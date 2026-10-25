@@ -1,6 +1,8 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
 import type { SwDoc } from "../../core/doc/doc";
 import { getWriterNumFormatKind } from "../../core/doc/number";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
@@ -21,7 +23,12 @@ export class RtfExport {
     string,
     {
       id: number;
-      levels: readonly Readonly<{ kind: "bullet" | "numbered"; start: number; bullet: number }>[];
+      levels: readonly Readonly<{
+        kind: "bullet" | "numbered";
+        start: number;
+        bullet: number;
+        numberingType: SvxNumType;
+      }>[];
     }
   >();
   private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
@@ -58,6 +65,7 @@ export class RtfExport {
               kind: getWriterNumFormatKind(format),
               start: format.GetStart(),
               bullet: format.GetBulletChar(),
+              numberingType: format.GetNumberingType(),
             };
           },
         );
@@ -107,7 +115,7 @@ export class RtfExport {
           output +=
             level.kind === "bullet"
               ? `{\\listlevel\\levelnfc23\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'01${escapeRtf(String.fromCodePoint(level.bullet || 0x2022))};}{\\levelnumbers;}}`
-              : `{\\listlevel\\levelnfc0\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}`;
+              : `{\\listlevel\\levelnfc${toRtfNfc(level.numberingType)}\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}`;
         output += `{\\listname ;}\\listid${list.id}}`;
       }
       output += "}{\\*\\listoverridetable";
@@ -229,4 +237,67 @@ function escapeRtf(value: string): string {
     else result += `\\u${code > 0x7fff ? code - 0x10000 : code}?`;
   }
   return result;
+}
+
+/** Maps native numbering types to RTF levelnfc, retaining the source Arabic fallback. */
+function toRtfNfc(type: SvxNumType): number {
+  switch (type) {
+    case SvxNumType.SVX_NUM_ROMAN_UPPER:
+      return 1;
+    case SvxNumType.SVX_NUM_ROMAN_LOWER:
+      return 2;
+    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER:
+    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N:
+      return 3;
+    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER:
+    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N:
+      return 4;
+    case SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC:
+      return 14;
+    case SvxNumType.SVX_NUM_CIRCLE_NUMBER:
+      return 18;
+    case SvxNumType.SVX_NUM_NUMBER_LOWER_ZH:
+      return 35;
+    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH:
+      return 38;
+    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW:
+      return 34;
+    case SvxNumType.SVX_NUM_TIAN_GAN_ZH:
+      return 30;
+    case SvxNumType.SVX_NUM_DI_ZI_ZH:
+      return 31;
+    case SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA:
+      return 16;
+    case SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA:
+      return 20;
+    case SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA:
+      return 12;
+    case SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA:
+      return 21;
+    case SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA:
+      return 13;
+    case SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO:
+    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_SYLLABLE_KO:
+      return 24;
+    case SvxNumType.SVX_NUM_HANGUL_JAMO_KO:
+    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_JAMO_KO:
+      return 25;
+    case SvxNumType.SVX_NUM_NUMBER_HANGUL_KO:
+      return 42;
+    case NumberingType.NUMBER_DIGITAL_KO as SvxNumType:
+      return 41;
+    case NumberingType.NUMBER_DIGITAL2_KO as SvxNumType:
+      return 44;
+    case NumberingType.NUMBER_LEGAL_KO as SvxNumType:
+      return 43;
+    case SvxNumType.SVX_NUM_CHAR_SPECIAL:
+    case SvxNumType.SVX_NUM_BITMAP:
+      return 23;
+    case SvxNumType.SVX_NUM_NUMBER_NONE:
+      return 255;
+    case SvxNumType.SVX_NUM_ARABIC_ZERO:
+      return 22;
+    default:
+      return 0;
+  }
 }

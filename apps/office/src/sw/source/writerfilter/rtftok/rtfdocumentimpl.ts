@@ -35,6 +35,8 @@ import {
 } from "../../../inc/poolfmt";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -189,7 +191,12 @@ export class RtfDocumentImpl {
   private readonly colors: string[] = [];
   private readonly listFormats = new Map<
     number,
-    readonly Readonly<{ kind: "bullet" | "numbered"; start: number; bullet?: number }>[]
+    readonly Readonly<{
+      kind: "bullet" | "numbered";
+      start: number;
+      bullet?: number;
+      numberingType: SvxNumType;
+    }>[]
   >();
   private readonly styles = new Map<
     number,
@@ -203,7 +210,12 @@ export class RtfDocumentImpl {
   private readonly importedStyles = new Map<number, SwTextFormatColl>();
   private readonly listOverrides = new Map<number, number>();
   private currentListId = 0;
-  private currentListLevels: { kind: "bullet" | "numbered"; start: number; bullet?: number }[] = [];
+  private currentListLevels: {
+    kind: "bullet" | "numbered";
+    start: number;
+    bullet?: number;
+    numberingType: SvxNumType;
+  }[] = [];
   private currentOverrideListId = 0;
   private currentOverrideIndex = 0;
   private fontName = "";
@@ -370,6 +382,7 @@ export class RtfDocumentImpl {
         const rule = node.GetNumRule();
         if (rule !== undefined) {
           const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
+          native.SetNumberingType(format.numberingType);
           native.SetStart(format.start);
           if (format.kind === "bullet" && format.bullet !== undefined)
             native.SetBulletChar(format.bullet);
@@ -530,7 +543,11 @@ export class RtfDocumentImpl {
     }
     if (state.destination === "list" && token.name === "listlevel") {
       state.destination = "listlevel";
-      this.currentListLevels.push({ kind: "numbered", start: 1 });
+      this.currentListLevels.push({
+        kind: "numbered",
+        start: 1,
+        numberingType: SvxNumType.SVX_NUM_ARABIC,
+      });
       return;
     }
     if (state.destination === "listlevel" && token.name === "leveltext") {
@@ -566,7 +583,10 @@ export class RtfDocumentImpl {
       if (token.name === "listid") this.currentListId = token.parameter ?? 0;
       else if (token.name === "levelnfc") {
         const level = this.currentListLevels.at(-1);
-        if (level !== undefined) level.kind = token.parameter === 23 ? "bullet" : "numbered";
+        if (level !== undefined) {
+          level.kind = token.parameter === 23 ? "bullet" : "numbered";
+          level.numberingType = fromRtfNfc(token.parameter ?? 0);
+        }
       } else if (token.name === "levelstartat") {
         const level = this.currentListLevels.at(-1);
         if (level !== undefined && token.parameter !== undefined)
@@ -851,4 +871,62 @@ function resolveRtfRunAttributes(
 /** Compares explicit-control sets before adjacent RTF runs are coalesced. */
 function equalControls(left: ReadonlySet<string>, right: ReadonlySet<string>): boolean {
   return left.size === right.size && [...left].every((name) => right.has(name));
+}
+
+/** Resolves RTF list level formats accepted by the current native numbering model. */
+function fromRtfNfc(value: number): SvxNumType {
+  switch (value) {
+    case 1:
+      return SvxNumType.SVX_NUM_ROMAN_UPPER;
+    case 2:
+      return SvxNumType.SVX_NUM_ROMAN_LOWER;
+    case 3:
+      return SvxNumType.SVX_NUM_CHARS_UPPER_LETTER;
+    case 4:
+      return SvxNumType.SVX_NUM_CHARS_LOWER_LETTER;
+    case 14:
+      return SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC;
+    case 18:
+      return SvxNumType.SVX_NUM_CIRCLE_NUMBER;
+    case 35:
+      return SvxNumType.SVX_NUM_NUMBER_LOWER_ZH;
+    case 38:
+      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH;
+    case 34:
+      return SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW;
+    case 30:
+      return SvxNumType.SVX_NUM_TIAN_GAN_ZH;
+    case 31:
+      return SvxNumType.SVX_NUM_DI_ZI_ZH;
+    case 16:
+      return SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA;
+    case 20:
+      return SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA;
+    case 12:
+      return SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA;
+    case 21:
+      return SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA;
+    case 13:
+      return SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA;
+    case 24:
+      return SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO;
+    case 25:
+      return SvxNumType.SVX_NUM_HANGUL_JAMO_KO;
+    case 42:
+      return SvxNumType.SVX_NUM_NUMBER_HANGUL_KO;
+    case 41:
+      return NumberingType.NUMBER_DIGITAL_KO as SvxNumType;
+    case 44:
+      return NumberingType.NUMBER_DIGITAL2_KO as SvxNumType;
+    case 43:
+      return NumberingType.NUMBER_LEGAL_KO as SvxNumType;
+    case 23:
+      return SvxNumType.SVX_NUM_CHAR_SPECIAL;
+    case 255:
+      return SvxNumType.SVX_NUM_NUMBER_NONE;
+    case 22:
+      return SvxNumType.SVX_NUM_ARABIC_ZERO;
+    default:
+      return SvxNumType.SVX_NUM_ARABIC;
+  }
 }

@@ -14,7 +14,7 @@
       "RtfExport::WriteNumbering"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body text, character decoration/position, hyperlinks, point bookmarks, paragraph alignment/indentation, paragraph style references, tables and list definitions including level starts and bullet glyphs as RTF."
+      "Writes represented Writer body text, character decoration/position, hyperlinks, point bookmarks, paragraph alignment/indentation, paragraph style references, tables and list definitions including source-mapped level numbering formats, starts and bullet glyphs as RTF."
     ],
     "omittedResponsibilities": [
       "Upstream complete page, frame, picture, non-hyperlink field, header/footer, drawing, section and full style-property export paths remain unverified."
@@ -34,6 +34,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
           "marker": "RtfExport::WriteNumbering"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "SVX_NUM_NUMBER_TRADITIONAL_JA"
         }
       ]
     }

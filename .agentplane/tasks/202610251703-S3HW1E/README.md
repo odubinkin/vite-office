@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T17:24:27.569Z"
+doc_updated_at: "2026-10-25T17:29:05.469Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351 and 63ec86af7c0c cover transfer decoration/position, RTF styles/bookmarks, and selected Markdown block behavior. This batch adds RTF per-level start values and bullet glyphs plus Markdown native numbering labels and parent-prefix list indentation; Markdown reader accepts nested markers at their parent continuation width. Related Vitest: 47 tests in five files pass after a type correction; office TypeScript, changed-path ESLint, provenance and module-boundary checks pass. Earlier targeted 70-test filter suite and Writer registry check also passed. Open: remaining RTF numbering formats and per-paragraph restart/count, complex table and page/section items, remaining field/style contracts, and full md4c grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet."
+  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c and 4cd04ace126d cover native transfer decoration/position, RTF style inheritance/bookmarks/list starts/bullet glyphs, and selected Markdown block/list behavior. This batch maps represented RTF numbering types to source levelnfc values, including East Asian types. Related RTF Vitest: 21 tests in two files pass; office TypeScript, changed-path ESLint, source-provenance and module-boundary checks pass. Earlier focused 70-test filter suite and Writer registry check passed. Open: per-paragraph list restart/count, represented table and page/section items, remaining field/style contracts, and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351 and 63ec86af7c0c cover transfer decoration/position, RTF styles/bookmarks, and selected Markdown block behavior. This batch adds RTF per-level start values and bullet glyphs plus Markdown native numbering labels and parent-prefix list indentation; Markdown reader accepts nested markers at their parent continuation width. Related Vitest: 47 tests in five files pass after a type correction; office TypeScript, changed-path ESLint, provenance and module-boundary checks pass. Earlier targeted 70-test filter suite and Writer registry check also passed. Open: remaining RTF numbering formats and per-paragraph restart/count, complex table and page/section items, remaining field/style contracts, and full md4c grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet.
+Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c and 4cd04ace126d cover native transfer decoration/position, RTF style inheritance/bookmarks/list starts/bullet glyphs, and selected Markdown block/list behavior. This batch maps represented RTF numbering types to source levelnfc values, including East Asian types. Related RTF Vitest: 21 tests in two files pass; office TypeScript, changed-path ESLint, source-provenance and module-boundary checks pass. Earlier focused 70-test filter suite and Writer registry check passed. Open: per-paragraph list restart/count, represented table and page/section items, remaining field/style contracts, and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet.

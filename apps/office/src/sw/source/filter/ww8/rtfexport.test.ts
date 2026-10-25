@@ -3,6 +3,8 @@ import { expect, it } from "vitest";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwpHints } from "../../core/txtnode/ndhints";
@@ -207,7 +209,11 @@ it("retains represented level starts and bullet glyphs in RTF list definitions",
   }
 });
 
-it("retains a numbered rule starting above one", () => {
+it.each([
+  [SvxNumType.SVX_NUM_ROMAN_UPPER, 1],
+  [SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO, 24],
+  [NumberingType.NUMBER_DIGITAL_KO as SvxNumType, 41],
+] as const)("retains a numbered rule starting above one with type %i", (numberingType, nfc) => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];
   if (first === undefined) throw new Error("Missing paragraph.");
@@ -217,14 +223,16 @@ it("retains a numbered rule starting above one", () => {
   if (rule === undefined) throw new Error("Missing rule.");
   const format = new SwNumFormat(rule.Get(0));
   format.SetStart(7);
+  format.SetNumberingType(numberingType);
   rule.Set(0, format);
   source.GetDocumentListsManager().InvalidateAllLists();
   let imported;
   try {
-    imported = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
-    );
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain(`\\levelnfc${nfc}\\levelstartat7`);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetStart()).toBe(7);
+    expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetNumberingType()).toBe(numberingType);
     expect(imported.paragraphs[0]?.GetListItemNumber()).toBe(7);
   } finally {
     imported?.Dispose();
