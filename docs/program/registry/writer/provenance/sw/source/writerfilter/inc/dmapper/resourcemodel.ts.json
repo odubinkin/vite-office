@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native XML UTF16 byte/string carriers and SvRef references bind host immutable text, numeric IDs and references; actual existing UNO Any/OUString and RTL/SAX/unit owners retain typed value behavior."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts",
+          "marker": "Id"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Value"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Sprm"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Properties"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Table"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+    "localSymbols": [
+      "Id",
+      "Reference",
+      "Value",
+      "Sprm",
+      "Properties",
+      "Table"
+    ],
+    "upstreamSymbols": [
+      "class Value",
+      "class Sprm",
+      "class Properties",
+      "class Table"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending."
+    ],
+    "omittedResponsibilities": [
+      "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",
+      "Unconsumed native binary/drawing/service variants, complete resource-model interfaces and C++ ABI are not claimed."
+    ]
+  }
+}

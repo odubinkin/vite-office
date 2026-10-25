@@ -1,0 +1,99 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+    "capabilityId": "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "type": "filter",
+    "maturity": "mapped",
+    "assertions": [
+      "The consumed OOXML resource values, generated IDs and property dispatch substrate retain source contracts; application DOCX import remains in progress."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host XML text/reference transport replaces native stream and SvRef carriers around reused typed UNO/RTL/SAX owners; numeric resource identities are generated unchanged from the pinned upstream model."
+    },
+    "capability": "Writer DOCX import into the represented canonical document graph",
+    "gaps": [
+      "DomainMapper document/style/list/table/section mapping remains pending.",
+      "Shell routing, cancellation/stale-result ownership and existing Open UI integration remain pending.",
+      "Resource tests do not prove application DOCX import or native semantic parity."
+    ],
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts",
+          "marker": "Id"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.ts",
+          "marker": "OOXMLValue"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
+          "marker": "NS_ooxml"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.test.ts",
+          "marker": "preserves source ON/OFF true spelling"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts",
+          "marker": "matches every consumed ID"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-docx.md",
+          "marker": "Implemented import resources"
+        }
+      ]
+    },
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Value"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx",
+          "marker": "GetBooleanValue"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/resourceids.py",
+          "marker": "ContentHandler"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlexport/ooxmlexport10.cxx",
+          "marker": "testStrict"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLPropertySet.hxx",
+          "marker": "class OOXMLValue"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/dmapper/resourcemodel.hxx",
+          "marker": "class Properties"
+        }
+      ]
+    },
+    "aspect": "model-operation",
+    "atomicOperation": "writer-docx-import-current-core-slice",
+    "scopeLimitations": [
+      "V4DQJW remains an active implementation task. Current tested resources are prerequisite evidence and do not narrow or complete the requested document/UI import scope."
+    ],
+    "implemented": false,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false
+  }
+}

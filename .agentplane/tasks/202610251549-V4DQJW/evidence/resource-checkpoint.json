@@ -1,0 +1,115 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "in_progress",
+  "component": "OOXML values, resource dispatch and native generated identities",
+  "sha256": {
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.test.ts": "c0a9972f63a5647f238549981df503964a0d417441277c701058032b5f2725ec",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.ts": "79929d091a398546bfe1160cb5e25301a64de1d47022ca102f0796764504376c",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts": "6983cbcb490af279c4860e88008b0fa767d40fe60113542f152abc2ab11c1dcd",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "08a8deb8715e692948974500563ddc0277b424b293085c911d8baf65f2d0ccf3",
+    "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts": "94921dcdf9e607e478dc8e2f7429db8f51e797ef4f6c0e39003d7ce629575a41"
+  },
+  "checks": [
+    {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/OOXMLPropertySet.test.ts",
+      "result": "pass",
+      "tests": 52
+    },
+    {
+      "command": "npm run test:coverage:writer --workspace @vite-office/office -- src/sw/source/writerfilter/ooxml/OOXMLPropertySet.test.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLPropertySet.ts --coverage.reportsDirectory=coverage/docx-values",
+      "result": "pass",
+      "tests": 52,
+      "coverage": {
+        "lines": {
+          "total": 101,
+          "covered": 101,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 120,
+          "covered": 120,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 42,
+          "covered": 42,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 93,
+          "covered": 93,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    },
+    {
+      "command": "npm run test:coverage:writer --workspace @vite-office/office -- src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts --coverage.include=src/sw/source/writerfilter/inc/ooxml/resourceids.ts --coverage.reportsDirectory=coverage/docx-resourceids",
+      "result": "pass",
+      "tests": 2,
+      "coverage": {
+        "lines": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 1,
+          "covered": 1,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      }
+    }
+  ],
+  "otherPassed": [
+    "npm run typecheck",
+    "npm run check:source-provenance",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "Scoped ESLint and Prettier",
+    "npm run inventory:registry:build",
+    "git diff --check"
+  ],
+  "pending": [
+    "DomainMapper mapping to the actual Writer text/style/numbering/table/section APIs",
+    "DOCX export over canonical nodes/items",
+    "SwDocShell selected-filter routing, cancellation and stale-generation handling",
+    "Existing Open/download UI integration and production browser acceptance",
+    "Complete task verification and closure"
+  ],
+  "notes": [
+    "This checkpoint proves only the import resource substrate and does not complete or narrow the user goal.",
+    "Native floating-to-int undefined inputs and empty-attribute null dereferences have explicit host errors without claiming a defined native result.",
+    "Native IDs generated using unchanged original resourceids.py/model.xml and each of 434 consumed constants checked against that generator.",
+    "Initial architecture gate required the actual existing sw/Library_sw.mk dependency on sax; the exact edge was documented and admitted without broadening allowed layering."
+  ]
+}

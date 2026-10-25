@@ -207,6 +207,9 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // Native sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx includes sax/tools/converter.hxx;
+      // sw/Library_sw.mk links sax for these original OOXML lexical conversions.
+      "sax",
       // Native Writer package/filter composition uses shared MIME constants and beans::PropertyValue (Library_sw/sdk_api).
       "comphelper",
       "udkapi",

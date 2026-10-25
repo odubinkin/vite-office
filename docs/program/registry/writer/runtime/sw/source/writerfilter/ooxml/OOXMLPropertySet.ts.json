@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLPropertySet.ts#OOXMLValue",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx#GetBooleanValue"
+      ],
+      "justification": "Consumed variant views, original boolean/hex/color/measure conversion, ordered duplicate properties, cloned reference identity, dynamic resolution and table positions. Original RTL/SAX/unit owners are reused. Undefined native casts/null dereferences are explicit host errors outside certified native domains. V4DQJW remains in progress: this resource substrate does not establish DOCX application import/export/UI support; full native interfaces/ABI and unconsumed binary/drawing/service variants remain omitted. Whole-module semantic parity stays unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLValue",
+        "GetBooleanValue",
+        "OOXMLPropertyType",
+        "OOXMLProperty",
+        "OOXMLPropertySet",
+        "OOXMLTable"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx",
+      "upstreamSymbols": [
+        "GetBooleanValue",
+        "OOXMLValue::getInt",
+        "OOXMLValue::getAny",
+        "OOXMLValue::createUniversalMeasure",
+        "OOXMLPropertySet::resolve",
+        "OOXMLTable::resolve"
+      ]
+    }
+  }
+}
