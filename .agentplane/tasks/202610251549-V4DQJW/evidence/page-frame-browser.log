@@ -1,0 +1,17 @@
+[WebServer] (node:54223) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+(node:54227) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:54228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=1280 (4.4s)
+  ✓  1 [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=1280 (9.3s)
+  ✓  3 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=390 (4.1s)
+  ✓  4 [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=390 (8.0s)
+  ✓  5 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:63:3 › native six-line border page and selected history width=1280 (8.7s)
+  ✓  6 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:63:3 › native six-line border page and selected history width=390 (5.9s)
+
+  6 passed (28.2s)

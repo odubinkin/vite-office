@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/xml/odt-roundtrip.test.ts src/sw/source/filter/xml/odt-property-roundtrip.test.ts src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts src/sw/browser/presentation/WriterPageStyleDialog.test.tsx --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/source/filter/xml/odt-roundtrip.test.ts src/sw/source/filter/xml/odt-property-roundtrip.test.ts src/sw/browser/filter/xml/native-ul-space-item-transport.test.ts src/sw/browser/filter/xml/native-row-split-item-transport.test.ts src/sw/browser/filter/xml/native-table-flow-item-transport.test.ts src/sw/browser/presentation/WriterPageStyleDialog.test.tsx --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  6 passed (6)
+      Tests  110 passed (110)
+   Start at  02:44:01
+   Duration  92.36s (transform 87.51s, setup 4.97s, import 114.89s, tests 31.51s, environment 26.51s)
+

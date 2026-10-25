@@ -10,7 +10,7 @@ import { SwRootFrame } from "./newfrm";
 import { SwFrame, SwFrameType } from "./wsfrm";
 import { GetFrameOfModify } from "./frmtool";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 /** Exposes construction of the original base frame for native type-mask admission checks. */
 class OriginalFrame extends SwFrame {
   /** Registers the real base client without replacing native behavior. @param node - Original content owner. @param root - Original layout. @returns Nothing. */

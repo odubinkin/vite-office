@@ -9,7 +9,7 @@ import { SwTextFrame } from "../text/txtfrm";
 import { SwTextCursor } from "../text/itrtxt";
 import { SwPosition } from "../crsr/pam";
 import { SwRootFrame } from "./newfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 const docs: SwDoc[] = [],
   roots: SwRootFrame[] = [];

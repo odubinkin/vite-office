@@ -7,7 +7,7 @@ import { SwFrame, SwFrameType, SwLayoutFrame } from "./wsfrm";
 import { SwFrameFormat } from "./atrfrm";
 import { SwRootFrame, createSwPageFrames } from "./newfrm";
 import { SwTextFrame, createSwTextFrameInputs } from "../text/txtfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 const docs: SwDoc[] = [],
   roots: SwRootFrame[] = [];

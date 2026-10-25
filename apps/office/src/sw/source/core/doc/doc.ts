@@ -230,9 +230,9 @@ export class SwDoc {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
-    this.pageDescs = [createDefaultWriterPageDescriptor(this.locale)];
     this.attrPool = new SwAttrPool(this);
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
+    this.pageDescs = [createDefaultWriterPageDescriptor(this.locale, this)];
     this.styleAccess = createStyleManager();
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
@@ -327,8 +327,9 @@ export class SwDoc {
   public MakePageDesc(name: string, source?: SwPageDesc): SwPageDesc {
     if (this.FindPageDesc(name) !== undefined)
       throw new Error(`Writer page descriptor exists: ${name}`);
-    const descriptor = source?.Clone() ?? createDefaultWriterPageDescriptor(this.locale);
-    descriptor.SetValue({ ...descriptor.GetValue(), name });
+    const descriptor =
+      source?.Clone() ?? createDefaultWriterPageDescriptor(this.locale, this, name);
+    descriptor.SetName(name);
     this.pageDescs.push(descriptor);
     this.NotifyModelChange({ kind: "page-descriptor-changed" });
     return descriptor;

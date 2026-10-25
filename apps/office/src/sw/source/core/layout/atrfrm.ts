@@ -9,9 +9,15 @@ import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { RES_BOX, RES_VERT_ORIENT } from "../../../inc/hintids";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { RES_ROW_SPLIT, RES_FRM_SIZE, RES_COLLAPSING_BORDERS } from "../../../inc/hintids";
+import { RES_TEXTGRID } from "../../../inc/hintids";
+import type { SwTextGridItem } from "../../../inc/tgrditem";
 
 /** Native frame identity owns its name and document attribute pool. */
 export class SwFrameFormat extends SwFormat {
+  /** Borrows the effective original page text-grid item. @param searchInParent - Whether inherited items participate. @returns Grid item. */
+  GetTextGrid(searchInParent = true): SwTextGridItem {
+    return this.GetAttrSet().Get(RES_TEXTGRID, searchInParent) as SwTextGridItem;
+  }
   /** Creates the represented table frame identity. @param pool - Document pool. @param name - Raw frame name. @param ranges - Native format ranges. @param derivedFrom - Optional parent frame. @returns Nothing. */
   public constructor(
     pool: SwAttrPool,

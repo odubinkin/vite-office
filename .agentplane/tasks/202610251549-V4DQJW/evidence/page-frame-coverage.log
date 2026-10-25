@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- src/sw/inc/tgrditem.test.ts src/sw/source/core/layout/pagedesc.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/browser/filter/xml/writer-frame-item-codec.test.ts --coverage.include=src/sw/inc/tgrditem.ts --coverage.include=src/offapi/com/sun/star/text/TextGridMode.ts --coverage.include=src/sw/source/core/layout/pagedesc.ts --coverage.include=src/sw/browser/filter/xml/writer-page-format-codec.ts --coverage.include=src/sw/browser/filter/xml/writer-frame-item-codec.ts --coverage.reportsDirectory=coverage/docx-page-owner
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage src/sw/inc/tgrditem.test.ts src/sw/source/core/layout/pagedesc.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/browser/filter/xml/writer-frame-item-codec.test.ts --coverage.include=src/sw/inc/tgrditem.ts --coverage.include=src/offapi/com/sun/star/text/TextGridMode.ts --coverage.include=src/sw/source/core/layout/pagedesc.ts --coverage.include=src/sw/browser/filter/xml/writer-page-format-codec.ts --coverage.include=src/sw/browser/filter/xml/writer-frame-item-codec.ts --coverage.reportsDirectory=coverage/docx-page-owner
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  4 passed (4)
+      Tests  13 passed (13)
+   Start at  02:46:39
+   Duration  20.90s (transform 16.84s, setup 1.74s, import 22.99s, tests 191ms, environment 13.35s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 349/349 )
+Branches     : 100% ( 244/244 )
+Functions    : 100% ( 79/79 )
+Lines        : 100% ( 324/324 )
+================================================================================

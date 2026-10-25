@@ -4,7 +4,7 @@ import { createWriterDocument } from "../doc/doc";
 import type { SwTableFormat } from "../table/swtable";
 import { SwTabFrame } from "./tabfrm";
 import { createSwPageFrames, SwRootFrame } from "./newfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 
 /** Creates a canonical two-column table. @param format - Authored geometry. @returns Native owners. */

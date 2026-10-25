@@ -1,7 +1,7 @@
 /** @fileoverview Checks native original-row repeated headline ownership and measured follow-page budgets. */
 import { describe, expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { createSwPageFrames, SwRootFrame, type SwPageFrame } from "./newfrm";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { SwTableFormat } from "../table/swtable";

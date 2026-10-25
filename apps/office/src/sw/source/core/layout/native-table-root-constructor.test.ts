@@ -3,7 +3,7 @@ import { expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwRootFrame, createSwPageFrames } from "./newfrm";
 import { SwTabFrame, SwRowFrame, SwCellFrame } from "./tabfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 /** Requires an actual native owner. @param value - Optional original owner. @returns Original owner. */
 function required<T>(value: T | undefined): T {

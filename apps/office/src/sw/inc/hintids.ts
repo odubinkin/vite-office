@@ -126,6 +126,8 @@ export const RES_HORI_ORIENT = 110 as const;
 
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
 export const RES_BOX = 113 as const;
+/** Original page text grid, RES_FRMATR_BEGIN +33. */
+export const RES_TEXTGRID = 122 as const;
 
 /** Direct paragraph text-left margin, matching `RES_MARGIN_TEXTLEFT`. */
 export const RES_MARGIN_TEXTLEFT = 93 as const;

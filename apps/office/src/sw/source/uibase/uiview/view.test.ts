@@ -6,7 +6,7 @@ import { BrowserSfxDispatcher } from "../../../../framework/browser/dispatch/bro
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { SfxViewFrame } from "../../../../sfx2/source/view/viewfrm";
 import { createWriterDocument } from "../../core/doc/doc";
-import { createDefaultWriterPageDescriptor } from "../../core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { SwDocShell } from "../app/docsh";
 import { SwView } from "./view";

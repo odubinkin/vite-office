@@ -7,7 +7,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
-import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../test/writer-page-descriptor";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 import { SwView } from "../../source/uibase/uiview/view";
 import { WriterViewProjection } from "../presentation/writer-view-projection";

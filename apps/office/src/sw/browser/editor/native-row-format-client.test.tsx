@@ -11,7 +11,7 @@ import { SwFormatFrameSize, SwFrameSize } from "../../inc/fmtfsize";
 import { WriterEditableTable } from "./WriterEditableTable";
 import { SwRootFrame } from "../../source/core/layout/newfrm";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
-import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../test/writer-page-descriptor";
 /** Requires an original model or DOM owner. @param value - Optional owner. @returns Actual owner. */
 function required<T>(value: T | null | undefined): T {
   if (value === undefined || value === null) throw new Error("Missing mounted row client owner");

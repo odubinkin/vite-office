@@ -121,11 +121,53 @@ import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwTableBoxNumFormat, SwTableBoxFormula, SwTableBoxValue } from "./cellatr";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { SwTextGridItem } from "../../../inc/tgrditem";
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    this.RegisterDefaultItem(
+      new SwTextGridItem(),
+      /** Restores every actual native grid field at the existing pool persistence boundary. @param value - Complete snapshot. @returns Item. */ (
+        value,
+      ) => {
+        if (!Array.isArray(value) || value.length !== 11)
+          throw new Error("SwTextGridItem snapshot is invalid.");
+        for (const index of [0, 1, 2, 3, 4, 8])
+          if (typeof value[index] !== "number" || !Number.isInteger(value[index]))
+            throw new Error("SwTextGridItem scalar is invalid.");
+        for (const index of [5, 6, 7, 9, 10])
+          if (typeof value[index] !== "boolean") throw new Error("SwTextGridItem flag is invalid.");
+        if (
+          value[0] < -2147483648 ||
+          value[0] > 2147483647 ||
+          value[1] < -32768 ||
+          value[1] > 32767 ||
+          value[4] < -2147483648 ||
+          value[4] > 2147483647 ||
+          [2, 3, 8].some(
+            /** Checks original unsigned16 fields. @param index - Field. @returns Invalid. */ (
+              index,
+            ) => value[index] < 0 || value[index] > 65535,
+          )
+        )
+          throw new Error("SwTextGridItem width is invalid.");
+        const item = new SwTextGridItem();
+        item.SetColor(new Color(ColorTransparency, value[0] >>> 0, "ColorTransparencyTag"));
+        item.SetLines(value[1]);
+        item.SetBaseHeight(value[2]);
+        item.SetRubyHeight(value[3]);
+        item.SetGridType(value[4]);
+        item.SetRubyTextBelow(value[5]);
+        item.SetPrintGrid(value[6]);
+        item.SetDisplayGrid(value[7]);
+        item.SetBaseWidth(value[8]);
+        item.SetSnapToChars(value[9]);
+        item.SetSquaredMode(value[10]);
+        return item;
+      },
+    );
     this.RegisterDefaultItem(
       new SvxEscapementItem(RES_CHRATR_ESCAPEMENT),
       /** Restores every stored native offset and height at the browser boundary. @param value - Complete persisted pair. @returns Actual item. */

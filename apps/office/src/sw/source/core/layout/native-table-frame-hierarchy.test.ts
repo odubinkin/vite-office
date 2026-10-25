@@ -15,7 +15,7 @@ import { CheckSplitCells } from "../frmedt/tblsel";
 import { SwPosition } from "../crsr/pam";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { createSwPageFrames } from "./newfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 /** Requires an original fixture owner. @param value - Optional owner. @returns Original owner. */
 function required<T>(value: T | undefined): T {
   if (value === undefined) throw Error("Missing table hierarchy owner");

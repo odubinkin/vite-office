@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:calc
+> npm run test:calc --workspace @vite-office/office -- src/sc/source/core/data/docpool.test.ts src/sc/source/core/data/patattr.test.ts src/sc/source/core/data/pageattr.test.ts --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:calc
+> vitest run --config vitest.calc.config.ts src/sc/source/core/data/docpool.test.ts src/sc/source/core/data/patattr.test.ts src/sc/source/core/data/pageattr.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  3 passed (3)
+      Tests  13 passed (13)
+   Start at  02:44:00
+   Duration  61.08s (transform 70.14s, setup 5.62s, import 86.70s, tests 735ms, environment 16.21s)
+

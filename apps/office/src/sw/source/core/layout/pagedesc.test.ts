@@ -1,12 +1,8 @@
 /** @fileoverview Verifies Writer Standard page descriptor defaults and validation. */
 
 import { describe, expect, it } from "vitest";
-import {
-  createDefaultWriterPageDescriptor,
-  equalWriterPageDescriptors,
-  SwPageDesc,
-  validateWriterPageDescriptor,
-} from "./pagedesc";
+import { equalWriterPageDescriptors, SwPageDesc, validateWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 
 describe("Writer page descriptor", /** Registers page-descriptor cases. @returns Nothing. */ () => {
   it("uses LibreOffice metric and imperial defaults and swaps known paper orientation", /** Verifies locale defaults and orientation. @returns Nothing. */ () => {
@@ -44,7 +40,7 @@ describe("Writer page descriptor", /** Registers page-descriptor cases. @returns
     expect(equalWriterPageDescriptors(initial.GetValue(), clone.GetValue())).toBe(true);
     clone.SetValue({ ...clone.GetValue(), leftMargin: 1200 });
     expect(equalWriterPageDescriptors(initial.GetValue(), clone.GetValue())).toBe(false);
-    expect(new SwPageDesc(clone.GetValue()).GetValue()).toEqual(clone.GetValue());
+    expect(new SwPageDesc(clone).GetValue()).toEqual(clone.GetValue());
     // Core page values do not enforce page-tab geometry limits or store a synthetic format.
     expect(
       validateWriterPageDescriptor({
@@ -68,7 +64,7 @@ describe("Writer page descriptor", /** Registers page-descriptor cases. @returns
 
   it("retains descriptor identity and upstream self/follow semantics", /** Verifies the supported SwPageDesc identity graph. @returns Nothing. */ () => {
     const standard = createDefaultWriterPageDescriptor("en-GB");
-    const left = new SwPageDesc({ ...standard.GetValue(), name: "Left Page" });
+    const left = new SwPageDesc("Left Page", standard.GetMaster(), standard.GetMaster().GetDoc());
     expect(standard.GetName()).toBe("Standard");
     expect(standard.GetFollow()).toBe(standard);
     standard.SetFollow(left);

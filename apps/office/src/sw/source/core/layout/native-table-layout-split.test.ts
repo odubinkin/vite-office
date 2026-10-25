@@ -2,7 +2,7 @@
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import type { SwTableFormat } from "../table/swtable";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { createSwPageFrames, type SwPageFrame } from "./newfrm";
 import { SwTabFrame } from "./tabfrm";
 const page = {

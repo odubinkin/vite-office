@@ -7,7 +7,7 @@ import { SwTextFrame, createSwTextFrameInputs, makeSwTextFrame } from "../text/t
 import { SwContentFrame } from "./ssfrm";
 import { SwFrame, SwFrameType } from "./wsfrm";
 import { createSwPageFrames, SwRootFrame } from "./newfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import { SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";

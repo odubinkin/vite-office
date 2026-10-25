@@ -1,5 +1,12 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
+import {
+  encodePageFormats,
+  restorePageFormats,
+  encodeTextGridDefault,
+  restoreTextGridDefault,
+  type WriterPageFormatRecord,
+} from "./writer-page-format-codec";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
@@ -356,7 +363,9 @@ export interface WriterDocumentRecord {
   readonly pageDescriptors: readonly Readonly<{
     followName: string;
     value: WriterPageDescriptorValue;
+    pageFormat?: WriterPageFormatRecord;
   }>[];
+  readonly textGridDefault?: SfxPoolItemSnapshot;
   readonly swModelVersion: 16;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
@@ -394,6 +403,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
       rows,
     });
   }
+  const textGridDefault = encodeTextGridDefault(document);
   return {
     embeddedFonts: document.GetEmbeddedFonts(),
     bookmarks: document
@@ -487,10 +497,12 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         return {
           followName: descriptor.GetFollow().GetName(),
           value: descriptor.GetValue(),
+          pageFormat: encodePageFormats(descriptor),
         };
       },
     ),
     swModelVersion: 16,
+    ...(textGridDefault === undefined ? {} : { textGridDefault }),
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
         collection,
@@ -619,6 +631,7 @@ export function* decodeWriterDocumentSteps(
     }
     if (record.lineNumberInfo !== undefined)
       document.SetLineNumberInfo(SwLineNumberInfo.FromValue(record.lineNumberInfo));
+    restoreTextGridDefault(document, record.textGridDefault);
     const firstPageDescriptor = record.pageDescriptors[0];
     if (
       firstPageDescriptor === undefined ||
@@ -645,6 +658,7 @@ export function* decodeWriterDocumentSteps(
       if (descriptor === undefined || follow === undefined)
         throw new Error("Stored Writer page descriptor follow link is invalid.");
       descriptor.SetFollow(follow);
+      restorePageFormats(descriptor, descriptorRecord.pageFormat);
     }
     const settings = { ...record.documentSettings };
     // Older browser graph records predate this represented native setting.

@@ -9,7 +9,7 @@ import { getSwTextFrameGap, type SwTextFrameSettings } from "../../source/core/t
 import { SwLineNumberInfo } from "../../inc/lineinfo";
 import { getWriterDomSelection } from "../editor/writer-selection";
 import { WriterPlainTextEditor } from "../editor/WriterPlainTextEditor";
-import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../test/writer-page-descriptor";
 import type { SwEditWin } from "../../source/uibase/docvw/edtwin";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { WriterRulers, WriterVerticalRuler } from "./WriterRulers";

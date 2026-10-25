@@ -1,0 +1,153 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T19:47:34.305759+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "scope": "Document-owned four page frames; native text grid/UNO items; actual pool user-default metadata; complete browser frame/grid transport",
+  "coverage": {
+    "pageOwners": {
+      "lines": {
+        "total": 324,
+        "covered": 324,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 349,
+        "covered": 349,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 79,
+        "covered": 79,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 244,
+        "covered": 244,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "poolOwner": {
+      "lines": {
+        "total": 187,
+        "covered": 187,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 229,
+        "covered": 229,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 47,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 132,
+        "covered": 132,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  },
+  "runtimeSha256": {
+    "apps/office/src/offapi/com/sun/star/text/TextGridMode.ts": "b456e48a24f712075f27f6e7ccbd0de521bb23630f28c8d4e420d05e85157d81",
+    "apps/office/src/sw/browser/filter/xml/writer-frame-item-codec.ts": "e2c56178382746e604df7f1921a52001329bef6deda831937341b716bfaeafb2",
+    "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts": "9ffec482179962783ab4cd8babc774f5126144aba944c3c9b891b5cce288c4fa",
+    "apps/office/src/sw/inc/tgrditem.ts": "641920fbc8f3e6e740fd31ddbd691db1827a578e39401c2caa92eca29baded7c",
+    "apps/office/src/test/writer-page-descriptor.ts": "99998b0499e5639cb865d786b2540d8c86d7e8515ca42c95231f63b867405a9c",
+    "apps/office/src/svl/source/items/itempool.ts": "724ef7c26a4aacd9a89e267d16e616469213fe3865e332adf874235f97c5c165",
+    "apps/office/src/sw/browser/filter/xml/item-codec.ts": "5df4e8393ffc85fee67c21e9fdd58cac14e6640fa59b578d2df9922f50b5fee9",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "5a7588ae0e90e29feadc06bbbec7dadbe18cca97b499f1b8b7750ea2928467ab",
+    "apps/office/src/sw/browser/filter/xml/writer-table-item-codec.ts": "6d8315f56f825b27cc38fbf23876666763f342fdb70b20604735d210e7efca03",
+    "apps/office/src/sw/inc/hintids.ts": "dfdaa0cc0d7594b5bd940c28f01a1e1bf658721859edc5b6966c7f47b7999c41",
+    "apps/office/src/sw/inc/unomid.ts": "a2010f918ade0a0b2a329003ef8675365c971b77524aa7a55900281b73951fa3",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "2a286ba892deef7fafce947a5f0586549dd413f022c75a1c8bb412d5e0e1ce81",
+    "apps/office/src/sw/source/core/doc/doc.ts": "0541073221df2bb6d739cea71aeb5b2ebb9281d4175c7c0025327d27cad45bfe",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "3f7863348088b59721c21c48e75424f83c9342900b00271e374bcd89c9d8f266",
+    "apps/office/src/sw/source/core/layout/pagedesc.ts": "dfaa876589a556e9955d749c5261150f061a8d945161ab586a093e328b6e89ef",
+    "apps/office/src/sw/source/core/unocore/unomap.ts": "93ae77f12c6b049f9cc6e4c5b618da9e7b6de4cb29bf9839f908bfedea4b5f23",
+    "apps/office/src/sw/source/core/unocore/unostyle.ts": "b0e2b9ea19cf3fbdcf5f7cbbcd3bdab96f3c171a2b86902272564a65a5e8f031"
+  },
+  "testGroups": [
+    {
+      "name": "page/frame owners",
+      "files": 4,
+      "passed": 13,
+      "log": "page-frame-coverage.log"
+    },
+    {
+      "name": "native ItemInfo pool",
+      "files": 5,
+      "passed": 31,
+      "coverage": "apps/office/coverage/docx-iteminfo-registration/coverage-summary.json"
+    },
+    {
+      "name": "Writer ODT/transport/page dialog regressions",
+      "files": 6,
+      "passed": 110,
+      "log": "page-frame-regressions.log"
+    },
+    {
+      "name": "Calc shared pool consumers",
+      "files": 3,
+      "passed": 13,
+      "log": "page-frame-calc.log"
+    },
+    {
+      "name": "migrated real-page fixtures",
+      "files": 27,
+      "passed": 206,
+      "note": "Run before final name/copy correction; corrected branches covered by final owner profile."
+    },
+    {
+      "name": "production Chromium desktop/mobile pages/history/transport",
+      "passed": 6,
+      "log": "page-frame-browser.log"
+    }
+  ],
+  "checks": [
+    "build/typecheck",
+    "scoped ESLint and Prettier",
+    "dependencies",
+    "JSDoc",
+    "file size",
+    "source tree",
+    "source provenance",
+    "registry/invariants/parity",
+    "static build",
+    "policy routing",
+    "git diff --check",
+    "doctor: zero errors, pre-existing managed-hook warning"
+  ],
+  "residualGaps": [
+    "SectionPropertyMap/default-page-mode notification and stylesheet/document loading remain pending.",
+    "DOCX import/export and existing UI Open/download integration remain pending.",
+    "ODT grid serialization remains pending.",
+    "Native full-module parity is unverified; browser LR transport explicitly binds raw scalar fields."
+  ],
+  "fullSuite": "Not run: second task after SWRD7X full checkpoint, next full suite at tenth task."
+}

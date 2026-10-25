@@ -13,3 +13,14 @@
 /** Native rel height relation member. */ export const MID_FRMSIZE_REL_HEIGHT_RELATION = 16;
 /** Native page descriptor name member. */ export const MID_PAGEDESC_PAGEDESCNAME = 0;
 /** Native optional page number offset member. */ export const MID_PAGEDESC_PAGENUMOFFSET = 1;
+/** Native grid color. */ export const MID_GRID_COLOR = 0;
+/** Native grid line count. */ export const MID_GRID_LINES = 1;
+/** Native grid base height. */ export const MID_GRID_BASEHEIGHT = 2;
+/** Native grid ruby height. */ export const MID_GRID_RUBYHEIGHT = 3;
+/** Native grid type. */ export const MID_GRID_TYPE = 4;
+/** Native grid ruby position. */ export const MID_GRID_RUBY_BELOW = 5;
+/** Native grid print flag. */ export const MID_GRID_PRINT = 6;
+/** Native grid display flag. */ export const MID_GRID_DISPLAY = 7;
+/** Native grid base width. */ export const MID_GRID_BASEWIDTH = 8;
+/** Native grid character snapping. */ export const MID_GRID_SNAPTOCHARS = 9;
+/** Native standard mode (inverse squared mode). */ export const MID_GRID_STANDARD_MODE = 10;

@@ -8,7 +8,7 @@ import { SwFrame } from "./wsfrm";
 import { SwTextFrame, createSwParaPortion } from "../text/txtfrm";
 import { SwParaPortion } from "../text/porlay";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import type { SwTextNode } from "../txtnode/ndtxt";
 const docs: SwDoc[] = [],
   roots: SwRootFrame[] = [],

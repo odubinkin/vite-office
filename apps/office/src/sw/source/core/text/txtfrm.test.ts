@@ -4,7 +4,7 @@ import { SwClient, SwIterator } from "../../../inc/calbck";
 import { afterEach, describe, expect, it } from "vitest";
 
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
-import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { createSwPageFrames } from "../layout/newfrm";
 import { createSwTextFrameInputs, projectSwLineNumbers, type SwTextFrameInput } from "./txtfrm";
 

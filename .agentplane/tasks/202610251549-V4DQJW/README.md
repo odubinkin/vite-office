@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T18:59:41.365Z"
+doc_updated_at: "2026-10-25T19:47:34.535Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -92,6 +92,10 @@ sections:
     - Observation: Native fast text/property/value contexts, document handler and per-stream parser provisioning are implemented with original82 URI registrations. Final profile60/6 files passes at S821/B454/F191/L747 all100 across10 runtime owners. Actual run schema parsing reaches DomainMapper/SwDoc with Unicode text and bold property assertions. Exact argv/hashes: evidence/fast-context-checkpoint.json.
       Impact: Native strict/transitional dispatch, copy-vs-child context state, xml:space, MCE and group ordering are verified. Source audit corrected an initial immediate callback rethrow: native saves the first failure, continues the current16KiB UTF8 block and wraps at the current locator. WRITER101/102 document preserved suspicious behavior. The SAX error carrier is an explicit host boundary, not a generated UNO Any/exception parity claim.
       Resolution: ODT regression25, ODS regression17, module guard48 pass. Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/size/registry/provenance1341/static/routing/diff pass; doctor retains only existing hook readiness warning. Full document section/style/list/table loading, export/UI, Calc XLSX and task-wide acceptance remain pending in approved scope. Full suite is not due.
+
+    - Observation: Page import exposed geometry-only page ownership, missing text grid and a pool-default registry without ItemInfo metadata.
+      Impact: Native section/grid UNO application and lossless browser graph transfer required real frame owners and actual native user-default state. Full DOCX application acceptance remains pending.
+      Resolution: Implemented four document-pool page frames, native grid/UNO properties, consumed ItemInfoStatic/User metadata and complete page/frame transport. Command/results/evidence/scope: page-frame-checkpoint.json records 13 owner tests with S349/B244/F79/L324 all100, 31 pool cases with all100, 110 Writer and13 Calc regressions,206 migrated fixture cases and6 production Chromium desktop/mobile cases; build/lint/format/dependency/docs/size/tree/provenance/registry/static/routing passed. Doctor has zero errors and the existing hook readiness warning. Full suite not due. Section/default-page-mode/style loading, DOCX export/UI and ODT grid persistence remain pending; no whole-task verification or parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -160,3 +164,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native fast text/property/value contexts, document handler and per-stream parser provisioning are implemented with original82 URI registrations. Final profile60/6 files passes at S821/B454/F191/L747 all100 across10 runtime owners. Actual run schema parsing reaches DomainMapper/SwDoc with Unicode text and bold property assertions. Exact argv/hashes: evidence/fast-context-checkpoint.json.
   Impact: Native strict/transitional dispatch, copy-vs-child context state, xml:space, MCE and group ordering are verified. Source audit corrected an initial immediate callback rethrow: native saves the first failure, continues the current16KiB UTF8 block and wraps at the current locator. WRITER101/102 document preserved suspicious behavior. The SAX error carrier is an explicit host boundary, not a generated UNO Any/exception parity claim.
   Resolution: ODT regression25, ODS regression17, module guard48 pass. Build/application typecheck, scoped lint/format, docs/dependencies/source-tree/size/registry/provenance1341/static/routing/diff pass; doctor retains only existing hook readiness warning. Full document section/style/list/table loading, export/UI, Calc XLSX and task-wide acceptance remain pending in approved scope. Full suite is not due.
+
+- Observation: Page import exposed geometry-only page ownership, missing text grid and a pool-default registry without ItemInfo metadata.
+  Impact: Native section/grid UNO application and lossless browser graph transfer required real frame owners and actual native user-default state. Full DOCX application acceptance remains pending.
+  Resolution: Implemented four document-pool page frames, native grid/UNO properties, consumed ItemInfoStatic/User metadata and complete page/frame transport. Command/results/evidence/scope: page-frame-checkpoint.json records 13 owner tests with S349/B244/F79/L324 all100, 31 pool cases with all100, 110 Writer and13 Calc regressions,206 migrated fixture cases and6 production Chromium desktop/mobile cases; build/lint/format/dependency/docs/size/tree/provenance/registry/static/routing passed. Doctor has zero errors and the existing hook readiness warning. Full suite not due. Section/default-page-mode/style loading, DOCX export/UI and ODT grid persistence remain pending; no whole-task verification or parity promotion.

@@ -119,3 +119,27 @@ The stream lazily provisions its own synchronous `FastSaxParser` and registers a
 Tests exercise actual fast SAX through the generated factory for strict/transitional text documents and inspect run formatting on a real `SwDoc` reached through `DomainMapper`. Whole-document section/style/list/table application is still pending. Encountering a not-yet-ported definition, resource class or cross-namespace factory fails explicitly at the incomplete implementation boundary; it does not silently pretend that the full DOCX import succeeded. This boundary is not a claimed native semantic replacement and must disappear as the missing owners are implemented before application acceptance. DOCX export and the existing application UI routes remain pending.
 
 Native callback failures retain only the first saved cause and continue the current16KiB UTF8 input block before failing at its checkpoint, as `Entity::saveException` and `FastSaxParserImpl::parse` do. The current host exception carrier exposes SAXParseException field names and the original saved reference; it does not claim a generated/registered UNO exception or Any value. Locator and lexical diagnostics come from the host XML engine. Native-generated SAX exception typing/ABI remains unverified.
+
+## Page-frame prerequisite
+
+`SwPageDesc` owns four real document-pool `SwFrameFormat` instances. Native usage
+flags, registered-name uniqueness, independent format names and copy/follow
+semantics replace the previous geometry-only state. Existing browser geometry
+values are projections of these owners. Native `SwTextGridItem` owns all eleven
+fields, typed UNO members and original paper-mode arithmetic. Page-style grid
+properties and `PageStyleLayout` use the original item and enum contracts.
+
+Registered pool defaults now have actual `ItemInfoStatic`/`ItemInfoUser` metadata,
+so user defaults follow the existing pool state machine without a synthetic
+contiguous Which range. Browser graph/Worker/storage records retain all four
+direct page item sets, their names, usage flags and optional user grid defaults.
+Legacy geometry-only records remain accepted. Frame-size encoding is shared
+with tables; complete LR transport preserves relative measures, proportions,
+gutters and flags. The browser codec copies original raw `propLeft`/`propRight`
+scalars explicitly because public proportional setters rescale stored values.
+This is a host serialization binding, not an alternative native item contract.
+
+Section application, document default-page-mode notifications and complete style
+loading remain pending. ODT currently preserves represented page geometry but
+does not yet serialize the new grid fields. This checkpoint does not establish
+DOCX import/export, application file routing or complete native parity.

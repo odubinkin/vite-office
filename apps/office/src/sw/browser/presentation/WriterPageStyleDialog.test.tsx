@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import fs from "node:fs";
 import { describe, expect, it, vi } from "vitest";
 
-import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../test/writer-page-descriptor";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterPageStyleDialog } from "./WriterPageStyleDialog";
 import { readOdtDocument } from "../../source/filter/xml/swxml";

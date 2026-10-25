@@ -29,10 +29,15 @@ import {
   noSuchElement,
   elementExists,
 } from "./unocrsrhelper";
-import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
+import { getDefaultWriterPageDescriptorValue } from "../layout/pagedesc";
 import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { convertTwipToMm100 } from "../../../../tools/inc/UnitConversion";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
+import { SwUnoPageStylePropertyMap } from "./unomap";
+import { UseOnPage } from "../layout/pagedesc";
+import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
+import { MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
+import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
 /** Represented native style families. Character/table/conditional styles require their unported core owners. */
 export type SwStyleFamily = "ParagraphStyles" | "PageStyles" | "NumberingStyles";
 /** A style descriptor owns pending properties only until insertByName attaches its canonical format. */
@@ -40,6 +45,11 @@ export class SwXStyle {
   private pending = new Map<string, Any>();
   private parentName = "";
   private owner: SwTextFormatColl | SwPageDesc | SwNumRule | undefined;
+  /** Native wrapper destruction releases pending descriptor Any values; the attached document format is borrowed. @returns Nothing. */
+  dispose(): void {
+    for (const value of this.pending.values()) value.dispose();
+    this.pending.clear();
+  }
   /** Binds the represented native owner and its declared inputs. @param doc - Canonical document owner. @param family - Original family input. @param owner - Original owner input. @returns Nothing. */
   constructor(
     readonly doc: SwDoc,
@@ -63,6 +73,13 @@ export class SwXStyle {
           ["TopMargin", "sal_Int32"],
           ["BottomMargin", "sal_Int32"],
           ["IsLandscape", "bool"],
+          ["PageStyleLayout", pageLayoutType],
+          ...[...SwUnoPageStylePropertyMap].map(
+            /** Publishes original grid property types. @param entry - Entry. @returns Descriptor. */ ([
+              name,
+              entry,
+            ]) => [name, entry.type] as const,
+          ),
         ],
         false,
       );
@@ -74,6 +91,15 @@ export class SwXStyle {
     if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown(n);
     if (!this.owner)
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
+    if (this.family === "PageStyles" && SwUnoPageStylePropertyMap.has(n)) {
+      const entry = SwUnoPageStylePropertyMap.get(n) as SwUnoPropertyEntry;
+      return (this.owner as SwPageDesc)
+        .GetMaster()
+        .GetAttrSet()
+        .GetItemState(entry.which, false) === SfxItemState.SET
+        ? PropertyState.DIRECT_VALUE
+        : PropertyState.DEFAULT_VALUE;
+    }
     if (this.family !== "ParagraphStyles") return PropertyState.DIRECT_VALUE;
     if (n === "FollowStyle") return PropertyState.DIRECT_VALUE;
     const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
@@ -99,7 +125,16 @@ export class SwXStyle {
       return;
     }
     if (this.family === "PageStyles") {
-      const defaults = createDefaultWriterPageDescriptor(this.doc.GetLocale()).GetValue();
+      const entry = SwUnoPageStylePropertyMap.get(n);
+      if (entry) {
+        (this.owner as SwPageDesc).GetMaster().ResetFormatAttr(entry.which);
+        return;
+      }
+      if (n === "PageStyleLayout") {
+        (this.owner as SwPageDesc).SetUseOn(UseOnPage.All);
+        return;
+      }
+      const defaults = getDefaultWriterPageDescriptorValue(this.doc.GetLocale());
       if (n === "FollowStyle") {
         (this.owner as SwPageDesc).SetFollow(null);
         return;
@@ -229,12 +264,17 @@ export class SwXStyle {
     const n = text(name);
     if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown(n);
     if (!this.owner) {
-      const entry = SwUnoPropertyMap.get(n);
+      const entry =
+        this.family === "PageStyles" ? SwUnoPageStylePropertyMap.get(n) : SwUnoPropertyMap.get(n);
       if (entry)
         putItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry, value);
       else if (n === "FollowStyle") stringValue(value);
       else if (n === "IsLandscape") scalar(value, "bool");
       else if (pageFields[n]) scalar(value, "sal_Int32");
+      else if (n === "PageStyleLayout") {
+        const item = SvxPageItem.CreateDefault();
+        if (!item.PutValue(value, MID_PAGE_LAYOUT)) illegal("Invalid page style layout");
+      }
       this.pending.get(n)?.dispose();
       this.pending.set(n, new UnoAny(value));
       return;
@@ -290,6 +330,22 @@ export class SwXStyle {
     const page = (this.owner as SwPageDesc | undefined) ?? this.doc.GetPageDesc(),
       value = page.GetValue(),
       out = new UnoAny();
+    const entry = SwUnoPageStylePropertyMap.get(n);
+    if (entry) {
+      out.dispose();
+      return queryItem(
+        this.owner
+          ? page.GetMaster().GetAttrSet().Get(entry.which)
+          : this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which),
+        entry,
+      );
+    }
+    if (n === "PageStyleLayout") {
+      const item = SvxPageItem.CreateDefault();
+      item.SetPageUsage(page.GetUseOn() as unknown as SvxPageUsage);
+      item.QueryValue(out, MID_PAGE_LAYOUT);
+      return out;
+    }
     if (n === "IsLandscape") out.insert([value.landscape], "bool");
     else {
       const key = pageFields[n];
@@ -302,6 +358,25 @@ export class SwXStyle {
   private setPageValue(n: string, v: Any): void {
     const page = this.owner as SwPageDesc,
       old = page.GetValue();
+    const entry = SwUnoPageStylePropertyMap.get(n);
+    if (entry) {
+      const item = putItem(page.GetMaster().GetAttrSet().Get(entry.which), entry, v);
+      for (const frame of [
+        page.GetMaster(),
+        page.GetLeft(),
+        page.GetFirstMaster(),
+        page.GetFirstLeft(),
+      ])
+        frame.SetFormatAttr(item);
+      return;
+    }
+    if (n === "PageStyleLayout") {
+      const item = SvxPageItem.CreateDefault();
+      item.SetPageUsage(page.GetUseOn() as unknown as SvxPageUsage);
+      if (!item.PutValue(v, MID_PAGE_LAYOUT)) illegal("Invalid page style layout");
+      page.SetUseOn(item.GetPageUsage() as unknown as UseOnPage);
+      return;
+    }
     if (n === "IsLandscape") page.SetValue({ ...old, landscape: scalar(v, "bool") as boolean });
     else {
       const key = pageFields[n] as (typeof pageFields)[string];

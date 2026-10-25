@@ -7,7 +7,7 @@ import { RES_UL_SPACE } from "../../../inc/hintids";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SwFormatTablePage } from "../../ui/table/tabledlg";
 import { createSwPageFrames } from "../layout/newfrm";
-import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import type { SwTableFormat } from "./swtable";
 /** Creates an original flat graph. @param input - Explicit construction input. @returns Native owners. */
 function fixture(input: SwTableFormat = {}) {

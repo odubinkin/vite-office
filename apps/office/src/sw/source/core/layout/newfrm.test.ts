@@ -3,7 +3,7 @@ import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { afterEach, describe, expect, it } from "vitest";
 
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { createSwPageFrames, projectSwTextPrintBounds } from "./newfrm";
 import { SwRootFrame } from "./newfrm";
 import { createWriterDocument } from "../doc/doc";

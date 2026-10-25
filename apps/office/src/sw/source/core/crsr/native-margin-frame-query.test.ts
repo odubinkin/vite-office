@@ -6,7 +6,7 @@ import { SwPosition } from "./pam";
 import { SwRootFrame } from "../layout/newfrm";
 import { SwTextFrame } from "../text/txtfrm";
 import { SwTextCursor } from "../text/itrtxt";
-import { createDefaultWriterPageDescriptor } from "../layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 const docs: SwDoc[] = [],
   roots: SwRootFrame[] = [],

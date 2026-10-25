@@ -11,7 +11,8 @@
     "assertions": [
       "Consumed OOXML resource, property map, URI/package stream and imported-style lookup contracts are implemented; application DOCX import remains in progress.",
       "Native parser state and break protocol are implemented; full fast-context/document dispatch and application import remain pending.",
-      "Native text/property/value fast contexts and registered SAX token dispatch are implemented for the admitted schema slice; document/section/style/list/table loading and application Open remain pending."
+      "Native text/property/value fast contexts and registered SAX token dispatch are implemented for the admitted schema slice; document/section/style/list/table loading and application Open remain pending.",
+      "Real document-owned page frames, grid item/UNO properties and lossless browser graph transport are implemented as section-import prerequisites; section application and application DOCX import remain pending."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -136,6 +137,18 @@
         {
           "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
           "marker": "FastSaxParser"
+        },
+        {
+          "path": "apps/office/src/sw/inc/tgrditem.ts",
+          "marker": "SwTextGridItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+          "marker": "SwPageDesc"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts",
+          "marker": "WriterPageFormatRecord"
         }
       ],
       "tests": [

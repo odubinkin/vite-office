@@ -10,7 +10,7 @@ import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { AttrSetChangeHint, SwAttrSetChg } from "../../../inc/hints";
 import { LegacyModifyHint } from "../../../inc/calbck";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { createSwPageFrames } from "./newfrm";
 /** Observes copied native delta consumption without replacing layout ownership. */
 class Frame extends SwTabFrame {

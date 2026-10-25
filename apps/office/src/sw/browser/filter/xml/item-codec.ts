@@ -3,6 +3,7 @@
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
 import { SwFormatPageDesc } from "../../../source/core/attr/fmtpdsc";
+import { encodeWriterFrameItem, decodeWriterFrameItem } from "./writer-frame-item-codec";
 import { encodePageDesc, decodePageDesc } from "./page-desc-codec";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
@@ -122,6 +123,8 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  const frame = encodeWriterFrameItem(item);
+  if (frame !== null) return frame;
   if (item instanceof SwFormatPageDesc) return encodePageDesc(item);
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
@@ -212,6 +215,8 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  const frame = decodeWriterFrameItem(snapshot);
+  if (frame !== null) return frame;
   return (
     decodePageDesc(snapshot) ?? decodeTextLineItem(pool, snapshot) ?? pool.CreateItem(snapshot)
   );

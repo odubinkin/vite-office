@@ -6,7 +6,7 @@ import { SwTableLine } from "../table/swtable";
 import { SwDoc } from "../doc/doc";
 import { SwRootFrame } from "./newfrm";
 import { SwTabFrame, SwRowFrame } from "./tabfrm";
-import { createDefaultWriterPageDescriptor } from "./pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../../test/writer-page-descriptor";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import type { SwModify } from "../../../inc/calbck";
 /** Requires an actual original owner. @param value - Original optional owner. @returns Original owner. */

@@ -4,7 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
 import { WriterWorkbench } from "../presentation/writer-view";
 import { SwLineNumberInfo } from "../../inc/lineinfo";
-import { createDefaultWriterPageDescriptor } from "../../source/core/layout/pagedesc";
+import { createDefaultWriterPageDescriptor } from "../../../test/writer-page-descriptor";
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
 afterEach(
   /** Releases actual React subscriptions and native root ownership. @returns Nothing. */ () => {

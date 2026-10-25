@@ -11,6 +11,7 @@ import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offap
 import * as H from "../../../inc/hintids";
 import * as M from "../../../../editeng/inc/memberids";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
+import * as Grid from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
 export interface SwUnoPropertyEntry {
   readonly which: number;
@@ -29,6 +30,37 @@ export interface SwUnoPropertyEntry {
     | "pagedesc"
     | "break";
 }
+/** Original page-style grid entries from unomap1.cxx, kept out of cursor/paragraph property maps. */
+export const SwUnoPageStylePropertyMap: ReadonlyMap<
+  string,
+  SwUnoPropertyEntry & { readonly type: UnoTypeArgument }
+> = new Map(
+  [
+    ["GridColor", Grid.MID_GRID_COLOR, "sal_Int32"],
+    ["GridLines", Grid.MID_GRID_LINES, "sal_Int16"],
+    ["GridBaseHeight", Grid.MID_GRID_BASEHEIGHT | 0x80, "sal_Int32"],
+    ["GridRubyHeight", Grid.MID_GRID_RUBYHEIGHT | 0x80, "sal_Int32"],
+    ["GridMode", Grid.MID_GRID_TYPE, "sal_Int16"],
+    ["GridRubyBelow", Grid.MID_GRID_RUBY_BELOW, "bool"],
+    ["GridPrint", Grid.MID_GRID_PRINT, "bool"],
+    ["GridDisplay", Grid.MID_GRID_DISPLAY, "bool"],
+    ["GridBaseWidth", Grid.MID_GRID_BASEWIDTH | 0x80, "sal_Int32"],
+    ["GridSnapToChars", Grid.MID_GRID_SNAPTOCHARS, "bool"],
+    ["StandardPageMode", Grid.MID_GRID_STANDARD_MODE, "bool"],
+  ].map(
+    /** Retains original Which/member/type descriptors. @param row - Original property row. @returns Entry. */ (
+      row,
+    ) => [
+      row[0] as string,
+      {
+        which: H.RES_TEXTGRID,
+        member: row[1] as number,
+        kind: "any" as const,
+        type: row[2] as UnoTypeArgument,
+      },
+    ],
+  ),
+);
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
   ["CharAutoStyleName", { which: H.RES_TXTATR_AUTOFMT, member: 0, kind: "autostyle" }],

@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts",
+          "marker": "WriterPageFormatRecord"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "Task V4DQJW page-frame prerequisite replaces the geometry-only SwPageDesc state with four document-pool-owned SwFrameFormat owners, native usage flags, registered-name uniqueness and copy/follow behavior. SwTextGridItem retains native eleven-field defaults, typed UNO members and paper-mode arithmetic; page UNO properties use actual pooled items. Browser graph records retain all four direct item sets, independent frame names and optional native user grid defaults; legacy geometry ingress remains explicit. Consumed ItemInfoStatic/User metadata now serves registered pool defaults without inventing contiguous ranges. Complete frame-size codec is shared with tables; LR browser transport copies original raw scalar fields including propLeft/propRight through explicit host field access, avoiding proportional setter rescaling. This host serialization binding is local infrastructure, not native semantic certification. SectionPropertyMap/default-page-mode/document/style loading, DOCX export/Open/download and ODT grid serialization remain pending. Existing statuses and intentional recovery/autosave/file UI deviations are preserved.",
+    "responsibilities": [
+      "Task V4DQJW page-frame prerequisite replaces the geometry-only SwPageDesc state with four document-pool-owned SwFrameFormat owners, native usage flags, registered-name uniqueness and copy/follow behavior. SwTextGridItem retains native eleven-field defaults, typed UNO members and paper-mode arithmetic; page UNO properties use actual pooled items. Browser graph records retain all four direct item sets, independent frame names and optional native user grid defaults; legacy geometry ingress remains explicit. Consumed ItemInfoStatic/User metadata now serves registered pool defaults without inventing contiguous ranges. Complete frame-size codec is shared with tables; LR browser transport copies original raw scalar fields including propLeft/propRight through explicit host field access, avoiding proportional setter rescaling. This host serialization binding is local infrastructure, not native semantic certification. SectionPropertyMap/default-page-mode/document/style loading, DOCX export/Open/download and ODT grid serialization remain pending. Existing statuses and intentional recovery/autosave/file UI deviations are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Explicit browser graph/Worker/storage serialization around original native item owners."
+    }
+  }
+}
