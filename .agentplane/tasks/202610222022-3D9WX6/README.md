@@ -4,7 +4,7 @@ title: "Connect native AutoSum and formula-bar input actions"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 38
+revision: 39
 origin:
   system: "manual"
 depends_on:
@@ -20,9 +20,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-25T05:22:51.375Z"
+  updated_at: "2026-10-25T05:25:02.789Z"
   updated_by: "CODER"
-  note: "Native AutoSum/formula-line behavior accepted on completed76foundation. Full19124cases and successful related rechecks,current all-app/inventory raw100,actual browser/Worker and full actual source/registry gates pass;original tracked reference link unchanged."
+  note: "verified-202610222022-3D9WX6"
   attempts: 0
 quality_review:
   state: "pass"
@@ -103,8 +103,14 @@ events:
     from: "DOING"
     to: "DOING"
     note: "Start: record the existing committed native AutoSum/input implementation as the quality review target before final accepted closure."
+  -
+    type: "verify"
+    at: "2026-10-25T05:25:02.789Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610222022-3D9WX6"
 doc_version: 3
-doc_updated_at: "2026-10-25T05:24:06.985Z"
+doc_updated_at: "2026-10-25T05:25:02.851Z"
 doc_updated_by: "CODER"
 description: "Block74 after73: implement original ordinary AutoSum classification/search/range construction and selected-block insertion through native token/view/input owners. Enable real Sum and correct StartFormula/SetFuncString source text selection in the shared-style Calc formula bar. Preserve native detection priorities,20-cell seek bound,sum-of-sums,empty-selection behavior,history and ODS persistence. No browser evaluator or ad-hoc range inference. Existing unported filtered/subtotal/group/3D services stay explicit and do not receive fabricated state. Scope up to80 source/test/registry/probe paths in Calc and any genuinely shared consumed owners. Require complete Calc raw100 and changed shared raw100,related tests,actual UI/browser/Worker checks and static/build/source/registry gates. Full all-app checkpoint80."
 sections:
@@ -170,6 +176,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-25T05:25:02.789Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610222022-3D9WX6
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:24:06.985Z, excerpt_hash=sha256:e4b5403602bcabde40b8240fc33d97dabb11c99e14ed781d9a8f06577fe229d2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222022-3D9WX6/blueprint/resolved-snapshot.json
+    - old_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+    - current_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610222022-3D9WX6
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610222022-3D9WX6 --result verified-202610222022-3D9WX6 --commit f60431bc26904df18137c2d578abf8faaf094aa2
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -276,6 +312,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-25T05:25:02.789Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610222022-3D9WX6
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T05:24:06.985Z, excerpt_hash=sha256:e4b5403602bcabde40b8240fc33d97dabb11c99e14ed781d9a8f06577fe229d2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610222022-3D9WX6/blueprint/resolved-snapshot.json
+- old_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+- current_digest: 3af666f0d863ab8e799e541b45afb62cd9f83177c0afbea25a27fecbf713e469
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610222022-3D9WX6
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610222022-3D9WX6 --result verified-202610222022-3D9WX6 --commit f60431bc26904df18137c2d578abf8faaf094aa2
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
