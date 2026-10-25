@@ -13,7 +13,7 @@
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Maps represented emphasis, code, hyperlink and strikeout span callbacks into Writer text runs, resolving relative hyperlink targets against a supplied document base URL while preserving fragment-only targets."
+      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs, resolving relative hyperlink targets against a supplied document base URL while preserving fragment-only targets."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -27,12 +27,20 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "resolves Markdown hyperlink callbacks"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "maps hard and soft line breaks"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
           "marker": "SwMarkdownParser::enter_span_callback"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
+          "marker": "MD_TEXT_BR"
         }
       ]
     }

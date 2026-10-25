@@ -21,6 +21,11 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SvxFontItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
@@ -32,7 +37,7 @@ import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import { SwNumRuleItem } from "../para/paratr";
+import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
 import * as H from "../../../inc/hintids";
 import { setTextFormatCollAtNode } from "../doc/docfmt";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -121,6 +126,14 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     );
   }
   const out = new Any();
+  if (entry.kind === "border") {
+    const edge = { 3: 0, 4: 1, 1: 2, 2: 3 }[entry.member & 0x7f];
+    if (edge === undefined || !(item instanceof SvxBoxItem)) illegal("Unknown paragraph border");
+    return new Any(
+      [SvxBoxItem.SvxLineToLine(item.GetLine(edge), true)],
+      cppu_detail_getUnoType_BorderLine2,
+    );
+  }
   if (entry.kind === "any") {
     (item as unknown as { QueryValue(out: Any, member: number): boolean }).QueryValue(
       out,
@@ -198,6 +211,13 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   const copy = item.Clone();
   if (copy === null) invalid("Invalid pooled item");
+  if (entry.kind === "border") {
+    if (!(copy instanceof SvxBoxItem)) illegal("Invalid paragraph border item");
+    const line = new BorderLine2();
+    if (!value.extract(line, cppu_detail_getUnoType_BorderLine2)) illegal("Expected BorderLine2");
+    if (!copy.PutValue(line, entry.member)) illegal("Invalid paragraph border");
+    return copy;
+  }
   if (entry.kind === "color") {
     const n = scalar(value, "sal_Int32") as number;
     if (copy instanceof SvxColorItem) {
@@ -221,6 +241,8 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
     return copy;
   }
+  if (copy instanceof SwParaConnectBorderItem)
+    return new SwParaConnectBorderItem(scalar(value, "bool") as boolean);
   if (copy instanceof SfxBoolItem)
     return new SfxBoolItem(item.Which(), scalar(value, "bool") as boolean);
   if (copy instanceof SfxInt16Item && entry.kind === "byte")

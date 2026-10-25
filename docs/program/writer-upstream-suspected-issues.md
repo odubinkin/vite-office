@@ -1178,3 +1178,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/wrtw8nds.cxx`, `MSWordExportBase::NeedTextNodeSplit` and `OutWW8_SwTextNode`, split a text node at soft page positions when its follow style needs another Word section, then call `RtfExport::PrepareNewPageDesc`. Pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::SectionBreaks`, stores the next text node's page descriptor as `m_pPrevPageDesc`; `RtfExport::PrepareNewPageDesc` suppresses `SectionBreak` when that descriptor's follow equals the requested page.
 - Observation: when a noninitial text node uses a first/follow style, the stored previous descriptor can already be that node's first style. Its soft split then creates two output paragraphs while the `\\sect` token is suppressed. This is a source-level control-flow inference, not a compiled desktop reproduction.
 - Preservation: the current RTF writer retains the split and the source suppression for that state. Focused tests distinguish the first text node from a later one without inventing a section to improve round trips.
+
+### WRITER105 — Markdown thematic-line export branch appears unreachable
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx` writes a paragraph only inside `if (!rNodeText.isEmpty())`; within that block, its `COLL_HTML_HR` case checks `if (rNodeText.isEmpty())` before writing `___`.
+- Observation: an empty horizontal-line paragraph imported by pinned `SwMarkdownParser::AddHR` cannot satisfy both conditions. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown writer retains the empty-paragraph behavior and does not synthesize `___` merely to improve the round trip.

@@ -150,6 +150,16 @@ export class SwMarkdownParser {
         activeListKind = undefined;
         continue;
       }
+      if (isThematicBreak(line)) {
+        blocks.push({
+          kind: "paragraph",
+          value: { runs: [], style: "horizontal-line" },
+        });
+        offset++;
+        activeListId = undefined;
+        activeListKind = undefined;
+        continue;
+      }
       if (activeListKind === undefined && /^(?: {4}|\t)/u.test(line)) {
         const code: string[] = [];
         while (offset < lines.length) {
@@ -266,9 +276,18 @@ export class SwMarkdownParser {
 /** Tests whether one line begins another block rather than continuing a paragraph. @param line - Current line. @param following - Next line. @returns Whether a boundary begins. */
 function isBlockStart(line: string, following: string | undefined): boolean {
   return (
+    isThematicBreak(line) ||
     /^ {0,3}(?:#{1,6}(?:\s|$)|(?:`{3,}|~{3,})|>\s?|(?:[-+*]|\d+[.)])\s+)/u.test(line) ||
     (line.includes("|") &&
       following !== undefined &&
       readMarkdownTableAlignment(following) !== undefined)
   );
+}
+
+/** Mirrors md4c's three-marker thematic block recognition after optional indentation. */
+function isThematicBreak(line: string): boolean {
+  const content = /^ {0,3}(.*)$/u.exec(line)?.[1];
+  if (content === undefined) return false;
+  const markers = content.replaceAll(/[ \t]/gu, "");
+  return markers.length >= 3 && /^([-*_])\1*$/u.test(markers);
 }

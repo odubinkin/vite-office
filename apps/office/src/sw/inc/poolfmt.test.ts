@@ -86,11 +86,11 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       );
       expect(collection.GetNextTextFormatColl().id).toBe(style.followId);
     }
-    expect(document.GetTextFormatColls()).toHaveLength(26);
+    expect(document.GetTextFormatColls()).toHaveLength(27);
     expect(document.GetTextFormatColl("table-contents").DerivedFrom()).toBe(
       document.GetDfltTextFormatColl(),
     );
-    expect(document.GetTextFormatColls()).toHaveLength(27);
+    expect(document.GetTextFormatColls()).toHaveLength(28);
     expect(document.GetTextFormatColl("heading-1").GetAssignedOutlineStyleLevel()).toBe(0);
     expect(document.GetTextFormatColl("heading-10").GetAssignedOutlineStyleLevel()).toBe(9);
     expect(
@@ -159,6 +159,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       "heading-10",
       "quotations",
       "preformatted-text",
+      "horizontal-line",
     ]);
     expect(
       WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.some(
@@ -287,6 +288,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       },
       quotations: { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 },
       "preformatted-text": { fontRole: "fixed", fontSizeTwips: 200, lowerTwips: 0 },
+      "horizontal-line": { fontSizeTwips: 120, lowerTwips: 283, lineNumber: false },
     } as const;
     expect(Object.keys(expected)).toEqual(
       WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(

@@ -12,7 +12,14 @@ import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import {
+  SvxBoxItem,
+  SvxBoxItemLine,
+  SvxRightMarginItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
+import { COL_GRAY } from "../../../../tools/inc/color";
 import {
   SvxFontHeightItem,
   SvxFontItem,
@@ -47,9 +54,11 @@ import {
   RES_UL_SPACE,
   RES_KEEP,
   RES_LINENUMBER,
+  RES_BOX,
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
+import { SwParaConnectBorderItem } from "../para/paratr";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Direct item values created by one upstream pool-style switch branch. */
@@ -181,6 +190,8 @@ export function getWriterParagraphStyleDefaults(
       return { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 };
     case "preformatted-text":
       return { fontRole: "fixed", fontSizeTwips: 10 * 20, lowerTwips: 0 };
+    case "horizontal-line":
+      return { fontSizeTwips: 120, lowerTwips: HTML_PARSPACE_TWIPS, lineNumber: false };
     default:
       return {};
   }
@@ -192,6 +203,12 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.id,
     collection.GetAttrSet().GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
   );
+  if (collection.id === "horizontal-line") {
+    const box = new SvxBoxItem(RES_BOX);
+    box.SetLine(new SvxBorderLine(COL_GRAY, 3, SvxBorderLineStyle.DOUBLE), SvxBoxItemLine.BOTTOM);
+    collection.SetFormatAttr(box);
+    collection.SetFormatAttr(new SwParaConnectBorderItem(false));
+  }
   if (defaults.adjust !== undefined)
     collection.SetFormatAttr(new SvxAdjustItem(defaults.adjust, RES_PARATR_ADJUST));
   if (defaults.firstLineTwips !== undefined)

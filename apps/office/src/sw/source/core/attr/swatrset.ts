@@ -104,7 +104,7 @@ import {
   RES_COLLAPSING_BORDERS,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../doc/doc";
-import { SwNumRuleItem } from "../para/paratr";
+import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
 import { SwFormatPageDesc } from "./fmtpdsc";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -192,6 +192,11 @@ export class SwAttrPool extends SfxItemPool {
       (value) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
     );
     this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
+    this.RegisterDefaultItem(
+      new SwParaConnectBorderItem(),
+      /** Restores the concrete paragraph-border connection item. @param value - Stored boolean. @returns Native item. */
+      (value) => new SwParaConnectBorderItem(Boolean(value)),
+    );
     const device = document.GetDefaultFontDevice();
     this.RegisterDefaultItem(
       new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, 0),

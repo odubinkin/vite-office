@@ -3,8 +3,22 @@
  */
 
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import { RES_PARATR_CONNECT_BORDER, RES_PARATR_NUMRULE } from "../../../inc/hintids";
+
+/** Native paragraph-border connection item, whose pooled default is true. */
+export class SwParaConnectBorderItem extends SfxBoolItem {
+  /** Creates the source boolean item. @param connect - Connect adjacent paragraph borders. */
+  public constructor(connect = true) {
+    super(RES_PARATR_CONNECT_BORDER, connect);
+  }
+
+  /** Preserves the native concrete item type. @returns Independent item. */
+  public override Clone(): SwParaConnectBorderItem {
+    return new SwParaConnectBorderItem(this.GetValue());
+  }
+}
 
 /** Native sw::ListLevelIndents flags from sw/inc/paratr.hxx. */
 export enum ListLevelIndents {

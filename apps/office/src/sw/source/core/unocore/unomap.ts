@@ -8,6 +8,7 @@ import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
+import { cppu_detail_getUnoType_BorderLine2 as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import * as H from "../../../inc/hintids";
 import * as M from "../../../../editeng/inc/memberids";
 import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
@@ -27,7 +28,8 @@ export interface SwUnoPropertyEntry {
     | "autostyle"
     | "hyperlink"
     | "pagedesc"
-    | "break";
+    | "break"
+    | "border";
 }
 /** Exact property identity and member selection; numeric values stay in their original item owners. */
 export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map([
@@ -119,6 +121,14 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
     { which: H.RES_MARGIN_FIRSTLINE, member: M.MID_FIRST_AUTO, kind: "bool" },
   ],
   ["ParaLineNumberCount", { which: H.RES_LINENUMBER, member: 0, kind: "bool" }],
+  ["ParaConnectBorder", { which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" }],
+  ...(["Top", "Bottom", "Left", "Right"] as const).map(
+    (side, index) =>
+      [
+        `Para${side}Border`,
+        { which: H.RES_BOX, member: ([3, 4, 1, 2][index] as number) | 0x80, kind: "border" },
+      ] as [string, SwUnoPropertyEntry],
+  ),
   ["BreakType", { which: H.RES_BREAK, member: 0, kind: "break" }],
   ["PageDescName", { which: H.RES_PAGEDESC, member: MID_PAGEDESC_PAGEDESCNAME, kind: "pagedesc" }],
   [
@@ -168,46 +178,48 @@ export function createPropertySetInfo(
     const argument: UnoTypeArgument =
       entry.kind === "break"
         ? breakType
-        : entry.kind === "pagedesc"
-          ? entry.member === MID_PAGEDESC_PAGEDESCNAME
-            ? "OUString"
-            : "sal_Int16"
-          : entry.kind === "string"
-            ? "OUString"
-            : entry.kind === "font"
-              ? entry.member < 3
-                ? "OUString"
-                : "sal_Int16"
-              : entry.kind === "bool"
-                ? "bool"
-                : entry.kind === "byte"
-                  ? "sal_Int8"
-                  : entry.kind === "short"
-                    ? "sal_Int16"
-                    : entry.kind === "hyperlink" || entry.kind === "autostyle"
-                      ? "OUString"
-                      : entry.kind === "color" || entry.kind === "long"
-                        ? "sal_Int32"
-                        : name.includes("Posture")
-                          ? fontSlantType
-                          : name === "ParaLineSpacing"
-                            ? lineSpacingType
-                            : name === "ParaTabStops"
-                              ? ["Sequence", tabStopType]
-                              : name === "CharUnderlineColor"
-                                ? "sal_Int32"
-                                : name === "CharUnderlineHasColor"
-                                  ? "bool"
-                                  : name === "CharStrikeout" ||
-                                      name === "CharEscapement" ||
-                                      name === "ParaAdjust" ||
-                                      name === "ParaLastLineAdjust"
-                                    ? "sal_Int16"
-                                    : name === "CharEscapementHeight"
-                                      ? "sal_Int8"
-                                      : name === "ParaExpandSingleWord"
-                                        ? "bool"
-                                        : "float";
+        : entry.kind === "border"
+          ? borderLineType
+          : entry.kind === "pagedesc"
+            ? entry.member === MID_PAGEDESC_PAGEDESCNAME
+              ? "OUString"
+              : "sal_Int16"
+            : entry.kind === "string"
+              ? "OUString"
+              : entry.kind === "font"
+                ? entry.member < 3
+                  ? "OUString"
+                  : "sal_Int16"
+                : entry.kind === "bool"
+                  ? "bool"
+                  : entry.kind === "byte"
+                    ? "sal_Int8"
+                    : entry.kind === "short"
+                      ? "sal_Int16"
+                      : entry.kind === "hyperlink" || entry.kind === "autostyle"
+                        ? "OUString"
+                        : entry.kind === "color" || entry.kind === "long"
+                          ? "sal_Int32"
+                          : name.includes("Posture")
+                            ? fontSlantType
+                            : name === "ParaLineSpacing"
+                              ? lineSpacingType
+                              : name === "ParaTabStops"
+                                ? ["Sequence", tabStopType]
+                                : name === "CharUnderlineColor"
+                                  ? "sal_Int32"
+                                  : name === "CharUnderlineHasColor"
+                                    ? "bool"
+                                    : name === "CharStrikeout" ||
+                                        name === "CharEscapement" ||
+                                        name === "ParaAdjust" ||
+                                        name === "ParaLastLineAdjust"
+                                      ? "sal_Int16"
+                                      : name === "CharEscapementHeight"
+                                        ? "sal_Int8"
+                                        : name === "ParaExpandSingleWord"
+                                          ? "bool"
+                                          : "float";
     const key = unicode(name);
     properties.push(new Property(key, entry.which, UnoType.get(argument), 1));
     key.dispose();

@@ -1,7 +1,11 @@
 /** @fileoverview Verifies Markdown reader callback mapping into native Writer nodes. */
 import { expect, it } from "vitest";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
+import { RES_BOX, RES_PARATR_CONNECT_BORDER } from "../../../inc/hintids";
 import { SwTableNode } from "../../core/docnode/node";
+import { SwParaConnectBorderItem } from "../../core/para/paratr";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { MarkdownReader } from "./swmd";
 
@@ -151,9 +155,35 @@ it("maps strikeout and code spans to native character items", /** Checks represe
 });
 
 it("maps hard and soft line breaks through Markdown text callbacks", /** Checks source break semantics in the body text. @returns Nothing. */ () => {
-  const document = read("Hard  \nbreak\nsoft\nbreak");
+  const document = read("Hard  \nbreak\nsoft\nbreak\nbackslash\\\nnext\nwide    \nend");
   try {
-    expect(document.paragraphs[0]?.GetText()).toBe("Hard\nbreak\u00a0soft\u00a0break");
+    expect(document.paragraphs[0]?.GetText()).toBe(
+      "Hard\nbreak\u00a0soft\u00a0break\u00a0backslash\nnext\u00a0wide\nend",
+    );
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps md4c thematic breaks distinct from setext headings and list markers", () => {
+  const document = read("---\n\n* * *\n\nTitle\n---\n\nAfter");
+  try {
+    expect(document.paragraphs.map((node) => [node.GetParagraphStyle(), node.GetText()])).toEqual([
+      ["horizontal-line", ""],
+      ["horizontal-line", ""],
+      ["heading-2", "Title"],
+      ["default", "After"],
+    ]);
+    const style = document.GetTextFormatColl("horizontal-line");
+    const border = style.GetAttrSet().GetItemIfSet(RES_BOX, false) as SvxBoxItem;
+    const bottom = border.GetLine(SvxBoxItemLine.BOTTOM);
+    expect(bottom?.GetBorderLineStyle()).toBe(SvxBorderLineStyle.DOUBLE);
+    expect(bottom?.GetWidth()).toBe(3);
+    expect(
+      (
+        style.GetAttrSet().GetItemIfSet(RES_PARATR_CONNECT_BORDER, false) as SwParaConnectBorderItem
+      ).GetValue(),
+    ).toBe(false);
   } finally {
     document.Dispose();
   }

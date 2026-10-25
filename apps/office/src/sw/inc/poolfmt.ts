@@ -250,6 +250,7 @@ const implementedStyleIds = new Set([
   "appendix",
   "quotations",
   "preformatted-text",
+  "horizontal-line",
 ]);
 
 /** Styles whose current item-set construction has source-derived semantics rather than name-only metadata. */

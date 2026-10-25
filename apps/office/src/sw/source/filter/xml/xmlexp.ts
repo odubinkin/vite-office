@@ -34,7 +34,7 @@ import {
   SvxTextLeftMarginItem,
   SvxULSpaceItem,
   type SvxLRSpaceItem,
-  type SvxBoxItem,
+  SvxBoxItem,
 } from "../../../../editeng/source/items/frmitems";
 
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -95,6 +95,7 @@ import {
   RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_PARATR_CONNECT_BORDER,
   RES_PARATR_OUTLINELEVEL,
   RES_UL_SPACE,
   RES_FRM_SIZE,
@@ -614,6 +615,8 @@ function assertSupportedItems(
     RES_UL_SPACE,
     RES_KEEP,
     RES_LINENUMBER,
+    RES_PARATR_CONNECT_BORDER,
+    RES_BOX,
   ]);
   if (allowListItems)
     for (const which of [
@@ -652,6 +655,8 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   const paragraphBreak = set.GetItemIfSet(RES_BREAK, false);
   const pageDesc = set.GetItemIfSet(RES_PAGEDESC, false);
   const lineNumber = set.GetItemIfSet(RES_LINENUMBER, false);
+  const joinBorder = set.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false);
+  const box = set.GetItemIfSet(RES_BOX, false);
   if (
     (firstLine !== undefined && !(firstLine instanceof SvxFirstLineIndentItem)) ||
     (right !== undefined && !(right instanceof SvxRightMarginItem)) ||
@@ -664,7 +669,9 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
     (widows !== undefined && !(widows instanceof SfxInt16Item)) ||
     (paragraphBreak !== undefined && !(paragraphBreak instanceof SfxInt16Item)) ||
     (pageDesc !== undefined && !(pageDesc instanceof SwFormatPageDesc)) ||
-    (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem))
+    (lineNumber !== undefined && !(lineNumber instanceof SfxBoolItem)) ||
+    (joinBorder !== undefined && !(joinBorder instanceof SfxBoolItem)) ||
+    (box !== undefined && !(box instanceof SvxBoxItem))
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
@@ -747,6 +754,8 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
         }
       : {}),
     ...(lineNumber instanceof SfxBoolItem ? { countLineNumbers: lineNumber.GetValue() } : {}),
+    ...(joinBorder instanceof SfxBoolItem ? { joinBorder: joinBorder.GetValue() } : {}),
+    ...(box instanceof SvxBoxItem ? exportBoxProperties(box) : {}),
   };
   return Object.keys(properties).length === 0 ? undefined : properties;
 }

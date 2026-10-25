@@ -55,6 +55,11 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
         offset += 2;
         continue;
       }
+      if (character === "\\" && text[offset + 1] === "\n") {
+        append("\n", attributes, url);
+        offset += 2;
+        continue;
+      }
       if (character === "[" && url === undefined) {
         const close = findClosing(text, "]", offset + 1);
         if (close >= 0 && text[close + 1] === "(") {
@@ -105,7 +110,7 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
         if (text.slice(Math.max(0, offset - 2), offset) === "  ") {
           const previous = runs.at(-1);
           if (previous !== undefined) {
-            const trimmed = previous.text.slice(0, -2);
+            const trimmed = previous.text.replace(/ +$/u, "");
             if (trimmed.length === 0) runs.pop();
             else runs[runs.length - 1] = { ...previous, text: trimmed };
           }

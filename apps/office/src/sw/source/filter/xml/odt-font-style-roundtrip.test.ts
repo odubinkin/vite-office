@@ -1,6 +1,9 @@
 /** @fileoverview Verifies complete Writer style and font ODT round-trip compatibility. */
 import { describe, expect, it, vi } from "vitest";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
+import { Color } from "../../../../tools/inc/color";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
@@ -11,9 +14,12 @@ import {
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
+  RES_BOX,
+  RES_PARATR_CONNECT_BORDER,
 } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { createWriterDocument } from "../../core/doc/doc";
+import { SwParaConnectBorderItem } from "../../core/para/paratr";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
@@ -40,6 +46,36 @@ async function rewriteStylesXml(
 }
 
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
+  it("round-trips the materialized thematic-line border and connection items", async () => {
+    const writer = createWriterDocument();
+    const style = writer.GetTextFormatColl("horizontal-line");
+    const box = (style.GetAttrSet().Get(RES_BOX) as SvxBoxItem).Clone();
+    box.SetLine(
+      new SvxBorderLine(new Color(0x112233), 40, SvxBorderLineStyle.SOLID),
+      SvxBoxItemLine.BOTTOM,
+    );
+    style.SetFormatAttr(box);
+    style.SetFormatAttr(new SwParaConnectBorderItem(true));
+    const saved = writeOdtDocument(writer, { title: "Thematic line" });
+    const xml = await new ZipFile(saved).readTextEntry("styles.xml");
+    expect(xml).toContain('style:join-border="true"');
+    expect(xml).toContain('fo:border-bottom="2.01pt solid #112233"');
+    const reopened = await readOdtDocument(saved, { title: "Thematic line" });
+    try {
+      const restored = reopened.document.GetTextFormatColl("horizontal-line").GetAttrSet();
+      expect(
+        (
+          restored.GetItemIfSet(RES_PARATR_CONNECT_BORDER, false) as SwParaConnectBorderItem
+        ).GetValue(),
+      ).toBe(true);
+      const line = (restored.GetItemIfSet(RES_BOX, false) as SvxBoxItem).GetBottom();
+      expect(line?.GetWidth()).toBe(40);
+      expect((line?.GetColor().toUInt32() ?? 0) & 0xffffff).toBe(0x112233);
+    } finally {
+      reopened.document.Dispose();
+      writer.Dispose();
+    }
+  });
   it("keeps Latin, Asian and complex-script family identities separate", /** Mirrors Writer's three SvxFontItem slots in named styles. @returns Completion. */ async () => {
     const writer = createWriterDocument();
     const style = writer.GetTextFormatColl("text-body");
@@ -330,7 +366,7 @@ describe("Writer ODT font and style compatibility", /** Groups file compatibilit
     }
 
     const opened = await readOdtDocument(firstBytes, state);
-    expect(opened.document.GetTextFormatColls()).toHaveLength(26);
+    expect(opened.document.GetTextFormatColls()).toHaveLength(27);
     expect(
       (
         opened.document
