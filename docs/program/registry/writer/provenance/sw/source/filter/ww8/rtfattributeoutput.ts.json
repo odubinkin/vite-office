@@ -22,7 +22,8 @@
       "RtfAttributeOutput::OutputCharCrossedOut"
     ],
     "preservedResponsibilities": [
-      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement."
+      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
+      "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -44,6 +45,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "round trips %s native line spacing"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "writes native underline line styles with the pinned RTF controls"
         }
       ],
       "upstream": [
@@ -54,6 +59,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/ww8atr.cxx",
           "marker": "AttributeOutputBase::ParaLineSpacing"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharUnderlineAssoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharUnderline"
         }
       ]
     }

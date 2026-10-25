@@ -212,7 +212,7 @@ export class RtfAttributeOutput {
       underline !== undefined &&
       (attributes.underline || attributes.underlineStyle !== undefined)
     )
-      result += `\\${underline}`;
+      result += `\\${underline}\\ulc${attributes.underlineColor === undefined || attributes.underlineColor === "auto" ? 0 : this.colorIndex(attributes.underlineColor)}`;
     if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
     else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
     else if (attributes.strikeout !== undefined) result += "\\strike";

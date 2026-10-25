@@ -27,7 +27,11 @@ import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
+import {
+  SvxFontHeightItem,
+  SvxFontItem,
+  SvxUnderlineItem,
+} from "../../../../editeng/source/items/textitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
@@ -44,6 +48,7 @@ import {
   RES_PARATR_LINESPACING,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_UNDERLINE,
 } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -83,7 +88,7 @@ it("writes native underline line styles with the pinned RTF controls", /** Check
       paragraph.SetText(fragment.text);
       paragraph.SetTextHints(fragment.hints);
       const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
-      expect(rtf).toContain(`\\${control} `);
+      expect(rtf).toContain(`\\${control}\\ulc0 `);
       const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
       try {
         const importedParagraph = imported.paragraphs[0];
@@ -127,7 +132,7 @@ it("round trips native word-only underline through RTF ulw", /** Checks the sour
     paragraph.SetTextHints(fragment.hints);
     expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
     const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
-    expect(rtf).toContain("\\ulw ");
+    expect(rtf).toContain("\\ulw\\ulc0 ");
     const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
     try {
       const importedParagraph = imported.paragraphs[0];
@@ -136,6 +141,62 @@ it("round trips native word-only underline through RTF ulw", /** Checks the sour
     } finally {
       imported.Dispose();
     }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("round trips an explicit native underline color through the RTF color table", /** Checks the source ulc index and independent line color. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    const fragment = createWriterTextFragment(paragraph, [
+      {
+        text: "colored",
+        attributes: {
+          bold: false,
+          italic: false,
+          underline: true,
+          underlineStyle: FontLineStyle.LINESTYLE_DOUBLE,
+          underlineColor: "#332211",
+        },
+      },
+    ]);
+    paragraph.SetText(fragment.text);
+    paragraph.SetTextHints(fragment.hints);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(rtf).toContain("\\red51\\green34\\blue17;");
+    expect(rtf).toContain("{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;");
+    expect(rtf).toContain("\\uldb\\ulc17 colored");
+    const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
+    try {
+      const importedParagraph = imported.paragraphs[0];
+      if (importedParagraph === undefined) throw new Error("Missing imported paragraph.");
+      expect(projectWriterTextRuns(importedParagraph)[0]?.attributes).toMatchObject({
+        underlineStyle: FontLineStyle.LINESTYLE_DOUBLE,
+        underlineColor: "#332211",
+      });
+    } finally {
+      imported.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("exports a colored paragraph underline item without a browser run override", /** Checks the ODT/core item route into the same RTF color-table writer. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    paragraph.SetText("Native");
+    const underline = new SvxUnderlineItem(FontLineStyle.LINESTYLE_WAVE, RES_CHRATR_UNDERLINE);
+    underline.SetColor(new Color(0x123456));
+    paragraph.SetAttr(underline);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(rtf).toContain("\\ulwave\\ulc17 Native");
+    expect(rtf).toContain("\\red18\\green52\\blue86;");
   } finally {
     document.Dispose();
   }
@@ -814,7 +875,7 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
     expect(new TextDecoder().decode(bytes)).toContain(
       "\\trowd\\trql\\trleft360\\ltrrow\\trrh-720\\trkeep",
     );
-    expect(new TextDecoder().decode(bytes)).toContain("\\clbrdrt\\brdrs\\brdrw30\\brdrcf1");
+    expect(new TextDecoder().decode(bytes)).toContain("\\clbrdrt\\brdrs\\brdrw30\\brdrcf6");
     expect(new TextDecoder().decode(bytes)).toContain("\\clpadfl3\\clpadl120\\clpadft3\\clpadt80");
     expect(new TextDecoder().decode(bytes)).toContain("\\trpaddft3\\trpaddt40");
     expect(new TextDecoder().decode(bytes)).toContain("\\trql\\trleft360");

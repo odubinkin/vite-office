@@ -82,6 +82,9 @@ export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCh
       ? { highlight: attributes.highlight }
       : {}),
     ...(isWriterStrikeout(attributes.strikeout) ? { strikeout: attributes.strikeout } : {}),
+    ...(isWriterColor(attributes.underlineColor, "auto")
+      ? { underlineColor: attributes.underlineColor }
+      : {}),
     ...(Number.isInteger(attributes.underlineStyle) &&
     Number(attributes.underlineStyle) >= FontLineStyle.LINESTYLE_NONE &&
     Number(attributes.underlineStyle) <= FontLineStyle.LINESTYLE_BOLDWAVE
@@ -142,6 +145,7 @@ function areWriterCharacterAttributesEqual(
     left.italic === right.italic &&
     left.underline === right.underline &&
     left.underlineStyle === right.underlineStyle &&
+    left.underlineColor === right.underlineColor &&
     left.underlineWordMode === right.underlineWordMode &&
     left.fontFamily === right.fontFamily &&
     left.fontSizeTwips === right.fontSizeTwips &&

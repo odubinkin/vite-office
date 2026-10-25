@@ -925,6 +925,7 @@ function equalAttributes(
     left.italic === right.italic &&
     left.underline === right.underline &&
     left.underlineStyle === right.underlineStyle &&
+    left.underlineColor === right.underlineColor &&
     left.underlineWordMode === right.underlineWordMode &&
     (left.strikeout ?? 0) === (right.strikeout ?? 0) &&
     (left.escapement?.offset ?? 0) === (right.escapement?.offset ?? 0) &&

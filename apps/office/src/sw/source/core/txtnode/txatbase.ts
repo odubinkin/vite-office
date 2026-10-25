@@ -50,6 +50,7 @@ import { SwFormatINetFormat } from "./fmtatr2";
 import type { SwpHints } from "./ndhints";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { COL_TRANSPARENT, Color } from "../../../../tools/inc/color";
 export { RES_TXTATR_AUTOFMT } from "../../../inc/hintids";
 export { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 
@@ -71,6 +72,8 @@ export interface WriterCharacterAttributes {
   readonly underline: boolean;
   /** Native underline line style; absent at boolean-only UI boundaries. */
   readonly underlineStyle?: FontLineStyle;
+  /** Native underline RGB value or the automatic/transparent sentinel. */
+  readonly underlineColor?: string;
   /** Whether single underline applies only to words. */
   readonly underlineWordMode?: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
@@ -481,19 +484,21 @@ export function createSwFormatAutoFormat(
     items.Put(
       new SvxWordLineModeItem(attributes.underlineWordMode === true, RES_CHRATR_WORDLINEMODE),
     );
+  const underlineStyle =
+    attributes.underlineStyle ??
+    (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
+  const inheritedUnderlineStyle =
+    inherited.underlineStyle ??
+    (inherited.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
   if (
-    (attributes.underlineStyle ??
-      (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE)) !==
-    (inherited.underlineStyle ??
-      (inherited.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE))
-  )
-    items.Put(
-      new SvxUnderlineItem(
-        attributes.underlineStyle ??
-          (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE),
-        RES_CHRATR_UNDERLINE,
-      ),
-    );
+    underlineStyle !== inheritedUnderlineStyle ||
+    (attributes.underlineColor ?? "auto") !== (inherited.underlineColor ?? "auto")
+  ) {
+    const underline = new SvxUnderlineItem(underlineStyle, RES_CHRATR_UNDERLINE);
+    if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
+      underline.SetColor(new Color(Number.parseInt(attributes.underlineColor.slice(1), 16)));
+    items.Put(underline);
+  }
   return new SwFormatAutoFormat(
     pool.GetDoc().GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
   );
@@ -528,6 +533,9 @@ export function projectWriterCharacterAttributes(
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
   const underline = get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
   const underlineStyle = underline.GetLineStyle();
+  const underlineColor = underline.GetColor();
+  const authoredUnderline = items.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+  const inheritedUnderline = inherited?.Get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem | undefined;
   const wordMode =
     items.GetItemIfSet(RES_CHRATR_WORDLINEMODE, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_WORDLINEMODE, true);
@@ -547,6 +555,15 @@ export function projectWriterCharacterAttributes(
     ...(underlineStyle !== FontLineStyle.LINESTYLE_SINGLE &&
     underlineStyle !== FontLineStyle.LINESTYLE_NONE
       ? { underlineStyle }
+      : underlineStyle === FontLineStyle.LINESTYLE_NONE &&
+          authoredUnderline !== undefined &&
+          inheritedUnderline?.GetBoolValue()
+        ? { underlineStyle }
+        : {}),
+    ...(!underlineColor.equals(COL_TRANSPARENT)
+      ? {
+          underlineColor: `#${(underlineColor.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`,
+        }
       : {}),
     ...(wordMode instanceof SvxWordLineModeItem && wordMode.GetValue()
       ? { underlineWordMode: true }

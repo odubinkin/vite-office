@@ -76,7 +76,7 @@ it("imports every pinned RTF underline value into the native line-style item", /
 
 it("inherits native underline style from the RTF stylesheet and applies direct override", /** Checks source character-style ancestry and group restoration. @returns Nothing. */ () => {
   const document = read(
-    String.raw`{\rtf1{\stylesheet{\s1\uldb Decorated;}}\s1 inherited {\uldash direct} inherited}`,
+    String.raw`{\rtf1{\stylesheet{\s1\uldb Decorated;}}\s1 inherited {\uldash direct}{\ulnone off} inherited}`,
   );
   try {
     const paragraph = document.paragraphs[0];
@@ -85,8 +85,12 @@ it("inherits native underline style from the RTF stylesheet and applies direct o
     expect(runs.map((run) => [run.text, run.attributes.underlineStyle])).toEqual([
       ["inherited ", FontLineStyle.LINESTYLE_DOUBLE],
       ["direct", FontLineStyle.LINESTYLE_DASH],
+      ["off", FontLineStyle.LINESTYLE_NONE],
       [" inherited", FontLineStyle.LINESTYLE_DOUBLE],
     ]);
+    expect(new TextDecoder().decode(new RtfExport().ExportDocument(document))).toContain(
+      "\\ulnone\\ulc0 off",
+    );
   } finally {
     document.Dispose();
   }
@@ -98,6 +102,37 @@ it("ignores unknown control words even when they match object prototypes", /** C
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Missing paragraph.");
     expect(projectWriterTextRuns(paragraph)[0]?.attributes.underline).toBe(false);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("imports underline color independently of its line-style keyword", /** Checks ulc table indexing before a native style value. @returns Nothing. */ () => {
+  const document = read(String.raw`{\rtf1{\colortbl;\red18\green52\blue86;}\ulc1\uldb colored}`);
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes).toMatchObject({
+      underlineStyle: FontLineStyle.LINESTYLE_DOUBLE,
+      underlineColor: "#123456",
+    });
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("inherits RTF underline color from a paragraph style and overrides it locally", /** Checks independent style and direct color-table properties. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\rtf1{\colortbl;\red18\green52\blue86;\red51\green34\blue17;}{\stylesheet{\s1\uldb\ulc1 Decorated;}}\s1 inherited {\ulc2 direct} inherited}`,
+  );
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    expect(projectWriterTextRuns(paragraph).map((run) => run.attributes.underlineColor)).toEqual([
+      "#123456",
+      "#332211",
+      "#123456",
+    ]);
   } finally {
     document.Dispose();
   }

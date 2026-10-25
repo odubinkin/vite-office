@@ -25,6 +25,45 @@ import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { RES_PAGEDESC } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
+import {
+  COL_BLACK,
+  COL_LIGHTBLUE,
+  COL_LIGHTCYAN,
+  COL_LIGHTGREEN,
+  COL_LIGHTMAGENTA,
+  COL_LIGHTRED,
+  COL_YELLOW,
+  COL_WHITE,
+  COL_BLUE,
+  COL_CYAN,
+  COL_GREEN,
+  COL_MAGENTA,
+  COL_RED,
+  COL_BROWN,
+  COL_GRAY,
+  COL_LIGHTGRAY,
+  type Color,
+} from "../../../../tools/inc/color";
+
+/** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
+const RTF_DEFAULT_COLORS = [
+  COL_BLACK,
+  COL_LIGHTBLUE,
+  COL_LIGHTCYAN,
+  COL_LIGHTGREEN,
+  COL_LIGHTMAGENTA,
+  COL_LIGHTRED,
+  COL_YELLOW,
+  COL_WHITE,
+  COL_BLUE,
+  COL_CYAN,
+  COL_GREEN,
+  COL_MAGENTA,
+  COL_RED,
+  COL_BROWN,
+  COL_GRAY,
+  COL_LIGHTGRAY,
+] as const;
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport {
@@ -52,6 +91,7 @@ export class RtfExport {
   public ExportDocument(document: SwDoc): Uint8Array {
     this.fonts.clear();
     this.colors.clear();
+    for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
     this.lists.clear();
     this.styles.clear();
     const blocks = document.GetNodes().getBodyContent();
@@ -61,6 +101,8 @@ export class RtfExport {
         if (run.attributes.fontFamily !== undefined) this.IndexFont(run.attributes.fontFamily);
         if (run.attributes.color !== undefined && run.attributes.color !== "auto")
           this.IndexColor(run.attributes.color);
+        if (run.attributes.underlineColor !== undefined && run.attributes.underlineColor !== "auto")
+          this.IndexColor(run.attributes.underlineColor);
         if (run.attributes.highlight !== undefined && run.attributes.highlight !== "transparent")
           this.IndexColor(run.attributes.highlight);
       }
@@ -92,6 +134,8 @@ export class RtfExport {
       if (attributes.fontFamily !== undefined) this.IndexFont(attributes.fontFamily);
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);
+      if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
+        this.IndexColor(attributes.underlineColor);
       if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
         this.IndexColor(attributes.highlight);
     }
@@ -530,17 +574,22 @@ export class RtfExport {
 
   /** Assigns a stable one-based RTF color index. @param color - CSS RGB color. @returns Index. */
   private IndexColor(color: string): number {
-    const existing = this.colors.get(color);
+    const key = color.toLowerCase();
+    const existing = this.colors.get(key);
     if (existing !== undefined) return existing;
     const index = this.colors.size + 1;
-    this.colors.set(color, index);
+    this.colors.set(key, index);
     return index;
   }
 }
 
 /** Converts the source Color channels to the existing RTF color-table key. */
 function borderColor(line: SvxBorderLine): string {
-  const color = line.GetColor();
+  return rtfColorKey(line.GetColor());
+}
+
+/** Uses source RGB channels as the RTF table key; alpha has no RTF color-table field. */
+function rtfColorKey(color: Readonly<Color>): string {
   return `#${[color.GetRed(), color.GetGreen(), color.GetBlue()]
     .map((channel) => channel.toString(16).padStart(2, "0"))
     .join("")}`;

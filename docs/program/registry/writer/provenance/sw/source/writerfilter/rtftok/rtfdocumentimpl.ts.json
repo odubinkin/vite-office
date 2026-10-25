@@ -29,7 +29,8 @@
       "Dispatches RTF ISCII Devanagari bytes through a fresh source-owned converter context.",
       "Dispatches RTF code page 65000 bytes through the pinned SAL UTF-7 text-to-Unicode state machine.",
       "Dispatches RTF code pages 50220/50225 through pinned SAL ISO-2022-JP/KR state machines and source-owned JIS/KS tables.",
-      "Uses the pinned SAL ImplDummyToUnicode fallback for RTF code pages without converter data, including Apple Arabic/Hebrew and unknown code pages; removes browser decoder lookup."
+      "Uses the pinned SAL ImplDummyToUnicode fallback for RTF code pages without converter data, including Apple Arabic/Hebrew and unknown code pages; removes browser decoder lookup.",
+      "Maps pinned RTF underline toggles, flags and color-table values to native style, word-line and underline-color items, including direct and stylesheet inheritance."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -79,6 +80,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
           "marker": "consecutive RTF header rows with the source limit"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports every pinned RTF underline value"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "inherits RTF underline color"
         }
       ],
       "upstream": [
@@ -109,6 +118,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
           "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFDocumentImpl::dispatchToggle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFlag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "RTFDocumentImpl::dispatchValue"
         }
       ]
     }

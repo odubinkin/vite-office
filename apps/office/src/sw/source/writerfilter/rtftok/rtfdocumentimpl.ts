@@ -283,6 +283,7 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "i",
   "ul",
   "ulnone",
+  "ulc",
   ...Object.keys(RTF_UNDERLINE_STYLES),
   "strike",
   "striked",
@@ -317,6 +318,7 @@ const CHARACTER_PROPERTY_CONTROLS = new Set([
   "i",
   "ul",
   "ulnone",
+  "ulc",
   ...Object.keys(RTF_UNDERLINE_STYLES),
   "strike",
   "striked",
@@ -650,6 +652,7 @@ export class RtfDocumentImpl {
             underlineWordMode: definition.character.underlineWordMode ?? current.underlineWordMode,
           }
         : {}),
+      ...(controls.has("ulc") ? { underlineColor: definition.character.underlineColor } : {}),
       ...(controls.has("strike") || controls.has("striked")
         ? { strikeout: definition.character.strikeout }
         : {}),
@@ -1305,6 +1308,11 @@ export class RtfDocumentImpl {
           ? { underlineWordMode: true }
           : {}),
       };
+    } else if (name === "ulc" && parameter !== undefined) {
+      state.character = {
+        ...state.character,
+        underlineColor: parameter === 0 ? "auto" : (this.colors[parameter] ?? "auto"),
+      };
     } else if (name === "strike" || name === "striked")
       state.character = {
         ...state.character,
@@ -1703,6 +1711,7 @@ function equalCharacter(a: WriterCharacterAttributes, b: WriterCharacterAttribut
     a.italic === b.italic &&
     a.underline === b.underline &&
     a.underlineStyle === b.underlineStyle &&
+    a.underlineColor === b.underlineColor &&
     a.underlineWordMode === b.underlineWordMode &&
     a.fontFamily === b.fontFamily &&
     a.fontSizeTwips === b.fontSizeTwips &&
@@ -1730,6 +1739,11 @@ function resolveRtfRunAttributes(
       : inherited.underlineStyle === undefined
         ? {}
         : { underlineStyle: inherited.underlineStyle }),
+    ...(controls.has("ulc")
+      ? { underlineColor: run.attributes.underlineColor ?? "auto" }
+      : inherited.underlineColor === undefined
+        ? {}
+        : { underlineColor: inherited.underlineColor }),
     ...((run.attributes.underlineWordMode ?? inherited.underlineWordMode) === undefined
       ? {}
       : { underlineWordMode: run.attributes.underlineWordMode ?? inherited.underlineWordMode }),
