@@ -7,6 +7,9 @@ import {
 } from "../../core/txtnode/txatbase";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
   SvxFirstLineIndentItem,
   SvxIndentValue,
@@ -18,6 +21,10 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
+  RES_UL_SPACE,
+  RES_KEEP,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
@@ -59,10 +66,22 @@ interface RtfParagraphState {
   left: number;
   right: number;
   firstLine: number;
+  before: number;
+  after: number;
+  contextual: boolean;
+  keepNext: boolean;
+  keepTogether: boolean;
+  widowControl: boolean;
   alignmentSet?: boolean;
   leftSet?: boolean;
   rightSet?: boolean;
   firstLineSet?: boolean;
+  beforeSet?: boolean;
+  afterSet?: boolean;
+  contextualSet?: boolean;
+  keepNextSet?: boolean;
+  keepTogetherSet?: boolean;
+  widowControlSet?: boolean;
   styleIndex?: number;
   listOverride?: number;
   listLevel: number;
@@ -151,6 +170,12 @@ const DEFAULT_PARAGRAPH: RtfParagraphState = {
   left: 0,
   right: 0,
   firstLine: 0,
+  before: 0,
+  after: 0,
+  contextual: false,
+  keepNext: false,
+  keepTogether: false,
+  widowControl: true,
   listLevel: 0,
 };
 const SKIPPED_DESTINATIONS = new Set([
@@ -196,6 +221,13 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "li",
   "ri",
   "fi",
+  "sb",
+  "sa",
+  "contextualspace",
+  "keepn",
+  "keep",
+  "widctlpar",
+  "nowidctlpar",
 ]);
 const CHARACTER_PROPERTY_CONTROLS = new Set([
   "b",
@@ -477,6 +509,19 @@ export class RtfDocumentImpl {
       collection.SetFormatAttr(
         new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
       );
+    if (controls.has("sb") || controls.has("sa") || controls.has("contextualspace")) {
+      const spacing = (collection.GetAttrSet().Get(RES_UL_SPACE) as SvxULSpaceItem).Clone();
+      if (controls.has("sb")) spacing.SetUpper(paragraph.before);
+      if (controls.has("sa")) spacing.SetLower(paragraph.after);
+      if (controls.has("contextualspace")) spacing.SetContextValue(paragraph.contextual);
+      collection.SetFormatAttr(spacing);
+    }
+    if (controls.has("keepn"))
+      collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, paragraph.keepNext));
+    if (controls.has("keep"))
+      collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.keepTogether));
+    if (controls.has("widctlpar") || controls.has("nowidctlpar"))
+      collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.widowControl ? 2 : 0));
   }
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
@@ -502,6 +547,19 @@ export class RtfDocumentImpl {
     if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
     if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
     if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
+    if (paragraph.state.beforeSet || paragraph.state.afterSet || paragraph.state.contextualSet) {
+      const spacing = (node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).Clone();
+      if (paragraph.state.beforeSet) spacing.SetUpper(paragraph.state.before);
+      if (paragraph.state.afterSet) spacing.SetLower(paragraph.state.after);
+      if (paragraph.state.contextualSet) spacing.SetContextValue(paragraph.state.contextual);
+      node.SetAttr(spacing);
+    }
+    if (paragraph.state.keepNextSet)
+      node.SetAttr(new SfxBoolItem(RES_KEEP, paragraph.state.keepNext));
+    if (paragraph.state.keepTogetherSet)
+      node.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.state.keepTogether));
+    if (paragraph.state.widowControlSet)
+      node.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.state.widowControl ? 2 : 0));
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
@@ -986,6 +1044,26 @@ export class RtfDocumentImpl {
       state.paragraph = { ...state.paragraph, right: Math.max(0, parameter), rightSet: true };
     else if (name === "fi" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, firstLine: parameter, firstLineSet: true };
+    else if (name === "sb" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, before: Math.max(0, parameter), beforeSet: true };
+    else if (name === "sa" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, after: Math.max(0, parameter), afterSet: true };
+    else if (name === "contextualspace")
+      state.paragraph = { ...state.paragraph, contextual: parameter !== 0, contextualSet: true };
+    else if (name === "keepn")
+      state.paragraph = { ...state.paragraph, keepNext: parameter !== 0, keepNextSet: true };
+    else if (name === "keep")
+      state.paragraph = {
+        ...state.paragraph,
+        keepTogether: parameter !== 0,
+        keepTogetherSet: true,
+      };
+    else if (name === "widctlpar" || name === "nowidctlpar")
+      state.paragraph = {
+        ...state.paragraph,
+        widowControl: name === "widctlpar" && parameter !== 0,
+        widowControlSet: true,
+      };
   }
 
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */

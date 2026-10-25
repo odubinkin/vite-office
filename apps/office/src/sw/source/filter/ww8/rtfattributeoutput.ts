@@ -11,6 +11,9 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { getWriterParagraphAlignment } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import {
   SvxFirstLineIndentItem,
@@ -22,6 +25,10 @@ import {
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
+  RES_UL_SPACE,
+  RES_KEEP,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
 } from "../../../inc/hintids";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
@@ -41,6 +48,10 @@ export class RtfAttributeOutput {
       (
         paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
       ).ResolveTextFirstLineOffset(),
+      paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
+      paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
+      paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
+      paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
     );
   }
 
@@ -52,6 +63,10 @@ export class RtfAttributeOutput {
       (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
       (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
       (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+      items.Get(RES_UL_SPACE) as SvxULSpaceItem,
+      items.Get(RES_KEEP) as SfxBoolItem,
+      items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
+      items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
     );
   }
 
@@ -61,6 +76,10 @@ export class RtfAttributeOutput {
     left: number,
     right: number,
     firstLine: number,
+    spacing: SvxULSpaceItem,
+    keep: SfxBoolItem,
+    split: SfxBoolItem,
+    widows: SfxInt16Item,
   ): string {
     let output =
       alignment === "center"
@@ -73,6 +92,11 @@ export class RtfAttributeOutput {
     if (left !== 0) output += `\\li${left}`;
     if (right !== 0) output += `\\ri${right}`;
     if (firstLine !== 0) output += `\\fi${firstLine}`;
+    output += `\\sb${spacing.GetUpper()}\\sa${spacing.GetLower()}`;
+    if (spacing.GetContext()) output += "\\contextualspace";
+    if (keep.GetValue()) output += "\\keepn";
+    if (!split.GetValue()) output += "\\keep";
+    output += widows.GetValue() ? "\\widctlpar" : "\\nowidctlpar";
     return output;
   }
 

@@ -12,10 +12,14 @@
     "upstreamSymbols": [
       "RtfAttributeOutput::OutputCharEscapement",
       "RtfAttributeOutput::FormatFirstLineIndent",
+      "RtfAttributeOutput::FormatULSpace",
+      "RtfAttributeOutput::FormatKeep",
+      "RtfAttributeOutput::ParaSplit",
+      "RtfAttributeOutput::ParaWidows",
       "RtfAttributeOutput::OutputCharCrossedOut"
     ],
     "preservedResponsibilities": [
-      "Emits represented native Writer paragraph and character item controls, including first-line indent, strikeout and escapement."
+      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, keep/split/widow behavior, strikeout and escapement."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -29,6 +33,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "retains upstream default-height"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native paragraph spacing"
         }
       ],
       "upstream": [

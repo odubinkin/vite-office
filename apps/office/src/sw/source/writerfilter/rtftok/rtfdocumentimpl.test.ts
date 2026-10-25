@@ -7,6 +7,10 @@ import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLin
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { RES_UL_SPACE, RES_KEEP, RES_PARATR_SPLIT, RES_PARATR_WIDOWS } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfTokenizer } from "./rtftokenizer";
@@ -18,6 +22,26 @@ function read(input: string) {
     new RtfTokenizer(new TextEncoder().encode(input)).Tokenize(),
   );
 }
+
+it("imports paragraph spacing and keep controls into native item owners", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\sb180\\sa300\\contextualspace\\keepn\\keep\\nowidctlpar First\\par\\pard\\widctlpar Second}",
+  );
+  try {
+    const first = document.paragraphs[0];
+    const second = document.paragraphs[1];
+    expect((first?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(180);
+    expect((first?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(300);
+    expect((first?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
+    expect((first?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect((first?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
+    expect((first?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(0);
+    expect((second?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(2);
+    expect((second?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(0);
+  } finally {
+    document.Dispose();
+  }
+});
 
 it("keeps a table before the first body paragraph", /** Checks physical body order when RTF starts with a table. @returns Nothing. */ () => {
   const document = read("{\\rtf1\\ansi\\trowd\\cellx1440\\intbl Cell\\cell\\row\\pard After}");

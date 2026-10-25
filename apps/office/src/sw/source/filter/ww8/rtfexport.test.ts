@@ -24,7 +24,16 @@ import {
 } from "../../../../editeng/inc/escapementitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
-import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import {
+  RES_MARGIN_FIRSTLINE,
+  RES_UL_SPACE,
+  RES_KEEP,
+  RES_PARATR_SPLIT,
+  RES_PARATR_WIDOWS,
+} from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
@@ -86,6 +95,59 @@ it("round trips represented paragraph styles through the RTF stylesheet", () => 
       "heading-2",
       "quotations",
     ]);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("round trips native paragraph spacing, keep, split and widow controls", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Together");
+  paragraph.SetAttr(new SvxULSpaceItem(120, 240, RES_UL_SPACE, true));
+  paragraph.SetAttr(new SfxBoolItem(RES_KEEP, true));
+  paragraph.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, false));
+  paragraph.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, 0));
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const encoded = new TextDecoder().decode(bytes);
+    expect(encoded).toContain("\\sb120\\sa240\\contextualspace\\keepn\\keep\\nowidctlpar");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const result = imported.paragraphs[0];
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(120);
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(240);
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
+    expect((result?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
+    expect((result?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
+    expect((result?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(0);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("retains native spacing and keep properties on a named RTF paragraph style", () => {
+  const source = createWriterDocument();
+  const style = source.GetTextFormatColl("heading-2");
+  style.SetFormatAttr(new SvxULSpaceItem(80, 160, RES_UL_SPACE, true));
+  style.SetFormatAttr(new SfxBoolItem(RES_KEEP, true));
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Styled");
+  paragraph.ChgFormatColl(style);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const result = imported.paragraphs[0];
+    expect(result?.GetParagraphStyle()).toBe("heading-2");
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(80);
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetLower()).toBe(160);
+    expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
+    expect((result?.GetAttr(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
   } finally {
     imported?.Dispose();
     source.Dispose();
