@@ -1,10 +1,11 @@
 ---
 id: "202610250529-SWRD7X"
 title: "Integrate Writer Calc and main and consolidate vendor"
-status: "DOING"
+result_summary: "verified-202610250529-SWRD7X"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -22,7 +23,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-25T08:17:14.968Z"
+  updated_at: "2026-10-25T08:18:04.243Z"
   updated_by: "CODER"
   note: "verified-202610250529-SWRD7X"
   attempts: 0
@@ -49,11 +50,16 @@ quality_review:
     - "Writer and Calc merge parents and the original main tip remain ancestors; no history was rewritten. Native color, optional offsets, paragraph cleanup, style names, bookmarks and null cell lookup were verified against the pinned upstream owners."
     - "All current coverage thresholds are exactly 100%; same-source hashes and coverage maps were validated, changed modules were fully remeasured, all 763 expanded XML/API cases and 536 latest-build browser cases passed. No exclusions or thresholds were weakened."
     - "All local and remote branches match the implementation commit; the ignored shared vendor directory and relative feature-checkout symlinks are valid, all five source trees are accessible, and the pre-existing Calc untracked files remain intact."
-commit: null
+commit:
+  hash: "368bda5c521672b70ca2b98701167b930831191d"
+  message: "🧩 SWRD7X task: persist verification and quality evidence"
 comments:
   -
     author: "CODER"
     body: "Start: Execute the user-approved branch integration, complete verification and shared vendor consolidation across the three named checkouts."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610250529-SWRD7X. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 events:
   -
     type: "status"
@@ -74,8 +80,21 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610250529-SWRD7X"
+  -
+    type: "verify"
+    at: "2026-10-25T08:18:04.243Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610250529-SWRD7X"
+  -
+    type: "status"
+    at: "2026-10-25T08:18:04.377Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610250529-SWRD7X. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
 doc_version: 3
-doc_updated_at: "2026-10-25T08:17:15.023Z"
+doc_updated_at: "2026-10-25T08:18:04.377Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved nine-step branch synchronization across vite-office, vite-office-writer and vite-office-calc; resolve merge conflicts, run and repair the complete verification suite, publish all three branches, and consolidate vendor content in main with ignored directory symlinks in the feature checkouts."
 sections:
@@ -152,6 +171,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-25T08:18:04.243Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610250529-SWRD7X
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:17:15.023Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+    - old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610250529-SWRD7X --result verified-202610250529-SWRD7X --commit 368bda5c521672b70ca2b98701167b930831191d
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Record initial branch hashes in Findings. Abort an incomplete merge if needed. Preserve vendor content until copy verification succeeds. Use explicit follow-up commits to reverse integration changes; never reset published history."
   Findings: |-
@@ -184,6 +233,10 @@ sections:
     - Observation: The complete application run executed 19,498 cases: 19,495 passed and three page-number auto cases used the already-loaded pre-fix XML module. All three recovered in the current-source XML/API runs. Strict complete-suite coverage initially exposed untested native import API error/lifetime contracts.
       Impact: Final evidence must retain failed initial runs, use fresh complete coverage for changed modules, and merge counters only for unchanged source files with identical maps. No thresholds, exclusions or architecture rules may be weakened.
       Resolution: Added actual-owner cursor, style, bookmark, table, generated exception, numbering and dispatcher tests. Latest expanded XML/API run: 127 files and 763 cases passed, all 18 measured API/import modules at 100% in all four metrics. Reconstructed full coverage with the installed Vitest Istanbul provider from 1,338 preserved full-run shards; verified original source bytes for 1,279 files, checked unchanged production hashes and exact supplemental maps, replaced all eight post-start changed modules with fresh complete coverage. Original global Istanbul gate passed: 67,906/67,906 lines; 74,946/74,946 statements; 13,463/13,463 functions; 45,841/45,841 branches. Native fixes preserve programmatic/mixed ParaStyleName and null missing-cell lookups. Removed only impossible duplicate state alternatives while preserving all public error boundaries. Full latest-build 536-case browser rerun remains in progress without failures.
+extensions:
+  implementation_commit:
+    hash: "96403127e98eaf42a63be96fef49575363e4ab6b"
+    message: "🧩 SWRD7X code: preserve upstream import contracts and share vendor"
 id_source: "generated"
 ---
 ## Summary
@@ -264,6 +317,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610250529-SWRD7X --result verified-202610250529-SWRD7X --commit 96403127e98eaf42a63be96fef49575363e4ab6b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-25T08:18:04.243Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610250529-SWRD7X
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:17:15.023Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+- old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610250529-SWRD7X --result verified-202610250529-SWRD7X --commit 368bda5c521672b70ca2b98701167b930831191d
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
