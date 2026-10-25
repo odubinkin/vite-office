@@ -11,17 +11,24 @@
       "aImplMS1251ByteCvtData",
       "aImplMS1253ByteCvtData",
       "aImplMS1254ByteCvtData",
-      "aImplMS1257ByteCvtData"
+      "aImplMS1257ByteCvtData",
+      "aImplAPPLECENTEUROByteCvtData",
+      "aImplAPPLECYRILLICByteCvtData",
+      "aImplAPPLEGREEKByteCvtData"
     ],
     "upstreamSymbols": [
       "aImplMS1250ByteCvtData",
       "aImplMS1251ByteCvtData",
       "aImplMS1253ByteCvtData",
       "aImplMS1254ByteCvtData",
-      "aImplMS1257ByteCvtData"
+      "aImplMS1257ByteCvtData",
+      "aImplAPPLECENTEUROByteCvtData",
+      "aImplAPPLECYRILLICByteCvtData",
+      "aImplAPPLEGREEKByteCvtData"
     ],
     "preservedResponsibilities": [
-      "Pinned Windows-1250/1251/1253/1254/1257 forward and reverse tables and byte-converter aggregates."
+      "Pinned Windows-1250/1251/1253/1254/1257 forward and reverse tables and byte-converter aggregates.",
+      "Preserves pinned Apple-code-page forward/reverse data and converter aggregates for native RTF decoding: aImplAPPLECENTEUROByteCvtData, aImplAPPLECYRILLICByteCvtData, aImplAPPLEGREEKByteCvtData."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

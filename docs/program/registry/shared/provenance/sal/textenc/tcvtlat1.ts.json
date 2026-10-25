@@ -6,13 +6,42 @@
     "status": "mapped",
     "localPath": "apps/office/src/sal/textenc/tcvtlat1.ts",
     "upstreamPath": "sal/textenc/tcvtlat1.tab",
-    "localSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData", "aImplAPPLEROMANByteCvtData"],
-    "upstreamSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData", "aImplAPPLEROMANByteCvtData"],
-    "preservedResponsibilities": ["Preserves the pinned IBM 437/850 and Apple Roman forward, reverse and extension tables and their native byte-converter aggregates for the shared SAL converter."],
-    "omittedResponsibilities": ["Other tcvtlat1.tab encodings and the full platform codec registry remain outside this module."],
+    "localSymbols": [
+      "aImplIBM437ByteCvtData",
+      "aImplIBM850ByteCvtData",
+      "aImplAPPLEROMANByteCvtData",
+      "aImplAPPLEICELANDByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplIBM437ByteCvtData",
+      "aImplIBM850ByteCvtData",
+      "aImplAPPLEROMANByteCvtData",
+      "aImplAPPLEICELANDByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Preserves the pinned IBM 437/850 and Apple Roman forward, reverse and extension tables and their native byte-converter aggregates for the shared SAL converter.",
+      "Preserves pinned Apple-code-page forward/reverse data and converter aggregates for native RTF decoding: aImplAPPLEICELANDByteCvtData."
+    ],
+    "omittedResponsibilities": [
+      "Other tcvtlat1.tab encodings and the full platform codec registry remain outside this module."
+    ],
     "evidence": {
-      "local": [{ "path": "apps/office/src/sal/textenc/tcvtlat1.ts", "marker": "aImplIBM850ToUniTab" }, { "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts", "marker": "pinned SAL IBM 437 and 850 tables" }],
-      "upstream": [{ "path": "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab", "marker": "aImplIBM850ToUniTab" }]
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtlat1.ts",
+          "marker": "aImplIBM850ToUniTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "pinned SAL IBM 437 and 850 tables"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab",
+          "marker": "aImplIBM850ToUniTab"
+        }
+      ]
     }
   }
 }

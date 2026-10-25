@@ -1,6 +1,10 @@
 /** @fileoverview Current single-byte data owners from sal/textenc/tables.cxx. */
 import type { ImplByteConvertData } from "./tenchelp";
 import {
+  RTL_TEXTENCODING_APPLE_CENTEURO,
+  RTL_TEXTENCODING_APPLE_CYRILLIC,
+  RTL_TEXTENCODING_APPLE_GREEK,
+  RTL_TEXTENCODING_APPLE_ICELAND,
   RTL_TEXTENCODING_APPLE_ROMAN,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_850,
@@ -18,11 +22,15 @@ import {
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 import {
+  aImplAPPLEICELANDByteCvtData,
   aImplAPPLEROMANByteCvtData,
   aImplIBM437ByteCvtData,
   aImplIBM850ByteCvtData,
 } from "./tcvtlat1";
 import {
+  aImplAPPLECENTEUROByteCvtData,
+  aImplAPPLECYRILLICByteCvtData,
+  aImplAPPLEGREEKByteCvtData,
   aImplMS1250ByteCvtData,
   aImplMS1251ByteCvtData,
   aImplMS1253ByteCvtData,
@@ -38,6 +46,14 @@ export function getSingleByteConvertData(
   encoding: rtl_TextEncoding,
 ): ImplByteConvertData | undefined {
   switch (encoding) {
+    case RTL_TEXTENCODING_APPLE_CENTEURO:
+      return aImplAPPLECENTEUROByteCvtData;
+    case RTL_TEXTENCODING_APPLE_CYRILLIC:
+      return aImplAPPLECYRILLICByteCvtData;
+    case RTL_TEXTENCODING_APPLE_GREEK:
+      return aImplAPPLEGREEKByteCvtData;
+    case RTL_TEXTENCODING_APPLE_ICELAND:
+      return aImplAPPLEICELANDByteCvtData;
     case RTL_TEXTENCODING_APPLE_ROMAN:
       return aImplAPPLEROMANByteCvtData;
     case RTL_TEXTENCODING_IBM_437:

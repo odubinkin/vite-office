@@ -159,6 +159,20 @@ it("uses SAL Symbol and Apple Roman encodings in RTF text", () => {
   }
 });
 
+it.each([
+  [10079, "\u00C4\u00A4\uF8FF"],
+  [10029, "\u00C4\u0158\u016B"],
+  [10007, "\u0410\u045F\u0440"],
+  [10006, "\u00C4\u03AD\u03C0"],
+])("decodes pinned SAL Apple code page %i in RTF text", (codepage, expected) => {
+  const doc = read(String.raw`{\rtf1\ansi\ansicpg${codepage}\'80\'db\'f0}`);
+  try {
+    expect(doc.paragraphs[0]?.GetText()).toBe(expected);
+  } finally {
+    doc.Dispose();
+  }
+});
+
 it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
   const prefix = new TextEncoder().encode(
     String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,
