@@ -4,7 +4,7 @@ title: "Implement shared OOXML package relationships and filter infrastructure"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -19,11 +19,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-25T16:05:33.629Z"
+  state: "ok"
+  updated_at: "2026-10-25T16:07:36.566Z"
   updated_by: "CODER"
-  note: "Closure review found a leading-dot filename boundary in WriteContentTypes; preserve original DirectoryHelper positive-offset extension condition and refresh its focused coverage before closure."
-  attempts: 1
+  note: "verified-202610251549-R2DJ64"
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-25T16:07:30.917Z"
+  updated_by: "EVALUATOR"
+  note: "Approved shared OOXML prerequisite implemented and verified against consumed pinned source contracts; no application feature parity is claimed."
+  evaluated_sha: "06a4c723d3b6699f098769caa31df70c99bf4e4b"
+  blueprint_digest: "1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e"
+  evidence_refs:
+    - ".agentplane/tasks/202610251549-R2DJ64/README.md"
+    - ".agentplane/tasks/202610251549-R2DJ64/quality/20261025-160730917-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610251549-R2DJ64/quality/20261025-160730917-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610251549-R2DJ64/quality/20261025-160730917-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610251549-R2DJ64/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610251549-R2DJ64/evidence/verification.json"
+    - "apps/office/src/oox/source/core/relations.test.ts"
+    - "apps/office/src/oox/source/core/xmlfilterbase.test.ts"
+    - "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts"
+  findings:
+    - "Reviewed original Relations ordering, first duplicate admission, namespace/TargetMode handling, relative target resolution, strict/transitional root fallback, XML false-on-failure/caching, original SAX metadata output, per-stream relation IDs and ToIUri UTF8. Closure review caught and corrected leading-dot extension handling before final acceptance."
 commit: null
 comments:
   -
@@ -49,8 +68,20 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Closure review found a leading-dot filename boundary in WriteContentTypes; preserve original DirectoryHelper positive-offset extension condition and refresh its focused coverage before closure."
+  -
+    type: "verify"
+    at: "2026-10-25T16:07:30.418Z"
+    author: "CODER"
+    state: "ok"
+    note: "Final PASS after source-review correction: native leading-dot extension behavior retained; fresh complete ZipPackage coverage remains S118/B66/F6/L104 at100 through40cases and final build/lint pass. Seven new modules remain fresh100 S320/B186/F77/L297. Related74case and pinned4case checks pass; all declared local gates passed. Current source hashes and exact command evidence refreshed in evidence/verification.json. No full suite due; DOCX/XLSX application feature/UI integration remains in approved dependent tasks."
+  -
+    type: "verify"
+    at: "2026-10-25T16:07:36.566Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610251549-R2DJ64"
 doc_version: 3
-doc_updated_at: "2026-10-25T16:05:33.684Z"
+doc_updated_at: "2026-10-25T16:07:36.623Z"
 doc_updated_by: "CODER"
 description: "User-approved first of three cohesive OOXML tasks. Implement upstream-owned OPC storage, content types, relationships, XML fragment import/export and format identities for Writer DOCX and Calc XLSX using existing ZIP/SAX and medium contracts. Preserve browser persistence decisions. Local pinned source research only; related tests and integration gates; no full suite due after SWRD7X checkpoint."
 sections:
@@ -116,6 +147,66 @@ sections:
     - operator_action: run_exact_argv
     - can_execute_now: true
     - safe_command: agentplane task complete 202610251549-R2DJ64 --result verified-202610251549-R2DJ64 --commit 78a86b891cb3de2a24d5c26334e09d7f2e6cf0e9
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    ### 2026-10-25T16:07:30.418Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Final PASS after source-review correction: native leading-dot extension behavior retained; fresh complete ZipPackage coverage remains S118/B66/F6/L104 at100 through40cases and final build/lint pass. Seven new modules remain fresh100 S320/B186/F77/L297. Related74case and pinned4case checks pass; all declared local gates passed. Current source hashes and exact command evidence refreshed in evidence/verification.json. No full suite due; DOCX/XLSX application feature/UI integration remains in approved dependent tasks.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:05:33.684Z, excerpt_hash=sha256:1020160bed4cb07b6a9e8b212931553497d9cc404ac82e95d6ad5d5fc0ea0bf0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-R2DJ64/blueprint/resolved-snapshot.json
+    - old_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+    - current_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-R2DJ64
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-R2DJ64
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-25T16:07:36.566Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610251549-R2DJ64
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:07:30.480Z, excerpt_hash=sha256:1020160bed4cb07b6a9e8b212931553497d9cc404ac82e95d6ad5d5fc0ea0bf0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-R2DJ64/blueprint/resolved-snapshot.json
+    - old_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+    - current_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-R2DJ64
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610251549-R2DJ64 --result verified-202610251549-R2DJ64 --commit 06a4c723d3b6699f098769caa31df70c99bf4e4b
     - diagnostic_command: none
     - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
     - freshness: route=computed_local remote=remote_skipped
@@ -217,6 +308,66 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610251549-R2DJ64 --result verified-202610251549-R2DJ64 --commit 78a86b891cb3de2a24d5c26334e09d7f2e6cf0e9
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-25T16:07:30.418Z — VERIFY — ok
+
+By: CODER
+
+Note: Final PASS after source-review correction: native leading-dot extension behavior retained; fresh complete ZipPackage coverage remains S118/B66/F6/L104 at100 through40cases and final build/lint pass. Seven new modules remain fresh100 S320/B186/F77/L297. Related74case and pinned4case checks pass; all declared local gates passed. Current source hashes and exact command evidence refreshed in evidence/verification.json. No full suite due; DOCX/XLSX application feature/UI integration remains in approved dependent tasks.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:05:33.684Z, excerpt_hash=sha256:1020160bed4cb07b6a9e8b212931553497d9cc404ac82e95d6ad5d5fc0ea0bf0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-R2DJ64/blueprint/resolved-snapshot.json
+- old_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+- current_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-R2DJ64
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-R2DJ64
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-25T16:07:36.566Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610251549-R2DJ64
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T16:07:30.480Z, excerpt_hash=sha256:1020160bed4cb07b6a9e8b212931553497d9cc404ac82e95d6ad5d5fc0ea0bf0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-R2DJ64/blueprint/resolved-snapshot.json
+- old_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+- current_digest: 1c48362813f7dbab1101c2fe5f0812fec7bcc75cf482ae1a70d140bb9365ef2e
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-R2DJ64
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610251549-R2DJ64 --result verified-202610251549-R2DJ64 --commit 06a4c723d3b6699f098769caa31df70c99bf4e4b
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
