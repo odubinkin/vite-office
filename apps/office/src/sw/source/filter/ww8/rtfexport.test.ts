@@ -12,6 +12,7 @@ import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrient
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
@@ -240,6 +241,87 @@ it("emits native page-before break controls and preserves the source first-run i
     source.Dispose();
   }
 });
+
+it("writes initial native page geometry to RTF global and first-section controls", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("Page");
+  const alternate = source.MakePageDesc("Landscape", source.GetPageDesc());
+  source.ChgPageDesc(
+    {
+      ...alternate.GetValue(),
+      width: 15000,
+      height: 9000,
+      leftMargin: 1000,
+      rightMargin: 1100,
+      topMargin: 1200,
+      bottomMargin: 1300,
+      landscape: true,
+    },
+    "Landscape",
+  );
+  first.SetAttr(new SwFormatPageDesc("Landscape"));
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const rtf = new TextDecoder().decode(bytes);
+    expect(rtf).toContain(String.raw`{\*\pgdscno1}`);
+    expect(rtf).toContain(String.raw`\landscape\paperh9000\paperw15000`);
+    expect(rtf).toContain(String.raw`\margl1000\margr1100\margt1200\margb1300`);
+    expect(rtf).toContain(String.raw`\sectd\sbknone\sectunlocked1`);
+    expect(rtf).toContain(String.raw`\lndscpsxn\pgwsxn15000\pghsxn9000`);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.GetPageDesc().GetValue()).toMatchObject({
+      width: 15000,
+      height: 9000,
+      leftMargin: 1000,
+      rightMargin: 1100,
+      topMargin: 1200,
+      bottomMargin: 1300,
+      landscape: true,
+    });
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("selects the first RTF page descriptor inherited from a paragraph style", () => {
+  const source = createWriterDocument();
+  try {
+    const paragraph = source.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    const alternate = source.MakePageDesc("Styled Page", source.GetPageDesc());
+    source.ChgPageDesc({ ...alternate.GetValue(), width: 14000 }, alternate.GetName());
+    const style = source.MakeTextFormatColl("Styled", source.GetTextFormatColl("default"));
+    style.SetFormatAttr(new SwFormatPageDesc("Styled Page"));
+    paragraph.ChgFormatColl(style);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf).toContain(String.raw`{\*\pgdscno1}`);
+    expect(rtf).toContain(String.raw`\paperw14000`);
+  } finally {
+    source.Dispose();
+  }
+});
+
+it.each([1, 2, 3, 5, 6])(
+  "retains source RTF no-op for represented break mode %i without columns or sections",
+  (mode) => {
+    const source = createWriterDocument();
+    try {
+      const first = source.paragraphs[0];
+      if (first === undefined) throw new Error("Missing paragraph.");
+      first.SetText("First");
+      const second = source.nodes.MakeTextNode("Second");
+      second.SetAttr(new SfxInt16Item(RES_BREAK, mode));
+      const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+      expect(rtf).not.toMatch(/\\(?:pagebb|column|page)(?![a-z])/u);
+    } finally {
+      source.Dispose();
+    }
+  },
+);
 
 it.each([
   ["fixed", -300, 0, 300],

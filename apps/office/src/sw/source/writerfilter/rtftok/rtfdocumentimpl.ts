@@ -66,6 +66,7 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
+import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 
 /** Paragraph properties represented by the current Writer model. */
 interface RtfParagraphState {
@@ -333,6 +334,9 @@ export class RtfDocumentImpl {
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
   private defaultTabStop = 720;
   private firstRun = true;
+  private readonly firstSectionPage: Partial<{
+    -readonly [K in Exclude<keyof WriterPageDescriptorValue, "name">]: WriterPageDescriptorValue[K];
+  }> = {};
 
   /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
@@ -346,6 +350,7 @@ export class RtfDocumentImpl {
       this.CommitParagraph();
     this.FlushTable();
     const document = new SwDoc(options);
+    document.ChgPageDesc({ ...document.GetPageDesc().GetValue(), ...this.firstSectionPage });
     // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
     document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
     const defaultTabs = (
@@ -852,6 +857,38 @@ export class RtfDocumentImpl {
   /** Applies one represented body control. @param name - RTF control. @param parameter - Optional value. @param state - Current group. */
   private DispatchBodyControl(name: string, parameter: number | undefined, state: RtfState): void {
     if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
+    if (this.firstRun) {
+      const page = this.firstSectionPage;
+      if (name === "landscape" || name === "lndscpsxn") page.landscape = true;
+      else if (parameter !== undefined) {
+        switch (name) {
+          case "paperw":
+          case "pgwsxn":
+            page.width = parameter;
+            break;
+          case "paperh":
+          case "pghsxn":
+            page.height = parameter;
+            break;
+          case "margl":
+          case "marglsxn":
+            page.leftMargin = parameter;
+            break;
+          case "margr":
+          case "margrsxn":
+            page.rightMargin = parameter;
+            break;
+          case "margt":
+          case "margtsxn":
+            page.topMargin = parameter;
+            break;
+          case "margb":
+          case "margbsxn":
+            page.bottomMargin = parameter;
+            break;
+        }
+      }
+    }
     if (name === "deftab" && parameter !== undefined) {
       this.defaultTabStop = parameter;
       return;

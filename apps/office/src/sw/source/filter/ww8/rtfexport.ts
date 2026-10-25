@@ -22,6 +22,9 @@ import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import { RES_PAGEDESC } from "../../../inc/hintids";
+import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import type { SwPageDesc } from "../../core/layout/pagedesc";
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport {
@@ -157,6 +160,7 @@ export class RtfExport {
       .GetAttrSet()
       .Get(RES_PARATR_TABSTOP) as SvxTabStopItem;
     if (defaultTabs.Count() > 0) output += `\\deftab${defaultTabs.At(0).GetTabPos()}`;
+    output += this.WriteInitialPageDescription(document, blocks[0]);
     output += "\n";
     for (const block of blocks) {
       if (block instanceof SwTableNode) {
@@ -239,6 +243,52 @@ export class RtfExport {
     }
     output += "}";
     return new TextEncoder().encode(output);
+  }
+
+  /** Emits the first native page descriptor as global paper and first-section controls. */
+  private WriteInitialPageDescription(
+    document: SwDoc,
+    firstBlock: SwTextNode | SwTableNode | undefined,
+  ): string {
+    const set =
+      firstBlock instanceof SwTableNode
+        ? firstBlock.GetTable().GetFrameFormat().GetAttrSet()
+        : firstBlock?.GetSwAttrSet();
+    const pageItem = set?.Get(RES_PAGEDESC) as SwFormatPageDesc | undefined;
+    const page =
+      (pageItem === undefined ? undefined : document.FindPageDesc(pageItem.GetPageDescName())) ??
+      document.GetPageDesc();
+    let output = "";
+    if (pageItem !== undefined && pageItem.GetPageDescName().length > 0) {
+      for (let index = 0; index < document.GetPageDescCnt(); index++)
+        if (document.GetPageDesc(index) === page) {
+          output += `{\\*\\pgdscno${index}}`;
+          break;
+        }
+    }
+    const value = page.GetValue();
+    if (value.landscape) output += "\\landscape";
+    output += `\\paperh${value.height}\\paperw${value.width}`;
+    output += `\\margl${value.leftMargin}\\margr${value.rightMargin}`;
+    output += `\\margt${value.topMargin}\\margb${value.bottomMargin}`;
+    output += "\\sectd\\sbknone\\sectunlocked1";
+    output += this.WriteSectionPageDescription(page);
+    return output;
+  }
+
+  /** Mirrors OutPageDescription for the currently represented physical page fields. */
+  private WriteSectionPageDescription(page: SwPageDesc): string {
+    const follow = page.GetFollow();
+    const value = follow.GetValue();
+    let output = "";
+    if (value.landscape) output += "\\lndscpsxn";
+    output += `\\pgwsxn${value.width}\\pghsxn${value.height}`;
+    if (value.leftMargin !== 0) output += `\\marglsxn${value.leftMargin}`;
+    if (value.rightMargin !== 0) output += `\\margrsxn${value.rightMargin}`;
+    if (value.topMargin !== 0) output += `\\margtsxn${value.topMargin}`;
+    if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
+    if (follow !== page) output += "\\titlepg";
+    return output;
   }
 
   /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */

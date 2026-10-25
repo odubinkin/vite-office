@@ -138,6 +138,25 @@ it("imports RTF line rules into named style and direct paragraph items", () => {
   }
 });
 
+it("imports RTF global paper and first-section geometry through the document page descriptor", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\paperw12000\paperh16000\margl1000\margr1100\margt1200\margb1300\sectd\pgwsxn12500\pghsxn16500\marglsxn1400\lndscpsxn Page}`,
+  );
+  try {
+    expect(document.GetPageDesc().GetValue()).toMatchObject({
+      width: 12500,
+      height: 16500,
+      leftMargin: 1400,
+      rightMargin: 1100,
+      topMargin: 1200,
+      bottomMargin: 1300,
+      landscape: true,
+    });
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("keeps a table before the first body paragraph", /** Checks physical body order when RTF starts with a table. @returns Nothing. */ () => {
   const document = read("{\\rtf1\\ansi\\trowd\\cellx1440\\intbl Cell\\cell\\row\\pard After}");
   try {
