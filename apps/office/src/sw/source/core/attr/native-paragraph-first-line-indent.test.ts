@@ -21,6 +21,23 @@ import {
   restoreOdtWriterTransfer,
 } from "../../../browser/filter/xml/odt-transfer";
 
+it("sets an imported first-line indent through the native paragraph item", /** Checks the RTF-facing setter retains the signed item value. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    paragraph.SetParagraphFirstLineIndent(-120);
+    expect(paragraph.GetParagraphFirstLineIndent()).toBe(-120);
+    expect(
+      (
+        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+      ).ResolveTextFirstLineOffset(),
+    ).toBe(-120);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it.each([U.TWIP, U.FONT_EM, U.FONT_CJK_ADVANCE])(
   "native first-line unit%s preserves original item/node/cursor/style client through three UndoRedo cycles",
   /** Mutates the original paragraph ItemSet and history. @param unit - Native unit. @returns Nothing. */ (

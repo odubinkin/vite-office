@@ -7,19 +7,28 @@
     "state": "active",
     "suite": "writer",
     "subsystem": "rtf-filter",
-    "capabilityIds": ["CAP-0121"],
+    "capabilityIds": [
+      "CAP-0121"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "none",
-      "evidence": ["apps/office/src/sw/source/filter/ww8/rtfexport.ts#RtfExport", "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx#RtfExport::WriteNumbering"],
-      "justification": "Native RTF writer for represented Writer content; complete upstream export parity remains unverified.",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/rtfexport.ts#RtfExport",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx#RtfExport::WriteNumbering"
+      ],
+      "justification": "Represented native RTF export now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified.",
       "knownViolations": [],
-      "localSymbols": ["RtfExport"],
+      "localSymbols": [
+        "RtfExport"
+      ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/rtfexport.cxx",
-      "upstreamSymbols": ["RtfExport::WriteNumbering"]
+      "upstreamSymbols": [
+        "RtfExport::WriteNumbering"
+      ]
     }
   }
 }

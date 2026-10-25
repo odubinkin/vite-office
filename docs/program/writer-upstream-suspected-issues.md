@@ -1118,3 +1118,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutEscapedChars` and `OutMarkdown_SwTextNode`. The escape switch omits `|` and carries a TODO asking whether to escape it; table output uses the same escaping path.
 - Observation: a literal pipe in a table cell can be emitted as a column delimiter, so re-import may split or shift cells. This is a source-level inference; native desktop round-trip behavior is not independently confirmed.
 - Preservation: keep the upstream escape set in `SwMDWriter`, including the missing pipe escape. The Markdown reader recognizes escaped pipes in incoming files, but the export path does not silently correct the upstream behavior.
+
+### WRITER095 — RTF export omits nonstandard escapement at the default proportional height
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharEscapement`. When proportional height equals `DFLT_ESC_PROP` (58), the function enters the super/subscript branch and returns after testing only the standard super/sub offsets and their automatic markers.
+- Observation: an item with height 58 and another valid offset, such as 25, emits no position control. The same offset with a different supported height emits `\up` or `\dn`. This is a source-derived finding, not confirmed desktop behavior for a typical UI action.
+- Preservation: keep this branch in `RtfExport.WriteEscapement`; do not emit a custom position for the height-58 case. Focused tests distinguish this source behavior from the represented custom-height round trip.

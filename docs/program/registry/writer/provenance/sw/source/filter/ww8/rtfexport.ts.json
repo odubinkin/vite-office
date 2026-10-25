@@ -6,13 +6,36 @@
     "status": "mapped",
     "localPath": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
     "upstreamPath": "sw/source/filter/ww8/rtfexport.cxx",
-    "localSymbols": ["RtfExport"],
-    "upstreamSymbols": ["RtfExport::ExportDocument_Impl", "RtfExport::WriteNumbering"],
-    "preservedResponsibilities": ["Writes represented Writer body text, character attributes, paragraph alignment, tables and list definitions as RTF."],
-    "omittedResponsibilities": ["Upstream's complete page, frame, picture, field, header/footer, drawing, section and style export paths remain unverified."],
+    "localSymbols": [
+      "RtfExport"
+    ],
+    "upstreamSymbols": [
+      "RtfExport::ExportDocument_Impl",
+      "RtfExport::WriteNumbering"
+    ],
+    "preservedResponsibilities": [
+      "Writes represented Writer body text, character decoration/position, hyperlinks, paragraph alignment/indentation, tables and list definitions as RTF."
+    ],
+    "omittedResponsibilities": [
+      "Upstream complete page, frame, picture, non-hyperlink field, header/footer, drawing, section and style export paths remain unverified."
+    ],
     "evidence": {
-      "local": [{ "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts", "marker": "round trips" }],
-      "upstream": [{ "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx", "marker": "RtfExport::WriteNumbering" }]
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native decoration"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
+          "marker": "RtfExport::WriteNumbering"
+        }
+      ]
     }
   }
 }

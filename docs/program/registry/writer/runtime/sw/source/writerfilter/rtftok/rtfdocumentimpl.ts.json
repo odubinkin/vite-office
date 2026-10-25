@@ -7,19 +7,28 @@
     "state": "active",
     "suite": "writer",
     "subsystem": "rtf-filter",
-    "capabilityIds": ["CAP-0121"],
+    "capabilityIds": [
+      "CAP-0121"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "none",
-      "evidence": ["apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts#RtfDocumentImpl", "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#RTFDocumentImpl"],
-      "justification": "Represented RTF import maps into native Writer owners; unrepresented upstream destinations remain unverified.",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts#RtfDocumentImpl",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx#RTFDocumentImpl"
+      ],
+      "justification": "Represented native RTF import now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified.",
       "knownViolations": [],
-      "localSymbols": ["RtfDocumentImpl"],
+      "localSymbols": [
+        "RtfDocumentImpl"
+      ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
-      "upstreamSymbols": ["RTFDocumentImpl::resolveSubstream"]
+      "upstreamSymbols": [
+        "RTFDocumentImpl::resolveSubstream"
+      ]
     }
   }
 }

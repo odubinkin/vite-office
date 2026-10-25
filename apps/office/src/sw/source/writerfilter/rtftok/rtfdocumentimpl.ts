@@ -1,5 +1,14 @@
 /** @fileoverview Maps RTF tokenizer events into native Writer nodes following rtftok/rtfdocumentimpl.cxx. */
-import { createWriterTextFragment, type WriterTextRun } from "../../filter/basflt/writer-transfer";
+import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
+import { SwpHints } from "../../core/txtnode/ndhints";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import {
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_PROP,
+  DFLT_ESC_SUB,
+  DFLT_ESC_SUPER,
+} from "../../../../editeng/inc/escapementitem";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -12,6 +21,7 @@ interface RtfParagraphState {
   alignment: WriterParagraphAlignment;
   left: number;
   right: number;
+  firstLine: number;
   listOverride?: number;
   listLevel: number;
 }
@@ -27,12 +37,16 @@ interface RtfState {
     | "listlevel"
     | "listoverridetable"
     | "listoverride"
+    | "field"
+    | "fldinst"
     | "skip";
   starred: boolean;
   character: WriterCharacterAttributes;
   paragraph: RtfParagraphState;
   fontIndex: number;
   colorIndex: number;
+  field?: { instruction: string; url?: string };
+  hyperlink?: string;
 }
 
 /** Parsed paragraph before the source graph is applied atomically. */
@@ -51,7 +65,13 @@ const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   italic: false,
   underline: false,
 };
-const DEFAULT_PARAGRAPH: RtfParagraphState = { alignment: "left", left: 0, right: 0, listLevel: 0 };
+const DEFAULT_PARAGRAPH: RtfParagraphState = {
+  alignment: "left",
+  left: 0,
+  right: 0,
+  firstLine: 0,
+  listLevel: 0,
+};
 const SKIPPED_DESTINATIONS = new Set([
   "stylesheet",
   "info",
@@ -66,7 +86,6 @@ const SKIPPED_DESTINATIONS = new Set([
   "footerr",
   "footnote",
   "annotation",
-  "fldinst",
   "filetbl",
   "datastore",
   "themedata",
@@ -95,6 +114,7 @@ export class RtfDocumentImpl {
   private tableRow: RtfParagraph[][] = [];
   private tableCell: RtfParagraph[] = [];
   private inTable = false;
+  private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
   /** Resolves complete lexical input into a fresh Writer document. @param tokens - Valid RTF events. @returns Imported model. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
@@ -141,11 +161,13 @@ export class RtfDocumentImpl {
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
   private ApplyParagraph(node: SwTextNode, paragraph: RtfParagraph): void {
-    const fragment = createWriterTextFragment(node, paragraph.runs);
-    node.SetText(fragment.text);
-    node.SetTextHints(fragment.hints);
+    node.SetText(paragraph.runs.map((run) => run.text).join(""));
+    const hints = new SwpHints(node.GetDoc().GetAttrPool());
+    hints.setTextRuns(paragraph.runs, node.GetSwAttrSet());
+    node.SetTextHints(hints);
     node.SetParagraphAlignment(paragraph.state.alignment);
     node.SetParagraphTextLeftMargin(paragraph.state.left);
+    node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
     node.SetParagraphRightMargin(paragraph.state.right);
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
@@ -174,16 +196,24 @@ export class RtfDocumentImpl {
         paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
         fontIndex: previous?.fontIndex ?? 0,
         colorIndex: previous?.colorIndex ?? 0,
+        ...(previous?.field === undefined ? {} : { field: previous.field }),
+        ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
       });
       return;
     }
     if (token.kind === "group-end") {
+      if (this.states.length === 1 && this.runs.length > 0) this.CommitParagraph(this.states[0]);
       const previous = this.states.pop();
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0) this.CommitFont(previous);
       if (previous?.destination === "list")
         this.listFormats.set(this.currentListId, [...this.currentListLevels]);
       if (previous?.destination === "listoverride")
         this.listOverrides.set(this.currentOverrideIndex, this.currentOverrideListId);
+      if (previous?.destination === "fldinst" && previous.field !== undefined) {
+        const match = /\bHYPERLINK\s+(?:"([^"]+)"|([^\s]+))/iu.exec(previous.field.instruction);
+        const url = match?.[1] ?? match?.[2];
+        if (url !== undefined) previous.field.url = url;
+      }
       return;
     }
     const state = this.states.at(-1);
@@ -191,6 +221,8 @@ export class RtfDocumentImpl {
     if (token.kind === "text") {
       if (state.destination === "fonttbl") this.ReadFontText(token.value, state);
       else if (state.destination === "colortbl") this.ReadColorText(token.value);
+      else if (state.destination === "fldinst" && state.field !== undefined)
+        state.field.instruction += token.value;
       else if (state.destination === "body") this.AppendText(token.value, state);
       return;
     }
@@ -200,6 +232,30 @@ export class RtfDocumentImpl {
     }
     if (token.name === "rtf") {
       this.sawHeader = token.parameter === 1;
+      return;
+    }
+    if (token.name === "field" && state.destination === "body") {
+      state.destination = "field";
+      state.field = { instruction: "" };
+      return;
+    }
+    if (token.name === "fldinst" && state.destination === "field") {
+      state.destination = "fldinst";
+      state.starred = false;
+      return;
+    }
+    if (token.name === "fldrslt" && state.destination === "field") {
+      state.destination = "body";
+      if (state.field?.url !== undefined) state.hyperlink = state.field.url;
+      else Reflect.deleteProperty(state, "hyperlink");
+      return;
+    }
+    if (token.name === "updnprop" && token.parameter !== undefined && state.starred) {
+      this.pendingUpDn = {
+        height: Math.floor(token.parameter / 100),
+        automatic: token.parameter % 100 === 1,
+      };
+      state.starred = false;
       return;
     }
     if (
@@ -318,7 +374,42 @@ export class RtfDocumentImpl {
       return;
     }
     if (name === "ulnone") state.character = { ...state.character, underline: false };
-    else if (name === "ls" && parameter !== undefined)
+    else if (name === "strike" || name === "striked")
+      state.character = {
+        ...state.character,
+        strikeout:
+          parameter === 0
+            ? FontStrikeout.STRIKEOUT_NONE
+            : name === "striked"
+              ? FontStrikeout.STRIKEOUT_DOUBLE
+              : FontStrikeout.STRIKEOUT_SINGLE,
+      };
+    else if (name === "super" || name === "sub")
+      state.character = {
+        ...state.character,
+        escapement: {
+          offset: name === "super" ? DFLT_ESC_SUPER : DFLT_ESC_SUB,
+          height: DFLT_ESC_PROP,
+        },
+      };
+    else if (name === "nosupersub") {
+      const character = { ...state.character };
+      Reflect.deleteProperty(character, "escapement");
+      state.character = character;
+    } else if ((name === "up" || name === "dn") && parameter !== undefined) {
+      const up = name === "up",
+        fontHeight = state.character.fontSizeTwips ?? 240;
+      const offset = this.pendingUpDn?.automatic
+        ? up
+          ? DFLT_ESC_AUTO_SUPER
+          : DFLT_ESC_AUTO_SUB
+        : Math.round(((parameter * 1000) / fontHeight) * (up ? 1 : -1));
+      state.character = {
+        ...state.character,
+        escapement: { offset, height: this.pendingUpDn?.height ?? 100 },
+      };
+      this.pendingUpDn = undefined;
+    } else if (name === "ls" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, listOverride: parameter };
     else if (name === "ilvl" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
@@ -351,6 +442,8 @@ export class RtfDocumentImpl {
       state.paragraph = { ...state.paragraph, left: Math.max(0, parameter) };
     else if (name === "ri" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, right: Math.max(0, parameter) };
+    else if (name === "fi" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, firstLine: parameter };
   }
 
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */
@@ -358,9 +451,18 @@ export class RtfDocumentImpl {
     if (value.length === 0) return;
     if (!this.inTable && this.tableRows.length > 0) this.FlushTable();
     const previous = this.runs.at(-1);
-    if (previous !== undefined && equalCharacter(previous.attributes, state.character))
+    if (
+      previous !== undefined &&
+      previous.hyperlink?.url === state.hyperlink &&
+      equalCharacter(previous.attributes, state.character)
+    )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
-    else this.runs.push({ text: value, attributes: { ...state.character } });
+    else
+      this.runs.push({
+        text: value,
+        attributes: { ...state.character },
+        ...(state.hyperlink === undefined ? {} : { hyperlink: { url: state.hyperlink } }),
+      });
     this.terminatedParagraph = false;
   }
 
@@ -418,6 +520,9 @@ function equalCharacter(a: WriterCharacterAttributes, b: WriterCharacterAttribut
     a.fontFamily === b.fontFamily &&
     a.fontSizeTwips === b.fontSizeTwips &&
     a.color === b.color &&
-    a.highlight === b.highlight
+    a.highlight === b.highlight &&
+    a.strikeout === b.strikeout &&
+    a.escapement?.offset === b.escapement?.offset &&
+    a.escapement?.height === b.escapement?.height
   );
 }

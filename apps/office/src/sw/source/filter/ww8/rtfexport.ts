@@ -4,10 +4,14 @@ import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
-import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import { RtfAttributeOutput } from "./rtfattributeoutput";
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport {
+  private readonly attributeOutput = new RtfAttributeOutput(
+    (family) => this.IndexFont(family),
+    (color) => this.IndexColor(color),
+  );
   private readonly fonts = new Map<string, number>();
   private readonly colors = new Map<string, number>();
   private readonly lists = new Map<
@@ -106,19 +110,7 @@ export class RtfExport {
 
   /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */
   private WriteParagraph(paragraph: SwTextNode): string {
-    const alignment = paragraph.GetParagraphAlignment();
-    let output =
-      alignment === "center"
-        ? "\\qc"
-        : alignment === "right"
-          ? "\\qr"
-          : alignment === "justify"
-            ? "\\qj"
-            : "\\ql";
-    const left = paragraph.GetParagraphTextLeftMargin(),
-      right = paragraph.GetParagraphRightMargin();
-    if (left !== 0) output += `\\li${left}`;
-    if (right !== 0) output += `\\ri${right}`;
+    let output = this.attributeOutput.WriteParagraphProperties(paragraph);
     const rule = paragraph.GetNumRule();
     if (rule !== undefined) {
       const list = this.lists.get(rule.GetName());
@@ -126,27 +118,14 @@ export class RtfExport {
     }
     output += " ";
     for (const run of projectWriterTextRuns(paragraph)) {
-      const controls = this.WriteCharacter(run.attributes);
-      output += "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
+      const controls = this.attributeOutput.WriteCharacter(run.attributes);
+      const text = "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
+      output +=
+        run.hyperlink === undefined
+          ? text
+          : `{\\field{\\*\\fldinst HYPERLINK "${escapeRtf(run.hyperlink.url).replaceAll('"', "\\u34?")}"}{\\fldrslt ${text}}}`;
     }
     return output;
-  }
-
-  /** Emits direct character controls for one run. @param attributes - Native run values. @returns RTF controls. */
-  private WriteCharacter(attributes: WriterCharacterAttributes): string {
-    let result = "";
-    if (attributes.bold) result += "\\b";
-    if (attributes.italic) result += "\\i";
-    if (attributes.underline) result += "\\ul";
-    if (attributes.fontFamily !== undefined)
-      result += `\\f${this.IndexFont(attributes.fontFamily)}`;
-    if (attributes.fontSizeTwips !== undefined)
-      result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
-    if (attributes.color !== undefined && attributes.color !== "auto")
-      result += `\\cf${this.IndexColor(attributes.color)}`;
-    if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
-      result += `\\highlight${this.IndexColor(attributes.highlight)}`;
-    return result;
   }
 
   /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */

@@ -2,6 +2,8 @@
 import { expect, it } from "vitest";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfTokenizer } from "./rtftokenizer";
 
@@ -57,6 +59,39 @@ it("resolves font and color tables into native character hints", /** Checks RTF 
       fontFamily: "Arial",
       fontSizeTwips: 280,
     });
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("imports first-line indentation, strikeout, superscript and hyperlink field results", /** Checks represented RTF dispatch and native owners. @returns Nothing. */ () => {
+  const document = read(
+    '{\\rtf1\\ansi\\fi-120 Base {\\strike crossed} {\\super raised} {\\field{\\*\\fldinst HYPERLINK "https://example.test"}{\\fldrslt linked}}}',
+  );
+  try {
+    const node = document.paragraphs[0];
+    expect(node?.GetParagraphFirstLineIndent()).toBe(-120);
+    const runs = projectWriterTextRuns(node);
+    expect(runs.find((run) => run.text === "crossed")?.attributes.strikeout).toBe(
+      FontStrikeout.STRIKEOUT_SINGLE,
+    );
+    expect(runs.find((run) => run.text === "raised")?.attributes.escapement).toEqual({
+      offset: DFLT_ESC_SUPER,
+      height: DFLT_ESC_PROP,
+    });
+    expect(runs.find((run) => run.text === "linked")?.hyperlink?.url).toBe("https://example.test");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains visible non-link field results without assigning a hyperlink", /** Checks unrelated fields stay plain at the represented field boundary. @returns Nothing. */ () => {
+  const document = read("{\\rtf1\\ansi Before {\\field{\\*\\fldinst PAGE}{\\fldrslt 3}} after}");
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("Before 3 after");
+    expect(
+      projectWriterTextRuns(document.paragraphs[0]).every((run) => run.hyperlink === undefined),
+    ).toBe(true);
   } finally {
     document.Dispose();
   }

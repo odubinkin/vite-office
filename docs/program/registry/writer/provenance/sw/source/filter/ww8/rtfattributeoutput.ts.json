@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "RtfAttributeOutput"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::OutputCharEscapement",
+      "RtfAttributeOutput::FormatFirstLineIndent",
+      "RtfAttributeOutput::OutputCharCrossedOut"
+    ],
+    "preservedResponsibilities": [
+      "Emits represented native Writer paragraph and character item controls, including first-line indent, strikeout and escapement."
+    ],
+    "omittedResponsibilities": [
+      "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native decoration"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "retains upstream default-height"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharEscapement"
+        }
+      ]
+    }
+  }
+}
