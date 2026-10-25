@@ -1,5 +1,6 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
 import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
@@ -9,7 +10,7 @@ import { ScBulkBroadcast } from "../inc/bcaslot";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScRangeList } from "../../../inc/rangelst";
 import { InsertDeleteFlags } from "../../../inc/global";
-import { MAXTAB, ValidTab } from "../../../inc/address";
+import { MAXTAB, ValidTab, SC_TAB_APPEND } from "../../../inc/address";
 import { BroadcastAction } from "./documen7";
 import { ExtendMerge as extendTableMerge } from "./table2";
 import { RefUpdateContext } from "../../../inc/refupdatecontext";
@@ -21,7 +22,7 @@ import { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { ScColumn } from "../../../inc/column";
 import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
-import type { ScTable } from "../../../inc/table";
+import { ScTable } from "../../../inc/table";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { uppercase } from "../../../../unotools/inc/charclass";
 import { ScDocument } from "../../../inc/document";
@@ -662,4 +663,41 @@ export function ValidNewTabName(this: ScDocument, name: OUStringConstReference):
   for (const table of this["maTabs"])
     if (table && uppercase(table.GetName(), this["locale"]).equals(candidate)) return false;
   return true;
+}
+
+/** Existing scalar sheet insertion body moved unchanged from the size-bounded facade. @param this - Actual document. @param position - Sheet position. @param name - Native name. @returns Inserted. */
+export function InsertTab(
+  this: ScDocument,
+  position: number,
+  name: OUStringConstReference,
+): boolean {
+  if (this["maTabs"].length > MAXTAB || !this.ValidNewTabName(name)) return false;
+  if (position === SC_TAB_APPEND || position >= this["maTabs"].length)
+    position = this["maTabs"].length;
+  if (!ValidTab(position)) return false;
+  this["maTabs"].splice(position, 0, new ScTable(this, position, name));
+  for (let i = position + 1; i < this["maTabs"].length; i++) this["maTabs"][i]?.SetTabNo(i);
+  const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
+  if (position < this["maTabs"].length - 1)
+    this["pBASM"]?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
+  this.SetAllFormulasDirty(new SetFormulaDirtyContext());
+  return true;
+}
+/** Original document.cxx filter-span dispatch. @param this - Actual document. @param first - First row. @param last - Last row. @param tab - Sheet. @returns Any filtered row. */
+export function HasFilteredRows(
+  this: ScDocument,
+  first: number,
+  last: number,
+  tab: number,
+): boolean {
+  return this.FetchTable(tab)?.getFilterData().hasFilteredRows(first, last) ?? false;
+}
+/** Original document.cxx last-unfiltered dispatch. @param this - Actual document. @param first - First row. @param last - Last row. @param tab - Sheet. @returns Row or signed maximum. */
+export function LastNonFilteredRow(
+  this: ScDocument,
+  first: number,
+  last: number,
+  tab: number,
+): number {
+  return this.FetchTable(tab)?.getFilterData().lastNonFilteredRow(first, last) ?? 2147483647;
 }

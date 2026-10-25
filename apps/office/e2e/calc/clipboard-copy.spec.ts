@@ -3,7 +3,9 @@ import type { SfxHint } from "../../src/svl/inc/hint";
 import { expect, test } from "@playwright/test";
 import { installKernelFixture } from "../shared/kernel-fixture";
 /** Bundled actual source declarations;no browser/document model replacement is used. */
-type Fixture = typeof import("../../src/editeng/inc/fhgtitem") &
+type Fixture = typeof import("../../src/sc/source/ui/inc/viewdata") &
+  typeof import("../../src/sc/source/ui/view/viewutil") &
+  typeof import("../../src/editeng/inc/fhgtitem") &
   typeof import("../../src/sc/source/ui/undo/undoblk") &
   typeof import("../../src/sc/source/ui/docshell/docsh") &
   typeof import("../../src/sc/source/core/data/document10") &
@@ -44,6 +46,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
   await installKernelFixture(page, "CalcClipboardFixture", [
     { module: "src/sc/source/ui/undo/undoblk.ts", names: ["ScUndoPaste"] },
     { module: "src/editeng/inc/fhgtitem.ts", names: ["SvxFontHeightItem"] },
+    { module: "src/sc/source/ui/inc/viewdata.ts", names: ["ScViewData", "ScMarkType"] },
+    { module: "src/sc/source/ui/view/viewutil.ts", names: ["ScViewUtil"] },
     { module: "src/sc/source/ui/docshell/docsh.ts", names: ["ScDocShell"] },
     { module: "src/sc/source/core/data/document10.ts", names: ["CopyOneCellFromClip"] },
     {
@@ -630,6 +634,24 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             pasteDocument.GetValue(new n.ScAddress(7, 10, 0)),
           ],
         };
+        const nativeView = new n.ScViewData(pasteDocument),
+          selectionRange = new n.ScRange();
+        nativeView.GetMarkData().SetMarkArea(new n.ScRange(6, 10, 0, 8, 11, 0));
+        const simpleSelection = nativeView.GetSimpleArea(selectionRange);
+        pasteDocument.SetRowFiltered(11, 11, 0, true);
+        const filteredSelection = nativeView.GetSimpleArea(selectionRange),
+          simpleEnd = [selectionRange.aEnd.Col(), selectionRange.aEnd.Row()];
+        nativeView.GetMarkData().SetMarkArea(new n.ScRange(0, 0, 0, 23, pasteDocument.MaxRow(), 0));
+        const fitRange = new n.ScRange(0, 0, 0, 1, 1, 0),
+          viewSelection = {
+            simple: simpleSelection,
+            filtered: filteredSelection,
+            simpleEnd,
+            largeFill: nativeView.SelectionForbidsCellFill(),
+            pasteBlocked: nativeView.SelectionForbidsPaste(1, 1),
+            fit: n.ScViewUtil.FitToUnfilteredRows(fitRange, pasteDocument, 2),
+            fitLast: fitRange.aEnd.Row(),
+          };
         pasteClip.Dispose();
         pasteDocument.Dispose();
         const historyDocument = new n.ScDocument(),
@@ -734,6 +756,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           undoShared,
           pasteHistory,
           publicPaste,
+          viewSelection,
           rowPrepared,
           preparedScripts,
           singleRow,
@@ -816,6 +839,15 @@ test("copies sparse clipboard blocks and completes real dependency notifications
       redone: true,
       after: 5,
       recalculated: 11,
+    },
+    viewSelection: {
+      simple: 1,
+      filtered: 3,
+      simpleEnd: [8, 11],
+      largeFill: true,
+      pasteBlocked: true,
+      fit: false,
+      fitLast: 1048575,
     },
     publicPaste: {
       clipStart: [0, 0],

@@ -64,6 +64,26 @@ export class FilterData {
     if (last) last[0] = data.mnRow2;
     return data.mbValue;
   }
+  /** Original forward filtered-span query retains rowFiltered's invalid-domain behavior. @param first - First row. @param last - Last row. @returns Any filtered row. */
+  hasFilteredRows(first: number, last: number): boolean {
+    for (let row = first; row <= last;) {
+      const end: [number] = [row];
+      if (this.rowFiltered(row, undefined, end)) return true;
+      row = end[0] + 1;
+    }
+    return false;
+  }
+  /** Original backward unfiltered search uses real segments and signed SCROW maximum. @param first - First row. @param last - Last row. @returns Last unfiltered row or2147483647. */
+  lastNonFilteredRow(first: number, last: number): number {
+    const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };
+    for (let row = last; row >= first;) {
+      if (!this.mrTable.GetDoc().ValidRow(row)) break;
+      this.mpFilteredRows.getRangeData(row, data);
+      if (!data.mbValue) return row;
+      row = data.mnRow1 - 1;
+    }
+    return 2147483647;
+  }
   /** Original first unfiltered row or signed SCROW maximum;initialized segments cover every valid row. @param first - First row. @param last - Last row. @returns Row or 2147483647. */
   firstNonFilteredRow(first: number, last: number): number {
     const data: ScFlatBoolRowRangeData = { mnRow1: 0, mnRow2: 0, mbValue: false };

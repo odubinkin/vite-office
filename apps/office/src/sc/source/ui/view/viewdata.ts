@@ -3,7 +3,11 @@ import { ScViewOptions, ViewOption } from "../../../inc/viewopti";
 import type { ScTabViewShell } from "../inc/tabvwsh";
 import type { ScDocument } from "../../../inc/document";
 import { ScMarkData } from "../../../inc/markdata";
-import { ValidTab } from "../../../inc/address";
+import { ScViewUtil } from "./viewutil";
+import { ScMergeAttr } from "../../../inc/attrib";
+import { ATTR_MERGE } from "../../../inc/scitems";
+import { SfxItemState } from "../../../../svl/inc/itemset";
+import { ScAddress, ScRange, ValidTab } from "../../../inc/address";
 /** Native viewdata.hxx pane identities; the supported unsplit view starts bottom-left. */
 export const ScSplitPos = {
   SC_SPLIT_TOPLEFT: 0,
@@ -14,6 +18,14 @@ export const ScSplitPos = {
 } as const;
 /** Native pane value domain; the maximum enumerator aliases bottom-right. */
 export type ScSplitPos = (typeof ScSplitPos)[keyof typeof ScSplitPos];
+/** Original viewdata.hxx mark-type bit values;NONE is internal only. */
+export enum ScMarkType {
+  SC_MARK_NONE = 0,
+  SC_MARK_SIMPLE = 1,
+  SC_MARK_FILTERED = 2,
+  SC_MARK_SIMPLE_FILTERED = 3,
+  SC_MARK_MULTI = 4,
+}
 /** Original viewdata.hxx reference mode identities. */
 export enum ScRefType {
   SC_REFTYPE_NONE = 0,
@@ -35,6 +47,81 @@ class ScViewDataTable {
 /** Native document-bound cursor/selection ownership, shared by browser view consumers. Only the declared cursor operations are ported. */
 export class ScViewData {
   private bSelCtrlMouseClick = false;
+  /** Original current data sheet query. @returns Actual tab. */
+  CurrentTabForData(): number {
+    return this.GetTabNumber();
+  }
+  /** Original simple-area overloads copy view marks unless an explicit mutable mark owner is supplied. @param args - Range/optional marks or six coordinate outputs. @returns Native mark type. */
+  GetSimpleArea(
+    ...args: [ScRange, ScMarkData?] | [[number], [number], [number], [number], [number], [number]]
+  ): ScMarkType {
+    if (!(args[0] instanceof ScRange)) {
+      const range = new ScRange(),
+        type = this.GetSimpleArea(range),
+        values = [...range.aStart.GetVars(), ...range.aEnd.GetVars()];
+      for (let i = 0; i < 6; ++i) (args[i] as [number])[0] = values[i] as number;
+      return type;
+    }
+    const range = args[0],
+      marks = args[1] instanceof ScMarkData ? args[1] : new ScMarkData(this.maMarkData);
+    let type = ScMarkType.SC_MARK_NONE;
+    if (marks.IsMarked() || marks.IsMultiMarked()) {
+      if (marks.IsMultiMarked()) marks.MarkToSimple();
+      if (marks.IsMarked() && !marks.IsMultiMarked()) {
+        range.assign(marks.GetMarkArea());
+        type = ScViewUtil.HasFiltered(range, this.mrDoc)
+          ? ScMarkType.SC_MARK_SIMPLE_FILTERED
+          : ScMarkType.SC_MARK_SIMPLE;
+      } else type = ScMarkType.SC_MARK_MULTI;
+    }
+    if (type !== ScMarkType.SC_MARK_SIMPLE && type !== ScMarkType.SC_MARK_SIMPLE_FILTERED) {
+      if (type === ScMarkType.SC_MARK_NONE) type = ScMarkType.SC_MARK_SIMPLE;
+      const col = this.GetCurX(),
+        row = this.GetCurY(),
+        tab = this.GetTabNumber(),
+        pattern = this.mrDoc.GetPattern(new ScAddress(col, row, this.CurrentTabForData()));
+      if (pattern && pattern.GetItemSet().GetItemState(ATTR_MERGE, false) === SfxItemState.SET) {
+        const merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr,
+          cols = merge.GetColMerge(),
+          rows = merge.GetRowMerge();
+        if (rows < 1 || cols < 1) range.assign(new ScRange(col, row, tab));
+        else {
+          range.assign(new ScRange(col, row, tab, col + cols - 1, row + rows - 1, tab));
+          if (ScViewUtil.HasFiltered(range, this.mrDoc)) type = ScMarkType.SC_MARK_SIMPLE_FILTERED;
+        }
+      } else range.assign(new ScRange(col, row, tab));
+    }
+    return type;
+  }
+  /** Original bounded fill heuristic uses integer division and23Mi-cell limit. @param range - Valid native range. @returns Fill is too large. */
+  static SelectionFillDOOM(range: ScRange): boolean {
+    return (
+      range.aEnd.Row() - range.aStart.Row() + 1 >
+      Math.trunc((23 * 1024 * 1024) / (range.aEnd.Col() - range.aStart.Col() + 1))
+    );
+  }
+  /** Original fill guard evaluates the actual simple area while preserving multi-selection behavior. @returns Fill forbidden. */
+  SelectionForbidsCellFill(): boolean {
+    const range = new ScRange(),
+      type = this.GetSimpleArea(range);
+    return type !== ScMarkType.SC_MARK_MULTI && ScViewData.SelectionFillDOOM(range);
+  }
+  /** Original explicit-clipboard/dimensions overloads;OS clipboard lookup remains unrepresented. @param args - Actual clipdoc or native dimensions. @returns Paste forbidden by source fill bound. */
+  SelectionForbidsPaste(...args: [ScDocument] | [number, number]): boolean {
+    if (typeof args[0] !== "number") {
+      const range = args[0].GetClipParam().getWholeRange();
+      return this.SelectionForbidsPaste(
+        range.aEnd.Col() - range.aStart.Col() + 1,
+        range.aEnd.Row() - range.aStart.Row() + 1,
+      );
+    }
+    const range = new ScRange(),
+      type = this.GetSimpleArea(range);
+    if (type === ScMarkType.SC_MARK_MULTI) return false;
+    if (range.aEnd.Row() - range.aStart.Row() + 1 === args[1]) return false;
+    if (range.aEnd.Col() - range.aStart.Col() + 1 === args[0]) return false;
+    return ScViewData.SelectionFillDOOM(range);
+  }
   /** Original selection-engine Ctrl-click state. @returns Modifier state. */ IsSelCtrlMouseClick(): boolean {
     return this.bSelCtrlMouseClick;
   }

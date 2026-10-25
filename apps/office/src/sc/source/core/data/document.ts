@@ -40,15 +40,13 @@ import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScColumn } from "../../../inc/column";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { ScTable } from "../../../inc/table";
+import type { ScTable } from "../../../inc/table";
 import {
   ScAddress,
   ScRange,
   MAXCOL,
   MAXROW,
   MAXROWCOUNT,
-  MAXTAB,
-  SC_TAB_APPEND,
   ValidCol,
   ValidRow,
   ValidTab,
@@ -479,6 +477,14 @@ export class ScDocument {
   /** Original missing-table filtered query retains outputs. @param row - Row. @param tab - Sheet. @param first - Span output. @param last - Span output. @returns Filtered. */
   RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
     return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
+  }
+  /** Original document filtered-span dispatch. @param args - Row bounds and sheet. @returns Any filtered row. */
+  HasFilteredRows(...args: Parameters<typeof document10.HasFilteredRows>): boolean {
+    return document10.HasFilteredRows.apply(this, args);
+  }
+  /** Original document last-unfiltered dispatch. @param args - Row bounds and sheet. @returns Row or signed maximum. */
+  LastNonFilteredRow(...args: Parameters<typeof document10.LastNonFilteredRow>): number {
+    return document10.LastNonFilteredRow.apply(this, args);
   }
   /** Original hidden row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param hidden - Flag. @returns Nothing. */
   SetRowHidden(first: number, last: number, tab: number, hidden: boolean): void {
@@ -943,16 +949,7 @@ export class ScDocument {
   }
   /** Inserts a normal scalar sheet and updates shifted sheet/column positions. External-document/undo-delete modes remain unsupported APIs. @param position - Position or native append sentinel. @param name - Native sheet name. @returns Inserted. */
   InsertTab(position: number, name: OUStringConstReference): boolean {
-    if (this.maTabs.length > MAXTAB || !this.ValidNewTabName(name)) return false;
-    if (position === SC_TAB_APPEND || position >= this.maTabs.length) position = this.maTabs.length;
-    if (!ValidTab(position)) return false;
-    this.maTabs.splice(position, 0, new ScTable(this, position, name));
-    for (let i = position + 1; i < this.maTabs.length; i++) this.maTabs[i]?.SetTabNo(i);
-    const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
-    if (position < this.maTabs.length - 1)
-      this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
-    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
-    return true;
+    return document10.InsertTab.call(this, position, name);
   }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {

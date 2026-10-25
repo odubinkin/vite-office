@@ -3947,3 +3947,12 @@ flag update without extending that flag mutation for consistency.
 - Pinned source: `sc/source/core/data/document.cxx`, coordinate and range `ScDocument::UndoToDocument` overloads.
 - The coordinate overload constructs `AutoCalcSwitch(rDestDoc,false)`,while the range overload constructs `AutoCalcSwitch(*this,false)`. The latter therefore disables calculation on the source Undo document rather than directly on the destination;its paired-sheet traversal and tail sentinel also differ from the coordinate overload.
 - No active incorrect result is established by the represented restoration scenarios. Preserve both actual receivers,guards and tail ranges;do not normalize the overloads into one supposedly equivalent implementation.
+
+
+### CALC-283 — FitToUnfilteredRows fits the whole sheet tail rather than the requested row count
+
+Pinned `sc/source/ui/view/viewutil.cxx:257` sets the range end to `LastNonFilteredRow(start, MaxRow)` and compares the entire tail's nonfiltered count with the requested count. On an otherwise unfiltered sheet, requesting two rows from row5 returns false but expands the end to MaxRow. A multi-sheet input still mutates its first-sheet end before returning false. Preserve this behavior;tests use real compressed filter runs and check mutation on both success and failure.
+
+### CALC-284 — Filtered merged cursor can replace MULTI mark type in GetSimpleArea
+
+Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected marks,then resolves the cursor's merged rectangle. If that rectangle contains a filtered row,the later branch replaces MULTI with SIMPLE_FILTERED. The actual marks stay disconnected. Preserve this ordering and resulting fill/paste admission rather than retaining MULTI artificially.
