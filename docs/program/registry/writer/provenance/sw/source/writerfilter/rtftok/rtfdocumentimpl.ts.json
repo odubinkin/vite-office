@@ -13,7 +13,7 @@
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, sl/slmult line-spacing modes, keep/split/widow and page-before behavior, absolute tab-stop positions and document default tab distance, first-section paper dimensions/margins/landscape through SwDoc page descriptors, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and direct cell vertical alignment/border/padding controls, plus HYPERLINK field URL, target, name and fragment switches into canonical Writer nodes and items; listtext fallback groups are skipped."
+      "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, sl/slmult line-spacing modes, keep/split/widow and page-before behavior, absolute tab-stop positions and document default tab distance, first-section paper dimensions/margins/landscape through SwDoc page descriptors, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and consecutive trhdr header rows with the source 10-row workaround, direct cell vertical alignment/border/padding controls, plus HYPERLINK field URL, target, name and fragment switches into canonical Writer nodes and items; listtext fallback groups are skipped."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, sections and embedded objects remain unverified."
@@ -51,6 +51,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
           "marker": "imports RTF global paper and first-section geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "consecutive RTF header rows with the source limit"
         }
       ],
       "upstream": [
@@ -65,6 +69,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "RTFKeyword::PAPERH"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
         }
       ]
     }

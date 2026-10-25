@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T18:26:45.280Z"
+doc_updated_at: "2026-10-25T18:30:31.697Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through 3cf1e357b532 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs and line spacing. Commit db7fc462a267 adds native RTF hyperlink field switches and source escaping; WRITER098 records source loss of represented hyperlink name. This batch maps pinned source first-page RTF global paper and section geometry through native SwPageDesc and SwDoc::ChgPageDesc, including inherited paragraph page style; direct page-after/page-both and single-column breaks preserve upstream no-op behavior without section data, documented in WRITER099. Focused 103 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry and module-boundary checks pass. Remaining current-model gaps: later page sections, follow style geometry and page-number restart; soft page breaks; further RTF field, style, list, table and paragraph differentials; hyperlink style and relative URL behavior; physical font metrics; complete md4c callback and syntax parity. Pinned md4c source is absent locally and network approval has not been granted. Existing WRITER096/097 list restart/tab-leader asymmetries and source orphan omission remain. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through 1d22f55a8953 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks and first-page RTF geometry. WRITER096-099 document retained upstream list restart, tab leader, hyperlink name and page-after asymmetries. This batch maps incoming RTF trhdr into the native repeated-row count, including DomainMapper consecutive-prefix semantics and the source 10-row workaround; pinned RTF export omits trhdr, unlike WW8 and DOCX, and WRITER100 documents that source asymmetry. Focused 107 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry and module-boundary checks pass. Remaining current-model gaps: later page sections, follow style geometry and page-number restart; soft page breaks; further RTF field, style, list, table and paragraph differentials; hyperlink style and relative URL behavior; physical font metrics; complete md4c callback and syntax parity. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through 3cf1e357b532 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs and line spacing. Commit db7fc462a267 adds native RTF hyperlink field switches and source escaping; WRITER098 records source loss of represented hyperlink name. This batch maps pinned source first-page RTF global paper and section geometry through native SwPageDesc and SwDoc::ChgPageDesc, including inherited paragraph page style; direct page-after/page-both and single-column breaks preserve upstream no-op behavior without section data, documented in WRITER099. Focused 103 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry and module-boundary checks pass. Remaining current-model gaps: later page sections, follow style geometry and page-number restart; soft page breaks; further RTF field, style, list, table and paragraph differentials; hyperlink style and relative URL behavior; physical font metrics; complete md4c callback and syntax parity. Pinned md4c source is absent locally and network approval has not been granted. Existing WRITER096/097 list restart/tab-leader asymmetries and source orphan omission remain. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Earlier task commits through 1d22f55a8953 cover native TXT, RTF and Markdown paths, RTF styles, bookmarks, lists, tables, paragraph controls, tabs, line spacing, hyperlinks and first-page RTF geometry. WRITER096-099 document retained upstream list restart, tab leader, hyperlink name and page-after asymmetries. This batch maps incoming RTF trhdr into the native repeated-row count, including DomainMapper consecutive-prefix semantics and the source 10-row workaround; pinned RTF export omits trhdr, unlike WW8 and DOCX, and WRITER100 documents that source asymmetry. Focused 107 TXT/RTF/Markdown/document I/O scenarios, office TypeScript, changed-path ESLint/Prettier, source-provenance, Writer registry and module-boundary checks pass. Remaining current-model gaps: later page sections, follow style geometry and page-number restart; soft page breaks; further RTF field, style, list, table and paragraph differentials; hyperlink style and relative URL behavior; physical font metrics; complete md4c callback and syntax parity. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.

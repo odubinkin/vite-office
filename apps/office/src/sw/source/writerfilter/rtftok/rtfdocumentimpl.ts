@@ -158,6 +158,7 @@ type RtfBlock =
 /** One RTF table row with physical cell boundaries in twips. */
 interface RtfTableRow {
   readonly cells: readonly (readonly RtfParagraph[])[];
+  readonly header: boolean;
   readonly boundaries: readonly number[];
   readonly alignment: "left" | "center" | "right";
   readonly left: number;
@@ -322,6 +323,7 @@ export class RtfDocumentImpl {
   private rowLeft = 0;
   private rowHeight = 0;
   private rowSplit = true;
+  private rowHeader = false;
   private rowVerticals: (VertOrientation | undefined)[] = [];
   private nextCellVertical: VertOrientation | undefined;
   private rowBorders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
@@ -501,6 +503,16 @@ export class RtfDocumentImpl {
             }
           }
         }
+        let repeatedRows = 0;
+        for (const row of block.rows) {
+          if (!row.header) break;
+          if (repeatedRows === 10) {
+            repeatedRows = 0;
+            break;
+          }
+          repeatedRows++;
+        }
+        table.SetRowsToRepeat(repeatedRows);
       }
     }
     return document;
@@ -909,6 +921,7 @@ export class RtfDocumentImpl {
       this.rowLeft = 0;
       this.rowHeight = 0;
       this.rowSplit = true;
+      this.rowHeader = false;
       this.rowVerticals = [];
       this.nextCellVertical = undefined;
       this.rowBorders = [];
@@ -989,6 +1002,10 @@ export class RtfDocumentImpl {
       this.rowSplit = false;
       return;
     }
+    if (name === "trhdr") {
+      this.rowHeader = true;
+      return;
+    }
     if (name === "trql" || name === "trqc" || name === "trqr") {
       this.rowAlignment = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
       return;
@@ -1028,6 +1045,7 @@ export class RtfDocumentImpl {
       if (this.tableRow.length > 0)
         this.tableRows.push({
           cells: this.tableRow.splice(0),
+          header: this.rowHeader,
           boundaries: this.rowBoundaries.splice(0),
           alignment: this.rowAlignment,
           left: this.rowLeft,

@@ -86,6 +86,25 @@ it("round trips text, Unicode, alignment and direct character runs", /** Checks 
   }
 });
 
+it("keeps the source RTF table-header export omission for represented repeat rows", () => {
+  const document = createWriterDocument();
+  try {
+    const first = document.paragraphs[0];
+    if (first === undefined) throw new Error("Missing paragraph.");
+    const table = document.nodes.InsertTable(first, "Header Table", {});
+    for (let index = 0; index < 2; index++) {
+      const line = document.nodes.AppendTableRow(table, 1);
+      line.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText(`Row ${index}`);
+    }
+    table.SetRowsToRepeat(1);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(rtf).toContain("\\trowd");
+    expect(rtf).not.toContain("\\trhdr");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("round trips represented paragraph styles through the RTF stylesheet", () => {
   const source = createWriterDocument();
   const heading = source.paragraphs[0];

@@ -190,6 +190,39 @@ it("imports cellx boundaries as independent native cell widths", () => {
 });
 
 it.each([
+  [2, 2],
+  [11, 0],
+] as const)("imports %i consecutive RTF header rows with the source limit", (headers, expected) => {
+  const row = (index: number) =>
+    `\\trowd${index < headers ? "\\trhdr" : ""}\\cellx1200\\intbl Row ${index}\\cell\\row`;
+  const source = `{\\rtf1\\ansi${Array.from({ length: headers + 1 }, (_, index) => row(index)).join("")}}`;
+  const document = read(source);
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) {
+      expect(block.GetTable().GetTabLines()).toHaveLength(headers + 1);
+      expect(block.GetTable().GetRowsToRepeat()).toBe(expected);
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("stops the repeating-header prefix at the first ordinary row", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\trowd\\trhdr\\cellx1200\\intbl One\\cell\\row\\trowd\\cellx1200\\intbl Two\\cell\\row\\trowd\\trhdr\\cellx1200\\intbl Three\\cell\\row}",
+  );
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) expect(block.GetTable().GetRowsToRepeat()).toBe(1);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it.each([
   ["trqc", HoriOrientation.CENTER],
   ["trqr", HoriOrientation.RIGHT],
 ] as const)("imports RTF table alignment %s", (control, expected) => {
