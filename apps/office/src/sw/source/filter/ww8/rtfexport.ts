@@ -129,14 +129,16 @@ export class RtfExport {
         for (const row of block.GetTable().GetTabLines()) {
           const boxes = row.GetTabBoxes();
           output += "\\trowd";
-          boxes.forEach(
-            /** Emits one cell boundary. @param _box - Cell. @param index - Column. @returns Nothing. */ (
-              _box,
-              index,
-            ) => {
-              output += `\\cellx${(index + 1) * 1440}`;
-            },
-          );
+          const nativeWidths = boxes.map((box) => box.GetFrameSize().GetWidth());
+          const hasNativeWidths = nativeWidths.every((width) => width > 0);
+          const baseWidth = nativeWidths.reduce((total, width) => total + width, 0);
+          const tableWidth = block.GetTable().GetFrameFormat().GetFrameSize().GetWidth();
+          const widthRatio = hasNativeWidths && tableWidth > 0 ? tableWidth / baseWidth : 1;
+          let right = 0;
+          for (const width of nativeWidths) {
+            right += hasNativeWidths ? width : 1440;
+            output += `\\cellx${Math.round(right * widthRatio)}`;
+          }
           for (const box of boxes) {
             for (const [paragraphIndex, paragraph] of box.GetParagraphs().entries()) {
               if (paragraphIndex > 0) output += "\\par ";

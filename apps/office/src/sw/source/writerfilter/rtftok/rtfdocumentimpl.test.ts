@@ -25,6 +25,28 @@ it("keeps a table before the first body paragraph", /** Checks physical body ord
   }
 });
 
+it("imports cellx boundaries as independent native cell widths", () => {
+  const document = read(
+    "{\\rtf1\\ansi\\trowd\\cellx1200\\cellx3900\\intbl Left\\cell\\intbl Right\\cell\\row}",
+  );
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) {
+      expect(block.GetTable().GetFrameFormat().GetFrameSize().GetWidth()).toBe(3900);
+      expect(
+        block
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()
+          .map((box) => box.GetFrameSize().GetWidth()),
+      ).toEqual([1200, 2700]);
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("imports group-scoped bold and paragraph alignment into native nodes", /** Checks actual text hints and paragraph items. @returns Nothing. */ () => {
   const document = read("{\\rtf1\\ansi\\qc Plain {\\b Bold} plain\\par\\ql Next}");
   try {

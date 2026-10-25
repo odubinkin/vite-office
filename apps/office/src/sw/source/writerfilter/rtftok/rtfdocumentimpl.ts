@@ -106,7 +106,13 @@ interface RtfRun extends WriterTextRun {
 /** Ordered body content with native rows and cell paragraphs. */
 type RtfBlock =
   | Readonly<{ kind: "paragraph"; paragraph: RtfParagraph }>
-  | Readonly<{ kind: "table"; rows: readonly (readonly (readonly RtfParagraph[])[])[] }>;
+  | Readonly<{ kind: "table"; rows: readonly RtfTableRow[] }>;
+
+/** One RTF table row with physical cell boundaries in twips. */
+interface RtfTableRow {
+  readonly cells: readonly (readonly RtfParagraph[])[];
+  readonly boundaries: readonly number[];
+}
 
 const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   bold: false,
@@ -222,9 +228,10 @@ export class RtfDocumentImpl {
   private color = { red: 0, green: 0, blue: 0 };
   private sawHeader = false;
   private terminatedParagraph = false;
-  private tableRows: RtfParagraph[][][] = [];
+  private tableRows: RtfTableRow[] = [];
   private tableRow: RtfParagraph[][] = [];
   private tableCell: RtfParagraph[] = [];
+  private rowBoundaries: number[] = [];
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
@@ -269,11 +276,24 @@ export class RtfDocumentImpl {
         const table = firstParagraph
           ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
           : document.nodes.MakeTableNode("RTF Table");
+        const rightEdge = Math.max(0, ...block.rows.flatMap((row) => row.boundaries));
+        if (rightEdge > 0) {
+          const size = table.GetFrameFormat().GetFrameSize().Clone();
+          size.SetWidth(rightEdge);
+          table.GetFrameFormat().SetFormatAttr(size);
+        }
         for (const row of block.rows) {
-          const line = document.nodes.AppendTableRow(table, row.length);
-          for (const [index, cell] of row.entries()) {
+          const line = document.nodes.AppendTableRow(table, row.cells.length);
+          for (const [index, cell] of row.cells.entries()) {
             const box = line.GetTabBoxes()[index];
             if (box === undefined) throw new Error("RTF table cell is missing.");
+            const right = row.boundaries[index];
+            const left = index === 0 ? 0 : row.boundaries[index - 1];
+            if (right !== undefined && left !== undefined && right > left) {
+              const size = box.GetFrameSize();
+              size.SetWidth(right - left);
+              box.SetFrameSize(size);
+            }
             for (const [paragraphIndex, paragraph] of cell.entries()) {
               const node =
                 paragraphIndex === 0
@@ -610,6 +630,11 @@ export class RtfDocumentImpl {
     if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
     if (name === "trowd") {
       this.inTable = true;
+      this.rowBoundaries = [];
+      return;
+    }
+    if (name === "cellx") {
+      if (parameter !== undefined) this.rowBoundaries.push(parameter);
       return;
     }
     if (name === "intbl") {
@@ -627,7 +652,11 @@ export class RtfDocumentImpl {
         if (this.runs.length > 0) this.CommitParagraph(state);
         this.tableRow.push(this.tableCell.splice(0));
       }
-      if (this.tableRow.length > 0) this.tableRows.push(this.tableRow.splice(0));
+      if (this.tableRow.length > 0)
+        this.tableRows.push({
+          cells: this.tableRow.splice(0),
+          boundaries: this.rowBoundaries.splice(0),
+        });
       this.inTable = false;
       this.terminatedParagraph = true;
       return;

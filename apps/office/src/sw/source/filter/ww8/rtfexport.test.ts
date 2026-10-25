@@ -124,18 +124,27 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("One");
   const firstBox = row.GetTabBoxes()[0];
   if (firstBox === undefined) throw new Error("Missing table cell.");
+  const firstSize = firstBox.GetFrameSize();
+  firstSize.SetWidth(1800);
+  firstBox.SetFrameSize(firstSize);
   source.nodes.AppendTableCellParagraph(firstBox).SetText("More");
-  row.GetTabBoxes()[1]?.GetParagraphs()[0]?.SetText("Two");
+  const secondBox = row.GetTabBoxes()[1];
+  if (secondBox === undefined) throw new Error("Missing second table cell.");
+  const secondSize = secondBox.GetFrameSize();
+  secondSize.SetWidth(3000);
+  secondBox.SetFrameSize(secondSize);
+  secondBox.GetParagraphs()[0]?.SetText("Two");
   source.nodes.MakeTextNode("After");
   let imported;
   try {
-    imported = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
-    );
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("\\cellx1800\\cellx4800");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Before", "After"]);
     const restored = imported.GetNodes().getBodyContent()[1];
     expect(restored).toBeInstanceOf(SwTableNode);
-    if (restored instanceof SwTableNode)
+    if (restored instanceof SwTableNode) {
+      expect(restored.GetTable().GetFrameFormat().GetFrameSize().GetWidth()).toBe(4800);
       expect(
         restored
           .GetTable()
@@ -143,6 +152,14 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
           ?.GetTabBoxes()
           .map((box) => box.GetParagraphs().map((node) => node.GetText())),
       ).toEqual([["One", "More"], ["Two"]]);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()
+          .map((box) => box.GetFrameSize().GetWidth()),
+      ).toEqual([1800, 3000]);
+    }
   } finally {
     imported?.Dispose();
     source.Dispose();
