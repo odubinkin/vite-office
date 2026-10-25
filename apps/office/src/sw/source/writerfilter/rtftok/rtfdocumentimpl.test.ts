@@ -1,6 +1,7 @@
 /** @fileoverview RTF document import through native Writer paragraph and text hint owners. */
 import { expect, it } from "vitest";
 import { SwTableNode } from "../../core/docnode/node";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
@@ -42,6 +43,20 @@ it("imports cellx boundaries as independent native cell widths", () => {
           .map((box) => box.GetFrameSize().GetWidth()),
       ).toEqual([1200, 2700]);
     }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it.each([
+  ["trqc", HoriOrientation.CENTER],
+  ["trqr", HoriOrientation.RIGHT],
+] as const)("imports RTF table alignment %s", (control, expected) => {
+  const document = read(`{\\rtf1\\ansi\\trowd\\${control}\\cellx1500\\intbl Cell\\cell\\row}`);
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) expect(block.GetTable().GetHoriOrient()).toBe(expected);
   } finally {
     document.Dispose();
   }

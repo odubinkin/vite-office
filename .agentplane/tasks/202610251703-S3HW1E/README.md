@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T17:35:48.542Z"
+doc_updated_at: "2026-10-25T17:37:48.557Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c, 4cd04ace126d, 29d07d2d7aa0 and c700468db825 cover native transfer decoration/position, RTF style inheritance/bookmarks/list definition and table cell widths, and selected Markdown block/list behavior. This batch adds upstream RTF paragraph listtext, suppresses list controls for uncounted nodes and records source-derived WRITER096: RTF restart creates a duplicate rule but ParaNumRule_Impl emits the original rule ID, so restart metadata is lost. Focused 24 RTF tests in two files pass; office TypeScript, changed-path ESLint/Prettier, source-provenance and module-boundary checks pass. Earlier focused 70-test filter suite and Writer registry check passed. Open: represented table merge/border/alignment/row properties, page/section items, further field/style/list contracts and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet."
+  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c, 4cd04ace126d, 29d07d2d7aa0, c700468db825 and 1dd281a0193a cover native transfer decoration/position, RTF style inheritance/bookmarks/list controls/table widths and selected Markdown block/list behavior. This batch maps RTF table horizontal alignment and trleft offset through native table frame items; cellx boundaries account for the offset on both paths. Focused 26 RTF tests in two files pass; office TypeScript, changed-path ESLint/Prettier, source-provenance and module-boundary checks pass. WRITER096 records pinned RTF list restart identifier loss and is preserved. Earlier focused 70-test filter suite and Writer registry check passed. Open: represented table merge/border/row properties, page/section items, further field/style/list contracts and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c, 4cd04ace126d, 29d07d2d7aa0 and c700468db825 cover native transfer decoration/position, RTF style inheritance/bookmarks/list definition and table cell widths, and selected Markdown block/list behavior. This batch adds upstream RTF paragraph listtext, suppresses list controls for uncounted nodes and records source-derived WRITER096: RTF restart creates a duplicate rule but ParaNumRule_Impl emits the original rule ID, so restart metadata is lost. Focused 24 RTF tests in two files pass; office TypeScript, changed-path ESLint/Prettier, source-provenance and module-boundary checks pass. Earlier focused 70-test filter suite and Writer registry check passed. Open: represented table merge/border/alignment/row properties, page/section items, further field/style/list contracts and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet.
+Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits c3970126f351, 63ec86af7c0c, 4cd04ace126d, 29d07d2d7aa0, c700468db825 and 1dd281a0193a cover native transfer decoration/position, RTF style inheritance/bookmarks/list controls/table widths and selected Markdown block/list behavior. This batch maps RTF table horizontal alignment and trleft offset through native table frame items; cellx boundaries account for the offset on both paths. Focused 26 RTF tests in two files pass; office TypeScript, changed-path ESLint/Prettier, source-provenance and module-boundary checks pass. WRITER096 records pinned RTF list restart identifier loss and is preserved. Earlier focused 70-test filter suite and Writer registry check passed. Open: represented table merge/border/row properties, page/section items, further field/style/list contracts and full md4c callback grammar. Pinned md4c source is absent locally; explicit network permission requested and pending. No claim of complete current-slice parity or final verification yet.

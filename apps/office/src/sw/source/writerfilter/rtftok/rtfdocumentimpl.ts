@@ -36,6 +36,7 @@ import {
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
@@ -112,6 +113,8 @@ type RtfBlock =
 interface RtfTableRow {
   readonly cells: readonly (readonly RtfParagraph[])[];
   readonly boundaries: readonly number[];
+  readonly alignment: "left" | "center" | "right";
+  readonly left: number;
 }
 
 const DEFAULT_CHARACTER: WriterCharacterAttributes = {
@@ -233,6 +236,8 @@ export class RtfDocumentImpl {
   private tableRow: RtfParagraph[][] = [];
   private tableCell: RtfParagraph[] = [];
   private rowBoundaries: number[] = [];
+  private rowAlignment: "left" | "center" | "right" = "left";
+  private rowLeft = 0;
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
@@ -277,7 +282,30 @@ export class RtfDocumentImpl {
         const table = firstParagraph
           ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
           : document.nodes.MakeTableNode("RTF Table");
-        const rightEdge = Math.max(0, ...block.rows.flatMap((row) => row.boundaries));
+        const firstRow = block.rows[0];
+        if (firstRow !== undefined) {
+          const format = table.GetFrameFormat();
+          const orient = format.GetHoriOrient().Clone();
+          orient.SetHoriOrient(
+            firstRow.alignment === "center"
+              ? HoriOrientation.CENTER
+              : firstRow.alignment === "right"
+                ? HoriOrientation.RIGHT
+                : firstRow.left !== 0
+                  ? HoriOrientation.NONE
+                  : HoriOrientation.LEFT,
+          );
+          format.SetFormatAttr(orient);
+          if (firstRow.left !== 0) {
+            const lr = format.GetLRSpace().Clone();
+            lr.SetLeft(SvxIndentValue.twips(firstRow.left));
+            format.SetFormatAttr(lr);
+          }
+        }
+        const rightEdge = block.rows.reduce(
+          (maximum, row) => Math.max(maximum, (row.boundaries.at(-1) ?? 0) - row.left),
+          0,
+        );
         if (rightEdge > 0) {
           const size = table.GetFrameFormat().GetFrameSize().Clone();
           size.SetWidth(rightEdge);
@@ -289,7 +317,7 @@ export class RtfDocumentImpl {
             const box = line.GetTabBoxes()[index];
             if (box === undefined) throw new Error("RTF table cell is missing.");
             const right = row.boundaries[index];
-            const left = index === 0 ? 0 : row.boundaries[index - 1];
+            const left = index === 0 ? row.left : row.boundaries[index - 1];
             if (right !== undefined && left !== undefined && right > left) {
               const size = box.GetFrameSize();
               size.SetWidth(right - left);
@@ -632,6 +660,16 @@ export class RtfDocumentImpl {
     if (name === "trowd") {
       this.inTable = true;
       this.rowBoundaries = [];
+      this.rowAlignment = "left";
+      this.rowLeft = 0;
+      return;
+    }
+    if (name === "trql" || name === "trqc" || name === "trqr") {
+      this.rowAlignment = name === "trqc" ? "center" : name === "trqr" ? "right" : "left";
+      return;
+    }
+    if (name === "trleft") {
+      this.rowLeft = parameter ?? 0;
       return;
     }
     if (name === "cellx") {
@@ -657,6 +695,8 @@ export class RtfDocumentImpl {
         this.tableRows.push({
           cells: this.tableRow.splice(0),
           boundaries: this.rowBoundaries.splice(0),
+          alignment: this.rowAlignment,
+          left: this.rowLeft,
         });
       this.inTable = false;
       this.terminatedParagraph = true;

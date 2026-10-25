@@ -4,6 +4,7 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
@@ -15,6 +16,7 @@ import {
   DFLT_ESC_SUPER,
 } from "../../../../editeng/inc/escapementitem";
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -134,16 +136,25 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   secondSize.SetWidth(3000);
   secondBox.SetFrameSize(secondSize);
   secondBox.GetParagraphs()[0]?.SetText("Two");
+  const frame = table.GetFrameFormat();
+  const orientation = frame.GetHoriOrient().Clone();
+  orientation.SetHoriOrient(HoriOrientation.NONE);
+  frame.SetFormatAttr(orientation);
+  const margins = frame.GetLRSpace().Clone();
+  margins.SetLeft(SvxIndentValue.twips(360));
+  frame.SetFormatAttr(margins);
   source.nodes.MakeTextNode("After");
   let imported;
   try {
     const bytes = new RtfExport().ExportDocument(source);
-    expect(new TextDecoder().decode(bytes)).toContain("\\cellx1800\\cellx4800");
+    expect(new TextDecoder().decode(bytes)).toContain("\\trql\\trleft360\\cellx2160\\cellx5160");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Before", "After"]);
     const restored = imported.GetNodes().getBodyContent()[1];
     expect(restored).toBeInstanceOf(SwTableNode);
     if (restored instanceof SwTableNode) {
+      expect(restored.GetTable().GetHoriOrient()).toBe(HoriOrientation.NONE);
+      expect(restored.GetTable().GetFrameFormat().GetLRSpace().ResolveLeft()).toBe(360);
       expect(restored.GetTable().GetFrameFormat().GetFrameSize().GetWidth()).toBe(4800);
       expect(
         restored

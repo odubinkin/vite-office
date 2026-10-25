@@ -2,6 +2,7 @@
 import type { SwDoc } from "../../core/doc/doc";
 import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -128,7 +129,20 @@ export class RtfExport {
       if (block instanceof SwTableNode) {
         for (const row of block.GetTable().GetTabLines()) {
           const boxes = row.GetTabBoxes();
+          const tableFormat = block.GetTable().GetFrameFormat();
+          const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
+          const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
           output += "\\trowd";
+          if (orientation === HoriOrientation.CENTER) output += "\\trqc";
+          else if (orientation === HoriOrientation.RIGHT) output += "\\trqr";
+          else {
+            output += "\\trql";
+            if (
+              orientation === HoriOrientation.NONE ||
+              orientation === HoriOrientation.LEFT_AND_WIDTH
+            )
+              output += `\\trleft${tableLeft}`;
+          }
           const nativeWidths = boxes.map((box) => box.GetFrameSize().GetWidth());
           const hasNativeWidths = nativeWidths.every((width) => width > 0);
           const baseWidth = nativeWidths.reduce((total, width) => total + width, 0);
@@ -137,7 +151,7 @@ export class RtfExport {
           let right = 0;
           for (const width of nativeWidths) {
             right += hasNativeWidths ? width : 1440;
-            output += `\\cellx${Math.round(right * widthRatio)}`;
+            output += `\\cellx${tableLeft + Math.round(right * widthRatio)}`;
           }
           for (const box of boxes) {
             for (const [paragraphIndex, paragraph] of box.GetParagraphs().entries()) {
