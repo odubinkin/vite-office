@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 38
+revision: 39
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T19:56:53.145Z"
+doc_updated_at: "2026-10-25T20:00:51.600Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 3eeddd4243d8 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, RTF Unicode fallback/hex breaks, and document-owned ANSI code-page selection including font suffix precedence. This batch adds a streaming RTF tokenizer-to-document listener path for Shift-JIS trailing bytes that are backslashes or braces; the browser OpenRtf path uses it while standalone Tokenize remains for lexical checks. Focused 113 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through d419bf481ec5 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, and streaming Shift-JIS lexical feedback through the browser OpenRtf path. This batch ports complete pinned SAL IBM 437/850 forward and reverse tables plus native converter aggregates into sal/textenc/tcvtlat1.ts, and uses the existing SAL converter for RTF pc/pca and font charset 254/255. Literal tables were compared exhaustively with pinned source; 114 focused RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-109 document retained source asymmetries, including the IBM 850 Euro/dotless-i alias. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 3eeddd4243d8 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, RTF Unicode fallback/hex breaks, and document-owned ANSI code-page selection including font suffix precedence. This batch adds a streaming RTF tokenizer-to-document listener path for Shift-JIS trailing bytes that are backslashes or braces; the browser OpenRtf path uses it while standalone Tokenize remains for lexical checks. Focused 113 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-108 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through d419bf481ec5 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, and streaming Shift-JIS lexical feedback through the browser OpenRtf path. This batch ports complete pinned SAL IBM 437/850 forward and reverse tables plus native converter aggregates into sal/textenc/tcvtlat1.ts, and uses the existing SAL converter for RTF pc/pca and font charset 254/255. Literal tables were compared exhaustively with pinned source; 114 focused RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-109 document retained source asymmetries, including the IBM 850 Euro/dotless-i alias. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.

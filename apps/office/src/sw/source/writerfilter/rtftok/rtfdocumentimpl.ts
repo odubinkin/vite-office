@@ -67,6 +67,8 @@ import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, RtfTokenizer, type RtfToken } from "./rtftokenizer";
 import { RTF_CHARSET_CODEPAGE, RTF_FONT_SUFFIX_CODEPAGE, rtfDecoderLabel } from "./rtfcharsets";
+import { convertCharToUnicode } from "../../../../sal/textenc/convertsimple.hxx";
+import { aImplIBM437ByteCvtData, aImplIBM850ByteCvtData } from "../../../../sal/textenc/tcvtlat1";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
@@ -1456,6 +1458,27 @@ export class RtfDocumentImpl {
 
   /** Converts ANSI bytes only after the current group and selected font are known. */
   private DecodeBytes(bytes: Uint8Array, state: RtfState): string {
+    if (state.currentCodepage === 437 || state.currentCodepage === 850) {
+      const destination = new Uint16Array(bytes.length);
+      const data = state.currentCodepage === 437 ? aImplIBM437ByteCvtData : aImplIBM850ByteCvtData;
+      const written = convertCharToUnicode(
+        data,
+        null,
+        bytes,
+        bytes.length,
+        destination,
+        destination.length,
+        0,
+        [0],
+        [0],
+      );
+      let text = "";
+      for (let offset = 0; offset < written; offset += 8192)
+        text += String.fromCharCode(
+          ...destination.subarray(offset, Math.min(offset + 8192, written)),
+        );
+      return text;
+    }
     try {
       return new TextDecoder(rtfDecoderLabel(state.currentCodepage)).decode(bytes);
     } catch {

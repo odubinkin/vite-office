@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtlat1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": ["CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": ["apps/office/src/sal/textenc/tcvtlat1.ts#aImplIBM437ByteCvtData", "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab#aImplIBM437ByteCvtData"],
+      "justification": "Pinned IBM 437/850 tables and aggregates are mapped for native RTF PC/OEM decoding; full codec registry parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData"],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sal/textenc/tcvtlat1.tab",
+      "upstreamSymbols": ["aImplIBM437ByteCvtData", "aImplIBM850ByteCvtData"]
+    }
+  }
+}

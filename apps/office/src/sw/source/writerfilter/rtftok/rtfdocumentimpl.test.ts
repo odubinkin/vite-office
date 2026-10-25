@@ -79,6 +79,23 @@ it("plain restores the default font's encoded text state", () => {
   }
 });
 
+it("uses pinned SAL IBM 437 and 850 tables for PC and font charsets", () => {
+  const pc = read(String.raw`{\rtf1\pc\'9b}`);
+  const pca = read(String.raw`{\rtf1\pca\'9b\'d5}`);
+  const fonts = read(
+    String.raw`{\rtf1\ansi{\fonttbl{\f0\fcharset254 PC;}{\f1\fcharset255 OEM;}}\f0\'9b\f1\'9b\'d5}`,
+  );
+  try {
+    expect(pc.paragraphs[0]?.GetText()).toBe("¢");
+    expect(pca.paragraphs[0]?.GetText()).toBe("ø€");
+    expect(fonts.paragraphs[0]?.GetText()).toBe("¢ø€");
+  } finally {
+    pc.Dispose();
+    pca.Dispose();
+    fonts.Dispose();
+  }
+});
+
 it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
   const prefix = new TextEncoder().encode(
     String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,
