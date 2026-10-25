@@ -4,7 +4,7 @@ title: "Integrate Writer Calc and main and consolidate vendor"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -21,11 +21,34 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
+  state: "ok"
+  updated_at: "2026-10-25T08:17:14.968Z"
+  updated_by: "CODER"
+  note: "verified-202610250529-SWRD7X"
   attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-25T08:16:47.562Z"
+  updated_by: "EVALUATOR"
+  note: "Upstream-aligned integration is complete and published in all three branches, with preserved history and vendor contents and all declared verification gates passing."
+  evaluated_sha: "96403127e98eaf42a63be96fef49575363e4ab6b"
+  blueprint_digest: "556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518"
+  evidence_refs:
+    - ".agentplane/tasks/202610250529-SWRD7X/README.md"
+    - ".agentplane/tasks/202610250529-SWRD7X/quality/20261025-081647562-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610250529-SWRD7X/quality/20261025-081647562-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610250529-SWRD7X/quality/20261025-081647562-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610250529-SWRD7X/evidence/integration-verification.json"
+    - ".agentplane/tmp/SWRD7X/official-coverage-gate.log"
+    - ".agentplane/tmp/SWRD7X/e2e-completion.log"
+    - ".agentplane/tmp/SWRD7X/inventory-completion.log"
+    - ".agentplane/tmp/SWRD7X/first-sync-audit.json"
+    - "Implementation 96403127e98eaf42a63be96fef49575363e4ab6b; doctor and policy routing passed"
+  findings:
+    - "Writer and Calc merge parents and the original main tip remain ancestors; no history was rewritten. Native color, optional offsets, paragraph cleanup, style names, bookmarks and null cell lookup were verified against the pinned upstream owners."
+    - "All current coverage thresholds are exactly 100%; same-source hashes and coverage maps were validated, changed modules were fully remeasured, all 763 expanded XML/API cases and 536 latest-build browser cases passed. No exclusions or thresholds were weakened."
+    - "All local and remote branches match the implementation commit; the ignored shared vendor directory and relative feature-checkout symlinks are valid, all five source trees are accessible, and the pre-existing Calc untracked files remain intact."
 commit: null
 comments:
   -
@@ -39,8 +62,20 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: Execute the user-approved branch integration, complete verification and shared vendor consolidation across the three named checkouts."
+  -
+    type: "verify"
+    at: "2026-10-25T08:16:07.921Z"
+    author: "CODER"
+    state: "ok"
+    note: "All declared project gates passed, application and inventory coverage are 100%, 536 current-build browser tests passed, and all three published branches and vendor source/link/status audits match implementation 96403127e98e."
+  -
+    type: "verify"
+    at: "2026-10-25T08:17:14.968Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610250529-SWRD7X"
 doc_version: 3
-doc_updated_at: "2026-10-25T08:11:20.375Z"
+doc_updated_at: "2026-10-25T08:17:15.023Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved nine-step branch synchronization across vite-office, vite-office-writer and vite-office-calc; resolve merge conflicts, run and repair the complete verification suite, publish all three branches, and consolidate vendor content in main with ignored directory symlinks in the feature checkouts."
 sections:
@@ -53,7 +88,71 @@ sections:
     - Verify git diff --check, no unmerged entries, no tracked vendor files, and ignored vendor directories/symlinks.
     - Verify every local branch equals its remote tip and main is an ancestor of writer and calc; inspect git status --short --untracked-files=all in each checkout.
     - Inventory vendor sources before changing links; compare differing entries and confirm all preserved contents remain accessible from each checkout.
-  Verification: "All project checks passed as the individual components of npm run verify after scoped repairs. Application coverage: 67,906/67,906 lines, 74,946/74,946 statements, 13,463/13,463 functions and 45,841/45,841 branches (100% each), validated with the installed Istanbul provider and original thresholds. The initial complete 19,498-case run had three pre-fix loaded-module assertions; all recovered in the current 127-file, 763-case XML/API run. Full latest-build browser suite: 536 passed. Inventory: 38 files, 124 passed and four metrics 100%. Tooling: 31 files, 149 passed. Formatting, ESLint, both TypeScript checks, dependencies/resources/static build, JSDoc, size, source tree/provenance, invariants/parity, doctor and routing passed. See evidence/integration-verification.json for exact source proof and retained recovery evidence. Git publication, final branch equality and final symlink/status audit are pending the next synchronization phase."
+  Verification: |-
+    All project checks passed as the individual components of npm run verify after scoped repairs. Application coverage: 67,906/67,906 lines, 74,946/74,946 statements, 13,463/13,463 functions and 45,841/45,841 branches (100% each), validated with the installed Istanbul provider and original thresholds. The initial complete 19,498-case run had three pre-fix loaded-module assertions; all recovered in the current 127-file, 763-case XML/API run. Full latest-build browser suite: 536 passed. Inventory: 38 files, 124 passed and four metrics 100%. Tooling: 31 files, 149 passed. Formatting, ESLint, both TypeScript checks, dependencies/resources/static build, JSDoc, size, source tree/provenance, invariants/parity, doctor and routing passed. See evidence/integration-verification.json for exact source proof and retained recovery evidence. Main and both feature branches are published at implementation commit 96403127e98eaf42a63be96fef49575363e4ab6b. Every local branch and all remote refs match; main is an ancestor of both feature branches. All tracked trees are clean. Main owns the physical ignored vendor directory; Writer and Calc have verified relative directory symlinks. All five source trees remain accessible. The two pre-existing Calc .DS_Store files were preserved. The task-only closure commit will be propagated by fast-forward without further source changes.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-25T08:16:07.921Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All declared project gates passed, application and inventory coverage are 100%, 536 current-build browser tests passed, and all three published branches and vendor source/link/status audits match implementation 96403127e98e.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:16:07.423Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+    - old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610250529-SWRD7X
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-25T08:17:14.968Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610250529-SWRD7X
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:16:07.977Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+    - old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610250529-SWRD7X --result verified-202610250529-SWRD7X --commit 96403127e98eaf42a63be96fef49575363e4ab6b
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Record initial branch hashes in Findings. Abort an incomplete merge if needed. Preserve vendor content until copy verification succeeds. Use explicit follow-up commits to reverse integration changes; never reset published history."
   Findings: |-
     User explicitly authorized local edits, merge conflict resolution, test repairs, network fetch/push, outside-primary access to the two named sibling checkouts and vendor consolidation. Initial main: cddbdb991; writer: ffa444835; calc: 9f6656f18. All tracked working trees are clean. Calc has existing untracked .DS_Store and output/.DS_Store files; preserve them. Main and Calc reference Boost via a symlink chain into Calc output, so vendor consolidation must materialize the dependency before removing the old links.
@@ -109,7 +208,70 @@ Execute the user-approved synchronization and vendor-consolidation plan document
 
 ## Verification
 
-All project checks passed as the individual components of npm run verify after scoped repairs. Application coverage: 67,906/67,906 lines, 74,946/74,946 statements, 13,463/13,463 functions and 45,841/45,841 branches (100% each), validated with the installed Istanbul provider and original thresholds. The initial complete 19,498-case run had three pre-fix loaded-module assertions; all recovered in the current 127-file, 763-case XML/API run. Full latest-build browser suite: 536 passed. Inventory: 38 files, 124 passed and four metrics 100%. Tooling: 31 files, 149 passed. Formatting, ESLint, both TypeScript checks, dependencies/resources/static build, JSDoc, size, source tree/provenance, invariants/parity, doctor and routing passed. See evidence/integration-verification.json for exact source proof and retained recovery evidence. Git publication, final branch equality and final symlink/status audit are pending the next synchronization phase.
+All project checks passed as the individual components of npm run verify after scoped repairs. Application coverage: 67,906/67,906 lines, 74,946/74,946 statements, 13,463/13,463 functions and 45,841/45,841 branches (100% each), validated with the installed Istanbul provider and original thresholds. The initial complete 19,498-case run had three pre-fix loaded-module assertions; all recovered in the current 127-file, 763-case XML/API run. Full latest-build browser suite: 536 passed. Inventory: 38 files, 124 passed and four metrics 100%. Tooling: 31 files, 149 passed. Formatting, ESLint, both TypeScript checks, dependencies/resources/static build, JSDoc, size, source tree/provenance, invariants/parity, doctor and routing passed. See evidence/integration-verification.json for exact source proof and retained recovery evidence. Main and both feature branches are published at implementation commit 96403127e98eaf42a63be96fef49575363e4ab6b. Every local branch and all remote refs match; main is an ancestor of both feature branches. All tracked trees are clean. Main owns the physical ignored vendor directory; Writer and Calc have verified relative directory symlinks. All five source trees remain accessible. The two pre-existing Calc .DS_Store files were preserved. The task-only closure commit will be propagated by fast-forward without further source changes.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-25T08:16:07.921Z — VERIFY — ok
+
+By: CODER
+
+Note: All declared project gates passed, application and inventory coverage are 100%, 536 current-build browser tests passed, and all three published branches and vendor source/link/status audits match implementation 96403127e98e.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:16:07.423Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+- old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610250529-SWRD7X
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-25T08:17:14.968Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610250529-SWRD7X
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-25T08:16:07.977Z, excerpt_hash=sha256:06c5105bdbc0de9f9d454ff45661256611a1f107ef1d18d141c394047e1f2dc5
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610250529-SWRD7X/blueprint/resolved-snapshot.json
+- old_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- current_digest: 556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610250529-SWRD7X
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610250529-SWRD7X --result verified-202610250529-SWRD7X --commit 96403127e98eaf42a63be96fef49575363e4ab6b
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 

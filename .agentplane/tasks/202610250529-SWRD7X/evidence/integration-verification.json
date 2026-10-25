@@ -152,12 +152,39 @@
     }
   },
   "git": {
-    "publication": "Pending main publication and reverse fast-forward integration.",
+    "publication": "Main and both feature branches published; all three local and remote heads match the implementation commit. A final task-only closure commit will be propagated afterward.",
     "writerMerge": "9d267ecccf7c",
     "calcMerge": "cabc009f6e36",
     "preservedCalcUntracked": [
       ".DS_Store",
       "output/.DS_Store"
+    ],
+    "implementationCommit": "96403127e98eaf42a63be96fef49575363e4ab6b",
+    "firstSynchronizationAudit": [
+      {
+        "folder": "vite-office",
+        "branch": "main",
+        "head": "96403127e98eaf42a63be96fef49575363e4ab6b",
+        "trackedClean": true,
+        "status": "",
+        "vendor": "/Users/odubinkin/Projects/vite-office/vendor"
+      },
+      {
+        "folder": "vite-office-writer",
+        "branch": "writer",
+        "head": "96403127e98eaf42a63be96fef49575363e4ab6b",
+        "trackedClean": true,
+        "status": "",
+        "vendor": "/Users/odubinkin/Projects/vite-office/vendor"
+      },
+      {
+        "folder": "vite-office-calc",
+        "branch": "calc",
+        "head": "96403127e98eaf42a63be96fef49575363e4ab6b",
+        "trackedClean": true,
+        "status": "?? .DS_Store\n?? output/.DS_Store",
+        "vendor": "/Users/odubinkin/Projects/vite-office/vendor"
+      }
     ]
   }
 }

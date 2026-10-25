@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "202610250529-SWRD7X",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-25T08:16:47.562Z",
+  "verdict": "pass",
+  "summary": "Upstream-aligned integration is complete and published in all three branches, with preserved history and vendor contents and all declared verification gates passing.",
+  "evaluated_sha": "96403127e98eaf42a63be96fef49575363e4ab6b",
+  "blueprint_digest": "556c6b3912bd9524937cf39ba161107e6db7dc0b1f051ea461be29a7b83a0518",
+  "findings": [
+    "Writer and Calc merge parents and the original main tip remain ancestors; no history was rewritten. Native color, optional offsets, paragraph cleanup, style names, bookmarks and null cell lookup were verified against the pinned upstream owners.",
+    "All current coverage thresholds are exactly 100%; same-source hashes and coverage maps were validated, changed modules were fully remeasured, all 763 expanded XML/API cases and 536 latest-build browser cases passed. No exclusions or thresholds were weakened.",
+    "All local and remote branches match the implementation commit; the ignored shared vendor directory and relative feature-checkout symlinks are valid, all five source trees are accessible, and the pre-existing Calc untracked files remain intact."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610250529-SWRD7X/README.md",
+    ".agentplane/tasks/202610250529-SWRD7X/evidence/integration-verification.json",
+    ".agentplane/tmp/SWRD7X/official-coverage-gate.log",
+    ".agentplane/tmp/SWRD7X/e2e-completion.log",
+    ".agentplane/tmp/SWRD7X/inventory-completion.log",
+    ".agentplane/tmp/SWRD7X/first-sync-audit.json",
+    "Implementation 96403127e98eaf42a63be96fef49575363e4ab6b; doctor and policy routing passed"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
