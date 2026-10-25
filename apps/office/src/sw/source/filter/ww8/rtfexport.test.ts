@@ -720,7 +720,9 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   let imported;
   try {
     const bytes = new RtfExport().ExportDocument(source);
-    expect(new TextDecoder().decode(bytes)).toContain("\\trowd\\trrh-720\\trkeep");
+    expect(new TextDecoder().decode(bytes)).toContain(
+      "\\trowd\\trql\\trleft360\\ltrrow\\trrh-720\\trkeep",
+    );
     expect(new TextDecoder().decode(bytes)).toContain("\\clbrdrt\\brdrs\\brdrw30\\brdrcf1");
     expect(new TextDecoder().decode(bytes)).toContain("\\clpadfl3\\clpadl120\\clpadft3\\clpadt80");
     expect(new TextDecoder().decode(bytes)).toContain("\\trpaddft3\\trpaddt40");

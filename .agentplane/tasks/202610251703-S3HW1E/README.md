@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 32
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T19:25:27.784Z"
+doc_updated_at: "2026-10-25T19:31:02.162Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits through 988c01621dd3 cover native TXT, RTF and Markdown paths; RTF styles, bookmarks, lists, tables, paragraph controls, tabs, hyperlinks, page-section import/export and physical first/follow selection; Markdown source hint semantics, base-URL links, thematic-line import and the native horizontal-line style. The ODT style path preserves represented paragraph borders and border connection through XML/UNO. WRITER096-105 document retained upstream asymmetries. This batch follows pinned Markdown MD_TEXT_ENTITY and MD_TEXT_NULLCHAR no-insertion callbacks by recognizing HTML named/numeric references with the installed HTML entity table, omitting recognized entities and null characters while retaining unknown names, escaped punctuation and literal code-span text. WRITER106 records this suspicious upstream behavior. Focused 40 Markdown writer/reader and document-UI scenarios, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps: complete md4c syntax/callback parity including HTML and images, extended URL normalization; RTF field/style/list/table/paragraph and section chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md; earlier commits through b9b1fa5d94be cover native TXT, RTF, and Markdown paths and upstream asymmetries WRITER096-106. This batch aligns RTF table row controls with pinned RtfAttributeOutput::TableDefinition: orientation, default left-to-right TableBidi, height, then row split. The current table frame has no direction item, so right-to-left table direction is outside its represented model. Focused RTF reader/exporter tests (77) and TXT/Markdown tests (39), office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Matrix: docs/program/writer-native-text-filter-slice.md. Commits through 988c01621dd3 cover native TXT, RTF and Markdown paths; RTF styles, bookmarks, lists, tables, paragraph controls, tabs, hyperlinks, page-section import/export and physical first/follow selection; Markdown source hint semantics, base-URL links, thematic-line import and the native horizontal-line style. The ODT style path preserves represented paragraph borders and border connection through XML/UNO. WRITER096-105 document retained upstream asymmetries. This batch follows pinned Markdown MD_TEXT_ENTITY and MD_TEXT_NULLCHAR no-insertion callbacks by recognizing HTML named/numeric references with the installed HTML entity table, omitting recognized entities and null characters while retaining unknown names, escaped punctuation and literal code-span text. WRITER106 records this suspicious upstream behavior. Focused 40 Markdown writer/reader and document-UI scenarios, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps: complete md4c syntax/callback parity including HTML and images, extended URL normalization; RTF field/style/list/table/paragraph and section chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md; earlier commits through b9b1fa5d94be cover native TXT, RTF, and Markdown paths and upstream asymmetries WRITER096-106. This batch aligns RTF table row controls with pinned RtfAttributeOutput::TableDefinition: orientation, default left-to-right TableBidi, height, then row split. The current table frame has no direction item, so right-to-left table direction is outside its represented model. Focused RTF reader/exporter tests (77) and TXT/Markdown tests (39), office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.

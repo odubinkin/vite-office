@@ -184,10 +184,6 @@ export class RtfExport {
           const orientation = tableFormat.GetHoriOrient().GetHoriOrient();
           const tableLeft = tableFormat.GetLRSpace().ResolveLeft();
           output += "\\trowd";
-          const rowSize = rowFormat.GetFrameSize();
-          if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
-            output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
-          if (!rowFormat.GetRowSplit().GetValue()) output += "\\trkeep";
           if (orientation === HoriOrientation.CENTER) output += "\\trqc";
           else if (orientation === HoriOrientation.RIGHT) output += "\\trqr";
           else {
@@ -198,6 +194,13 @@ export class RtfExport {
             )
               output += `\\trleft${tableLeft}`;
           }
+          // TableDefinition emits orientation, resolved frame direction, height,
+          // then row splitting. The current table frame has no direction item.
+          output += "\\ltrrow";
+          const rowSize = rowFormat.GetFrameSize();
+          if (rowSize.GetHeight() !== 0 && rowSize.GetHeightSizeType() !== SwFrameSize.Variable)
+            output += `\\trrh${rowSize.GetHeightSizeType() === SwFrameSize.Fixed ? -rowSize.GetHeight() : rowSize.GetHeight()}`;
+          if (!rowFormat.GetRowSplit().GetValue()) output += "\\trkeep";
           const tableBox = tableFormat.GetBox();
           for (const [edge, unitControl, valueControl] of [
             [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
