@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtkr5.johab.1.ts",
+    "upstreamPath": "sal/textenc/tcvtkr5.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_JOHAB_00",
+      "aImplUniToDBCSTab_JOHAB_01",
+      "aImplUniToDBCSTab_JOHAB_02",
+      "aImplUniToDBCSTab_JOHAB_03",
+      "aImplUniToDBCSTab_JOHAB_04",
+      "aImplUniToDBCSTab_JOHAB_20",
+      "aImplUniToDBCSTab_JOHAB_21",
+      "aImplUniToDBCSTab_JOHAB_22",
+      "aImplUniToDBCSTab_JOHAB_23",
+      "aImplUniToDBCSTab_JOHAB_24",
+      "aImplUniToDBCSTab_JOHAB_25",
+      "aImplUniToDBCSTab_JOHAB_26",
+      "aImplUniToDBCSTab_JOHAB_30",
+      "aImplUniToDBCSTab_JOHAB_31",
+      "aImplUniToDBCSTab_JOHAB_32",
+      "aImplUniToDBCSTab_JOHAB_33",
+      "aImplUniToDBCSTab_JOHAB_4E",
+      "aImplUniToDBCSTab_JOHAB_4F",
+      "aImplUniToDBCSTab_JOHAB_50",
+      "aImplUniToDBCSTab_JOHAB_51",
+      "aImplUniToDBCSTab_JOHAB_52",
+      "aImplUniToDBCSTab_JOHAB_53",
+      "aImplUniToDBCSTab_JOHAB_54",
+      "aImplUniToDBCSTab_JOHAB_55",
+      "aImplUniToDBCSTab_JOHAB_56",
+      "aImplUniToDBCSTab_JOHAB_57",
+      "aImplUniToDBCSTab_JOHAB_58",
+      "aImplUniToDBCSTab_JOHAB_59",
+      "aImplUniToDBCSTab_JOHAB_5A",
+      "aImplUniToDBCSTab_JOHAB_5B"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_JOHAB_00",
+      "aImplUniToDBCSTab_JOHAB_01",
+      "aImplUniToDBCSTab_JOHAB_02",
+      "aImplUniToDBCSTab_JOHAB_03",
+      "aImplUniToDBCSTab_JOHAB_04",
+      "aImplUniToDBCSTab_JOHAB_20",
+      "aImplUniToDBCSTab_JOHAB_21",
+      "aImplUniToDBCSTab_JOHAB_22",
+      "aImplUniToDBCSTab_JOHAB_23",
+      "aImplUniToDBCSTab_JOHAB_24",
+      "aImplUniToDBCSTab_JOHAB_25",
+      "aImplUniToDBCSTab_JOHAB_26",
+      "aImplUniToDBCSTab_JOHAB_30",
+      "aImplUniToDBCSTab_JOHAB_31",
+      "aImplUniToDBCSTab_JOHAB_32",
+      "aImplUniToDBCSTab_JOHAB_33",
+      "aImplUniToDBCSTab_JOHAB_4E",
+      "aImplUniToDBCSTab_JOHAB_4F",
+      "aImplUniToDBCSTab_JOHAB_50",
+      "aImplUniToDBCSTab_JOHAB_51",
+      "aImplUniToDBCSTab_JOHAB_52",
+      "aImplUniToDBCSTab_JOHAB_53",
+      "aImplUniToDBCSTab_JOHAB_54",
+      "aImplUniToDBCSTab_JOHAB_55",
+      "aImplUniToDBCSTab_JOHAB_56",
+      "aImplUniToDBCSTab_JOHAB_57",
+      "aImplUniToDBCSTab_JOHAB_58",
+      "aImplUniToDBCSTab_JOHAB_59",
+      "aImplUniToDBCSTab_JOHAB_5A",
+      "aImplUniToDBCSTab_JOHAB_5B"
+    ],
+    "preservedResponsibilities": [
+      "Pinned JOHAB source-owned reverse numeric tables with every value and original pointer target preserved."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtkr5.johab.1.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtkr5.tab source owner is split by JOHAB responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtkr5.johab.1.ts",
+          "marker": "aImplUniToDBCSTab_JOHAB_00"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL MS-"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtkr5.tab",
+          "marker": "aImplUniToDBCSTab_JOHAB_00"
+        }
+      ]
+    }
+  }
+}

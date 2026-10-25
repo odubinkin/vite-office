@@ -263,6 +263,7 @@ it.each([
   [936, "81", "40", "f8", "a1", "\u4E02\uE001"],
   [949, "81", "41", "c9", "a1", "\uAC02\uE000"],
   [950, "a1", "40", "fa", "40", "\u3000\uE000"],
+  [1361, "84", "44", "d8", "31", "\u3133\uE000"],
 ])(
   "decodes pinned SAL MS-%i normal and EUDC bytes",
   (codepage, lead, trail, eudcLead, eudcTrail, expected) => {

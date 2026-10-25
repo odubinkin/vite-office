@@ -21,7 +21,8 @@
       "Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding.",
       "Selects the pinned UTF-8 converter path for the RTL_TEXTENCODING_UTF8 value used by Writer RTF import.",
       "Selects the pinned MS-932 DBCS aggregate and distinct native converter path for Writer RTF import.",
-      "Selects pinned MS-936, MS-949 and MS-950 DBCS aggregates for native Writer RTF byte decoding."
+      "Selects pinned MS-936, MS-949 and MS-950 DBCS aggregates for native Writer RTF byte decoding.",
+      "Selects the pinned JOHAB/MS-1361 DBCS aggregate for native Writer RTF byte decoding."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

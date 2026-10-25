@@ -43,6 +43,7 @@ import {
   RTL_TEXTENCODING_MS_936,
   RTL_TEXTENCODING_MS_949,
   RTL_TEXTENCODING_MS_950,
+  RTL_TEXTENCODING_MS_1361,
   RTL_TEXTENCODING_MS_1250,
   RTL_TEXTENCODING_MS_1251,
   RTL_TEXTENCODING_MS_1252,
@@ -118,6 +119,7 @@ import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
 import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
 import { aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
+import { aImplJOHABDBCSCvtData } from "./tcvtkr6.johab";
 import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
 
 /** Returns the existing single-byte converter data for the represented encoding. */
@@ -239,6 +241,7 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_MS_936) return { kind: "dbcs", data: aImplMS936DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_949) return { kind: "dbcs", data: aImplMS949DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_950) return { kind: "dbcs", data: aImplMS950DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_MS_1361) return { kind: "dbcs", data: aImplJOHABDBCSCvtData };
   const data = getSingleByteConvertData(encoding);
   return data === undefined ? undefined : { kind: "single-byte", data };
 }
