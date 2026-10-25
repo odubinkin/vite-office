@@ -30,7 +30,8 @@
       "Dispatches RTF code page 65000 bytes through the pinned SAL UTF-7 text-to-Unicode state machine.",
       "Dispatches RTF code pages 50220/50225 through pinned SAL ISO-2022-JP/KR state machines and source-owned JIS/KS tables.",
       "Uses the pinned SAL ImplDummyToUnicode fallback for RTF code pages without converter data, including Apple Arabic/Hebrew and unknown code pages; removes browser decoder lookup.",
-      "Maps pinned RTF underline toggles, flags and color-table values to native style, word-line and underline-color items, including direct and stylesheet inheritance."
+      "Maps pinned RTF underline toggles, flags and color-table values to native style, word-line and underline-color items, including direct and stylesheet inheritance.",
+      "Follows tokenizer FLAG control semantics for uld/ulw numeric parameters and leaves the registered but source-unhandled ulhair toggle without an underline item."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
@@ -88,6 +89,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
           "marker": "inherits RTF underline color"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "retains the pinned RTF reader's unhandled ulhair toggle"
         }
       ],
       "upstream": [
@@ -130,6 +135,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
           "marker": "RTFDocumentImpl::dispatchValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "flags ignore any parameter by definition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "\"ulhair\"_ostr"
         }
       ]
     }

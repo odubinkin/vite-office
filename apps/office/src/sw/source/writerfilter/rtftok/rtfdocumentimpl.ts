@@ -1299,7 +1299,11 @@ export class RtfDocumentImpl {
       ? RTF_UNDERLINE_STYLES[name]
       : undefined;
     if (underlineStyle !== undefined) {
-      const style = parameter === 0 ? FontLineStyle.LINESTYLE_NONE : underlineStyle;
+      // rtftokenizer.cxx dispatches ULD and ULW as flags, ignoring numeric parameters.
+      const style =
+        parameter === 0 && name !== "uld" && name !== "ulw"
+          ? FontLineStyle.LINESTYLE_NONE
+          : underlineStyle;
       state.character = {
         ...state.character,
         underline: style !== FontLineStyle.LINESTYLE_NONE,

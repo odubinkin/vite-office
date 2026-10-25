@@ -37,8 +37,10 @@ it("imports every pinned RTF underline value into the native line-style item", /
   const cases: readonly [string, FontLineStyle][] = [
     ["ul", FontLineStyle.LINESTYLE_SINGLE],
     ["ulw", FontLineStyle.LINESTYLE_SINGLE],
+    ["ulw0", FontLineStyle.LINESTYLE_SINGLE],
     ["uldb", FontLineStyle.LINESTYLE_DOUBLE],
     ["uld", FontLineStyle.LINESTYLE_DOTTED],
+    ["uld0", FontLineStyle.LINESTYLE_DOTTED],
     ["uldash", FontLineStyle.LINESTYLE_DASH],
     ["uldashd", FontLineStyle.LINESTYLE_DASHDOT],
     ["uldashdd", FontLineStyle.LINESTYLE_DASHDOTDOT],
@@ -66,7 +68,7 @@ it("imports every pinned RTF underline value into the native line-style item", /
             ? FontLineStyle.LINESTYLE_SINGLE
             : FontLineStyle.LINESTYLE_NONE),
       ).toBe(style);
-      if (control === "ulw")
+      if (control === "ulw" || control === "ulw0")
         expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
     } finally {
       document.Dispose();
@@ -98,6 +100,17 @@ it("inherits native underline style from the RTF stylesheet and applies direct o
 
 it("ignores unknown control words even when they match object prototypes", /** Checks that unknown RTF keywords cannot become style values. @returns Nothing. */ () => {
   const document = read(String.raw`{\rtf1\constructor text}`);
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes.underline).toBe(false);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains the pinned RTF reader's unhandled ulhair toggle", /** Checks the registered but unimplemented source control. @returns Nothing. */ () => {
+  const document = read(String.raw`{\rtf1\ulhair text}`);
   try {
     const paragraph = document.paragraphs[0];
     if (paragraph === undefined) throw new Error("Missing paragraph.");

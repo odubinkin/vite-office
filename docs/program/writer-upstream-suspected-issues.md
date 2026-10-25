@@ -1262,3 +1262,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharUnderline`, emits `\\ulc` from `rUnderline.GetColor()` after each supported underline style. Its adjacent `NEEDSWORK` comment says that this value appears always black even when an ODT underline is, for example, green.
 - Observation: the source explicitly flags a possible loss before the color-table emission point. The earlier producer of `rUnderline` and compiled desktop behavior have not been traced, so this remains a suspected issue rather than a confirmed reproduction.
 - Preservation: the local RTF output takes the actual native `SvxUnderlineItem` color and writes its color-table index, following the cited emission logic. It does not force a correction or a black value based on the comment.
+
+### WRITER119 — Registered RTF hairline underline is ignored by the reader
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` registers `ulhair` as an RTF toggle, but `RTFDocumentImpl::dispatchToggle` has no `ULHAIR` case; it reaches the default `TODO handle toggle` branch and leaves the character underline unchanged.
+- Observation: a hairline-underline control does not reach the document's underline value. This follows the source dispatch table and default branch; compiled desktop behavior remains unverified.
+- Preservation: the local RTF reader likewise leaves `\\ulhair` without an underline-style item. A focused test pins the ignored control.
