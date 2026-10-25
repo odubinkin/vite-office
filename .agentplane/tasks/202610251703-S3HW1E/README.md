@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 7
+revision: 8
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T17:14:56.583Z"
+doc_updated_at: "2026-10-25T17:19:46.630Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Current model comparison is recorded in docs/program/writer-native-text-filter-slice.md. Closed in this batch: shared text transfer retains native strikeout and escapement; RTF stylesheet names and effective paragraph/character controls; point bookmarks at text and table-cell offsets; Markdown setext headings, indented code, multiline quotations and grouped preformatted export. Commands: targeted Vitest on eight related files, 70 tests pass; office TypeScript typecheck pass; changed-path ESLint and Prettier pass; source-provenance and module-boundary checks pass; Writer registry check passed but reports wider inventory gaps. Open: current-model numbering variants and restart/count, complex table properties, page/section items, remaining style and field contracts, and full md4c Markdown grammar. The pinned md4c source is absent locally and network access awaits explicit approval. No claim of complete parity yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commit c3970126f351 closes shared strikeout/escapement transfer, represented RTF stylesheet export and point bookmarks, and Markdown setext/indented-code/multiline-quote/grouped-code cases. Additional RTF correction: external named styles now create document-owned collections; recognized character and paragraph controls populate those styles; absent direct controls inherit style values while explicit controls override; duplicate normalized names retain distinct identities. Related Vitest: 34 tests in three files pass after this correction; office TypeScript, changed-path ESLint, source-provenance and module boundaries pass. Previously 70 tests in eight broader filter files and Writer registry check passed. Open: numbering variants/restarts/count, complex table properties, page/section items, remaining field and style contracts, full md4c Markdown grammar. Pinned md4c source is absent locally and network access awaits explicit approval. No claim of full current-slice parity or final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Current model comparison is recorded in docs/program/writer-native-text-filter-slice.md. Closed in this batch: shared text transfer retains native strikeout and escapement; RTF stylesheet names and effective paragraph/character controls; point bookmarks at text and table-cell offsets; Markdown setext headings, indented code, multiline quotations and grouped preformatted export. Commands: targeted Vitest on eight related files, 70 tests pass; office TypeScript typecheck pass; changed-path ESLint and Prettier pass; source-provenance and module-boundary checks pass; Writer registry check passed but reports wider inventory gaps. Open: current-model numbering variants and restart/count, complex table properties, page/section items, remaining style and field contracts, and full md4c Markdown grammar. The pinned md4c source is absent locally and network access awaits explicit approval. No claim of complete parity yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commit c3970126f351 closes shared strikeout/escapement transfer, represented RTF stylesheet export and point bookmarks, and Markdown setext/indented-code/multiline-quote/grouped-code cases. Additional RTF correction: external named styles now create document-owned collections; recognized character and paragraph controls populate those styles; absent direct controls inherit style values while explicit controls override; duplicate normalized names retain distinct identities. Related Vitest: 34 tests in three files pass after this correction; office TypeScript, changed-path ESLint, source-provenance and module boundaries pass. Previously 70 tests in eight broader filter files and Writer registry check passed. Open: numbering variants/restarts/count, complex table properties, page/section items, remaining field and style contracts, full md4c Markdown grammar. Pinned md4c source is absent locally and network access awaits explicit approval. No claim of full current-slice parity or final verification yet.

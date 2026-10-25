@@ -6,6 +6,7 @@ import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
 import { RtfTokenizer } from "./rtftokenizer";
+import { RtfExport } from "../../filter/ww8/rtfexport";
 
 /** Imports one RTF fixture. @param input - RTF source. @returns Writer document. */
 function read(input: string) {
@@ -72,6 +73,62 @@ it("maps stylesheet paragraph controls to available Writer styles", () => {
     expect(document.paragraphs.map((node) => node.GetParagraphStyle())).toEqual([
       "heading-3",
       "default",
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("creates a document-owned collection for an external RTF paragraph style", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s42\\b\\fs28\\qc\\li180 Custom Note;}}\\pard\\s42 Styled}",
+  );
+  let reopened;
+  try {
+    const paragraph = document.paragraphs[0];
+    expect(paragraph?.GetParagraphStyle()).toBe("custom-note");
+    expect(paragraph?.GetTextFormatColl().GetName()).toBe("Custom Note");
+    expect(paragraph?.GetParagraphAlignment()).toBe("center");
+    expect(paragraph?.GetParagraphTextLeftMargin()).toBe(180);
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes).toMatchObject({
+      bold: true,
+      fontSizeTwips: 280,
+    });
+    reopened = new RtfDocumentImpl().Resolve(
+      new RtfTokenizer(new RtfExport().ExportDocument(document)).Tokenize(),
+    );
+    expect(reopened.paragraphs[0]?.GetParagraphStyle()).toBe("custom-note");
+    expect(reopened.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
+    expect(projectWriterTextRuns(reopened.paragraphs[0])[0]?.attributes.bold).toBe(true);
+  } finally {
+    reopened?.Dispose();
+    document.Dispose();
+  }
+});
+
+it("inherits RTF style characters until an explicit run control overrides them", () => {
+  const document = read("{\\rtf1{\\stylesheet{\\s3\\b Strong Note;}}\\pard\\s3 Yes {\\b0 No} Yes}");
+  try {
+    expect(
+      projectWriterTextRuns(document.paragraphs[0]).map((run) => [run.text, run.attributes.bold]),
+    ).toEqual([
+      ["Yes ", true],
+      ["No", false],
+      [" Yes", true],
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps distinct RTF style indexes when names normalize to the same identity", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s1 First-Note;}{\\s2 First Note;}}\\s1 One\\par\\s2 Two}",
+  );
+  try {
+    expect(document.paragraphs.map((node) => node.GetParagraphStyle())).toEqual([
+      "first-note",
+      "first-note:2:1",
     ]);
   } finally {
     document.Dispose();

@@ -1,6 +1,24 @@
 /** @fileoverview Maps RTF tokenizer events into native Writer nodes following rtftok/rtfdocumentimpl.cxx. */
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import { SwpHints } from "../../core/txtnode/ndhints";
+import {
+  createSwFormatAutoFormat,
+  projectWriterCharacterAttributes,
+} from "../../core/txtnode/txatbase";
+import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
+import {
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
+} from "../../../inc/hintids";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   DFLT_ESC_AUTO_SUB,
@@ -10,8 +28,11 @@ import {
   DFLT_ESC_SUPER,
 } from "../../../../editeng/inc/escapementitem";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
-import { isWriterParagraphStyle } from "../../core/doc/fmtcol";
-import { getWriterParagraphStyleId } from "../../../inc/poolfmt";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import {
+  getWriterMaterializedParagraphStyleDefinition,
+  getWriterParagraphStyleId,
+} from "../../../inc/poolfmt";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
@@ -24,6 +45,10 @@ interface RtfParagraphState {
   left: number;
   right: number;
   firstLine: number;
+  alignmentSet?: boolean;
+  leftSet?: boolean;
+  rightSet?: boolean;
+  firstLineSet?: boolean;
   styleIndex?: number;
   listOverride?: number;
   listLevel: number;
@@ -56,14 +81,21 @@ interface RtfState {
   hyperlink?: string;
   styleIndex?: number;
   styleName?: string;
+  styleControls: Set<string>;
+  characterControls: Set<string>;
   bookmarkName?: string;
 }
 
 /** Parsed paragraph before the source graph is applied atomically. */
 interface RtfParagraph {
-  readonly runs: readonly WriterTextRun[];
+  readonly runs: readonly RtfRun[];
   readonly state: RtfParagraphState;
   readonly marks: readonly Readonly<{ name: string; offset: number }>[];
+}
+
+/** Parsed RTF text plus controls explicitly active at that span. */
+interface RtfRun extends WriterTextRun {
+  readonly controls: ReadonlySet<string>;
 }
 
 /** Ordered body content with native rows and cell paragraphs. */
@@ -103,17 +135,66 @@ const SKIPPED_DESTINATIONS = new Set([
   "colorschememapping",
   "xmlnstbl",
 ]);
+const STYLE_PROPERTY_CONTROLS = new Set([
+  "b",
+  "i",
+  "ul",
+  "ulnone",
+  "strike",
+  "striked",
+  "super",
+  "sub",
+  "up",
+  "dn",
+  "f",
+  "fs",
+  "cf",
+  "highlight",
+  "ql",
+  "qc",
+  "qr",
+  "qj",
+  "li",
+  "ri",
+  "fi",
+]);
+const CHARACTER_PROPERTY_CONTROLS = new Set([
+  "b",
+  "i",
+  "ul",
+  "ulnone",
+  "strike",
+  "striked",
+  "super",
+  "sub",
+  "up",
+  "dn",
+  "nosupersub",
+  "f",
+  "fs",
+  "cf",
+  "highlight",
+]);
 
 /** Imports a represented RTF body without coupling the tokenizer to browser I/O. */
 export class RtfDocumentImpl {
   private readonly states: RtfState[] = [];
   private readonly blocks: RtfBlock[] = [];
-  private readonly runs: WriterTextRun[] = [];
+  private readonly runs: RtfRun[] = [];
   private readonly marks: { name: string; offset: number }[] = [];
   private readonly fonts = new Map<number, string>();
   private readonly colors: string[] = [];
   private readonly listFormats = new Map<number, readonly ("bullet" | "numbered")[]>();
-  private readonly styles = new Map<number, string>();
+  private readonly styles = new Map<
+    number,
+    Readonly<{
+      name: string;
+      character: WriterCharacterAttributes;
+      paragraph: RtfParagraphState;
+      controls: ReadonlySet<string>;
+    }>
+  >();
+  private readonly importedStyles = new Map<number, SwTextFormatColl>();
   private readonly listOverrides = new Map<number, number>();
   private currentListId = 0;
   private currentListLevels: ("bullet" | "numbered")[] = [];
@@ -141,6 +222,24 @@ export class RtfDocumentImpl {
       this.CommitParagraph();
     this.FlushTable();
     const document = new SwDoc(options);
+    this.importedStyles.clear();
+    for (const [index, definition] of this.styles) {
+      const { name } = definition;
+      const id =
+        name === "Default Paragraph Style" || name === "Standard"
+          ? "default"
+          : getWriterParagraphStyleId(name);
+      let identity = id || name;
+      let suffix = 1;
+      while (document.FindTextFormatColl(identity) !== undefined)
+        identity = `${id || name}:${index}:${suffix++}`;
+      const collection =
+        getWriterMaterializedParagraphStyleDefinition(id) === undefined
+          ? document.MakeTextFormatColl(name, document.GetTextFormatColl("default"), identity)
+          : document.GetTextFormatColl(id);
+      this.importedStyles.set(index, collection);
+      this.ApplyStyleDefinition(collection, definition);
+    }
     let firstParagraph = true;
     for (const block of this.blocks) {
       if (block.kind === "paragraph") {
@@ -172,30 +271,83 @@ export class RtfDocumentImpl {
     return document;
   }
 
+  /** Installs represented RTF stylesheet properties on the document-owned collection. */
+  private ApplyStyleDefinition(
+    collection: SwTextFormatColl,
+    definition: {
+      character: WriterCharacterAttributes;
+      paragraph: RtfParagraphState;
+      controls: ReadonlySet<string>;
+    },
+  ): void {
+    const controls = definition.controls;
+    const current = projectWriterCharacterAttributes(collection.GetAttrSet());
+    const target: WriterCharacterAttributes = {
+      ...current,
+      ...(controls.has("b") ? { bold: definition.character.bold } : {}),
+      ...(controls.has("i") ? { italic: definition.character.italic } : {}),
+      ...(controls.has("ul") || controls.has("ulnone")
+        ? { underline: definition.character.underline }
+        : {}),
+      ...(controls.has("strike") || controls.has("striked")
+        ? { strikeout: definition.character.strikeout }
+        : {}),
+      ...(controls.has("super") || controls.has("sub") || controls.has("up") || controls.has("dn")
+        ? { escapement: definition.character.escapement }
+        : {}),
+      ...(controls.has("f") ? { fontFamily: definition.character.fontFamily } : {}),
+      ...(controls.has("fs") ? { fontSizeTwips: definition.character.fontSizeTwips } : {}),
+      ...(controls.has("cf") ? { color: definition.character.color } : {}),
+      ...(controls.has("highlight") ? { highlight: definition.character.highlight } : {}),
+    };
+    const items = createSwFormatAutoFormat(
+      collection.GetAttrSet().GetDoc().GetAttrPool(),
+      target,
+      current,
+    ).GetStyleHandle();
+    for (const item of items.entries()) collection.SetFormatAttr(item);
+    const paragraph = definition.paragraph;
+    if (["ql", "qc", "qr", "qj"].some((name) => controls.has(name)))
+      collection.SetFormatAttr(
+        new SvxAdjustItem(getSvxAdjust(paragraph.alignment), RES_PARATR_ADJUST),
+      );
+    if (controls.has("li"))
+      collection.SetFormatAttr(
+        new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
+      );
+    if (controls.has("ri"))
+      collection.SetFormatAttr(
+        new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
+      );
+    if (controls.has("fi"))
+      collection.SetFormatAttr(
+        new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
+      );
+  }
+
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
   private ApplyParagraph(node: SwTextNode, paragraph: RtfParagraph): void {
-    const styleName =
+    const style =
       paragraph.state.styleIndex === undefined
         ? undefined
-        : this.styles.get(paragraph.state.styleIndex);
-    const styleId =
-      styleName === undefined
-        ? undefined
-        : styleName === "Default Paragraph Style" || styleName === "Standard"
-          ? "default"
-          : getWriterParagraphStyleId(styleName);
-    if (styleId !== undefined && isWriterParagraphStyle(styleId))
-      node.ChgFormatColl(node.GetDoc().GetTextFormatColl(styleId));
-    node.SetText(paragraph.runs.map((run) => run.text).join(""));
+        : this.importedStyles.get(paragraph.state.styleIndex);
+    if (style !== undefined) node.ChgFormatColl(style);
+    const inherited = projectWriterCharacterAttributes(node.GetSwAttrSet());
+    const runs = paragraph.runs.map((run) => ({
+      text: run.text,
+      ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
+      attributes: resolveRtfRunAttributes(run, inherited),
+    }));
+    node.SetText(runs.map((run) => run.text).join(""));
     const hints = new SwpHints(node.GetDoc().GetAttrPool());
-    hints.setTextRuns(paragraph.runs, node.GetSwAttrSet());
+    hints.setTextRuns(runs, node.GetSwAttrSet());
     node.SetTextHints(hints);
     for (const mark of paragraph.marks)
       node.GetDoc().GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
-    node.SetParagraphAlignment(paragraph.state.alignment);
-    node.SetParagraphTextLeftMargin(paragraph.state.left);
-    node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
-    node.SetParagraphRightMargin(paragraph.state.right);
+    if (paragraph.state.alignmentSet) node.SetParagraphAlignment(paragraph.state.alignment);
+    if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
+    if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
+    if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
@@ -226,6 +378,8 @@ export class RtfDocumentImpl {
         ...(previous?.field === undefined ? {} : { field: previous.field }),
         ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
         ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
+        styleControls: new Set(previous?.styleControls),
+        characterControls: new Set(previous?.characterControls),
       });
       return;
     }
@@ -235,7 +389,13 @@ export class RtfDocumentImpl {
       if (previous?.destination === "fonttbl" && previous.fontIndex >= 0) this.CommitFont(previous);
       if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
         const name = previous.styleName?.split(";")[0]?.trim();
-        if (name !== undefined && name.length > 0) this.styles.set(previous.styleIndex, name);
+        if (name !== undefined && name.length > 0)
+          this.styles.set(previous.styleIndex, {
+            name,
+            character: { ...previous.character },
+            paragraph: { ...previous.paragraph },
+            controls: new Set(previous.styleControls),
+          });
       }
       if (previous?.destination === "bookmarkstart") {
         const name = previous.bookmarkName?.trim();
@@ -323,9 +483,17 @@ export class RtfDocumentImpl {
       state.destination = "styleentry";
       state.styleIndex = token.parameter ?? 0;
       state.styleName = "";
+      state.styleControls = new Set();
       return;
     }
-    if (state.destination === "styleentry" || state.destination === "stylesheet") return;
+    if (state.destination === "styleentry") {
+      if (STYLE_PROPERTY_CONTROLS.has(token.name)) {
+        state.styleControls.add(token.name);
+        this.DispatchBodyControl(token.name, token.parameter, state);
+      }
+      return;
+    }
+    if (state.destination === "stylesheet") return;
     if (state.destination === "listtable" && token.name === "list") {
       state.destination = "list";
       this.currentListId = 0;
@@ -380,6 +548,7 @@ export class RtfDocumentImpl {
 
   /** Applies one represented body control. @param name - RTF control. @param parameter - Optional value. @param state - Current group. */
   private DispatchBodyControl(name: string, parameter: number | undefined, state: RtfState): void {
+    if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
     if (name === "trowd") {
       this.inTable = true;
       return;
@@ -417,6 +586,7 @@ export class RtfDocumentImpl {
     }
     if (name === "plain") {
       state.character = { ...DEFAULT_CHARACTER };
+      state.characterControls.clear();
       return;
     }
     if (name === "pard") {
@@ -495,15 +665,16 @@ export class RtfDocumentImpl {
     } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj")
       state.paragraph = {
         ...state.paragraph,
+        alignmentSet: true,
         alignment:
           name === "ql" ? "left" : name === "qc" ? "center" : name === "qr" ? "right" : "justify",
       };
     else if (name === "li" && parameter !== undefined)
-      state.paragraph = { ...state.paragraph, left: Math.max(0, parameter) };
+      state.paragraph = { ...state.paragraph, left: Math.max(0, parameter), leftSet: true };
     else if (name === "ri" && parameter !== undefined)
-      state.paragraph = { ...state.paragraph, right: Math.max(0, parameter) };
+      state.paragraph = { ...state.paragraph, right: Math.max(0, parameter), rightSet: true };
     else if (name === "fi" && parameter !== undefined)
-      state.paragraph = { ...state.paragraph, firstLine: parameter };
+      state.paragraph = { ...state.paragraph, firstLine: parameter, firstLineSet: true };
   }
 
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */
@@ -514,6 +685,7 @@ export class RtfDocumentImpl {
     if (
       previous !== undefined &&
       previous.hyperlink?.url === state.hyperlink &&
+      equalControls(previous.controls, state.characterControls) &&
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
@@ -521,6 +693,7 @@ export class RtfDocumentImpl {
       this.runs.push({
         text: value,
         attributes: { ...state.character },
+        controls: new Set(state.characterControls),
         ...(state.hyperlink === undefined ? {} : { hyperlink: { url: state.hyperlink } }),
       });
     this.terminatedParagraph = false;
@@ -586,4 +759,57 @@ function equalCharacter(a: WriterCharacterAttributes, b: WriterCharacterAttribut
     a.escapement?.offset === b.escapement?.offset &&
     a.escapement?.height === b.escapement?.height
   );
+}
+
+/** Keeps absent RTF direct controls inherited from the selected paragraph style. */
+function resolveRtfRunAttributes(
+  run: RtfRun,
+  inherited: WriterCharacterAttributes,
+): WriterCharacterAttributes {
+  const controls = run.controls;
+  const has = (...names: string[]) => names.some((name) => controls.has(name));
+  return {
+    bold: has("b") ? run.attributes.bold : inherited.bold,
+    italic: has("i") ? run.attributes.italic : inherited.italic,
+    underline: has("ul", "ulnone") ? run.attributes.underline : inherited.underline,
+    ...(has("f")
+      ? run.attributes.fontFamily === undefined
+        ? {}
+        : { fontFamily: run.attributes.fontFamily }
+      : inherited.fontFamily === undefined
+        ? {}
+        : { fontFamily: inherited.fontFamily }),
+    ...(has("fs")
+      ? run.attributes.fontSizeTwips === undefined
+        ? {}
+        : { fontSizeTwips: run.attributes.fontSizeTwips }
+      : inherited.fontSizeTwips === undefined
+        ? {}
+        : { fontSizeTwips: inherited.fontSizeTwips }),
+    ...(has("cf")
+      ? { color: run.attributes.color ?? "auto" }
+      : inherited.color === undefined
+        ? {}
+        : { color: inherited.color }),
+    ...(has("highlight")
+      ? { highlight: run.attributes.highlight ?? "transparent" }
+      : inherited.highlight === undefined
+        ? {}
+        : { highlight: inherited.highlight }),
+    ...(has("strike", "striked")
+      ? { strikeout: run.attributes.strikeout ?? FontStrikeout.STRIKEOUT_NONE }
+      : inherited.strikeout === undefined
+        ? {}
+        : { strikeout: inherited.strikeout }),
+    ...(has("super", "sub", "up", "dn", "nosupersub")
+      ? { escapement: run.attributes.escapement ?? { offset: 0, height: 100 } }
+      : inherited.escapement === undefined
+        ? {}
+        : { escapement: inherited.escapement }),
+  };
+}
+
+/** Compares explicit-control sets before adjacent RTF runs are coalesced. */
+function equalControls(left: ReadonlySet<string>, right: ReadonlySet<string>): boolean {
+  return left.size === right.size && [...left].every((name) => right.has(name));
 }
