@@ -1,10 +1,11 @@
 ---
 id: "202610222022-3D9WX6"
 title: "Connect native AutoSum and formula-bar input actions"
-status: "DOING"
+result_summary: "Native AutoSum and formula input accepted with full-suite coverage"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 39
+revision: 40
 origin:
   system: "manual"
 depends_on:
@@ -43,8 +44,8 @@ quality_review:
   findings:
     - "Current UI source matches committed f60431bc2690;actual shared-style Sum/Formula,rectangle/history/input selection and ODS browser/Worker evidence reviewed on completed76foundation. Strict source/map/counter100proof retained with original failures and successful rechecks;no changed thresholds or timeout limits."
 commit:
-  hash: "f60431bc26904df18137c2d578abf8faaf094aa2"
-  message: "✨ 3D9WX6 calc: connect native block AutoSum and retain input selection"
+  hash: "5fd168ba8d94c4eae1b836602cc9a42f5e31a310"
+  message: "✅ 3D9WX6 calc: bind native AutoSum review to committed implementation"
 comments:
   -
     author: "CODER"
@@ -61,6 +62,9 @@ comments:
   -
     author: "CODER"
     body: "Start: record the existing committed native AutoSum/input implementation as the quality review target before final accepted closure."
+  -
+    author: "CODER"
+    body: "Verified: Native AutoSum and formula-input UI use real clipboard/history and shared Writer-style controls;complete all-app tests with successful related repairs,current strict100 coverage and actual source/registry/browser/Worker gates accepted. Close74on completed76foundation and pause the goal as requested."
 events:
   -
     type: "status"
@@ -109,8 +113,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610222022-3D9WX6"
+  -
+    type: "status"
+    at: "2026-10-25T05:25:40.526Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: Native AutoSum and formula-input UI use real clipboard/history and shared Writer-style controls;complete all-app tests with successful related repairs,current strict100 coverage and actual source/registry/browser/Worker gates accepted. Close74on completed76foundation and pause the goal as requested."
 doc_version: 3
-doc_updated_at: "2026-10-25T05:25:02.851Z"
+doc_updated_at: "2026-10-25T05:25:40.528Z"
 doc_updated_by: "CODER"
 description: "Block74 after73: implement original ordinary AutoSum classification/search/range construction and selected-block insertion through native token/view/input owners. Enable real Sum and correct StartFormula/SetFuncString source text selection in the shared-style Calc formula bar. Preserve native detection priorities,20-cell seek bound,sum-of-sums,empty-selection behavior,history and ODS persistence. No browser evaluator or ad-hoc range inference. Existing unported filtered/subtotal/group/3D services stay explicit and do not receive fabricated state. Scope up to80 source/test/registry/probe paths in Calc and any genuinely shared consumed owners. Require complete Calc raw100 and changed shared raw100,related tests,actual UI/browser/Worker checks and static/build/source/registry gates. Full all-app checkpoint80."
 sections:
