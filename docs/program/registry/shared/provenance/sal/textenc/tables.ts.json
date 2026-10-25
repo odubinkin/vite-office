@@ -26,7 +26,8 @@
       "Selects the pinned EUC-KR aggregate and source-equivalent Apple Korean MS-949 aggregate by rtl_TextEncoding.",
       "Selects the pinned GB2312 DBCS aggregate for EUC-CN RTF bytes.",
       "Selects the pinned Apple Japanese, Simplified Chinese and Traditional Chinese DBCS aggregates for Writer RTF bytes.",
-      "Selects the pinned EUC-JP converter aggregate and distinct native conversion path for Writer RTF bytes."
+      "Selects the pinned EUC-JP converter aggregate and distinct native conversion path for Writer RTF bytes.",
+      "Selects the pinned ISCII Devanagari contextual converter for Writer RTF code page 57002."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

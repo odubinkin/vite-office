@@ -1226,3 +1226,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplEUCJPToUnicode`, subtracts `JIS_EUC_LEAD_OFF` and `JIS_EUC_TRAIL_OFF` from a double-byte pair before testing those same variables against the offsets in the undefined-character branch. Its multibyte-undefined branch advances the source pointer before action handling, then the common output path advances it again; with `FLUSH`, it resets the pointer to the character start before the common advance.
 - Observation: an unmapped JIS double-byte pair whose original bytes are in range is classified as invalid after subtraction. An undefined SS2 pair can report a consumed-byte count different from its full byte width. These conclusions follow source control flow; compiled desktop behavior has not been compared.
 - Preservation: the local EUC-JP converter retains the branch order, classification and pointer updates exactly. Focused tests cover an invalid pair and the SS2 `FLUSH` path.
+
+### WRITER113 — ISCII lookahead reads beyond the supplied source span
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `IsciiDevanagariToUnicode::convert`, computes `nNext` under `nConverted < nSrcBytes + 1` and then reads `pSrcBuf[nConverted + 1]`. For the last byte of a nonempty buffer this condition is still true, so the read lies one byte beyond the supplied span.
+- Observation: the out-of-span value can affect whether a final byte combines with nukta. The actual allocation may contain an accessible extra byte, but the conversion contract does not provide it; compiled desktop behavior at that boundary remains unverified.
+- Preservation: the local converter retains the same lookahead condition and combination order. JavaScript's bounded source view supplies zero when the adjacent byte is absent, avoiding an out-of-bounds read while leaving the in-span source behavior unchanged.

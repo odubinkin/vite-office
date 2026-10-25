@@ -286,6 +286,7 @@ it.each([
   [10008, String.raw`\'a1\'a1`, "\u3000"],
   [10002, String.raw`\'a1\'40`, "\u3000"],
   [51932, String.raw`\'8e\'a1\'a1\'a1\'8f\'a2\'af`, "\uFF61\u3000\u02D8"],
+  [57002, String.raw`\'a1\'e9\'e8\'e8`, "\u0950\u094D\u200C"],
 ])(
   "uses pinned SAL EUC and Apple DBCS aggregates for code page %i",
   (codepage, bytes, expected) => {

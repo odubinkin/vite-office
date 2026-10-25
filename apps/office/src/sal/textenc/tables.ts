@@ -43,6 +43,7 @@ import {
   RTL_TEXTENCODING_ISO_8859_8,
   RTL_TEXTENCODING_ISO_8859_9,
   RTL_TEXTENCODING_ISO_8859_15,
+  RTL_TEXTENCODING_ISCII_DEVANAGARI,
   RTL_TEXTENCODING_KOI8_R,
   RTL_TEXTENCODING_KOI8_U,
   RTL_TEXTENCODING_MS_874,
@@ -245,12 +246,14 @@ export function getTextToUnicodeData(
   | Readonly<{ kind: "symbol" }>
   | Readonly<{ kind: "utf8" }>
   | Readonly<{ kind: "eucjp"; data: ImplEUCJPConvertData }>
+  | Readonly<{ kind: "iscii" }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
   | undefined {
   if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
   if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
   if (encoding === RTL_TEXTENCODING_EUC_JP) return { kind: "eucjp", data: aImplEUCJPCvtData };
+  if (encoding === RTL_TEXTENCODING_ISCII_DEVANAGARI) return { kind: "iscii" };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_JAPANESE)
     return { kind: "dbcs", data: aImplAPPLEJAPANESEDBCSCvtData };
