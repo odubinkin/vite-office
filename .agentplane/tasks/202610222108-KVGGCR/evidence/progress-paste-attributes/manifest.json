@@ -1,0 +1,72 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;default-content/attribute paste Undo verified;native PasteFromClip/EnterBlock and task74 UI acceptance remain pending",
+  "sourceBaseline": "425e0fada48fb4353c23af2b67536d10ceeb2f1a",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "approvedScopePathCount": 300,
+  "conservativeAllPathsCount": 304,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 28,
+  "checks": {
+    "calc": "229files/992scenarios pass with unchanged thresholds/timeouts/exclusions",
+    "coverage": {
+      "lines": {
+        "total": 15733,
+        "covered": 15733,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17612,
+        "covered": 17612,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3032,
+        "covered": 3032,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10534,
+        "covered": 10534,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "related": "11files/104scenarios;new deletion/history owners raw100 S169/B66/F21/L158",
+    "browserWorker": "fresh production build then actual combined content/attribute Undo/Redo and formula dependency recalculation in Chromium and DOM-free Worker1/1 pass",
+    "scopedProvenance": "8source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor and diff pass"
+  },
+  "preserved": [
+    "Original RemoveAreaMerge clears actual merge anchors and their full rectangle before resetting patterns;SetPatternAreaSafe retains existing overlap/autofilter flags and wanted actual default style information.",
+    "ScAttrEntry export permits type-only source partition access to existing canonical holders;attarray.delete.ts definitions operate on the same ScAttrArray instance under the1000-line gate.",
+    "Native document/table/column ApplyAttr creates real canonical pattern copies and retains equality/disposal rules;GetName body moves unchanged from the facade to its existing same-instance partition.",
+    "ScUndoPaste admits the actual default-content/attribute/NOCAPTIONS flags required by EnterBlock;DoChange preserves native all-or-none normalization and actual data/pattern snapshot ownership."
+  ],
+  "explicitBoundaries": [
+    "Source no-copy-mode RefUndoData,drawing/change tracking,Repeat and physical view/paint services remain unrepresented. Nondefault clipboard families remain outside the admitted slice.",
+    "Selection/view PasteFromClip/EnterBlock and final task74 UI acceptance are not complete;task76 stays DOING/unverified.",
+    "Full all-application suites,necessary fixes/scenarios,required100coverage,final task closure and goal pause remain required;this Calc-only checkpoint does not trigger the final stop. Missing liblangtag reference/source and unrelated broad final gates remain unwaived."
+  ],
+  "failuresAndRepairs": [
+    "Initial partition compile errors were repaired using actual source-private entry type and bracket-qualified private definitions;missing OUString type import corrected.",
+    "Initial registry generation failed before writes due to a wrong assumed runtime-record key;repaired using the actual semantic schema.",
+    "Non-null-assertion lint and added-mask JSDoc failures were repaired without weakening gates.",
+    "First229file Calc pass had992/992 scenarios pass and one uncovered unsupported drawing-deletion rejection. A real reject-before-mutation scenario closes the final raw line/branch;final992/992 raw100 passes."
+  ]
+}

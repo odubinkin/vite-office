@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/chartlis.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/chartlis.cxx",
+    "localSymbols": [
+      "ScChartListener",
+      "ScChartListenerCollection",
+      "ScChartHiddenRangeListener"
+    ],
+    "upstreamSymbols": [
+      "ScChartListener",
+      "ScChartListenerCollection",
+      "ScChartHiddenRangeListener"
+    ],
+    "preservedResponsibilities": [
+      "Native local cell/area subscriptions,ScChartUnoData callback/source reference ownership,ALL event payload,interpreter/manual-calculation deferral and actual repaint Idle collection now execute through original document owners. Native sorted name order,empty copy construction,reentrant insertion/removal interruption,hidden-range copied geometry and borrowed client lifetime are retained. External-link management,drawing-backed chart loading and unused collection management APIs remain explicitly unported;this is not a complete chart service or task76 acceptance."
+    ],
+    "omittedResponsibilities": [
+      "External chart links,drawing-backed chart loading and unused collection service management remain unported. Full document paste/history and UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/chartlis.ts",
+          "marker": "ScChartListener"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+          "marker": "pointer-vector equality"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
+          "marker": "actual"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/chartlis.cxx",
+          "marker": "ScChartListener"
+        }
+      ]
+    }
+  }
+}

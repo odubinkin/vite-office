@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/i18n/KNumberFormatUsage.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/i18n/KNumberFormatUsage.ts",
+        "apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/i18n/KNumberFormatUsage.idl"
+      ],
+      "justification": "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DATE",
+        "TIME",
+        "DATE_TIME",
+        "FIXED_NUMBER",
+        "FRACTION_NUMBER",
+        "PERCENT_NUMBER",
+        "SCIENTIFIC_NUMBER",
+        "CURRENCY"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "offapi/com/sun/star/i18n/KNumberFormatUsage.idl",
+      "upstreamSymbols": [
+        "KNumberFormatUsage",
+        "DATE",
+        "TIME",
+        "DATE_TIME",
+        "FIXED_NUMBER",
+        "FRACTION_NUMBER",
+        "PERCENT_NUMBER",
+        "SCIENTIFIC_NUMBER",
+        "CURRENCY"
+      ]
+    }
+  }
+}

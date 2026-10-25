@@ -1,4 +1,9 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import { ScConditionalFormatList } from "../../../inc/conditio";
+import * as table2 from "./table2";
+import * as table5 from "./table5";
+import * as table7 from "./table7";
 import { ConvertToGroupListening } from "../../../inc/types";
 import { HasAttrFlags } from "../../../inc/global";
 import type { ScItemPoolCache } from "../../../inc/poolcach";
@@ -38,11 +43,161 @@ import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
 import { FilterData } from "../../../inc/FilterData";
-import { SetOptimalHeightsToRows } from "./table1";
+import { UpdateReference, SetOptimalHeightsToRows, SetStreamValid } from "./table1";
 /** Original ColumnDataApply callable contract. */
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
 export class ScTable {
+  /** Original pagination-cache bit,visible to native out-of-class friend definitions. */
+  mbPageBreaksValid = false;
+  private bStreamValid = false;
+  private maRowManualBreaks = new Set<number>();
+  private maColManualBreaks = new Set<number>();
+  private readonly maRowPageBreaks = new Set<number>();
+  private readonly maColPageBreaks = new Set<number>();
+  /** Original validated page-break query. @param row - Native index. @returns Membership. */
+  HasRowPageBreak(row: number): boolean {
+    return this.rDocument.ValidRow(row) && this.maRowPageBreaks.has(row);
+  }
+  /** Original validated page-break query. @param col - Native index. @returns Membership. */
+  HasColPageBreak(col: number): boolean {
+    return this.rDocument.ValidCol(col) && this.maColPageBreaks.has(col);
+  }
+  /** Original validated manual-break query. @param row - Native index. @returns Membership. */
+  HasRowManualBreak(row: number): boolean {
+    return this.rDocument.ValidRow(row) && this.maRowManualBreaks.has(row);
+  }
+  /** Original validated manual-break query. @param col - Native index. @returns Membership. */
+  HasColManualBreak(col: number): boolean {
+    return this.rDocument.ValidCol(col) && this.maColManualBreaks.has(col);
+  }
+  /** Original stream validity query. @returns Whether valid. */
+  IsStreamValid(): boolean {
+    return this.bStreamValid;
+  }
+  /** Original stream state assignment respects the document lock. @param value - New state. @param ignoreLock - Native default false. @returns Nothing. */
+  SetStreamValid(value: boolean, ignoreLock = false): void {
+    SetStreamValid.call(this, value, ignoreLock);
+  }
+  /** Original page-break cache invalidation. @returns Nothing. */
+  InvalidatePageBreaks(): void {
+    this.mbPageBreaksValid = false;
+  }
+  /** Original sheet Undo dispatch on the same actual table. @param args - Context,rectangle,flags,mark and destination. @returns Nothing. */
+  UndoToTable(...args: Parameters<typeof table2.UndoToTable>): void {
+    table2.UndoToTable.apply(this, args);
+  }
+  /** Original table5 clears manual breaks. @param args - Native arguments. @returns Native result. */
+  RemoveManualBreaks(...args: Parameters<typeof table5.RemoveManualBreaks>): void {
+    return table5.RemoveManualBreaks.apply(this, args);
+  }
+  /** Original table5 queries manual breaks. @param args - Native arguments. @returns Native result. */
+  HasManualBreaks(...args: Parameters<typeof table5.HasManualBreaks>): boolean {
+    return table5.HasManualBreaks.apply(this, args);
+  }
+  /** Original table5 moves row manual breaks. @param args - Native arguments. @returns Native result. */
+  SetRowManualBreaks(...args: Parameters<typeof table5.SetRowManualBreaks>): void {
+    return table5.SetRowManualBreaks.apply(this, args);
+  }
+  /** Original table5 moves column manual breaks. @param args - Native arguments. @returns Native result. */
+  SetColManualBreaks(...args: Parameters<typeof table5.SetColManualBreaks>): void {
+    return table5.SetColManualBreaks.apply(this, args);
+  }
+  /** Original table5 collects row breaks. @param args - Native arguments. @returns Native result. */
+  GetAllRowBreaks(...args: Parameters<typeof table5.GetAllRowBreaks>): void {
+    return table5.GetAllRowBreaks.apply(this, args);
+  }
+  /** Original table5 collects column breaks. @param args - Native arguments. @returns Native result. */
+  GetAllColBreaks(...args: Parameters<typeof table5.GetAllColBreaks>): void {
+    return table5.GetAllColBreaks.apply(this, args);
+  }
+  /** Original table5 sets row break flags. @param args - Native arguments. @returns Native result. */
+  SetRowBreak(...args: Parameters<typeof table5.SetRowBreak>): void {
+    return table5.SetRowBreak.apply(this, args);
+  }
+  /** Original table5 sets column break flags. @param args - Native arguments. @returns Native result. */
+  SetColBreak(...args: Parameters<typeof table5.SetColBreak>): void {
+    return table5.SetColBreak.apply(this, args);
+  }
+
+  private mpCondFormatList: ScConditionalFormatList | null = new ScConditionalFormatList();
+  /** Original table1 mutable getter creates an absent owned list. @returns Actual owner. */
+  GetCondFormList(): ScConditionalFormatList {
+    if (!this.mpCondFormatList) this.mpCondFormatList = new ScConditionalFormatList();
+    return this.mpCondFormatList;
+  }
+  /** Original unique-pointer reset transfers ownership before destroying the previous list. @param next - New owned list or native null. @returns Nothing. */
+  SetCondFormList(next: ScConditionalFormatList | null): void {
+    const previous = this.mpCondFormatList;
+    this.mpCondFormatList = next;
+    previous?.Dispose();
+  }
+  /** Original table1 deletion assumes its normal non-null list owner. @param index - Conditional index. @returns Nothing. */
+  DeleteConditionalFormat(index: number): void {
+    (this.mpCondFormatList as ScConditionalFormatList).erase(index);
+  }
+
+  /** Original single-source-row repetition on this actual sheet. @param args - Native context,bounds and source geometry. @returns Nothing. */
+  CopyOneCellFromClip(...args: Parameters<typeof table7.CopyOneCellFromClip>): void {
+    table7.CopyOneCellFromClip.apply(this, args);
+  }
+  /** Original table7 merged-anchor query keeps sparse column allocation unchanged. @param col - Column. @param row - Row. @returns Merged anchor. */
+  IsMerged(col: number, row: number): boolean {
+    return table7.IsMerged.call(this, col, row);
+  }
+  /** Original raw height query ignores hidden state and retains the absent/invalid fallback. @param row - Source row. @returns Twips. */
+  GetOriginalHeight(row: number): number {
+    return this.rDocument.ValidRow(row) && this.mpRowHeights
+      ? this.mpRowHeights.getValue(row)
+      : this.GetOptimalMinRowHeight();
+  }
+  /** Original table1 reference operation on this actual sheet. @param args - Native context and defaults. @returns Nothing. */
+  UpdateReference(...args: Parameters<typeof UpdateReference>): void {
+    UpdateReference.apply(this, args);
+  }
+  /** Original table2 conditional-index removal forwarding. @param args - Ranges and key. @returns Nothing. */
+  RemoveCondFormatData(...args: Parameters<typeof table2.RemoveCondFormatData>): void {
+    table2.RemoveCondFormatData.apply(this, args);
+  }
+  /** Original table2 conditional-format attribute forwarding. @param args - Ranges and key. @returns Nothing. */
+  AddCondFormatData(...args: Parameters<typeof table2.AddCondFormatData>): void {
+    table2.AddCondFormatData.apply(this, args);
+  }
+  /** Original table2 clipboard dirty forwarding. @param args - Native bounds and changed spans. @returns Nothing. */
+  SetDirtyFromClip(...args: Parameters<typeof table2.SetDirtyFromClip>): void {
+    table2.SetDirtyFromClip.apply(this, args);
+  }
+  /** Original table2 broadcaster forwarding. @param args - Native bounds and hint. @returns Whether delivered. */
+  BroadcastBroadcasters(...args: Parameters<typeof table2.BroadcastBroadcasters>): boolean {
+    return table2.BroadcastBroadcasters.apply(this, args);
+  }
+  /** Original table2 general clipboard-copy forwarding on this actual table. @param args - Native rectangle/displacement/source arguments. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof table2.CopyFromClip>): void {
+    table2.CopyFromClip.apply(this, args);
+  }
+  /** Original table7 pre-paste forwarding on this actual table instance. @param args - Native context/source/broadcast arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof table7.DeleteBeforeCopyFromClip>): void {
+    table7.DeleteBeforeCopyFromClip.apply(this, args);
+  }
+  /** Original table1 cleanup visits only actual allocated columns. @returns Nothing. */
+  DeleteEmptyBroadcasters(): void {
+    for (const column of this.aCol) column.DeleteEmptyBroadcasters();
+  }
+  /** Original table2 clipboard listening clamps to actual allocated columns and native bounds. @param start - Start context. @param end - End context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
+  StartListeningFormulaCells(
+    start: StartListeningContext,
+    end: EndListeningContext,
+    col1: number,
+    row1: number,
+    col2: number,
+    row2: number,
+  ): void {
+    col2 = Math.min(col2, this.aCol.length - 1, this.rDocument.MaxCol());
+    row2 = Math.min(row2, this.rDocument.MaxRow());
+    if (this.rDocument.ValidColRow(col1, row1) && this.rDocument.ValidColRow(col2, row2))
+      for (let col = col1; col <= col2; ++col)
+        (this.aCol[col] as ScColumn).StartListeningFormulaCells(start, end, row1, row2);
+  }
   /** Original table7 allocated-column regroup routing. @param col - Column. @returns Nothing. */
   RegroupFormulaCells(col: number): void {
     if (this.rDocument.ValidCol(col) && col < this.aCol.length)
@@ -193,6 +348,20 @@ export class ScTable {
       ) => column.ChangeSelectionIndent(first, last, increment),
     );
   }
+  /** Original format compatibility application through existing column owners. @param args - Range,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof table2.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    table2.ApplyPatternIfNumberformatIncompatible.apply(this, args);
+  }
+  /** Original flag addition on actual columns. @param args - Native rectangle and flags. @returns Changed. */
+  ApplyFlags(...args: Parameters<typeof table2.ApplyFlags>): boolean {
+    return table2.ApplyFlags.apply(this, args);
+  }
+  /** Original flag removal without tail allocation. @param args - Native rectangle and flags. @returns Changed. */
+  RemoveFlags(...args: Parameters<typeof table2.RemoveFlags>): boolean {
+    return table2.RemoveFlags.apply(this, args);
+  }
   /** Original table2.cxx DeleteArea clamps to allocated columns and never mutates the default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param flags - Consumed attribute-only flags. @returns Nothing. */
   DeleteArea(
     firstCol: number,
@@ -210,9 +379,26 @@ export class ScTable {
       for (let col = firstCol; col <= lastCol; col++)
         (this.aCol[col] as ScColumn).DeleteArea(firstRow, lastRow, flags);
   }
-  /** Original DeleteSelection traverses allocated columns only;no synthetic column allocation or default-tail correction. @param flags - Attribute-only flags. @param marks - Actual native marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
-    for (const column of this.aCol) column.DeleteSelection(flags, marks);
+  /** Original table2 single-item assignment validates coordinates before allocation. @param col - Column. @param row - Row. @param attr - Actual item. @returns Nothing. */
+  ApplyAttr(col: number, row: number, attr: SfxPoolItem): void {
+    if (this.rDocument.ValidColRow(col, row))
+      this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
+  }
+  /** Original table.hxx allocated-column validity. @param col - Column. @returns Allocated native column. */
+  IsColValid(col: number): boolean {
+    return col >= 0 && col < this.aCol.length;
+  }
+  /** Original table2 editability dispatch. @param args - Native block bounds and policy. @returns Editable under represented normal-sheet profile. */
+  IsBlockEditable(...args: Parameters<typeof table2.IsBlockEditable>): boolean {
+    return table2.IsBlockEditable.apply(this, args);
+  }
+  /** Original matrix-fragment dispatch over actual stored cells. @param args - Native bounds and matrix policy. @returns Actual admitted fragment result. */
+  HasBlockMatrixFragment(...args: Parameters<typeof table2.HasBlockMatrixFragment>): boolean {
+    return table2.HasBlockMatrixFragment.apply(this, args);
+  }
+  /** Original DeleteSelection traverses allocated columns only and forwards the native broadcast policy. @param flags - Native deletion flags. @param marks - Actual native marks. @param broadcast - Original defaulttrue. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {
+    for (const column of this.aCol) column.DeleteSelection(flags, marks, broadcast);
   }
   /** Original multi-column spans clamp to allocated columns and retain sparse storage. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited items. @returns Nothing. */
   MergeSelectionPattern(state: ScMergePatternState, marks: ScMarkData, deep: boolean): void {
@@ -378,30 +564,34 @@ export class ScTable {
   private readonly aCol: ScColumn[] = [];
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
-  private readonly mpColWidth: ScCompressedArray;
-  private readonly mpColFlags: ScBitMaskCompressedArray;
+  private readonly mpColWidth: ScCompressedArray | null;
+  declare private readonly mpColFlags: ScBitMaskCompressedArray | null;
   private readonly maFilterData: FilterData;
-  private readonly mpRowHeights: ScFlatUInt16RowSegments;
-  private readonly pRowFlags: ScBitMaskCompressedArray;
+  private readonly mpRowHeights: ScFlatUInt16RowSegments | null;
+  private readonly pRowFlags: ScBitMaskCompressedArray | null;
   private mnOptimalMinRowHeight = 0;
-  /** Stores the native sheet identity without constructing unrelated services. @param rDocument - Owner. @param nTab - Sheet position. @param name - Sheet name. @returns Sheet. */
+  /** Stores the native sheet identity without constructing unrelated services. @param rDocument - Owner. @param nTab - Sheet position. @param name - Sheet name. @param colInfo - Native width/column-flag allocation default true. @param rowInfo - Native height/row-flag allocation default true. @returns Sheet. */
   constructor(
     private readonly rDocument: ScDocument,
     private nTab: number,
     name: OUStringConstReference,
+    colInfo = true,
+    rowInfo = true,
   ) {
     this.aName = new OUString(name);
-    this.mpColWidth = new ScCompressedArray(rDocument.MaxCol() + 1, STD_COL_WIDTH, {
-      access: 16,
-      value: 16,
-    });
-    this.mpColFlags = new ScBitMaskCompressedArray(rDocument.MaxCol() + 1, CRFlags.NONE, 16);
+    this.mpColWidth = colInfo
+      ? new ScCompressedArray(rDocument.MaxCol() + 1, STD_COL_WIDTH, { access: 16, value: 16 })
+      : null;
+    this.mpColFlags = colInfo
+      ? new ScBitMaskCompressedArray(rDocument.MaxCol() + 1, CRFlags.NONE, 16)
+      : null;
     this.maFilterData = new FilterData(this);
-    this.mpRowHeights = new ScFlatUInt16RowSegments(
-      rDocument.MaxRow(),
-      this.GetOptimalMinRowHeight(),
-    );
-    this.pRowFlags = new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32);
+    this.mpRowHeights = rowInfo
+      ? new ScFlatUInt16RowSegments(rDocument.MaxRow(), this.GetOptimalMinRowHeight())
+      : null;
+    this.pRowFlags = rowInfo
+      ? new ScBitMaskCompressedArray(rDocument.MaxRow(), CRFlags.NONE, 32)
+      : null;
     this.aDefaultColData = new ScColumnData(rDocument);
     this.aDefaultColData.Init(-1, nTab);
     this.CreateColumnIfNotExists(INITIALCOLCOUNT - 1);
@@ -410,11 +600,14 @@ export class ScTable {
   GetDoc(): ScDocument {
     return this.rDocument;
   }
-  /** Original UInt16 column-width setter retains zero-to-standard fallback;page-break services remain outside this slice. @param column - Column. @param width - Native unsigned16 twips. @returns Nothing. */
+  /** Original UInt16 column-width setter retains zero-to-standard fallback and invalidates native pagination. @param column - Column. @param width - Native unsigned16 twips. @returns Nothing. */
   SetColWidth(column: number, width: number): void {
-    if (this.rDocument.ValidCol(column)) {
+    if (this.rDocument.ValidCol(column) && this.mpColWidth) {
       width = width & 0xffff || STD_COL_WIDTH;
-      if (width !== this.mpColWidth.GetValue(column)) this.mpColWidth.SetValue(column, width);
+      if (width !== this.mpColWidth.GetValue(column)) {
+        this.mpColWidth.SetValue(column, width);
+        this.InvalidatePageBreaks();
+      }
     }
   }
   /** Original width-only setter shares the represented width mutation without page-break services. @param column - Column. @param width - UInt16 twips. @returns Nothing. */
@@ -423,12 +616,12 @@ export class ScTable {
   }
   /** Original invalid-column standard fallback and optional hidden-as-zero query. @param column - Column. @param hiddenAsZero - Native default,true. @returns Twips. */
   GetColWidth(column: number, hiddenAsZero = true): number {
-    if (!this.rDocument.ValidCol(column)) return STD_COL_WIDTH;
+    if (!this.rDocument.ValidCol(column) || !this.mpColWidth) return STD_COL_WIDTH;
     return hiddenAsZero && this.ColHidden(column) ? 0 : this.mpColWidth.GetValue(column);
   }
-  /** Borrows actual source compressed width runs for the browser projection without another geometry model. @param column - Valid source column. @returns Original range data;its unused terminal sentinel may exceed MaxCol. */
+  /** Borrows actual source compressed width runs for the browser projection;allocated column geometry is the caller precondition. @param column - Valid source column. @returns Original range data;its unused terminal sentinel may exceed MaxCol. */
   GetColWidthRange(column: number): ScCompressedArrayRangeData {
-    return this.mpColWidth.GetRangeData(column);
+    return (this.mpColWidth as ScCompressedArray).GetRangeData(column);
   }
   /** Delegates original table5.cxx hidden query to its real FilterData owner. @param column - Column. @param first - Optional span start. @param last - Optional span end. @returns Hidden. */
   ColHidden(column: number, first?: [number], last?: [number]): boolean {
@@ -443,25 +636,13 @@ export class ScTable {
     if (this.rDocument.ValidCol(column) && !this.ColHidden(column) !== show)
       this.SetColHidden(column, column, !show);
   }
-  /** Consumed native geometry-only CopyToTable width/flag/hidden path;no cells or patterns are copied. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param target - Real destination sheet. @returns Nothing. */
-  CopyToTable(
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-    target: ScTable,
-  ): void {
-    if (firstRow === 0 && lastRow === this.rDocument.MaxRow()) {
-      target.mpColWidth.CopyFrom(this.mpColWidth, firstCol, lastCol);
-      target.mpColFlags.CopyFrom(this.mpColFlags, firstCol, lastCol);
-      target.maFilterData.copyColHidden(this.maFilterData, firstCol, lastCol);
-    }
-    if (firstCol === 0 && lastCol === this.rDocument.MaxCol()) {
-      target.CopyRowHeight(this, firstRow, lastRow, 0);
-      target.pRowFlags.CopyFrom(this.pRowFlags, firstRow, lastRow);
-      target.maFilterData.copyRowHidden(this.maFilterData, firstRow, lastRow);
-      target.maFilterData.copyRowFiltered(this.maFilterData, firstRow, lastRow);
-    }
+  /** Original table2 copy on this same native sheet. @param args - Context,range,flags,destination,marks and original copy policies. @returns Nothing. */
+  CopyToTable(...args: Parameters<typeof table2.CopyToTable>): void {
+    table2.CopyToTable.apply(this, args);
+  }
+  /** Original conditional format transfer. @param args - Destination bounds,offset and source. @returns Nothing. */
+  CopyConditionalFormat(...args: Parameters<typeof table2.CopyConditionalFormat>): void {
+    table2.CopyConditionalFormat.apply(this, args);
   }
   /** Reads native per-sheet override or startup minimum; device-dependent global initialization remains separate. @returns Twips. */
   GetOptimalMinRowHeight(): number {
@@ -471,12 +652,9 @@ export class ScTable {
   SetOptimalMinRowHeight(height: number): void {
     this.mnOptimalMinRowHeight = height & 0xffff;
   }
-  /** Reads actual visible/raw row geometry from native segments. @param row - Row. @param hiddenAsZero - Original visibility default,true. @returns Twips or source invalid-row minimum. */
-  GetRowHeight(row: number, hiddenAsZero = true): number {
-    if (this.rDocument.ValidRow(row) && hiddenAsZero && this.RowHidden(row)) return 0;
-    return this.rDocument.ValidRow(row)
-      ? this.mpRowHeights.getValue(row)
-      : this.GetOptimalMinRowHeight();
+  /** Original scalar/range row-height overloads. @param first - First or scalar row. @param second - Hidden policy or last row. @param hidden - Range hidden policy. @returns Twips. */
+  GetRowHeight(first: number, second: boolean | number = true, hidden = true): number {
+    return table2.GetRowHeight.call(this, first, second, hidden);
   }
   /** Original independent row-hidden query. @param row - Row. @param first - Span output. @param last - Span output. @returns Hidden. */
   RowHidden(row: number, first?: [number], last?: [number]): boolean {
@@ -495,34 +673,36 @@ export class ScTable {
     this.SetRowHidden(first, last, !show);
     if (show) this.maFilterData.setRowFiltered(first, last, false);
   }
-  /** Original CopyRowHeight reads compressed raw heights,not hidden-as-zero queries. @param source - Source table. @param first - Destination start. @param last - Destination end. @param offset - Source row offset. @returns Nothing. */
+  /** Original CopyRowHeight requires actual source/destination height stores and reads raw heights,not hidden-as-zero queries. @param source - Source table. @param first - Destination start. @param last - Destination end. @param offset - Source row offset. @returns Nothing. */
   CopyRowHeight(source: ScTable, first: number, last: number, offset: number): void {
     for (let row = first; row <= last;) {
       const run: ScFlatUInt16RowRangeData = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
-      if (!source.mpRowHeights.getRangeData(row + offset, run)) return;
+      if (!(source.mpRowHeights as ScFlatUInt16RowSegments).getRangeData(row + offset, run)) return;
       const end = Math.min(last, run.mnRow2 - offset);
-      this.mpRowHeights.setValue(row, end, run.mnValue);
+      (this.mpRowHeights as ScFlatUInt16RowSegments).setValue(row, end, run.mnValue);
       row = end + 1;
     }
   }
-  /** Borrows real compressed geometry boundaries for valid rows. @param row - Valid row. @returns Native range. */
+  /** Borrows real compressed geometry boundaries for valid rows with allocated row information. @param row - Valid row. @returns Native range. */
   GetRowHeightRange(row: number): ScFlatUInt16RowRangeData {
     const data = { mnRow1: 0, mnRow2: 0, mnValue: 0 };
-    this.mpRowHeights.getRangeData(row, data);
+    (this.mpRowHeights as ScFlatUInt16RowSegments).getRangeData(row, data);
     return data;
   }
-  /** Reads genuine compressed row flag bounds. @param row - Row. @returns Flags and range. */
+  /** Reads genuine compressed row flag bounds;allocated row information is required. @param row - Row. @returns Flags and range. */
   GetRowFlagsRange(row: number): ReturnType<ScBitMaskCompressedArray["GetRangeData"]> {
-    return this.pRowFlags.GetRangeData(row);
+    return (this.pRowFlags as ScBitMaskCompressedArray).GetRangeData(row);
   }
   /** Stores geometry without device pixel comparison, as used by import. @param first - First row. @param last - Last row. @param height - UInt16 twips. @returns Nothing. */
   SetRowHeightOnly(first: number, last: number, height: number): void {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.mpRowHeights)
+      return;
     this.mpRowHeights.setValue(first, last, height & 0xffff || this.GetOptimalMinRowHeight());
   }
   /** Updates only the source manual-size bit. @param first - First row. @param last - Last row. @param manual - Flag. @returns Nothing. */
   SetManualHeight(first: number, last: number, manual: boolean): void {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.pRowFlags)
+      return;
     if (manual) this.pRowFlags.OrValue(first, last, CRFlags.ManualSize);
     else this.pRowFlags.AndValue(first, last, CRFlags.All & ~CRFlags.ManualSize);
   }
@@ -534,7 +714,8 @@ export class ScTable {
     ppty: number,
     api: boolean,
   ): boolean {
-    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return false;
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last) || !this.mpRowHeights)
+      return false;
     height = height & 0xffff || this.GetOptimalMinRowHeight();
     const pixels = Math.trunc(height * ppty);
     for (let row = first; row <= last;) {
@@ -552,7 +733,7 @@ export class ScTable {
     }
     return false;
   }
-  /** Calculates native standard attribute maxima without expanding row spans; unsupported device layout retains imported geometry. @param context - Shared across selected sheets. @param first - First row. @param last - Last row. @param api - Source UI uses true. @returns Whether heights changed. */
+  /** Calculates native standard attribute maxima with allocated row information;unsupported device layout retains imported geometry. @param context - Shared across selected sheets. @param first - First row. @param last - Last row. @param api - Source UI uses true. @returns Whether heights changed. */
   SetOptimalHeight(context: RowHeightContext, first: number, last: number, api: boolean): boolean {
     const patterns: { first: number; last: number; pattern: ScPatternAttr }[] = [];
     const start: [number] = [0],
@@ -583,7 +764,7 @@ export class ScTable {
       /** Mutates actual sheet geometry. @param startRow - First. @param endRow - Last. @param height - Twips. @param fromApi - Shrink policy. @returns Changed. */
       (startRow, endRow, height, fromApi) =>
         this.SetRowHeightRange(startRow, endRow, height, context.getPPTY(), fromApi),
-      this.pRowFlags,
+      this.pRowFlags as ScBitMaskCompressedArray,
       first,
       last,
       api,
@@ -619,10 +800,17 @@ export class ScTable {
     if (!this.rDocument.ValidCol(col) || col >= this.aCol.length) return;
     (this.aCol[col] as ScColumn).DeleteBroadcasters(position, first, last);
   }
-  /** Releases canonical pattern ownership on sheet removal. @returns Nothing. */
+  /** Releases native conditional-format and canonical pattern ownership on sheet teardown. @returns Nothing. */
   DisposeAttributes(): void {
+    this.mpCondFormatList?.Dispose();
     for (const col of this.aCol) col.DisposeAttributes();
     this.aDefaultColData.DisposeAttributes();
+  }
+  /** Releases represented members in native reverse declaration order after document-level conditional listeners are cleared. @returns Nothing. */
+  Dispose(): void {
+    this.aDefaultColData.DisposeAttributes();
+    this.mpCondFormatList?.Dispose();
+    for (const column of this.aCol) column.Dispose();
   }
   /** Reads actual native/default column attributes. @param col - Column. @param row - Row. @returns Pattern or null. */
   GetPattern(col: number, row: number): ScPatternAttr | null {

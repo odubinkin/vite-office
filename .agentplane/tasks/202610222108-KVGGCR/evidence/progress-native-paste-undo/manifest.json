@@ -1,0 +1,70 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native document UndoToDocument and content-only paste history verified;PasteFromClip/EnterBlock,attribute undo and task74 UI acceptance remain pending",
+  "sourceBaseline": "aaa0db8b9fce884e1d854c412e8fb18e1ba2d789",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "approvedScopePathCount": 297,
+  "conservativeAllPathsCount": 301,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 38,
+  "checks": {
+    "calc": "229files/990scenarios pass;unchanged thresholds,timeouts and exclusions",
+    "coverage": {
+      "lines": {
+        "total": 15650,
+        "covered": 15650,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17523,
+        "covered": 17523,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3020,
+        "covered": 3020,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10487,
+        "covered": 10487,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh production build then actual native copy,paste history,Undo/Redo and dependency recalculation in Chromium and DOM-free Worker1/1 pass",
+    "scopedProvenance": "11 actual source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor and diff pass;doctor retains existing hook warning"
+  },
+  "preserved": [
+    "Coordinate/range CopyToDocument and UndoToDocument retain native geometry defaults and distinct source/destination AutoCalc scopes,range clamping,coordinate assertions and tail sentinels (CALC282).",
+    "Actual marked deletion ends intersected groups,purges real broadcasters,deletes actual stores,restarts needed subscriptions and dirties surviving formula groups.",
+    "Native ScUndoPaste owns real lazy/prefilled Undo/Redo documents,original selected-sheet and whole-axis geometry rules,range broadcasts and native restoration order;actual Sfx history drives recalculation and fresh ODS reopen.",
+    "SingleColumnSpanSet.getRows replaces caller output without host spread argument limits;formula-only bounded ProcessFormula erases original stateless no-op functor."
+  ],
+  "explicitBoundaries": [
+    "Content-only ScUndoPaste admission remains explicit. EnterBlock passes ATTRIB as nUndoExtraFlags in upstream;native attribute deletion/restoration must be completed before connecting that call.",
+    "Cut RefUndoData,drawing/note/change tracking,Repeat and ScSimpleUndo physical view/painting/area-link services remain unrepresented;no dummy hooks or alternate model are introduced.",
+    "Task76 and74 remain open/unverified. Full all-application tests/fixes/required100coverage/final task closure/goal pause remain required;this Calc-only checkpoint does not trigger that stop.",
+    "Deleted liblangtag references and global final source/lint gates remain unwaived."
+  ],
+  "failuresAndRepairs": [
+    "Initial unified-signature lint,option visibility typing and DeleteSelection JSDoc failures were repaired without dummy getters or Repeat services.",
+    "First complete Calc attempt passed988/989 scenarios;legacy unsupported-style error substring compatibility was restored. Next989/989 passed with four uncovered lines/seven branches;real top-group/default-broadcast/dirty dependency scenarios closed every raw gap. No mock providers,coverage exclusions or threshold changes."
+  ]
+}

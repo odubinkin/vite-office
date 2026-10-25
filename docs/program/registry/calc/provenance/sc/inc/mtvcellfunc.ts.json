@@ -13,7 +13,9 @@
       "ProcessFormula"
     ],
     "preservedResponsibilities": [
-      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false."
+      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
+      "Task76 general-copy progress ports original CopyCellsFromClipHandler and CopyTextAttrsFromClipHandler with real typed source blocks,two content/metadata passes,independent native cursor values,context writeback and foreign string re-interning. ScColumn scalar/hinted SetValue/SetRawString/SetFormulaCell overloads retain native defaults,return contracts,broadcast controls and actual group/listener owners. Table2 CopyFromClip validates/clamps the destination and dispatches actual source columns;CONTENTS preserves destination patterns and geometry. ParseBlock now represents its actual container-event template and borrowed node fields;bounded ProcessFormula dispatches real formula pointers and separate non-formula spans. Original column/table/document SetDirtyFromClip,rectangular individual/area BroadcastCells and deferred BroadcastAction use existing bulk owners and actual subscriptions;cached formula results are dirtied only in completion. Matrix,foreign-pool formulas,number-format inheritance,full formatter/notes/edit/drawing services,group-compute cache invalidation and shell/UNO stream notifications remain unrepresented. Native general document/reference orchestration,paste undo/redo and EnterBlock/UI acceptance remain pending;this is not full task76 acceptance or full parity.",
+      "Original bounded formula-only ProcessFormula and the existing two-functor path retain real store/cursor bounds. Optional TypeScript last-argument syntax erases only the native stateless FuncElseNoOp template/overload distinction;the tuple admits explicit undefined like the optional function argument. No callback service or alternative store is installed."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -23,9 +25,25 @@
         {
           "path": "apps/office/src/sc/inc/mtvcellfunc.ts",
           "marker": "ProcessFormula"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
+          "marker": "general"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "undoes and redoes real pasted"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+          "marker": "restores actual boundary group"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/mtvcellfunc.hxx",
+          "marker": "ProcessFormula"
+        },
         {
           "path": "vendor/libreoffice-reference/sc/inc/mtvcellfunc.hxx",
           "marker": "ProcessFormula"

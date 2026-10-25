@@ -1,0 +1,235 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;copy-reference/compile prerequisite verified;final paste/Undo/EnterBlock acceptance pending",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 863,
+  "calcFiles": 216,
+  "coverage": {
+    "lines": {
+      "total": 14063,
+      "covered": 14063,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15708,
+      "covered": 15708,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2707,
+      "covered": 2707,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9558,
+      "covered": 9558,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "changedSharedCoverage": {
+    "lines": {
+      "total": 201,
+      "covered": 201,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 234,
+      "covered": 234,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 69,
+      "covered": 69,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 84,
+      "covered": 84,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "chromiumWorkerScenarios": 6,
+  "capturedSourceTestConfigHashes": 448,
+  "sourceHashesStable": true,
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed in this block",
+  "taskFootprint": "98/110 source/test/registry/probe paths",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png",
+    "apps/office/src/formula/inc/tokenarray.test.ts",
+    "apps/office/src/formula/source/core/api/token.array.ts",
+    "apps/office/src/sc/inc/columnset.ts",
+    "apps/office/src/sc/inc/refupdatecontext.ts",
+    "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/columnset.ts",
+    "apps/office/src/sc/source/core/data/documen3.ts",
+    "apps/office/src/sc/source/core/data/document.ts",
+    "apps/office/src/sc/source/core/data/formula-copy.test.ts",
+    "apps/office/src/sc/source/core/data/formulacell.ts",
+    "apps/office/src/sc/source/core/data/refupdatecontext.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table1.ts",
+    "apps/office/src/sc/source/core/tool/sharedformula.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/inc/columnset.ts.json",
+    "docs/program/registry/calc/provenance/sc/inc/refupdatecontext.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/columnset.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/refupdatecontext.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table1.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/sharedformula.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/columnset.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/refupdatecontext.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/columnset.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/refupdatecontext.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table1.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/sharedformula.ts.json",
+    "docs/program/registry/shared/provenance/formula/source/core/api/token.array.ts.json",
+    "docs/program/registry/shared/runtime/formula/source/core/api/token.array.ts.json"
+  ],
+  "rawSha256": "ac872f8e62a8344f72924da9f6eeadd6f50910ad43c5c9ef2fdc69bba1db38ae",
+  "checks": {
+    "coverage": {
+      "command": "npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=../../output/playwright/task76-reference-final-coverage",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-final.log",
+      "sha256": "c247496c35faa9adf77ae57ab488536f84961a14b7ab6e1823e69c0545f18b4d"
+    },
+    "shared-coverage": {
+      "command": "npx vitest run --config vitest.shared.config.ts src/formula/inc/tokenarray.test.ts --coverage --coverage.include=src/formula/source/core/api/token.array.ts --coverage.reportsDirectory=../../output/playwright/task76-reference-shared-final-coverage",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-shared-final.log",
+      "sha256": "a447af944a7edbb299edfedc3895510844fb6866af697c638290cceb01f2e9ec"
+    },
+    "build-app-types": {
+      "command": "npm run build",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-build2.log",
+      "sha256": "e246be722038b8444e215db1ac9c908fe475d9398902186914c40d8dff4ffe27"
+    },
+    "tools-types": {
+      "command": "npx tsc --noEmit -p tsconfig.tools.json",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-tools-types-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "lint": {
+      "command": "npx eslint apps/office/src/sc apps/office/src/formula/source/core/api/token.array.ts apps/office/src/formula/inc/tokenarray.test.ts apps/office/e2e/calc/clipboard-copy.spec.ts",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-lint2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check <changed source/test/E2E/docs paths>",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-format-final.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-docs2.log",
+      "sha256": "4e891b6b7433e24ff2c69b28854a71e42c0699c5b2de661100697a745689df00"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-size.log",
+      "sha256": "9ae88ef15a5142bcab59a217c6ff0aa35abb2cb6138268a9aacab13b701b35f4"
+    },
+    "boundaries": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-boundaries.log",
+      "sha256": "a663d4cfd1b48cad65396923b43ffea6c0e826875ad8aa47cbdc3c9e17fd632c"
+    },
+    "source-tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-provenance.log",
+      "sha256": "f026a859bdffa47c08315148a88284f49d920818c337ca240e91b403b436b606"
+    },
+    "calc-registry": {
+      "command": "npm run inventory:parity:calc",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-registry.log",
+      "sha256": "c65e02e4362276b8da99d2741c7b0a951593f8806ae9ed1cb5b2120a20ce85ee"
+    },
+    "shared-registry": {
+      "command": "npm run inventory:parity:shared",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-shared-registry.log",
+      "sha256": "a0f9a20cc736c043119c8d14623a367fef9bf0e8b7a998a4e1ace1a7145a9711"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "chromium-worker": {
+      "command": "npx playwright test e2e/calc/clipboard-copy.spec.ts e2e/calc/formula-pointing.spec.ts e2e/calc/cell-selection.spec.ts --config playwright.config.ts --project=calc",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-browser-final.log",
+      "sha256": "7ba831fa2791217e27abba851e6c446e4db5b8b7fa4a1f6a7b25a0de572f8bed"
+    },
+    "static": {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "output/playwright/task76-reference-doctor.log",
+      "sha256": "226ee45ed445fde6aa202baae56935df0e859988a1e4e036ad1070a1fbc6bb91"
+    }
+  }
+}

@@ -90,7 +90,7 @@ it("opens real Calc file dialogs from the shared menu and keyboard,then saves an
   fireEvent.click(screen.getByRole("menuitem", { name: "File" }));
   fireEvent.click(screen.getByRole("menuitem", { name: /Save As/ }));
   expect(screen.getByRole("dialog", { name: "Save As" })).toBeVisible();
-  expect(screen.getByRole("grid").parentElement).toHaveAttribute("inert");
+  expect(screen.getByRole("grid").closest("[inert]")).toHaveAttribute("inert");
   fireEvent.change(screen.getByRole("textbox", { name: "New copy name" }), {
     target: { value: "Named copy" },
   });

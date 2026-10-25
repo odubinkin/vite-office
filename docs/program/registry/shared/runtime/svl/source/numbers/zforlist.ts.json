@@ -1,0 +1,63 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.ts",
+        "apps/office/src/svl/source/numbers/zforlist.test.ts",
+        "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+        "vendor/libreoffice-reference/include/svl/nfengine.hxx",
+        "apps/office/src/sc/source/ui/view/paste-block.test.ts#fills relative formulas over a rectangle"
+      ],
+      "justification": "Task76 ports Original exact-index/default/currency-decimal/currency-integer/zero selection and actual empty Sequence assignment with native default-initialized NumberFormatCode and locale decimal separator. Default adjustment mutates original compound storage after caller COW,retains medium/long ordering and duplicate-medium flags CALC-272. Decimal projects only the consumed current-language field;optional LocaleData diagnostics are not represented. Full formatter constructor/table and document paste remain pending. Task76 adds the actual SvNFFormatData table owner,exact native key/type lookup,locale-block lookup and case-sensitive ordered same-language search. ImpInsertFormat consumes real scanner/ActLnge projections and generated NumberFormatCode values;it preserves native empty-code failure,duplicate-code/position disposal,default marking and owned comment assignment. Currency/prefix/other pattern services remain explicit unported admission boundaries. The General-only phase of ImpGenerateFormats uses the real XNumberFormatCode interface and source mapper,actual Sequence COW/default policy,scanner and compiled entries,then forces NUMBER/standard and overwrites the shared nThousand field with builtin limit100. It does not replace or claim the remaining builtin generator or a complete SvNumberFormatter service. Native object fields retain MaxCLOffset0,missing-currency sentinel,bNoZerofalse and empty format/default-key maps. Numeric sorting preserves consumed std::map traversal;physical STL tree destructor order is not represented and admitted entries have no destructor callbacks. CALC-273 documents the provably unreachable position-offset>=10000 guard after offset=position-position%10000 for all uint32 positions;observable source insertion results are preserved. Full language/formatter construction,remaining builtins,document paste/history and task74 remain pending. Task76 adds actual represented SvNFLanguageData ownership for initial/current languages,requested/loaded real Locale projections,cached decimal/alternate/group/date strings,International date-order default and the actual format scanner. The actual prepared XNumberFormatCode service field is borrowed instead of fabricating an XComponentContext/provider. Existing native ID/locale conversion and LocaleDataWrapper field bindings prepare actual resources. ChangeIntl preserves original no-op language check,initial language,stable string/scanner identity,current parse state and precision,with cached-field updates before scanner keyword changes. Full LanguageTag/LocaleDataWrapper/calendar/transliteration/input-number-scanner/color services,copy constructor and UNO service/reference ABI are not represented. No full SvNumberFormatter or remaining builtin generator is claimed. Actual General/NatNum0 formatter owner composes actual provider,language,scanner,parsed-table and Date owners through the source General-only initialization phase. Separate real scanner-provider and local generation-provider lifetimes are retained,including cleanup after an unported prefix admission failure. Original UNKNOWN-to-US initialization,precision2,year1950 input-field default,date evaluation/normalized format-null-date versus raw input-null-date fields,NoZerofalse,General numeric/string dispatch and owned destructor order are represented. No fake XComponentContext,formatter test peer or synthetic parsed entry is created. Component lookup binds directly to the actual native provider;UNO/reference ABI,global formatter registry/native mutexes and remaining builtin generation are not claimed. Nonzero format keys and other pattern/NatNum families are explicit unavailable boundaries,never fake General entries. Public entry references exclude mutation/destruction/private-key methods. Native zero suppression retains the prior color pointer (CALC277),while General string output copies input despite the contradictory header comment (CALC278). Full pool/document/interpreter/paste/history integration remains pending. Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImpGetFormatCodeIndex",
+        "ImpAdjustFormatCodeDefault",
+        "SvNFFormatData",
+        "generateStandardNumberFormat",
+        "SvNFLanguageData",
+        "SvNumberFormatter",
+        "SvNFEngine",
+        "IsCompatible"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFFormatData::ImpGetFormatCodeIndex",
+        "SvNFFormatData::ImpAdjustFormatCodeDefault",
+        "SvNFFormatData::SvNFFormatData",
+        "SvNFFormatData::GetEntry",
+        "SvNFFormatData::GetFormatEntry",
+        "SvNFFormatData::GetType",
+        "SvNFFormatData::ImpGetCLOffset",
+        "SvNFFormatData::ImpIsEntry",
+        "SvNFFormatData::ImpInsertFormat",
+        "SvNFFormatData::ImpGenerateFormats",
+        "SvNFLanguageData::SvNFLanguageData",
+        "SvNFLanguageData::ChangeIntl",
+        "SvNumberFormatter::SvNumberFormatter",
+        "SvNumberFormatter::~SvNumberFormatter",
+        "SvNFEngine::GetOutputString",
+        "SvNFEngine::ChangeNullDate",
+        "SvNumberFormatter::GetYear2000",
+        "SvNumberFormatter::SetYear2000",
+        "SvNumberFormatter::IsCompatible"
+      ]
+    }
+  }
+}

@@ -13,6 +13,19 @@ type CellPosition = ReturnType<CellStoreType["position"]>;
 /** Original static consumers borrow actual formula blocks rather than a copied cell index. */
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class -- Preserve the original static SharedFormulaUtil boundary.
 export class SharedFormulaUtil {
+  /** Original one-boundary join only accepts a formula with a formula immediately above in the same block. @param position - Actual store position. @returns Joined flag. */
+  static joinFormulaCellAbove(position: CellPosition): boolean {
+    const node = position.first.get();
+    if (node.type !== element_type_formula || position.second === 0) return false;
+    const data = node.data as base_element_block,
+      previous = formula_block.at(data, position.second - 1) as ScFormulaCell,
+      cell = formula_block.at(data, position.second) as ScFormulaCell;
+    return this.joinFormulaCells(
+      { first: position.first.copy(), second: position.second - 1 },
+      previous,
+      cell,
+    );
+  }
   /** Original template groups the nonempty range of initially unshared cells. @param begin - Borrowed begin pointer. @param end - Borrowed end pointer. @returns Nothing. */
   static groupFormulaCells(
     begin: delayed_delete_vector_iterator<ScFormulaCell | null>,

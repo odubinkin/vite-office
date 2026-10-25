@@ -5,11 +5,13 @@ import {
   StackVar,
   FormulaDoubleToken,
   FormulaStringToken,
+  FormulaStringOpToken,
   FormulaErrorToken,
 } from "../../../inc/token";
 import { FormulaError } from "../../../inc/errorcodes";
 import { OpCode } from "../../../inc/opcode";
-import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
 
 /** Original fixed UInt8 recalculation bits and aliases. */
 export const ScRecalcMode = {
@@ -182,6 +184,15 @@ export class FormulaTokenArray {
   /** Original shared-string token append. @param value - Shared value. @returns Added token or null. */
   AddString(value: SharedStringConstReference): FormulaToken | null {
     return this.Add(new FormulaStringToken(value));
+  }
+  /** Original malformed-source token append uses a non-interned SharedString value. @param value - Original Unicode source. @returns Added token or null. */
+  AddBad(value: OUStringConstReference): FormulaToken | null {
+    const string = new SharedString(value);
+    try {
+      return this.Add(new FormulaStringOpToken(OpCode.ocBad, string, SharedString.move));
+    } finally {
+      string.dispose();
+    }
   }
   /** Original error-token append. @param error - Error. @returns Added token or null. */
   AddError(error: FormulaError): FormulaToken | null {

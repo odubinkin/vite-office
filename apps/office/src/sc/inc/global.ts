@@ -40,15 +40,37 @@ export enum ScInputMode {
   SC_INPUT_TOP = 3,
 }
 
+/** Original formula/note clone flags from global.hxx. Only Default is consumed by this copy profile. */
+export enum ScCloneFlags {
+  Default = 0x0000,
+  StartListening = 0x0001,
+  NoMakeAbsExternal = 0x0002,
+  NamesToLocal = 0x0004,
+  AdjustCrossSheetRefs = 0x0008,
+}
+
 /** Consumed native attribute-copy flags; content/object flag operations remain separate. */
 export enum InsertDeleteFlags {
   NONE = 0x0000,
+  VALUE = 0x0001,
+  DATETIME = 0x0002,
   STRING = 0x0004,
-  EDITATTR = 0x0100,
-  NOCAPTIONS = 0x8000,
+  NOTE = 0x0008,
+  FORMULA = 0x0010,
   HARDATTR = 0x0020,
   STYLES = 0x0040,
+  OBJECTS = 0x0080,
+  EDITATTR = 0x0100,
+  ADDNOTES = 0x0400,
+  OUTLINE = 0x0800,
+  SPECIAL_BOOLEAN = 0x1000,
+  FORGETCAPTIONS = 0x2000,
+  SPARKLINES = 0x4000,
+  NOCAPTIONS = 0x8000,
   ATTRIB = 0x0060,
+  CONTENTS = 0x481f,
+  ALL = 0x49ff,
+  AUTOFILL = 0x4977,
 }
 
 /** Original standard row-height correction in twips. */
@@ -111,4 +133,23 @@ export enum HasAttrFlags {
   Rotate = 0x0400,
   NotOverlapped = 0x0800,
   RightOrCenter = 0x1000,
+}
+
+/** Original global.hxx paste arithmetic discriminator. */
+export enum ScPasteFunc {
+  NONE,
+  ADD,
+  SUB,
+  MUL,
+  DIV,
+}
+/** Original global.hxx insertion modes,including INS_NONE4. */
+export enum InsCellCmd {
+  INS_CELLSDOWN,
+  INS_CELLSRIGHT,
+  INS_INSROWS_BEFORE,
+  INS_INSCOLS_BEFORE,
+  INS_NONE,
+  INS_INSROWS_AFTER,
+  INS_INSCOLS_AFTER,
 }

@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "rtl-approx-arithmetic",
     "capabilityIds": [
-      "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f"
+      "CAP-a4a3caad-6757-4cc5-a8f1-997a7ccd4a2f",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,18 +20,25 @@
         "apps/office/src/sal/inc/rtl/math.ts",
         "apps/office/src/sal/rtl/approx.test.ts"
       ],
-      "justification": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed.",
+      "justification": "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed. Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence. Final76 registry audit:the header explicitly re-exports approxValue from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "approxAdd",
-        "approxSub"
+        "approxSub",
+        "round",
+        "approxFloor",
+        "approxCeil"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/rtl/math.hxx",
       "upstreamSymbols": [
         "approxAdd",
         "approxSub",
-        "approxEqual"
+        "approxEqual",
+        "round",
+        "approxFloor",
+        "approxCeil",
+        "approxValue"
       ]
     }
   }

@@ -1,0 +1,142 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native formula format metadata and pattern caches verified;document paste/history/result-format services incomplete",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 884,
+  "calcFiles": 219,
+  "calcCoverage": {
+    "lines": {
+      "total": 14206,
+      "covered": 14206,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15871,
+      "covered": 15871,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2733,
+      "covered": 2733,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9673,
+      "covered": 9673,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "changedSharedCoverage": {
+    "path": "apps/office/src/svl/inc/zforlist.ts",
+    "summary": {
+      "lines": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "scenarios": 2
+  },
+  "productionAndConfigHashesStable": true,
+  "capturedFinalHashes": 450,
+  "postCalcTestChanges": "Only clipboard-reference.test.ts JSDoc repair and adoption of an already-asserted copied cell for document-owned cleanup;final focused19/19 and app types/lint/format pass. Production and configs unchanged since complete Calc coverage run.",
+  "taskFootprint": "110/110 cumulative source/test/registry/probe paths;further new paths require scope approval",
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed here",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+    "apps/office/src/sc/source/core/data/column.ts",
+    "apps/office/src/sc/source/core/data/column3.ts",
+    "apps/office/src/sc/source/core/data/formulacell.ts",
+    "apps/office/src/sc/source/core/data/patattr.ts",
+    "apps/office/src/svl/inc/zforlist.ts",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/patattr.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/column3.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/patattr.ts.json",
+    "docs/program/registry/shared/provenance/svl/inc/zforlist.ts.json",
+    "docs/program/registry/shared/runtime/svl/inc/zforlist.ts.json"
+  ],
+  "rawSha256": "713c001c729f72252afd6ab31edc0dc35eb2edadcd20506e1401c00e3e3a8650",
+  "logHashes": {
+    "task76-format-calc.log": "7f19faed6d332af2838b69e9cf36b7651eef2e534db949042788f0b9c14519b0",
+    "task76-format-changed-provenance2.log": "dcc3547e5bf370cb73541e12f3cdf8ca338f19a934e9056f41d2f5c3e2c30fad",
+    "task76-format-tools-types.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "task76-format-test-prettier.log": "cb2d47938137845b60858485f5e93d205daaf609de6b6da97c147c41043880ba",
+    "task76-format-registry-prettier.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "task76-format-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "task76-format-lint2.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "task76-format-resources.log": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38",
+    "task76-format-size.log": "53c44e9152acd2ee24a6d564af7499f14254c510b3d89e81629b8de8db66cc7f",
+    "task76-format-types.log": "1cc4503df7597b9841b77c0e0cf03e56c072c4ac3e92b210ac74b4cb66e82ae7",
+    "task76-format-registry-final-format.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "task76-format-focused.log": "8ee192d8909b42a53702e730bf4fbb442fa0ccd85999f7bdabe8c096fec7f3db",
+    "task76-format-browser.log": "ee148ad44a780f0ed82fa8cb45f87ce34e4c7f0c26388d741686e7e061ea2862",
+    "task76-format-provenance.log": "66736fb88a437aca8e7dfd30e1281886fa9d1090545025f60face37d14b4dbe4",
+    "task76-format-types2.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "task76-format-types3.log": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2",
+    "task76-format-doctor.log": "e3689324ef09b6e232b4e62d04c0b643a050d7562afabc23064bd8b569f284de",
+    "task76-format-changed-provenance.log": "dcc3547e5bf370cb73541e12f3cdf8ca338f19a934e9056f41d2f5c3e2c30fad",
+    "task76-format-docs2.log": "5182abc7a0907d2025b9855b5047b35dbd80a76511e71affd50d5c9108291c73",
+    "task76-format-build.log": "c8a9bc6ba1f8c6c3838be7853514e4840372bc57ae60b78a1b9ea72448e47b69",
+    "task76-format-lint.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "task76-format-format2.log": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+    "task76-format-routing.log": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9",
+    "task76-format-shared.log": "cc6adacdbbef25141e1764169872f530679668490375e519f373e8b9dc69f61d",
+    "task76-format-registry.log": "3bdcac49f8328872c01c5e8c15a8d9c2e36d64f65577cbde4cbaf140994acd58",
+    "task76-format-static.log": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0",
+    "task76-format-tree.log": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497",
+    "task76-format-probe-prettier.log": "2b6206530075aa5d179761bc6d194322e310e646b0c194a6f66304dc9598dfe2",
+    "task76-format-focused2.log": "f940a043b721f2cff0bc373129d72e73371e54cd6ee6e176a792bb48a5f756eb",
+    "task76-format-docs.log": "89522f0a9fa6b62acd50b7ef8f8e94d287fecd9aa4409a475d51ad77f878867e",
+    "task76-format-boundaries.log": "ba409222a54d81de519b9ed143951bb5d9883c2c72162953d8733a9e84893c6d"
+  },
+  "limits": [
+    "Full provenance fails on deleted ICU reference;full Calc registry fails on deleted mdds reference.",
+    "Canonical changed-five-module provenance passes against retained pinned LO source;not a substitute for full gates.",
+    "Context number-format language conversion,conditional format/result-format interpretation and hard-format application remain unported.",
+    "Native format request stays represented without claiming completion of the unported result-format interpreter phase.",
+    "No network or restoration of deleted research references.",
+    "Human baseline .DS_Store and output/.DS_Store excluded and preserved."
+  ]
+}

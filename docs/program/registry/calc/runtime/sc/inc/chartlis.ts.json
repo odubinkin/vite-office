@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/inc/chartlis.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+        "apps/office/e2e/calc/clipboard-copy.spec.ts",
+        "apps/office/src/sc/source/core/tool/chart-collection.test.ts"
+      ],
+      "justification": "Native ScChartListener range-list/token-vector constructors retain actual FormulaToken identities,copy the by-value vector,own the name value and preserve false used/dirty defaults. GetRangeList allocates fresh ranges at the default origin;SetRangeList replaces tokens without changing flags. Equality retains document/name/flag/emptiness/token-pointer comparisons,including unequal independently generated equal ranges. Ordinary GC is the existing intrusive-token reference adaptation. Live chart notification,external links,UNO,chart loading and Idle collection scheduling remain unported;this owner is not installed as a complete chart service. Exports the represented original chart listener,collection and hidden-range boundaries plus type-only consumed UNO event/callback fields. No drawing service or fake chart backend is supplied. Final76 registry audit:the header explicitly re-exports ScChartHiddenRangeListener,ScChartListener,ScChartListenerCollection from its real source owner rather than declaring those symbols locally. localSymbols lists only declarations physically owned here;the original upstream symbols,source-owner evidence,status and responsibility remain unchanged. The semantic analyzer and its failure criteria are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/inc/chartlis.hxx",
+      "upstreamSymbols": [
+        "ScChartListener"
+      ]
+    }
+  }
+}

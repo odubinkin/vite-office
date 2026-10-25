@@ -106,6 +106,7 @@ it("routes scalar TYPE arrows to cell movement while modifiers and TABLE retain 
   fireEvent.keyDown(input, { key: "ArrowDown" });
   expect(c.Address()).toBe("C3");
   expect(c.mode).toBe(ScInputMode.SC_INPUT_TYPE);
+  expect(c.Input()).toBe("=UNPORTED(A1)C4");
   for (const modifier of ["ctrlKey", "metaKey", "altKey"] as const) {
     fireEvent.keyDown(input, { key: "ArrowLeft", [modifier]: true });
     fireEvent.keyDown(input, { key: "F2", [modifier]: true });

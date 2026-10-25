@@ -1,4 +1,11 @@
 /** @fileoverview Scalar/local-reference column storage and native single-cell broadcasters. Rich text,notes,area/group services remain unsupported. */
+import {
+  SetElementsToEmpty1,
+  ParseBlock,
+  ProcessBlock,
+  type CellStoreNode,
+} from "../../../inc/mtvfunctions";
+import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
 import * as column3 from "./column3";
 import * as column4 from "./column4";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
@@ -7,6 +14,7 @@ import {
   SingleCellListening,
   type StartListeningType,
 } from "../../../inc/types";
+import type { ScMF } from "../../../inc/attrib";
 import { HasAttrFlags } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
@@ -19,7 +27,6 @@ import {
   element_type_empty,
   CellTextAttrStoreType,
   string_element_callbacks,
-  string_value_type,
   formula_element_callbacks,
   element_type_formula,
   formula_block,
@@ -27,7 +34,7 @@ import {
 } from "../../../inc/mtvelements";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks.ts";
 import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import type { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -53,7 +60,7 @@ import { ScAddress } from "../../../inc/address";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import {
   element_type_numeric,
   element_type_string,
@@ -64,8 +71,10 @@ import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScItemPoolCache } from "../../../inc/poolcach";
+import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
+import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { CopyToDocContext } from "../../../inc/clipcontext";
 import { ScMultiSelIter } from "../../../inc/markmulti";
-
 import { ScAttrArray } from "./attarray";
 import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
 /** Attribute portion of native ScColumnData, also used for the real default column. */
@@ -145,6 +154,10 @@ export class ScColumnData {
   GetPattern(row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPattern(row);
   }
+  /** Original column.hxx number-format forwarding uses this column's actual canonical pattern. @param context - Actual interpreter context. @param row - Valid row. @returns Effective native format key. */
+  GetNumberFormat(context: ScInterpreterContext, row: number): number {
+    return (this.pAttrArray.GetPattern(row) as ScPatternAttr).GetNumberFormat(context);
+  }
   /** Borrows a complete attribute run. @param start - First output. @param end - Last output. @param row - Query row. @returns Pattern or null. */
   GetPatternRange(start: [number], end: [number], row: number): ScPatternAttr | null {
     return this.pAttrArray.GetPatternRange(start, end, row);
@@ -171,6 +184,162 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original format compatibility application on real attribute runs. @param args - Range,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof column3.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    column3.ApplyPatternIfNumberformatIncompatible.apply(this, args);
+  }
+  /** Original inline column flag addition. @param first - First row. @param last - Last row. @param flags - Added flags. @returns Changed. */
+  ApplyFlags(first: number, last: number, flags: ScMF): boolean {
+    return this.pAttrArray.ApplyFlags(first, last, flags);
+  }
+  /** Original inline column flag removal. @param first - First row. @param last - Last row. @param flags - Removed flags. @returns Changed. */
+  RemoveFlags(first: number, last: number, flags: ScMF): boolean {
+    return this.pAttrArray.RemoveFlags(first, last, flags);
+  }
+  /** Original column.hxx inline forwards to the actual attribute runs. @param row - Queried row. @returns Whether the cell is a merged anchor. */
+  IsMerged(row: number): boolean {
+    return this.pAttrArray.IsMerged(row);
+  }
+  /** Original column.cxx Undo copies formulas outside the edited rows and the requested flags within them. @param context - Actual destination context. @param first - First edited row. @param last - Last edited row. @param flags - Edited payload. @param marked - Original mark argument. @param target - Destination column. @returns Nothing. */
+  UndoToColumn(
+    context: CopyToDocContext,
+    first: number,
+    last: number,
+    flags: InsertDeleteFlags,
+    marked: boolean,
+    target: ScColumn,
+  ): void {
+    if (first > 0)
+      this.CopyToColumn(context, 0, first - 1, InsertDeleteFlags.FORMULA, false, target);
+    this.CopyToColumn(context, first, last, flags, marked, target);
+    if (last < this.GetDoc().MaxRow())
+      this.CopyToColumn(
+        context,
+        last + 1,
+        this.GetDoc().MaxRow(),
+        InsertDeleteFlags.FORMULA,
+        false,
+        target,
+      );
+  }
+  /** Original inline conditional-index removal. @param first - First row. @param last - Last row. @param index - Key,or zero for all. @returns Nothing. */
+  RemoveCondFormat(first: number, last: number, index: number): void {
+    this.pAttrArray.RemoveCondFormat(first, last, index);
+  }
+  /** Original column.hxx conditional-index forwarding. @param first - First row. @param last - Last row. @param index - Format key. @returns Nothing. */
+  AddCondFormat(first: number, last: number, index: number): void {
+    this.pAttrArray.AddCondFormat(first, last, index);
+  }
+  /** Original reference-update dispatch skips empty and clipboard/undo columns. @param context - Native operation. @param undo - Optional native undo document. @returns Updated flag. */
+  UpdateReference(context: RefUpdateContext, undo: ScDocument | null = null): boolean {
+    if (this.IsEmptyData() || this.GetDoc().IsClipOrUndo()) return false;
+    if (context.meMode !== UpdateRefMode.URM_COPY)
+      throw new Error("Non-copy column reference updates are not implemented");
+    return this.UpdateReferenceOnCopy(context, undo);
+  }
+  /** Original copy traversal updates real formulas then rejoins both previously split boundaries. @param context - Native copy operation. @param undo - Undo owner. @returns Native accumulated update flag. */
+  private UpdateReferenceOnCopy(context: RefUpdateContext, undo: ScDocument | null): boolean {
+    const handler = new UpdateRefOnCopy(context, undo),
+      block = context.getBlockPosition(this.nTab, this.nCol),
+      first = context.maRange.aStart.Row(),
+      last = context.maRange.aEnd.Row();
+    let position = block
+      ? this.maCells.position(
+          block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>,
+          first,
+        )
+      : this.maCells.position(first);
+    ProcessBlock(position.first, this.maCells, handler, first, last);
+    SharedFormulaUtil.joinFormulaCellAbove(position);
+    if (last < this.GetDoc().MaxRow()) {
+      position = this.maCells.position(position.first, last + 1);
+      SharedFormulaUtil.joinFormulaCellAbove(position);
+    }
+    return handler.isUpdated();
+  }
+  /** Original deferred clipboard dirty phase separates formula dirtiness from scalar broadcast spans. @param first - First row. @param last - Last row. @param spans - Deferred changed spans. @returns Nothing. */
+  SetDirtyFromClip(first: number, last: number, spans: ColumnSpanSet): void {
+    const old = this.rDocument.GetAutoCalc();
+    this.rDocument.SetAutoCalc(false);
+    try {
+      const action = new SetDirtyOnRangeHandler(this);
+      ProcessFormula(
+        this.maCells.begin(),
+        this.maCells,
+        first,
+        last,
+        /** Original formula operator. @param row - Native row. @param cell - Formula. @returns Nothing. */ (
+          row,
+          cell,
+        ) => {
+          void row;
+          cell.SetDirty();
+        },
+        /** Original non-formula operator. @param type - Store kind. @param row - First row. @param length - Count. @returns Nothing. */ (
+          type,
+          row,
+          length,
+        ) => action.other(type, row, length),
+      );
+      action.fillBroadcastSpans(spans);
+    } finally {
+      this.rDocument.SetAutoCalc(old);
+    }
+  }
+  /** Original sparse broadcaster walk reuses one mutable native hint across the actual nonempty broadcaster blocks. @param first - First row. @param last - Last row. @param id - Hint ID. @returns Whether delivered. */
+  BroadcastBroadcasters(first: number, last: number, id: SfxHintId): boolean {
+    const hint = new ScHint(id, new ScAddress(this.nCol, 0, this.nTab));
+    let delivered = false;
+    ParseBlock(
+      this.maBroadcasters.cbegin(),
+      this.maBroadcasters,
+      {
+        /** Original broadcaster template only visits actual stored listeners. @param node - Actual block. @param offset - First element. @param length - Count. @returns Nothing. */
+        call(node, offset, length) {
+          if (node.type !== element_type_broadcaster) return;
+          for (let index = 0; index < length; ++index) {
+            hint.SetAddressRow(node.position + offset + index);
+            (
+              broadcaster_block.at(
+                node.data as base_element_block,
+                offset + index,
+              ) as SvtBroadcaster<SfxHint>
+            ).Broadcast(hint);
+            delivered = true;
+          }
+        },
+      },
+      first,
+      last,
+    );
+    return delivered;
+  }
+  /** Original mutable metadata-store borrow. @returns Actual native store. */
+  GetCellAttrStore(): CellTextAttrStoreType {
+    return this.maCellTextAttrs;
+  }
+  /** Original default-content general clipboard copy on this actual column. @param args - Native arguments. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof column3.CopyFromClip>): void {
+    column3.CopyFromClip.apply(this, args);
+  }
+  /** Original pre-paste deletion forwards actual context/source/deferred spans. @param args - Native arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof column4.DeleteBeforeCopyFromClip>): void {
+    column4.DeleteBeforeCopyFromClip.apply(this, args);
+  }
+  /** Original cached typed-store deletion. @param args - Native deletion arguments. @returns Compact deletion result. */
+  DeleteCells(...args: Parameters<typeof column3.DeleteCells>): column3.DeleteCellsResult {
+    return column3.DeleteCells.apply(this, args);
+  }
+  /** Original column4 single-cell row repetition. @param args - Context,row bounds and source offset. @returns Nothing. */
+  CopyOneCellFromClip(...args: Parameters<typeof column4.CopyOneCellFromClip>): void {
+    column4.CopyOneCellFromClip.apply(this, args);
+  }
+  /** Original span-clone routing inserts native code/group owners into typed storage. @param args - Source,metadata,spans and optional cursor. @returns Nothing. */
+  CloneFormulaCell(...args: Parameters<typeof column4.CloneFormulaCell>): void {
+    column4.CloneFormulaCell.apply(this, args);
+  }
   /** Original formula-block count query from column4.cxx. @returns Formulas present. */
   HasFormulaCell(): boolean {
     return this.mnBlkCountFormula > 0;
@@ -218,21 +387,34 @@ export class ScColumn extends ScColumnData {
         formula_block.at(data, position.second + 1) as ScFormulaCell,
       );
   }
-  /** Original affected upper/lower spans restart using one actual shared cursor set. Delayed-start batching is outside this normal immediate-edit profile. @param rows - Zero,two or four inclusive endpoints. @returns Nothing. */
+  /** Original affected upper/lower spans restart using one actual shared cursor set. Actual native delay admission batches adjacent surviving spans. @param rows - Zero,two or four inclusive endpoints. @returns Nothing. */
   StartListeningUnshared(rows: readonly number[]): void {
     if (!rows.length || this.rDocument.IsDelayedFormulaGrouping()) return;
     const positions = new ColumnBlockPositionSet(this.rDocument),
       start = new StartListeningContext(this.rDocument, positions),
       end = new EndListeningContext(this.rDocument, positions);
-    this.StartListeningFormulaCells(start, end, rows[0] as number, rows[1] as number);
-    if (rows.length >= 4)
+    if (
+      !this.rDocument.CanDelayStartListeningFormulaCells(this, rows[0] as number, rows[1] as number)
+    )
+      this.StartListeningFormulaCells(start, end, rows[0] as number, rows[1] as number);
+    if (
+      rows.length >= 4 &&
+      !this.rDocument.CanDelayStartListeningFormulaCells(this, rows[2] as number, rows[3] as number)
+    )
       this.StartListeningFormulaCells(start, end, rows[2] as number, rows[3] as number);
   }
   /** Original whole-column grouping functor on actual storage. @param positions - Optional changed-group positions. @returns Nothing. */
   RegroupFormulaCells(positions: ScAddress[] | null = null): void {
     column3.RegroupFormulaCells.call(this, positions);
   }
-
+  /** Original const metadata lookup borrows a real store element or returns null for an empty block. @param row - Valid row. @returns Metadata or null. */
+  GetCellTextAttr(row: number): CellTextAttr | null {
+    const position = this.maCellTextAttrs.cposition(row),
+      block = position.first.get();
+    return block.type === element_type_celltextattr
+      ? celltextattr_block.at(block.data as base_element_block, position.second)
+      : null;
+  }
   /** Original cached script getter;UNKNOWN is retained until a real classifier writes metadata. @param row - Row. @returns Cached flags or NONE for absent metadata. */
   GetScriptType(row: number): SvtScriptType {
     if (
@@ -252,83 +434,64 @@ export class ScColumn extends ScColumnData {
     if (block.type !== element_type_celltextattr) return;
     celltextattr_block.at(block.data as base_element_block, position.second).mnScriptType = type;
   }
-
   /** Original column.cxx cursor cache owns the old pattern until its canonical replacement is assigned. @param row - Native row. @param pattern - Borrowed delta. @returns Nothing. */
   ApplyPattern(row: number, pattern: ScPatternAttr): void {
-    const cache = new ScItemPoolCache(
-        this.rDocument.getCellAttributeHelper(),
-        pattern.GetItemSet(),
-      ),
-      old = new CellAttributeHolder(this.pAttrArray.GetPattern(row));
-    try {
-      const next = cache.ApplyTo(old);
-      if (!CellAttributeHolder.areSame(next, old)) this.pAttrArray.SetPattern(row, next);
-    } finally {
-      old.Dispose();
-      cache.Dispose();
-    }
+    column3.ApplyPattern.call(this, row, pattern);
   }
   /** Original column.hxx cursor pattern assignment. @param row - Native row. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(row: number, holder: CellAttributeHolder): void {
     this.pAttrArray.SetPattern(row, holder);
   }
 
-  /** Consumed unmarked CopyToColumn STRING/CopyByCloneHandler string-block path;native typed-store writes and text metadata avoid introducing setter broadcasts. Attribute copying remains with the existing document run-copy owner. @param first - First row. @param last - Last row. @param target - Actual target column. @returns Nothing. */
-  CopyToColumn(first: number, last: number, target: ScColumn): void {
-    const end = this.maCells.cend();
-    for (
-      const position = this.maCells.cposition(first).first;
-      !position.equals(end);
-      position.increment()
-    ) {
-      const block = position.get();
-      if (block.position > last) break;
-      if (block.type !== element_type_string) continue;
-      for (
-        let row = Math.max(first, block.position);
-        row <= Math.min(last, block.position + block.size - 1);
-        row++
-      ) {
-        const string = this.GetSharedString(row);
-        try {
-          const rows = target.DetachFormulaCell(row);
-          if (string.isEmpty()) {
-            target.maCells.set_empty(row, row);
-            target.maCellTextAttrs.set_empty(row, row);
-          } else {
-            const copy =
-              this.rDocument.GetPool() === target.rDocument.GetPool()
-                ? new SharedString(string)
-                : target.rDocument.GetSharedStringPool().intern(string.getString());
-            try {
-              target.maCells.set(row, copy, string_element_callbacks);
-              target.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
-            } finally {
-              copy.dispose();
-            }
-          }
-          target.StartListeningUnshared(rows);
-        } finally {
-          string.dispose();
-        }
-      }
-    }
+  /** Original destructor binding on the actual native column. @returns Nothing. */
+  Dispose(): void {
+    column3.Dispose.call(this);
   }
-  /** Consumed native column3.cxx attribute-only deletion;unrepresented content/style deletion is rejected before mutation. Plain cells have no EditEngine attributes to strip. @param first - First row. @param last - Last row. @param flags - HARDATTR/EDITATTR and optional internal NOCAPTIONS. @returns Nothing. */
-  DeleteArea(first: number, last: number, flags: InsertDeleteFlags): void {
-    if (
-      flags &
-      ~(InsertDeleteFlags.HARDATTR | InsertDeleteFlags.EDITATTR | InsertDeleteFlags.NOCAPTIONS)
-    )
-      throw new Error("Only native hard-attribute deletion is implemented");
-    if (flags & InsertDeleteFlags.HARDATTR) this.pAttrArray.DeleteHardAttr(first, last);
+  /** Existing STRING call binds the same native context and handler. @param first - First row. @param last - Last row. @param target - Actual destination. @returns Nothing. */
+  CopyToColumn(first: number, last: number, target: ScColumn): void;
+  /** Original clone-copy signature with native defaults. @param args - Context,bounds,flags,marks,destination and native clone policy. @returns Nothing. */
+  CopyToColumn(...args: Parameters<typeof column3.CopyToColumn>): void;
+  /** Binds both consumed forms to one native handler and store graph. @param args - Original arguments or existing STRING binding. @returns Nothing. */
+  CopyToColumn(
+    ...args: [number, number, ScColumn] | Parameters<typeof column3.CopyToColumn>
+  ): void {
+    if (typeof args[0] === "number") {
+      const target = args[2] as ScColumn;
+      column3.CopyToColumn.call(
+        this,
+        new CopyToDocContext(target.GetDoc()),
+        args[0],
+        args[1] as number,
+        InsertDeleteFlags.STRING,
+        false,
+        target,
+      );
+    } else column3.CopyToColumn.apply(this, args as Parameters<typeof column3.CopyToColumn>);
   }
-  /** Original DeleteSelection visits only actual multi-mark row spans for this allocated column. @param flags - Consumed deletion flags. @param marks - Native marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
+  /** Original single-item pattern assignment. @param args - Row and actual item. @returns Nothing. */
+  ApplyAttr(...args: Parameters<typeof column3.ApplyAttr>): void {
+    column3.ApplyAttr.apply(this, args);
+  }
+  /** Original column matrix-boundary query for admitted ordinary cells. @param args - Row bounds,edge mask and matrix policy. @returns Actual native edge flags. */
+  GetBlockMatrixEdges(
+    ...args: Parameters<typeof column3.GetBlockMatrixEdges>
+  ): import("../../../inc/types").MatrixEdge {
+    return column3.GetBlockMatrixEdges.apply(this, args);
+  }
+  /** Original whole-group teardown with optional native row outputs. @param args - Original context,bounds and outputs. @returns Nothing. */
+  EndListeningFormulaCells(...args: Parameters<typeof column4.EndListeningFormulaCells>): void {
+    column4.EndListeningFormulaCells.apply(this, args);
+  }
+  /** Original column3 DeleteArea consumes actual cell and attribute stores. @param args - Native rows,flags,broadcast defaulttrue and optional span collector. @returns Nothing. */
+  DeleteArea(...args: Parameters<typeof column3.DeleteArea>): void {
+    column3.DeleteArea.apply(this, args);
+  }
+  /** Original multi-mark deletion preserves its broadcast default and native row traversal. @param flags - Native deletion flags. @param marks - Actual marks. @param broadcast - Original defaulttrue. @returns Nothing. */
+  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData, broadcast = true): void {
     if (marks.IsMultiMarked()) {
       const iterator = new ScMultiSelIter(marks.GetMultiSelData(), this.nCol);
       for (let result = iterator.Next(0, 0); result[0]; result = iterator.Next(0, 0))
-        this.DeleteArea(result[1], result[2], flags);
+        this.DeleteArea(result[1], result[2], flags, broadcast);
     }
   }
   /** Original disjoint row-span traversal over native multi-selection data. @param state - Selection accumulator. @param marks - Actual marks. @param deep - Include inherited values. @returns Nothing. */
@@ -383,6 +546,7 @@ export class ScColumn extends ScColumnData {
   /** Native friend-visible logical counters used by CellStoreEvent; no lifetime accounting. */
   mnBlkCountFormula = 0;
   mnBlkCountCellNotes = 0;
+  private mbEmptyBroadcastersPending = false;
   private readonly maBroadcasters: BroadcasterStoreType;
   private readonly maCells: CellStoreType;
   private readonly maCellTextAttrs: CellTextAttrStoreType;
@@ -461,31 +625,69 @@ export class ScColumn extends ScColumnData {
   GetDoc(): ScDocument {
     return this.rDocument;
   }
-  /** Writes numeric cell content and invalidates its text measurement metadata. @param row - Row. @param value - Number. @returns Nothing. */
-  SetValue(row: number, value: number): void {
-    if (!this.rDocument.ValidRow(row)) return;
-    const rows = this.DetachFormulaCell(row);
-    this.maCells.set(row, value, double_element_callbacks);
-    this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
-    this.StartListeningUnshared(rows);
-    this.BroadcastNewCell(row);
+  /** Original numeric insertion without a position hint. @param row - Row. @param value - Number. @returns Nothing. */
+  SetValue(row: number, value: number): void;
+  /** Original cached numeric insertion with the native broadcast default. @param block - Actual cursors. @param row - Row. @param value - Number. @param broadcast - Broadcast flag. @returns Nothing. */
+  SetValue(block: ColumnBlockPosition, row: number, value: number, broadcast?: boolean): void;
+  /** Binds original scalar/hinted overloads to the same actual stores. @param first - Row or cursors. @param second - Value or row. @param third - Hinted value. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetValue(
+    first: number | ColumnBlockPosition,
+    second: number,
+    third?: number,
+    broadcast = true,
+  ): void {
+    column3.SetValue.call(this, first, second, third, broadcast);
   }
-  /** Stores literal text using the document's shared pool,without number or formula recognition. @param row - Row. @param value - Unicode text or already interned string. @returns Nothing. */
-  SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void {
+  /** Original literal Unicode/shared-string insertion. @param row - Row. @param value - Literal text. @returns Nothing. */
+  SetRawString(row: number, value: OUStringConstReference | SharedStringConstReference): void;
+  /** Original cached shared-string insertion. @param block - Actual cursors. @param row - Row. @param value - Shared text. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetRawString(
+    block: ColumnBlockPosition,
+    row: number,
+    value: SharedStringConstReference,
+    broadcast?: boolean,
+  ): void;
+  /** Binds original string overloads to actual shared storage and deferred listeners. @param first - Row or cursors. @param second - Text or row. @param third - Hinted text. @param broadcast - Native broadcast default. @returns Nothing. */
+  SetRawString(
+    first: number | ColumnBlockPosition,
+    second: number | OUStringConstReference | SharedStringConstReference,
+    third?: SharedStringConstReference,
+    broadcast = true,
+  ): void {
+    const block = first instanceof ColumnBlockPosition ? first : null,
+      row = block ? (second as number) : (first as number),
+      value = block
+        ? (third as SharedStringConstReference)
+        : (second as OUStringConstReference | SharedStringConstReference);
     if (!this.rDocument.ValidRow(row)) return;
     const shared =
-      "getData" in value
-        ? new SharedString(value)
-        : this.rDocument.GetSharedStringPool().intern(value);
-    const rows = this.DetachFormulaCell(row);
+        "getData" in value
+          ? new SharedString(value)
+          : this.rDocument.GetSharedStringPool().intern(value),
+      rows = this.DetachFormulaCell(row);
     try {
-      this.maCells.set(row, shared, string_element_callbacks);
-      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+      if (block) {
+        block.miCellPos = this.maCells.set(
+          block.miCellPos as ReturnType<CellStoreType["begin"]>,
+          row,
+          shared,
+          string_element_callbacks,
+        );
+        block.miCellTextAttrPos = this.maCellTextAttrs.set(
+          block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+          row,
+          new CellTextAttr(),
+          celltextattr_element_callbacks,
+        );
+      } else {
+        this.maCells.set(row, shared, string_element_callbacks);
+        this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+      }
     } finally {
       shared.dispose();
     }
     this.StartListeningUnshared(rows);
-    this.BroadcastNewCell(row);
+    if (broadcast) this.BroadcastNewCell(row);
   }
   /** Compiles and stores a supported formula in the actual typed block store. @param row - Row. @param formula - Source. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(row: number, formula: OUStringConstReference, grammar: Grammar): void {
@@ -498,17 +700,60 @@ export class ScColumn extends ScColumnData {
     );
     this.SetFormulaCell(row, cell);
   }
-  /** Adopts an already compiled native formula owner without reparsing its input text. The cell position/document must match this column and row. @param row - Target row. @param cell - Compiled owner. @param listening - Original column listening mode. @returns Adopted cell or null for invalid row. */
+  /** Adopts an already compiled native formula owner without reparsing its input text. The cell position/document must match this column and row. @param row - Target row. @param cell - Compiled owner. @param listening - Original column listening mode. @param inheritNumFormatIfNeeded - Native default true. @returns Adopted cell or null for invalid row. */
   SetFormulaCell(
     row: number,
     cell: ScFormulaCell,
-    listening: StartListeningType = SingleCellListening,
-  ): ScFormulaCell | null {
-    if (!this.rDocument.ValidRow(row)) return null;
+    listening?: StartListeningType,
+    inheritNumFormatIfNeeded?: boolean,
+  ): ScFormulaCell | null;
+  /** Original hinted formula adoption returns void and inherits a requested general format. @param block - Cached cursors. @param row - Row. @param cell - Owned formula. @param listening - Native listening default. @param inheritNumFormatIfNeeded - Native default true. @returns Nothing. */
+  SetFormulaCell(
+    block: ColumnBlockPosition,
+    row: number,
+    cell: ScFormulaCell,
+    listening?: StartListeningType,
+    inheritNumFormatIfNeeded?: boolean,
+  ): void;
+  /** Binds both source formula adoption overloads to actual cell/group owners. @param first - Row or cursors. @param second - Formula or row. @param third - Listening mode or formula. @param fourth - Hinted listening mode or ordinary inheritance flag. @param fifth - Hinted inheritance flag. @returns Original nonhinted owner or void for the hinted overload. */
+  SetFormulaCell(
+    first: number | ColumnBlockPosition,
+    second: ScFormulaCell | number,
+    third?: StartListeningType | ScFormulaCell,
+    fourth: StartListeningType | boolean = SingleCellListening,
+    fifth = true,
+  ): ScFormulaCell | null | void {
+    const block = first instanceof ColumnBlockPosition ? first : null,
+      row = block ? (second as number) : (first as number),
+      cell = block ? (third as ScFormulaCell) : (second as ScFormulaCell),
+      listening = block
+        ? (fourth as StartListeningType)
+        : ((third as StartListeningType) ?? SingleCellListening),
+      inherit = block ? fifth : typeof fourth === "boolean" ? fourth : true;
+    if (!this.rDocument.ValidRow(row)) return block ? undefined : null;
     const rows = this.DetachFormulaCell(row);
-    this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
-    this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    const format = this.GetNumberFormat(this.rDocument.GetNonThreadedContext(), row);
+    if (format % SV_COUNTRY_LANGUAGE_OFFSET === 0 && inherit) cell.SetNeedNumberFormat(true);
+    if (block) {
+      block.miCellPos = this.maCells.set<ScFormulaCell | null>(
+        block.miCellPos as ReturnType<CellStoreType["begin"]>,
+        row,
+        cell,
+        formula_element_callbacks,
+      );
+      block.miCellTextAttrPos = this.maCellTextAttrs.set(
+        block.miCellTextAttrPos as ReturnType<CellTextAttrStoreType["begin"]>,
+        row,
+        new CellTextAttr(),
+        celltextattr_element_callbacks,
+      );
+    } else {
+      this.maCells.set<ScFormulaCell | null>(row, cell, formula_element_callbacks);
+      this.maCellTextAttrs.set(row, new CellTextAttr(), celltextattr_element_callbacks);
+    }
     this.JoinNewFormulaCell(this.maCells.position(row), cell);
+    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc())
+      return block ? undefined : cell;
     if (listening === ConvertToGroupListening) {
       const positions = new ColumnBlockPositionSet(this.rDocument),
         start = new StartListeningContext(this.rDocument, positions),
@@ -530,14 +775,11 @@ export class ScColumn extends ScColumnData {
         if (!top.NeedsListening()) this.SetNeedsListeningGroup(rows[index] as number);
       }
     cell.SetDirty();
-    return cell;
+    return block ? undefined : cell;
   }
   /** Borrows an actual formula-cell identity. @param row - Valid row. @returns Formula cell or null. */
   GetFormulaCell(row: number): ScFormulaCell | null {
-    if (this.maCells.get_type(row) !== element_type_formula) return null;
-    const output: [ScFormulaCell | null] = [null];
-    this.maCells.get(row, formula_element_callbacks, output);
-    return output[0];
+    return column3.GetFormulaCell.call(this, row);
   }
   /** Reads a real formula error, with native nonformula NONE. @param row - Valid row. @returns Error. */
   GetErrCode(row: number): FormulaError {
@@ -545,19 +787,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Performs native default-context dirty marking and tree membership without tracking broadcasts. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
-    if (context.mbClearTabDeletedFlag)
-      throw new Error("Deleted-sheet flag clearing is not implemented");
-    ProcessFormula(
-      this.maCells,
-      /** Marks the actual cell. @param row - Row. @param cell - Formula. @returns Nothing. */ (
-        row,
-        cell,
-      ) => {
-        void row;
-        cell.SetDirtyVar();
-        if (!this.rDocument.IsInFormulaTree(cell)) this.rDocument.PutInFormulaTree(cell);
-      },
-    );
+    column3.SetAllFormulasDirty.call(this, context);
   }
   /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
   GetCellValue(row: number): ScRefCellValue {
@@ -637,7 +867,23 @@ export class ScColumn extends ScColumnData {
     const broadcaster = this.GetBroadcaster(row);
     if (!broadcaster) return;
     listener.EndListening(broadcaster);
-    if (!broadcaster.HasListeners()) this.maBroadcasters.set_empty(row, row);
+    if (!broadcaster.HasListeners()) {
+      if (this.rDocument.IsDelayedDeletingBroadcasters()) this.mbEmptyBroadcastersPending = true;
+      else this.maBroadcasters.set_empty(row, row);
+    }
+  }
+  /** Original column2 pending cleanup scans actual managed broadcaster elements. @returns Nothing. */
+  DeleteEmptyBroadcasters(): void {
+    if (!this.mbEmptyBroadcastersPending) return;
+    SetElementsToEmpty1(
+      broadcaster_block,
+      this.maBroadcasters,
+      /** Original BroadcasterNoListenersPredicate. @param _row - Native row. @param broadcaster - Actual owner. @returns Unobserved. */ (
+        _row,
+        broadcaster,
+      ) => !(broadcaster as SvtBroadcaster<SfxHint>).HasListeners(),
+    );
+    this.mbEmptyBroadcastersPending = false;
   }
   /** Original detach records surviving native group spans before unsharing the removed member. @param row - Valid row. @returns Inclusive surviving span pairs. */
   private DetachFormulaCell(row: number): number[] {
@@ -659,6 +905,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Broadcasts the represented normal-document source write. Import/clipboard modes remain unsupported. @param row - Valid row. @returns Nothing. */
   private BroadcastNewCell(row: number): void {
+    if (this.rDocument.IsClipOrUndo() || this.rDocument.IsInsertingFromOtherDoc()) return;
     this.Broadcast(row);
   }
   /** Dispatches actual native cell-change hints. @param row - Valid row. @returns Nothing. */
@@ -686,9 +933,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Returns an independent shared string value,or its native empty default. @param row - Valid row. @returns Shared text. */
   GetSharedString(row: number): SharedString {
-    return this.maCells.get_type(row) === element_type_string
-      ? this.maCells.get(row, string_element_callbacks, string_value_type)
-      : new SharedString();
+    return column3.GetSharedString.call(this, row);
   }
   /** Clears content and its text metadata in the represented scalar stores. @param row - Valid row. @returns Nothing. */
   Delete(row: number): void {
@@ -697,5 +942,50 @@ export class ScColumn extends ScColumnData {
     this.maCellTextAttrs.set_empty(row, row);
     this.StartListeningUnshared(rows);
     this.Broadcast(row);
+  }
+}
+
+/** Original SetDirtyOnRangeHandler owns compact non-formula changed spans. */
+class SetDirtyOnRangeHandler {
+  private readonly maValueRanges: SingleColumnSpanSet;
+  /** Borrows the actual column and limits. @param column - Native owner. @returns Handler. */
+  constructor(private readonly column: ScColumn) {
+    this.maValueRanges = new SingleColumnSpanSet(column.GetDoc().GetSheetLimits());
+  }
+  /** Native non-formula dispatch excludes empty blocks. @param type - Store type. @param first - First row. @param length - Count. @returns Nothing. */
+  other(type: number, first: number, length: number): void {
+    if (type !== element_type_empty) this.maValueRanges.set(first, first + length - 1, true);
+  }
+  /** Transfers compact native true spans for the original post-insert broadcast. @param spans - Document operation owner. @returns Nothing. */
+  fillBroadcastSpans(spans: ColumnSpanSet): void {
+    spans.set(
+      this.column.GetDoc(),
+      this.column.GetTab(),
+      this.column.GetCol(),
+      this.maValueRanges,
+      true,
+    );
+  }
+}
+
+/** Original UpdateRefOnCopy functor visits every borrowed formula,including shared members. */
+class UpdateRefOnCopy {
+  private mbUpdated = false;
+  /** Borrows actual operation and undo owner. @param context - Context. @param undo - Undo document. @returns Handler. */
+  constructor(
+    private readonly context: RefUpdateContext,
+    private readonly undo: ScDocument | null,
+  ) {}
+  /** Original result query. @returns Accumulated native flag. */
+  isUpdated(): boolean {
+    return this.mbUpdated;
+  }
+  /** Original non-short-circuit traversal consumes only formula blocks. @param node - Borrowed store block. @param offset - First element. @param size - Count. @returns Nothing. */
+  call(node: CellStoreNode, offset: number, size: number): void {
+    if (node.type !== element_type_formula) return;
+    for (let index = offset; index < offset + size; ++index) {
+      const cell = formula_block.at(node.data as base_element_block, index) as ScFormulaCell;
+      this.mbUpdated = cell.UpdateReference(this.context, this.undo) || this.mbUpdated;
+    }
   }
 }

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/tool/chartlis.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "internal-clipboard",
+    "capabilityIds": [
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+        "apps/office/e2e/calc/clipboard-copy.spec.ts",
+        "apps/office/src/sc/source/core/tool/chart-collection.test.ts"
+      ],
+      "justification": "Native local cell/area subscriptions,ScChartUnoData callback/source reference ownership,ALL event payload,interpreter/manual-calculation deferral and actual repaint Idle collection now execute through original document owners. Native sorted name order,empty copy construction,reentrant insertion/removal interruption,hidden-range copied geometry and borrowed client lifetime are retained. External-link management,drawing-backed chart loading and unused collection management APIs remain explicitly unported;this is not a complete chart service or task76 acceptance.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScChartListener",
+        "ScChartListenerCollection",
+        "ScChartHiddenRangeListener"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/tool/chartlis.cxx",
+      "upstreamSymbols": [
+        "ScChartListener",
+        "ScChartListenerCollection",
+        "ScChartHiddenRangeListener"
+      ]
+    }
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/attarray.delete.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "cell-attributes",
+    "capabilityIds": [
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/attarray.delete.ts#DeleteArea",
+        "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts#deletes full native attributes",
+        "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx#ScAttrArray::DeleteArea",
+        "apps/office/src/sc/source/core/data/merge-refresh.test.ts#refreshes horizontal vertical and rectangular merges"
+      ],
+      "justification": "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim. Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RemoveAreaMerge",
+        "SetPatternAreaSafe",
+        "DeleteArea",
+        "ApplyFlags",
+        "RemoveFlags",
+        "ExtendMerge"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/attarray.cxx",
+      "upstreamSymbols": [
+        "ScAttrArray::RemoveAreaMerge",
+        "ScAttrArray::SetPatternAreaSafe",
+        "ScAttrArray::DeleteArea",
+        "ScAttrArray::ApplyFlags",
+        "ScAttrArray::RemoveFlags",
+        "ScAttrArray::ExtendMerge"
+      ]
+    }
+  }
+}

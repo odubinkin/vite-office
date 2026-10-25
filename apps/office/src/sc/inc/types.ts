@@ -63,3 +63,17 @@ export type ScConstMatrixRef = Readonly<
 > | null;
 
 export { RangeMatrix, MultiDataCellState } from "../source/core/data/types";
+
+/** Original intrusive token-reference typedef uses the existing GC-held FormulaToken identity and nullable value. */
+export type ScTokenRef = import("../../formula/inc/types").FormulaTokenRef;
+
+/** Original types.hxx matrix edge flags;matrix geometry services are separately admitted. */
+export enum MatrixEdge {
+  Nothing = 0,
+  Inside = 1,
+  Bottom = 2,
+  Left = 4,
+  Top = 8,
+  Right = 16,
+  Open = 32,
+}

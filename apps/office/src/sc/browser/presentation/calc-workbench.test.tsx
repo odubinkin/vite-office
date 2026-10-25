@@ -1,4 +1,5 @@
 /** @fileoverview Mounted production Calc workspace and real Sfx/model integration checks. */
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScInputMode } from "../../inc/global";
 import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
@@ -207,7 +208,7 @@ it("uses native Sum reference selection,accept/cancel and live formula history i
   session.Close();
 });
 
-it("keeps grid focus after selected AutoSum and presents an unavailable block-fill command without document edits", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
+it("keeps grid focus after selected AutoSum and executes native empty-block formula fill", /** Mounted controls and direct native command dispatch share actual marks and error presentation. @returns Nothing. */ () => {
   const session = createCalcSession(),
     c = session.controller,
     doc = c.shell.GetDocument();
@@ -235,10 +236,9 @@ it("keeps grid focus after selected AutoSum and presents an unavailable block-fi
       expect(c.AutoSum()).toBeUndefined();
     },
   );
-  expect(screen.getByRole("alert")).toHaveTextContent(
-    "Native EnterBlock/PasteFromClip block fill is not implemented",
-  );
-  expect(doc.GetFormulaCell(new ScAddress(1, 1, 0))).toBeNull();
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
   expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(5);
   cleanup();
   session.Close();
@@ -265,6 +265,97 @@ it("starts an empty native Sum argument draft and cancels without a document edi
   expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
   expect(c.shell.GetDocument().GetFormulaCell(new ScAddress())).toBeNull();
   expect(screen.getByRole("grid")).toHaveFocus();
+  cleanup();
+  session.Close();
+});
+it("enables shared Sum controls for an empty marked rectangle and preserves native one-action Undo/Redo", /** Actual formula-bar buttons execute the original clipboard path and keep grid focus. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    doc = c.shell.GetDocument();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetValue(new ScAddress(1, 0, 0), 4);
+  c.viewData.SetCurY(1);
+  c.viewData.GetMarkData().SetMarkArea(new ScRange(0, 1, 0, 1, 2, 0));
+  c.error = "Previous command failed";
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  const sum = screen.getByRole("button", { name: "Sum" });
+  expect(sum).toBeEnabled();
+  fireEvent.click(sum);
+  expect(doc.GetValue(new ScAddress(0, 1, 0))).toBe(2);
+  expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
+  expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(2);
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  expect(screen.getByRole("grid")).toHaveFocus();
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(1);
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(doc.GetFormulaCell(new ScAddress(1, 2, 0))).toBeNull();
+  fireEvent.click(screen.getByRole("button", { name: "Redo" }));
+  expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(4);
+  cleanup();
+  session.Close();
+});
+
+it("preserves browser-owned select-all when focusing existing formula-line text", /** Native focus delegates to the edit view;only a programmatic formula/reference request projects a new selection. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    doc = c.shell.GetDocument();
+  doc.SetTextCell(new ScAddress(), unicode("Original text"));
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  const line = screen.getByRole<HTMLInputElement>("textbox", { name: "Input line" });
+  line.setSelectionRange(0, "Original text".length);
+  act(
+    /** Actual DOM focus retains its existing selection. @returns Nothing. */ () => {
+      line.focus();
+    },
+  );
+  expect(c.mode).toBe(ScInputMode.SC_INPUT_TOP);
+  expect([line.selectionStart, line.selectionEnd]).toEqual([0, "Original text".length]);
+  fireEvent.change(line, {
+    target: { value: "Updated words", selectionStart: 13, selectionEnd: 13 },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Accept input" }));
+  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("Updated words");
+  fireEvent.click(screen.getByRole("button", { name: "Undo" }));
+  expect(screen.getByRole("gridcell", { name: "A1" })).toHaveTextContent("Original text");
+  cleanup();
+  session.Close();
+});
+it("keeps unsupported SUBTOTAL disabled in the mounted shared formula bar", /** Real filtered source rows keep the ordinary Sum action unavailable without a replacement calculation. @returns Nothing. */ () => {
+  const session = createCalcSession(),
+    c = session.controller,
+    doc = c.shell.GetDocument();
+  doc.SetValue(new ScAddress(), 2);
+  doc.SetRowFiltered(0, 0, 0, true);
+  c.viewData.SetCurY(1);
+  render(
+    <CalcWorkbench
+      controller={c}
+      frame={session.frame}
+      fileWorkflows={session.fileWorkflows}
+      sheetWorkflows={session.sheetWorkflows}
+    />,
+  );
+  const sum = screen.getByRole("button", { name: "Sum" });
+  expect(sum).toBeDisabled();
+  fireEvent.click(sum);
+  expect(doc.GetFormulaCell(new ScAddress(0, 1, 0))).toBeNull();
+  expect(c.shell.GetUndoManager().GetUndoActionCount()).toBe(0);
+  expect(screen.queryByRole("alert")).not.toBeInTheDocument();
   cleanup();
   session.Close();
 });

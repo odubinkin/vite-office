@@ -1,4 +1,5 @@
 /** @fileoverview Native Calc cell-pattern itemsets,borrowed style inheritance and canonical holder lifecycle;Calc style-pool resolution,VCL/font/number caches and hash prefilters remain unported. */
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import type { SfxStyleSheet } from "../../../../svl/inc/style";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
@@ -29,6 +30,13 @@ import {
   COL_BLACK,
 } from "../../../../tools/inc/color";
 import { ComplexColor, ColorType } from "../../../../docmodel/inc/color/ComplexColor";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { LANGUAGE_SYSTEM, type LanguageType } from "../../../../i18nlangtag/inc/lang";
+import { SV_COUNTRY_LANGUAGE_OFFSET } from "../../../../svl/inc/zforlist";
+import type { ScDocument } from "../../../inc/document";
+import type { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { ScGlobal } from "../../../inc/global";
 /** Original automatic-font color modes from patattr.hxx,co-located with the represented native owner. */
 export enum ScAutoFontColorMode {
   Raw,
@@ -292,6 +300,8 @@ export class ScPatternAttr {
   private pStyle: ScPatternStyleReference | null = null;
   private mnPAKey = 0n;
   private mnRefCount = 0;
+  private mxNumberFormatKey: number | undefined;
+  private mxLanguageType: LanguageType | undefined;
   /** Original helper/itemset/name and implicit-copy forms. INVALID entries are preserved. @param source - Helper or pattern. @param itemSet - Source deltas. @param styleName - Optional unbound style name. @returns Pattern. */
   constructor(
     source: CellAttributeHelper | ScPatternAttr,
@@ -304,6 +314,8 @@ export class ScPatternAttr {
       this.moName = source.moName === null ? null : new OUString(source.moName);
       this.mnPAKey = source.mnPAKey;
       this.pStyle = source.pStyle;
+      this.mxNumberFormatKey = source.mxNumberFormatKey;
+      this.mxLanguageType = source.mxLanguageType;
     } else {
       this.pCellAttributeHelper = source;
       this.maLocalSfxItemSet = new SfxItemSet(source.GetPool(), aScPatternAttrSchema);
@@ -334,8 +346,9 @@ export class ScPatternAttr {
   GetItemSet(): SfxItemSet {
     return this.maLocalSfxItemSet;
   }
-  /** Original writable itemset borrow;render/font/number/hash caches are not represented in this data slice. @returns Actual set. */
+  /** Original writable itemset borrow invalidates represented derived caches. @returns Actual set. */
   GetItemSetWritable(): SfxItemSet {
+    this.InvalidateCaches();
     return this.maLocalSfxItemSet;
   }
   /** Original stored name takes precedence over the borrowed style name. @returns Native borrowed name or null. */
@@ -343,10 +356,10 @@ export class ScPatternAttr {
     return this.moName ?? this.pStyle?.GetName() ?? null;
   }
   /** Original const style pointer borrow;this pattern does not own style lifetime. @returns Native style reference or null. */
-  GetStyleSheet(): Pick<ScPatternStyleReference, "GetName"> | null {
+  GetStyleSheet(): ScPatternStyleReference | null {
     return this.pStyle;
   }
-  /** Original inherited SET clearing and style-parent association. Native null detaches the pointer and parent but deliberately keeps an existing stored name. Derived caches remain absent in this data slice. @param style - Borrowed style or null. @param clearDirectFormat - Clear only fields SET by the style,including its parent chain. @returns Nothing. */
+  /** Original inherited SET clearing and style-parent association. Native null detaches the pointer and parent but deliberately keeps an existing stored name. Represented derived caches are invalidated. @param style - Borrowed style or null. @param clearDirectFormat - Clear only fields SET by the style,including its parent chain. @returns Nothing. */
   SetStyleSheet(style: ScPatternStyleReference | null, clearDirectFormat = true): void {
     if (style !== null) {
       const styleSet = style.GetItemSet();
@@ -362,6 +375,7 @@ export class ScPatternAttr {
       this.maLocalSfxItemSet.SetParent(undefined);
       this.pStyle = null;
     }
+    this.InvalidateCaches();
   }
   /** Original deleted-style transition copies the name before detaching the borrowed style and parent. @returns Nothing. */
   StyleToName(): void {
@@ -370,6 +384,7 @@ export class ScPatternAttr {
       this.moName = new OUString(this.pStyle.GetName());
       this.pStyle = null;
       this.maLocalSfxItemSet.SetParent(undefined);
+      this.InvalidateCaches();
     }
   }
   /** Original direct/inherited font SET query,not the pool default. @returns Whether the effective explicitly set font uses the symbol encoding. */
@@ -490,9 +505,11 @@ export class ScPatternAttr {
     if (value !== SvxCellHorJustify.Standard)
       destination.Put(new SvxHorJustifyItem(value, ATTR.ATTR_HOR_JUSTIFY));
   }
-  /** Original null guard and mutation of the real cell item set. Render/number/hash caches are absent in this existing data slice,so no fake invalidation service is added. @param edit - Source or native null. @returns Nothing. */
+  /** Original null guard and mutation of the real cell item set invalidate represented caches. @param edit - Source or native null. @returns Nothing. */
   GetFromEditItemSet(edit: SfxItemSet | null): void {
-    if (edit !== null) ScPatternAttr.GetFromEditItemSet(this.maLocalSfxItemSet, edit);
+    if (edit === null) return;
+    ScPatternAttr.GetFromEditItemSet(this.maLocalSfxItemSet, edit);
+    this.InvalidateCaches();
   }
   /** Original paragraph alignment entry is deliberately separate from FillEditItemSet. @param edit - Actual paragraph destination. @returns Nothing. */
   FillEditParaItems(edit: SfxItemSet): void {
@@ -529,11 +546,72 @@ export class ScPatternAttr {
   }
   /** Original direct item insertion. @param item - Native item. @returns Nothing. */
   ItemSetPut(item: SfxPoolItem): void {
+    this.InvalidateCacheFor(item.Which());
     this.maLocalSfxItemSet.Put(item);
   }
   /** Original direct item clearing. @param which - Item identity. @returns Nothing. */
   ItemSetClearItem(which: number): void {
+    this.InvalidateCacheFor(which);
     this.maLocalSfxItemSet.ClearItem(which);
+  }
+  /** Original MigrateToDocument branch without a style/format-exchange/validation service owner. Actual direct SET items move to the destination helper;the native absent-validation-list branch resets its index. @param destination - Actual target document. @param source - Actual source document. @returns Canonical owned migrated pattern. */
+  MigrateToDocument(destination: ScDocument, source: ScDocument): CellAttributeHolder {
+    if (destination !== source && this.pStyle !== null)
+      throw new Error("Foreign cell-style migration requires native style-pool copying");
+    const next = new ScPatternAttr(destination.getCellAttributeHelper()),
+      items = next.GetItemSetWritable();
+    if (destination !== source) next.SetStyleSheet(null);
+    for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END; ++which) {
+      if (this.maLocalSfxItemSet.GetItemState(which, false) !== SfxItemState.SET) continue;
+      const item = this.maLocalSfxItemSet.GetItemIfSet(which, false) as SfxPoolItem;
+      // No validation-list or format-exchange owner exists in this admitted document slice.
+      // This is the native absent-list/no-exchange branch,not a fabricated service.
+      items.Put(which === 153 ? new SfxUInt32Item(153, 0) : item);
+    }
+    return new CellAttributeHolder(next, true);
+  }
+  /** Original validity check treats mixed selection items as invalid. @returns Both number-format fields are valid. */
+  HasValidNumberFormat(): boolean {
+    return (
+      this.maLocalSfxItemSet.GetItemState(146) !== SfxItemState.INVALID &&
+      this.maLocalSfxItemSet.GetItemState(147) !== SfxItemState.INVALID
+    );
+  }
+  /** Original lazy key cache is bypassed during threaded group calculation. @returns Effective format key. */
+  GetNumberFormatKey(): number {
+    if (this.mxNumberFormatKey === undefined) {
+      const key = (this.maLocalSfxItemSet.Get(146) as SfxUInt32Item).GetValue();
+      if (ScGlobal.bThreadedGroupCalcInProgress) return key;
+      this.mxNumberFormatKey = key;
+    }
+    return this.mxNumberFormatKey;
+  }
+  /** Original independent language cache has the same threaded bypass. @returns Effective format language. */
+  GetLanguageType(): LanguageType {
+    if (this.mxLanguageType === undefined) {
+      const language = (this.maLocalSfxItemSet.Get(147) as SvxLanguageItem).GetLanguage();
+      if (ScGlobal.bThreadedGroupCalcInProgress) return language;
+      this.mxLanguageType = language;
+    }
+    return this.mxLanguageType;
+  }
+  /** Original formatter/context default-format branches. Nondefault language conversion remains unported. @param context - Actual interpreter context,formatter or native null formatter. @returns Effective format key. */
+  GetNumberFormat(context: ScInterpreterContext | SvNumberFormatter | null): number {
+    const key = this.GetNumberFormatKey(),
+      language = this.GetLanguageType();
+    if ((key < SV_COUNTRY_LANGUAGE_OFFSET && language === LANGUAGE_SYSTEM) || context === null)
+      return key;
+    throw new Error("Number-format language conversion is not implemented");
+  }
+  /** Invalidates actual represented derived values;visibility/hash services remain unported. @returns Nothing. */
+  InvalidateCaches(): void {
+    this.mxNumberFormatKey = undefined;
+    this.mxLanguageType = undefined;
+  }
+  /** Original per-item invalidation leaves the other cache intact. @param which - Changed attribute identity. @returns Nothing. */
+  InvalidateCacheFor(which: number): void {
+    if (which === 147) this.mxLanguageType = undefined;
+    else if (which === 146) this.mxNumberFormatKey = undefined;
   }
   /** Original registration key assignment. @param key - Native uint64. @returns Nothing. */
   SetPAKey(key: bigint): void {
@@ -551,13 +629,17 @@ export class ScPatternAttr {
       const item = this.maLocalSfxItemSet.GetItemIfSet(which, false) as SfxPoolItem;
       const oldState = oldSet.GetItemState(which, true);
       if (oldState === SfxItemState.SET) {
-        if (SfxPoolItem.areSame(item, oldSet.GetItemIfSet(which, true)))
+        if (SfxPoolItem.areSame(item, oldSet.GetItemIfSet(which, true))) {
           this.maLocalSfxItemSet.ClearItem(which);
+          this.InvalidateCaches();
+        }
       } else if (
         oldState !== SfxItemState.INVALID &&
         item.equals(this.maLocalSfxItemSet.GetPool().GetUserOrPoolDefaultItem(which))
-      )
+      ) {
         this.maLocalSfxItemSet.ClearItem(which);
+        this.InvalidateCaches();
+      }
     }
   }
   /** Original zero-terminated direct SET query. @param whichIds - Native IDs ending at zero. @returns Whether any direct value is set. */
@@ -574,6 +656,7 @@ export class ScPatternAttr {
       if (which === 0) break;
       this.maLocalSfxItemSet.ClearItem(which);
     }
+    this.InvalidateCaches();
   }
 }
 /** Original canonical pattern holder with copy/move/assignment/destruction semantics. */

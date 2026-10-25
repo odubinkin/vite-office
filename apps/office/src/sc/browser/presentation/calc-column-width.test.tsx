@@ -42,7 +42,7 @@ it("uses shared menus,actual width history and source hide/show without losing w
     fireEvent.click(screen.getByRole("menuitem", { name: "Column Width…" }));
     const input = screen.getByRole("spinbutton", { name: "Width" });
     expect(input).toHaveFocus();
-    expect(screen.getByRole("grid").parentElement).toHaveAttribute("inert");
+    expect(screen.getByRole("grid").closest("[inert]")).toHaveAttribute("inert");
     fireEvent.change(input, { target: { value: "1in" } });
     fireEvent.click(screen.getByRole("button", { name: "OK" }));
     await waitFor(

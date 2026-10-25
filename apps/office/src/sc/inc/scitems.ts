@@ -241,3 +241,6 @@ export const ATTR_HIDDEN = 188;
 
 /** Original end of the complete Calc item pool. */
 export const ATTR_ENDINDEX = ATTR_HIDDEN;
+
+/** Original typed WhichId of SfxUInt32Item number-format key. */
+export const ATTR_VALUE_FORMAT = 146;

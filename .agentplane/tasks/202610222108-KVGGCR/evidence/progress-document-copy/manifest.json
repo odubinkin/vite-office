@@ -1,0 +1,106 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;document/table copy and native attribute Undo ownership implemented;full paste/history/EnterBlock and AutoSum incomplete",
+  "sourceBaseline": "5edc6713464651edd544405e925f9625c48d4c69",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "currentFourOwnerScenarios": 726,
+  "currentFourOwnerFiles": 162,
+  "currentFourOwnerSummary": {
+    "lines": {
+      "total": 775,
+      "covered": 775,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 905,
+      "covered": 905,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 220,
+      "covered": 220,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 458,
+      "covered": 458,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "failedFullCalc": {
+    "scenariosPassed": 958,
+    "filesPassed": 229,
+    "unhandledErrors": 2,
+    "result": "fail;mounted tests close sessions before unmounting React;not accepted as full Calc verification",
+    "summary": {
+      "lines": {
+        "total": 15094,
+        "covered": 15076,
+        "skipped": 0,
+        "pct": 99.88
+      },
+      "statements": {
+        "total": 16888,
+        "covered": 16863,
+        "skipped": 0,
+        "pct": 99.85
+      },
+      "functions": {
+        "total": 2961,
+        "covered": 2958,
+        "skipped": 0,
+        "pct": 99.89
+      },
+      "branches": {
+        "total": 10182,
+        "covered": 10174,
+        "skipped": 0,
+        "pct": 99.92
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "subsequentChanges": "Native SetName and direct FilterData/indent guard scenarios close the measured coverage gaps in the fresh four-owner run. No new complete Calc replay yet."
+  },
+  "chromiumDomFreeWorker": "pass;actual CopyToDocument snapshot/restoration and live chart notifications in both realms",
+  "sourceOwners": 14,
+  "sourceProvenance": "pass;14 mapped owners",
+  "conservativeFootprint": 216,
+  "approvedBudget": 216,
+  "pendingExpansion": {
+    "requestedBudget": 218,
+    "reason": "Unmount two existing mounted UI test surfaces before closing their actual sessions.",
+    "approved": false,
+    "paths": [
+      "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+      "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx"
+    ],
+    "patch": "output/playwright/task76-copy-ui-cleanup-proposed.patch",
+    "applied": false
+  },
+  "limitations": [
+    "Conditional-format copy covers current concrete date/empty entries;range-dependent visual entry families and their deduplication predicate remain unported.",
+    "Foreign style-pool copying,names/database/outline/sparkline/caption stores,full formatter and document paste/history remain unported.",
+    "Existing geometry Undo snapshot mode is unchanged;only consumed pattern/indent snapshots were migrated to native Undo mode.",
+    "The previously reported missing liblangtag source references still block broad source/provenance/registry gates;no restore/network performed.",
+    "Previously reported five unchanged Writer ESLint errors remain outside this progress block.",
+    "The complete all-application run and final task closure/goal pause have not occurred."
+  ],
+  "stopRule": "Finish active76 then74;full all-application tests/fixes/required100percent coverage/final closure;pause goal. Do not start78-80.",
+  "rawBytes": 688784,
+  "rawSha256": "50b28e4ad1bee25a35075b0d884ebb102e33e0cb7b6d0b5e74889defd15e0ea5"
+}

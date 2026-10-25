@@ -18,3 +18,34 @@ export const SvNumFormatType = {
 } as const;
 /** Native typed flags can combine the declared format categories. */
 export type SvNumFormatType = number;
+
+/** Original number-format key block size per country/language. */
+export const SV_COUNTRY_LANGUAGE_OFFSET = 10000;
+
+/** Consumed original NfIndexTableOffset values;remaining built-in families retain their separate unported generation responsibilities. */
+export const NfIndexTableOffset = {
+  NF_NUMBER_STANDARD: 0,
+  NF_CURRENCY_START: 12,
+  NF_CURRENCY_1000INT: 12,
+  NF_CURRENCY_1000DEC2: 13,
+  NF_CURRENCY_1000INT_RED: 14,
+  NF_CURRENCY_1000DEC2_RED: 15,
+  NF_CURRENCY_1000DEC2_CCC: 16,
+  NF_CURRENCY_1000DEC2_DASHED: 17,
+  NF_CURRENCY_END: 17,
+  NF_INDEX_TABLE_RESERVED_START: 51,
+  NF_INDEX_TABLE_ENTRIES: 62,
+} as const;
+
+/** Original builtin entry limit per locale block. */
+export const SV_MAX_COUNT_STANDARD_FORMATS = 100;
+/** Original missing-entry unsigned32 sentinel. */
+export const NUMBERFORMAT_ENTRY_NOT_FOUND = 0xffffffff;
+
+/** Original date-format evaluation order;date parsing remains a separate responsibility. */
+export const NfEvalDateFormat = {
+  International: 0,
+  Format: 1,
+  InternationalThenFormat: 2,
+  FormatThenInternational: 3,
+} as const;

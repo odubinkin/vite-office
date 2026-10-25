@@ -9,10 +9,26 @@
     "localSymbols": [
       "ScAttrArray",
       "lcl_TestAttr",
-      "lcl_MergeToFrame"
+      "lcl_MergeToFrame",
+      "CopyArea",
+      "AddCondFormat",
+      "RemoveCondFormat",
+      "IsMerged",
+      "ExtendMerge",
+      "DeleteArea",
+      "RemoveAreaMerge",
+      "SetPatternAreaSafe",
+      "ApplyFlags",
+      "RemoveFlags"
     ],
     "upstreamSymbols": [
-      "ScAttrArray"
+      "ScAttrArray",
+      "ScAttrArray::AddCondFormat",
+      "ScAttrArray::RemoveCondFormat",
+      "ScAttrArray::IsMerged",
+      "ScAttrArray::ExtendMerge",
+      "ScAttrArray::ApplyFlags",
+      "ScAttrArray::RemoveFlags"
     ],
     "preservedResponsibilities": [
       "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
@@ -22,7 +38,14 @@
       "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
       "Task3ANMSS UI checkpoint connects all12native Calc border presets,last-used repetition,Shift-only validity reset,line style/color and diagonal slots to shared Writer buttons,palette and popup lifecycle. Native ScViewFunc ApplyAttributes routes frames separately from scalar attributes;original marked/cursor operation classes and ScUndoCursorAttr retain actual snapshots,complete patterns and normal enabled-undo ordering. Existing input history remains. Source mixed-style no-history and black15twip/Hairline preset behavior are preserved as CALC228/229. The native unmerged SVX frame Array resolves actual neighbor styles and clipping;browser grid CSS and diagonals reuse the actual Writer line projection. Existing primary saving/open/no-recovery behavior remains. ODS border conversion and production browser/mobile/Worker acceptance are covered by task48 final evidence;complete native parity remains unverified. Native rich edit,merged/rotation/device primitives,global undo enablement,protection,alternate views,UNO argument/service graphs and complete native parity are unverified. Actual view references replace native global active-view lookup;physical cell interning is erased under GC.",
       "Task3ANMSS UI checkpoint connects all12native Calc border presets,last-used repetition,Shift-only validity reset,line style/color and diagonal slots to shared Writer buttons,palette and popup lifecycle. Native ScViewFunc ApplyAttributes routes frames separately from scalar attributes;original marked/cursor operation classes and ScUndoCursorAttr retain actual snapshots,complete patterns and normal enabled-undo ordering. Existing input history remains. Native cursor/marked operations report admitted success even for repeated equal attributes. Real canonical selection caches replace range-list mutation,retaining minimal default-column allocation. Popup contents are created only while actually open,using the shared Writer/SVX lifecycle,viewport placement and connected-owner Escape focus. Native completion preserves ordinary Done versus API requests and the explicit line-style Done branch. Empty argument requests remain ignored. CALC230 retains present empty diagonal line pointers after None. Source mixed-style no-history and black15twip/Hairline preset behavior are preserved as CALC228/229. The native unmerged SVX frame Array resolves actual neighbor styles and clipping;browser grid CSS and diagonals reuse the actual Writer line projection. Existing primary saving/open/no-recovery behavior remains. ODS border conversion and production browser/mobile/Worker acceptance are covered by task48 final evidence;complete native parity remains unverified. Native rich edit,merged/rotation/device primitives,global undo enablement,protection,alternate views,UNO argument/service graphs and complete native parity are unverified. Actual view references replace native global active-view lookup;physical cell interning is erased under GC.",
-      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete."
+      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete.",
+      "Task76 attribute-copy progress: Original CopyArea retains row-offset/clipping order,canonical source/destination defaults,empty-run handling,source run traversal,merge-flag stripping (including All),actual holder lifetimes and helper migration through native MigrateToDocument. Source runs/defaults are not materialized as another table model. Unported migration style/validation/format services retain their stated admission boundaries.",
+      "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
+      "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
+      "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
+      "Original ScAttrArray::ExtendMerge scans actual canonical entries,uses each entry start,retains native row/column bounds and default-column assertion. Refresh now uses actual flag mutation/re-search and the represented no-database-range filter refresh phase.",
+      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
+      "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -44,6 +67,26 @@
         {
           "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "removes one conditional key"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/attarray.ts",
+          "marker": "IsMerged"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
+          "marker": "orchestrates real default-content"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/merge-refresh.test.ts",
+          "marker": "refreshes horizontal vertical and rectangular merges"
         }
       ],
       "upstream": [
@@ -62,6 +105,30 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
           "marker": "HasAttrFlags::NeedHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::RemoveCondFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::IsMerged"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::DeleteArea"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::ApplyFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::RemoveFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::ExtendMerge"
         }
       ]
     }

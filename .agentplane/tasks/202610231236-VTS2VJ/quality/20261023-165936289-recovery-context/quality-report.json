@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610231236-VTS2VJ",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-23T16:59:36.289Z",
+  "verdict": "pass",
+  "summary": "Implementation f111d0b9c08f satisfies the approved local-reference/native mouse selection profile with real owners and stable edit lifetime;837Calc cases and raw100 are tied to473committed source/test/config hashes.",
+  "evaluated_sha": "f111d0b9c08f48c5d84a277ed5728900fa47ff9b",
+  "blueprint_digest": "df14cbfd3d7f242642745d0fb119e82d2d34e83140a4a2f3736582764e9fef19",
+  "findings": [
+    "Original input/reference/view/mark contracts are represented without alternate cell models or fake native services;real active view/document identity rejects unsupported cross-document contexts.",
+    "Click/drag/full-axis/modifier/negative selection,capture/scroll/hidden geometry,UTF16 equals protection,caret/focus/IME/paste/manual-word semantics,history and ODS recalculation have actual-owner evidence;5Chromium/Worker and33related Writer/VCL scenarios pass.",
+    "All authored Calc lint/format and required build/type/static/source/registry gates pass. Broad npm lint diagnostic retains unchanged Writer/ignored-probe baseline errors;the report does not certify that broad command."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610231236-VTS2VJ/README.md",
+    ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/checks.json",
+    ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/source-hashes.json",
+    ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/calc-coverage.log",
+    ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-final/chromium-worker.log",
+    ".agentplane/tasks/202610231236-VTS2VJ/evidence/pointing-gates"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native range finder,clipboard fill/transfer,external/3D/matrix,merged/protected/split/device and general keyboard cursor services remain outside this admitted profile;broader native parity stays foundation/B/unverified.",
+    "All-application replay remains deferred until80 under the human cadence;unrelated Writer baseline lint remains outside77."
+  ]
+}

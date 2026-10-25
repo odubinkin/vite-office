@@ -1,0 +1,74 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;intermediate regression verification,not task acceptance",
+  "sourceBaseline": "92ed62cedcc1049a1493d3356895ca1e370b8267",
+  "humanApproval": "2026-10-24;216 to218 paths confirmed in this chat",
+  "footprint": 218,
+  "paths": [
+    "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+    "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx"
+  ],
+  "checks": {
+    "calc": {
+      "result": "pass",
+      "command": "npx vitest run --config vitest.calc.config.ts --coverage --coverage.reportsDirectory=coverage/task76-copy-cleanup",
+      "files": 229,
+      "scenarios": 960,
+      "summary": {
+        "lines": {
+          "total": 15095,
+          "covered": 15095,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 16889,
+          "covered": 16889,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 2962,
+          "covered": 2962,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 10182,
+          "covered": 10182,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      }
+    },
+    "lint": {
+      "result": "pass",
+      "scope": [
+        "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+        "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx"
+      ]
+    },
+    "format": {
+      "result": "pass",
+      "scope": [
+        "apps/office/src/sc/browser/presentation/calc-borders.test.tsx",
+        "apps/office/src/sc/browser/presentation/calc-shadow-relief.test.tsx"
+      ]
+    }
+  },
+  "remaining": [
+    "Native document CopyFromClip and CopyOneCellFromClip orchestration,including real number formatter/script services.",
+    "Native paste Undo/Redo and EnterBlock.",
+    "Task74 final AutoSum acceptance.",
+    "Required changed-shared and full all-application verification/fixes/final closure/goal pause.",
+    "Existing missing liblangtag source-reference and unchanged Writer lint failures remain unwaived."
+  ],
+  "rawBytes": 409482,
+  "rawSha256": "3b37227a92ac52c777fe7aed984e7c14885580e99336306bcc4cf63b50e86fcc"
+}

@@ -1,0 +1,69 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native paste/fill selection admission verified;PasteFromClip/EnterBlock and task74 UI acceptance remain pending",
+  "sourceBaseline": "a1e44732d9ae9ba9fc08605b9897d7ddb565fc70",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePathLimit": null,
+  "scopeApproval": "Human confirmation2026-10-25 removes numerical path limits only for existing tasks76/74;functional scope,network/reference restrictions and full-run/fixes/coverage/closure/pause rule unchanged. Recorded in2ff174182d1a and a1e44732d9ae.",
+  "authorizedScopePathCount": 310,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 21,
+  "checks": {
+    "related": "96files/457scenarios pass with unchanged thresholds/timeouts/exclusions",
+    "measuredOwners": "FilterData.ts,document10.ts,viewdata.ts,viewutil.ts;current whole Calc/all-app certification not claimed",
+    "coverage": {
+      "lines": {
+        "total": 553,
+        "covered": 553,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 663,
+        "covered": 663,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 96,
+        "covered": 96,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 319,
+        "covered": 319,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh build then actual native simple/filtered selection,large fill/paste admission and whole-tail fit in Chromium/DOM-free Worker1/1 pass",
+    "scopedProvenance": "6source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "ScViewData GetSimpleArea retains view-mark copies versus explicit mutable marks,all coordinate outputs,cursor merge/degenerate fallbacks,filtered classification and source MULTI override (CALC284).",
+    "Native fill/paste admission preserves23Mi-cell integer bound,exact matching row/column dimensions and explicit clipdoc handling;OS clipboard lookup is unrepresented.",
+    "ScViewUtil HasFiltered and FitToUnfilteredRows use actual FilterData segments and preserve source first-sheet,whole-tail,count and mutation-on-failure behavior (CALC283).",
+    "Native document filtered-span/last-row getters preserve missing-sheet false/signed-maximum defaults. Initialized valid FilterData segments make original failed-getRangeData defense unreachable under admitted lifecycle.",
+    "Scalar InsertTab body moves unchanged to existing same-instance partition under file-size policy;no alternate store or native service peers are introduced."
+  ],
+  "failuresAndRepairs": [
+    "After moving InsertTab,unused MAXTAB import removed. Initial test incorrectly assumed no initially allocated native column;assertion now checks unchanged actual baseline rather than zero,retaining the no-cell-allocation admission requirement."
+  ],
+  "remaining": [
+    "Native PasteFromClip/EnterBlock,editability and final74 UI acceptance remain incomplete. No task completion/full parity promotion.",
+    "Finish76 and74,then full all-application suites,necessary fixes/scenarios,required100coverage,final task closure and goal pause. Missing reference/source gates remain unwaived."
+  ]
+}

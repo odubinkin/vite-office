@@ -1,0 +1,10 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office-calc/apps/office
+
+ ✓ |calc| src/sc/source/core/data/clipboard-deletion.test.ts (6 tests) 24ms
+
+ Test Files  1 passed (1)
+      Tests  6 passed (6)
+   Start at  00:14:40
+   Duration  2.24s (transform 1.27s, setup 97ms, import 1.55s, tests 24ms, environment 486ms)
+

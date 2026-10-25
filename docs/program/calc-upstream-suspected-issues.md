@@ -3718,3 +3718,241 @@ formula regression: ABS itself does not accept eight arguments. Preserve the
 runtime lookup, including UInt16 narrowing and the distinct return sentinel.
 Independent source vectors cover the boundary;no whole-native class execution
 or user-visible LibreOffice failure is claimed.
+
+## CALC-259: the first Ctrl-click includes the old active cell
+
+Status: surprising behavior; explicitly described as an intentional upstream
+workaround, not a confirmed defect.
+
+Pinned `sc/source/ui/view/select.cxx`, `ScViewFunctionSet::SetCursorAtCell`,
+lines 793–811, handles a Ctrl-click with no previous marks by initializing a
+block at the old cursor before initializing the clicked cell. The source
+comment labels this `#i3875# *Hack*` and explicitly requires both old and new
+cells to be highlighted. Its same-cell case retains one marked cell.
+
+Example: with A1 active and no marked range, Ctrl-click D4 selects A1 and D4;
+it does not select D4 alone. The normal subsequent Ctrl-click branch can
+subtract already marked cells through native negative block conversion.
+
+Evidence: the pinned source and the actual owner vector in
+[mouse-block.test.ts](../../apps/office/src/sc/source/ui/view/mouse-block.test.ts)
+(`keeps original function-set anchors and the first-Ctrl-click old cursor
+inclusion`). Full historical issue context and the upstream selection engine's
+other modes have not been audited. Decision: preserve this branch and its
+original defaults without replacing it with a browser-only selection rule.
+
+## CALC-260: updated global names normalize the sheet only on insertion
+
+Status: surprising contract asymmetry; not a confirmed upstream defect.
+
+Pinned `sc/source/core/data/refupdatecontext.cxx`, lines 18–65,
+`UpdatedRangeNames::setUpdatedName`, maps every sheet index below -1 to -1.
+The three readers `isNameUpdated`, `getUpdatedNames` and `isEmpty` perform
+literal key lookups without applying that normalization.
+
+After `setUpdatedName(-8, 4)`, querying sheet -1 reports the updated name,
+whereas querying sheet -8 reports absence. Callers must use the canonical
+global-name index when reading. The local owner preserves the asymmetry;
+it does not normalize every public method for convenience.
+
+Evidence: the pinned methods and the actual value-owner scenario in
+[clipboard-reference.test.ts](../../apps/office/src/sc/source/core/data/clipboard-reference.test.ts)
+(`retains original sparse column output and insertion-only global-name normalization`).
+No claim is made that a defined upstream caller passes a noncanonical index
+to the readers. Decision: retain the original insertion and lookup behavior.
+
+## CALC-261: filtered block copying adds the no-row sentinel to its count
+
+Status: surprising helper contract; not a confirmed defect in a defined UI call.
+
+Pinned `sc/source/core/data/FilterData.cxx`, `firstNonFilteredRow`, returns
+`std::numeric_limits<SCROW>::max()` when no eligible row is found. Pinned
+`sc/source/core/data/document.cxx`, `CopyNonFilteredFromClip`, lines 2893–2920,
+adds the difference between that result and the old source row to its
+filtered-row count before checking whether the result exceeds the source end.
+It also publishes that sentinel through the source-row output.
+
+For a source cursor of 1 and an entirely filtered range ending at row 5,
+the helper returns 2147483646 and advances the cursor to 2147483647. It does
+not return the five filtered rows in the requested interval. The enclosing
+paste orchestration may prevent such calls; that reachability is not certified.
+
+Evidence: the pinned methods and
+[clipboard-block.test.ts](../../apps/office/src/sc/source/core/data/clipboard-block.test.ts)
+(`retains signed SCROW-max sentinel and its original filtered-row count accumulation`).
+Decision: preserve the original accumulator and output instead of clamping them.
+
+## CALC-262: empty selected Undo initialization retains one null sheet slot
+
+Status: surprising diagnostic fallback; not a confirmed defect in a defined UI call.
+
+Pinned `sc/source/core/data/markdata.cxx`, `ScMarkData::GetLastSelected`,
+lines 194–200, reports a diagnostic and returns 0 when no sheet is selected.
+Pinned `sc/source/core/data/document.cxx`, `ScDocument::InitUndoSelected`,
+lines 2076–2105, loops inclusively through that result and appends a null slot
+for every unselected sheet. Thus an empty selection leaves the Undo document
+with a table-vector size of 1 and `FetchTable(0) == nullptr`.
+
+Evidence: the pinned methods and
+[clipboard-undo-init.test.ts](../../apps/office/src/sc/source/core/data/clipboard-undo-init.test.ts)
+(`replaces previous Undo content with exactly selected sparse sheets and independent option defaults`).
+Whether ordinary upstream UI callers can supply an empty selection has not
+been established. Decision: preserve the slot and original diagnostic fallback,
+without replacing the result with an empty vector.
+
+## CALC-263: single-row paste changes the manual-size bit only on its first destination row
+
+Status: surprising propagation asymmetry; not a confirmed upstream defect.
+
+Pinned `sc/source/core/data/table7.cxx`, `ScTable::CopyOneCellFromClip`,
+lines 149–160, copies the source height to the entire destination row range
+when the destination spans all columns. Its following manual-size flag update
+uses the single-row overload `OrValue(nRow1, ...)` or `AndValue(nRow1, ...)`.
+The other destination rows retain their previous manual-size flags.
+
+For destination rows 2–4 with initially automatic flags, copying a manually
+sized source row sets all three heights but leaves manual flags true,false,false.
+Copying an automatic source onto initially manual destination rows leaves
+false,true,true. Hidden source rows still supply their original nonzero height.
+
+Evidence: the pinned method and
+[clipboard-single-row.test.ts](../../apps/office/src/sc/source/core/data/clipboard-single-row.test.ts)
+(`copies whole-row heights but updates only the first destination row's manual-size flag`).
+Decision: preserve both the full-range height update and the first-row-only
+flag update without extending that flag mutation for consistency.
+
+
+### CALC-264 — End-listening output rows describe different visited objects
+
+- Pinned source: `sc/source/core/data/column4.cxx`, `EndListeningFormulaCellsHandler` and `ScColumn::EndListeningFormulaCells`.
+- The handler assigns its start row at every visited formula block and can backtrack it to a shared top. It assigns the end row only when it visits a shared top;singletons never update that field.
+- A singleton-only interval therefore returns its row as start and `-1` as end. A later singleton block can leave start greater than the end of an earlier visited shared group. With no formulas anywhere in the column,the wrapper leaves both caller outputs untouched;with formulas elsewhere but none in the requested interval,it writes `-1` into both outputs.
+- Impact: these outputs are not a normalized covering interval. Consumers must preserve the original sentinel and assignment contract;the port intentionally retains it. This may be intentional metadata rather than a defect.
+- Evidence: `apps/office/src/sc/source/core/data/delayed-copy-listening.test.ts` uses real separated shared groups and a singleton to observe all four cases.
+
+
+### CALC-265 — Column Undo forwards a mark flag without the mark data
+
+- Pinned source: `sc/source/core/data/column.cxx`, `ScColumn::UndoToColumn` and `ScColumn::CopyToColumn`;`sc/inc/column.hxx` supplies the null mark-data default.
+- `UndoToColumn` forwards `bMarked` for the edited rows but never supplies a `ScMarkData` pointer. Its own source comment asks `TODO: bMarked ????`. `CopyToColumn` enters its marked branch only to require non-null multi-mark data;with the default null pointer it copies no edited cells.
+- Formula-only copies before and after the edited rows explicitly pass false and still run. Consequently,`bMarked=true` can update outside formulas while leaving the selected payload unchanged.
+- This may be an unused caller profile rather than an active UI defect. The port preserves the exact flag/default interaction and does not synthesize selection data or force the argument false.
+- Evidence: `apps/office/src/sc/source/core/data/native-table-undo.test.ts` uses real compiled Undo snapshots and destination formula dependencies to verify both branches.
+
+
+### CALC-266 — Range-list reconstruction appends a default range after extraction fails
+
+- Pinned source: `sc/source/core/tool/reftokenhelper.cxx`, `ScRefTokenHelper::getRangeListFromTokens` and `getRangeFromToken`.
+- The loop creates a default `ScRange`,ignores the boolean result of `getRangeFromToken`,and appends that range unconditionally. Its call also leaves `bExternal` at the original false default.
+- A scalar/non-reference token therefore appends A1 rather than being dropped. An external-reference token is rejected by the default internal-family extraction and also appends A1. Existing output ranges remain in the list.
+- Callers may rely on an internal-reference-only invariant;this observation is not a claim of an active UI defect. The port retains the default-range append and the original external-flag default.
+- Evidence: `apps/office/src/sc/source/core/tool/reftokenhelper.test.ts` uses real scalar,internal and external tokens and observes their output ranges.
+
+### CALC-267 — External reference intersection filters file IDs but not table names
+
+- Pinned source: `sc/source/core/tool/reftokenhelper.cxx`, `ScRefTokenHelper::intersects`.
+- After checking internal/external families,the function compares external file IDs and numeric range coordinates. It never compares the external tokens' table-name strings. The separate joining helper in the same file does compare those strings.
+- Two real external tokens with the same file ID and intersecting numeric sheet/row/column spans can therefore intersect even when their table names differ. This may reflect a caller-specific sheet-coordinate invariant rather than a defect.
+- The port preserves the original comparison order and does not add a table-name filter. `reftokenhelper.test.ts` verifies both different-file rejection and the different-name/same-file result using actual external reference owners.
+
+### CALC-268 — Active Timer.SetTimeout retains the original task timestamp
+
+- Pinned source: `vcl/source/app/timer.cxx`, `Timer::SetTimeout`, `Timer::UpdateMinPeriod`; `vcl/source/app/scheduler.cxx`, `Task::Start`.
+- The comment says an active timeout change renews the clock, but `SetTimeout` changes the duration and requests a system-timer wakeup without changing the task record's `mnUpdateTime`. Readiness still uses the original record timestamp plus the new duration.
+- For a timer started at tick1000 with timeout100, changing the timeout to20 at tick1010 leaves its task deadline at1020. An independent scheduler wakeup observes the remaining10 ticks; it does not establish a new deadline at1030.
+- This may be intentional elapsed-time behavior with an imprecise comment, rather than a defect. The port preserves the source timestamp and earlier-wakeup selection. `apps/office/src/vcl/source/app/native-scheduler.test.ts` verifies actual native owners through the browser system-timer boundary.
+
+### CALC-269 — Marked column-copy recursion resets clone flags
+
+- Pinned source: `sc/source/core/data/column.cxx`, `ScColumn::CopyToColumn`;`sc/inc/column.hxx` supplies the default `ScCloneFlags::Default` argument.
+- The marked branch forwards the context,clipped rows,copy flags,destination,mark pointer and link policy to its recursive unmarked call,but omits `nCloneFlags`. An explicit nondefault clone policy therefore becomes Default for actual marked spans.
+- The port preserves this omission instead of forwarding the outer policy. Nondefault unmarked clone services remain an explicit unsupported boundary of the represented local-reference profile.
+
+### CALC-270 — Table geometry copy positions width iterators before replacing their array data
+
+- Pinned source: `sc/source/core/data/table2.cxx`, `ScTable::CopyToTable`;`sc/inc/compressedarray.hxx`, `ScCompressedArray::Iterator`.
+- Both width iterators are positioned before destination `CopyFrom`. Iterator dereference subsequently uses the live array at the retained compressed-entry index,while increment advances the retained logical region. CopyFrom can replace the destination run partition.
+- The later width-change comparison therefore does not compare a stable snapshot of pre-copy widths. This may depend on caller/run-partition invariants;it is not established as an active UI defect.
+- The port uses the genuine compressed-array iterator owners in the same order;it does not replace them with fresh point lookups or pre-copy width snapshots.
+
+### CALC-271 — Number-format locale cache retains four entries for its size-three constant
+
+- Pinned source: `i18npool/source/numberformatcode/numberformatcode.cxx`, `NumberFormatCodeMapper::getFormats`.
+- On a cache miss,the code defines `FORMATELEMENTCACHE_SIZE = 3`,pops the oldest entry only when the current size is strictly greater than that constant,and then appends the new locale. The fourth distinct locale grows the cache from three to four entries;later misses retain four entries by popping before appending.
+- This may be an intentional soft limit or an imprecise constant name rather than an active defect. Preserve the strict `>` comparison and insertion order when this native mapper owner is ported;do not change it to `>=`.
+- The mapper port preserves the strict comparison and FIFO order. `apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts` observes actual Locale/OUString ownership:four distinct locale values remain retained,a hit does not refresh their order,and a fifth locale releases the first cached value while an already returned format code remains valid. The separate locale resource-field binding has no fabricated cache.
+
+### CALC-272 — Default adjustment leaves multiple medium defaults enabled
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpAdjustFormatCodeDefault`.
+- The comment promises one default for a format-code group. The MEDIUM arm records the latest index but does not clear earlier medium defaults;the final assignment enables the latest default without disabling its predecessors. Duplicate-medium input therefore retains multiple defaults.
+- Optional locale-data diagnostics report duplicate defaults but do not repair them. This may rely on valid source locale catalogs rather than cause a current UI defect. Preserve the original algorithm and test duplicate-medium input instead of silently normalizing it.
+
+### CALC-273 — Additional-format insertion range guard cannot reject a uint32 position
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, `SvNFFormatData::ImpInsertFormat`.
+- The additional-format branch computes `nCLOffset = nPos - (nPos % SV_COUNTRY_LANGUAGE_OFFSET)` and subsequently checks `nPos - nCLOffset >= SV_COUNTRY_LANGUAGE_OFFSET`. For every uint32 `nPos`,the difference is exactly its remainder modulo10000 and is therefore between0 and9999. The guard cannot report "too many format codes" for a valid argument.
+- The caller's additional-format loop has a separate block-capacity check;this observation does not establish an active UI defect. The port preserves the same selection/insertion results and documents the unreachable guard proof instead of inventing an input outside the unsigned argument domain or changing the offset calculation.
+
+### CALC-274 — Ethiopian Tigrinya locale falls back to US English despite an Eritrean data service
+
+- Pinned source: `i18npool/source/localedata/localedata.cxx`, `aLibTable`, `lcl_LookupTableHelper::getFunctionSymbolByName`, `LocaleDataImpl::getFallbackLocaleServiceNames` and `getFunctionSymbol`;`i18nlangtag/source/isolang/isolang.cxx`, native Tigrinya language-country entries.
+- The data-service table registers `ti_ER` but not `ti_ET`. An ordinary `ti_ET` request tries its exact service and then language-only `ti`. The latter resolves through the native first Tigrinya fallback entry `ti_ET`,which is also absent,so the final `en_US` service is selected. The existing `ti_ET.xml` file alone does not register a service.
+- This may be an intentional registration/default choice;no active UI defect is established. Preserve the service-table and fallback order instead of choosing `ti_ER` because it looks linguistically closer. The loaded-identity tests retain `[en,US,empty]` for this request.
+
+### CALC-275 — BCE date normalization advances overflow days toward earlier months
+
+- Pinned source: `comphelper/source/misc/date.cxx`, `comphelper::date::normalize`.
+- For a negative year,day overflow subtracts the current month length and decrements the month,or decrements the year and selects December. For example,`32/01/-2` becomes `01/12/-3`;the positive-year branch instead advances to the following month.
+- This may reflect historical packed-date conventions rather than an intended chronological normalization rule. Preserve the original branch direction,including the minimum-year clamp;do not replace it with JavaScript Date or a generic forward-month algorithm.
+
+### CALC-276 — Month normalization can wrap the signed16 year instead of saturating
+
+- Pinned source: `comphelper/source/misc/date.cxx`, `comphelper::date::normalize`, `sal_Int16` year assignments.
+- Month overflow performs `rYear += rMonth / 12`;month zero performs `--rYear`. On the represented two's-complement signed16 narrowing profile,`01/13/32767` becomes `01/01/-32768`,and `01/00/-32768` becomes `01/12/32767`. The separate day-overflow branches explicitly clamp year endpoints instead.
+- These are boundary inputs and no active UI defect is established. Preserve native-width assignments and the source's distinct month/day policies;do not silently saturate month-induced year changes.
+
+### CALC-277 — Zero suppression leaves the output color pointer unchanged
+
+- Pinned source: `svl/source/numbers/zforlist.cxx`, numeric `SvNFEngine::GetOutputString`.
+- When `GetNoZero()` is true and the number equals zero,the function clears the output text and returns before resetting or assigning `ppColor`. A caller-provided previous color therefore remains present. Regular General output clears the pointer through the parsed entry.
+- A higher-level caller may initialize its pointer for every request,so this is not established as an active cell-rendering defect. Preserve the early-return order and the retained pointer in direct engine/formatter tests.
+
+### CALC-278 — String-output documentation promises empty text but General preserves input
+
+- Pinned source: `include/svl/numformat.hxx`, string `GetOutputString` comment;`svl/source/numbers/zforlist.cxx`, string `SvNFEngine::GetOutputString`.
+- The header says a format without text type or a fourth subformat yields an empty output string. The implementation instead resets the color pointer and copies the input string when both conditions are absent. General therefore preserves ordinary text,including input/output aliasing.
+- This appears to be stale documentation rather than a runtime defect. Preserve the actual copied-input behavior;do not clear General text to follow the contradictory comment.
+
+### CALC-279 — Single-row fast-path reference delta uses the post-loop source column
+
+- Pinned source: `sc/source/core/data/document10.cxx`, `ScDocument::CopyOneCellFromClip`, source-column preparation and following `RefUpdateContext`.
+- The preparation loop increments `aSrcPos` after every source column,including the final one. The subsequent `mnColDelta = nCol1 - aSrcPos.Col()` therefore uses the first column after the source range rather than its starting column. For a one-column source at column0 pasted at column2,the recorded delta is1 rather than2.
+- The existing clone path already relocates relative references,and no active incorrect result is established by the admitted local-sheet scenarios. Preserve the exact post-loop position and delta calculation;do not silently change it to the initial source coordinate.
+
+### CALC-280 — Single-row paste traverses unselected sheets inside the selected envelope
+
+- Pinned source: `sc/source/core/data/document10.cxx`, `ScDocument::CopyOneCellFromClip`;`sc/source/core/data/document.cxx`, `getMarkedTableRange` and `CopyFromClip`.
+- The context stores the first and last populated selected sheets. The single-row fast path then copies to every sheet in that interval without checking `ScMarkData::GetTableSelect`,while pre-deletion and generic block copying do check the marks. With sheets0 and2 selected,a one-row source also overwrites sheet1.
+- The actual native control flow is preserved and covered with genuine documents and sparse marks. Do not silently restrict the fast path to selected sheets;the upstream inconsistency needs a separate reviewed decision.
+
+### CALC-281 — Single-row paste fast path does not consult source filtering
+
+- Pinned source: `sc/source/core/data/document.cxx`, `CopyFromClip`;`sc/source/core/data/document10.cxx`, `CopyOneCellFromClip`.
+- `CopyFromClip` computes source dimensions with `bIncludeFiltered`,but attempts the single-row fast path before the filtered/generic branch. That fast path has no include-filtered parameter or row-filter guard. A fully filtered one-row source therefore still copies with `bIncludeFiltered=false` in the represented direct core call.
+- Preserve the actual dispatch order and copied result. Higher UI layers may avoid this call for an entirely filtered source;no broader UI defect is asserted here.
+
+### CALC-282 — UndoToDocument overloads disable auto-calculation on different documents
+
+- Pinned source: `sc/source/core/data/document.cxx`, coordinate and range `ScDocument::UndoToDocument` overloads.
+- The coordinate overload constructs `AutoCalcSwitch(rDestDoc,false)`,while the range overload constructs `AutoCalcSwitch(*this,false)`. The latter therefore disables calculation on the source Undo document rather than directly on the destination;its paired-sheet traversal and tail sentinel also differ from the coordinate overload.
+- No active incorrect result is established by the represented restoration scenarios. Preserve both actual receivers,guards and tail ranges;do not normalize the overloads into one supposedly equivalent implementation.
+
+
+### CALC-283 — FitToUnfilteredRows fits the whole sheet tail rather than the requested row count
+
+Pinned `sc/source/ui/view/viewutil.cxx:257` sets the range end to `LastNonFilteredRow(start, MaxRow)` and compares the entire tail's nonfiltered count with the requested count. On an otherwise unfiltered sheet, requesting two rows from row5 returns false but expands the end to MaxRow. A multi-sheet input still mutates its first-sheet end before returning false. Preserve this behavior;tests use real compressed filter runs and check mutation on both success and failure.
+
+### CALC-284 — Filtered merged cursor can replace MULTI mark type in GetSimpleArea
+
+Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected marks,then resolves the cursor's merged rectangle. If that rectangle contains a filtered row,the later branch replaces MULTI with SIMPLE_FILTERED. The actual marks stay disconnected. Preserve this ordering and resulting fill/paste admission rather than retaining MULTI artificially.

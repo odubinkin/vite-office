@@ -1,0 +1,18 @@
+doctor: checking workspace
+doctor: checking branch_pr drift
+doctor: checking runtime source
+doctor: checking project-local blueprints
+doctor: checking prompt graph
+doctor: checking recent task archive
+doctor: checking workflow contract
+{"ts":"2026-10-23T17:16:59.684Z","component":"workflow-runtime","event":"workflow_doctor_check","details":{"ok":true,"findings":0}}
+warning: doctor findings: errors=0 warnings=1 info=1
+- [WARN] State: managed AgentPlane hook shim is missing current readiness or fallback branches
+Likely cause: the repository still has an older managed shim that cannot validate runner startup or use current fallback recovery
+Next action: agentplane hooks install (rewrite the shim with the current fallback chain)
+Details: Shim path: .agentplane/bin/agentplane
+  - AGENTPLANE_HOOK_RUNNER fallback: present
+  - AGENTPLANE_HOOK_ALLOW_GLOBAL fallback: present
+  - Runner startup readiness: missing
+- [INFO] Project blueprint compatibility: compatible; trusted=0
+doctor (OK)

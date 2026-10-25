@@ -5,9 +5,8 @@ import { ScMarkData } from "../../../inc/markdata";
 import { ScAddress, ScRange } from "../../../inc/address";
 import { ScRangeList } from "../../../inc/rangelst";
 import { ScPatternAttr } from "../../../inc/patattr";
-import { ScDocument } from "../../../inc/document";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { InsertDeleteFlags } from "../../../inc/global";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { ScUndoSelectionAttr } from "../undo/undoblk3";
 import { ScUndoCursorAttr } from "../undo/undocell";
 import type { ScViewData } from "../inc/viewdata";
@@ -42,16 +41,10 @@ export class ApplyAttributesWithChangedRangeOperation extends Operation {
       this.maChangeRanges.push_back(changed);
     }
     if (this.mbRecord) {
-      const undo = new ScDocument(),
-        name = new OUString();
-      try {
-        for (let tab = 0; tab < doc.GetTableCount(); tab++) {
-          doc.GetName(tab, name);
-          undo.InsertTab(tab, name);
-        }
-      } finally {
-        name.dispose();
-      }
+      const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+        tab = range.aStart.Tab();
+      undo.InitUndo(doc, tab, tab);
+      for (const selected of marks) if (selected !== tab) undo.AddUndoTab(selected, selected);
       const copy = new ScRange(range);
       copy.aStart.SetTab(0);
       copy.aEnd.SetTab(doc.GetTableCount() - 1);

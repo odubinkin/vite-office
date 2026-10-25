@@ -1,0 +1,1990 @@
+{
+  "af_NA": {
+    "Language": "af",
+    "LanguageDefaultName": "Afrikaans",
+    "Country": "NA",
+    "CountryDefaultName": "Namibia",
+    "Variant": ""
+  },
+  "af_ZA": {
+    "Language": "af",
+    "LanguageDefaultName": "Afrikaans",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "ak_GH": {
+    "Language": "ak",
+    "LanguageDefaultName": "Akan",
+    "Country": "GH",
+    "CountryDefaultName": "Ghana",
+    "Variant": ""
+  },
+  "am_ET": {
+    "Language": "am",
+    "LanguageDefaultName": "Amharic",
+    "Country": "ET",
+    "CountryDefaultName": "Ethiopia",
+    "Variant": ""
+  },
+  "an_ES": {
+    "Language": "an",
+    "LanguageDefaultName": "Aragonese",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "ar_AE": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "AE",
+    "CountryDefaultName": "United Arab Emirates",
+    "Variant": ""
+  },
+  "ar_BH": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "BH",
+    "CountryDefaultName": "Bahrain",
+    "Variant": ""
+  },
+  "ar_DZ": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "DZ",
+    "CountryDefaultName": "Algeria",
+    "Variant": ""
+  },
+  "ar_EG": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "EG",
+    "CountryDefaultName": "Egypt",
+    "Variant": ""
+  },
+  "ar_IQ": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "IQ",
+    "CountryDefaultName": "Iraq",
+    "Variant": ""
+  },
+  "ar_JO": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "JO",
+    "CountryDefaultName": "Jordan",
+    "Variant": ""
+  },
+  "ar_KW": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "KW",
+    "CountryDefaultName": "Kuwait",
+    "Variant": ""
+  },
+  "ar_LB": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "LB",
+    "CountryDefaultName": "Lebanon",
+    "Variant": ""
+  },
+  "ar_LY": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "LY",
+    "CountryDefaultName": "Libya",
+    "Variant": ""
+  },
+  "ar_MA": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "MA",
+    "CountryDefaultName": "Morocco",
+    "Variant": ""
+  },
+  "ar_OM": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic, Omani Spoken",
+    "Country": "OM",
+    "CountryDefaultName": "Oman",
+    "Variant": ""
+  },
+  "ar_QA": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "QA",
+    "CountryDefaultName": "Qatar",
+    "Variant": ""
+  },
+  "ar_SA": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "SA",
+    "CountryDefaultName": "Saudi Arabia",
+    "Variant": ""
+  },
+  "ar_SY": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "SY",
+    "CountryDefaultName": "Syria",
+    "Variant": ""
+  },
+  "ar_TN": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "TN",
+    "CountryDefaultName": "Tunisia",
+    "Variant": ""
+  },
+  "ar_YE": {
+    "Language": "ar",
+    "LanguageDefaultName": "Arabic",
+    "Country": "YE",
+    "CountryDefaultName": "Yemen",
+    "Variant": ""
+  },
+  "ast_ES": {
+    "Language": "ast",
+    "LanguageDefaultName": "Asturian",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "axk_CG": {
+    "Language": "axk",
+    "LanguageDefaultName": "Aka",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "az_AZ": {
+    "Language": "az",
+    "LanguageDefaultName": "Azerbaijani",
+    "Country": "AZ",
+    "CountryDefaultName": "Azerbaijan",
+    "Variant": ""
+  },
+  "be_BY": {
+    "Language": "be",
+    "LanguageDefaultName": "Belarusian",
+    "Country": "BY",
+    "CountryDefaultName": "Belarus",
+    "Variant": ""
+  },
+  "beq_CG": {
+    "Language": "beq",
+    "LanguageDefaultName": "Beembe",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "bg_BG": {
+    "Language": "bg",
+    "LanguageDefaultName": "Bulgarian",
+    "Country": "BG",
+    "CountryDefaultName": "Bulgaria",
+    "Variant": ""
+  },
+  "bkw_CG": {
+    "Language": "bkw",
+    "LanguageDefaultName": "Bekwil",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "bm_ML": {
+    "Language": "bm",
+    "LanguageDefaultName": "Bamanankan",
+    "Country": "ML",
+    "CountryDefaultName": "Mali",
+    "Variant": ""
+  },
+  "bn_BD": {
+    "Language": "bn",
+    "LanguageDefaultName": "Bengali",
+    "Country": "BD",
+    "CountryDefaultName": "Bangladesh",
+    "Variant": ""
+  },
+  "bn_IN": {
+    "Language": "bn",
+    "LanguageDefaultName": "Bengali",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "bo_CN": {
+    "Language": "bo",
+    "LanguageDefaultName": "Tibetan",
+    "Country": "CN",
+    "CountryDefaultName": "China",
+    "Variant": ""
+  },
+  "bo_IN": {
+    "Language": "bo",
+    "LanguageDefaultName": "Tibetan",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "br_FR": {
+    "Language": "br",
+    "LanguageDefaultName": "Breton",
+    "Country": "FR",
+    "CountryDefaultName": "France",
+    "Variant": ""
+  },
+  "bs_BA": {
+    "Language": "bs",
+    "LanguageDefaultName": "Bosnian",
+    "Country": "BA",
+    "CountryDefaultName": "Bosnia-Herzegovina",
+    "Variant": ""
+  },
+  "bvx_CG": {
+    "Language": "bvx",
+    "LanguageDefaultName": "Dibole",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ca_ES": {
+    "Language": "ca",
+    "LanguageDefaultName": "Catalan",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "ca_ES_valencia": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Catalan (Valencian)",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": "ca-ES-valencia"
+  },
+  "cs_CZ": {
+    "Language": "cs",
+    "LanguageDefaultName": "Czech",
+    "Country": "CZ",
+    "CountryDefaultName": "Czech Republic",
+    "Variant": ""
+  },
+  "cu_RU": {
+    "Language": "cu",
+    "LanguageDefaultName": "Church Slavic",
+    "Country": "RU",
+    "CountryDefaultName": "Russia",
+    "Variant": ""
+  },
+  "cv_RU": {
+    "Language": "cv",
+    "LanguageDefaultName": "Chuvash",
+    "Country": "RU",
+    "CountryDefaultName": "Russia",
+    "Variant": ""
+  },
+  "cy_GB": {
+    "Language": "cy",
+    "LanguageDefaultName": "Welsh",
+    "Country": "GB",
+    "CountryDefaultName": "United Kingdom",
+    "Variant": ""
+  },
+  "da_DK": {
+    "Language": "da",
+    "LanguageDefaultName": "Danish",
+    "Country": "DK",
+    "CountryDefaultName": "Denmark",
+    "Variant": ""
+  },
+  "dde_CG": {
+    "Language": "dde",
+    "LanguageDefaultName": "Doondo",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "de_AT": {
+    "Language": "de",
+    "LanguageDefaultName": "German",
+    "Country": "AT",
+    "CountryDefaultName": "Austria",
+    "Variant": ""
+  },
+  "de_CH": {
+    "Language": "de",
+    "LanguageDefaultName": "German",
+    "Country": "CH",
+    "CountryDefaultName": "Switzerland",
+    "Variant": ""
+  },
+  "de_DE": {
+    "Language": "de",
+    "LanguageDefaultName": "German",
+    "Country": "DE",
+    "CountryDefaultName": "Germany",
+    "Variant": ""
+  },
+  "de_LI": {
+    "Language": "de",
+    "LanguageDefaultName": "German",
+    "Country": "LI",
+    "CountryDefaultName": "Liechtenstein",
+    "Variant": ""
+  },
+  "de_LU": {
+    "Language": "de",
+    "LanguageDefaultName": "German",
+    "Country": "LU",
+    "CountryDefaultName": "Luxembourg",
+    "Variant": ""
+  },
+  "dsb_DE": {
+    "Language": "dsb",
+    "LanguageDefaultName": "Sorbian, Lower",
+    "Country": "DE",
+    "CountryDefaultName": "Germany",
+    "Variant": ""
+  },
+  "dv_MV": {
+    "Language": "dv",
+    "LanguageDefaultName": "Dhivehi",
+    "Country": "MV",
+    "CountryDefaultName": "Maldives",
+    "Variant": ""
+  },
+  "dz_BT": {
+    "Language": "dz",
+    "LanguageDefaultName": "Dzongkha",
+    "Country": "BT",
+    "CountryDefaultName": "Bhutan",
+    "Variant": ""
+  },
+  "ebo_CG": {
+    "Language": "ebo",
+    "LanguageDefaultName": "Teke-Eboo",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ee_GH": {
+    "Language": "ee",
+    "LanguageDefaultName": "Éwé",
+    "Country": "GH",
+    "CountryDefaultName": "Ghana",
+    "Variant": ""
+  },
+  "el_GR": {
+    "Language": "el",
+    "LanguageDefaultName": "Greek",
+    "Country": "GR",
+    "CountryDefaultName": "Greece",
+    "Variant": ""
+  },
+  "en_AU": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "AU",
+    "CountryDefaultName": "Australia",
+    "Variant": ""
+  },
+  "en_BW": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "BW",
+    "CountryDefaultName": "Botswana",
+    "Variant": ""
+  },
+  "en_BZ": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "BZ",
+    "CountryDefaultName": "Belize",
+    "Variant": ""
+  },
+  "en_CA": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "CA",
+    "CountryDefaultName": "Canada",
+    "Variant": ""
+  },
+  "en_DK": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "DK",
+    "CountryDefaultName": "Denmark",
+    "Variant": ""
+  },
+  "en_GB": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "GB",
+    "CountryDefaultName": "United Kingdom",
+    "Variant": ""
+  },
+  "en_GH": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "GH",
+    "CountryDefaultName": "Ghana",
+    "Variant": ""
+  },
+  "en_GM": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "GM",
+    "CountryDefaultName": "Gambia",
+    "Variant": ""
+  },
+  "en_GY": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "GY",
+    "CountryDefaultName": "Guyana",
+    "Variant": ""
+  },
+  "en_HK": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "HK",
+    "CountryDefaultName": "Hong Kong",
+    "Variant": ""
+  },
+  "en_IE": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "IE",
+    "CountryDefaultName": "Ireland",
+    "Variant": ""
+  },
+  "en_IL": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "IL",
+    "CountryDefaultName": "Israel",
+    "Variant": ""
+  },
+  "en_IN": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "en_JM": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "JM",
+    "CountryDefaultName": "Jamaica",
+    "Variant": ""
+  },
+  "en_KE": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "KE",
+    "CountryDefaultName": "Kenya",
+    "Variant": ""
+  },
+  "en_LK": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "LK",
+    "CountryDefaultName": "Sri Lanka",
+    "Variant": ""
+  },
+  "en_MU": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "MU",
+    "CountryDefaultName": "Mauritius",
+    "Variant": ""
+  },
+  "en_MW": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "MW",
+    "CountryDefaultName": "Malawi",
+    "Variant": ""
+  },
+  "en_MY": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "MY",
+    "CountryDefaultName": "Malaysia",
+    "Variant": ""
+  },
+  "en_NA": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "NA",
+    "CountryDefaultName": "Namibia",
+    "Variant": ""
+  },
+  "en_NG": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "NG",
+    "CountryDefaultName": "Nigeria",
+    "Variant": ""
+  },
+  "en_NZ": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "NZ",
+    "CountryDefaultName": "New Zealand",
+    "Variant": ""
+  },
+  "en_PH": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "PH",
+    "CountryDefaultName": "Philippines",
+    "Variant": ""
+  },
+  "en_TT": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "TT",
+    "CountryDefaultName": "Trinidad and Tobago",
+    "Variant": ""
+  },
+  "en_US": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "US",
+    "CountryDefaultName": "United States",
+    "Variant": ""
+  },
+  "en_ZA": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "en_ZM": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "ZM",
+    "CountryDefaultName": "Zambia",
+    "Variant": ""
+  },
+  "en_ZW": {
+    "Language": "en",
+    "LanguageDefaultName": "English",
+    "Country": "ZW",
+    "CountryDefaultName": "Zimbabwe",
+    "Variant": ""
+  },
+  "eo": {
+    "Language": "eo",
+    "LanguageDefaultName": "Esperanto",
+    "Country": "",
+    "CountryDefaultName": "",
+    "Variant": ""
+  },
+  "es_AR": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "AR",
+    "CountryDefaultName": "Argentina",
+    "Variant": ""
+  },
+  "es_BO": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "BO",
+    "CountryDefaultName": "Bolivia",
+    "Variant": ""
+  },
+  "es_CL": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "CL",
+    "CountryDefaultName": "Chile",
+    "Variant": ""
+  },
+  "es_CO": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "CO",
+    "CountryDefaultName": "Colombia",
+    "Variant": ""
+  },
+  "es_CR": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "CR",
+    "CountryDefaultName": "Costa Rica",
+    "Variant": ""
+  },
+  "es_DO": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "DO",
+    "CountryDefaultName": "Dominican Republic",
+    "Variant": ""
+  },
+  "es_EC": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "EC",
+    "CountryDefaultName": "Ecuador",
+    "Variant": ""
+  },
+  "es_ES": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "es_GT": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "GT",
+    "CountryDefaultName": "Guatemala",
+    "Variant": ""
+  },
+  "es_HN": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "HN",
+    "CountryDefaultName": "Honduras",
+    "Variant": ""
+  },
+  "es_MX": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "MX",
+    "CountryDefaultName": "Mexico",
+    "Variant": ""
+  },
+  "es_NI": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "NI",
+    "CountryDefaultName": "Nicaragua",
+    "Variant": ""
+  },
+  "es_PA": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "PA",
+    "CountryDefaultName": "Panama",
+    "Variant": ""
+  },
+  "es_PE": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "PE",
+    "CountryDefaultName": "Peru",
+    "Variant": ""
+  },
+  "es_PR": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "PR",
+    "CountryDefaultName": "Puerto Rico",
+    "Variant": ""
+  },
+  "es_PY": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "PY",
+    "CountryDefaultName": "Paraguay",
+    "Variant": ""
+  },
+  "es_SV": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "SV",
+    "CountryDefaultName": "El Salvador",
+    "Variant": ""
+  },
+  "es_UY": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "UY",
+    "CountryDefaultName": "Uruguay",
+    "Variant": ""
+  },
+  "es_VE": {
+    "Language": "es",
+    "LanguageDefaultName": "Spanish",
+    "Country": "VE",
+    "CountryDefaultName": "Venezuela",
+    "Variant": ""
+  },
+  "et_EE": {
+    "Language": "et",
+    "LanguageDefaultName": "Estonian",
+    "Country": "EE",
+    "CountryDefaultName": "Estonia",
+    "Variant": ""
+  },
+  "eu_ES": {
+    "Language": "eu",
+    "LanguageDefaultName": "Basque",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "ext_ES": {
+    "Language": "ext",
+    "LanguageDefaultName": "Extremaduran",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "fa_IR": {
+    "Language": "fa",
+    "LanguageDefaultName": "Persian",
+    "Country": "IR",
+    "CountryDefaultName": "Iran",
+    "Variant": ""
+  },
+  "fi_FI": {
+    "Language": "fi",
+    "LanguageDefaultName": "Finnish",
+    "Country": "FI",
+    "CountryDefaultName": "Finland",
+    "Variant": ""
+  },
+  "fo_FO": {
+    "Language": "fo",
+    "LanguageDefaultName": "Faroese",
+    "Country": "FO",
+    "CountryDefaultName": "Faroe Islands",
+    "Variant": ""
+  },
+  "fr_BE": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "BE",
+    "CountryDefaultName": "Belgium",
+    "Variant": ""
+  },
+  "fr_BF": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "BF",
+    "CountryDefaultName": "Burkina Faso",
+    "Variant": ""
+  },
+  "fr_BJ": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "BJ",
+    "CountryDefaultName": "Bénin",
+    "Variant": ""
+  },
+  "fr_CA": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "CA",
+    "CountryDefaultName": "Canada",
+    "Variant": ""
+  },
+  "fr_CH": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "CH",
+    "CountryDefaultName": "Switzerland",
+    "Variant": ""
+  },
+  "fr_CI": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "CI",
+    "CountryDefaultName": "Côte d'Ivoire",
+    "Variant": ""
+  },
+  "fr_FR": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "FR",
+    "CountryDefaultName": "France",
+    "Variant": ""
+  },
+  "fr_GN": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "GN",
+    "CountryDefaultName": "Republic of Guinea",
+    "Variant": ""
+  },
+  "fr_LU": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "LU",
+    "CountryDefaultName": "Luxembourg",
+    "Variant": ""
+  },
+  "fr_MC": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "MC",
+    "CountryDefaultName": "Monaco",
+    "Variant": ""
+  },
+  "fr_ML": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "ML",
+    "CountryDefaultName": "Mali",
+    "Variant": ""
+  },
+  "fr_NE": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "NE",
+    "CountryDefaultName": "Niger",
+    "Variant": ""
+  },
+  "fr_SN": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "SN",
+    "CountryDefaultName": "Sénégal",
+    "Variant": ""
+  },
+  "fr_TG": {
+    "Language": "fr",
+    "LanguageDefaultName": "French",
+    "Country": "TG",
+    "CountryDefaultName": "Togo",
+    "Variant": ""
+  },
+  "fur_IT": {
+    "Language": "fur",
+    "LanguageDefaultName": "Friulian",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "fy_NL": {
+    "Language": "fy",
+    "LanguageDefaultName": "Frisian, Western",
+    "Country": "NL",
+    "CountryDefaultName": "Netherlands",
+    "Variant": ""
+  },
+  "ga_IE": {
+    "Language": "ga",
+    "LanguageDefaultName": "Irish",
+    "Country": "IE",
+    "CountryDefaultName": "Ireland",
+    "Variant": ""
+  },
+  "gd_GB": {
+    "Language": "gd",
+    "LanguageDefaultName": "Gaelic, Scottish",
+    "Country": "GB",
+    "CountryDefaultName": "United Kingdom",
+    "Variant": ""
+  },
+  "gl_ES": {
+    "Language": "gl",
+    "LanguageDefaultName": "Galician",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": ""
+  },
+  "gos_NL": {
+    "Language": "gos",
+    "LanguageDefaultName": "Gronings",
+    "Country": "NL",
+    "CountryDefaultName": "Netherlands",
+    "Variant": ""
+  },
+  "gsc_FR": {
+    "Language": "gsc",
+    "LanguageDefaultName": "Gascon",
+    "Country": "FR",
+    "CountryDefaultName": "France",
+    "Variant": ""
+  },
+  "gu_IN": {
+    "Language": "gu",
+    "LanguageDefaultName": "Gujarati",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "gug_PY": {
+    "Language": "gug",
+    "LanguageDefaultName": "Guaraní, Paraguayan",
+    "Country": "PY",
+    "CountryDefaultName": "Paraguay",
+    "Variant": ""
+  },
+  "ha_Latn_GH": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Hausa",
+    "Country": "GH",
+    "CountryDefaultName": "Ghana",
+    "Variant": "ha-Latn-GH"
+  },
+  "ha_Latn_NG": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Hausa",
+    "Country": "NG",
+    "CountryDefaultName": "Nigeria",
+    "Variant": "ha-Latn-NG"
+  },
+  "haw_US": {
+    "Language": "haw",
+    "LanguageDefaultName": "Hawaiian",
+    "Country": "US",
+    "CountryDefaultName": "United States",
+    "Variant": ""
+  },
+  "he_IL": {
+    "Language": "he",
+    "LanguageDefaultName": "Hebrew",
+    "Country": "IL",
+    "CountryDefaultName": "Israel",
+    "Variant": ""
+  },
+  "hi_IN": {
+    "Language": "hi",
+    "LanguageDefaultName": "Hindi",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "hil_PH": {
+    "Language": "hil",
+    "LanguageDefaultName": "Hiligaynon",
+    "Country": "PH",
+    "CountryDefaultName": "Philippines",
+    "Variant": ""
+  },
+  "hr_HR": {
+    "Language": "hr",
+    "LanguageDefaultName": "Croatian",
+    "Country": "HR",
+    "CountryDefaultName": "Croatia",
+    "Variant": ""
+  },
+  "hsb_DE": {
+    "Language": "hsb",
+    "LanguageDefaultName": "Sorbian, Upper",
+    "Country": "DE",
+    "CountryDefaultName": "Germany",
+    "Variant": ""
+  },
+  "ht_HT": {
+    "Language": "ht",
+    "LanguageDefaultName": "Haitian Creole",
+    "Country": "HT",
+    "CountryDefaultName": "Haiti",
+    "Variant": ""
+  },
+  "hu_HU": {
+    "Language": "hu",
+    "LanguageDefaultName": "Hungarian",
+    "Country": "HU",
+    "CountryDefaultName": "Hungary",
+    "Variant": ""
+  },
+  "hy_AM": {
+    "Language": "hy",
+    "LanguageDefaultName": "Armenian",
+    "Country": "AM",
+    "CountryDefaultName": "Armenia",
+    "Variant": ""
+  },
+  "ia": {
+    "Language": "ia",
+    "LanguageDefaultName": "Interlingua",
+    "Country": "",
+    "CountryDefaultName": "",
+    "Variant": ""
+  },
+  "id_ID": {
+    "Language": "id",
+    "LanguageDefaultName": "Indonesian",
+    "Country": "ID",
+    "CountryDefaultName": "Indonesia",
+    "Variant": ""
+  },
+  "ilo_PH": {
+    "Language": "ilo",
+    "LanguageDefaultName": "Iloko",
+    "Country": "PH",
+    "CountryDefaultName": "Philippines",
+    "Variant": ""
+  },
+  "is_IS": {
+    "Language": "is",
+    "LanguageDefaultName": "Icelandic",
+    "Country": "IS",
+    "CountryDefaultName": "Iceland",
+    "Variant": ""
+  },
+  "it_CH": {
+    "Language": "it",
+    "LanguageDefaultName": "Italian",
+    "Country": "CH",
+    "CountryDefaultName": "Switzerland",
+    "Variant": ""
+  },
+  "it_IT": {
+    "Language": "it",
+    "LanguageDefaultName": "Italian",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "iyx_CG": {
+    "Language": "iyx",
+    "LanguageDefaultName": "Yaka",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ja_JP": {
+    "Language": "ja",
+    "LanguageDefaultName": "Japanese",
+    "Country": "JP",
+    "CountryDefaultName": "Japan",
+    "Variant": ""
+  },
+  "jbo": {
+    "Language": "jbo",
+    "LanguageDefaultName": "Lojban",
+    "Country": "",
+    "CountryDefaultName": "",
+    "Variant": ""
+  },
+  "ka_GE": {
+    "Language": "ka",
+    "LanguageDefaultName": "Georgian",
+    "Country": "GE",
+    "CountryDefaultName": "Georgia",
+    "Variant": ""
+  },
+  "kab_DZ": {
+    "Language": "kab",
+    "LanguageDefaultName": "Kabyle",
+    "Country": "DZ",
+    "CountryDefaultName": "Algeria",
+    "Variant": ""
+  },
+  "kk_KZ": {
+    "Language": "kk",
+    "LanguageDefaultName": "Kazakh",
+    "Country": "KZ",
+    "CountryDefaultName": "Kazakhstan",
+    "Variant": ""
+  },
+  "kkw_CG": {
+    "Language": "kkw",
+    "LanguageDefaultName": "Teke-Kukuya",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "kl_GL": {
+    "Language": "kl",
+    "LanguageDefaultName": "Kalaallisut",
+    "Country": "GL",
+    "CountryDefaultName": "Kalaallit Nunaat",
+    "Variant": ""
+  },
+  "km_KH": {
+    "Language": "km",
+    "LanguageDefaultName": "Khmer",
+    "Country": "KH",
+    "CountryDefaultName": "Cambodia",
+    "Variant": ""
+  },
+  "kmr_Latn_TR": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Kurdish",
+    "Country": "TR",
+    "CountryDefaultName": "Turkey",
+    "Variant": "kmr-Latn-TR"
+  },
+  "kn_IN": {
+    "Language": "kn",
+    "LanguageDefaultName": "Kannada",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "kng_CG": {
+    "Language": "kng",
+    "LanguageDefaultName": "Koongo",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ko_KR": {
+    "Language": "ko",
+    "LanguageDefaultName": "Korean",
+    "Country": "KR",
+    "CountryDefaultName": "Korea",
+    "Variant": ""
+  },
+  "ky_KG": {
+    "Language": "ky",
+    "LanguageDefaultName": "Kirghiz",
+    "Country": "KG",
+    "CountryDefaultName": "Kyrgyzstan",
+    "Variant": ""
+  },
+  "la_VA": {
+    "Language": "la",
+    "LanguageDefaultName": "Latin",
+    "Country": "VA",
+    "CountryDefaultName": "State of the Vatican City",
+    "Variant": ""
+  },
+  "lb_LU": {
+    "Language": "lb",
+    "LanguageDefaultName": "Luxembourgish",
+    "Country": "LU",
+    "CountryDefaultName": "Luxemburg",
+    "Variant": ""
+  },
+  "ldi_CG": {
+    "Language": "ldi",
+    "LanguageDefaultName": "Laari",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "lg_UG": {
+    "Language": "lg",
+    "LanguageDefaultName": "Ganda",
+    "Country": "UG",
+    "CountryDefaultName": "Uganda",
+    "Variant": ""
+  },
+  "lgr_SB": {
+    "Language": "lgr",
+    "LanguageDefaultName": "Lengo",
+    "Country": "SB",
+    "CountryDefaultName": "Solomon Islands",
+    "Variant": ""
+  },
+  "lif_NP": {
+    "Language": "lif",
+    "LanguageDefaultName": "Limbu",
+    "Country": "NP",
+    "CountryDefaultName": "Nepal",
+    "Variant": ""
+  },
+  "lij_IT": {
+    "Language": "lij",
+    "LanguageDefaultName": "Ligurian",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "lld_IT": {
+    "Language": "lld",
+    "LanguageDefaultName": "Ladin",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "ln_CD": {
+    "Language": "ln",
+    "LanguageDefaultName": "Lingala",
+    "Country": "CD",
+    "CountryDefaultName": "Democratic Republic of the Congo",
+    "Variant": ""
+  },
+  "lo_LA": {
+    "Language": "lo",
+    "LanguageDefaultName": "Lao",
+    "Country": "LA",
+    "CountryDefaultName": "Laos",
+    "Variant": ""
+  },
+  "lt_LT": {
+    "Language": "lt",
+    "LanguageDefaultName": "Lithuanian",
+    "Country": "LT",
+    "CountryDefaultName": "Lithuania",
+    "Variant": ""
+  },
+  "ltg_LV": {
+    "Language": "ltg",
+    "LanguageDefaultName": "Latgalian",
+    "Country": "LV",
+    "CountryDefaultName": "Latvia",
+    "Variant": ""
+  },
+  "lv_LV": {
+    "Language": "lv",
+    "LanguageDefaultName": "Latvian",
+    "Country": "LV",
+    "CountryDefaultName": "Latvia",
+    "Variant": ""
+  },
+  "mai_IN": {
+    "Language": "mai",
+    "LanguageDefaultName": "Maithili",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "mdw_CG": {
+    "Language": "mdw",
+    "LanguageDefaultName": "Mbochi",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "mfe_MU": {
+    "Language": "mfe",
+    "LanguageDefaultName": "Kreol Repiblik Moris",
+    "Country": "MU",
+    "CountryDefaultName": "Republic of Mauritius",
+    "Variant": ""
+  },
+  "min_ID": {
+    "Language": "min",
+    "LanguageDefaultName": "Minangkabau",
+    "Country": "ID",
+    "CountryDefaultName": "Indonesia",
+    "Variant": ""
+  },
+  "mk_MK": {
+    "Language": "mk",
+    "LanguageDefaultName": "Macedonian",
+    "Country": "MK",
+    "CountryDefaultName": "Republic of Macedonia",
+    "Variant": ""
+  },
+  "mkw_CG": {
+    "Language": "mkw",
+    "LanguageDefaultName": "Kituba",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ml_IN": {
+    "Language": "ml",
+    "LanguageDefaultName": "Malayalam",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "mn_Cyrl_MN": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Mongolian Cyrillic",
+    "Country": "MN",
+    "CountryDefaultName": "Mongolia",
+    "Variant": "mn-Cyrl-MN"
+  },
+  "mn_Mong_MN": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Mongolian Mongolian",
+    "Country": "MN",
+    "CountryDefaultName": "Mongolia",
+    "Variant": "mn-Mong-MN"
+  },
+  "mos_BF": {
+    "Language": "mos",
+    "LanguageDefaultName": "Mòoré",
+    "Country": "BF",
+    "CountryDefaultName": "Burkina Faso",
+    "Variant": ""
+  },
+  "mr_IN": {
+    "Language": "mr",
+    "LanguageDefaultName": "Marathi",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "ms_MY": {
+    "Language": "ms",
+    "LanguageDefaultName": "Bahasa Melayu",
+    "Country": "MY",
+    "CountryDefaultName": "Malaysia",
+    "Variant": ""
+  },
+  "mt_MT": {
+    "Language": "mt",
+    "LanguageDefaultName": "Maltese",
+    "Country": "MT",
+    "CountryDefaultName": "Malta",
+    "Variant": ""
+  },
+  "my_MM": {
+    "Language": "my",
+    "LanguageDefaultName": "Burmese",
+    "Country": "MM",
+    "CountryDefaultName": "Myanmar",
+    "Variant": ""
+  },
+  "myv_RU": {
+    "Language": "myv",
+    "LanguageDefaultName": "Erzya",
+    "Country": "RU",
+    "CountryDefaultName": "Russia",
+    "Variant": ""
+  },
+  "nb_NO": {
+    "Language": "nb",
+    "LanguageDefaultName": "Norwegian Bokmål",
+    "Country": "NO",
+    "CountryDefaultName": "Norway",
+    "Variant": ""
+  },
+  "nds_DE": {
+    "Language": "nds",
+    "LanguageDefaultName": "German, Low",
+    "Country": "DE",
+    "CountryDefaultName": "Germany",
+    "Variant": ""
+  },
+  "ne_NP": {
+    "Language": "ne",
+    "LanguageDefaultName": "Nepali",
+    "Country": "NP",
+    "CountryDefaultName": "Nepal",
+    "Variant": ""
+  },
+  "ngz_CG": {
+    "Language": "ngz",
+    "LanguageDefaultName": "Ngungwel",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "njx_CG": {
+    "Language": "njx",
+    "LanguageDefaultName": "Kunyi",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "njy_CG": {
+    "Language": "njy",
+    "LanguageDefaultName": "Njyem",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "nl_BE": {
+    "Language": "nl",
+    "LanguageDefaultName": "Dutch",
+    "Country": "BE",
+    "CountryDefaultName": "Belgium",
+    "Variant": ""
+  },
+  "nl_NL": {
+    "Language": "nl",
+    "LanguageDefaultName": "Dutch",
+    "Country": "NL",
+    "CountryDefaultName": "Netherlands",
+    "Variant": ""
+  },
+  "nn_NO": {
+    "Language": "nn",
+    "LanguageDefaultName": "Norwegian Nynorsk",
+    "Country": "NO",
+    "CountryDefaultName": "Norway",
+    "Variant": ""
+  },
+  "no_NO": {
+    "Language": "no",
+    "LanguageDefaultName": "Norwegian",
+    "Country": "NO",
+    "CountryDefaultName": "Norway",
+    "Variant": ""
+  },
+  "nr_ZA": {
+    "Language": "nr",
+    "LanguageDefaultName": "Ndebele, South",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "nso_ZA": {
+    "Language": "nso",
+    "LanguageDefaultName": "Northern Sotho",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "ny_MW": {
+    "Language": "ny",
+    "LanguageDefaultName": "Nyanja",
+    "Country": "MW",
+    "CountryDefaultName": "Malawi",
+    "Variant": ""
+  },
+  "oc_ES_aranes": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Occitan (Aranese)",
+    "Country": "ES",
+    "CountryDefaultName": "Spain",
+    "Variant": "oc-ES-aranes"
+  },
+  "oc_FR_lengadoc": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Occitan (Languedocien)",
+    "Country": "FR",
+    "CountryDefaultName": "France",
+    "Variant": "oc-FR-lengadoc"
+  },
+  "om_ET": {
+    "Language": "om",
+    "LanguageDefaultName": "Oromo, West Central",
+    "Country": "ET",
+    "CountryDefaultName": "Ethiopia",
+    "Variant": ""
+  },
+  "or_IN": {
+    "Language": "or",
+    "LanguageDefaultName": "Odia",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "pa_IN": {
+    "Language": "pa",
+    "LanguageDefaultName": "Punjabi",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "pap_BQ": {
+    "Language": "pap",
+    "LanguageDefaultName": "Papiamento",
+    "Country": "BQ",
+    "CountryDefaultName": "Bonaire",
+    "Variant": ""
+  },
+  "pap_CW": {
+    "Language": "pap",
+    "LanguageDefaultName": "Papiamento",
+    "Country": "CW",
+    "CountryDefaultName": "Curaçao",
+    "Variant": ""
+  },
+  "pdc_US": {
+    "Language": "pdc",
+    "LanguageDefaultName": "Pennsylvania Dutch",
+    "Country": "US",
+    "CountryDefaultName": "United States",
+    "Variant": ""
+  },
+  "pjt_AU": {
+    "Language": "pjt",
+    "LanguageDefaultName": "Pitjantjatjara",
+    "Country": "AU",
+    "CountryDefaultName": "Australia",
+    "Variant": ""
+  },
+  "pl_PL": {
+    "Language": "pl",
+    "LanguageDefaultName": "Polish",
+    "Country": "PL",
+    "CountryDefaultName": "Poland",
+    "Variant": ""
+  },
+  "plt_MG": {
+    "Language": "plt",
+    "LanguageDefaultName": "Malagasy, Plateau",
+    "Country": "MG",
+    "CountryDefaultName": "Madagascar",
+    "Variant": ""
+  },
+  "pt_AO": {
+    "Language": "pt",
+    "LanguageDefaultName": "Portuguese",
+    "Country": "AO",
+    "CountryDefaultName": "Angola",
+    "Variant": ""
+  },
+  "pt_BR": {
+    "Language": "pt",
+    "LanguageDefaultName": "Portuguese",
+    "Country": "BR",
+    "CountryDefaultName": "Brazil",
+    "Variant": ""
+  },
+  "pt_MZ": {
+    "Language": "pt",
+    "LanguageDefaultName": "Portuguese",
+    "Country": "MZ",
+    "CountryDefaultName": "Mozambique",
+    "Variant": ""
+  },
+  "pt_PT": {
+    "Language": "pt",
+    "LanguageDefaultName": "Portuguese",
+    "Country": "PT",
+    "CountryDefaultName": "Portugal",
+    "Variant": ""
+  },
+  "pui_CO": {
+    "Language": "pui",
+    "LanguageDefaultName": "Puinave",
+    "Country": "CO",
+    "CountryDefaultName": "Colombia",
+    "Variant": ""
+  },
+  "puu_CG": {
+    "Language": "puu",
+    "LanguageDefaultName": "Punu",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ro_MD": {
+    "Language": "ro",
+    "LanguageDefaultName": "Romanian",
+    "Country": "MD",
+    "CountryDefaultName": "Moldova",
+    "Variant": ""
+  },
+  "ro_RO": {
+    "Language": "ro",
+    "LanguageDefaultName": "Romanian",
+    "Country": "RO",
+    "CountryDefaultName": "Romania",
+    "Variant": ""
+  },
+  "ru_RU": {
+    "Language": "ru",
+    "LanguageDefaultName": "Russian",
+    "Country": "RU",
+    "CountryDefaultName": "Russia",
+    "Variant": ""
+  },
+  "rue_SK": {
+    "Language": "rue",
+    "LanguageDefaultName": "Rusyn",
+    "Country": "SK",
+    "CountryDefaultName": "Slovakia",
+    "Variant": ""
+  },
+  "rw_RW": {
+    "Language": "rw",
+    "LanguageDefaultName": "Kinyarwanda",
+    "Country": "RW",
+    "CountryDefaultName": "Rwanda",
+    "Variant": ""
+  },
+  "sat_IN": {
+    "Language": "sat",
+    "LanguageDefaultName": "Santali",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "sat_Olck_IN": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Santali, Ol Chiki",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": "sat-Olck-IN"
+  },
+  "sc_IT": {
+    "Language": "sc",
+    "LanguageDefaultName": "Sardinian",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "sdj_CG": {
+    "Language": "sdj",
+    "LanguageDefaultName": "Suundi",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "sg_CF": {
+    "Language": "sg",
+    "LanguageDefaultName": "Sango",
+    "Country": "CF",
+    "CountryDefaultName": "Central African Republic",
+    "Variant": ""
+  },
+  "shs_CA": {
+    "Language": "shs",
+    "LanguageDefaultName": "Shuswap",
+    "Country": "CA",
+    "CountryDefaultName": "Canada",
+    "Variant": ""
+  },
+  "sid_ET": {
+    "Language": "sid",
+    "LanguageDefaultName": "Sidama",
+    "Country": "ET",
+    "CountryDefaultName": "Ethiopia",
+    "Variant": ""
+  },
+  "sk_SK": {
+    "Language": "sk",
+    "LanguageDefaultName": "Slovak",
+    "Country": "SK",
+    "CountryDefaultName": "Slovak Republic",
+    "Variant": ""
+  },
+  "sl_SI": {
+    "Language": "sl",
+    "LanguageDefaultName": "Slovenian",
+    "Country": "SI",
+    "CountryDefaultName": "Slovenia",
+    "Variant": ""
+  },
+  "so_SO": {
+    "Language": "so",
+    "LanguageDefaultName": "Somali",
+    "Country": "SO",
+    "CountryDefaultName": "Somalia",
+    "Variant": ""
+  },
+  "sq_AL": {
+    "Language": "sq",
+    "LanguageDefaultName": "Albanian",
+    "Country": "AL",
+    "CountryDefaultName": "Albania",
+    "Variant": ""
+  },
+  "sr_CS": {
+    "Language": "sr",
+    "LanguageDefaultName": "Serbian Cyrillic",
+    "Country": "CS",
+    "CountryDefaultName": "Serbia and Montenegro",
+    "Variant": ""
+  },
+  "sr_Latn_CS": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Serbian Latin",
+    "Country": "CS",
+    "CountryDefaultName": "Serbia and Montenegro",
+    "Variant": "sr-Latn-CS"
+  },
+  "sr_Latn_ME": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Serbian Latin",
+    "Country": "ME",
+    "CountryDefaultName": "Serbia",
+    "Variant": "sr-Latn-ME"
+  },
+  "sr_Latn_RS": {
+    "Language": "qlt",
+    "LanguageDefaultName": "Serbian Latin",
+    "Country": "RS",
+    "CountryDefaultName": "Serbia",
+    "Variant": "sr-Latn-RS"
+  },
+  "sr_ME": {
+    "Language": "sr",
+    "LanguageDefaultName": "Serbian Cyrillic",
+    "Country": "ME",
+    "CountryDefaultName": "Montenegro",
+    "Variant": ""
+  },
+  "sr_RS": {
+    "Language": "sr",
+    "LanguageDefaultName": "Serbian Cyrillic",
+    "Country": "RS",
+    "CountryDefaultName": "Serbia",
+    "Variant": ""
+  },
+  "ss_ZA": {
+    "Language": "ss",
+    "LanguageDefaultName": "Swati",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "st_ZA": {
+    "Language": "st",
+    "LanguageDefaultName": "Sotho",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "sun_ID": {
+    "Language": "sun",
+    "LanguageDefaultName": "Sunda",
+    "Country": "ID",
+    "CountryDefaultName": "Indonesia",
+    "Variant": ""
+  },
+  "sv_FI": {
+    "Language": "sv",
+    "LanguageDefaultName": "Swedish",
+    "Country": "FI",
+    "CountryDefaultName": "Finland",
+    "Variant": ""
+  },
+  "sv_SE": {
+    "Language": "sv",
+    "LanguageDefaultName": "Swedish",
+    "Country": "SE",
+    "CountryDefaultName": "Sweden",
+    "Variant": ""
+  },
+  "sw_TZ": {
+    "Language": "sw",
+    "LanguageDefaultName": "Swahili",
+    "Country": "TZ",
+    "CountryDefaultName": "Tanzania",
+    "Variant": ""
+  },
+  "szl_PL": {
+    "Language": "szl",
+    "LanguageDefaultName": "Silesian",
+    "Country": "PL",
+    "CountryDefaultName": "Poland",
+    "Variant": ""
+  },
+  "ta_IN": {
+    "Language": "ta",
+    "LanguageDefaultName": "Tamil",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "te_IN": {
+    "Language": "te",
+    "LanguageDefaultName": "Telugu",
+    "Country": "IN",
+    "CountryDefaultName": "India",
+    "Variant": ""
+  },
+  "tek_CG": {
+    "Language": "tek",
+    "LanguageDefaultName": "Teke-Ibali",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "tg_TJ": {
+    "Language": "tg",
+    "LanguageDefaultName": "Tajik",
+    "Country": "TJ",
+    "CountryDefaultName": "Tajikistan",
+    "Variant": ""
+  },
+  "th_TH": {
+    "Language": "th",
+    "LanguageDefaultName": "Thai",
+    "Country": "TH",
+    "CountryDefaultName": "Thailand",
+    "Variant": ""
+  },
+  "ti_ER": {
+    "Language": "ti",
+    "LanguageDefaultName": "Tigrigina",
+    "Country": "ER",
+    "CountryDefaultName": "Eritrea",
+    "Variant": ""
+  },
+  "tk_TM": {
+    "Language": "tk",
+    "LanguageDefaultName": "Turkmen",
+    "Country": "TM",
+    "CountryDefaultName": "Turkmenistan",
+    "Variant": ""
+  },
+  "tn_ZA": {
+    "Language": "tn",
+    "LanguageDefaultName": "Tswana",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "tpi_PG": {
+    "Language": "tpi",
+    "LanguageDefaultName": "Tok Pisin",
+    "Country": "PG",
+    "CountryDefaultName": "Papua New Guinea",
+    "Variant": ""
+  },
+  "tr_TR": {
+    "Language": "tr",
+    "LanguageDefaultName": "Turkish",
+    "Country": "TR",
+    "CountryDefaultName": "Turkey",
+    "Variant": ""
+  },
+  "ts_ZA": {
+    "Language": "ts",
+    "LanguageDefaultName": "Tsonga",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "tsa_CG": {
+    "Language": "tsa",
+    "LanguageDefaultName": "Tsaangi",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "tt_RU": {
+    "Language": "tt",
+    "LanguageDefaultName": "Tatar",
+    "Country": "RU",
+    "CountryDefaultName": "Russia",
+    "Variant": ""
+  },
+  "tyx_CG": {
+    "Language": "tyx",
+    "LanguageDefaultName": "Teke-Tyee",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "ug_CN": {
+    "Language": "ug",
+    "LanguageDefaultName": "Uyghur",
+    "Country": "CN",
+    "CountryDefaultName": "China",
+    "Variant": ""
+  },
+  "uk_UA": {
+    "Language": "uk",
+    "LanguageDefaultName": "Ukrainian",
+    "Country": "UA",
+    "CountryDefaultName": "Ukraine",
+    "Variant": ""
+  },
+  "ur_PK": {
+    "Language": "ur",
+    "LanguageDefaultName": "Urdu",
+    "Country": "PK",
+    "CountryDefaultName": "Pakistan",
+    "Variant": ""
+  },
+  "uz_UZ": {
+    "Language": "uz",
+    "LanguageDefaultName": "Uzbek",
+    "Country": "UZ",
+    "CountryDefaultName": "Uzbekistan",
+    "Variant": ""
+  },
+  "ve_ZA": {
+    "Language": "ve",
+    "LanguageDefaultName": "Venda",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "vec_IT": {
+    "Language": "vec",
+    "LanguageDefaultName": "Venetian",
+    "Country": "IT",
+    "CountryDefaultName": "Italy",
+    "Variant": ""
+  },
+  "vi_VN": {
+    "Language": "vi",
+    "LanguageDefaultName": "Vietnamese",
+    "Country": "VN",
+    "CountryDefaultName": "Vietnam",
+    "Variant": ""
+  },
+  "vif_CG": {
+    "Language": "vif",
+    "LanguageDefaultName": "Vili",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "vro_EE": {
+    "Language": "vro",
+    "LanguageDefaultName": "Võro",
+    "Country": "EE",
+    "CountryDefaultName": "Estonia",
+    "Variant": ""
+  },
+  "wa_BE": {
+    "Language": "wa",
+    "LanguageDefaultName": "Walloon",
+    "Country": "BE",
+    "CountryDefaultName": "Belgium",
+    "Variant": ""
+  },
+  "xh_ZA": {
+    "Language": "xh",
+    "LanguageDefaultName": "Xhosa",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  },
+  "xku_CG": {
+    "Language": "xku",
+    "LanguageDefaultName": "Kaamba",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "yi_US": {
+    "Language": "yi",
+    "LanguageDefaultName": "Yiddish",
+    "Country": "US",
+    "CountryDefaultName": "United States",
+    "Variant": ""
+  },
+  "yom_CG": {
+    "Language": "yom",
+    "LanguageDefaultName": "Yombe",
+    "Country": "CG",
+    "CountryDefaultName": "Congo",
+    "Variant": ""
+  },
+  "zh_CN": {
+    "Language": "zh",
+    "LanguageDefaultName": "Simplified Chinese",
+    "Country": "CN",
+    "CountryDefaultName": "China",
+    "Variant": ""
+  },
+  "zh_HK": {
+    "Language": "zh",
+    "LanguageDefaultName": "Chinese",
+    "Country": "HK",
+    "CountryDefaultName": "Hong Kong, China",
+    "Variant": ""
+  },
+  "zh_MO": {
+    "Language": "zh",
+    "LanguageDefaultName": "Chinese",
+    "Country": "MO",
+    "CountryDefaultName": "Macau, China",
+    "Variant": ""
+  },
+  "zh_SG": {
+    "Language": "zh",
+    "LanguageDefaultName": "Chinese",
+    "Country": "SG",
+    "CountryDefaultName": "Singapore",
+    "Variant": ""
+  },
+  "zh_TW": {
+    "Language": "zh",
+    "LanguageDefaultName": "Traditional Chinese",
+    "Country": "TW",
+    "CountryDefaultName": "Taiwan",
+    "Variant": ""
+  },
+  "zu_ZA": {
+    "Language": "zu",
+    "LanguageDefaultName": "Zulu",
+    "Country": "ZA",
+    "CountryDefaultName": "South Africa",
+    "Variant": ""
+  }
+}

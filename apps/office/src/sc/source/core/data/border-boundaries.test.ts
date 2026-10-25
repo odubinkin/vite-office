@@ -281,7 +281,7 @@ it("styles independent diagonal-only runs without fabricating box or missing-lin
     close(d);
   }
 });
-it("publishes row segment endpoints and preserves unselected copies and repeated simple-cache applications", /** Real segmented outputs and native table callbacks. @returns Nothing. */ async () => {
+it("publishes row segment endpoints and retains native unmarked copy and repeated simple-cache applications", /** Real segmented outputs and native table callbacks. @returns Nothing. */ async () => {
   const { vi } = await import("vitest"),
     d = document(),
     t = required(d.FetchTable(0)),
@@ -320,7 +320,7 @@ it("publishes row segment endpoints and preserves unselected copies and repeated
     d.CopyToDocument(new ScRange(0, 0, 0, 1, 1, 1), InsertDeleteFlags.ATTRIB, false, dest, m);
     expect(
       (required(dest.GetPattern(new ScAddress())).GetItem(150) as SvxBoxItem).GetTop(),
-    ).toBeUndefined();
+    ).toEqual((required(d.GetPattern(new ScAddress())).GetItem(150) as SvxBoxItem).GetTop());
   } finally {
     cache.Dispose();
     p.Dispose();

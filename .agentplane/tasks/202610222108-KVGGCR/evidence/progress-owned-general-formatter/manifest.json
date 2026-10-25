@@ -1,0 +1,71 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;owned General/NatNum0 formatter/date/engine implemented;native pool-reference/document/interpreter/paste/history integration and task74 pending",
+  "sourceBaseline": "e18be174c361507fc496dcbb23281e61f82318e7",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 288,
+  "changedPaths": 24,
+  "checks": {
+    "relatedTests": "8files/40scenarios pass",
+    "coverage": {
+      "lines": {
+        "total": 505,
+        "covered": 505,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 557,
+        "covered": 557,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 107,
+        "covered": 107,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 238,
+        "covered": 238,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh build then actual formatter/date/settings/output Chromium/DOM-free Worker1/1 pass",
+    "boundaryTests": "2files/48scenarios pass",
+    "scopedProvenance": "6source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff check pass"
+  },
+  "preserved": [
+    "Native comphelper leap/month/validity/normalization,source BCE direction,signed16 month-wrap and day-limit clamps.",
+    "Native tools Date packed value,DMY/raw/copy/assignment/const borrow,field extraction and actual shared normalization;no host Date backend.",
+    "Actual General/NatNum0 SvNumberFormatter composes owned native provider,language,scanner,parsed table and date values;separate local generation/scanner service roles and failure cleanup.",
+    "Native UNKNOWN-to-US,precision2,year1950,date settings,NoZerofalse,numeric/string output,NoZero retained-color order and const borrowed entry surface.",
+    "Actual format scanner normalized null date versus raw input-scanner date/year field projections,without fabricating an input-scanner service.",
+    "CALC275-278 retain source BCE/month-wrap,color-pointer and string-documentation mismatches.",
+    "Canonical tools->comphelper edge follows tdate.cxx/Library_tl."
+  ],
+  "limits": [
+    "Only actual General/NatNum0 entries are admitted;remaining builtin/pattern/NatNum families are unavailable,not fabricated General substitutes.",
+    "Context service lookup binds actual providers;UNO/reference ABI,global formatter registry and mutex/thread services remain unrepresented.",
+    "SvNFEngine static-only C++ class is erased as a static namespace object to preserve its API under repository lint;no instance state/provider is introduced.",
+    "ScPoolHelper still needs its native salhelper::SimpleReferenceObject/rtl::Reference lifetime before owning this formatter. Existing managed pointer assignments are insufficient for explicit logical formatter destruction.",
+    "Native pool/document/interpreter/paste/history/task74 and full all-application acceptance remain pending.",
+    "Human-deleted liblangtag references and broad source/provenance/registry gates remain unwaived."
+  ],
+  "initialFailures": [
+    "Initial date selection omitted a positive year-rollover normalization branch;added its real source-boundary example.",
+    "Wrong prefix-failure locale assumption fa_IR was corrected to actual my_MM NatNum1/LANGUAGE_BURMESE0x0455 from source data;no provider test double was used.",
+    "One repair command used application cwd for root-relative files and therefore did not modify them;the confirmed completed test handle was polled,then root repair and tests rerun.",
+    "Lint required static-only engine class syntax erasure and explicit erasure of unconsumed General STAR flag;no rule/threshold changes."
+  ]
+}

@@ -10,18 +10,29 @@
       "ScPatternAttr",
       "CellAttributeHelper",
       "CellAttributeHolder",
-      "aScPatternAttrSchema"
+      "aScPatternAttrSchema",
+      "GetNumberFormatKey",
+      "GetLanguageType",
+      "HasValidNumberFormat",
+      "GetNumberFormat",
+      "InvalidateCaches",
+      "InvalidateCacheFor",
+      "MigrateToDocument"
     ],
     "upstreamSymbols": [
       "ScPatternAttr",
       "CellAttributeHelper",
-      "CellAttributeHolder"
+      "CellAttributeHolder",
+      "ScPatternAttr::GetNumberFormat"
     ],
     "preservedResponsibilities": [
       "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced.",
       "Task9SF7RJ connects actual shared Writer/SVX color palettes to Calc color10017/background10186 commands,real native color/brush items and sparse selection/history. SfxObjectShell owns recent NamedColor copies and original ColorsChanged notifications;Calc uses that same broadcaster identity. The native broadcaster role is consumed without claiming the unported full SfxShell command/lifecycle class. Original toolbox defaults and names are retained at the browser binding. Native pool defaults continue contiguously through background148,including source system-following number-format language. Actual ODS uses text color/automatic and table-cell background/transparency property groups over shared handlers. Bounded task9SF7RJ acceptance:Calc363cases and related11891cases pass with source-matched raw S/B/F/L100;all21browser cases pass across the original19-case run and corrected1280/390color scenarios. Full native configuration/view services remain unported;fillColor consumes explicit ambient values from the actual plain browser view. No broad parity flags are promoted.",
       "Task9K7PXS ports native ScPatternAttr FillToEditItemSet/FillEditItemSet,GetFromEditItemSet,FillEditParaItems and GetCellOrientation. Original input snapshots are read before target Changed hooks,and forward/reverse insertion order is preserved. Three independent script fonts,absolute height conversion using genuine integral o3tl rounding,complex color/underline payloads,conditional/table/direct precedence and parent SET handling are preserved. Original asymmetries remain:automatic color clears direct EditEngine color,table style participates in family/height/weight/color but not posture/line/language,script spacing is forced off,and reverse left adjustment leaves existing cell alignment(CALC239). The real shared SfxItemSet const-reference PutAsTargetWhich clones for the destination pool and adopts the remapped clone without changing its source. No fake EditEngine pool,layout service,formatted-number provider or document state is added. Render/number/hash caches are absent in this data slice;no fake invalidation hook is supplied. Actual EditEngine/GetNeededSize/GetOptimalHeight and automatic wrapped-height remain required and unported. Full native UI/device/font/UNO/ABI parity remains unverified.",
-      "Task6GG949 ports original ScPatternAttr borrowed style pointer/name association,copy,parent inheritance,default clearDirectFormat=true,null-attachment name retention,StyleToName and explicit/inherited symbol-font query. CellAttributeHelper preserves exact style-identity rename/delete matching,remove/rename/reinsert ordering including failed rename,canonical holder/name-group ownership and all-to-name/default-pattern teardown. Native caches absent from this existing slice remain absent;no dummy invalidation is introduced. The erased borrowed base operations are supplied by genuine shared SfxStyleSheet values;this neither implements nor substitutes ScStyleSheet,ScStyleSheetPool,ScPoolHelper,document style resolution or standard-style construction. Mounted Calc projects real inherited three-script font values from actual registered column patterns. Full StyleApply/named-style UI/history/ODS,style repaint propagation and automatic wrapped-height remain required and unported. No browser style store or broad native UI/device/UNO/ABI parity is claimed."
+      "Task6GG949 ports original ScPatternAttr borrowed style pointer/name association,copy,parent inheritance,default clearDirectFormat=true,null-attachment name retention,StyleToName and explicit/inherited symbol-font query. CellAttributeHelper preserves exact style-identity rename/delete matching,remove/rename/reinsert ordering including failed rename,canonical holder/name-group ownership and all-to-name/default-pattern teardown. Native caches absent from this existing slice remain absent;no dummy invalidation is introduced. The erased borrowed base operations are supplied by genuine shared SfxStyleSheet values;this neither implements nor substitutes ScStyleSheet,ScStyleSheetPool,ScPoolHelper,document style resolution or standard-style construction. Mounted Calc projects real inherited three-script font values from actual registered column patterns. Full StyleApply/named-style UI/history/ODS,style repaint propagation and automatic wrapped-height remain required and unported. No browser style store or broad native UI/device/UNO/ABI parity is claimed.",
+      "Task76: Native number-format key/language caches,copy-constructor cache values,threaded uncached reads,HasValidNumberFormat and original item/writable-set/style/edit/delta invalidation are represented. GetNumberFormat retains the native system-language built-in branch and null-formatter raw-key branch. Context language conversion,conditional number formatting,visibility/hash caches and result-format services remain explicitly unported.",
+      "Task76 attribute-copy progress: Native MigrateToDocument now copies direct SET items into the real destination helper,skips INVALID/inherited fields and preserves the no-format-exchange branch. With no validation-list owner in this document slice,the original absent-list branch resets validation indices to0. Bound foreign style copying remains an explicit missing Calc style-pool factory;no style resolver,validation list or format map is faked. The actual stored style pointer type is exposed to consumed same-helper hard-attribute copying.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
       "ScGlobal initialized style defaults,style resolution,document pool/attribute-array integration,font/number/rendering caches,hash optimization and complete Calc formatting remain unported."
@@ -59,12 +70,24 @@
         {
           "path": "apps/office/e2e/calc/cell-style-association.spec.ts",
           "marker": "Worker"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-attribute-copy.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
           "marker": "ScPatternAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/patattr.cxx",
+          "marker": "ScPatternAttr::GetNumberFormat"
         }
       ]
     }

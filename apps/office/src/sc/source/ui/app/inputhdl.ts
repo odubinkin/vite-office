@@ -1,7 +1,93 @@
-/** @fileoverview ScInputHandler input-mode subset from inputhdl.cxx/inputhdl.hxx. EditEngine,protection,reference input and VCL view synchronization remain unported;the browser adapter supplies the current scalar draft and focus. */
+/** @fileoverview ScInputHandler input-mode subset from inputhdl.cxx/inputhdl.hxx. Local reference selection uses the actual borrowed browser draft/caret;complete EditEngine,protection,reference dialogs and VCL view synchronization remain unported. */
+import { ScAddress, ScRange, ScRefFlags } from "../../../inc/address";
+import type { ScDocument } from "../../../inc/document";
+import type { ScTabViewShell } from "../inc/tabvwsh";
+import { ESelection } from "../../../../editeng/inc/ESelection";
 import { ScInputMode } from "../../../inc/global";
+/** Borrowed browser edit binding for the active single-line view;this is not a replacement EditEngine or EditView. */
+export interface ScInputReferenceInput {
+  GetText(): string;
+  GetSelection(): ESelection;
+  SetSelection(selection: ESelection): void;
+  InsertText(text: string, select: boolean): void;
+}
 /** Native mode owner used by the active scalar input binding. */
 export class ScInputHandler {
+  private pReferenceInput: ScInputReferenceInput | null = null;
+  private pActiveViewSh: ScTabViewShell | null = null;
+  private aCursorPos = new ScAddress();
+  private bSelIsRef = false;
+  /** Borrows the actual active browser edit view and native edit-origin position. @param input - Browser binding or absent view. @param cursor - Original editing cell. @param view - Actual active native view shell or absent view. @returns Nothing. */
+  BindReferenceInput(
+    input: ScInputReferenceInput | null,
+    cursor: ScAddress,
+    view: ScTabViewShell | null,
+  ): void {
+    this.pActiveViewSh = view;
+    this.pReferenceInput = input;
+    this.aCursorPos.assign(cursor);
+  }
+  /** Original selection collapse preserves the end endpoint. @returns Nothing. */
+  RemoveSelection(): void {
+    const input = this.pReferenceInput;
+    if (!input) return;
+    const selection = input.GetSelection();
+    selection.CollapseToEnd();
+    input.SetSelection(selection);
+  }
+  /** Browser projection of original KeyInput/Command removal of a pointer-selected reference before text editing. @returns Nothing. */
+  PrepareReferenceInput(): void {
+    if (this.bSelIsRef) {
+      this.RemoveSelection();
+      this.bSelIsRef = false;
+    }
+  }
+  /** Original selected-reference state projection used for painting and DOM selection synchronization. @returns Selected reference. */
+  IsReferenceSelection(): boolean {
+    return this.bSelIsRef;
+  }
+  /** Browser caret changes end the native pointer-selection state. @returns Nothing. */
+  ReferenceSelectionChanged(): void {
+    this.bSelIsRef = false;
+  }
+  /** Original AddRefEntry retains native separator and whole-text trailing-space rules. @returns Nothing. */
+  AddRefEntry(): void {
+    const input = this.pReferenceInput;
+    if (!input) return;
+    this.RemoveSelection();
+    const value = input.GetText();
+    let index = value.length - 1;
+    while (index >= 0 && value[index] === " ") --index;
+    const last = value[index];
+    if (last !== "(" && last !== ";" && last !== "=") input.InsertText(";", false);
+    this.SetModified();
+    this.UpdateInputState(input.GetText());
+  }
+  /** Original same-document SetReference replaces the active adjusted selection and never overwrites equals. @param reference - Actual pointer range. @param doc - Document whose reference is inserted. @returns Nothing. */
+  SetReference(reference: ScRange, doc: ScDocument): void {
+    const input = this.pReferenceInput;
+    if (!input) return;
+    const selection = input.GetSelection();
+    selection.Adjust();
+    if (selection.start.nIndex === 0) return;
+    if (!this.pActiveViewSh || doc !== this.pActiveViewSh.GetViewData().GetDocument())
+      throw new Error("External or inactive document reference input is not implemented");
+    if (
+      reference.aStart.Tab() !== this.aCursorPos.Tab() ||
+      reference.aStart.Tab() !== reference.aEnd.Tab()
+    )
+      throw new Error("Sheet-qualified formula reference input is not implemented");
+    input.SetSelection(selection);
+    const value = reference.Format(doc, ScRefFlags.VALID);
+    try {
+      input.InsertText(String.fromCharCode(...value.getStr().subarray(0, value.getLength())), true);
+    } finally {
+      value.dispose();
+    }
+    this.SetModified();
+    this.UpdateInputState(input.GetText());
+    this.bSelIsRef = true;
+  }
   private eMode = ScInputMode.SC_INPUT_NONE;
   private bModified = false;
   private bFormulaMode = false;
@@ -21,10 +107,12 @@ export class ScInputHandler {
   UpdateInputState(text: string, existingContent?: boolean): void {
     if (existingContent !== undefined) this.mbEditingExistingContent = existingContent;
     this.bFormulaMode = this.StartsLikeFormula(text);
+    this.bSelIsRef = false;
   }
   /** Explicit browser lifecycle projection of native accepted/cancelled/replaced input state resets. @returns Nothing. */
   ResetInputState(): void {
     this.ResetModified();
+    this.bSelIsRef = false;
     this.bFormulaMode = false;
     this.mbEditingExistingContent = false;
   }

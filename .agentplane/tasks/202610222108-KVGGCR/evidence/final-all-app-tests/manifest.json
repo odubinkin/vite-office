@@ -1,0 +1,209 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING/unverified;all-app test failures resolved through related rechecks and current raw100 coverage established;global registry remains unwaived pending permission to restore three additional pinned liblangtag reference files",
+  "sourceBaseline": "f60431bc26904df18137c2d578abf8faaf094aa2",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "changedPaths": [
+    "docs/program/registry/shared/runtime/i18npool/inc/numberformatcode.ts.json",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/math.h.ts.json",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/math.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/chartlis.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/clipcontext.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/conditio.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/reftokenhelper.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/refupdatecontext.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/scopetools.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/ui/inc/editable.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/idle.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/scheduler.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/svdata.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/task.ts.json",
+    "docs/program/registry/shared/runtime/vcl/inc/timer.ts.json",
+    ".prettierignore",
+    "eslint.config.js",
+    "apps/office/src/sw/source/filter/xml/odt-xml-boundaries.test.ts",
+    "scripts/native-search-boundary.test.ts"
+  ],
+  "checks": {
+    "allApplicationUnit": "Complete1280file19124case suite:19117pass7fail. All7original failures have current passing observations in54file227case browser/controller/chart recheck and2file13case final exact-owner gap recheck. New mounted focus/SUBTOTAL cases also pass. Original failures retained;no claim that the first full command was green;overlapping reruns are not added to unique totals.",
+    "currentApplicationCoverage": {
+      "lines": {
+        "total": 63360,
+        "covered": 63360,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 69844,
+        "covered": 69844,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12749,
+        "covered": 12749,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 42892,
+        "covered": 42892,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageOwners": {
+      "calc": {
+        "modules": 185,
+        "summary": {
+          "lines": {
+            "total": 16221,
+            "covered": 16221,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 18151,
+            "covered": 18151,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 3111,
+            "covered": 3111,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 10808,
+            "covered": 10808,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "writer": {
+        "modules": 244,
+        "summary": {
+          "lines": {
+            "total": 16097,
+            "covered": 16097,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 17730,
+            "covered": 17730,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 3821,
+            "covered": 3821,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 12796,
+            "covered": 12796,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "shared": {
+        "modules": 623,
+        "summary": {
+          "lines": {
+            "total": 31042,
+            "covered": 31042,
+            "skipped": 0,
+            "pct": 100
+          },
+          "statements": {
+            "total": 33963,
+            "covered": 33963,
+            "skipped": 0,
+            "pct": 100
+          },
+          "functions": {
+            "total": 5817,
+            "covered": 5817,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 19288,
+            "covered": 19288,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      }
+    },
+    "coverageMethod": "All1237runtime source hashes checked against full-suite start. Exactly two changed presenter maps are replaced wholesale with complete fresh current-source maps. Other current sources are byte-identical. Remaining actual FileDialog/document coverage uses standard Istanbul same-source/same-map merge from final2file13case recheck. Every raw statement/function/branch counter and all four original strict100 thresholds asserted;no counter edits/exclusions/threshold reductions.",
+    "browser": "Canonical full500cases498pass2fail;after real input-focus/select-all fix,related7cases pass on fresh production build,including both initial failures,5000row ODS IO,AutoSum1280/390 and reference pointing. Invalid earlier noncanonical-origin run canceled and retained,not accepted as a full run.",
+    "inventory": "Whole38file124case coverage run retains2timing failures;all124unique cases have passing observations via unchanged-timeout9case registry/mapping and7case ODT related rechecks.43unchanged actual owners have every raw counter hit.",
+    "inventoryCoverage": {
+      "lines": {
+        "total": 1670,
+        "covered": 1670,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 1734,
+        "covered": 1734,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 437,
+        "covered": 437,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1290,
+        "covered": 1290,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "tooling": "Full26file142case run retained141pass1stale boundary expectation fail. Corrected only its three expectations for already-source-authorized published API module edges;actual checker unchanged. Current1case recheck passes.",
+    "quality": "Final production build,tools/app types,global ESLint/Prettier,JSDoc3034,size,boundaries,tree,resources,static,routing/doctor and full source provenance1237 pass. All1237 semantic runtime records pass after correcting15 re-export/header local-declaration lists;no checker weakening or parity/status promotion.",
+    "globalRegistry": "FAIL/unwaived:vendor/liblangtag-reference/README is first missing full parity reference. Direct canonical-record audit additionally lists liblangtag/lt-tag.h and tests/check-lang.c. Separate human approval question pending;only17previously approved files restored."
+  },
+  "referenceApproval": "Human confirmed17-file pinned archive restoration;verified archive SHA256 a96975b79ddd8fef6d9295c083fe3f1afa1a8898a57235d4069255ade44e5cf2 and restored216050bytes only inside checkout through existing link. No downloaded code execution. Three additional files remain absent pending authorization.",
+  "stopRule": "After final required reference/registry acceptance,record verify/quality/commit/finish76 then74 and pause goal. No new tasks or feature families."
+}

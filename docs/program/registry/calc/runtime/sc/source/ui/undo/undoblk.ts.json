@@ -17,17 +17,29 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/ui/undo/undoblk.ts",
-        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts"
+        "apps/office/src/sc/source/ui/view/cell-indent-row-height.test.ts",
+        "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+        "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+        "apps/office/e2e/calc/clipboard-copy.spec.ts",
+        "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+        "apps/office/src/sc/source/core/data/clipboard-deletion.test.ts",
+        "apps/office/src/sc/source/core/data/native-table-undo.test.ts"
       ],
-      "justification": "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50.",
+      "justification": "TaskQMVA57 connects native 200-twip indentation,width caps,alignment coercion,filtered working marks and ScUndoIndent to the existing shared Writer toolbar. Actual row-height/manual flags and independent hidden/filtered segments drive native height/hide/show requests,geometry documents,keyboard skipping,compressed grid projection and ODS. The common ScMetricInputDlg accepts original dialog/current/default/unit/digits/range inputs for both axes. Shared XMLMeasurePropHdl preserves original signed scalar saturation,Any assignment and typed extraction;Calc indentation uses original signed16 HMM and UInt16 twip boundaries. Default-view unprotected/unmerged scalar cells only;optimal/device sizing,global undo enablement,UNO service/argument transform graphs,protection,drawing,outline,alternate views and complete native parity remain unverified. Existing primary save/open/no-recovery policies remain. Only related module tests run between all-app checkpoint40 and planned checkpoint50. Native indent history destroys its owned Undo document through the common destructor rather than explicitly destroying the source-shared string pool. Native content-only ScUndoPaste owns actual Undo/Redo documents and original range/mark/option values. Native base range fields project into the real shared SfxUndoAction;no fake ScMultiBlockUndo lifecycle exists. DoChange captures Redo lazily into actual SCDOCMODE_UNDO with native full-axis geometry flags,backs up selected sheets,normalizes CONTENTS/NOCAPTIONS,deletes without early broadcasts,issues original range broadcasts and preserves first-sheet/remaining-sheet Redo versus Undo restoration order. Compiled token ownership and native geometry defaults are retained. Actual unique owners are destroyed on disposal and local constructor-admission failure. Options preserve NONE0,INS_NONE4 and false booleans by-value;the native private option value has an explicit TypeScript field projection while Repeat is unported. Cut RefUndoData,change tracking,notes/drawing,ScSimpleUndo view/paint/area-link services and Repeat remain unrepresented without dummy hooks. Shell Sfx history,two selected sheets,stale tabs,groups,text/empty/value/formula restoration,lazy/prefilled Redo,whole-axis geometry and fresh ODS reopen are tested. EnterBlock/PasteFromClip UI acceptance remains pending. Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
       "knownViolations": [],
       "localSymbols": [
-        "ScUndoIndent"
+        "ScUndoIndent",
+        "ScUndoPaste",
+        "ScUndoPasteOptions"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/ui/undo/undoblk.cxx",
       "upstreamSymbols": [
-        "ScUndoIndent::Undo"
+        "ScUndoIndent::Undo",
+        "ScUndoPaste::ScUndoPaste",
+        "ScUndoPaste::DoChange",
+        "ScUndoPaste::Undo",
+        "ScUndoPaste::Redo"
       ]
     }
   }

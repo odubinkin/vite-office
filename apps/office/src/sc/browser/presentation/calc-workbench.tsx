@@ -2,6 +2,7 @@
 import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { getBrowserShortcut } from "../../../framework/browser/accelerators/keymapping";
 import type { ScTable } from "../../inc/table";
+import { columnAtPixel, columnPixels } from "./column-geometry";
 import { rowAtPixel, rowPixels } from "./row-geometry";
 import { ScInputMode } from "../../inc/global";
 import {
@@ -13,6 +14,7 @@ import {
   useRef,
   useSyncExternalStore,
   type KeyboardEvent,
+  type SyntheticEvent,
 } from "react";
 import { officeCommandIcons } from "../../../framework/browser/presentation/office-command-icons";
 import { CalcViewController } from "../controller/calc-view-controller";
@@ -40,7 +42,7 @@ import type { CalcSheetWorkflows } from "../workflows/calc-sheet-workflows";
 import { CalcFileDialog } from "./CalcFileDialog";
 import { CommandMenuBar } from "../../../framework/browser/presentation/CommandMenuBar";
 import { calcMenus, getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
-import { MAXTAB } from "../../inc/address";
+import { ScAddress, MAXTAB } from "../../inc/address";
 /** Production document/view and its shared Sfx frame. */
 export interface CalcWorkbenchProps {
   readonly sheetWorkflows: CalcSheetWorkflows;
@@ -89,7 +91,7 @@ export function CalcWorkbench({
           error instanceof Error ? error.message : String(error),
         ),
   });
-  const [inputSelection, setInputSelection] = useState<readonly [number, number]>();
+
   const [sheetPopup, setSheetPopup] = useState<CommandPopupMenuProps["position"]>();
   const closeSheetPopup = useCallback(
     /** Releases the shared popup owner. @returns Nothing. */ () => setSheetPopup(undefined),
@@ -99,13 +101,15 @@ export function CalcWorkbench({
   if (modal && sheetPopup !== undefined) setSheetPopup(undefined);
   const root = useRef<HTMLElement>(null),
     tabs = useRef<HTMLDivElement>(null),
-    previousModal = useRef(modal);
+    previousModal = useRef(modal),
+    browserTopFocus = useRef(false);
   const view = controller.viewData,
     doc = controller.shell.GetDocument();
   const cursorColumn = view.GetCurX(),
     cursorRow = view.GetCurY(),
     activeTab = view.GetTabNumber(),
     inputMode = controller.mode;
+  const [selectionStart, selectionEnd] = controller.inputSelection;
   const cursorRowHeight = (doc.FetchTable(activeTab) as ScTable).GetRowHeight(cursorRow);
   const source = useMemo(
     /** Binds presenters to the active frame. @returns Command source. */ () =>
@@ -129,16 +133,20 @@ export function CalcWorkbench({
     [modal],
   );
   useLayoutEffect(
-    /** Applies original input-window text selection only after controlled text has rendered. @returns Nothing. */ () => {
-      if (inputSelection) {
+    /** Projects native selection requests after controlled text renders. Actual browser focus owns its initial caret/selection,as ScTextWnd GetFocus delegates to the edit view without moving it. @returns Nothing. */ () => {
+      const preserveBrowserSelection = browserTopFocus.current;
+      browserTopFocus.current = false;
+      if (controller.mode !== ScInputMode.SC_INPUT_NONE && !preserveBrowserSelection) {
         const input = (root.current as HTMLElement).querySelector(
-          '[aria-label="Input line"]',
-        ) as HTMLInputElement;
-        input.focus();
-        input.setSelectionRange(inputSelection[0], inputSelection[1]);
+          controller.mode === ScInputMode.SC_INPUT_TOP
+            ? '[aria-label="Input line"]'
+            : '[aria-label^="Edit cell "]',
+        ) as HTMLInputElement | null;
+        input?.focus({ preventScroll: true });
+        input?.setSelectionRange(controller.inputSelection[0], controller.inputSelection[1]);
       }
     },
-    [inputSelection],
+    [controller, selectionStart, selectionEnd, controller.inputText, inputMode],
   );
   useEffect(
     /** Tracks concrete browser viewport changes separately from logical sheet rows. @returns Cleanup. */ () => {
@@ -199,9 +207,48 @@ export function CalcWorkbench({
     },
     [controller, doc, cursorColumn, cursorRow, activeTab, inputMode, cursorRowHeight],
   );
+  /** Projects original input-handler Command selected-reference collapse before DOM paste or IME starts. @param event - Actual editor command. @returns Nothing. */
+  function inputCommand(event: SyntheticEvent<HTMLInputElement>): void {
+    if (controller.inputHandler.IsReferenceSelection()) {
+      controller.inputHandler.PrepareReferenceInput();
+      event.currentTarget.setSelectionRange(
+        controller.inputSelection[0],
+        controller.inputSelection[1],
+      );
+    }
+  }
   /** Routes one input key while retaining IME ownership until composition completes. @param event - Input key. @returns Nothing. */
   function inputKey(event: KeyboardEvent<HTMLInputElement>): void {
     if (event.nativeEvent.isComposing) return;
+    if (
+      controller.mode === ScInputMode.SC_INPUT_TYPE &&
+      controller.inputHandler.IsFormulaMode() &&
+      event.key.startsWith("Arrow") &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      event.preventDefault();
+      controller.NavigateReference(
+        event.key === "ArrowLeft" ? -1 : event.key === "ArrowRight" ? 1 : 0,
+        event.key === "ArrowUp" ? -1 : event.key === "ArrowDown" ? 1 : 0,
+        event.shiftKey,
+      );
+      return;
+    }
+    if (
+      controller.inputHandler.IsReferenceSelection() &&
+      event.key !== "Escape" &&
+      !event.ctrlKey &&
+      !event.metaKey &&
+      !event.altKey
+    ) {
+      controller.inputHandler.PrepareReferenceInput();
+      event.currentTarget.setSelectionRange(
+        controller.inputSelection[0],
+        controller.inputSelection[1],
+      );
+    }
     if (
       controller.mode === ScInputMode.SC_INPUT_TYPE &&
       !event.ctrlKey &&
@@ -312,11 +359,12 @@ export function CalcWorkbench({
     if (action === "accept" && controller.Commit()) focusGrid();
     if (action === "sum") {
       const selection = controller.AutoSum();
-      if (selection) setInputSelection(selection);
+      if (selection) controller.SetInputSelection(selection[0], selection[1]);
       else focusGrid();
     }
     if (action === "equals") {
-      setInputSelection(controller.StartFormula());
+      const selection = controller.StartFormula();
+      controller.SetInputSelection(selection[0], selection[1]);
     }
   }
   return (
@@ -437,18 +485,95 @@ export function CalcWorkbench({
             }
           }
           onInput={
-            /** Changes the input owner's sole draft. @param value - Draft. @returns Nothing. */ (
+            /** Changes the input owner's sole draft. @param value - Draft. @param selection - Actual DOM UTF16 selection. @returns Nothing. */ (
               value,
-            ) => controller.ChangeInput(value)
+              selection,
+            ) => {
+              controller.ChangeInput(value);
+              controller.SetInputSelection(selection[0], selection[1]);
+            }
           }
           onInputFocus={
-            /** Enters formula-line mode. @returns Nothing. */ () =>
-              controller.StartInput(ScInputMode.SC_INPUT_TOP)
+            /** Enters TOP without overriding the browser-owned focus selection. Programmatic native input has already selected TOP before its focus is projected. @param event - Actual edit view focus. @returns Nothing. */ (
+              event,
+            ) => {
+              if (controller.mode !== ScInputMode.SC_INPUT_TOP) {
+                browserTopFocus.current =
+                  event.currentTarget === event.currentTarget.ownerDocument.activeElement;
+                controller.StartInput(ScInputMode.SC_INPUT_TOP);
+              }
+            }
+          }
+          onInputCommand={inputCommand}
+          onInputSelection={
+            /** Borrows actual native edit selection after its controlled text has rendered. @param start - UTF16 start. @param end - UTF16 end. @param value - DOM text associated with these endpoints. @returns Nothing. */ (
+              start,
+              end,
+              value,
+            ) => {
+              if (value === controller.Input()) controller.SetInputSelection(start, end);
+            }
           }
           onInputKeyDown={inputKey}
           onAction={inputAction}
         />
         <ScGridWindow
+          referenceMode={controller.inputHandler.IsFormulaMode()}
+          referenceRange={controller.ReferenceRange()}
+          onReveal={
+            /** Reveals native selection endpoints without moving the actual edit/active cursor. @param position - Hit-tested endpoint. @param kind - Pointer surface. @returns Nothing. */ (
+              position,
+              kind,
+            ) => {
+              const client = grid(),
+                viewport = controller.viewport;
+              if (!client.clientWidth || !client.clientHeight) return;
+              const table = doc.FetchTable(activeTab) as ScTable;
+              const left = columnPixels(table, 0, viewport.firstColumn - 1) + viewport.columnOffset;
+              const top = rowPixels(table, 0, viewport.firstRow - 1) + viewport.rowOffset;
+              const bodyWidth = client.clientWidth - (view.IsHeaderMode() ? 48 : 0),
+                bodyHeight = client.clientHeight - (view.IsHeaderMode() ? viewport.rowHeight : 0);
+              const x = columnPixels(table, 0, position.Col() - 1),
+                right = columnPixels(table, 0, position.Col());
+              const y = rowPixels(table, 0, position.Row() - 1),
+                bottom = rowPixels(table, 0, position.Row());
+              if (kind !== "row" && (x < left || right > left + bodyWidth))
+                client.scrollLeft = controller.ScrollLeftForColumn(
+                  x < left
+                    ? position.Col()
+                    : Math.min(
+                        position.Col(),
+                        columnAtPixel(table, Math.max(0, right - bodyWidth), doc.MaxCol()) + 1,
+                      ),
+                  client.clientWidth,
+                );
+              if (kind !== "column" && (y < top || bottom > top + bodyHeight))
+                client.scrollTop = controller.ScrollTopForRow(
+                  y < top
+                    ? position.Row()
+                    : Math.min(
+                        position.Row(),
+                        rowAtPixel(table, Math.max(0, bottom - bodyHeight), doc.MaxRow()) + 1,
+                      ),
+                  client.clientHeight,
+                );
+              controller.Scroll(
+                client.scrollLeft,
+                client.scrollTop,
+                client.clientWidth,
+                client.clientHeight,
+              );
+            }
+          }
+          onPointerEnd={
+            /** Ends actual native pointer selection. @returns Nothing. */ () =>
+              controller.EndPointer()
+          }
+          onDrag={
+            /** Updates the real reference endpoint during native window tracking. @param position - Endpoint. @returns Nothing. */ (
+              position,
+            ) => controller.MovePointer(position)
+          }
           headerSizing={{
             GetEntrySize:
               /** Reads native header dimensions. @param width - Axis. @param index - Entry. @returns Pixels. */ (
@@ -483,19 +608,42 @@ export function CalcWorkbench({
               pos,
               event,
             ) => {
-              if (event.button === 0) controller.Select(pos.Col(), pos.Row(), event.shiftKey);
+              controller.StartPointer(pos, event.shiftKey, event.ctrlKey || event.metaKey);
             }
           }
           onHeader={
-            /** Selects actual source row/column/all marks. @param kind - Header. @param index - Coordinate. @returns Nothing. */ (
+            /** Selects actual source row/column/all marks. @param kind - Header. @param index - Coordinate. @param event - Actual input modifiers. @returns Nothing. */ (
               kind,
               index,
-            ) => controller.Header(kind, index)
+              event,
+            ) => {
+              if (kind === "all") {
+                if (controller.inputHandler.IsFormulaMode()) {
+                  controller.PointReference(new ScAddress(0, 0, view.GetTabNumber()));
+                  controller.DragReference(
+                    new ScAddress(doc.MaxCol(), doc.MaxRow(), view.GetTabNumber()),
+                  );
+                } else controller.Header("all", 0);
+              } else {
+                controller.StartPointer(
+                  new ScAddress(
+                    kind === "column" ? index : 0,
+                    kind === "row" ? index : 0,
+                    view.GetTabNumber(),
+                  ),
+                  event.shiftKey,
+                  event.ctrlKey || event.metaKey,
+                  kind,
+                );
+                if (event.type === "click") controller.EndPointer();
+              }
+            }
           }
           onEdit={
             /** Starts inline editing through the input owner. @param pos - Cell. @returns Nothing. */ (
               pos,
             ) => {
+              if (controller.inputHandler.IsFormulaMode()) return;
               controller.Select(pos.Col(), pos.Row());
               controller.StartInput(ScInputMode.SC_INPUT_TABLE);
             }
@@ -515,9 +663,29 @@ export function CalcWorkbench({
             }
           }
           onInput={
-            /** Shares one draft with the formula line. @param value - Draft. @returns Nothing. */ (
+            /** Shares one draft with the formula line. @param value - Draft. @param selection - Actual DOM UTF16 selection. @returns Nothing. */ (
               value,
-            ) => controller.ChangeInput(value)
+              selection,
+            ) => {
+              controller.ChangeInput(value);
+              controller.SetInputSelection(selection[0], selection[1]);
+            }
+          }
+          onInputPointerDown={
+            /** Native edit-view mouse input ends reference selection and switches TYPE to TABLE before caret/word selection. @returns Nothing. */ () => {
+              controller.inputHandler.ReferenceSelectionChanged();
+              controller.StartInput(ScInputMode.SC_INPUT_TABLE);
+            }
+          }
+          onInputCommand={inputCommand}
+          onInputSelection={
+            /** Borrows actual native edit selection after its controlled text has rendered. @param start - UTF16 start. @param end - UTF16 end. @param value - DOM text associated with these endpoints. @returns Nothing. */ (
+              start,
+              end,
+              value,
+            ) => {
+              if (value === controller.Input()) controller.SetInputSelection(start, end);
+            }
           }
           onInputKeyDown={inputKey}
         />

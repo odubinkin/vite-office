@@ -1,0 +1,68 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native General format-table phase implemented;remaining builtin/language/formatter services and document paste/history/task74 pending",
+  "sourceBaseline": "d06f1f7facb40fa484cf9cd6c81b40f518cbef1b",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 274,
+  "changedPaths": 18,
+  "checks": {
+    "relatedTests": "4files/21scenarios pass",
+    "coverage": {
+      "lines": {
+        "total": 299,
+        "covered": 299,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 349,
+        "covered": 349,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 162,
+        "covered": 162,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh build then actual table/General generation/output Chromium/DOM-free Worker1/1 pass",
+    "boundaryTests": "47/47 pass",
+    "scopedProvenance": "5source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff check pass"
+  },
+  "preserved": [
+    "Actual SvNFFormatData field defaults and ownership of genuine compiled SvNumberformat entries.",
+    "Original key/type/locale-block lookup and numeric ordered exact-start/same-language/case-sensitive entry search.",
+    "Original admitted General insertion,empty-code failure,duplicate-code/position disposal,default flag and owned comment assignment.",
+    "Original General-only ImpGenerateFormats phase consumes real mapper Sequence/default policies,scanner/entry state and overwrites shared nThousand with builtin limit100.",
+    "Original XNumberFormatCode IDL four-method type contract keeps svl below the concrete i18npool implementation;native UDK Locale dependency is represented by the canonical offapi->udkapi SDK edge.",
+    "CALC-273 proves the original additional-format guard unreachable for every uint32 position;native input-domain results retained."
+  ],
+  "limits": [
+    "Not final all-Calc/changed-shared/all-application acceptance.",
+    "The remaining builtin generator,language/formatter constructors,currency/prefix/other pattern and NatNum services remain unported admission boundaries.",
+    "No full SvNumberFormatter provider is fabricated;document paste/history/task74 remain pending.",
+    "XNumberFormatCode is a consumed IDL type projection,not generated UNO ABI/Reference/service metadata.",
+    "Physical STL tree destructor order is not represented;admitted entries have no destructor callbacks.",
+    "Full source/provenance/registry gates remain unwaived;deleted liblangtag references are still absent."
+  ],
+  "missingReferences": [
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+    "vendor/liblangtag-reference/liblangtag/lt-error.h"
+  ]
+}

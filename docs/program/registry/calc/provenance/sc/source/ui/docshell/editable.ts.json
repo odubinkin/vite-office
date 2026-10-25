@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/docshell/editable.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/docshell/editable.cxx",
+    "localSymbols": [
+      "ScEditableTester",
+      "GetMessageId"
+    ],
+    "upstreamSymbols": [
+      "ScEditableTester::CreateAndTestBlock",
+      "ScEditableTester::TestBlock",
+      "ScEditableTester::GetMessageId"
+    ],
+    "preservedResponsibilities": [
+      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed selection/action factories,positive matrix geometry,read-only/protected/locked/scenario services and full native parity remain unported. No replacement document/backend is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/editable.ts",
+          "marker": "ScEditableTester"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-editability.test.ts",
+          "marker": "retains cumulative tester"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx",
+          "marker": "ScEditableTester::CreateAndTestBlock"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx",
+          "marker": "ScEditableTester::TestBlock"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/editable.cxx",
+          "marker": "ScEditableTester::GetMessageId"
+        }
+      ]
+    }
+  }
+}

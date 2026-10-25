@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/documen3.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/documen3.cxx",
+    "localSymbols": [
+      "UpdateReference"
+    ],
+    "upstreamSymbols": [
+      "UpdateReference"
+    ],
+    "preservedResponsibilities": [
+      "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified."
+    ],
+    "omittedResponsibilities": [
+      "Non-copy reference engines, full document copy/paste undo orchestration and absent native service families remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/documen3.ts",
+          "marker": "UpdateReference"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen3.cxx",
+          "marker": "UpdateReference"
+        }
+      ]
+    }
+  }
+}

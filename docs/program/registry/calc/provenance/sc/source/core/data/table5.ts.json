@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/table5.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/table5.cxx",
+    "localSymbols": [
+      "RemoveManualBreaks",
+      "HasManualBreaks",
+      "SetRowManualBreaks",
+      "SetColManualBreaks",
+      "GetAllRowBreaks",
+      "GetAllColBreaks",
+      "SetRowBreak",
+      "SetColBreak"
+    ],
+    "upstreamSymbols": [
+      "ScTable::RemoveManualBreaks",
+      "ScTable::HasManualBreaks",
+      "ScTable::SetRowManualBreaks",
+      "ScTable::SetColManualBreaks",
+      "ScTable::GetAllRowBreaks",
+      "ScTable::GetAllColBreaks",
+      "ScTable::SetRowBreak",
+      "ScTable::SetColBreak"
+    ],
+    "preservedResponsibilities": [
+      "Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Full native pagination,print device/UNO and sheet-local named-expression owners are outside this represented slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/table5.ts",
+          "marker": "RemoveManualBreaks"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/native-table-undo.test.ts",
+          "marker": "restores native full-axis geometry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table5.cxx",
+          "marker": "ScTable::SetRowManualBreaks"
+        }
+      ]
+    }
+  }
+}

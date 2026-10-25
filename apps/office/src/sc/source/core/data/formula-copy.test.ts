@@ -214,10 +214,15 @@ it("copies into native clipboard mode without ordinary-document reference invali
     retained = new ScFormulaCell(bad, clip, new ScAddress());
   expect(bad.GetCode().GetCodeError()).not.toBe(FormulaError.NONE);
   expect(retained.GetCode().GetCodeError()).toBe(bad.GetCode().GetCodeError());
-  const undoSource = new ScFormulaCell(undo, new ScAddress(1, 1, 0), unicode("=A1+$A$1"), grammar),
+  const undoSource = new ScFormulaCell(
+      undo,
+      new ScAddress(1, 1, 0),
+      source.GetCode().Clone(),
+      grammar,
+    ),
     undoCopy = undoSource.Clone(new ScAddress(1, 0, 0));
   expect(undoCopy.GetCode().GetCodeError()).toBe(FormulaError.NONE);
-  const invalidUndo = new ScFormulaCell(undo, new ScAddress(), unicode("=1+"), grammar),
+  const invalidUndo = new ScFormulaCell(undo, new ScAddress(), bad.GetCode().Clone(), grammar),
     deferred = invalidUndo.Clone();
   expect(invalidUndo.GetCode().GetCodeError()).not.toBe(FormulaError.NONE);
   expect(deferred.GetCode().GetCodeError()).toBe(FormulaError.NONE);

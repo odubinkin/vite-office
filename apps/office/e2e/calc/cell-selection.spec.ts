@@ -33,7 +33,7 @@ for (const width of [1280, 390]) {
       "aria-selected",
       "false",
     );
-    await expect(grid).toHaveAttribute("aria-activedescendant", /-0-2-3$/);
+    await expect(grid).toHaveAttribute("aria-activedescendant", /-0-1-1$/);
     await expect(grid).toBeFocused();
     await grid.getByRole("gridcell", { name: "B2", exact: true }).click();
     await page.getByRole("menubar").getByRole("menuitem", { name: "Edit", exact: true }).click();

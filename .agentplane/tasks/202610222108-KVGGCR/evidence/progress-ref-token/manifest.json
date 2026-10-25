@@ -1,0 +1,129 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native reference-token conversions verified;paste/history and AutoSum remain incomplete",
+  "sourceBaseline": "eb6884daef8b",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 21,
+  "relatedFiles": 6,
+  "currentMeasuredCoverage": {
+    "lines": {
+      "total": 74,
+      "covered": 74,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 84,
+      "covered": 84,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 10,
+      "covered": 10,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 51,
+      "covered": 51,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "calcCoverage": {
+    "lines": {
+      "total": 14843,
+      "covered": 14843,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16608,
+      "covered": 16608,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2899,
+      "covered": 2899,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10041,
+      "covered": 10041,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 180,
+  "hashedPaths": 464,
+  "coverageMethod": "Actual one-owner raw100 combined with hash-verified prior Calc coverage;not a new complete Calc replay. Type-only ScTokenRef change has byte-identical emitted JavaScript against the immutable old source. Re-export header contains only exports. No threshold,exclusion,ignore or coverage counter changes.",
+  "browserWorker": "1/1 Chromium and DOM-free Worker pass;actual helper extraction,range list,borrowed endpoint and intersection",
+  "passedChecks": [
+    "production build",
+    "app types",
+    "tools types",
+    "ESLint",
+    "Prettier",
+    "JSDoc",
+    "file size",
+    "module boundaries",
+    "source tree",
+    "scoped canonical provenance for3modules",
+    "Calc resources",
+    "static smoke",
+    "routing",
+    "doctor"
+  ],
+  "unported": [
+    "named-reference lookup",
+    "compileRangeRepresentation",
+    "join",
+    "chart/Idle and formatting owners",
+    "full document paste/history and EnterBlock/AutoSum"
+  ],
+  "suspectedUpstreamIssues": [
+    "CALC-266",
+    "CALC-267"
+  ],
+  "referenceAvailability": {
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c": false,
+    "vendor/liblangtag-reference/liblangtag/lt-error.h": false
+  },
+  "fullSourceGates": "Missing liblangtag source failures remain unwaived;no source-gate pass or restoration claimed.",
+  "taskFootprint": "149/160 conservative cumulative paths:prior139 plus7new files and3existing types/header-registry paths newly touched by76.",
+  "stopRule": "Finish active76 and74,then full all-application tests,fixes,required100percent coverage,final closure and pause. Do not wait for10tasks or start planned78-80.",
+  "fullAllApplicationRun": "Not yet executed in this progress block.",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/inc/types.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/inc/types.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/types.ts.json"
+  ],
+  "newPaths": [
+    "apps/office/src/sc/inc/reftokenhelper.ts",
+    "apps/office/src/sc/source/core/tool/reftokenhelper.test.ts",
+    "apps/office/src/sc/source/core/tool/reftokenhelper.ts",
+    "docs/program/registry/calc/provenance/sc/inc/reftokenhelper.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/reftokenhelper.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/reftokenhelper.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/reftokenhelper.ts.json"
+  ],
+  "rawSha256": "2ff76a11f4d957186a17e206249da935c9f2a7045db54b01ba274153af19e4c1",
+  "compressedBytes": 436004
+}

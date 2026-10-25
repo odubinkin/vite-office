@@ -1,0 +1,77 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;default-content CopyFromClip orchestration implemented and complete Calc100 verified;document UndoToDocument,paste history,EnterBlock and task74 remain pending",
+  "sourceBaseline": "29a140b40df1e660118bc79c4b5346a9f60ea0d5",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "approvedScopePathCount": 297,
+  "conservativeAllPathsCount": 301,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "scopeAccounting": "The approved Scope/Plan names source/test/registry/probe paths. Prior conservative unions also retained four existing other-task PNG evidence paths. Both counts and the entire historical union are preserved;no source/test/registry/probe path is excluded and no earlier archive is changed.",
+  "changedPaths": 18,
+  "checks": {
+    "calc": "229files/979scenarios pass with unchanged thresholds/timeouts",
+    "coverage": {
+      "lines": {
+        "total": 15396,
+        "covered": 15396,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17236,
+        "covered": 17236,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2994,
+        "covered": 2994,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10347,
+        "covered": 10347,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh production build then public ScDocument.CopyFromClip single-row and generic row-tiling,actual subscriptions and formula recalculation in Chromium/DOM-free Worker1/1 pass",
+    "scopedProvenance": "4source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "Original non-refresh attribute-entry/table/document merge extension,entry-start rows,valid bounds,allocated-column clamp and native default-column assertions.",
+    "Actual same-formatter NumFmtMergeHandler branch and native null exchange-table pointer/getter;foreign merge rejects without a fabricated exchange table.",
+    "Public CopyFromClip delegates to same-instance source definitions,using original parameter defaults,marked-table range,merge excess,deletion,single-row optimization,generic column/row chunks,filtered cursor continuation,post-insertion listening,bulk dirty/broadcast and reset-cut order.",
+    "AutoCalc,context and logical formatter scope lifetimes are actual owners;local unsupported-admission exceptions restore insertion/auto-calc state without synthetic rollback.",
+    "The unchanged native StartListeningFromClip body is partitioned out of the large document facade;its actual arguments and instance are retained.",
+    "Source default CONTENTS invariant proves native attr preallocation unreachable and final content guard true;no fake allocation branch is installed.",
+    "CALC280-281 preserve fast-path writes to unselected intermediate sheets and fully filtered single-row input.",
+    "Native empty-code error output regression now checks compiler UnknownToken520,Err:520 and unchanged formula dirty state.",
+    "Actual generic/single-row paste,new dependencies and fresh ODS reopen are exercised on the same model."
+  ],
+  "explicitBoundaries": [
+    "Global clipboard lookup,foreign formatter merge,nondefault paste,refresh/filter flag services and absent note/drawing/sparkline stores remain explicit unported boundaries.",
+    "Main CopyFromClip is a document.cxx responsibility physically partitioned into existing document10.ts beside actual clipboard phases;no alternate workbook or cell fill model exists.",
+    "ScDocument UndoToDocument is not implemented yet;existing native column/table Undo and CopyToDocument are available. Real ScUndoPaste/PasteFromClip/EnterBlock and task74 UI acceptance remain incomplete.",
+    "Full all-application certification/fixes/required100coverage/final task closure/goal pause remain required;this Calc-only checkpoint does not trigger that stop schedule. Deleted liblangtag reference/source gates remain unwaived."
+  ],
+  "failuresAndRepairs": [
+    "Initial compile identified unused facade context import,new field read contract and global ValidTab ownership;fixed through original GetFormatExchangeList and existing address helper.",
+    "Duplicate existing ODS test imports removed. First Calc pass had977/978 scenarios pass:one legacy formula-output test still expected an unimplemented-error throw. The native resource path is now supported,so the test checks source UnknownToken/error output without interpreting the cell.",
+    "Next Calc pass had978/978 scenarios pass but raw coverage missed empty source slots and partial source-row continuation. Added one real sparse clipboard/multiple-destination scenario;final229files979scenarios pass raw100 without exclusions,threshold changes,mocked providers or weakened checks."
+  ]
+}

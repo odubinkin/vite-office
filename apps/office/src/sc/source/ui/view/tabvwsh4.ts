@@ -1,4 +1,5 @@
 /** @fileoverview Consumed ScTabViewShell actual view ownership and default frame line from tabvwsh3.cxx/tabvwsh4.cxx/tabvwsh8.cxx/tabvwshf.cxx;native window/UNO services remain unported. */
+import type { ScModule } from "../../../inc/scmod";
 import { DoAutoSum, UseSubTotal } from "./tabvwshc";
 import type { ScRangeList } from "../../../inc/rangelst";
 import type { OpCode } from "../../../../formula/inc/opcode";
@@ -69,10 +70,13 @@ export class ScTabViewShell extends ScViewFunc {
     20,
     SvxBorderLineStyle.SOLID,
   );
-  /** Binds actual source view data and shell. @param viewShellDoc - Document shell. @returns View shell. */
-  constructor(private readonly viewShellDoc: ScDocShell) {
+  /** Binds actual source view data and shell. @param viewShellDoc - Document shell. @param module - Actual active input reference receiver. @returns View shell. */
+  constructor(
+    private readonly viewShellDoc: ScDocShell,
+    module: ScModule | null = null,
+  ) {
     const data = new ScViewData(viewShellDoc.GetDocument());
-    super(data, viewShellDoc);
+    super(data, viewShellDoc, module);
     // Native pView constructor initialization follows super because JavaScript forbids this before the base constructor.
     data["pView"] = this;
   }

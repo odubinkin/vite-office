@@ -1,0 +1,107 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native default-content PasteFromClip/EnterBlock/EnterAutoSum implemented and Calc/changed-shared raw100 verified;task74 visible availability and final all-app acceptance remain pending;global source gates remain blocked by two deleted reference files",
+  "sourceBaseline": "b3184144ba9d9b71373ff960479eec6381b5de77",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePathLimit": null,
+  "scopeApproval": "Human confirmation2026-10-25 removes numerical path limits only for existing tasks76/74;functional scope,network/reference restrictions and full-run/fixes/coverage/closure/pause rule unchanged. Recorded in2ff174182d1a and a1e44732d9ae.",
+  "authorizedScopePathCount": 346,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 64,
+  "checks": {
+    "calc": "Complete final baseline235files/1014scenarios pass;one additional genuine SUBTOTAL-error scenario and overlapping existing host-feedback scenario pass.1015 unique Calc scenarios observed;focused reruns are not counted again.",
+    "coverage": {
+      "lines": {
+        "total": 16211,
+        "covered": 16211,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 18141,
+        "covered": 18141,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3111,
+        "covered": 3111,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10801,
+        "covered": 10801,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMethod": "Actual standard Istanbul aggregation of complete final Calc and one source-identical/map-identical focused owner. All19 changed runtime SHA256 hashes and all statement/function/branch maps in the merged owner are asserted stable. Every raw counter and four unchanged strict100 metrics asserted. Standalone focused partial-module threshold failures retained,not reported as standalone full passes.",
+    "shared": "4actual number-format files/20scenarios pass;whole changed zforlist owner strict raw100 without threshold changes",
+    "sharedCoverage": {
+      "lines": {
+        "total": 222,
+        "covered": 222,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 244,
+        "covered": 244,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 102,
+        "covered": 102,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "browserWorker": "fresh production build;actual rectangular relative/absolute formula clone,single native list action,Undo/Redo and merge refresh in Chromium and DOM-free Worker pass1/1",
+    "other": "app/tools types,all64-path Prettier,changed TS/TSX ESLint,JSDoc,size,boundaries,source-tree,19-owner source provenance,Calc resources,static,routing,doctor,diff pass",
+    "globalSourceProvenance": "FAIL ENOENT vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c",
+    "globalRegistry": "FAIL ENOENT vendor/liblangtag-reference/liblangtag/lt-error.h"
+  },
+  "preserved": [
+    "One real formula is compiled at the original cursor into an actual ScDocument clipboard,then cloned by canonical native contexts/stores;no repeated EnterData fill or formula-source reparse. Native EnterAutoSum uses the last inferred range end plus one row as formula reference address.",
+    "Native GetSimpleArea,copied selected marks,source dimensions,selection growth,bounds,first-existing clipboard sheet/filters,merge envelopes,editability,CONTENTS/ATTRIB/NOCAPTIONS normalization,real Undo documents and lazy ScUndoPaste history retain native ownership/order/defaults.",
+    "Current normal active-view/enabled-Undo profile erases unavailable physical paint/OLE/UNO/window phases without fake providers. Nondefault/cut/multi-range/filtered/merged-source unmerge/positive matrix/rich input/dialog families reject explicitly before unsupported work. Native disjoint-mark ErrorMessage plus one-cell EnterData fallback remains implemented.",
+    "Native pure IsCompatible preserves asymmetric numeric/date/logical/duration categories;its equality branch permits equivalent removal of the redundant pure caller equality test. Actual General formatter and cached canonical attribute-run application are used. Nondefault language conversion stays unported.",
+    "Native ErrorMessage resolves pinned English resources at the existing browser resource boundary and stops actual pointer tracking before existing error presentation. Document replacement rebinds the active host;no VCL/gettext service is imitated.",
+    "GetCellAttributeHelper and SetAllFormulasDirty bodies physically partition unchanged on the same original instances for strict file-size gates. Native first-used-table HasClipFilteredRows replaces an invalid dimension-difference inference,including all-filtered one-cell ranges.",
+    "Actual rectangular formulas,absolute/relative references,styles,Undo/Redo,ODS reopen,full-axis empty content,source/destination gaps,real foreign formatter failure and genuine SUBTOTAL error are verified."
+  ],
+  "failuresAndRepairs": [
+    "Missing type imports and native ATTR_VALUE_FORMAT146 declaration repaired from actual headers;test used existing writeOdsDocument/async readOdsDocument API instead of nonexistent shell alias.",
+    "Test marking accessor corrected to actual GetMarkingFlag;no production alias or fake owner added.",
+    "All-filtered one-cell source exposed GetClipArea zero clamp;implemented actual HasClipFilteredRows instead of guessing from dimension differences.",
+    "Initial broad run retained old workbench refusal assertion and an invalid test assumption about an unmarked edge merge. Original unmarked paste resets to clipboard dimensions;the final edge test supplies the actual out-of-sheet marked merge envelope. Corrected files pass16/16;subsequent complete baseline235files/1014scenarios passes.",
+    "Complete baseline left one old UI Error branch uncovered because its prior failure trigger now succeeds. Added genuine filtered-source SUBTOTAL error,then exact-map/hash standard aggregation reaches raw100.",
+    "Global source/registry failures remain unwaived;approved scope forbids network/reference restoration. No deleted cache was restored and no broad gate pass is claimed."
+  ],
+  "stopRule": "Finish existing76 and74;full all-application suites,necessary fixes/new scenarios,required100coverage,final task closure,then pause goal. No new planned tasks;final source gates remain unwaived."
+}

@@ -1,4 +1,7 @@
 /** @fileoverview Consumed native ScViewFunc selection formatting,frame operations and explicit sheet geometry;device/rich-edit/alternate-view services remain unported. */
+import { PasteFromClip } from "./viewfun3";
+import { EnterBlock, EnterAutoSum } from "./viewfun2";
+import type { ScModule } from "../../../inc/scmod";
 import type { ScDocumentPool } from "../../core/data/docpool";
 import {
   SvxBoxItem,
@@ -27,11 +30,10 @@ import { ScRange, ScAddress } from "../../../inc/address";
 import { ScUndoWidthOrHeight } from "../undo/undoblk2";
 import { ScRangeList } from "../../../inc/rangelst";
 import { OpCode } from "../../../../formula/inc/opcode";
-import { ScDocument } from "../../../inc/document";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScFormulaCell } from "../../../inc/formulacell";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { ColRowSpan } from "../../../inc/columnspanset";
 import type { ScViewData } from "../inc/viewdata";
 /** Original ShowFilteredRows skips actual filter runs when manually resizing or hiding. @param doc - Actual document. @param tab - Sheet. @param first - First row. @param last - Last row. @param show - Visibility. @returns Nothing. */
@@ -90,12 +92,13 @@ export function GetSelectionPattern(view: ScViewData): ScPatternAttr {
 
 /** Native view-function layer owns the cursor-versus-mark deletion decision. */
 export class ScViewFunc extends ScTabView {
-  /** Borrows actual source view/document owners. @param data - View. @param shell - Document shell. @returns View functions. */
+  /** Borrows actual source view/document owners. @param data - View. @param shell - Document shell. @param module - Actual active input reference receiver. @returns View functions. */
   constructor(
     private readonly data: ScViewData,
     private readonly shell: ScDocShell,
+    module: ScModule | null = null,
   ) {
-    super(data);
+    super(data, true, module);
   }
   /** Original range inference delegates to the native viewfun2 implementation. @param ranges - Ordered output ranges. @returns Found data. */
   GetAutoSumArea(ranges: ScRangeList): boolean {
@@ -119,6 +122,18 @@ export class ScViewFunc extends ScTabView {
     code: OpCode,
   ): boolean {
     return AutoSum(this, range, subtotal, setCursor, continueMarks, code);
+  }
+  /** Original aggregate block-input orchestration. @param args - Actual ranges,category,position and opcode. @returns Nothing. */
+  EnterAutoSum(...args: Parameters<typeof EnterAutoSum>): void {
+    EnterAutoSum.apply(this, args);
+  }
+  /** Original internal clipboard paste entry. @param args - Native flags,clipboard and original policy defaults. @returns Pasted. */
+  PasteFromClip(...args: Parameters<typeof PasteFromClip>): boolean {
+    return PasteFromClip.apply(this, args);
+  }
+  /** Original formula block input. @param source - Formula text. @param rich - Native absent rich object. @returns Nothing. */
+  EnterBlock(source: OUStringConstReference, rich: null): void {
+    EnterBlock.call(this, source, rich);
   }
   /** Consumed ordinary-formula EnterData path,using native concrete formula operations and per-cell list history. Nonformula/rich-edit/matrix processing remains unported here. @param col - Column. @param row - Row. @param tab - Source sheet. @param source - Formula text. @returns Nothing. */
   EnterData(col: number, row: number, tab: number, source: OUStringConstReference): void {
@@ -333,13 +348,10 @@ export class ScViewFunc extends ScTabView {
     const removeAdjacent = outer.IsRemoveAdjacentCellBorder(),
       cover = new ScRange(range);
     if (removeAdjacent) marks.GetSelectionCover(cover);
-    const undo = new ScDocument(),
-      name = new OUString();
-    for (let tab = 0; tab < doc.GetTableCount(); tab++) {
-      doc.GetName(tab, name);
-      undo.InsertTab(tab, name);
-    }
-    name.dispose();
+    const undo = new ScDocument(ScDocumentMode.SCDOCMODE_UNDO),
+      tab = range.aStart.Tab();
+    undo.InitUndo(doc, tab, tab);
+    for (const selected of marks) if (selected !== tab) undo.AddUndoTab(selected, selected);
     const copy = new ScRange(cover),
       copyOnlyMarked = !removeAdjacent && multi;
     copy.aStart.SetTab(0);

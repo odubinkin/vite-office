@@ -1,0 +1,85 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native format mapper/value transport implemented,not final clipboard/paste/UI acceptance",
+  "sourceBaseline": "8adc034b3b65d895c370946f3e1bf77559096760",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 263,
+  "changedPaths": 26,
+  "implemented": [
+    "Native FormatElement/NumberFormatCode generated type bindings,real seven-field NumberFormatCode constructor/copy/assignment/string ownership and nonowning mutable field references.",
+    "Original getAllFormats compound Sequence transport over prepared locale fields.",
+    "Original NumberFormatCodeMapper default/index/usage/all queries,exact enum conversions and complete-Locale FIFO cache.",
+    "CALC-271 strict size>3/four-entry cache behavior verified through actual Locale/OUString ownership and returned-value lifetimes.",
+    "Canonical i18npool->cppu/offapi dependency edges backed by original Library_i18npool SDK/CPPu use and native mapper headers;reverse/application/browser prohibitions retained."
+  ],
+  "checks": {
+    "relatedTests": {
+      "files": 3,
+      "scenarios": 14,
+      "result": "pass",
+      "allLocales": 284,
+      "allMappedRows": 15186
+    },
+    "coverage": {
+      "measuredOwners": 7,
+      "summary": {
+        "lines": {
+          "total": 219,
+          "covered": 219,
+          "skipped": 0,
+          "pct": 100
+        },
+        "statements": {
+          "total": 248,
+          "covered": 248,
+          "skipped": 0,
+          "pct": 100
+        },
+        "functions": {
+          "total": 49,
+          "covered": 49,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 85,
+          "covered": 85,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "result": "pass"
+    },
+    "browserAndDomFreeWorker": "pass;1 actual source scenario after current production build",
+    "build": "pass after two test-only cast corrections",
+    "appAndToolsTypes": "pass after corrections",
+    "changedPathLint": "pass",
+    "format": "pass",
+    "boundaries": "pass;1225 runtime sources,6056 relative imports,168 reported allowed edges",
+    "boundaryScenarios": "47/47 pass",
+    "jsdoc": "pass;3009 authored source files",
+    "size": "pass;boundary test998 lines",
+    "scopedProvenance": "pass;7 mapped owners"
+  },
+  "initialFailures": [
+    "Initial build/typecheck rejected two new test casts for compound metadata and the Sequence.getArray union. Corrected only static casts;production source and runtime assertions unchanged. Fresh types/build/browser pass.",
+    "An initial browser module probe passed on the previous preview host build;it is not used as the final production-build acceptance. A fresh build and subsequent browser/Worker replay pass.",
+    "Initial module-boundary validation rejected i18npool->cppu/offapi. Added only original Library_i18npool/SDK-backed edges and verified forward/reverse restrictions with47 boundary scenarios."
+  ],
+  "omissions": [
+    "Service-manager construction,UNO service/interface ABI,XServiceInfo and native mutex/thread scheduling are unrepresented.",
+    "Unconsumed generated comparison/move families are not claimed;actual shared compound/Sequence transport is reused without a new type or ownership engine.",
+    "Full SvNumberFormatter/language/scanner ownership,ScCellFormat/script preparation,document paste/history/EnterBlock and task74 remain pending.",
+    "Complete current Calc/changed-shared/all-application acceptance,prior missing-liblangtag reference gates and Writer lint failures remain unwaived."
+  ],
+  "stopRule": "Finish76 then74;full all-application tests,fix failures/add scenarios,required100coverage,final closure and goal pause. Do not start78-80.",
+  "rawBytes": 163996,
+  "rawSha256": "3b0a9bf10d29a22c15fac708d6ad4b8b3108f561e240465032b9a6c85c135110"
+}

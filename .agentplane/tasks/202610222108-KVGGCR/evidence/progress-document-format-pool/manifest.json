@@ -1,0 +1,66 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;document pool lifetime and lazy General formatter connected;interpreter/script/document paste/history and task74 still pending",
+  "sourceBaseline": "54035077070cf9645e68b45a59dc6d195c352327",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "approvedBudget": 300,
+  "footprint": 291,
+  "changedPaths": 19,
+  "checks": {
+    "relatedTests": "18files/165scenarios pass with maxWorkers1;unchanged timeout/coverage thresholds",
+    "coverage": {
+      "lines": {
+        "total": 150,
+        "covered": 150,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 180,
+        "covered": 180,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 29,
+        "covered": 29,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 73,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "browserWorker": "fresh production build then actual document-owned General formatter and shared Undo borrow in Chromium/DOM-free Worker1/1 pass",
+    "boundaryTests": "2files/49scenarios pass",
+    "scopedProvenance": "5source owners pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,static,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "SimpleReferenceObject actual OSL atomic count,static flag,protected staticize,virtual zero-count destructor assertion. No replacement lifetime engine.",
+    "ScPoolHelper native default ScDocOptions,lazy actual formatter,represented creation/settings order and destruction.",
+    "ScDocument rtl::Reference acquire/release at initialization,sharing and destruction;Reference::set retains/releases even for identical bodies.",
+    "Actual shared clipboard/Undo holds parsed formatter entries after source closes;last release destroys logical owned values.",
+    "Canonical salhelper->sal and sc->salhelper source dependency directions."
+  ],
+  "failuresAndRepairs": [
+    "Initial GetDate call used tuple-return syntax instead of actual output references;corrected without changing ScDocOptions contract.",
+    "Type/lint/JSDoc test assertions repaired. Browser fixture shared output scratch was overwritten;stored compiled output before independent pooled-formatter observation.",
+    "One repeated parallel test run hit the existing10000ms module-reset hook timeout and secondary incomplete-realm failures. Original18file run passed;final identical scenario set with maxWorkers1 passes with unchanged timeouts."
+  ],
+  "remaining": [
+    "ScCellFormat and actual interpreter formatting preparation/script updater",
+    "Document CopyOneCellFromClip/CopyFromClip orchestration,native paste undo/EnterBlock and task74 UI acceptance",
+    "Full Calc/changed-shared/all-application final certification and required100coverage before closure/pause",
+    "Unported full number formats/color callbacks/edit-engine and physical pool shutdown are explicit boundaries;deleted liblangtag source gates remain unwaived"
+  ]
+}

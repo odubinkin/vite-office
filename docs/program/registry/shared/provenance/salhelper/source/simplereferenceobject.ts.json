@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/salhelper/source/simplereferenceobject.ts",
+    "status": "mapped",
+    "upstreamPath": "salhelper/source/simplereferenceobject.cxx",
+    "localSymbols": [
+      "SimpleReferenceObject"
+    ],
+    "upstreamSymbols": [
+      "SimpleReferenceObject::~SimpleReferenceObject"
+    ],
+    "preservedResponsibilities": [
+      "Original SimpleReferenceObject signed32 count,static flag,acquire/release through actual OSL atomic functions and zero-count virtual destruction. Protected staticize and destructor assertion preserve source contracts. The destroy method erases C++ delete-this dispatch;it does not introduce a replacement ownership backend. C++ allocator/DLL ABI operators and physical deallocation are unrepresented."
+    ],
+    "omittedResponsibilities": [
+      "C++ allocator/DLL ABI operators and physical deallocation remain unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/salhelper/source/simplereferenceobject.ts",
+          "marker": "SimpleReferenceObject"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+          "marker": "staticization"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/salhelper/simplereferenceobject.hxx",
+          "marker": "void acquire()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/salhelper/source/simplereferenceobject.cxx",
+          "marker": "SimpleReferenceObject::~SimpleReferenceObject"
+        }
+      ]
+    }
+  }
+}

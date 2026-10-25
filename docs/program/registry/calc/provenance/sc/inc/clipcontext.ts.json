@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/inc/clipcontext.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/clipcontext.hxx",
+    "localSymbols": [
+      "ClipContextBase",
+      "CopyFromClipContext",
+      "CopyToDocContext"
+    ],
+    "upstreamSymbols": [
+      "ClipContextBase",
+      "CopyFromClipContext"
+    ],
+    "preservedResponsibilities": [
+      "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
+      "Task76 clone-copy progress: Original CopyToDocContext exports the actual cursor-context owner with start-listening default true and mutable operation policy."
+    ],
+    "omittedResponsibilities": [
+      "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/inc/clipcontext.ts",
+          "marker": "ClipContextBase"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+          "marker": "clipboard"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/clipcontext.hxx",
+          "marker": "ClipContextBase"
+        }
+      ]
+    }
+  }
+}

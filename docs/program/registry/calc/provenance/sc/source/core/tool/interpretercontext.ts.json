@@ -10,10 +10,13 @@
       "ScInterpreterContext"
     ],
     "upstreamSymbols": [
-      "ScInterpreterContext::ScInterpreterContext"
+      "ScInterpreterContext::ScInterpreterContext",
+      "ScInterpreterContext::NFGetOutputString",
+      "ScInterpreterContext::initFormatTable"
     ],
     "preservedResponsibilities": [
-      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false."
+      "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
+      "Actual nonthreaded context now lazily borrows the real document pool formatter and forwards native numeric/string NFGetOutputString with defaultfalse star control. This is a represented field/caller projection,not a formatter or RO-policy substitute. Constructor and lazy initialization do not claim native prepFormatterForRoMode currency-table/language-copy/cache services;threaded access rejects explicitly. RNG,tokens,caches and other NF methods remain unported."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."
@@ -23,6 +26,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/interpretercontext.ts",
           "marker": "ScInterpreterContext"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
+          "marker": "original document fast path"
         }
       ],
       "upstream": [

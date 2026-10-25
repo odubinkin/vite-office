@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/datetime/tdate.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/datetime/tdate.cxx",
+    "localSymbols": [
+      "Date",
+      "DateConstReference"
+    ],
+    "upstreamSymbols": [
+      "Date::setDateFromDMY",
+      "Date::IsValidDate",
+      "Date::Normalize"
+    ],
+    "preservedResponsibilities": [
+      "Actual tools Date packed signed32 value,DMY/raw/copy constructors,implicit member assignment,absolute day/month and signed16 year extraction,validity and normalization delegate to genuine shared comphelper algorithms. DateConstReference projects the original borrowed const value surface;no host JavaScript Date,timezone or alternate calendar provider is used. Native representability assertions and year0 constructor diagnostic-only policy are preserved. SYSTEM clock,UNO conversions,day arithmetic and other Date operations remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only represented native value/normalization responsibilities are ported;clock,UNO/calendar ABI,day arithmetic and full formatter/document integration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/datetime/tdate.ts",
+          "marker": "Date"
+        },
+        {
+          "path": "apps/office/src/tools/source/datetime/tdate.test.ts",
+          "marker": "normalize"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/tools/source/datetime/tdate.cxx",
+          "marker": "Date::setDateFromDMY"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/tools/date.hxx",
+          "marker": "GetDay"
+        }
+      ]
+    }
+  }
+}

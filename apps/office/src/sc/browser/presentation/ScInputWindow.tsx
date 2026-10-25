@@ -1,4 +1,5 @@
 /** @fileoverview Controlled browser composition of ScPosWnd and the ScInputWindow formula/OK-cancel input line. Draft and address transitions belong to the input/view controllers. */
+import type { SyntheticEvent, FocusEvent } from "react";
 import type { KeyboardEvent } from "react";
 import { FunctionSquare, Sigma, Equal, X, Check, ChevronDown, type LucideIcon } from "lucide-react";
 import {
@@ -16,8 +17,10 @@ export interface ScInputWindowProps {
   readonly enabledActions: ReadonlySet<CalcInputAction>;
   readonly onAddressChange: (value: string) => void;
   readonly onAddressKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
-  readonly onInput: (value: string) => void;
-  readonly onInputFocus: () => void;
+  readonly onInput: (value: string, selection: readonly [number, number]) => void;
+  readonly onInputCommand?: (event: SyntheticEvent<HTMLInputElement>) => void;
+  readonly onInputSelection?: (start: number, end: number, text: string) => void;
+  readonly onInputFocus: (event: FocusEvent<HTMLInputElement>) => void;
   readonly onInputKeyDown: (event: KeyboardEvent<HTMLInputElement>) => void;
   readonly onAction: (action: CalcInputAction) => void;
 }
@@ -96,7 +99,22 @@ export function ScInputWindow(props: ScInputWindowProps): React.JSX.Element {
         onChange={
           /** Forwards formula or scalar input. @param event - DOM input. @returns Nothing. */ (
             event,
-          ) => props.onInput(event.target.value)
+          ) =>
+            props.onInput(event.target.value, [
+              event.target.selectionStart as number,
+              event.target.selectionEnd as number,
+            ])
+        }
+        onCompositionStart={props.onInputCommand}
+        onPaste={props.onInputCommand}
+        onSelect={
+          /** Projects actual UTF16 edit selection to the input owner. @param event - Editor selection. @returns Nothing. */
+          (event) =>
+            props.onInputSelection?.(
+              event.currentTarget.selectionStart as number,
+              event.currentTarget.selectionEnd as number,
+              event.currentTarget.value,
+            )
         }
         onKeyDown={props.onInputKeyDown}
         className={`${officeTextInputClassName} flex-1`}

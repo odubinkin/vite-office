@@ -1,0 +1,123 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native chart-listener value ownership verified;live chart/Idle,document paste/history and AutoSum incomplete",
+  "sourceBaseline": "98f7eb8a3e19",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "relatedScenarios": 31,
+  "relatedFiles": 3,
+  "currentMeasuredCoverage": {
+    "lines": {
+      "total": 30,
+      "covered": 30,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 31,
+      "covered": 31,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 12,
+      "covered": 12,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 15,
+      "covered": 15,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "calcCoverage": {
+    "lines": {
+      "total": 14873,
+      "covered": 14873,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 16639,
+      "covered": 16639,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2911,
+      "covered": 2911,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 10056,
+      "covered": 10056,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": "Unknown"
+    }
+  },
+  "executableOwners": 181,
+  "hashedPaths": 467,
+  "coverageMethod": "Actual current one-owner raw100 and hash-verified prior Calc composition. New header AST contains only re-exports. Not a complete current Calc replay. No fabricated counters,changed thresholds,exclusions or ignore directives.",
+  "browserWorker": "1/1 actual Chromium and DOM-free Worker pass,including new actual chart-listener ownership",
+  "passedChecks": [
+    "production build",
+    "app types",
+    "tools types",
+    "ESLint",
+    "Prettier",
+    "JSDoc",
+    "file size",
+    "module boundaries",
+    "source tree",
+    "scoped canonical provenance2modules",
+    "Calc resources",
+    "static smoke",
+    "routing",
+    "doctor"
+  ],
+  "diagnostics": "Initial non-null test assertion lint failure repaired with genuine assert;first browser launch preceded temporary-config creation and failed before executing. Both final checks pass;original diagnostics retained.",
+  "unported": [
+    "live chart notification and listening",
+    "external chart links",
+    "UNO chart data",
+    "chart loading",
+    "Idle collection scheduling",
+    "full document/table copy,paste/history,EnterBlock and74 acceptance"
+  ],
+  "referenceAvailability": {
+    "vendor/liblangtag-reference/extensions/lt-ext-ldml-t.c": false,
+    "vendor/liblangtag-reference/liblangtag/lt-error.h": false
+  },
+  "fullSourceGates": "Prior missing-liblangtag source failures remain unwaived;no pass,restoration or network action claimed.",
+  "taskFootprint": "156/160 conservative cumulative paths:prior149 plus7new chart source/header/test/registry paths.",
+  "stopRule": "Finish active76 and74,then full all-application tests,fix failures/add scenarios,verify required100percent coverage,final closure and pause. Do not wait for10tasks or start78-80.",
+  "fullAllApplicationRun": "Not yet executed in this progress block.",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts"
+  ],
+  "newPaths": [
+    "apps/office/src/sc/inc/chartlis.ts",
+    "apps/office/src/sc/source/core/tool/chartlis.test.ts",
+    "apps/office/src/sc/source/core/tool/chartlis.ts",
+    "docs/program/registry/calc/provenance/sc/inc/chartlis.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/chartlis.ts.json",
+    "docs/program/registry/calc/runtime/sc/inc/chartlis.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/chartlis.ts.json"
+  ],
+  "rawSha256": "495108c8bc6a0edb098a86d253fb3ad251eed7001dfc40efa27c25f00b86aa7e",
+  "compressedBytes": 427468
+}

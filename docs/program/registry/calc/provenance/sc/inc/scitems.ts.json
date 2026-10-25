@@ -68,7 +68,8 @@
       "ATTR_PAGE_FORMULAS",
       "ATTR_PAGE_NULLVALS",
       "ATTR_HIDDEN",
-      "ATTR_ENDINDEX"
+      "ATTR_ENDINDEX",
+      "ATTR_VALUE_FORMAT"
     ],
     "upstreamSymbols": [
       "ATTR_MERGE_FLAG",
@@ -132,7 +133,8 @@
       "ATTR_PAGE_FORMULAS",
       "ATTR_PAGE_NULLVALS",
       "ATTR_HIDDEN",
-      "ATTR_ENDINDEX"
+      "ATTR_ENDINDEX",
+      "ATTR_VALUE_FORMAT"
     ],
     "preservedResponsibilities": [
       "Original attribute header/core boundary and actual scalar flag owner; reuses shared SfxInt16Item.",
@@ -165,7 +167,8 @@
       "TaskSKT4XD ports actual ScPatternAttr fixed100..155 SfxItemSet ownership,INVALID copying,unbound style names,conditional SET precedence,equality,direct mutation,key and selection-delta helpers plus CellAttributeHelper canonical registration and CellAttributeHolder copy/move/destruction. Real shared pool/itemset/value classes are reused. Holder counts preserve canonical identity/lifetime;GC replaces physical deletion. Native hash-prefilter/cache optimization is omitted while full equality and source name-group/last-hit ownership remain. Default helper implements only native unnamed pre-ScGlobal-initialization branch;initialized Standard resources,ScDocumentPool,ScStyleSheet,column/attrarray/document integration,VCL font/number/visible caches and formatting execution are unported. No fake font default or browser format store is introduced.",
       "Task3ANMSS in-progress frame foundation ports native border defaults,actual ScItemPoolCache,attribute-run frame application/query,selected-sheet frames and line transformations. ScTabViewShell owns the native black20twip solid default line. ScViewFunc ApplyPatternLines and existing ScUndoSelectionAttr retain actual attribute documents,adjacent envelopes and source replay ordering,including CALC227 rectangular-redo envelope loss. Shared Writer border paint projection moves into SVX browser ownership without changing its CSS mapping. Focused frame/history and existing formatting tests provide bounded evidence;toolbar dispatch,presets,line-style/color workflows,ODS integration and whole-block verification are still pending. Native global undo enablement,protection,merged/rich-edit/drawing/device/alternate-view services and complete parity remain unverified. Existing browser primary saving/open/no-recovery behavior remains.",
       "TaskB9WXKD ports original ScStyleNameConversion ordered cell/page/frame maps,stable programmatic constants,legacy alias priority,exact UTF16 user suffix escaping,suffix-first decoding,invalid-family fallthrough and independent native string returns. Default English resources are actual pinned globstr.hrc values at the existing English UI boundary;alternate resolved labels are explicit borrowed read-site values. Native default maps retain lazy static lifetime and scoped alternate map handles are released. No ScModule/gettext/locale/cache service is emulated. ScDocumentPool static metadata is extended contiguously from152 through176 with original Which/slot/flags and existing real native shared shadow,validation,conditional,hyperlink,spacing,page,tray,size,bool,object-mode and unsigned items. Earlier identities remain unchanged;rich-header177+ defaults are not fabricated. Source alias and pool-versus-style default asymmetries remain(CALC241). Actual ScStyleSheet/ScStyleSheetPool/ScPoolHelper,standard-style construction,full named-style UI/history/ODS,rich edit/header services and automatic wrapped-height remain required and unported. Full UI/global resource localization/device/UNO/ABI parity remains unverified.",
-      "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied."
+      "TaskD9RYSD completes original Calc package100..188 with89entries,87shared static defaults and two actual pool-local SvxSetItem header/footer sets. Source range pairs remain separate,including160..160 and161..166. Actual ScPageHFItem leaves all3areas null by default,clones genuine EditTextObject values,retains their pools and clones before aliased replacement. ScGlobal EETextObjEqual preserves pointer/null fast paths and nonvirtual base pool-insensitive Equals. Existing ScPageScaleToItem is reused with source pool1,1 versus standalone0,0 defaults. Temporary pool-name string ownership is released;Clone returns a base SfxItemPool exactly as upstream. No style,UNO-content,renderer or lifetime facade is supplied.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
       "Task102 represents original ScMF13 constants and ScMergeFlagAttr default145/0, signed16 flag cast, ordinary scalar copy/rvalue-copy/Clone and all9 overlap/filter/scenario/pivot predicates over actual existing shared SfxInt16Item/SfxPoolItem. Header/core and Which declaration remain separate; no duplicate integer/pool owner. Existing shared bounded Which/equality/QueryValue transport is reused unchanged, not claimed as full native UNO/type-assertion/ABI contract. Copy and Clone retain base Which and independent object identity, source remains unchanged. Signed16 cast query witnesses do not call typed-flag operations outside original All0x07ff domain. Source-backed fixed independent predicate examples and actual shared itemset transport tests; no new C++ probe or fake native base/provider. Original dumpAsXml diagnostic hook, remaining attrib/scitems owners, ScMergeAttr spans, document/filter import/copy/paste/grid rendering/config/view/ODS remain pending. Actual original copy-paste QA ScMF::Auto/ATTR_MERGE_FLAG is unexecuted context, not direct document proof. No sanitizer/refcounts/memory manager/native binary/layout claim. Whole Calc and complete affected shared owners strict raw100 required, only existing relevant consumers included. First full101passed; nextfull111requestedpause.",
@@ -281,6 +284,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/docpool-style-defaults.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
         }
       ],
       "upstream": [
@@ -355,6 +362,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/docpool.cxx",
           "marker": "ATTR_USERDEF"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/scitems.hxx",
+          "marker": "ATTR_VALUE_FORMAT"
         }
       ]
     }

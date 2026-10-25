@@ -1,4 +1,5 @@
 /** @fileoverview ScAttrArray canonical pattern row runs, default-column inheritance and native split/merge algorithm. VCL width caches, stream-copy validity and rich edit-text stripping are outside this document slice. */
+import * as deletion from "./attarray.delete";
 import { SvxLineItem } from "../../../../editeng/inc/lineitem";
 import { ScLineFlags, SC_LINE_EMPTY, SC_LINE_SET, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -10,12 +11,13 @@ import {
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
+import { ScMF, ScMergeFlagAttr } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
 import { ATTR_BORDER } from "../../../inc/scitems";
 import { ScIndentItem } from "../../../inc/attrib";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { ScCondFormatItem, ScRotateValueItem } from "../../../inc/attrib";
+import { ScCondFormatItem, ScCondFormatIndexes, ScRotateValueItem } from "../../../inc/attrib";
 import { ATTR_LINEBREAK, ATTR_CONDITIONAL, ATTR_ROTATE_VALUE } from "../../../inc/scitems";
 import { SvxCellHorJustify, SvxCellOrientation } from "../../../../editeng/inc/svxenum";
 import { SC_INDENT_STEP, HasAttrFlags } from "../../../inc/global";
@@ -113,13 +115,43 @@ function lcl_MergeToFrame(
     inner.SetLine(result[0], InnerEdge.VERT);
 }
 /** Original end-row entry with actual canonical holder ownership. */
-class ScAttrEntry extends CellAttributeHolder {
+export class ScAttrEntry extends CellAttributeHolder {
   nEndRow = 0;
 }
 /** Original column attribute interval owner; rows without cell contents retain real patterns. */
 export class ScAttrArray {
-  /** Original NeedHeight branch of HasAttrib_Impl over genuine pattern values;other masks remain explicitly unported. @param pattern - Actual pattern. @returns Height-sensitive attribute found. */
-  private HasAttrib_Impl(pattern: ScPatternAttr): boolean {
+  /** Original merged-anchor query uses stored runs or the document's actual default attribute. @param row - Queried row. @returns Whether either merge span exceeds one. */
+  IsMerged(row: number): boolean {
+    if (this.mvData.length) {
+      const index: [number] = [0];
+      this.Search(row, index);
+      const pattern = (this.mvData[index[0]] as ScAttrEntry).getScPatternAttr() as ScPatternAttr;
+      return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+    }
+    const pattern = this.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
+  }
+  /** Original merge extension on this same attribute owner. @param args - Native bounds,outputs and refresh defaultfalse. @returns Whether a merge was found. */
+  ExtendMerge(...args: Parameters<typeof deletion.ExtendMerge>): boolean {
+    return deletion.ExtendMerge.apply(this, args);
+  }
+  /** Original interval flag addition. @param first - First row. @param last - Last row. @param flags - Added flags. @returns Whether changed. */
+  ApplyFlags(first: number, last: number, flags: ScMF): boolean {
+    return deletion.ApplyFlags.call(this, first, last, flags);
+  }
+  /** Original interval flag removal. @param first - First row. @param last - Last row. @param flags - Removed flags. @returns Whether changed. */
+  RemoveFlags(first: number, last: number, flags: ScMF): boolean {
+    return deletion.RemoveFlags.call(this, first, last, flags);
+  }
+  /** Original NeedHeight and deletion merge-flag branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
+  private HasAttrib_Impl(pattern: ScPatternAttr, mask: HasAttrFlags): boolean {
+    if (mask !== HasAttrFlags.NeedHeight) {
+      const flags = pattern.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr;
+      return Boolean(
+        (mask & HasAttrFlags.Overlapped && flags.IsOverlapped()) ||
+        (mask & HasAttrFlags.AutoFilter && flags.HasAutoFilter()),
+      );
+    }
     if (pattern.GetCellOrientation() !== SvxCellOrientation.Standard) return true;
     if ((pattern.GetItem(ATTR_LINEBREAK) as SfxBoolItem).GetValue()) return true;
     if (
@@ -131,13 +163,17 @@ export class ScAttrArray {
       return true;
     return (pattern.GetItem(ATTR_ROTATE_VALUE) as ScRotateValueItem).GetValue() !== 0;
   }
-  /** Original range search and early found termination for the consumed NeedHeight mask. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
+  /** Original range search and early found termination for the consumed NeedHeight/deletion merge-flag masks. @param first - First row. @param last - Last row. @param mask - Source mask. @returns Attribute found. */
   HasAttrib(first: number, last: number, mask: HasAttrFlags): boolean {
-    if (mask !== HasAttrFlags.NeedHeight)
-      throw new Error("Only NeedHeight attribute queries are implemented");
+    if (
+      mask !== HasAttrFlags.NeedHeight &&
+      mask !== (HasAttrFlags.Overlapped | HasAttrFlags.AutoFilter)
+    )
+      throw new Error("Only NeedHeight and deletion merge-flag attribute queries are implemented");
     if (this.mvData.length === 0)
       return this.HasAttrib_Impl(
         this.rDocument.getCellAttributeHelper().getDefaultCellAttribute() as ScPatternAttr,
+        mask,
       );
     const start: [number] = [0],
       end: [number] = [0];
@@ -148,6 +184,7 @@ export class ScAttrArray {
     for (let i = start[0]; i <= end[0] && !found; i++)
       found = this.HasAttrib_Impl(
         (this.mvData[i] as ScAttrEntry).getScPatternAttr() as ScPatternAttr,
+        mask,
       );
     return found;
   }
@@ -185,6 +222,83 @@ export class ScAttrArray {
       }
     }
     return changed;
+  }
+  /** Original conditional-index insertion walks canonical runs and retains existing indices and styles. Valid rows always have the document's real default pattern. @param first - First row. @param last - Last row. @param index - Unsigned conditional-format key. @returns Nothing. */
+  AddCondFormat(first: number, last: number, index: number): void {
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (last < first) return;
+    index >>>= 0;
+    let start = first,
+      end: number;
+    do {
+      const pattern = this.GetPattern(start) as ScPatternAttr;
+      const runStart: [number] = [0],
+        runEnd: [number] = [0];
+      this.GetPatternRange(runStart, runEnd, start);
+      end = Math.min(runEnd[0], last);
+      const item = pattern.GetItemSet().GetItemIfSet(ATTR_CONDITIONAL) as ScCondFormatItem | null;
+      let next: ScPatternAttr | null = null;
+      if (item) {
+        const indexes = item.GetCondFormatData();
+        if (indexes.find(index) === -1) {
+          const copied = new ScCondFormatIndexes([...indexes]);
+          copied.insert(index);
+          next = new ScPatternAttr(pattern);
+          next.ItemSetPut(ScCondFormatItem.move(copied));
+        }
+      } else {
+        next = new ScPatternAttr(pattern);
+        next.ItemSetPut(new ScCondFormatItem(index));
+      }
+      const holder = next ? new CellAttributeHolder(next, true) : new CellAttributeHolder(pattern);
+      try {
+        this.SetPatternArea(start, end, holder);
+      } finally {
+        holder.Dispose();
+      }
+      start = end + 1;
+    } while (end < last);
+  }
+  /** Original conditional-index removal preserves explicit empty items and all unrelated attributes. Valid rows have a real default pattern. @param first - First row. @param last - Last row. @param index - Unsigned key;zero removes all indices. @returns Nothing. */
+  RemoveCondFormat(first: number, last: number, index: number): void {
+    if (!this.rDocument.ValidRow(first) || !this.rDocument.ValidRow(last)) return;
+    if (last < first) return;
+    index >>>= 0;
+    let start = first,
+      end: number;
+    do {
+      const pattern = this.GetPattern(start) as ScPatternAttr;
+      const runStart: [number] = [0],
+        runEnd: [number] = [0];
+      this.GetPatternRange(runStart, runEnd, start);
+      end = Math.min(runEnd[0], last);
+      const item = pattern.GetItemSet().GetItemIfSet(ATTR_CONDITIONAL) as
+        ScCondFormatItem | undefined;
+      if (item) {
+        let next: ScCondFormatItem | null = null;
+        if (index === 0) next = new ScCondFormatItem();
+        else {
+          const indexes = item.GetCondFormatData(),
+            position = indexes.find(index);
+          if (position !== -1) {
+            const copied = new ScCondFormatIndexes([...indexes]);
+            copied.erase_at(position);
+            next = ScCondFormatItem.move(copied);
+          }
+        }
+        if (next) {
+          const replacement = new ScPatternAttr(pattern);
+          replacement.ItemSetPut(next);
+          const holder = new CellAttributeHolder(replacement, true);
+          try {
+            this.SetPatternArea(start, end, holder);
+          } finally {
+            holder.Dispose();
+          }
+        }
+      }
+      start = end + 1;
+    } while (end < last);
   }
   /** Original ApplyCacheArea split/full-run traversal;rich-edit,width-cache and stream validity services remain unported. @param first - First row. @param last - Last row. @param cache - Actual native cache. @param changed - Original optional change output. @returns Nothing. */
   ApplyCacheArea(first: number, last: number, cache: ScItemPoolCache, changed?: [boolean]): void {
@@ -628,6 +742,18 @@ export class ScAttrArray {
     entry.nEndRow = this.rDocument.MaxRow();
     this.mvData.push(entry);
   }
+  /** Original deletion operates on this native attribute owner. @param first - First row. @param last - Last row. @returns Nothing. */
+  DeleteArea(first: number, last: number): void {
+    deletion.DeleteArea.call(this, first, last);
+  }
+  /** Original merge-anchor cleanup. @param first - First row. @param last - Last row. @returns Nothing. */
+  RemoveAreaMerge(first: number, last: number): void {
+    deletion.RemoveAreaMerge.call(this, first, last);
+  }
+  /** Original assignment retaining overlapping/filter flags. @param first - First row. @param last - Last row. @param wanted - Wanted canonical value. @returns Nothing. */
+  SetPatternAreaSafe(first: number, last: number, wanted: CellAttributeHolder): void {
+    deletion.SetPatternAreaSafe.call(this, first, last, wanted);
+  }
   /** Original DeleteHardAttr clears direct items while retaining styles and both merge items;canonical runs are re-searched after replacement. @param first - Ordered valid first row. @param last - Ordered valid last row. @returns Nothing. */
   DeleteHardAttr(first: number, last: number): void {
     this.SetDefaultIfNotInit();
@@ -747,6 +873,62 @@ export class ScAttrArray {
       if (insert) (this.mvData[insert - 1] as ScAttrEntry).nEndRow = start - 1;
       (this.mvData[insert] as ScAttrEntry).nEndRow = end;
       (this.mvData[insert] as ScAttrEntry).setScPatternAttr(pattern);
+    }
+  }
+  /** Original native attribute run copying,including offset clipping,canonical defaults,merge-flag stripping and actual helper migration. @param first - Destination first row. @param last - Destination last row. @param dy - Source-to-destination displacement. @param target - Actual target attribute owner. @param strip - Original default NONE. @returns Nothing. */
+  CopyArea(first: number, last: number, dy: number, target: ScAttrArray, strip = ScMF.NONE): void {
+    first -= dy;
+    last -= dy;
+    let destination = Math.max(first + dy, 0);
+    const end = Math.min(last + dy, this.rDocument.MaxRow()),
+      sameHelper =
+        this.rDocument.getCellAttributeHelper() === target.rDocument.getCellAttributeHelper(),
+      sourceDefault = this.rDocument.getCellAttributeHelper().getDefaultCellAttribute(),
+      targetDefault = target.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
+    if (!this.mvData.length) {
+      const holder = new CellAttributeHolder(targetDefault);
+      try {
+        target.SetPatternArea(destination, end, holder);
+      } finally {
+        holder.Dispose();
+      }
+      return;
+    }
+    for (let index = 0; index < this.mvData.length && destination <= end; ++index) {
+      const entry = this.mvData[index] as ScAttrEntry;
+      if (entry.nEndRow >= first) {
+        const pattern = entry.getScPatternAttr() as ScPatternAttr;
+        let holder: CellAttributeHolder;
+        if (ScPatternAttr.areSame(sourceDefault, pattern))
+          holder = new CellAttributeHolder(targetDefault);
+        else if (strip !== ScMF.NONE) {
+          const temporary = new ScPatternAttr(pattern),
+            flags =
+              strip === ScMF.All
+                ? ScMF.NONE
+                : (((temporary.GetItem(ATTR_MERGE_FLAG) as ScMergeFlagAttr).GetValue() &
+                    ~strip) as ScMF);
+          if (flags !== ScMF.NONE) temporary.ItemSetPut(new ScMergeFlagAttr(flags));
+          else temporary.ItemSetClearItem(ATTR_MERGE_FLAG);
+          if (sameHelper) holder = new CellAttributeHolder(temporary, true);
+          else {
+            try {
+              holder = temporary.MigrateToDocument(target.rDocument, this.rDocument);
+            } finally {
+              temporary.Dispose();
+            }
+          }
+        } else
+          holder = sameHelper
+            ? new CellAttributeHolder(pattern)
+            : pattern.MigrateToDocument(target.rDocument, this.rDocument);
+        try {
+          target.SetPatternArea(destination, Math.min(entry.nEndRow + dy, end), holder);
+        } finally {
+          holder.Dispose();
+        }
+      }
+      destination = Math.max(destination, (this.mvData[index] as ScAttrEntry).nEndRow + dy + 1);
     }
   }
 }

@@ -25,9 +25,10 @@ it("routes source shadow menu through shared Writer controls and real complete n
   const s = createCalcSession(),
     c = s.controller,
     d = s.frame.GetDispatcher();
+  let surface: ReturnType<typeof render> | undefined;
   try {
     c.EnterString("Shadow");
-    render(
+    surface = render(
       <CalcWorkbench
         controller={c}
         frame={s.frame}
@@ -50,6 +51,7 @@ it("routes source shadow menu through shared Writer controls and real complete n
     ).toBe("executed");
     expect(effects(s)).toEqual([true, 2]);
   } finally {
+    surface?.unmount();
     s.Close();
   }
 });

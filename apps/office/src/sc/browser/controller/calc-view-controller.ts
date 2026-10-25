@@ -1,4 +1,12 @@
 /** @fileoverview Browser input/viewport binding for the current scalar Calc model. Actual cells,marks,formula evaluation and undo stacks remain with native-shaped owners. */
+import { ScMarkData } from "../../inc/markdata";
+import { ScViewUtil } from "../../source/ui/view/viewutil";
+import * as pointerInput from "./calc-pointer-selection";
+import type { CalcPointerKind } from "./calc-pointer-selection";
+import * as referenceInput from "./calc-reference-input";
+import * as cellInput from "./calc-cell-input";
+import { ScModule } from "../../inc/scmod";
+import { ScRefType } from "../../source/ui/inc/viewdata";
 import type { CalcViewOption } from "../../sdi/tabvwsh";
 import { ViewOption } from "../../inc/viewopti";
 import type { SvxShadowedItem, SvxCharReliefItem } from "../../../editeng/source/items/textitem";
@@ -27,19 +35,17 @@ import { ScUndoCursorAttr } from "../../source/ui/undo/undocell";
 import { ScUndoSelectionAttr, ScUndoDeleteContents } from "../../source/ui/undo/undoblk3";
 import type { CalcCharacterFormat } from "../../source/ui/view/formatsh";
 import { ScFormatShell } from "../../source/ui/view/formatsh";
-import type { ScCellValue } from "../../inc/cellvalue";
 import { OpCode } from "../../../formula/inc/opcode";
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScInputMode, CellType } from "../../inc/global";
 import { ScInputHandler } from "../../source/ui/inc/inputhdl";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
-import { ScTabView } from "../../source/ui/inc/tabview";
 import { ScViewData } from "../../source/ui/inc/viewdata";
 import { ScRangeList } from "../../inc/rangelst";
 import { ScAddress, ScRange, ScRefFlags } from "../../inc/address";
 import { ScUndoSetCell } from "../../source/ui/inc/undocell";
 import { SfxUndoAction, SfxListUndoAction } from "../../../svl/source/undo/undo";
-import { prepareCell, captureCell, parseCellInput, cellInputText } from "../editor/cell-input";
+import { cellInputText } from "../editor/cell-input";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { CalcGridViewport } from "../presentation/ScGridWindow";
 /** Undoable sheet append within the current scalar document slice. */
@@ -242,6 +248,51 @@ export class CalcViewController {
   get mode(): ScInputMode {
     return this.inputHandler.GetMode();
   }
+  protected pointerKind: CalcPointerKind | null = null;
+  /** Routes actual pointer admission to native selection owners. @param position - Cell. @param extend - Shift. @param append - Ctrl/Cmd. @param kind - Surface. @returns Admitted. */
+  StartPointer(
+    position: ScAddress,
+    extend = false,
+    append = false,
+    kind: CalcPointerKind = "cell",
+  ): boolean {
+    return pointerInput.StartPointer.call(this, position, extend, append, kind);
+  }
+  /** Tracks the admitted pointer endpoint. @param position - Cell. @returns Nothing. */ MovePointer(
+    position: ScAddress,
+  ): void {
+    pointerInput.MovePointer.call(this, position);
+  }
+  /** Completes native pointer selection. @returns Nothing. */ EndPointer(): void {
+    pointerInput.EndPointer.call(this);
+  }
+  inputSelection: readonly [number, number] = [0, 0];
+  readonly scModule = new ScModule(
+    /** Borrows this host's active native input handler. @returns Handler. */ () =>
+      this.inputHandler,
+  );
+  /** Stores an actual DOM edit selection without invalidating the controlled input. @param start - UTF16 start. @param end - UTF16 end. @returns Nothing. */
+  SetInputSelection(start: number, end: number): void {
+    if (start === this.inputSelection[0] && end === this.inputSelection[1]) return;
+    this.inputSelection = [start, end];
+    this.inputHandler.ReferenceSelectionChanged();
+  }
+  /** Routes pointer entry through native input/reference owners before ordinary Commit. @param position - Cell. @param extend - Extend reference. @param append - Append argument. @returns Consumed. */
+  PointReference(position: ScAddress, extend = false, append = false): boolean {
+    return referenceInput.PointReference.call(this, position, extend, append);
+  }
+  /** Updates the current native reference endpoint. @param position - Cell. @returns Nothing. */
+  DragReference(position: ScAddress): void {
+    referenceInput.DragReference.call(this, position);
+  }
+  /** Moves the native reference endpoint without committing the edited cell. @param dx - Column movement. @param dy - Row movement. @param extend - Extend reference anchor. @returns Nothing. */
+  NavigateReference(dx: number, dy: number, extend: boolean): void {
+    referenceInput.NavigateReference.call(this, dx, dy, extend);
+  }
+  /** Borrows current reference geometry for grid painting. @returns Reference or null. */
+  ReferenceRange(): ScRange | null {
+    return referenceInput.ReferenceRange.call(this);
+  }
   inputText = "";
   addressText = "A1";
   error = "";
@@ -264,12 +315,14 @@ export class CalcViewController {
   private anchor = new ScAddress();
   /** Binds canonical model/view owners. @param shell - Active shell. @returns Controller. */
   constructor(readonly shell: ScDocShell = new ScDocShell()) {
-    this.viewShell = new ScTabViewShell(shell);
+    this.viewShell = new ScTabViewShell(shell, this.scModule);
+    this.BindViewErrorMessage();
     this.viewData = this.viewShell.GetViewData();
     this.detachShell = shell.Subscribe(
       /** Rebinds only when the canonical model identity changes. @returns Nothing. */ () => {
         if (this.viewData.GetDocument() !== shell.GetDocument()) {
-          this.viewShell = new ScTabViewShell(shell);
+          this.viewShell = new ScTabViewShell(shell, this.scModule);
+          this.BindViewErrorMessage();
           this.viewData = this.viewShell.GetViewData();
           this.anchor = new ScAddress();
           this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
@@ -278,6 +331,18 @@ export class CalcViewController {
           this.addressText = "A1";
           this.error = "";
         }
+        this.Changed();
+      },
+    );
+  }
+  /** Projects native ErrorMessage through the existing browser error UI and actual pointer lifetime. @returns Nothing. */
+  private BindViewErrorMessage(): void {
+    this.viewShell.SetErrorMessageHandler(
+      /** Replaces physical grid/header StopMarking and message presentation with the active browser controls. @param message - Native resolved resource. @returns Nothing. */ (
+        message,
+      ) => {
+        this.EndPointer();
+        this.error = message;
         this.Changed();
       },
     );
@@ -330,6 +395,9 @@ export class CalcViewController {
     col = Math.max(0, Math.min(doc.MaxCol(), col));
     row = Math.max(0, Math.min(doc.MaxRow(), row));
     if (!this.Commit()) return false;
+    this.viewShell.DoneBlockMode();
+    this.viewShell.GetFunctionSet().SetAnchorFlag(false);
+    this.viewShell.GetHeaderFunctionSet().SetAnchorFlag(false);
     this.viewData.SetCurX(col);
     this.viewData.SetCurY(row);
     const pos = this.Position(),
@@ -349,16 +417,12 @@ export class CalcViewController {
   Navigate(columns: number, rows: number, extend = false): boolean {
     const old = this.viewData.GetCurX(),
       proposed = Math.max(0, Math.min(this.shell.GetDocument().MaxCol(), old + columns)),
-      column = columns
-        ? new ScTabView(this.viewData).SkipCursorHorizontal(proposed, old, columns)
-        : proposed;
+      column = columns ? this.viewShell.SkipCursorHorizontal(proposed, old, columns) : proposed;
     const oldRow = this.viewData.GetCurY(),
       proposedRow = Math.max(0, Math.min(this.shell.GetDocument().MaxRow(), oldRow + rows));
     return this.Select(
       column,
-      rows
-        ? new ScTabView(this.viewData).SkipCursorVertical(proposedRow, oldRow, rows)
-        : proposedRow,
+      rows ? this.viewShell.SkipCursorVertical(proposedRow, oldRow, rows) : proposedRow,
       extend,
     );
   }
@@ -371,23 +435,19 @@ export class CalcViewController {
       this.Changed();
       return;
     }
-    if (!this.Select(kind === "column" ? index : 0, kind === "row" ? index : 0)) return;
-    const doc = this.shell.GetDocument(),
-      tab = this.viewData.GetTabNumber();
-    this.viewData
-      .GetMarkData()
-      .SetMarkArea(
-        new ScRange(
-          kind === "column" ? index : 0,
-          kind === "row" ? index : 0,
-          tab,
-          kind === "row" ? doc.MaxCol() : index,
-          kind === "column" ? doc.MaxRow() : index,
-          tab,
-        ),
-      );
-    this.Changed();
+    this.StartPointer(
+      new ScAddress(
+        kind === "column" ? index : 0,
+        kind === "row" ? index : 0,
+        this.viewData.GetTabNumber(),
+      ),
+      false,
+      false,
+      kind,
+    );
+    this.EndPointer();
   }
+
   /** Admits pending input before original Deselect and projects InitOwnBlockMode's current-cell anchor without moving the cursor. @returns Whether admitted. */
   DeselectCells(): boolean {
     if (!this.Commit()) return false;
@@ -422,7 +482,7 @@ export class CalcViewController {
   /** Executes original no-argument row selection after accepting the current input. @returns Whether selection was admitted. */
   MarkRows(): boolean {
     if (!this.Commit()) return false;
-    new ScTabView(this.viewData).MarkRows();
+    this.viewShell.MarkRows();
     const start = this.viewData.GetMarkData().GetMarkArea().aStart;
     this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
     this.Changed();
@@ -431,7 +491,7 @@ export class CalcViewController {
   /** Executes original no-argument column selection after accepting the current input. @returns Whether selection was admitted. */
   MarkColumns(): boolean {
     if (!this.Commit()) return false;
-    new ScTabView(this.viewData).MarkColumns();
+    this.viewShell.MarkColumns();
     const start = this.viewData.GetMarkData().GetMarkArea().aStart;
     this.anchor = new ScAddress(start.Col(), start.Row(), start.Tab());
     this.Changed();
@@ -552,7 +612,7 @@ export class CalcViewController {
     this.Changed();
     return changed;
   }
-  /** Browser availability boundary for native services already implemented in this kernel. Clipboard block-fill and SUBTOTAL remain unavailable;no replacement calculation is offered. @returns The represented native action can execute. */
+  /** Browser availability boundary over actual native inference and copied marks. Ordinary empty-block fill is available;SUBTOTAL and filtered paste services remain unported. @returns The represented native action can execute. */
   CanAutoSum(): boolean {
     const marks = this.viewData.GetMarkData(),
       ranges = new ScRangeList(),
@@ -568,13 +628,22 @@ export class CalcViewController {
             range.aEnd.Row(),
             range.aStart.Tab(),
           )
-        )
-          return false;
+        ) {
+          const inferred = new ScRangeList(),
+            targets = new ScMarkData(marks);
+          this.viewShell.GetAutoSumArea(inferred);
+          targets.MarkToSimple();
+          return (
+            (targets.IsMultiMarked() || !ScViewUtil.HasFiltered(targets.GetMarkArea(), doc)) &&
+            !this.viewShell.UseSubTotal(inferred)
+          );
+        }
     } else this.viewShell.GetAutoSumArea(ranges);
     return !this.viewShell.UseSubTotal(ranges);
   }
   /** Runs original AutoSum and SetFuncString caret selection through real view/input owners. @returns Native selection when an input-line draft was created. */
   AutoSum(): readonly [number, number] | undefined {
+    this.error = "";
     try {
       const rangeFinder: [boolean] = [false],
         subtotal: [boolean] = [false],
@@ -634,11 +703,15 @@ export class CalcViewController {
     const original = this.Input(),
       starting = !this.inputHandler.IsInputMode();
     this.inputText = replacement ?? original;
+    if (starting || replacement !== undefined)
+      this.inputSelection = [this.inputText.length, this.inputText.length];
+    if (starting) referenceInput.BindReferenceInput.call(this);
     this.inputHandler.SetMode(mode);
-    this.inputHandler.UpdateInputState(
-      this.inputText,
-      starting ? mode !== ScInputMode.SC_INPUT_TYPE && original.length > 0 : undefined,
-    );
+    if (starting || replacement !== undefined)
+      this.inputHandler.UpdateInputState(
+        this.inputText,
+        starting ? mode !== ScInputMode.SC_INPUT_TYPE && original.length > 0 : undefined,
+      );
     if (replacement !== undefined) this.inputHandler.SetModified();
     this.error = "";
     this.Changed();
@@ -651,6 +724,9 @@ export class CalcViewController {
     const starting = !this.inputHandler.IsInputMode();
     this.inputText = this.Input();
     this.inputHandler.StartOrToggleEditMode();
+    if (starting) referenceInput.BindReferenceInput.call(this);
+    if (this.mode === ScInputMode.SC_INPUT_TABLE)
+      this.inputSelection = [this.inputText.length, this.inputText.length];
     this.inputHandler.UpdateInputState(
       this.inputText,
       starting ? this.inputText.length > 0 : undefined,
@@ -662,6 +738,7 @@ export class CalcViewController {
   /** Updates the input handler's sole draft. @param value - Draft. @returns Nothing. */
   ChangeInput(value: string): void {
     this.inputText = value;
+    this.inputSelection = [value.length, value.length];
     this.inputHandler.SetModified();
     this.inputHandler.UpdateInputState(value);
     this.error = "";
@@ -671,54 +748,14 @@ export class CalcViewController {
   Cancel(): void {
     this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
     this.inputHandler.ResetInputState();
+    this.viewData.SetRefMode(false, ScRefType.SC_REFTYPE_NONE);
     this.inputText = "";
     this.error = "";
     this.Changed();
   }
-  /** Commits supported input atomically through real core setters and shared history. @returns Whether input was accepted. */
+  /** Commits actual input through the existing cell/history owners. @returns Accepted. */
   Commit(): boolean {
-    if (this.mode === ScInputMode.SC_INPUT_NONE) return true;
-    this.shell.EnsureOpen();
-    try {
-      if (this.inputHandler.IsModified()) {
-        const doc = this.shell.GetDocument(),
-          pos = this.Position(),
-          content = parseCellInput(this.inputText),
-          manager = this.shell.GetUndoManager();
-        const prepared: { position: ScAddress; value: ScCellValue }[] = [];
-        try {
-          for (const tab of this.viewData.GetMarkData().GetSelectedTabs()) {
-            const position = new ScAddress(pos.Col(), pos.Row(), tab);
-            prepared.push({ position, value: prepareCell(doc, position, content) });
-          }
-          manager.EnterListAction("Input");
-          try {
-            for (const { position, value } of prepared) {
-              const before = captureCell(doc, position);
-              value.release(doc, position);
-              manager.AddUndoAction(
-                new ScUndoSetCell(this.shell, position, before, captureCell(doc, position)),
-              );
-            }
-          } finally {
-            manager.LeaveListAction();
-          }
-        } finally {
-          for (const { value } of prepared) value.clear();
-        }
-        this.shell.SetDocumentModified();
-      }
-      this.inputHandler.SetMode(ScInputMode.SC_INPUT_NONE);
-      this.inputHandler.ResetInputState();
-      this.inputText = "";
-      this.error = "";
-      this.Changed();
-      return true;
-    } catch (error) {
-      this.error = (error as Error).message;
-      this.Changed();
-      return false;
-    }
+    return cellInput.Commit.call(this);
   }
   /** Handles the source EnterString slot payload. @param value - Input string. @param dontCommit - Retain the input-handler draft. @returns Accepted. */
   EnterString(value: string, dontCommit = false): boolean {
@@ -763,7 +800,7 @@ export class CalcViewController {
   /** Switches actual tab/cursor/mark ownership. @param tab - Existing tab. @param extend - Toggle selected sheets. @returns Nothing. */
   SelectTab(tab: number, extend = false): void {
     if (!this.shell.GetDocument().FetchTable(tab) || !this.Commit()) return;
-    new ScTabView(this.viewData).SetTabNo(tab, false, extend);
+    this.viewShell.SetTabNo(tab, false, extend);
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
@@ -771,19 +808,19 @@ export class CalcViewController {
   /** Executes native adjacent-sheet navigation after accepting pending input. @param direction - Previous or next. @param extend - Extend the selected sheet group. @returns Nothing. */
   SelectNextTab(direction: number, extend = false): void {
     if (!this.Commit()) return;
-    new ScTabView(this.viewData).SelectNextTab(direction, extend);
+    this.viewShell.SelectNextTab(direction, extend);
     this.anchor = this.Position();
     this.addressText = this.Address();
     this.Changed();
   }
   /** Selects all actual sheets through the source view owner. @returns Nothing. */
   SelectAllTables(): void {
-    new ScTabView(this.viewData).SelectAllTables();
+    this.viewShell.SelectAllTables();
     this.Changed();
   }
   /** Deselects the group while retaining the active sheet. @returns Nothing. */
   DeselectAllTables(): void {
-    new ScTabView(this.viewData).DeselectAllTables();
+    this.viewShell.DeselectAllTables();
     this.Changed();
   }
   /** Queries original tab-group state for the native deselection slot. @returns Multiple selected. */

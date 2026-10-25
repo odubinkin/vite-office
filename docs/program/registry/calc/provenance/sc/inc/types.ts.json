@@ -40,6 +40,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/shared-formula.test.ts",
           "marker": "ConvertToGroupListening"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-editability.test.ts",
+          "marker": "native edge visit shapes"
         }
       ],
       "upstream": [
@@ -62,6 +66,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
           "marker": "StartListeningType"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/types.hxx",
+          "marker": "enum class MatrixEdge"
         }
       ]
     },
@@ -79,7 +87,9 @@
       "ConvertToGroupListening",
       "SingleCellListening",
       "NoListening",
-      "StartListeningType"
+      "StartListeningType",
+      "ScTokenRef",
+      "MatrixEdge"
     ],
     "omittedResponsibilities": [
       "Reference parsing/formatting, external links, native hashes, range subtraction and sticky reference updates remain subsequent Calc tasks.",
@@ -95,7 +105,9 @@
       "Original matrix result references, numeric clone/alias overloads, signed dimensions and result mutations, using ordinary JS references.",
       "Actual range-matrix/cell-state value ownership and matrix-range sharing/copy semantics, genuine matrix peer evidence with full original declarations.",
       "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified.",
-      "Block75 adoption routing now retains original ConvertToGroupListening0,SingleCellListening1,NoListening2. Column SetFormulaCell defaults to SingleCellListening;table SetFormulaCell explicitly selects ConvertToGroupListening. Source affected-span bounds and context traversal preserve one actual area owner when extending existing groups. NoListening marks surviving groups through original SetNeedsListeningGroup on actual blocks. Rejected table/document adoptions semantically Dispose the actual formula as native deletion does;GC retains physical lifetime only. The group-area fixture assembles predeclared groups through the native column SingleCellListening boundary before subscribing the whole group,without an import-mode facade. Mode identity,group compileCode,history and final raw100 remain pending."
+      "Block75 adoption routing now retains original ConvertToGroupListening0,SingleCellListening1,NoListening2. Column SetFormulaCell defaults to SingleCellListening;table SetFormulaCell explicitly selects ConvertToGroupListening. Source affected-span bounds and context traversal preserve one actual area owner when extending existing groups. NoListening marks surviving groups through original SetNeedsListeningGroup on actual blocks. Rejected table/document adoptions semantically Dispose the actual formula as native deletion does;GC retains physical lifetime only. The group-area fixture assembles predeclared groups through the native column SingleCellListening boundary before subscribing the whole group,without an import-mode facade. Mode identity,group compileCode,history and final raw100 remain pending.",
+      "Task76 ports original reference-token extraction,range-list append/vector replacement,3D display flags,four local/external reference discriminators,endpoint normalization/borrowed identity,and file-ID/range intersection order using existing actual tokens/refdata/ranges. ScTokenRef reuses the project GC-held FormulaToken reference instead of inventing pointer counts. Relative flags and native default-range/external-name asymmetries are preserved (CALC-266/267). Named-expression resolution explicitly requires the unported native range-name owner;compileRangeRepresentation and join are not bound. Chart/Idle and full document paste/history remain incomplete.",
+      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete."
     ],
     "status": "mapped",
     "upstreamPath": "sc/inc/types.hxx",
@@ -112,7 +124,8 @@
       "ConvertToGroupListening",
       "SingleCellListening",
       "NoListening",
-      "StartListeningType"
+      "StartListeningType",
+      "ScTokenRef"
     ]
   }
 }

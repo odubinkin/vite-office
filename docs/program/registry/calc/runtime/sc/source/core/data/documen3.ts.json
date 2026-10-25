@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/documen3.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "local-reference-tracking",
+    "capabilityIds": [
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/documen3.ts",
+        "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/documen3.cxx#UpdateReference"
+      ],
+      "justification": "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UpdateReference"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/documen3.cxx",
+      "upstreamSymbols": [
+        "UpdateReference"
+      ]
+    }
+  }
+}

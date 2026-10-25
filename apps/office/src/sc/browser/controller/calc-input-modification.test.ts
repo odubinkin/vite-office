@@ -82,7 +82,7 @@ it("preserves native Formula action content and UTF16 selection for empty,numeri
   c.Close();
 });
 
-it("keeps unsupported clipboard-fill and subtotal contexts unavailable while retaining real native inference", /** Availability queries inspect actual marks/filtered rows,without substituted evaluation. @returns Nothing. */ () => {
+it("admits native block fill and keeps unsupported subtotal unavailable", /** Availability queries inspect actual marks/filtered rows,without substituted evaluation. @returns Nothing. */ () => {
   const c = new CalcViewController(),
     doc = c.shell.GetDocument();
   expect(c.CanAutoSum()).toBe(true);
@@ -93,7 +93,7 @@ it("keeps unsupported clipboard-fill and subtotal contexts unavailable while ret
   expect(c.CanAutoSum()).toBe(false);
   doc.SetRowFiltered(0, 0, 0, false);
   c.viewData.GetMarkData().SetMarkArea(new ScRange(0, 1, 0, 1, 2, 0));
-  expect(c.CanAutoSum()).toBe(false);
+  expect(c.CanAutoSum()).toBe(true);
   c.viewData.GetMarkData().SetMarkArea(new ScRange(0, 0, 0, 0, 1, 0));
   expect(c.CanAutoSum()).toBe(true);
   c.Close();

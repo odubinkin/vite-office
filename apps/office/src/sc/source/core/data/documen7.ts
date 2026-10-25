@@ -1,22 +1,50 @@
 /** @fileoverview Consumed native out-of-class ScDocument dependency methods from documen7/document.cxx. Each definition runs on the same ScDocument instance;literal private-member access bridges TypeScript class-file boundaries without another state model. */
-import type { ScColumnData } from "../../../inc/column";
+import {
+  EndListeningIntersectedGroups,
+  SetNeedsListeningGroups,
+  StartNeededListeners,
+  SetDirtyIncludingEmptyCells,
+} from "./document10";
+import { ScItemPoolCache } from "../../../inc/poolcach";
+import { SfxItemState } from "../../../../svl/inc/itemset";
+import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
+import { CopyToDocContext } from "../../../inc/clipcontext";
+import { ScCloneFlags } from "../../../inc/global";
+import { DelayDeletingBroadcasters } from "../../../inc/scopetools";
+import { AutoCalcSwitch } from "../../../inc/scopetools";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScRangeList } from "../../../inc/rangelst";
+import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
+import {
+  SvxBoxItem,
+  SvxBoxInfoItem,
+  SvxBoxItemLine as Edge,
+  SvxBoxInfoItemLine as InnerEdge,
+  SvxBoxInfoItemValidFlags as Valid,
+} from "../../../../editeng/source/items/frmitems";
+import type { ColumnAction, ColumnSpanSet } from "../../../inc/columnspanset";
+import type { ScColumn } from "../../../inc/column";
 import { ScMergePatternState } from "../../../inc/attarray";
-import { ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { SharedString } from "../../../../svl/inc/sharedstring";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { ScTable } from "../../../inc/table";
+import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import type { ScMarkData } from "../../../inc/markdata";
-import type { ScTable } from "../../../inc/table";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { HasAttrFlags, InsertDeleteFlags } from "../../../inc/global";
+import { CellType, HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
 import { SfxHintId, type SfxHint } from "../../../../svl/inc/hint";
-import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS } from "../../../inc/address";
+import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS, MAXTAB } from "../../../inc/address";
 import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
-import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import { type StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 
 /** Original document.cxx initialized-column cursor forwarding. @param this - Actual document. @param position - Actual cursor. @param tab - Sheet. @param col - Column. @returns Initialized. */
 export function InitColumnBlockPosition(
@@ -233,7 +261,7 @@ export function SetAllFormulasDirty(this: ScDocument, context: SetFormulaDirtyCo
   const old = this["bAutoCalc"];
   this["bAutoCalc"] = false;
   try {
-    for (const table of this["maTabs"]) table.SetAllFormulasDirty(context);
+    for (const table of this["maTabs"]) table?.SetAllFormulasDirty(context);
   } finally {
     this.SetAutoCalc(old);
   }
@@ -307,13 +335,13 @@ export function CreateSelectionPattern(
     if (marks.IsMultiMarked())
       for (const tab of marks.GetSelectedTabs()) {
         if (tab >= this.GetTableCount()) break;
-        (this["maTabs"][tab] as ScTable).MergeSelectionPattern(state, marks, deep);
+        this["maTabs"][tab]?.MergeSelectionPattern(state, marks, deep);
       }
     if (marks.IsMarked()) {
       const range = marks.GetMarkArea();
       for (const tab of marks.GetSelectedTabs()) {
         if (tab >= this.GetTableCount()) break;
-        (this["maTabs"][tab] as ScTable).MergePatternArea(
+        this["maTabs"][tab]?.MergePatternArea(
           state,
           range.aStart.Col(),
           range.aStart.Row(),
@@ -334,128 +362,595 @@ export function CreateSelectionPattern(
   }
 }
 
-/** Original document.cxx consumed document copy definition on the same instance. @param this - Actual document. @param range - Copied area. @param flags - Native flags. @param marked - Restrict to marks. @param destination - Actual receiving document. @param marks - Optional real mark data. @returns Nothing. */
+/** Original document.cxx coordinate/range copy overloads retain validation,scope order and default geometry true. @param this - Actual source. @param args - Native coordinates or range,flags,marks,destination and optional original policy arguments. @returns Nothing. */
 export function CopyToDocument(
   this: ScDocument,
-  range: ScRange,
-  flags: InsertDeleteFlags,
-  marked: boolean,
-  destination: ScDocument,
-  marks?: ScMarkData,
+  ...args:
+    | [
+        ScRange,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        (boolean | undefined)?,
+      ]
+    | [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        boolean?,
+      ]
 ): void {
-  if (flags === InsertDeleteFlags.NONE) {
-    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-      if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
+  if (!(args[0] instanceof ScRange)) {
+    const [x1, y1, t1, x2, y2, t2, flags, marked, destination, marks = null, colRowFlags = true] =
+      args as [
+        number,
+        number,
+        number,
+        number,
+        number,
+        number,
+        InsertDeleteFlags,
+        boolean,
+        ScDocument,
+        (ScMarkData | null | undefined)?,
+        boolean?,
+      ];
+    if (ValidTab(t1) && ValidTab(t2))
+      this.CopyToDocument(
+        new ScRange(x1, y1, t1, x2, y2, t2),
+        flags,
+        marked,
+        destination,
+        marks,
+        colRowFlags,
+      );
+    return;
+  }
+  const [range, flags, marked, destination, marks = null, colRowFlags = true] = args as [
+    ScRange,
+    InsertDeleteFlags,
+    boolean,
+    ScDocument,
+    (ScMarkData | null | undefined)?,
+    boolean?,
+  ];
+  const ordered = new ScRange(range);
+  ordered.PutInOrder();
+  if (destination["aDocName"].isEmpty()) destination["aDocName"].assign(this["aDocName"]);
+  const autoCalc = new AutoCalcSwitch(destination, false),
+    bulk = new ScBulkBroadcast(destination.GetBASM(), SfxHintId.ScDataChanged),
+    delay = new DelayDeletingBroadcasters(this),
+    context = new CopyToDocContext(destination);
+  context.setStartListening(false);
+  try {
+    const count = Math.min(this.GetTableCount(), destination.GetTableCount());
+    for (let tab = ordered.aStart.Tab(); tab <= ordered.aEnd.Tab() && tab < count; ++tab) {
       const source = this.FetchTable(tab),
         target = destination.FetchTable(tab);
-      if (source && target)
-        source.CopyToTable(
+      if (!source || !target) continue;
+      source.CopyToTable(
+        context,
+        ordered.aStart.Col(),
+        ordered.aStart.Row(),
+        ordered.aEnd.Col(),
+        ordered.aEnd.Row(),
+        flags,
+        marked,
+        target,
+        marks,
+        false,
+        colRowFlags,
+        ScCloneFlags.Default,
+        true,
+      );
+    }
+    destination.StartAllListeners(ordered);
+  } finally {
+    delay.Dispose();
+    bulk.Dispose();
+    autoCalc.Dispose();
+  }
+}
+
+/** Original document.cxx selection-frame query on the same document instance;definition partitioned to preserve the file-size boundary. @param this - Actual document. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
+export function GetSelectionFrame(
+  this: ScDocument,
+  marks: ScMarkData,
+  outer: SvxBoxItem,
+  inner: SvxBoxInfoItem,
+): void {
+  for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT]) outer.SetLine(undefined, edge);
+  outer.SetAllDistances(0);
+  inner.SetLine(undefined, InnerEdge.HORI);
+  inner.SetLine(undefined, InnerEdge.VERT);
+  inner.SetTable(true);
+  inner.SetDist(true);
+  inner.SetMinDist(false);
+  const flags = new ScLineFlags();
+  if (marks.IsMultiMarked()) {
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    let rows = false,
+      cols = false;
+    for (const range of ranges) {
+      rows = rows || range.aStart.Row() !== range.aEnd.Row();
+      cols = cols || range.aStart.Col() !== range.aEnd.Col();
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        this.FetchTable(tab)?.MergeBlockFrame(
+          outer,
+          inner,
+          flags,
           range.aStart.Col(),
           range.aStart.Row(),
           range.aEnd.Col(),
           range.aEnd.Row(),
-          target,
-        );
-    }
-    return;
-  }
-  if (
-    (flags & InsertDeleteFlags.ATTRIB) !== InsertDeleteFlags.ATTRIB ||
-    flags &
-      ~(
-        InsertDeleteFlags.ATTRIB |
-        InsertDeleteFlags.STRING |
-        InsertDeleteFlags.EDITATTR |
-        InsertDeleteFlags.NOCAPTIONS
-      )
-  )
-    throw new Error("Only attribute document copying is implemented");
-  if (marked) {
-    if (marks === undefined) throw new Error("Marked attribute copying requires mark data");
-    for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); tab++) {
-      if (!marks.GetTableSelect(tab)) continue;
-      for (const part of marks.GetMarkedRangesForTab(tab)) {
-        const firstCol = Math.max(part.aStart.Col(), range.aStart.Col()),
-          firstRow = Math.max(part.aStart.Row(), range.aStart.Row()),
-          lastCol = Math.min(part.aEnd.Col(), range.aEnd.Col()),
-          lastRow = Math.min(part.aEnd.Row(), range.aEnd.Row());
-        if (firstCol > lastCol || firstRow > lastRow) continue;
-        this.CopyToDocument(
-          new ScRange(firstCol, firstRow, tab, lastCol, lastRow, tab),
-          flags,
-          false,
-          destination,
-          marks,
         );
       }
     }
-    return;
+    inner.EnableHor(rows);
+    inner.EnableVer(cols);
+  } else if (marks.IsMarked()) {
+    const range = marks.GetMarkArea();
+    inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
+    inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.MergeBlockFrame(
+        outer,
+        inner,
+        flags,
+        range.aStart.Col(),
+        range.aStart.Row(),
+        range.aEnd.Col(),
+        range.aEnd.Row(),
+      );
+    }
   }
-  const start = range.aStart,
-    end = range.aEnd;
-  for (let tab = start.Tab(); tab <= end.Tab(); tab++) {
-    if (marks !== undefined && !marks.GetTableSelect(tab)) continue;
-    const source = this.FetchTable(tab),
-      target = destination.FetchTable(tab);
-    if (!source || !target) continue;
-    const last =
-      end.Col() === this.MaxCol()
-        ? Math.max(
-            start.Col(),
-            source.GetAllocatedColumnsCount(),
-            target.GetAllocatedColumnsCount(),
-          ) - 1
-        : end.Col();
-    for (let col = start.Col(); col <= last; col++) {
-      copyColumnAttributes(
-        source.GetColumnData(col),
-        target.CreateColumnIfNotExists(col),
-        start.Row(),
-        end.Row(),
-        destination,
-      );
-      if (flags & InsertDeleteFlags.STRING && col < source.GetAllocatedColumnsCount())
-        source
-          .CreateColumnIfNotExists(col)
-          .CopyToColumn(start.Row(), end.Row(), target.CreateColumnIfNotExists(col));
-    }
-    if (end.Col() === this.MaxCol()) {
-      // INITIALCOLCOUNT=1 and grow-only column storage imply the original last>=0 guard.
-      target.CreateColumnIfNotExists(last);
-      copyColumnAttributes(
-        source.GetDefaultColumnData(),
-        target.GetDefaultColumnData(),
-        start.Row(),
-        end.Row(),
-        destination,
-      );
-    }
+  inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
+  inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+}
+
+/** Original bulk listener teardown shares one purge context and returns immediately for empty input. @param this - Actual document. @param cells - Borrowed actual formulas. @returns Nothing. */
+export function EndListeningFormulaCells(this: ScDocument, cells: readonly ScFormulaCell[]): void {
+  if (!cells.length) return;
+  const context = new EndListeningContext(this);
+  for (const cell of cells) cell.EndListeningTo(context);
+  context.purgeEmptyBroadcasters();
+}
+
+/** Original document selected-sheet deferred clipboard dirty phase. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected tabs. @param flags - Native insert flags. @param spans - Deferred broadcasts. @returns Nothing. */
+export function SetDirtyFromClip(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  flags: InsertDeleteFlags,
+  spans: ColumnSpanSet,
+): void {
+  if (!(flags & InsertDeleteFlags.CONTENTS)) return;
+  for (const tab of marks.GetSelectedTabs()) {
+    if (tab >= this.GetTableCount()) break;
+    this.FetchTable(tab)?.SetDirtyFromClip(col1, row1, col2, row2, spans);
   }
 }
-/** Copies real pattern runs across actual helper/pool ownership. @param source - Source attributes. @param target - Target attributes. @param start - First row. @param end - Last row. @param destination - Target document. @returns Nothing. */
-function copyColumnAttributes(
-  source: ScColumnData,
-  target: ScColumnData,
-  start: number,
-  end: number,
-  destination: ScDocument,
+/** Original document7 rectangular broadcast coordinates actual individual and area subscriptions under one native bulk scope. Unrepresented group-compute cache,stream-valid and UNO shell notification owners are not synthesized. @param this - Actual document. @param range - Changed rectangle. @param id - Hint ID. @param singles - Native individual-broadcaster default. @returns Nothing. */
+export function BroadcastCells(
+  this: ScDocument,
+  range: ScRange,
+  id: SfxHintId,
+  singles: boolean,
 ): void {
-  const first: [number] = [0],
-    last: [number] = [0];
-  for (let row = start; row <= end;) {
-    const old = source.GetPatternRange(first, last, row) as ScPatternAttr;
-    const next = new ScPatternAttr(
-      destination.getCellAttributeHelper(),
-      old.GetItemSet(),
-      old.GetStyleName() ?? undefined,
+  if (!this["pBASM"] || this["eHardRecalcState"] !== HardRecalcState.OFF) return;
+  const bulk = new ScBulkBroadcast(this["pBASM"], id);
+  try {
+    let delivered = false;
+    if (singles)
+      for (let tab = range.aStart.Tab(); tab <= range.aEnd.Tab(); ++tab) {
+        const table = this.FetchTable(tab);
+        if (table)
+          delivered =
+            table.BroadcastBroadcasters(
+              range.aStart.Col(),
+              range.aStart.Row(),
+              range.aEnd.Col(),
+              range.aEnd.Row(),
+              id,
+            ) || delivered;
+      }
+    if (this["pBASM"].AreaBroadcast(range, id) || delivered) this.TrackFormulas(id);
+  } finally {
+    bulk.Dispose();
+  }
+}
+
+/** Original document.cxx deferred scalar/deletion broadcast action. */
+export class BroadcastAction implements ColumnAction {
+  private mpCol: ScColumn | null = null;
+  /** Borrows the real destination document. @param mrDoc - Actual document. @returns Action. */
+  constructor(private readonly mrDoc: ScDocument) {}
+  /** Original callback borrows the actual allocated column. @param column - Native column. @returns Nothing. */
+  startColumn(column: ScColumn): void {
+    this.mpCol = column;
+  }
+  /** Original false-span early return and inclusive changed-row notification. @param first - First row. @param last - Last row. @param value - Changed flag. @returns Nothing. */
+  execute(first: number, last: number, value: boolean): void {
+    if (!value) return;
+    if (!this.mpCol) throw new Error("BroadcastAction requires an initialized column");
+    const range = new ScRange(this.mpCol.GetCol(), first, this.mpCol.GetTab());
+    range.aEnd.SetRow(last);
+    this.mrDoc.BroadcastCells(range, SfxHintId.ScDataChanged);
+  }
+}
+
+/** Original content/attribute selection deletion retains boundary groups and native broadcast policy. @param this - Actual document. @param flags - Deletion flags. @param marks - Actual selection. @param broadcast - Original defaulttrue. @returns Nothing. */
+export function DeleteSelection(
+  this: ScDocument,
+  flags: InsertDeleteFlags,
+  marks: ScMarkData,
+  broadcast = true,
+): void {
+  const scope = new AutoCalcSwitch(this, false);
+  try {
+    const groups: ScAddress[] = [],
+      content = (flags & ~InsertDeleteFlags.CONTENTS) !== flags;
+    if (content) {
+      const context = new EndListeningContext(this),
+        ranges = new ScRangeList();
+      marks.FillRangeListWithMarks(ranges, false);
+      for (const range of ranges) EndListeningIntersectedGroups.call(this, context, range, groups);
+      context.purgeEmptyBroadcasters();
+    }
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      this.FetchTable(tab)?.DeleteSelection(flags, marks, broadcast);
+    }
+    if (!content) return;
+    SetNeedsListeningGroups.call(this, groups);
+    StartNeededListeners.call(this);
+    if (!groups.length) return;
+    const ranges = new ScRangeList();
+    marks.FillRangeListWithMarks(ranges, false);
+    for (const range of ranges) SetDirtyIncludingEmptyCells.call(this, range);
+    for (const address of groups) this.GetFormulaCell(address)?.SetDirty(true);
+  } finally {
+    scope.Dispose();
+  }
+}
+/** Original block copying and consecutive-sheet reference phase for the admitted CONTENTS context;source clipboard must contain an actual sheet. Same-pool cut/move services remain unported. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Selected sheets. @param dx - Column displacement. @param dy - Row displacement. @returns Nothing. */
+export function CopyBlockFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  dx: number,
+  dy: number,
+): void {
+  const clip = context.getClipDoc(),
+    count = clip.GetTableCount(),
+    cut = clip.GetClipParam().mbCutMode;
+  if (cut && clip.GetPool() === this.GetPool())
+    throw new Error("Same-document cut reference updates are not implemented");
+  let clipTab = 0;
+  for (
+    let tab = context.getTabStart();
+    tab <= context.getTabEnd() && tab < this.GetTableCount();
+    ++tab
+  ) {
+    const table = this.FetchTable(tab);
+    if (!table || !marks.GetTableSelect(tab)) continue;
+    while (!clip.FetchTable(clipTab)) clipTab = (clipTab + 1) % count;
+    table.CopyFromClip(
+      context,
+      col1,
+      row1,
+      col2,
+      row2,
+      dx,
+      dy,
+      clip.FetchTable(clipTab) as ScTable,
     );
-    const holder = new CellAttributeHolder(next, true);
-    try {
-      const stop = Math.min(end, last[0]);
-      target.SetPatternArea(row, stop, holder);
-      row = stop + 1;
-    } finally {
-      holder.Dispose();
+    clipTab = (clipTab + 1) % count;
+  }
+  clipTab = 0;
+  for (
+    let tab = context.getTabStart();
+    tab <= context.getTabEnd() && tab < this.GetTableCount();
+    ++tab
+  ) {
+    if (!this.FetchTable(tab) || !marks.GetTableSelect(tab)) continue;
+    while (!clip.FetchTable(clipTab)) clipTab = (clipTab + 1) % count;
+    let follow = 0;
+    while (
+      tab + follow < context.getTabEnd() &&
+      marks.GetTableSelect(tab + follow + 1) &&
+      clipTab + follow < MAXTAB &&
+      clip.FetchTable((clipTab + follow + 1) % count)
+    )
+      ++follow;
+    const references = new RefUpdateContext(this, clip);
+    references.maRange.assign(new ScRange(col1, row1, tab, col2, row2, tab + follow));
+    references.mnColDelta = dx;
+    references.mnRowDelta = dy;
+    references.mnTabDelta = tab - clipTab;
+    references.setBlockPositionReference(context.getBlockPositionSet());
+    if (!cut) {
+      references.meMode = UpdateRefMode.URM_COPY;
+      this.UpdateReference(references, context.getUndoDoc(), false);
+    }
+    clipTab = (clipTab + follow + 1) % count;
+    tab += follow;
+  }
+}
+/** Original filtered-row runs use the first populated source sheet's filter flags and publish the native source cursor,including its SCROW-max sentinel. @param this - Destination. @param context - Native context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param marks - Destination sheets. @param dx - Column displacement. @param sourceRow - Source cursor output. @param sourceEnd - Last source row. @returns Skipped source-row count. */
+export function CopyNonFilteredFromClip(
+  this: ScDocument,
+  context: CopyFromClipContext,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  marks: ScMarkData,
+  dx: number,
+  sourceRow: [number],
+  sourceEnd: number,
+): number {
+  const clip = context.getClipDoc();
+  let flagTab = 0;
+  while (flagTab < clip.GetTableCount() && !clip.FetchTable(flagTab)) ++flagTab;
+  let row = sourceRow[0],
+    destination = row1,
+    filtered = 0;
+  while (row <= sourceEnd && destination <= row2) {
+    const old = row;
+    row = clip.FirstNonFilteredRow(row, sourceEnd, flagTab);
+    filtered += row - old;
+    if (row <= sourceEnd) {
+      const last: [number] = [row];
+      clip.RowFiltered(row, flagTab, undefined, last);
+      const follow = Math.min(last[0] - row, sourceEnd - row, row2 - destination);
+      this.CopyBlockFromClip(
+        context,
+        col1,
+        destination,
+        col2,
+        destination + follow,
+        marks,
+        dx,
+        destination - row,
+      );
+      row += follow + 1;
+      destination += follow + 1;
     }
   }
+  sourceRow[0] = row;
+  return filtered;
+}
+
+/** Original clipboard dimensions,partitioned unchanged onto the same document. @param this - Actual document. @param cols - Width difference. @param rows - Height difference. @param includeFiltered - Filtered mode. @returns Nothing. */
+export function GetClipArea(
+  this: ScDocument,
+  cols: [number],
+  rows: [number],
+  includeFiltered: boolean,
+): void {
+  if (!this.IsClipboard()) return;
+  const ranges = this.GetClipParam().maRanges;
+  if (ranges.empty()) return;
+  const whole = ranges.Combine();
+  cols[0] = whole.aEnd.Col() - whole.aStart.Col();
+  if (includeFiltered) rows[0] = whole.aEnd.Row() - whole.aStart.Row();
+  else {
+    let tab = 0;
+    while (tab < this.GetTableCount() && !this.FetchTable(tab)) ++tab;
+    rows[0] = Math.max(0, this.CountNonFilteredRows(whole.aStart.Row(), whole.aEnd.Row(), tab) - 1);
+  }
+}
+/** Original native contiguous Undo initialization;source shell-medium URL propagation remains unrepresented. @param this - Undo document. @param source - Source owner. @param first - First sheet. @param last - Last sheet. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function InitUndo(
+  this: ScDocument,
+  source: ScDocument,
+  first: number,
+  last: number,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  this.Clear();
+  this.SharePooledResources(source);
+  const tabs = this["maTabs"];
+  while (tabs.length <= last) tabs.push(null);
+  for (let tab = first; tab <= last; ++tab)
+    tabs[tab] = new ScTable(this, tab, new OUString(), colInfo, rowInfo);
+}
+/** Original selected-sheet Undo initialization retains intervening null slots and clears previous payload owners. @param this - Undo document. @param source - Source owner. @param marks - Source-selected sheets. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function InitUndoSelected(
+  this: ScDocument,
+  source: ScDocument,
+  marks: ScMarkData,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  this.Clear();
+  this.SharePooledResources(source);
+  for (let tab = 0; tab <= marks.GetLastSelected(); ++tab)
+    this["maTabs"].push(
+      marks.GetTableSelect(tab) ? new ScTable(this, tab, new OUString(), colInfo, rowInfo) : null,
+    );
+}
+/** Original incremental Undo allocation leaves existing tables and their geometry owners intact. @param this - Undo document. @param first - First sheet. @param last - Last sheet. @param colInfo - Original default false. @param rowInfo - Original default false. @returns Nothing. */
+export function AddUndoTab(
+  this: ScDocument,
+  first: number,
+  last: number,
+  colInfo = false,
+  rowInfo = false,
+): void {
+  if (!this.IsUndo()) return;
+  const tabs = this["maTabs"];
+  while (tabs.length <= last) tabs.push(null);
+  for (let tab = first; tab <= last; ++tab)
+    if (!tabs[tab]) tabs[tab] = new ScTable(this, tab, new OUString(), colInfo, rowInfo);
+}
+
+/** Original selected-sheet DeleteArea body,partitioned unchanged on the same document owner. @param this - Actual document. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param marks - Selected sheets. @param flags - Native deletion flags. @returns Nothing. */
+export function DeleteArea(
+  this: ScDocument,
+  firstCol: number,
+  firstRow: number,
+  lastCol: number,
+  lastRow: number,
+  marks: ScMarkData,
+  flags: InsertDeleteFlags,
+): void {
+  const autoCalc = new AutoCalcSwitch(this, false);
+  try {
+    [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
+    [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
+    for (let tab = 0; tab < this.GetTableCount(); tab++)
+      if (marks.GetTableSelect(tab))
+        (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
+  } finally {
+    autoCalc.Dispose();
+  }
+}
+
+/** Existing native data-area clipping body,partitioned unchanged onto this same document. @param this - Actual document. @param tab - Sheet. @param firstCol - First column output. @param firstRow - First row output. @param lastCol - Last column output. @param lastRow - Last row output. @returns Valid clipped range. */
+export function ShrinkToDataArea(
+  this: ScDocument,
+  tab: number,
+  firstCol: [number],
+  firstRow: [number],
+  lastCol: [number],
+  lastRow: [number],
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table === null) return false;
+  const col1: [number] = [0],
+    row1: [number] = [0],
+    col2: [number] = [0],
+    row2: [number] = [0];
+  table.GetFirstDataPos(col1, row1);
+  table.GetLastDataPos(col2, row2);
+  if (col1[0] > col2[0] || row1[0] > row2[0]) return false;
+  if (firstCol[0] < col1[0]) firstCol[0] = col1[0];
+  if (col2[0] < lastCol[0]) lastCol[0] = col2[0];
+  if (firstRow[0] < row1[0]) firstRow[0] = row1[0];
+  if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
+  if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
+  return true;
+}
+
+/** Original document.cxx GetCellType body,partitioned unchanged on the same instance. @param this - Actual document. @param position - Cell address. @returns Native value. */
+export function GetCellType(this: ScDocument, position: ScAddress): CellType {
+  return (
+    this.FetchTable(position.Tab())?.GetCellType(position.Col(), position.Row()) ??
+    CellType.CELLTYPE_NONE
+  );
+}
+
+/** Original document.cxx GetSharedString body,partitioned unchanged on the same instance. @param this - Actual document. @param position - Cell address. @returns Native value. */
+export function GetSharedString(this: ScDocument, position: ScAddress): SharedString {
+  return (
+    this.FetchTable(position.Tab())?.GetSharedString(position.Col(), position.Row()) ??
+    new SharedString()
+  );
+}
+
+/** Original document.cxx conditional-index dispatch ignores absent sheets. @param this - Destination document. @param ranges - Native ranges. @param tab - Destination sheet. @param index - Format key. @returns Nothing. */
+export function AddCondFormatData(
+  this: ScDocument,
+  ranges: ScRangeList,
+  tab: number,
+  index: number,
+): void {
+  this.FetchTable(tab)?.AddCondFormatData(ranges, index);
+}
+
+/** Original literal SetTextCell body on the same document;rich edit-text remains outside this slice. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
+export function SetTextCell(
+  this: ScDocument,
+  position: ScAddress,
+  value: OUStringConstReference,
+): void {
+  const table = this.FetchTable(position.Tab());
+  if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
+  if (/[\r\n]/.test(text(value))) throw new Error("Multiline edit-text cells are not implemented");
+  if (!value.getLength()) {
+    table.SetEmptyCell(position.Col(), position.Row());
+    return;
+  }
+  const shared = this["mpCellStringPool"].intern(value);
+  try {
+    table.SetRawString(position.Col(), position.Row(), shared);
+  } finally {
+    shared.dispose();
+  }
+}
+
+/** Original document.cxx conditional-index removal ignores missing sheets. @param this - Destination document. @param ranges - Native ranges. @param tab - Sheet. @param index - Key,or zero for all. @returns Nothing. */
+export function RemoveCondFormatData(
+  this: ScDocument,
+  ranges: ScRangeList,
+  tab: number,
+  index: number,
+): void {
+  this.FetchTable(tab)?.RemoveCondFormatData(ranges, index);
+}
+
+/** Original document.cxx simple-area or selected-cache dispatch on the same document. @param this - Actual document. @param delta - Source pattern. @param marks - Actual selection. @returns Attribute change. */
+export function ApplySelectionPattern(
+  this: ScDocument,
+  delta: ScPatternAttr,
+  marks: ScMarkData,
+): boolean {
+  let set = false;
+  for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
+    set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
+  if (!set) return false;
+  let changed = false;
+  if (marks.IsMarked() && !marks.IsMultiMarked()) {
+    const range = marks.GetMarkArea();
+    for (const tab of marks.GetSelectedTabs()) {
+      if (tab >= this.GetTableCount()) break;
+      changed =
+        this.ApplyPatternAreaTab(
+          range.aStart.Col(),
+          range.aStart.Row(),
+          range.aEnd.Col(),
+          range.aEnd.Row(),
+          tab,
+          delta,
+        ) || changed;
+    }
+  } else {
+    const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
+    try {
+      for (const tab of marks.GetSelectedTabs()) {
+        if (tab >= this.GetTableCount()) break;
+        changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
+      }
+    } finally {
+      cache.Dispose();
+    }
+  }
+  return changed;
 }

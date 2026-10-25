@@ -7,13 +7,18 @@
     "status": "mapped",
     "upstreamPath": "sc/inc/refupdatecontext.hxx",
     "localSymbols": [
-      "SetFormulaDirtyContext"
+      "SetFormulaDirtyContext",
+      "RefUpdateInsertTabContext",
+      "RefUpdateDeleteTabContext",
+      "RefUpdateMoveTabContext"
     ],
     "upstreamSymbols": [
       "SetFormulaDirtyContext"
     ],
     "preservedResponsibilities": [
-      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only."
+      "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only.",
+      "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
+      "TaskKVGGCR adds original RefUpdateInsertTabContext,RefUpdateDeleteTabContext and RefUpdateMoveTabContext with actual document references,initialized independent updated-name/error owners and exact inclusive/directional getNewTab remapping. These are consumed by genuine date-entry copy/update contracts;no sheet-move UI or full token-update consumer is claimed."
     ],
     "omittedResponsibilities": [
       "Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity."
@@ -27,12 +32,24 @@
         {
           "path": "apps/office/src/sc/source/core/data/reference-protocol.test.ts",
           "marker": "preserves native formula-list membership"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "native"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/inc/refupdatecontext.hxx",
           "marker": "SetFormulaDirtyContext"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/refupdatecontext.cxx",
+          "marker": "RefUpdateMoveTabContext::getNewTab"
         }
       ]
     }

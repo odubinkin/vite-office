@@ -2,6 +2,7 @@
 import { assert, expect, it } from "vitest";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { ScCompiler } from "../../../inc/compiler";
 import { ScSingleRefToken } from "../../../inc/token";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
@@ -70,8 +71,10 @@ it("serializes actual code tokens and ODFF references without interpreting or re
   doc.SetFormula(pos, unicode("="), grammar);
   const invalid = doc.GetFormulaCell(pos);
   assert(invalid);
-  expect(
-    /** Native error-string resource is not present. @returns Formula. */ () =>
-      invalid.GetFormula(grammar),
-  ).toThrow(/not implemented/);
+  expect(invalid.GetCode().GetCodeError()).toBe(FormulaError.UnknownToken);
+  const invalidDirty = invalid.GetDirty();
+  const invalidOutput = invalid.GetFormula(grammar);
+  expect(text(invalidOutput)).toBe("Err:520");
+  invalidOutput.dispose();
+  expect(invalid.GetDirty()).toBe(invalidDirty);
 });

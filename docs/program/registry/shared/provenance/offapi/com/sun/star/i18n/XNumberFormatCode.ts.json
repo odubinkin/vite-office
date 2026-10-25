@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/i18n/XNumberFormatCode.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/i18n/XNumberFormatCode.idl",
+    "localSymbols": [
+      "XNumberFormatCode"
+    ],
+    "upstreamSymbols": [
+      "XNumberFormatCode",
+      "getDefault",
+      "getFormatCode",
+      "getAllFormatCode",
+      "getAllFormatCodes"
+    ],
+    "preservedResponsibilities": [
+      "Original XNumberFormatCode.idl four-method type contract binds actual Locale,generated NumberFormatCode and real shared Sequence values. SvNFFormatData consumes the original public interface rather than importing its i18npool implementation. The actual mapper declares this contract and existing mapper tests exercise all four methods over284locales/15186rows. This compile-time contract projection does not implement generated UNO interface metadata/ABI,queryInterface/acquire/release,Reference ownership or service construction;those are not fabricated. The native UDK Locale signature justifies the canonical offapi->udkapi SDK edge."
+    ],
+    "omittedResponsibilities": [
+      "Generated UNO interface ABI/metadata,Reference/XInterface ownership and service construction remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/i18n/XNumberFormatCode.ts",
+          "marker": "XNumberFormatCode"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/numberformatcode/numberformatcode.test.ts",
+          "marker": "getAllFormatCode"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/i18n/XNumberFormatCode.idl",
+          "marker": "XNumberFormatCode"
+        }
+      ]
+    }
+  }
+}

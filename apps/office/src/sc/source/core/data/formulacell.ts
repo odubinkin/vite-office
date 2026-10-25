@@ -4,6 +4,7 @@ import {
   type SvtDyingHint,
   type SvtQueryBase,
 } from "../../../../svl/source/notify/listener";
+import { ScGlobal } from "../../../inc/global";
 import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
 import { ScSingleRefToken, ScDoubleRefToken, ScTableRefToken } from "../../../inc/token";
 import {
@@ -25,6 +26,8 @@ import { ScCompiler } from "../../../inc/compiler";
 import { ScInterpreter } from "../inc/interpre";
 import { ScFormulaResult, type FormulaResultNumber } from "../../../inc/formularesult";
 import { ScTokenArray } from "../../../inc/tokenarray";
+import { UpdateRefMode, CellType } from "../../../inc/global";
+import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ScAddress, BCA_LISTEN_ALWAYS } from "../../../inc/address";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScDocument } from "../../../inc/document";
@@ -67,10 +70,173 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   private readonly eTempGrammar: Grammar;
   private cMatrixFlag: ScMatrixMode = ScMatrixMode.NONE;
   private bDirty = true;
+  private bCompile = false;
+  private bChanged = false;
   private bNeedListening = false;
   private bInChangeTrack = false;
+  private mbNeedsNumberFormat = false;
+  private mbAllowNumberFormatChange = false;
   private nFormatType: SvNumFormatType = SvNumFormatType.NUMBER;
   readonly aPos: ScAddress;
+  /** Original explicit format request also enables later result-format changes. @param value - Requested state. @returns Nothing. */
+  SetNeedNumberFormat(value: boolean): void {
+    this.mbAllowNumberFormatChange = value;
+    this.mbNeedsNumberFormat = this.mbAllowNumberFormatChange;
+  }
+  /** Original copy/adoption metadata query. @returns Pending format request. */
+  NeedsNumberFormat(): boolean {
+    return this.mbNeedsNumberFormat;
+  }
+  /** Original explicit recompilation flag setter. @param value - Compile state. @returns Nothing. */
+  SetCompile(value: boolean): void {
+    this.bCompile = value;
+  }
+  /** Original changed flag query. @returns Changed state. */
+  IsChanged(): boolean {
+    return this.bChanged;
+  }
+  /** Original changed flag setter. @param value - Changed state. @returns Nothing. */
+  SetChanged(value: boolean): void {
+    this.bChanged = value;
+  }
+  /** Original formula-result token assignment;the real result owner retains token lifetime. @param token - Result token or null. @returns Nothing. */
+  SetResultToken(token: FormulaToken | null): void {
+    this.aResult.SetToken(token);
+  }
+  /** Original normal source recompilation over the same actual formula owner. Shared/named/formatter services retain their existing explicit boundaries. @param formula - Source formula. @param noListening - Native listener suppression. @param grammar - Original input grammar. @returns Nothing. */
+  Compile(formula: OUStringConstReference, noListening: boolean, grammar: Grammar): void {
+    if (this.rDocument.IsClipOrUndo()) return;
+    const inTree = this.rDocument.IsInFormulaTree(this);
+    if (inTree) this.rDocument.RemoveFromFormulaTree(this);
+    if (this.mxGroup) throw new Error("Compile requires an unshared formula cell");
+    this.pCode.Clear();
+    const scanner = new ScCompiler(this.rDocument, this.aPos, grammar);
+    this.pCode = scanner.CompileString(formula);
+    if (this.pCode.GetCodeError() === FormulaError.NONE) {
+      const hybrid = this.aResult.GetHybridFormula();
+      try {
+        if (!this.pCode.GetLen() && !hybrid.isEmpty() && text(formula) === text(hybrid)) {
+          const bad = text(formula).startsWith("=") ? text(formula).slice(1) : text(formula),
+            value = unicode(bad);
+          try {
+            this.pCode.AddBad(value);
+          } finally {
+            value.dispose();
+          }
+        }
+      } finally {
+        hybrid.dispose();
+      }
+      this.bCompile = true;
+      this.CompileTokenArray(noListening);
+    } else this.bChanged = true;
+    if (inTree) this.rDocument.PutInFormulaTree(this);
+  }
+  /** Original token recompilation keeps formula-tree membership and suppresses listeners while inserting. @param noListening - Original default false. @returns Nothing. */
+  CompileTokenArray(noListening = false): void {
+    const hybrid = this.aResult.GetHybridFormula();
+    try {
+      if (!this.pCode.GetLen() && !hybrid.isEmpty()) {
+        this.Compile(hybrid, noListening, this.eTempGrammar);
+        return;
+      }
+    } finally {
+      hybrid.dispose();
+    }
+    if (
+      !this.bCompile ||
+      this.rDocument.IsClipOrUndo() ||
+      this.pCode.GetCodeError() !== FormulaError.NONE
+    )
+      return;
+    const inTree = this.rDocument.IsInFormulaTree(this);
+    if (inTree) this.rDocument.RemoveFromFormulaTree(this);
+    if (this.rDocument.IsInsertingFromOtherDoc()) noListening = true;
+    if (!noListening && this.pCode.GetCodeLen()) this.EndListeningTo(this.rDocument);
+    const compiler = new ScCompiler(
+      this.rDocument,
+      this.aPos,
+      this.pCode,
+      this.rDocument.GetGrammar(),
+      true,
+      this.cMatrixFlag !== ScMatrixMode.NONE,
+    );
+    // The actual shared compiler rejects subtotal opcodes before returning in this slice.
+    compiler.CompileTokenArray();
+    if (this.pCode.GetCodeError() === FormulaError.NONE) {
+      this.nFormatType = compiler.GetNumFormatType();
+      this.bChanged = true;
+      this.aResult.SetToken(null);
+      this.bCompile = false;
+      if (!noListening) this.StartListeningTo(this.rDocument);
+    }
+    if (inTree) this.rDocument.PutInFormulaTree(this);
+  }
+  /** Original copy-reference update uses already-relocated compiled offsets;only recalculation/compile/undo metadata is changed. @param context - Actual update values. @param undo - Optional actual undo document. @param undoPosition - Optional source undo position. @returns Native false. */
+  UpdateReferenceOnCopy(
+    context: RefUpdateContext,
+    undo: ScDocument | null,
+    undoPosition: ScAddress | null,
+  ): boolean {
+    if (context.meMode !== UpdateRefMode.URM_COPY) return false;
+    const oldPosition = new ScAddress(this.aPos),
+      undoAt = new ScAddress(undoPosition ?? this.aPos);
+    if (context.maRange.Contains(this.aPos))
+      oldPosition.Set(
+        this.aPos.Col() - context.mnColDelta,
+        this.aPos.Row() - context.mnRowDelta,
+        this.aPos.Tab() - context.mnTabDelta,
+      );
+    const hasRefs = this.pCode.HasReferences() || this.pCode.HasOpCode(OpCode.ocColRowName);
+    let onMove = this.pCode.IsRecalcModeOnRefMove();
+    if (!hasRefs && !onMove) return false;
+    const oldCode = undo ? this.pCode.Clone() : null;
+    if (onMove) onMove = !this.aPos.equals(oldPosition);
+    let dirty = onMove;
+    if (undo && onMove && undo.GetCellType(undoAt) !== CellType.CELLTYPE_FORMULA) {
+      const copy = new ScFormulaCell(
+        undo,
+        undoAt,
+        oldCode as ScTokenArray,
+        this.eTempGrammar,
+        this.cMatrixFlag,
+      );
+      copy.SetResultToken(null);
+      undo.SetFormulaCell(undoAt, copy);
+    }
+    if (this.bCompile) {
+      this.CompileTokenArray();
+      dirty = true;
+    }
+    if (dirty) {
+      const old = this.rDocument.GetAutoCalc();
+      this.rDocument.SetAutoCalc(false);
+      try {
+        this.SetDirty();
+      } finally {
+        this.rDocument.SetAutoCalc(old);
+      }
+    }
+    return false;
+  }
+  /** Original clipboard/shared-top guards and mode dispatch;shift/move engines remain explicit unported boundaries. @param context - Native context. @param undo - Optional actual undo document. @param undoPosition - Optional actual undo coordinate. @returns Native update flag. */
+  UpdateReference(
+    context: RefUpdateContext,
+    undo: ScDocument | null = null,
+    undoPosition: ScAddress | null = null,
+  ): boolean {
+    if (this.rDocument.IsClipOrUndo()) return false;
+    if (this.mxGroup && this.mxGroup.mpTopCell !== this) {
+      if (context.meMode === UpdateRefMode.URM_INSDEL)
+        throw new Error("Native shared formula shift is not implemented");
+      return false;
+    }
+    if (context.meMode === UpdateRefMode.URM_COPY)
+      return this.UpdateReferenceOnCopy(context, undo, undoPosition);
+    if (context.meMode === UpdateRefMode.URM_INSDEL || context.meMode === UpdateRefMode.URM_MOVE)
+      throw new Error("Native shift/move reference updates are not implemented");
+    return false;
+  }
   /** Compiles numeric/local-reference source. @param rDocument - Document. @param position - Cell. @param formula - Source or owned tokens. @param grammar - Source grammar. @returns Cell. */
   constructor(
     rDocument: ScDocument,
@@ -108,32 +274,31 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.aPos = new ScAddress(pos);
       this.eTempGrammar = source.eTempGrammar;
       this.nFormatType = source.nFormatType;
+      this.mbNeedsNumberFormat = source.mbNeedsNumberFormat;
       this.pCode = source.pCode.Clone();
       this.aResult = new ScFormulaResult(source.aResult);
       this.bDirty = source.bDirty;
+      this.bCompile = source.bCompile;
+      this.bChanged = source.bChanged;
       const compile =
         this.pCode.GetCodeError() !== FormulaError.NONE &&
         !doc.IsClipboard() &&
         this.pCode.GetLen() !== 0;
-      if (compile) this.pCode.SetCodeError(FormulaError.NONE);
+      if (compile) {
+        this.pCode.SetCodeError(FormulaError.NONE);
+        this.bCompile = true;
+      }
       if (!doc.IsClipOrUndo() || doc.IsUndo())
         this.pCode.AdjustAbsoluteRefs(source.rDocument, source.aPos, this.aPos, false);
       // Clipboard and undo copies retain reference flags until the native insertion/update phase.
       if (!doc.IsClipOrUndo()) this.pCode.AdjustReferenceOnCopy(this.aPos);
-      if (compile && !doc.IsClipOrUndo()) {
-        const compiler = new ScCompiler(
-          doc,
-          this.aPos,
-          this.pCode,
-          this.eTempGrammar,
-          true,
-          this.cMatrixFlag !== ScMatrixMode.NONE,
-        );
-        compiler.CompileTokenArray();
-        if (this.pCode.GetCodeError() === FormulaError.NONE) {
-          this.nFormatType = compiler.GetNumFormatType();
-          this.aResult.SetToken(null);
-        }
+      if (this.bCompile) {
+        const compileLater =
+          source.rDocument.IsClipboard() &&
+          (this.pCode.HasOpCode(OpCode.ocRange) ||
+            this.pCode.HasOpCode(OpCode.ocColRowName) ||
+            this.pCode.HasOpCode(OpCode.ocTableRef));
+        if (!compileLater) this.CompileTokenArray(true);
       }
     } else {
       this.rDocument = documentOrCell;
@@ -175,19 +340,8 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
           throw new Error("Subtotal-cell document registration is not implemented");
         this.pCode.GenHash();
       } else {
-        const scanner = new ScCompiler(this.rDocument, this.aPos, this.eTempGrammar);
-        this.pCode = scanner.CompileString(formula);
-        const compiler = new ScCompiler(
-          this.rDocument,
-          this.aPos,
-          this.pCode,
-          this.eTempGrammar,
-          true,
-          this.cMatrixFlag !== ScMatrixMode.NONE,
-        );
-        compiler.CompileTokenArray();
-        if (this.pCode.GetCodeError() === FormulaError.NONE)
-          this.nFormatType = compiler.GetNumFormatType();
+        this.pCode = new ScTokenArray(this.rDocument);
+        this.Compile(formula, true, this.eTempGrammar);
       }
     }
   }
@@ -198,7 +352,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   /** Serializes real source-order tokens without evaluating the cell or caching a second formula model. @param grammar - Explicit serialization grammar. @returns Formula with native leading equals. */
   GetFormula(grammar: Grammar): OUString {
     if (this.pCode.GetCodeError() !== FormulaError.NONE && !this.pCode.GetLen())
-      throw new Error("Localized empty-code error strings are not implemented");
+      return ScGlobal.GetErrorString(this.pCode.GetCodeError());
     const output = new OUString();
     try {
       let emit = true;
@@ -450,6 +604,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       return false;
     }
     this.bRunning = true;
+    this.rDocument.IncInterpretLevel();
     try {
       if (this.pCode.GetCodeError() === FormulaError.NONE) {
         const interpreter = new ScInterpreter(
@@ -466,6 +621,7 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       if (!this.pCode.IsRecalcModeAlways()) this.rDocument.RemoveFromFormulaTree(this);
       return true;
     } finally {
+      this.rDocument.DecInterpretLevel();
       this.bRunning = false;
     }
   }
@@ -635,6 +791,11 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       default:
         break;
     }
+  }
+  /** Original lazy empty-as-string result query. @returns Native empty-display flag. */
+  IsEmptyDisplayedAsString(): boolean {
+    this.MaybeInterpret();
+    return this.aResult.IsEmptyDisplayedAsString();
   }
   /** Reads native numeric/error classification after lazy interpretation. @returns Is numeric or error. */
   IsValue(): boolean {

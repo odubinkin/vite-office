@@ -1,0 +1,174 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;table single-row copy verified;document paste/history acceptance pending",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "calcScenarios": 881,
+  "calcFiles": 219,
+  "coverage": {
+    "lines": {
+      "total": 14164,
+      "covered": 14164,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 15824,
+      "covered": 15824,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 2724,
+      "covered": 2724,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 9645,
+      "covered": 9645,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "sourceHashesStable": true,
+  "capturedSourceTestConfigHashes": 448,
+  "taskFootprint": "104/110 cumulative paths,including prior removed probe images",
+  "coverageConfigurationUnchanged": true,
+  "fullAllApplicationCheckpoint": "80;not performed here",
+  "changedPaths": [
+    "apps/office/e2e/calc/clipboard-copy.spec.ts",
+    "apps/office/src/sc/source/core/data/table.ts",
+    "apps/office/src/sc/source/core/data/table7.ts",
+    "docs/program/calc-upstream-suspected-issues.md",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/provenance/sc/source/core/data/table7.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table.ts.json",
+    "docs/program/registry/calc/runtime/sc/source/core/data/table7.ts.json",
+    "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts"
+  ],
+  "rawSha256": "02db20ba846365563a4adec573f5ab875c6a42688b4fd1b0b3cf0329f3324a56",
+  "checks": {
+    "task76-row-static.log": {
+      "result": "pass",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    "task76-row-docs.log": {
+      "result": "pass",
+      "sha256": "5182abc7a0907d2025b9855b5047b35dbd80a76511e71affd50d5c9108291c73"
+    },
+    "task76-row-build.log": {
+      "result": "pass",
+      "sha256": "a2b0558463ba947ce580a0ac002d371b71448c6c8531934069e41fd7f8db3a10"
+    },
+    "task76-row-focused.log": {
+      "result": "pass",
+      "sha256": "9003c7b6bee288c32c75ffbb65ddb846f2b5fd19a96ec3ab35f7b67bf6eccbad"
+    },
+    "task76-row-tree.log": {
+      "result": "pass",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "task76-row-changed-provenance.log": {
+      "result": "diagnostic input-adapter failure",
+      "sha256": "4df42a68b3f2466a9801e13f4adb7f0ee76816a25946765b6ee7507adc825a62"
+    },
+    "task76-row-lint.log": {
+      "result": "pass",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "task76-row-doctor.log": {
+      "result": "pass",
+      "sha256": "7087a3335bdf686293c1ca3f259be2c7c90925dcd8a6498b6582e7e21132b5fb"
+    },
+    "task76-row-registry.log": {
+      "result": "fail:missing optional upstream source directory",
+      "sha256": "3bdcac49f8328872c01c5e8c15a8d9c2e36d64f65577cbde4cbaf140994acd58"
+    },
+    "task76-row-route6.log": {
+      "result": "pass",
+      "sha256": "50b725015774641dee76722cb5b081bf8406327fd8b887ab61c56268e1fde8e4"
+    },
+    "task76-row-route5.log": {
+      "result": "pass",
+      "sha256": "50b725015774641dee76722cb5b081bf8406327fd8b887ab61c56268e1fde8e4"
+    },
+    "task76-row-size.log": {
+      "result": "pass",
+      "sha256": "66b17af9544bf6f9e49937e044709e9d84dce5b9e2ba3ca13742b399e7b41575"
+    },
+    "task76-row-route4.log": {
+      "result": "pass",
+      "sha256": "50b725015774641dee76722cb5b081bf8406327fd8b887ab61c56268e1fde8e4"
+    },
+    "task76-row-provenance.log": {
+      "result": "fail:missing optional upstream source directory",
+      "sha256": "66736fb88a437aca8e7dfd30e1281886fa9d1090545025f60face37d14b4dbe4"
+    },
+    "task76-row-routing.log": {
+      "result": "pass",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "task76-row-route3.log": {
+      "result": "pass",
+      "sha256": "50b725015774641dee76722cb5b081bf8406327fd8b887ab61c56268e1fde8e4"
+    },
+    "task76-row-route2.log": {
+      "result": "pass",
+      "sha256": "50b725015774641dee76722cb5b081bf8406327fd8b887ab61c56268e1fde8e4"
+    },
+    "task76-row-changed-provenance4.log": {
+      "result": "pass",
+      "sha256": "822be20d96b2c48b4d2cbfe3c144d4501f27d9c08168354d7e7149c29136470a"
+    },
+    "task76-row-boundaries.log": {
+      "result": "pass",
+      "sha256": "ae20f4df32db35fca29809d4cf56cd14bcb7b0149fcd13785294067adbe9cf0c"
+    },
+    "task76-row-changed-provenance2.log": {
+      "result": "diagnostic input-adapter failure",
+      "sha256": "28dc75e662e5ed76e38e7b610ec7fa833560e4edac281ca2fadcbea0110a3aef"
+    },
+    "task76-row-tools-types.log": {
+      "result": "pass",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "task76-row-calc.log": {
+      "result": "pass",
+      "sha256": "fb4efe89a58190ba848a2b1e3240b38d06aace0198b9076d1faf1342b6bf8d10"
+    },
+    "task76-row-resources.log": {
+      "result": "pass",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "task76-row-browser.log": {
+      "result": "pass",
+      "sha256": "95658ecedd8906d6eea209e9887c9ce006f4cb0d0492ab1499cb607369906267"
+    },
+    "task76-row-changed-provenance3.log": {
+      "result": "diagnostic input-adapter failure",
+      "sha256": "7b0602dd772050806e8f303c9fad1382f344ce9c4cb713fa5647bba0f73e83e1"
+    },
+    "task76-row-types.log": {
+      "result": "pass",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    "task76-row-format.log": {
+      "result": "pass",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  },
+  "limits": [
+    "Full provenance gate cannot read deleted vendor/icu-reference/source/common/ucase.h.",
+    "Full Calc registry gate cannot read deleted vendor/mdds-reference/include/mdds/multi_type_matrix_def.inl.",
+    "Changed table.ts/table7.ts provenance passes against retained pinned LibreOffice reference;not a replacement for full gates.",
+    "Human intentionally deleted ignored upstream caches to reclaim disk;no network/restoration performed.",
+    "Human baseline .DS_Store and output/.DS_Store preserved and excluded.",
+    "Full mandatory source/registry checks remain required for final task acceptance;no approved skip or weakened validation."
+  ]
+}

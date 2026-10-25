@@ -77,6 +77,7 @@ it("reads raw and typed embedded resources from browser XML and rejects a missin
   Reflect.deleteProperty(files, font.path);
   Object.defineProperty(files, font.path, {
     enumerable: true,
+    configurable: false,
     get: /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
       undefined,
   });

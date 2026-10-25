@@ -202,10 +202,10 @@ it("owns original locale and case-mapping dependencies without browser or revers
     expect(isForbiddenModuleEdge(dependency, "i18nutil")).toBe(true);
   }
   // Original transliteration.hxx consumes the generated IDL enum, whose hdl includes SAL types/sentinel.
-  expect(isForbiddenModuleEdge("offapi", "sal")).toBe(false);
   expect(isForbiddenModuleEdge("sal", "offapi")).toBe(true);
   // Original cppumaker normal enum getters use CPPU static type initialization.
-  expect(isForbiddenModuleEdge("offapi", "cppu")).toBe(false);
+  for (const target of ["sal", "cppu", "udkapi"])
+    expect(isForbiddenModuleEdge("offapi", target)).toBe(false);
   for (const owner of ["udkapi", "i18nutil", "offapi"])
     for (const dependency of ["sc", "sw", "framework", "vcl"])
       expect(isForbiddenModuleEdge(owner, dependency)).toBe(true);
@@ -567,7 +567,7 @@ it("permits Calc attribute Any transport while protecting reverse and browser bo
 it("keeps original enum extraction below SVL and Calc without reverse or browser edges", /** Checks exact native helper dependencies. @returns Nothing. */ () => {
   for (const target of ["comphelper", "cppu"])
     expect(isForbiddenModuleEdge("svl", target)).toBe(false);
-  for (const target of ["cppu", "udkapi"])
+  for (const target of ["sal", "cppu", "udkapi"])
     expect(isForbiddenModuleEdge("comphelper", target)).toBe(false);
   for (const target of ["sc", "sw", "svl", "framework"])
     expect(isForbiddenModuleEdge("comphelper", target)).toBe(true);
@@ -779,10 +779,11 @@ it("keeps native numeric locale resources below tab items and application/browse
   for (const owner of ["i18npool", "unotools"])
     for (const app of ["sc", "sw", "framework"])
       expect(isForbiddenModuleEdge(owner, app)).toBe(true);
-  for (const owner of ["i18nlangtag", "udkapi"])
+  for (const owner of ["i18nlangtag", "udkapi", "cppu", "offapi"]) {
     expect(isForbiddenModuleEdge("i18npool", owner)).toBe(false);
+    expect(isForbiddenModuleEdge(owner, "i18npool")).toBe(true);
+  }
   expect(isForbiddenModuleEdge("i18npool", "unotools")).toBe(true);
-  expect(isForbiddenModuleEdge("i18nlangtag", "i18npool")).toBe(true);
   expect(
     getRuntimeOwnershipViolation(
       "i18npool/source/localedata/localedata.ts",
@@ -841,11 +842,11 @@ it("distinguishes emitted imports from erased type syntax before runtime cycle d
     ].sort(),
   );
   expect([...getRuntimeImportSpecifiers("const value=1;")]).toEqual([]);
-  expect(isForbiddenModuleEdge("svl", "udkapi")).toBe(false);
-  for (const module of ["sc", "sw", "vcl", "framework"]) {
-    expect(isForbiddenModuleEdge("udkapi", module)).toBe(true);
-    expect(isForbiddenModuleEdge("cppu", module)).toBe(true);
-  }
+  for (const target of ["udkapi", "offapi", "i18nlangtag"])
+    expect(isForbiddenModuleEdge("svl", target)).toBe(false);
+  for (const module of ["sc", "sw", "vcl", "framework", "svl"])
+    for (const owner of ["udkapi", "cppu", "offapi"])
+      expect(isForbiddenModuleEdge(owner, module)).toBe(true);
 });
 it("admits only source-backed VCL variation and original UTF16 decimal header bindings", /** Preserves reverse/application edge rejection and exact shared SAL/o3tl named bindings. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("vcl", "o3tl")).toBe(false);
@@ -879,6 +880,17 @@ it("admits only source-backed VCL variation and original UTF16 decimal header bi
 });
 
 it("admits only original pure document-pool VCL dependencies while retaining domain/browser gates", /** Verifies the exact consumed native edge and negative browser/reverse cases. @returns Nothing. */ () => {
+  for (const target of ["vcl/inc/idle.ts", "vcl/inc/task.ts", "vcl/inc/scheduler.ts"])
+    expect(isForbiddenDomainVclImport("sc/source/core/tool/chartlis.ts", target)).toBe(false);
+  for (const target of [
+    "vcl/browser/sal-timer.ts",
+    "vcl/source/app/scheduler.ts",
+    "vcl/inc/idle-other.ts",
+  ])
+    expect(isForbiddenDomainVclImport("sc/source/core/tool/chartlis.ts", target)).toBe(true);
+  expect(isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/inc/idle.ts")).toBe(
+    true,
+  );
   const source = "sc/source/core/data/docpool.ts";
   for (const target of [
     "vcl/inc/fntstyle.ts",
@@ -893,12 +905,8 @@ it("admits only original pure document-pool VCL dependencies while retaining dom
     "vcl/source/font/font.ts",
   ])
     expect(isForbiddenDomainVclImport(source, target)).toBe(true);
-  expect(
-    isForbiddenDomainVclImport("sc/source/core/data/document.ts", "vcl/source/outdev/font.ts"),
-  ).toBe(true);
-  expect(isForbiddenDomainVclImport("sw/source/core/doc/doc.ts", "vcl/source/outdev/font.ts")).toBe(
-    true,
-  );
+  for (const caller of ["sc/source/core/data/document.ts", "sw/source/core/doc/doc.ts"])
+    expect(isForbiddenDomainVclImport(caller, "vcl/source/outdev/font.ts")).toBe(true);
   expect(
     isForbiddenDomainVclImport(
       "sc/browser/presentation/ScGridWindow.tsx",

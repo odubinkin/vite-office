@@ -1,0 +1,505 @@
+
+> vite-office@0.1.0 lint
+> eslint . --max-warnings 0
+
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sc/source/filter/xml/ods-xml-boundaries.test.ts
+  82:3  error  Forbidden non-null assertion  @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/apps/office/src/sw/source/filter/xml/odt-xml-boundaries.test.ts
+   62:12  error  Forbidden non-null assertion                      @typescript-eslint/no-non-null-assertion
+   76:16  error  Do not delete dynamically computed property keys  @typescript-eslint/no-dynamic-delete
+  117:25  error  Forbidden non-null assertion                      @typescript-eslint/no-non-null-assertion
+  117:25  error  Forbidden non-null assertion                      @typescript-eslint/no-non-null-assertion
+  176:23  error  Forbidden non-null assertion                      @typescript-eslint/no-non-null-assertion
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task135-checks/final-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task137-checks/final-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task143-checks/audit-mapping.ts
+  8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task143-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task145-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task153-checks/audit-boundaries.mjs
+  5:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task155-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task156-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task157-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task158-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task159-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task160-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task162-checks/build-browser-portable.mjs
+  2:10  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task165-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166-checks/native-audit.mjs
+  15:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task166a-checks/semantic-audit.mjs
+   8:1   error  Missing JSDoc comment                 jsdoc/require-jsdoc
+  34:1   error  Missing JSDoc comment                 jsdoc/require-jsdoc
+  34:10  error  'findCalc' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/guard-proof.mjs
+  6:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  6:93  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task167-checks/native-audit.mjs
+  12:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task168-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/migrate-iterations.mjs
+  7:2   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  9:20  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task169-checks/native-audit.mjs
+  14:1    error  Missing JSDoc comment  jsdoc/require-jsdoc
+  14:134  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task170-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task171-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task173-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task174-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task175-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task176-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task177-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task177-checks/native-audit.mjs
+  30:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task178-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task179-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task180-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task181-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task182-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task183-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task184-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task184-checks/native-audit.mjs
+  6:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  6:44  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task185-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task185-checks/native-audit.mjs
+  8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task186-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task187-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task188-checks/build-browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task188-checks/native-audit.mjs
+  6:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task189-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task189-checks/native-audit.mjs
+  8:31  error  Spaces are hard to count. Use {4}  no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task190-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task191-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task191-checks/native-audit.mjs
+   8:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  10:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task192-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task193-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task193-checks/native-audit.mjs
+  13:91  error  'tag' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  17:1   error  Missing JSDoc comment                     jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task194-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task195-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task196-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task198-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task199-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task200-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task201-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task202-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task203-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task204-checks/browser-portable.mjs
+  2:9  error  'readFileSync' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task204-checks/portable.mjs
+  11:30  error  'c' is defined but never used  @typescript-eslint/no-unused-vars
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task205-checks/final-audit.mjs
+  10:486  error  'k' is defined but never used                                @typescript-eslint/no-unused-vars
+  10:568  error  'k' is defined but never used                                @typescript-eslint/no-unused-vars
+  17:111  error  Unexpected control character(s) in regular expression: \x1b  no-control-regex
+  17:175  error  Spaces are hard to count. Use {2}                            no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task206-checks/final-audit.mjs
+  9:138  error  Spaces are hard to count. Use {2}  no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-batch-runner.mjs
+  12:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  13:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  14:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task40-reconcile.mjs
+  13:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task50-full-runner.mjs
+  13:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  14:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  20:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-document-tests.mjs
+  4:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-final-runner.mjs
+  13:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  14:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  20:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-istanbul-observer.mjs
+    22:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    25:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    29:11  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    33:12  error    Empty block statement                                                                    no-empty
+    46:9   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    59:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    64:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    87:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+    98:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   106:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   121:15  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   136:24  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   147:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   161:24  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   181:12  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   188:29  error    Do not delete dynamically computed property keys                                         @typescript-eslint/no-dynamic-delete
+   189:34  error    Do not delete dynamically computed property keys                                         @typescript-eslint/no-dynamic-delete
+   190:35  error    Do not delete dynamically computed property keys                                         @typescript-eslint/no-dynamic-delete
+   207:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   230:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   300:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   326:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   334:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   335:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   364:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   404:13  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   421:29  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   442:26  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   451:13  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   492:12  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   502:13  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   508:13  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   517:14  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   540:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   567:28  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   658:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   696:28  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   706:27  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   747:24  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   752:29  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   760:25  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   768:16  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   797:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   799:27  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   808:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   817:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   822:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   828:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   832:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   836:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   840:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   853:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   859:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   866:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   872:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   889:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   908:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   913:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   924:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+   938:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1066:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1069:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1116:15  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1125:14  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1152:34  error    Do not delete dynamically computed property keys                                         @typescript-eslint/no-dynamic-delete
+  1197:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1214:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1217:15  error    '_' is defined but never used                                                            @typescript-eslint/no-unused-vars
+  1229:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1236:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1261:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1266:24  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1304:33  error    Do not delete dynamically computed property keys                                         @typescript-eslint/no-dynamic-delete
+  1320:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1352:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1413:42  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1491:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1531:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1555:7   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1577:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1642:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1667:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1688:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1698:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1706:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1755:1   error    Missing JSDoc @param "namespace" description                                             jsdoc/require-param-description
+  1765:4   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1848:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  1858:1   error    Missing JSDoc @param "namespaces" description                                            jsdoc/require-param-description
+  1887:1   error    Missing JSDoc @param "search" description                                                jsdoc/require-param-description
+  1888:1   error    Missing JSDoc @param "template" description                                              jsdoc/require-param-description
+  1908:36  warning  Unused eslint-disable directive (no problems were reported from 'no-negated-condition')
+  1944:1   error    Missing JSDoc @param "name" description                                                  jsdoc/require-param-description
+  1967:1   error    Missing JSDoc @param "val" description                                                   jsdoc/require-param-description
+  1995:1   error    /* eslint-env */ comments are no longer supported
+  1999:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2114:3   warning  Unused eslint-disable directive (no problems were reported from 'complexity')
+  2115:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2132:4   warning  Unused eslint-disable directive (no problems were reported from 'no-return-assign')
+  2149:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2197:1   error    Missing JSDoc @param "namespaces" description                                            jsdoc/require-param-description
+  2207:13  error    'error' is defined but never used                                                        @typescript-eslint/no-unused-vars
+  2223:13  error    'error' is defined but never used                                                        @typescript-eslint/no-unused-vars
+  2247:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2252:13  error    'error' is defined but never used                                                        @typescript-eslint/no-unused-vars
+  2266:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2282:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2298:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2330:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2343:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2425:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2444:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2474:4   error    Definition for rule 'import/no-extraneous-dependencies' was not found                    import/no-extraneous-dependencies
+  2557:12  error    'error' is defined but never used                                                        @typescript-eslint/no-unused-vars
+  2598:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2610:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2625:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2636:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2643:1   error    Missing JSDoc @param "namespaces" description                                            jsdoc/require-param-description
+  2663:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2674:3   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2691:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2703:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2718:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2737:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2745:16  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2750:16  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2767:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2773:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2782:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2783:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2796:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2813:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2835:15  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2861:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2884:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  2997:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3091:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3095:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3099:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3121:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3131:2   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3132:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3138:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3237:21  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3290:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3305:6   error    Missing JSDoc block description                                                          jsdoc/require-description
+  3437:18  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3527:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3536:26  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3549:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3554:12  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3579:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3591:17  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3629:19  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3632:24  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3637:14  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3668:23  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3689:25  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3693:39  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3724:11  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3733:16  error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+  3746:1   error    Missing JSDoc comment                                                                    jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-nonnull.mjs
+  3:230  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-parallel-runner.mjs
+  11:7    error  'tracked' is assigned a value but never used      @typescript-eslint/no-unused-vars
+  13:1    error  Missing JSDoc comment                             jsdoc/require-jsdoc
+  14:1    error  Missing JSDoc comment                             jsdoc/require-jsdoc
+  20:1    error  Missing JSDoc comment                             jsdoc/require-jsdoc
+  22:284  error  Do not delete dynamically computed property keys  @typescript-eslint/no-dynamic-delete
+  31:2    error  Missing JSDoc comment                             jsdoc/require-jsdoc
+  53:2    error  Missing JSDoc comment                             jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task51-remap-partial.mjs
+  2:207  error  Empty block statement  no-empty
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-proof.mjs
+  16:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  16:34  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task52-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-proof.mjs
+  16:76  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  21:19  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task53-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task54-close-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task54-proof.mjs
+  14:76  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  19:19  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task54-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task55-proof.mjs
+   9:70  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  12:19  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task55-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-audit.mjs
+  5:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  5:39  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-proof.mjs
+  10:1   error  Missing JSDoc comment  jsdoc/require-jsdoc
+  10:34  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  16:19  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task56-static.mjs
+  4:40  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task65-build-evidence.mjs
+  10:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  15:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+  19:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task65-debug-value.ts
+  6:15  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  7:35  error  Missing JSDoc comment                     jsdoc/require-jsdoc
+  7:81  error  Missing JSDoc comment                     jsdoc/require-jsdoc
+  8:25  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task66-port-headers.mjs
+  15:99  error  Spaces are hard to count. Use {12}  no-regex-spaces
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task72-run-gates.mjs
+  5:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task73-debug-actual-nan.ts
+  2:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task73-debug-fixture-nan.ts
+  2:1    error  Missing JSDoc comment  jsdoc/require-jsdoc
+  2:133  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task73-debug-nan.ts
+  3:1   error  Missing JSDoc comment                           jsdoc/require-jsdoc
+  5:52  error  'sum' is never reassigned. Use 'const' instead  prefer-const
+
+/Users/odubinkin/Projects/vite-office-calc/output/playwright/task73-run-gates.mjs
+  5:1  error  Missing JSDoc comment  jsdoc/require-jsdoc
+
+✖ 301 problems (298 errors, 3 warnings)
+  5 errors and 3 warnings potentially fixable with the `--fix` option.
+

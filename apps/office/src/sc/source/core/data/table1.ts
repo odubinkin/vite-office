@@ -1,6 +1,11 @@
 /** @fileoverview Native SetOptimalHeightsToRows reducer over actual compressed row flags and calculated heights; drawing services remain unported. */
 import type { RowHeightContext } from "../../../inc/rowheightcontext";
 import type { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
+import type { ScColumn } from "../../../inc/column";
+import type { ScTable } from "../../../inc/table";
+import type { ScDocument } from "../../../inc/document";
+import type { RefUpdateContext } from "../../../inc/refupdatecontext";
+import { UpdateRefMode } from "../../../inc/global";
 import { CRFlags } from "../../../inc/global";
 /** Applies native grouping, manual/force flags and extra-height semantics. @param context - Shared calculation. @param apply - Actual sheet height mutation. @param flags - Row flags. @param first - First row. @param last - Last row. @param api - Allow interactive single-row shrinking. @returns Whether geometry changed. */
 export function SetOptimalHeightsToRows(
@@ -50,4 +55,28 @@ export function SetOptimalHeightsToRows(
   }
   if (previous) changed = apply(start, end, previous, api) || changed;
   return changed;
+}
+
+/** Original table1 copy-reference traversal over allocated columns;drawing,names,printing and validation owners remain unrepresented. @param this - Actual native owner. @param context - Native context. @param undo - Undo document. @param includeDraw - Original default. @param updateNoteCaptionPos - Original default. @returns Nothing. */
+export function UpdateReference(
+  this: ScTable,
+  context: RefUpdateContext,
+  undo: ScDocument | null = null,
+  includeDraw = true,
+  updateNoteCaptionPos = true,
+): void {
+  void includeDraw;
+  void updateNoteCaptionPos;
+  if (context.meMode !== UpdateRefMode.URM_COPY)
+    throw new Error("Non-copy table reference updates are not implemented");
+  const last = Math.min(context.maRange.aEnd.Col(), this.GetAllocatedColumnsCount() - 1);
+  for (let col = Math.max(0, context.maRange.aStart.Col()); col <= last; ++col)
+    (this["aCol"][col] as ScColumn).UpdateReference(context, undo);
+  this["mpCondFormatList"]?.UpdateReference(context);
+}
+
+/** Original stream validity short circuit and lock/default ordering. @param this - Actual sheet. @param value - New state. @param ignoreLock - Resolved native argument. @returns Nothing. */
+export function SetStreamValid(this: ScTable, value: boolean, ignoreLock: boolean): void {
+  if (!this["bStreamValid"] && !value) return;
+  if (ignoreLock || !this["rDocument"].IsStreamValidLocked()) this["bStreamValid"] = value;
 }

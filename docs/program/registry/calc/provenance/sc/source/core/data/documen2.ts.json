@@ -7,18 +7,23 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/documen2.cxx",
     "localSymbols": [
-      "Dispose"
+      "Dispose",
+      "InitializeResources",
+      "getCellAttributeHelper"
     ],
     "upstreamSymbols": [
-      "ScDocument::~ScDocument"
+      "ScDocument::~ScDocument",
+      "ScDocument::getCellAttributeHelper"
     ],
     "preservedResponsibilities": [
-      "Consumed observable destructor runs on the actual ScDocument instance. TypeScript same-instance out-of-class functions preserve private owners;GC replaces physical deletion.",
-      "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
-      "Block75 document-mode work in progress now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,source auto-calc defaults,independent string pools,normal/function-access-only ScPoolHelper and broadcast-area allocation,and nullable GetPool/GetStyleSheetPool contracts. Actual helper owns ScDocumentPool and ScStyleSheetPool on the existing shared style base. SourceDocumentGone clears the actual style-pool source pointer;managed references retain physical identity without a global reference-count simulator. CellAttributeHelper is allocated lazily and rejects unshared clipboard/undo access as native assertions require. Real document NoListening and formula change-track membership flags preserve native start/end subscription asymmetry after group teardown. Tests use genuine documents,resources and listeners. Existing normal-document shell/export/test consumers explicitly borrow the known owned pool at original dereference boundaries;nullable document API remains honest. Calc style creation/copy factories explicitly reject unsupported ScStyleSheet construction rather than creating the wrong shared style type. Standard-style population,formatter/edit-engine services,clipboard resource sharing/reset/paste belong outside this consumed allocation/lifetime slice. Full closure/raw100 and broad native parity remain pending."
+      "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
+      "Native constructor resource definitions execute on the same ScDocument instance;ordinary/function-access modes own actual chart collections while Clip/Undo retain null. Original destructor sets bInDtorClear and destroys the collection before area broadcasters and formula cells. Existing pool/string resource semantics are preserved.",
+      "The represented native document destructor delegates to actual Clear after chart/area destruction;typed column value destruction releases Undo strings instead of destroying a source-shared string pool. The owned document-name value is released. Native string-pool reference counting/delayed purge and unported global services remain outside this profile.",
+      "Native pool-helper ownership now retains actual salhelper SimpleReferenceObject acquire/release operations at document initialization,rtl::Reference assignment and destruction. ScPoolHelper owns a lazy actual General/NatNum0 SvNumberFormatter and copies default/document options into its null-date,precision and two-digit-year fields. Shared clipboard/Undo owners retain the formatter after source closure;the last intrusive release destroys its owned parsed values. Number-color callbacks,edit-engine and physical style/item-pool shutdown remain unported;no fake service is installed. Document paste and UI acceptance remain pending.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
-      "Only the stated consumed slice is implemented;broader native contracts,defaults and behavior remain unverified."
+      "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
     ],
     "evidence": {
       "local": [
@@ -33,12 +38,44 @@
         {
           "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
           "marker": "constructs native mode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-resources.test.ts",
+          "marker": "clipboard"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-context.test.ts",
+          "marker": "clipboard"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-formula-clone.test.ts",
+          "marker": "span"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/chart-collection.test.ts",
+          "marker": "actual"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/clipboard-undo-copy.test.ts",
+          "marker": "native scope guards"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/conditional-copy.test.ts",
+          "marker": "relocated ranges"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
           "marker": "ScDocument::~ScDocument"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen2.cxx",
+          "marker": "ScDocument::getCellAttributeHelper"
         }
       ]
     }

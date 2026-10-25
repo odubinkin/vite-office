@@ -7,13 +7,19 @@
     "status": "mapped",
     "upstreamPath": "sc/source/ui/view/tabview3.cxx",
     "localSymbols": [
-      "ScTabView"
+      "ScTabView",
+      "ErrorMessage",
+      "SetErrorMessageHandler"
     ],
     "upstreamSymbols": [
       "ScTabView::SelectNextTab",
       "ScTabView::SetTabNo",
       "ScTabView::MarkRows",
-      "ScTabView::MarkColumns"
+      "ScTabView::MarkColumns",
+      "ScTabView::SelMouseButtonDown",
+      "ScTabView::MarkRange",
+      "ScTabView::MarkDataArea",
+      "ScTabView::Unmark"
     ],
     "preservedResponsibilities": [
       "TaskFKYDT8 ports ScTabView SelectNextTab and SetTabNo sheet grouping from tabview3.cxx and SelectAllTables/DeselectAllTables from tabview2.cxx over real ScViewData/ScMarkData. Native WrapNextPrevSheetTab defaults true. Existing per-sheet cursor state survives navigation;normal selection retains a partial group on already-selected target sheets and collapses an all-selected group. Native Sfx slots26543,26544,26561,26562,26361,26365 use original operation/state boundaries. Navigation commits the real input draft first and rejected drafts prevent movement. Source group-only commands do not change model generation,dirty state or history. Shared CommandMenuBar executes real slots and browser Ctrl/Meta+PageUp/PageDown plus tab-arrow navigation use the same dispatcher. Hidden/alternate sheets,reference editing,drawing/window services and full native parity remain unported.",
@@ -23,10 +29,13 @@
       "TaskFZA8S9 ports original column range emptiness,occupancy and bounded last-row queries;table/document connected-area expansion and shrinking retain source order,diagonals,includeOld/onlyDown and allocated-column clamping. Table construction now uses actual INITIALCOLCOUNT=1. SelectAll5723 honors SelectRangeBeforeAll=true;SelectData26551,shared Writer menus,Ctrl/Meta+A,keypad multiply,platform Space accelerators and direct whole-sheet corner use actual native marks. Cursor,sheet membership,content generation,dirty state and history remain unchanged by selection. Native rich-edit,reference,device/protection and alternate-view services remain unported. Native cached column-iterator hints are omitted as a lookup optimization;the original uncached occupancy overload reads the same real typed store. Existing Writer browser save/open deviations remain.",
       "TaskY1NRHK connects original hidden Deselect26549 and ShiftBackspace to the actual normal-grid ScTabView Unmark state effects:old cursor resets only when marked;real marks clear,cursor and sheet membership remain;the existing browser movement anchor follows original same-position InitOwnBlockMode. Full MoveCursorAbs device/SelectionEngine/reference services remain explicitly unported,without facades. Shared source-generated catalog metadata supplies Undo Selection and its native accelerator without adding a visible menu/toolbar placement. Grid cells/labels suppress DOM text selection declaratively while the actual inline input explicitly retains native text selection;no global Selection mutation is used. Escape remains distinct from Deselect and nested input/menu/modal/composition ownership is preserved. No document/history or browser IO/recovery policy changes;complete native/browser parity remains unverified.",
       "TaskY1NRHK final keyboard route uses the shared canonical event adapter and the active Sfx shortcut table;disabled or reassigned ShiftBackspace is honored. The key-only slot fallback uses the same canonical native Shift+BACKSPACE identity. Source default,unbound,reassigned,consumed-event,modifier and nested-editor cases are covered with actual frame/shell owners.",
-      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete."
+      "Block74 work in progress connects actual RPN outer-function adjacency,directional AutoSum search with the original20-cell cutoff,sum-of-sums,relative range token output,and nonempty selected-block totals through native SetFormulaOperation. Original StartFormula preserves content-dependent UTF16 selection instead of replacing every cell with a bare equals;browser caret projection runs after controlled render and retains shared Writer styling. NeedHeight queries traverse actual attribute runs and default-column tails. The normal enabled-recording/default-view profile retains real value owners and source manual-calculation behavior. Clipboard EnterBlock/PasteFromClip,grouped formula copies,named database/autofilter collections,SUBTOTAL,nondefault undo/alternate-view/device services remain unported. Browser availability disables contexts requiring those missing services;there is no flat-copy/alternate-evaluator substitute. Broad contract/default/behavior parity remains unverified and the task is not complete.",
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported.",
+      "Task77 follow-through replaces temporary browser ScTabView instances with the actual ScTabViewShell owner. Existing MarkRange,MarkDataArea,MarkRows,MarkColumns,SelectAll and Unmark now use native DoneBlockMode/InitBlockMode/MarkCursor/InitOwnBlockMode boundaries. The native mouse Shift/Ctrl flag lifetime and marking flag preserve additive/negative blocks and subsequent command/sheet transitions. WithSelectionMouseModifiers is an explicit browser dispatch projection,not a substitute VCL SelectionEngine. Complete selection-engine drag transfer,screen acceleration and split/protected/merged services remain unported.",
+      "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim."
     ],
     "omittedResponsibilities": [
-      "The current core supports only visible sheets;hidden and alternate sheet views,reference editing,VCL drawing/window/focus services and whole-module parity are not simulated.",
+      "The current core supports visible/unmerged local-reference and normal selection profiles. Hidden sheets,alternate/split/protected views,fill/transfer,VCL drawing/window/focus services and whole-module parity remain unported.",
       "SelectAllTables/DeselectAllTables retain native membership logic from tabview2.cxx;browser repaint/bindings invalidate through the controller."
     ],
     "evidence": {
@@ -46,6 +55,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/native-autosum.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
+          "marker": "fills relative formulas over a rectangle"
         }
       ],
       "upstream": [
@@ -84,6 +97,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/ui/inc/viewdata.hxx",
           "marker": "ScViewData::GetMoveCursor"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/view/tabview2.cxx",
+          "marker": "ScTabView::ErrorMessage"
         }
       ]
     }

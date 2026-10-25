@@ -29,6 +29,7 @@ const moduleNames = [
   "offapi",
   "package",
   "sal",
+  "salhelper",
   "sax",
   "sc",
   "sfx2",
@@ -90,17 +91,21 @@ const allowedEdges = new Map([
   // Original isolang.cxx uses actual RTL strings and generated css::lang::Locale values.
   ["i18nlangtag", new Set(["sal", "udkapi"])],
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
-  // Original Library_i18npool links sal/i18nutil; cclass_unicode and transliteration_body use OUString/casefolding.
-  ["i18npool", new Set(["i18nlangtag", "i18nutil", "sal", "udkapi"])],
+  // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
+  // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
+  ["i18npool", new Set(["cppu", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
   ["o3tl", new Set(["sal"])],
   // Original generated enum getters use actual CPPU static enum metadata.
-  ["offapi", new Set(["cppu", "sal"])],
+  // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
+  ["offapi", new Set(["cppu", "sal", "udkapi"])],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
+  // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
+  ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
   ["sax", new Set(["sal", "udkapi"])],
   [
@@ -121,6 +126,8 @@ const allowedEdges = new Map([
       "package",
       // Original Calc global.hxx/token.hxx use rtl/ustring.hxx; hybrid results own OUString.
       "sal",
+      // Native poolhelp.hxx derives SimpleReferenceObject;Library_sc links salhelper.
+      "salhelper",
       "sax",
       "sfx2",
       "svl",
@@ -140,7 +147,22 @@ const allowedEdges = new Map([
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
   // Native grabbagitem.cxx consumes generated UDK beans PropertyValue.hpp.
   // Original SharedStringPool borrows CharClass; Library_svl links utl.
-  ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools", "udkapi", "unotools"])],
+  // Original zforlist.cxx consumes generated i18n NumberFormatCode;Library_svl uses SDK API.
+  // Original zforscan/zforlist use native LanguageTag/MsLangId;Library_svl links i18nlangtag.
+  [
+    "svl",
+    new Set([
+      "comphelper",
+      "cppu",
+      "i18nlangtag",
+      "o3tl",
+      "offapi",
+      "sal",
+      "tools",
+      "udkapi",
+      "unotools",
+    ]),
+  ],
   // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
   // Original sampletext.cxx consumes VCL font/charmap/capabilities, ICU script codes,
   // i18nutil Unicode classes, SAL encoding and UNO ScriptType. Library_svt links
@@ -242,7 +264,8 @@ const allowedEdges = new Map([
   ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
-  ["tools", new Set(["o3tl", "cppu"])],
+  // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
+  ["tools", new Set(["o3tl", "cppu", "comphelper"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   ["xmloff", new Set(["udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"])],
@@ -253,11 +276,18 @@ const allowedEdges = new Map([
 export function isForbiddenModuleEdge(sourceModule, targetModule) {
   return !allowedEdges.get(sourceModule)?.has(targetModule);
 }
-/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
+/** Retains the core/browser VCL gate while admitting only the source-backed pure dependencies consumed by ScDocumentPool and ScChartListenerCollection. Other VCL and all browser imports remain forbidden from domain core. @param relativeSource - Source-root-relative caller. @param relativeTarget - Source-root-relative target. @returns Forbidden flag. */
 export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
+  // These kernel contracts use an explicitly bound platform;they never import browser adapters.
+  if (
+    source === "sc/source/core/tool/chartlis.ts" &&
+    ["vcl/inc/idle", "vcl/inc/task", "vcl/inc/scheduler"].includes(target)
+  )
+    return false;
   // docpool.cxx consumes FontRelief and GetDefaultFont; these represented modules contain no browser/device adapter.
   return (
     source !== "sc/source/core/data/docpool.ts" ||

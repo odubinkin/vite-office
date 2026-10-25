@@ -1,16 +1,18 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
+import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
 import { ScViewOptions } from "../../../inc/viewopti";
+import * as documen3 from "./documen3";
 import * as documen2 from "./documen2";
+import type { ScChartListenerCollection } from "../../../inc/chartlis";
 import * as documen7 from "./documen7";
+import * as documen9 from "./documen9";
 import * as document10 from "./document10";
-import { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
-import { ScItemPoolCache } from "../../../inc/poolcach";
+import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
 import { GetStringScriptType as classifyString } from "./documen6";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import { ScLineFlags, SC_LINE_DONTCARE } from "../../../inc/attarray";
 import {
   SvxBoxItem,
   SvxBoxInfoItem,
@@ -21,13 +23,11 @@ import {
 import { ScRangeList } from "../../../inc/rangelst";
 import type { ScMarkData } from "../../../inc/markdata";
 import { ScClipParam } from "../../../inc/clipparam";
-import { SfxItemState } from "../../../../svl/inc/itemset";
-import { ATTR_PATTERN_START, ATTR_PATTERN_END } from "../../../inc/scitems";
 import type { ScDocumentPool } from "./docpool";
-import { ScPoolHelper } from "../inc/poolhelp";
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import type { ScPoolHelper } from "../inc/poolhelp";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
 import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
-import { ScHorizontalCellIterator } from "../../../inc/dociter";
 import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScHint } from "../../../inc/brdcst";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
@@ -36,29 +36,26 @@ import type { SvtListener } from "../../../../svl/source/notify/listener";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import type { ScColumn } from "../../../inc/column";
 import type { ScFormulaCell } from "../../../inc/formulacell";
-import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { ScTable } from "../../../inc/table";
+import type { ScTable } from "../../../inc/table";
 import {
   ScAddress,
   ScRange,
   MAXCOL,
   MAXROW,
   MAXROWCOUNT,
-  MAXTAB,
-  SC_TAB_APPEND,
   ValidCol,
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { CellType, InsertDeleteFlags, ScGlobal, UpdateRefMode } from "../../../inc/global";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
+import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
 import type { HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
-import { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
-import { uppercase } from "../../../../unotools/inc/charclass";
+import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
 import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 /** Native document construction modes from document.hxx. */
@@ -76,7 +73,94 @@ export enum HardRecalcState {
 }
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  private mbStreamValidLocked = false;
+  /** Original stream-validity lock query. @returns Lock state. */
+  IsStreamValidLocked(): boolean {
+    return this.mbStreamValidLocked;
+  }
+  /** Original document.cxx lock assignment. @param lock - Lock state. @returns Nothing. */
+  LockStreamValid(lock: boolean): void {
+    this.mbStreamValidLocked = lock;
+  }
+  /** Original contiguous Undo initialization. @param args - Native source,sheets and allocation defaults. @returns Nothing. */
+  InitUndo(...args: Parameters<typeof documen7.InitUndo>): void {
+    documen7.InitUndo.apply(this, args);
+  }
+  /** Original sparse selected-sheet Undo initialization. @param args - Native source,marks and allocation defaults. @returns Nothing. */
+  InitUndoSelected(...args: Parameters<typeof documen7.InitUndoSelected>): void {
+    documen7.InitUndoSelected.apply(this, args);
+  }
+  /** Original conditional-index removal dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
+  RemoveCondFormatData(...args: Parameters<typeof documen7.RemoveCondFormatData>): void {
+    documen7.RemoveCondFormatData.apply(this, args);
+  }
+  /** Original conditional-index dispatch. @param args - Ranges,sheet and key. @returns Nothing. */
+  AddCondFormatData(...args: Parameters<typeof documen7.AddCondFormatData>): void {
+    documen7.AddCondFormatData.apply(this, args);
+  }
+  /** Original incremental Undo sheet allocation. @param args - Native sheet range and allocation defaults. @returns Nothing. */
+  AddUndoTab(...args: Parameters<typeof documen7.AddUndoTab>): void {
+    documen7.AddUndoTab.apply(this, args);
+  }
+  /** Original general block paste into actual selected sheets. @param args - Native context,bounds,marks and displacement. @returns Nothing. */
+  CopyBlockFromClip(...args: Parameters<typeof documen7.CopyBlockFromClip>): void {
+    documen7.CopyBlockFromClip.apply(this, args);
+  }
+  /** Original filtered-source block dispatch. @param args - Native context,bounds,marks and source row output. @returns Filtered count. */
+  CopyNonFilteredFromClip(...args: Parameters<typeof documen7.CopyNonFilteredFromClip>): number {
+    return documen7.CopyNonFilteredFromClip.apply(this, args);
+  }
+  /** Original source-row query and missing-table sentinel. @param first - First row. @param last - Last row. @param tab - Sheet. @returns Row or signed SCROW maximum. */
+  FirstNonFilteredRow(first: number, last: number, tab: number): number {
+    return this.FetchTable(tab)?.getFilterData().firstNonFilteredRow(first, last) ?? 2147483647;
+  }
+  /** Original documen3 reference update on this actual document. @param args - Native context and defaults. @returns Nothing. */
+  UpdateReference(...args: Parameters<typeof documen3.UpdateReference>): void {
+    documen3.UpdateReference.apply(this, args);
+  }
+  private bDelayedDeletingBroadcasters = false;
+  /** Original document10 defers semantic broadcaster deletion. @param delay - Enable or flush. @returns Nothing. */
+  EnableDelayDeletingBroadcasters(delay: boolean): void {
+    document10.EnableDelayDeletingBroadcasters.call(this, delay);
+  }
+  /** Original broadcaster delay query. @returns Delayed. */
+  IsDelayedDeletingBroadcasters(): boolean {
+    return this.bDelayedDeletingBroadcasters;
+  }
+  /** Original range listener completion. @param range - Copied range. @returns Nothing. */
+  StartAllListeners(range: ScRange): void {
+    document10.StartAllListeners.call(this, range);
+  }
   private pDelayedFormulaGrouping: ScRange | null = null;
+  private readonly pDelayedStartListeningFormulaCells = new Map<ScColumn, [number, number]>();
+  /** Original per-column start-listening delay control. @param column - Actual column. @param delay - Enable or finish. @returns Nothing. */
+  EnableDelayStartListeningFormulaCells(column: ScColumn, delay: boolean): void {
+    document10.EnableDelayStartListeningFormulaCells.call(this, column, delay);
+  }
+  /** Original per-column delay query. @param column - Actual column. @returns Enabled. */
+  IsEnabledDelayStartListeningFormulaCells(column: ScColumn): boolean {
+    return this.pDelayedStartListeningFormulaCells.has(column);
+  }
+  /** Original adjacent-span admission. @param column - Actual column. @param first - First row. @param last - Last row. @returns Deferred. */
+  CanDelayStartListeningFormulaCells(column: ScColumn, first: number, last: number): boolean {
+    return document10.CanDelayStartListeningFormulaCells.call(this, column, first, last);
+  }
+  /** Original selected-sheet clipboard dirty forwarding. @param args - Native bounds,marks,flags and deferred spans. @returns Nothing. */
+  SetDirtyFromClip(...args: Parameters<typeof documen7.SetDirtyFromClip>): void {
+    documen7.SetDirtyFromClip.apply(this, args);
+  }
+  /** Original rectangular broadcast with its native individual-broadcaster default. @param range - Changed area. @param id - Hint ID. @param singles - Individual delivery. @returns Nothing. */
+  BroadcastCells(range: ScRange, id: SfxHintId, singles = true): void {
+    documen7.BroadcastCells.call(this, range, id, singles);
+  }
+  /** Original clipboard pre-deletion forwarding on this actual document. @param args - Native arguments. @returns Nothing. */
+  DeleteBeforeCopyFromClip(...args: Parameters<typeof document10.DeleteBeforeCopyFromClip>): void {
+    document10.DeleteBeforeCopyFromClip.apply(this, args);
+  }
+  /** Original vector listener teardown forwards to the same native document. @param cells - Actual formulas. @returns Nothing. */
+  EndListeningFormulaCells(cells: readonly ScFormulaCell[]): void {
+    documen7.EndListeningFormulaCells.call(this, cells);
+  }
   /** Original delay owner presence. @returns Delayed. */
   IsDelayedFormulaGrouping(): boolean {
     return this.pDelayedFormulaGrouping !== null;
@@ -111,6 +195,81 @@ export class ScDocument {
     documen7.DeleteBroadcasters.apply(this, args);
   }
   static readonly HardRecalcState = HardRecalcState;
+  /** Original clipboard listening on the same document and actual source contexts. @param args - Native contexts,sheet and bounds. @returns Nothing. */
+  StartListeningFromClip(...args: Parameters<typeof document10.StartListeningFromClip>): void {
+    document10.StartListeningFromClip.apply(this, args);
+  }
+  /** Original document clipboard paste orchestration. @param args - Native range,marks,flags,documents and original policy defaults. @returns Nothing. */
+  CopyFromClip(...args: Parameters<typeof document10.CopyFromClip>): void {
+    document10.CopyFromClip.apply(this, args);
+  }
+  private pFormatExchangeList: Map<number, number> | null = null;
+  /** Original borrowed formatter exchange-table pointer. @returns Actual table or null. */
+  GetFormatExchangeList(): Map<number, number> | null {
+    return this.pFormatExchangeList;
+  }
+  /** Shares the actual source pool helper,string pool and canonical attribute helper. @param source - Resource owner. @returns Nothing. */
+  SharePooledResources(source: ScDocument): void {
+    document10.SharePooledResources.call(this, source);
+  }
+  /** Clears native sheet owners while retaining document resources and clipboard parameters. @returns Nothing. */
+  Clear(): void {
+    documen9.Clear.call(this);
+  }
+  /** Resets a clipboard to source-selected sheet indexes or one explicit sheet. @param source - Source document. @param selection - Source marks,null for all,or explicit sheet. @returns Nothing. */
+  ResetClip(source: ScDocument, selection: ScMarkData | number | null): void {
+    documen2.ResetClip.call(this, source, selection);
+  }
+  /** Native clipboard initialization clears old content before borrowing source resources. @param source - Source document. @returns Nothing. */
+  InitClipPtrs(source: ScDocument): void {
+    documen2.InitClipPtrs.call(this, source);
+  }
+  /** Original owned clipboard range/cut assignment. @param args - Source area and original defaultfalse cut mode. @returns Nothing. */
+  SetClipArea(...args: Parameters<typeof document10.SetClipArea>): void {
+    document10.SetClipArea.apply(this, args);
+  }
+  /** Original range/coordinate Undo restoration on actual native documents. @param args - Native overload arguments. @returns Nothing. */
+  UndoToDocument(...args: Parameters<typeof document10.UndoToDocument>): void {
+    document10.UndoToDocument.apply(this, args);
+  }
+  /** Original clipboard dimensions on this actual document. @param args - Dimension outputs and filtered mode. @returns Nothing. */
+  GetClipArea(...args: Parameters<typeof documen7.GetClipArea>): void {
+    documen7.GetClipArea.apply(this, args);
+  }
+  /** Original first-used-sheet clipboard filter query. @returns Any filtered clipboard row. */
+  HasClipFilteredRows(): boolean {
+    return document10.HasClipFilteredRows.call(this);
+  }
+  /** Original clipboard start query retains caller outputs for an empty/non-clip owner. @param args - Column and row outputs. @returns Nothing. */
+  GetClipStart(...args: Parameters<typeof document10.GetClipStart>): void {
+    document10.GetClipStart.apply(this, args);
+  }
+  /** Original coordinate merge envelope. @param args - Native parameters. @returns Whether changed or found. */
+  ExtendMerge(...args: Parameters<typeof document10.ExtendMerge>): boolean {
+    return document10.ExtendMerge.apply(this, args);
+  }
+  /** Original selected-sheet format compatibility operation. @param args - Range,marks,pattern and category. @returns Nothing. */
+  ApplyPatternIfNumberformatIncompatible(
+    ...args: Parameters<typeof document10.ApplyPatternIfNumberformatIncompatible>
+  ): void {
+    document10.ApplyPatternIfNumberformatIncompatible.apply(this, args);
+  }
+  /** Original sheet flag addition. @param args - Native parameters. @returns Whether changed or found. */
+  ApplyFlagsTab(...args: Parameters<typeof document10.ApplyFlagsTab>): boolean {
+    return document10.ApplyFlagsTab.apply(this, args);
+  }
+  /** Original sheet flag removal. @param args - Native parameters. @returns Whether changed or found. */
+  RemoveFlagsTab(...args: Parameters<typeof document10.RemoveFlagsTab>): boolean {
+    return document10.RemoveFlagsTab.apply(this, args);
+  }
+  /** Original filter refresh for represented sheets without database ranges. @param args - Native parameters. @returns Whether changed or found. */
+  RefreshAutoFilter(...args: Parameters<typeof document10.RefreshAutoFilter>): boolean {
+    return document10.RefreshAutoFilter.apply(this, args);
+  }
+  /** Original selected-sheet merge envelope. @param args - Native bounds,marks and refresh defaultfalse. @returns Nothing. */
+  ExtendMergeSel(...args: Parameters<typeof document10.ExtendMergeSel>): void {
+    document10.ExtendMergeSel.apply(this, args);
+  }
   private mpClipParam: ScClipParam | undefined;
   /** Original lazily owned clipboard parameters,also available on normal documents. @returns Actual document-owned clipboard parameters. */
   GetClipParam(): ScClipParam {
@@ -133,19 +292,23 @@ export class ScDocument {
   SetGrammar(grammar: Grammar): void {
     this.eGrammar = grammar;
   }
-  /** Original document block emptiness forwards to the actual sheet;missing sheets retain false. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param tab - Sheet. @returns Empty block. */
-  IsBlockEmpty(
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-    tab: number,
-  ): boolean {
-    return this.FetchTable(tab)?.IsBlockEmpty(firstCol, firstRow, lastCol, lastRow) ?? false;
+  /** Original block emptiness on the same document. @param args - Native coordinates and sheet. @returns Empty block. */
+  IsBlockEmpty(...args: Parameters<typeof document10.IsBlockEmpty>): boolean {
+    return document10.IsBlockEmpty.apply(this, args);
   }
   /** Original range overload delegates to actual sheet attribute owners. @param range - Area. @param mask - Native query. @returns Found. */
   HasAttrib(range: ScRange, mask: HasAttrFlags): boolean {
     return documen7.HasAttrib.call(this, range, mask);
+  }
+  private readonly pDocOptions = new ScDocOptions();
+  /** Original borrowed document options,including lazy search classification. @returns Actual options. */
+  GetDocOptions(): ScDocOptionsConstReference {
+    return this.pDocOptions;
+  }
+  /** Assigns original options by value;the unported lazy formatter is never allocated in this profile. @param options - Source options. @returns Nothing. */
+  SetDocOptions(options: ScDocOptionsConstReference): void {
+    this.pDocOptions.assign(options);
+    this.mxPoolHelper?.SetFormTableOpt(options);
   }
   private readonly pViewOptions = new ScViewOptions();
   /** Original documen3 borrowed view options. @returns Actual document-owned options. */
@@ -206,61 +369,7 @@ export class ScDocument {
   }
   /** Original selection-frame query preserves traversal order and six independent mixed states. @param marks - Actual marks. @param outer - Outer result. @param inner - Inner result. @returns Nothing. */
   GetSelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
-    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
-      outer.SetLine(undefined, edge);
-    outer.SetAllDistances(0);
-    inner.SetLine(undefined, InnerEdge.HORI);
-    inner.SetLine(undefined, InnerEdge.VERT);
-    inner.SetTable(true);
-    inner.SetDist(true);
-    inner.SetMinDist(false);
-    const flags = new ScLineFlags();
-    if (marks.IsMultiMarked()) {
-      const ranges = new ScRangeList();
-      marks.FillRangeListWithMarks(ranges, false);
-      let rows = false,
-        cols = false;
-      for (const range of ranges) {
-        rows = rows || range.aStart.Row() !== range.aEnd.Row();
-        cols = cols || range.aStart.Col() !== range.aEnd.Col();
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          this.FetchTable(tab)?.MergeBlockFrame(
-            outer,
-            inner,
-            flags,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-        }
-      }
-      inner.EnableHor(rows);
-      inner.EnableVer(cols);
-    } else if (marks.IsMarked()) {
-      const range = marks.GetMarkArea();
-      inner.EnableHor(range.aStart.Row() !== range.aEnd.Row());
-      inner.EnableVer(range.aStart.Col() !== range.aEnd.Col());
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        this.FetchTable(tab)?.MergeBlockFrame(
-          outer,
-          inner,
-          flags,
-          range.aStart.Col(),
-          range.aStart.Row(),
-          range.aEnd.Col(),
-          range.aEnd.Row(),
-        );
-      }
-    }
-    inner.SetValid(Valid.LEFT, flags.nLeft !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.RIGHT, flags.nRight !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.TOP, flags.nTop !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.BOTTOM, flags.nBottom !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.HORI, flags.nHori !== SC_LINE_DONTCARE);
-    inner.SetValid(Valid.VERT, flags.nVert !== SC_LINE_DONTCARE);
+    documen7.GetSelectionFrame.call(this, marks, outer, inner);
   }
   /** Original marked selection frames and adjacent-envelope border removal. @param marks - Actual native marks. @param outer - Requested outer lines. @param inner - Requested inner lines and validity. @returns Nothing. */
   ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
@@ -388,6 +497,18 @@ export class ScDocument {
   RowFiltered(row: number, tab: number, first?: [number], last?: [number]): boolean {
     return this.FetchTable(tab)?.getFilterData().rowFiltered(row, first, last) ?? false;
   }
+  /** Original normal-document block-editability dispatch. @param args - Native sheet,bounds and matrix policy. @returns Editable in represented profile. */
+  IsBlockEditable(...args: Parameters<typeof document10.IsBlockEditable>): boolean {
+    return document10.IsBlockEditable.apply(this, args);
+  }
+  /** Original document filtered-span dispatch. @param args - Row bounds and sheet. @returns Any filtered row. */
+  HasFilteredRows(...args: Parameters<typeof document10.HasFilteredRows>): boolean {
+    return document10.HasFilteredRows.apply(this, args);
+  }
+  /** Original document last-unfiltered dispatch. @param args - Row bounds and sheet. @returns Row or signed maximum. */
+  LastNonFilteredRow(...args: Parameters<typeof document10.LastNonFilteredRow>): number {
+    return document10.LastNonFilteredRow.apply(this, args);
+  }
   /** Original hidden row dispatch. @param first - First row. @param last - Last row. @param tab - Sheet. @param hidden - Flag. @returns Nothing. */
   SetRowHidden(first: number, last: number, tab: number, hidden: boolean): void {
     this.FetchTable(tab)?.SetRowHidden(first, last, hidden);
@@ -437,32 +558,12 @@ export class ScDocument {
     marks: ScMarkData,
     flags: InsertDeleteFlags,
   ): void {
-    const oldAutoCalc = this.GetAutoCalc();
-    this.SetAutoCalc(false);
-    try {
-      [firstCol, lastCol] = [Math.min(firstCol, lastCol), Math.max(firstCol, lastCol)];
-      [firstRow, lastRow] = [Math.min(firstRow, lastRow), Math.max(firstRow, lastRow)];
-      for (let tab = 0; tab < this.GetTableCount(); tab++)
-        if (marks.GetTableSelect(tab))
-          (this.FetchTable(tab) as ScTable).DeleteArea(firstCol, firstRow, lastCol, lastRow, flags);
-    } finally {
-      this.SetAutoCalc(oldAutoCalc);
-    }
+    documen7.DeleteArea.call(this, firstCol, firstRow, lastCol, lastRow, marks, flags);
   }
-  /** Original selected-sheet DeleteSelection traversal for the represented hard/edit-attribute flags;cell payload/listener owners are untouched. @param flags - Attribute-only deletion flags. @param marks - Actual multi marks. @returns Nothing. */
-  DeleteSelection(flags: InsertDeleteFlags, marks: ScMarkData): void {
-    const oldAutoCalc = this.GetAutoCalc();
-    this.SetAutoCalc(false);
-    try {
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        (this.FetchTable(tab) as ScTable).DeleteSelection(flags, marks);
-      }
-    } finally {
-      this.SetAutoCalc(oldAutoCalc);
-    }
+  /** Original selected-sheet deletion on this document. @param args - Native flags and marks. @returns Nothing. */
+  DeleteSelection(...args: Parameters<typeof documen7.DeleteSelection>): void {
+    documen7.DeleteSelection.apply(this, args);
   }
-
   /** Clips only to real cell data, preserving source output mutations on failure. @param tab - Sheet. @param firstCol - Start-column output. @param firstRow - Start-row output. @param lastCol - End-column output. @param lastRow - End-row output. @returns Whether the clipped area is valid. */
   ShrinkToDataArea(
     tab: number,
@@ -471,21 +572,7 @@ export class ScDocument {
     lastCol: [number],
     lastRow: [number],
   ): boolean {
-    const table = this.FetchTable(tab);
-    if (table === null) return false;
-    const col1: [number] = [0],
-      row1: [number] = [0],
-      col2: [number] = [0],
-      row2: [number] = [0];
-    table.GetFirstDataPos(col1, row1);
-    table.GetLastDataPos(col2, row2);
-    if (col1[0] > col2[0] || row1[0] > row2[0]) return false;
-    if (firstCol[0] < col1[0]) firstCol[0] = col1[0];
-    if (col2[0] < lastCol[0]) lastCol[0] = col2[0];
-    if (firstRow[0] < row1[0]) firstRow[0] = row1[0];
-    if (row2[0] < lastRow[0]) lastRow[0] = row2[0];
-    if (firstCol[0] > lastCol[0] || firstRow[0] > lastRow[0]) return false;
-    return true;
+    return documen7.ShrinkToDataArea.call(this, tab, firstCol, firstRow, lastCol, lastRow);
   }
   private pSelectionAttr: ScPatternAttr | undefined;
   /** Original owned selection pattern assembled by native table/column/run merges. @param marks - Actual sheet and cell marks. @param deep - Include inherited items. @returns Independent pattern. */
@@ -505,6 +592,15 @@ export class ScDocument {
   private readonly bIsUndo: boolean;
   private readonly bIsFunctionAccess: boolean;
   private bNoListening = false;
+  private bInsertingFromOtherDoc = false;
+  /** Original deferred insertion state. @returns Insertion flag. */
+  IsInsertingFromOtherDoc(): boolean {
+    return this.bInsertingFromOtherDoc;
+  }
+  /** Original flag suppresses premature column listening and broadcasts during clipboard transfer. @param inserting - Insertion flag. @returns Nothing. */
+  SetInsertingFromOtherDoc(inserting: boolean): void {
+    this.bInsertingFromOtherDoc = inserting;
+  }
   private pFormulaTree: ScFormulaCell | null = null;
   private pEOFormulaTree: ScFormulaCell | null = null;
   private pFormulaTrack: ScFormulaCell | null = null;
@@ -515,32 +611,55 @@ export class ScDocument {
   private bCalculatingFormulaTree = false;
   private readonly mxSheetLimits = new ScSheetLimits(MAXCOL, MAXROW);
   private readonly maInterpreterContext = new ScInterpreterContext(this, null);
+  private readonly aDocName = new OUString();
+  /** Original document.hxx document-name assignment. @param name - Source value. @returns Nothing. */
+  SetName(name: OUStringConstReference): void {
+    this.aDocName.assign(name);
+  }
+  private pChartListenerCollection: ScChartListenerCollection | null = null;
+  private nInterpretLevel = 0;
+  private bImportingXML = false;
+  private bInDtorClear = false;
+  /** Borrows the native chart collection,absent in Clip/Undo documents. @returns Collection or null. */
+  GetChartListenerCollection(): ScChartListenerCollection | null {
+    return this.pChartListenerCollection;
+  }
+  /** Original interpreter nesting query. @returns Active. */
+  IsInInterpreter(): boolean {
+    return this.nInterpretLevel !== 0;
+  }
+  /** Original saturating unsigned-short nesting increment. @returns Nothing. */
+  IncInterpretLevel(): void {
+    if (this.nInterpretLevel < 0xffff) ++this.nInterpretLevel;
+  }
+  /** Original nesting decrement retains zero. @returns Nothing. */
+  DecInterpretLevel(): void {
+    if (this.nInterpretLevel) --this.nInterpretLevel;
+  }
+  /** Original XML-import query. @returns Importing. */
+  IsImportingXML(): boolean {
+    return this.bImportingXML;
+  }
+  /** Original document teardown query. @returns Clearing. */
+  IsInDtorClear(): boolean {
+    return this.bInDtorClear;
+  }
   private bAutoCalc: boolean;
-  private readonly maTabs: ScTable[] = [];
+  private readonly maTabs: (ScTable | null)[] = [];
   private pBASM: ScBroadcastAreaSlotMachine | null = null;
   private eHardRecalcState = HardRecalcState.OFF;
   private mbTrackFormulasPending = false;
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
   private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
-  private readonly mpCellStringPool: SharedStringPool;
+  declare private mpCellStringPool: SharedStringPool;
   /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
   constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
     this.bIsClip = mode === ScDocumentMode.SCDOCMODE_CLIP;
     this.bIsUndo = mode === ScDocumentMode.SCDOCMODE_UNDO;
     this.bIsFunctionAccess = mode === ScDocumentMode.SCDOCMODE_FUNCTIONACCESS;
     this.bAutoCalc = mode === ScDocumentMode.SCDOCMODE_DOCUMENT || this.bIsFunctionAccess;
-    if (this.bAutoCalc) {
-      this.mxPoolHelper = new ScPoolHelper(this);
-      this.pBASM = new ScBroadcastAreaSlotMachine(this);
-    }
-    const locale = this.locale;
-    this.mpCellStringPool = new SharedStringPool({
-      /** Applies the existing real whole-string classifier field binding. @param value - Unicode source. @returns Uppercase value. */
-      uppercase(value) {
-        return uppercase(value, locale);
-      },
-    });
+    documen2.InitializeResources.call(this);
   }
   /** Borrows the native document pool, absent before temporary-document resource sharing. @returns Pool or null. */
   GetPool(): ScDocumentPool | null {
@@ -549,6 +668,10 @@ export class ScDocument {
   /** Borrows the actual native style pool when this document owns pooled resources. @returns Pool or null. */
   GetStyleSheetPool(): ScStyleSheetPool | null {
     return this.mxPoolHelper ? this.mxPoolHelper.GetStylePool() : null;
+  }
+  /** Original documen2 formatter query through the actual shared pool. @returns Borrowed formatter. */
+  GetFormatTable(): SvNumberFormatter {
+    return documen2.GetFormatTable.call(this);
   }
   /** Native clipboard mode query. @returns Mode flag. */
   IsClipboard(): boolean {
@@ -576,20 +699,19 @@ export class ScDocument {
   }
   /** Borrows actual document pattern canonicalization. @returns Helper. */
   getCellAttributeHelper(): CellAttributeHelper {
-    if (!this.mpCellAttributeHelper) {
-      if (this.IsClipOrUndo())
-        throw new Error(
-          "CellAttributeHelper needs to be shared using SharePooledResources, not created",
-        );
-      const pool = this.GetPool();
-      if (!pool) throw new Error("No SfxItemPool for this ScDocument");
-      this.mpCellAttributeHelper = new CellAttributeHelper(pool);
-    }
-    return this.mpCellAttributeHelper;
+    return documen2.getCellAttributeHelper.call(this);
   }
   /** Borrows effective cell attributes through the sheet/column/default chain. @param position - Cell. @returns Pattern or null. */
   GetPattern(position: ScAddress): ScPatternAttr | null {
     return this.FetchTable(position.Tab())?.GetPattern(position.Col(), position.Row()) ?? null;
+  }
+  /** Original document10 merge query over actual sparse sheets. @param position - Queried cell. @returns Merged anchor. */
+  IsMerged(position: ScAddress): boolean {
+    return document10.IsMerged.call(this, position);
+  }
+  /** Original single-item dispatch. @param args - Coordinates and actual item. @returns Nothing. */
+  ApplyAttr(...args: Parameters<typeof document10.ApplyAttr>): void {
+    document10.ApplyAttr.apply(this, args);
   }
   /** Original document.cxx cursor-pattern assignment delegates through the actual sheet. @param col - Column. @param row - Row. @param tab - Sheet. @param holder - Complete canonical pattern. @returns Nothing. */
   SetPattern(col: number, row: number, tab: number, holder: CellAttributeHolder): void {
@@ -614,39 +736,9 @@ export class ScDocument {
   }
   /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
-    let set = false;
-    for (let which = ATTR_PATTERN_START; which <= ATTR_PATTERN_END && !set; which++)
-      set = delta.GetItemSet().GetItemState(which) === SfxItemState.SET;
-    if (!set) return false;
-    let changed = false;
-    if (marks.IsMarked() && !marks.IsMultiMarked()) {
-      const range = marks.GetMarkArea();
-      for (const tab of marks.GetSelectedTabs()) {
-        if (tab >= this.GetTableCount()) break;
-        changed =
-          this.ApplyPatternAreaTab(
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-            tab,
-            delta,
-          ) || changed;
-      }
-    } else {
-      const cache = new ScItemPoolCache(this.getCellAttributeHelper(), delta.GetItemSet());
-      try {
-        for (const tab of marks.GetSelectedTabs()) {
-          if (tab >= this.GetTableCount()) break;
-          changed = (this.FetchTable(tab)?.ApplySelectionCache(cache, marks) ?? false) || changed;
-        }
-      } finally {
-        cache.Dispose();
-      }
-    }
-    return changed;
+    return documen7.ApplySelectionPattern.call(this, delta, marks);
   }
-  /** Copies consumed ATTRIB and optional source STRING undo payload through real native mark spans, preserving default-column tails and styled empty runs. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
+  /** Copies through the original document/table/column owner chain with native scope guards and listening completion. @param range - Source rectangle. @param flags - ATTRIB and optional STRING/EDITATTR/NOCAPTIONS undo flags. @param marked - Copy only marked row/column spans. @param destination - Real target document. @param marks - Selected sheets and optional multi marks. @returns Nothing. */
   CopyToDocument(...args: Parameters<typeof documen7.CopyToDocument>): void {
     documen7.CopyToDocument.apply(this, args);
   }
@@ -854,17 +946,11 @@ export class ScDocument {
   }
   /** Borrows a real existing sheet or native null result. @param tab - Sheet. @returns Owner or null. */
   FetchTable(tab: number): ScTable | null {
-    return ValidTab(tab) && tab < this.maTabs.length ? (this.maTabs[tab] as ScTable) : null;
+    return ValidTab(tab) ? (this.maTabs[tab] ?? null) : null;
   }
   /** Copies the sheet name or clears the output for a missing sheet. @param tab - Sheet. @param output - Unicode target. @returns Found. */
   GetName(tab: number, output: OUString): boolean {
-    const table = this.FetchTable(tab);
-    if (!table) {
-      output.clear();
-      return false;
-    }
-    output.assign(table.GetName());
-    return true;
+    return document10.GetName.call(this, tab, output);
   }
   /** Applies native editable sheet-name character constraints without a fabricated length limit. @param name - Native Unicode name. @returns Validity. */
   static ValidTabName(name: OUStringConstReference): boolean {
@@ -873,42 +959,15 @@ export class ScDocument {
   }
   /** Rejects duplicate names using the existing real uppercase operation. @param name - New name. @returns Availability. */
   ValidNewTabName(name: OUStringConstReference): boolean {
-    if (!ScDocument.ValidTabName(name)) return false;
-    const candidate = uppercase(name, this.locale);
-    for (const table of this.maTabs)
-      if (uppercase(table.GetName(), this.locale).equals(candidate)) return false;
-    return true;
+    return document10.ValidNewTabName.call(this, name);
   }
   /** Inserts a normal scalar sheet and updates shifted sheet/column positions. External-document/undo-delete modes remain unsupported APIs. @param position - Position or native append sentinel. @param name - Native sheet name. @returns Inserted. */
   InsertTab(position: number, name: OUStringConstReference): boolean {
-    if (this.maTabs.length > MAXTAB || !this.ValidNewTabName(name)) return false;
-    if (position === SC_TAB_APPEND || position >= this.maTabs.length) position = this.maTabs.length;
-    if (!ValidTab(position)) return false;
-    this.maTabs.splice(position, 0, new ScTable(this, position, name));
-    for (let i = position + 1; i < this.maTabs.length; i++) (this.maTabs[i] as ScTable).SetTabNo(i);
-    const shifted = new ScRange(0, 0, position, this.MaxCol(), this.MaxRow(), MAXTAB);
-    if (position < this.maTabs.length - 1)
-      this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, 1);
-    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
-    return true;
+    return document10.InsertTab.call(this, position, name);
   }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {
-    if (!this.FetchTable(tab) || this.maTabs.length <= 1) return false;
-    const shifted = new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), this.GetTableCount() - 1);
-    this.pBASM?.DelBroadcastAreasInRange(new ScRange(0, 0, tab, this.MaxCol(), this.MaxRow(), tab));
-    const iterator = new ScHorizontalCellIterator(this, tab, 0, 0, this.MaxCol(), this.MaxRow());
-    const col: [number] = [0],
-      row: [number] = [0];
-    let cell;
-    while ((cell = iterator.GetNext(col, row))) cell.getFormula()?.Dispose();
-    (this.maTabs[tab] as ScTable).DisposeAttributes();
-    this.maTabs.splice(tab, 1);
-    for (let index = tab; index < this.maTabs.length; index++)
-      (this.maTabs[index] as ScTable).SetTabNo(index);
-    this.pBASM?.UpdateBroadcastAreas(UpdateRefMode.URM_INSDEL, shifted, 0, 0, -1);
-    this.SetAllFormulasDirty(new SetFormulaDirtyContext());
-    return true;
+    return document10.DeleteTab.call(this, tab);
   }
   /** Writes a number through the actual sheet/column chain. @param position - Cell address. @param value - Number. @returns Nothing. */
   SetValue(position: ScAddress, value: number): void {
@@ -920,34 +979,15 @@ export class ScDocument {
   }
   /** Reads the actual stored scalar discriminator. @param position - Cell address. @returns Type. */
   GetCellType(position: ScAddress): CellType {
-    return (
-      this.FetchTable(position.Tab())?.GetCellType(position.Col(), position.Row()) ??
-      CellType.CELLTYPE_NONE
-    );
+    return documen7.GetCellType.call(this, position);
   }
   /** Returns an independent shared-string value. @param position - Cell address. @returns Shared text. */
   GetSharedString(position: ScAddress): SharedString {
-    return (
-      this.FetchTable(position.Tab())?.GetSharedString(position.Col(), position.Row()) ??
-      new SharedString()
-    );
+    return documen7.GetSharedString.call(this, position);
   }
   /** Implements the literal single-line content portion of SetTextCell;rich edit-text and number-format attributes are explicit gaps. @param position - Cell address. @param value - Literal Unicode input. @returns Nothing. */
   SetTextCell(position: ScAddress, value: OUStringConstReference): void {
-    const table = this.FetchTable(position.Tab());
-    if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
-    if (/[\r\n]/.test(text(value)))
-      throw new Error("Multiline edit-text cells are not implemented");
-    if (!value.getLength()) {
-      table.SetEmptyCell(position.Col(), position.Row());
-      return;
-    }
-    const shared = this.mpCellStringPool.intern(value);
-    try {
-      table.SetRawString(position.Col(), position.Row(), shared);
-    } finally {
-      shared.dispose();
-    }
+    documen7.SetTextCell.call(this, position, value);
   }
   /** Clears an existing scalar cell without allocating a missing column or sheet. @param position - Cell address. @returns Nothing. */
   SetEmptyCell(position: ScAddress): void {

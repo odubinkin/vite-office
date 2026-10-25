@@ -1,13 +1,119 @@
-/** @fileoverview ScTabView sheet navigation/selection subset from tabview3.cxx and tabview2.cxx over canonical ScViewData. The current document slice has only visible sheets;hidden-sheet,reference-mode,VCL drawing and window services remain unported. */
+/** @fileoverview ScTabView sheet navigation/selection subset from tabview3.cxx and tabview2.cxx over canonical ScViewData. The current document slice has only visible sheets and unmerged local references;hidden-sheet,merged/fill/reference-dialog,VCL drawing and window services remain unported. */
+import { ScViewFunctionSet, ScHeaderFunctionSet } from "./select";
+import * as tabview2 from "./tabview2";
+import * as tabview4 from "./tabview4";
+import type { ScModule } from "../../../inc/scmod";
 import { ScRange, ValidTab } from "../../../inc/address";
 import type { ScViewData } from "../inc/viewdata";
-/** Native sheet navigation/grouping owner for the existing all-visible document slice. */
+/** Native view navigation,reference and selection owner for the represented visible/unmerged document slice. */
 export class ScTabView {
-  /** Borrows canonical view data and native Calc Input/WrapNextPrevSheetTab default. @param aViewData - Actual view state. @param wrapNextPrevSheetTab - Pinned Calc.xcs default,true. @returns View. */
+  private errorMessageHandler: ((message: string) => void) | undefined;
+  /** Browser binding of the physical message/StopMarking presentation formerly owned by VCL windows. @param handler - Active host presentation or absent headless host. @returns Nothing. */
+  SetErrorMessageHandler(handler: ((message: string) => void) | undefined): void {
+    this.errorMessageHandler = handler;
+  }
+  /** Original ErrorMessage presentation entry at the existing resolved English resource boundary. Drop/read-only/weld window families are unrepresented;the browser host stops actual pointer tracking before displaying the message. @param message - Resolved native resource. @returns Nothing. */
+  ErrorMessage(message: string): void {
+    this.errorMessageHandler?.(message);
+  }
+  private readonly aFunctionSet: ScViewFunctionSet;
+  private readonly aHdrFunc: ScHeaderFunctionSet;
+  /** Original borrowed cell selection function set. @returns Actual function set. */ GetFunctionSet(): ScViewFunctionSet {
+    return this.aFunctionSet;
+  }
+  /** Browser host borrow of the original header function-set member. @returns Actual header function set. */ GetHeaderFunctionSet(): ScHeaderFunctionSet {
+    return this.aHdrFunc;
+  }
+
+  protected meBlockMode = 0;
+  protected nBlockStartX = 0;
+  protected nBlockStartXOrig = 0;
+  protected nBlockEndX = 0;
+  protected nBlockStartY = 0;
+  protected nBlockStartYOrig = 0;
+  protected nBlockEndY = 0;
+  protected nBlockStartZ = 0;
+  protected nBlockEndZ = 0;
+  protected nOldCurX = 0;
+  protected nOldCurY = 0;
+  protected bMoveIsShift = false;
+  protected bBlockNeg = false;
+  protected bBlockCols = false;
+  protected bBlockRows = false;
+  /** Browser projection of original SelMouseButtonDown modifier lifetime around the actual selection dispatch. @param shift - Native Shift state. @param control - Native Ctrl state. @param dispatch - Actual hit-tested function-set dispatch. @returns Nothing. */
+  WithSelectionMouseModifiers(shift: boolean, control: boolean, dispatch: () => void): void {
+    this.aViewData.SetSelCtrlMouseClick(control);
+    this.bMoveIsShift = shift;
+    try {
+      dispatch();
+    } finally {
+      this.bMoveIsShift = false;
+      this.aViewData.SetSelCtrlMouseClick(false);
+    }
+  }
+  /** Original source block-lifetime predicate. @returns Block active. */ IsBlockMode(): boolean {
+    return this.meBlockMode !== 0;
+  }
+  /** Original anchor comparison. @param args - Cell coordinates. @returns Matches. */ IsMarking(
+    ...args: Parameters<typeof tabview2.IsMarking>
+  ): boolean {
+    return tabview2.IsMarking.apply(this, args);
+  }
+  /** Original block initialization defaults. @param col - Column. @param row - Row. @param tab - Sheet. @param testNeg - Test subtract mode. @param cols - Full columns. @param rows - Full rows. @param forceNeg - Force subtract. @returns Nothing. */
+  InitBlockMode(
+    col: number,
+    row: number,
+    tab: number,
+    testNeg = false,
+    cols = false,
+    rows = false,
+    forceNeg = false,
+  ): void {
+    tabview2.InitBlockMode.call(this, col, row, tab, testNeg, cols, rows, forceNeg);
+  }
+  /** Original Own block initialization. @param range - Selection. @returns Nothing. */ InitOwnBlockMode(
+    range: ScRange,
+  ): void {
+    tabview2.InitOwnBlockMode.call(this, range);
+  }
+  /** Original normal block completion. @param continued - Preserve marks. @returns Nothing. */ DoneBlockMode(
+    continued = false,
+  ): void {
+    tabview2.DoneBlockMode.call(this, continued);
+  }
+  /** Original block endpoint update. @param col - Column. @param row - Row. @param tab - Sheet. @param cols - Full columns. @param rows - Full rows. @param cellSelection - Cell expansion profile. @returns Nothing. */
+  MarkCursor(
+    col: number,
+    row: number,
+    tab: number,
+    cols = false,
+    rows = false,
+    cellSelection = false,
+  ): void {
+    tabview2.MarkCursor.call(this, col, row, tab, cols, rows, cellSelection);
+  }
+
+  /** Borrows canonical view data and native Calc Input/WrapNextPrevSheetTab default. @param aViewData - Actual view state. @param wrapNextPrevSheetTab - Pinned Calc.xcs default,true. @param referenceModule - Actual active input reference receiver. @returns View. */
   constructor(
     private readonly aViewData: ScViewData,
     private readonly wrapNextPrevSheetTab = true,
-  ) {}
+    readonly referenceModule: ScModule | null = null,
+  ) {
+    this.aFunctionSet = new ScViewFunctionSet(this, referenceModule);
+    this.aHdrFunc = new ScHeaderFunctionSet(this);
+  }
+  /** Original InitRefMode delegates through the same actual view. @param args - Reference coordinates and kind. @returns Nothing. */
+  InitRefMode(...args: Parameters<typeof tabview4.InitRefMode>): void {
+    tabview4.InitRefMode.apply(this, args);
+  }
+  /** Original UpdateRef retains the reference anchor. @param args - Reference endpoint. @returns Nothing. */
+  UpdateRef(...args: Parameters<typeof tabview4.UpdateRef>): void {
+    tabview4.UpdateRef.apply(this, args);
+  }
+  /** Original reference lifetime completion. @param continued - Continue with another argument. @returns Nothing. */
+  DoneRefMode(continued = false): void {
+    tabview4.DoneRefMode.call(this, continued);
+  }
   /** Original view-data borrow used by active native history. @returns Actual view. */
   GetViewData(): ScViewData {
     return this.aViewData;
@@ -30,6 +136,8 @@ export class ScTabView {
     if (!bNew && nTab === this.aViewData.GetTabNumber()) return;
     const rMark = this.aViewData.GetMarkData(),
       nTabCount = this.aViewData.GetDocument().GetTableCount();
+    this.DoneBlockMode();
+    this.aFunctionSet.SetAnchorFlag(false);
     rMark.ResetMark();
     this.aViewData.SetTabNo(nTab);
     let bAllSelected = true;
@@ -52,6 +160,14 @@ export class ScTabView {
     if (marks.IsMarked() || marks.IsMultiMarked()) {
       this.aViewData.ResetOldCursor();
       marks.ResetMark();
+      this.DoneBlockMode();
+      this.InitOwnBlockMode(
+        new ScRange(
+          this.aViewData.GetCurX(),
+          this.aViewData.GetCurY(),
+          this.aViewData.GetTabNumber(),
+        ),
+      );
     }
   }
   /** Original SelectAll normal-grid path,retaining cursor and selected sheets. Native block-window notifications are projected by the browser controller. @returns Nothing. */
@@ -61,8 +177,9 @@ export class ScTabView {
       tab = this.aViewData.GetTabNumber(),
       range = new ScRange(0, 0, tab, doc.MaxCol(), doc.MaxRow(), tab);
     if (marks.IsMarked() && marks.GetMarkArea().equals(range)) return;
-    marks.ResetMark();
-    marks.SetMarkArea(range);
+    this.DoneBlockMode();
+    this.InitBlockMode(0, 0, tab);
+    this.MarkCursor(doc.MaxCol(), doc.MaxRow(), tab);
   }
   /** Original normal-grid cursor assignment;window/overlay notifications are projected by the browser. @param col - Column. @param row - Row. @param refresh - Force same-position update. @returns Nothing. */
   SetCursor(col: number, row: number, refresh = false): void {
@@ -74,11 +191,9 @@ export class ScTabView {
   MarkRange(range: ScRange, _setCursor: false, continueMarks = false): void {
     void _setCursor;
     this.SetTabNo(range.aStart.Tab());
-    const marks = this.aViewData.GetMarkData();
-    if (continueMarks) marks.MarkToMulti();
-    else marks.ResetMark();
-    marks.SetMarkNegative(false);
-    marks.SetMarkArea(range);
+    this.DoneBlockMode(continueMarks);
+    this.InitBlockMode(range.aStart.Col(), range.aStart.Row(), range.aStart.Tab());
+    this.MarkCursor(range.aEnd.Col(), range.aEnd.Row(), range.aEnd.Tab());
   }
   /** Original MarkDataArea normal-grid path. @param includeCursor - Native include-old flag,default true. @returns Nothing. */
   MarkDataArea(includeCursor = true): void {
@@ -90,9 +205,9 @@ export class ScTabView {
     this.aViewData
       .GetDocument()
       .GetDataArea(tab, firstCol, firstRow, lastCol, lastRow, includeCursor, false);
-    const marks = this.aViewData.GetMarkData();
-    marks.ResetMark();
-    marks.SetMarkArea(new ScRange(firstCol[0], firstRow[0], tab, lastCol[0], lastRow[0], tab));
+    this.DoneBlockMode();
+    this.InitBlockMode(firstCol[0], firstRow[0], tab);
+    this.MarkCursor(lastCol[0], lastRow[0], tab);
   }
   /** Original SkipCursorHorizontal hidden-column branch for the unprotected,unmerged cell slice. @param column - Proposed column. @param old - Original cursor. @param movement - Nonzero horizontal direction. @returns Source cursor after boundary reversal. */
   SkipCursorHorizontal(column: number, old: number, movement: number): number {
@@ -145,7 +260,9 @@ export class ScTabView {
       start = range.aStart.Col();
       end = range.aEnd.Col();
     } else start = end = this.aViewData.GetCurX();
-    mark.SetMarkArea(new ScRange(start, 0, tab, end, this.aViewData.GetDocument().MaxRow(), tab));
+    this.DoneBlockMode();
+    this.InitBlockMode(start, 0, tab);
+    this.MarkCursor(end, this.aViewData.GetDocument().MaxRow(), tab);
   }
   /** Expands the simple selection to complete rows using original no-argument MarkRows rules,without moving the native cursor. @returns Nothing. */
   MarkRows(): void {
@@ -157,7 +274,9 @@ export class ScTabView {
       start = range.aStart.Row();
       end = range.aEnd.Row();
     } else start = end = this.aViewData.GetCurY();
-    mark.SetMarkArea(new ScRange(0, start, tab, this.aViewData.GetDocument().MaxCol(), end, tab));
+    this.DoneBlockMode();
+    this.InitBlockMode(0, start, tab);
+    this.MarkCursor(this.aViewData.GetDocument().MaxCol(), end, tab);
   }
   /** Selects every actual sheet without moving the cursor or changing cell marks. @returns Nothing. */
   SelectAllTables(): void {

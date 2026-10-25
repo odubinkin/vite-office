@@ -1,2 +1,10 @@
-/** @fileoverview Native default formula-dirty context value; other ref-update context families remain unsupported. */
-export { SetFormulaDirtyContext } from "../source/core/data/refupdatecontext";
+/** @fileoverview Original dirty and copy-reference context values;unported shift/move consumers remain explicit. */
+export {
+  SetFormulaDirtyContext,
+  UpdatedRangeNames,
+  RefErrorContext,
+  RefUpdateContext,
+  RefUpdateInsertTabContext,
+  RefUpdateDeleteTabContext,
+  RefUpdateMoveTabContext,
+} from "../source/core/data/refupdatecontext";

@@ -17,17 +17,21 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/table1.ts",
-        "apps/office/src/sc/source/core/data/rowheight.test.ts"
+        "apps/office/src/sc/source/core/data/rowheight.test.ts",
+        "apps/office/src/sc/source/core/data/clipboard-reference.test.ts",
+        "apps/office/src/sc/source/core/data/native-table-undo.test.ts"
       ],
-      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
+      "justification": "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified. Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified. Native table1 UpdateReference now forwards to the real conditional-format list after column traversal;cache values are reset even for nonintersecting copied cells. Original list UpdateReference prunes empty ranges only in URM_INSDEL. Broader sheet insert/delete/move token/table consumers remain unported and are not replaced by a SetTabNo shortcut. Task76 native UndoToColumn/UndoToTable restore the edited payload,formula-only cells outside its rows/columns,whole conditional-format ownership,and full-axis raw geometry/manual breaks with actual null geometry checks. Marked copying retains the original null-mark-data asymmetry (CALC-265). Real table5 page/manual sets,ordered set value/move binding,stream-validity state/document locking and width-change pagination invalidation are represented. Named-expression maps,pagination/device calculation,full XML streaming and native document-level Undo/paste/history orchestration remain unported;no fake owner or alternate workbook is introduced.",
       "knownViolations": [],
       "localSymbols": [
-        "SetOptimalHeightsToRows"
+        "SetOptimalHeightsToRows",
+        "SetStreamValid"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/data/table1.cxx",
       "upstreamSymbols": [
-        "SetOptimalHeightsToRows"
+        "SetOptimalHeightsToRows",
+        "ScTable::SetStreamValid"
       ]
     }
   }
