@@ -20,6 +20,36 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("opens valid RTF atomically and preserves the old graph on malformed input", /** Checks native filter and shell lifecycle boundary. @returns Nothing. */ () => {
+    const shell = makeShell();
+    const original = shell.GetDoc();
+    const metadata = createDocument({ id: "rtf", suiteId: "writer", title: "RTF" });
+    const medium = {
+      kind: "input" as const,
+      name: "file.rtf",
+      filterId: "Rich Text Format",
+      mediaType: "application/rtf",
+      source: { kind: "external" as const, reference: {} },
+    };
+    try {
+      expect(() =>
+        shell.OpenRtf(new TextEncoder().encode("{\\rtf1 broken"), metadata, medium),
+      ).toThrow();
+      expect(shell.GetDoc()).toBe(original);
+      const loaded = shell.OpenRtf(
+        new TextEncoder().encode("{\\rtf1\\ansi Imported}"),
+        metadata,
+        medium,
+      );
+      expect(loaded.paragraphs[0]?.GetText()).toBe("Imported");
+      expect(shell.GetMedium().GetLastOperation()).toMatchObject({
+        operation: "open",
+        state: "succeeded",
+      });
+    } finally {
+      shell.Close();
+    }
+  });
   it("retains upstream single-paragraph ASCII numbering suppression", /** Checks the original endpoint condition for full-document export. @returns Nothing. */ () => {
     const shell = makeShell();
     try {

@@ -43,3 +43,20 @@ export function exportWriterTextToPort(
       }),
   );
 }
+
+/** Exports the native RTF filter stream through the browser port. @param docShell - Active shell. @param port - Browser adapter. @param filename - Download name. @returns Completion. */
+export function exportWriterRtfToPort(
+  docShell: SwDocShell,
+  port: DocumentExportPort,
+  filename: string,
+): Promise<void> {
+  return docShell.Export(
+    { filterId: "Rich Text Format", kind: "export", mediaType: "application/rtf", name: filename },
+    /** Delivers native RTF bytes after the shell captures its current model. @returns Port completion. */ () =>
+      port.export({
+        data: docShell.SerializeRtf(),
+        mediaType: "application/rtf",
+        name: filename,
+      }),
+  );
+}

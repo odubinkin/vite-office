@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfexport.cxx",
+    "localSymbols": ["RtfExport"],
+    "upstreamSymbols": ["RtfExport::ExportDocument_Impl", "RtfExport::WriteNumbering"],
+    "preservedResponsibilities": ["Writes represented Writer body text, character attributes, paragraph alignment, tables and list definitions as RTF."],
+    "omittedResponsibilities": ["Upstream's complete page, frame, picture, field, header/footer, drawing, section and style export paths remain unverified."],
+    "evidence": {
+      "local": [{ "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts", "marker": "round trips" }],
+      "upstream": [{ "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx", "marker": "RtfExport::WriteNumbering" }]
+    }
+  }
+}

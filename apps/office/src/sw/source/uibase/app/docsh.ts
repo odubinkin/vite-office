@@ -31,6 +31,9 @@ import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
 import { SwASCWriter } from "../../filter/ascii/wrtasc";
+import { RtfExport } from "../../filter/ww8/rtfexport";
+import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
+import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
@@ -93,6 +96,34 @@ export class SwDocShell extends SfxObjectShell {
   public SerializeText(): string {
     this.EnsureOpen();
     return new SwASCWriter().WriteDocument(this.document);
+  }
+
+  /** Serializes the live Writer model through the native RTF writer. @returns RTF bytes. */
+  public SerializeRtf(): Uint8Array {
+    this.EnsureOpen();
+    return new RtfExport().ExportDocument(this.document);
+  }
+
+  /** Reads an RTF candidate before atomically replacing the active model. @param bytes - Complete RTF stream. @param metadata - Target identity. @param medium - Source medium. @returns Installed model. */
+  public OpenRtf(bytes: Uint8Array, metadata: SfxObjectShellState, medium: SfxMediumInput): SwDoc {
+    this.EnsureOpen();
+    const document = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize(), {
+      ...(this.defaultFontDevice === undefined
+        ? {}
+        : { defaultFontDevice: this.defaultFontDevice }),
+      locale: this.defaultLocale,
+    });
+    const state: SfxObjectShellState = Object.freeze({
+      ...metadata,
+      isModified: false,
+      lifecycle: "saved",
+      recoveryGeneration: null,
+    });
+    return this.ReplaceDocument(
+      document,
+      state,
+      setMediumOperation(acquireSfxMedium(medium), "open", "succeeded", state.contentGeneration),
+    );
   }
 
   /** Associates the current Writer view like native SwDocShell::SetView. @param view - Active view or no view. @returns Nothing. */

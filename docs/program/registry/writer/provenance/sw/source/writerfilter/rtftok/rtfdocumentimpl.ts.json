@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": ["RtfDocumentImpl"],
+    "upstreamSymbols": ["RTFDocumentImpl::resolveSubstream"],
+    "preservedResponsibilities": ["Maps group-scoped character and paragraph controls, tables and list metadata into canonical Writer text nodes, hints and list items."],
+    "omittedResponsibilities": ["The full upstream destination vocabulary, drawings, fields, comments, complex styles, redlines, sections and embedded objects remain unverified."],
+    "evidence": {
+      "local": [{ "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts", "marker": "group-scoped bold" }],
+      "upstream": [{ "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx", "marker": "RTFDocumentImpl" }]
+    }
+  }
+}

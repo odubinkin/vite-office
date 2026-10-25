@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": ["CAP-0121"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": ["apps/office/src/sw/source/filter/ww8/rtfexport.ts#RtfExport", "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx#RtfExport::WriteNumbering"],
+      "justification": "Native RTF writer for represented Writer content; complete upstream export parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": ["RtfExport"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/rtfexport.cxx",
+      "upstreamSymbols": ["RtfExport::WriteNumbering"]
+    }
+  }
+}
