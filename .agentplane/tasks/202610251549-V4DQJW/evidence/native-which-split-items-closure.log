@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/inc/native-table-split-items.test.ts --maxWorkers=1
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/inc/native-table-split-items.test.ts --maxWorkers=1
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  4 passed (4)
+   Start at  03:38:48
+   Duration  9.24s (transform 6.02s, setup 250ms, import 7.23s, tests 38ms, environment 1.37s)
+

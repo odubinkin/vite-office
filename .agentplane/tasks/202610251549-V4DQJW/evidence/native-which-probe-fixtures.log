@@ -1,0 +1,75 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts (5 tests | 2 failed) 2781ms
+   × collects inherited/default deltas while excluding sentinels and slot IDs 77ms
+   × calls storage Changed before replacement and removal 6ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts > collects inherited/default deltas while excluding sentinels and slot IDs
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/sw/source/core/docnode/node-attribute-handle.test.ts:223:43
+    221|   expect(old.Get(87).QueryValue()).toBe(3);
+    222|   expect(next.Get(87).QueryValue()).toBe(4);
+    223|   expect(set.ClearItem_BC(84, old, next)).toBe(1);
+       |                                           ^
+    224|   expect(old.Get(87).QueryValue()).toBe(4);
+    225|   expect(next.Get(87).QueryValue()).toBe(3);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts > calls storage Changed before replacement and removal
+AssertionError: expected [ +0, 1, 1, +0, 1 ] to deeply equal [ +0, 1, 1, +0, 1, 2, 2 ]
+
+- Expected
++ Received
+
+@@ -2,8 +2,6 @@
+    0,
+    1,
+    1,
+    0,
+    1,
+-   2,
+-   2,
+  ]
+
+ ❯ src/sw/source/core/docnode/node-attribute-handle.test.ts:276:22
+    274|   set.Put(new SfxInt16Item(89, 7));
+    275|   set.ClearItem();
+    276|   expect(set.counts).toEqual([0, 1, 1, 0, 1, 2, 2]);
+       |                      ^
+    277| });
+    278|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed | 3 passed (4)
+      Tests  2 failed | 89 passed (91)
+   Start at  03:23:53
+   Duration  25.83s (transform 26.00s, setup 1.82s, import 36.79s, tests 5.38s, environment 5.98s)
+
+npm error Lifecycle script `test:writer` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.writer.config.ts src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts --maxWorkers=2

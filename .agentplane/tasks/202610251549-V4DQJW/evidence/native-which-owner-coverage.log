@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/doc/native-page-owner-lifetimes.test.ts src/sw/browser/filter/xml/writer-which-id-migration.test.ts --coverage.include=src/sw/source/core/doc/docdesc.ts --coverage.include=src/sw/inc/charfmt.ts --coverage.include=src/sw/inc/fmtcol.ts --coverage.include=src/sw/browser/filter/xml/writer-which-id-migration.ts --coverage.reportsDirectory=coverage/writer-native-which-owners
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage src/sw/source/core/doc/native-page-owner-lifetimes.test.ts src/sw/browser/filter/xml/writer-which-id-migration.test.ts --coverage.include=src/sw/source/core/doc/docdesc.ts --coverage.include=src/sw/inc/charfmt.ts --coverage.include=src/sw/inc/fmtcol.ts --coverage.include=src/sw/browser/filter/xml/writer-which-id-migration.ts --coverage.reportsDirectory=coverage/writer-native-which-owners
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  2 passed (2)
+      Tests  4 passed (4)
+   Start at  03:40:06
+   Duration  8.58s (transform 10.54s, setup 672ms, import 12.34s, tests 51ms, environment 3.28s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 57/57 )
+Branches     : 100% ( 47/47 )
+Functions    : 100% ( 8/8 )
+Lines        : 100% ( 50/50 )
+================================================================================

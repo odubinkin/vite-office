@@ -1,0 +1,49 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/txtnode/list-restart-getter.test.ts src/sw/source/core/undo/native-format-parent-history.test.ts src/sw/source/core/undo/native-object-dying.test.ts src/sw/source/core/undo/native-format-death-history.test.ts src/sw/source/core/undo/native-format-change-history.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/filter/xml/odt-canonical-state.test.ts --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/source/core/txtnode/list-restart-getter.test.ts src/sw/source/core/undo/native-format-parent-history.test.ts src/sw/source/core/undo/native-object-dying.test.ts src/sw/source/core/undo/native-format-death-history.test.ts src/sw/source/core/undo/native-format-change-history.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/filter/xml/odt-canonical-state.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ |writer| src/sw/source/core/txtnode/list-restart-getter.test.ts (2 tests | 1 failed) 212ms
+   × matches unchanged native absent/direct getter values and nonfatal diagnostics without mutation 184ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/list-restart-getter.test.ts > matches unchanged native absent/direct getter values and nonfatal diagnostics without mutation
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ check src/sw/source/core/txtnode/list-restart-getter.test.ts:51:36
+     49|       expect(node.HasAttrListRestartValue()).toBe(expected.direct);
+     50|       expect(node.HasSwAttrSet()).toBe(expected.allocated);
+     51|       expect(direct?.Count() ?? 0).toBe(expected.count);
+       |                                    ^
+     52|       expect(node.GetpSwAttrSet()).toBe(direct);
+     53|       expect(
+ ❯ src/sw/source/core/txtnode/list-restart-getter.test.ts:71:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 6 passed (7)
+      Tests  1 failed | 10 passed (11)
+   Start at  03:36:03
+   Duration  102.99s (transform 90.75s, setup 8.61s, import 139.32s, tests 1.63s, environment 47.35s)
+
+npm error Lifecycle script `test:writer` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.writer.config.ts src/sw/source/core/txtnode/list-restart-getter.test.ts src/sw/source/core/undo/native-format-parent-history.test.ts src/sw/source/core/undo/native-object-dying.test.ts src/sw/source/core/undo/native-format-death-history.test.ts src/sw/source/core/undo/native-format-change-history.test.ts src/sw/source/core/attr/native-format-parent.test.ts src/sw/source/filter/xml/odt-canonical-state.test.ts --maxWorkers=2

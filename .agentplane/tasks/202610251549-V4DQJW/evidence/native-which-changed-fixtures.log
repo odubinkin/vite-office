@@ -1,0 +1,935 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/browser/filter/xml/writer-which-id-migration.test.ts src/sw/source/core/doc/native-page-owner-lifetimes.test.ts src/sw/browser/editor/native-cell-format-client.test.tsx src/sw/browser/editor/native-format-attribute-notify.test.tsx src/sw/browser/editor/native-format-notifier.test.tsx src/sw/browser/editor/native-table-lr-items.test.tsx src/sw/browser/presentation/native-format-notifier-store.test.ts src/sw/browser/presentation/native-headline-dialog-input.test.tsx src/sw/browser/presentation/native-layout-split-item.test.tsx src/sw/browser/presentation/native-row-frame-format.test.tsx src/sw/browser/presentation/native-row-split-dialog-input.test.tsx src/sw/browser/presentation/native-table-export-items.test.tsx src/sw/browser/presentation/native-table-itemset-restore.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/inc/fmtfsize.test.ts src/sw/inc/fmtornt.test.ts src/sw/inc/tgrditem.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/doc/number-list-format.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/layout/native-frame-attribute-notify.test.ts src/sw/source/core/layout/native-layout-split-item.test.ts src/sw/source/core/layout/native-table-attr-notify.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/table/native-table-lr-item.test.ts src/sw/source/core/table/native-table-lr-value.test.ts src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/txtnode/internet-style-id-transport.test.ts src/sw/source/core/txtnode/list-restart-contract.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts src/sw/source/core/txtnode/text-collection-numbering.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/core/undo/native-layout-split-item.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-split-dialog-input.test.ts src/sw/source/core/undo/native-table-itemset-restore.test.ts src/sw/source/core/undo/native-table-lr-history.test.ts src/sw/source/core/undo/undobj.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/xml/native-table-export-items.test.ts src/sw/source/filter/xml/odt-list-continuation.test.ts src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts src/sw/source/filter/xml/odt-list-implicit-restart.test.ts src/sw/source/filter/xml/odt-list-start-normalization.test.ts src/sw/source/filter/xml/odt-list-sublist-restart.test.ts src/sw/source/filter/xml/odt-text-collection-numbering.test.ts src/sw/source/ui/table/native-headline-dialog-input.test.ts src/sw/source/ui/table/native-row-split-dialog-input.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts --maxWorkers=4
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/browser/filter/xml/writer-which-id-migration.test.ts src/sw/source/core/doc/native-page-owner-lifetimes.test.ts src/sw/browser/editor/native-cell-format-client.test.tsx src/sw/browser/editor/native-format-attribute-notify.test.tsx src/sw/browser/editor/native-format-notifier.test.tsx src/sw/browser/editor/native-table-lr-items.test.tsx src/sw/browser/presentation/native-format-notifier-store.test.ts src/sw/browser/presentation/native-headline-dialog-input.test.tsx src/sw/browser/presentation/native-layout-split-item.test.tsx src/sw/browser/presentation/native-row-frame-format.test.tsx src/sw/browser/presentation/native-row-split-dialog-input.test.tsx src/sw/browser/presentation/native-table-export-items.test.tsx src/sw/browser/presentation/native-table-itemset-restore.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/inc/fmtfsize.test.ts src/sw/inc/fmtornt.test.ts src/sw/inc/tgrditem.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/doc/number-list-format.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/layout/native-frame-attribute-notify.test.ts src/sw/source/core/layout/native-layout-split-item.test.ts src/sw/source/core/layout/native-table-attr-notify.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/table/native-table-lr-item.test.ts src/sw/source/core/table/native-table-lr-value.test.ts src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/txtnode/internet-style-id-transport.test.ts src/sw/source/core/txtnode/list-restart-contract.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts src/sw/source/core/txtnode/text-collection-numbering.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/core/undo/native-layout-split-item.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-split-dialog-input.test.ts src/sw/source/core/undo/native-table-itemset-restore.test.ts src/sw/source/core/undo/native-table-lr-history.test.ts src/sw/source/core/undo/undobj.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/xml/native-table-export-items.test.ts src/sw/source/filter/xml/odt-list-continuation.test.ts src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts src/sw/source/filter/xml/odt-list-implicit-restart.test.ts src/sw/source/filter/xml/odt-list-start-normalization.test.ts src/sw/source/filter/xml/odt-list-sublist-restart.test.ts src/sw/source/filter/xml/odt-text-collection-numbering.test.ts src/sw/source/ui/table/native-headline-dialog-input.test.ts src/sw/source/ui/table/native-row-split-dialog-input.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts --maxWorkers=4
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+ ❯ |writer| src/sw/source/core/txtnode/direct-attribute-native.test.ts (1 test | 1 failed) 121ms
+   × matches unchanged native pre/post handlers before validating counter reads 119ms
+ ❯ |writer| src/sw/source/core/edit/edfcol-reset.test.ts (37 tests | 30 failed) 1276ms
+     × protects rule=0 page=0 break=0 while clearing all other direct items 330ms
+     × protects rule=1 page=0 break=0 while clearing all other direct items 10ms
+     × protects rule=2 page=0 break=0 while clearing all other direct items 82ms
+     × protects rule=0 page=1 break=0 while clearing all other direct items 17ms
+     × protects rule=1 page=1 break=0 while clearing all other direct items 28ms
+     × protects rule=2 page=1 break=0 while clearing all other direct items 44ms
+     × protects rule=0 page=2 break=0 while clearing all other direct items 34ms
+     × protects rule=1 page=2 break=0 while clearing all other direct items 50ms
+     × protects rule=2 page=2 break=0 while clearing all other direct items 69ms
+     × protects rule=0 page=0 break=1 while clearing all other direct items 12ms
+     × protects rule=1 page=0 break=1 while clearing all other direct items 5ms
+     × protects rule=2 page=0 break=1 while clearing all other direct items 5ms
+     × protects rule=0 page=1 break=1 while clearing all other direct items 7ms
+     × protects rule=1 page=1 break=1 while clearing all other direct items 6ms
+     × protects rule=2 page=1 break=1 while clearing all other direct items 15ms
+     × protects rule=0 page=2 break=1 while clearing all other direct items 18ms
+     × protects rule=1 page=2 break=1 while clearing all other direct items 6ms
+     × protects rule=2 page=2 break=1 while clearing all other direct items 5ms
+     × protects rule=0 page=0 break=2 while clearing all other direct items 4ms
+     × protects rule=1 page=0 break=2 while clearing all other direct items 37ms
+     × protects rule=2 page=0 break=2 while clearing all other direct items 36ms
+     × protects rule=0 page=1 break=2 while clearing all other direct items 84ms
+     × protects rule=1 page=1 break=2 while clearing all other direct items 21ms
+     × protects rule=2 page=1 break=2 while clearing all other direct items 5ms
+     × protects rule=0 page=2 break=2 while clearing all other direct items 11ms
+     × protects rule=1 page=2 break=2 while clearing all other direct items 27ms
+     × protects rule=2 page=2 break=2 while clearing all other direct items 43ms
+     × resets the entire inclusive mixed range with reversed=false and one history owner 22ms
+     × resets the entire inclusive mixed range with reversed=true and one history owner 5ms
+     × records every actual unchanged SfxRequest, retains family2 and restores reset state independently 13ms
+ ❯ |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts (5 tests | 3 failed) 152ms
+   × matches unchanged native handle owners over300 sequences and1815 states 125ms
+   × collects inherited/default deltas while excluding sentinels and slot IDs 8ms
+   × calls storage Changed before replacement and removal 7ms
+ ❯ |writer| src/sw/source/core/edit/edfcol-modifier.test.ts (48 tests | 34 failed) 717ms
+     × honors only KEY_MOD1 in actual command mask 0 41ms
+     × honors only KEY_MOD1 in actual command mask 4096 12ms
+     × honors only KEY_MOD1 in actual command mask 8192 15ms
+     × honors only KEY_MOD1 in actual command mask 12288 11ms
+     × honors only KEY_MOD1 in actual command mask 16384 7ms
+     × honors only KEY_MOD1 in actual command mask 32768 7ms
+     × honors only KEY_MOD1 in actual command mask 65535 12ms
+     × uses native deletion-set protection for rule=0 page=0 break=0 8ms
+     × uses native deletion-set protection for rule=1 page=0 break=0 17ms
+     × uses native deletion-set protection for rule=2 page=0 break=0 8ms
+     × uses native deletion-set protection for rule=0 page=1 break=0 15ms
+     × uses native deletion-set protection for rule=1 page=1 break=0 15ms
+     × uses native deletion-set protection for rule=2 page=1 break=0 15ms
+     × uses native deletion-set protection for rule=0 page=2 break=0 6ms
+     × uses native deletion-set protection for rule=1 page=2 break=0 5ms
+     × uses native deletion-set protection for rule=2 page=2 break=0 8ms
+     × uses native deletion-set protection for rule=0 page=0 break=1 6ms
+     × uses native deletion-set protection for rule=1 page=0 break=1 6ms
+     × uses native deletion-set protection for rule=2 page=0 break=1 7ms
+     × uses native deletion-set protection for rule=0 page=1 break=1 6ms
+     × uses native deletion-set protection for rule=1 page=1 break=1 8ms
+     × uses native deletion-set protection for rule=2 page=1 break=1 6ms
+     × uses native deletion-set protection for rule=0 page=2 break=1 8ms
+     × uses native deletion-set protection for rule=1 page=2 break=1 8ms
+     × uses native deletion-set protection for rule=2 page=2 break=1 9ms
+     × uses native deletion-set protection for rule=0 page=0 break=2 5ms
+     × uses native deletion-set protection for rule=1 page=0 break=2 39ms
+     × uses native deletion-set protection for rule=2 page=0 break=2 5ms
+     × uses native deletion-set protection for rule=0 page=1 break=2 4ms
+     × uses native deletion-set protection for rule=1 page=1 break=2 3ms
+     × uses native deletion-set protection for rule=2 page=1 break=2 5ms
+     × uses native deletion-set protection for rule=0 page=2 break=2 7ms
+     × uses native deletion-set protection for rule=1 page=2 break=2 4ms
+     × uses native deletion-set protection for rule=2 page=2 break=2 4ms
+ ❯ |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts (52 tests | 32 failed) 550ms
+     × five pairs which=15 length=0 absent 31ms
+     × five pairs which=15 length=0 source 6ms
+     × five pairs which=15 length=0 main 4ms
+     × five pairs which=15 length=0 equal 26ms
+     × five pairs which=15 length=0 different 5ms
+     × five pairs which=15 length=4 absent 4ms
+     × five pairs which=15 length=4 source 3ms
+     × five pairs which=15 length=4 main 6ms
+     × five pairs which=15 length=4 equal 4ms
+     × five pairs which=15 length=4 different 9ms
+     × five pairs which=26 length=0 absent 4ms
+     × five pairs which=26 length=0 source 3ms
+     × five pairs which=26 length=0 main 2ms
+     × five pairs which=26 length=0 equal 2ms
+     × five pairs which=26 length=0 different 2ms
+     × five pairs which=26 length=4 absent 4ms
+     × five pairs which=26 length=4 source 11ms
+     × five pairs which=26 length=4 main 10ms
+     × five pairs which=26 length=4 equal 9ms
+     × five pairs which=26 length=4 different 3ms
+     × five pairs which=31 length=0 absent 11ms
+     × five pairs which=31 length=0 source 3ms
+     × five pairs which=31 length=0 main 5ms
+     × five pairs which=31 length=0 equal 2ms
+     × five pairs which=31 length=0 different 3ms
+     × five pairs which=31 length=4 absent 3ms
+     × five pairs which=31 length=4 source 11ms
+     × five pairs which=31 length=4 main 3ms
+     × five pairs which=31 length=4 equal 3ms
+     × five pairs which=31 length=4 different 3ms
+     × empty leading clears character items and copies direct-only trailing values=true 6ms
+     × empty leading clears character items and copies direct-only trailing values=false 3ms
+ ❯ |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts (13 tests | 5 failed) 112ms
+   × legacy table Which110 uses native mask and exact admission 21ms
+   × legacy table Which101 uses native mask and exact admission 6ms
+   × legacy table Which99 uses native mask and exact admission 7ms
+   × legacy table Which113 uses native mask and exact admission 5ms
+   × copied table deltas consume handled items and preserve original borrowed descriptors 6ms
+ ❯ |writer| src/sw/source/core/txtnode/text-collection-numbering.test.ts (6 tests | 1 failed) 188ms
+   × resets list attributes on removal and clears synthesized suppression on return to a numbered style 23ms
+ ❯ |writer| src/sw/source/core/undo/native-format-attribute-notify-history.test.ts (2 tests | 1 failed) 116ms
+   × real cell attribute history retains original frame clients and exact native accepted change sets 86ms
+ ❯ |writer| src/sw/source/core/txtnode/list-restart-contract.test.ts (2 tests | 1 failed) 194ms
+   × matches literal native flag/value states and mutation attempts in normal and reading documents 120ms
+ ❯ |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts (12 tests | 7 failed) 102ms
+   × native legacy Which92 invalidates the specified physical areas 45ms
+   × native legacy Which93 invalidates the specified physical areas 5ms
+   × native legacy Which94 invalidates the specified physical areas 4ms
+   × native legacy Which99 invalidates the specified physical areas 5ms
+   × native legacy Which113 invalidates the specified physical areas 4ms
+   × native legacy Which117 invalidates the specified physical areas 4ms
+   × native delta iteration accumulates once, preserves item identities and invalidates the next original sibling 8ms
+ ❯ |writer| src/sw/browser/presentation/native-format-notifier-store.test.ts (4 tests | 1 failed) 179ms
+   × native format store invalidates actual root and Sfx caches from original row cell and style hints without model signals 126ms
+ ❯ |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts (16 tests | 5 failed) 191ms
+   × single native item mutation publishes precise effective deltas to original clients before the native notifier 35ms
+   × native multi-item changes and reset ranges retain inherited old and effective default new values 21ms
+   × native Differentiate includes invalid disabled and unequal local identities plus self and empty branches 7ms
+   × actual pooled protection and cell defaults supply effective native old and reset deltas 5ms
+   × native parent rejection and delegated clear no-op keep original storage and clients unchanged 7ms
+ ❯ |writer| src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts (7 tests | 1 failed) 103ms
+   × synthesizes outline suppression and clears it on explicit numbering and full reset 52ms
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 122 ⎯⎯⎯⎯⎯⎯
+
+ FAIL  |writer| src/sw/browser/presentation/native-format-notifier-store.test.ts > native format store invalidates actual root and Sfx caches from original row cell and style hints without model signals
+AssertionError: expected SwFormatVertOrient{ which: 112, …(7) } to deeply equal SwFormatVertOrient{ which: 112, …(7) }
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  SwFormatVertOrient {
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "orientation": 0,
+    "position": 0,
+    "relation": 1,
+    "shareable": true,
+    "which": 112,
+
+ ❯ src/sw/browser/presentation/native-format-notifier-store.test.ts:61:53
+     59|     expect(first.GetFrameFormat()).toBe(format);
+     60|     expect(row.GetFrameFormat()).toBe(rowFormat);
+     61|     expect(second.GetFrameFormat().GetVertOrient()).toEqual(new SwForm…
+       |                                                     ^
+     62|     expect(first.GetParagraphs()[0]).toBe(node);
+     63|     expect(node.GetText()).toBe("Original cell text");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/122]⎯
+
+ FAIL  |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts > matches unchanged native handle owners over300 sequences and1815 states
+Error: Native handle case32 step0: {"op":[0,84,4],"actual":{"result":0,"same":false,"current":[],"retained":null,"events":[]},"expected":{"result":1,"same":false,"current":[[84,4,0]],"retained":null,"events":[[1,1,1]]}}
+ ❯ src/sw/source/core/docnode/node-attribute-handle.test.ts:137:17
+    135|         };
+    136|         if (!isDeepStrictEqual(actual, test.expected[step]))
+    137|           throw new Error(
+       |                 ^
+    138|             `Native handle case${index} step${step}: ${JSON.stringify(…
+    139|           );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/122]⎯
+
+ FAIL  |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts > collects inherited/default deltas while excluding sentinels and slot IDs
+AssertionError: expected +0 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/sw/source/core/docnode/node-attribute-handle.test.ts:210:43
+    208|   expect(old.Get(87).QueryValue()).toBe(3);
+    209|   expect(next.Get(87).QueryValue()).toBe(4);
+    210|   expect(set.ClearItem_BC(84, old, next)).toBe(1);
+       |                                           ^
+    211|   expect(old.Get(87).QueryValue()).toBe(4);
+    212|   expect(next.Get(87).QueryValue()).toBe(3);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/122]⎯
+
+ FAIL  |writer| src/sw/source/core/docnode/node-attribute-handle.test.ts > calls storage Changed before replacement and removal
+AssertionError: expected [ +0, 1, 1, +0, 1 ] to deeply equal [ +0, 1, 1, +0, 1, 2, 2 ]
+
+- Expected
++ Received
+
+@@ -2,8 +2,6 @@
+    0,
+    1,
+    1,
+    0,
+    1,
+-   2,
+-   2,
+  ]
+
+ ❯ src/sw/source/core/docnode/node-attribute-handle.test.ts:263:22
+    261|   set.Put(new SfxInt16Item(89, 7));
+    262|   set.ClearItem();
+    263|   expect(set.counts).toEqual([0, 1, 1, 0, 1, 2, 2]);
+       |                      ^
+    264| });
+    265|
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/122]⎯
+
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 4096
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 8192
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 12288
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 16384
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 32768
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > honors only KEY_MOD1 in actual command mask 65535
+AssertionError: expected +0 to be 240 // Object.is equality
+
+- Expected
++ Received
+
+- 240
++ 0
+
+ ❯ src/sw/source/core/edit/edfcol-modifier.test.ts:120:50
+    118|       expect(request.GetModifier()).toBe(modifier);
+    119|       expect(node.GetTextFormatColl()).toBe(target);
+    120|       expect(node.GetParagraphFirstLineIndent()).toBe(240);
+       |                                                  ^
+    121|       expect(required(node.GetpSwpHints()).Count()).toBe((modifier & 8…
+    122|       expect(required(node.GetpSwpHints()).entries().at(-1)?.Which()).…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/122]⎯
+
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=0 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=0 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=0 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=1 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=1 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=1 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=2 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=2 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=2 break=0
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=0 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=0 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=0 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=1 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=1 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=1 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=2 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=2 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=2 break=1
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=0 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=0 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=0 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=1 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=1 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=1 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=0 page=2 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=1 page=2 break=2
+ FAIL  |writer| src/sw/source/core/edit/edfcol-modifier.test.ts > native Ctrl paragraph StyleApply > uses native deletion-set protection for rule=2 page=2 break=2
+AssertionError: expected +0 to be 240 // Object.is equality
+
+- Expected
++ Received
+
+- 240
++ 0
+
+ ❯ src/sw/source/core/edit/edfcol-modifier.test.ts:302:50
+    300|       expect(node.GetpSwAttrSet()?.GetItemIfSet(104, false) !== undefi…
+    301|       expect(node.GetpSwAttrSet()?.GetItemIfSet(15, false)).toBeUndefi…
+    302|       expect(node.GetParagraphFirstLineIndent()).toBe(240);
+       |                                                  ^
+    303|       expect(node.GetpSwAttrSet()?.GetItemIfSet(87, false)?.QueryValue…
+    304|     },
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/122]⎯
+
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=0 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=0 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=0 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=1 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=1 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=1 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=2 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=2 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=2 break=0 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=0 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=0 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=0 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=1 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=1 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=1 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=2 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=2 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=2 break=1 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=0 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=0 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=0 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=1 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=1 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=1 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=0 page=2 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=1 page=2 break=2 while clearing all other direct items
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > protects rule=2 page=2 break=2 while clearing all other direct items
+AssertionError: expected +0 to be 240 // Object.is equality
+
+- Expected
++ Received
+
+- 240
++ 0
+
+ ❯ src/sw/source/core/edit/edfcol-reset.test.ts:104:50
+    102|       expect(node.GetpSwAttrSet()?.GetItemIfSet(67, false)).toBeUndefi…
+    103|       expect(node.GetpSwAttrSet()?.GetItemIfSet(95, false)).toBeUndefi…
+    104|       expect(node.GetParagraphFirstLineIndent()).toBe(240);
+       |                                                  ^
+    105|       expect(node.GetpSwAttrSet()?.GetItemIfSet(75, false) !== undefin…
+    106|       expect(node.GetpSwAttrSet()?.GetItemIfSet(103, false) !== undefi…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/122]⎯
+
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > resets the entire inclusive mixed range with reversed=false and one history owner
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > resets the entire inclusive mixed range with reversed=true and one history owner
+AssertionError: expected +0 to be 240 // Object.is equality
+
+- Expected
++ Received
+
+- 240
++ 0
+
+ ❯ src/sw/source/core/edit/edfcol-reset.test.ts:191:52
+    189|       expect(owner.GetUndoManager().GetUndoAction()).toBeInstanceOf(Sf…
+    190|       for (const node of [first, empty, last]) {
+    191|         expect(node.GetParagraphFirstLineIndent()).toBe(240);
+       |                                                    ^
+    192|         expect(node.GetpSwAttrSet()).toBeUndefined();
+    193|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[8/122]⎯
+
+ FAIL  |writer| src/sw/source/core/edit/edfcol-reset.test.ts > ordinary native StyleApply reset > records every actual unchanged SfxRequest, retains family2 and restores reset state independently
+AssertionError: expected +0 to be 240 // Object.is equality
+
+- Expected
++ Received
+
+- 240
++ 0
+
+ ❯ src/sw/source/core/edit/edfcol-reset.test.ts:279:50
+    277|       expect((request.GetReturnValue() as SfxUInt16Item).GetValue()).t…
+    278|       expect(owner.GetUndoManager().GetUndoActionCount()).toBe(request…
+    279|       expect(node.GetParagraphFirstLineIndent()).toBe(240);
+       |                                                  ^
+    280|     }
+    281|     shell.Undo();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[9/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which92 invalidates the specified physical areas
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which94 invalidates the specified physical areas
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which99 invalidates the specified physical areas
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which113 invalidates the specified physical areas
+AssertionError: expected [ true, true, true, false ] to deeply equal [ false, false, true, true ]
+
+- Expected
++ Received
+
+  [
+-   false,
+-   false,
++   true,
+    true,
+    true,
++   false,
+  ]
+
+ ❯ src/sw/source/core/layout/native-frame-attribute-notify.test.ts:102:28
+    100|       ready(frame);
+    101|       format.CallSwClientNotify(new LegacyModifyHint(undefined, item));
+    102|       expect(state(frame)).toEqual(
+       |                            ^
+    103|         which === 109
+    104|           ? [true, true, true, false]
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[10/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which93 invalidates the specified physical areas
+AssertionError: expected [ false, false, true, false ] to deeply equal [ false, false, true, true ]
+
+- Expected
++ Received
+
+  [
+    false,
+    false,
+    true,
+-   true,
++   false,
+  ]
+
+ ❯ src/sw/source/core/layout/native-frame-attribute-notify.test.ts:102:28
+    100|       ready(frame);
+    101|       format.CallSwClientNotify(new LegacyModifyHint(undefined, item));
+    102|       expect(state(frame)).toEqual(
+       |                            ^
+    103|         which === 109
+    104|           ? [true, true, true, false]
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[11/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native legacy Which117 invalidates the specified physical areas
+AssertionError: expected [ true, true, true, false ] to deeply equal [ true, true, false, false ]
+
+- Expected
++ Received
+
+  [
+    true,
+    true,
+-   false,
++   true,
+    false,
+  ]
+
+ ❯ src/sw/source/core/layout/native-frame-attribute-notify.test.ts:102:28
+    100|       ready(frame);
+    101|       format.CallSwClientNotify(new LegacyModifyHint(undefined, item));
+    102|       expect(state(frame)).toEqual(
+       |                            ^
+    103|         which === 109
+    104|           ? [true, true, true, false]
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[12/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-frame-attribute-notify.test.ts > native delta iteration accumulates once, preserves item identities and invalidates the next original sibling
+AssertionError: expected [ 93, 116, 120 ] to deeply equal [ 90, 113, 117 ]
+
+- Expected
++ Received
+
+  [
+-   90,
+-   113,
+-   117,
++   93,
++   116,
++   120,
+  ]
+
+ ❯ src/sw/source/core/layout/native-frame-attribute-notify.test.ts:172:7
+    170|         ) => item.Which(),
+    171|       ),
+    172|     ).toEqual([90, 113, 117]);
+       |       ^
+    173|     frame.events.length = 0;
+    174|     next.events.length = 0;
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[13/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts > legacy table Which110 uses native mask and exact admission
+AssertionError: expected [ +0 ] to deeply equal [ 34 ]
+
+- Expected
++ Received
+
+  [
+-   34,
++   0,
+  ]
+
+ ❯ src/sw/source/core/layout/native-table-attr-notify.test.ts:145:34
+    143|     try {
+    144|       f.owner.CallSwClientNotify(new LegacyModifyHint(undefined, item)…
+    145|       expect(f.frame.tableMasks).toEqual([
+       |                                  ^
+    146|         which === 90 || which === 110
+    147|           ? 0x22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[14/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts > legacy table Which101 uses native mask and exact admission
+AssertionError: expected [ +0 ] to deeply equal [ 192 ]
+
+- Expected
++ Received
+
+  [
+-   192,
++   0,
+  ]
+
+ ❯ src/sw/source/core/layout/native-table-attr-notify.test.ts:145:34
+    143|     try {
+    144|       f.owner.CallSwClientNotify(new LegacyModifyHint(undefined, item)…
+    145|       expect(f.frame.tableMasks).toEqual([
+       |                                  ^
+    146|         which === 90 || which === 110
+    147|           ? 0x22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[15/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts > legacy table Which99 uses native mask and exact admission
+AssertionError: expected [ +0 ] to deeply equal [ 28 ]
+
+- Expected
++ Received
+
+  [
+-   28,
++   0,
+  ]
+
+ ❯ src/sw/source/core/layout/native-table-attr-notify.test.ts:145:34
+    143|     try {
+    144|       f.owner.CallSwClientNotify(new LegacyModifyHint(undefined, item)…
+    145|       expect(f.frame.tableMasks).toEqual([
+       |                                  ^
+    146|         which === 90 || which === 110
+    147|           ? 0x22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[16/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts > legacy table Which113 uses native mask and exact admission
+AssertionError: expected [ 34 ] to deeply equal [ +0 ]
+
+- Expected
++ Received
+
+  [
+-   0,
++   34,
+  ]
+
+ ❯ src/sw/source/core/layout/native-table-attr-notify.test.ts:145:34
+    143|     try {
+    144|       f.owner.CallSwClientNotify(new LegacyModifyHint(undefined, item)…
+    145|       expect(f.frame.tableMasks).toEqual([
+       |                                  ^
+    146|         which === 90 || which === 110
+    147|           ? 0x22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[17/122]⎯
+
+ FAIL  |writer| src/sw/source/core/layout/native-table-attr-notify.test.ts > copied table deltas consume handled items and preserve original borrowed descriptors
+AssertionError: expected [ 102, 116 ] to deeply equal [ 99, 113 ]
+
+- Expected
++ Received
+
+  [
+-   99,
+-   113,
++   102,
++   116,
+  ]
+
+ ❯ src/sw/source/core/layout/native-table-attr-notify.test.ts:218:9
+    216|             ) => item.Which(),
+    217|           ),
+    218|       ).toEqual([99, 113]);
+       |         ^
+    219|       expect(
+    220|         copyNew
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[18/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts > synthesizes outline suppression and clears it on explicit numbering and full reset
+AssertionError: expected [ 75, 82 ] to deeply equal [ 73, 80 ]
+
+- Expected
++ Received
+
+  [
+-   73,
+-   80,
++   75,
++   82,
+  ]
+
+ ❯ src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts:34:5
+     32|         (item) => item.Which(),
+     33|       ),
+     34|   ).toEqual([73, 80]);
+       |     ^
+     35|   expect(doc.nodes.GetOutLineNds().entries()).toEqual([node]);
+     36|   doc.EnsureNumRule("Counters", "numbered");
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[19/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/direct-attribute-native.test.ts > matches unchanged native pre/post handlers before validating counter reads
+Error: Native comparison mismatch at sequence 0 step 0: {"actual":{"nodes":[{"rule":"Counters","owned":"Counters","level":0,"outline":0,"empty":false,"id":"Counters","restart":false,"counted":true,"start":1,"cached":1,"attrs":{"75":"Counters"},"vector":[1]},{"rule":"-","owned":"-","level":0,"outline":0,"empty":false,"id":"-","restart":false,"counted":true,"start":1,"cached":-999,"attrs":{},"vector":[]},{"rule":"-","owned":"-","level":0,"outline":0,"empty":false,"id":"-","restart":false,"counted":true,"start":1,"cached":-999,"attrs":{},"vector":[]}],"events":[0],"outline":[],"rules":[[0],[],[]],"registry":[0]},"expected":{"nodes":[{"rule":"Counters","owned":"Counters","level":0,"outline":0,"empty":false,"id":"Counters","restart":false,"counted":true,"start":1,"cached":1,"attrs":{"73":"Counters"},"vector":[1]},{"rule":"-","owned":"-","level":0,"outline":0,"empty":false,"id":"-","restart":false,"counted":true,"start":1,"cached":-999,"attrs":{},"vector":[]},{"rule":"-","owned":"-","level":0,"outline":0,"empty":false,"id":"-","restart":false,"counted":true,"start":1,"cached":-999,"attrs":{},"vector":[]}],"events":[0],"outline":[],"rules":[[0],[],[]],"registry":[0]}}
+ ❯ src/sw/source/core/txtnode/direct-attribute-native.test.ts:188:15
+    186|       snapshots.push(actual);
+    187|       if (!isDeepStrictEqual(actual, test.expected[step])) {
+    188|         throw new Error(
+       |               ^
+    189|           `Native comparison mismatch at sequence ${index} step ${step…
+    190|         );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[20/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/list-restart-contract.test.ts > matches literal native flag/value states and mutation attempts in normal and reading documents
+AssertionError: missing-value-reset-and-flags; reading=false; step=1: expected { restart: false, direct: null, …(3) } to deeply equal { restart: false, direct: null, …(3) }
+
+- Expected
++ Received
+
+@@ -1,10 +1,10 @@
+  {
+    "calls": [
+      [
+        "reset",
+-       86,
++       89,
+      ],
+    ],
+    "direct": null,
+    "effective": 1,
+    "restart": false,
+
+ ❯ check src/sw/source/core/txtnode/list-restart-contract.test.ts:47:11
+     45|           },
+     46|           `${test.name}; reading=${reading}; step=${step}`,
+     47|         ).toEqual(test.states[step]);
+       |           ^
+     48|         states += 1;
+     49|         put.mockClear();
+ ❯ src/sw/source/core/txtnode/list-restart-contract.test.ts:57:9
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[21/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=0 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=0 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=0 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=0 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=0 different
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=4 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=4 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=4 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=4 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=15 length=4 different
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=0 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=0 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=0 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=0 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=0 different
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=4 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=4 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=4 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=4 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=26 length=4 different
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=0 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=0 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=0 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=0 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=0 different
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=4 absent
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=4 source
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=4 main
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=4 equal
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph character conversion > five pairs which=31 length=4 different
+AssertionError: expected undefined to be +0 // Object.is equality
+
+- Expected:
+0
+
++ Received:
+undefined
+
+ ❯ src/sw/source/core/txtnode/native-format-to-text.test.ts:138:37
+    136|             length && pair === "main" ? [[0, 4, FontWeight.WEIGHT_BOLD…
+    137|           );
+    138|           expect(direct(first, 80)).toBe(0);
+       |                                     ^
+    139|           expect(direct(second, 80)).toBe(0);
+    140|           expect(first.GetpSwpHints() === undefined).toBe(!(length && …
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[22/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph join preparation and history > empty leading clears character items and copies direct-only trailing values=true
+ FAIL  |writer| src/sw/source/core/txtnode/native-format-to-text.test.ts > native paragraph join preparation and history > empty leading clears character items and copies direct-only trailing values=false
+AssertionError: expected undefined to be +0 // Object.is equality
+
+- Expected:
+0
+
++ Received:
+undefined
+
+ ❯ src/sw/source/core/txtnode/native-format-to-text.test.ts:443:33
+    441|       expect(direct(first)).toBeUndefined();
+    442|       expect(direct(first, 11)).toBe(hasDirect ? FontItalic.ITALIC_NOR…
+    443|       expect(direct(first, 80)).toBe(0);
+       |                                 ^
+    444|       expect(first.GetTextFormatColl()).toBe(original);
+    445|       expect(spans(first)).toEqual([]);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[23/122]⎯
+
+ FAIL  |writer| src/sw/source/core/txtnode/text-collection-numbering.test.ts > resets list attributes on removal and clears synthesized suppression on return to a numbered style
+AssertionError: expected [ 75, 82 ] to deeply equal [ 73, 80 ]
+
+- Expected
++ Received
+
+  [
+-   73,
+-   80,
++   75,
++   82,
+  ]
+
+ ❯ src/sw/source/core/txtnode/text-collection-numbering.test.ts:108:5
+    106|         ) => item.Which(),
+    107|       ),
+    108|   ).toEqual([73, 80]);
+       |     ^
+    109|   expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(true);
+    110|   const attrs = node.GetpSwAttrSet();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[24/122]⎯
+
+ FAIL  |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts > single native item mutation publishes precise effective deltas to original clients before the native notifier
+AssertionError: expected SwFormatVertOrient{ which: 112, …(7) } to deeply equal SwFormatVertOrient{ which: 112, …(7) }
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  SwFormatVertOrient {
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "orientation": 0,
+    "position": 0,
+    "relation": 1,
+    "shareable": true,
+    "which": 112,
+
+ ❯ SwClient.callback src/sw/source/core/attr/native-format-attribute-notify.test.ts:89:55
+     87|       events.push(["native", source, h, format.IsModifyLocked()]);
+     88|       expect(format.GetVertOrient()).toEqual(new SwFormatVertOrient(72…
+     89|       expect(required(h.m_pOld).GetChgSet().Get(112)).toEqual(new SwFo…
+       |                                                       ^
+     90|       expect(required(h.m_pNew).GetChgSet().Get(112)).toEqual(new SwFo…
+     91|       expect(required(h.m_pOld).GetTheChgdSet()).toBe(format.GetAttrSe…
+ ❯ SwClientNotify src/sw/inc/calbck.ts:111:10
+ ❯ SwTableBoxFormat.DeliverWriterNotification src/sw/inc/calbck.ts:197:56
+ ❯ SwTableBoxFormat.DeliverWriterNotification src/sw/inc/calbck.ts:293:11
+ ❯ SwTableBoxFormat.CallSwClientNotify src/sw/inc/calbck.ts:236:17
+ ❯ SwTableBoxFormat.SwClientNotify src/sw/inc/calbck.ts:225:12
+ ❯ SwTableBoxFormat.SwClientNotify src/sw/source/core/attr/format.ts:204:11
+ ❯ ClientNotifyAttrChg src/sw/inc/calbck.ts:320:10
+ ❯ SwTableBoxFormat.SetFormatAttr src/sw/source/core/attr/format.ts:122:7
+ ❯ src/sw/source/core/attr/native-format-attribute-notify.test.ts:108:17
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[25/122]⎯
+
+ FAIL  |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts > native multi-item changes and reset ranges retain inherited old and effective default new values
+AssertionError: expected SwFormatFrameSize{ which: 93, …(11) } to deeply equal SwFormatFrameSize{ which: 93, …(11) }
+
+- Expected
++ Received
+
+@@ -6,11 +6,11 @@
+      "mnA": 0,
+      "mnB": 0,
+    },
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "shareable": true,
+    "which": 93,
+    "widthPercent": 0,
+    "widthPercentRelation": 0,
+    "widthType": 1,
+
+ ❯ src/sw/source/core/attr/native-format-attribute-notify.test.ts:144:50
+    142|     new SwFormatFrameSize(SwFrameSize.Fixed, 6000, 500),
+    143|   );
+    144|   expect(required(h.m_pNew).GetChgSet().Get(93)).toEqual(new SwFormatF…
+       |                                                  ^
+    145|   expect(format.ResetFormatAttr(93)).toBe(false);
+    146|   expect(format.ResetAllFormatAttr()).toBe(1);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[26/122]⎯
+
+ FAIL  |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts > native Differentiate includes invalid disabled and unequal local identities plus self and empty branches
+AssertionError: expected 3 to be 1 // Object.is equality
+
+- Expected
++ Received
+
+- 1
++ 3
+
+ ❯ src/sw/source/core/attr/native-format-attribute-notify.test.ts:233:55
+    231|   set.Put(new SwFormatFrameSize(SwFrameSize.Fixed, 6000, 500));
+    232|   parent.SetFormatAttrSet(set);
+    233|   expect(required(native(c.hints[0]).m_pNew).Count()).toBe(1);
+       |                                                       ^
+    234|   expect(required(native(c.hints[0]).m_pNew).GetChgSet().GetItemState(…
+    235|     SfxItemState.SET,
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[27/122]⎯
+
+ FAIL  |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts > actual pooled protection and cell defaults supply effective native old and reset deltas
+AssertionError: expected SvxProtectItem{ which: 110, …(7) } to deeply equal SvxProtectItem{ which: 110, …(7) }
+
+- Expected
++ Received
+
+@@ -2,9 +2,9 @@
+    "bCntnt": false,
+    "bPos": false,
+    "bSize": false,
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "shareable": true,
+    "which": 110,
+  }
+
+ ❯ src/sw/source/core/attr/native-format-attribute-notify.test.ts:502:57
+    500|   for (const [index, item] of items.entries()) {
+    501|     const expected = required(defaults[index]);
+    502|     expect(pool.GetUserOrPoolDefaultItem(item.Which())).toEqual(expect…
+       |                                                         ^
+    503|     expect(format.SetFormatAttr(item)).toBe(true);
+    504|     const hint = native(o.hints.at(-1));
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[28/122]⎯
+
+ FAIL  |writer| src/sw/source/core/attr/native-format-attribute-notify.test.ts > native parent rejection and delegated clear no-op keep original storage and clients unchanged
+AssertionError: expected SwFormatVertOrient{ which: 112, …(7) } to deeply equal SwFormatVertOrient{ which: 112, …(7) }
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  SwFormatVertOrient {
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "orientation": 0,
+    "position": 0,
+    "relation": 1,
+    "shareable": true,
+    "which": 112,
+
+ ❯ src/sw/source/core/attr/native-format-attribute-notify.test.ts:549:68
+    547|   clear.mockRestore();
+    548|   expect(format.ResetAllFormatAttr()).toBe(1);
+    549|   expect(required(native(o.hints[0]).m_pNew).GetChgSet().Get(112)).toE…
+       |                                                                    ^
+    550|     new SwFormatVertOrient(),
+    551|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[29/122]⎯
+
+ FAIL  |writer| src/sw/source/core/undo/native-format-attribute-notify-history.test.ts > real cell attribute history retains original frame clients and exact native accepted change sets
+AssertionError: expected SwFormatVertOrient{ which: 112, …(7) } to deeply equal SwFormatVertOrient{ which: 112, …(7) }
+
+- Expected
++ Received
+
+@@ -1,9 +1,9 @@
+  SwFormatVertOrient {
+    "m_bDynamicDefault": false,
+    "m_bIsSetItem": false,
+-   "m_bStaticDefault": false,
++   "m_bStaticDefault": true,
+    "orientation": 0,
+    "position": 0,
+    "relation": 1,
+    "shareable": true,
+    "which": 112,
+
+ ❯ src/sw/source/core/undo/native-format-attribute-notify-history.test.ts:51:56
+     49|     expect(changes[0]?.[0]).toBe(first.GetFrameFormat());
+     50|     expect(required(hint.m_pNew).GetTheChgdSet()).toBe(first.GetFrameF…
+     51|     expect(required(hint.m_pOld).GetChgSet().Get(112)).toEqual(new SwF…
+       |                                                        ^
+     52|     expect(required(hint.m_pNew).GetChgSet().Get(112)).toEqual(new SwF…
+     53|     expect(second.GetFrameFormat()).toBe(original);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[30/122]⎯
+
+
+ Test Files  13 failed | 50 passed (63)
+      Tests  122 failed | 1822 passed (1944)
+   Start at  03:19:42
+   Duration  245.70s (transform 33.11s, setup 23.42s, import 177.33s, tests 139.32s, environment 124.70s)
+
+npm error Lifecycle script `test:writer` failed with error:
+npm error code 1
+npm error path /Users/odubinkin/Projects/vite-office/apps/office
+npm error workspace @vite-office/office@0.1.0
+npm error location /Users/odubinkin/Projects/vite-office/apps/office
+npm error command failed
+npm error command sh -c vitest run --config vitest.writer.config.ts src/sw/browser/filter/xml/writer-which-id-migration.test.ts src/sw/source/core/doc/native-page-owner-lifetimes.test.ts src/sw/browser/editor/native-cell-format-client.test.tsx src/sw/browser/editor/native-format-attribute-notify.test.tsx src/sw/browser/editor/native-format-notifier.test.tsx src/sw/browser/editor/native-table-lr-items.test.tsx src/sw/browser/presentation/native-format-notifier-store.test.ts src/sw/browser/presentation/native-headline-dialog-input.test.tsx src/sw/browser/presentation/native-layout-split-item.test.tsx src/sw/browser/presentation/native-row-frame-format.test.tsx src/sw/browser/presentation/native-row-split-dialog-input.test.tsx src/sw/browser/presentation/native-table-export-items.test.tsx src/sw/browser/presentation/native-table-itemset-restore.test.tsx src/sw/browser/presentation/native-table-split-items.test.tsx src/sw/browser/presentation/native-table-text-flow-split.test.tsx src/sw/inc/fmtfsize.test.ts src/sw/inc/fmtornt.test.ts src/sw/inc/tgrditem.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-contract.test.ts src/sw/source/core/SwNumberTree/SwNumberTree-policy.test.ts src/sw/source/core/attr/list-restart-default.test.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/doc/number-list-format.test.ts src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/core/docnode/native-row-split-items.test.ts src/sw/source/core/docnode/node-attribute-handle.test.ts src/sw/source/core/edit/edfcol-modifier.test.ts src/sw/source/core/edit/edfcol-reset.test.ts src/sw/source/core/layout/native-frame-attribute-notify.test.ts src/sw/source/core/layout/native-layout-split-item.test.ts src/sw/source/core/layout/native-table-attr-notify.test.ts src/sw/source/core/table/native-box-frame-format.test.ts src/sw/source/core/table/native-row-frame-format.test.ts src/sw/source/core/table/native-table-lr-item.test.ts src/sw/source/core/table/native-table-lr-value.test.ts src/sw/source/core/txtnode/direct-attribute-lifecycle.test.ts src/sw/source/core/txtnode/direct-attribute-native.test.ts src/sw/source/core/txtnode/internet-style-id-transport.test.ts src/sw/source/core/txtnode/list-restart-contract.test.ts src/sw/source/core/txtnode/native-empty-hint-ownership.test.ts src/sw/source/core/txtnode/native-format-to-text.test.ts src/sw/source/core/txtnode/native-ignore-hint-expansion.test.ts src/sw/source/core/txtnode/text-collection-numbering.test.ts src/sw/source/core/undo/native-box-frame-format-history.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/core/undo/native-layout-split-item.test.ts src/sw/source/core/undo/native-row-frame-format-history.test.ts src/sw/source/core/undo/native-row-split-dialog-input.test.ts src/sw/source/core/undo/native-table-itemset-restore.test.ts src/sw/source/core/undo/native-table-lr-history.test.ts src/sw/source/core/undo/undobj.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/filter/xml/native-table-export-items.test.ts src/sw/source/filter/xml/odt-list-continuation.test.ts src/sw/source/filter/xml/odt-list-counters-roundtrip.test.ts src/sw/source/filter/xml/odt-list-headers-roundtrip.test.ts src/sw/source/filter/xml/odt-list-implicit-restart.test.ts src/sw/source/filter/xml/odt-list-start-normalization.test.ts src/sw/source/filter/xml/odt-list-sublist-restart.test.ts src/sw/source/filter/xml/odt-text-collection-numbering.test.ts src/sw/source/ui/table/native-headline-dialog-input.test.ts src/sw/source/ui/table/native-row-split-dialog-input.test.ts src/sw/source/uibase/wrtsh/native-cross-node-deletion.test.ts --maxWorkers=4

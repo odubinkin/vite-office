@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 21
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T19:47:34.535Z"
+doc_updated_at: "2026-10-25T20:46:24.368Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -96,6 +96,14 @@ sections:
     - Observation: Page import exposed geometry-only page ownership, missing text grid and a pool-default registry without ItemInfo metadata.
       Impact: Native section/grid UNO application and lossless browser graph transfer required real frame owners and actual native user-default state. Full DOCX application acceptance remains pending.
       Resolution: Implemented four document-pool page frames, native grid/UNO properties, consumed ItemInfoStatic/User metadata and complete page/frame transport. Command/results/evidence/scope: page-frame-checkpoint.json records 13 owner tests with S349/B244/F79/L324 all100, 31 pool cases with all100, 110 Writer and13 Calc regressions,206 migrated fixture cases and6 production Chromium desktop/mobile cases; build/lint/format/dependency/docs/size/tree/provenance/registry/static/routing passed. Doctor has zero errors and the existing hook readiness warning. Full suite not due. Section/default-page-mode/style loading, DOCX export/UI and ODT grid persistence remain pending; no whole-task verification or parity promotion.
+
+    - Observation: Pinned hintids.hxx expression evaluation exposed local Writer paragraph identities offset by2, subsequent list/frame/cell identities offset by3, and a separate protection registration under old frame-direction ID127. Existing marker-only invariants had not detected the incorrect evaluated values.
+      Impact: Native grid/section and every represented Writer pooled item must use the real source identities; retaining the old numeric table would violate the approved architecture and corrupt mixed native protocol use. Existing browser v16 records need explicit ingress migration.
+      Resolution: Corrected consumed constants and exact native row/cell ranges, native RES_PROTECT110 and RES_BOXATR_FORMAT160; current graph17 writes native IDs and v16 migration stays browser-owned. Added actual pinned expression guard (74 identities) to npm verify and corrected four invariant catalog values. Four new app owners pass4 tests with S57/B47/F8/L50 all100;11 targeted tooling checks pass; build/typecheck and source provenance/registry pass. Broad Writer regression remains live in session38928; raw fixtures are being migrated. Browser5/6 passed; desktop ODT reopen exposed a name conflict and is being rechecked separately. Full repository suite is not due; no task acceptance or parity promotion.
+
+    - Observation: Native identity and page-owner checkpoint is verified; initial broad Writer regression exposed obsolete numeric test fixtures, raw allocation/default-flag comparisons, and append-only client-order assumptions.
+      Impact: Preserving those fixture assumptions would reinstate incorrect native IDs or invalidate real document-owned page clients. Test recordings prove behavioral protocols; they do not independently prove numeric source identities.
+      Resolution: Command/results/evidence/scope: native-which-checkpoint.json records actual pinned expression checks for74 IDs,4 owner tests at S57/B47/F8/L50 all100, the681-file/15246-case Writer attempt and final28-file/1042-case original-failure closure with zero failures. Original native probe JSON recordings remain unchanged; seven test-protocol labels bind to actual native constants only in tests. Use native equals for item payloads and original right-of-anchor registration order. Build/final typecheck/scoped lint+format/resources/dependencies/docs/size/tree/provenance/registry/static/routing passed; doctor has only the existing hook warning. Browser5of6 plus unchanged failed-only desktop recheck1pass retained: intermittent name collision is still an observation for final file-workflow acceptance, not a claimed fix. DOCX/XLSX/filter/UI and ODT-grid acceptance remain pending; no whole-task verification or parity promotion.
 id_source: "generated"
 ---
 ## Summary
@@ -168,3 +176,11 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Page import exposed geometry-only page ownership, missing text grid and a pool-default registry without ItemInfo metadata.
   Impact: Native section/grid UNO application and lossless browser graph transfer required real frame owners and actual native user-default state. Full DOCX application acceptance remains pending.
   Resolution: Implemented four document-pool page frames, native grid/UNO properties, consumed ItemInfoStatic/User metadata and complete page/frame transport. Command/results/evidence/scope: page-frame-checkpoint.json records 13 owner tests with S349/B244/F79/L324 all100, 31 pool cases with all100, 110 Writer and13 Calc regressions,206 migrated fixture cases and6 production Chromium desktop/mobile cases; build/lint/format/dependency/docs/size/tree/provenance/registry/static/routing passed. Doctor has zero errors and the existing hook readiness warning. Full suite not due. Section/default-page-mode/style loading, DOCX export/UI and ODT grid persistence remain pending; no whole-task verification or parity promotion.
+
+- Observation: Pinned hintids.hxx expression evaluation exposed local Writer paragraph identities offset by2, subsequent list/frame/cell identities offset by3, and a separate protection registration under old frame-direction ID127. Existing marker-only invariants had not detected the incorrect evaluated values.
+  Impact: Native grid/section and every represented Writer pooled item must use the real source identities; retaining the old numeric table would violate the approved architecture and corrupt mixed native protocol use. Existing browser v16 records need explicit ingress migration.
+  Resolution: Corrected consumed constants and exact native row/cell ranges, native RES_PROTECT110 and RES_BOXATR_FORMAT160; current graph17 writes native IDs and v16 migration stays browser-owned. Added actual pinned expression guard (74 identities) to npm verify and corrected four invariant catalog values. Four new app owners pass4 tests with S57/B47/F8/L50 all100;11 targeted tooling checks pass; build/typecheck and source provenance/registry pass. Broad Writer regression remains live in session38928; raw fixtures are being migrated. Browser5/6 passed; desktop ODT reopen exposed a name conflict and is being rechecked separately. Full repository suite is not due; no task acceptance or parity promotion.
+
+- Observation: Native identity and page-owner checkpoint is verified; initial broad Writer regression exposed obsolete numeric test fixtures, raw allocation/default-flag comparisons, and append-only client-order assumptions.
+  Impact: Preserving those fixture assumptions would reinstate incorrect native IDs or invalidate real document-owned page clients. Test recordings prove behavioral protocols; they do not independently prove numeric source identities.
+  Resolution: Command/results/evidence/scope: native-which-checkpoint.json records actual pinned expression checks for74 IDs,4 owner tests at S57/B47/F8/L50 all100, the681-file/15246-case Writer attempt and final28-file/1042-case original-failure closure with zero failures. Original native probe JSON recordings remain unchanged; seven test-protocol labels bind to actual native constants only in tests. Use native equals for item payloads and original right-of-anchor registration order. Build/final typecheck/scoped lint+format/resources/dependencies/docs/size/tree/provenance/registry/static/routing passed; doctor has only the existing hook warning. Browser5of6 plus unchanged failed-only desktop recheck1pass retained: intermittent name collision is still an observation for final file-workflow acceptance, not a claimed fix. DOCX/XLSX/filter/UI and ODT-grid acceptance remain pending; no whole-task verification or parity promotion.

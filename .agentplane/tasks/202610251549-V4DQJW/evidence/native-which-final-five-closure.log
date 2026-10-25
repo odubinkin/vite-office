@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/layout/native-frame-attribute-notify.test.ts src/sw/source/core/layout/native-table-attr-notify.test.ts src/sw/source/core/edit/edfcol-history.test.ts --maxWorkers=2
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/source/core/attr/native-format-attribute-notify.test.ts src/sw/source/core/layout/native-frame-attribute-notify.test.ts src/sw/source/core/layout/native-table-attr-notify.test.ts src/sw/source/core/edit/edfcol-history.test.ts --maxWorkers=2
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  4 passed (4)
+      Tests  55 passed (55)
+   Start at  03:29:46
+   Duration  70.73s (transform 82.09s, setup 4.20s, import 101.38s, tests 1.24s, environment 24.65s)
+

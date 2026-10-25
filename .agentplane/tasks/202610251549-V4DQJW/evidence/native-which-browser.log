@@ -1,0 +1,63 @@
+[WebServer] (node:17412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 6 tests using 2 workers
+
+(node:17796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:17797) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  2 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=1280 (18.4s)
+  ✓  3 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:9:3 › native empty-hit focus and keyboard selection width=390 (11.6s)
+  ✓  4 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:63:3 › native six-line border page and selected history width=1280 (19.1s)
+  ✓  5 [writer] › apps/office/e2e/writer-native-border-page.spec.ts:63:3 › native six-line border page and selected history width=390 (17.0s)
+  ✘  1 [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=1280 (39.1s)
+(node:20516) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  6 [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=390 (7.3s)
+
+
+  1) [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=1280 
+
+    Test timeout of 30000ms exceeded.
+
+    Error: expect(locator).toBeHidden() failed
+
+    Locator:  getByRole('dialog', { name: 'Open', exact: true })
+    Expected: hidden
+    Received: visible
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeHidden" with timeout 5000ms
+      - waiting for getByRole('dialog', { name: 'Open', exact: true })
+        13 × locator resolved to <div role="dialog" aria-label="Open" aria-modal="true" data-office-modal="true" data-writer-modal="true" class="fixed inset-0 z-[60] grid place-items-center bg-slate-950/50 p-4 backdrop-blur-[2px]">…</div>
+           - unexpected value "visible"
+
+
+      77 |       buffer: bytes,
+      78 |     });
+    > 79 |     await expect(page.getByRole("dialog", { name: "Open", exact: true })).toBeHidden();
+         |                                                                           ^
+      80 |     await open();
+      81 |     await expect(insert).toBeChecked();
+      82 |     await expect(style).toBeChecked();
+        at /Users/odubinkin/Projects/vite-office/apps/office/e2e/writer-page-offset-transport.spec.ts:79:75
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/e2e/writer-page-offset-transpo-efb81-offset-transport-width-1280-writer/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/e2e/writer-page-offset-transpo-efb81-offset-transport-width-1280-writer/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/e2e/writer-page-offset-transpo-efb81-offset-transport-width-1280-writer/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/e2e/writer-page-offset-transpo-efb81-offset-transport-width-1280-writer/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [writer] › apps/office/e2e/writer-page-offset-transport.spec.ts:7:3 › Writer zero page offset transport width=1280 
+  5 passed (2.6m)

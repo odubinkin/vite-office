@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/browser/presentation/writer-view-title-collision.test.tsx -t repeats rename collision --maxWorkers=1
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/browser/presentation/writer-view-title-collision.test.tsx -t repeats rename collision --maxWorkers=1
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 1 skipped (2)
+   Start at  03:17:42
+   Duration  69.78s (transform 45.83s, setup 730ms, import 53.37s, tests 8.69s, environment 5.46s)
+

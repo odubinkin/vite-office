@@ -1,0 +1,143 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T20:46:23.572089+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "scope": "Pinned Writer WhichId correction, explicit v16-to-v17 browser ingress migration, real default format owners and page teardown",
+  "runtimeSha256": {
+    "apps/office/src/sw/browser/filter/xml/writer-which-id-migration.ts": "2faf56c31659d47301de1a126b4da7799dd92c54b9c269304d7fade245d9abcb",
+    "apps/office/src/sw/inc/charfmt.ts": "a0e668789b3d9855c98ab26423d3ebed465e4f9bb4ed4a8624443136ebbd5d6c",
+    "apps/office/src/sw/inc/fmtcol.ts": "5ff45559276bf9553a0b630393cbde8bee2df96c5b522c92ec2f8a614905fa34",
+    "apps/office/src/sw/source/core/doc/docdesc.ts": "30f6208624e4d63dda0fb98d5737e44a120f908fa4a901cdc5e48b784b9f899a",
+    "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts": "b8004a137bae836d667c2e2dcbd4bd1c38e1ac8b4be35a55cae435ba3ce12754",
+    "apps/office/src/sw/inc/hintids.ts": "f2a9ccd175b3131f9851628e0f62aa7d2475b05894791ffd40bc256c7e22b84b",
+    "apps/office/src/sw/inc/swtblfmt.ts": "14081ffd39adebdc198ba96fc0eae78b3ab625d82c55d318e63db8d54373a542",
+    "apps/office/src/sw/source/core/attr/cellatr.ts": "8c34afe5475a18a7ec47252794e99e06434f2eebdfecef14c78574cdf8d4c67b",
+    "apps/office/src/sw/source/core/attr/format.ts": "e8b44b6a52c2cb8eaea48aa94aaea7ca33fe0a08561dce02d60ddc981506bfa2",
+    "apps/office/src/sw/source/core/attr/swatrset.ts": "35a9afee3bd9714fb8eb3f9af37af299d4489990411624a3dfdc814f2f78a502",
+    "apps/office/src/sw/source/core/doc/doc.ts": "aa3a750b975745b94e9b5b9e517647a9a56977a8dabbaff255c917c80e851b60",
+    "apps/office/src/sw/source/core/doc/fmtcol.ts": "55c2a0766007adf213c9d4c2b661ae8862cc014a7edc2a45b7bcd9dbafcff918",
+    "apps/office/src/sw/source/core/layout/atrfrm.ts": "324436bac52785440f6f93d7fe8989ca1b1158108bb68b22b4dd5edfad99fc5b"
+  },
+  "coverage": {
+    "lines": {
+      "total": 50,
+      "covered": 50,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 57,
+      "covered": 57,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 8,
+      "covered": 8,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 47,
+      "covered": 47,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "coverageOwners": [
+    "sw/inc/charfmt.ts",
+    "sw/inc/fmtcol.ts",
+    "sw/source/core/doc/docdesc.ts",
+    "sw/browser/filter/xml/writer-which-id-migration.ts"
+  ],
+  "ownerTests": {
+    "files": 2,
+    "passed": 4,
+    "log": "native-which-owner-coverage.log"
+  },
+  "nativeIdentityGuard": {
+    "command": "npm run check:writer-hintids",
+    "checked": 74,
+    "evidence": "Actual pinned C++ expression evaluation; committed invariant numeric values independently checked by the guard integration test."
+  },
+  "writerRegression": {
+    "command": "npm run test:writer -- --maxWorkers=2",
+    "initial": {
+      "files": 681,
+      "tests": 15246,
+      "passedFiles": 653,
+      "passedTests": 15099,
+      "failedFiles": 28,
+      "failedTests": 147,
+      "log": "native-which-writer-regression.log"
+    },
+    "failureClosure": {
+      "files": 28,
+      "passedTests": 1042,
+      "failedTests": 0,
+      "command": "Explicit original failed-file list with --maxWorkers=4",
+      "log": "native-which-broad-failure-closure.log"
+    },
+    "note": "The initial broad run and subsequent corrections are retained separately; no whole repository suite was replayed. Original fixture labels, default-item metadata comparisons and client ordering assumptions were corrected in tests. Original extracted-native recordings remain unchanged."
+  },
+  "tooling": {
+    "initialSelectedFiles": 3,
+    "passedTests": 11,
+    "log": "native-which-tooling-tests.log",
+    "additionalGuardIntegration": {
+      "passedTests": 3,
+      "log": "native-which-guard-tests.log",
+      "note": "Includes the original two guard cases plus one new committed-invariant numeric evaluation case; do not sum repeated guard cases."
+    }
+  },
+  "productionBrowser": {
+    "initialPassed": 5,
+    "initialFailed": 1,
+    "failedOnlyRecheckPassed": 1,
+    "logs": [
+      "native-which-browser.log",
+      "native-which-open-recheck.log"
+    ],
+    "widths": [
+      1280,
+      390
+    ],
+    "observation": "Desktop ODT reopen initially reported an existing document name collision under parallel load. An unchanged isolated rerun passed; no UI or autosave policy was changed and the intermittent collision remains an observation for final application file-workflow acceptance."
+  },
+  "checks": [
+    "build",
+    "final application/tool typecheck",
+    "scoped ESLint",
+    "scoped Prettier",
+    "module boundaries",
+    "JSDoc",
+    "file size",
+    "source tree",
+    "source provenance",
+    "registry/invariants/parity",
+    "Writer and Calc resource checks",
+    "static build",
+    "routing",
+    "git diff --check",
+    "doctor: zero errors and existing managed hook readiness warning"
+  ],
+  "residualGaps": [
+    "General SetDefault and DefaultPageMode notifications remain pending.",
+    "DOCX sections/styles/document loading and export/Open/download paths remain pending.",
+    "Calc XLSX task has not started.",
+    "ODT grid XML serialization remains pending.",
+    "Investigate intermittent title-collision observation during final file-workflow acceptance; isolated reruns passed without a code or threshold change.",
+    "Whole native module parity remains unverified."
+  ],
+  "fullRepositorySuite": "Not run: second task after SWRD7X full checkpoint; cadence remains one full run per ten agentplane tasks."
+}

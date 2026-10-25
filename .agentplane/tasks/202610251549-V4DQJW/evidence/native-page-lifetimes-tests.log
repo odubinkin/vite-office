@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- src/sw/source/core/doc/native-page-owner-lifetimes.test.ts --coverage.include=src/sw/source/core/doc/docdesc.ts --coverage.include=src/sw/inc/charfmt.ts --coverage.include=src/sw/inc/fmtcol.ts --coverage.reportsDirectory=coverage/writer-page-lifetimes
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage src/sw/source/core/doc/native-page-owner-lifetimes.test.ts --coverage.include=src/sw/source/core/doc/docdesc.ts --coverage.include=src/sw/inc/charfmt.ts --coverage.include=src/sw/inc/fmtcol.ts --coverage.reportsDirectory=coverage/writer-page-lifetimes
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  03:07:05
+   Duration  11.70s (transform 8.73s, setup 239ms, import 10.02s, tests 56ms, environment 1.12s)
+
+ % Coverage report from istanbul
+-----------------|---------|----------|---------|---------|-------------------
+File             | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------------|---------|----------|---------|---------|-------------------
+-----------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 32/32 )
+Branches     : 100% ( 20/20 )
+Functions    : 100% ( 6/6 )
+Lines        : 100% ( 27/27 )
+================================================================================

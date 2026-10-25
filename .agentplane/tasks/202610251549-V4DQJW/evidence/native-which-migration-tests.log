@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage
+> npm run test:coverage --workspace @vite-office/office -- src/sw/browser/filter/xml/writer-which-id-migration.test.ts --coverage.include=src/sw/browser/filter/xml/writer-which-id-migration.ts --coverage.reportsDirectory=coverage/writer-which-id-migration
+
+
+> @vite-office/office@0.1.0 test:coverage
+> vitest run --coverage src/sw/browser/filter/xml/writer-which-id-migration.test.ts --coverage.include=src/sw/browser/filter/xml/writer-which-id-migration.ts --coverage.reportsDirectory=coverage/writer-which-id-migration
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  2 passed (2)
+   Start at  03:01:40
+   Duration  12.09s (transform 8.68s, setup 276ms, import 10.07s, tests 63ms, environment 1.35s)
+
+ % Coverage report from istanbul
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 25/25 )
+Branches     : 100% ( 27/27 )
+Functions    : 100% ( 2/2 )
+Lines        : 100% ( 23/23 )
+================================================================================

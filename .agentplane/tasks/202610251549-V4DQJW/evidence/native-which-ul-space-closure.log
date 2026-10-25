@@ -1,0 +1,17 @@
+
+> vite-office@0.1.0 test:writer
+> npm run test:writer --workspace @vite-office/office -- src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts -t direct native spacing absence --maxWorkers=1
+
+
+> @vite-office/office@0.1.0 test:writer
+> vitest run --config vitest.writer.config.ts src/sw/browser/filter/xml/native-table-ul-space-transport.test.ts -t direct native spacing absence --maxWorkers=1
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 18 skipped (19)
+   Start at  03:32:17
+   Duration  24.38s (transform 17.51s, setup 276ms, import 20.23s, tests 79ms, environment 2.99s)
+
