@@ -5,6 +5,7 @@ export type RtfToken =
   | Readonly<{ kind: "group-start" }>
   | Readonly<{ kind: "group-end" }>
   | Readonly<{ kind: "control"; name: string; parameter?: number }>
+  | Readonly<{ kind: "hex-break"; value: "\r" | "\n" }>
   | Readonly<{ kind: "text"; value: string }>;
 
 /** Reports a malformed RTF stream before it can replace the active Writer model. */
@@ -24,8 +25,18 @@ export class RtfTokenizer {
   private offset = 0;
   private depth = 0;
   private groupUnicodeSkip: number[] = [1];
-  private fallback = 0;
+  private groupFallback: number[] = [0];
   private bytes: number[] = [];
+
+  /** Returns the current parser state's remaining Unicode fallback characters. */
+  private get fallback(): number {
+    return this.groupFallback.at(-1) ?? 0;
+  }
+
+  /** Updates only the current group state, matching native push/pop behavior. */
+  private set fallback(value: number) {
+    this.groupFallback[this.groupFallback.length - 1] = value;
+  }
 
   /** Captures caller-owned source bytes. @param source - Complete RTF bytes. */
   public constructor(source: Uint8Array) {
@@ -43,12 +54,14 @@ export class RtfTokenizer {
         this.depth++;
         if (this.depth > 1024) throw new RtfSyntaxError("RTF group nesting is too deep.");
         this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) ?? 1);
+        this.groupFallback.push(this.fallback);
         this.tokens.push({ kind: "group-start" });
       } else if (byte === 0x7d) {
         this.FlushText();
         if (this.depth === 0) throw new RtfSyntaxError("Unexpected RTF group end.");
         this.depth--;
         this.groupUnicodeSkip.pop();
+        this.groupFallback.pop();
         this.tokens.push({ kind: "group-end" });
       } else if (byte === 0x5c) {
         this.ReadEscape();
@@ -73,12 +86,20 @@ export class RtfTokenizer {
       if (a === undefined || b === undefined) throw new RtfSyntaxError("Incomplete RTF hex byte.");
       const digits = String.fromCharCode(a, b);
       if (!/^[0-9a-fA-F]{2}$/u.test(digits)) throw new RtfSyntaxError("Invalid RTF hex byte.");
-      this.AppendByte(Number.parseInt(digits, 16));
+      const value = Number.parseInt(digits, 16);
+      if (value === 0x0d || value === 0x0a) {
+        // Keep the byte origin until the destination-aware resolveChars boundary.
+        if (this.fallback !== 0) this.fallback--;
+        else {
+          this.FlushText();
+          this.tokens.push({ kind: "hex-break", value: value === 0x0d ? "\r" : "\n" });
+        }
+      } else this.AppendByte(value);
       return;
     }
     if (!isLetter(first)) {
       if (first === 0x7b || first === 0x7d || first === 0x5c) this.AppendByte(first);
-      else if (this.fallback > 0) this.fallback--;
+      else if (this.fallback !== 0) this.fallback--;
       else {
         this.FlushText();
         this.tokens.push({ kind: "control", name: String.fromCharCode(first) });
@@ -114,12 +135,18 @@ export class RtfTokenizer {
       }
     }
     if (name === "uc") {
-      this.groupUnicodeSkip[this.groupUnicodeSkip.length - 1] = Math.max(0, parameter ?? 1);
+      const width = parameter ?? 1;
+      if (width >= -32768 && width <= 32767)
+        this.groupUnicodeSkip[this.groupUnicodeSkip.length - 1] = width;
     } else if (name === "u") {
-      this.FlushText();
-      this.tokens.push({ kind: "text", value: String.fromCharCode((parameter ?? 0) & 0xffff) });
-      this.fallback = this.groupUnicodeSkip.at(-1) ?? 1;
-    } else if (this.fallback === 0) {
+      const codeUnit = parameter ?? 0;
+      if (codeUnit >= -32768 && codeUnit <= 65535) {
+        this.FlushText();
+        this.tokens.push({ kind: "text", value: String.fromCharCode(codeUnit & 0xffff) });
+        this.fallback = this.groupUnicodeSkip.at(-1) ?? 1;
+      }
+    } else {
+      // The native fallback counter is consumed by characters, not control words.
       this.FlushText();
       this.tokens.push({
         kind: "control",
@@ -131,7 +158,7 @@ export class RtfTokenizer {
 
   /** Adds one raw text byte, or consumes one fallback character after Unicode. @param byte - Input byte. */
   private AppendByte(byte: number): void {
-    if (this.fallback > 0) {
+    if (this.fallback !== 0) {
       this.fallback--;
       return;
     }

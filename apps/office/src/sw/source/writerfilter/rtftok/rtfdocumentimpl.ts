@@ -765,6 +765,14 @@ export class RtfDocumentImpl {
     }
     const state = this.states.at(-1);
     if (state === undefined) throw new RtfSyntaxError("RTF content is outside the root group.");
+    if (token.kind === "hex-break") {
+      // resolveChars converts hex CR and LF into separate PAR controls except
+      // in destinations such as LEVELTEXT, where their bytes remain data.
+      if (state.destination === "body") this.DispatchBodyControl("par", undefined, state);
+      else if (state.destination === "leveltext")
+        state.levelText = (state.levelText ?? "") + token.value;
+      return;
+    }
     if (token.kind === "text") {
       if (state.destination === "fonttbl") this.ReadFontText(token.value, state);
       else if (state.destination === "styleentry")

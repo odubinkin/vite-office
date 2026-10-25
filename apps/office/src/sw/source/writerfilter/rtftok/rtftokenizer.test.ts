@@ -40,6 +40,63 @@ it("decodes ANSI hex bytes with the declared code page", /** Checks cp1251 byte 
   });
 });
 
+it("keeps control words while a Unicode fallback character remains pending", () => {
+  expect(tokenize(String.raw`{\rtf1 A\u233\par?B}`)).toEqual([
+    { kind: "group-start" },
+    { kind: "control", name: "rtf", parameter: 1 },
+    { kind: "text", value: "A" },
+    { kind: "text", value: "é" },
+    { kind: "control", name: "par" },
+    { kind: "text", value: "B" },
+    { kind: "group-end" },
+  ]);
+});
+
+it("restores the parent Unicode fallback count after an RTF group", () => {
+  const text = tokenize(String.raw`{\rtf1\uc2\u233{??}??X}`)
+    .filter((token) => token.kind === "text")
+    .map((token) => token.value)
+    .join("");
+  expect(text).toBe("éX");
+});
+
+it("retains the pinned signed Unicode fallback width and bare uc default", () => {
+  expect(
+    tokenize(String.raw`{\rtf1\uc-1\u233ABC}`)
+      .filter((token) => token.kind === "text")
+      .map((token) => token.value)
+      .join(""),
+  ).toBe("é");
+  expect(
+    tokenize(String.raw`{\rtf1\uc0\uc\u233?X}`)
+      .filter((token) => token.kind === "text")
+      .map((token) => token.value)
+      .join(""),
+  ).toBe("éX");
+  expect(
+    tokenize(String.raw`{\rtf1\u65536?X}`)
+      .filter((token) => token.kind === "text")
+      .map((token) => token.value)
+      .join(""),
+  ).toBe("?X");
+});
+
+it("keeps each escaped hex CR and LF for destination-aware paragraph dispatch", () => {
+  expect(tokenize(String.raw`{\rtf1 A\'0d\'0aB}`)).toEqual([
+    { kind: "group-start" },
+    { kind: "control", name: "rtf", parameter: 1 },
+    { kind: "text", value: "A" },
+    { kind: "hex-break", value: "\r" },
+    { kind: "hex-break", value: "\n" },
+    { kind: "text", value: "B" },
+    { kind: "group-end" },
+  ]);
+  expect(tokenize(String.raw`{\rtf1\u233\'0dX}`)).toContainEqual({
+    kind: "text",
+    value: "X",
+  });
+});
+
 it("consumes binary payload without treating braces as groups", /** Checks native bin run lexical ownership. @returns Nothing. */ () => {
   expect(tokenize("{\\rtf1 A\\bin3{}\\B}")).toContainEqual({ kind: "text", value: "B" });
 });

@@ -35,6 +35,15 @@ function read(input: string) {
   );
 }
 
+it("imports hex CR/LF and a control word after Unicode fallback as separate paragraphs", () => {
+  const document = read(String.raw`{\rtf1\ansi A\'0d\'0aB\u233\par?C}`);
+  try {
+    expect(document.paragraphs.map((node) => node.GetText())).toEqual(["A", "", "Bé", "C"]);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("imports paragraph spacing and keep controls into native item owners", () => {
   const document = read(
     "{\\rtf1\\ansi\\sb180\\sa300\\contextualspace\\keepn\\keep\\nowidctlpar First\\par\\pard\\widctlpar Second}",

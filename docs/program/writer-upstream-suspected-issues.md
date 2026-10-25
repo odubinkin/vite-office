@@ -1196,3 +1196,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::StartNumberedBulletList`, changes a level format to ordered or bullet only when `GetNumFormat(nLevel) == nullptr`. A later list of the other type at the same level reuses the existing rule and skips that change. `StartNumberedBulletListItem` then assigns the same rule to the paragraph.
 - Observation: sibling nested lists of different Markdown marker types can display the first level's marker kind for both, until the outer list ends and a new rule is created. This is a source-level inference, not a compiled desktop reproduction.
 - Preservation: the local Markdown importer now shares one document-owned rule across nested lists and keeps the first format used at a level. A focused test covers the reused-level case.
+
+### WRITER108 — Negative RTF Unicode fallback width suppresses later text
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx` accepts signed 16-bit `\uc` values and assigns the value to `RTFParserState::m_nCharsToSkip` after `\u`. Pinned `rtfdocumentimpl.cxx`, `RTFDocumentImpl::resolveChars`, appends a character only when that counter equals zero and otherwise decrements it. The `uc` keyword has a bare default of one in `rtftokenizer.cxx`.
+- Observation: `\uc-1\u233ABC` appears to import the Unicode character and suppress all three subsequent literal characters, because the negative counter moves farther from zero. This is source-level inference, not a compiled desktop result.
+- Preservation: the local RTF tokenizer keeps the signed width, decrements it for fallback characters and retains the source bare-`uc` default. A focused test pins the negative case.
