@@ -176,9 +176,9 @@ it("retains numbered list identity and levels through RTF list tables", /** Chec
   applyWriterParagraphList(second, { kind: "numbered", level: 1 });
   let imported;
   try {
-    imported = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
-    );
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("{\\listtext\\pard\\plain ");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(
       imported.paragraphs.map((node) => [
         node.GetText(),
@@ -190,6 +190,56 @@ it("retains numbered list identity and levels through RTF list tables", /** Chec
       ["Two", "numbered", 1],
     ]);
     expect(imported.paragraphs[0]?.GetListId()).toBe(imported.paragraphs[1]?.GetListId());
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("omits RTF list controls for a native uncounted paragraph", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("Counted");
+  const uncounted = source.nodes.MakeTextNode("Uncounted");
+  applyWriterParagraphList(first, { kind: "numbered", level: 0, listId: "Numbers" });
+  applyWriterParagraphList(uncounted, { kind: "numbered", level: 0, listId: "Numbers" });
+  uncounted.SetCountedInList(false);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const body = new TextDecoder().decode(bytes).split("\\par\n");
+    expect(body[0]).toContain("\\listtext");
+    expect(body[1]).not.toContain("\\listtext");
+    expect(body[1]).not.toContain("\\ls");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Counted", "Uncounted"]);
+    expect(imported.paragraphs[1]?.GetNumRule()).toBeUndefined();
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("retains the pinned RTF original-rule reference on a restarted paragraph", () => {
+  const source = createWriterDocument();
+  const first = source.paragraphs[0];
+  if (first === undefined) throw new Error("Missing paragraph.");
+  first.SetText("First");
+  const restarted = source.nodes.MakeTextNode("Restarted");
+  applyWriterParagraphList(first, { kind: "numbered", level: 0, listId: "Numbers" });
+  applyWriterParagraphList(restarted, { kind: "numbered", level: 0, listId: "Numbers" });
+  restarted.SetListRestart(true);
+  restarted.SetAttrListRestartValue(9);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const body = new TextDecoder().decode(bytes).split("\\par\n");
+    expect(body[1]).toContain("\\ls1");
+    expect(body[1]).toContain("\\listtext");
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(imported.paragraphs[1]?.IsListRestart()).toBe(false);
+    expect(imported.paragraphs[1]?.GetNumRule()?.Get(0).GetStart()).toBe(1);
   } finally {
     imported?.Dispose();
     source.Dispose();

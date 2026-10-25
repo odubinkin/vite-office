@@ -160,9 +160,18 @@ export class RtfExport {
     const style = this.styles.get(paragraph.GetParagraphStyle());
     if (style !== undefined) output += `\\s${style.index}`;
     const rule = paragraph.GetNumRule();
-    if (rule !== undefined) {
+    if (rule !== undefined && paragraph.IsCountedInList()) {
       const list = this.lists.get(rule.GetName());
-      if (list !== undefined) output += `\\ls${list.id}\\ilvl${paragraph.GetAttrListLevel()}`;
+      if (list !== undefined) {
+        const level = paragraph.GetAttrListLevel();
+        const format = rule.Get(level);
+        const label =
+          getWriterNumFormatKind(format) === "bullet"
+            ? String.fromCodePoint(format.GetBulletChar())
+            : paragraph.GetNumString();
+        output += `{\\listtext\\pard\\plain ${escapeRtf(label)}\\tab}`;
+        output += `\\ilvl${Math.min(level, 8)}\\ls${list.id}`;
+      }
     }
     output += " ";
     const marks = paragraph

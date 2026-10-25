@@ -140,6 +140,7 @@ const SKIPPED_DESTINATIONS = new Set([
   "footerr",
   "footnote",
   "annotation",
+  "listtext",
   "filetbl",
   "datastore",
   "themedata",
