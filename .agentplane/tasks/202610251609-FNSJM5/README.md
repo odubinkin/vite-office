@@ -1,10 +1,11 @@
 ---
 id: "202610251609-FNSJM5"
 title: "Connect native Writer TXT export and filter shell path"
-status: "DOING"
+result_summary: "Native TXT export connected and verified with 43 targeted tests, typecheck, format/lint and Writer registry checks."
+status: "DONE"
 priority: "med"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -40,11 +41,16 @@ quality_review:
     - "npx vitest run --config vitest.writer.config.ts (43 targeted tests passed)"
   findings:
     - "Full document output includes native paragraph numbering, final line endings and tab-delimited table rows; unrelated save behavior remains unchanged."
-commit: null
+commit:
+  hash: "8d13791a51596e94cdf12cdb647d8f954141c091"
+  message: "🚧 FNSJM5 task: connect native Writer TXT export"
 comments:
   -
     author: "CODER"
     body: "Start: implement the approved Writer TXT native filter export and UI route in the current checkout."
+  -
+    author: "CODER"
+    body: "Verified: native Writer ASCII export now owns full body TXT serialization, including tables, and the browser download uses the shell; focused checks passed."
 events:
   -
     type: "status"
@@ -59,8 +65,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Native TXT filter and UI route pass 43 focused tests, Office typecheck, targeted formatting/lint, Writer registry check and diff validation."
+  -
+    type: "status"
+    at: "2026-10-25T16:14:38.756Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: native Writer ASCII export now owns full body TXT serialization, including tables, and the browser download uses the shell; focused checks passed."
 doc_version: 3
-doc_updated_at: "2026-10-25T16:13:53.706Z"
+doc_updated_at: "2026-10-25T16:14:38.757Z"
 doc_updated_by: "CODER"
 description: "Route Writer TXT download through native ASCII writer and document shell, preserving upstream filter boundaries and browser medium semantics; verify related core and UI behavior."
 sections:
