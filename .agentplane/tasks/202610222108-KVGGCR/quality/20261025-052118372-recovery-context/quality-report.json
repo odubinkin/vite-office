@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610222108-KVGGCR",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-25T05:21:18.372Z",
+  "verdict": "pass",
+  "summary": "All approved76 and final74 acceptance checks pass,current all-app raw100 and real full source/registry gates verified;ready to finish prerequisite76.",
+  "evaluated_sha": "bc110524951b5d73abd078b8971791bca6f6458d",
+  "blueprint_digest": "5834d1b8f349cba3230b89f4d1b2efa19838402dfffd058e51701e36094be465",
+  "findings": [
+    "Real native clipboard/context/store/compiled formula and Undo ownership/defaults retained. Full initial failures retained with current successful related rechecks;no timeout or coverage gate weakening. Original tracked reference link retained;only three local ignored reference files copied from existing common vendor."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610222108-KVGGCR/README.md",
+    ".agentplane/tasks/202610222108-KVGGCR/evidence/final-shared-reference-acceptance/manifest.json",
+    ".agentplane/tasks/202610222108-KVGGCR/evidence/final-all-app-tests/manifest.json",
+    ".agentplane/tasks/202610222022-3D9WX6/evidence/progress-visible-autosum/manifest.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Approved unported nondefault/cut/filtered/SUBTOTAL/3D/rich/device families and wider Calc roadmap remain explicit;bounded task acceptance does not claim full LibreOffice parity."
+  ]
+}
