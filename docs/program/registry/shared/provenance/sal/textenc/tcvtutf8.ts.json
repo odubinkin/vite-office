@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtutf8.ts",
+    "upstreamPath": "sal/textenc/tcvtutf8.cxx",
+    "localSymbols": [
+      "ImplCreateUtf8ToUnicodeContext",
+      "ImplResetUtf8ToUnicodeContext",
+      "ImplConvertUtf8ToUnicode"
+    ],
+    "upstreamSymbols": [
+      "ImplCreateUtf8ToUnicodeContext",
+      "ImplResetUtf8ToUnicodeContext",
+      "ImplConvertUtf8ToUnicode"
+    ],
+    "preservedResponsibilities": [
+      "Pinned SAL streaming UTF-8 to Unicode conversion, including BOM, malformed-sequence, context and FLUSH behavior."
+    ],
+    "omittedResponsibilities": [
+      "Reverse Unicode-to-UTF-8 conversion and broader SAL factory behavior remain outside this import-focused module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf8.ts",
+          "marker": "ImplConvertUtf8ToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf8.test.ts",
+          "marker": "pinned signature"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtutf8.cxx",
+          "marker": "ImplConvertUtf8ToUnicode"
+        }
+      ]
+    }
+  }
+}

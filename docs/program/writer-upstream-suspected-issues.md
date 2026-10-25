@@ -1208,3 +1208,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtlat1.tab`, `aImplIBM850ToUniTab`, maps byte `0xD5` to `U+20AC` after the documented Euro-sign change. Its `aImplIBM850ToCharTabEx` still maps both `U+0131` (dotless i) and `U+20AC` to byte `0xD5`.
 - Observation: converting dotless i to IBM 850 and back appears to produce a Euro sign. This is a source-table inference, not an independently compiled desktop conversion result.
 - Preservation: the shared SAL table port retains both reverse entries and the forward Euro mapping exactly. Writer RTF import uses the forward table; no corrective alias is introduced.
+
+### WRITER110 — Markdown underline callback uses the strikeout item ID
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::enter_span_callback`, creates `SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_CROSSEDOUT)` for `MD_SPAN_U`. Pinned `sw/inc/hintids.hxx` declares `RES_CHRATR_UNDERLINE` separately from `RES_CHRATR_CROSSEDOUT`.
+- Observation: if md4c emits an underline span, the item's type and Which ID appear inconsistent when `SetAttrs` passes it to `InsertPoolItem`. The configured `MD_DIALECT_GITHUB | MD_FLAG_WIKILINKS` may not emit this span; reachability and resulting desktop behavior remain unverified.
+- Preservation: retain the pinned item-ID choice if this callback is added to the current Markdown parser. Do not silently substitute `RES_CHRATR_UNDERLINE` without source differential evidence.

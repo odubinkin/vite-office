@@ -146,7 +146,18 @@ it.each([
 it("uses pinned SAL Windows-1252 undefined-byte handling", () => {
   const document = read(String.raw`{\rtf1\ansi A\'81\'80\'8dB}`);
   try {
-    expect(document.paragraphs[0]?.GetText()).toBe("A\uFFFD\u20AC\uFFFDB");
+    expect(document.paragraphs[0]?.GetText()).toBe("A\uF181\u20AC\uF18DB");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("uses native SAL UTF-8 conversion for RTF code page 65001", () => {
+  const document = read(
+    String.raw`{\rtf1\ansi\ansicpg65001\'ef\'bb\'bf\'f0\'9f\'98\'80\'e0\'80\'80\'e2}`,
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("\uFEFF😀\uFFFD\uFFFD");
   } finally {
     document.Dispose();
   }
@@ -173,7 +184,7 @@ it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
   }
   const undefinedByte = read(String.raw`{\rtf1\ansi\ansicpg1251\'98}`);
   try {
-    expect(undefinedByte.paragraphs[0]?.GetText()).toBe("\uFFFD");
+    expect(undefinedByte.paragraphs[0]?.GetText()).toBe("\uF198");
   } finally {
     undefinedByte.Dispose();
   }
@@ -182,7 +193,7 @@ it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
 it("uses pinned SAL Windows-874 Thai and undefined-byte mapping", () => {
   const document = read(String.raw`{\rtf1\ansi\ansicpg874\'a1\'81}`);
   try {
-    expect(document.paragraphs[0]?.GetText()).toBe("ก\uFFFD");
+    expect(document.paragraphs[0]?.GetText()).toBe("ก\uF181");
   } finally {
     document.Dispose();
   }

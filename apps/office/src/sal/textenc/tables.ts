@@ -49,6 +49,7 @@ import {
   RTL_TEXTENCODING_MS_1257,
   RTL_TEXTENCODING_MS_1258,
   RTL_TEXTENCODING_SYMBOL,
+  RTL_TEXTENCODING_UTF8,
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 import {
@@ -215,14 +216,16 @@ export function getSingleByteConvertData(
   }
 }
 
-/** Preserves the distinct converter function for Symbol versus table codecs. */
+/** Preserves the distinct Symbol, UTF-8, and single-byte converter dispatch. */
 export function getTextToUnicodeData(
   encoding: rtl_TextEncoding,
 ):
   | Readonly<{ kind: "symbol" }>
+  | Readonly<{ kind: "utf8" }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
   | undefined {
   if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
+  if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
   const data = getSingleByteConvertData(encoding);
   return data === undefined ? undefined : { kind: "single-byte", data };
 }

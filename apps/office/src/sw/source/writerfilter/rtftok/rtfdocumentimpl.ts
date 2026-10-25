@@ -71,6 +71,9 @@ import { convertCharToUnicode } from "../../../../sal/textenc/convertsimple.hxx"
 import { ImplSymbolToUnicode } from "../../../../sal/textenc/tcvtbyte";
 import { rtl_getTextEncodingFromWindowsCodePage } from "../../../../sal/textenc/tencinfo";
 import { getTextToUnicodeData } from "../../../../sal/textenc/tables";
+import { ImplConvertUtf8ToUnicode } from "../../../../sal/textenc/tcvtutf8";
+import { OSTRING_TO_OUSTRING_CVTFLAGS } from "../../../../sal/inc/rtl/ustring.h";
+import { RTL_TEXTTOUNICODE_FLAGS_FLUSH } from "../../../../sal/inc/rtl/textcvt.h";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
@@ -1465,6 +1468,7 @@ export class RtfDocumentImpl {
     );
     if (encoding !== undefined) {
       const destination = new Uint16Array(bytes.length);
+      const flags = OSTRING_TO_OUSTRING_CVTFLAGS | RTL_TEXTTOUNICODE_FLAGS_FLUSH;
       const written =
         encoding.kind === "symbol"
           ? ImplSymbolToUnicode(
@@ -1474,21 +1478,33 @@ export class RtfDocumentImpl {
               bytes.length,
               destination,
               destination.length,
-              0,
+              flags,
               [0],
               [0],
             )
-          : convertCharToUnicode(
-              encoding.data,
-              null,
-              bytes,
-              bytes.length,
-              destination,
-              destination.length,
-              0,
-              [0],
-              [0],
-            );
+          : encoding.kind === "utf8"
+            ? ImplConvertUtf8ToUnicode(
+                null,
+                null,
+                bytes,
+                bytes.length,
+                destination,
+                destination.length,
+                flags,
+                [0],
+                [0],
+              )
+            : convertCharToUnicode(
+                encoding.data,
+                null,
+                bytes,
+                bytes.length,
+                destination,
+                destination.length,
+                flags,
+                [0],
+                [0],
+              );
       let text = "";
       for (let offset = 0; offset < written; offset += 8192)
         text += String.fromCharCode(

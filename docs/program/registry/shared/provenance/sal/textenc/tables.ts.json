@@ -18,7 +18,8 @@
       "Selects represented Apple Central European, Cyrillic, Greek and Icelandic converter data by rtl_TextEncoding.",
       "Selects the pinned Apple Croatian, Romanian, Turkish and Ukrainian converter data by rtl_TextEncoding.",
       "Selects thirteen additional source-owned IBM single-byte converters by rtl_TextEncoding for RTF decoding.",
-      "Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding."
+      "Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding.",
+      "Selects the pinned UTF-8 converter path for the RTL_TEXTENCODING_UTF8 value used by Writer RTF import."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."

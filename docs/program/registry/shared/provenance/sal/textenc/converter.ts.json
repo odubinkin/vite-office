@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/converter.ts",
+    "upstreamPath": "sal/textenc/converter.cxx",
+    "localSymbols": [
+      "BadInputConversionAction",
+      "handleBadInputTextToUnicodeConversion"
+    ],
+    "upstreamSymbols": [
+      "BadInputConversionAction",
+      "handleBadInputTextToUnicodeConversion"
+    ],
+    "preservedResponsibilities": [
+      "Pinned SAL invalid/undefined byte actions, info bits, flag masks and destination accounting for the UTF-8 decoder."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-text bad-input actions and remaining converter.cxx responsibilities are not yet used by this import-focused path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/converter.ts",
+          "marker": "handleBadInputTextToUnicodeConversion"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf8.test.ts",
+          "marker": "pinned signature"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/converter.cxx",
+          "marker": "handleBadInputTextToUnicodeConversion"
+        }
+      ]
+    }
+  }
+}
