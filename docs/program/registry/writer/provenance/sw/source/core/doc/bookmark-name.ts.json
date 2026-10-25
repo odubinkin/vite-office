@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/bookmark-name.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/doc/docbm.cxx",
+    "localSymbols": [
+      "getUniqueBookmarkName"
+    ],
+    "upstreamSymbols": [
+      "MarkManager::getUniqueMarkName"
+    ],
+    "preservedResponsibilities": [
+      "Defined normal non-mailmerge name lookup,localized copy-template,next-offset cache and signed32 exhaustion behavior. Actual mark ownership and cache belong to the caller;mailmerge naming,unique-name guards and full MarkManager behavior remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete native bookmark model,mailmerge,platform widgets and localization services remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/bookmark-name.ts",
+          "marker": "getUniqueBookmarkName"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docbm.cxx",
+          "marker": "MarkManager::getUniqueMarkName"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/bookmark-name.ts",
+      "rationale": "The deterministic normal name-allocation loop is split from actual mark lifetime and document notifications in docbm.ts. The real mark manager retains its lookup and native offset cache; this value-only source responsibility can be verified directly at native counter boundaries without allocating billions of document marks.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

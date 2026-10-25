@@ -1,5 +1,15 @@
 /** @fileoverview Native represented font metadata,paint,alignment and stored size over immutable JS values;configuration,rendering and device resolution remain pending. */
-import { FontFamily, FontPitch, TextAlign } from "../../../tools/inc/fontenum";
+import {
+  FontFamily,
+  FontPitch,
+  FontWeight,
+  FontItalic,
+  TextAlign,
+  FontLineStyle,
+  FontStrikeout,
+  FontEmphasisMark,
+} from "../../../tools/inc/fontenum";
+import { FontRelief } from "../../inc/fntstyle";
 import { RTL_TEXTENCODING_DONTKNOW, type rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
 
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
@@ -12,11 +22,20 @@ interface FontMetadata {
   readonly family: FontFamily;
   readonly pitch: FontPitch;
   readonly charSet: rtl_TextEncoding;
+  readonly weight: FontWeight;
+  readonly italic: FontItalic;
   readonly color: Readonly<Color>;
   readonly fillColor: Readonly<Color>;
   readonly transparent: boolean;
   readonly alignment: TextAlign;
   readonly fontSize: ReadonlySize;
+  readonly outline: boolean;
+  readonly shadow: boolean;
+  readonly underline: FontLineStyle;
+  readonly overline: FontLineStyle;
+  readonly strikeout: FontStrikeout;
+  readonly relief: FontRelief;
+  readonly emphasisMark: FontEmphasisMark;
 }
 const globalDefault: Readonly<FontMetadata> = Object.freeze({
   familyName: "",
@@ -24,11 +43,20 @@ const globalDefault: Readonly<FontMetadata> = Object.freeze({
   family: FontFamily.FAMILY_DONTKNOW,
   pitch: FontPitch.PITCH_DONTKNOW,
   charSet: RTL_TEXTENCODING_DONTKNOW,
+  weight: FontWeight.WEIGHT_DONTKNOW,
+  italic: FontItalic.ITALIC_NONE,
   color: Object.freeze(new Color(COL_TRANSPARENT)),
   fillColor: Object.freeze(new Color(COL_TRANSPARENT)),
   transparent: true,
   alignment: TextAlign.ALIGN_TOP,
   fontSize: Object.freeze(new Size()),
+  outline: false,
+  shadow: false,
+  underline: FontLineStyle.LINESTYLE_NONE,
+  overline: FontLineStyle.LINESTYLE_NONE,
+  strikeout: FontStrikeout.STRIKEOUT_NONE,
+  relief: FontRelief.NONE,
+  emphasisMark: FontEmphasisMark.NONE,
 });
 /** Const reference excludes every represented native mutator. */
 export type ConstFont = Omit<Font, Extract<keyof Font, `Set${string}`> | "assign">;
@@ -91,6 +119,86 @@ export class Font {
   public SetCharSet(charSet: rtl_TextEncoding): void {
     if (this.GetCharSet() !== charSet)
       this.mpImplFont = Object.freeze({ ...this.mpImplFont, charSet });
+  }
+  /** Native stored weight accessor; configuration lookup belongs to MaybeAskConfig, not this const operation. @returns Stored weight. */
+  public GetWeight(): FontWeight {
+    return this.mpImplFont.weight;
+  }
+  /** Native guarded weight assignment. @param weight - Original weight enum. @returns Nothing. */
+  public SetWeight(weight: FontWeight): void {
+    if (this.GetWeight() !== weight)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, weight });
+  }
+  /** Native stored italic accessor without configuration lookup. @returns Stored italic. */
+  public GetItalic(): FontItalic {
+    return this.mpImplFont.italic;
+  }
+  /** Native guarded italic assignment. @param italic - Original italic enum. @returns Nothing. */
+  public SetItalic(italic: FontItalic): void {
+    if (this.GetItalic() !== italic)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, italic });
+  }
+  /** Original stored outline flag. @returns Outline. */
+  public IsOutline(): boolean {
+    return this.mpImplFont.outline;
+  }
+  /** Original guarded outline assignment. @param outline - Flag. @returns Nothing. */
+  public SetOutline(outline: boolean): void {
+    if (this.IsOutline() !== outline)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, outline });
+  }
+  /** Original stored shadow flag. @returns Shadow. */
+  public IsShadow(): boolean {
+    return this.mpImplFont.shadow;
+  }
+  /** Original guarded shadow assignment. @param shadow - Flag. @returns Nothing. */
+  public SetShadow(shadow: boolean): void {
+    if (this.IsShadow() !== shadow) this.mpImplFont = Object.freeze({ ...this.mpImplFont, shadow });
+  }
+  /** Original stored underline enum. @returns Underline. */
+  public GetUnderline(): FontLineStyle {
+    return this.mpImplFont.underline;
+  }
+  /** Original guarded underline assignment. @param underline - Style. @returns Nothing. */
+  public SetUnderline(underline: FontLineStyle): void {
+    if (this.GetUnderline() !== underline)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, underline });
+  }
+  /** Original stored overline enum. @returns Overline. */
+  public GetOverline(): FontLineStyle {
+    return this.mpImplFont.overline;
+  }
+  /** Original guarded overline assignment. @param overline - Style. @returns Nothing. */
+  public SetOverline(overline: FontLineStyle): void {
+    if (this.GetOverline() !== overline)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, overline });
+  }
+  /** Original stored strikeout enum. @returns Strikeout. */
+  public GetStrikeout(): FontStrikeout {
+    return this.mpImplFont.strikeout;
+  }
+  /** Original guarded strikeout assignment. @param strikeout - Style. @returns Nothing. */
+  public SetStrikeout(strikeout: FontStrikeout): void {
+    if (this.GetStrikeout() !== strikeout)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, strikeout });
+  }
+  /** Original stored relief enum. @returns Relief. */
+  public GetRelief(): FontRelief {
+    return this.mpImplFont.relief;
+  }
+  /** Original guarded relief assignment. @param relief - Relief. @returns Nothing. */
+  public SetRelief(relief: FontRelief): void {
+    if (this.GetRelief() !== relief)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, relief });
+  }
+  /** Original stored emphasis flags. @returns Emphasis. */
+  public GetEmphasisMark(): FontEmphasisMark {
+    return this.mpImplFont.emphasisMark;
+  }
+  /** Original guarded emphasis assignment. @param emphasisMark - Flags. @returns Nothing. */
+  public SetEmphasisMark(emphasisMark: FontEmphasisMark): void {
+    if (this.GetEmphasisMark() !== emphasisMark)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, emphasisMark });
   }
   /** Original cow_wrapper comparison admits shared state or equal values despite this method name;reuse represented Font equality without implementing C++ ownership. @param other - Font. @returns Equal represented value. */
   public IsSameInstance(other: ConstFont): boolean {
@@ -177,6 +285,15 @@ export class Font {
   /** Native comparison excludes only color/fill;all other represented font fields participate. Full unrepresented font attributes remain pending. @param other - Native font. @returns Equal represented noncolor value. */
   public EqualIgnoreColor(other: ConstFont): boolean {
     return (
+      this.GetWeight() === other.GetWeight() &&
+      this.GetItalic() === other.GetItalic() &&
+      this.IsOutline() === other.IsOutline() &&
+      this.IsShadow() === other.IsShadow() &&
+      this.GetUnderline() === other.GetUnderline() &&
+      this.GetOverline() === other.GetOverline() &&
+      this.GetStrikeout() === other.GetStrikeout() &&
+      this.GetRelief() === other.GetRelief() &&
+      this.GetEmphasisMark() === other.GetEmphasisMark() &&
       this.GetFamilyType() === other.GetFamilyType() &&
       this.GetPitch() === other.GetPitch() &&
       this.GetCharSet() === other.GetCharSet() &&

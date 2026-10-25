@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterLineNumberingDialog.tsx#WriterLineNumberingDialog"
       ],
-      "justification": "Presents the supported document line-number settings from the pinned Writer dialog. TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained.",
+      "justification": "Presents the supported document line-number settings from the pinned Writer dialog. TaskDS8CKD replaces hardcoded centimetre number entry with shared browser metric text/spin presentation over actual MetricSpinButton and native unit parser. Explicit suffixes and display-unit inputs preserve existing source draft/table coupling and physical twips;untouched display does not rewrite model values. Module preference UI,remaining paragraph/sidebar fields and full native UI parity remain follow-up;existing statuses/defaults/exceptions retained. TaskHGNC48 connects original line-number draft,sensitivity,grouping,bounds and mounted focus/cancellation through actual document ownership;unrepresented source controls remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "WriterLineNumberingDialog"

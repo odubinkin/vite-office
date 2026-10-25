@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/style-preview-device.ts",
+          "marker": "BrowserStylePreviewDevice"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/style-preview-device.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/shared/style-preview-device.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/style-preview-device.ts",
+    "rationale": "Task6764KT adds a real Canvas text device consumed structurally by native style CalcBoundRect/UserDrawEntry,without a VCL-to-SVX import. Actual Font values select CSS family,weight and posture;weight/posture projection follows native SVGAttributeWriter,including SEMILIGHT400 and unknown400. Canvas text is laid out from exact UTF16 substrings at the host boundary. Real fontBoundingBoxAscent/Descent supply original TOP/BASELINE/BOTTOM offsets;unsupported metrics are not replaced with fabricated baselines. Actual advance widths are rounded to integer and ink is enclosed in native closed-edge Rectangle values. Browser floor/ceil and Canvas shaping/metrics are host-owned,not native approxValue or raster parity. The consumed style-font path requires positive height and zero stored average width;arbitrary native horizontal font matching is explicitly unsupported. Device fixtures prove protocol behavior;Chromium witness separately consumes actual Writer preview items and bundled fonts with explicit supplied Latin ScriptInfo. EditEngine CheckScript,full SetupEntry decoration/color,physical cmap/face selection and live dropdown integration remain unfinished. No broad parity promotion. Task6764KT extends the actual Canvas device with independent text/fill state, explicit copied host background and optional outline color, and real closed-edge rectangle painting with Canvas save/restore including failure restoration. Source SetupEntry color decisions now consume this device in a separate actual Chromium witness; selected rows suppress style fill/text colors and preserve supplied highlight paint. COL_AUTO alpha transformation is retained (WRITER080). Canvas rasterization and inherited line geometry remain browser-owned; full native draw modes, complete SetupEntry,style pool/color-item wiring and live dropdown rendering remain unfinished. Strict100 protocol tests are not a native raster-parity certificate. OutputDevice DrawRect empty rejection and edge normalization are retained; Canvas fill uses inclusive extents, while optional one-pixel outline uses the CairoCommon final-edge exclusion. Browser antialiasing and raster snapping are not claimed equivalent. Task6764KT live dropdown increment: actual shell absolute MapUnit values convert with original MapRes inch factor and signed rounding before DPR backing. An optional detached SVG text sink retains source font,baseline,color and pen;Canvas default drawing remains. Actual source script initialization and Writer pool items now feed live toolbar/sidebar rows. Unsupported host metrics retain ordinary labels. Native raster,physical fallback and full VCL service equivalence remain unverified.",
+    "responsibilities": [
+      "Real Canvas adaptation of source style preview text-device calls using actual Font values and browser TextMetrics."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native text measurement and drawing are adapted to actual Canvas metrics and paint;actual source fonts and integer style geometry are retained. Native raster equality and unsupported arbitrary average-width matching are not claimed."
+    },
+    "status": "local-only"
+  },
+  "legacyOrder": 285
+}

@@ -3,7 +3,7 @@
 import { MetricSpinButton } from "../../../svtools/browser/control/MetricSpinButton";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
 import {
@@ -29,6 +29,13 @@ export function WriterPageStyleDialog({
   onCancel,
   onSubmit,
 }: WriterPageStyleDialogProps): React.JSX.Element {
+  const initialControl = useRef<HTMLSelectElement>(null);
+  useEffect(
+    /** Focuses this mounted page-format control. @returns Nothing. */ () => {
+      initialControl.current?.focus();
+    },
+    [],
+  );
   const localization = useBrowserLocalization();
   const [page] = useState(
     /** Creates the original page-geometry and list owners for this request. @returns Page tab. */ () =>
@@ -76,6 +83,23 @@ export function WriterPageStyleDialog({
       aria-modal="true"
       data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
+      onKeyDown={
+        /** Cancels the exact active page-style request. @param event - Native key. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
+        }
+      }
+      onMouseDown={
+        /** Retains the active modal control when the background receives a pointer press. @param event - Actual pointer input. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.target === event.currentTarget) event.preventDefault();
+        }
+      }
       role="dialog"
     >
       <form
@@ -111,6 +135,7 @@ export function WriterPageStyleDialog({
                 <label className="col-span-2 grid gap-1 text-sm font-semibold text-slate-700">
                   Format
                   <select
+                    ref={initialControl}
                     aria-label="Paper format"
                     className="rounded-md border border-slate-300 px-3 py-2 font-normal"
                     onChange={

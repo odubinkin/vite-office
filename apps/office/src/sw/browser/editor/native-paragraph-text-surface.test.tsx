@@ -228,7 +228,7 @@ describe("native paragraph text surface", /** Registers actual model, range and 
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
         "Paragraph style",
       ),
-    ).toHaveValue("heading-1");
+    ).toHaveValue("Heading 1");
     expect(screen.getByTestId("writer-list-marker-" + id)).toHaveTextContent("1.");
     select(f, false);
     expect(window.getSelection()?.toString()).toBe("lphaOmeg");

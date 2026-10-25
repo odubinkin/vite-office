@@ -4,6 +4,50 @@ import { Font, type ConstFont } from "./font";
 import { Color, COL_TRANSPARENT } from "../../../tools/inc/color";
 import { Size } from "../../../tools/inc/gen";
 import { TextAlign } from "../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout, FontEmphasisMark } from "../../../tools/inc/fontenum";
+import { FontRelief } from "../../inc/fntstyle";
+it("preserves original decoration defaults, independent copies and guarded value comparisons", /** Each represented decoration participates in equality and ordinary JS immutable sharing. @returns Nothing. */ () => {
+  const defaults = new Font();
+  expect([
+    defaults.IsOutline(),
+    defaults.IsShadow(),
+    defaults.GetUnderline(),
+    defaults.GetOverline(),
+    defaults.GetStrikeout(),
+    defaults.GetRelief(),
+    defaults.GetEmphasisMark(),
+  ]).toEqual([false, false, 0, 0, 0, 0, 0]);
+  const operations: readonly ((font: Font) => void)[] = [
+    /** Sets original outline flag. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetOutline(true),
+    /** Sets original shadow flag. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetShadow(true),
+    /** Sets original underline enum. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetUnderline(FontLineStyle.LINESTYLE_DOUBLEWAVE),
+    /** Sets original overline enum. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetOverline(FontLineStyle.LINESTYLE_BOLD),
+    /** Sets original strikeout enum. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetStrikeout(FontStrikeout.STRIKEOUT_X),
+    /** Sets original relief enum. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetRelief(FontRelief.Engraved),
+    /** Sets original emphasis flags. @param font - Value. @returns Nothing. */ (font) =>
+      font.SetEmphasisMark(FontEmphasisMark.Disc | FontEmphasisMark.PosBelow),
+  ];
+  for (const set of operations) {
+    const font = new Font(defaults),
+      original = new Font(font);
+    set(font);
+    expect(font.EqualIgnoreColor(original)).toBe(false);
+    const copy = new Font(font);
+    set(font);
+    expect(font.IsSameInstance(copy)).toBe(true);
+    expect(font.Equals(copy)).toBe(true);
+    expect(original.Equals(defaults)).toBe(true);
+    const assigned = new Font();
+    expect(assigned.assign(font)).toBe(assigned);
+    expect(assigned.Equals(font)).toBe(true);
+  }
+});
 it("retains original transparent colors,alignment and zero size defaults", /** No renderer or config object is fabricated. @returns Nothing. */ () => {
   const f = new Font();
   expect([

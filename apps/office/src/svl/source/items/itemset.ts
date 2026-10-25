@@ -214,6 +214,15 @@ export class SfxItemSet {
     return searchInParent ? this.parent?.GetItemIfSet(which, true) : undefined;
   }
 
+  /** Original slot-aware optional lookup; defaults are returned only when parent searching is enabled. @param id - Slot or Which identity. @param searchInParent - Native deep/default lookup flag. @returns Set/default item or undefined for unknown, invalid, disabled or shallow default state. */
+  public GetItem(id: number, searchInParent = true): SfxPoolItem | undefined {
+    const which = this.pool.GetWhichIDFromSlotID(id);
+    const state = this.GetItemState(which, searchInParent);
+    if (searchInParent && state === SfxItemState.DEFAULT && SfxItemPool.IsWhich(which))
+      return this.pool.GetUserOrPoolDefaultItem(which);
+    return state === SfxItemState.SET ? this.GetItemIfSet(which, searchInParent) : undefined;
+  }
+
   /** Returns a direct, inherited, or pool-default item. @param which - Queried WhichId. @param searchInParent - Whether parents participate. @returns Effective item. */
   public Get(which: number, searchInParent = true): SfxPoolItem {
     const local = this.poolItemMap.get(which);

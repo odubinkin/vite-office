@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/source/editeng/impedit2.script.ts",
+    "localSymbols": [
+      "getSingleParagraphItemScriptType",
+      "initPlainParagraphScriptTypes"
+    ],
+    "upstreamPath": "editeng/source/editeng/impedit2.cxx",
+    "upstreamSymbols": [
+      "ImpEditEngine::GetItemScriptType",
+      "InitScriptTypes"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT Extracted single-paragraph scalar range/caret operation over actual resolved ESelection and initialized ScriptTypePosInfo values. Native copy/adjust,preceding-character cursor lookup,endpoint-only script membership,WEAK exclusion and actual language fallback are retained. Multi-paragraph storage,CreateSel bounds,InitScriptTypes and full EditEngine ownership remain caller responsibilities;this is not a partial ImpEditEngine facade. WRITER077 preserves the interior-span omission. Focused source tests use explicit initialized script data,not an ICU bidi-analysis certificate. Native source script-position data flows into original CheckScript requests without an independent style store. ICU direction construction and live row integration remain pending;no broad parity promotion.",
+      "Task6764KT extracts the actual literal-paragraph/no-field/no-hint InitScriptTypes orchestration:empty text returns early;actual paragraph direction initializes ICU;actual default language selects the weak fallback;the native loop copies ScriptTypePosInfo values. The caller retains paragraph/field/hint/storage ownership. SvxStyleBox CheckScript creates a default EditEngine with LANGUAGE_DONTKNOW and LTR pool writing direction;SetText uses ImpInsertText without the typing/paste auto-direction update. Full EditEngine services and final style UI remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Full paragraph storage,CreateSel resolution,text/feature normalization,field/hint owners,automatic-direction editing hooks and live widget integration remain unported. The literal paragraph script initialization,scalar query and consumed ICU direction analysis are implemented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.script.ts",
+          "marker": "getSingleParagraphItemScriptType"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.script.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/editeng/impedit2.cxx",
+          "marker": "ImpEditEngine::GetItemScriptType"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/editeng/source/editeng/impedit2.script.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Extracts the consumed one-paragraph range/caret algorithm from the large native impedit2 translation unit without manufacturing an incomplete EditEngine/ImpEditEngine service or paragraph provider."
+    }
+  }
+}

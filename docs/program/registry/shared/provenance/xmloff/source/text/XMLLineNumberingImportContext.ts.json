@@ -25,7 +25,8 @@
       "Non-Arabic numbering styles and native UNO style properties are outside the browser slice."
     ],
     "preservedResponsibilities": [
-      "Imports the supported ODF line-number attributes and optional separator before publishing document settings."
+      "Imports the supported ODF line-number attributes and optional separator before publishing document settings.",
+      "TaskJ1K3KF reuses native SAX signed32 conversion,min0 clamp,signed16 narrowing and original positive main/nonnegative separator property admission. Invalid/narrowed-negative interval lexemes retain defaults;complete UNO import and other attributes remain bounded."
     ],
     "status": "mapped",
     "upstreamPath": "xmloff/source/text/XMLLineNumberingImportContext.cxx",

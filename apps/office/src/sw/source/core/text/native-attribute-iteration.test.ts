@@ -5,8 +5,10 @@ import { SwAttrIter } from "./itratr";
 import { SwAttrHandler } from "./atrstck";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { createWriterTextColorItem, writerTextColorValue } from "../attr/swatrset";
 import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 
@@ -48,7 +50,7 @@ for (const cell of [false, true])
         node.SetText("abcdefgh");
         doc.GetDfltTextFormatColl().SetFormatAttr(new SvxWeightItem(5, 15));
         const outer = format(doc, new SvxWeightItem(8, 15)),
-          inner = format(doc, new SvxPostureItem(2, 11), new SfxStringItem(3, "#123456"));
+          inner = format(doc, new SvxPostureItem(2, 11), createWriterTextColorItem("#123456"));
         const normal = format(doc, new SvxWeightItem(5, 15)),
           zero = format(doc, new SvxWeightItem(8, 15));
         const hints = node.GetOrCreateSwpHints();
@@ -74,8 +76,8 @@ for (const cell of [false, true])
             pos < 8 && (priority || pos < 4 || pos >= 7),
           );
           expect((handler.ReadItem(11) as SvxPostureItem).GetBoolValue()).toBe(pos >= 2 && pos < 6);
-          expect((handler.ReadItem(3) as SfxStringItem).GetValue()).toBe(
-            pos >= 2 && pos < 6 ? "#123456" : "auto",
+          expect(writerTextColorValue(handler.ReadItem(3) as SvxColorItem)).toBe(
+            pos >= 2 && pos < 6 ? "#123456" : "#000000",
           );
           if (pos >= 2 && pos < 6) expect(handler.ReadItem(3)).toBe(inner.GetStyleHandle().Get(3));
           if (pos === 8) expect(handler.ReadItem(15)).toBe(node.GetAttr(15));

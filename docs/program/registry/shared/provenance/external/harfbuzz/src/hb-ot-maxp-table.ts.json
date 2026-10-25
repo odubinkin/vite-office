@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/harfbuzz/src/hb-ot-maxp-table.ts",
+    "upstreamPath": "vendor/harfbuzz-reference/src/hb-ot-maxp-table.hh",
+    "localSymbols": [
+      "readMaxpGlyphCount"
+    ],
+    "upstreamSymbols": [
+      "get_num_glyphs",
+      "sanitize"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT transfers only the consumed HarfBuzz14.2.1 sanitized table selection,unicode collection and glyph-population algorithms. Source archive SHA-256 is pinned by LibreOffice download.lst. Native JavaScript Set,DataView and garbage collection own storage; browser Canvas continues shaping/rasterization. No HarfBuzz memory manager,library install or full text shaper is ported. Source encoding binary search,preference,format0/4/6/10/12/13/14 handling,remaining-cmap format4 bounds,ordered segment mutation,uint32 arithmetic and default beyond-64K loca population are retained. WRITER081/082 document suspected upstream collection discrepancies. Real physical style/weight/encoding selection,collection identity resolution and dropdown paint integration remain unfinished; no full font/UI parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full native HarfBuzz face/blob ownership,shaping,serialization/subsetting and allocator/lifetime mechanisms are not ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/harfbuzz/src/hb-ot-maxp-table.ts",
+          "marker": "readMaxpGlyphCount"
+        },
+        {
+          "path": "apps/office/src/external/harfbuzz/src/hb-ot-cmap-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/harfbuzz-reference/src/hb-ot-maxp-table.hh",
+          "marker": "get_num_glyphs"
+        }
+      ]
+    }
+  }
+}

@@ -18,7 +18,7 @@
       "evidence": [
         "apps/office/src/sw/browser/presentation/WriterInsertBreakDialog.tsx#WriterInsertBreakDialog"
       ],
-      "justification": "Adapts pinned insertbreak.ui for the supported hard page-break command.",
+      "justification": "Adapts pinned insertbreak.ui for the supported hard page-break command. TaskVBNV75 connects consumed native formatting dialog tab/default-button/Escape and mounted control/frame focus semantics through actual keyed requests;full toolkit/modal services remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "WriterInsertBreakDialog"

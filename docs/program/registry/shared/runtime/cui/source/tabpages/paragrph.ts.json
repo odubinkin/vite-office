@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/cui/source/tabpages/paragrph.ts#SvxExtParagraphTabPage"
+      ],
+      "justification": "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SvxExtParagraphTabPage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "cui/source/tabpages/paragrph.cxx",
+      "upstreamSymbols": [
+        "SvxExtParagraphTabPage::AllowSplitHdl"
+      ]
+    }
+  }
+}

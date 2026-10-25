@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/vcl/source/font/PhysicalFontFace.ts",
+    "localSymbols": [
+      "readOs2FontCapabilities",
+      "makeFontCharMap"
+    ],
+    "upstreamPath": "vcl/source/font/PhysicalFontFace.cxx",
+    "upstreamSymbols": [
+      "PhysicalFontFace::GetFontCapabilities",
+      "appendBitset",
+      "PhysicalFontFace::GetFontCharMap"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT reads actual SFNT/TTC table containers at the browser byte boundary and preserves the defined PhysicalFontFace OS/2 coverage algorithm: original offsets42/78,word-to-bit ordering,optional codepage set and last-successful-word reuse after short reads. WRITER074 records version-zero/partial-read behavior and the uninitialized-first-word boundary, where the browser exposes unknown data rather than emulating C++ uninitialized memory. The core file contains only the extracted capability algorithm; no fake PhysicalFontFace class or service is introduced. Native physical-face ownership,HarfBuzz cmap/collection face selection and dropdown rendering remain unfinished. Collection capability reads require an explicit resolved face index. Actual repository fonts and synthetic binary-boundary cases are checked; advertised coverage is not glyph support.",
+      "Task6764KT transfers only the consumed HarfBuzz14.2.1 sanitized table selection,unicode collection and glyph-population algorithms. Source archive SHA-256 is pinned by LibreOffice download.lst. Native JavaScript Set,DataView and garbage collection own storage; browser Canvas continues shaping/rasterization. No HarfBuzz memory manager,library install or full text shaper is ported. Source encoding binary search,preference,format0/4/6/10/12/13/14 handling,remaining-cmap format4 bounds,ordered segment mutation,uint32 arithmetic and default beyond-64K loca population are retained. WRITER081/082 document suspected upstream collection discrepancies. Real physical style/weight/encoding selection,collection identity resolution and dropdown paint integration remain unfinished; no full font/UI parity is claimed. The extracted GetFontCharMap value projection turns nonempty collected sets into sorted half-open ranges,using the actual symbol default only for empty sets. Physical cache ownership is not fabricated."
+    ],
+    "omittedResponsibilities": [
+      "PhysicalFontFace inheritance,native physical-face/cache ownership and platform backend acquisition remain unported. Only the consumed capability and character-map value algorithms are represented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/source/font/PhysicalFontFace.ts",
+          "marker": "readOs2FontCapabilities"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/os2-font-capabilities.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/font-character-map.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/vcl/source/font/PhysicalFontFace.cxx",
+          "marker": "PhysicalFontFace::GetFontCapabilities"
+        },
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "SvStream::ReadNumber"
+        }
+      ]
+    }
+  }
+}

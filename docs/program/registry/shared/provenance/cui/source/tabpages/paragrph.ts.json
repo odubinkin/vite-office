@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/cui/source/tabpages/paragrph.ts",
+    "status": "mapped",
+    "upstreamPath": "cui/source/tabpages/paragrph.cxx",
+    "localSymbols": [
+      "SvxExtParagraphTabPage"
+    ],
+    "upstreamSymbols": [
+      "SvxExtParagraphTabPage::AllowSplitHdl",
+      "SvxExtParagraphTabPage::PageBreakHdl"
+    ],
+    "preservedResponsibilities": [
+      "Definite split/widow/orphan and page-only break Reset,handler dependencies,retained drafts and changed-output decisions. Mixed/HTML,column and remaining controls are unported."
+    ],
+    "omittedResponsibilities": [
+      "Complete native textflow and mixed/HTML widget services."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/cui/source/tabpages/paragrph.ts",
+          "marker": "SvxExtParagraphTabPage"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxExtParagraphTabPage::AllowSplitHdl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/cui/source/tabpages/paragrph.cxx",
+          "marker": "SvxExtParagraphTabPage::PageBreakHdl"
+        }
+      ]
+    }
+  }
+}

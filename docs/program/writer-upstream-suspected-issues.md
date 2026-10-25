@@ -954,3 +954,155 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `cui/source/tabpages/tabstpge.cxx`, `SvxTabulatorTabPage::DelHdl_Impl`.
 - Observation: a missing row returns immediately; a list of exactly one row delegates to Delete All and returns. The remaining branch therefore begins with at least two rows. It removes one displayed row; subsequent native item removal and current-row assignment do not remove another displayed row. Consequently its trailing `get_count() == 0` block cannot execute under the original non-reentrant page handler contract. The browser's focus-without-select projection is only called by that block. This is a source control-flow proof; compiled/native reentrancy or corrupt-widget behavior is not claimed.
 - Preservation: retain the original empty-list block, flags and focus operation. Do not delete it or infer normal UI reachability from coverage. Explicitly named synthetic-only tests, requested by the user, deliberately violate the displayed-list removal invariant and separately invoke the actual browser callback with false to pin the preserved branch bodies. These executions cover the isolated contracts and do not invalidate the source control-flow proof. The actual offset-collision state from WRITER063 is separately tested and still leaves a displayed row after deletion.
+
+### WRITER067 — new-style validation precedes leading-space removal
+
+- Source: pinned `sfx2/source/dialog/newstyle.cxx`, `SfxNewStyleDlg::OKClickHdl` and `ModifyHdl`; `include/sfx2/newstyle.hxx`, `GetName`.
+- Observation: collision/protected-builtin lookup uses the exact raw entry. `GetName` subsequently strips leading ASCII spaces. Thus an entry such as ` Heading 1` bypasses the exact builtin-name guard and delivers `Heading 1` to Writer. Whitespace-only validation removes ASCII spaces only; tabs and other whitespace remain accepted. Preserve this order rather than silently normalizing before validation. Independent dialog tests pin the contracts; this is a source-derived finding, not native GUI confirmation.
+
+### WRITER068 — NewByExample records creation history even for an existing style
+
+- Source: pinned `sw/source/uibase/app/docst.cxx`, `SwDocShell::MakeByExample`; `sw/source/core/undo/SwUndoFmt.cxx`, `SwUndoFormatCreate::UndoImpl` and `SwUndoTextFormatCollCreate::Delete`.
+- Observation: `Find` may return an existing paragraph style, including a user style accepted after overwrite confirmation. After filling it and changing its parent, `MakeByExample` still appends `SwUndoTextFormatCollCreate`. Undo of that separate history entry deletes the style by name, rather than restoring an overwritten style definition. Keep the original history shape. The browser's bounded single-default representation still protects its document root; complete hidden native default/style-table parity is not claimed.
+
+### WRITER069 — FontCharMap counting below its first endpoint can return a negative population
+
+- Source: pinned `vcl/source/font/fontcharmap.cxx`, `FontCharMap::findRangeIndex` and `CountCharsInRange`.
+- Observation: the binary search returns endpoint zero for characters below the first range. `CountCharsInRange` does not clamp its upper bound to the first character before subtracting the remainder of that range. For actual ranges `[32,35),[80,82)`, the inclusive interval `[0,10]` consequently returns `-21`, although it contains no represented characters. Preserve the arithmetic. The portable source test pins this boundary result; no native GUI path to that interval is claimed. Separately, negative population indices are caller-contract violations: `GetCharFromIndex(-1)` follows original unsigned arithmetic rather than the out-of-bounds-at-end fallback. Synthetic-only tests pin that operation without claiming real dropdown reachability.
+
+### WRITER070 — OutputDevice HasGlyphs tests UTF16 units rather than Unicode scalar values
+
+- Source: pinned `vcl/source/outdev/font.cxx`, `OutputDevice::HasGlyphs`; `vcl/source/font/PhysicalFontFace.cxx`, `GetFontCharMap`.
+- Observation: the physical face collects Unicode codepoint ranges, but `HasGlyphs` passes individual `rStr[i]` UTF16 units to `FontCharMap::HasChar` and increments the offset by one. A charmap containing U+1F600 therefore still fails a text containing its surrogate pair unless the map also advertises the surrogate code units themselves. Keep the source loop and its returned UTF16 failure offsets, including the empty-string initial-index return. This is a source-derived contract finding, not a compiled native rendering result. It matters to font-name/sample eligibility; it does not imply that the browser text renderer cannot paint the actual character.
+
+### WRITER071 — sampletext retains a final codepage test whose false edge is dominated by the CJK mask
+
+- Source: pinned `svtools/source/misc/sampletext.cxx`, internal `getScript`.
+- Observation: the codepage mask contains only CP932, CP936, CP949, CP950 and CP1361. CP1361 is subsequently folded into CP949 and cleared. In the `count() == 1` branch, unsuccessful CP932, CP949 and CP936 tests therefore entail CP950. The final CP950 test's false edge cannot execute with a consistent native bitset. Preserve the original conditional and subsequent Han fallback. This is a source invariant proof, not a claim of a functional native bug. In accordance with the user's request to pin preserved unreachable bodies, an explicitly synthetic-only test temporarily violates the copied Set's membership consistency. It covers the retained false edge but proves no physical font, installed-font capability or real dropdown reachability; production capability data is never altered this way.
+
+### WRITER072 — font-name fallback can replace a full script sample with a minimal one
+
+- Source: pinned `svtools/source/control/ctrlbox.cxx`, `DrawPreview`.
+- Observation: when a font cannot render its own family name and its advertised-script sample is empty, the first fallback loop searches full samples and stops at the first supported script. The following Hebrew/Greek minimal-sample loop is not guarded by another empty-sample check. It can therefore replace that already chosen full sample. A Latin-named face whose actual map supports the Arabic full sample and Greek `ΑΒ`, with no usable advertised-script classification, ends with `ΑΒ`. Preserve both loops and this overwrite order. The deterministic device/map test pins the source decision; it does not claim an installed font or compiled native GUI reproduction.
+
+### WRITER073 — style preview script boundaries are sampled through preceding-character cursor semantics
+
+- Source: pinned `svx/source/tbxctrls/tbcontrl.cxx`, `CheckScript`; `editeng/source/editeng/editeng.cxx`, `EditEngine::GetScriptType`; `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::GetItemScriptType`.
+- Observation: `CheckScript` samples collapsed selections at UTF16 positions zero through text length and stores a change at the current position before assigning the new script. The collapsed-selection owner uses the preceding character at nonzero positions, while position zero uses the next character. Given plain strong-script runs Latin `[0,1)` and Asian `[1,2)` for `A字`, the sampled script sequence is Latin, Latin, Asian. The loop emits only a Latin segment ending at two; the final Asian assignment has no following iteration. In longer mixed names this can put the first character of a new script in the preceding preview-font segment. This is a source-level inference conditional on those scanner runs, not a compiled native scanner or GUI observation. Complex direction, hints and weak-character resolution remain the scanner's responsibility.
+- Preservation: when implementing the actual style-preview script path, retain the collapsed-selection owner and original `CheckScript` positions and emission order. Do not silently replace this with ordinary Unicode script-run boundaries to make mixed-script preview look more intuitive. The actual EditEngine script/direction scanner and production preview caller are still unported at this checkpoint.
+
+### WRITER074 — short OS/2 coverage reads reuse the previous successfully read word
+
+- Source: pinned `vcl/source/font/PhysicalFontFace.cxx`, `GetFontCapabilities` and `appendBitset`; `tools/source/stream/stream.cxx`, `SvStream::ReadNumber`/`ReadUInt32`; `vcl/inc/font/TrueTypeFont.hxx`, coverage offsets 42 and 78.
+- Observation: the capability reader appends its output variable after each read without checking each read result. `ReadNumber` assigns the caller's output only while the stream is good. Once a complete Unicode word has been read, subsequent short reads therefore reuse the last successful word. A valid version-zero OS/2 table ending at byte 78 still enters the codepage branch after its complete Unicode block; both failed codepage reads append the last Unicode word at bit offsets zero and 32. A table with one complete codepage word repeats that word for a missing second word. No OS/2 version test suppresses these codepage bitsets.
+- Preservation: retain last-word reuse and the optional-bitset distinction for these defined inputs; tests pin short Unicode, version-zero and partial codepage tables. If even the first Unicode word is unavailable, native `nValue` has never been initialized: its bit results have no portable defined contract. The browser byte-input boundary leaves such capability data unknown instead of inventing zero coverage or emulating uninitialized C++ memory. This is a source-level contract finding, not a compiled native GUI observation or evidence of actual glyph support.
+
+### WRITER075 — style preview ink bounds do not accumulate run advances
+
+- Source: pinned `svx/source/tbxctrls/tbcontrl.cxx`, `SvxStyleBox_Base::CalcBoundRect`, `UserDrawEntry` and `CalcOptimalExtraUserWidth`; `vcl/source/outdev/text.cxx`, `OutputDevice::GetTextBoundRect`.
+- Observation: measurement calls `GetTextBoundRect` with both base and index equal to each run start, then unions the resulting rectangles without translating by earlier runs' advances. The device's explicit prefix offset applies only when base and index differ. Drawing separately advances the pen after each run using cached `textWidth`. Consequently a multiscript label can have a measured width close to the widest single run while drawing the sum of its advances, potentially underestimating the popup's extra width. This is a source-derived inference over the supplied run metrics, not native GUI confirmation; actual layout and script analysis still own their inputs.
+- Preservation: retain the unshifted ink union and independent per-run advances. A deterministic fixture pins a union spanning x=-2 through20 while drawing advances21,31,41. Do not change the measurement into a cumulative-width union to make this case look more intuitive.
+
+### WRITER076 — style preview assigns case mapping to a derived font but draws through the base device font
+
+- Source: pinned `svx/source/tbxctrls/tbcontrl.cxx`, `SvxStyleBox_Base::SetupEntry`, `CalcBoundRect` and `UserDrawEntry`; `include/editeng/svxfont.hxx`, `SvxFont::eCaseMap`/`SetCaseMap`; `vcl/source/outdev/font.cxx`, `OutputDevice::SetFont`.
+- Observation: `SetupEntry` assigns the style's case-map item to each `SvxFont`, whose case-map value is a derived-class field. The subsequent preview measurement/drawing passes those fonts into `OutputDevice::SetFont(const vcl::Font&)`, which creates and stores a base `vcl::Font` value. The original label then goes directly to the device's measurement and drawing methods, without the `SvxFont` case-mapping text helpers. This path therefore appears to discard the case-map setting rather than previewing uppercase, lowercase or small caps. This is a source-level finding, not a native GUI observation.
+- Preservation: keep the original label and device-font path. Do not add browser label case conversion merely because `SetupEntry` assigns a case-map item. Full `SvxFont` and `SetupEntry` implementation remain pending at this checkpoint.
+
+### WRITER077 — GetItemScriptType ignores a script span strictly inside a selection
+
+- Source: pinned `editeng/source/editeng/impedit2.cxx`, `ImpEditEngine::GetItemScriptType`.
+- Observation: a cached script span contributes flags only if it contains the selection start or selection end under the two original endpoint tests. A span entirely between those endpoints contributes nothing. For initialized Latin `[0,1)`, Asian `[1,2)` and Complex `[2,3)` spans, selection `[0,3)` therefore returns Latin|Complex, omitting Asian. This is a source-level finding over the original range algorithm, not native GUI confirmation.
+- Preservation: retain the endpoint tests rather than replacing them with a generic interval-overlap test. The extracted single-paragraph operation pins flags5 for this case, and copied reversed selections produce the same result without mutating the input. Actual paragraph storage,selection resolution and ICU analysis remain their owners' responsibilities.
+
+### WRITER078 — GTK font-history restoration reverses saved order and does not apply the maximum
+
+- Source: pinned `vcl/unx/gtk3/gtkinst.cxx`, `GtkInstanceComboBox::set_mru_entries`, `get_mru_entries`; `svtools/source/control/ctrlbox.cxx`, `FontNameBox::Fill`, `LoadMRUEntries`, `SaveMRUEntries`.
+- Observation: saving enumerates current recent rows in order, but restoring inserts every accepted name at index zero. Saved `[A,B]` therefore restores as `[B,A]`. The restore loop also does not trim to `m_nMaxMRUCount`; only a later `update_mru` trims the list. Existing nonempty widget history passes through this same restoration on refill. This is source-derived behavior, not native GUI confirmation.
+- Preservation: retain prepend order, exact main-list membership filtering and absence of restore-time truncation. Focused tests cover reversal and restoring more than five entries; production Writer and Calc tests cover restored order, including actual Calc page teardown and reload.
+
+### WRITER079 — GTK history duplicate removal excludes the old last row
+
+- Source: pinned `vcl/unx/gtk3/gtkinst.cxx`, `GtkInstanceComboBox::update_mru`.
+- Observation: after prepending the accepted text, duplicate search uses `i < m_nMRUCount - 1`. The previous last row is excluded. Accepting `A` with history `[B,A]` and maximum five therefore leaves `[A,B,A]`. Tail trimming may hide this at capacity, but does not remove the duplicate below capacity. This is source-derived behavior, not native GUI confirmation.
+- Preservation: retain the loop boundary and subsequent tail trimming. Deterministic value and actual populated widget tests pin the duplicate below capacity instead of replacing this with general deduplication.
+
+### WRITER080 — style color visibility adjustment can turn COL_AUTO into a transparent explicit color
+
+- Source: pinned `svx/source/tbxctrls/tbcontrl.cxx`, `SetupEntry`, `TestColorsVisible`; `tools/source/generic/color.cxx`, `DecreaseContrast`; `include/tools/color.hxx`, `COL_AUTO`; `vcl/source/rendercontext/drawmode.cxx`, `GetTextColor`.
+- Observation: with an automatic or absent foreground and a solid white background, `SetupEntry` passes `COL_AUTO` to `TestColorsVisible`. Both colors have white RGB channels and the same brightness category. The contrast operation changes RGB from255 to225 while retaining the original transparency byte255, producing packed `0xffe1e1e1`. That value differs from `COL_AUTO`, so `SetupEntry` assigns it as explicit text color. The normal draw-mode color function retains that value. This is a source-derived value/dispatch finding, not confirmation of the final native raster: native backend handling and active draw mode can affect output.
+- Preservation: retain the original alpha, automatic sentinel comparisons and explicit-color assignment. Do not invent an opaque contrasting foreground. Deterministic tests pin the packed result; the real Canvas adapter separately confirms that its projection is transparent and leaves the painted white background visible.
+
+### WRITER081 — HarfBuzz format4 unicode collection does not apply idDelta to glyph-array entries
+
+- Source: pinned LibreOffice HarfBuzz14.2.1 archive, `src/hb-ot-cmap-table.hh`, `CmapSubtableFormat4::accelerator_t::collect_unicodes` and `get_glyph`.
+- Observation: for a nonzero range offset, collection removes a character only when its raw glyph-array word is zero. Nominal glyph lookup subsequently adds idDelta, masks to16 bits and rejects a resulting zero. A raw glyph1 with delta-1 therefore remains in the collected character map although nominal lookup rejects it. This is a source-derived finding, not native UI confirmation.
+- Preservation: retain the raw-word collection check, whole-cmap remaining-byte bounds and ordered add/delete behavior. Focused tests pin the glyph1/delta-1 discrepancy rather than replacing collection with nominal glyph lookup.
+
+### WRITER082 — HarfBuzz long-group collection includes the glyph-count boundary
+
+- Source: pinned LibreOffice HarfBuzz14.2.1 archive, `src/hb-ot-cmap-table.hh`, `CmapSubtableLongSegmented::collect_unicodes`.
+- Observation: when a group's computed final glyph reaches the population limit, the inclusive end is set to `start + num_glyphs - gid`, without subtracting one. Format12 group `[65,67]` starting at glyph2 with population4 therefore includes character67, whose sequential glyph would equal4. The shared template also limits constant-glyph format13 using this sequential expression. Malformed reversed ranges can expand after unsigned arithmetic. This is a source-derived finding, not native UI confirmation.
+- Preservation: retain the inclusive bound, shared template logic and unsigned arithmetic. Focused tests cover both formats, glyph zero, Unicode clamping and reversed/wrapping source inputs.
+
+### WRITER083 — FontList assigns SEMILIGHT and MEDIUM the same comparison rank
+
+- Source: pinned `svtools/source/control/ctrltool.cxx`, `sortWeightValue`, `ImplCompareFontMetric`, `FontList::ImplInsertFonts`; `include/tools/fontenum.hxx`, `FontWeight`.
+- Observation: WEIGHT_NORMAL has enum value5. The normal-first transform returns `weight+1` below NORMAL and `weight-1` above it. SEMILIGHT4 and MEDIUM6 therefore both become rank5. With equal italic and style name, the comparator returns zero despite different weights. Insertion treats the incoming record as a duplicate and discards it,except when its charset matches the system charset and the old record's does not. That exception replaces the old metric,including its weight. This is a source-derived finding,not native GUI confirmation.
+- Preservation: retain the rank collision and existing charset replacement. Focused tests verify both lost-record and replacement cases;do not repair the transform or add a weight tie-breaker.
+
+### WRITER084 — paragraph-direction guessing does not enter an FSI isolate
+
+- Source: pinned `i18nutil/source/utility/guessparadirection.cxx`, `GuessParagraphDirection`; `include/i18nutil/guessparadirection.hxx`; `i18nutil/qa/cppunit/test_guessparadirection.cxx`, `testIsolate`.
+- Observation: the source increments isolate depth for LRI and RLI, but not for FSI (`U_FIRST_STRONG_ISOLATE`). For `FSI + Hebrew + PDI`, the Hebrew strong character is therefore considered outside an isolate and the function returns RightToLeft. The analogous LRI/RLI-only input returns Ambiguous. This appears inconsistent with the function's stated paragraph-level/isolate rule. Existing upstream isolate QA covers LRI, RLI and PDI, but omits FSI. This is a source-level inference, not a native GUI observation or a finding about ICU's bidi resolver.
+- Preservation: retain the omission if this direction-guessing helper is consumed or ported; do not silently substitute ICU base-direction guessing. The present style-label path follows native `EditEngine::SetText`/`ImpInsertText` and the default LTR pool direction, which do not invoke the typing/paste `UpdateAutoParaDirection` hook. The newly ported ICU resolver independently handles FSI as the original ICU does; this finding does not change that algorithm.
+
+
+### WRITER085 — object-bar Invisible registration is normalized to Standard
+
+- Source: pinned `include/sfx2/shell.hxx`, `SfxVisibilityFlags`; `sfx2/source/control/objface.cxx`, `CreateObjectBarUI_Impl` and `SfxInterface::IsObjectBarVisible`; `sw/source/uibase/shells/listsh.cxx`, `SwListShell::InitInterface_Impl`.
+- Observation: the `Invisible` enum value is zero and documented as “Never visible”, but `CreateObjectBarUI_Impl` adds `Standard` when that exact value is passed. `IsObjectBarVisible` subsequently returns true for a registered bar. Writer registers its numbering object bar with `Invisible`, so interpreting the registration name literally would incorrectly hide it. This is a surprising source API/comment contract, possibly retained for compatibility; no desktop GUI defect or unintended behavior is confirmed.
+- Preservation: retain the actual normalizing/visible behavior when connecting the represented numbering toolbar. Select it from native NumberList context and preserve the table shell's priority at the same object-bar position. Browser integration does not claim to port the complete SFX object-bar/configuration subsystem or repair the upstream enum comment.
+
+
+### WRITER086 — forbidden bookmark text can still enable actions for a sanitized existing name
+
+- Source: pinned `sw/source/ui/misc/bookmark.cxx`, `SwInsertBookmarkDlg::ModifyHdl`; `sw/source/ui/inc/bookmark.hxx`, `BookmarkTable::aForbiddenChars`.
+- Observation: forbidden characters are removed only from the temporary matching string. `A/B` can therefore select an existing `AB` while the raw entry remains `A/B`. The forbidden flag disables Insert but is absent from Delete/GoTo/Rename admission. This is a source-derived control-state observation,not a confirmed harmful desktop operation.
+- Preservation: retain raw input,temporary matching and distinct button conditions. Value and actual browser-control tests cover the sanitized existing-name path rather than applying an invented global rejection.
+
+### WRITER087 — exhausted bookmark copy counters return an empty or still-colliding name
+
+- Source: pinned `sw/source/core/doc/docbm.cxx`, `MarkManager::getUniqueMarkName`.
+- Observation: after a collision,the candidate string starts empty and the loop runs only while the cached signed counter is below INT32_MAX. A cache already at INT32_MAX returns empty. At INT32_MAX-1,a colliding final candidate is returned when the counter reaches the bound. Reaching these cache values requires billions of allocations and is not practical ordinary document behavior;no native GUI defect is claimed.
+- Preservation: retain loop,cache update and return values in the extracted normal naming helper. Direct helper tests use explicitly artificial counter values to preserve coverage;they do not claim these states are practically reachable.
+
+### WRITER088 — Internet query removal also truncates a question mark inside a fragment
+
+- Source: pinned `cui/source/dialogs/hyperlinkinternettabpage.cxx`, `HyperlinkInternetTP::RemoveQueryString`.
+- Observation: the handler finds the first literal `?` without checking for a preceding `#`. Thus `https://example.test/a#fragment?keep` becomes `https://example.test/a#fragment`, even though the question mark is inside the URI fragment. A following hash and its suffix are preserved literally. This is a source control-handler observation,not a confirmed desktop defect after all native URL normalization paths.
+- Preservation: retain literal string slicing and source event/session preference behavior. Tests cover this ordinary string input;using `URL.search` would change the source contract.
+
+### WRITER089 — imported line-number intervals wrap through signed16 before property admission
+
+- Source: pinned `xmloff/source/text/XMLLineNumberingImportContext.cxx`, interval attribute and `CreateAndInsert`; `XMLLineNumberingSeparatorImportContext.cxx`; `sw/source/core/unocore/unosett.cxx`, Interval/SeparatorInterval setters.
+- Observation: SAX converts with a minimum of zero,then the importer narrows to signed16. Values32768..65535 become negative and are ignored;65537 becomes1. Main interval0 is ignored by the property owner,whereas separator interval0 is accepted. Property reads/export also narrow unsigned core intervals to signed16,so rare direct-core values can serialize as negative intervals. This discontinuous range behavior may be surprising;no desktop defect is confirmed.
+- Preservation: reuse the existing SAX converter,retain narrowing and distinct admission conditions. Tests include ordinary and synthetic range boundaries,invalid lexemes and actual ODT re-export;no invented range rejection replaces native fallback behavior.
+
+### WRITER090 — paragraph split sensitivity depends on which off-handler ran last
+
+- Source: pinned `cui/source/tabpages/paragrph.cxx`, `SvxExtParagraphTabPage::AllowSplitHdl`, `WidowHdl`, `OrphanHdl` and Reset handler order.
+- Observation: Widow false when Orphan is false disables Allow Split; Orphan false when Widow is false enables it. Reset calls Widow then Orphan,so both-off initial state permits splitting,while later unchecking Widow last can disable that control. AllowSplit changes checkbox sensitivity but does not directly disable checked numeric rows. This is a source control-state observation,not a confirmed desktop defect.
+- Preservation: retain exact handler order and definite-state sensitivity effects;tests exercise both orders and retained numeric rows. Complete mixed-state/native widget services remain unrepresented.
+
+### WRITER091 — paragraph page-number widget permits zero and stops at 55535
+
+- Source: pinned `cui/uiconfig/ui/textflowpage.ui`, `adjustment3`; `SvxExtParagraphTabPage::FillItemSet` and `sw/source/uibase/utlui/uitool.cxx`, `SfxToSwPageDescAttr`.
+- Observation: the page-number spin has an implicit lower bound zero and upper 55535,although the item is unsigned16 and Writer permits offsets through65535. Reset visually clamps imported larger values but unchanged saved widget state does not emit a replacement. Whether the upper limit is intentional remains unconfirmed.
+- Preservation: keep original widget bounds,retained saved-state semantics and unsigned16 item including zero. Do not change imported out-of-widget-range offsets merely by opening and accepting the dialog.
+
+### WRITER092 — page offset XML import saturates signed16 while export exposes unsigned16 as signed
+
+- Source: pinned `sw/source/core/layout/atrfrm.cxx`, `SwFormatPageDesc::QueryValue`/`PutValue`; `xmloff/source/style/xmlbahdl.cxx`, `XMLNumberWithAutoForVoidPropHdl` and `lcl_xmloff_setAny`; `xmloff/source/text/txtexppr.cxx`, `CTF_PAGENUMBEROFFSET`.
+- Observation: native offset65535 queries as signed16 -1 and exports as -1. Importing positive65535 saturates to32767,whereas importing -1 reaches unsigned65535. Thus numerically equivalent modulo65536 XML inputs can produce different offsets. Zero is valid in ODF1.3;older-version special handling is outside the current fixed1.3 writer. This is preserved source behavior,not a confirmed upstream defect.
+- Preservation: use the original Any member projection,SAX lexical conversion,signed16 saturation and signed XML output. Invalid lexical input leaves a property unset;exact auto means void. Tests pin boundaries and actual Writer ODT/browser worker cycles.

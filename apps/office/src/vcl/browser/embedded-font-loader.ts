@@ -1,5 +1,7 @@
 /** @fileoverview Browser FontFace adapter for package-backed Writer fonts, bounded by SwXMLReader. */
 
+import { rememberBrowserFontFaceSource } from "./font-face-source";
+
 /** Browser-facing subset of a package-backed font resource. */
 export interface BrowserEmbeddedFont {
   readonly familyName: string;
@@ -27,10 +29,12 @@ export function installWriterEmbeddedFonts(
       onChange?.(font.familyName, false);
       continue;
     }
-    const face = new FontFaceClass(font.familyName, font.bytes.slice().buffer as ArrayBuffer, {
+    const source = font.bytes.slice().buffer as ArrayBuffer;
+    const face = new FontFaceClass(font.familyName, source, {
       style: font.style,
       weight: font.weight,
     });
+    rememberBrowserFontFaceSource(face, source);
     void face.load().then(
       /** Publishes a loaded face only while its document is active. @param loaded - Browser face. @returns Nothing. */
       (loaded) => {

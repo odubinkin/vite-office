@@ -53,6 +53,7 @@ describe("Writer upstream quick controls", /** Groups quick-panel interactions. 
         onSubmit={onSubmit}
       />,
     );
+    fireEvent.click(screen.getByLabelText("Show numbering"));
     fireEvent.change(screen.getByLabelText("Position"), {
       target: { value: String(LineNumberPosition.Right) },
     });

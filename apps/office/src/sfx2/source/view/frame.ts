@@ -1,4 +1,4 @@
-/** @fileoverview Implements request-scoped SfxUnoAnyItem from pinned sfx2/source/view/frame.cxx. */
+/** @fileoverview Implements consumed SfxFrame target defaults and request-scoped SfxUnoAnyItem from pinned sfx2/source/view/frame.cxx. */
 
 import { SfxPoolItem } from "../../../svl/source/items/poolitem";
 
@@ -33,3 +33,11 @@ export class SfxUnoAnyItem extends SfxPoolItem {
     return this.value;
   }
 }
+
+/** Consumed static target-list responsibility of SfxFrame;native frame/window lifecycle remains unrepresented. */
+export const SfxFrame = {
+  /** Appends original defaults without clearing the caller list. @param targets - Caller-owned target list. @returns Nothing. */
+  GetDefaultTargetList(targets: string[]): void {
+    targets.push("", "_top", "_parent", "_blank", "_self");
+  },
+};

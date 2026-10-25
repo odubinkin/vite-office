@@ -2,6 +2,7 @@
 import { useRef } from "react";
 import {
   Bold,
+  RemoveFormatting,
   Italic,
   Underline,
   Strikethrough,
@@ -42,7 +43,7 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
       focusDocument={props.focusDocument}
       focusContent={
         /** Enters the first actual font widget. @returns Nothing. */ () =>
-          content.current?.querySelector("select")?.focus()
+          content.current?.querySelector<HTMLInputElement>("input[role=combobox]")?.focus()
       }
     >
       <div ref={content} className="space-y-2 py-2 [&_select]:min-w-0 [&_select]:max-w-full">
@@ -53,6 +54,10 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
                 binding,
               ) => (
                 <FontNameSelect
+                  inSidebar
+                  {...(props.focusDocument === undefined
+                    ? {}
+                    : { focusDocument: props.focusDocument })}
                   {...binding}
                   label={getCommandResource(".uno:CharFontName").controlLabel as string}
                   embeddedFontFamilies={props.embeddedFontFamilies}
@@ -78,10 +83,6 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
               )
             }
           </CommandSelectControl>
-        </div>
-        <div className="flex justify-end gap-1" role="group" aria-label="Font Size Adjustment">
-          <CommandButton {...props} commandId=".uno:Grow" icon={AArrowUp} />
-          <CommandButton {...props} commandId=".uno:Shrink" icon={AArrowDown} />
         </div>
         <div className="flex flex-wrap gap-1" role="group" aria-label="Font Effects">
           {[
@@ -159,6 +160,17 @@ export function TextPropertyPanel(props: TextPropertyPanelProps): React.JSX.Elem
               />
             ),
           )}
+        </div>
+        <div
+          className="flex justify-between gap-1"
+          role="group"
+          aria-label="Direct Formatting and Font Size"
+        >
+          <CommandButton {...props} commandId=".uno:ResetAttributes" icon={RemoveFormatting} />
+          <div className="flex gap-1">
+            <CommandButton {...props} commandId=".uno:Grow" icon={AArrowUp} />
+            <CommandButton {...props} commandId=".uno:Shrink" icon={AArrowDown} />
+          </div>
         </div>
       </div>
     </SidebarPanel>

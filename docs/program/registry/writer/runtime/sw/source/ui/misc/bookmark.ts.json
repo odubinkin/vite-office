@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/ui/misc/bookmark.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/ui/misc/bookmark.ts#bookmarkModifyState",
+        "vendor/libreoffice-reference/sw/source/ui/misc/bookmark.cxx#ModifyHdl"
+      ],
+      "justification": "Consumed native temporary sanitization,semicolon token counts,row selection/button rules and localized highest-suffix proposal. Protection input is retained at the value boundary;full protected/expanded/experimental bookmark responsibilities and table metadata remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "bookmarkModifyState",
+        "bookmarkSelectionState",
+        "bookmarkNameProposal"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/ui/misc/bookmark.cxx",
+      "upstreamSymbols": [
+        "ModifyHdl",
+        "SwInsertBookmarkDlg::SelectionChanged",
+        "BookmarkTable::GetNameProposal"
+      ]
+    }
+  }
+}

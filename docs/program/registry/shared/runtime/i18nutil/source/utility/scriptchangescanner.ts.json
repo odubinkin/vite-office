@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18nutil/source/utility/scriptchangescanner.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-script-analysis",
+    "capabilityIds": [
+      "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/i18nutil/source/utility/scriptchangescanner.ts#MakeScriptChangeScanner",
+        "apps/office/src/i18nutil/source/utility/scriptchangescanner.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT implements the original ScriptHintProvider and full GreedyScriptChangeScanner body over existing actual SAL UTF16 iteration,pinned GetScriptClass,Unicode categories and ICU script properties. Retains insertion-order/forward-only hints,first-strong prescan/caller-provided default-language fallback,Ignore/weak-only hints,RTL/embedded CTL rules with Asian exception,zero-length transition skipping and dotted-circle/mark/NNBSP-Mongolian reassociation. Peek returns copied structs. Native direction/script contracts now use the real concrete direction factory and original default ICU analyzer;no approximate provider is supplied. Explicit direction levels/runs in tests are protocol fixtures,not ICU bidi-analysis evidence. Header retains the native ScriptHintType enum and reexports actual runtime owners;the implementation compares the exact canonical IDL aliases with a type-only header dependency to avoid an ESM declaration cycle. No native ownership/cache/lifetime emulation. Full EditEngine paragraph/storage/selection/field ownership and live style dropdown wiring remain unfinished;the consumed script query,CheckScript and ICU bidi construction are implemented without broad parity promotion. Task6764KT now supplies the actual concrete direction factory over pinned default ICU levels,real logical-run counts and original LRM/RLM/embedding-terminal adjustment. Embedded strong-LTR detection scans UTF16 code units exactly as upstream;GetLevelAt is independent of traversal and preserves invalid-index0. Reset and by-value Peek are retained. This supersedes earlier pending-direction notes;full EditEngine and live style UI remain unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScriptHintProvider",
+        "ScriptChangeScanner",
+        "DirectionChangeScanner",
+        "MakeScriptChangeScanner",
+        "ScriptChange",
+        "DirectionChange",
+        "MakeDirectionChangeScanner",
+        "IcuDirectionChangeScanner"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "i18nutil/source/utility/scriptchangescanner.cxx",
+      "upstreamSymbols": [
+        "ScriptHintProvider",
+        "GreedyScriptChangeScanner",
+        "DirectionChangeScanner",
+        "ScriptChangeScanner",
+        "MakeScriptChangeScanner",
+        "MakeDirectionChangeScanner",
+        "IcuDirectionChangeScanner"
+      ]
+    }
+  }
+}

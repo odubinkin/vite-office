@@ -40,7 +40,12 @@ export class SwLineNumberInfo {
             countInFlys: false,
             restartEachPage: false,
           }
-        : { ...value };
+        : {
+            ...value,
+            dividerCountBy: value.dividerCountBy & 65535,
+            posFromLeft: value.posFromLeft & 65535,
+            countBy: value.countBy & 65535,
+          };
   }
 
   /** Restores a validated browser transfer value. @param candidate - Stored value. @returns Line-number configuration. */
@@ -50,9 +55,9 @@ export class SwLineNumberInfo {
     const value = candidate as Record<string, unknown>;
     if (
       typeof value.divider !== "string" ||
-      !Number.isInteger(value.dividerCountBy) ||
-      !Number.isInteger(value.posFromLeft) ||
-      !Number.isInteger(value.countBy) ||
+      !isUnsigned16(value.dividerCountBy) ||
+      !isUnsigned16(value.posFromLeft) ||
+      !isUnsigned16(value.countBy) ||
       !Number.isInteger(value.position) ||
       (value.position as number) < LineNumberPosition.Left ||
       (value.position as number) > LineNumberPosition.Outside ||
@@ -103,7 +108,7 @@ export class SwLineNumberInfo {
   }
   /** Changes divider interval. @param count - New interval. @returns Nothing. */
   public SetDividerCountBy(count: number): void {
-    this.value = { ...this.value, dividerCountBy: count };
+    this.value = { ...this.value, dividerCountBy: count & 65535 };
   }
   /** Returns gutter offset in twips. @returns Offset. */
   public GetPosFromLeft(): number {
@@ -111,7 +116,7 @@ export class SwLineNumberInfo {
   }
   /** Changes gutter offset. @param position - Twips. @returns Nothing. */
   public SetPosFromLeft(position: number): void {
-    this.value = { ...this.value, posFromLeft: position };
+    this.value = { ...this.value, posFromLeft: position & 65535 };
   }
   /** Returns count interval. @returns Interval. */
   public GetCountBy(): number {
@@ -119,7 +124,7 @@ export class SwLineNumberInfo {
   }
   /** Changes count interval. @param count - New interval. @returns Nothing. */
   public SetCountBy(count: number): void {
-    this.value = { ...this.value, countBy: count };
+    this.value = { ...this.value, countBy: count & 65535 };
   }
   /** Returns paint position. @returns Position. */
   public GetPos(): LineNumberPosition {
@@ -161,4 +166,9 @@ export class SwLineNumberInfo {
   public SetRestartEachPage(restart: boolean): void {
     this.value = { ...this.value, restartEachPage: restart };
   }
+}
+
+/** Validates the represented transfer width before native-typed core construction. @param value - Untrusted scalar. @returns Whether an unsigned16 integer. */
+function isUnsigned16(value: unknown): boolean {
+  return Number.isInteger(value) && (value as number) >= 0 && (value as number) <= 65535;
 }

@@ -1,7 +1,27 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
-import { SID_ATTR_TABSTOP, SID_ATTR_LRSPACE } from "../../../../editeng/inc/editids";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
+import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
+import {
+  SID_ATTR_TABSTOP,
+  SID_ATTR_LRSPACE,
+  SID_ATTR_CHAR_FONT,
+  SID_ATTR_CHAR_POSTURE,
+  SID_ATTR_CHAR_WEIGHT,
+  SID_ATTR_CHAR_STRIKEOUT,
+  SID_ATTR_CHAR_UNDERLINE,
+  SID_ATTR_CHAR_FONTHEIGHT,
+  SID_ATTR_CHAR_CJK_FONT,
+  SID_ATTR_CHAR_CJK_FONTHEIGHT,
+  SID_ATTR_CHAR_CJK_POSTURE,
+  SID_ATTR_CHAR_CJK_WEIGHT,
+  SID_ATTR_CHAR_CTL_FONT,
+  SID_ATTR_CHAR_CTL_FONTHEIGHT,
+  SID_ATTR_CHAR_CTL_POSTURE,
+  SID_ATTR_CHAR_CTL_WEIGHT,
+} from "../../../../editeng/inc/editids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -198,7 +218,11 @@ export class SwAttrPool extends SfxItemPool {
         getDefaultFontSelection(device, "text", getWriterDefaultFontLanguage(locale, "ctl"), "ctl"),
       ],
     ]);
-    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT])
+    for (const [which, slot] of [
+      [RES_CHRATR_FONT, SID_ATTR_CHAR_FONT],
+      [RES_CHRATR_CJK_FONT, SID_ATTR_CHAR_CJK_FONT],
+      [RES_CHRATR_CTL_FONT, SID_ATTR_CHAR_CTL_FONT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxFontItem(
           FontFamily.FAMILY_DONTKNOW,
@@ -245,8 +269,13 @@ export class SwAttrPool extends SfxItemPool {
             which,
           );
         },
+        slot,
       );
-    for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
+    for (const [which, slot] of [
+      [RES_CHRATR_FONTSIZE, SID_ATTR_CHAR_FONTHEIGHT],
+      [RES_CHRATR_CJK_FONTSIZE, SID_ATTR_CHAR_CJK_FONTHEIGHT],
+      [RES_CHRATR_CTL_FONTSIZE, SID_ATTR_CHAR_CTL_FONTHEIGHT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxFontHeightItem(12 * 20, 100, which),
         /** Restores all native height/property/unit state without applying the property twice. @param value - Complete logical state. @returns Font-height item. */ (
@@ -267,39 +296,52 @@ export class SwAttrPool extends SfxItemPool {
           item.SetProp(value.prop, value.propUnit);
           return item;
         },
-        which === RES_CHRATR_FONTSIZE ? 10015 : which === RES_CHRATR_CJK_FONTSIZE ? 10888 : 10893,
+        slot,
       );
-    for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
+    for (const [which, slot] of [
+      [RES_CHRATR_POSTURE, SID_ATTR_CHAR_POSTURE],
+      [RES_CHRATR_CJK_POSTURE, SID_ATTR_CHAR_CJK_POSTURE],
+      [RES_CHRATR_CTL_POSTURE, SID_ATTR_CHAR_CTL_POSTURE],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxPostureItem(FontItalic.ITALIC_NONE, which),
         /** Restores a posture item. @param value - Persisted enum value. @returns Concrete posture item. */
         (value) => new SvxPostureItem(Number(value) as FontItalic, which),
+        slot,
       );
-    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+    for (const [which, slot] of [
+      [RES_CHRATR_WEIGHT, SID_ATTR_CHAR_WEIGHT],
+      [RES_CHRATR_CJK_WEIGHT, SID_ATTR_CHAR_CJK_WEIGHT],
+      [RES_CHRATR_CTL_WEIGHT, SID_ATTR_CHAR_CTL_WEIGHT],
+    ] as const)
       this.RegisterDefaultItem(
         new SvxWeightItem(FontWeight.WEIGHT_NORMAL, which),
         /** Restores a weight item. @param value - Persisted enum value. @returns Concrete weight item. */
         (value) => new SvxWeightItem(Number(value) as FontWeight, which),
+        slot,
       );
     this.RegisterDefaultItem(
       new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT),
       /** Restores the complete native strikeout enum. @param value - Stored enum. @returns Item. */
       (value) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
+      SID_ATTR_CHAR_STRIKEOUT,
     );
     this.RegisterDefaultItem(
       new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE),
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
+      SID_ATTR_CHAR_UNDERLINE,
     );
-    for (const [which, value] of [
-      [RES_CHRATR_COLOR, "auto"],
-      [RES_CHRATR_HIGHLIGHT, "transparent"],
-    ] as const)
-      this.RegisterDefaultItem(
-        new SfxStringItem(which, value),
-        /** Restores a string-valued compatibility item. @param stored - Persisted value. @returns String item. */
-        (stored) => new SfxStringItem(which, String(stored)),
-      );
+    this.RegisterDefaultItem(
+      new SvxColorItem(RES_CHRATR_COLOR),
+      createWriterTextColorItem,
+      SID_ATTR_CHAR_COLOR,
+    );
+    this.RegisterDefaultItem(
+      new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"),
+      /** Retains the existing unported highlight compatibility boundary. @param stored - Persisted value. @returns Existing highlight item. */
+      (stored) => new SfxStringItem(RES_CHRATR_HIGHLIGHT, String(stored)),
+    );
     this.RegisterDefaultItem(
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */
@@ -496,14 +538,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores pinned SvxBreak ordinal. @param value - Stored mode. @returns Break item. */
       (value) => new SfxInt16Item(RES_BREAK, Number(value)),
     );
-    this.RegisterDefaultItem(
-      new SwFormatPageDesc(),
-      /** Restores a page-style name and restart offset. @param value - Stored pair. @returns Page descriptor item. */
-      (value) => {
-        const pair = value as readonly [string, number];
-        return new SwFormatPageDesc(pair[0], pair[1] === 0 ? undefined : pair[1]);
-      },
-    );
+    this.RegisterDefaultItem(new SwFormatPageDesc());
     this.RegisterDefaultItem(
       new SwNumRuleItem(),
       /** Restores a numbering-rule item. @param value - Persisted rule name. @returns Concrete rule item. */
@@ -675,4 +710,25 @@ export class SwAttrSet extends SfxItemSet {
     if (includeItems) this.CopyItemsTo(clone);
     return clone;
   }
+}
+
+/** Converts only the existing validated Writer hex/automatic request and legacy worker values to the real native color item. New worker values retain the full packed transparency word. This is a compatibility boundary,not an alternate core color class. @param value - Existing request/transfer value. @returns Native Writer color item. */
+export function createWriterTextColorItem(value: unknown): SvxColorItem {
+  if (typeof value === "number" && Number.isInteger(value) && value >= 0 && value <= 0xffffffff)
+    return new SvxColorItem(
+      new Color(ColorTransparency, value, "ColorTransparencyTag"),
+      RES_CHRATR_COLOR,
+    );
+  if (value === "auto") return new SvxColorItem(COL_AUTO, RES_CHRATR_COLOR);
+  if (typeof value === "string" && /^#[0-9a-f]{6}$/iu.test(value))
+    return new SvxColorItem(new Color(Number.parseInt(value.slice(1), 16)), RES_CHRATR_COLOR);
+  throw new Error("Writer text color value is invalid.");
+}
+/** Projects a real native color to the existing Writer primitive text/worker/DOM boundary. Automatic and source alpha are retained;the item itself remains native. @param item - Actual native character color. @returns Existing external color value. */
+export function writerTextColorValue(item: Readonly<SvxColorItem>): string {
+  const color = item.GetValue();
+  if (color.equals(COL_AUTO)) return "auto";
+  if (color.GetAlpha() !== 255)
+    return `rgba(${color.GetRed()}, ${color.GetGreen()}, ${color.GetBlue()}, ${color.GetAlpha() / 255})`;
+  return `#${(color.toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
 }

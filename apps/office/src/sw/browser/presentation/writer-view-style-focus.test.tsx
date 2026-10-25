@@ -5,6 +5,7 @@ import { createWriterDocumentSession } from "../composition/writer-module";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { WriterWorkbench } from "./writer-view";
 import { WRITER_COMMAND_IDS } from "../../uiconfig/swriter/menubar/menubar-commands";
+import { getWriterDomSelection } from "../editor/writer-selection";
 import { SwDoc } from "../../source/core/doc/doc";
 
 const sessions: ReturnType<typeof createWriterDocumentSession>[] = [];
@@ -102,8 +103,10 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
         },
       );
       fixture.select.focus();
-      if (method === "pointer") fireEvent.change(fixture.select, { target: { value: "OwnedB" } });
-      else {
+      if (method === "pointer") {
+        fireEvent.change(fixture.select, { target: { value: "Owned: B & 字" } });
+        fireEvent.keyDown(fixture.select, { key: "Enter" });
+      } else {
         fireEvent.keyDown(fixture.select, { key: "ArrowDown" });
         expect(fixture.shell.GetActiveParagraph().GetParagraphStyle()).toBe("OwnedA");
         fireEvent.keyDown(fixture.select, { key: "Enter" });
@@ -114,7 +117,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
       });
       expect(fixture.editor.contains(document.activeElement)).toBe(true);
       expect(endpoints(fixture)).toEqual(before);
-      expect(fixture.select).toHaveValue("OwnedB");
+      expect(fixture.select).toHaveValue("Owned: B & 字");
       expect(fixture.document.GetUndoManager().GetUndoActionCount()).toBe(1);
       expect(fixture.document.paragraphs[0]?.GetText()).toBe("Untouched");
       expect(fixture.document.paragraphs[0]?.GetParagraphStyle()).toBe("default");
@@ -131,20 +134,20 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
       fireEvent.keyDown(fixture.editor, { ctrlKey: true, key: "z" });
       expect(paragraph.GetText()).toBe("Second");
       fireEvent.keyDown(fixture.editor, { ctrlKey: true, key: "z" });
-      expect(fixture.select).toHaveValue("OwnedA");
+      expect(fixture.select).toHaveValue("Owned: A & 字");
       fireEvent.keyDown(fixture.editor, { ctrlKey: true, shiftKey: true, key: "z" });
-      expect(fixture.select).toHaveValue("OwnedB");
+      expect(fixture.select).toHaveValue("Owned: B & 字");
     });
   it("keeps travel and Escape out of model/history and releases focus on repeated native Enter", /** Checks native travel cancellation and repeated style acceptance. @returns Nothing. */ () => {
     const fixture = mount(),
       before = endpoints(fixture);
     fixture.select.focus();
     fireEvent.keyDown(fixture.select, { key: "ArrowDown" });
-    expect(fixture.select).toHaveValue("OwnedB");
+    expect(fixture.select).toHaveValue("Owned: B & 字");
     expect(fixture.select).toHaveFocus();
     expect(fixture.shell.GetActiveParagraph().GetParagraphStyle()).toBe("OwnedA");
     fireEvent.keyDown(fixture.select, { key: "Escape" });
-    expect(fixture.select).toHaveValue("OwnedA");
+    expect(fixture.select).toHaveValue("Owned: A & 字");
     expect(fixture.editor.contains(document.activeElement)).toBe(true);
     expect(endpoints(fixture)).toEqual(before);
     expect(fixture.document.GetUndoManager().GetUndoActionCount()).toBe(0);
@@ -172,7 +175,7 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
         });
       },
     );
-    expect(fixture.select).toHaveValue("default");
+    expect(fixture.select).toHaveValue("Default Paragraph Style");
     expect(screen.queryByRole("option", { name: "Owned: A & 字" })).toBeNull();
     fireEvent.keyDown(fixture.select, { key: "Enter" });
     expect(replacement.paragraphs[0]?.GetParagraphStyle()).toBe("default");
@@ -195,13 +198,15 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
       },
     );
     second.select.focus();
-    fireEvent.change(second.select, { target: { value: "OwnedB" } });
+    fireEvent.change(second.select, { target: { value: "Owned: B & 字" } });
+    fireEvent.keyDown(second.select, { key: "Enter" });
     expect(second.editor.contains(document.activeElement)).toBe(true);
     expect(first.shell.GetActiveParagraph().GetParagraphStyle()).toBe("OwnedA");
     second.setActive(false);
     first.setActive(true);
     first.select.focus();
-    fireEvent.change(first.select, { target: { value: "OwnedB" } });
+    fireEvent.change(first.select, { target: { value: "Owned: B & 字" } });
+    fireEvent.keyDown(first.select, { key: "Enter" });
     expect(first.editor.contains(document.activeElement)).toBe(true);
     fireEvent.click(first.frame.getByRole("menuitem", { name: "Insert" }));
     fireEvent.click(first.frame.getByRole("menuitem", { name: "Hyperlink…" }));
@@ -213,4 +218,33 @@ describe("Writer style-box focus", /** Defines actual client contracts. @returns
     fireEvent.click(first.frame.getByRole("button", { name: "Cancel" }));
     expect(first.select).toBeEnabled();
   });
+});
+
+it("restores the retained cursor on explicit client refocus after an editable combo invalidates DOM selection without a model change", /** Reproduces the browser control/document selection boundary using a real frame. @returns Nothing. */ () => {
+  const f = mount(),
+    before = endpoints(f),
+    node = f.shell.GetActiveParagraph();
+  f.select.focus();
+  const paragraph = f.editor.querySelector(
+    `[data-writer-node-index="${node.GetIndex()}"]`,
+  ) as HTMLParagraphElement;
+  const range = document.createRange();
+  range.selectNodeContents(paragraph);
+  range.collapse(true);
+  const selection = window.getSelection() as Selection;
+  selection.removeAllRanges();
+  selection.addRange(range);
+  act(
+    /** Delivers the stale DOM event while the style entry owns focus. @returns Nothing. */
+    () => {
+      document.dispatchEvent(new Event("selectionchange"));
+    },
+  );
+  expect(endpoints(f)).toEqual(before);
+  act(
+    /** Explicit native client focus must reproject the retained core point even without a new snapshot. @returns Nothing. */
+    () => fireEvent.focus(f.editor),
+  );
+  expect(getWriterDomSelection(selection)?.point.offset).toBe(before.point[1]);
+  expect(endpoints(f)).toEqual(before);
 });

@@ -100,7 +100,7 @@
           "marker": "WriterFormattingToolbar"
         },
         {
-          "path": "apps/office/src/vcl/browser/font-list.ts",
+          "path": "apps/office/src/svtools/browser/font-list.ts",
           "marker": "export class FontList"
         }
       ],

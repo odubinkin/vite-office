@@ -26,7 +26,8 @@
       "Native SwClient style tracking and fly-frame layout are outside the browser slice."
     ],
     "preservedResponsibilities": [
-      "Keeps the pinned line-number defaults and copyable document-owned configuration."
+      "Keeps the pinned line-number defaults and copyable document-owned configuration.",
+      "TaskJ1K3KF preserves actual uint16 scalar storage in constructor/setters and validates native-width transfer data;source copy/default behavior remains unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/lineinfo.hxx",

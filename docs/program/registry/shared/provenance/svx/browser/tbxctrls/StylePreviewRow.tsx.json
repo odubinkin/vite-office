@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StylePreviewRow.tsx",
+          "marker": "StylePreviewRow"
+        },
+        {
+          "path": "apps/office/src/svx/browser/tbxctrls/StylePreviewRow.test.tsx",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/shared/style-name-preview.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/svx/browser/tbxctrls/StylePreviewRow.tsx",
+    "rationale": "Actual native preview sets feed source optional fonts,InitScriptTypes/CheckScript,bounds,fitting,color decisions and draw positions. Canvas measures actual host fonts;SVG paints source weight/posture/decorations without intercepting row pointer input. Browser shaping,available faces and rasterization remain host-owned;no native pixel parity claim.",
+    "responsibilities": [
+      "Actual native preview sets feed source optional fonts,InitScriptTypes/CheckScript,bounds,fitting,color decisions and draw positions. Canvas measures actual host fonts;SVG paints source weight/posture/decorations without intercepting row pointer input. Browser shaping,available faces and rasterization remain host-owned;no native pixel parity claim."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual native preview sets feed source optional fonts,InitScriptTypes/CheckScript,bounds,fitting,color decisions and draw positions. Canvas measures actual host fonts;SVG paints source weight/posture/decorations without intercepting row pointer input. Browser shaping,available faces and rasterization remain host-owned;no native pixel parity claim."
+    },
+    "status": "local-only"
+  }
+}

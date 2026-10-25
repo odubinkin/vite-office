@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svtools/source/control/ctrlbox.fontmru.ts",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/source/control/ctrlbox.fontmru.ts",
+          "marker": "decodeFontMruEntries"
+        },
+        {
+          "path": "apps/office/src/svtools/browser/font-mru-store.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/control/ctrlbox.cxx",
+          "marker": "SaveMRUEntries"
+        }
+      ]
+    },
+    "localSymbols": [
+      "decodeFontMruEntries",
+      "encodeFontMruEntries"
+    ],
+    "upstreamPath": "svtools/source/control/ctrlbox.cxx",
+    "upstreamSymbols": [
+      "SaveMRUEntries",
+      "LoadMRUEntries"
+    ],
+    "preservedResponsibilities": [
+      "Original FontNameBox logical first-line semicolon codec, empty-token rejection, raw names and two LF WriteLine calls. Empty output does not truncate an existing store. The text boundary does not claim byte-stream or full FontNameBox parity."
+    ],
+    "omittedResponsibilities": [
+      "Full native byte stream, filesystem and complete FontNameBox presentation remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svtools/source/control/ctrlbox.fontmru.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keeps consumed FontNameBox MRU logical file codec in svtools/source/control, split from other ctrlbox.cxx responsibilities; browser profile I/O remains separate."
+    }
+  }
+}

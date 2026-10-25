@@ -79,7 +79,9 @@ it("rejects incompatible, duplicate-sheet and missing-style transfer data and di
       decodeCalcDocument({ ...record, sheets: [...record.sheets, ...record.sheets] }),
   ).toThrow("sheet is invalid");
   const missing = structuredClone(record);
-  missing.sheets[0]!.patterns[0] = [-1, 0, 0, "missing"];
+  const firstSheet = missing.sheets[0];
+  if (firstSheet === undefined) throw new Error("Calc sheet fixture is missing.");
+  firstSheet.patterns[0] = [-1, 0, 0, "missing"];
   expect(
     /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () =>
       decodeCalcDocument(missing),

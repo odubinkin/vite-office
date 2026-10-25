@@ -4,7 +4,9 @@ import { encodeFontMetadata, restoreFontMetadata } from "./font-metadata-codec";
 import { Font } from "../source/font/font";
 import { Color, ColorTransparency } from "../../tools/inc/color";
 import { Size } from "../../tools/inc/gen";
-import { TextAlign, FontFamily, FontPitch } from "../../tools/inc/fontenum";
+import { TextAlign, FontFamily, FontPitch, FontWeight, FontItalic } from "../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout, FontEmphasisMark } from "../../tools/inc/fontenum";
+import { FontRelief } from "../inc/fntstyle";
 /** Actual nondefault native value. @returns Font. */ function font(): Font {
   const f = new Font();
   f.SetFamilyName("Owner");
@@ -12,6 +14,15 @@ import { TextAlign, FontFamily, FontPitch } from "../../tools/inc/fontenum";
   f.SetFamily(FontFamily.FAMILY_MODERN);
   f.SetPitch(FontPitch.PITCH_FIXED);
   f.SetCharSet(10);
+  f.SetWeight(FontWeight.WEIGHT_BOLD);
+  f.SetItalic(FontItalic.ITALIC_OBLIQUE);
+  f.SetOutline(true);
+  f.SetShadow(true);
+  f.SetUnderline(FontLineStyle.LINESTYLE_DOUBLEWAVE);
+  f.SetOverline(FontLineStyle.LINESTYLE_BOLD);
+  f.SetStrikeout(FontStrikeout.STRIKEOUT_X);
+  f.SetRelief(FontRelief.Engraved);
+  f.SetEmphasisMark(FontEmphasisMark.Disc | FontEmphasisMark.PosBelow);
   f.SetColor(new Color(ColorTransparency, 0x80123456, "ColorTransparencyTag"));
   f.SetFillColor(new Color(0xabcdef));
   f.SetTransparent(false);
@@ -32,6 +43,75 @@ it("preserves every represented value across structured clone and independent ou
   source.SetFontHeight(2);
   expect(target.GetFontHeight()).toBe(1234);
   expect(target.GetColor().toUInt32()).toBe(0x80123456);
+});
+it("restores pre-decoration records with native defaults and rejects partial or malformed decoration groups atomically", /** Previously populated values must not survive legacy absence or partial validation. @returns Nothing. */ () => {
+  const source = font(),
+    target = font(),
+    record = encodeFontMetadata(source);
+  const { outline, shadow, underline, overline, strikeout, relief, emphasisMark, ...legacy } =
+    record;
+  expect([outline, shadow, underline, overline, strikeout, relief, emphasisMark]).toEqual([
+    true,
+    true,
+    11,
+    12,
+    6,
+    2,
+    8195,
+  ]);
+  restoreFontMetadata(target, legacy);
+  expect([
+    target.IsOutline(),
+    target.IsShadow(),
+    target.GetUnderline(),
+    target.GetOverline(),
+    target.GetStrikeout(),
+    target.GetRelief(),
+    target.GetEmphasisMark(),
+  ]).toEqual([false, false, 0, 0, 0, 0, 0]);
+  const copy = new Font(target);
+  for (const key of [
+    "outline",
+    "shadow",
+    "underline",
+    "overline",
+    "strikeout",
+    "relief",
+    "emphasisMark",
+  ] as const) {
+    expect(
+      /** Invalid partial group must not change the target. @returns Nothing. */ () =>
+        restoreFontMetadata(target, { ...legacy, [key]: record[key] }),
+    ).toThrow("font metadata");
+    const invalid: keyof typeof record = key;
+    for (const value of [undefined, "bad", null]) {
+      expect(
+        /** Invalid scalar must not change the target. @returns Nothing. */ () =>
+          restoreFontMetadata(target, { ...record, [invalid]: value }),
+      ).toThrow("font metadata");
+      expect(target.Equals(copy)).toBe(true);
+    }
+  }
+  for (const key of ["underline", "overline", "strikeout", "relief", "emphasisMark"] as const)
+    for (const value of [-2147483649, 2147483648, 0.5]) {
+      expect(
+        /** Rejects values outside original stored enum transport. @returns Nothing. */ () =>
+          restoreFontMetadata(target, { ...record, [key]: value }),
+      ).toThrow("font metadata");
+      expect(target.Equals(copy)).toBe(true);
+    }
+  for (const value of [-2147483648, 2147483647]) {
+    const arbitrary = {
+      ...record,
+      underline: value,
+      overline: value,
+      strikeout: value,
+      relief: value,
+      emphasisMark: value,
+    };
+    restoreFontMetadata(target, arbitrary);
+    expect(encodeFontMetadata(target)).toEqual(arbitrary);
+  }
 });
 it("restores legacy four-field metadata using actual native Font value defaults", /** A previously populated recipient must not retain stale new fields. @returns Nothing. */ () => {
   const target = font(),
@@ -120,4 +200,36 @@ it("rejects partial or malformed new value groups without silent field defaults"
     ).toThrow("font metadata");
     expect(target.Equals(copy)).toBe(true);
   }
+});
+
+it("restores pre-face paint records with native defaults and rejects partial face groups atomically", /** Older records may contain the complete paint group without weight and italic. @returns Nothing. */ () => {
+  const target = font(),
+    record = encodeFontMetadata(font());
+  const { weight, italic, ...legacy } = record;
+  expect([weight, italic]).toEqual([FontWeight.WEIGHT_BOLD, FontItalic.ITALIC_OBLIQUE]);
+  restoreFontMetadata(target, legacy);
+  expect([target.GetWeight(), target.GetItalic()]).toEqual([
+    FontWeight.WEIGHT_DONTKNOW,
+    FontItalic.ITALIC_NONE,
+  ]);
+  const copy = new Font(target);
+  for (const value of [
+    { ...legacy, weight: 5 },
+    { ...legacy, italic: 0 },
+    { ...record, weight: undefined },
+    { ...record, weight: 1.5 },
+    { ...record, weight: -2147483649 },
+    { ...record, weight: 2147483648 },
+    { ...record, italic: null },
+    { ...record, italic: -2147483649 },
+    { ...record, italic: 2147483648 },
+  ]) {
+    expect(
+      /** Invalid transport must not mutate stored native values. @returns Nothing. */ () =>
+        restoreFontMetadata(target, value),
+    ).toThrow("font metadata");
+    expect(target.Equals(copy)).toBe(true);
+  }
+  restoreFontMetadata(target, { ...record, weight: -2147483648, italic: 2147483647 });
+  expect([target.GetWeight(), target.GetItalic()]).toEqual([-2147483648, 2147483647]);
 });

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/undo/SwUndoFmt.ts",
+          "marker": "SwUndoTextFormatCollCreate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/undo/SwUndoFmt.cxx",
+          "marker": "SwUndoTextFormatCollCreate"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/undo/SwUndoFmt.ts",
+    "rationale": "TaskDVQ9ES ports the consumed paragraph by-example naming/creation history boundary. Native exact raw-name validation, leading-space GetName order and separate create/apply history are preserved. Browser lifetime is native JS. Full native style families, hidden default/style-table parity, pool group masks, recording and widget services remain unverified. No application-wide parity promotion or saving/opening/recovery policy change.",
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/undo/SwUndoFmt.cxx",
+    "upstreamSymbols": [
+      "SwUndoTextFormatCollCreate"
+    ],
+    "localSymbols": [
+      "SwUndoTextFormatCollCreate"
+    ],
+    "preservedResponsibilities": [
+      "Name-based original collection creation undo and direct-item/parent restoration."
+    ],
+    "omittedResponsibilities": [
+      "Other style families, native hidden-default table, conditional styles and pool category restoration remain outside this bounded consumed paragraph path."
+    ]
+  },
+  "legacyOrder": 322
+}

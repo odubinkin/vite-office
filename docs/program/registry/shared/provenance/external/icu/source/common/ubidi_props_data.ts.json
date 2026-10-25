@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/ubidi_props_data.ts",
+    "localSymbols": [
+      "ubidi_props_trie",
+      "ubidi_props_mirrors"
+    ],
+    "upstreamPath": "vendor/icu-reference/source/common/ubidi_props_data.h",
+    "upstreamSymbols": [
+      "ubidi_props_singleton",
+      "ubidi_props_mirrors"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished."
+    ],
+    "omittedResponsibilities": [
+      "Only the documented default fixed-direction/null-external-level slice is exposed;full native ICU modes,services,storage/ABI and final style UI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/ubidi_props_data.ts",
+          "marker": "ubidi_props_trie"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/ubidi.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/ubidi_props_data.h",
+          "marker": "ubidi_props_singleton"
+        }
+      ]
+    }
+  }
+}

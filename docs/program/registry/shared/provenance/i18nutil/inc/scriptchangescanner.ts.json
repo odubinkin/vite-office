@@ -7,24 +7,36 @@
     "status": "mapped",
     "upstreamPath": "include/i18nutil/scriptchangescanner.hxx",
     "localSymbols": [
-      "ScriptHintType"
+      "ScriptHintType",
+      "MakeDirectionChangeScanner"
     ],
     "upstreamSymbols": [
       "ScriptHintType",
       "Automatic",
-      "Complex"
+      "Complex",
+      "ScriptHintProvider",
+      "DirectionChangeScanner",
+      "ScriptChangeScanner",
+      "MakeScriptChangeScanner",
+      "MakeDirectionChangeScanner"
     ],
     "preservedResponsibilities": [
-      "Task153 implements actual SvxCaseMapItem/SvxScriptHintItem/SvxOpticalSizingItem constructor/copy/concrete Clone/value/typed member contracts on existing shared enum/bool/Any owners. Case mapping has exact6native declarations and actual5IDL short constants: queries map4modes explicitly and otherwise NONE, while unsigned16 property writes accept only5published values, ignoring member. Script hint uses the actual5fixed-unsigned16 native aliases over real5IDL constants and MID_SCRIPTHINT0, with original byte/twips selector mask, unknown untouched success and unsigned16 extraction without declared-enum range validation. Native argument narrowing is explicit through JS bit operations; no wrapper identity or type-provider facade. Optical sizing reuses real bool transport and no factory absent from native declarations is invented. Existing inherited scalar queries remain explicit browser bindings. Actual EditEngine defaults4071NotMapped/4075Automatic/4076false are source-backed witnesses, not a dummy pool. Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx and Library_editeng links i18nutil; only this native dependency edge is admitted, reverse/browser guards retained and all existing dependency/cycle function bodies unchanged. Original451line textitem owner cannot fit this full value family under500, so canonical3headers reexport a necessary source responsibility split. ScriptHintType declaration is not a script scanner, case-mode storage is not a casing engine, optical bool is not a font-axis provider; no ICU/native ownership manager is added. Localized GetPresentation/GetValueText/resources and diagnostics/instance caches remain unported. Source accepts out-of-enum hints; do not silently clamp them. UI localization and actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS remain pending; statuses and deliberate I/O/recovery deviations unchanged."
+      "Task153 implements actual SvxCaseMapItem/SvxScriptHintItem/SvxOpticalSizingItem constructor/copy/concrete Clone/value/typed member contracts on existing shared enum/bool/Any owners. Case mapping has exact6native declarations and actual5IDL short constants: queries map4modes explicitly and otherwise NONE, while unsigned16 property writes accept only5published values, ignoring member. Script hint uses the actual5fixed-unsigned16 native aliases over real5IDL constants and MID_SCRIPTHINT0, with original byte/twips selector mask, unknown untouched success and unsigned16 extraction without declared-enum range validation. Native argument narrowing is explicit through JS bit operations; no wrapper identity or type-provider facade. Optical sizing reuses real bool transport and no factory absent from native declarations is invented. Existing inherited scalar queries remain explicit browser bindings. Actual EditEngine defaults4071NotMapped/4075Automatic/4076false are source-backed witnesses, not a dummy pool. Original scripthintitem.hxx includes i18nutil/scriptchangescanner.hxx and Library_editeng links i18nutil; only this native dependency edge is admitted, reverse/browser guards retained and all existing dependency/cycle function bodies unchanged. Original451line textitem owner cannot fit this full value family under500, so canonical3headers reexport a necessary source responsibility split. ScriptHintType declaration is not a script scanner, case-mode storage is not a casing engine, optical bool is not a font-axis provider; no ICU/native ownership manager is added. Localized GetPresentation/GetValueText/resources and diagnostics/instance caches remain unported. Source accepts out-of-enum hints; do not silently clamp them. UI localization and actual EditEngine/EditTextObject/ScPageHFItem/Calc pool/model/connected UI/same-model ODS remain pending; statuses and deliberate I/O/recovery deviations unchanged.",
+      "Task6764KT implements the original ScriptHintProvider and full GreedyScriptChangeScanner body over existing actual SAL UTF16 iteration,pinned GetScriptClass,Unicode categories and ICU script properties. Retains insertion-order/forward-only hints,first-strong prescan/caller-provided default-language fallback,Ignore/weak-only hints,RTL/embedded CTL rules with Asian exception,zero-length transition skipping and dotted-circle/mark/NNBSP-Mongolian reassociation. Peek returns copied structs. Native direction/script contracts now use the real concrete direction factory and original default ICU analyzer;no approximate provider is supplied. Explicit direction levels/runs in tests are protocol fixtures,not ICU bidi-analysis evidence. Header retains the native ScriptHintType enum and reexports actual runtime owners;the implementation compares the exact canonical IDL aliases with a type-only header dependency to avoid an ESM declaration cycle. No native ownership/cache/lifetime emulation. Full EditEngine paragraph/storage/selection/field ownership and live style dropdown wiring remain unfinished;the consumed script query,CheckScript and ICU bidi construction are implemented without broad parity promotion.",
+      "The original header now reexports the actual concrete direction factory. No synthetic bidi provider or native allocation/lifetime adapter is introduced."
     ],
     "omittedResponsibilities": [
-      "Localized presentation/value text/resources, scanner/range/casing/font-axis algorithms, diagnostics and native instance cache/lifetime managers are unported. Actual full Calc pool/model/UI/ODS is pending."
+      "This header retains value/contract declarations and reexports actual scanner owners;full EditEngine paragraph/field/selection services,localized presentation and complete Calc model/UI/ODS parity remain outside this slice."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/i18nutil/inc/scriptchangescanner.ts",
           "marker": "ScriptHintType"
+        },
+        {
+          "path": "apps/office/src/i18nutil/source/utility/scriptchangescanner.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

@@ -1,121 +1,63 @@
-/** @fileoverview Adapts native SvxStyleBox acceptance, travel and focus release to a browser style selector. */
-import { useState } from "react";
+/** @fileoverview SvxStyleBox controller acceptance and saved-value focus contracts from pinned tbcontrl.cxx. */
+import type { ReactNode } from "react";
+import { ComboBox } from "../../../vcl/browser/ComboBox";
 import type { StyleToolboxEntry } from "./style-toolbox-control";
 
-/** Family-independent browser style-box ports; the frame retains dispatch and model ownership. */
+/** Original frame-owned style pool lookup and dispatch ports. */
 export interface StyleToolboxSelectProps {
+  readonly popupWidth?: number;
   readonly options: readonly StyleToolboxEntry[];
   readonly value: string;
   readonly enabled: boolean;
   readonly label: string;
   readonly getLabel: (style: StyleToolboxEntry) => string;
   readonly applyStyle: (style: StyleToolboxEntry) => void;
+  readonly acceptName: (name: string) => void;
   readonly focusDocument?: () => void;
+  readonly inSidebar?: boolean;
+  readonly renderItem?: (style: StyleToolboxEntry, selected: boolean) => ReactNode;
 }
 
-/** Renders tentative native keyboard travel and explicit acceptance without presentation-owned model writes. @param props - Current bindings and frame ports. @returns Style selector. */
-export function StyleToolboxSelect({
-  options,
-  value,
-  enabled,
-  label,
-  getLabel,
-  applyStyle,
-  focusDocument,
-}: StyleToolboxSelectProps): React.JSX.Element {
-  const [draft, setDraft] =
-    useState<
-      Readonly<{ options: readonly StyleToolboxEntry[]; boundValue: string; value: string }>
-    >();
-  const selected = draft?.options === options && draft.boundValue === value ? draft.value : value;
-
-  /** Resolves the selected entry before native focus-before-dispatch acceptance. @param id - Rendered identity. @param releaseFocus - Whether normal focus navigation is suppressed. @returns Nothing. */
-  function accept(id: string, releaseFocus: boolean): void {
-    const style = options.find(
-      /** Resolves an actual rendered entry. @param entry - Candidate. @returns Match. */ (entry) =>
-        entry.id === id,
-    );
-    if (!enabled || style === undefined) return;
-    setDraft(undefined);
-    if (releaseFocus) focusDocument?.();
-    applyStyle(style);
-  }
-
+/** Resolves actual style identities before dispatch while the shared widget owns only text and travel. @param props - Actual pool projection and frame controller ports. @returns Style combo. */
+export function StyleToolboxSelect(props: StyleToolboxSelectProps): React.JSX.Element {
+  const current = props.options.find(
+    /** Resolves the actual document style identity. @param entry - Pool row. @returns Match. */
+    (entry) => entry.id === props.value,
+  );
   return (
-    <label className="contents">
-      <span className="sr-only">{label}</span>
-      <select
-        aria-label={label}
-        disabled={!enabled}
-        className="h-8 min-w-44 rounded-md border border-slate-300 bg-white px-2 text-sm text-slate-700"
-        value={selected}
-        onBlur={
-          /** Restores the saved binding value after unaccepted travel. @returns Nothing. */ () =>
-            setDraft(undefined)
+    <ComboBox
+      {...(props.popupWidth === undefined ? {} : { popupWidth: props.popupWidth })}
+      resetKey={props.options}
+      options={props.options}
+      value={current === undefined ? "" : props.getLabel(current)}
+      enabled={props.enabled}
+      label={props.label}
+      getText={props.getLabel}
+      getId={
+        /** Supplies native identity independently of translated display text. @param entry - Pool row. @returns Identity. */
+        (entry) => entry.id
+      }
+      {...(props.renderItem === undefined ? {} : { renderItem: props.renderItem })}
+      onAccept={
+        /** Releases focus before dispatch, preserving raw names for creation. @param text - Accepted text. @param release - Whether controller focus release is requested. @returns Nothing. */
+        (text, release) => {
+          const entry = props.options.find(
+            /** Translates visible names to real pool identities. @param style - Pool row. @returns Match. */
+            (style) => props.getLabel(style) === text,
+          );
+          if (release) props.focusDocument?.();
+          if (entry !== undefined) props.applyStyle(entry);
+          else props.acceptName(text);
         }
-        onChange={
-          /** Accepts a direct native list pick. @param event - Select change. @returns Nothing. */ (
-            event,
-          ) => accept(event.target.value, true)
+      }
+      onCancel={
+        /** Sidebar Escape belongs to its deck; toolbar cancellation releases document focus. @returns Whether the key was consumed. */
+        () => {
+          if (props.inSidebar) return false;
+          props.focusDocument?.();
+          return true;
         }
-        onKeyDown={
-          /** Routes native acceptance/cancellation and closed-widget travel. @param event - Browser key. @returns Nothing. */ (
-            event,
-          ) => {
-            if (!enabled) return;
-            if (event.key === "Escape") {
-              event.preventDefault();
-              setDraft(undefined);
-              focusDocument?.();
-              return;
-            }
-            if (event.key === "Tab") {
-              accept(selected, false);
-              return;
-            }
-            if (event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-            if (event.key === "Enter") {
-              event.preventDefault();
-              accept(selected, true);
-              return;
-            }
-            const index = options.findIndex(
-              /** Finds current travel position. @param entry - Candidate. @returns Match. */ (
-                entry,
-              ) => entry.id === selected,
-            );
-            let next: number;
-            switch (event.key) {
-              case "ArrowDown":
-                next = Math.min(options.length - 1, index + 1);
-                break;
-              case "ArrowUp":
-                next = Math.max(0, index - 1);
-                break;
-              case "PageUp":
-                next = 0;
-                break;
-              case "PageDown":
-                next = options.length - 1;
-                break;
-              default:
-                return;
-            }
-            event.preventDefault();
-            const style = options[next];
-            if (style !== undefined) setDraft({ options, boundValue: value, value: style.id });
-          }
-        }
-      >
-        {selected === "" && <option value="" />}
-        {options.map(
-          /** Renders one native flat entry. @param style - Entry. @returns Option. */ (style) => (
-            <option key={style.id} value={style.id}>
-              {getLabel(style)}
-            </option>
-          ),
-        )}
-      </select>
-    </label>
+      }
+    />
   );
 }

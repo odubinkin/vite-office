@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/core/attr/fmtpdsc.ts#SwFormatPageDesc",
         "vendor/libreoffice-reference/sw/inc/fmtpdsc.hxx#SwFormatPageDesc"
       ],
-      "justification": "The bounded page descriptor name and optional number offset are tested for ODT round trips; broader page descriptor behavior remains unverified.",
+      "justification": "The bounded page descriptor name and optional number offset are tested for ODT round trips; broader page descriptor behavior remains unverified. Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified. TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
       "knownViolations": [],
       "localSymbols": [
         "SwFormatPageDesc"

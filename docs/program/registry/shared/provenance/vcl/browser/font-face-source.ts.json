@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/font-face-source.ts",
+          "marker": "rememberBrowserFontFaceSource"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/font-face-source.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/font-face-source.ts",
+    "rationale": "Task6764KT preserves actual browser physical-face records and available source bytes. FontList groups real registered FontFaces and approved Local Font Access records without discarding actual descriptors, PostScript identity or lazy blob access. Embedded-font installation records the exact constructor bytes by actual FontFace identity in a JS WeakMap and returns independent byte copies. CSS FontFace bytes remain absent because the public FontFace API does not expose its source; CSS URL acquisition,cmap parsing,native face selection and visual preview integration remain unfinished. No glyph support or native font metrics are inferred from names, and no native lifetime machinery is implemented.",
+    "responsibilities": [
+      "Actual constructor byte ownership keyed by real FontFace identity.",
+      "Independent source-byte reads without name-based physical-face or glyph metadata fabrication."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser adapter retains constructor byte values by JS weak identity; native reference counting and explicit object lifetime mechanisms are erased."
+    },
+    "status": "local-only"
+  }
+}

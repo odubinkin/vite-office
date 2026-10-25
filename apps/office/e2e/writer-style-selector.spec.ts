@@ -108,10 +108,17 @@ for (const width of [1280, 390])
     const select = page
       .getByRole("toolbar", { name: "Writer formatting toolbar" })
       .getByRole("combobox", { name: "Paragraph style", exact: true });
-    await expect(select).toHaveValue("OwnedChild");
-    await expect(select.locator("option:checked")).toHaveText("Owned child");
+    await expect(select).toHaveValue("Owned child");
+
     await expect(select.locator("optgroup")).toHaveCount(0);
-    await expect(select.locator("option")).toHaveText([
+    await select
+      .locator("..")
+      .getByRole("button", { name: "Show Paragraph style", exact: true })
+      .click();
+    const popup = page.locator(`id=${await select.getAttribute("aria-controls")}`);
+    await expect(
+      popup.getByRole("option").locator("[data-office-style-preview] > span"),
+    ).toHaveText([
       "Default Paragraph Style",
       "Text body",
       "Title",
@@ -126,22 +133,21 @@ for (const width of [1280, 390])
       "Owned child",
       "Unused: & 字",
     ]);
-    await select.selectOption("UnusedCustom");
-    await expect(select.locator("option:checked")).toHaveText("Unused: & 字");
+    await popup.getByRole("option", { name: "Unused: & 字", exact: true }).click();
+    await expect(select).toHaveValue("Unused: & 字");
     await expect(paragraph).toHaveAttribute("data-style", "UnusedCustom");
     await editor.press("Control+z");
-    await expect(select).toHaveValue("OwnedChild");
+    await expect(select).toHaveValue("Owned child");
     await editor.press("Control+Shift+z");
-    await expect(select).toHaveValue("UnusedCustom");
+    await expect(select).toHaveValue("Unused: & 字");
     await editor.press("Control+z");
     await checkLayout(-12);
     if (width === 1280)
       await expect(
         page
           .getByRole("complementary", { name: "Writer properties sidebar" })
-          .getByRole("combobox", { name: "Paragraph style", exact: true })
-          .locator("option:checked"),
-      ).toHaveText("Owned child");
+          .getByRole("combobox", { name: "Paragraph style", exact: true }),
+      ).toHaveValue("Owned child");
     const openDialog = /** Opens the product paragraph draft. @returns Completion. */ async () => {
       await page.getByRole("menuitem", { name: "Format", exact: true }).click();
       await page.getByRole("menuitem", { name: "Paragraph…", exact: true }).click();

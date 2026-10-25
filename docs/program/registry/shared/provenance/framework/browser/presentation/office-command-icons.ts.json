@@ -20,7 +20,7 @@
       ]
     },
     "localPath": "apps/office/src/framework/browser/presentation/office-command-icons.ts",
-    "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner.",
+    "rationale": "Contains browser or React adaptation outside LibreOffice implementation paths; no native LibreOffice source file is claimed as its owner. TaskDVQ9ES adds the existing browser icon vocabulary for original StyleUpdateByExample and StyleNewByExample identities; source resource positions and command ownership are unchanged.",
     "responsibilities": [
       "Shares actual Writer Lucide choices under original UNO identities and supplies Calc standard-toolbar icon additions. Browser icon vocabulary carries no native availability,command ordering or model behavior.",
       "Task98VCB0 shares existing Writer formatting alignment/list/indent icon choices and supplies all native Calc cell-formatting icon placements without inventing document attribute state.",

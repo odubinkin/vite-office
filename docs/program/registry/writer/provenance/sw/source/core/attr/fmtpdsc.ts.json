@@ -14,6 +14,10 @@
         {
           "marker": "SwFormatPageDesc",
           "path": "vendor/libreoffice-reference/sw/inc/fmtpdsc.hxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/layout/atrfrm.cxx",
+          "marker": "SwFormatPageDesc::QueryValue"
         }
       ]
     },
@@ -25,7 +29,9 @@
       "Live SwPageDesc pointer registration and SwClient notifications are outside the current browser document slice."
     ],
     "preservedResponsibilities": [
-      "Stores Writer's paragraph page-style reference and optional page-number restart in a pooled item."
+      "Stores Writer's paragraph page-style reference and optional page-number restart in a pooled item.",
+      "Task0AGGG4 connects zero page-number offset admitted by original textflowpage.ui and unsigned16 Writer page descriptor to existing paragraph acceptance and ODT boundary;broader XML numeric handler semantics remain unverified.",
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/fmtpdsc.hxx",

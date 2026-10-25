@@ -39,6 +39,12 @@ export class DocumentStylePoolManager {
     return collection;
   }
 
+  /** Removes an owned collection from the native table before format destruction. @param collection - Original owner. @returns Nothing. */
+  public RemoveTextFormatColl(collection: SwTextFormatColl): void {
+    this.collections.splice(this.collections.indexOf(collection), 1);
+    this.collectionsById.delete(collection.id);
+  }
+
   /** Finds or creates a supported collection with pinned parent/follow links. @param id - Programmatic identity. @returns Document-owned collection. */
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
     const existing = this.FindTextFormatColl(id);

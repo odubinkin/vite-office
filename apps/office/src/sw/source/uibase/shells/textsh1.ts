@@ -573,7 +573,7 @@ export class SwTextShell extends SwBaseShell {
       (value.pageNumber !== undefined &&
         value.pageNumber !== "auto" &&
         (!Number.isInteger(value.pageNumber) ||
-          value.pageNumber < 1 ||
+          value.pageNumber < 0 ||
           value.pageNumber > 65535)) ||
       (value.pageStyleName !== undefined &&
         value.pageStyleName !== "" &&

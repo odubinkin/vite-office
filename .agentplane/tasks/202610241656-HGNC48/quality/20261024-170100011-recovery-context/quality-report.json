@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241656-HGNC48",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T17:01:00.011Z",
+  "verdict": "pass",
+  "summary": "Source-shaped represented line-number dialog verified;close first of two tasks.",
+  "evaluated_sha": "e86b1708ff088e4f0e6ead3e8878bee929997d8b",
+  "blueprint_digest": "6d6ff11fb2e8a9417e635f511c9fe1b8d6159400c14d312da15cee241198b265",
+  "findings": [
+    "Actual source draft preserves source sensitivity,range/sentinel/ushort acceptance and inactive values;actual UI returns original frame focus. Model/filter ownership unchanged;omitted source services remain explicit.",
+    "10focused cases with strict2owner100coverage,151related cases and2production Chromium cases with real ODT and screenshots pass. Initial format/capability-record gate failures corrected;other gates pass without ignores or parity promotion."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241656-HGNC48/README.md",
+    "output/playwright/writer-full-checkpoint/HGNC48-coverage-final.log",
+    "output/playwright/writer-full-checkpoint/HGNC48-consumers.log",
+    "output/playwright/writer-full-checkpoint/HGNC48-e2e.log",
+    "output/playwright/writer-full-checkpoint/HGNC48-gates.json",
+    "output/playwright/writer-full-checkpoint/HGNC48-invariants-final.log",
+    "output/playwright/writer-full-checkpoint/HGNC48-parity-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Style,format,header-footer and complete widgets remain unrepresented. Continue exactly one approved numeric core/ODT task then pause goal."
+  ]
+}

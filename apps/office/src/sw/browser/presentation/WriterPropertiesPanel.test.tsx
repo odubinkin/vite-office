@@ -122,13 +122,15 @@ it("shares actual style,font,size,effect and color state with the formatting too
   const { sidebar, shell } = mount(),
     toolbar = within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" }));
   fireEvent.change(sidebar.getByRole("combobox", { name: "Paragraph style" }), {
-    target: { value: "heading-1" },
+    target: { value: "Heading 1" },
   });
+  fireEvent.keyDown(sidebar.getByRole("combobox", { name: "Paragraph style" }), { key: "Enter" });
   expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-1");
-  expect(toolbar.getByRole("combobox", { name: "Paragraph style" })).toHaveValue("heading-1");
+  expect(toolbar.getByRole("combobox", { name: "Paragraph style" })).toHaveValue("Heading 1");
   fireEvent.change(sidebar.getByRole("combobox", { name: "Font name" }), {
     target: { value: "Liberation Sans" },
   });
+  fireEvent.keyDown(sidebar.getByRole("combobox", { name: "Font name" }), { key: "Enter" });
   expect(toolbar.getByRole("combobox", { name: "Font name" })).toHaveValue("Liberation Sans");
   fireEvent.change(sidebar.getByRole("combobox", { name: "Font size" }), {
     target: { value: "14" },
@@ -304,7 +306,84 @@ it("disables controls without an active shell and keeps actual custom style name
   );
   expect(screen.getByRole("combobox", { name: "Paragraph style" })).toBeDisabled();
   expect(screen.getByRole("combobox", { name: "Paragraph style" })).toHaveValue("");
-  expect(screen.getByRole("option", { name: "Owned custom style" })).toHaveValue("owned-custom");
+  expect(session.viewStore.GetSnapshot().paragraphStyleOptions).toContainEqual({
+    id: "owned-custom",
+    name: "Owned custom style",
+  });
   expect(screen.getByRole("combobox", { name: "Font name" })).toBeDisabled();
   expect(screen.getByRole("button", { name: "Bold" })).toBeDisabled();
+});
+
+it("creates from editable sidebar names, updates the real owner and opens native naming from its toolbar", /** Checks actual UI/core/dialog wiring and once-only dispatch. @returns Completion. */ async () => {
+  const { sidebar, shell } = mount();
+  const input = sidebar.getByRole("combobox", { name: "Paragraph style" });
+  fireEvent.change(sidebar.getByRole("spinbutton", { name: "Before Text Indent" }), {
+    target: { value: "1 cm" },
+  });
+  const execute = vi.spyOn(session.frame.GetDispatcher(), "Execute");
+  fireEvent.change(input, { target: { value: "UI: & 字" } });
+  expect(session.docShell.GetDoc().FindTextFormatCollByName("UI: & 字")).toBeUndefined();
+  fireEvent.keyDown(input, { key: "Enter" });
+  const collection = shell.GetActiveParagraph().GetTextFormatColl();
+  expect(collection.GetName()).toBe("UI: & 字");
+  expect(execute).toHaveBeenCalledWith(".uno:StyleNewByExample", { Param: "UI: & 字", Family: 2 });
+  fireEvent.change(sidebar.getByRole("spinbutton", { name: "Before Text Indent" }), {
+    target: { value: "2 cm" },
+  });
+  fireEvent.click(sidebar.getByRole("button", { name: "Update" }));
+  expect(
+    (collection.GetAttrSet().Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+  ).toBe(1134);
+  fireEvent.click(sidebar.getByRole("button", { name: "New Style from Selection" }));
+  const dialog = screen.getByRole("dialog", { name: "New Style from Selection" });
+  fireEvent.change(within(dialog).getByRole("textbox", { name: "Style name" }), {
+    target: { value: "Named through dialog" },
+  });
+  await act(
+    /** Completes the original asynchronous request. @returns Nothing. */
+    async () => {
+      fireEvent.click(within(dialog).getByRole("button", { name: "OK" }));
+    },
+  );
+  expect(shell.GetActiveParagraph().GetTextFormatColl().GetName()).toBe("Named through dialog");
+  expect(sidebar.getByRole("button", { name: "Clone Formatting" })).toBeDisabled();
+});
+
+it("applies unseen builtin names from the complete pool and keeps source naming cancellation independent", /** Checks native full-pool lookup and original presenter cancel/header routes. @returns Completion. */ async () => {
+  const { sidebar, shell } = mount();
+  const toolbar = within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" }));
+  const input = toolbar.getByRole("combobox", { name: "Paragraph style" });
+  fireEvent.change(input, { target: { value: "Heading 5" } });
+  fireEvent.keyDown(input, { key: "Enter" });
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-5");
+  const sidebarInput = sidebar.getByRole("combobox", { name: "Paragraph style" });
+  fireEvent.change(sidebarInput, { target: { value: "Heading 6" } });
+  fireEvent.keyDown(sidebarInput, { key: "Enter" });
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-6");
+  for (const action of ["Cancel", "Close"]) {
+    fireEvent.click(sidebar.getByRole("button", { name: "New Style from Selection" }));
+    await act(
+      /** Cancels the actual native asynchronous request. @returns Nothing. */
+      async () => {
+        fireEvent.click(
+          within(screen.getByRole("dialog", { name: "New Style from Selection" })).getByRole(
+            "button",
+            { name: action },
+          ),
+        );
+      },
+    );
+  }
+  expect(shell.GetActiveParagraph().GetParagraphStyle()).toBe("heading-6");
+  fireEvent.change(input, { target: { value: "Toolbar native name" } });
+  fireEvent.keyDown(input, { key: "Enter" });
+  expect(shell.GetActiveParagraph().GetTextFormatColl().GetName()).toBe("Toolbar native name");
+});
+
+it("returns Style title cancellation to its actual document client", /** Checks the native panel header focus port after editable-box cancellation. @returns Nothing. */ () => {
+  const { sidebar } = mount();
+  const title = sidebar.getByRole("button", { name: "Style", expanded: true });
+  title.focus();
+  fireEvent.keyDown(title, { key: "Escape" });
+  expect(screen.getByLabelText("Writer document body")).toHaveFocus();
 });

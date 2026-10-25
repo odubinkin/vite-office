@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/ParagraphPortion.ts",
+    "localSymbols": [
+      "ScriptTypePosInfo",
+      "ScriptTypePosInfos"
+    ],
+    "upstreamPath": "editeng/inc/ParagraphPortion.hxx",
+    "upstreamSymbols": [
+      "ScriptTypePosInfo",
+      "ScriptTypePosInfos"
+    ],
+    "preservedResponsibilities": [
+      "Task6764KT Original ScriptTypePosInfo constructor/data fields and original vector alias only;paragraph storage,layout and initialization are not represented by a fake ParagraphPortion class. Focused source tests use explicit initialized script data,not an ICU bidi-analysis certificate. Native source script-position data flows into original CheckScript requests without an independent style store. ICU direction construction and live row integration remain pending;no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Actual paragraph storage,selection resolution/initialization,ICU direction analysis and live widget integration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/ParagraphPortion.ts",
+          "marker": "ScriptTypePosInfo"
+        },
+        {
+          "path": "apps/office/src/editeng/source/editeng/impedit2.script.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/editeng/inc/ParagraphPortion.hxx",
+          "marker": "ScriptTypePosInfo"
+        }
+      ]
+    }
+  }
+}

@@ -17,11 +17,18 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/vcl/browser/font-list.ts#export class FontList"
+        "apps/office/src/vcl/browser/font-list.ts#getBrowserFont",
+        "apps/office/src/vcl/browser/font-face-source.test.ts#@fileoverview",
+        "apps/office/src/vcl/browser/os2-font-capabilities.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-css-source.spec.ts#@fileoverview"
       ],
-      "justification": "Adapts LibreOffice FontList device enumeration to the browser Local Font Access API with deterministic metric-compatible fallbacks when access is unavailable. Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "justification": "Task6764KT separates physical browser source records and actual byte/capability acquisition from svtools-owned FontList. This VCL browser adapter retains complete represented unknown Font metadata construction,real registered/approved-local byte access,explicit TTC face-index requirements and original OS/2 capability decisions. Family inventory/grouping/lookup moved to svtools/browser/font-list.ts;no native FontList/device/cmap service is fabricated here. Actual source reads and errors preserve earlier behavior;coverage bits are not glyph support. Registered document I/O defaults and unverified broad parity statuses remain unchanged.",
       "knownViolations": [],
-      "localSymbols": [],
+      "localSymbols": [
+        "getBrowserFont",
+        "readBrowserPhysicalFont",
+        "readBrowserFontCapabilities"
+      ],
       "sourceResponsibility": "browser-owned",
       "upstreamFile": null,
       "upstreamSymbols": []

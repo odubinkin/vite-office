@@ -2,6 +2,10 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { SwFormatPageDesc } from "../../../source/core/attr/fmtpdsc";
+import { encodePageDesc, decodePageDesc } from "./page-desc-codec";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 
 import {
@@ -118,8 +122,21 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  if (item instanceof SwFormatPageDesc) return encodePageDesc(item);
   if (item instanceof SfxUnoAnyItem)
     throw new Error("SfxUnoAnyItem is a request argument and cannot be persisted.");
+  if (item instanceof SvxColorItem) {
+    const complex = item.getComplexColor(),
+      empty = new ComplexColor();
+    // Source equality omits usage/final fields;checking it alone could lose native state.
+    if (
+      !complex.equals(empty) ||
+      complex.getThemeColorUsage() !== empty.getThemeColorUsage() ||
+      !complex.getFinalColor().equals(empty.getFinalColor())
+    )
+      throw new Error("Writer complex color transfer is not implemented.");
+    return { which: item.Which(), value: item.GetValue().toUInt32() };
+  }
   if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
   if (item instanceof SvxEscapementItem)
     return {
@@ -195,7 +212,9 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
-  return decodeTextLineItem(pool, snapshot) ?? pool.CreateItem(snapshot);
+  return (
+    decodePageDesc(snapshot) ?? decodeTextLineItem(pool, snapshot) ?? pool.CreateItem(snapshot)
+  );
 }
 
 /** Restores direct deltas into an existing set. @param set - Destination set. @param snapshots - Current-schema records. @returns Nothing. */

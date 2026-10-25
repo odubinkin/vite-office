@@ -1,4 +1,5 @@
 /** @fileoverview Exercises object-shell state validation and lifecycle transitions. */
+import { MapUnit } from "../../../tools/inc/mapunit";
 import { describe, expect, it } from "vitest";
 
 import { createDocument, SfxObjectShell, type SfxObjectShellState } from "./objsh";
@@ -141,4 +142,17 @@ describe("SfxObjectShell", /** Groups SfxObjectShell. @returns Test callback res
     expect(medium.IsOpen()).toBe(true);
     expect(retained.GetDocumentId()).toBe("retained");
   });
+});
+
+it("owns the native default and arbitrary map-unit assignment without changing lifecycle state", /** Display units and logical document units are separate native contracts. @returns Nothing. */ () => {
+  const shell = new TestShell(initial, { kind: "untitled", name: initial.title });
+  const before = shell.GetDocumentState();
+  expect(shell.GetMapUnit()).toBe(MapUnit.Map100thMM);
+  shell.SetMapUnit(MapUnit.MapTwip);
+  expect(shell.GetMapUnit()).toBe(MapUnit.MapTwip);
+  expect(shell.GetDocumentState()).toEqual(before);
+  shell.SetMapUnit(MapUnit.MapRelative);
+  expect(shell.GetMapUnit()).toBe(MapUnit.MapRelative);
+  expect(shell.GetDocumentState()).toEqual(before);
+  shell.Dispose();
 });

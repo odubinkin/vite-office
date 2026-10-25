@@ -1,4 +1,5 @@
 /** @fileoverview Checks style-box acceptance, travel and client focus before real continued typing. */
+import { pickWriterStyle } from "./writer-style-box";
 import { expect, test, type Locator, type Page } from "@playwright/test";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
@@ -72,7 +73,7 @@ for (const width of [1280, 390]) {
   }, testInfo) => {
     const fixture = await openOwnedStyleDocument(page, width);
     await fixture.select.focus();
-    await fixture.select.selectOption("OwnedB");
+    await pickWriterStyle(fixture.select, "Owned: B & 字");
     await expectClientFocus(fixture.editor);
     await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
     await page.keyboard.insertText(":Pick");
@@ -80,16 +81,16 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("Control+z");
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus");
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedA");
+    await expect(fixture.select).toHaveValue("Owned: A & 字");
     await page.keyboard.press("Control+Shift+z");
-    await expect(fixture.select).toHaveValue("OwnedB");
+    await expect(fixture.select).toHaveValue("Owned: B & 字");
     await fixture.select.focus();
-    await fixture.select.selectOption("OwnedB");
+    await pickWriterStyle(fixture.select, "Owned: B & 字");
     await expectClientFocus(fixture.editor);
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedB");
+    await expect(fixture.select).toHaveValue("Owned: B & 字");
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedA");
+    await expect(fixture.select).toHaveValue("Owned: A & 字");
     await expect(fixture.untouched).toHaveText("UntouchedStyleFocus");
     await expect(fixture.untouched).toHaveAttribute("style", fixture.untouchedStyle as string);
     await page.screenshot({
@@ -105,7 +106,7 @@ for (const width of [1280, 390]) {
       undo = page.getByRole("button", { name: "Undo", exact: true });
     await fixture.select.focus();
     await page.keyboard.press("ArrowDown");
-    await expect(fixture.select).toHaveValue("OwnedB");
+    await expect(fixture.select).toHaveValue("Owned: B & 字");
     await expect(fixture.select).toBeFocused();
     await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedA");
     await expect(undo).toBeDisabled();
@@ -116,12 +117,12 @@ for (const width of [1280, 390]) {
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus:Enter");
     await page.keyboard.press("Control+z");
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedA");
+    await expect(fixture.select).toHaveValue("Owned: A & 字");
     await fixture.select.focus();
     await page.keyboard.press("ArrowDown");
     await page.keyboard.press("Escape");
     await expectClientFocus(fixture.editor);
-    await expect(fixture.select).toHaveValue("OwnedA");
+    await expect(fixture.select).toHaveValue("Owned: A & 字");
     await expect(undo).toBeDisabled();
     await fixture.select.focus();
     await page.keyboard.press("ArrowDown");
@@ -129,7 +130,7 @@ for (const width of [1280, 390]) {
     await expect(
       page
         .getByRole("toolbar", { name: "Writer formatting toolbar" })
-        .getByRole("combobox", { name: "Font name", exact: true }),
+        .getByRole("button", { name: "Update", exact: true }),
     ).toBeFocused();
     await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedB");
     await page.keyboard.press("Shift+Tab");
@@ -140,9 +141,9 @@ for (const width of [1280, 390]) {
     await expect(fixture.paragraph).toHaveText("FirstStyleFocus:Tab");
     await page.keyboard.press("Control+z");
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedB");
+    await expect(fixture.select).toHaveValue("Owned: B & 字");
     await page.keyboard.press("Control+z");
-    await expect(fixture.select).toHaveValue("OwnedA");
+    await expect(fixture.select).toHaveValue("Owned: A & 字");
     await expect(fixture.untouched).toHaveText("UntouchedStyleFocus");
     await expect(fixture.untouched).toHaveAttribute("style", fixture.untouchedStyle as string);
     await page.screenshot({
@@ -150,5 +151,54 @@ for (const width of [1280, 390]) {
       scale: "css",
       fullPage: true,
     });
+  });
+  test(`Writer style popup overlay width=${width}`, /** Checks real DOM overlay, viewport bounds and accessible travel before any document edit. @param fixtures - Browser page. @param testInfo - Screenshot output. @returns Completion. */ async ({
+    page,
+  }, testInfo) => {
+    const errors: string[] = [];
+    page.on(
+      "pageerror",
+      /** Records actual browser failures. @param error - Unhandled error. @returns Nothing. */ (
+        error,
+      ) => {
+        errors.push(error.message);
+      },
+    );
+    const fixture = await openOwnedStyleDocument(page, width);
+    await fixture.select
+      .locator("..")
+      .getByRole("button", { name: "Show Paragraph style", exact: true })
+      .click();
+    const list = page.getByRole("listbox", { name: "Paragraph style", exact: true });
+    await expect(list).toBeVisible();
+    const rect = await list.boundingBox();
+    expect(rect).not.toBeNull();
+    expect(rect?.x).toBeGreaterThanOrEqual(0);
+    expect((rect?.x ?? 0) + (rect?.width ?? 0)).toBeLessThanOrEqual(width);
+    expect(
+      await list.evaluate(
+        /** Checks that toolbar clipping cannot affect the popup. @param element - Actual list. @returns Whether in the document overlay layer. */ (
+          element,
+        ) => element.parentElement === document.body,
+      ),
+    ).toBe(true);
+    await fixture.select.press("PageDown");
+    const active = await fixture.select.getAttribute("aria-activedescendant");
+    expect(active).not.toBeNull();
+    await expect(list.getByRole("option", { selected: true })).toHaveAttribute(
+      "id",
+      active as string,
+    );
+    await expect(list.getByRole("option", { selected: true })).toBeInViewport();
+    await expect(fixture.paragraph).toHaveAttribute("data-style", "OwnedA");
+    await page.screenshot({
+      path: testInfo.outputPath("style-popup-overlay.png"),
+      scale: "css",
+      fullPage: true,
+    });
+    await fixture.select.press("Escape");
+    await expect(list).toHaveCount(0);
+    await expectClientFocus(fixture.editor);
+    expect(errors).toEqual([]);
   });
 }

@@ -1,4 +1,7 @@
 /** @fileoverview Native character-state ring limits, empty selected cells, direct full-node attributes and registered old/reset history. */
+import { writerTextColorValue } from "../attr/swatrset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { createWriterTextColorItem } from "../attr/swatrset";
 import { afterEach, expect, it } from "vitest";
 import { createWriterDocumentSession } from "../../../browser/composition/writer-module";
 import { SwPaM, SwPosition } from "../crsr/pam";
@@ -49,7 +52,7 @@ it("rejects a typed non-enum request without changing native items or history", 
 it("preserves attributes outside a partial native character edit", /** Original full-cover hints are split only at the actual selected content boundaries. @returns Nothing. */ () => {
   const f = fixture(),
     items = new SfxItemSet(f.doc.GetAttrPool(), [[RES_CHRATR_COLOR, WHICH]]);
-  items.Put(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+  items.Put(createWriterTextColorItem("#336699"));
   items.Put(new SvxCrossedOutItem(S.STRIKEOUT_SINGLE, WHICH));
   f.node.GetOrCreateSwpHints().Insert(MakeTextAttr(f.doc, items, 0, f.node.Len()));
   const point = new SwPosition(f.node, 4),
@@ -153,7 +156,7 @@ it("formats text across original structural slots and preserves partial-range va
 it("selectively resets compound values and actual internet attributes without replacing unrelated maps", /** Covers the original native selective RstTextAttr branches on initialized registered items. @returns Nothing. */ () => {
   const f = fixture(),
     items = new SfxItemSet(f.doc.GetAttrPool(), [[RES_CHRATR_COLOR, WHICH]]);
-  items.Put(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+  items.Put(createWriterTextColorItem("#336699"));
   items.Put(new SvxCrossedOutItem(S.STRIKEOUT_SINGLE, WHICH));
   f.node.GetOrCreateSwpHints().Insert(MakeTextAttr(f.doc, items, 0, f.node.Len()));
   const reset = state(f);
@@ -201,7 +204,7 @@ it("queries borrowed original cursors without applying active typing items", /**
 it("retains original collapsed attributes and removes only the changed zero hint during history", /** A marked equal-end request is a native zero-width attribute operation,not a nonempty range or browser-only pending flag. @returns Nothing. */ () => {
   const f = fixture(),
     items = new SfxItemSet(f.doc.GetAttrPool(), [[RES_CHRATR_COLOR, WHICH]]);
-  items.Put(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+  items.Put(createWriterTextColorItem("#336699"));
   items.Put(new SvxCrossedOutItem(S.STRIKEOUT_SINGLE, WHICH));
   f.node.GetOrCreateSwpHints().Insert(MakeTextAttr(f.doc, items, 2, 2));
   const point = new SwPosition(f.node, 2);
@@ -214,7 +217,7 @@ it("retains original collapsed attributes and removes only the changed zero hint
     f.node.GetParaAttr(result, 2, 2);
     return [
       (result.Get(WHICH) as SvxCrossedOutItem).GetStrikeout(),
-      (result.Get(RES_CHRATR_COLOR) as SfxStringItem).GetValue(),
+      writerTextColorValue(result.Get(RES_CHRATR_COLOR) as SvxColorItem),
     ];
   }
   expect(current()).toEqual([S.STRIKEOUT_DOUBLE, "#336699"]);
@@ -228,7 +231,7 @@ it("retains original collapsed attributes and removes only the changed zero hint
 it("preserves unrelated original hint owners during full-node edits and history", /** Selective native deletion must not recreate an unrelated color hint or its maps. @returns Nothing. */ () => {
   const f = fixture(),
     color = new SfxItemSet(f.doc.GetAttrPool(), [[RES_CHRATR_COLOR, RES_CHRATR_COLOR]]);
-  color.Put(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+  color.Put(createWriterTextColorItem("#336699"));
   const hint = MakeTextAttr(f.doc, color, 0, f.node.Len()),
     hints = f.node.GetOrCreateSwpHints();
   hints.Insert(hint);

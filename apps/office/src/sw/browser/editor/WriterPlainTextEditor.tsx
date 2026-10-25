@@ -44,7 +44,6 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
   const rulerLane = useContext(WriterRulerLaneContext);
   const localRootElement = useRef<HTMLElement | null>(null);
   const rootElement = props.editingHostRef ?? localRootElement;
-  const selectionRestorePending = useRef(false);
   const measurementHost = useRef<HTMLDivElement | null>(null);
   const measurementRootRef = useRef<ShadowRoot | null>(null);
   const [measurementRoot, setMeasurementRoot] = useState<ShadowRoot | null>(null);
@@ -286,10 +285,8 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
         focused !== root.ownerDocument.body &&
         !root.contains(focused);
       if (outside && focused.closest("[data-writer-editing-host]") !== null) {
-        selectionRestorePending.current = true;
         return;
       }
-      selectionRestorePending.current = false;
       controller.RestoreSelection(props.cursorSelection);
       // Selection APIs may focus the contenteditable host. Keep toolbar navigation
       // intact while still projecting commands such as Select All into the DOM.
@@ -460,11 +457,7 @@ export function WriterPlainTextEditor(props: WriterPlainTextEditorProps): React.
           /** Restores the retained shell cursor when the owning client explicitly regains focus. @param event - Host or paragraph focus. @returns Nothing. */ (
             event,
           ) => {
-            controller.HandleFocus(event);
-            if (event.target === event.currentTarget && selectionRestorePending.current) {
-              selectionRestorePending.current = false;
-              controller.RestoreSelection(props.cursorSelection);
-            }
+            controller.HandleFocus(event, props.cursorSelection);
           }
         }
         onContextMenu={

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/use-writer-style-previews.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/use-writer-style-previews.ts#useWriterStylePreviews",
+        "apps/office/src/sw/browser/presentation/writer-style-selector.test.tsx#@fileoverview",
+        "apps/office/e2e/shared/style-name-preview.spec.ts#@fileoverview"
+      ],
+      "justification": "Binds both real Writer toolbar and sidebar style boxes to owning SwDocShell,actual map unit and GetItemSetForPreview with native default fallback. Closed/missing owners keep ordinary labels;no parallel style pool or document formatting state.",
+      "knownViolations": [],
+      "localSymbols": [
+        "useWriterStylePreviews"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -1,4 +1,6 @@
 /** @fileoverview Resolves represented NewNumberPortion font values from original paragraph and numbering owners. */
+import { writerTextColorValue } from "../attr/swatrset";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
@@ -14,7 +16,6 @@ import {
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
-import type { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
@@ -84,6 +85,6 @@ export function resolveSwNumberPortionFont(
           }),
         }
       : {}),
-    color: (node.GetAttr(RES_CHRATR_COLOR) as SfxStringItem).GetValue(),
+    color: writerTextColorValue(node.GetAttr(RES_CHRATR_COLOR) as SvxColorItem),
   });
 }

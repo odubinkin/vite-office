@@ -27,6 +27,12 @@ function mount(value = "b") {
           getLabel={
             /** Retains actual names. @param style - Entry. @returns Label. */ (style) => style.name
           }
+          acceptName={
+            /** Observes the native typed-name dispatch boundary. @param name - Exact text. @returns Nothing. */
+            (name) => {
+              trace.push(`new:${name}`);
+            }
+          }
           applyStyle={
             /** Observes actual accepted names. @param style - Accepted entry. @returns Nothing. */ (
               style,
@@ -79,20 +85,21 @@ function press(box: HTMLElement, key: string, overrides: KeyboardEventInit = {})
 describe("native style-box acceptance", /** Defines widget contracts. @returns Nothing. */ () => {
   it("releases client focus before direct acceptance with actual punctuation", /** Checks native dispatch ordering. @returns Nothing. */ () => {
     const fixture = mount("a");
-    fireEvent.change(fixture.box, { target: { value: "b" } });
+    fireEvent.click(screen.getByRole("button", { name: "Show Style" }));
+    fireEvent.click(screen.getByRole("option", { name: "Owned: & 字" }));
     expect(fixture.trace).toEqual(["focus", "apply:Owned: & 字"]);
     expect(fixture.client).toHaveFocus();
   });
   it("travels without applying and stops at literal first/last entries", /** Checks supported native closed-widget traversal. @returns Nothing. */ () => {
     const fixture = mount();
     for (const [key, value] of [
-      ["ArrowDown", "c"],
-      ["ArrowDown", "c"],
-      ["ArrowUp", "b"],
-      ["ArrowUp", "a"],
-      ["ArrowUp", "a"],
-      ["PageDown", "c"],
-      ["PageUp", "a"],
+      ["ArrowDown", "Zulu"],
+      ["ArrowDown", "Zulu"],
+      ["ArrowUp", "Owned: & 字"],
+      ["ArrowUp", "Alpha"],
+      ["ArrowUp", "Alpha"],
+      ["PageDown", "Zulu"],
+      ["PageUp", "Alpha"],
     ]) {
       expect(press(fixture.box, key as string).defaultPrevented).toBe(true);
       expect(fixture.box).toHaveValue(value);
@@ -119,7 +126,7 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
     const fixture = mount();
     press(fixture.box, "ArrowUp");
     expect(press(fixture.box, "Escape").defaultPrevented).toBe(true);
-    expect(fixture.box).toHaveValue("b");
+    expect(fixture.box).toHaveValue("Owned: & 字");
     expect(fixture.client).toHaveFocus();
     expect(fixture.trace).toEqual(["focus"]);
     fixture.box.focus();
@@ -127,17 +134,17 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
     act(
       /** Leaves the widget without acceptance. @returns Nothing. */ () => fixture.client.focus(),
     );
-    expect(fixture.box).toHaveValue("b");
+    expect(fixture.box).toHaveValue("Owned: & 字");
     expect(fixture.trace).toEqual(["focus"]);
   });
   it("rejects drafts after a binding or option owner changes", /** Checks live family invalidation. @returns Nothing. */ () => {
     const fixture = mount();
     press(fixture.box, "ArrowUp");
     fixture.update("c");
-    expect(fixture.box).toHaveValue("c");
+    expect(fixture.box).toHaveValue("Zulu");
     press(fixture.box, "ArrowUp");
     fixture.update("c", options.slice());
-    expect(fixture.box).toHaveValue("c");
+    expect(fixture.box).toHaveValue("Zulu");
     expect(fixture.trace).toEqual([]);
   });
   it("leaves unrelated and modified keys to their owner", /** Checks native modifier admission. @returns Nothing. */ () => {
@@ -150,7 +157,7 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
     ])
       expect(press(fixture.box, "ArrowDown", overrides).defaultPrevented).toBe(false);
     expect(press(fixture.box, "F10").defaultPrevented).toBe(false);
-    expect(fixture.box).toHaveValue("b");
+    expect(fixture.box).toHaveValue("Owned: & 字");
     expect(fixture.trace).toEqual([]);
   });
   it("ignores disabled and absent selections without focus or model calls", /** Checks inactive binding safety. @returns Nothing. */ () => {
@@ -165,7 +172,7 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
     press(fixture.box, "PageUp");
     press(fixture.box, "PageDown");
     press(fixture.box, "Enter");
-    expect(fixture.trace).toEqual([]);
+    expect(fixture.trace).toEqual(["focus", "new:"]);
   });
   it("retains standalone presentation without a focus port", /** Checks explicit optional browser ownership. @returns Nothing. */ () => {
     const trace: string[] = [];
@@ -175,6 +182,12 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
         value="a"
         enabled
         label="Standalone"
+        acceptName={
+          /** Retains standalone typed-name ownership. @param name - Exact text. @returns Nothing. */
+          (name) => {
+            trace.push(`new:${name}`);
+          }
+        }
         getLabel={
           /** Reads a native name. @param style - Entry. @returns Name. */ (style) => style.name
         }
@@ -189,5 +202,102 @@ describe("native style-box acceptance", /** Defines widget contracts. @returns N
     press(box, "Escape");
     press(box, "Enter");
     expect(trace).toEqual(["a"]);
+    fireEvent.change(box, { target: { value: "Typed standalone" } });
+    press(box, "Enter");
+    expect(trace).toEqual(["a", "new:Typed standalone"]);
   });
+});
+
+it("keeps popup-internal focus, ignores disabled picks and leaves sidebar Escape to the deck", /** Checks realistic binding invalidation while a popup is open. @returns Nothing. */ () => {
+  const f = mount();
+  const toggle = screen.getByRole("button", { name: "Show Style" });
+  fireEvent.mouseDown(toggle);
+  fireEvent.click(toggle);
+  act(
+    /** Transfers within the actual composite widget. @returns Nothing. */
+    () => toggle.focus(),
+  );
+  const option = screen.getByRole("option", { name: "Zulu" });
+  fireEvent.mouseDown(option);
+  f.update("b", options, false);
+  fireEvent.click(option);
+  expect(f.trace).toEqual([]);
+  cleanup();
+  const trace: string[] = [];
+  render(
+    <StyleToolboxSelect
+      options={options}
+      value="a"
+      enabled
+      inSidebar
+      label="Sidebar style"
+      getLabel={
+        /** Uses actual names. @param entry - Source row. @returns Label. */
+        (entry) => entry.name
+      }
+      applyStyle={
+        /** Observes normal acceptance. @param entry - Actual row. @returns Nothing. */
+        (entry) => {
+          trace.push(entry.name);
+        }
+      }
+      acceptName={
+        /** Observes raw typed names. @param name - Entry text. @returns Nothing. */
+        (name) => {
+          trace.push(name);
+        }
+      }
+    />,
+  );
+  const box = screen.getByRole("combobox", { name: "Sidebar style" });
+  box.focus();
+  fireEvent.change(box, { target: { value: "Raw name " } });
+  expect(trace).toEqual([]);
+  expect(press(box, "Escape").defaultPrevented).toBe(false);
+  expect(box).toHaveValue("Alpha");
+  fireEvent.change(box, { target: { value: "Raw name " } });
+  press(box, "Enter");
+  expect(trace).toEqual(["Raw name "]);
+});
+
+it("passes custom style rows through the common widget while resolving actual style identity on pick", /** Checks separation of accessible name, row drawing and native apply owner. @returns Nothing. */ () => {
+  const applied: StyleToolboxEntry[] = [];
+  render(
+    <StyleToolboxSelect
+      options={options}
+      value="b"
+      enabled
+      label="Preview"
+      getLabel={
+        /** Uses actual visible names. @param entry - Pool row. @returns Name. */ (entry) =>
+          entry.name
+      }
+      renderItem={
+        /** Supplies independent custom row content without changing its native identity. @param entry - Pool row. @param selected - Current row state. @returns Row. */ (
+          entry,
+          selected,
+        ) => (
+          <span aria-hidden data-active={selected}>
+            {entry.id} preview
+          </span>
+        )
+      }
+      applyStyle={
+        /** Observes the actual native row rather than rendered text. @param entry - Accepted row. @returns Nothing. */ (
+          entry,
+        ) => {
+          applied.push(entry);
+        }
+      }
+      acceptName={
+        /** Rejects unexpected raw-name acceptance. @returns Nothing. */ () => {
+          throw new Error("Known row must resolve through the pool.");
+        }
+      }
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Show Preview" }));
+  expect(screen.getByText("b preview")).toHaveAttribute("data-active", "true");
+  fireEvent.click(screen.getByRole("option", { name: "Owned: & 字" }));
+  expect(applied).toEqual([options[1]]);
 });

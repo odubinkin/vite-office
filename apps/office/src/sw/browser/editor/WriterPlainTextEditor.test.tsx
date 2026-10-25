@@ -240,12 +240,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
     render(<App />);
     const paragraph = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(paragraph, "Plain override");
-    fireEvent.change(
-      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
-        "Paragraph style",
-      ),
-      { target: { value: "heading-4" } },
-    );
+    const styleEntry = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByRole("combobox", { name: "Paragraph style" });
+    styleEntry.focus();
+    fireEvent.change(styleEntry, { target: { value: "Heading 4" } });
+    fireEvent.keyDown(styleEntry, { key: "Enter" });
     const styledParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     const range = document.createRange();
     range.selectNodeContents(styledParagraph);
@@ -373,12 +373,12 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
 
     const firstParagraph = screen.getByRole("textbox", { name: "Writer document text" });
     enterWriterParagraphText(firstParagraph, "Before after");
-    fireEvent.change(
-      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
-        "Paragraph style",
-      ),
-      { target: { value: "heading-1" } },
-    );
+    const styleEntry = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByRole("combobox", { name: "Paragraph style" });
+    styleEntry.focus();
+    fireEvent.change(styleEntry, { target: { value: "Heading 1" } });
+    fireEvent.keyDown(styleEntry, { key: "Enter" });
     fireEvent.click(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
         "button",
@@ -419,7 +419,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
         "Paragraph style",
       ),
-    ).toHaveValue("heading-1");
+    ).toHaveValue("Heading 1");
     expect(Number(secondParagraph.style.lineHeight)).toBeCloseTo(1.15);
     expect(secondParagraph).toHaveStyle({ textAlign: "center" });
     expect(
@@ -427,7 +427,7 @@ describe("Writer paragraph breaks" /** Groups native Enter interaction and guard
         "combobox",
         { name: "Paragraph style" },
       ),
-    ).toHaveValue("heading-1");
+    ).toHaveValue("Heading 1");
     firstParagraph.focus();
     placeWriterCaret(firstParagraph, 1);
     fireEvent.keyDown(firstParagraph, { key: "Delete" });

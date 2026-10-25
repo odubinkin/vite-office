@@ -1,4 +1,6 @@
 /** @fileoverview Renders Writer text and numbering toolbar resources through shared command descriptors. */
+import type { SwDocShell } from "../../source/uibase/app/docsh";
+import { useWriterStylePreviews } from "./use-writer-style-previews";
 import { CommandSelectControl } from "../../../framework/browser/presentation/CommandSelectControl";
 import { FontNameSelect, FontSizeSelect } from "../../../svx/browser/tbxctrls/FontSelects";
 import { getOfficeFormattingButtonContent as getWriterButtonContent } from "../../../framework/browser/presentation/office-formatting-content";
@@ -27,6 +29,8 @@ import type { WriterToolbarItemPlacement } from "../../uiconfig/swriter/ui-resou
 /** Inputs shared by the complete Writer text formatting toolbar. */
 export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps {
   readonly unit: FieldUnit;
+  readonly objectShell?: SwDocShell;
+  readonly paragraphStyleNames?: readonly string[];
   readonly paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   readonly focusDocument?: () => void;
   readonly isInputEnabled?: boolean;
@@ -38,8 +42,10 @@ export interface WriterFormattingToolbarProps extends BrowserCommandSurfaceProps
 /** Renders the complete Writer text toolbar. Its generic indent commands select list-level or paragraph-margin behavior in the text shell. @param props - Shared command surface and shell context. @returns Toolbar item fragment. */
 export function WriterFormattingToolbar({
   commandSource,
+  objectShell,
   unit,
   paragraphStyleOptions,
+  paragraphStyleNames = [],
   focusDocument,
   isInputEnabled = true,
   resolveArguments,
@@ -88,6 +94,8 @@ export function WriterFormattingToolbar({
               resolveArguments,
               embeddedFontFamilies,
               fontAvailability,
+              paragraphStyleNames,
+              objectShell,
             );
           }
         }
@@ -120,7 +128,7 @@ function isWriterSpecialToolbarPlacement(
     : item.kind === "command-select" && "label" in item && "options" in item;
 }
 
-/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param paragraphStyleOptions - Binding-backed style selector options. @param focusDocument - Owning document client port. @param isInputEnabled - Active frame eligibility. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @returns Rendered special item. */
+/** Renders one non-button toolbar placement. @param placement - Generic resource item. @param commandSource - Descriptor/state source. @param getCommandResource - Generated command lookup. @param paragraphStyleOptions - Binding-backed style selector options. @param focusDocument - Owning document client port. @param isInputEnabled - Active frame eligibility. @param resolveArguments - Browser argument adapter. @param embeddedFontFamilies - Package font families. @param fontAvailability - Browser load status. @param paragraphStyleNames - Full source pool names beyond visible rows. @param objectShell - Actual owning Writer shell. @returns Rendered special item. */
 function renderSpecialToolbarItem(
   placement: Extract<
     WriterToolbarItemPlacement,
@@ -134,6 +142,8 @@ function renderSpecialToolbarItem(
   resolveArguments: BrowserCommandSurfaceProps["resolveArguments"],
   embeddedFontFamilies: readonly string[],
   fontAvailability: Readonly<Record<string, boolean>>,
+  paragraphStyleNames: readonly string[],
+  objectShell: SwDocShell | undefined,
 ): React.ReactNode {
   const item = placement;
   if (item.kind === "font-select" || item.kind === "font-size-select")
@@ -152,6 +162,7 @@ function renderSpecialToolbarItem(
           ) =>
             item.kind === "font-select" ? (
               <FontNameSelect
+                {...(focusDocument === undefined ? {} : { focusDocument })}
                 {...binding}
                 label={getCommandResource(item.commandId).controlLabel}
                 embeddedFontFamilies={embeddedFontFamilies}
@@ -173,7 +184,9 @@ function renderSpecialToolbarItem(
       commandSource={commandSource}
       getCommandResource={getCommandResource}
       key={item.label}
+      paragraphStyleNames={paragraphStyleNames}
       paragraphStyleOptions={paragraphStyleOptions}
+      {...(objectShell === undefined ? {} : { objectShell })}
       {...(focusDocument === undefined ? {} : { focusDocument })}
       isInputEnabled={isInputEnabled}
     />
@@ -183,13 +196,17 @@ function renderSpecialToolbarItem(
 /** Binding-backed paragraph-style selector. @param props - Generated resource and command state inputs. @returns Style selector. */
 function ParagraphStyleSelect({
   commandSource,
+  objectShell,
   getCommandResource,
   paragraphStyleOptions,
+  paragraphStyleNames,
   focusDocument,
   isInputEnabled,
 }: Readonly<{
   commandSource: BrowserCommandSurfaceProps["commandSource"];
+  objectShell?: SwDocShell;
   getCommandResource: (commandUrl: string) => WriterCommandResource;
+  paragraphStyleNames: readonly string[];
   paragraphStyleOptions: readonly WriterParagraphStyleOption[];
   focusDocument?: () => void;
   isInputEnabled: boolean;
@@ -199,8 +216,23 @@ function ParagraphStyleSelect({
     WRITER_COMMAND_IDS.styleApply,
     getCommandResource,
   );
+  const preview = useWriterStylePreviews(objectShell, paragraphStyleOptions, getCommandResource);
   return (
     <StyleToolboxSelect
+      {...preview}
+      acceptName={
+        /** Uses the entire native pool, not just visible rows, to choose Apply or NewByExample. @param name - Exact accepted name. @returns Nothing. */
+        (name) => {
+          commandSource.Execute(
+            paragraphStyleNames.includes(name)
+              ? WRITER_COMMAND_IDS.styleApply
+              : WRITER_COMMAND_IDS.styleNewByExample,
+            paragraphStyleNames.includes(name)
+              ? { Template: name, Family: 2 }
+              : { Param: name, Family: 2 },
+          );
+        }
+      }
       options={paragraphStyleOptions}
       value={String(presentation.selectedValue ?? "")}
       enabled={presentation.enabled && isInputEnabled}

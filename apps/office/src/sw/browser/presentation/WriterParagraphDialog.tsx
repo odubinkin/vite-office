@@ -4,7 +4,11 @@ import { TabulatorDialogSession } from "../../../cui/browser/tabpages/tabstpge-s
 import { TabulatorTabPage } from "../../../cui/browser/tabpages/TabulatorTabPage";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useState } from "react";
+import { SvxExtParagraphTabPage } from "../../../cui/source/tabpages/paragrph";
+import { WriterParagraphBreakControls } from "./WriterParagraphBreakControls";
+import { WriterParagraphSplitControls } from "./WriterParagraphSplitControls";
+import { tabControlDirection } from "../../../vcl/source/control/tabctrl";
+import { useEffect, useId, useRef, useState } from "react";
 import type { WriterParagraphFormatValue } from "../../source/uibase/shells/textsh1";
 import type {
   WriterParagraphDialogRequest,
@@ -26,6 +30,15 @@ export function WriterParagraphDialog({
   onDialogSubmit: (id: number, value: WriterParagraphDialogResult) => void;
 }>): React.JSX.Element {
   const [activeTab, setActiveTab] = useState<"spacing" | "flow" | "tabs">("spacing");
+  const tabIds = ["spacing", "flow", "tabs"] as const;
+  const tabIdentity = useId(),
+    tabRefs = useRef<Partial<Record<(typeof tabIds)[number], HTMLButtonElement | null>>>({});
+  useEffect(
+    /** Focuses the actual active native tab on opening this request. @returns Nothing. */ () => {
+      tabRefs.current.spacing?.focus();
+    },
+    [],
+  );
   const [showLineNumbersDraft, setShowLineNumbersDraft] = useState(
     dialogRequest.request.paintLineNumbers,
   );
@@ -33,23 +46,83 @@ export function WriterParagraphDialog({
     /** Handles Writer formatting state.  @returns Callback result. */ () =>
       dialogRequest.request.initialValue,
   );
+  const [flow] = useState(
+    /** Creates original definite paragraph split controls for this request. @returns Native page. */ () =>
+      new SvxExtParagraphTabPage(
+        dialogRequest.request.initialValue,
+        dialogRequest.request.pageStyleNames,
+      ),
+  );
   const [tabs] = useState(
     /** Retains a lazy native page and accumulated exchange output for this request. @returns Session. */
     () => new TabulatorDialogSession(dialogRequest.request.tabContext, unit),
   );
+  /** Runs original tab deactivation before changing the active page. @param next - Original tab identity. @returns Nothing. */
+  function activate(next: (typeof tabIds)[number]): void {
+    if (next === activeTab) return;
+    if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    setActiveTab(next);
+  }
+  /** Accepts original request values through the existing controller port. @returns Nothing. */
+  function accept(): void {
+    if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
+    onDialogSubmit(dialogRequest.id, {
+      tabStopItems: tabs.output,
+      paragraphFormat: { ...draft, ...flow.FillItemSet() },
+      paintLineNumbers: showLineNumbersDraft,
+    });
+  }
   return (
     <div
       data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4"
       onMouseDown={
-        /** Handles Writer formatting state. @param event - Input value. @returns Callback result. */ (
+        /** Keeps a backdrop click from stealing the active modal control focus. @param event - Actual pointer input. @returns Nothing. */ (
           event,
         ) => {
-          if (event.target === event.currentTarget) onDialogCancel(dialogRequest.id);
+          if (event.target === event.currentTarget) event.preventDefault();
         }
       }
     >
-      <section
+      <form
+        onSubmit={
+          /** Uses native browser default-button acceptance for input Enter. @param event - Form submission. @returns Nothing. */ (
+            event,
+          ) => {
+            event.preventDefault();
+            accept();
+          }
+        }
+        onKeyDownCapture={
+          /** Gives original tab shortcuts priority over page spin keys. @param event - Key input. @returns Nothing. */ (
+            event,
+          ) => {
+            const direction = tabControlDirection(
+              event.key,
+              event.ctrlKey || event.metaKey,
+              event.shiftKey,
+              (event.target as HTMLElement).getAttribute("role") === "tab",
+            );
+            if (direction === undefined) return;
+            event.preventDefault();
+            event.stopPropagation();
+            const next = tabIds[
+              (tabIds.indexOf(activeTab) + direction + tabIds.length) % tabIds.length
+            ] as (typeof tabIds)[number];
+            activate(next);
+            tabRefs.current[next]?.focus();
+          }
+        }
+        onKeyDown={
+          /** Cancels only unconsumed Escape from this modal. @param event - Key input. @returns Nothing. */ (
+            event,
+          ) => {
+            if (event.key === "Escape" && !event.defaultPrevented) {
+              event.stopPropagation();
+              onDialogCancel(dialogRequest.id);
+            }
+          }
+        }
         aria-label="Paragraph"
         aria-modal="true"
         data-writer-modal-panel="true"
@@ -82,13 +155,22 @@ export function WriterParagraphDialog({
                   label,
                 ]) => (
                   <button
+                    id={`${tabIdentity}-${id}`}
+                    aria-controls={`${tabIdentity}-panel`}
+                    tabIndex={activeTab === id ? 0 : -1}
+                    ref={
+                      /** Retains only the actual mounted tab control. @param element - Button. @returns Nothing. */ (
+                        element,
+                      ) => {
+                        tabRefs.current[id] = element;
+                      }
+                    }
                     aria-selected={activeTab === id}
                     className={`shrink-0 border-b-2 px-3 py-2 text-left text-sm sm:border-b-0 sm:border-r-2 ${activeTab === id ? "border-indigo-700 font-semibold" : "border-transparent"}`}
                     key={id}
                     onClick={
                       /** Handles Writer formatting state.  @returns Callback result. */ () => {
-                        if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
-                        setActiveTab(id);
+                        activate(id);
                       }
                     }
                     role="tab"
@@ -101,6 +183,8 @@ export function WriterParagraphDialog({
             </div>
             <div
               className="writer-dialog-scroll grid min-w-0 grid-cols-1 content-start gap-3 text-sm sm:grid-cols-2"
+              id={`${tabIdentity}-panel`}
+              aria-labelledby={`${tabIdentity}-${activeTab}`}
               role="tabpanel"
             >
               {activeTab === "spacing" ? (
@@ -228,132 +312,8 @@ export function WriterParagraphDialog({
               {activeTab === "tabs" ? <TabulatorTabPage session={tabs} /> : null}
               {activeTab === "flow" ? (
                 <>
-                  <label className="flex flex-col gap-1">
-                    Page style
-                    <select
-                      aria-label="Page style"
-                      className="rounded border px-2 py-1"
-                      value={draft.pageStyleName ?? ""}
-                      onChange={
-                        /** Selects a document page descriptor. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) => setDraft({ ...draft, pageStyleName: event.target.value })
-                      }
-                    >
-                      <option value="">Follow current</option>
-                      {(dialogRequest.request.pageStyleNames ?? ["Standard"]).map(
-                        /** Renders a named page descriptor. @param name - Writer name. @returns Option. */ (
-                          name,
-                        ) => (
-                          <option key={name} value={name}>
-                            {name}
-                          </option>
-                        ),
-                      )}
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1">
-                    Page numbering
-                    <select
-                      aria-label="Page numbering"
-                      className="rounded border px-2 py-1"
-                      value={
-                        draft.pageNumber === undefined || draft.pageNumber === "auto"
-                          ? "auto"
-                          : "restart"
-                      }
-                      onChange={
-                        /** Selects automatic or restarted page numbering. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({
-                            ...draft,
-                            pageNumber: event.target.value === "auto" ? "auto" : 1,
-                          })
-                      }
-                    >
-                      <option value="auto">Continue</option>
-                      <option value="restart">Restart at</option>
-                    </select>
-                  </label>
-                  {draft.pageNumber !== undefined && draft.pageNumber !== "auto" ? (
-                    <NumberField
-                      label="Start page number"
-                      value={draft.pageNumber}
-                      min={1}
-                      onChange={
-                        /** Changes the first printed page number. @param value - Page number. @returns Nothing. */ (
-                          value,
-                        ) => setDraft({ ...draft, pageNumber: value })
-                      }
-                    />
-                  ) : null}
-                  <label className="flex flex-col gap-1">
-                    Break before
-                    <select
-                      aria-label="Break before"
-                      className="rounded border px-2 py-1"
-                      value={draft.breakBefore ?? "auto"}
-                      onChange={
-                        /** Sets a page break before the paragraph. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({ ...draft, breakBefore: event.target.value as "auto" | "page" })
-                      }
-                    >
-                      <option value="auto">Automatic</option>
-                      <option value="page">Page</option>
-                    </select>
-                  </label>
-                  <label className="flex flex-col gap-1">
-                    Break after
-                    <select
-                      aria-label="Break after"
-                      className="rounded border px-2 py-1"
-                      value={draft.breakAfter ?? "auto"}
-                      onChange={
-                        /** Sets a page break after the paragraph. @param event - Selection. @returns Nothing. */ (
-                          event,
-                        ) =>
-                          setDraft({ ...draft, breakAfter: event.target.value as "auto" | "page" })
-                      }
-                    >
-                      <option value="auto">Automatic</option>
-                      <option value="page">Page</option>
-                    </select>
-                  </label>
-                  <label className="sm:col-span-2 flex items-center gap-2">
-                    <input
-                      checked={draft.keepTogether ?? false}
-                      onChange={
-                        /** Updates paragraph split permission. @param event - Checkbox change. @returns Nothing. */ (
-                          event,
-                        ) => setDraft({ ...draft, keepTogether: event.target.checked })
-                      }
-                      type="checkbox"
-                    />
-                    Do not split paragraph
-                  </label>
-                  <NumberField
-                    label="Orphan control (lines)"
-                    value={draft.orphans ?? 2}
-                    min={0}
-                    onChange={
-                      /** Updates minimum lines before a split. @param value - Count. @returns Nothing. */ (
-                        value,
-                      ) => setDraft({ ...draft, orphans: value })
-                    }
-                  />
-                  <NumberField
-                    label="Widow control (lines)"
-                    value={draft.widows ?? 2}
-                    min={0}
-                    onChange={
-                      /** Updates minimum lines after a split. @param value - Count. @returns Nothing. */ (
-                        value,
-                      ) => setDraft({ ...draft, widows: value })
-                    }
-                  />
+                  <WriterParagraphBreakControls page={flow} />
+                  <WriterParagraphSplitControls page={flow} />
                   <label className="sm:col-span-2 flex items-center gap-2">
                     <input
                       checked={draft.keepWithNext}
@@ -406,24 +366,11 @@ export function WriterParagraphDialog({
           >
             Cancel
           </button>
-          <button
-            className="writer-dialog-primary"
-            onClick={
-              /** Handles Writer formatting state.  @returns Callback result. */ () => {
-                if (activeTab === "tabs") tabs.Deactivate(draft.firstLineIndentPt ?? 0);
-                onDialogSubmit(dialogRequest.id, {
-                  tabStopItems: tabs.output,
-                  paragraphFormat: draft,
-                  paintLineNumbers: showLineNumbersDraft,
-                });
-              }
-            }
-            type="button"
-          >
+          <button className="writer-dialog-primary" type="submit">
             OK
           </button>
         </div>
-      </section>
+      </form>
     </div>
   );
 }

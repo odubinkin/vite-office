@@ -1,4 +1,5 @@
 /** @fileoverview Checks visible inclusive paragraph StyleApply ranges, active-endpoint no-op correction, history and ODT export on desktop/mobile. */
+import { pickWriterStyle } from "./writer-style-box";
 import { expect, test, type Locator } from "@playwright/test";
 import fs from "node:fs/promises";
 import { createDocument } from "../src/sfx2/source/doc/objsh";
@@ -89,8 +90,8 @@ for (const width of [1280, 390]) {
     const beforeStyle = await before.getAttribute("style"),
       afterStyle = await after.getAttribute("style");
     await selectParagraphRange(editor);
-    await expect(select).toHaveValue("OwnedA");
-    await select.selectOption("OwnedA");
+    await expect(select).toHaveValue("Owned range A");
+    await pickWriterStyle(select, "Owned range A");
     await expect(first).toHaveAttribute("data-style", "OwnedA");
     await expect(empty).toHaveAttribute("data-style", "OwnedA");
     await expect(last).toHaveAttribute("data-style", "OwnedA");
@@ -102,16 +103,15 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("Control+Shift+z");
     await expect(first).toHaveAttribute("data-style", "OwnedA");
     await expect(empty).toHaveAttribute("data-style", "OwnedA");
-    await select.selectOption("OwnedB");
+    await pickWriterStyle(select, "Owned range B");
     for (const paragraph of [first, empty, last])
       await expect(paragraph).toHaveAttribute("data-style", "OwnedB");
     if (width === 1280)
       await expect(
         page
           .getByRole("complementary", { name: "Writer properties sidebar" })
-          .getByRole("combobox", { name: "Paragraph style", exact: true })
-          .locator("option:checked"),
-      ).toHaveText("Owned range B");
+          .getByRole("combobox", { name: "Paragraph style", exact: true }),
+      ).toHaveValue("Owned range B");
     await last.click();
     await page.keyboard.press("End");
     await page.keyboard.insertText(":AfterRangeStyle");

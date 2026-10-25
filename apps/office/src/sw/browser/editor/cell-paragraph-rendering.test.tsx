@@ -1,4 +1,5 @@
 /** @fileoverview Verifies body and cell paragraphs share actual native style/list projections and shell history without upstream execution. */
+import { createWriterTextColorItem } from "../../source/core/attr/swatrset";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { SvxIndentValue } from "../../../editeng/inc/lrspitem";
 import { afterEach, describe, expect, it, vi } from "vitest";
@@ -9,7 +10,6 @@ import { SfxStringItem } from "../../../svl/source/items/stritem";
 import { SvxFontHeightItem } from "../../../editeng/source/items/textitem";
 import { SvxULSpaceItem, SvxFirstLineIndentItem } from "../../../editeng/source/items/frmitems";
 import {
-  RES_CHRATR_COLOR,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_FONTSIZE,
   RES_MARGIN_FIRSTLINE,
@@ -79,7 +79,7 @@ describe("shared native cell paragraph display", /** Registers actual node-to-di
     owner.node.SetParagraphRightMargin(300);
     owner.node.SetAttr(new SvxULSpaceItem(100, 200, RES_UL_SPACE));
     owner.node.SetAttr(new SvxFontHeightItem(280, 100, RES_CHRATR_FONTSIZE));
-    owner.node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#123456"));
+    owner.node.SetAttr(createWriterTextColorItem("#123456"));
     owner.node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#abcdef"));
     mount(owner);
     const cell = screen.getByLabelText("Row 1 column 1 paragraph 1");

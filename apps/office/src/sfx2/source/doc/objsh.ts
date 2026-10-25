@@ -4,6 +4,7 @@
  */
 
 import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
+import { MapUnit } from "../../../tools/inc/mapunit";
 import { NamedColor } from "../../inc/namedcolor";
 import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
@@ -57,6 +58,7 @@ export class SfxObjectShell extends SfxBroadcaster {
     this.m_aRecentColors.clear();
     super.Dispose();
   }
+  private m_nMapUnit = MapUnit.Map100thMM;
   private closed = false;
   private contentGeneration: number;
   private hasSavePosition: boolean;
@@ -90,6 +92,16 @@ export class SfxObjectShell extends SfxBroadcaster {
       suiteId: this.moduleId,
       title: this.title,
     });
+  }
+
+  /** Original object-shell map unit stored independently of the user's display unit. @returns Current logical map unit. */
+  public GetMapUnit(): MapUnit {
+    return this.m_nMapUnit;
+  }
+
+  /** Original raw assignment emits no document edit or notification. @param unit - Native logical map unit. @returns Nothing. */
+  public SetMapUnit(unit: MapUnit): void {
+    this.m_nMapUnit = unit;
   }
 
   /** Returns the stable document identity. @returns Shell identity. */

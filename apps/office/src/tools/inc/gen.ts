@@ -1,4 +1,4 @@
-/** @fileoverview Native represented integer Point/Size ownership from tools/gen.hxx; rotation, scaling, hashing and full rectangle APIs remain unported. */
+/** @fileoverview Native represented integer Point/Size and closed-interval Rectangle values from tools/gen.hxx; unconsumed transforms, hashing and full geometry APIs remain unported. */
 /** Const native point access without writable references. */
 export interface ReadonlyPoint {
   X(): number;
@@ -144,5 +144,114 @@ export class Size extends SizeTemplate {
       typeof width === "number" ? width : width.Width(),
       typeof width === "number" ? height : width.Height(),
     );
+  }
+}
+
+/** Consumed native closed-interval Rectangle value; unconsumed transforms and open-interval setters remain unported. */
+export class Rectangle {
+  public static readonly RECT_EMPTY = -32767;
+  private mnLeft = 0;
+  private mnTop = 0;
+  private mnRight = Rectangle.RECT_EMPTY;
+  private mnBottom = Rectangle.RECT_EMPTY;
+  /** Original default,copy,empty-position,closed-edge and point/size forms. @param args - Actual constructor form. @returns Independent rectangle. */
+  constructor(
+    ...args:
+      | []
+      | [source: Rectangle]
+      | [left: number, top: number]
+      | [left: number, top: number, right: number, bottom: number]
+      | [point: ReadonlyPoint, size: ReadonlySize]
+  ) {
+    if (args.length === 0) return;
+    if (args.length === 1) {
+      const source = args[0];
+      this.mnLeft = source.mnLeft;
+      this.mnTop = source.mnTop;
+      this.mnRight = source.mnRight;
+      this.mnBottom = source.mnBottom;
+    } else if (typeof args[0] === "number") {
+      this.mnLeft = Math.trunc(args[0]);
+      this.mnTop = Math.trunc(args[1] as number);
+      if (args.length === 4) {
+        this.mnRight = Math.trunc(args[2]);
+        this.mnBottom = Math.trunc(args[3]);
+      }
+    } else {
+      const point = args[0],
+        size = args[1] as ReadonlySize;
+      this.mnLeft = point.X();
+      this.mnTop = point.Y();
+      this.mnRight = size.Width()
+        ? this.mnLeft + size.Width() + (size.Width() > 0 ? -1 : 1)
+        : Rectangle.RECT_EMPTY;
+      this.mnBottom = size.Height()
+        ? this.mnTop + size.Height() + (size.Height() > 0 ? -1 : 1)
+        : Rectangle.RECT_EMPTY;
+    }
+  }
+  /** Original left edge. @returns Coordinate. */
+  public Left(): number {
+    return this.mnLeft;
+  }
+  /** Original top edge. @returns Coordinate. */
+  public Top(): number {
+    return this.mnTop;
+  }
+  /** Original empty-width edge aliases left. @returns Coordinate. */
+  public Right(): number {
+    return this.IsWidthEmpty() ? this.mnLeft : this.mnRight;
+  }
+  /** Original empty-height edge aliases top. @returns Coordinate. */
+  public Bottom(): number {
+    return this.IsHeightEmpty() ? this.mnTop : this.mnBottom;
+  }
+  /** Original width sentinel predicate. @returns Empty width. */
+  public IsWidthEmpty(): boolean {
+    return this.mnRight === Rectangle.RECT_EMPTY;
+  }
+  /** Original height sentinel predicate. @returns Empty height. */
+  public IsHeightEmpty(): boolean {
+    return this.mnBottom === Rectangle.RECT_EMPTY;
+  }
+  /** Original empty-axis disjunction. @returns Empty rectangle. */
+  public IsEmpty(): boolean {
+    return this.IsWidthEmpty() || this.IsHeightEmpty();
+  }
+  /** Original signed inclusive width. @returns Extent. */
+  public GetWidth(): number {
+    if (this.IsWidthEmpty()) return 0;
+    const width = this.mnRight - this.mnLeft;
+    return width < 0 ? width - 1 : width + 1;
+  }
+  /** Original signed inclusive height. @returns Extent. */
+  public GetHeight(): number {
+    if (this.IsHeightEmpty()) return 0;
+    const height = this.mnBottom - this.mnTop;
+    return height < 0 ? height - 1 : height + 1;
+  }
+  /** Original by-value top-left point. @returns Independent position. */
+  public TopLeft(): Point {
+    return new Point(this.mnLeft, this.mnTop);
+  }
+  /** Original union ignores empty operands,assigns into an empty receiver and otherwise normalizes all four raw edges. @param other - Actual rectangle. @returns Receiver,as the native template wrapper. */
+  public Union(other: Rectangle): this {
+    if (other.IsEmpty()) return this;
+    if (this.IsEmpty()) {
+      this.mnLeft = other.mnLeft;
+      this.mnTop = other.mnTop;
+      this.mnRight = other.mnRight;
+      this.mnBottom = other.mnBottom;
+    } else {
+      const left = Math.min(this.mnLeft, other.mnLeft, this.mnRight, other.mnRight);
+      const right = Math.max(this.mnLeft, other.mnLeft, this.mnRight, other.mnRight);
+      const top = Math.min(this.mnTop, other.mnTop, this.mnBottom, other.mnBottom);
+      const bottom = Math.max(this.mnTop, other.mnTop, this.mnBottom, other.mnBottom);
+      this.mnLeft = left;
+      this.mnRight = right;
+      this.mnTop = top;
+      this.mnBottom = bottom;
+    }
+    return this;
   }
 }

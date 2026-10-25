@@ -1,9 +1,11 @@
 /** @fileoverview Renders the browser counterpart of Writer's Hyperlink dialog. */
 
 import { WriterDialogHeader } from "./WriterDialogHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 import { useBrowserLocalization } from "../../../framework/browser/localization/browser-localization-context";
+import { SfxFrame } from "../../../sfx2/source/view/frame";
+import { HyperlinkInternetTP } from "../../../cui/source/dialogs/hyperlinkinternettabpage";
 import type { WriterHyperlink } from "../../source/core/txtnode/fmtatr2";
 
 /** Hyperlink dialog properties. */
@@ -21,13 +23,27 @@ export function WriterHyperlinkDialog({
 }: WriterHyperlinkDialogProps): React.JSX.Element {
   const localization = useBrowserLocalization();
   const title = localization.GetText("writer.hyperlink.title", "Hyperlink");
-  const [url, setUrl] = useState(initialHyperlink?.url ?? "");
+  const [internet] = useState(
+    /** Creates original represented entry/toggle state for this request. @returns Internet page. */ () =>
+      new HyperlinkInternetTP(initialHyperlink?.url ?? ""),
+  );
+  const [url, setUrl] = useState(internet.GetTarget());
+  const [removeQuery, setRemoveQuery] = useState(internet.IsRemoveQueryString());
+  const [targets] = useState(
+    /** Populates actual native target defaults once for this mounted page. @returns Default target list. */ () => {
+      const values: string[] = [];
+      SfxFrame.GetDefaultTargetList(values);
+      return values;
+    },
+  );
+  const targetListId = useId(),
+    input = useRef<HTMLInputElement>(null);
   const [text, setText] = useState("");
   const [targetFrame, setTargetFrame] = useState(initialHyperlink?.targetFrame ?? "");
   const [name, setName] = useState(initialHyperlink?.name ?? "");
   useEffect(
     /** Focuses the primary hyperlink field after the modal mounts. @returns Nothing. */ () => {
-      globalThis.document.querySelector<HTMLInputElement>("#writer-hyperlink-url")?.focus();
+      input.current?.focus();
     },
     [],
   );
@@ -37,6 +53,16 @@ export function WriterHyperlinkDialog({
       aria-modal="true"
       data-writer-modal="true"
       className="fixed inset-0 z-50 grid place-items-center bg-slate-950/40 p-4"
+      onKeyDown={
+        /** Cancels this original request from its own modal. @param event - Native key. @returns Nothing. */ (
+          event,
+        ) => {
+          if (event.key === "Escape") {
+            event.stopPropagation();
+            onCancel();
+          }
+        }
+      }
       role="dialog"
     >
       <form
@@ -56,7 +82,7 @@ export function WriterHyperlinkDialog({
               {
                 ...initialWithoutTarget,
                 ...(targetFrame.length === 0 ? {} : { targetFrame }),
-                ...(name.trim().length === 0 ? {} : { name: name.trim() }),
+                ...(name.length === 0 ? {} : { name }),
                 url: destination,
               },
               text,
@@ -71,22 +97,6 @@ export function WriterHyperlinkDialog({
           </div>
           <fieldset className="grid gap-3 border border-slate-300 p-3">
             <legend className="px-1 text-sm font-semibold">Hyperlink Settings</legend>
-            <label className="grid gap-1 text-sm font-semibold text-slate-700">
-              {localization.GetText("writer.hyperlink.url", "Link")}
-              <input
-                aria-label="URL"
-                className="rounded-md border border-slate-300 px-3 py-2 font-normal"
-                id="writer-hyperlink-url"
-                onChange={
-                  /** Updates the destination field. @param event - Input change. @returns Nothing. */
-                  (event) => setUrl(event.target.value)
-                }
-                required
-                inputMode="url"
-                type="text"
-                value={url}
-              />
-            </label>
             {initialHyperlink === undefined ? (
               <label className="grid gap-1 text-sm font-semibold text-slate-700">
                 {localization.GetText("writer.hyperlink.text", "Text")}
@@ -105,30 +115,69 @@ export function WriterHyperlinkDialog({
               </label>
             ) : null}
             <label className="grid gap-1 text-sm font-semibold text-slate-700">
-              {localization.GetText("writer.hyperlink.target", "Frame")}
-              <select
-                aria-label="Target"
+              {localization.GetText("writer.hyperlink.url", "Link")}
+              <input
+                aria-label="URL"
                 className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+                ref={input}
                 onChange={
-                  /** Updates the target frame choice. @param event - Selection change. @returns Nothing. */
-                  (event) => setTargetFrame(event.target.value)
+                  /** Updates the destination field. @param event - Input change. @returns Nothing. */
+                  (event) => {
+                    internet.ModifiedTargetHdl_Impl(event.target.value);
+                    setUrl(internet.GetTarget());
+                  }
                 }
-                value={targetFrame}
-              >
-                <option value="">
-                  {localization.GetText("writer.hyperlink.target-current", "Current frame")}
-                </option>
-                <option value="_blank">
-                  {localization.GetText("writer.hyperlink.target-new", "New window")}
-                </option>
-                <option value="_self">
-                  {localization.GetText("writer.hyperlink.target-same", "Same frame")}
-                </option>
-              </select>
+                required
+                inputMode="url"
+                type="text"
+                value={url}
+              />
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <input
+                type="checkbox"
+                checked={removeQuery}
+                onChange={
+                  /** Applies the source checkbox immediately;unchecking does not restore deleted text. @param event - Native toggle. @returns Nothing. */ (
+                    event,
+                  ) => {
+                    internet.ClickRemoveQueryStringHdl_Impl(event.target.checked);
+                    setRemoveQuery(internet.IsRemoveQueryString());
+                    setUrl(internet.GetTarget());
+                  }
+                }
+              />
+              {localization.GetText(
+                "hyperlinkinternetpage.removequerystring",
+                "Remove query string",
+              )}
             </label>
           </fieldset>
           <fieldset className="grid gap-3 border border-slate-300 p-3">
             <legend className="px-1 text-sm font-semibold">Further Settings</legend>
+            <label className="grid gap-1 text-sm font-semibold text-slate-700">
+              {localization.GetText("writer.hyperlink.target", "Frame")}
+              <input
+                aria-label="Target"
+                list={targetListId}
+                className="rounded-md border border-slate-300 px-3 py-2 font-normal"
+                value={targetFrame}
+                onChange={
+                  /** Retains native editable target text,including custom frame names. @param event - Actual entry. @returns Nothing. */ (
+                    event,
+                  ) => setTargetFrame(event.target.value)
+                }
+              />
+              <datalist id={targetListId}>
+                {targets.map(
+                  /** Renders original frame defaults in source order. @param value - Raw native target. @returns Entry. */ (
+                    value,
+                  ) => (
+                    <option key={value} value={value} />
+                  ),
+                )}
+              </datalist>
+            </label>
             <label className="grid gap-1 text-sm font-semibold text-slate-700">
               Name
               <input

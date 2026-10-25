@@ -1,4 +1,5 @@
 /** @fileoverview Checks real native item stacks reach shared body/cell DOM without the filter TextRuns formatter. */
+import { createWriterTextColorItem } from "../../source/core/attr/swatrset";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -76,7 +77,7 @@ for (const cell of [false, true])
               session,
               new SvxPostureItem(2, 11),
               new SvxUnderlineItem(1, 14),
-              new SfxStringItem(3, "#123456"),
+              createWriterTextColorItem("#123456"),
               new SfxStringItem(42, "#abcdef"),
               new SvxFontHeightItem(320, 100, 8),
               new SvxFontItem(
@@ -197,7 +198,7 @@ it("native display retains inherited items and explicit normal resets in a clipp
           session,
           new SvxWeightItem(5, 15),
           new SvxPostureItem(0, 11),
-          new SfxStringItem(3, "auto"),
+          createWriterTextColorItem("auto"),
           new SfxStringItem(42, "transparent"),
         ),
         2,

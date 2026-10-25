@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/page-desc-codec.ts",
+          "marker": "encodePageDesc"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/xml/page-desc-codec.ts",
+    "rationale": "Browser-owned lossless optional page descriptor snapshots and historical pair decoding;original core Any properties remain independent from JSON.",
+    "responsibilities": [
+      "Browser-owned lossless optional page descriptor snapshots and historical pair decoding;original core Any properties remain independent from JSON."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Dedicated Worker structured-clone encoding is a browser execution boundary and is not part of the native SfxPoolItem value contract."
+    },
+    "status": "local-only",
+    "preservedResponsibilities": [
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
+    ],
+    "localSymbols": [
+      "encodePageDesc",
+      "decodePageDesc"
+    ]
+  },
+  "legacyOrder": 88
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { SwUndoFormatAttr } from "../undo/unattr";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -422,8 +423,8 @@ export class SwDoc {
   public NotifyModelChange(hint: SwAtomicModelHint): void {
     this.stateManager.NotifyModelChange(hint);
   }
-  /** Returns style-pool ownership. @returns Style manager. */
-  public GetDocumentStylePoolManager(): DocumentStylePoolManager {
+  /** Returns the actual style-pool owner through Writer's native access boundary. @returns Style manager. */
+  public getIDocumentStylePoolAccess(): DocumentStylePoolManager {
     return this.stylePoolManager;
   }
   /** Appends one original range undo before applying typed paragraph attributes. @param range - Native selected range. @param right - Increase direction. @param modulus - Native snapping policy. @param state - Optional browser shell cursor adjunct. @returns Nothing. */
@@ -481,12 +482,38 @@ export class SwDoc {
   }
 
   /** Creates and registers a named text collection like native docfmt.cxx. @param name - Display name. @param parent - Parent collection. @param id - Stable graph identity, defaulting to the name. @returns New document-owned collection. */
-  public MakeTextFormatColl(name: string, parent?: SwTextFormatColl, id = name): SwTextFormatColl {
+  public MakeTextFormatColl(
+    name: string,
+    parent?: SwTextFormatColl,
+    id?: string,
+  ): SwTextFormatColl {
+    let identity = id ?? name;
+    if (id === undefined) {
+      let suffix = 1;
+      while (this.FindTextFormatColl(identity) !== undefined) identity = `${name}:${suffix++}`;
+    }
     const collection = this.stylePoolManager.AddTextFormatColl(
-      new SwTextFormatColl(this.attrPool, id, name, parent),
+      new SwTextFormatColl(this.attrPool, identity, name, parent),
     );
     this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
     return collection;
+  }
+
+  /** Changes represented paragraph-format attributes with original ChgFormat history ownership. @param collection - Actual named format. @param set - Incoming direct items. @returns Nothing. */
+  public ChgFormat(collection: SwTextFormatColl, set: SfxItemSet): void {
+    if (this.undoManager.DoesUndo())
+      this.undoManager.AddUndoAction(new SwUndoFormatAttr(collection, set));
+    collection.SetFormatAttrSet(set);
+  }
+
+  /** Removes a named collection and corrects follow links before original format death. Used by creation undo with recording suppressed. @param collection - Owned non-default collection. @returns Nothing. */
+  public DelTextFormatColl(collection: SwTextFormatColl): void {
+    if (collection === this.GetDfltTextFormatColl()) return;
+    this.stylePoolManager.RemoveTextFormatColl(collection);
+    for (const owner of this.GetTextFormatColls())
+      if (owner.GetNextTextFormatColl() === collection) owner.SetNextTextFormatColl(owner);
+    collection.DisposeModify();
+    this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: collection.GetName() });
   }
 
   /** Copies absent custom style ownership with native parent/follow/direct-item and manual-rule handling. @param source - Source collection. @returns Destination collection; the existing builtin identity adapter is retained. */

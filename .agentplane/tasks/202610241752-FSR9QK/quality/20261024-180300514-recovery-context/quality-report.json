@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241752-FSR9QK",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T18:03:00.514Z",
+  "verdict": "pass",
+  "summary": "Native page descriptor Any and XML offset contracts are connected to lossless browser transfer.",
+  "evaluated_sha": "661c4c068aedc1512c0f16659615582c932496c0",
+  "blueprint_digest": "3095ae6599471a0794715ef4bc088bb00ce4b0e1b165ddce551e4dba3ad7cb79",
+  "findings": [
+    "Source review verifies signed16 QueryValue/PutValue,void,conversion-bit mask and read-only name. Core no longer serializes JSON;browser records preserve0/absent and historical input semantics. Shared XML handler retains original SAX saturation and signed export,including source suspected discontinuityWRITER092.",
+    "Exact-final source hashes,56focused cases and strict100coverage,52consumer cases,48tooling cases,4production Chromium1280/390 UI/history/ODT cycles and15source gates pass. Two concrete Any import edges are source-backed with neighboring permissions still forbidden;no thresholds/limits reduced."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241752-FSR9QK/README.md",
+    "output/playwright/writer-full-checkpoint/FSR9QK-hashes.json",
+    "output/playwright/writer-full-checkpoint/FSR9QK-coverage-last.log",
+    "output/playwright/writer-full-checkpoint/FSR9QK-consumers.log",
+    "output/playwright/writer-full-checkpoint/FSR9QK-boundaries-final.log",
+    "output/playwright/writer-full-checkpoint/FSR9QK-e2e.log",
+    "output/playwright/writer-full-checkpoint/FSR9QK-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Full native page descriptor client/style-mapper services remain outside represented scope;next authorized task runs full checkpoint before stopping."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterNumObjectBar.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0107"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterNumObjectBar.tsx#WriterNumObjectBar",
+        "apps/office/src/sw/browser/presentation/WriterNumObjectBar.test.tsx"
+      ],
+      "justification": "React numbering object toolbar consumes the existing generated visible numobjectbar placements and actual Sfx frame bindings. Native NumberList context selects it;table object toolbar wins the same source position. No document/list state or command is recreated in the presenter. Full native toolbar management and unsupported source commands remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterNumObjectBar"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

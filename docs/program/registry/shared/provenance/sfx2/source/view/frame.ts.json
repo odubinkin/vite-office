@@ -19,20 +19,23 @@
     },
     "localPath": "apps/office/src/sfx2/source/view/frame.ts",
     "localSymbols": [
-      "SfxUnoAnyItem"
+      "SfxUnoAnyItem",
+      "SfxFrame"
     ],
     "omittedResponsibilities": [
       "Native pooling, UNO mutation and presentation paths outside the bounded SfxUnoAnyItem request value contract remain unimplemented."
     ],
     "preservedResponsibilities": [
-      "Implements bounded SfxUnoAnyItem construction, value, always-unequal comparison and clone behavior at the pinned sfx2/source/view/frame.cxx owner."
+      "Implements bounded SfxUnoAnyItem construction, value, always-unequal comparison and clone behavior at the pinned sfx2/source/view/frame.cxx owner.",
+      "TaskH0Q3NZ adds consumed SfxFrame::GetDefaultTargetList append order including empty No Target;actual native frame/window lifecycle remains unrepresented."
     ],
     "status": "mapped",
     "upstreamPath": "sfx2/source/view/frame.cxx",
     "upstreamSymbols": [
       "SfxUnoAnyItem",
       "SfxUnoAnyItem::Clone",
-      "SfxUnoAnyItem::operator=="
+      "SfxUnoAnyItem::operator==",
+      "SfxFrame::GetDefaultTargetList"
     ]
   },
   "legacyOrder": 52

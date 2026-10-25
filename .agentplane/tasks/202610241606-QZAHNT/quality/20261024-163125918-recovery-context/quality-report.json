@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241606-QZAHNT",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T16:31:25.918Z",
+  "verdict": "pass",
+  "summary": "Reviewed a7ad714366d9 against approved represented bookmark scope and source-bound final checks;ready to close exactly this task.",
+  "evaluated_sha": "a7ad714366d96f65c11d5b9ed554ede8fe7ef119",
+  "blueprint_digest": "1cfc5fcfda721951915a6bffc8cf878e2e75607f58e0fefa01f7cbe6894fcac9",
+  "findings": [
+    "Live names come from the actual mark owner;immediate GoTo/Delete/Rename reuse frame dispatch while the original dialog request remains pending. Close preserves changes and returns focus through the actual mounted document port;Chromium verifies resumed typing and ODT reopen at1280/390.",
+    "Native temporary-name matching,token counts,selection differences,raw whitespace,unique-name cache and practically unreachable counter branches are retained;WRITER086/087 document suspected source issues. No second mark model,coverage ignore,threshold reduction or broad parity promotion.",
+    "Final source-hash manifest matches all31implementation/record/doc paths in the reviewed commit;strict four-owner coverage totals117statements,76branches,30functions,106lines with zero skipped.192native-consumer and18shared XML scenarios pass;27exact-final focused cases and2production browser cases pass. All declared static/source/lifecycle gates pass."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241606-QZAHNT/README.md",
+    "output/playwright/writer-full-checkpoint/QZAHNT-source-hashes.json",
+    "output/playwright/writer-full-checkpoint/QZAHNT-coverage-final.log",
+    "output/playwright/writer-full-checkpoint/QZAHNT-native-consumers.log",
+    "output/playwright/writer-full-checkpoint/QZAHNT-shared.log",
+    "output/playwright/writer-full-checkpoint/QZAHNT-e2e-final.log",
+    "output/playwright/writer-full-checkpoint/QZAHNT-final-gates.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Expanded/protected/hidden bookmark controls,mailmerge naming,complete native metadata/XNamed and localization services remain outside approved represented slice;full suite is not due at task2after checkpoint."
+  ]
+}

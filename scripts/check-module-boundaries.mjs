@@ -133,7 +133,8 @@ const allowedEdges = new Map([
       "xmloff",
     ]),
   ],
-  ["sfx2", new Set(["svl"])],
+  // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
+  ["sfx2", new Set(["svl", "tools"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
@@ -141,11 +142,42 @@ const allowedEdges = new Map([
   // Original SharedStringPool borrows CharClass; Library_svl links utl.
   ["svl", new Set(["comphelper", "cppu", "o3tl", "sal", "tools", "udkapi", "unotools"])],
   // Original svtools/source/misc/unitconv.cxx uses Tools map/field units and o3tl conversions.
-  ["svtools", new Set(["tools", "o3tl"])],
+  // Original sampletext.cxx consumes VCL font/charmap/capabilities, ICU script codes,
+  // i18nutil Unicode classes, SAL encoding and UNO ScriptType. Library_svt links
+  // i18nlangtag/i18nutil/utl/vcl/sal and ICU; retain these native dependency directions.
+  [
+    "svtools",
+    new Set([
+      "tools",
+      "o3tl",
+      "external",
+      "i18nlangtag",
+      "i18nutil",
+      "unotools",
+      "sal",
+      "offapi",
+      "vcl",
+    ]),
+  ],
   // Original sdangitm.hxx includes tools/degree.hxx.
   // Original rotmodit.cxx exposes Any and CellVertJustify2.
   // Original pageitem.cxx clears the actual rtl OUString presentation output.
-  ["svx", new Set(["cppu", "editeng", "o3tl", "offapi", "sal", "svl", "svtools", "tools", "vcl"])],
+  // Library_svxcore links i18nlangtag; style label analysis uses actual LANGUAGE_DONTKNOW.
+  [
+    "svx",
+    new Set([
+      "i18nlangtag",
+      "cppu",
+      "editeng",
+      "o3tl",
+      "offapi",
+      "sal",
+      "svl",
+      "svtools",
+      "tools",
+      "vcl",
+    ]),
+  ],
   [
     "sw",
     new Set([
@@ -157,6 +189,8 @@ const allowedEdges = new Map([
       // Original sw/Library_sw.mk links cppuhelper; unosett.hxx uses cppuhelper/implbase.hxx.
       "cppuhelper",
       "cui",
+      // Library_sw links docmodel; real SvxColorItem transfer retains complex-color state.
+      "docmodel",
       "editeng",
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
@@ -182,9 +216,11 @@ const allowedEdges = new Map([
   // Original FontVariation.cxx includes o3tl/string_view.hxx for token/trim/decimal input.
   // Original Library_vcl links i18nlangtag; GetDefaultFont consumes resolved language/Locale values.
   // Original field.cxx includes i18nutil/unicode.hxx; Library_vcl.mk links i18nutil.
+  // Native PhysicalFontFace.cxx uses hb_face_collect_unicodes; Library_vcl.mk links external HarfBuzz.
   [
     "vcl",
     new Set([
+      "external",
       "i18nutil",
       "i18nlangtag",
       "o3tl",
@@ -283,6 +319,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
   )
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
+  if (portablePath.startsWith("external/harfbuzz/src/")) return "upstream-mechanism";
   if (
     portablePath.startsWith("sal/rtl/") ||
     portablePath.startsWith("sal/inc/rtl/") ||

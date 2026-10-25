@@ -12,7 +12,7 @@ import type { BrowserCommandSurfaceProps } from "../../../framework/browser/pres
 import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
 import { createWriterDocumentSession } from "../../../sw/browser/composition/writer-module";
 import { getWriterCommandResource } from "../../../sw/uiconfig/swriter/writer-command-resources";
-import { FontList } from "../../../vcl/browser/font-list";
+import { FontList } from "../../../svtools/browser/font-list";
 import { WriterFormattingToolbar } from "./WriterFormattingToolbar";
 import { createBrowserFontItem } from "../../../svx/browser/tbxctrls/font-item";
 /** Actual frame/controller ports used by the original Writer font widgets. */
@@ -118,6 +118,7 @@ it("dispatches Writer family and nonstandard sizes through real bindings and pre
     fireEvent.change(screen.getByRole("combobox", { name: "Shared family" }), {
       target: { value: "Liberation Sans" },
     });
+    fireEvent.keyDown(screen.getByRole("combobox", { name: "Shared family" }), { key: "Enter" });
     expect(execute).toHaveBeenLastCalledWith(".uno:CharFontName", {
       from: "shared",
       fontFamily: createBrowserFontItem("Liberation Sans"),

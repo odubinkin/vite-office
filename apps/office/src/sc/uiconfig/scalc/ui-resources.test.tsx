@@ -1,5 +1,5 @@
 /** @fileoverview Production Calc resource hierarchy and shared Writer menu/toolbar contracts. */
-import { FontList } from "../../../vcl/browser/font-list";
+import { FontList } from "../../../svtools/browser/font-list";
 import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createCalcSession } from "../../browser/composition/calc-module";

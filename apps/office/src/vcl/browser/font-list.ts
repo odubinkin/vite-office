@@ -1,5 +1,9 @@
-/** @fileoverview Browser counterpart of LibreOffice `svtools/ctrltool.hxx` FontList. */
+/** @fileoverview Browser physical-font records and actual source-byte/capability acquisition; svtools owns FontList grouping and lookup. */
 import { text } from "../../i18nlangtag/source/isolang/isolang.tables";
+import { readSfntFontTable } from "./sfnt-font-table";
+import { readOs2FontCapabilities } from "../source/font/PhysicalFontFace";
+import type { FontCapabilities } from "../inc/fontcapabilities";
+import { readBrowserFontFaceSource } from "./font-face-source";
 import { Font } from "../source/font/font";
 import { GetEnglishSearchFontName } from "../../unotools/source/misc/fontdefs";
 import { RTL_TEXTENCODING_SYMBOL } from "../../sal/inc/rtl/textenc";
@@ -37,74 +41,44 @@ export function getBrowserFont(name: string): Font {
   return font;
 }
 
-export const FALLBACK_FONT_FAMILIES = [
-  "Liberation Serif",
-  "Liberation Sans",
-  "Liberation Mono",
-  "Arial",
-  "Calibri",
-  "Cambria",
-  "Courier New",
-  "DejaVu Sans",
-  "DejaVu Serif",
-  "Noto Sans",
-  "Noto Serif",
-  "Times New Roman",
-] as const;
-
 /** Browser local-font query result used by FontList. */
-interface LocalFontData {
+export interface BrowserLocalFontData {
   readonly family: string;
+  readonly fullName?: string;
+  readonly postscriptName?: string;
+  readonly style?: string;
+  readonly blob?: () => Promise<Blob>;
 }
-/** Local Font Access API signature kept optional for unsupported browsers. */
-type LocalFontQuery = () => Promise<readonly LocalFontData[]>;
+/** Actual registered face or approved local-font record; browser metadata is retained without inventing native physical metrics. */
+export type BrowserPhysicalFont =
+  | Readonly<{ kind: "registered"; family: string; face: FontFace; sourceUrl?: string }>
+  | Readonly<{ kind: "local"; family: string; data: BrowserLocalFontData }>;
 
-/** Ordered, deduplicated font-family list populated from the active output device. */
-export class FontList {
-  /** Creates a font list from normalized names. @param names - Ordered unique families. @returns Nothing. */
-  public constructor(private readonly names: readonly string[]) {}
-  /** Returns the number of family names. @returns Font count. */
-  public GetFontNameCount(): number {
-    return this.names.length;
+/** Reads bytes only from an actual source: an owned FontFace constructor buffer or approved Local Font Access blob. @param font - Real physical record. @returns Source bytes or undefined when the platform exposes names only. */
+export async function readBrowserPhysicalFont(
+  font: BrowserPhysicalFont,
+): Promise<ArrayBuffer | undefined> {
+  if (font.kind === "registered") {
+    const owned = readBrowserFontFaceSource(font.face);
+    if (owned !== undefined || font.sourceUrl === undefined) return owned;
+    await font.face.load();
+    const response = await fetch(font.sourceUrl, { credentials: "same-origin" });
+    if (!response.ok) throw new Error(`Font source read failed: ${response.status}`);
+    return response.arrayBuffer();
   }
-  /** Returns one family by index. @param index - Zero-based position. @returns Font family. */
-  public GetFontName(index: number): string {
-    const name = this.names[index];
-    if (name === undefined) throw new Error(`FontList index is outside the list: ${index}`);
-    return name;
-  }
-  /** Returns the immutable ordered family list. @returns Font families. */
-  public GetFontNames(): readonly string[] {
-    return this.names;
-  }
-  /** Queries Local Font Access and falls back offline. @param window_ - Browser boundary. @returns Populated list. */
-  public static async FromBrowser(window_: Window = window): Promise<FontList> {
-    const query = (window_ as Window & { queryLocalFonts?: LocalFontQuery }).queryLocalFonts;
-    let local: readonly LocalFontData[] = [];
-    if (query !== undefined)
-      try {
-        local = await query.call(window_);
-      } catch {
-        local = [];
-      }
-    const names = [
-      ...new Set([
-        ...FALLBACK_FONT_FAMILIES,
-        ...local
-          .map(
-            /** Projects a family. @param font - Local font. @returns Family. */ (font) =>
-              font.family,
-          )
-          .filter(
-            /** Removes blank families. @param family - Candidate. @returns Whether non-empty. */ Boolean,
-          ),
-      ]),
-    ].sort(
-      /** Sorts family names. @param left - First. @param right - Second. @returns Ordering. */ (
-        left,
-        right,
-      ) => left.localeCompare(right, undefined, { sensitivity: "base" }),
-    );
-    return new FontList(names);
-  }
+  const blob = await font.data.blob?.();
+  return blob?.arrayBuffer();
+}
+/** Reads actual advertised capabilities using the source PhysicalFontFace OS/2 algorithm. A collection requires an explicitly resolved face index; family names never select its first face implicitly. @param font - Real physical source. @param faceIndex - Actual resolved collection index, optional for standalone fonts. @returns Source capability bitsets or unknown. */
+export async function readBrowserFontCapabilities(
+  font: BrowserPhysicalFont,
+  faceIndex?: number,
+): Promise<FontCapabilities | undefined> {
+  const source = await readBrowserPhysicalFont(font);
+  if (source === undefined) return undefined;
+  const bytes = new Uint8Array(source);
+  if (faceIndex === undefined && String.fromCharCode(...bytes.subarray(0, 4)) === "ttcf")
+    return undefined;
+  const table = readSfntFontTable(bytes, "OS/2", faceIndex ?? 0);
+  return table === undefined ? undefined : readOs2FontCapabilities(table);
 }

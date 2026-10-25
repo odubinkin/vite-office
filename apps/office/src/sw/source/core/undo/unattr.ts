@@ -1,4 +1,6 @@
 /** @fileoverview Implements direct character and paragraph attribute undo from pinned LibreOffice unattr.cxx. */
+import { SfxUndoAction } from "../../../../svl/source/undo/undo";
+import type { SwTextFormatColl } from "../doc/fmtcol";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwTextFragment, SwTextNode, WriterParagraphAlignment } from "../txtnode/ndtxt";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -429,5 +431,46 @@ export class SwUndoMoveLeftMargin extends SwUndo {
           : {}),
       });
     return range;
+  }
+}
+
+/** Native ChgFormat history: old direct set plus newly introduced WhichIds, resolved by style name. */
+export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
+  private items: SfxItemSet;
+  private readonly which: readonly number[];
+  private readonly name: string;
+  /** Captures old direct items and the new-item reset mask. @param collection - Original format. @param set - Incoming direct set. @returns Nothing. */
+  public constructor(collection: SwTextFormatColl, set: SfxItemSet) {
+    super();
+    this.name = collection.GetName();
+    this.items = collection.GetAttrSet().Clone();
+    this.which = [
+      ...new Set(
+        [...this.items.entries(), ...set.entries()].map(
+          /** Retains complete native identity. @param item - Direct item. @returns WhichId. */
+          (item) => item.Which(),
+        ),
+      ),
+    ];
+  }
+  /** Returns the source operation label. @returns Label. */
+  public override GetComment(): string {
+    return "Change Style Attributes";
+  }
+  /** Swaps retained and live direct values like original UndoImpl. @param context - Current document. @returns Nothing. */
+  public override UndoWithContext(context: SwUndoRedoContext): void {
+    const collection = context.GetDoc().FindTextFormatCollByName(this.name);
+    if (collection === undefined) return;
+    const next = collection.GetAttrSet().Clone();
+    for (const which of this.which) {
+      const item = this.items.GetItemIfSet(which, false);
+      if (item === undefined) collection.ResetFormatAttr(which);
+      else collection.SetFormatAttr(item);
+    }
+    this.items = next;
+  }
+  /** Original redo uses the same swap operation. @param context - Current document. @returns Nothing. */
+  public override RedoWithContext(context: SwUndoRedoContext): void {
+    this.UndoWithContext(context);
   }
 }

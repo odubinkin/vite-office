@@ -172,8 +172,11 @@ describe("App" /**
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
         "Paragraph style",
       ),
-      { target: { value: "default" } },
+      { target: { value: "Default Paragraph Style" } },
     );
+    fireEvent.keyDown(within(formattingToolbar).getByLabelText("Paragraph style"), {
+      key: "Enter",
+    });
     expect(screen.getByRole("button", { name: "Undo" })).toBeEnabled();
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(screen.getByRole("button", { name: "Undo" })).toBeDisabled();
@@ -181,21 +184,25 @@ describe("App" /**
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
         "Paragraph style",
       ),
-      { target: { value: "heading-1" } },
+      { target: { value: "Heading 1" } },
     );
+    fireEvent.keyDown(within(formattingToolbar).getByLabelText("Paragraph style"), {
+      key: "Enter",
+    });
     expect(firstParagraph).toHaveStyle({ fontSize: "18pt" });
     expect(firstParagraph).not.toHaveAccessibleDescription();
     expect(
-      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByText(
-        "Heading 1",
+      within(screen.getByRole("complementary", { name: "Writer properties sidebar" })).getByRole(
+        "combobox",
+        { name: "Paragraph style" },
       ),
-    ).toBeInTheDocument();
+    ).toHaveValue("Heading 1");
     fireEvent.click(screen.getByRole("button", { name: "Undo" }));
     expect(
       within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByLabelText(
         "Paragraph style",
       ),
-    ).toHaveValue("default");
+    ).toHaveValue("Default Paragraph Style");
     fireEvent.click(screen.getByRole("button", { name: "Redo" }));
     fireEvent.click(within(formattingToolbar).getByRole("button", { name: "Center" }));
     expect(firstParagraph).toHaveStyle({ textAlign: "center" });
@@ -245,8 +252,16 @@ describe("App" /**
     const fontSelect = within(
       screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
     ).getByLabelText("Font name");
-    expect(within(fontSelect).getByRole("option", { name: "Noto Serif" })).toBeInTheDocument();
+    fireEvent.click(
+      within(screen.getByRole("toolbar", { name: "Writer formatting toolbar" })).getByRole(
+        "button",
+        { name: "Show Font name" },
+      ),
+    );
+    expect(screen.getByRole("option", { name: "Noto Serif" })).toBeInTheDocument();
+    fireEvent.keyDown(fontSelect, { key: "Escape" });
     fireEvent.change(fontSelect, { target: { value: "Noto Serif" } });
+    fireEvent.keyDown(fontSelect, { key: "Enter" });
     expect(editor.querySelector("span")).toHaveStyle({ fontFamily: "Noto Serif" });
     const fontSizeSelect = within(
       screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
@@ -265,48 +280,34 @@ describe("App" /**
     const styleSelect = within(
       screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
     ).getByLabelText("Paragraph style");
-    expect(within(styleSelect).getAllByRole("option")).toHaveLength(10);
+    const styleToggle = within(
+      screen.getByRole("toolbar", { name: "Writer formatting toolbar" }),
+    ).getByRole("button", { name: "Show Paragraph style" });
+    fireEvent.click(styleToggle);
     expect(
-      within(styleSelect).queryByRole("option", { name: "List Heading" }),
-    ).not.toBeInTheDocument();
-    for (const [style, fontSize] of [
-      ["title", "28pt"],
-      ["subtitle", "18pt"],
-      ["heading-3", "14pt"],
-      ["heading-5", "12pt"],
-      ["heading", "14pt"],
-      ["preformatted-text", "10pt"],
-      ["quotations", "12pt"],
-      ["caption", "10pt"],
-      ["footnote", "10pt"],
+      within(screen.getByRole("listbox", { name: "Paragraph style" })).getAllByRole("option"),
+    ).toHaveLength(10);
+    expect(screen.queryByRole("option", { name: "List Heading" })).toBeNull();
+    fireEvent.keyDown(styleSelect, { key: "Escape" });
+    for (const [name, fontSize] of [
+      ["Title", "28pt"],
+      ["Subtitle", "18pt"],
+      ["Heading 3", "14pt"],
+      ["Heading 5", "12pt"],
+      ["Heading", "14pt"],
+      ["Preformatted Text", "10pt"],
+      ["Quotations", "12pt"],
+      ["Caption", "10pt"],
+      ["Footnote", "10pt"],
     ] as const) {
-      if (
-        !Array.from((styleSelect as HTMLSelectElement).options).some(
-          /** Checks actual available styles. @param option - Native select option. @returns Match. */
-          (option) => option.value === style,
-        )
-      ) {
-        const names: Readonly<Record<typeof style, string>> = {
-          title: "Title",
-          subtitle: "Subtitle",
-          "heading-3": "Heading 3",
-          "preformatted-text": "Preformatted Text",
-          quotations: "Quotations",
-          "heading-5": "Heading 5",
-          heading: "Heading",
-          caption: "Caption",
-          footnote: "Footnote",
-        };
+      fireEvent.click(styleToggle);
+      if (screen.queryByRole("option", { name }) === null) {
+        fireEvent.keyDown(styleSelect, { key: "Escape" });
         fireEvent.click(screen.getByRole("menuitem", { name: "Styles" }));
-        fireEvent.click(screen.getByRole("menuitemradio", { name: names[style] }));
-        expect(
-          Array.from((styleSelect as HTMLSelectElement).options).map(
-            /** Reads actual option identity after native style use. @param option - Option. @returns Identity. */
-            (option) => option.value,
-          ),
-        ).toContain(style);
+        fireEvent.click(screen.getByRole("menuitemradio", { name }));
+        fireEvent.click(styleToggle);
       }
-      fireEvent.change(styleSelect, { target: { value: style } });
+      fireEvent.click(screen.getByRole("option", { name }));
       expect(editor).toHaveStyle({ fontSize });
     }
   });

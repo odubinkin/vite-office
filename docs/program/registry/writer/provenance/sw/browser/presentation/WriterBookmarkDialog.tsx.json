@@ -12,7 +12,7 @@
       ]
     },
     "localPath": "apps/office/src/sw/browser/presentation/WriterBookmarkDialog.tsx",
-    "rationale": "Adapts pinned insertbookmark.ui and bookmarkmenu.ui to accessible browser controls; marks remain in SwDoc.",
+    "rationale": "Adapts pinned insertbookmark.ui and bookmarkmenu.ui to accessible browser controls; marks remain in SwDoc. TaskQZAHNT: TaskQZAHNT: Consumed native raw-name matching,multiple-row selection/button sensitivity,separate rename prompt and persistent immediate GoTo/Delete/Rename are connected to actual marks. Insert completes the real request. Complete tree metadata,expanded text editing,protection and hidden properties remain outside this slice.",
     "responsibilities": [
       "Renders WriterBookmarkDialog and forwards accepted commands to Writer shell ownership."
     ],

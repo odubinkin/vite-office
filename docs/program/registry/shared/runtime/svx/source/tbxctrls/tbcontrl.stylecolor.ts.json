@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.ts#testStylePreviewColorsVisible",
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts#@fileoverview",
+        "apps/office/e2e/shared/style-preview-color-device.spec.ts#@fileoverview"
+      ],
+      "justification": "Extracted complete consumed SetupEntry color block plus its earlier UI text-color initialization, with actual Color values supplied after optional preview item lookup. Selected rows retain highlight text/background; only SOLID style fill draws a rectangle; visibility adjustment uses the explicit style or actual device background. Original strict luminance interval,contrast arithmetic,alpha and COL_AUTO sentinel comparison remain unchanged (WRITER080). Actual pool lookup, menu state, font decorations and full SetupEntry/live dropdown integration remain pending. The consumed device port flattens GetBackground().GetColor() without introducing a fake Wallpaper object. Test-only IsBright instrumentation reaches a redundant guard that is unreachable for actual native Color values; production logic is unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "testStylePreviewColorsVisible",
+        "initializeStylePreviewTextColor",
+        "applyStylePreviewColors"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svx/source/tbxctrls/tbcontrl.cxx",
+      "upstreamSymbols": [
+        "TestColorsVisible",
+        "SetupEntry"
+      ]
+    }
+  }
+}

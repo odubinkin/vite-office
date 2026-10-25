@@ -440,6 +440,14 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlimp-named-styles.ts",
+          "marker": "applyNamedParagraphStyles"
+        },
+        {
+          "path": "apps/office/src/sw/source/uibase/app/docstyle-preview.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -750,6 +758,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
           "marker": "HandleTableHeadlineChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/doc.hxx",
+          "marker": "getIDocumentStylePoolAccess"
         }
       ]
     },
@@ -812,7 +824,8 @@
       "Task135: Embedded resource identity permits multiple declaration-local font-face aliases for identical package data; conflicting family/style/weight/format still rejects. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
       "Task TV1H69 exposes native BalanceRowHeight through the existing ndtbl1 owner and original cursor/history state, with no browser height payload or parallel geometry model. Full document parity remains unverified.",
       "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
-      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
+      "Task6764KT in-progress font/style dropdown pipeline: original FontNameBox item sizing, five-pixel fit loop, own-name eligibility, exact script/minimal/symbol sample order, right-aligned sample truncation and scoped paint state are represented. Browser Canvas consumes acquired face metadata and real TextMetrics; no glyph support is inferred from CSS fallback. Writer paragraph FillPreview flattens real root/parent/child item sets and temporarily resolves unused pool styles before deleting new collections in reverse creation order; no persistent style store, model revision, modified or history mutation is introduced. The old unused GetDocumentStylePoolManager accessor is canonicalized to native getIDocumentStylePoolAccess. WRITER072 documents the preserved minimal-sample overwrite. Browser font-source acquisition, real popup/style rendering and Writer/Calc acceptance remain unfinished. Focused deterministic device tests are not installed-font or Chromium-raster evidence; no broad parity/default status is promoted."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/doc.cxx",
@@ -821,7 +834,8 @@
       "SwDoc::acquire",
       "SwDoc::release",
       "SwDoc::getReferenceCount"
-    ]
+    ],
+    "rationale": " TaskDVQ9ES extends the consumed paragraph style path with editable raw-name acceptance, full pool-name lookup beyond displayed rows, actual document-shell UpdateStyle/MakeByExample, point-node FillByEx filtering, first selected text collection lookup, native grouped update and separate attribute/create/apply histories, Sfx ignored asynchronous naming and existing collection deletion/follow correction. Source quirks WRITER067/068 are preserved. Named-style references are XML-escaped during paragraph/list body export. The Style panel retains native command order; FormatPaintbrush and standalone Writer ResetAttributes remain disabled because their original execute paths are not implemented. This corrects the initial task assumption that ResetAttributes was already registered; the private style-application reset is a distinct owner. Wider style families/masks/hidden default table, complete style-box popup/completion/preview/clear/more/platform services and complete UI/core parity remain unverified. Existing save/open/autosave/no-recovery deviations and classification/default statuses are unchanged."
   },
   "legacyOrder": 164
 }

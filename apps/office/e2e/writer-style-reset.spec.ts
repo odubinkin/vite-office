@@ -1,4 +1,5 @@
 /** @fileoverview Checks ordinary paragraph style reset, exact hint preservation, native repeated history and ODT export in real desktop/mobile UI. */
+import { pickWriterStyle } from "./writer-style-box";
 import { expect, test, type Locator } from "@playwright/test";
 import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
@@ -109,8 +110,8 @@ for (const width of [1280, 390])
     await expect(partial.locator("strong")).toHaveText("rtial");
     await expect(link.locator("a strong")).toHaveText("LinkResetProof");
     await selectRange(editor);
-    await expect(select).toHaveValue("ResetA");
-    await select.selectOption("ResetA");
+    await expect(select).toHaveValue("Reset style A");
+    await pickWriterStyle(select, "Reset style A");
     for (const node of [whole, empty, partial, link])
       await expect(node).toHaveCSS("text-indent", "16px");
     await expect(whole.locator("strong")).toHaveCount(0);
@@ -122,10 +123,9 @@ for (const width of [1280, 390])
       await expect(
         page
           .getByRole("complementary", { name: "Writer properties sidebar" })
-          .getByRole("combobox", { name: "Paragraph style", exact: true })
-          .locator("option:checked"),
-      ).toHaveText("Reset style A");
-    await select.selectOption("ResetA");
+          .getByRole("combobox", { name: "Paragraph style", exact: true }),
+      ).toHaveValue("Reset style A");
+    await pickWriterStyle(select, "Reset style A");
     await page.keyboard.press("Control+z");
     await expect(whole).toHaveCSS("text-indent", "16px");
     await expect(whole.locator("strong")).toHaveCount(0);
@@ -139,7 +139,7 @@ for (const width of [1280, 390])
     await expect(whole).toHaveCSS("text-indent", "16px");
     await expect(partial.locator("strong")).toHaveCount(0);
     await expect(link.locator("a")).toHaveCount(0);
-    await select.selectOption("ResetB");
+    await pickWriterStyle(select, "Reset style B");
     for (const node of [whole, empty, partial, link]) {
       await expect(node).toHaveAttribute("data-style", "ResetB");
       await expect(node).toHaveCSS("text-indent", "24px");

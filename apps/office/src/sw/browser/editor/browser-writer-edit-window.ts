@@ -52,6 +52,7 @@ export class BrowserWriterEditWindow {
   private tableFrames = new Map<HTMLTableElement, SwTabFrame>();
   private tableBorderGuide: HTMLDivElement | undefined;
   private suppressBorderClick = false;
+  private restoringSelection = false;
 
   /** Creates a browser edit window. @param editWindow - Writer-owned operation boundary. @param environment - Browser selection surface. @param resolveParagraph - Mounted projection lookup. @returns Nothing. */
   public constructor(
@@ -130,6 +131,7 @@ export class BrowserWriterEditWindow {
       /** Publishes one native selection to SwEditWin. @param selection - DOM selection projection. @returns Nothing. */ (
         selection,
       ) => {
+        if (!root.contains(this.environment.document.activeElement)) return;
         if (!this.tableCapture) this.ApplySelection(selection);
       },
     );
@@ -152,13 +154,43 @@ export class BrowserWriterEditWindow {
 
   /** Restores shell-owned cursor state into the DOM projection. @param selection - Current cursor projection. @returns Whether restoration succeeded. */
   public RestoreSelection(selection: WriterCursorSelection): boolean {
-    return this.selectionMapper.Restore(selection);
+    const previous = this.restoringSelection;
+    this.restoringSelection = true;
+    try {
+      return this.selectionMapper.Restore(selection);
+    } finally {
+      this.restoringSelection = previous;
+    }
+  }
+
+  /** Focuses the native editing device without admitting a stale DOM selection during an explicit model-owned gesture. Native GrabFocus retains the PaM. @param host - Actual editing host. @returns Nothing. */
+  private FocusHost(host: HTMLElement): void {
+    const previous = this.restoringSelection;
+    this.restoringSelection = true;
+    try {
+      host.focus({ preventScroll: true });
+    } finally {
+      this.restoringSelection = previous;
+    }
   }
 
   public readonly HandleFocus =
-    /** Preserves native cursor on menu refocus; ordinary paragraph focus resolves its SwNodes coordinate. @param event - React focus event. @returns Nothing. */ (
+    /** Preserves browser-created host selections before focus restoration; ordinary paragraph focus resolves its SwNodes coordinate. Native GetFocus does not reset the PaM. @param event - React focus event. @param retained - Current shell cursor restored on explicit return from a control or when no valid document DOM selection exists. @returns Nothing. */ (
       event: React.FocusEvent<HTMLElement>,
+      retained?: WriterCursorSelection,
     ): void => {
+      if (this.restoringSelection) return;
+      if (event.target === event.currentTarget) {
+        const previous = event.relatedTarget ?? this.environment.document.activeElement;
+        const fromControl =
+          previous !== null &&
+          previous !== this.environment.document.body &&
+          !event.currentTarget.contains(previous);
+        const actual = fromControl ? undefined : this.selectionMapper.Read();
+        if (actual !== undefined) this.ApplySelection(actual);
+        else if (retained !== undefined) this.RestoreSelection(retained);
+        return;
+      }
       if (event.relatedTarget !== null && event.relatedTarget.closest('[role="menu"]') !== null)
         return;
       const paragraph = (event.target as HTMLElement).closest<HTMLParagraphElement>(
@@ -441,7 +473,7 @@ export class BrowserWriterEditWindow {
           SwTab.SEL_HORI;
         if (this.editWindow.GetTableBorderDragPosition() !== undefined) {
           this.suppressBorderClick = true;
-          event.currentTarget.focus({ preventScroll: true });
+          this.FocusHost(event.currentTarget);
           this.PaintColumnGuide();
         }
         event.preventDefault();
@@ -450,7 +482,7 @@ export class BrowserWriterEditWindow {
       if (event.button === 0 && marker?.parentElement != null) {
         const parent = marker.parentElement,
           offset = Array.from(parent.childNodes).indexOf(marker) + 1;
-        event.currentTarget.focus({ preventScroll: true });
+        this.FocusHost(event.currentTarget);
         if (
           this.selectionMapper.SetBaseAndExtent(parent, offset, parent, offset) &&
           this.SynchronizeSelection()

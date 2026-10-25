@@ -34,7 +34,7 @@ test("Writer creates, edits, and round-trips hyperlinks", /** Verifies upstream-
 
   await page.getByRole("button", { name: "Hyperlink" }).click();
   await page.getByLabel("URL").fill("https://example.test/first");
-  await page.getByLabel("Target").selectOption("_blank");
+  await page.getByLabel("Target").fill("_blank");
   await page.getByRole("button", { name: "Apply" }).click();
   await expect(editor.getByRole("link", { name: "Linked text" })).toHaveAttribute(
     "href",

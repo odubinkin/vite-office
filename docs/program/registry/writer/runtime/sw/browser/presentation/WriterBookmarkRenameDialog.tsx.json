@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/presentation/WriterBookmarkRenameDialog.tsx",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "browser-presentation",
+    "capabilityIds": [
+      "CAP-0113"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/presentation/WriterBookmarkRenameDialog.tsx#WriterBookmarkRenameDialog"
+      ],
+      "justification": "Browser projection of the consumed SwRenameXNamedDlg prompt,actual live names,raw whitespace and insertion-only forbidden-character filtering. Parent bookmark request stays open;complete native widget/XNamed services remain unported. Native beforeinput selection ranges identify inserted text without common-prefix inference.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WriterBookmarkRenameDialog",
+        "filterBookmarkRenameEdit"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

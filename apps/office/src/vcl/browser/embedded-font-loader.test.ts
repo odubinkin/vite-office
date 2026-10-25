@@ -1,6 +1,7 @@
 /** @fileoverview Checks document font installation, fallback and revocation at the browser boundary. */
 
 import { describe, expect, it, vi } from "vitest";
+import { readBrowserFontFaceSource } from "./font-face-source";
 import { installWriterEmbeddedFonts, type BrowserEmbeddedFont } from "./embedded-font-loader";
 
 const resource: BrowserEmbeddedFont = {
@@ -70,6 +71,11 @@ describe("embedded browser fonts", /** Groups availability and lifecycle tests. 
       descriptors: { style: "normal", weight: "bold" },
     });
     expect(onChange).toHaveBeenCalledWith("Package Serif", true);
+    const face = added.mock.calls[0]?.[0] as FontFace;
+    expect(new Uint8Array(readBrowserFontFaceSource(face) as ArrayBuffer)).toEqual(resource.bytes);
+    const copy = new Uint8Array(readBrowserFontFaceSource(face) as ArrayBuffer);
+    copy[0] = 255;
+    expect(new Uint8Array(readBrowserFontFaceSource(face) as ArrayBuffer)).toEqual(resource.bytes);
     cleanup();
     expect(deleted).toHaveBeenCalledWith(added.mock.calls[0]?.[0]);
   });

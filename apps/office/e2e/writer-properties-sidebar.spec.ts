@@ -1,4 +1,6 @@
 /** @fileoverview Exercises source-shaped Writer Properties panels,actual slot/history synchronization and genuine ODT output in Chromium. */
+import { pickComboBoxEntry } from "./shared/combo-box";
+import { pickWriterStyle } from "./writer-style-box";
 import { expect, test } from "@playwright/test";
 import { readFile, writeFile } from "node:fs/promises";
 import { readOdtDocument } from "../src/sw/source/filter/xml/swxml";
@@ -38,15 +40,17 @@ for (const width of [1280, 390]) {
             ),
         ),
     ).toEqual(["Style", "Character", "Paragraph"]);
-    await sidebar
-      .getByRole("combobox", { name: "Paragraph style", exact: true })
-      .selectOption("heading-1");
+    await pickWriterStyle(
+      sidebar.getByRole("combobox", { name: "Paragraph style", exact: true }),
+      "Heading 1",
+    );
     await expect(
       toolbar.getByRole("combobox", { name: "Paragraph style", exact: true }),
-    ).toHaveValue("heading-1");
-    await sidebar
-      .getByRole("combobox", { name: "Font name", exact: true })
-      .selectOption("Liberation Sans");
+    ).toHaveValue("Heading 1");
+    await pickComboBoxEntry(
+      sidebar.getByRole("combobox", { name: "Font name", exact: true }),
+      "Liberation Sans",
+    );
     await sidebar.getByRole("combobox", { name: "Font size", exact: true }).fill("14");
     await sidebar.getByRole("combobox", { name: "Font size", exact: true }).press("Tab");
     await expect(toolbar.getByRole("combobox", { name: "Font name", exact: true })).toHaveValue(

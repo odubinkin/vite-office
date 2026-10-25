@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/ui/misc/linenum.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0125"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/ui/misc/linenum.ts#SwLineNumberingDlg"
+      ],
+      "justification": "Consumed native line-number control bounds,sentinel initialization,sensitivity and ushort acceptance. Document,line-number style/format and header/footer services remain outside this represented draft.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwLineNumberingDlg"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/ui/misc/linenum.cxx",
+      "upstreamSymbols": [
+        "SwLineNumberingDlg::SwLineNumberingDlg"
+      ]
+    }
+  }
+}

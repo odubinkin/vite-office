@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/vcl/browser/sfnt-font-table.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "font-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/vcl/browser/sfnt-font-table.ts#readSfntFontTable",
+        "apps/office/src/vcl/browser/sfnt-font-table.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT reads actual SFNT/TTC table containers at the browser byte boundary and preserves the defined PhysicalFontFace OS/2 coverage algorithm: original offsets42/78,word-to-bit ordering,optional codepage set and last-successful-word reuse after short reads. WRITER074 records version-zero/partial-read behavior and the uninitialized-first-word boundary, where the browser exposes unknown data rather than emulating C++ uninitialized memory. The core file contains only the extracted capability algorithm; no fake PhysicalFontFace class or service is introduced. Native physical-face ownership,HarfBuzz cmap/collection face selection and dropdown rendering remain unfinished. Collection capability reads require an explicit resolved face index. Actual repository fonts and synthetic binary-boundary cases are checked; advertised coverage is not glyph support. SFNT directory access is a bounded browser byte-container adapter,not a claim to reproduce the unread HarfBuzz sanitizer/cmap implementation. Unsupported/ambiguous containers remain unknown.",
+      "knownViolations": [],
+      "localSymbols": [
+        "readSfntFontTable"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

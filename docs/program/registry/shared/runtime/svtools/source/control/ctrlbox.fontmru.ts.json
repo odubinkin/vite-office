@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/source/control/ctrlbox.fontmru.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "font-style-dropdown-preview",
+    "capabilityIds": [
+      "CAP-0109"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svtools/source/control/ctrlbox.fontmru.ts#decodeFontMruEntries",
+        "apps/office/src/svtools/browser/font-mru-store.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-mru.spec.ts#@fileoverview"
+      ],
+      "justification": "Original FontNameBox logical first-line semicolon codec, empty-token rejection, raw names and two LF WriteLine calls. Empty output does not truncate an existing store. The text boundary does not claim byte-stream or full FontNameBox parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "decodeFontMruEntries",
+        "encodeFontMruEntries"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svtools/source/control/ctrlbox.cxx",
+      "upstreamSymbols": [
+        "SaveMRUEntries",
+        "LoadMRUEntries"
+      ]
+    }
+  }
+}

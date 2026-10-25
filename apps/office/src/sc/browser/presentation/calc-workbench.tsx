@@ -389,6 +389,7 @@ export function CalcWorkbench({
           }
           formattingToolbar={
             <CalcFormattingToolbar
+              focusDocument={focusGrid}
               objectShell={controller.shell}
               commandSource={source}
               resolveArguments={resolveCalcCommandArguments}

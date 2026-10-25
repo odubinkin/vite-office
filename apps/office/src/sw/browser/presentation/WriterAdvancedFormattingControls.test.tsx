@@ -266,16 +266,11 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.change(screen.getByLabelText("Position"), { target: { value: "72" } });
     fireEvent.click(screen.getByText("New"));
     fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
-    fireEvent.change(screen.getByLabelText("Page style"), { target: { value: "Standard" } });
-    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
+    fireEvent.click(screen.getByLabelText("Insert"));
+    fireEvent.click(screen.getByLabelText("With page style"));
+    fireEvent.click(screen.getByLabelText("Page number"));
     fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
-    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "auto" } });
-    expect(screen.queryByLabelText("Start page number")).toBeNull();
-    fireEvent.change(screen.getByLabelText("Page numbering"), { target: { value: "restart" } });
-    fireEvent.change(screen.getByLabelText("Start page number"), { target: { value: "2" } });
-    fireEvent.change(screen.getByLabelText("Break before"), { target: { value: "page" } });
-    fireEvent.change(screen.getByLabelText("Break after"), { target: { value: "page" } });
-    fireEvent.click(screen.getByLabelText("Do not split paragraph"));
+    fireEvent.click(screen.getByLabelText("Allow to split paragraph"));
     fireEvent.change(screen.getByLabelText("Orphan control (lines)"), {
       target: { value: "3" },
     });
@@ -295,8 +290,8 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
         keepTogether: true,
         orphans: 3,
         widows: 4,
-        breakBefore: "page",
-        breakAfter: "page",
+        breakBefore: "auto",
+        breakAfter: "auto",
         pageStyleName: "Standard",
         pageNumber: 2,
       }),
@@ -360,6 +355,8 @@ describe("Writer advanced formatting controls", /** Handles Writer formatting st
     fireEvent.click(screen.getByText("Delete"));
     expect(screen.queryByRole("option", { name: "24.0 pt" })).toBeNull();
     fireEvent.mouseDown(screen.getByRole("dialog").parentElement as HTMLElement);
+    expect(screen.queryByRole("dialog")).toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
     expect(screen.queryByRole("dialog")).toBeNull();
     fireEvent.click(screen.getByRole("button", { name: "Open Paragraph from Format menu" }));
     fireEvent.change(screen.getByLabelText("Line spacing"), { target: { value: "leading" } });

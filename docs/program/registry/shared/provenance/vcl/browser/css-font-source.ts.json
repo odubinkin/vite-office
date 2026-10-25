@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/css-font-source.ts",
+          "marker": "getCssFontFaceSources"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/css-font-source.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/e2e/shared/font-css-source.spec.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/css-font-source.ts",
+    "rationale": "Task6764KT connects actual registered CSS FontFaces to unique active same-origin CSSOM declarations, preserving ambiguity as unknown rather than selecting guessed glyph data. Source URLs use actual stylesheet bases and CSS string decoding; disabled/opaque/inactive sheets,duplicate descriptors,local/fallback/unsupported format/technology sources are not guessed. FontList retains source URLs, reads only on demand, waits for actual face.load and propagates HTTP/load failures. Chromium witnesses run actual repository exports over production Writer/Calc pages; unit CSSOM descriptor ports explicitly compensate for jsdom dropping font-face-only descriptors and are not native browser evidence. Actual font cmap/capability readers,native regular-face choice and visual font/style dropdown integration remain unfinished; no full parity/default promotion.",
+    "responsibilities": [
+      "Actual active CSSOM font descriptors and one-to-one registered face source matching.",
+      "Conservative same-origin source URL resolution without substituting fake glyph or physical metrics."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The browser CSSOM and real registered FontFace identity supply source URLs for physical metadata acquisition. Native font/backend tables and cmap behavior remain separate owners; no font support is inferred from browser fallback painting."
+    },
+    "status": "local-only"
+  }
+}

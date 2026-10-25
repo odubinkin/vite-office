@@ -65,7 +65,7 @@ for (const width of [1280, 390]) {
     await page.keyboard.press("ControlOrMeta+[");
     await expect(size).toHaveValue("13.3 pt");
     await sidebar
-      .getByRole("group", { name: "Font Size Adjustment", exact: true })
+      .getByRole("group", { name: "Direct Formatting and Font Size", exact: true })
       .getByRole("button", { name: "Increase", exact: true })
       .click();
     await expect(size).toHaveValue("15.3 pt");
@@ -74,12 +74,12 @@ for (const width of [1280, 390]) {
     await page.getByRole("button", { name: "Redo", exact: true }).click();
     await expect(size).toHaveValue("15.3 pt");
     await sidebar
-      .getByRole("group", { name: "Font Size Adjustment", exact: true })
+      .getByRole("group", { name: "Direct Formatting and Font Size", exact: true })
       .getByRole("button", { name: "Decrease", exact: true })
       .click();
     await expect(size).toHaveValue("13.3 pt");
     await sidebar
-      .getByRole("group", { name: "Font Size Adjustment", exact: true })
+      .getByRole("group", { name: "Direct Formatting and Font Size", exact: true })
       .scrollIntoViewIfNeeded();
     await page.screenshot({ path: info.outputPath("font-sizing.png") });
     expect(

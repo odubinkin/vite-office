@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "202610241710-Z2BZNW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-24T17:16:08.040Z",
+  "verdict": "pass",
+  "summary": "Represented source paragraph split controls meet first-task acceptance;ready to close.",
+  "evaluated_sha": "14f54f1d5de0394e8b3f696106f1d64885cc3d83",
+  "blueprint_digest": "09e93514154cf97095c3c4661ae5e471981c63240f2bb644f791f61b0d904f78",
+  "findings": [
+    "Native definite-state reset/handler order,bounds,sensitivity asymmetry,inactive numbers and changed-output semantics are reused by actual Paragraph requests. Existing core/history/filter ownership remains authoritative;source suspicion documented as WRITER090.",
+    "Strict2owner100coverage,14focused cases,52consumer cases and2production Chromium1280/390 cases pass. Real cancellation,undo/redo and ODT round-trip verified;declared gates pass after final format correction without suppression or parity promotion."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610241710-Z2BZNW/README.md",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-hashes.json",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-coverage.log",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-consumers.log",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-e2e.log",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-gates.json",
+    "output/playwright/writer-full-checkpoint/Z2BZNW-format-fixed.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Mixed/HTML and complete textflow services remain unrepresented. First of two tasks;continue one formatting keyboard/focus task then pause goal."
+  ]
+}

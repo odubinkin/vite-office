@@ -1,4 +1,5 @@
 /** @fileoverview Checks actual mounted numbering font ownership for body and table-cell lists. */
+import { createWriterTextColorItem } from "../../source/core/attr/swatrset";
 import { FontItalic, FontWeight } from "../../../tools/inc/fontenum";
 import { act, cleanup, render } from "@testing-library/react";
 import { afterEach, expect, it } from "vitest";
@@ -8,7 +9,6 @@ import { WriterViewStore } from "../presentation/writer-view-projection";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 import { applyWriterParagraphList } from "../../source/core/doc/list";
 import { createWriterNumFormat } from "../../source/core/doc/number";
-import { SfxStringItem } from "../../../svl/source/items/stritem";
 import {
   FontLineStyle,
   SvxFontItem,
@@ -23,7 +23,6 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_COLOR,
 } from "../../inc/hintids";
 import { FontFamily, FontPitch } from "../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../sal/inc/rtl/textenc";
@@ -63,7 +62,7 @@ for (const cell of [false, true])
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
       node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
       node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_UNDERLINE));
-      node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+      node.SetAttr(createWriterTextColorItem("#336699"));
       applyWriterParagraphList(node, { kind, level: 0, ruleName: "LabelFont" });
       const rule = node.GetNumRule();
       if (rule === undefined) throw Error("Missing rule");

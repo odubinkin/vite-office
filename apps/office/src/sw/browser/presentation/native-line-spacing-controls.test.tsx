@@ -261,3 +261,82 @@ it("handles unknown and subsequently disabled status through actual Sfx shell an
     session.Close();
   }
 });
+
+it("positions the actual floating line-spacing panel inside the viewport and releases geometry observers", /** Explicit host geometry covers anchor edges and above/below placement;Chromium tests verify actual layout. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession(),
+    observe = vi.fn(),
+    disconnect = vi.fn();
+  vi.stubGlobal("innerWidth", 390);
+  vi.stubGlobal("innerHeight", 800);
+  vi.stubGlobal(
+    "ResizeObserver",
+    /** Explicit browser observer protocol fixture. */ class {
+      observe = observe;
+      disconnect = disconnect;
+    },
+  );
+  vi.spyOn(HTMLElement.prototype, "offsetWidth", "get").mockReturnValue(280);
+  vi.spyOn(HTMLElement.prototype, "offsetHeight", "get").mockReturnValue(200);
+  const rendered = render(
+    <WriterLineSpacingControl
+      commandSource={createBrowserCommandSource(session.view.GetViewFrame())}
+      getCommandResource={getWriterCommandResource}
+      unit={FieldUnit.CM}
+    />,
+  );
+  const trigger = screen.getByRole("button", { name: "Line Spacing" }),
+    anchor = trigger.parentElement as HTMLDivElement;
+  const bounds = vi.spyOn(anchor, "getBoundingClientRect").mockReturnValue({
+    left: 10,
+    right: 42,
+    top: 20,
+    bottom: 52,
+    width: 32,
+    height: 32,
+  } as DOMRect);
+  try {
+    fireEvent.click(trigger);
+    const panel = screen.getByRole("dialog", { name: "Line Spacing" })
+      .parentElement as HTMLDivElement;
+    expect(panel.parentElement).toBe(document.body);
+    expect(panel.style.left).toBe("0px");
+    expect(panel.style.top).toBe("52px");
+    expect(panel.style.maxWidth).toBe("390px");
+    expect(panel.style.maxHeight).toBe("800px");
+    fireEvent.pointerDown(panel);
+    expect(trigger).toHaveAttribute("aria-expanded", "true");
+    bounds.mockReturnValue({
+      left: 348,
+      right: 380,
+      top: 700,
+      bottom: 732,
+      width: 32,
+      height: 32,
+    } as DOMRect);
+    fireEvent.resize(window);
+    expect(panel.style.left).toBe("100px");
+    expect(panel.style.top).toBe("500px");
+    bounds.mockReturnValue({
+      left: 800,
+      right: 832,
+      top: 20,
+      bottom: 52,
+      width: 32,
+      height: 32,
+    } as DOMRect);
+    fireEvent.scroll(window);
+    expect(panel.style.left).toBe("110px");
+    expect(observe).toHaveBeenCalledWith(panel);
+    fireEvent.pointerDown(document.body);
+    expect(trigger).toHaveAttribute("aria-expanded", "false");
+    expect(disconnect).toHaveBeenCalled();
+    const reads = bounds.mock.calls.length;
+    fireEvent.resize(window);
+    expect(bounds).toHaveBeenCalledTimes(reads);
+  } finally {
+    rendered.unmount();
+    session.Close();
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  }
+});

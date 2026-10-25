@@ -1,11 +1,11 @@
 /** @fileoverview Verifies represented native Number/Bullet font construction without upstream execution. */
+import { createWriterTextColorItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
 import { createWriterNumFormat, SvxNumType } from "../doc/number";
 import { Font } from "../../../../vcl/source/font/font";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   FontLineStyle,
   SvxFontItem,
@@ -20,7 +20,6 @@ import {
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_UNDERLINE,
-  RES_CHRATR_COLOR,
 } from "../../../inc/hintids";
 import { resolveSwNumberPortionFont } from "./txtfld";
 import {
@@ -55,7 +54,7 @@ for (const preserve of [false, true])
       node.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
       node.SetAttr(new SvxPostureItem(FontItalic.ITALIC_OBLIQUE, RES_CHRATR_POSTURE));
       node.SetAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
-      node.SetAttr(new SfxStringItem(RES_CHRATR_COLOR, "#336699"));
+      node.SetAttr(createWriterTextColorItem("#336699"));
       applyWriterParagraphList(node, { kind: "bullet", level: 0, ruleName: "Font rule" });
       const rule = node.GetNumRule();
       if (rule === undefined) throw Error("Missing rule");

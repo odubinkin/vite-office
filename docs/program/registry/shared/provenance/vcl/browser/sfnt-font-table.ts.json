@@ -1,0 +1,30 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/vcl/browser/sfnt-font-table.ts",
+          "marker": "readSfntFontTable"
+        },
+        {
+          "path": "apps/office/src/vcl/browser/sfnt-font-table.test.ts",
+          "marker": "@fileoverview"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/vcl/browser/sfnt-font-table.ts",
+    "rationale": "Task6764KT reads actual SFNT/TTC table containers at the browser byte boundary and preserves the defined PhysicalFontFace OS/2 coverage algorithm: original offsets42/78,word-to-bit ordering,optional codepage set and last-successful-word reuse after short reads. WRITER074 records version-zero/partial-read behavior and the uninitialized-first-word boundary, where the browser exposes unknown data rather than emulating C++ uninitialized memory. The core file contains only the extracted capability algorithm; no fake PhysicalFontFace class or service is introduced. Native physical-face ownership,HarfBuzz cmap/collection face selection and dropdown rendering remain unfinished. Collection capability reads require an explicit resolved face index. Actual repository fonts and synthetic binary-boundary cases are checked; advertised coverage is not glyph support.",
+    "responsibilities": [
+      "Actual SFNT/TTC directory offsets,explicit collection index and bounded raw table views.",
+      "Unsupported/truncated/duplicate table identities remain unknown rather than fabricating physical metadata."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual browser-acquired bytes need a container/table boundary before the defined source OS/2 algorithm. Native HarfBuzz face/cmap parsing and backend ownership are not approximated by a native-class facade."
+    },
+    "status": "local-only"
+  }
+}

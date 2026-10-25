@@ -1,8 +1,11 @@
 /** @fileoverview Checks live document-owned style population, dispatch and history through actual Sfx bindings. */
+import type { StylePreviewSource } from "../../../svx/browser/tbxctrls/style-preview-state";
+import { useWriterStylePreviews } from "./use-writer-style-previews";
+import { MapUnit } from "../../../tools/inc/mapunit";
 import { FieldUnit } from "../../../tools/inc/fldunit";
 import { SvxFontItem } from "../../../editeng/inc/fontitem";
-import { useSyncExternalStore } from "react";
-import { act, cleanup, fireEvent, render, screen } from "@testing-library/react";
+import { isValidElement, useSyncExternalStore } from "react";
+import { act, cleanup, fireEvent, render, renderHook, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { createBrowserCommandSource } from "../../../framework/browser/presentation/command-surface";
@@ -48,6 +51,7 @@ function attach(document = new SwDoc(), argumentsValue?: unknown) {
         unit={FieldUnit.CM}
         commandSource={source}
         paragraphStyleOptions={projection.paragraphStyleOptions}
+        paragraphStyleNames={projection.paragraphStyleNames}
         resolveArguments={
           /** Supplies the requested presentation-owned arguments. @returns Arguments. */ () =>
             argumentsValue
@@ -83,20 +87,10 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       const execute = vi.spyOn(owner.source, "Execute");
       try {
         render(<owner.Toolbar />);
-        const selects = screen.getAllByRole("combobox");
-        const font = selects.find(
-          /** Finds the device-backed font selector. @param select - Candidate selector. @returns Whether it lists the font. */ (
-            select,
-          ) =>
-            [...(select as HTMLSelectElement).options].some(
-              /** Matches the requested font. @param option - Native option. @returns Match. */ (
-                option,
-              ) => option.value === "Liberation Serif",
-            ),
-        );
+        const font = screen.getByRole("combobox", { name: "Font name" });
         const size = screen.getByRole("combobox", { name: "Font size" });
-        if (font === undefined) throw new Error("Missing font selector");
         fireEvent.change(font, { target: { value: "Liberation Serif" } });
+        fireEvent.keyDown(font, { key: "Enter" });
         fireEvent.change(size, { target: { value: "14" } });
         fireEvent.keyDown(size, { key: "Enter" });
         expect(execute).toHaveBeenCalledWith(".uno:CharFontName", {
@@ -181,38 +175,41 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
     render(<owner.Toolbar />);
     const select = screen.getByRole("combobox", { name: "Paragraph style" });
     expect(select.querySelectorAll("optgroup")).toHaveLength(0);
-    fireEvent.change(select, { target: { value: "custom-id" } });
+    fireEvent.change(select, { target: { value: "Owned: & <字>" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(execute).toHaveBeenLastCalledWith(".uno:StyleApply", {
       Style: "Owned: & <字>",
       FamilyName: "ParagraphStyles",
     });
-    expect(select).toHaveValue("custom-id");
+    expect(select).toHaveValue("Owned: & <字>");
     expect(required(document.paragraphs[0]).GetTextFormatColl().GetName()).toBe("Owned: & <字>");
     const history = document.GetUndoManager().GetUndoActionCount();
-    fireEvent.change(select, { target: { value: "custom-id" } });
+    fireEvent.change(select, { target: { value: "Owned: & <字>" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(document.GetUndoManager().GetUndoActionCount()).toBe(history + 1);
     act(
       /** Undoes the repeated request and then the applied style. @returns Nothing. */ () => {
         owner.source.Execute(WRITER_COMMAND_IDS.undo);
-        expect(select).toHaveValue("custom-id");
+        expect(select).toHaveValue("Owned: & <字>");
         owner.source.Execute(WRITER_COMMAND_IDS.undo);
       },
     );
-    expect(select).toHaveValue("default");
+    expect(select).toHaveValue("Default Paragraph Style");
     act(
       /** Redoes the applied style. @returns Nothing. */ () => {
         owner.source.Execute(WRITER_COMMAND_IDS.redo);
       },
     );
-    expect(select).toHaveValue("custom-id");
+    expect(select).toHaveValue("Owned: & <字>");
     expect(untouched.GetParagraphStyle()).toBe("default");
     act(
       /** Renames the actual active owner. @returns Nothing. */ () => {
         required(document.FindTextFormatColl("custom-id")).SetFormatName("Renamed: & 字", true);
       },
     );
-    expect(select).toHaveValue("custom-id");
-    expect(screen.getByRole("option", { name: "Renamed: & 字" })).toHaveValue("custom-id");
+    expect(select).toHaveValue("Renamed: & 字");
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Renamed: & 字" })).toBeVisible();
     const second = new SwDoc();
     second.MakeTextFormatColl("New document style", undefined, "second");
     act(
@@ -223,9 +220,11 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
         });
       },
     );
-    expect(select).toHaveValue("default");
+    expect(select).toHaveValue("Default Paragraph Style");
     expect(screen.queryByRole("option", { name: "Renamed: & 字" })).toBeNull();
-    expect(screen.getByRole("option", { name: "New document style" })).toHaveValue("second");
+    if (screen.queryByRole("option", { name: "New document style" }) === null)
+      fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "New document style" })).toBeVisible();
     act(/** Removes active command shells. @returns Nothing. */ () => owner.frame.CloseView());
     expect(select).toBeDisabled();
     expect(select).toHaveValue("");
@@ -246,8 +245,10 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       </BrowserLocalizationProvider>,
     );
     const select = screen.getByRole("combobox", { name: "Paragraph style" });
-    expect(screen.getByRole("option", { name: "Заголовок 1" })).toHaveValue("heading-1");
-    fireEvent.change(select, { target: { value: "heading-1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Заголовок 1" })).toBeVisible();
+    fireEvent.change(select, { target: { value: "Заголовок 1" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(required(owner.document.paragraphs[0]).GetParagraphStyle()).toBe("heading-1");
     act(
       /** Renames a builtin and registers a live custom style. @returns Nothing. */ () => {
@@ -256,13 +257,77 @@ describe("Writer live style selector", /** Defines actual document contracts. @r
       },
     );
     expect(screen.queryByRole("option", { name: "Заголовок 1" })).toBeNull();
-    expect(screen.getByRole("option", { name: "Owned heading" })).toHaveValue("heading-1");
-    expect(screen.getByRole("option", { name: "Unused:新" })).toHaveValue("new");
-    fireEvent.change(select, { target: { value: "new" } });
-    fireEvent.change(select, { target: { value: "heading-1" } });
+    fireEvent.click(screen.getByRole("button", { name: "Show Paragraph style" }));
+    expect(screen.getByRole("option", { name: "Owned heading" })).toBeVisible();
+    expect(screen.getByRole("option", { name: "Unused:新" })).toBeVisible();
+    fireEvent.change(select, { target: { value: "Unused:新" } });
+    fireEvent.keyDown(select, { key: "Enter" });
+    fireEvent.change(select, { target: { value: "Owned heading" } });
+    fireEvent.keyDown(select, { key: "Enter" });
     expect(required(owner.document.paragraphs[0]).GetTextFormatColl().GetName()).toBe(
       "Owned heading",
     );
     owner.close();
   });
+});
+
+it("retains an editable style draft across unrelated native binding invalidation", /** Actual pool rows and owner identity are unchanged by a caret/state refresh. @returns Nothing. */ () => {
+  const f = attach();
+  try {
+    render(<f.Toolbar />);
+    const input = screen.getByRole("combobox", { name: "Paragraph style" });
+    const before = f.store.GetSnapshot().paragraphStyleOptions;
+    fireEvent.change(input, { target: { value: "Draft custom name" } });
+    act(
+      /** Publishes an unrelated native state refresh. @returns Nothing. */ () => {
+        f.frame.GetBindings().Invalidate("selection");
+      },
+    );
+    expect(f.store.GetSnapshot().paragraphStyleOptions).toBe(before);
+    expect(input).toHaveValue("Draft custom name");
+  } finally {
+    f.close();
+  }
+});
+
+it("reads actual shell style items for localized,custom,missing and closed preview owners", /** Checks the actual shared toolbar/sidebar preview contract without mounting an invented style pool. @returns Nothing. */ () => {
+  const f = attach();
+  try {
+    const entries = f.store.GetSnapshot().paragraphStyleOptions;
+    const hook = renderHook(
+      /** Binds the real owning shell. @returns Preview ports. */ () =>
+        useWriterStylePreviews(
+          f.shell,
+          entries,
+          /** Localizes only resource-backed entries. @param id - Actual resource identity. @returns Label. */ (
+            id,
+          ) => ({ label: id }),
+        ),
+    );
+    const builtin = entries[0];
+    if (builtin === undefined) throw new Error("Style fixture is missing.");
+    const renderItem = hook.result.current.renderItem;
+    if (renderItem === undefined) throw new Error("Style preview renderer is missing.");
+    const builtinRow = renderItem(builtin, false),
+      customRow = renderItem({ id: "unknown-style", name: "Custom name" }, true);
+    if (
+      !isValidElement<{ source: StylePreviewSource; name: string }>(builtinRow) ||
+      !isValidElement<{ source: StylePreviewSource; name: string }>(customRow)
+    )
+      throw new Error("Preview row is missing.");
+    expect(builtinRow.props.source.mapUnit).toBe(MapUnit.MapTwip);
+    expect(builtinRow.props.source.getItemSet()).toBeDefined();
+    expect(customRow.props.name).toBe("Custom name");
+    expect(customRow.props.source.getItemSet()).toBeDefined();
+    act(
+      /** Publishes actual measured host extents. @returns Nothing. */ () =>
+        builtinRow.props.source.controller.ReportWidth(builtin.id, 321),
+    );
+    expect(hook.result.current.popupWidth).toBe(321);
+    f.shell.Close();
+    expect(builtinRow.props.source.getItemSet()).toBeUndefined();
+    hook.unmount();
+  } finally {
+    f.close();
+  }
 });

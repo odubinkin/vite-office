@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/browser/font-preview-resources.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-platform",
+    "capabilityIds": [
+      "CAP-0109",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svtools/browser/font-preview-resources.ts#getBrowserPreviewMetric",
+        "apps/office/src/svtools/browser/font-preview-resources.test.ts#@fileoverview",
+        "apps/office/e2e/shared/font-name-preview.spec.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT connects the actual Writer/Calc shared FontNameSelect to source FontNameBox sizing/paint and real acquired physical files. Browser metrics use exposed CSS weight/slant and actual local named-style metadata;unavailable native family,pitch,registered named style and local weight/slant remain unknown. Native FontList still owns comparison/duplicate rules;UTF8 document encoding is an explicit browser-device port. Only the retained file loads on demand. Actual cmap/maxp/head/loca and defined OS2 readers supply glyph coverage/capabilities. A private actual FontFace loaded from the same bytes supplies outlines without CSS family substitution or double synthetic bold/slant;the source logical family stays unchanged. Real private registrations are marked by WeakSet identity and excluded from later inventories. Ordinary JS/browser/React ownership releases only private FontFaces and prevents stale asynchronous publication;no native allocator/refcount/cache machinery is ported. Actual row Canvas uses source sample selection,readable-name eligibility,fitting,selection colors and current host color/resize events. Unknown bytes/unresolved collections/load failures keep a readable label;glyph support is never inferred from fallback widths. Native physical OS backend/default named-style resolution,variable/named-instance acquisition,full style dropdowns and native raster parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getBrowserPreviewMetric",
+        "BrowserFontPreviewResources"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

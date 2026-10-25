@@ -18,21 +18,24 @@
       "evidence": [
         "apps/office/src/tools/inc/gen.ts#Pair",
         "vendor/libreoffice-reference/include/tools/gen.hxx#Pair",
-        "apps/office/src/tools/inc/gen.test.ts#@fileoverview"
+        "apps/office/src/tools/inc/gen.test.ts#@fileoverview",
+        "apps/office/src/tools/inc/gen.rectangle.test.ts#@fileoverview"
       ],
-      "justification": "Task202610111735-R760SH restores the original SwFrameAreaDefinition owner composed by every real SwFrame, replacing misplaced validity fields with native-owned zero-default absolute/relative SwRects, guarded flags and uint32 frame IDs. Point/Size template bases own by-value integer storage; SwRect retains inclusive integer edge access, signed center division, height-before-width SSize, and WRITER-006 zero-area containment. Nested write-access values write back on explicit Dispose in finally without replacing borrowed members or changing validity. Composition represents C++ multiple inheritance while preserving original SwClient registration identity. Actual root/text/table/row/cell owners and independent scope values are checked without executing upstream. Numeric support is limited to finite integers in the JavaScript exact range; full native tools/SwRect operators, transforms, invalidation consumers, geometry formatting/query integration and browser measured geometry remain unported. No broad semantic/default/whole-capability promotion; registered recovery/open/save deviations retained.",
+      "justification": "Task202610111735-R760SH restores the original SwFrameAreaDefinition owner composed by every real SwFrame, replacing misplaced validity fields with native-owned zero-default absolute/relative SwRects, guarded flags and uint32 frame IDs. Point/Size template bases own by-value integer storage; SwRect retains inclusive integer edge access, signed center division, height-before-width SSize, and WRITER-006 zero-area containment. Nested write-access values write back on explicit Dispose in finally without replacing borrowed members or changing validity. Composition represents C++ multiple inheritance while preserving original SwClient registration identity. Actual root/text/table/row/cell owners and independent scope values are checked without executing upstream. Numeric support is limited to finite integers in the JavaScript exact range; full native tools/SwRect operators, transforms, invalidation consumers, geometry formatting/query integration and browser measured geometry remain unported. No broad semantic/default/whole-capability promotion; registered recovery/open/save deviations retained. Task6764KT adds the consumed native closed-interval Rectangle value:default/copy/empty-position/edge/Point-Size construction,original -32767 empty-axis sentinel,signed inclusive extents,TopLeft and Union over all four raw axis coordinates. An empty receiver copies a nonempty inverted operand without normalization;the subsequent union normalizes endpoints as upstream. JS representation stores template-base fields in the concrete value without native ABI machinery. Other Rectangle transforms/intersections/open-interval APIs remain unported. This enables actual source style preview measurement;no full geometry parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "Pair",
         "Point",
-        "Size"
+        "Size",
+        "Rectangle"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/tools/gen.hxx",
       "upstreamSymbols": [
         "Pair",
         "Point",
-        "Size"
+        "Size",
+        "Rectangle"
       ]
     }
   }

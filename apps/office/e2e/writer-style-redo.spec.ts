@@ -1,4 +1,5 @@
 /** @fileoverview Verifies native style/reset history asymmetry, expanded redo selection, typing and ODT export at desktop/mobile widths. */
+import { pickWriterStyle } from "./writer-style-box";
 import { expect, test } from "@playwright/test";
 import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
@@ -63,11 +64,11 @@ for (const width of [1280, 390])
         afterStyle = await after.getAttribute("style");
       await target.click();
       await page.keyboard.press("End");
-      await expect(select).toHaveValue("HistoryA");
+      await expect(select).toHaveValue("History style A");
       await expect(target.locator("strong")).toHaveText("Bold");
       await expect(target.locator("a")).toHaveText("Link");
       await expect(target).toHaveCSS("text-indent", "48px");
-      await select.selectOption("HistoryB");
+      await pickWriterStyle(select, "History style B");
       await expect(editor).toBeFocused();
       await expect(target).toHaveCSS("text-indent", "24px");
       await expect(target.locator("strong")).toHaveText("Bold");
@@ -113,9 +114,8 @@ for (const width of [1280, 390])
         await expect(
           page
             .getByRole("complementary", { name: "Writer properties sidebar" })
-            .getByRole("combobox", { name: "Paragraph style", exact: true })
-            .locator("option:checked"),
-        ).toHaveText("History style B");
+            .getByRole("combobox", { name: "Paragraph style", exact: true }),
+        ).toHaveValue("History style B");
       await target.scrollIntoViewIfNeeded();
       await page.screenshot({
         path: testInfo.outputPath("native-style-redo.png"),

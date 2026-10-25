@@ -8,6 +8,8 @@ import { getConfiguredDefaultFont } from "../../unotools/source/config/fontcfg";
 import { OUString, type OUStringConstReference } from "../../sal/inc/rtl/ustring";
 import { Locale, type LocaleConstReference } from "../../udkapi/com/sun/star/lang/Locale";
 
+import { decodeBrowserFontFamily } from "./font-family";
+
 /** Generic role/locale boundary shared by Calc and Writer browser composition. */
 export interface BrowserDefaultFontDevice {
   readonly getDefaultFont: (
@@ -45,27 +47,6 @@ export function createDefaultFontLocale(tag: string): Locale {
   variant.dispose();
   return locale;
 }
-/** Decodes the browser's valid CSS family serialization, including CSS code-point escapes and line continuations. @param descriptor - FontFace.family. @returns Actual registered family name. */
-function familyName(descriptor: string): string {
-  const quoted =
-    (descriptor.startsWith('"') && descriptor.endsWith('"')) ||
-    (descriptor.startsWith("'") && descriptor.endsWith("'"));
-  const value = quoted ? descriptor.slice(1, -1) : descriptor;
-  return value.replace(
-    /\\(?:([0-9a-fA-F]{1,6})(?:\r\n|[ \t\r\n\f])?|\r\n|[\n\r\f]|(.))/g,
-    /** Decodes one CSS escape from the platform descriptor. @param _match - Complete escape. @param hex - Optional hexadecimal value. @param escaped - Optional simple escape. @returns Decoded value. */ (
-      _match,
-      hex: string | undefined,
-      escaped: string | undefined,
-    ) => {
-      if (hex === undefined) return escaped ?? "";
-      const point = Number.parseInt(hex, 16);
-      return String.fromCodePoint(
-        point === 0 || point > 0x10ffff || (point >= 0xd800 && point <= 0xdfff) ? 0xfffd : point,
-      );
-    },
-  );
-}
 /** Uses the real shared native normalization operation. @param units - Logical view. @returns Search key. */
 function searchName(units: Uint16Array): string {
   const value = GetEnglishSearchFontName(units),
@@ -79,7 +60,7 @@ function registeredFamilies(fontSet: FontFaceSet | undefined): Map<string, Regis
   fontSet?.forEach(
     /** Groups one browser face. @param face - Real face. @returns Nothing. */ (face) => {
       if (face.status === "error") return;
-      const name = familyName(face.family),
+      const name = decodeBrowserFontFamily(face.family),
         value = unicode(name);
       const key = searchName(value.getStr().subarray(0, value.getLength()));
       value.dispose();

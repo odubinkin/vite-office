@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/ubidi.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-bidi-analysis",
+    "capabilityIds": [
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681",
+      "CAP-3b2da041-e40a-4ae2-a28a-45a45be7f83e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/ubidi.ts#resolveDefaultBidiLevels",
+        "apps/office/src/external/icu/source/common/ubidi.test.ts#@fileoverview"
+      ],
+      "justification": "Task6764KT implements the consumed ICU78.3 default-reordering,fixed initial0/1,null external-level path for real style-label script analysis. Keeps original property grouping,state tables,FSI normalization,paragraph boundaries,UTF16 lead-surrogate BN handling,explicit embedding/isolate overflow,paired-bracket synonyms and N0c recursion,implicit isolate suspension/resume,L1/X9 and trivial-direction level collapsing. Frozen Unicode17 trie/mirror words come from the unchanged pinned source. Compiled original ICU common/stubdata libraries and the observer match93808full level/run-count cases and all1114112three-property scalar records. A2731-case retained native vector fixture and full property digest replay without native libraries or vendor sources. Source static-helper guards on noncanonical initialized values are marked separately from ordinary scan reachability. No JS direction heuristic,full ICU API,allocator/refcount/lifetime emulation,external levels,context/default-level detection,inverse/reordering/visual-output modes or native ABI parity is claimed. Live style popup integration remains unfinished.",
+      "knownViolations": [],
+      "localSymbols": [
+        "resolveDefaultBidiLevels",
+        "fixN0c",
+        "bracketProcessClosing",
+        "BracketData",
+        "resolveExplicitLevels",
+        "resolveImplicitRuns"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/icu-reference/source/common/ubidi.cpp",
+      "upstreamSymbols": [
+        "ubidi_setPara",
+        "getDirProps",
+        "resolveExplicitLevels",
+        "resolveImplicitLevels",
+        "bracketProcessClosing",
+        "fixN0c",
+        "adjustWSLevels"
+      ]
+    }
+  }
+}

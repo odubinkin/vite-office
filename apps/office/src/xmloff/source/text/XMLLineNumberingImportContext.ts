@@ -1,5 +1,6 @@
 /** @fileoverview Imports supported ODF line-number settings at the pinned XMLLineNumberingImportContext boundary. */
 
+import { Converter } from "../../../sax/source/tools/converter";
 import { FastAttributeList, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
 import { importOdfLength } from "../core/xmluconv";
@@ -50,7 +51,7 @@ export class XMLLineNumberingImportContext extends SvXMLImportContext {
       throw new Error("Unsupported ODF line-number position.");
     this.values = {
       countBlankLines: readBoolean(attributes, XMLToken.TEXT_COUNT_EMPTY_LINES, true),
-      countBy: readIncrement(attributes, XMLToken.TEXT_INCREMENT, 5),
+      countBy: readIncrement(attributes, 5, 1),
       countInFlys: readBoolean(attributes, XMLToken.TEXT_COUNT_IN_TEXT_BOXES, false),
       divider: "",
       dividerCountBy: 3,
@@ -103,7 +104,7 @@ class XMLLineNumberingSeparatorImportContext extends SvXMLImportContext {
   ) {
     super();
     attributes.assertOnly([XMLToken.TEXT_INCREMENT], "line-number separator");
-    this.dividerCountBy = readIncrement(attributes, XMLToken.TEXT_INCREMENT, 3);
+    this.dividerCountBy = readIncrement(attributes, 3, 0);
   }
   /** Accumulates decoded separator characters. @param characters - Text. @returns Nothing. */
   public override characters(characters: string): void {
@@ -123,12 +124,12 @@ function readBoolean(attributes: FastAttributeList, token: XMLToken, fallback: b
   return raw === "true";
 }
 
-/** Reads a nonnegative ODF line interval. @param attributes - Source. @param token - Attribute. @param fallback - Upstream default. @returns Interval. */
-function readIncrement(attributes: FastAttributeList, token: XMLToken, fallback: number): number {
-  const raw = attributes.get(token);
+/** Mirrors native SAX conversion,signed16 narrowing and the existing UNO property admission without introducing a second property service. @param attributes - Source. @param fallback - Actual unchanged document default. @param minimum - Interval is positive;separator interval is nonnegative. @returns Applied value or retained default. */
+function readIncrement(attributes: FastAttributeList, fallback: number, minimum: number): number {
+  const raw = attributes.get(XMLToken.TEXT_INCREMENT);
   if (raw === null) return fallback;
-  const number = Number(raw);
-  if (!Number.isInteger(number) || number < 0 || number > 65535)
-    throw new Error("Unsupported ODF line-number increment.");
-  return number;
+  const output: [number] = [0];
+  if (!Converter.convertNumber(output, raw, 0)) return fallback;
+  const narrowed = (output[0] << 16) >> 16;
+  return narrowed >= minimum ? narrowed : fallback;
 }

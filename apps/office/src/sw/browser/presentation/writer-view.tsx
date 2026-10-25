@@ -1,4 +1,6 @@
 /** @fileoverview Projects a persistent SwView through browser-only command and editor adapters. */
+import { WriterNumObjectBar } from "./WriterNumObjectBar";
+import { SelectionType } from "../../source/uibase/inc/wrtsh";
 import type { BrowserDocumentSummary } from "../../../framework/browser/storage/document-store";
 import { useBrowserSaveShortcut } from "../../../framework/browser/presentation/use-command-shortcuts";
 import { SwFormatVertOrient } from "../../inc/fmtornt";
@@ -504,6 +506,14 @@ export function WriterWorkbench({
     <div hidden={!isActive}>
       <WriterWorkspaceChrome
         documentTitle={snapshot.documentState.title}
+        numberingToolbar={
+          (view.GetWrtShell().GetSelectionType() & SelectionType.NumberList) !== 0 ? (
+            <WriterNumObjectBar
+              commandSource={commandSource}
+              resolveArguments={resolveCommandArguments}
+            />
+          ) : undefined
+        }
         tableToolbar={
           currentTable === undefined ? undefined : (
             <WriterTableObjectBar
@@ -514,6 +524,7 @@ export function WriterWorkbench({
         }
         formattingToolbar={
           <WriterFormattingToolbar
+            objectShell={view.GetDocShell()}
             unit={snapshot.metricUnit}
             isInputEnabled={isInputEnabled}
             focusDocument={
@@ -543,18 +554,25 @@ export function WriterWorkbench({
                 onDialogCancel={
                   /** Cancels the exact paragraph request. @param id - Request identity. @returns Nothing. */ (
                     id,
-                  ) => dialogController.Cancel(id)
+                  ) => {
+                    dialogController.Cancel(id);
+                    (editingHostRef.current as HTMLElement).focus();
+                  }
                 }
                 onDialogSubmit={
                   /** Completes the exact paragraph request. @param id - Request identity. @param value - Accepted draft. @returns Nothing. */ (
                     id,
                     value,
-                  ) => dialogController.Complete(id, value)
+                  ) => {
+                    dialogController.Complete(id, value);
+                    (editingHostRef.current as HTMLElement).focus();
+                  }
                 }
               />
             }
             commandSource={commandSource}
             paragraphStyleOptions={snapshot.paragraphStyleOptions}
+            paragraphStyleNames={snapshot.paragraphStyleNames}
             resolveArguments={resolveCommandArguments}
           />
         }
@@ -585,9 +603,11 @@ export function WriterWorkbench({
         propertiesSidebar={
           <>
             <WriterPropertiesPanel
+              objectShell={view.GetDocShell()}
               isTable={currentTable !== undefined}
               unit={snapshot.metricUnit}
               paragraphStyleOptions={snapshot.paragraphStyleOptions}
+              paragraphStyleNames={snapshot.paragraphStyleNames}
               embeddedFontFamilies={activeDocument.GetEmbeddedFonts().map(
                 /** Projects actual embedded family names. @param font - Package font. @returns Family name. */
                 (font) => font.familyName,
@@ -779,8 +799,10 @@ export function WriterWorkbench({
           unit={snapshot.metricUnit}
           value={snapshot.lineNumberInfo}
           onCancel={
-            /** Discards line-numbering draft. @returns Nothing. */ () =>
-              setLineNumberingDialog(false)
+            /** Discards line-numbering draft and returns original client focus. @returns Nothing. */ () => {
+              setLineNumberingDialog(false);
+              (editingHostRef.current as HTMLElement).focus();
+            }
           }
           onSubmit={
             /** Commits line-number settings. @param value - Accepted settings. @returns Nothing. */ (
@@ -788,11 +810,24 @@ export function WriterWorkbench({
             ) => {
               activeDocument.SetLineNumberInfo(SwLineNumberInfo.FromValue(value));
               setLineNumberingDialog(false);
+              (editingHostRef.current as HTMLElement).focus();
             }
           }
         />
       ) : null}
       <WriterDialogPresenter
+        focusDocument={
+          /** Returns closed hyperlink/bookmark dialog focus to its actual mounted document client. @returns Nothing. */ () =>
+            (editingHostRef.current as HTMLElement).focus()
+        }
+        bookmarkNames={view.GetWrtShell().GetTextShell().GetBookmarkNames()}
+        onBookmarkOperation={
+          /** Applies immediate native bookmark operations without completing the open request. @param result - Actual operation. @returns Nothing. */ (
+            result,
+          ) => {
+            view.Execute(WRITER_COMMAND_IDS.insertBookmark, { bookmark: result });
+          }
+        }
         controller={dialogController}
         request={dialogRequest}
         unit={snapshot.metricUnit}
