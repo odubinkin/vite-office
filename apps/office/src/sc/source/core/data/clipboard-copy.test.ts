@@ -539,10 +539,10 @@ it("retains clip-start outputs and extends each marked sheet from the original i
   sparse.InitUndo(doc, 2, 2);
   sparse.ExtendMergeSel(0, 0, x, y, marks, false);
   expect([x[0], y[0]]).toEqual([1, 2]);
-  expect(
-    /** Native refresh services remain explicit until represented. @returns Nothing. */ () =>
-      doc.ExtendMergeSel(0, 0, x, y, marks, true),
-  ).toThrow("Refresh merge/filter");
+  x[0] = 0;
+  y[0] = 0;
+  doc.ExtendMergeSel(0, 0, x, y, marks, true);
+  expect([x[0], y[0]]).toEqual([1, 2]);
   pattern.Dispose();
   sparse.Dispose();
   clip.Dispose();

@@ -10,6 +10,7 @@ import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import { SfxHintId } from "../../../../svl/inc/hint";
 import { ScRangeList } from "../../../inc/rangelst";
+import { ScMF } from "../../../inc/attrib";
 import { InsertDeleteFlags } from "../../../inc/global";
 import { MAXTAB, ValidTab, SC_TAB_APPEND } from "../../../inc/address";
 import { BroadcastAction } from "./documen7";
@@ -230,7 +231,7 @@ function getMarkedTableRange(doc: ScDocument, marks: ScMarkData): [number, numbe
   }
   return [first, last];
 }
-/** Original document non-refresh merge extension through actual tables;refresh/filter services are outside this consumed path. @param this - Clipboard. @param col - First column. @param row - First row. @param endCol - Last column output. @param endRow - Last row output. @param tab - Source sheet. @param refresh - Native defaultfalse;refresh services are unported. @returns Merge found. */
+/** Original document merge extension and filter refresh for the represented sheets without database ranges. @param this - Clipboard. @param col - First column. @param row - First row. @param endCol - Last column output. @param endRow - Last row output. @param tab - Source sheet. @param refresh - Native defaultfalse. @returns Merge found. */
 export function ExtendMerge(
   this: ScDocument,
   col: number,
@@ -242,9 +243,10 @@ export function ExtendMerge(
 ): boolean {
   if (!this.ValidColRow(col, row) || !this.ValidColRow(endCol[0], endRow[0]) || !ValidTab(tab))
     return false;
-  if (refresh) throw Error("Refresh merge/filter services are not implemented");
   const table = this.FetchTable(tab);
-  return table ? extendTableMerge.call(table, col, row, endCol, endRow) : false;
+  const found = table ? extendTableMerge.call(table, col, row, endCol, endRow, refresh) : false;
+  if (refresh) this.RefreshAutoFilter(col, row, endCol[0], endRow[0], tab);
+  return found;
 }
 /** Original nested formatter-merge scope on the actual document. Only the genuine same-formatter branch is admitted;foreign formatter merging has no dummy exchange map. */
 class NumFmtMergeHandler {
@@ -738,4 +740,54 @@ export function IsBlockEditable(
   if (table) return table.IsBlockEditable(col1, row1, col2, row2, onlyMatrix, noMatrix);
   if (onlyMatrix) onlyMatrix[0] = false;
   return false;
+}
+
+/** Original document flag dispatch,including missing-sheet false. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param tab - Sheet. @param flags - Native flags. @returns Changed. */
+export function ApplyFlagsTab(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  tab: number,
+  flags: ScMF,
+): boolean {
+  return this.FetchTable(tab)?.ApplyFlags(col1, row1, col2, row2, flags) ?? false;
+}
+
+/** Original document flag dispatch,including missing-sheet false. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param tab - Sheet. @param flags - Native flags. @returns Changed. */
+export function RemoveFlagsTab(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  tab: number,
+  flags: ScMF,
+): boolean {
+  return this.FetchTable(tab)?.RemoveFlags(col1, row1, col2, row2, flags) ?? false;
+}
+
+/** Original removal phase for sheets without represented named or anonymous database ranges. Their positive reconstruction services remain unported;no synthetic database collection is supplied. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param tab - Sheet. @returns Changed flags. */
+export function RefreshAutoFilter(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  tab: number,
+): boolean {
+  return this.RemoveFlagsTab(col1, row1, col2, row2, tab, ScMF.Auto);
+}
+
+/** Original block emptiness delegation,physically partitioned from the size-bounded facade without changing owners. @param this - Actual document. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param tab - Sheet. @returns Empty block. */
+export function IsBlockEmpty(
+  this: ScDocument,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  tab: number,
+): boolean {
+  return this.FetchTable(tab)?.IsBlockEmpty(col1, row1, col2, row2) ?? false;
 }

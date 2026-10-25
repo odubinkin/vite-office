@@ -386,10 +386,7 @@ it("extends merged source ranges through actual native attribute entries and all
     attrs.ExtendMerge(doc.MaxCol(), doc.MaxRow(), doc.MaxRow(), boundaryCol, boundaryRow),
   ).toBe(true);
   expect([boundaryCol[0], boundaryRow[0]]).toEqual([doc.MaxCol(), doc.MaxRow()]);
-  expect(
-    /** Refresh has no substitute filter/flag backend. @returns Nothing. */ () =>
-      attrs.ExtendMerge(0, 0, 0, [0], [0], true),
-  ).toThrow("Merge flag refresh");
+  expect(attrs.ExtendMerge(0, 0, 0, [0], [0], true)).toBe(false);
   const defaults = new ScAttrArray(-1, 0, doc);
   expect(
     /** The native default-column method precondition remains explicit. @returns Nothing. */ () =>

@@ -34,7 +34,11 @@
       "GetClipStart",
       "ExtendMergeSel",
       "ValidNewTabName",
-      "IsBlockEditable"
+      "IsBlockEditable",
+      "ApplyFlagsTab",
+      "RemoveFlagsTab",
+      "RefreshAutoFilter",
+      "ExtendMerge"
     ],
     "upstreamSymbols": [
       "ScDocument::SetValue",
@@ -45,7 +49,11 @@
       "ScDocument::SetDirtyFromClip",
       "ScDocument::AddCondFormatData",
       "ScDocument::RemoveCondFormatData",
-      "ScDocument::LockStreamValid"
+      "ScDocument::LockStreamValid",
+      "ScDocument::ApplyFlagsTab",
+      "ScDocument::RemoveFlagsTab",
+      "ScDocument::RefreshAutoFilter",
+      "ScDocument::ExtendMerge"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -69,7 +77,8 @@
       "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
       "Native document.cxx GetClipStart preserves caller coordinates for non-clip/empty range owners and reads the first actual clipboard range otherwise. ExtendMergeSel preserves source selected-sheet order,sparse table skips,table-count break and independent original-end envelope on every sheet;end outputs only grow. Refresh remains an explicit unported service. ValidNewTabName body moves unchanged onto the same instance to keep the facade below1000 lines. PasteFromClip/EnterBlock and task74 acceptance remain pending.",
       "Human removed numerical path caps for existing76/74 on2026-10-25;functional scope and final full-run/fixes/coverage/closure/pause rule stay unchanged. Native ScMarkType/GetSimpleArea overloads preserve copied versus explicit marks,coordinate outputs,merged cursor fallback,degenerate merge values,filtered classification and source MULTI override (CALC284). Actual ScViewData fill/paste admission retains23Mi-cell integer bound and exact-axis exceptions;OS clipboard lookup stays unrepresented. ScViewUtil HasFiltered and FitToUnfilteredRows use genuine compressed FilterData,including native whole-tail mutation/count behavior on failed fits (CALC283). FilterData span/last-row queries retain real domains and signed maximum;document dispatch preserves absent-sheet defaults. Valid initialized segment owners make the source failed getRangeData defensive branch unreachable in the admitted lifecycle;no segment provider is replaced. Scalar InsertTab moves unchanged to the same-instance partition for the facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
-      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete."
+      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
+      "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."
@@ -219,6 +228,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/paste-editability.test.ts",
           "marker": "native edge visit shapes"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/merge-refresh.test.ts",
+          "marker": "refreshes horizontal vertical and rectangular merges"
         }
       ],
       "upstream": [
@@ -361,6 +374,22 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
           "marker": "ScDocument::DeleteTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ApplyFlagsTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::RemoveFlagsTab"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::RefreshAutoFilter"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ExtendMerge"
         }
       ]
     }

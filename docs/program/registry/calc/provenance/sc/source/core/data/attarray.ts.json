@@ -17,14 +17,18 @@
       "ExtendMerge",
       "DeleteArea",
       "RemoveAreaMerge",
-      "SetPatternAreaSafe"
+      "SetPatternAreaSafe",
+      "ApplyFlags",
+      "RemoveFlags"
     ],
     "upstreamSymbols": [
       "ScAttrArray",
       "ScAttrArray::AddCondFormat",
       "ScAttrArray::RemoveCondFormat",
       "ScAttrArray::IsMerged",
-      "ScAttrArray::ExtendMerge"
+      "ScAttrArray::ExtendMerge",
+      "ScAttrArray::ApplyFlags",
+      "ScAttrArray::RemoveFlags"
     ],
     "preservedResponsibilities": [
       "TaskWP2DC4 connects the actual shared Writer FontSizeSelect through Calc FontHeight slot10015 and ScFormatShell to real document/sheet/column/default-column ScAttrArray runs, ScPatternAttr and shared itemsets. Original height200twips100percent defaults and three-script font-size application are retained. Real ScUndoSelectionAttr stores an attribute-only ScDocument plus marks and redo delta; content remains in original cell stores. Automatic ODF cell styles preserve script font heights and styled empty row/column spans through actual package/autosave/open. ScDocumentPool exports only original contiguous character prefix100..124; no defaults are invented for unsupported cell/page items. Default fonts use source script-language fallbacks, shipped configuration and original no-device OnlyOne logical-family branch without claiming installed faces. Full native format/dialog/script-aware painting,automatic row height,named cell styles,family application and remaining cell/page defaults remain unverified. Writer visible-content/two-word naming,primary storage and no-recovery deviations remain. This leaf does not certify complete Calc UI parity.",
@@ -39,8 +43,9 @@
       "Task76 conditional-index binding ports document/table/column/ScAttrArray AddCondFormatData/AddCondFormat over the actual canonical attribute runs. Valid rows always have the real default pattern;run clipping,index union,unsigned keys,idempotent insertion,existing attributes and holder destruction are retained. Conditional copy orchestration,style migration,painting and full paste history remain unverified.",
       "Task76 conditional-index removal binds actual document/table/column/attribute owners:zero clears all indices while retaining an explicit empty item;nonzero erases only the first matching index,including initializer-list duplicates. Existing attributes survive,and table removal clamps to allocated columns without allocating a new tail. Scalar SetValue and literal SetTextCell bodies are partitioned onto the same actual owners in column3/documen7;native defaults,stores,listener order and text admission are unchanged. Full conditional copy/style migration and paste/history remain pending.",
       "Native merged-anchor query follows document10 to table7,inline column.hxx and actual ScAttrArray runs. Absent sheets,invalid or unallocated columns return false without allocating columns;stored runs use Search and their actual ATTR_MERGE spans,while an empty attribute array uses the document default pattern. Overlap flags alone do not constitute a merged anchor. These are prerequisites for original CopyOneCellFromClip;document-level paste and its formatter/script/history services remain incomplete.",
-      "Original non-refresh ScAttrArray::ExtendMerge scans actual canonical entries,uses each entry start,retains native row/column bounds and default-column assertion. Refresh needs unported flag/filter services and rejects explicitly.",
-      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim."
+      "Original ScAttrArray::ExtendMerge scans actual canonical entries,uses each entry start,retains native row/column bounds and default-column assertion. Refresh now uses actual flag mutation/re-search and the represented no-database-range filter refresh phase.",
+      "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
+      "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -78,6 +83,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-copy.test.ts",
           "marker": "orchestrates real default-content"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/merge-refresh.test.ts",
+          "marker": "refreshes horizontal vertical and rectangular merges"
         }
       ],
       "upstream": [
@@ -108,6 +117,18 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
           "marker": "ScAttrArray::DeleteArea"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::ApplyFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::RemoveFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/attarray.cxx",
+          "marker": "ScAttrArray::ExtendMerge"
         }
       ]
     }

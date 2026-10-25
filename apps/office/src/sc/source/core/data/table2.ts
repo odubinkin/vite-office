@@ -19,6 +19,7 @@ import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import type { SfxHintId } from "../../../../svl/inc/hint";
 import type { ScTable } from "../../../inc/table";
 import type { ScColumn } from "../../../inc/column";
+import type { ScMF } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_MERGE } from "../../../inc/scitems";
@@ -393,13 +394,14 @@ export function CopyConditionalFormat(
   }
 }
 
-/** Original table2 non-refresh merge extension,including allocated-column clamp and default-column invariant. The native inline ScColumn delegate is erased directly to its actual attribute-array owner. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Extended column output. @param lastRow - Extended row output. @returns Whether a merge was found. */
+/** Original table2 merge extension,including allocated-column clamp and default-column invariant. The native inline ScColumn delegate is erased directly to its actual attribute-array owner. @param this - Actual sheet. @param firstCol - First column. @param firstRow - First row. @param lastCol - Extended column output. @param lastRow - Extended row output. @param refresh - Native defaultfalse. @returns Whether a merge was found. */
 export function ExtendMerge(
   this: ScTable,
   firstCol: number,
   firstRow: number,
   lastCol: [number],
   lastRow: [number],
+  refresh = false,
 ): boolean {
   const doc = this.GetDoc();
   if (!doc.ValidCol(firstCol) || !doc.ValidCol(lastCol[0])) return false;
@@ -423,6 +425,7 @@ export function ExtendMerge(
         endRow,
         lastCol,
         lastRow,
+        refresh,
       ) || found;
   return found;
 }
@@ -499,4 +502,39 @@ export function IsBlockEditable(
   this.HasBlockMatrixFragment(col1, row1, col2, row2, noMatrix);
   if (onlyMatrix) onlyMatrix[0] = false;
   return true;
+}
+
+/** Original table2 ApplyFlags rectangle traversal. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param flags - Native flags. @returns Whether changed. */
+export function ApplyFlags(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  flags: ScMF,
+): boolean {
+  const doc = this.GetDoc();
+  if (!doc.ValidColRow(col1, row1) || !doc.ValidColRow(col2, row2)) return false;
+  let changed = false;
+  for (let col = col1; col <= col2; ++col)
+    changed = this.CreateColumnIfNotExists(col).ApplyFlags(row1, row2, flags) || changed;
+  return changed;
+}
+
+/** Original table2 RemoveFlags rectangle traversal. @param this - Actual table. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @param flags - Native flags. @returns Whether changed. */
+export function RemoveFlags(
+  this: ScTable,
+  col1: number,
+  row1: number,
+  col2: number,
+  row2: number,
+  flags: ScMF,
+): boolean {
+  const doc = this.GetDoc();
+  if (!doc.ValidColRow(col1, row1) || !doc.ValidColRow(col2, row2)) return false;
+  let changed = false;
+  col2 = this.ClampToAllocatedColumns(col2);
+  for (let col = col1; col <= col2; ++col)
+    changed = (this.FetchColumn(col) as ScColumn).RemoveFlags(row1, row2, flags) || changed;
+  return changed;
 }

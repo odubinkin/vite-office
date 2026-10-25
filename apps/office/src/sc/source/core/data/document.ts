@@ -240,6 +240,22 @@ export class ScDocument {
   GetClipStart(...args: Parameters<typeof document10.GetClipStart>): void {
     document10.GetClipStart.apply(this, args);
   }
+  /** Original coordinate merge envelope. @param args - Native parameters. @returns Whether changed or found. */
+  ExtendMerge(...args: Parameters<typeof document10.ExtendMerge>): boolean {
+    return document10.ExtendMerge.apply(this, args);
+  }
+  /** Original sheet flag addition. @param args - Native parameters. @returns Whether changed or found. */
+  ApplyFlagsTab(...args: Parameters<typeof document10.ApplyFlagsTab>): boolean {
+    return document10.ApplyFlagsTab.apply(this, args);
+  }
+  /** Original sheet flag removal. @param args - Native parameters. @returns Whether changed or found. */
+  RemoveFlagsTab(...args: Parameters<typeof document10.RemoveFlagsTab>): boolean {
+    return document10.RemoveFlagsTab.apply(this, args);
+  }
+  /** Original filter refresh for represented sheets without database ranges. @param args - Native parameters. @returns Whether changed or found. */
+  RefreshAutoFilter(...args: Parameters<typeof document10.RefreshAutoFilter>): boolean {
+    return document10.RefreshAutoFilter.apply(this, args);
+  }
   /** Original selected-sheet merge envelope. @param args - Native bounds,marks and refresh defaultfalse. @returns Nothing. */
   ExtendMergeSel(...args: Parameters<typeof document10.ExtendMergeSel>): void {
     document10.ExtendMergeSel.apply(this, args);
@@ -266,15 +282,9 @@ export class ScDocument {
   SetGrammar(grammar: Grammar): void {
     this.eGrammar = grammar;
   }
-  /** Original document block emptiness forwards to the actual sheet;missing sheets retain false. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param tab - Sheet. @returns Empty block. */
-  IsBlockEmpty(
-    firstCol: number,
-    firstRow: number,
-    lastCol: number,
-    lastRow: number,
-    tab: number,
-  ): boolean {
-    return this.FetchTable(tab)?.IsBlockEmpty(firstCol, firstRow, lastCol, lastRow) ?? false;
+  /** Original block emptiness on the same document. @param args - Native coordinates and sheet. @returns Empty block. */
+  IsBlockEmpty(...args: Parameters<typeof document10.IsBlockEmpty>): boolean {
+    return document10.IsBlockEmpty.apply(this, args);
   }
   /** Original range overload delegates to actual sheet attribute owners. @param range - Area. @param mask - Native query. @returns Found. */
   HasAttrib(range: ScRange, mask: HasAttrFlags): boolean {

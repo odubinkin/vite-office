@@ -131,38 +131,17 @@ export class ScAttrArray {
     const pattern = this.rDocument.getCellAttributeHelper().getDefaultCellAttribute();
     return (pattern.GetItem(ATTR_MERGE) as ScMergeAttr).IsMerged();
   }
-  /** Original non-refresh ExtendMerge scan over native canonical attribute entries. Refresh requires the unported ApplyFlagsTab/filter services and rejects explicitly. @param col - Addressed column. @param first - First row. @param last - Last row. @param paintCol - Extended column output. @param paintRow - Extended row output. @param refresh - Original defaultfalse flag. @returns Whether a merge was found. */
-  ExtendMerge(
-    col: number,
-    first: number,
-    last: number,
-    paintCol: [number],
-    paintRow: [number],
-    refresh = false,
-  ): boolean {
-    if (refresh) throw Error("Merge flag refresh is not implemented");
-    if (this.nCol === -1) throw Error("Default-column ExtendMerge assertion");
-    this.SetDefaultIfNotInit();
-    const start: [number] = [0],
-      end: [number] = [0];
-    this.Search(first, start);
-    this.Search(last, end);
-    let found = false;
-    for (let i = start[0]; i <= end[0]; ++i) {
-      const pattern = (this.mvData[i] as ScAttrEntry).getScPatternAttr() as ScPatternAttr;
-      const merge = pattern.GetItem(ATTR_MERGE) as ScMergeAttr;
-      const columns = merge.GetColMerge(),
-        rows = merge.GetRowMerge();
-      if (columns > 1 || rows > 1) {
-        const row = i > 0 ? (this.mvData[i - 1] as ScAttrEntry).nEndRow + 1 : 0;
-        const endCol = col + columns - 1,
-          endRow = row + rows - 1;
-        if (endCol > paintCol[0] && endCol <= this.rDocument.MaxCol()) paintCol[0] = endCol;
-        if (endRow > paintRow[0] && endRow <= this.rDocument.MaxRow()) paintRow[0] = endRow;
-        found = true;
-      }
-    }
-    return found;
+  /** Original merge extension on this same attribute owner. @param args - Native bounds,outputs and refresh defaultfalse. @returns Whether a merge was found. */
+  ExtendMerge(...args: Parameters<typeof deletion.ExtendMerge>): boolean {
+    return deletion.ExtendMerge.apply(this, args);
+  }
+  /** Original interval flag addition. @param first - First row. @param last - Last row. @param flags - Added flags. @returns Whether changed. */
+  ApplyFlags(first: number, last: number, flags: ScMF): boolean {
+    return deletion.ApplyFlags.call(this, first, last, flags);
+  }
+  /** Original interval flag removal. @param first - First row. @param last - Last row. @param flags - Removed flags. @returns Whether changed. */
+  RemoveFlags(first: number, last: number, flags: ScMF): boolean {
+    return deletion.RemoveFlags.call(this, first, last, flags);
   }
   /** Original NeedHeight and deletion merge-flag branches over genuine pattern values;other masks remain unported. @param pattern - Actual pattern. @param mask - Admitted native mask. @returns Requested attribute found. */
   private HasAttrib_Impl(pattern: ScPatternAttr, mask: HasAttrFlags): boolean {

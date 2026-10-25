@@ -14,6 +14,7 @@ import {
   SingleCellListening,
   type StartListeningType,
 } from "../../../inc/types";
+import type { ScMF } from "../../../inc/attrib";
 import { HasAttrFlags } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
@@ -183,6 +184,14 @@ export class ScColumnData {
 }
 /** Numeric/string/formula column owner;cells are not stored in an application-side grid. */
 export class ScColumn extends ScColumnData {
+  /** Original inline column flag addition. @param first - First row. @param last - Last row. @param flags - Added flags. @returns Changed. */
+  ApplyFlags(first: number, last: number, flags: ScMF): boolean {
+    return this.pAttrArray.ApplyFlags(first, last, flags);
+  }
+  /** Original inline column flag removal. @param first - First row. @param last - Last row. @param flags - Removed flags. @returns Changed. */
+  RemoveFlags(first: number, last: number, flags: ScMF): boolean {
+    return this.pAttrArray.RemoveFlags(first, last, flags);
+  }
   /** Original column.hxx inline forwards to the actual attribute runs. @param row - Queried row. @returns Whether the cell is a merged anchor. */
   IsMerged(row: number): boolean {
     return this.pAttrArray.IsMerged(row);
@@ -764,10 +773,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Borrows an actual formula-cell identity. @param row - Valid row. @returns Formula cell or null. */
   GetFormulaCell(row: number): ScFormulaCell | null {
-    if (this.maCells.get_type(row) !== element_type_formula) return null;
-    const output: [ScFormulaCell | null] = [null];
-    this.maCells.get(row, formula_element_callbacks, output);
-    return output[0];
+    return column3.GetFormulaCell.call(this, row);
   }
   /** Reads a real formula error, with native nonformula NONE. @param row - Valid row. @returns Error. */
   GetErrCode(row: number): FormulaError {

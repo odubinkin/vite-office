@@ -26,7 +26,8 @@
       "SetDirtyIncludingEmptyCells",
       "ApplyAttr",
       "GetBlockMatrixEdges",
-      "ApplyPattern"
+      "ApplyPattern",
+      "GetFormulaCell"
     ],
     "upstreamSymbols": [
       "GroupFormulaCells",
@@ -41,7 +42,8 @@
       "ScColumn::GetSharedString",
       "ScColumn::DeleteArea",
       "ScColumn::BroadcastCells",
-      "ScColumn::StartListeners"
+      "ScColumn::StartListeners",
+      "ScColumn::GetFormulaCell"
     ],
     "preservedResponsibilities": [
       "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
@@ -56,7 +58,8 @@
       "Native CopyToColumn admits the original NOTE-stripped full scalar payload from ordinary table copies while retaining selective-number/link/foreign-style boundaries. Original marked recursion omits the clone-policy argument (CALC-269). ImplDestroy stops real store events,clears and resizes represented cell/text stores;actual member destruction releases shared strings and formula subscriptions through native value callbacks. Note/sparkline stores and CellStorageModified compute/stream services remain unported.",
       "Original DeleteArea uses actual DeleteCellsResult,optional deleted-span collection,hard-attribute deletion and changed-row broadcast order. Absent note/sparkline/edit owners have no dummy stores;style reset rejects explicitly. BroadcastCells reuses one real ScHint. StartListeners retains real needed flags and shared top/group-length skipping. Consumed column.cxx SetDirty BROADCAST_BROADCASTERS uses the actual formula-only ProcessFormula overload,broadcaster walk and TrackFormulas. Other mode bodies remain separate existing/unported responsibilities.",
       "Original attarray.cxx deletion methods operate on the same actual ScAttrArray owner. RemoveAreaMerge clears full native merge rectangles via canonical document/table/column ApplyAttr;SetPatternAreaSafe retains overlap/autofilter flags and default cell styles. Physical source partition satisfies the1000-line file bound. ScUndoPaste retains native CONTENTS/ATTRIB/NOCAPTIONS normalization and actual content/pattern snapshots. PasteFromClip/EnterBlock and final74 remain pending;no complete parity claim.",
-      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete."
+      "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
+      "Native GetFormulaCell body partitions unchanged from the same ScColumn facade into its original column3.cxx responsibility;actual typed cell storage and borrowed formula identity stay unchanged. This maintains the enforced source size bound without a second model."
     ],
     "omittedResponsibilities": [
       "Remaining task75 document modes,delayed-start batching,group compileCode and final raw100/history/native differential acceptance remain pending."
@@ -160,6 +163,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column.cxx",
           "marker": "ScColumn::ApplyPattern"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::GetFormulaCell"
         }
       ]
     }

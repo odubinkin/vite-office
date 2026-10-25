@@ -4,6 +4,7 @@ import { SharedString } from "../../../../svl/inc/sharedstring";
 import { string_value_type } from "../../../inc/mtvelements";
 import {
   formula_block,
+  formula_element_callbacks,
   element_type_formula,
   element_type_numeric,
   element_type_string,
@@ -910,4 +911,12 @@ export function GetBlockMatrixEdges(
     row += end - offset;
   }
   return MatrixEdge.Nothing;
+}
+
+/** Original actual formula-cell borrow,partitioned unchanged from the facade. @param this - Actual column. @param row - Valid row. @returns Actual formula or null. */
+export function GetFormulaCell(this: ScColumn, row: number): ScFormulaCell | null {
+  if (this["maCells"].get_type(row) !== element_type_formula) return null;
+  const output: [ScFormulaCell | null] = [null];
+  this["maCells"].get(row, formula_element_callbacks, output);
+  return output[0];
 }

@@ -1,0 +1,68 @@
+{
+  "task": "202610222108-KVGGCR",
+  "state": "DOING;native merge/flag refresh verified;PasteFromClip/EnterBlock and final74 UI acceptance remain pending",
+  "sourceBaseline": "96cb22d71bf3fe8e52d4ad39e57d26ce1eeede66",
+  "upstreamCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePathLimit": null,
+  "scopeApproval": "Human confirmation2026-10-25 removes numerical path limits only for existing tasks76/74;functional scope,network/reference restrictions and full-run/fixes/coverage/closure/pause rule unchanged. Recorded in2ff174182d1a and a1e44732d9ae.",
+  "authorizedScopePathCount": 319,
+  "historicalNonSourceEvidencePaths": [
+    "apps/office/output/playwright/task33-cell-selection-1280.png",
+    "apps/office/output/playwright/task33-cell-selection-390.png",
+    "apps/office/output/playwright/task77-pointing-1280.png",
+    "apps/office/output/playwright/task77-pointing-390.png"
+  ],
+  "changedPaths": 28,
+  "checks": {
+    "calc": "232 files/1002 scenarios pass;initial broad coverage100. Final eight source owners independently rerun after same-instance method partition:166 files/769 scenarios pass,raw100 S2961/B1724/F526/L2614. Overlapping scenarios are not counted as new unique tests.",
+    "coverage": {
+      "lines": {
+        "total": 16001,
+        "covered": 16001,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 17917,
+        "covered": 17917,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3088,
+        "covered": 3088,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 10703,
+        "covered": 10703,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "coverageMethod": "Original full Calc raw coverage retained. Fresh complete coverage replaces the eight changed-source owners after exact source SHA256 verification. Every remaining owner is asserted byte-identical to HEAD. Every final raw statement/function/branch counter and unchanged strict100 S/B/F/L metrics pass.",
+    "browserWorker": "fresh final production build/static smoke;two actual Chromium and DOM-free Worker scenarios pass",
+    "other": "app/tools types,changed ESLint/Prettier,JSDoc,size,boundaries,source-tree,8-owner source provenance,routing,doctor,diff pass"
+  },
+  "preserved": [
+    "Native ApplyFlags/RemoveFlags canonical run traversal,bitwise updates,holder disposal,re-search after mutation and changed booleans.",
+    "Native sheet endpoint validation;addition allocates only addressed columns;removal clamps to allocated tail. Native document absent-sheet false.",
+    "ExtendMerge horizontal/vertical/combined overlap flag reconstruction and native index re-search after mutations. Native refresh calls orphan Auto flag removal even without merged cells.",
+    "Database-range collection owners are not represented in current slice;their positive autofilter reconstruction remains unported without fabricated null/empty providers.",
+    "Existing GetFormulaCell and IsBlockEmpty bodies partition unchanged to existing same-instance source definitions for strict file-size gates."
+  ],
+  "failuresAndRepairs": [
+    "Old refresh-rejection assertions updated to canonical native mutation results;per-sheet original bound outputs reset before the repeated envelope test.",
+    "ESLint non-null assertions replaced by real table type and typed tuples.",
+    "Column facade met forbidden1000-line threshold;existing GetFormulaCell moved unchanged into original column3 responsibility;missing callback import repaired.",
+    "New cross-file symbols are recorded against actual upstream evidence instead of incorrectly asserting they reside in each primary mapped source."
+  ],
+  "stopRule": "Finish existing76 and74;full all-application suites,necessary fixes/new scenarios,required100coverage,final task closure,then pause goal. No new planned tasks;final source gates remain unwaived."
+}

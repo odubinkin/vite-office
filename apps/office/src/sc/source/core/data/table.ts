@@ -348,6 +348,14 @@ export class ScTable {
       ) => column.ChangeSelectionIndent(first, last, increment),
     );
   }
+  /** Original flag addition on actual columns. @param args - Native rectangle and flags. @returns Changed. */
+  ApplyFlags(...args: Parameters<typeof table2.ApplyFlags>): boolean {
+    return table2.ApplyFlags.apply(this, args);
+  }
+  /** Original flag removal without tail allocation. @param args - Native rectangle and flags. @returns Changed. */
+  RemoveFlags(...args: Parameters<typeof table2.RemoveFlags>): boolean {
+    return table2.RemoveFlags.apply(this, args);
+  }
   /** Original table2.cxx DeleteArea clamps to allocated columns and never mutates the default-column tail. @param firstCol - First column. @param firstRow - First row. @param lastCol - Last column. @param lastRow - Last row. @param flags - Consumed attribute-only flags. @returns Nothing. */
   DeleteArea(
     firstCol: number,
