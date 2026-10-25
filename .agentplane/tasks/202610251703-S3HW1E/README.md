@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 66
+revision: 67
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T22:53:29.499Z"
+doc_updated_at: "2026-10-25T22:57:34.927Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -75,6 +75,8 @@ sections:
     RTF table-width source audit: pinned AttributeOutputBase::GetTablePageSize and SwWriteTable::GetAbsWidthRatio use the table frame width as the base and either that fixed width or the resolved page text width (with a width percentage) as the target. The local exporter previously divided by the sum of each row’s cell widths; it now follows the source base/target contract for the represented page geometry. A focused regression uses a 6000-twip table frame with 1800/3000-twip cells and checks both full-page and fixed-width boundaries. `npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/rtfexport.test.ts`: 51 passed. TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module boundaries and `git diff --check` passed. The capability matrix records the layout/HTML/nested-merge boundary; full current-slice closure remains pending on its other open rows.
 
     RTF paragraph-indent source audit: pinned RtfAttributeOutput::FormatTextLeftMargin / FormatRightMargin emit paired physical and logical controls (`\li`/`\lin`, `\ri`/`\rin`); pinned rtftok `RTFKeyword::LI` resets an inherited `\fi` only if no direct first-line value is already present. Local export/import and stylesheet/body application now follow these rules for the represented direction-less paragraph margin items. Focused `rtfexport.test.ts` + `rtfdocumentimpl.test.ts`: 156 passed; TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module-boundary and diff checks passed. Full current-slice parity remains pending on the matrix’s other open capabilities.
+
+    RTF distributed-alignment batch: pinned RtfAttributeOutput::ParaAdjust emits `\qd` for block alignment whose last-line adjustment is block; pinned rtftok maps `\qd` to OOXML distribute and DomainMapper sets both native paragraph and last-line block alignment. The local RTF paths now consume `SvxAdjustItem` directly instead of flattening its last-line field to the four-value UI projection. Named styles, body paragraphs, and direct `\qj` override are covered. Command: `npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ascii src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx`. Result: pass, 249 tests in ten related files. TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module-boundary and `git diff --check` passed. Full current-slice closure remains pending on other matrix rows.
 id_source: "generated"
 ---
 ## Summary
@@ -128,3 +130,5 @@ Native highlight-brush batch: pinned `sw/source/core/bastyp/init.cxx` registers 
 RTF table-width source audit: pinned AttributeOutputBase::GetTablePageSize and SwWriteTable::GetAbsWidthRatio use the table frame width as the base and either that fixed width or the resolved page text width (with a width percentage) as the target. The local exporter previously divided by the sum of each row’s cell widths; it now follows the source base/target contract for the represented page geometry. A focused regression uses a 6000-twip table frame with 1800/3000-twip cells and checks both full-page and fixed-width boundaries. `npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/rtfexport.test.ts`: 51 passed. TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module boundaries and `git diff --check` passed. The capability matrix records the layout/HTML/nested-merge boundary; full current-slice closure remains pending on its other open rows.
 
 RTF paragraph-indent source audit: pinned RtfAttributeOutput::FormatTextLeftMargin / FormatRightMargin emit paired physical and logical controls (`\li`/`\lin`, `\ri`/`\rin`); pinned rtftok `RTFKeyword::LI` resets an inherited `\fi` only if no direct first-line value is already present. Local export/import and stylesheet/body application now follow these rules for the represented direction-less paragraph margin items. Focused `rtfexport.test.ts` + `rtfdocumentimpl.test.ts`: 156 passed; TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module-boundary and diff checks passed. Full current-slice parity remains pending on the matrix’s other open capabilities.
+
+RTF distributed-alignment batch: pinned RtfAttributeOutput::ParaAdjust emits `\qd` for block alignment whose last-line adjustment is block; pinned rtftok maps `\qd` to OOXML distribute and DomainMapper sets both native paragraph and last-line block alignment. The local RTF paths now consume `SvxAdjustItem` directly instead of flattening its last-line field to the four-value UI projection. Named styles, body paragraphs, and direct `\qj` override are covered. Command: `npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ascii src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/writerfilter/rtftok src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx`. Result: pass, 249 tests in ten related files. TypeScript typecheck, scoped ESLint/Prettier, source-provenance, Writer registry, module-boundary and `git diff --check` passed. Full current-slice closure remains pending on other matrix rows.

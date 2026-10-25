@@ -94,3 +94,11 @@ zero first-line indent on `\\li` only when no earlier direct `\\fi` exists;
 the local style and body paths retain that ordering. Source-level bidi
 resolution of distinct physical and logical values remains outside the
 current direction-less paragraph model.
+
+RTF paragraph adjustment now reads the native `SvxAdjustItem` rather than its
+four-value UI projection. The pinned `ParaAdjust` emits `\\qd` when block
+alignment also distributes the last line, and the pinned `rtfdispatchflag.cxx`
+maps incoming `\\qd` to OOXML distribute, which `DomainMapper` applies as
+block alignment plus block last-line adjustment. Body paragraphs and named
+stylesheet entries preserve that independent native last-line value; a direct
+`\\qj` replaces it with ordinary block alignment.

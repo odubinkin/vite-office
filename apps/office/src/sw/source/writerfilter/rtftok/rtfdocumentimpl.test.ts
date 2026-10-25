@@ -9,7 +9,8 @@ import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { SvxAdjust, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -22,6 +23,7 @@ import {
   RES_BREAK,
   RES_PAGEDESC,
   RES_PARATR_LINESPACING,
+  RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
@@ -967,6 +969,23 @@ it("maps logical RTF indents and resets inherited first-line indent on direct li
     expect(document.paragraphs[0]?.GetParagraphRightMargin()).toBe(300);
     expect(document.paragraphs[0]?.GetParagraphFirstLineIndent()).toBe(0);
     expect(document.paragraphs[1]?.GetParagraphFirstLineIndent()).toBe(360);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps qd distributed-last-line alignment in styles and direct overrides", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s42\\qd Distributed;}}\\pard\\s42 Styled\\par\\pard\\s42\\qj Direct}",
+  );
+  try {
+    const inherited = document.paragraphs[0]?.GetAttr(RES_PARATR_ADJUST) as
+      SvxAdjustItem | undefined;
+    const direct = document.paragraphs[1]?.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem | undefined;
+    expect(inherited?.GetAdjust()).toBe(SvxAdjust.Block);
+    expect(inherited?.GetLastBlock()).toBe(SvxAdjust.Block);
+    expect(direct?.GetAdjust()).toBe(SvxAdjust.Block);
+    expect(direct?.GetLastBlock()).toBe(SvxAdjust.Left);
   } finally {
     document.Dispose();
   }

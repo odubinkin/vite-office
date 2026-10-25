@@ -11,7 +11,7 @@ import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
-import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { SvxAdjust, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -89,6 +89,7 @@ import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 /** Paragraph properties represented by the current Writer model. */
 interface RtfParagraphState {
   alignment: WriterParagraphAlignment;
+  distributeLastLine: boolean;
   left: number;
   right: number;
   firstLine: number;
@@ -240,6 +241,7 @@ function hasRtfUnderlineControl(controls: ReadonlySet<string>): boolean {
 }
 const DEFAULT_PARAGRAPH: RtfParagraphState = {
   alignment: "left",
+  distributeLastLine: false,
   left: 0,
   right: 0,
   firstLine: 0,
@@ -299,6 +301,7 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "qc",
   "qr",
   "qj",
+  "qd",
   "li",
   "lin",
   "ri",
@@ -673,10 +676,11 @@ export class RtfDocumentImpl {
     ).GetStyleHandle();
     for (const item of items.entries()) collection.SetFormatAttr(item);
     const paragraph = definition.paragraph;
-    if (["ql", "qc", "qr", "qj"].some((name) => controls.has(name)))
-      collection.SetFormatAttr(
-        new SvxAdjustItem(getSvxAdjust(paragraph.alignment), RES_PARATR_ADJUST),
-      );
+    if (["ql", "qc", "qr", "qj", "qd"].some((name) => controls.has(name))) {
+      const adjust = new SvxAdjustItem(getSvxAdjust(paragraph.alignment), RES_PARATR_ADJUST);
+      if (paragraph.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
+      collection.SetFormatAttr(adjust);
+    }
     if (controls.has("li") || controls.has("lin"))
       collection.SetFormatAttr(
         new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
@@ -726,7 +730,11 @@ export class RtfDocumentImpl {
     node.SetTextHints(hints);
     for (const mark of paragraph.marks)
       node.GetDoc().GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
-    if (paragraph.state.alignmentSet) node.SetParagraphAlignment(paragraph.state.alignment);
+    if (paragraph.state.alignmentSet) {
+      const adjust = new SvxAdjustItem(getSvxAdjust(paragraph.state.alignment), RES_PARATR_ADJUST);
+      if (paragraph.state.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
+      node.SetAttr(adjust);
+    }
     if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
     if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
     if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
@@ -1380,10 +1388,11 @@ export class RtfDocumentImpl {
       Reflect.deleteProperty(character, "highlight");
       const highlight = parameter === 0 ? undefined : this.colors[parameter];
       state.character = { ...character, ...(highlight === undefined ? {} : { highlight }) };
-    } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj")
+    } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj" || name === "qd")
       state.paragraph = {
         ...state.paragraph,
         alignmentSet: true,
+        distributeLastLine: name === "qd",
         alignment:
           name === "ql" ? "left" : name === "qc" ? "center" : name === "qr" ? "right" : "justify",
       };

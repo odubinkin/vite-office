@@ -34,6 +34,8 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -49,6 +51,7 @@ import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_UNDERLINE,
+  RES_PARATR_ADJUST,
 } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -1065,6 +1068,28 @@ it("writes both physical and logical RTF paragraph indents", () => {
     const output = new TextDecoder().decode(new RtfExport().ExportDocument(document));
     expect(output).toContain("\\li180\\lin180\\ri300\\rin300");
   } finally {
+    document.Dispose();
+  }
+});
+
+it("round trips native distributed-last-line paragraph alignment through qd", () => {
+  const document = createWriterDocument();
+  const paragraph = document.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Distributed");
+  const adjust = new SvxAdjustItem(SvxAdjust.Block, RES_PARATR_ADJUST);
+  adjust.SetLastBlock(SvxAdjust.Block);
+  paragraph.SetAttr(adjust);
+  let restored;
+  try {
+    const bytes = new RtfExport().ExportDocument(document);
+    expect(new TextDecoder().decode(bytes)).toContain("\\qd");
+    restored = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const result = restored.paragraphs[0]?.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem | undefined;
+    expect(result?.GetAdjust()).toBe(SvxAdjust.Block);
+    expect(result?.GetLastBlock()).toBe(SvxAdjust.Block);
+  } finally {
+    restored?.Dispose();
     document.Dispose();
   }
 });
