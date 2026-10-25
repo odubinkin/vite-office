@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610251609-FNSJM5",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-25T16:14:27.405Z",
+  "verdict": "pass",
+  "summary": "Native TXT filter path and browser adapter match approved scope; focused checks pass.",
+  "evaluated_sha": "8d13791a51596e94cdf12cdb647d8f954141c091",
+  "blueprint_digest": "07b91867c4c8adf1392230e8bdaaab2cdc9a92450e2218aaf8cb22e29e72661a",
+  "findings": [
+    "Full document output includes native paragraph numbering, final line endings and tab-delimited table rows; unrelated save behavior remains unchanged."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610251609-FNSJM5/README.md",
+    "apps/office/src/sw/source/uibase/app/docsh.test.ts",
+    "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx",
+    "npx vitest run --config vitest.writer.config.ts (43 targeted tests passed)"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
