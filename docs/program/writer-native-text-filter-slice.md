@@ -28,6 +28,13 @@ the body. The reader keeps one document-owned list across the single blank line
 emitted between loose list items. An empty leading preformatted paragraph can
 leave an unmatched closing fence under the pinned source conditions (WRITER116).
 
+Markdown byte import now rejects an empty stream before replacing the document,
+as pinned `SwMarkdownParser::CallParser` does. The pinned Markdown reader
+normally receives the thread text encoding from `SwAsciiOptions::Reset()`;
+only an explicitly unknown encoding enters `SvStream::DetectEncoding()`.
+The browser default remains UTF-8, and the nondefault encoding option, ICU
+detector and full byte-stream differential behavior remain open (WRITER117).
+
 The Markdown reader currently implements only selected md4c callback outcomes, including
 backslash and whitespace hard breaks, soft breaks, thematic-line blocks, recognized
 entity omission and null-character omission. The

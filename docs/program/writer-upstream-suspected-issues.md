@@ -1250,3 +1250,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutMarkdown_SwTextNode`, enters its fence logic only for nonempty text. For a nonempty preformatted paragraph, it decides whether to open the fence by checking the preceding node's pool style, even when that preceding node was empty and wrote no fence.
 - Observation: an empty preformatted paragraph followed by a nonempty one emits no opening fence, but the last nonempty paragraph still emits a closing fence. This is a source-level inference, not a compiled desktop reproduction.
 - Preservation: the local Markdown writer makes the same independent text and neighboring-style decisions. A focused test pins the resulting unmatched fence.
+
+### WRITER117 — Markdown automatic encoding detection is bypassed by the default reader option
+
+- Source: pinned `sw/source/filter/basflt/shellio.cxx`, `SwAsciiOptions::Reset`, initializes the charset to `osl_getThreadTextEncoding()`. Pinned `sw/source/filter/md/swmd.cxx`, `MarkdownReader::Read` passes that value to `SwMarkdownParser::CallParser`, which calls `SvStream::DetectEncoding()` only for `RTL_TEXTENCODING_DONTKNOW`. Pinned Unix thread initialization replaces an unknown locale encoding with US-ASCII; Windows uses the active code page.
+- Observation: ordinary Markdown opening does not reach BOM/ICU detection unless a caller explicitly supplies an unknown charset. This is a source-level inference, not a compiled desktop reproduction. A UTF-16 BOM alone does not override the default charset through this path.
+- Preservation: the browser Writer reader keeps its default UTF-8 byte path and does not unconditionally detect UTF-16 BOMs. The explicit unknown-charset branch is not yet represented locally.

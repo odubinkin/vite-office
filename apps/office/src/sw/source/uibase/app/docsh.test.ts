@@ -34,6 +34,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
     };
     try {
       expect(() => shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium)).toThrow();
+      expect(() => shell.OpenMarkdown(new Uint8Array(), metadata, medium)).toThrow();
       expect(shell.GetDoc()).toBe(original);
       const loaded = shell.OpenMarkdown(new TextEncoder().encode("# Imported"), metadata, medium);
       expect(loaded.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");

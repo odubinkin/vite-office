@@ -27,8 +27,9 @@ type MarkdownBlock =
 
 /** Reads Markdown bytes and installs represented source blocks into canonical Writer nodes. */
 export class MarkdownReader {
-  /** Imports one UTF-8 Markdown document. @param bytes - Source stream. @param options - Writer document environment. @param baseURL - Source document URL when known. @returns Imported model. */
+  /** Imports one Markdown document with the source default text encoding. @param bytes - Source stream. @param options - Writer document environment. @param baseURL - Source document URL when known. @returns Imported model. */
   public Read(bytes: Uint8Array, options: SwDocOptions = {}, baseURL = ""): SwDoc {
+    if (bytes.length === 0) throw new Error("Invalid Markdown byte stream.");
     const text = new TextDecoder("utf-8", { fatal: true })
       .decode(bytes)
       .replaceAll("\r\n", "\n")

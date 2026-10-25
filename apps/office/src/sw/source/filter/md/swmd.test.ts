@@ -14,6 +14,11 @@ function read(value: string) {
   return new MarkdownReader().Read(new TextEncoder().encode(value));
 }
 
+it("rejects an empty Markdown stream before model allocation", () => {
+  const reader = new MarkdownReader();
+  expect(() => reader.Read(new Uint8Array())).toThrow("Invalid Markdown byte stream.");
+});
+
 it("imports headings and nested emphasis as native paragraph styles and hints", /** Checks block/span callback ownership. @returns Nothing. */ () => {
   const document = read(
     "## Heading\n\nPlain **bold *italic*** and [link](https://example.test).\n",
