@@ -6,7 +6,7 @@ import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrient
 import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
@@ -32,6 +32,76 @@ import { RtfExport } from "../../filter/ww8/rtfexport";
 function read(input: string) {
   return new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(input));
 }
+
+it("imports every pinned RTF underline value into the native line-style item", /** Checks keyword to native style dispatch. @returns Nothing. */ () => {
+  const cases: readonly [string, FontLineStyle][] = [
+    ["ul", FontLineStyle.LINESTYLE_SINGLE],
+    ["ulw", FontLineStyle.LINESTYLE_SINGLE],
+    ["uldb", FontLineStyle.LINESTYLE_DOUBLE],
+    ["uld", FontLineStyle.LINESTYLE_DOTTED],
+    ["uldash", FontLineStyle.LINESTYLE_DASH],
+    ["uldashd", FontLineStyle.LINESTYLE_DASHDOT],
+    ["uldashdd", FontLineStyle.LINESTYLE_DASHDOTDOT],
+    ["ulth", FontLineStyle.LINESTYLE_BOLD],
+    ["ulwave", FontLineStyle.LINESTYLE_WAVE],
+    ["ulthd", FontLineStyle.LINESTYLE_BOLDDOTTED],
+    ["ulthdash", FontLineStyle.LINESTYLE_BOLDDASH],
+    ["ulldash", FontLineStyle.LINESTYLE_LONGDASH],
+    ["ulthldash", FontLineStyle.LINESTYLE_BOLDLONGDASH],
+    ["ulthdashd", FontLineStyle.LINESTYLE_BOLDDASHDOT],
+    ["ulthdashdd", FontLineStyle.LINESTYLE_BOLDDASHDOTDOT],
+    ["ulhwave", FontLineStyle.LINESTYLE_BOLDWAVE],
+    ["ululdbwave", FontLineStyle.LINESTYLE_DOUBLEWAVE],
+    ["ulnone", FontLineStyle.LINESTYLE_NONE],
+    ["ul0", FontLineStyle.LINESTYLE_NONE],
+  ];
+  for (const [control, style] of cases) {
+    const document = read(`{\\rtf1 \\${control} text}`);
+    try {
+      const paragraph = document.paragraphs[0];
+      if (paragraph === undefined) throw new Error("Missing paragraph.");
+      expect(
+        projectWriterTextRuns(paragraph)[0]?.attributes.underlineStyle ??
+          (projectWriterTextRuns(paragraph)[0]?.attributes.underline
+            ? FontLineStyle.LINESTYLE_SINGLE
+            : FontLineStyle.LINESTYLE_NONE),
+      ).toBe(style);
+      if (control === "ulw")
+        expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
+    } finally {
+      document.Dispose();
+    }
+  }
+});
+
+it("inherits native underline style from the RTF stylesheet and applies direct override", /** Checks source character-style ancestry and group restoration. @returns Nothing. */ () => {
+  const document = read(
+    String.raw`{\rtf1{\stylesheet{\s1\uldb Decorated;}}\s1 inherited {\uldash direct} inherited}`,
+  );
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    const runs = projectWriterTextRuns(paragraph);
+    expect(runs.map((run) => [run.text, run.attributes.underlineStyle])).toEqual([
+      ["inherited ", FontLineStyle.LINESTYLE_DOUBLE],
+      ["direct", FontLineStyle.LINESTYLE_DASH],
+      [" inherited", FontLineStyle.LINESTYLE_DOUBLE],
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("ignores unknown control words even when they match object prototypes", /** Checks that unknown RTF keywords cannot become style values. @returns Nothing. */ () => {
+  const document = read(String.raw`{\rtf1\constructor text}`);
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes.underline).toBe(false);
+  } finally {
+    document.Dispose();
+  }
+});
 
 it("decodes ANSI bytes after group and font encoding selection", () => {
   const document = read(

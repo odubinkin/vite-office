@@ -1,5 +1,5 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   DFLT_ESC_AUTO_SUB,
   DFLT_ESC_AUTO_SUPER,
@@ -182,7 +182,37 @@ export class RtfAttributeOutput {
     let result = "";
     if (attributes.bold) result += "\\b";
     if (attributes.italic) result += "\\i";
-    if (attributes.underline) result += "\\ul";
+    const underlineStyle =
+      attributes.underlineStyle ??
+      (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
+    const underlineControl: Partial<Record<FontLineStyle, string>> = {
+      [FontLineStyle.LINESTYLE_SINGLE]: "ul",
+      [FontLineStyle.LINESTYLE_DOUBLE]: "uldb",
+      [FontLineStyle.LINESTYLE_NONE]: "ulnone",
+      [FontLineStyle.LINESTYLE_DOTTED]: "uld",
+      [FontLineStyle.LINESTYLE_DASH]: "uldash",
+      [FontLineStyle.LINESTYLE_DASHDOT]: "uldashd",
+      [FontLineStyle.LINESTYLE_DASHDOTDOT]: "uldashdd",
+      [FontLineStyle.LINESTYLE_BOLD]: "ulth",
+      [FontLineStyle.LINESTYLE_WAVE]: "ulwave",
+      [FontLineStyle.LINESTYLE_BOLDDOTTED]: "ulthd",
+      [FontLineStyle.LINESTYLE_BOLDDASH]: "ulthdash",
+      [FontLineStyle.LINESTYLE_LONGDASH]: "ulldash",
+      [FontLineStyle.LINESTYLE_BOLDLONGDASH]: "ulthldash",
+      [FontLineStyle.LINESTYLE_BOLDDASHDOT]: "ulthdashd",
+      [FontLineStyle.LINESTYLE_BOLDDASHDOTDOT]: "ulthdashdd",
+      [FontLineStyle.LINESTYLE_BOLDWAVE]: "ulhwave",
+      [FontLineStyle.LINESTYLE_DOUBLEWAVE]: "ululdbwave",
+    };
+    const underline =
+      underlineStyle === FontLineStyle.LINESTYLE_SINGLE && attributes.underlineWordMode
+        ? "ulw"
+        : underlineControl[underlineStyle];
+    if (
+      underline !== undefined &&
+      (attributes.underline || attributes.underlineStyle !== undefined)
+    )
+      result += `\\${underline}`;
     if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
     else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
     else if (attributes.strikeout !== undefined) result += "\\strike";

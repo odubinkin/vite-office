@@ -1,7 +1,7 @@
 /** @fileoverview Normalizes browser and filter text-run transfer records at the Writer filter boundary. */
 
 import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtatr2";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SwpHints, type WriterTextRunLike } from "../../core/txtnode/ndhints";
 import type { SwTextFragment, SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -82,6 +82,14 @@ export function normalizeWriterCharacterAttributes(candidate: unknown): WriterCh
       ? { highlight: attributes.highlight }
       : {}),
     ...(isWriterStrikeout(attributes.strikeout) ? { strikeout: attributes.strikeout } : {}),
+    ...(Number.isInteger(attributes.underlineStyle) &&
+    Number(attributes.underlineStyle) >= FontLineStyle.LINESTYLE_NONE &&
+    Number(attributes.underlineStyle) <= FontLineStyle.LINESTYLE_BOLDWAVE
+      ? { underlineStyle: Number(attributes.underlineStyle) as FontLineStyle }
+      : {}),
+    ...(typeof attributes.underlineWordMode === "boolean"
+      ? { underlineWordMode: attributes.underlineWordMode }
+      : {}),
     ...(isWriterEscapement(attributes.escapement)
       ? {
           escapement: {
@@ -133,6 +141,8 @@ function areWriterCharacterAttributesEqual(
     left.color === right.color &&
     left.italic === right.italic &&
     left.underline === right.underline &&
+    left.underlineStyle === right.underlineStyle &&
+    left.underlineWordMode === right.underlineWordMode &&
     left.fontFamily === right.fontFamily &&
     left.fontSizeTwips === right.fontSizeTwips &&
     left.highlight === right.highlight &&

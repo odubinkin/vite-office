@@ -18,6 +18,7 @@ import {
   SvxPostureItem,
   SvxUnderlineItem,
   SvxWeightItem,
+  SvxWordLineModeItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
@@ -37,6 +38,7 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
@@ -67,6 +69,10 @@ export interface WriterCharacterAttributes {
   readonly italic: boolean;
   /** Whether the text uses a single underline. */
   readonly underline: boolean;
+  /** Native underline line style; absent at boolean-only UI boundaries. */
+  readonly underlineStyle?: FontLineStyle;
+  /** Whether single underline applies only to words. */
+  readonly underlineWordMode?: boolean;
   /** Complete native decoration value; omitted only at legacy display boundaries. */
   readonly strikeout?: FontStrikeout;
   /** Complete native offset and relative height. */
@@ -471,10 +477,20 @@ export function createSwFormatAutoFormat(
         RES_CHRATR_ESCAPEMENT,
       ),
     );
-  if (attributes.underline !== inherited.underline)
+  if (attributes.underlineWordMode !== inherited.underlineWordMode)
+    items.Put(
+      new SvxWordLineModeItem(attributes.underlineWordMode === true, RES_CHRATR_WORDLINEMODE),
+    );
+  if (
+    (attributes.underlineStyle ??
+      (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE)) !==
+    (inherited.underlineStyle ??
+      (inherited.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE))
+  )
     items.Put(
       new SvxUnderlineItem(
-        attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE,
+        attributes.underlineStyle ??
+          (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE),
         RES_CHRATR_UNDERLINE,
       ),
     );
@@ -510,6 +526,11 @@ export function projectWriterCharacterAttributes(
   const authoredStrikeout =
     items.GetItemIfSet(RES_CHRATR_CROSSEDOUT, false) ??
     inherited?.GetItemIfSet(RES_CHRATR_CROSSEDOUT, true);
+  const underline = get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem;
+  const underlineStyle = underline.GetLineStyle();
+  const wordMode =
+    items.GetItemIfSet(RES_CHRATR_WORDLINEMODE, false) ??
+    inherited?.GetItemIfSet(RES_CHRATR_WORDLINEMODE, true);
   return {
     ...(color instanceof SvxColorItem ? { color: writerTextColorValue(color) } : {}),
     ...(font instanceof SvxFontItem ? { fontFamily: font.GetFamilyName() } : {}),
@@ -522,7 +543,14 @@ export function projectWriterCharacterAttributes(
       : {}),
     bold: (get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetBoolValue(),
     italic: (get(RES_CHRATR_POSTURE) as SvxPostureItem).GetBoolValue(),
-    underline: (get(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetBoolValue(),
+    underline: underline.GetBoolValue(),
+    ...(underlineStyle !== FontLineStyle.LINESTYLE_SINGLE &&
+    underlineStyle !== FontLineStyle.LINESTYLE_NONE
+      ? { underlineStyle }
+      : {}),
+    ...(wordMode instanceof SvxWordLineModeItem && wordMode.GetValue()
+      ? { underlineWordMode: true }
+      : {}),
     ...(authoredStrikeout !== undefined || strikeout.GetBoolValue()
       ? { strikeout: strikeout.GetStrikeout() }
       : {}),

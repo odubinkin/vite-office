@@ -17,7 +17,7 @@ import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingT
 import { SwTableNode } from "../../core/docnode/node";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { SwpHints } from "../../core/txtnode/ndhints";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   DFLT_ESC_AUTO_SUPER,
   DFLT_ESC_PROP,
@@ -49,6 +49,97 @@ import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
 import { RtfTokenizer } from "../../writerfilter/rtftok/rtftokenizer";
 import { RtfExport } from "./rtfexport";
+
+it("writes native underline line styles with the pinned RTF controls", /** Checks source control mapping and round-trip item state. @returns Nothing. */ () => {
+  const cases: readonly [FontLineStyle, string][] = [
+    [FontLineStyle.LINESTYLE_SINGLE, "ul"],
+    [FontLineStyle.LINESTYLE_DOUBLE, "uldb"],
+    [FontLineStyle.LINESTYLE_DOTTED, "uld"],
+    [FontLineStyle.LINESTYLE_DASH, "uldash"],
+    [FontLineStyle.LINESTYLE_DASHDOT, "uldashd"],
+    [FontLineStyle.LINESTYLE_DASHDOTDOT, "uldashdd"],
+    [FontLineStyle.LINESTYLE_BOLD, "ulth"],
+    [FontLineStyle.LINESTYLE_WAVE, "ulwave"],
+    [FontLineStyle.LINESTYLE_BOLDDOTTED, "ulthd"],
+    [FontLineStyle.LINESTYLE_BOLDDASH, "ulthdash"],
+    [FontLineStyle.LINESTYLE_LONGDASH, "ulldash"],
+    [FontLineStyle.LINESTYLE_BOLDLONGDASH, "ulthldash"],
+    [FontLineStyle.LINESTYLE_BOLDDASHDOT, "ulthdashd"],
+    [FontLineStyle.LINESTYLE_BOLDDASHDOTDOT, "ulthdashdd"],
+    [FontLineStyle.LINESTYLE_BOLDWAVE, "ulhwave"],
+    [FontLineStyle.LINESTYLE_DOUBLEWAVE, "ululdbwave"],
+  ];
+  for (const [style, control] of cases) {
+    const document = createWriterDocument();
+    try {
+      const paragraph = document.paragraphs[0];
+      if (paragraph === undefined) throw new Error("Missing paragraph.");
+      const fragment = createWriterTextFragment(paragraph, [
+        {
+          text: "underlined",
+          attributes: { bold: false, italic: false, underline: true, underlineStyle: style },
+        },
+      ]);
+      paragraph.SetText(fragment.text);
+      paragraph.SetTextHints(fragment.hints);
+      const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+      expect(rtf).toContain(`\\${control} `);
+      const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
+      try {
+        const importedParagraph = imported.paragraphs[0];
+        if (importedParagraph === undefined) throw new Error("Missing imported paragraph.");
+        expect(
+          projectWriterTextRuns(importedParagraph)[0]?.attributes.underlineStyle ??
+            FontLineStyle.LINESTYLE_SINGLE,
+        ).toBe(style);
+      } finally {
+        imported.Dispose();
+      }
+    } finally {
+      document.Dispose();
+    }
+  }
+});
+
+it("round trips native word-only underline through RTF ulw", /** Checks the source word-line item across RTF export and import. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    const fragment = createWriterTextFragment(paragraph, [
+      {
+        text: "word only",
+        attributes: {
+          bold: false,
+          italic: false,
+          underline: true,
+          underlineStyle: FontLineStyle.LINESTYLE_SINGLE,
+          underlineWordMode: true,
+        },
+      },
+    ]);
+    expect(fragment.hints.Count()).toBeGreaterThan(0);
+    expect(
+      fragment.hints.toTextRuns(fragment.text, paragraph.GetSwAttrSet())[0]?.attributes
+        .underlineWordMode,
+    ).toBe(true);
+    paragraph.SetText(fragment.text);
+    paragraph.SetTextHints(fragment.hints);
+    expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(rtf).toContain("\\ulw ");
+    const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
+    try {
+      const importedParagraph = imported.paragraphs[0];
+      if (importedParagraph === undefined) throw new Error("Missing imported paragraph.");
+      expect(projectWriterTextRuns(importedParagraph)[0]?.attributes.underlineWordMode).toBe(true);
+    } finally {
+      imported.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
 
 it("round trips text, Unicode, alignment and direct character runs", /** Checks native graph values after writer and tokenizer. @returns Nothing. */ () => {
   const source = createWriterDocument();

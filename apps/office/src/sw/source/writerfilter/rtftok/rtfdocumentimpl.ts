@@ -33,7 +33,7 @@ import {
   RES_PARATR_TABSTOP,
   RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   DFLT_ESC_AUTO_SUB,
   DFLT_ESC_AUTO_SUPER,
@@ -213,6 +213,31 @@ const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   italic: false,
   underline: false,
 };
+/** RTF underline keywords dispatched as OOXML underline values by the pinned rtftok reader. */
+const RTF_UNDERLINE_STYLES: Readonly<Record<string, FontLineStyle>> = {
+  ul: FontLineStyle.LINESTYLE_SINGLE,
+  uld: FontLineStyle.LINESTYLE_DOTTED,
+  uldash: FontLineStyle.LINESTYLE_DASH,
+  uldashd: FontLineStyle.LINESTYLE_DASHDOT,
+  uldashdd: FontLineStyle.LINESTYLE_DASHDOTDOT,
+  uldb: FontLineStyle.LINESTYLE_DOUBLE,
+  ulhwave: FontLineStyle.LINESTYLE_BOLDWAVE,
+  ulldash: FontLineStyle.LINESTYLE_LONGDASH,
+  ulth: FontLineStyle.LINESTYLE_BOLD,
+  ulthd: FontLineStyle.LINESTYLE_BOLDDOTTED,
+  ulthdash: FontLineStyle.LINESTYLE_BOLDDASH,
+  ulthdashd: FontLineStyle.LINESTYLE_BOLDDASHDOT,
+  ulthdashdd: FontLineStyle.LINESTYLE_BOLDDASHDOTDOT,
+  ulthldash: FontLineStyle.LINESTYLE_BOLDLONGDASH,
+  ululdbwave: FontLineStyle.LINESTYLE_DOUBLEWAVE,
+  ulwave: FontLineStyle.LINESTYLE_WAVE,
+  ulw: FontLineStyle.LINESTYLE_SINGLE,
+  ulnone: FontLineStyle.LINESTYLE_NONE,
+};
+/** Tests direct underline state across all RTF style controls. @param controls - Direct keyword set. @returns Whether one is an underline control. */
+function hasRtfUnderlineControl(controls: ReadonlySet<string>): boolean {
+  return [...controls].some((name) => Object.hasOwn(RTF_UNDERLINE_STYLES, name));
+}
 const DEFAULT_PARAGRAPH: RtfParagraphState = {
   alignment: "left",
   left: 0,
@@ -258,6 +283,7 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "i",
   "ul",
   "ulnone",
+  ...Object.keys(RTF_UNDERLINE_STYLES),
   "strike",
   "striked",
   "super",
@@ -291,6 +317,7 @@ const CHARACTER_PROPERTY_CONTROLS = new Set([
   "i",
   "ul",
   "ulnone",
+  ...Object.keys(RTF_UNDERLINE_STYLES),
   "strike",
   "striked",
   "super",
@@ -616,8 +643,12 @@ export class RtfDocumentImpl {
       ...current,
       ...(controls.has("b") ? { bold: definition.character.bold } : {}),
       ...(controls.has("i") ? { italic: definition.character.italic } : {}),
-      ...(controls.has("ul") || controls.has("ulnone")
-        ? { underline: definition.character.underline }
+      ...(hasRtfUnderlineControl(controls)
+        ? {
+            underline: definition.character.underline,
+            underlineStyle: definition.character.underlineStyle,
+            underlineWordMode: definition.character.underlineWordMode ?? current.underlineWordMode,
+          }
         : {}),
       ...(controls.has("strike") || controls.has("striked")
         ? { strikeout: definition.character.strikeout }
@@ -1254,15 +1285,27 @@ export class RtfDocumentImpl {
       state.paragraph = { ...DEFAULT_PARAGRAPH };
       return;
     }
-    if (name === "b" || name === "i" || name === "ul") {
+    if (name === "b" || name === "i") {
       state.character = {
         ...state.character,
-        [name === "b" ? "bold" : name === "i" ? "italic" : "underline"]: parameter !== 0,
+        [name === "b" ? "bold" : "italic"]: parameter !== 0,
       };
       return;
     }
-    if (name === "ulnone") state.character = { ...state.character, underline: false };
-    else if (name === "strike" || name === "striked")
+    const underlineStyle = Object.hasOwn(RTF_UNDERLINE_STYLES, name)
+      ? RTF_UNDERLINE_STYLES[name]
+      : undefined;
+    if (underlineStyle !== undefined) {
+      const style = parameter === 0 ? FontLineStyle.LINESTYLE_NONE : underlineStyle;
+      state.character = {
+        ...state.character,
+        underline: style !== FontLineStyle.LINESTYLE_NONE,
+        underlineStyle: style,
+        ...(name === "ulw" && style !== FontLineStyle.LINESTYLE_NONE
+          ? { underlineWordMode: true }
+          : {}),
+      };
+    } else if (name === "strike" || name === "striked")
       state.character = {
         ...state.character,
         strikeout:
@@ -1659,6 +1702,8 @@ function equalCharacter(a: WriterCharacterAttributes, b: WriterCharacterAttribut
     a.bold === b.bold &&
     a.italic === b.italic &&
     a.underline === b.underline &&
+    a.underlineStyle === b.underlineStyle &&
+    a.underlineWordMode === b.underlineWordMode &&
     a.fontFamily === b.fontFamily &&
     a.fontSizeTwips === b.fontSizeTwips &&
     a.color === b.color &&
@@ -1679,7 +1724,15 @@ function resolveRtfRunAttributes(
   return {
     bold: has("b") ? run.attributes.bold : inherited.bold,
     italic: has("i") ? run.attributes.italic : inherited.italic,
-    underline: has("ul", "ulnone") ? run.attributes.underline : inherited.underline,
+    underline: hasRtfUnderlineControl(controls) ? run.attributes.underline : inherited.underline,
+    ...(hasRtfUnderlineControl(controls)
+      ? { underlineStyle: run.attributes.underlineStyle }
+      : inherited.underlineStyle === undefined
+        ? {}
+        : { underlineStyle: inherited.underlineStyle }),
+    ...((run.attributes.underlineWordMode ?? inherited.underlineWordMode) === undefined
+      ? {}
+      : { underlineWordMode: run.attributes.underlineWordMode ?? inherited.underlineWordMode }),
     ...(has("f")
       ? run.attributes.fontFamily === undefined
         ? {}

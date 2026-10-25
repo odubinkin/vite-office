@@ -51,6 +51,7 @@ import {
   SvxFontItem,
   SvxPostureItem,
   SvxUnderlineItem,
+  SvxWordLineModeItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -79,6 +80,7 @@ import {
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
+  RES_CHRATR_WORDLINEMODE,
   RES_CHRATR_WEIGHT,
   RES_PARATR_ADJUST,
   RES_PARATR_SPLIT,
@@ -336,6 +338,11 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores an underline item. @param value - Persisted enum value. @returns Concrete underline item. */
       (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
       SID_ATTR_CHAR_UNDERLINE,
+    );
+    this.RegisterDefaultItem(
+      new SvxWordLineModeItem(false, RES_CHRATR_WORDLINEMODE),
+      /** Restores the native word-only line mode. @param value - Stored boolean. @returns Concrete item. */
+      (value) => new SvxWordLineModeItem(value === true, RES_CHRATR_WORDLINEMODE),
     );
     this.RegisterDefaultItem(
       new SvxColorItem(RES_CHRATR_COLOR),
