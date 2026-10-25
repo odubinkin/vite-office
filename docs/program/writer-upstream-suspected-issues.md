@@ -1112,3 +1112,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `comphelper/source/xml/ofopxmlhelper.cxx`, `OFOPXMLHelper::GetContentTypeByName`.
 - Observation: the helper searches the extension key in Overrides and Defaults before searching the full part key. Given default `xml = application/xml` and override `/word/document.xml = document-main`, it returns `application/xml`. This is surprising relative to OPC override precedence. The separate `ZipPackage::parseContentType` applies defaults then overrides; no incorrect desktop document result or reachable consumer defect is established here.
 - Preservation: retain exact search order, case-sensitive matching and first duplicate. `apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts` pins this result. Main-part selection uses the native office-document relationship path rather than changing this helper to infer a format from an extension. Shared finding also appears in the other application's issue ledger.
+
+### WRITER094 — PropertyMap overwrite insertion discards an explicit document-default marker
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `PropertyMap::Insert`; `PropertyMap.hxx`, `PropValue` constructors.
+- Observation: `Insert(id, value, true, NO_GRAB_BAG, true)` constructs the two-argument `PropValue`, leaving its document-default flag false. The non-overwrite branch forwards the explicit flag. Thus the marker's effect depends on overwrite mode even for a previously missing property. This may be intentional caller discipline; no incorrect desktop document result is established.
+- Preservation: retain both constructor selections. The actual property-map tests check default-marker reads and inherited merges rather than normalizing overwrite insertion.
+
+### WRITER095 — PropertyMap caches the first nonempty character-grab-bag projection across later flag changes
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `PropertyMap::GetPropertyValues`.
+- Observation: a nonempty cached property vector returns before consulting `bCharGrabBag`. With one ordinary property and one character grab-bag entry, calling with false first makes a later true call omit that bag; reversing the order retains it on a later false call. If false produces an empty vector, a later true call recomputes. Consumer call ordering and whether any desktop defect follows remain unverified.
+- Preservation: retain the nonempty-cache test and invalidation rules. Native typed-sequence tests cover both call orders and recomputation after invalidation.
+
+### WRITER096 — imported-style property lookup guards a direct self-parent but not longer inheritance cycles
+
+- Source: pinned `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `GetPropertyFromStyleSheet` and `lcl_getParent`.
+- Observation: lookup walks base style IDs until a property is found, no parent exists, or the next entry equals the current entry. A two-entry cycle with the requested property absent satisfies none of those conditions. Whether earlier style admission guarantees a cycle-free graph for every caller is unverified; this is not a confirmed desktop defect.
+- Preservation: keep the direct-self guard and lookup order. Tests cover direct-self termination, missing parents, inherited properties and paragraph-before-character DocDefaults. They do not execute a nonterminating cycle or silently introduce a visited-set repair.

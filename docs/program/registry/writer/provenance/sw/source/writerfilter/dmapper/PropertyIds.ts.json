@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/PropertyIds.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyIds.ts",
+          "marker": "PropertyIds"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyIds.cxx",
+          "marker": "getPropertyName"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyIds.cxx",
+          "marker": "isCharacterProperty"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyIds.cxx",
+          "marker": "isParagraphProperty"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/PropertyIds.cxx",
+    "localSymbols": [
+      "PropertyIds",
+      "getPropertyName",
+      "isCharacterProperty",
+      "isParagraphProperty"
+    ],
+    "upstreamSymbols": [
+      "getPropertyName",
+      "isCharacterProperty",
+      "isParagraphProperty"
+    ],
+    "preservedResponsibilities": [
+      "Original PropertyIds.hxx enum values and PropertyIds.cxx full name table, native static OUString/empty reference ownership and original character/paragraph interval predicates."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

@@ -9,7 +9,7 @@
     "type": "filter",
     "maturity": "mapped",
     "assertions": [
-      "The consumed OOXML resource values, generated IDs and property dispatch substrate retain source contracts; application DOCX import remains in progress."
+      "Consumed OOXML resource, property map, URI/package stream and imported-style lookup contracts are implemented; application DOCX import remains in progress."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
@@ -17,7 +17,7 @@
     },
     "capability": "Writer DOCX import into the represented canonical document graph",
     "gaps": [
-      "DomainMapper document/style/list/table/section mapping remains pending.",
+      "Complete style resource parsing/application and DomainMapper numbering/table/section/theme mapping remain pending; paragraph/run mapping is partial.",
       "Shell routing, cancellation/stale-result ownership and existing Open UI integration remain pending.",
       "Resource tests do not prove application DOCX import or native semantic parity."
     ],
@@ -34,6 +34,54 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
           "marker": "NS_ooxml"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyIds.ts",
+          "marker": "PropertyIds"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts",
+          "marker": "GrabBagType"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts",
+          "marker": "convertTwipToMm100_Limited"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts",
+          "marker": "ThemeColorHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+          "marker": "DomainMapper"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+          "marker": "DomainMapper_Impl"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts",
+          "marker": "StyleSheetTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts",
+          "marker": "StreamType_t"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+          "marker": "OOXMLStreamImpl"
+        },
+        {
+          "path": "apps/office/src/stoc/source/uriproc/UriReference.ts",
+          "marker": "UriReference"
+        },
+        {
+          "path": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts",
+          "marker": "UriReferenceFactory"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/types.ts",
+          "marker": "getEnumAsINT32"
         }
       ],
       "tests": [
@@ -44,6 +92,22 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts",
           "marker": "matches every consumed ID"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.test.ts",
+          "marker": "preserves all four typed interop bags"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.test.ts",
+          "marker": "writes actual formatted and plain runs"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts",
+          "marker": "follows native parent/style/paragraph-default"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+          "marker": "opens pinned native strict"
         }
       ],
       "docs": [
@@ -66,6 +130,54 @@
         {
           "path": "sw/source/writerfilter/ooxml/resourceids.py",
           "marker": "ContentHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyIds.cxx",
+          "marker": "getPropertyName"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyMap.cxx",
+          "marker": "PropertyMap::Insert"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ConversionHelper.cxx",
+          "marker": "convertTwipToMm100_Limited"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeColorHandler.hxx",
+          "marker": "ThemeColorHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "DomainMapper::lcl_utext"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::GetPropertyFromStyleSheet"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::StyleSheetTable"
+        },
+        {
+          "path": "sw/source/writerfilter/inc/ooxml/OOXMLDocument.hxx",
+          "marker": "StreamType_t"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLStreamImpl::lcl_getTarget"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReference.cxx",
+          "marker": "UriReference::getUriReference"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "parseGeneric"
+        },
+        {
+          "path": "comphelper/source/misc/types.cxx",
+          "marker": "getEnumAsINT32"
         }
       ],
       "tests": [

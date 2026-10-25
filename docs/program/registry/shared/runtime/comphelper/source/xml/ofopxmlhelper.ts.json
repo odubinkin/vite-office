@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "ooxml-package",
     "capabilityIds": [
-      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -19,7 +20,7 @@
         "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts#StringPair",
         "vendor/libreoffice-reference/comphelper/source/xml/ofopxmlhelper.cxx#ReadContentTypeSequence"
       ],
-      "justification": "Native ordered content sequence parsing and extension-first lookup plus actual SAX writer metadata output, including source whitespace and strict relation attribute names. Ports only the consumed XML/package contract; native UNO services, general storage hierarchy, encrypted/ZIP64 packages, XLSB RecordParser and complete application document filters are outside this prerequisite. Strings/byte arrays and Promises bind host XML/ZIP transport; whole-module parity remains unverified.",
+      "justification": "Native ordered content sequence parsing and extension-first lookup plus actual SAX writer metadata output, including source whitespace and strict relation attribute names. Ports only the consumed XML/package contract; native UNO services, general storage hierarchy, encrypted/ZIP64 packages, XLSB RecordParser and complete application document filters are outside this prerequisite. Strings/byte arrays and Promises bind host XML/ZIP transport; whole-module parity remains unverified. V4DQJW adds original ordered relationship-sequence reading: qualified root/child depth, required Id only, optional fields in Id/Type/Target/TargetMode order, duplicate preservation and ignored text. Writer uses this original XRelationshipAccess contract rather than oox::RelationsFragment admission.",
       "knownViolations": [],
       "localSymbols": [
         "StringPair",
@@ -27,7 +28,8 @@
         "ReadContentTypeSequence",
         "GetContentTypeByName",
         "WriteContentSequence",
-        "WriteRelationsInfoSequence"
+        "WriteRelationsInfoSequence",
+        "ReadRelationsInfoSequence"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "comphelper/source/xml/ofopxmlhelper.cxx",
@@ -35,7 +37,8 @@
         "ReadContentTypeSequence",
         "GetContentTypeByName",
         "WriteContentSequence",
-        "WriteRelationsInfoSequence"
+        "WriteRelationsInfoSequence",
+        "ReadRelationsInfoSequence"
       ]
     }
   }

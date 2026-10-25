@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts",
+          "marker": "ThemeColorHandler"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeColorHandler.hxx",
+          "marker": "ThemeColorHandler"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeColorHandler.hxx",
+          "marker": "lcl_attribute"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/ThemeColorHandler.hxx",
+          "marker": "lcl_sprm"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/ThemeColorHandler.hxx",
+    "localSymbols": [
+      "ThemeColorHandler"
+    ],
+    "upstreamSymbols": [
+      "ThemeColorHandler",
+      "lcl_attribute",
+      "lcl_sprm"
+    ],
+    "preservedResponsibilities": [
+      "Original separate color/index/tint/shade defaults and attribute receiver; modifier callback remains inert. Color-scheme/theme resolution belongs to the mapper and is still pending."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

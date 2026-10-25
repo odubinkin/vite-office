@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "taskId": "202610251549-V4DQJW",
+  "kind": "partial-implementation-checkpoint",
+  "createdAt": "2026-10-25T17:10:42.431913+00:00",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scopeResult": "pass",
+  "taskAcceptance": "pending",
+  "runtimeModules": 15,
+  "coverage": {
+    "lines": {
+      "total": 1153,
+      "covered": 1153,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 1218,
+      "covered": 1218,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 135,
+      "covered": 135,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 610,
+      "covered": 610,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "coverageArgv": [
+    "npm",
+    "run",
+    "test:coverage",
+    "--",
+    "src/sw/source/writerfilter/dmapper/DomainMapper.test.ts",
+    "src/sw/source/writerfilter/dmapper/PropertyMap.test.ts",
+    "src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts",
+    "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+    "src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts",
+    "src/stoc/source/uriproc/UriReferenceFactory.test.ts",
+    "src/comphelper/source/xml/ofopxmlhelper.test.ts",
+    "--coverage.include=src/sw/source/writerfilter/dmapper/*.ts",
+    "--coverage.include=src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts",
+    "--coverage.include=src/sw/source/writerfilter/inc/ooxml/resourceids.ts",
+    "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+    "--coverage.include=src/stoc/source/uriproc/*.ts",
+    "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts",
+    "--coverage.include=src/comphelper/source/misc/types.ts",
+    "--coverage.include=src/offapi/com/sun/star/style/ParagraphAdjust.ts",
+    "--coverage.reportsDirectory=coverage/docx-mapper-checkpoint"
+  ],
+  "selectedTestFiles": 7,
+  "selectedTestsPassed": 89,
+  "runtimeSha256": {
+    "apps/office/src/comphelper/source/misc/types.ts": "f57efd6f1659968ea11fce98e58fff3a2832885faaaec523e0f8b3b01cc6f85e",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "566fc1674623ee7ab56c406527954872b77f0f6d0b766ae7583fef89a3dda68a",
+    "apps/office/src/offapi/com/sun/star/style/ParagraphAdjust.ts": "62d91996c9799329a0bed0d705b9a346517bb9a50154cdbe13d374d6ad96d82d",
+    "apps/office/src/stoc/source/uriproc/UriReference.ts": "cdd1664c7489ff53b3d5d837604347183d0467e8a7369f1b070b2aab714f8394",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts": "14c2c55524916cd0a612a3804b92541f3dbca465b0a07dcb7a3537a86637e796",
+    "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts": "0439120f896f035ecc31834e022f976bba18b50214af7249c64c970c6261f45c",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts": "34d0d9ee07bde2c934907d95e2abba29a1a6ca2c710750237c78110a2bee269a",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts": "323d87e9fd914f0bb82bfc6f613f6b8b33ed4c7cf3e6f44f118f9819cff47954",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyIds.ts": "0cad33142c743d7aa4ad96fbfd1a215b8186ea942b244bf076ef04a7f0eb0023",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": "4864c1dacf02cb3e41f6c3de5de84a8c35d72ef06a16d7ee8323c6ee5c11a1d7",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts": "b6885fe9a1695e17e1ea3556dec3c15b0bbc459d7067d5ef712bac519e3fe174",
+    "apps/office/src/sw/source/writerfilter/dmapper/ThemeColorHandler.ts": "8d3483bd993c9240cd8bbf14be09e7789a33ddc4b925d231b4aba987af10dac3",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/OOXMLDocument.ts": "75fe932e6b649ebccc54886a614397addc626fd61cfc78877c35d89eb0660a40",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "fa976ce15d38fa5ebb4f4b4effe51f1da98e0b6a3a8d0aa1c65afdd9b59fdbe0",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "1ea92f870ce517091a8410ddca7edb9078d9d037663e8e8d22e8b8bbf791ef23"
+  },
+  "testSha256": {
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.test.ts": "9221d154f6e061714feccc0fff07d6bdfa87b04cd19dfd3a673b9ff4fd4ee04e",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.test.ts": "f085645affd9dfb13667243f1730b26c9702c4b371905940ce4d7cf50fda8c81",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts": "2e4087a3351907b5b1a2379861ce588f887bb6a7ba0c93dde91fa5bf206484d0",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "21ad67625cc111cb69b2abeb4ba6e02419b10423168d0791825fa5ffbddcdac5",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts": "6983cbcb490af279c4860e88008b0fa767d40fe60113542f152abc2ab11c1dcd",
+    "apps/office/src/stoc/source/uriproc/UriReferenceFactory.test.ts": "f90fc69c6cf09bb972f4926a6f20a6a659174d33cffe4dce7136024e7a2933cc",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "4a26cef581921096ca4c538309996c92f493872df8cc1402f7bbc3a2730f0790"
+  },
+  "additionalChecks": [
+    {
+      "command": "npm run test:writer -- src/sw/source/core/unocore/native-text-import-api.test.ts src/sw/source/core/unocore/native-import-api-states.test.ts src/sw/source/core/unocore/native-import-core-lifetimes.test.ts",
+      "result": "pass",
+      "testFiles": 3,
+      "testsPassed": 47
+    },
+    {
+      "command": "npm run test:shared -- src/editeng/source/items/justifyitem.test.ts",
+      "result": "pass",
+      "testFiles": 1,
+      "testsPassed": 5
+    }
+  ],
+  "checksPassed": [
+    "npm run typecheck",
+    "npm run build",
+    "scoped ESLint --max-warnings 0",
+    "scoped Prettier",
+    "npm run check:docs",
+    "npm run check:dependencies",
+    "npm run check:source-provenance",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run inventory:registry:build",
+    "npm run inventory:registry:check",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "node scripts/check-static-build.mjs",
+    "git diff --check"
+  ],
+  "doctorResidual": "Existing hook shim readiness warning; no new errors, no hook changes.",
+  "nativeFixtureSha256": {
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/strict.docx": "6e71a4d554ea90df1ddcc9b6fbbcc677a94c6617cb35f9e5b7d4ccab46f1a79e",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/tdf82065_Ind_start_strict.docx": "818c4607a96cde9f5251c934cf49da3e5dd0bbbcd48a4d8bde94cb9c11360220",
+    "vendor/libreoffice-reference/sw/qa/extras/ooxmlexport/data/hello.docx": "4dc73af4d16b42da1d53be74621d5d6c865476c43919906b1e60ea47f8256813"
+  },
+  "sourceTableEvidence": {
+    "propertyEnumDeclarations": 385,
+    "propertyNameBindings": 382,
+    "styleNamePairs": 439,
+    "method": "Selected tests read the pinned native files and compare every original declaration or mapping against production owners."
+  },
+  "failureBoundaryEvidence": "The native null-URI service-result guard is tested by a one-call prototype spy; normal URI and all normal stream paths use the real factory and ZIP bindings.",
+  "remaining": [
+    "OOXML factory/context schema dispatch and full document/style resource parsing",
+    "Full canonical model style/list/table/section/theme mapping",
+    "DOCX canonical graph export and reopen",
+    "Shell/filter asynchronous routing and existing UI Open/download browser scenarios",
+    "Task-wide acceptance and evaluator verification"
+  ],
+  "fullSuite": "Not due: second agentplane task after SWRD7X full-suite checkpoint; no task completed in this checkpoint."
+}

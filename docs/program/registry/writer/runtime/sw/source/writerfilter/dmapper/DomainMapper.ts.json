@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts#DomainMapper",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx#DomainMapper::lcl_utext"
+      ],
+      "justification": "Consumed paragraph/run groups, native CR finish protocol, three script families, typed character/paragraph properties and style toggle semantics. Imported-style values are read through DomainMapper_Impl, not Writer pooled-style UNO defaults. The represented non-numbered paragraph/run slice is partial; style application, numbering/table/section/theme managers and unconsumed property cases remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DomainMapper"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper.cxx",
+      "upstreamSymbols": [
+        "DomainMapper::lcl_utext",
+        "DomainMapper::lcl_sprm",
+        "DomainMapper::lcl_attribute"
+      ]
+    }
+  }
+}

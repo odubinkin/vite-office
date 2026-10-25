@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/misc/types.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/types.ts",
+          "marker": "getEnumAsINT32"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "comphelper/source/misc/types.cxx",
+          "marker": "getEnumAsINT32"
+        }
+      ]
+    },
+    "upstreamPath": "comphelper/source/misc/types.cxx",
+    "localSymbols": [
+      "getEnumAsINT32"
+    ],
+    "upstreamSymbols": [
+      "getEnumAsINT32"
+    ],
+    "preservedResponsibilities": [
+      "Native getEnumAsINT32 delegates to existing enum2int, retains typed numeric/enum extraction and actual generated IllegalArgumentException with empty Reference and ArgumentPosition -1. Other types.cxx functions are omitted."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

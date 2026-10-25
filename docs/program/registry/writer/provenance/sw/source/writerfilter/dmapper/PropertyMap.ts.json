@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts",
+          "marker": "GrabBagType"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyMap.cxx",
+          "marker": "PropertyMap::Insert"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyMap.cxx",
+          "marker": "PropertyMap::GetPropertyValues"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/PropertyMap.cxx",
+          "marker": "PropertyMap::InsertProps"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/PropertyMap.cxx",
+    "localSymbols": [
+      "GrabBagType",
+      "PropValue",
+      "PropertyMap"
+    ],
+    "upstreamSymbols": [
+      "PropertyMap::Insert",
+      "PropertyMap::GetPropertyValues",
+      "PropertyMap::InsertProps"
+    ],
+    "preservedResponsibilities": [
+      "Native typed Any ownership, numeric key order, style-first property output, merge/default markers, cache invalidation and four actual PropertyValue-sequence grab bags. Original overwrite and cache surprises are preserved in WRITER094/095."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

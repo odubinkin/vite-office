@@ -3,11 +3,47 @@ import { expect, it } from "vitest";
 import {
   GetContentTypeByName,
   ReadContentTypeSequence,
+  ReadRelationsInfoSequence,
   WriteContentSequence,
   WriteRelationsInfoSequence,
 } from "./ofopxmlhelper";
 import { WriteContentTypes } from "../../../package/source/zippackage/ZipPackage";
 import { createManifestProperty } from "../../../package/source/manifest/ManifestWriter";
+
+it("retains native ordered relationship sequences, duplicates and Id-only entries", /** Verifies XRelationshipAccess admission used by Writer. @returns Nothing. */ () => {
+  expect(
+    ReadRelationsInfoSequence(
+      '<Relationships><Relationship TargetMode="Other" Target="a&amp;b" Type="t" Id="r"/><Relationship Id="r"/><Relationship Id="last" Type="" Target=""/></Relationships>',
+    ),
+  ).toEqual([
+    [
+      { First: "Id", Second: "r" },
+      { First: "Type", Second: "t" },
+      { First: "Target", Second: "a&b" },
+      { First: "TargetMode", Second: "Other" },
+    ],
+    [{ First: "Id", Second: "r" }],
+    [{ First: "Id", Second: "last" }],
+  ]);
+  expect(ReadRelationsInfoSequence("<Relationships>ignored</Relationships>")).toEqual([]);
+});
+
+it.each([
+  "<Other/>",
+  "<Relationships><Other/></Relationships>",
+  "<Relationships><Relationships/></Relationships>",
+  "<Relationships><Relationship/></Relationships>",
+  '<Relationships><Relationship Id="r"><Relationship Id="s"/></Relationship></Relationships>',
+  '<r:Relationships xmlns:r="urn:r"/>',
+])(
+  "rejects native relationship shape violations %s",
+  /** Executes original admission. @param xml - Invalid sequence. @returns Nothing. */ (xml) => {
+    expect(
+      /** Attempts native read. @returns Sequence or throws. */ () =>
+        ReadRelationsInfoSequence(xml),
+    ).toThrow();
+  },
+);
 
 it("preserves source order, duplicate pairs and the native extension-first lookup", /** Retains surprising upstream precedence. @returns Nothing. */ () => {
   const types = ReadContentTypeSequence(

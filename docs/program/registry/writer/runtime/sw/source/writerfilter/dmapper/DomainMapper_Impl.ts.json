@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts#DomainMapper_Impl",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx#DomainMapper_Impl::GetPropertyFromStyleSheet"
+      ],
+      "justification": "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DomainMapper_Impl",
+        "ContextType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+      "upstreamSymbols": [
+        "DomainMapper_Impl::GetPropertyFromStyleSheet",
+        "DomainMapper_Impl::GetCurrentParaStyleName",
+        "DomainMapper_Impl::RemoveLastParagraph"
+      ]
+    }
+  }
+}

@@ -7,14 +7,16 @@
     "status": "mapped",
     "upstreamPath": "offapi/com/sun/star/style/ParagraphAdjust.idl",
     "localSymbols": [
-      "ParagraphAdjust"
+      "ParagraphAdjust",
+      "cppu_detail_getUnoType_ParagraphAdjust"
     ],
     "upstreamSymbols": [
       "ParagraphAdjust",
       "LEFT"
     ],
     "preservedResponsibilities": [
-      "Task117 adds actual SvxHorJustifyItem, SvxVerJustifyItem, SvxJustifyMethodItem and SvxRotateModeItem normal value/default/copy/Clone/full member query/update contracts over existing SfxEnumItem/CPPU Any. Original internal enums, member IDs and five OffAPI IDL declarations remain in shared original owners. CellHoriJustify and VerticalAlignment actual typed Any queries use original cppumaker-normal static enum type getter logic over existing real static_enum_type_init/borrowedTypecell, with declared overload identity suffixing and no fake type/provider or generator execution. Enum versus short versus long wire types and cross-type rejection are preserved. Browser plain numeric extraction/output binding is explicit. Members narrow to unsigned8 and horizontal/vertical strip CONVERT_TWIPS. Horizontal unknown member returns true with untouched Any; vertical default member ignores failed long extraction and resets Standard withtrue, while typed adjustment member fails unchanged. RotateMode also resets Standard and returnstrue after failed long extraction; method item rejects failed extraction unchanged. Unknown fixed-int scoped core enum values preserve original switch fallbacks; native invalid casts/assertions/uninitialized/ABI excluded. Original localized presentation/value-text/diagnostics/native caches/thread/lifetime, comprehensive generated enum type variants/other IDL helpers and complete DocPool/document/config/storage/UI/ODS pending/excluded. Calc Which129/130/132/133/136 correspond to explicit DocPool Standard/Auto/Standard/Auto/Bottom values; these actual items and real pooled copies are tested without a fake DocPool. Existing metadata history/status retained without broad parity promotion. No new memory/refcount engine, C++ generator/nativebuild/sanitizer. Goalactive, full121next."
+      "Task117 adds actual SvxHorJustifyItem, SvxVerJustifyItem, SvxJustifyMethodItem and SvxRotateModeItem normal value/default/copy/Clone/full member query/update contracts over existing SfxEnumItem/CPPU Any. Original internal enums, member IDs and five OffAPI IDL declarations remain in shared original owners. CellHoriJustify and VerticalAlignment actual typed Any queries use original cppumaker-normal static enum type getter logic over existing real static_enum_type_init/borrowedTypecell, with declared overload identity suffixing and no fake type/provider or generator execution. Enum versus short versus long wire types and cross-type rejection are preserved. Browser plain numeric extraction/output binding is explicit. Members narrow to unsigned8 and horizontal/vertical strip CONVERT_TWIPS. Horizontal unknown member returns true with untouched Any; vertical default member ignores failed long extraction and resets Standard withtrue, while typed adjustment member fails unchanged. RotateMode also resets Standard and returnstrue after failed long extraction; method item rejects failed extraction unchanged. Unknown fixed-int scoped core enum values preserve original switch fallbacks; native invalid casts/assertions/uninitialized/ABI excluded. Original localized presentation/value-text/diagnostics/native caches/thread/lifetime, comprehensive generated enum type variants/other IDL helpers and complete DocPool/document/config/storage/UI/ODS pending/excluded. Calc Which129/130/132/133/136 correspond to explicit DocPool Standard/Auto/Standard/Auto/Bottom values; these actual items and real pooled copies are tested without a fake DocPool. Existing metadata history/status retained without broad parity promotion. No new memory/refcount engine, C++ generator/nativebuild/sanitizer. Goalactive, full121next.",
+      "V4DQJW adds cppumaker-normal static ParagraphAdjust enum type initialization over actual typelib metadata for typed DomainMapper Any values; enum identity/default remain original."
     ],
     "omittedResponsibilities": [
       "Task117 covers normal initialized alignment/typed Any values only; localized presentation/diagnostics/caches/native ABI/invalid domains/comprehensive generated enum helpers/full DocPool/document/UI/ODS remain excluded or pending."
@@ -24,6 +26,10 @@
         {
           "path": "apps/office/src/editeng/source/items/justifyitem.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/style/ParagraphAdjust.ts",
+          "marker": "cppu_detail_getUnoType_ParagraphAdjust"
         }
       ],
       "upstream": [

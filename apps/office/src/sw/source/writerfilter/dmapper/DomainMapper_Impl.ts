@@ -1,0 +1,190 @@
+/** @fileoverview Consumed DomainMapper_Impl property-context and body text-append ownership; all text mutations use existing native SwXText APIs. */
+import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
+import type { SwXText } from "../../core/unocore/unotext";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SwXParagraph } from "../../core/unocore/unoparagraph";
+import { PropertyMap } from "./PropertyMap";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { text } from "../../core/unocore/unocrsrhelper";
+import { PropertyIds as P, isCharacterProperty } from "./PropertyIds";
+import { StyleSheetTable, type StyleSheetEntry } from "./StyleSheetTable";
+
+/** Original ContextType declaration order. */
+export enum ContextType {
+  CONTEXT_SECTION = 0,
+  CONTEXT_PARAGRAPH = 1,
+  CONTEXT_CHARACTER = 2,
+  CONTEXT_STYLESHEET = 3,
+  CONTEXT_LIST = 4,
+}
+/** A native context entry borrows supplied style maps and owns maps created by PushProperties. */
+interface Context {
+  readonly type: ContextType;
+  readonly properties: PropertyMap;
+  readonly owned: boolean;
+}
+
+/** Native context/body responsibility; section, list and table managers extend this same owner as their consumed operations are ported. */
+export class DomainMapper_Impl {
+  private readonly contexts: Context[] = [];
+  private readonly body: SwXText;
+  private appendedParagraph = false;
+  private readonly styleSheetTable = new StyleSheetTable();
+  private defaultParaStyleName = "";
+  private currentParaStyleName = "";
+  private inStyleSheetImport = false;
+  /** Borrows actual Writer model/text interfaces. @param model - Destination model. @returns Mapper state. */
+  constructor(readonly model: SwXTextDocument) {
+    this.body = model.getText();
+  }
+  /** Original context creation. @param type - Context type. @returns New map. */
+  PushProperties(type: ContextType): PropertyMap {
+    const properties = new PropertyMap();
+    this.contexts.push({ type, properties, owned: true });
+    return properties;
+  }
+  /** Original style context retains the shared supplied map. @param properties - Shared map. @returns Nothing. */
+  PushStyleProperties(properties: PropertyMap): void {
+    this.contexts.push({ type: ContextType.CONTEXT_STYLESHEET, properties, owned: false });
+  }
+  /** Original context pop requires matching stream nesting. @param type - Expected type. @returns Nothing. */
+  PopProperties(type: ContextType): void {
+    const current = this.contexts.at(-1);
+    if (!current || current.type !== type)
+      throw new Error("DomainMapper context nesting is invalid.");
+    this.contexts.pop();
+    if (current.owned) current.properties.dispose();
+  }
+  /** Original nullable current map. @returns Map or null. */ GetTopContext(): PropertyMap | null {
+    return this.contexts.at(-1)?.properties ?? null;
+  }
+  /** Original type-specific innermost map lookup. @param type - Requested type. @returns Map or null. */
+  GetTopContextOfType(type: ContextType): PropertyMap | null {
+    for (let i = this.contexts.length - 1; i >= 0; --i) {
+      const context = this.contexts[i] as Context;
+      if (context.type === type) return context.properties;
+    }
+    return null;
+  }
+  /** Borrows original import stylesheet owner. @returns Table. */ GetStyleSheetTable(): StyleSheetTable {
+    return this.styleSheetTable;
+  }
+  /** Native stylesheet-import mode controls current-entry lookup and default-name caching. @param importing - Import phase. @returns Nothing. */ SetStyleSheetImport(
+    importing: boolean,
+  ): void {
+    this.inStyleSheetImport = importing;
+  }
+  /** Native stream-state paragraph style fallback. @param name - Converted style name. @returns Nothing. */ SetCurrentParaStyleName(
+    name: string,
+  ): void {
+    this.currentParaStyleName = name;
+  }
+  /** Original default paragraph style cache remains unset while importing styles. @returns Converted default name. */
+  GetDefaultParaStyleName(): string {
+    if (this.defaultParaStyleName === "") {
+      const entry = this.styleSheetTable.FindDefaultParaStyle();
+      if (entry && entry.m_sConvertedStyleName !== "") {
+        if (!this.inStyleSheetImport) this.defaultParaStyleName = entry.m_sConvertedStyleName;
+        return entry.m_sConvertedStyleName;
+      }
+      return "Standard";
+    }
+    return this.defaultParaStyleName;
+  }
+  /** Original body current style uses paragraph context, then saved fallback, then imported default. @returns Converted style name. */
+  GetCurrentParaStyleName(): string {
+    let name = this.currentParaStyleName;
+    const property = this.GetTopContextOfType(ContextType.CONTEXT_PARAGRAPH)?.getProperty(
+      P.PROP_PARA_STYLE_NAME,
+    );
+    if (property) {
+      const value = new OUString();
+      try {
+        if (property[1].extract(value, "OUString")) name = text(value);
+      } finally {
+        value.dispose();
+        property[1].dispose();
+      }
+    }
+    if (!this.inStyleSheetImport && name === "") name = this.GetDefaultParaStyleName();
+    return name;
+  }
+  /** Native imported-style inheritance, self-parent guard and paragraph-before-character DocDefaults precedence. @param id - Native property. @param initial - First entry. @param docDefaults - Include document defaults. @param para - Paragraph context. @param isDocDefault - Optional native output flag. @returns Owned Any, void if absent. */
+  GetPropertyFromStyleSheet(
+    id: P,
+    initial: StyleSheetEntry | null,
+    docDefaults: boolean,
+    para: boolean,
+    isDocDefault?: [boolean],
+  ): Any {
+    let entry = initial;
+    while (entry) {
+      const property = entry.m_pProperties.getProperty(id);
+      if (property) {
+        if (isDocDefault) isDocDefault[0] = entry.m_pProperties.isDocDefault(id);
+        return property[1];
+      }
+      const parent =
+        entry.m_sBaseStyleIdentifier === ""
+          ? null
+          : this.styleSheetTable.FindStyleSheetByISTD(entry.m_sBaseStyleIdentifier);
+      if (entry === parent) break;
+      entry = parent;
+    }
+    if (docDefaults && para) {
+      const property = this.styleSheetTable.GetDefaultParaProps().getProperty(id);
+      if (property) {
+        if (isDocDefault) isDocDefault[0] = true;
+        return property[1];
+      }
+    }
+    if (docDefaults && isCharacterProperty(id)) {
+      const property = this.styleSheetTable.GetDefaultCharProps().getProperty(id);
+      if (property) {
+        if (isDocDefault) isDocDefault[0] = true;
+        return property[1];
+      }
+    }
+    if (isDocDefault) isDocDefault[0] = false;
+    return new Any();
+  }
+  /** Original style toggle lookup uses the imported current entry or the current paragraph's converted-name entry. @param id - Property. @returns Owned Any. */
+  GetPropertyFromParaStyleSheet(id: P): Any {
+    const entry = this.inStyleSheetImport
+      ? this.styleSheetTable.GetCurrentEntry()
+      : this.styleSheetTable.FindStyleSheetByConvertedStyleName(this.GetCurrentParaStyleName());
+    return this.GetPropertyFromStyleSheet(id, entry, true, true);
+  }
+  /** Appends through the canonical NOHINTEXPAND import API. @param value - Native text. @param properties - Current character map. @returns Nothing. */
+  appendTextPortion(value: OUStringConstReference, properties: PropertyMap | null): void {
+    const range = this.body.appendTextPortion(value, properties?.GetPropertyValues() ?? []);
+    range.dispose();
+  }
+  /** Finishes the actual paragraph through XParagraphAppend, preserving style-first property order. @param properties - Paragraph map. @returns Nothing. */
+  finishParagraph(properties: PropertyMap | null): void {
+    const paragraph = this.body.finishParagraph(properties?.GetPropertyValues() ?? []);
+    paragraph.Release();
+    this.appendedParagraph = true;
+  }
+  /** Original body trailing-paragraph deletion uses XComponent paragraph disposal rather than merging formatting into its predecessor. @returns Nothing. */
+  RemoveLastParagraph(): void {
+    if (!this.appendedParagraph) return;
+    const nodes = this.body.GetTextNodes(),
+      last = nodes.at(-1);
+    if (last && nodes.length > 1 && last.GetText() === "") {
+      const paragraph = new SwXParagraph(last, this.body);
+      paragraph.dispose();
+      paragraph.Release();
+    }
+    this.appendedParagraph = false;
+  }
+  /** Releases only filter-owned temporary maps; model lifetime remains external. @returns Nothing. */
+  dispose(): void {
+    while (this.contexts.length) {
+      const context = this.contexts.pop() as Context;
+      if (context.owned) context.properties.dispose();
+    }
+    this.styleSheetTable.dispose();
+  }
+}

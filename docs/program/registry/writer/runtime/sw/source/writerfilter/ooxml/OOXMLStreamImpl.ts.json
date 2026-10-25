@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts#OOXMLStreamImpl",
+        "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx#OOXMLStreamImpl::lcl_getTarget"
+      ],
+      "justification": "Original ordered XRelationshipAccess attribute lookup, strict/transitional types, last duplicate external-ID cache, customTarget filtering, URI RETAIN resolution and VBA project/data nesting. Host asynchronous factories bind native constructors; mutable streamTargets fields bind original translation-unit globals. Shared ZIP input binds XStorage; complete UNO services, repair/encryption and fast-token parser provision are not implemented. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OOXMLStreamImpl",
+        "streamTargets"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+      "upstreamSymbols": [
+        "OOXMLStreamImpl::lcl_getTarget",
+        "OOXMLStreamImpl::init",
+        "OOXMLStreamImpl::getTargetForId",
+        "OOXMLDocumentFactory::createStream"
+      ]
+    }
+  }
+}

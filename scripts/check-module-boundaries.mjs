@@ -34,6 +34,7 @@ const moduleNames = [
   "sax",
   "sc",
   "sfx2",
+  "stoc",
   "svl",
   "svtools",
   "svx",
@@ -112,6 +113,8 @@ const allowedEdges = new Map([
   ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
   ["sax", new Set(["sal", "udkapi"])],
+  // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
+  ["stoc", new Set()],
   [
     "sc",
     new Set([
@@ -210,6 +213,10 @@ const allowedEdges = new Map([
       // Native sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx includes sax/tools/converter.hxx;
       // sw/Library_sw.mk links sax for these original OOXML lexical conversions.
       "sax",
+      // OOXMLStreamImpl uses oox fast-token infrastructure and the UriReferenceFactory UNO service;
+      // the host ZIP binding lives in oox and the generic URI service implementation in stoc.
+      "oox",
+      "stoc",
       // Native Writer package/filter composition uses shared MIME constants and beans::PropertyValue (Library_sw/sdk_api).
       "comphelper",
       "udkapi",

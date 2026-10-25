@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+          "marker": "DomainMapper_Impl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::GetPropertyFromStyleSheet"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::GetCurrentParaStyleName"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "DomainMapper_Impl::RemoveLastParagraph"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+    "localSymbols": [
+      "DomainMapper_Impl",
+      "ContextType"
+    ],
+    "upstreamSymbols": [
+      "DomainMapper_Impl::GetPropertyFromStyleSheet",
+      "DomainMapper_Impl::GetCurrentParaStyleName",
+      "DomainMapper_Impl::RemoveLastParagraph"
+    ],
+    "preservedResponsibilities": [
+      "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

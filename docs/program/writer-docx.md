@@ -35,6 +35,23 @@ is `06a4c723d3b6699f098769caa31df70c99bf4e4b`.
 - `OOXMLPropertySet` preserves property order, duplicate IDs, reference sharing
   on clone, attribute/modifier channels and additions during resolution.
   `OOXMLTable` retains positions of admitted values without nested properties.
+- `PropertyMap` uses actual typed `Any`, `PropertyValue` and `Sequence` owners,
+  source numeric ordering, style-first output and four native interop bags.
+  Overwrite/default and first-nonempty cache behavior remain source-exact.
+- The current `DomainMapper` paragraph/run slice writes through actual
+  `SwXText.appendTextPortion` and `finishParagraph`; it preserves three script
+  families, native CR events and trailing-body-paragraph disposal. Lists,
+  sections, tables, theme application and the remaining property handlers are
+  still being implemented.
+- Imported style lookup uses `StyleSheetTable` entry maps and typed DocDefaults,
+  including three native 10pt heights and disabled auto-kerning. The full
+  439-pair name map, reserved-name suffix and first duplicate ID are preserved.
+  This owner does not yet parse/apply the complete stylesheet resource stream.
+- `OOXMLStreamImpl` follows the Writer `XRelationshipAccess` sequence contract,
+  exact strict/transitional types, external-ID cache, native custom-target and
+  VBA nesting behavior. The consumed `stoc` generic URI owner preserves dot
+  segments, escapes and excessive-parent policies through the native algorithm.
+  This deliberately differs from the separate `oox::Relations` lookup contract.
 
 Native binary/drawing/service variants are not advertised by this resource
 slice. Native undefined floating-to-int casts and null attribute dereferences

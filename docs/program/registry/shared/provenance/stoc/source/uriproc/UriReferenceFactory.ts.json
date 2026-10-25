@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts",
+          "marker": "UriReferenceFactory"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "parseGeneric"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "processSegments"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReferenceFactory.cxx",
+          "marker": "Factory::makeAbsolute"
+        }
+      ]
+    },
+    "upstreamPath": "stoc/source/uriproc/UriReferenceFactory.cxx",
+    "localSymbols": [
+      "UriReferenceFactory",
+      "RelativeUriExcessParentSegments"
+    ],
+    "upstreamSymbols": [
+      "parseGeneric",
+      "processSegments",
+      "Factory::makeAbsolute"
+    ],
+    "preservedResponsibilities": [
+      "Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

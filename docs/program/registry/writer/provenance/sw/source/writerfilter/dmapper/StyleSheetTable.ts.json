@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts",
+          "marker": "StyleSheetTable"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::StyleSheetTable"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::ConvertStyleName"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::FindStyleSheetByISTD"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::lcl_entry"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+    "localSymbols": [
+      "StyleSheetTable",
+      "StyleSheetEntry",
+      "StyleType"
+    ],
+    "upstreamSymbols": [
+      "StyleSheetTable::StyleSheetTable",
+      "StyleSheetTable::ConvertStyleName",
+      "StyleSheetTable::FindStyleSheetByISTD",
+      "StyleSheetTable::lcl_entry"
+    ],
+    "preservedResponsibilities": [
+      "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+          "marker": "OOXMLStreamImpl"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLStreamImpl::lcl_getTarget"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLStreamImpl::init"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLStreamImpl::getTargetForId"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLDocumentFactory::createStream"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+    "localSymbols": [
+      "OOXMLStreamImpl",
+      "streamTargets"
+    ],
+    "upstreamSymbols": [
+      "OOXMLStreamImpl::lcl_getTarget",
+      "OOXMLStreamImpl::init",
+      "OOXMLStreamImpl::getTargetForId",
+      "OOXMLDocumentFactory::createStream"
+    ],
+    "preservedResponsibilities": [
+      "Original ordered XRelationshipAccess attribute lookup, strict/transitional types, last duplicate external-ID cache, customTarget filtering, URI RETAIN resolution and VBA project/data nesting. Host asynchronous factories bind native constructors; mutable streamTargets fields bind original translation-unit globals. Shared ZIP input binds XStorage; complete UNO services, repair/encryption and fast-token parser provision are not implemented."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

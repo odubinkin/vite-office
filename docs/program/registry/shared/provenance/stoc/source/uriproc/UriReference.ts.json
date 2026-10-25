@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/stoc/source/uriproc/UriReference.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original source ownership and consumed native contracts are retained; host references, immutable XML/URI UTF16 fields and asynchronous ZIP transport bind browser execution around actual existing typed Any/OUString/PropertyValue owners."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/stoc/source/uriproc/UriReference.ts",
+          "marker": "UriReference"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "stoc/source/uriproc/UriReference.cxx",
+          "marker": "UriReference::getUriReference"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReference.cxx",
+          "marker": "UriReference::hasRelativePath"
+        },
+        {
+          "path": "stoc/source/uriproc/UriReference.cxx",
+          "marker": "UriReference::getPath"
+        }
+      ]
+    },
+    "upstreamPath": "stoc/source/uriproc/UriReference.cxx",
+    "localSymbols": [
+      "UriReference"
+    ],
+    "upstreamSymbols": [
+      "UriReference::getUriReference",
+      "UriReference::hasRelativePath",
+      "UriReference::getPath"
+    ],
+    "preservedResponsibilities": [
+      "Consumed generic URI value operations preserve lexical UTF16 and absent versus empty authority/query/fragment. Component service identity, mutex/native lifetime and unused URI methods are omitted."
+    ],
+    "omittedResponsibilities": [
+      "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+    ]
+  }
+}

@@ -12,6 +12,37 @@ export interface StringPair {
 /** Native ordered Defaults/Overrides sequence. */
 export type ContentTypeSequence = readonly [readonly StringPair[], readonly StringPair[]];
 
+/** Reads the native relationship sequence without the stricter oox::Relations admission rules. @param xml - Relationship XML. @returns Ordered attributes and entries. */
+export function ReadRelationsInfoSequence(xml: string): readonly (readonly StringPair[])[] {
+  const result: StringPair[][] = [];
+  let depth = 0;
+  parseFastXmlStream(xml, {
+    /** Retains qualified names, depth and the sole required Id attribute. @param tag - Element. @param attributes - Attributes. @returns Nothing. */
+    open(tag, attributes) {
+      ++depth;
+      if (tag.name === "Relationships" && depth === 1) return;
+      if (tag.name !== "Relationship" || depth !== 2)
+        throw new Error("Invalid OOXML relationship element.");
+      const entry: StringPair[] = [];
+      for (const name of ["Id", "Type", "Target", "TargetMode"]) {
+        const value =
+          attributes.find(
+            /** Matches exact native attribute name. @param attribute - Attribute. @returns Match. */
+            (attribute) => attribute.name === name,
+          )?.value ?? "";
+        if (name === "Id" && value === "") throw new Error("Missing OOXML relationship Id.");
+        if (value !== "") entry.push({ First: name, Second: value });
+      }
+      result.push(entry);
+    },
+    /** Native handler ignores character content. @returns Nothing. */ characters() {},
+    /** Pops one original element. @returns Nothing. */ close() {
+      --depth;
+    },
+  });
+  return result;
+}
+
 /** Creates an exact UTF16 value for the existing native SAX API. @param value - Text. @returns Owned string. */
 function native(value: string): OUString {
   return new OUString(

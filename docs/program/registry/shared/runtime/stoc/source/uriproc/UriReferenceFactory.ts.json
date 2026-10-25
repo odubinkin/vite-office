@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/stoc/source/uriproc/UriReferenceFactory.ts#UriReferenceFactory",
+        "vendor/libreoffice-reference/stoc/source/uriproc/UriReferenceFactory.cxx#parseGeneric"
+      ],
+      "justification": "Generic native parser and exact two-half segment algorithm with ERROR/RETAIN/REMOVE parent policies, additional-special-segment flag, absolute/relative/empty URI branches and query/fragment precedence. No browser URL normalization, escape decoding or excess-parent removal is substituted. Specialized scheme component service lookup, makeRelative and UNO service registration are omitted. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UriReferenceFactory",
+        "RelativeUriExcessParentSegments"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "stoc/source/uriproc/UriReferenceFactory.cxx",
+      "upstreamSymbols": [
+        "parseGeneric",
+        "processSegments",
+        "Factory::makeAbsolute"
+      ]
+    }
+  }
+}
