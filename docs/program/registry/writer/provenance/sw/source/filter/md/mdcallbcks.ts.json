@@ -13,7 +13,7 @@
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs, resolving relative hyperlink targets against a supplied document base URL while preserving fragment-only targets."
+      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs; preserves the pinned empty entity/null-character text callbacks by omitting recognized HTML references and null characters while retaining unrecognized text and literal code spans. Relative hyperlink targets resolve against a supplied document base URL while fragment-only targets remain unchanged."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -31,6 +31,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "maps hard and soft line breaks"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "omits entity and null-character callbacks"
         }
       ],
       "upstream": [
@@ -41,6 +45,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
           "marker": "MD_TEXT_BR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
+          "marker": "MD_TEXT_ENTITY"
         }
       ]
     }

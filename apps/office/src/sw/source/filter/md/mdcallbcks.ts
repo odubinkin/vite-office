@@ -1,5 +1,6 @@
 /** @fileoverview Markdown span callbacks for Writer text hints, following sw/source/filter/md/mdcallbcks.cxx. */
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { decodeHTMLStrict } from "entities";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
@@ -46,14 +47,30 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
   function visit(text: string, attributes: WriterCharacterAttributes, url?: string): void {
     for (let offset = 0; offset < text.length;) {
       const character = text[offset] as string;
+      if (character === "\u0000") {
+        // Pinned MD_TEXT_NULLCHAR callback has no insertion branch.
+        offset++;
+        continue;
+      }
       if (
         character === "\\" &&
         offset + 1 < text.length &&
-        /[\\`*_[\]{}()#+.!>|~-]/u.test(text[offset + 1] as string)
+        isAsciiPunctuation(text[offset + 1] as string)
       ) {
         append(text[offset + 1] as string, attributes, url);
         offset += 2;
         continue;
+      }
+      if (character === "&") {
+        const entity =
+          /^&(?:#(?:[0-9]{1,7}|[xX][0-9A-Fa-f]{1,6})|[A-Za-z][A-Za-z0-9]{1,31});/u.exec(
+            text.slice(offset),
+          )?.[0];
+        if (entity !== undefined && decodeHTMLStrict(entity) !== entity) {
+          // Pinned MD_TEXT_ENTITY callback has no insertion branch.
+          offset += entity.length;
+          continue;
+        }
       }
       if (character === "\\" && text[offset + 1] === "\n") {
         append("\n", attributes, url);
@@ -125,6 +142,17 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
   }
   visit(source, DEFAULT_ATTRIBUTES);
   return runs;
+}
+
+/** md4c backslash escapes any ASCII punctuation, not only markup delimiters. */
+function isAsciiPunctuation(character: string): boolean {
+  const code = character.charCodeAt(0);
+  return (
+    (code >= 33 && code <= 47) ||
+    (code >= 58 && code <= 64) ||
+    (code >= 91 && code <= 96) ||
+    (code >= 123 && code <= 126)
+  );
 }
 
 /** Finds an unescaped delimiter, including multi-character emphasis markers. @param text - Source. @param marker - Closing marker. @param from - Search start. @returns Offset or -1. */

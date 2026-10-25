@@ -1184,3 +1184,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/wrtmd.cxx` writes a paragraph only inside `if (!rNodeText.isEmpty())`; within that block, its `COLL_HTML_HR` case checks `if (rNodeText.isEmpty())` before writing `___`.
 - Observation: an empty horizontal-line paragraph imported by pinned `SwMarkdownParser::AddHR` cannot satisfy both conditions. This is a source-level inference, not a compiled desktop reproduction.
 - Preservation: the local Markdown writer retains the empty-paragraph behavior and does not synthesize `___` merely to improve the round trip.
+
+### WRITER106 — Markdown entity callbacks discard recognized source text
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::text_callback`, inserts `MD_TEXT_NORMAL` and `MD_TEXT_CODE` but has an empty branch for `MD_TEXT_ENTITY` and `MD_TEXT_NULLCHAR`.
+- Observation: a recognized entity such as `&amp;` contributes no text, while an unrecognized entity-like sequence remains normal text. This follows the callback switch; it is not an independently compiled desktop result.
+- Preservation: the local Markdown reader detects recognized HTML references and omits them, retaining unknown names and literal code-span content. Null-character callbacks are likewise omitted.

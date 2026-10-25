@@ -165,6 +165,15 @@ it("maps hard and soft line breaks through Markdown text callbacks", /** Checks 
   }
 });
 
+it("omits entity and null-character callbacks while keeping unknown, escaped and code text", () => {
+  const document = read("A &amp; B &#65; &madeup; \\&amp; `&copy;` \\? N\u0000UL");
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("A  B  &madeup; &amp; &copy; ? NUL");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("keeps md4c thematic breaks distinct from setext headings and list markers", () => {
   const document = read("---\n\n* * *\n\nTitle\n---\n\nAfter");
   try {
