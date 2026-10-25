@@ -38,6 +38,13 @@ import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
+import {
+  ConvertBorderWidthFromWord,
+  SvxBorderLine,
+} from "../../../../editeng/source/items/borderline";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { Color } from "../../../../tools/inc/color";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
@@ -121,6 +128,17 @@ interface RtfTableRow {
   readonly height: number;
   readonly split: boolean;
   readonly verticals: readonly (VertOrientation | undefined)[];
+  readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
+  readonly paddings: readonly ReadonlyMap<SvxBoxItemLine, number>[];
+  readonly defaultPaddings: ReadonlyMap<SvxBoxItemLine, number>;
+}
+
+/** One cell edge from RTF row definitions before native box materialization. */
+interface RtfCellBorder {
+  style: BorderLineStyle;
+  width: number;
+  colorIndex: number;
+  wordStyle: number;
 }
 
 const DEFAULT_CHARACTER: WriterCharacterAttributes = {
@@ -248,6 +266,12 @@ export class RtfDocumentImpl {
   private rowSplit = true;
   private rowVerticals: (VertOrientation | undefined)[] = [];
   private nextCellVertical: VertOrientation | undefined;
+  private rowBorders: Map<SvxBoxItemLine, RtfCellBorder>[] = [];
+  private nextCellBorders = new Map<SvxBoxItemLine, RtfCellBorder>();
+  private activeBorder: RtfCellBorder | undefined;
+  private rowPaddings: Map<SvxBoxItemLine, number>[] = [];
+  private nextCellPaddings = new Map<SvxBoxItemLine, number>();
+  private rowDefaultPaddings = new Map<SvxBoxItemLine, number>();
   private inTable = false;
   private pendingUpDn: { height: number; automatic: boolean } | undefined;
 
@@ -311,6 +335,11 @@ export class RtfDocumentImpl {
             lr.SetLeft(SvxIndentValue.twips(firstRow.left));
             format.SetFormatAttr(lr);
           }
+          if (firstRow.defaultPaddings.size > 0) {
+            const item = format.GetBox().Clone();
+            for (const [edge, value] of firstRow.defaultPaddings) item.SetDistance(value, edge);
+            format.SetFormatAttr(item);
+          }
         }
         const rightEdge = block.rows.reduce(
           (maximum, row) => Math.max(maximum, (row.boundaries.at(-1) ?? 0) - row.left),
@@ -337,6 +366,41 @@ export class RtfDocumentImpl {
             if (vertical !== undefined) {
               const item = box.GetVertOrient();
               item.SetVertOrient(vertical);
+              box.ClaimFrameFormat().SetFormatAttr(item);
+            }
+            const borders = row.borders[index];
+            if (borders !== undefined && borders.size > 0) {
+              const item = box.GetBox();
+              for (const [edge, border] of borders) {
+                if (border.style === BorderLineStyle.NONE) {
+                  item.SetLine(undefined, edge);
+                  continue;
+                }
+                const color = this.colors[border.colorIndex] ?? "#000000";
+                const wordWidth =
+                  border.wordStyle === 2 && border.style !== BorderLineStyle.SOLID
+                    ? border.width * 2
+                    : border.width;
+                item.SetLine(
+                  new SvxBorderLine(
+                    new Color(
+                      Number.parseInt(color.slice(1, 3), 16),
+                      Number.parseInt(color.slice(3, 5), 16),
+                      Number.parseInt(color.slice(5, 7), 16),
+                    ),
+                    ConvertBorderWidthFromWord(border.style, wordWidth, border.wordStyle),
+                    border.style,
+                  ),
+                  edge,
+                );
+              }
+              box.ClaimFrameFormat().SetFormatAttr(item);
+            }
+            const paddings = row.paddings[index];
+            if (row.defaultPaddings.size > 0 || (paddings !== undefined && paddings.size > 0)) {
+              const item = box.GetBox();
+              for (const [edge, value] of row.defaultPaddings) item.SetDistance(value, edge);
+              for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
               box.ClaimFrameFormat().SetFormatAttr(item);
             }
             const right = row.boundaries[index];
@@ -689,6 +753,65 @@ export class RtfDocumentImpl {
       this.rowSplit = true;
       this.rowVerticals = [];
       this.nextCellVertical = undefined;
+      this.rowBorders = [];
+      this.nextCellBorders = new Map();
+      this.activeBorder = undefined;
+      this.rowPaddings = [];
+      this.nextCellPaddings = new Map();
+      this.rowDefaultPaddings = new Map();
+      return;
+    }
+    if (name === "trpaddt" || name === "trpaddl" || name === "trpaddb" || name === "trpaddr") {
+      const edge =
+        name === "trpaddt"
+          ? SvxBoxItemLine.TOP
+          : name === "trpaddl"
+            ? SvxBoxItemLine.LEFT
+            : name === "trpaddb"
+              ? SvxBoxItemLine.BOTTOM
+              : SvxBoxItemLine.RIGHT;
+      this.rowDefaultPaddings.set(edge, parameter ?? 0);
+      return;
+    }
+    if (name === "clpadl" || name === "clpadt" || name === "clpadb" || name === "clpadr") {
+      const edge =
+        name === "clpadl"
+          ? SvxBoxItemLine.TOP
+          : name === "clpadt"
+            ? SvxBoxItemLine.LEFT
+            : name === "clpadb"
+              ? SvxBoxItemLine.BOTTOM
+              : SvxBoxItemLine.RIGHT;
+      this.nextCellPaddings.set(edge, parameter ?? 0);
+      return;
+    }
+    if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
+      const edge =
+        name === "clbrdrt"
+          ? SvxBoxItemLine.TOP
+          : name === "clbrdrl"
+            ? SvxBoxItemLine.LEFT
+            : name === "clbrdrb"
+              ? SvxBoxItemLine.BOTTOM
+              : SvxBoxItemLine.RIGHT;
+      const border: RtfCellBorder = {
+        style: BorderLineStyle.SOLID,
+        width: 0,
+        colorIndex: 0,
+        wordStyle: 0,
+      };
+      this.nextCellBorders.set(edge, border);
+      this.activeBorder = border;
+      return;
+    }
+    if (this.activeBorder !== undefined && name.startsWith("brdr")) {
+      if (name === "brdrw") this.activeBorder.width = parameter ?? 0;
+      else if (name === "brdrcf") this.activeBorder.colorIndex = parameter ?? 0;
+      else if (name === "brdrth") this.activeBorder.wordStyle = 2;
+      else if (name === "brdrhair") {
+        this.activeBorder.style = BorderLineStyle.SOLID;
+        this.activeBorder.wordStyle = 5;
+      } else this.activeBorder.style = fromRtfBorderStyle(name);
       return;
     }
     if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
@@ -721,6 +844,11 @@ export class RtfDocumentImpl {
         this.rowBoundaries.push(parameter);
         this.rowVerticals.push(this.nextCellVertical);
         this.nextCellVertical = undefined;
+        this.rowBorders.push(this.nextCellBorders);
+        this.nextCellBorders = new Map();
+        this.rowPaddings.push(this.nextCellPaddings);
+        this.nextCellPaddings = new Map();
+        this.activeBorder = undefined;
       }
       return;
     }
@@ -748,6 +876,9 @@ export class RtfDocumentImpl {
           height: this.rowHeight,
           split: this.rowSplit,
           verticals: this.rowVerticals.splice(0),
+          borders: this.rowBorders.splice(0),
+          paddings: this.rowPaddings.splice(0),
+          defaultPaddings: this.rowDefaultPaddings,
         });
       this.inTable = false;
       this.terminatedParagraph = true;
@@ -1049,5 +1180,47 @@ function fromRtfNfc(value: number): SvxNumType {
       return SvxNumType.SVX_NUM_ARABIC_ZERO;
     default:
       return SvxNumType.SVX_NUM_ARABIC;
+  }
+}
+
+/** Resolves source RTF cell border keywords to native border styles. */
+function fromRtfBorderStyle(name: string): BorderLineStyle {
+  switch (name) {
+    case "brdrdot":
+      return BorderLineStyle.DOTTED;
+    case "brdrdash":
+      return BorderLineStyle.DASHED;
+    case "brdrdb":
+      return BorderLineStyle.DOUBLE;
+    case "brdrtnthsg":
+      return BorderLineStyle.THINTHICK_SMALLGAP;
+    case "brdrtnthmg":
+      return BorderLineStyle.THINTHICK_MEDIUMGAP;
+    case "brdrtnthlg":
+      return BorderLineStyle.THINTHICK_LARGEGAP;
+    case "brdrthtnsg":
+      return BorderLineStyle.THICKTHIN_SMALLGAP;
+    case "brdrthtnmg":
+      return BorderLineStyle.THICKTHIN_MEDIUMGAP;
+    case "brdrthtnlg":
+      return BorderLineStyle.THICKTHIN_LARGEGAP;
+    case "brdremboss":
+      return BorderLineStyle.EMBOSSED;
+    case "brdrengrave":
+      return BorderLineStyle.ENGRAVED;
+    case "brdroutset":
+      return BorderLineStyle.OUTSET;
+    case "brdrinset":
+      return BorderLineStyle.INSET;
+    case "brdrdashsm":
+      return BorderLineStyle.FINE_DASHED;
+    case "brdrdashd":
+      return BorderLineStyle.DASH_DOT;
+    case "brdrdashdd":
+      return BorderLineStyle.DASH_DOT_DOT;
+    case "brdrnone":
+      return BorderLineStyle.NONE;
+    default:
+      return BorderLineStyle.SOLID;
   }
 }

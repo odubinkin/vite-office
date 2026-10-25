@@ -4,6 +4,10 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
+import { Color } from "../../../../tools/inc/color";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
@@ -140,6 +144,14 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   const firstVertical = firstBox.GetVertOrient();
   firstVertical.SetVertOrient(VertOrientation.CENTER);
   firstBox.ClaimFrameFormat().SetFormatAttr(firstVertical);
+  const firstBorders = firstBox.GetBox();
+  firstBorders.SetLine(
+    new SvxBorderLine(new Color(255, 0, 0), 30, BorderLineStyle.SOLID),
+    SvxBoxItemLine.TOP,
+  );
+  firstBorders.SetDistance(120, SvxBoxItemLine.TOP);
+  firstBorders.SetDistance(80, SvxBoxItemLine.LEFT);
+  firstBox.ClaimFrameFormat().SetFormatAttr(firstBorders);
   source.nodes.AppendTableCellParagraph(firstBox).SetText("More");
   const secondBox = row.GetTabBoxes()[1];
   if (secondBox === undefined) throw new Error("Missing second table cell.");
@@ -157,13 +169,21 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   const margins = frame.GetLRSpace().Clone();
   margins.SetLeft(SvxIndentValue.twips(360));
   frame.SetFormatAttr(margins);
+  const tablePadding = frame.GetBox().Clone();
+  tablePadding.SetDistance(40, SvxBoxItemLine.TOP);
+  tablePadding.SetDistance(60, SvxBoxItemLine.RIGHT);
+  frame.SetFormatAttr(tablePadding);
   source.nodes.MakeTextNode("After");
   let imported;
   try {
     const bytes = new RtfExport().ExportDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\trowd\\trrh-720\\trkeep");
+    expect(new TextDecoder().decode(bytes)).toContain("\\clbrdrt\\brdrs\\brdrw30\\brdrcf1");
+    expect(new TextDecoder().decode(bytes)).toContain("\\clpadfl3\\clpadl120\\clpadft3\\clpadt80");
+    expect(new TextDecoder().decode(bytes)).toContain("\\trpaddft3\\trpaddt40");
+    expect(new TextDecoder().decode(bytes)).toContain("\\trql\\trleft360");
     expect(new TextDecoder().decode(bytes)).toContain(
-      "\\trql\\trleft360\\clvertalc\\cellx2160\\clvertalb\\cellx5160",
+      "\\clvertalc\\cellx2160\\clvertalb\\cellx5160",
     );
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetText())).toEqual(["Before", "After"]);
@@ -177,6 +197,9 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
       expect(restored.GetTable().GetTabLines()[0]?.GetRowSplit().GetValue()).toBe(false);
       expect(restored.GetTable().GetHoriOrient()).toBe(HoriOrientation.NONE);
       expect(restored.GetTable().GetFrameFormat().GetLRSpace().ResolveLeft()).toBe(360);
+      expect(restored.GetTable().GetFrameFormat().GetBox().GetDistance(SvxBoxItemLine.TOP)).toBe(
+        40,
+      );
       expect(restored.GetTable().GetFrameFormat().GetFrameSize().GetWidth()).toBe(4800);
       expect(
         restored
@@ -199,6 +222,42 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
           ?.GetTabBoxes()
           .map((box) => box.GetVertOrient().GetVertOrient()),
       ).toEqual([VertOrientation.CENTER, VertOrientation.BOTTOM]);
+      const restoredTop = restored.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetBox().GetTop();
+      expect(restoredTop?.GetWidth()).toBe(30);
+      expect(restoredTop?.GetBorderLineStyle()).toBe(BorderLineStyle.SOLID);
+      expect(restoredTop?.GetColor().GetRed()).toBe(255);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()[0]
+          ?.GetBox()
+          .GetDistance(SvxBoxItemLine.TOP),
+      ).toBe(120);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()[0]
+          ?.GetBox()
+          .GetDistance(SvxBoxItemLine.LEFT),
+      ).toBe(80);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()[1]
+          ?.GetBox()
+          .GetDistance(SvxBoxItemLine.TOP),
+      ).toBe(40);
+      expect(
+        restored
+          .GetTable()
+          .GetTabLines()[0]
+          ?.GetTabBoxes()[1]
+          ?.GetBox()
+          .GetDistance(SvxBoxItemLine.RIGHT),
+      ).toBe(60);
     }
   } finally {
     imported?.Dispose();

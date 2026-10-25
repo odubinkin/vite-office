@@ -34,6 +34,10 @@
         {
           "path": "vendor/libreoffice-reference/editeng/source/items/borderline.cxx",
           "marker": "SvxBorderLine::GuessLinesWidths"
+        },
+        {
+          "path": "vendor/libreoffice-reference/editeng/source/items/borderline.cxx",
+          "marker": "ConvertBorderWidthToWord"
         }
       ]
     },
@@ -41,6 +45,8 @@
     "localSymbols": [
       "SvxBorderLine",
       "roundBorderMetric",
+      "ConvertBorderWidthToWord",
+      "ConvertBorderWidthFromWord",
       "BorderLineRecord"
     ],
     "omittedResponsibilities": [
@@ -59,7 +65,9 @@
       "SvxBorderLine::SvxBorderLine",
       "SvxBorderLine::getWidthImpl",
       "SvxBorderLine::ScaleMetrics",
-      "SvxBorderLine::GuessLinesWidths"
+      "SvxBorderLine::GuessLinesWidths",
+      "ConvertBorderWidthToWord",
+      "ConvertBorderWidthFromWord"
     ]
   },
   "legacyOrder": 2

@@ -5,6 +5,12 @@ import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwFrameSize } from "../../../inc/fmtfsize";
+import {
+  ConvertBorderWidthToWord,
+  type SvxBorderLine,
+} from "../../../../editeng/source/items/borderline";
+import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
@@ -83,6 +89,23 @@ export class RtfExport {
       if (attributes.highlight !== undefined && attributes.highlight !== "transparent")
         this.IndexColor(attributes.highlight);
     }
+    for (const block of blocks) {
+      if (!(block instanceof SwTableNode)) continue;
+      for (const row of block.GetTable().GetTabLines())
+        for (const cell of row.GetTabBoxes()) {
+          const box = cell.GetFormat().box;
+          if (box === undefined) continue;
+          for (const edge of [
+            SvxBoxItemLine.TOP,
+            SvxBoxItemLine.LEFT,
+            SvxBoxItemLine.BOTTOM,
+            SvxBoxItemLine.RIGHT,
+          ]) {
+            const line = box.GetLine(edge);
+            if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
+          }
+        }
+    }
     let output = "{\\rtf1\\ansi\\ansicpg1252\\deff0";
     if (this.fonts.size > 0) {
       output += "{\\fonttbl";
@@ -150,6 +173,14 @@ export class RtfExport {
             )
               output += `\\trleft${tableLeft}`;
           }
+          const tableBox = tableFormat.GetBox();
+          for (const [edge, unitControl, valueControl] of [
+            [SvxBoxItemLine.TOP, "trpaddft", "trpaddt"],
+            [SvxBoxItemLine.LEFT, "trpaddfl", "trpaddl"],
+            [SvxBoxItemLine.BOTTOM, "trpaddfb", "trpaddb"],
+            [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
+          ] as const)
+            output += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
           const nativeWidths = boxes.map((box) => box.GetFrameSize().GetWidth());
           const hasNativeWidths = nativeWidths.every((width) => width > 0);
           const baseWidth = nativeWidths.reduce((total, width) => total + width, 0);
@@ -157,6 +188,25 @@ export class RtfExport {
           const widthRatio = hasNativeWidths && tableWidth > 0 ? tableWidth / baseWidth : 1;
           let right = 0;
           for (const [index, width] of nativeWidths.entries()) {
+            const box = boxes[index]?.GetFormat().box;
+            if (box !== undefined)
+              for (const [edge, control] of [
+                [SvxBoxItemLine.TOP, "clbrdrt"],
+                [SvxBoxItemLine.LEFT, "clbrdrl"],
+                [SvxBoxItemLine.BOTTOM, "clbrdrb"],
+                [SvxBoxItemLine.RIGHT, "clbrdrr"],
+              ] as const)
+                output += this.WriteCellBorder(control, box.GetLine(edge));
+            if (box !== undefined)
+              for (const [edge, unitControl, valueControl] of [
+                [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
+                [SvxBoxItemLine.LEFT, "clpadft", "clpadt"],
+                [SvxBoxItemLine.BOTTOM, "clpadfb", "clpadb"],
+                [SvxBoxItemLine.RIGHT, "clpadfr", "clpadr"],
+              ] as const) {
+                const distance = box.GetDistance(edge);
+                if (distance > 0) output += `\\${unitControl}3\\${valueControl}${distance}`;
+              }
             const vertical = boxes[index]?.GetFormat().vertOrient?.GetVertOrient();
             if (vertical !== undefined)
               output +=
@@ -246,6 +296,17 @@ export class RtfExport {
       : `{\\field{\\*\\fldinst HYPERLINK "${escapeRtf(run.hyperlink.url).replaceAll('"', "\\u34?")}"}{\\fldrslt ${text}}}`;
   }
 
+  /** Emits one native cell edge using the source RTF border style and width mapping. */
+  private WriteCellBorder(control: string, line: SvxBorderLine | undefined): string {
+    if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
+    const style = line.GetBorderLineStyle();
+    const width = line.GetWidth();
+    const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
+    const size =
+      width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
+    return `\\${control}\\${rtfBorderStyle(style, width)}${size}\\brdrcf${this.IndexColor(borderColor(line))}`;
+  }
+
   /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */
   private IndexFont(family: string): number {
     const existing = this.fonts.get(family);
@@ -262,6 +323,57 @@ export class RtfExport {
     const index = this.colors.size + 1;
     this.colors.set(color, index);
     return index;
+  }
+}
+
+/** Converts the source Color channels to the existing RTF color-table key. */
+function borderColor(line: SvxBorderLine): string {
+  const color = line.GetColor();
+  return `#${[color.GetRed(), color.GetGreen(), color.GetBlue()]
+    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .join("")}`;
+}
+
+/** Maps native cell-line styles exactly as OutTBLBorderLine. */
+function rtfBorderStyle(style: BorderLineStyle, width: number): string {
+  switch (style) {
+    case BorderLineStyle.SOLID:
+      return width === 1 ? "brdrhair" : "brdrs";
+    case BorderLineStyle.DOTTED:
+      return "brdrdot";
+    case BorderLineStyle.DASHED:
+      return "brdrdash";
+    case BorderLineStyle.DOUBLE:
+    case BorderLineStyle.DOUBLE_THIN:
+      return "brdrdb";
+    case BorderLineStyle.THINTHICK_SMALLGAP:
+      return "brdrtnthsg";
+    case BorderLineStyle.THINTHICK_MEDIUMGAP:
+      return "brdrtnthmg";
+    case BorderLineStyle.THINTHICK_LARGEGAP:
+      return "brdrtnthlg";
+    case BorderLineStyle.THICKTHIN_SMALLGAP:
+      return "brdrthtnsg";
+    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
+      return "brdrthtnmg";
+    case BorderLineStyle.THICKTHIN_LARGEGAP:
+      return "brdrthtnlg";
+    case BorderLineStyle.EMBOSSED:
+      return "brdremboss";
+    case BorderLineStyle.ENGRAVED:
+      return "brdrengrave";
+    case BorderLineStyle.OUTSET:
+      return "brdroutset";
+    case BorderLineStyle.INSET:
+      return "brdrinset";
+    case BorderLineStyle.FINE_DASHED:
+      return "brdrdashsm";
+    case BorderLineStyle.DASH_DOT:
+      return "brdrdashd";
+    case BorderLineStyle.DASH_DOT_DOT:
+      return "brdrdashdd";
+    default:
+      return "brdrnone";
   }
 }
 

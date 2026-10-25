@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 import { SwTableNode } from "../../core/docnode/node";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
@@ -95,6 +96,28 @@ it("maps per-cell RTF vertical alignment before each cellx boundary", () => {
           ?.GetTabBoxes()
           .map((box) => box.GetVertOrient().GetVertOrient()),
       ).toEqual([VertOrientation.TOP, VertOrientation.BOTTOM]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("imports cell border style, width and color from the RTF color table", () => {
+  const document = read(
+    "{\\rtf1\\ansi{\\colortbl;\\red0\\green128\\blue255;}\\trowd\\clbrdrl\\brdrdot\\brdrw20\\brdrcf1\\cellx1200\\intbl Cell\\cell\\row}",
+  );
+  try {
+    const block = document.GetNodes().getBodyContent()[0];
+    expect(block).toBeInstanceOf(SwTableNode);
+    if (block instanceof SwTableNode) {
+      const left = block.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetBox().GetLeft();
+      expect(left?.GetBorderLineStyle()).toBe(BorderLineStyle.DOTTED);
+      expect(left?.GetWidth()).toBe(20);
+      expect([
+        left?.GetColor().GetRed(),
+        left?.GetColor().GetGreen(),
+        left?.GetColor().GetBlue(),
+      ]).toEqual([0, 128, 255]);
+    }
   } finally {
     document.Dispose();
   }
