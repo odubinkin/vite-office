@@ -598,3 +598,15 @@ export const aImplMS949DBCSCvtData: ImplDBCSConvertData = Object.freeze({
   mnTrailStart: 0x41,
   mnTrailEnd: 0xfe,
 });
+
+/** Original aImplKSC5601DBCSCvtData pointer and range aggregate for EUC-KR. */
+export const aImplKSC5601DBCSCvtData: ImplDBCSConvertData = Object.freeze({
+  mpToUniLeadTab: aKSC5601UniLeadTab,
+  mpToDBCSHighTab: aKSC5601DBCSHighTab,
+  mpEUDCTab: aImplMS949DBCSEUDCTab,
+  mnEUDCCount: 0x2,
+  mnLeadStart: 0xa1,
+  mnLeadEnd: 0xfe,
+  mnTrailStart: 0xa1,
+  mnTrailEnd: 0xfe,
+});

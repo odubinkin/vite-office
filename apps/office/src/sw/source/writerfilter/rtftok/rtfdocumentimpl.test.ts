@@ -278,6 +278,22 @@ it.each([
   },
 );
 
+it.each([
+  [51949, String.raw`\'a1\'a1\'81\'41`, "\u3000\uF181A"],
+  [10003, String.raw`\'81\'41`, "\uAC02"],
+  [51936, String.raw`\'a1\'a1\'81\'40`, "\u3000\uFFFD"],
+])(
+  "uses the pinned SAL EUC and Apple Korean aggregates for code page %i",
+  (codepage, bytes, expected) => {
+    const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}${bytes}}`);
+    try {
+      expect(document.paragraphs[0]?.GetText()).toBe(expected);
+    } finally {
+      document.Dispose();
+    }
+  },
+);
+
 it("imports hex CR/LF and a control word after Unicode fallback as separate paragraphs", () => {
   const document = read(String.raw`{\rtf1\ansi A\'0d\'0aB\u233\par?C}`);
   try {

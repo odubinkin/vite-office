@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts#aGB2312UniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvtscn6.tab#aGB2312UniLeadTab",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses the pinned SAL EUC and Apple Korean aggregates"
+      ],
+      "justification": "Pinned GB2312 lead, reverse-high and DBCS aggregate with source pointer offsets preserved. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aGB2312UniLeadTab",
+        "aGB2312DBCSHighTab",
+        "aImplGB2312DBCSCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtscn6.tab",
+      "upstreamSymbols": [
+        "aGB2312UniLeadTab",
+        "aGB2312DBCSHighTab",
+        "aImplGB2312DBCSCvtData"
+      ]
+    }
+  }
+}

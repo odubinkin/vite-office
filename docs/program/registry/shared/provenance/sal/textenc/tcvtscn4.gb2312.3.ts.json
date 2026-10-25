@@ -1,0 +1,77 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtscn4.gb2312.3.ts",
+    "upstreamPath": "sal/textenc/tcvtscn4.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_GB_8E",
+      "aImplUniToDBCSTab_GB_8F",
+      "aImplUniToDBCSTab_GB_90",
+      "aImplUniToDBCSTab_GB_91",
+      "aImplUniToDBCSTab_GB_92",
+      "aImplUniToDBCSTab_GB_93",
+      "aImplUniToDBCSTab_GB_94",
+      "aImplUniToDBCSTab_GB_95",
+      "aImplUniToDBCSTab_GB_96",
+      "aImplUniToDBCSTab_GB_97",
+      "aImplUniToDBCSTab_GB_98",
+      "aImplUniToDBCSTab_GB_99",
+      "aImplUniToDBCSTab_GB_9A",
+      "aImplUniToDBCSTab_GB_9B",
+      "aImplUniToDBCSTab_GB_9C",
+      "aImplUniToDBCSTab_GB_9E",
+      "aImplUniToDBCSTab_GB_9F"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_GB_8E",
+      "aImplUniToDBCSTab_GB_8F",
+      "aImplUniToDBCSTab_GB_90",
+      "aImplUniToDBCSTab_GB_91",
+      "aImplUniToDBCSTab_GB_92",
+      "aImplUniToDBCSTab_GB_93",
+      "aImplUniToDBCSTab_GB_94",
+      "aImplUniToDBCSTab_GB_95",
+      "aImplUniToDBCSTab_GB_96",
+      "aImplUniToDBCSTab_GB_97",
+      "aImplUniToDBCSTab_GB_98",
+      "aImplUniToDBCSTab_GB_99",
+      "aImplUniToDBCSTab_GB_9A",
+      "aImplUniToDBCSTab_GB_9B",
+      "aImplUniToDBCSTab_GB_9C",
+      "aImplUniToDBCSTab_GB_9E",
+      "aImplUniToDBCSTab_GB_9F"
+    ],
+    "preservedResponsibilities": [
+      "Pinned GB2312 source-owned reverse numeric tables with every value and original pointer target preserved."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtscn4.gb2312.3.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtscn4.tab source owner is split by GB2312 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtscn4.gb2312.3.ts",
+          "marker": "aImplUniToDBCSTab_GB_8E"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses the pinned SAL EUC and Apple Korean aggregates"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtscn4.tab",
+          "marker": "aImplUniToDBCSTab_GB_8E"
+        }
+      ]
+    }
+  }
+}

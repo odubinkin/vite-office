@@ -10,16 +10,19 @@
       "aKSC5601UniLeadTab",
       "aKSC5601DBCSHighTab",
       "aImplMS949DBCSEUDCTab",
-      "aImplMS949DBCSCvtData"
+      "aImplMS949DBCSCvtData",
+      "aImplKSC5601DBCSCvtData"
     ],
     "upstreamSymbols": [
       "aKSC5601UniLeadTab",
       "aKSC5601DBCSHighTab",
       "aImplMS949DBCSEUDCTab",
-      "aImplMS949DBCSCvtData"
+      "aImplMS949DBCSCvtData",
+      "aImplKSC5601DBCSCvtData"
     ],
     "preservedResponsibilities": [
-      "Pinned MS-949 lead, reverse-high, EUDC and complete DBCS converter aggregate."
+      "Pinned MS-949 lead, reverse-high, EUDC and complete DBCS converter aggregate.",
+      "Retains the distinct pinned KSC5601 range aggregate for EUC-KR while Apple Korean reuses the MS-949 aggregate."
     ],
     "omittedResponsibilities": [
       "Other source-owned encodings and full SAL factory behavior remain outside this module."

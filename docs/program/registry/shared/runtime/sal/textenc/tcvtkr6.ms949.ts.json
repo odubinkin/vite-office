@@ -20,13 +20,14 @@
         "vendor/libreoffice-reference/sal/textenc/tcvtkr6.tab#aKSC5601UniLeadTab",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL MS-"
       ],
-      "justification": "Pinned MS-949 lead, reverse-high, EUDC and complete DBCS converter aggregate. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "justification": "Pinned MS-949 lead, reverse-high, EUDC and complete DBCS converter aggregate. Full multibyte SAL codec parity and compiled upstream differential remain unverified. Includes the pinned EUC-KR KSC5601 range aggregate.",
       "knownViolations": [],
       "localSymbols": [
         "aKSC5601UniLeadTab",
         "aKSC5601DBCSHighTab",
         "aImplMS949DBCSEUDCTab",
-        "aImplMS949DBCSCvtData"
+        "aImplMS949DBCSCvtData",
+        "aImplKSC5601DBCSCvtData"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtkr6.tab",
@@ -34,7 +35,8 @@
         "aKSC5601UniLeadTab",
         "aKSC5601DBCSHighTab",
         "aImplMS949DBCSEUDCTab",
-        "aImplMS949DBCSCvtData"
+        "aImplMS949DBCSCvtData",
+        "aImplKSC5601DBCSCvtData"
       ]
     }
   }

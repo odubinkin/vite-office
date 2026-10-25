@@ -6,11 +6,14 @@ import {
   RTL_TEXTENCODING_APPLE_CYRILLIC,
   RTL_TEXTENCODING_APPLE_GREEK,
   RTL_TEXTENCODING_APPLE_ICELAND,
+  RTL_TEXTENCODING_APPLE_KOREAN,
   RTL_TEXTENCODING_APPLE_ROMAN,
   RTL_TEXTENCODING_APPLE_ROMANIAN,
   RTL_TEXTENCODING_APPLE_TURKISH,
   RTL_TEXTENCODING_APPLE_UKRAINIAN,
   RTL_TEXTENCODING_ASCII_US,
+  RTL_TEXTENCODING_EUC_CN,
+  RTL_TEXTENCODING_EUC_KR,
   RTL_TEXTENCODING_IBM_437,
   RTL_TEXTENCODING_IBM_737,
   RTL_TEXTENCODING_IBM_775,
@@ -118,7 +121,8 @@ import {
 import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
 import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
-import { aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
+import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
+import { aImplKSC5601DBCSCvtData, aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
 import { aImplJOHABDBCSCvtData } from "./tcvtkr6.johab";
 import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
 
@@ -239,7 +243,11 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_936) return { kind: "dbcs", data: aImplMS936DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_EUC_CN) return { kind: "dbcs", data: aImplGB2312DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_949) return { kind: "dbcs", data: aImplMS949DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_EUC_KR) return { kind: "dbcs", data: aImplKSC5601DBCSCvtData };
+  if (encoding === RTL_TEXTENCODING_APPLE_KOREAN)
+    return { kind: "dbcs", data: aImplMS949DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_950) return { kind: "dbcs", data: aImplMS950DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_1361) return { kind: "dbcs", data: aImplJOHABDBCSCvtData };
   const data = getSingleByteConvertData(encoding);
