@@ -1,0 +1,8 @@
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office
+
+
+ Test Files  1 passed (1)
+      Tests  3 passed (3)
+   Start at  04:23:31
+   Duration  2.86s (transform 712ms, setup 0ms, import 1.11s, tests 252ms, environment 0ms)

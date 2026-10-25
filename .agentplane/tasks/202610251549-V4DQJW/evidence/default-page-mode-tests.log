@@ -1,68 +1,16 @@
 
 > vite-office@0.1.0 test:writer
-> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/doc/native-default-page-mode.test.ts --maxWorkers=1
+> npm run test:writer --workspace @vite-office/office -- src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/uibase/app/docst-by-example.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/core/layout/pagedesc.test.ts src/sw/browser/filter/xml/page-desc-codec.test.ts src/sw/source/core/doc/native-page-owner-lifetimes.test.ts --maxWorkers=2
 
 
 > @vite-office/office@0.1.0 test:writer
-> vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-default-page-mode.test.ts --maxWorkers=1
+> vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-default-page-mode.test.ts src/sw/source/core/undo/native-format-attribute-notify-history.test.ts src/sw/source/uibase/app/docst-by-example.test.ts src/sw/source/core/unocore/native-page-grid-properties.test.ts src/sw/source/core/layout/pagedesc.test.ts src/sw/browser/filter/xml/page-desc-codec.test.ts src/sw/source/core/doc/native-page-owner-lifetimes.test.ts --maxWorkers=2
 
 
  RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
 
- ❯ |writer| src/sw/source/core/doc/native-default-page-mode.test.ts (4 tests | 2 failed) 164ms
-   × preserves UNO page-mode false fallback on failed bool extraction and exposes only the document property map 56ms
-   × retains native tab-stop removal boundaries and visits authored inherited items in node/style order 39ms
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
-
- FAIL  |writer| src/sw/source/core/doc/native-default-page-mode.test.ts > preserves UNO page-mode false fallback on failed bool extraction and exposes only the document property map
-AssertionError: expected false to be true // Object.is equality
-
-- Expected
-+ Received
-
-- true
-+ false
-
- ❯ src/sw/source/core/doc/native-default-page-mode.test.ts:80:72
-     78|     const current = model.getPropertyValue(key); expect(current.hasVal…
-     79|     model.setPropertyValue(key, wrong); expect(doc.IsSquaredPageMode()…
-     80|     model.setPropertyValue(key, mode); expect(doc.IsSquaredPageMode())…
-       |                                                                        ^
-     81|     expect(/** Rejects absent dispatch. @returns Never. */ () => model…
-     82|     expect(/** Rejects absent dispatch. @returns Never. */ () => model…
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
-
- FAIL  |writer| src/sw/source/core/doc/native-default-page-mode.test.ts > retains native tab-stop removal boundaries and visits authored inherited items in node/style order
-AssertionError: expected true to be false // Object.is equality
-
-- Expected
-+ Received
-
-- false
-+ true
-
- ❯ src/sw/source/core/doc/native-default-page-mode.test.ts:104:83
-    102|   expect(authored.Count()).toBe(2);
-    103|   expect(lcl_SetNewDefTabStops(200, 200, authored)).toBe(false);
-    104|   expect(lcl_SetNewDefTabStops(100, 200, new SvxTabStopItem(RES_PARATR…
-       |                                                                                   ^
-    105|   let count = 0; doc.ForEachParaAtrTabStopItem(/** Stops at first visi…
-    106|   expect(count).toBe(1); doc.Dispose();
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
-
-
- Test Files  1 failed (1)
-      Tests  2 failed | 2 passed (4)
-   Start at  04:13:52
-   Duration  22.60s (transform 16.64s, setup 601ms, import 19.47s, tests 164ms, environment 2.02s)
-
-npm error Lifecycle script `test:writer` failed with error:
-npm error code 1
-npm error path /Users/odubinkin/Projects/vite-office/apps/office
-npm error workspace @vite-office/office@0.1.0
-npm error location /Users/odubinkin/Projects/vite-office/apps/office
-npm error command failed
-npm error command sh -c vitest run --config vitest.writer.config.ts src/sw/source/core/doc/native-default-page-mode.test.ts --maxWorkers=1
+ Test Files  7 passed (7)
+      Tests  30 passed (30)
+   Start at  04:22:52
+   Duration  155.75s (transform 83.00s, setup 15.58s, import 191.57s, tests 8.97s, environment 67.34s)

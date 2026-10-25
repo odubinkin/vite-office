@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 21
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T20:46:24.368Z"
+doc_updated_at: "2026-10-25T21:24:01.576Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -104,6 +104,10 @@ sections:
     - Observation: Native identity and page-owner checkpoint is verified; initial broad Writer regression exposed obsolete numeric test fixtures, raw allocation/default-flag comparisons, and append-only client-order assumptions.
       Impact: Preserving those fixture assumptions would reinstate incorrect native IDs or invalidate real document-owned page clients. Test recordings prove behavioral protocols; they do not independently prove numeric source identities.
       Resolution: Command/results/evidence/scope: native-which-checkpoint.json records actual pinned expression checks for74 IDs,4 owner tests at S57/B47/F8/L50 all100, the681-file/15246-case Writer attempt and final28-file/1042-case original-failure closure with zero failures. Original native probe JSON recordings remain unchanged; seven test-protocol labels bind to actual native constants only in tests. Use native equals for item payloads and original right-of-anchor registration order. Build/final typecheck/scoped lint+format/resources/dependencies/docs/size/tree/provenance/registry/static/routing passed; doctor has only the existing hook warning. Browser5of6 plus unchanged failed-only desktop recheck1pass retained: intermittent name collision is still an observation for final file-workflow acceptance, not a claimed fix. DOCX/XLSX/filter/UI and ODT-grid acceptance remain pending; no whole-task verification or parity promotion.
+
+    - Observation: Native default-attribute/page-mode prerequisite implemented; real pool/default-format routing, INVALID style history and default undo replace simplified history. Targeted 7-file Writer run passes 30 cases; new item iterator and document dispatch identity have scoped raw100 coverage. WRITER103–106 preserve suspected source asymmetries.
+      Impact: Enables native document page-mode application for DOCX sections. This is partial implementation evidence, not task acceptance; SectionPropertyMap, document/style loading, export and production file workflow remain pending.
+      Resolution: Continue approved CODER implementation within this task, retain current semantic parity statuses and intentional UI/autosave/recovery deviations. No full suite due; no task verification pass or closure recorded.
 id_source: "generated"
 ---
 ## Summary
@@ -184,3 +188,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native identity and page-owner checkpoint is verified; initial broad Writer regression exposed obsolete numeric test fixtures, raw allocation/default-flag comparisons, and append-only client-order assumptions.
   Impact: Preserving those fixture assumptions would reinstate incorrect native IDs or invalidate real document-owned page clients. Test recordings prove behavioral protocols; they do not independently prove numeric source identities.
   Resolution: Command/results/evidence/scope: native-which-checkpoint.json records actual pinned expression checks for74 IDs,4 owner tests at S57/B47/F8/L50 all100, the681-file/15246-case Writer attempt and final28-file/1042-case original-failure closure with zero failures. Original native probe JSON recordings remain unchanged; seven test-protocol labels bind to actual native constants only in tests. Use native equals for item payloads and original right-of-anchor registration order. Build/final typecheck/scoped lint+format/resources/dependencies/docs/size/tree/provenance/registry/static/routing passed; doctor has only the existing hook warning. Browser5of6 plus unchanged failed-only desktop recheck1pass retained: intermittent name collision is still an observation for final file-workflow acceptance, not a claimed fix. DOCX/XLSX/filter/UI and ODT-grid acceptance remain pending; no whole-task verification or parity promotion.
+
+- Observation: Native default-attribute/page-mode prerequisite implemented; real pool/default-format routing, INVALID style history and default undo replace simplified history. Targeted 7-file Writer run passes 30 cases; new item iterator and document dispatch identity have scoped raw100 coverage. WRITER103–106 preserve suspected source asymmetries.
+  Impact: Enables native document page-mode application for DOCX sections. This is partial implementation evidence, not task acceptance; SectionPropertyMap, document/style loading, export and production file workflow remain pending.
+  Resolution: Continue approved CODER implementation within this task, retain current semantic parity statuses and intentional UI/autosave/recovery deviations. No full suite due; no task verification pass or closure recorded.

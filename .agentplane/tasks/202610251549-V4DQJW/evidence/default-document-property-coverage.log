@@ -1,0 +1,30 @@
+
+> vite-office@0.1.0 test:coverage:writer
+> npm run test:coverage:writer --workspace @vite-office/office -- src/sw/source/core/doc/native-default-page-mode.test.ts --coverage.include=src/sw/inc/unomap.ts --coverage.reportsDirectory=coverage/docx-document-property
+
+
+> @vite-office/office@0.1.0 test:coverage:writer
+> vitest run --config vitest.writer.config.ts --coverage src/sw/source/core/doc/native-default-page-mode.test.ts --coverage.include=src/sw/inc/unomap.ts --coverage.reportsDirectory=coverage/docx-document-property
+
+
+ RUN  v4.1.10 /Users/odubinkin/Projects/vite-office/apps/office
+      Coverage enabled with istanbul
+
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  04:21:15
+   Duration  10.25s (transform 7.21s, setup 201ms, import 8.80s, tests 56ms, environment 929ms)
+
+ % Coverage report from istanbul
+-----------|---------|----------|---------|---------|-------------------
+File       | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-----------|---------|----------|---------|---------|-------------------
+-----------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 100% ( 1/1 )
+Branches     : 100% ( 0/0 )
+Functions    : 100% ( 0/0 )
+Lines        : 100% ( 1/1 )
+================================================================================

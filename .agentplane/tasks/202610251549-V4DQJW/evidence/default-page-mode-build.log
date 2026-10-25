@@ -1,0 +1,38 @@
+
+> vite-office@0.1.0 build
+> npm run build --workspace @vite-office/office
+
+
+> @vite-office/office@0.1.0 build
+> tsc --noEmit && vite build
+
+vite v8.2.1 building client environment for production...
+[2K
+transforming...✓ 2981 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                         0.54 kB │ gzip:   0.33 kB
+dist/assets/tblsels-CrFA-9L6.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblselw-D9zQinbS.svg        5.15 kB │ gzip:   0.61 kB
+dist/assets/tblsele-ndGfGfAd.svg        5.16 kB │ gzip:   0.61 kB
+dist/assets/tblselsw-Bp6i2xcj.svg       5.76 kB │ gzip:   0.65 kB
+dist/assets/tblselse-DkDvgj_p.svg       5.80 kB │ gzip:   0.65 kB
+dist/assets/odt-worker-BplZNGsn.js  3,673.02 kB
+dist/assets/ods-worker-BxwC9R-P.js  3,768.27 kB
+dist/assets/index-mCE5Iw5S.css         71.52 kB │ gzip:  11.63 kB
+dist/assets/index-CsDJyaEw.js       6,005.05 kB │ gzip: 924.57 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 500 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 8.42s
+[33m[PLUGIN_TIMINGS] [0mYour build spent 79% of 8.4s inside plugin hooks (6.7s).
+Measured inside the callback, so queue time is excluded and time the callback itself awaited is not:
+  - @tailwindcss/vite:generate:build transform (52%, 4.4s, 1 call)
+Those rows are 52% of the build; the rest of the 79% is below.
+Not measurable — 2 hooks whose calls overlap, so elapsed time covers work other calls were doing. Profile with `node --cpu-prof`:
+  - vite:asset load (9 calls)
+  - vite:worker-import-meta-url transform (2 calls)
+See https://rolldown.rs/reference/InputOptions.checks#plugintimings for more details.

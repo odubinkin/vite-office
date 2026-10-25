@@ -1,0 +1,46 @@
+{
+  "scope": "all",
+  "capabilityCount": 339,
+  "moduleCount": 1351,
+  "invariantCount": 34,
+  "globalRecordCount": 3104,
+  "parity": {
+    "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "behaviorParityCount": 43,
+    "classifiedDivergenceCount": 107,
+    "contractParityCount": 43,
+    "defaultParityCount": 43,
+    "differentialParityCount": 43,
+    "exceptionCount": 2,
+    "gapCount": 532,
+    "implementedCount": 336,
+    "parityReady": false,
+    "ownershipParityCount": 43,
+    "recordCount": 339,
+    "schemaVersion": 6,
+    "serializationParityCount": 43,
+    "scopeLimitationCount": 583,
+    "unresolvedParityCount": 293,
+    "unclassifiedDivergenceCount": 0,
+    "verifiedCount": 43
+  },
+  "provenance": {
+    "browserAdaptationCount": 178,
+    "localInfrastructureCount": 27,
+    "mappedCount": 1146,
+    "moduleCount": 1351
+  },
+  "runtime": {
+    "commandCount": 123,
+    "exportedOperationCount": 1728,
+    "internalOperationCount": 19,
+    "placeholderSuiteCount": 5,
+    "schemaVersion": 3,
+    "semanticViolationCount": 0,
+    "uiBehaviorCount": 10
+  },
+  "command": "npm run inventory:registry:check",
+  "exitCode": 0,
+  "originalOutputSha256": "adedf37b3d09bb94fef51c20942edc9ddc47fc3532a541965c3324cd8bfe3dcf",
+  "note": "Scalar verification summary; verbose module/evidence listings omitted."
+}
