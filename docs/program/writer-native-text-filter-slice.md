@@ -85,3 +85,12 @@ do not sum to the table frame width. The desktop layout rectangle, HTML table
 layout branch and expanded nested/merged table graph are outside the current
 portable model; remaining represented table properties still need the matrix
 audit above.
+
+RTF paragraph margins now emit both physical `\\li`/`\\ri` and logical
+`\\lin`/`\\rin` controls as pinned `FormatTextLeftMargin` and
+`FormatRightMargin` do. The reader accepts either pair for the represented
+left/right margin items. Pinned `rtfdispatchvalue.cxx` also inserts a direct
+zero first-line indent on `\\li` only when no earlier direct `\\fi` exists;
+the local style and body paths retain that ordering. Source-level bidi
+resolution of distinct physical and logical values remains outside the
+current direction-less paragraph model.

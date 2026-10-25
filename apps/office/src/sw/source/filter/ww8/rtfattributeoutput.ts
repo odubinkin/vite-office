@@ -126,8 +126,8 @@ export class RtfAttributeOutput {
           : alignment === "justify"
             ? "\\qj"
             : "\\ql";
-    if (left !== 0) output += `\\li${left}`;
-    if (right !== 0) output += `\\ri${right}`;
+    if (left !== 0) output += `\\li${left}\\lin${left}`;
+    if (right !== 0) output += `\\ri${right}\\rin${right}`;
     if (firstLine !== 0) output += `\\fi${firstLine}`;
     output += `\\sb${spacing.GetUpper()}\\sa${spacing.GetLower()}`;
     if (spacing.GetContext()) output += "\\contextualspace";

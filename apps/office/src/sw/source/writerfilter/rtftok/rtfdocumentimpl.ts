@@ -300,7 +300,9 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "qr",
   "qj",
   "li",
+  "lin",
   "ri",
+  "rin",
   "fi",
   "sb",
   "sa",
@@ -675,15 +677,15 @@ export class RtfDocumentImpl {
       collection.SetFormatAttr(
         new SvxAdjustItem(getSvxAdjust(paragraph.alignment), RES_PARATR_ADJUST),
       );
-    if (controls.has("li"))
+    if (controls.has("li") || controls.has("lin"))
       collection.SetFormatAttr(
         new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
       );
-    if (controls.has("ri"))
+    if (controls.has("ri") || controls.has("rin"))
       collection.SetFormatAttr(
         new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
       );
-    if (controls.has("fi"))
+    if (controls.has("fi") || controls.has("li"))
       collection.SetFormatAttr(
         new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
       );
@@ -1386,8 +1388,16 @@ export class RtfDocumentImpl {
           name === "ql" ? "left" : name === "qc" ? "center" : name === "qr" ? "right" : "justify",
       };
     else if (name === "li" && parameter !== undefined)
+      state.paragraph = {
+        ...state.paragraph,
+        left: Math.max(0, parameter),
+        leftSet: true,
+        // rtftok LI inserts firstLine=0 with Ignore conflict policy.
+        ...(!state.paragraph.firstLineSet ? { firstLine: 0, firstLineSet: true } : {}),
+      };
+    else if (name === "lin" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, left: Math.max(0, parameter), leftSet: true };
-    else if (name === "ri" && parameter !== undefined)
+    else if ((name === "ri" || name === "rin") && parameter !== undefined)
       state.paragraph = { ...state.paragraph, right: Math.max(0, parameter), rightSet: true };
     else if (name === "fi" && parameter !== undefined)
       state.paragraph = { ...state.paragraph, firstLine: parameter, firstLineSet: true };

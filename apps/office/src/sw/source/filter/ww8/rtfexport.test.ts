@@ -1054,6 +1054,21 @@ it("uses the native table frame and page widths for fixed and relative RTF cell 
   }
 });
 
+it("writes both physical and logical RTF paragraph indents", () => {
+  const document = createWriterDocument();
+  const paragraph = document.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Indented");
+  paragraph.SetParagraphTextLeftMargin(180);
+  paragraph.SetParagraphRightMargin(300);
+  try {
+    const output = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    expect(output).toContain("\\li180\\lin180\\ri300\\rin300");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("retains numbered list identity and levels through RTF list tables", /** Checks source-backed list and override controls. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];

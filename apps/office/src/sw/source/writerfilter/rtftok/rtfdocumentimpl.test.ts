@@ -958,6 +958,20 @@ it("creates a document-owned collection for an external RTF paragraph style", ()
   }
 });
 
+it("maps logical RTF indents and resets inherited first-line indent on direct li", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s42\\fi240 Indented;}}\\pard\\s42\\li180\\lin200\\rin300 Reset\\par\\pard\\s42\\fi360\\li180 Keep}",
+  );
+  try {
+    expect(document.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(200);
+    expect(document.paragraphs[0]?.GetParagraphRightMargin()).toBe(300);
+    expect(document.paragraphs[0]?.GetParagraphFirstLineIndent()).toBe(0);
+    expect(document.paragraphs[1]?.GetParagraphFirstLineIndent()).toBe(360);
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("inherits RTF style characters until an explicit run control overrides them", () => {
   const document = read("{\\rtf1{\\stylesheet{\\s3\\b Strong Note;}}\\pard\\s3 Yes {\\b0 No} Yes}");
   try {
