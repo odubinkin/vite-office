@@ -2,6 +2,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
+import { applyWriterParagraphList } from "../../core/doc/list";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/source/items/textitem";
@@ -19,6 +20,50 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
+  it("retains upstream single-paragraph ASCII numbering suppression", /** Checks the original endpoint condition for full-document export. @returns Nothing. */ () => {
+    const shell = makeShell();
+    try {
+      const paragraph = shell.GetDoc().paragraphs[0];
+      if (paragraph === undefined) throw new Error("Missing first paragraph.");
+      paragraph.SetText("Only");
+      applyWriterParagraphList(paragraph, { kind: "numbered", level: 0 });
+      expect(shell.SerializeText()).toBe("Only\n");
+    } finally {
+      shell.Close();
+    }
+  });
+  it("serializes complete text through native ASCII numbering and final line rules", /** Checks the shell filter output on connected body nodes. @returns Nothing. */ () => {
+    const shell = makeShell();
+    try {
+      const document = shell.GetDoc();
+      const first = document.paragraphs[0];
+      if (first === undefined) throw new Error("Missing first paragraph.");
+      const second = document.nodes.MakeTextNode("Second");
+      first.SetText("First");
+      applyWriterParagraphList(first, { kind: "numbered", level: 0 });
+      applyWriterParagraphList(second, { kind: "numbered", level: 0 });
+      expect(shell.SerializeText()).toBe("    1. First\n    2. Second\n");
+    } finally {
+      shell.Close();
+    }
+  });
+  it("writes table rows with native ASCII tabs and cell paragraph breaks", /** Checks the full-body table writer path. @returns Nothing. */ () => {
+    const shell = makeShell();
+    try {
+      const document = shell.GetDoc();
+      const first = document.paragraphs[0];
+      if (first === undefined) throw new Error("Missing first paragraph.");
+      first.SetText("Before");
+      const table = document.nodes.MakeTableNode("Grid", {}, first);
+      const row = document.nodes.AppendTableRow(table, 2);
+      row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("A");
+      row.GetTabBoxes()[1]?.GetParagraphs()[0]?.SetText("B");
+      document.nodes.MakeTextNode("After");
+      expect(shell.SerializeText()).toBe("Before\nA\tB\nAfter\n");
+    } finally {
+      shell.Close();
+    }
+  });
   it("forwards the retained default-font device through a real ODT open", /** Observes the real filter boundary while actual package serialization/import executes. @returns Completion. */ async () => {
     const device: DefaultFontDevice = {
         getDefaultFont: /** Supplies the platform device family. @returns Family. */ () =>

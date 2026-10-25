@@ -30,6 +30,7 @@ import { MIMETYPE_OASIS_OPENDOCUMENT_TEXT as ODT_MIMETYPE } from "../../../../co
 import { SwClient, SwModify, subscribeToSwModify } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
 import { SwDoc } from "../../core/doc/doc";
+import { SwASCWriter } from "../../filter/ascii/wrtasc";
 import type { DefaultFontDevice } from "../../core/doc/default-font";
 import type { SwUndoRedoContext } from "../../core/undo/undobj";
 import {
@@ -86,6 +87,12 @@ export class SwDocShell extends SfxObjectShell {
   /** Returns the shell-owned Writer model. @returns Active model. */
   public GetDoc(): SwDoc {
     return this.document;
+  }
+
+  /** Serializes the complete body through Writer's native ASCII filter. @returns Plain text. */
+  public SerializeText(): string {
+    this.EnsureOpen();
+    return new SwASCWriter().WriteDocument(this.document);
   }
 
   /** Associates the current Writer view like native SwDocShell::SetView. @param view - Active view or no view. @returns Nothing. */

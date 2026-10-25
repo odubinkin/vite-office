@@ -148,7 +148,7 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     await waitFor(
       /** Waits for the browser export. @returns Nothing. */ () =>
         expect(exported).toHaveBeenCalledWith({
-          data: "Plain body",
+          data: "Plain body\n",
           mediaType: "text/plain;charset=utf-8",
           name: "Draft.txt",
         }),
