@@ -51,7 +51,7 @@ it.each([false, true])(
       spy.mockRestore();
       expect(scopes).toHaveLength(1);
       expect(scopes[0]).toEqual(selected ? [box] : [box, required(last.GetTabBoxes()[0])]);
-      expect((input.GetItemIfSet(129, false) as SwFormatRowSplit | undefined)?.GetValue()).toBe(
+      expect((input.GetItemIfSet(132, false) as SwFormatRowSplit | undefined)?.GetValue()).toBe(
         selected ? false : undefined,
       );
       expect(shell.GetCursor()).toBe(originalCursor);
@@ -63,7 +63,7 @@ it.each([false, true])(
       expect(page.GetRowSplitState()).toBe(selected ? false : undefined);
       page.SetRowSplitState(true);
       page.FillItemSet(output);
-      expect(output.GetItemIfSet(129, false)).toBeInstanceOf(SwFormatRowSplit);
+      expect(output.GetItemIfSet(132, false)).toBeInstanceOf(SwFormatRowSplit);
       frame = new SwTabFrame(table);
       const row = required(frame.Lower()) as SwRowFrame,
         cell = required(row.Lower()) as SwCellFrame;
@@ -106,7 +106,7 @@ it.each([undefined, false, true])(
       doc = session.docShell.GetDoc(),
       shell = session.view.GetWrtShell();
     try {
-      expect(TableParamToItemSet(shell).GetItemIfSet(129, false)).toBeUndefined();
+      expect(TableParamToItemSet(shell).GetItemIfSet(132, false)).toBeUndefined();
       const table = doc.nodes.MakeTableNode("UniformNativeRows");
       table.AddColumnWidth(3000);
       const rows = [
@@ -126,7 +126,7 @@ it.each([undefined, false, true])(
       shell.SetCursor(position);
       position.Dispose();
       const cursor = shell.CaptureCursorState(),
-        item = required(TableParamToItemSet(shell).GetItemIfSet(129, false)) as SwFormatRowSplit;
+        item = required(TableParamToItemSet(shell).GetItemIfSet(132, false)) as SwFormatRowSplit;
       expect(item).toBeInstanceOf(SwFormatRowSplit);
       expect(item.GetValue()).toBe(value ?? true);
       expect(item).not.toBe(rows[0]?.GetRowSplit());

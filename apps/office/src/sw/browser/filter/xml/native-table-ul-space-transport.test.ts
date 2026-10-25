@@ -113,7 +113,7 @@ it("direct native spacing absence overrides conflicting scalar fields across JSO
       try {
         const frame = required(restored.GetTables()[0]).GetFrameFormat();
         expect(frame.GetAttrSet().GetItemIfSet(RES_UL_SPACE, false)).toBeUndefined();
-        expect(frame.GetULSpace()).toEqual(new SvxULSpaceItem(RES_UL_SPACE));
+        expect(frame.GetULSpace().equals(new SvxULSpaceItem(RES_UL_SPACE))).toBe(true);
       } finally {
         restored.Dispose();
       }

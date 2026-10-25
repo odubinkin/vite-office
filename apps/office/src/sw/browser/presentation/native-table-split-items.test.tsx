@@ -94,13 +94,13 @@ for (const selected of [false, true])
         const input = accepted(f);
         expect(input.Count()).toBe(mode === "both" ? 2 : 1);
         if (mode !== "row") {
-          expect(input.GetItemIfSet(120, false)).toBeInstanceOf(SwFormatLayoutSplit);
-          expect(input.Get(120).QueryValue()).toBe(false);
-        } else expect(input.GetItemIfSet(120, false)).toBeUndefined();
+          expect(input.GetItemIfSet(123, false)).toBeInstanceOf(SwFormatLayoutSplit);
+          expect(input.Get(123).QueryValue()).toBe(false);
+        } else expect(input.GetItemIfSet(123, false)).toBeUndefined();
         if (mode !== "table") {
-          expect(input.GetItemIfSet(129, false)).toBeInstanceOf(SwFormatRowSplit);
-          expect(input.Get(129).QueryValue()).toBe(true);
-        } else expect(input.GetItemIfSet(129, false)).toBeUndefined();
+          expect(input.GetItemIfSet(132, false)).toBeInstanceOf(SwFormatRowSplit);
+          expect(input.Get(132).QueryValue()).toBe(true);
+        } else expect(input.GetItemIfSet(132, false)).toBeUndefined();
         const finalFormat = mode === "row" ? f.format : { ...f.format, layoutSplit: false },
           finalRows =
             mode === "table"

@@ -41,7 +41,7 @@ function fixture() {
     node = required(doc.paragraphs[0]);
   node.SetText("ResetText");
   const target = doc.MakeTextFormatColl("Reset target", doc.GetDfltTextFormatColl(), "ResetTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 95));
   const owner = new SwDocShell(
     doc,
     createDocument({ id: "native-reset", title: "Reset", suiteId: "writer" }),
@@ -83,29 +83,29 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
     ) => {
       const { doc, node, shell, target } = fixture();
       doc.EnsureNumRule("ProtectedRule", "numbered");
-      node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, 65));
-      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+      node.SetAttr(new SvxAdjustItem(SvxAdjust.Right, 67));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
       node.SetAttr(new SvxWeightItem(8, 15));
-      node.SetAttr(new SfxStringItem(83, "ProtectedList"));
-      node.SetAttr(new SfxInt16Item(84, 2));
-      node.SetAttr(new SfxBoolItem(85, true));
-      node.SetAttr(new SfxInt16Item(86, 7));
-      node.SetAttr(new SfxBoolItem(87, false));
+      node.SetAttr(new SfxStringItem(86, "ProtectedList"));
+      node.SetAttr(new SfxInt16Item(87, 2));
+      node.SetAttr(new SfxBoolItem(88, true));
+      node.SetAttr(new SfxInt16Item(89, 7));
+      node.SetAttr(new SfxBoolItem(90, false));
       if (ruleState !== 0) node.SetAttr(new SwNumRuleItem(ruleState === 1 ? "" : "ProtectedRule"));
       if (pageState !== 0) node.SetAttr(new SwFormatPageDesc(pageState === 1 ? "" : "Standard", 3));
-      if (breakState !== 0) node.SetAttr(new SfxInt16Item(101, breakState === 1 ? 0 : 4));
+      if (breakState !== 0) node.SetAttr(new SfxInt16Item(104, breakState === 1 ? 0 : 4));
       const before = required(node.GetpSwAttrSet()).Clone(),
         marker = node.IsEmptyListStyleDueToSetOutlineLevelAttr();
       expect(shell.SetParagraphStyle("ResetTarget")).toBe(true);
       expect(node.GetTextFormatColl()).toBe(target);
       expect(node.GetpSwAttrSet()?.GetItemIfSet(15, false)).toBeUndefined();
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(65, false)).toBeUndefined();
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(92, false)).toBeUndefined();
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(67, false)).toBeUndefined();
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(95, false)).toBeUndefined();
       expect(node.GetParagraphFirstLineIndent()).toBe(240);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(73, false) !== undefined).toBe(ruleState === 2);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(100, false) !== undefined).toBe(pageState === 2);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(101, false) !== undefined).toBe(breakState === 2);
-      for (const which of [83, 84, 85, 86, 87])
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(75, false) !== undefined).toBe(ruleState === 2);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(103, false) !== undefined).toBe(pageState === 2);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(104, false) !== undefined).toBe(breakState === 2);
+      for (const which of [86, 87, 88, 89, 90])
         expect(node.GetpSwAttrSet()?.GetItemIfSet(which, false)).toBeDefined();
       // Collection-change numbering cleanup is a separate native ndtxt transition when no rule remains.
       if (ruleState === 2) {
@@ -172,7 +172,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
         untouched = doc.GetNodes().MakeTextNode("Neighbor");
       first.ChgFormatColl(target);
       for (const node of [first, empty, last, untouched])
-        node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+        node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
       first.SetTextHints(
         new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, first.Len())]),
       );
@@ -228,7 +228,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
       );
       parent.SetFormatAttr(new SwNumRuleItem(sameRule ? "BeforeRule" : "AfterRule"));
       target.SetDerivedFrom(parent);
-      target.SetFormatAttr(new SfxInt16Item(84, 1));
+      target.SetFormatAttr(new SfxInt16Item(87, 1));
       node.ChgFormatColl(beforeStyle);
       node.SetListId("BeforeListIdentity");
       node.SetAttrListLevel(3);
@@ -261,7 +261,7 @@ describe("ordinary native StyleApply reset", /** Groups real source-owned reset/
   it("records every actual unchanged SfxRequest, retains family2 and restores reset state independently", /** Checks native repeated-request history through document dispatch. @returns Nothing. */ () => {
     const { doc, node, shell, dispatch, target, owner } = fixture();
     node.ChgFormatColl(target);
-    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
     node.SetTextHints(
       new SwpHints(doc.GetAttrPool(), [new SwTextAttrEnd(bold(doc), 0, node.Len())]),
     );

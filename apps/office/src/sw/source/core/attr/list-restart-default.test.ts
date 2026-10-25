@@ -23,36 +23,36 @@ it("owns the native default1 while resolving direct and inherited broadcast valu
     const item = pool.GetUserOrPoolDefaultItem(RES_PARATR_LIST_RESTARTVALUE);
     expect(item).toBeInstanceOf(SfxInt16Item);
     expect(item.QueryValue()).toBe(1);
-    expect(new SfxInt16Item(86).QueryValue()).toBe(0);
-    expect(pool.CreateItem({ which: 86, value: 0 }).QueryValue()).toBe(0);
+    expect(new SfxInt16Item(89).QueryValue()).toBe(0);
+    expect(pool.CreateItem({ which: 89, value: 0 }).QueryValue()).toBe(0);
     expect(item.Clone()).not.toBe(item);
     expect(item.Clone()?.QueryValue()).toBe(1);
-    const parent = new SwAttrSet(pool, [[84, 87]]);
-    const set = new SwAttrSet(pool, [[84, 87]], parent);
-    const old = new SwAttrSet(pool, [[84, 87]]);
-    const next = new SwAttrSet(pool, [[84, 87]]);
+    const parent = new SwAttrSet(pool, [[87, 90]]);
+    const set = new SwAttrSet(pool, [[87, 90]], parent);
+    const old = new SwAttrSet(pool, [[87, 90]]);
+    const next = new SwAttrSet(pool, [[87, 90]]);
     expect(set.Count()).toBe(0);
-    expect(set.GetItemState(86, false)).toBe(SfxItemState.DEFAULT);
-    expect(set.GetItemIfSet(86, false)).toBeUndefined();
-    expect(set.Get(86).QueryValue()).toBe(1);
-    expect(set.CloneAsValue().Get(86).QueryValue()).toBe(1);
-    parent.Put(new SfxInt16Item(86, 9));
-    expect(set.Get(86).QueryValue()).toBe(9);
-    expect(set.Get(86, false).QueryValue()).toBe(1);
-    expect(set.GetItemState(86, false)).toBe(SfxItemState.DEFAULT);
-    expect(set.GetItemState(86, true)).toBe(SfxItemState.SET);
-    expect(set.Put_BC(new SfxInt16Item(86, 7), old, next)).toBe(true);
-    expect(old.Get(86).QueryValue()).toBe(9);
-    expect(next.Get(86).QueryValue()).toBe(7);
-    expect(set.ClearItem_BC(86, old, next)).toBe(1);
-    expect(next.Get(86).QueryValue()).toBe(9);
-    parent.ClearItem(86);
-    expect(set.Put_BC(new SfxInt16Item(86, 0), old, next)).toBe(true);
-    expect(old.Get(86).QueryValue()).toBe(1);
-    expect(next.Get(86).QueryValue()).toBe(0);
-    expect(set.ClearItem_BC(86, old, next)).toBe(1);
-    expect(next.Get(86).QueryValue()).toBe(1);
-    expect(pool.GetUserOrPoolDefaultItem(86)).toBe(item);
+    expect(set.GetItemState(89, false)).toBe(SfxItemState.DEFAULT);
+    expect(set.GetItemIfSet(89, false)).toBeUndefined();
+    expect(set.Get(89).QueryValue()).toBe(1);
+    expect(set.CloneAsValue().Get(89).QueryValue()).toBe(1);
+    parent.Put(new SfxInt16Item(89, 9));
+    expect(set.Get(89).QueryValue()).toBe(9);
+    expect(set.Get(89, false).QueryValue()).toBe(1);
+    expect(set.GetItemState(89, false)).toBe(SfxItemState.DEFAULT);
+    expect(set.GetItemState(89, true)).toBe(SfxItemState.SET);
+    expect(set.Put_BC(new SfxInt16Item(89, 7), old, next)).toBe(true);
+    expect(old.Get(89).QueryValue()).toBe(9);
+    expect(next.Get(89).QueryValue()).toBe(7);
+    expect(set.ClearItem_BC(89, old, next)).toBe(1);
+    expect(next.Get(89).QueryValue()).toBe(9);
+    parent.ClearItem(89);
+    expect(set.Put_BC(new SfxInt16Item(89, 0), old, next)).toBe(true);
+    expect(old.Get(89).QueryValue()).toBe(1);
+    expect(next.Get(89).QueryValue()).toBe(0);
+    expect(set.ClearItem_BC(89, old, next)).toBe(1);
+    expect(next.Get(89).QueryValue()).toBe(1);
+    expect(pool.GetUserOrPoolDefaultItem(89)).toBe(item);
   }
 });
 
@@ -60,9 +60,9 @@ it("owns the native default1 while resolving direct and inherited broadcast valu
 function checkStart(node: SwTextNode, value?: number): void {
   expect(node.HasAttrListRestartValue()).toBe(value !== undefined);
   expect(node.GetActualListStartValue()).toBe(value ?? 9);
-  expect(node.GetAttr(86).QueryValue()).toBe(value ?? 1);
+  expect(node.GetAttr(89).QueryValue()).toBe(value ?? 1);
   if (value !== undefined) expect(node.GetAttrListRestartValue()).toBe(value);
-  expect(node.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(86).QueryValue()).toBe(1);
+  expect(node.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(89).QueryValue()).toBe(1);
 }
 
 it("keeps rule start9 and explicit zero/seven distinct through actual list undo, Worker16 and reset", /** Proves the pool default never creates restart state or replaces a rule-defined start. @returns Nothing. */ () => {
@@ -103,16 +103,16 @@ it("keeps rule start9 and explicit zero/seven distinct through actual list undo,
     expect(restored).toHaveLength(2);
     const transferred = decodeWriterDocument(encodeWriterDocument(doc));
     checkStart(transferred.paragraphs[0] as SwTextNode, value);
-    node.ResetAttr(86, 86);
+    node.ResetAttr(89, 89);
     checkStart(node);
     node.SetListRestart(true);
     node.SetAttrListRestartValue(value);
-    node.ResetAttr([86, 86]);
+    node.ResetAttr([89, 89]);
     checkStart(node);
     node.SetListRestart(true);
     node.SetAttrListRestartValue(value);
     node.ResetAllAttr();
-    expect(node.GetAttr(86).QueryValue()).toBe(1);
+    expect(node.GetAttr(89).QueryValue()).toBe(1);
     expect(node.HasAttrListRestartValue()).toBe(false);
   }
 });

@@ -183,7 +183,7 @@ it("normalizes native ordinary starts and ignores header starts across document 
         }
         expect(state(copy)).toEqual(actual);
         const record = encodeWriterDocument(document);
-        expect(record.swModelVersion).toBe(16);
+        expect(record.swModelVersion).toBe(17);
         expect(state(decodeWriterDocument(record))).toEqual(actual);
         const output = writeOdtDocument(document, { title: "Starts" });
         const content = await new ZipFile(output).readTextEntry("content.xml");

@@ -116,8 +116,8 @@ describe("native paragraph character conversion", /** Registers five-pair and re
                 which,
               ),
             );
-          first.SetAttr(new SfxUInt16Item(80, 0));
-          second.SetAttr(new SfxUInt16Item(80, 0));
+          first.SetAttr(new SfxUInt16Item(82, 0));
+          second.SetAttr(new SfxUInt16Item(82, 0));
           second.FormatToTextAttr(first);
           expect(direct(second, which)).toBeUndefined();
           expect(direct(first, which)).toBe(
@@ -135,8 +135,8 @@ describe("native paragraph character conversion", /** Registers five-pair and re
           expect(spans(first, which)).toEqual(
             length && pair === "main" ? [[0, 4, FontWeight.WEIGHT_BOLD]] : [],
           );
-          expect(direct(first, 80)).toBe(0);
-          expect(direct(second, 80)).toBe(0);
+          expect(direct(first, 82)).toBe(0);
+          expect(direct(second, 82)).toBe(0);
           expect(first.GetpSwpHints() === undefined).toBe(!(length && pair === "main"));
           expect(second.GetpSwpHints()).toBeDefined();
           expect(doc.paragraphs).toEqual([first, second]);
@@ -429,7 +429,7 @@ describe("native paragraph join preparation and history", /** Registers actual s
     ) => {
       const { doc, first, second } = fixture("");
       first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, 15));
-      first.SetAttr(new SfxUInt16Item(80, 0));
+      first.SetAttr(new SfxUInt16Item(82, 0));
       if (hasDirect) second.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
       second.ChgFormatColl(doc.GetTextFormatColl("heading-1"));
       doc
@@ -440,7 +440,7 @@ describe("native paragraph join preparation and history", /** Registers actual s
       expect(first.GetText()).toBe("efgh");
       expect(direct(first)).toBeUndefined();
       expect(direct(first, 11)).toBe(hasDirect ? FontItalic.ITALIC_NORMAL : undefined);
-      expect(direct(first, 80)).toBe(0);
+      expect(direct(first, 82)).toBe(0);
       expect(first.GetTextFormatColl()).toBe(original);
       expect(spans(first)).toEqual([]);
     },

@@ -2,6 +2,7 @@
 import type { SwNumRule } from "../doc/number";
 import { expect, it } from "vitest";
 import { isDeepStrictEqual } from "node:util";
+import { nativeProbeWhich, nativeProbeLabel } from "../../../../test/writer-native-probe-identity";
 import cases from "../../../../test/writer-native-attributes.json";
 import { SwDoc } from "../doc/doc";
 import type { SwNodeNum } from "../SwNumberTree/SwNodeNum";
@@ -92,31 +93,31 @@ it("matches unchanged native pre/post handlers before validating counter reads",
       if (kind === 1)
         node.SetAttr(new SwNumRuleItem(required(["", "Counters", "Bullets", "Outline"][value])));
       if (kind === 2) node.SetAttrListLevel(value);
-      if (kind === 3) node.SetAttr(new SfxStringItem(83, value ? "Retained" : ""));
-      if (kind === 4) node.SetAttr(new SfxBoolItem(85, !!value));
-      if (kind === 5) node.SetAttr(new SfxBoolItem(87, !!value));
+      if (kind === 3) node.SetAttr(new SfxStringItem(86, value ? "Retained" : ""));
+      if (kind === 4) node.SetAttr(new SfxBoolItem(88, !!value));
+      if (kind === 5) node.SetAttr(new SfxBoolItem(90, !!value));
       if (kind === 6) node.SetAttrOutlineLevel(value);
-      if (kind === 7) node.ResetAttr(value);
-      if (kind === 8) node.SetAttr(new SfxInt16Item(86, value));
+      if (kind === 7) node.ResetAttr(nativeProbeWhich(value));
+      if (kind === 8) node.SetAttr(new SfxInt16Item(89, value));
       if (kind === 9) node.ResetAllAttr();
       if (kind === 10) {
-        const set = new SfxItemSet(doc.GetAttrPool(), [[1, 87]]);
-        set.Put(new SfxInt16Item(84, value));
-        set.Put(new SfxBoolItem(85, true));
-        set.Put(new SfxInt16Item(86, 7));
-        set.Put(new SfxBoolItem(87, false));
+        const set = new SfxItemSet(doc.GetAttrPool(), [[1, 90]]);
+        set.Put(new SfxInt16Item(87, value));
+        set.Put(new SfxBoolItem(88, true));
+        set.Put(new SfxInt16Item(89, 7));
+        set.Put(new SfxBoolItem(90, false));
         node.SetAttr(set);
       }
-      if (kind === 11) node.ResetAttr([84, 86, 85, 87]);
-      if (kind === 12) node.ResetAttr(84, 87);
+      if (kind === 11) node.ResetAttr([87, 89, 88, 90]);
+      if (kind === 12) node.ResetAttr(87, 90);
       if (kind === 13) node.SetEmptyListStyleDueToSetOutlineLevelAttr();
       if (kind === 14) node.ResetEmptyListStyleDueToResetOutlineLevelAttr();
       if (kind === 15) {
-        const set = new SfxItemSet(doc.GetAttrPool(), [[1, 87]]);
+        const set = new SfxItemSet(doc.GetAttrPool(), [[1, 90]]);
         set.Put(new SwNumRuleItem(value ? "Counters" : ""));
-        set.Put(new SfxStringItem(83, "Retained"));
-        set.Put(new SfxUInt16Item(80, 4));
-        set.Put(new SfxInt16Item(84, 2));
+        set.Put(new SfxStringItem(86, "Retained"));
+        set.Put(new SfxUInt16Item(82, 4));
+        set.Put(new SfxInt16Item(87, 2));
         node.SetAttr(set);
       }
       const registry: SwNodeNum[] = [];
@@ -141,7 +142,7 @@ it("matches unchanged native pre/post handlers before validating counter reads",
                 /** Encodes retained direct item identity and value. @param i - Direct item. @returns Primitive item entry. */ (
                   i,
                 ) => [
-                  String(i.Which()),
+                  String(nativeProbeLabel(i.Which())),
                   i.QueryValue() === ""
                     ? "-"
                     : typeof i.QueryValue() === "boolean"

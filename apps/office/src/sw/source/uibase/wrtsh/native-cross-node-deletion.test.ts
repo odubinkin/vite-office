@@ -345,21 +345,21 @@ describe("native join flags and body-text kernel", /** Registers direct core and
       if (kind === "character") first.SetAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, 15));
       if (kind === "breaks") {
         first.SetAttr(new SwFormatPageDesc("first-page", 3));
-        first.SetAttr(new SfxInt16Item(101, 1));
+        first.SetAttr(new SfxInt16Item(104, 1));
       }
       last.SetAttr(new SwFormatPageDesc("last-page", 9));
-      last.SetAttr(new SfxInt16Item(101, 2));
+      last.SetAttr(new SfxInt16Item(104, 2));
       const a = new SwPosition(first, 0),
         b = new SwPosition(last, 2),
         range = new SwPaM(a, b);
       expect(doc.GetDocumentContentOperationsManager().DeleteAndJoin(range)).toBe(true);
       expect(doc.paragraphs).toEqual([last]);
       expect(last.GetText()).toBe("gh");
-      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(100, false) as
+      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(103, false) as
         SwFormatPageDesc | undefined;
       expect(descriptor?.GetPageDescName()).toBe(kind === "breaks" ? "first-page" : undefined);
       expect(descriptor?.GetNumOffset()).toBe(kind === "breaks" ? 3 : undefined);
-      expect(last.GetpSwAttrSet()?.GetItemIfSet(101, false)?.QueryValue()).toBe(
+      expect(last.GetpSwAttrSet()?.GetItemIfSet(104, false)?.QueryValue()).toBe(
         kind === "breaks" ? 1 : undefined,
       );
       range.Dispose();
@@ -379,7 +379,7 @@ describe("native join flags and body-text kernel", /** Registers direct core and
         b = new SwPosition(last, 2),
         range = new SwPaM(a, b);
       expect(doc.GetDocumentContentOperationsManager().DeleteAndJoin(range)).toBe(true);
-      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(100, false) as SwFormatPageDesc;
+      const descriptor = last.GetpSwAttrSet()?.GetItemIfSet(103, false) as SwFormatPageDesc;
       expect(descriptor.GetPageDescName()).toBe("first-page");
       expect(descriptor.GetNumOffset()).toBe(offset);
       range.Dispose();

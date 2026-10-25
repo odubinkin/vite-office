@@ -121,14 +121,14 @@ it("matches native null foreign owned-prefix and deferred descendant cache obser
     texts.forEach(
       /** Inserts each source-owned list record with explicit policy inputs. @param text - Paragraph. @param index - Native ordinal. @returns Nothing. */
       (text, index) => {
-        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 87]]);
+        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 90]]);
         items.Put(new SwNumRuleItem("Contract"));
-        items.Put(new SfxStringItem(83, "contract"));
-        items.Put(new SfxInt16Item(84, required(profile.levels[index])));
-        items.Put(new SfxBoolItem(87, Boolean(profile.mask & (1 << index))));
+        items.Put(new SfxStringItem(86, "contract"));
+        items.Put(new SfxInt16Item(87, required(profile.levels[index])));
+        items.Put(new SfxBoolItem(90, Boolean(profile.mask & (1 << index))));
         if (index === 0 && profile.restart) {
-          items.Put(new SfxBoolItem(85, true));
-          items.Put(new SfxInt16Item(86, 11));
+          items.Put(new SfxBoolItem(88, true));
+          items.Put(new SfxInt16Item(89, 11));
         }
         text.SetAttr(items);
       },

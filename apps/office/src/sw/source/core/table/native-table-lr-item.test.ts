@@ -24,7 +24,7 @@ it.each([false, true])(
       }),
       format = table.GetFrameFormat(),
       parent = new SwFrameFormat(doc.GetAttrPool(), "Parent"),
-      item = new SvxLRSpaceItem(98);
+      item = new SvxLRSpaceItem(101);
     table.AddColumnWidth(3000);
     doc.nodes.AppendTableRow(table, 1);
     item.SetLeft(SvxIndentValue.twips(-120));

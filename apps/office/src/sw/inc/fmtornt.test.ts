@@ -32,7 +32,7 @@ it("owns complete native defaults and isolated values", /** Checks native litera
     R.PAGE_PRINT_AREA_TOP,
   ]).toEqual([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   const item = new SwFormatVertOrient();
-  expect(item.Which()).toBe(109);
+  expect(item.Which()).toBe(112);
   expect([item.GetPos(), item.GetVertOrient(), item.GetRelationOrient()]).toEqual([0, 0, 1]);
   const copy = item.Clone();
   expect(copy).not.toBe(item);

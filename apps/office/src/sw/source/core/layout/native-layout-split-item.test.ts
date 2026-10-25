@@ -84,8 +84,8 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
   ) => {
     const doc = new SwDoc(),
       table = doc.nodes.MakeTableNode("Input", { layoutSplit: false }),
-      input = new SfxItemSet(doc.GetAttrPool(), state === "unknown" ? [[113, 113]] : [[120, 120]]),
-      parent = new SfxItemSet(doc.GetAttrPool(), [[120, 120]]);
+      input = new SfxItemSet(doc.GetAttrPool(), state === "unknown" ? [[116, 116]] : [[123, 123]]),
+      parent = new SfxItemSet(doc.GetAttrPool(), [[123, 123]]);
     parent.Put(new SwFormatLayoutSplit(false));
     input.SetParent(parent);
     if (state === "false" || state === "true") input.Put(new SwFormatLayoutSplit(state === "true"));
@@ -94,15 +94,15 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
     if (state === "default") input.SetParent(undefined);
     const page = new SwTextFlowPage(table, undefined, input),
       expected = state !== "false",
-      output = new SfxItemSet(doc.GetAttrPool(), [[120, 120]]);
+      output = new SfxItemSet(doc.GetAttrPool(), [[123, 123]]);
     try {
       expect(page.IsSplit()).toBe(expected);
       expect(page.FillItemSet(output)).toEqual({});
       expect(output.Count()).toBe(0);
       page.SplitHdl_Impl(!expected);
       expect(page.FillItemSet(output)).toEqual({ layoutSplit: !expected });
-      expect(output.Get(120)).toBeInstanceOf(SwFormatLayoutSplit);
-      expect((output.Get(120) as SwFormatLayoutSplit).GetValue()).toBe(!expected);
+      expect(output.Get(123)).toBeInstanceOf(SwFormatLayoutSplit);
+      expect((output.Get(123) as SwFormatLayoutSplit).GetValue()).toBe(!expected);
       expect(table.GetFormat().layoutSplit).toBe(false);
       page.Reset();
       expect(page.IsSplit()).toBe(expected);
@@ -117,8 +117,8 @@ it("native split batches consume only copied descriptors and invalidate represen
     table = doc.nodes.MakeTableNode("Position"),
     frame = new Frame(table),
     owner = table.GetFrameFormat(),
-    old = new SwAttrSet(doc.GetAttrPool(), [[120, 120]]),
-    next = new SwAttrSet(doc.GetAttrPool(), [[120, 120]]);
+    old = new SwAttrSet(doc.GetAttrPool(), [[123, 123]]),
+    next = new SwAttrSet(doc.GetAttrPool(), [[123, 123]]);
   old.Put(new SwFormatLayoutSplit(true));
   next.Put(new SwFormatLayoutSplit(false));
   const previous = new SwAttrSetChg(owner.GetAttrSet(), old),
@@ -134,7 +134,7 @@ it("native split batches consume only copied descriptors and invalidate represen
     expect(frame.isFramePrintAreaValid()).toBe(true);
     expect(previous.Count()).toBe(1);
     expect(accepted.Count()).toBe(1);
-    expect(previous.GetChgSet().Get(120)).toBeInstanceOf(SwFormatLayoutSplit);
+    expect(previous.GetChgSet().Get(123)).toBeInstanceOf(SwFormatLayoutSplit);
     expect(frame.copies[0]?.[0]).not.toBe(previous);
     expect(frame.copies[0]?.[1]).not.toBe(accepted);
     expect(frame.copies[0]?.[0]?.Count()).toBe(0);

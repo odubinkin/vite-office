@@ -46,7 +46,7 @@ it("native root death clears original cell inheritance before real undo-redo and
     expect(format.GetAttrSet()).toBe(set);
     expect(set.GetParent()).toBeUndefined();
     expect(format.DerivedFrom()).toBeUndefined();
-    expect(format.GetVertOrient()).toEqual(new SwFormatVertOrient());
+    expect(format.GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
     expect(model).not.toHaveBeenCalled();
     const position = new SwPosition(node, 2);
     shell.SetCursor(position);
@@ -57,7 +57,7 @@ it("native root death clears original cell inheritance before real undo-redo and
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(shell.Undo()).toBe(true);
       expect(box.GetFrameFormat().DerivedFrom()).toBe(doc.GetDfltFrameFormat());
-      expect(box.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient());
+      expect(box.GetFrameFormat().GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
       expect(frame.GetFormat()).toBe(box.GetFrameFormat());
       expect(shell.Redo()).toBe(true);
       expect(box.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient(240, 3, 7));

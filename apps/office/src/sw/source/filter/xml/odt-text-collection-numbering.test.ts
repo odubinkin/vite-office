@@ -41,7 +41,7 @@ it("restores actual outline assignments and direct items while migrating absent 
       .GetTextFormatColl("heading-4")
       .GetAssignedOutlineStyleLevel(),
   ).toBe(-1);
-  heading.ResetFormatAttr(80);
+  heading.ResetFormatAttr(82);
   const absent = encodeWriterDocument(doc);
   expect(encodeWriterDocument(decodeWriterDocument(absent))).toEqual(absent);
   const defaults = new SwDoc();
@@ -183,7 +183,7 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
   expect(node.GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");
   expect(node.GetListLabel()).toBe("•");
   const stored = encodeWriterDocument(doc);
-  expect(stored.swModelVersion).toBe(16);
+  expect(stored.swModelVersion).toBe(17);
   const transferred = decodeWriterDocument(stored);
   for (const current of [doc, transferred]) {
     const paragraph = firstParagraph(current);
@@ -202,7 +202,7 @@ it("uses the newly selected rule in genuine ODT and preserves style attributes t
     expect(firstParagraph(reopened).GetNum()?.GetNumRule()?.GetName()).toBe("Bullets");
     expect(firstParagraph(reopened).GetListLabel()).toBe("•");
     expect(firstParagraph(reopened).GetAttrListLevel()).toBe(0);
-    firstParagraph(reopened).ResetAttr(73);
+    firstParagraph(reopened).ResetAttr(75);
     firstParagraph(reopened).ChgFormatColl(reopened.GetTextFormatColl("text-body"));
     expect(firstParagraph(reopened).GetListLabel()).toBe("1.");
   }

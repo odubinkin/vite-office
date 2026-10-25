@@ -1,5 +1,8 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { MakePageDesc, DelPageDesc, ChgPageDesc } from "./docdesc";
 import { SwUndoFormatAttr } from "../undo/unattr";
+import { SwCharFormat } from "../../../inc/charfmt";
+import { SwGrfFormatColl } from "../../../inc/fmtcol";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
 import { SwFrameFormat } from "../layout/atrfrm";
@@ -79,7 +82,6 @@ import { UndoManager } from "../undo/docundo";
 import type { DefaultFontDevice } from "./default-font";
 import {
   createDefaultWriterPageDescriptor,
-  equalWriterPageDescriptors,
   SwPageDesc,
   type WriterPageDescriptorValue,
 } from "../layout/pagedesc";
@@ -219,6 +221,8 @@ export class SwDoc {
   private readonly stateManager = new DocumentStateManager();
   private readonly stylePoolManager: DocumentStylePoolManager;
   private readonly undoManager = new UndoManager(this);
+  private readonly defaultCharFormat: SwCharFormat;
+  private readonly defaultGrfFormatColl: SwGrfFormatColl;
   private readonly defaultFontDevice: DefaultFontDevice | undefined;
   private readonly locale: string;
   private lineNumberInfo = new SwLineNumberInfo();
@@ -231,6 +235,8 @@ export class SwDoc {
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
     this.attrPool = new SwAttrPool(this);
+    this.defaultCharFormat = new SwCharFormat(this.attrPool, "Character style");
+    this.defaultGrfFormatColl = new SwGrfFormatColl(this.attrPool, "Graphikformatvorlage");
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale, this)];
     this.styleAccess = createStyleManager();
@@ -323,50 +329,29 @@ export class SwDoc {
   public ContainsPageDesc(descriptor: SwPageDesc | undefined): boolean {
     return descriptor !== undefined && this.pageDescs.includes(descriptor);
   }
-  /** Creates a named descriptor, optionally copying supported geometry. @param name - Unique page-style name. @param source - Optional source descriptor. @returns New document-owned descriptor. */
+  /** Creates a native document-owned page descriptor. @param name - Unique style name. @param source - Optional native copy. @returns Descriptor. */
   public MakePageDesc(name: string, source?: SwPageDesc): SwPageDesc {
-    if (this.FindPageDesc(name) !== undefined)
-      throw new Error(`Writer page descriptor exists: ${name}`);
-    const descriptor =
-      source?.Clone() ?? createDefaultWriterPageDescriptor(this.locale, this, name);
-    descriptor.SetName(name);
-    this.pageDescs.push(descriptor);
-    this.NotifyModelChange({ kind: "page-descriptor-changed" });
-    return descriptor;
+    return MakePageDesc(this, this.pageDescs, name, source);
   }
-  /** Deletes a non-default descriptor and restores incoming follow links to self-follow. @param descriptor - Name or position. @returns Whether deleted. */
+  /** Deletes a non-default descriptor through native page ownership. @param descriptor - Style name or index. @returns Whether deleted. */
   public DelPageDesc(descriptor: number | string): boolean {
-    const index =
-      typeof descriptor === "number"
-        ? descriptor
-        : this.pageDescs.findIndex(
-            /** Finds a page style by name. @param item - Candidate page style. @returns Whether names match. */ (
-              item,
-            ) => item.GetName() === descriptor,
-          );
-    if (index <= 0 || index >= this.pageDescs.length) return false;
-    const removed = this.pageDescs[index] as SwPageDesc;
-    for (const item of this.pageDescs) if (item.GetFollow() === removed) item.SetFollow(null);
-    this.pageDescs.splice(index, 1);
-    this.NotifyModelChange({ kind: "page-descriptor-changed" });
-    return true;
+    return DelPageDesc(this, this.pageDescs, descriptor);
   }
-  /** Replaces supported geometry at an existing descriptor identity and publishes one model hint. @param value - Page geometry. @param target - Name or position. @returns Whether it changed. */
+  /** Applies the existing browser geometry ingress to a native descriptor. @param value - Geometry. @param target - Name or index. @returns Whether changed. */
   public ChgPageDesc(value: WriterPageDescriptorValue, target: number | string = 0): boolean {
-    const descriptor =
-      typeof target === "number" ? this.GetPageDesc(target) : this.FindPageDesc(target);
-    if (descriptor === undefined) return false;
-    if (value.name !== descriptor.GetName())
-      throw new Error("Writer page descriptor replacement must preserve its identity.");
-    const before = descriptor.GetValue();
-    if (equalWriterPageDescriptors(before, value)) return false;
-    descriptor.SetValue(value);
-    this.NotifyModelChange({ kind: "page-descriptor-changed" });
-    return true;
+    return ChgPageDesc(this, value, target);
   }
   /** Returns the injected output-device font resolver. @returns Device or undefined. */
   public GetDefaultFontDevice(): DefaultFontDevice | undefined {
     return this.defaultFontDevice;
+  }
+  /** Native default character format. @returns Document-owned format. */
+  public GetDfltCharFormat(): SwCharFormat {
+    return this.defaultCharFormat;
+  }
+  /** Native default graphic collection. @returns Document-owned collection. */
+  public GetDfltGrfFormatColl(): SwGrfFormatColl {
+    return this.defaultGrfFormatColl;
   }
   /** Returns Writer's complete node array. @returns Owned node array. */
   public GetNodes(): SwNodes {
@@ -985,9 +970,13 @@ export class SwDoc {
   /** Disposes the document notification graph. @returns Nothing. */
   public Dispose(): void {
     this.mbDtor = true;
+    for (const page of this.pageDescs) page.DisposeModify();
+    this.pageDescs.length = 0;
     for (const node of this.nodes.entries()) if (node instanceof SwTextNode) node.RemoveFromList();
     this.markAccess.Dispose();
     this.undoManager.Dispose();
+    this.defaultGrfFormatColl.DisposeModify();
+    this.defaultCharFormat.DisposeModify();
     this.stateManager.Dispose();
   }
 }

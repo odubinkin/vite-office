@@ -48,7 +48,7 @@ it("native format constructor registers original inheritance without document mu
       6000, 720,
     ]);
     expect(format.GetVertOrient()).toBe(parent.GetVertOrient());
-    expect(clients(parent)).toEqual([...before, format]);
+    expect(clients(parent)).toEqual([before[0], format, ...before.slice(1)]);
     expect(doc.GetDocumentStateManager().GetModelRevision()).toBe(revision);
     expect(hints).toEqual([]);
   } finally {

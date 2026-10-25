@@ -1,6 +1,7 @@
 /** @fileoverview Verifies real Writer handle mutations against unchanged native owners and independent lifecycle/delta assertions. */
 import { expect, it, vi } from "vitest";
 import { isDeepStrictEqual } from "node:util";
+import { nativeProbeWhich } from "../../../../test/writer-native-probe-identity";
 import cases from "../../../../test/writer-native-attribute-handles.json";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
@@ -21,12 +22,13 @@ function required<T>(value: T | undefined): T {
 function snapshot(set: SwAttrSet | undefined): number[][] | null {
   if (set === undefined) return null;
   const items: number[][] = [];
-  for (const which of [84, 85, 86, 87]) {
+  for (const label of [84, 85, 86, 87]) {
+    const which = nativeProbeWhich(label);
     const state = set.GetItemState(which, false);
     if (state === SfxItemState.SET)
-      items.push([which, Number(set.Get(which, false).QueryValue()), 0]);
-    if (state === SfxItemState.INVALID) items.push([which, 0, 1]);
-    if (state === SfxItemState.DISABLED) items.push([which, 0, 2]);
+      items.push([label, Number(set.Get(which, false).QueryValue()), 0]);
+    if (state === SfxItemState.INVALID) items.push([label, 0, 1]);
+    if (state === SfxItemState.DISABLED) items.push([label, 0, 2]);
   }
   return items;
 }
@@ -89,7 +91,18 @@ it("matches unchanged native handle owners over300 sequences and1815 states", /*
           }
           notify(hint);
         };
-      for (const [step, op] of test.ops.entries()) {
+      for (const [step, recorded] of test.ops.entries()) {
+        const op = [...recorded];
+        const kindOfOperation = op[0];
+        if (kindOfOperation === 1) {
+          for (let i = 1; i < op.length; i += 2) op[i] = nativeProbeWhich(required(op[i]));
+        } else if (kindOfOperation === 3) {
+          for (let i = 1; i < op.length; ++i) op[i] = nativeProbeWhich(required(op[i]));
+        } else if (kindOfOperation === 9) op[2] = nativeProbeWhich(required(op[2]));
+        else if ([0, 2, 5, 6, 8].includes(required(kindOfOperation))) {
+          op[1] = nativeProbeWhich(required(op[1]));
+          if (kindOfOperation === 2) op[2] = nativeProbeWhich(required(op[2]));
+        }
         const [kind, which, value] = op as [number, number, number];
         const before = node.GetpSwAttrSet();
         events.splice(0);
@@ -154,9 +167,9 @@ it("retains empty handles on scalar/all no-ops but releases an empty vector hand
     false,
   );
   const empty = node.GetpSwAttrSet();
-  expect(node.ResetAttr(84)).toBe(false);
+  expect(node.ResetAttr(87)).toBe(false);
   expect(node.GetpSwAttrSet()).toBe(empty);
-  expect(node.ResetAttr(84, 83)).toBe(false);
+  expect(node.ResetAttr(87, 86)).toBe(false);
   expect(node.GetpSwAttrSet()).toBe(empty);
   expect(node.ResetAllAttr()).toBe(0);
   expect(node.GetpSwAttrSet()).toBe(empty);
@@ -167,10 +180,10 @@ it("retains empty handles on scalar/all no-ops but releases an empty vector hand
 it("keeps retained values independent and broadcasts a still-owned cleared handle before nested writes", /** Checks source handle ownership through real text wrappers and model callbacks. @returns Nothing. */ () => {
   const doc = new SwDoc();
   const node = required(doc.paragraphs[0]);
-  node.SetAttr(new SfxInt16Item(84, 4));
+  node.SetAttr(new SfxInt16Item(87, 4));
   const original = required(node.GetpSwAttrSet());
-  node.SetAttr(new SfxInt16Item(84, 2));
-  expect(original.Get(84).QueryValue()).toBe(4);
+  node.SetAttr(new SfxInt16Item(87, 2));
+  expect(original.Get(87).QueryValue()).toBe(4);
   const retained = required(node.GetpSwAttrSet());
   const observed: SwAttrSet[] = [];
   const notify = doc.NotifyModelChange.bind(doc);
@@ -185,14 +198,14 @@ it("keeps retained values independent and broadcasts a still-owned cleared handl
         expect(cleared.Count()).toBe(0);
         expect(cleared).not.toBe(retained);
         observed.push(cleared);
-        node.SetAttr(new SfxInt16Item(84, 7));
+        node.SetAttr(new SfxInt16Item(87, 7));
       }
       notify(hint);
     };
   expect(node.ResetAllAttr()).toBe(1);
-  expect(retained.Get(84).QueryValue()).toBe(2);
+  expect(retained.Get(87).QueryValue()).toBe(2);
   expect(required(observed[0]).Count()).toBe(0);
-  expect(node.GetAttr(84).QueryValue()).toBe(7);
+  expect(node.GetAttr(87).QueryValue()).toBe(7);
   expect(node.HasSwAttrSet()).toBe(true);
 });
 
@@ -200,32 +213,32 @@ it("collects inherited/default deltas while excluding sentinels and slot IDs", /
   const doc = new SwDoc();
   const pool = doc.GetAttrPool();
   const parent = new SwAttrSet(pool, [[1, 6000]]);
-  parent.Put(new SfxInt16Item(84, 3));
+  parent.Put(new SfxInt16Item(87, 3));
   const set = new SwAttrSet(pool, [[1, 6000]], parent);
   const old = new SwAttrSet(pool, [[1, 6000]]);
   const next = new SwAttrSet(pool, [[1, 6000]]);
-  expect(set.Put_BC(new SfxInt16Item(84, 4), old, next)).toBe(true);
-  expect(old.Get(84).QueryValue()).toBe(3);
-  expect(next.Get(84).QueryValue()).toBe(4);
-  expect(set.ClearItem_BC(84, old, next)).toBe(1);
-  expect(old.Get(84).QueryValue()).toBe(4);
-  expect(next.Get(84).QueryValue()).toBe(3);
+  expect(set.Put_BC(new SfxInt16Item(87, 4), old, next)).toBe(true);
+  expect(old.Get(87).QueryValue()).toBe(3);
+  expect(next.Get(87).QueryValue()).toBe(4);
+  expect(set.ClearItem_BC(87, old, next)).toBe(1);
+  expect(old.Get(87).QueryValue()).toBe(4);
+  expect(next.Get(87).QueryValue()).toBe(3);
   set.SetParent(undefined);
-  expect(set.Put_BC(new SfxInt16Item(84, 2), old, undefined)).toBe(true);
-  expect(old.Get(84).QueryValue()).toBe(0);
-  expect(set.ClearItem_BC(84, undefined, next)).toBe(1);
-  expect(next.Get(84).QueryValue()).toBe(0);
-  set.Put(new SfxInt16Item(84, 7));
-  expect(old.Get(84).QueryValue()).toBe(0);
-  set.InvalidateItem(85);
-  set.DisableItem(87);
+  expect(set.Put_BC(new SfxInt16Item(87, 2), old, undefined)).toBe(true);
+  expect(old.Get(87).QueryValue()).toBe(0);
+  expect(set.ClearItem_BC(87, undefined, next)).toBe(1);
+  expect(next.Get(87).QueryValue()).toBe(0);
+  set.Put(new SfxInt16Item(87, 7));
+  expect(old.Get(87).QueryValue()).toBe(0);
+  set.InvalidateItem(88);
+  set.DisableItem(90);
   const freshOld = new SwAttrSet(pool, [[1, 6000]]);
   const freshNext = new SwAttrSet(pool, [[1, 6000]]);
   expect(set.ClearItem_BC(0, freshOld, freshNext)).toBe(3);
   expect(freshOld.Count()).toBe(1);
   expect(freshNext.Count()).toBe(1);
-  expect(freshOld.Get(84).QueryValue()).toBe(7);
-  expect(freshNext.Get(84).QueryValue()).toBe(0);
+  expect(freshOld.Get(87).QueryValue()).toBe(7);
+  expect(freshNext.Get(87).QueryValue()).toBe(0);
   expect(set.Put_BC(new SfxInt16Item(5000, 2), freshOld, freshNext)).toBe(true);
   expect(set.ClearItem_BC(5000, freshOld, freshNext)).toBe(1);
   expect(freshOld.Count()).toBe(1);
@@ -253,12 +266,12 @@ class ObservedSet extends SfxItemSet {
 
 it("calls storage Changed before replacement and removal", /** Checks the virtual storage boundary independently of Writer owner code. @returns Nothing. */ () => {
   const doc = new SwDoc();
-  const set = new ObservedSet(doc.GetAttrPool(), [[84, 87]]);
-  set.Put(new SfxInt16Item(84, 4));
-  set.Put(new SfxInt16Item(84, 2));
-  set.ClearItem(84);
-  set.Put(new SfxInt16Item(84, 2));
-  set.Put(new SfxInt16Item(86, 7));
+  const set = new ObservedSet(doc.GetAttrPool(), [[87, 90]]);
+  set.Put(new SfxInt16Item(87, 4));
+  set.Put(new SfxInt16Item(87, 2));
+  set.ClearItem(87);
+  set.Put(new SfxInt16Item(87, 2));
+  set.Put(new SfxInt16Item(89, 7));
   set.ClearItem();
   expect(set.counts).toEqual([0, 1, 1, 0, 1, 2, 2]);
 });

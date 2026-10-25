@@ -43,7 +43,7 @@ function fixture() {
     doc.GetDfltTextFormatColl(),
     "HistoryTarget",
   );
-  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 95));
   const owner = new SwDocShell(
       doc,
       createDocument({ id: "paired-history", title: "History", suiteId: "writer" }),
@@ -85,7 +85,7 @@ describe("native paired StyleApply history", /** Groups native operation/history
       (kind) => {
         const { doc, first, empty, last, neighbor, target, owner, shell } = fixture();
         for (const node of [first, empty, last, neighbor])
-          node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+          node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
         first.SetTextHints(new SwpHints(doc.GetAttrPool(), [hint(doc, kind, first.Len())]));
         last.SetTextHints(
           new SwpHints(doc.GetAttrPool(), [

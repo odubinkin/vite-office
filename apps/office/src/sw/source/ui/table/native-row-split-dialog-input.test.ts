@@ -23,9 +23,9 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
     const f = fixture(),
       input = new SfxItemSet(
         f.doc.GetAttrPool(),
-        state === "unknown" ? [[120, 120]] : [[129, 129]],
+        state === "unknown" ? [[123, 123]] : [[132, 132]],
       ),
-      parent = new SfxItemSet(f.doc.GetAttrPool(), [[129, 129]]),
+      parent = new SfxItemSet(f.doc.GetAttrPool(), [[132, 132]]),
       output = new SfxItemSet(f.doc.GetAttrPool(), [[1, 32767]]),
       box = f.first.GetTabBoxes()[0];
     if (box === undefined) throw Error("Missing native selected row box");
@@ -48,7 +48,7 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
       page.SetRowSplitState(expected !== true);
       expect(page.FillItemSet(output)).toEqual({ layoutSplit: false, rowSplit: expected !== true });
       expect(output.GetItemIfSet(RES_ROW_SPLIT, false)).toBeInstanceOf(SwFormatRowSplit);
-      expect((output.Get(129) as SwFormatRowSplit).GetValue()).toBe(expected !== true);
+      expect((output.Get(132) as SwFormatRowSplit).GetValue()).toBe(expected !== true);
       page.Reset();
       expect(page.GetRowSplitState()).toBe(expected);
       expect(page.IsRowSplitSensitive()).toBe(true);
@@ -74,7 +74,7 @@ it("input-free native row projection retains original selected, whole, foreign a
     const empty = f.doc.nodes.MakeTableNode("Empty");
     expect(new SwTextFlowPage(empty).GetRowSplitState()).toBeUndefined();
     expect(new SwTextFlowPage(empty, [first]).GetRowSplitState()).toBeUndefined();
-    const input = new SfxItemSet(f.doc.GetAttrPool(), [[120, 129]]);
+    const input = new SfxItemSet(f.doc.GetAttrPool(), [[123, 132]]);
     input.Put(new SwFormatRowSplit(true));
     input.Put(new SwFormatLayoutSplit(false));
     const page = new SwTextFlowPage(f.table, [first], input);

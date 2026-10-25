@@ -46,7 +46,7 @@ it.each([undefined, false, true])(
         second = row.GetRowSplit(),
         format = row.GetFormat();
       expect(first).toBeInstanceOf(SwFormatRowSplit);
-      expect(first.Which()).toBe(129);
+      expect(first.Which()).toBe(132);
       expect(first.GetValue()).toBe(value ?? true);
       expect(second).not.toBe(first);
       expect(format).not.toHaveProperty("keepTogether");
@@ -55,7 +55,7 @@ it.each([undefined, false, true])(
       first.SetWhich(120);
       format.rowSplit?.SetValue(!(value ?? true));
       expect(row.GetRowSplit().GetValue()).toBe(value ?? true);
-      expect(row.GetRowSplit().Which()).toBe(129);
+      expect(row.GetRowSplit().Which()).toBe(132);
       expect(row.GetFrameSize().GetHeight()).toBe(600);
       if (value === undefined) expect(row.GetFormat().rowSplit).toBeUndefined();
       else expect(row.GetFormat().rowSplit).toBeInstanceOf(SwFormatRowSplit);

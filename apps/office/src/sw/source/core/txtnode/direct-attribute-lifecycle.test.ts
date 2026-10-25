@@ -31,7 +31,7 @@ it("synthesizes outline suppression and clears it on explicit numbering and full
         /** Reads direct item ownership. @param item - Direct item. @returns WhichId. */
         (item) => item.Which(),
       ),
-  ).toEqual([73, 80]);
+  ).toEqual([75, 82]);
   expect(doc.nodes.GetOutLineNds().entries()).toEqual([node]);
   doc.EnsureNumRule("Counters", "numbered");
   node.SetAttr(new SwNumRuleItem("Counters"));
@@ -45,11 +45,11 @@ it("synthesizes outline suppression and clears it on explicit numbering and full
   expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(false);
   expect(node.GetpSwAttrSet()).toBeUndefined();
   node.SetAttrOutlineLevel(3);
-  node.ResetAttr(80);
+  node.ResetAttr(82);
   expect(node.GetpSwAttrSet()).toBeUndefined();
   expect(doc.nodes.GetOutLineNds().entries()).toEqual([]);
   node.ResetAttr([]);
-  node.ResetAttr(84, 83);
+  node.ResetAttr(87, 86);
   node.ResetAllAttr();
 });
 it("retains absent inherited IDs and preserves the Arabic versus bullet count distinction", /** Proves source registration identity and pre-vector cache/event semantics. @returns Nothing. */ () => {
@@ -62,7 +62,7 @@ it("retains absent inherited IDs and preserves the Arabic versus bullet count di
     const tail = doc.nodes.MakeTextNode();
     tail.ChgFormatColl(style);
     const owned = node.GetNum();
-    expect(node.ResetAttr(83)).toBe(false);
+    expect(node.ResetAttr(86)).toBe(false);
     expect(node.GetNum()).toBe(owned);
     const events: number[] = [];
     const notify = doc.NotifyModelChange.bind(doc);
@@ -78,17 +78,17 @@ it("retains absent inherited IDs and preserves the Arabic versus bullet count di
     expect(node.GetNum()?.GetNumber(false)).toBe(kind === "numbered" ? 0 : 1);
     expect(tail.GetNum()?.GetNumber(false)).toBe(kind === "numbered" ? 1 : 2);
     events.splice(0);
-    node.ResetAttr(87);
+    node.ResetAttr(90);
     expect(events).toEqual([node.GetIndex(), tail.GetIndex()]);
     expect(node.GetNum()?.GetNumber(false)).toBe(1);
     expect(tail.GetNum()?.GetNumber(false)).toBe(2);
     const clients: SwTextNode[] = [];
     rule.GetTextNodeList(clients);
     expect(clients).toEqual([node, tail]);
-    node.SetAttr(new SfxBoolItem(85, false));
-    node.SetAttr(new SfxInt16Item(86, 0));
-    node.SetAttr(new SfxInt16Item(86, 0));
-    node.ResetAttr([85, 86, 84, 87]);
+    node.SetAttr(new SfxBoolItem(88, false));
+    node.SetAttr(new SfxInt16Item(89, 0));
+    node.SetAttr(new SfxInt16Item(89, 0));
+    node.ResetAttr([88, 89, 87, 90]);
   }
 });
 it("maintains real sorted outline identity across move, clone, replacement, deletion and copying", /** Verifies index ownership rather than filtered projections, including detached and foreign guards. @returns Nothing. */ () => {
@@ -114,7 +114,7 @@ it("maintains real sorted outline identity across move, clone, replacement, dele
   expect(index.entries()).toEqual([replacement, node, clone, third]);
   doc.nodes.removeTextNode(clone);
   expect(index.entries()).toEqual([replacement, node, third]);
-  replacement.ResetAttr(80);
+  replacement.ResetAttr(82);
   expect(index.entries()).toEqual([node, third]);
   expect(index.contains(replacement)).toBe(false);
   doc.nodes.UpdateOutlineNode(doc.nodes.GetEndOfContent());
@@ -172,9 +172,9 @@ it("retains shown record operation and notification policy boundaries", /** Veri
   node.RemoveFromList();
   node.NumRuleChgd();
   node.CloneTo(doc.nodes).NumRuleChgd();
-  node.SetAttr(new SfxUInt16Item(80, 0));
+  node.SetAttr(new SfxUInt16Item(82, 0));
   expect(node.IsOutline()).toBe(false);
-  node.ResetAttr([73, 84, 85, 86, 87]);
+  node.ResetAttr([75, 87, 88, 89, 90]);
 });
 it("distinguishes explicit outline rule type from its reserved name and retains clone metadata", /** Verifies native setter invalidation and no name inference without adding outline factories. @returns Nothing. */ () => {
   const { doc, node } = fixture();
@@ -191,7 +191,7 @@ it("distinguishes explicit outline rule type from its reserved name and retains 
   rule.SetRuleType(SwNumRuleType.OUTLINE_RULE);
   node.SetNumRule("Chapter");
   expect(node.IsOutline()).toBe(true);
-  node.SetAttr(new SfxBoolItem(85, false));
+  node.SetAttr(new SfxBoolItem(88, false));
   expect(doc.nodes.GetOutLineNds().entries()).toEqual([node]);
   node.ResetAllAttr();
   expect(node.IsOutline()).toBe(false);
@@ -214,7 +214,7 @@ it("preserves outline index identity across repeated registration and independen
 it("leaves absent rules unattached and does not invent a level for assigned zero-outline styles", /** Verifies failed rule resolution with explicit identity and the native invalid assigned-level reset guard using real pooled style state. @returns Nothing. */ () => {
   const { doc, node } = fixture();
   node.SetAttr(new SwNumRuleItem("unknown"));
-  node.SetAttr(new SfxStringItem(83, "MissingRuleList"));
+  node.SetAttr(new SfxStringItem(86, "MissingRuleList"));
   node.AddToList();
   expect(node.GetNum()).toBeUndefined();
   expect(doc.GetDocumentListsManager().GetListByName("MissingRuleList")).toBeUndefined();
@@ -227,8 +227,8 @@ it("leaves absent rules unattached and does not invent a level for assigned zero
   node.ResetAllAttr();
   node.ChgFormatColl(style, false);
   for (const outline of [0, 11]) {
-    style.SetFormatAttr(new SfxUInt16Item(80, outline));
-    node.ResetAttr([73, 84]);
+    style.SetFormatAttr(new SfxUInt16Item(82, outline));
+    node.ResetAttr([75, 87]);
     expect(node.GetNum()?.GetNumRule()).toBe(doc.FindNumRulePtr("Outline"));
     expect(node.HasAttrListLevel()).toBe(false);
     expect(node.GetAttrListLevel()).toBe(0);

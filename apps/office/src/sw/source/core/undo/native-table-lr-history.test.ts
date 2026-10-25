@@ -34,7 +34,7 @@ it.each([false, true])(
       node.SetText("Original list cell");
       shell.FocusNode(node);
       shell.SetParagraphListKind("bullet");
-      const before = new SvxLRSpaceItem(98);
+      const before = new SvxLRSpaceItem(101);
       before.SetLeft(SvxIndentValue.twips(-120));
       before.SetRight(SvxIndentValue.twips(240));
       before.SetGutterMargin(41);
@@ -45,15 +45,15 @@ it.each([false, true])(
       if (inherited) {
         parent.SetFormatAttr(before);
         format.SetDerivedFrom(parent);
-        format.ResetFormatAttr(98);
+        format.ResetFormatAttr(101);
       } else format.SetFormatAttr(before);
       const cursor = shell.GetCursor(),
         nodes = [...doc.nodes.entries()],
         list = node.GetListId(),
-        after = new SvxLRSpaceItem(98);
+        after = new SvxLRSpaceItem(101);
       after.SetLeft(SvxIndentValue.twips(400));
       after.SetRight(SvxIndentValue.twips(200));
-      const input = new SfxItemSet(doc.GetAttrPool(), [[98, 98]]);
+      const input = new SfxItemSet(doc.GetAttrPool(), [[101, 101]]);
       input.Put(after);
       doc.GetUndoManager().Clear();
       const scalar = vi.spyOn(table, "SetFormat");
@@ -63,7 +63,7 @@ it.each([false, true])(
       for (let cycle = 0; cycle < 3; cycle++) {
         expect(shell.Undo()).toBe(true);
         expect(format.GetLRSpace()).toEqual(before);
-        expect(format.GetAttrSet().GetItemIfSet(98, false) === undefined).toBe(inherited);
+        expect(format.GetAttrSet().GetItemIfSet(101, false) === undefined).toBe(inherited);
         expect(shell.Redo()).toBe(true);
         expect(format.GetLRSpace()).toEqual(after);
         expect(table.GetTabLines()[0]).toBe(row);
@@ -92,7 +92,7 @@ it("original dialog LR, orientation and width use one native geometry ItemSet", 
     table.AddColumnWidth(3000);
     const row = doc.nodes.AppendTableRow(table, 1);
     shell.FocusNode(required(required(row.GetTabBoxes()[0]).GetParagraphs()[0]));
-    const old = new SvxLRSpaceItem(98);
+    const old = new SvxLRSpaceItem(101);
     old.SetGutterMargin(41);
     old.SetAutoFirst(true);
     format.SetFormatAttr(old);

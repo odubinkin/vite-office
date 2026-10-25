@@ -59,7 +59,7 @@ it("mounted main table renders native linked cell formats and history without bo
       node = required(first.GetParagraphs()[0]);
     node.SetText("Native cell");
     for (const box of [first, second]) {
-      const item = new SvxBoxItem(113);
+      const item = new SvxBoxItem(116);
       item.SetAllDistances(60);
       for (const edge of [0, 1, 2, 3])
         item.SetLine(new SvxBorderLine(new Color(0x112233), 30), edge);

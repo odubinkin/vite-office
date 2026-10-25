@@ -75,7 +75,7 @@ describe("native internet identities through real graph owners", /** Registers r
         original = check(node, normal, visited);
       const record = encodeWriterDocument(doc),
         hint = required(record.textNodes[0]?.hints[0]);
-      expect(record.swModelVersion).toBe(16);
+      expect(record.swModelVersion).toBe(17);
       if (hint.kind !== "hyperlink") throw new Error("Missing actual internet graph record");
       expect(hint.hyperlink.inetFormatId ?? 0).toBe(normal);
       expect(hint.hyperlink.visitedFormatId ?? 0).toBe(visited);

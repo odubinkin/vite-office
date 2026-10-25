@@ -28,9 +28,9 @@ it.each(["zero", "three", "large", "default", "unknown", "inherited", "invalid",
         doc.GetAttrPool(),
         state === "unknown"
           ? [
-              [113, 113],
-              [120, 120],
-              [132, 132],
+              [116, 116],
+              [123, 123],
+              [135, 135],
               [10023, 10023],
             ]
           : [[1, 32767]],

@@ -63,7 +63,7 @@ it.each([false, true])(
       const accepted = first.GetFrameFormat();
       expect(accepted).toBeInstanceOf(SwTableLineFormat);
       expect(accepted).not.toBe(original);
-      expect(accepted.GetAttrSet().GetItemIfSet(129, false)).toBeInstanceOf(SwFormatRowSplit);
+      expect(accepted.GetAttrSet().GetItemIfSet(132, false)).toBeInstanceOf(SwFormatRowSplit);
       expect(frame.GetTabLine()).toBe(first);
       for (const row of rows.slice(1))
         expect(row.GetFrameFormat()).toBe(selected ? original : accepted);

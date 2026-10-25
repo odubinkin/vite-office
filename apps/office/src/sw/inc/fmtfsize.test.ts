@@ -31,7 +31,7 @@ it("native frame size retains all eight defaults, fields and complete clone equa
   const item = new SwFormatFrameSize();
   expect([SwFrameSize.Variable, SwFrameSize.Fixed, SwFrameSize.Minimum]).toEqual([0, 1, 2]);
   expect(item.Which()).toBe(RES_FRM_SIZE);
-  expect(RES_FRM_SIZE).toBe(90);
+  expect(RES_FRM_SIZE).toBe(93);
   expect(SwFormatFrameSize.SYNCED).toBe(255);
   expect([
     item.GetWidth(),

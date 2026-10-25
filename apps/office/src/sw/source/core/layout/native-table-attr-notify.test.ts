@@ -117,8 +117,8 @@ function close(f: ReturnType<typeof fixture>): void {
 }
 /** Creates exact borrowed descriptors and independently cloned items. @param f - Original fixture. @param items - Supplied native values. @returns Original hint. */
 function delta(f: ReturnType<typeof fixture>, items: readonly SfxPoolItem[]): AttrSetChangeHint {
-  const oldSet = new SwAttrSet(f.doc.GetAttrPool(), [[90, 132]]),
-    newSet = new SwAttrSet(f.doc.GetAttrPool(), [[90, 132]]);
+  const oldSet = new SwAttrSet(f.doc.GetAttrPool(), [[93, 135]]),
+    newSet = new SwAttrSet(f.doc.GetAttrPool(), [[93, 135]]);
   for (const item of items) {
     oldSet.Put(item);
     newSet.Put(item);
@@ -128,54 +128,54 @@ function delta(f: ReturnType<typeof fixture>, items: readonly SfxPoolItem[]): At
     new SwAttrSetChg(f.owner.GetAttrSet(), newSet),
   );
 }
-it.each([90, 110, 101, 132, 99, 113, 117, 0])(
+it.each([93, 113, 104, 135, 102, 116, 120, 0])(
   "legacy table Which%s uses native mask and exact admission",
   /** Checks literal masks and original sibling state. @param which - Native WhichId. @returns Nothing. */ (
     which,
   ) => {
     const f = fixture(),
       item =
-        which === 90
+        which === 93
           ? new SwFormatFrameSize(SwFrameSize.Fixed, 3000, 600)
-          : which === 132
-            ? new SfxBoolItem(132, true)
+          : which === 135
+            ? new SfxBoolItem(135, true)
             : new SfxUInt16Item(which, 1);
     try {
       f.owner.CallSwClientNotify(new LegacyModifyHint(undefined, item));
       expect(f.frame.tableMasks).toEqual([
-        which === 90 || which === 110
+        which === 93 || which === 113
           ? 0x22
-          : which === 101
+          : which === 104
             ? 0xc0
-            : which === 132
+            : which === 135
               ? 0x02
-              : which === 99
+              : which === 102
                 ? 0x1c
                 : 0,
       ]);
       expect(state(f.frame)).toEqual(
-        which === 90
+        which === 93
           ? [false, false, true, false]
-          : which === 110
+          : which === 113
             ? [true, false, true, false]
-            : which === 101
+            : which === 104
               ? [true, true, false, false]
-              : which === 132
+              : which === 135
                 ? [false, false, true, true]
                 : [true, true, true, false],
       );
       expect(state(f.prev)).toEqual(
-        which === 99 ? [true, false, true, false] : [true, true, true, false],
+        which === 102 ? [true, false, true, false] : [true, true, true, false],
       );
       expect(state(f.next)).toEqual(
-        which === 99
+        which === 102
           ? [true, false, true, true]
-          : which === 90 || which === 101
+          : which === 93 || which === 104
             ? [true, true, false, false]
             : [true, true, true, false],
       );
       expect(f.frame.generic).toEqual(
-        [90, 110, 101, 132].includes(which) ? [[undefined, item]] : [],
+        [93, 113, 104, 135].includes(which) ? [[undefined, item]] : [],
       );
       expect(f.frame.owner()).toBe(f.owner);
     } finally {
@@ -215,7 +215,7 @@ it("copied table deltas consume handled items and preserve original borrowed des
               item,
             ) => item.Which(),
           ),
-      ).toEqual([99, 113]);
+      ).toEqual([102, 116]);
       expect(
         copyNew
           ?.GetChgSet()
@@ -225,7 +225,7 @@ it("copied table deltas consume handled items and preserve original borrowed des
               item,
             ) => item.Which(),
           ),
-      ).toEqual([99, 113]);
+      ).toEqual([102, 116]);
     }
     expect(
       f.frame.generic.map(
@@ -239,8 +239,8 @@ it("copied table deltas consume handled items and preserve original borrowed des
           ),
       ),
     ).toEqual([
-      [99, 99],
-      [113, 113],
+      [102, 102],
+      [116, 116],
     ]);
     expect(f.frame.generic[0]?.[0]).not.toBe(oldItems[1]);
     expect(state(f.frame)).toEqual([false, false, true, true]);
@@ -271,7 +271,7 @@ it("handled-only size batches bypass generic size and next-position reactions", 
 });
 it("old-before-new Which and separately copied descriptors retain native clearing ownership", /** Checks native helper optional-copy and asymmetric Which contracts. @returns Nothing. */ () => {
   const f = fixture(false),
-    oldItem = new SfxBoolItem(132, true),
+    oldItem = new SfxBoolItem(135, true),
     newItem = new SwFormatFrameSize(SwFrameSize.Fixed, 3000, 600);
   try {
     const h = delta(f, [oldItem, newItem]);
@@ -284,7 +284,7 @@ it("old-before-new Which and separately copied descriptors retain native clearin
     expect(next.Count()).toBe(1);
     expect(h.m_pNew?.Count()).toBe(2);
     expect(f.frame.update(undefined, undefined)).toBe(0);
-    f.owner.CallSwClientNotify(new LegacyModifyHint(new SfxUInt16Item(117, 1), oldItem));
+    f.owner.CallSwClientNotify(new LegacyModifyHint(new SfxUInt16Item(120, 1), oldItem));
     expect(f.frame.tableMasks.at(-1)).toBe(0);
     expect(f.frame.generic).toEqual([]);
   } finally {
@@ -301,11 +301,11 @@ it("empty unpaired transaction and unrelated format hints preserve native table 
     f.owner.CallSwClientNotify(new AttrSetChangeHint(undefined, h.m_pNew));
     f.owner.CallSwClientNotify(h);
     expect(f.frame.generic).toEqual([]);
-    const breakItem = new SfxUInt16Item(101, 1);
+    const breakItem = new SfxUInt16Item(104, 1);
     f.owner.CallSwClientNotify({
       kind: "model-transaction",
       hints: [
-        new LegacyModifyHint(undefined, new SfxUInt16Item(99, 1)),
+        new LegacyModifyHint(undefined, new SfxUInt16Item(102, 1)),
         new LegacyModifyHint(undefined, breakItem),
       ],
     });
@@ -320,11 +320,11 @@ it("empty unpaired transaction and unrelated format hints preserve native table 
 it("residual-only batch forwards copy values while legacy default does not", /** Checks source default bClear=false and retained copy behavior. @returns Nothing. */ () => {
   const f = fixture(false);
   try {
-    f.owner.CallSwClientNotify(delta(f, [new SvxBoxItem(113)]));
+    f.owner.CallSwClientNotify(delta(f, [new SvxBoxItem(116)]));
     expect(state(f.frame)).toEqual([false, false, true, true]);
     expect(f.frame.generic).toHaveLength(1);
     ready(f.frame);
-    f.owner.CallSwClientNotify(new LegacyModifyHint(new SvxBoxItem(113), undefined));
+    f.owner.CallSwClientNotify(new LegacyModifyHint(new SvxBoxItem(116), undefined));
     expect(state(f.frame)).toEqual([true, true, true, false]);
     expect(f.frame.generic).toHaveLength(1);
     expect(

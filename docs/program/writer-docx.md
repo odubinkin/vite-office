@@ -143,3 +143,32 @@ Section application, document default-page-mode notifications and complete style
 loading remain pending. ODT currently preserves represented page geometry but
 does not yet serialize the new grid fields. This checkpoint does not establish
 DOCX import/export, application file routing or complete native parity.
+
+## Native identity correction
+
+The pinned `hintids.hxx` has additional text and paragraph attributes compared
+with the old numeric browser table. The consumed paragraph identities were two
+positions behind upstream, and identities from `RES_PARATR_LIST_BEGIN` onward
+were three behind. Current core constants and native row/cell ranges now use
+the pinned values; `RES_FRM_SIZE` is 93 and `RES_TEXTGRID` is 125. The old pool
+also registered `SvxProtectItem` under 127 (the old frame-direction slot),
+instead of the actual `RES_PROTECT` identity 110. That registration is corrected.
+
+Browser graph version17 writes native identities exclusively. Its explicit v16
+ingress migrates old identities and the protection misregistration before
+restoring concrete native items. Item values, physical dimensions and other
+numeric fields are unchanged. Core APIs do not accept legacy aliases.
+`npm run check:writer-hintids` resolves the actual pinned C++ expressions and
+checks every consumed numeric declaration; the main verification pipeline
+includes this check. Earlier numerical claims in historical checkpoint notes
+describe the former incorrect local table and do not establish native parity.
+
+The older extracted-native test recordings use their original numeric attribute
+labels as a test protocol. Their operations and expected results remain
+unchanged. A test-only binding maps those seven paragraph/list labels to real
+current native identities and projects result labels back for comparison. This
+binding is absent from the core and from document transport. The independent
+pinned-expression guard proves numeric identity; recorded native probes prove
+the represented behavioral sequences. Native pooled-default flags are asserted
+through pool ownership tests, while value comparisons use the items' native
+`equals` contracts rather than comparing allocation/default bookkeeping fields.

@@ -36,8 +36,8 @@ it("mounted direct items paint, export and reopen across native Undo and Redo", 
       list = node.GetListId();
     doc.GetUndoManager().Clear();
     render(<WriterWorkbench isActive view={session.view} />);
-    const input = new SfxItemSet(doc.GetAttrPool(), [[99, 99]]);
-    input.Put(new SvxULSpaceItem(120, 240, 99));
+    const input = new SfxItemSet(doc.GetAttrPool(), [[102, 102]]);
+    input.Put(new SvxULSpaceItem(120, 240, 102));
     act(
       /** Applies original table items. @returns Nothing. */ () => {
         expect(shell.SetTableAttr(input)).toBe(true);
@@ -71,7 +71,7 @@ it("mounted direct items paint, export and reopen across native Undo and Redo", 
           expect(shell.Undo()).toBe(true);
         },
       );
-      expect(format.GetAttrSet().GetItemIfSet(99, false)).toBeUndefined();
+      expect(format.GetAttrSet().GetItemIfSet(102, false)).toBeUndefined();
       const tableAttrs = required(
         required(exportContentXml(doc).match(/<style:table-properties([^>]*)\/>/))[1],
       );

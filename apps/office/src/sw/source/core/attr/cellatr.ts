@@ -1,7 +1,7 @@
 /** @fileoverview Ports bounded native table cell item defaults and ownership from pinned sw/source/core/attr/cellatr.cxx; calculation and formula conversion remain unported. */
 import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE } from "../../../inc/hintids";
+import { RES_BOXATR_FORMULA, RES_BOXATR_VALUE, RES_BOXATR_FORMAT } from "../../../inc/hintids";
 import type { SwTableBoxFormat } from "../../../inc/swtblfmt";
 import type { SwTableBox } from "../table/swtable";
 import type { SwTableBoxStartNode } from "../docnode/node";
@@ -15,7 +15,10 @@ export function getSwDefaultTextFormat(): number {
 export class SwTableBoxNumFormat extends SfxUInt32Item {
   /** Normalizes native built-in text formats. @param format - Unsigned format identity. @returns Nothing. */
   public constructor(format = getSwDefaultTextFormat()) {
-    super(157, format % 10000 === getSwDefaultTextFormat() ? getSwDefaultTextFormat() : format);
+    super(
+      RES_BOXATR_FORMAT,
+      format % 10000 === getSwDefaultTextFormat() ? getSwDefaultTextFormat() : format,
+    );
   }
   /** Clones the original numeric format. @returns Owned item. */
   public override Clone(): SwTableBoxNumFormat {

@@ -1,6 +1,7 @@
 /** @fileoverview Checks the nonfatal restart getter against unchanged native owner bodies and OSL/SAL warning macros. */
 import type { SwNumRule } from "../doc/number";
 import { expect, it, vi } from "vitest";
+import { nativeProbeWhich } from "../../../../test/writer-native-probe-identity";
 import native from "../../../../test/writer-native-restart-getter.json";
 import { SwDoc } from "../doc/doc";
 import type { SwTextNode } from "./ndtxt";
@@ -57,16 +58,17 @@ it("matches unchanged native absent/direct getter values and nonfatal diagnostic
         ),
       ).toEqual(items);
       expect(expected.inParent).toBe(true);
-      expect(read).toHaveBeenCalledExactlyOnceWith(86);
+      expect(read).toHaveBeenCalledExactlyOnceWith(89);
       expect(notification).not.toHaveBeenCalled();
       read.mockRestore();
       states += 1;
     }
     check(0);
     for (const [step, operation] of native.operations.entries()) {
-      const [kind, which, value] = operation as [string, number, number];
+      const [kind, label, value] = operation as [string, number, number];
+      const which = nativeProbeWhich(label);
       if (kind === "clear") node.ResetAttr(which);
-      else if (which === 85) node.SetAttr(new SfxBoolItem(which, value !== 0));
+      else if (label === 85) node.SetAttr(new SfxBoolItem(which, value !== 0));
       else node.SetAttr(new SfxInt16Item(which, value));
       check(step + 1);
     }

@@ -34,11 +34,11 @@ it.each([false, true])(
       node.SetText("Original mounted list");
       shell.FocusNode(node);
       shell.SetParagraphListKind("bullet");
-      const before = new SvxULSpaceItem(120, 240, 99, true);
+      const before = new SvxULSpaceItem(120, 240, 102, true);
       if (inherited) {
         parent.SetFormatAttr(before);
         format.SetDerivedFrom(parent);
-        format.ResetFormatAttr(99);
+        format.ResetFormatAttr(102);
       } else format.SetFormatAttr(before);
       const cursor = shell.CaptureCursorState(),
         list = node.GetListId(),
@@ -50,8 +50,8 @@ it.each([false, true])(
         marginBottom: "16px",
       });
       const replay = vi.spyOn(table, "SetFormat"),
-        input = new SfxItemSet(doc.GetAttrPool(), [[99, 99]]);
-      input.Put(new SvxULSpaceItem(360, 480, 99));
+        input = new SfxItemSet(doc.GetAttrPool(), [[102, 102]]);
+      input.Put(new SvxULSpaceItem(360, 480, 102));
       act(
         /** Applies original native dialog attributes to the mounted view. @returns Nothing. */ () => {
           expect(shell.SetTableAttr(input)).toBe(true);
@@ -68,7 +68,7 @@ it.each([false, true])(
           marginBottom: "16px",
         });
         expect(format.GetULSpace()).toEqual(before);
-        expect(format.GetAttrSet().GetItemIfSet(99, false) === undefined).toBe(inherited);
+        expect(format.GetAttrSet().GetItemIfSet(102, false) === undefined).toBe(inherited);
         act(
           /** Replays accepted native direct items. @returns Nothing. */ () => {
             expect(shell.Redo()).toBe(true);
@@ -91,7 +91,7 @@ it.each([false, true])(
       }
       expect(replay).not.toHaveBeenCalled();
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
-      expect(input.Get(99)).toEqual(new SvxULSpaceItem(360, 480, 99));
+      expect(input.Get(102)).toEqual(new SvxULSpaceItem(360, 480, 102));
       if (inherited) expect(parent.GetULSpace()).toEqual(before);
     } finally {
       cleanup();

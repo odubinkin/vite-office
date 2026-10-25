@@ -130,7 +130,10 @@ it("self and descendant proposals return false without changing any original inh
     expect(owners.map(clients)).toEqual(
       registrations.map(
         /** Includes only the deliberately added observers. @param before - Prior clients. @param index - Owner ordinal. @returns Original registration list. */
-        (before, index) => [...before, observers[index]],
+        (before, index) =>
+          before.length === 0
+            ? [observers[index]]
+            : [before[0], observers[index], ...before.slice(1)],
       ),
     );
     expect(hints).toEqual([]);

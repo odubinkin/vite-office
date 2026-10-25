@@ -1,0 +1,26 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-which-id-migration.ts",
+    "status": "local-only",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-which-id-migration.ts",
+          "marker": "upgradeWriterWhichIds"
+        }
+      ],
+      "upstream": []
+    },
+    "rationale": "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved.",
+    "responsibilities": [
+      "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Versioned browser graph migration is not a native core identity alias or native document format."
+    }
+  }
+}

@@ -22,7 +22,7 @@ it.each(["false", "true", "absent", "inherited", "invalid", "disabled"])(
     const doc = new SwDoc(),
       table = doc.nodes.MakeTableNode("NativeInput", { width: 6000, layoutSplit: false }),
       input = new SfxItemSet(doc.GetAttrPool(), [[1, 32767]]),
-      parent = new SfxItemSet(doc.GetAttrPool(), [[120, 120]]),
+      parent = new SfxItemSet(doc.GetAttrPool(), [[123, 123]]),
       submit = vi.fn(),
       cancel = vi.fn();
     table.AddColumnWidth(6000);
@@ -48,7 +48,7 @@ it.each(["false", "true", "absent", "inherited", "invalid", "disabled"])(
       expect(checkbox).toHaveProperty("checked", state !== "false");
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       expect(submit.mock.calls[0]?.[0]).not.toHaveProperty("layoutSplit");
-      expect(submit.mock.calls[0]?.[0].items.GetItemIfSet(120, false)).toBeUndefined();
+      expect(submit.mock.calls[0]?.[0].items.GetItemIfSet(123, false)).toBeUndefined();
       fireEvent.click(checkbox);
       fireEvent.click(screen.getByRole("tab", { name: "Table" }));
       fireEvent.click(screen.getByRole("tab", { name: "Text Flow" }));
@@ -65,8 +65,8 @@ it.each(["false", "true", "absent", "inherited", "invalid", "disabled"])(
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       const output = submit.mock.calls.at(-1)?.[0];
       expect(output.layoutSplit).toBe(state === "false");
-      expect(output.items.Get(120)).toBeInstanceOf(SwFormatLayoutSplit);
-      expect(output.items.Get(120).GetValue()).toBe(state === "false");
+      expect(output.items.Get(123)).toBeInstanceOf(SwFormatLayoutSplit);
+      expect(output.items.Get(123).GetValue()).toBe(state === "false");
       expect(table.GetFormat().layoutSplit).toBe(false);
       expect(doc.GetUndoManager().GetUndoActionCount()).toBe(0);
     } finally {
@@ -116,7 +116,7 @@ it.each([false, true])(
       expect(screen.getByRole("checkbox", { name: label })).not.toBeChecked();
       fireEvent.click(screen.getByRole("checkbox", { name: label }));
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
-      expect((owner.GetAttrSet().Get(120) as SwFormatLayoutSplit).GetValue()).toBe(true);
+      expect((owner.GetAttrSet().Get(123) as SwFormatLayoutSplit).GetValue()).toBe(true);
       expect(table.GetFormat().layoutSplit).toBe(true);
       expect(table.GetTabLines()[0]).toBe(row);
       expect(box.GetParagraphs()[0]).toBe(node);

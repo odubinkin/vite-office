@@ -4,7 +4,7 @@ import { createWriterDocumentSession } from "../../../browser/composition/writer
 import { SwPosition } from "../crsr/pam";
 import { SwTableCursor } from "../crsr/swcrsr";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SwTableBoxNumFormat } from "../attr/cellatr";
 import { SwClient } from "../../../inc/calbck";
 import { MoveTableBoxHint, TableBoxFormatChanged } from "../../../inc/hints";
 /** Requires an actual native owner. @param value - Optional owner. @returns Actual owner. */
@@ -27,7 +27,7 @@ it("native attribute history restores full shared item sets and sends move hints
       third = required(boxes[2]),
       original = first.GetFrameFormat();
     original.SetFormatAttr(new SwFormatVertOrient(720, 3, 7));
-    original.SetFormatAttr(new SfxUInt16Item(127, 37));
+    original.SetFormatAttr(new SwTableBoxNumFormat(37));
     second.ChgFrameFormat(original);
     third.ChgFrameFormat(original);
     const node = required(first.GetParagraphs()[0]);
@@ -96,13 +96,13 @@ it("native attribute history restores full shared item sets and sends move hints
         ),
       );
       expect(restored.GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
-      expect(restored.GetAttrSet().Get(127).QueryValue()).toBe(37);
+      expect(restored.GetAttrSet().Get(160).QueryValue()).toBe(37);
       expect(shell.Redo()).toBe(true);
       expect(first.GetFrameFormat()).toBe(second.GetFrameFormat());
       expect(first.GetFrameFormat()).not.toBe(third.GetFrameFormat());
       expect(first.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient(-360, 2, 8));
       expect(third.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
-      expect(first.GetFrameFormat().GetAttrSet().Get(127).QueryValue()).toBe(37);
+      expect(first.GetFrameFormat().GetAttrSet().Get(160).QueryValue()).toBe(37);
       expect(shell.CaptureCursorState()).toEqual(before);
       expect(row.GetTabBoxes()).toEqual(boxes);
       expect(first.GetParagraphs()[0]).toBe(node);

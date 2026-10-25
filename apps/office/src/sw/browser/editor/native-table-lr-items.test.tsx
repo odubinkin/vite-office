@@ -35,14 +35,14 @@ it.each([false, true])(
         node = required(box.GetParagraphs()[0]);
       node.SetText("Original LR cell");
       shell.FocusNode(node);
-      const before = new SvxLRSpaceItem(98);
+      const before = new SvxLRSpaceItem(101);
       before.SetLeft(SvxIndentValue.twips(120));
       before.SetRight(SvxIndentValue.twips(240));
       let source = format;
       if (inherited) {
         source = parent;
         format.SetDerivedFrom(parent);
-        format.ResetFormatAttr(98);
+        format.ResetFormatAttr(101);
       }
       source.SetFormatAttr(before);
       doc.GetUndoManager().Clear();
@@ -107,7 +107,7 @@ it.each([false, true])(
           },
         );
         expect(format.GetLRSpace()).toEqual(saved);
-        expect(format.GetAttrSet().GetItemIfSet(98, false) === undefined).toBe(inherited);
+        expect(format.GetAttrSet().GetItemIfSet(101, false) === undefined).toBe(inherited);
         act(
           /** Redoes native original LR. @returns Nothing. */ () => {
             expect(shell.Redo()).toBe(true);

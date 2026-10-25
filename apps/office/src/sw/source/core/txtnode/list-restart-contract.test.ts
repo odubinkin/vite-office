@@ -1,6 +1,7 @@
 /** @fileoverview Compares Writer restart flag/value setters to six complete unchanged pinned native definitions. */
 import type { SwNumRule } from "../doc/number";
 import { expect, it, vi } from "vitest";
+import { nativeProbeLabel } from "../../../../test/writer-native-probe-identity";
 import native from "../../../../test/writer-native-list-restart.json";
 import { SwDoc } from "../doc/doc";
 import type { SwTextNode } from "./ndtxt";
@@ -32,14 +33,18 @@ it("matches literal native flag/value states and mutation attempts in normal and
         const calls: unknown[] = [];
         for (const [item] of put.mock.calls) {
           const value = item as SfxPoolItem;
-          calls.push(["set", value.Which(), value.QueryValue()]);
+          calls.push(["set", nativeProbeLabel(value.Which()), value.QueryValue()]);
         }
-        for (const [which] of clear.mock.calls) calls.push(["reset", which]);
+        for (const [which] of clear.mock.calls)
+          calls.push([
+            "reset",
+            typeof which === "number" ? nativeProbeLabel(which) : which.map(nativeProbeLabel),
+          ]);
         expect(
           {
             restart: node.IsListRestart(),
             direct: node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : null,
-            effective: node.GetAttr(86).QueryValue(),
+            effective: node.GetAttr(89).QueryValue(),
             start: node.GetActualListStartValue(),
             calls,
           },
@@ -118,7 +123,7 @@ it("retains inactive values through real list counters, undo and Worker16 before
     reopened.SetAttrListRestartValue(65_535);
     expect(reopened.IsListRestart()).toBe(true);
     expect(reopened.HasAttrListRestartValue()).toBe(false);
-    expect(reopened.GetAttr(86).QueryValue()).toBe(1);
+    expect(reopened.GetAttr(89).QueryValue()).toBe(1);
     expect(reopened.GetListItemNumber()).toBe(9);
   }
 });

@@ -276,7 +276,7 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
       expect(state(copied)).toEqual(expected);
       expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
       const record = encodeWriterDocument(imported.document);
-      expect(record.swModelVersion).toBe(16);
+      expect(record.swModelVersion).toBe(17);
       const transferred = decodeWriterDocument(record);
       expect(state(transferred)).toEqual(expected);
       const exported = writeOdtDocument(imported.document, { title: "Headers" });

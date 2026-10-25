@@ -260,7 +260,7 @@ describe("native node ignore expansion", /** Registers independent node and coor
       const owner = fixture(family, 7, true, true, 2, 6),
         record = encodeWriterDocument(owner.doc),
         transfer = createOdtWriterTransfer(owner.doc);
-      expect(record.swModelVersion).toBe(16);
+      expect(record.swModelVersion).toBe(17);
       expect(transfer.transferVersion).toBe(5);
       for (const copy of [
         owner.node.CloneTo(owner.doc.GetNodes()),

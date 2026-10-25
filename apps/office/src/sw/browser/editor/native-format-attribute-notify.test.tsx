@@ -58,7 +58,7 @@ it("direct native format item writes refresh the main UI through original docume
     ).toHaveStyle({ verticalAlign: "top" });
     act(
       /** Restores direct native orientation to pooled default. @returns Nothing. */ () => {
-        expect(original.ResetFormatAttr(109)).toBe(true);
+        expect(original.ResetFormatAttr(112)).toBe(true);
       },
     );
     expect(cell).toHaveStyle({ verticalAlign: "top" });

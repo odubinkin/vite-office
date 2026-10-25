@@ -301,7 +301,7 @@ describe("Writer action-based undo" /** Groups Stage 3 Writer action acceptance 
     expect(document.paragraphs).toHaveLength(1);
     shell.Undo();
     // Native list activation already writes this heading collection's unique direct level 0.
-    expect(trailingSnapshot?.autoAttributes).toContainEqual({ value: 0, which: 84 });
+    expect(trailingSnapshot?.autoAttributes).toContainEqual({ value: 0, which: 87 });
     expect(encodeWriterDocument(document).textNodes[1]).toEqual(trailingSnapshot);
     shell.Redo();
     expect(

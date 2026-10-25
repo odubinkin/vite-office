@@ -302,7 +302,7 @@ describe("native empty ranged ownership", /** Registers independent literals and
       owner.node.EraseText(2, 4);
       const record = encodeWriterDocument(owner.doc),
         transfer = createOdtWriterTransfer(owner.doc);
-      expect(record.swModelVersion).toBe(16);
+      expect(record.swModelVersion).toBe(17);
       expect(transfer.transferVersion).toBe(5);
       for (const copy of [
         owner.node.CloneTo(owner.doc.GetNodes()),

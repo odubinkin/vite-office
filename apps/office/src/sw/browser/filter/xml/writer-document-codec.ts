@@ -1,4 +1,5 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import { upgradeWriterWhichIds } from "./writer-which-id-migration";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import {
   encodePageFormats,
@@ -366,7 +367,7 @@ export interface WriterDocumentRecord {
     pageFormat?: WriterPageFormatRecord;
   }>[];
   readonly textGridDefault?: SfxPoolItemSnapshot;
-  readonly swModelVersion: 16;
+  readonly swModelVersion: 17;
   readonly textFormatCollections: readonly WriterStyleRecord[];
   readonly textNodes: readonly WriterTextNodeRecord[];
 }
@@ -501,7 +502,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         };
       },
     ),
-    swModelVersion: 16,
+    swModelVersion: 17,
     ...(textGridDefault === undefined ? {} : { textGridDefault }),
     textFormatCollections: document.GetTextFormatColls().map(
       /** Encodes one paragraph collection. @param collection - Model collection. @returns Primitive style record. */ (
@@ -590,14 +591,15 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
   };
 }
 
-/** Decodes only the current schema; legacy records are intentionally unsupported. @param candidate - Stored value. @param defaultFontDevice - Current output device. @returns Canonical graph. */
+/** Decodes current records and explicitly migrates the former incorrect v16 WhichIds. @param input - Stored value. @param defaultFontDevice - Current output device. @returns Canonical graph. */
 export function* decodeWriterDocumentSteps(
-  candidate: unknown,
+  input: unknown,
   defaultFontDevice?: DefaultFontDevice,
 ): Generator<void, SwDoc> {
+  const candidate = upgradeWriterWhichIds(input);
   if (
     !isRecord(candidate) ||
-    candidate.swModelVersion !== 16 ||
+    candidate.swModelVersion !== 17 ||
     !isRecord(candidate.documentSettings) ||
     typeof candidate.locale !== "string" ||
     candidate.locale.length === 0 ||

@@ -65,12 +65,12 @@ it("native change descriptors borrow originals and copy only independently owned
   expect(borrowed.GetChgSet()).toBe(delta);
   expect(copy.GetTheChgdSet()).toBe(source);
   expect(copy.GetChgSet()).not.toBe(delta);
-  expect(copy.GetChgSet().Get(109)).toEqual(delta.Get(109));
-  expect(copy.GetChgSet().Get(109)).not.toBe(delta.Get(109));
+  expect(copy.GetChgSet().Get(112)).toEqual(delta.Get(112));
+  expect(copy.GetChgSet().Get(112)).not.toBe(delta.Get(112));
   expect(hint.m_pOld).toBe(borrowed);
   expect(hint.m_pNew).toBe(copy);
   expect(copy.Count()).toBe(1);
-  copy.ClearItem(109);
+  copy.ClearItem(112);
   expect(copy.Count()).toBe(0);
   expect(borrowed.Count()).toBe(1);
 });
@@ -86,8 +86,8 @@ it("single native item mutation publishes precise effective deltas to original c
       const h = native(hint);
       events.push(["native", source, h, format.IsModifyLocked()]);
       expect(format.GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
-      expect(required(h.m_pOld).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient());
-      expect(required(h.m_pNew).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient(720, 3, 7));
+      expect(required(h.m_pOld).GetChgSet().Get(112).equals(new SwFormatVertOrient())).toBe(true);
+      expect(required(h.m_pNew).GetChgSet().Get(112)).toEqual(new SwFormatVertOrient(720, 3, 7));
       expect(required(h.m_pOld).GetTheChgdSet()).toBe(format.GetAttrSet());
       expect(required(h.m_pNew).GetTheChgdSet()).toBe(format.GetAttrSet());
     },
@@ -133,21 +133,21 @@ it("native multi-item changes and reset ranges retain inherited old and effectiv
   expect(o.hints).toHaveLength(1);
   let h = native(o.hints[0]);
   expect(required(h.m_pNew).Count()).toBe(2);
-  expect(required(h.m_pOld).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient(240, 3, 7));
+  expect(required(h.m_pOld).GetChgSet().Get(112)).toEqual(new SwFormatVertOrient(240, 3, 7));
   expect(format.SetFormatAttrSet(set)).toBe(false);
   expect(format.SetFormatAttrSet(new SwAttrSet(doc.GetAttrPool(), set.GetRanges()))).toBe(false);
-  expect(format.ResetFormatAttr(90, 89)).toBe(true);
+  expect(format.ResetFormatAttr(93, 89)).toBe(true);
   h = native(o.hints[1]);
-  expect(required(h.m_pOld).GetChgSet().Get(90)).toEqual(
+  expect(required(h.m_pOld).GetChgSet().Get(93)).toEqual(
     new SwFormatFrameSize(SwFrameSize.Fixed, 6000, 500),
   );
-  expect(required(h.m_pNew).GetChgSet().Get(90)).toEqual(new SwFormatFrameSize());
-  expect(format.ResetFormatAttr(90)).toBe(false);
+  expect(required(h.m_pNew).GetChgSet().Get(93).equals(new SwFormatFrameSize())).toBe(true);
+  expect(format.ResetFormatAttr(93)).toBe(false);
   expect(format.ResetAllFormatAttr()).toBe(1);
   h = native(o.hints[2]);
-  expect(required(h.m_pNew).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient(240, 3, 7));
+  expect(required(h.m_pNew).GetChgSet().Get(112)).toEqual(new SwFormatVertOrient(240, 3, 7));
   expect(format.ResetAllFormatAttr()).toBe(0);
-  expect(format.ResetFormatAttr(109, 113)).toBe(false);
+  expect(format.ResetFormatAttr(112, 113)).toBe(false);
   expect(o.hints).toHaveLength(3);
   o.client.Dispose();
 });
@@ -163,9 +163,9 @@ it("native boolean modify lock suppresses single set set-copy and all reset noti
   format.LockModify();
   expect(format.SetFormatAttr(new SwFormatVertOrient(240, 3, 7))).toBe(true);
   expect(format.SetFormatAttrSet(set)).toBe(true);
-  expect(format.ResetFormatAttr(109)).toBe(true);
+  expect(format.ResetFormatAttr(112)).toBe(true);
   format.SetFormatAttrSet(set);
-  expect(format.ResetFormatAttr(90, 109)).toBe(true);
+  expect(format.ResetFormatAttr(93, 112)).toBe(true);
   format.SetFormatAttrSet(set);
   expect(format.ResetAllFormatAttr()).toBe(2);
   expect(o.hints).toEqual([]);
@@ -196,7 +196,7 @@ it("original parent format clients filter every local WhichId and reparent witho
   expect(child.GetAttrSet().GetParent()).toBe(parent.GetAttrSet());
   expect(required(h.m_pNew).GetTheChgdSet()).toBe(parent.GetAttrSet());
   expect(required(h.m_pNew).Count()).toBe(1);
-  expect(required(h.m_pNew).GetChgSet().GetItemState(109, false)).not.toBe(SfxItemState.SET);
+  expect(required(h.m_pNew).GetChgSet().GetItemState(112, false)).not.toBe(SfxItemState.SET);
   expect(required(h.m_pNew).GetChgSet()).not.toBe(required(original.m_pNew).GetChgSet());
   expect(p.hints[0]).not.toBe(original);
   expect(required(native(p.hints[0]).m_pNew).Count()).toBe(2);
@@ -221,17 +221,17 @@ it("native Differentiate includes invalid disabled and unequal local identities 
     child = doc.MakeTableBoxFormat(),
     set = new SwAttrSet(doc.GetAttrPool(), parent.GetAttrSet().GetRanges());
   child.SetDerivedFrom(parent);
-  child.GetAttrSet().InvalidateItem(109);
-  child.GetAttrSet().DisableItem(113);
+  child.GetAttrSet().InvalidateItem(112);
+  child.GetAttrSet().DisableItem(116);
   const c = observe(child);
   set.Put(new SwFormatVertOrient(720, 3, 7));
-  const box = new SvxBoxItem(113);
+  const box = new SvxBoxItem(116);
   box.SetAllDistances(60);
   set.Put(box);
   set.Put(new SwFormatFrameSize(SwFrameSize.Fixed, 6000, 500));
   parent.SetFormatAttrSet(set);
   expect(required(native(c.hints[0]).m_pNew).Count()).toBe(1);
-  expect(required(native(c.hints[0]).m_pNew).GetChgSet().GetItemState(90, false)).toBe(
+  expect(required(native(c.hints[0]).m_pNew).GetChgSet().GetItemState(93, false)).toBe(
     SfxItemState.SET,
   );
   const delta = set.CloneAsValue(),
@@ -241,7 +241,7 @@ it("native Differentiate includes invalid disabled and unequal local identities 
   expect(delta.Count()).toBe(3);
   delta.Differentiate(child.GetAttrSet());
   expect(delta.Count()).toBe(1);
-  expect(delta.GetItemState(90, false)).toBe(SfxItemState.SET);
+  expect(delta.GetItemState(93, false)).toBe(SfxItemState.SET);
   delta.Differentiate(delta);
   expect(delta.Count()).toBe(0);
   c.client.Dispose();
@@ -264,7 +264,7 @@ it("native inherited transactions filter atomic deltas before forwarding one ori
   expect(h.kind).toBe("model-transaction");
   if (h.kind !== "model-transaction") throw Error("Missing native batch");
   expect(h.hints).toHaveLength(1);
-  expect(required(native(h.hints[0]).m_pNew).GetChgSet().GetItemState(90, false)).toBe(
+  expect(required(native(h.hints[0]).m_pNew).GetChgSet().GetItemState(93, false)).toBe(
     SfxItemState.SET,
   );
   c.client.Dispose();
@@ -397,7 +397,7 @@ it("native unsigned32 items retain native inheritance, signed UNO bits and indep
   expect(number.equals(new SwTableBoxNumFormat(7))).toBe(false);
 });
 it("native protection defaults keep three independent flags and exact member clone contracts", /** Checks native flags rather than an opaque substitute. @returns Nothing. */ () => {
-  const item = new SvxProtectItem(127);
+  const item = new SvxProtectItem(110);
   expect([item.IsContentProtected(), item.IsSizeProtected(), item.IsPosProtected()]).toEqual([
     false,
     false,
@@ -405,7 +405,7 @@ it("native protection defaults keep three independent flags and exact member clo
   ]);
   expect(item.Clone()).toEqual(item);
   item.SetContentProtect(true);
-  expect(item.equals(new SvxProtectItem(127))).toBe(false);
+  expect(item.equals(new SvxProtectItem(110))).toBe(false);
   item.SetSizeProtect(true);
   item.SetPosProtect(true);
   const clone = item.Clone();
@@ -421,9 +421,9 @@ it("native protection defaults keep three independent flags and exact member clo
   expect(item.QueryValue(3)).toBeUndefined();
   expect(item.PutValue(true, 3)).toBe(false);
   expect(clone.QueryValue()).toEqual([true, true, true]);
-  const size = new SvxProtectItem(127);
+  const size = new SvxProtectItem(110);
   size.SetSizeProtect(true);
-  const pos = new SvxProtectItem(127);
+  const pos = new SvxProtectItem(110);
   pos.SetPosProtect(true);
   expect(item.equals(size)).toBe(false);
   expect(item.equals(pos)).toBe(false);
@@ -482,7 +482,7 @@ it("actual pooled protection and cell defaults supply effective native old and r
     pool = doc.GetAttrPool(),
     format = doc.MakeTableBoxFormat(),
     o = observe(format);
-  const protection = new SvxProtectItem(127);
+  const protection = new SvxProtectItem(110);
   protection.SetContentProtect(true);
   protection.SetPosProtect(true);
   const items = [
@@ -492,17 +492,17 @@ it("actual pooled protection and cell defaults supply effective native old and r
     new SwTableBoxValue(1.5),
   ];
   const defaults = [
-    new SvxProtectItem(127),
+    new SvxProtectItem(110),
     new SwTableBoxNumFormat(),
     new SwTableBoxFormula(""),
     new SwTableBoxValue(),
   ];
   for (const [index, item] of items.entries()) {
     const expected = required(defaults[index]);
-    expect(pool.GetUserOrPoolDefaultItem(item.Which())).toEqual(expected);
+    expect(pool.GetUserOrPoolDefaultItem(item.Which()).equals(expected)).toBe(true);
     expect(format.SetFormatAttr(item)).toBe(true);
     const hint = native(o.hints.at(-1));
-    expect(required(hint.m_pOld).GetChgSet().Get(item.Which())).toEqual(expected);
+    expect(required(hint.m_pOld).GetChgSet().Get(item.Which()).equals(expected)).toBe(true);
     expect(required(hint.m_pNew).GetChgSet().Get(item.Which())).toEqual(item);
     const restored = pool.CreateItem({
       which: item.Which(),
@@ -514,13 +514,14 @@ it("actual pooled protection and cell defaults supply effective native old and r
     expect(
       required(native(o.hints.at(-1)).m_pNew)
         .GetChgSet()
-        .Get(item.Which()),
-    ).toEqual(expected);
+        .Get(item.Which())
+        .equals(expected),
+    ).toBe(true);
   }
-  expect(pool.CreateItem({ which: 157, value: -1 })).toEqual(new SwTableBoxNumFormat(0xffffffff));
+  expect(pool.CreateItem({ which: 160, value: -1 })).toEqual(new SwTableBoxNumFormat(0xffffffff));
   expect(
     /** Rejects an invalid protection snapshot. @returns Never. */ () =>
-      pool.CreateItem({ which: 127, value: 1 }),
+      pool.CreateItem({ which: 110, value: 1 }),
   ).toThrow("protection is invalid");
   o.client.Dispose();
 });
@@ -546,9 +547,9 @@ it("native parent rejection and delegated clear no-op keep original storage and 
   expect(format.GetVertOrient()).toEqual(item);
   clear.mockRestore();
   expect(format.ResetAllFormatAttr()).toBe(1);
-  expect(required(native(o.hints[0]).m_pNew).GetChgSet().Get(109)).toEqual(
-    new SwFormatVertOrient(),
-  );
+  expect(
+    required(native(o.hints[0]).m_pNew).GetChgSet().Get(112).equals(new SwFormatVertOrient()),
+  ).toBe(true);
   o.client.Dispose();
 });
 it("native SwModify ignores unrelated browser hints while forwarding native death values", /** Original SwModify::SwClientNotify filters by native hint identity rather than acting as generic Sfx forwarding. @returns Nothing. */ () => {

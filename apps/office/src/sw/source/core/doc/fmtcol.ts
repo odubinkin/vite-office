@@ -7,6 +7,7 @@ import {
   RES_PARATR_OUTLINELEVEL,
   WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
 } from "../../../inc/hintids";
+import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { SwNumRuleItem } from "../para/paratr";
 import { SwFormat } from "../attr/format";
@@ -28,9 +29,14 @@ export type WriterParagraphStyle = string;
 
 /** Named Writer format collection; unlike SwFormat it is not automatic. */
 export class SwFormatColl extends SwFormat {
-  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @returns Nothing. */
-  public constructor(pool: SwAttrPool, name: string, parent?: SwFormatColl) {
-    super(pool, name, WRITER_TEXT_FORMAT_COLL_WHICH_RANGES, parent);
+  /** Creates a named format collection. @param pool - Owning Writer pool. @param name - UI name. @param parent - Optional parent collection. @param ranges - Original admitted style ranges. @returns Nothing. */
+  public constructor(
+    pool: SwAttrPool,
+    name: string,
+    parent?: SwFormatColl,
+    ranges: WhichRangesContainer = WRITER_TEXT_FORMAT_COLL_WHICH_RANGES,
+  ) {
+    super(pool, name, ranges, parent);
     this.SetAuto(false);
   }
 }

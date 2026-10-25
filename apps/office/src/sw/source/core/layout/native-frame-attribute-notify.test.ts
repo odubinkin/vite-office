@@ -73,8 +73,8 @@ function delta(
   format: SwFrameFormat,
   items: readonly SfxPoolItem[],
 ): AttrSetChangeHint {
-  const oldSet = new SwAttrSet(doc.GetAttrPool(), [[90, 129]]),
-    newSet = new SwAttrSet(doc.GetAttrPool(), [[90, 129]]);
+  const oldSet = new SwAttrSet(doc.GetAttrPool(), [[93, 132]]),
+    newSet = new SwAttrSet(doc.GetAttrPool(), [[93, 132]]);
   for (const item of items) {
     oldSet.Put(item);
     newSet.Put(item);
@@ -84,7 +84,7 @@ function delta(
     new SwAttrSetChg(format.GetAttrSet(), newSet),
   );
 }
-it.each([92, 93, 94, 99, 113, 117, 90, 109])(
+it.each([95, 96, 97, 102, 116, 120, 93, 112])(
   "native legacy Which%s invalidates the specified physical areas",
   /** Checks literal native mask and action ordering. @param which - Native item identity. @returns Nothing. */ (
     which,
@@ -93,28 +93,28 @@ it.each([92, 93, 94, 99, 113, 117, 90, 109])(
       format = doc.MakeTableBoxFormat(),
       frame = new Probe(format);
     const item =
-      which === 90
+      which === 93
         ? new SwFormatFrameSize(SwFrameSize.Fixed, 300, 400)
         : new SfxUInt16Item(which, 1);
     try {
       ready(frame);
       format.CallSwClientNotify(new LegacyModifyHint(undefined, item));
       expect(state(frame)).toEqual(
-        which === 109
+        which === 112
           ? [true, true, true, false]
-          : which === 117
+          : which === 120
             ? [true, true, false, false]
-            : which === 90
+            : which === 93
               ? [false, false, true, false]
               : [false, false, true, true],
       );
       expect(frame.events).toEqual(
-        which === 109
+        which === 112
           ? []
-          : which === 117
+          : which === 120
             ? ["page", InvalidationType.INVALID_POS]
             : [
-                ...(which === 113 ? [["prepare", 2]] : []),
+                ...(which === 116 ? [["prepare", 2]] : []),
                 "page",
                 InvalidationType.INVALID_PRTAREA,
                 InvalidationType.INVALID_SIZE,
@@ -137,8 +137,8 @@ it("native delta iteration accumulates once, preserves item identities and inval
   frame.InsertBehind(parent);
   next.InsertBehind(parent, frame);
   const hint = delta(doc, format, [
-    new SfxUInt16Item(117, 1),
-    new SvxBoxItem(113),
+    new SfxUInt16Item(120, 1),
+    new SvxBoxItem(116),
     new SwFormatFrameSize(SwFrameSize.Minimum, 100, 500),
   ]);
   try {
@@ -169,7 +169,7 @@ it("native delta iteration accumulates once, preserves item identities and inval
           item,
         ) => item.Which(),
       ),
-    ).toEqual([90, 113, 117]);
+    ).toEqual([93, 116, 120]);
     frame.events.length = 0;
     next.events.length = 0;
     format.CallSwClientNotify(hint);
@@ -183,7 +183,7 @@ it("empty and incomplete native deltas retain state, while old items take preced
   const doc = new SwDoc(),
     format = doc.MakeTableBoxFormat(),
     frame = new Probe(format),
-    item = new SfxUInt16Item(117, 1);
+    item = new SfxUInt16Item(120, 1);
   try {
     ready(frame);
     const empty = delta(doc, format, []);
@@ -202,8 +202,8 @@ it("empty and incomplete native deltas retain state, while old items take preced
       [undefined, undefined],
     ]);
     const borrowed = new LegacyModifyHint(item, new SwFormatFrameSize());
-    expect(borrowed.GetWhich()).toBe(117);
-    expect(new LegacyModifyHint(undefined, item).GetWhich()).toBe(117);
+    expect(borrowed.GetWhich()).toBe(120);
+    expect(new LegacyModifyHint(undefined, item).GetWhich()).toBe(120);
     expect(new LegacyModifyHint(undefined, undefined).GetWhich()).toBe(0);
     format.CallSwClientNotify(borrowed);
     expect(state(frame)).toEqual([true, true, false, false]);
@@ -240,7 +240,7 @@ it("row callbacks prioritize frame size over split and suppress unrelated legacy
     peer = new RowProbe(line),
     format = line.GetFrameFormat();
   const hint = delta(doc, format, [
-    new SvxBoxItem(113),
+    new SvxBoxItem(116),
     new SwFormatRowSplit(false),
     new SwFormatFrameSize(SwFrameSize.Minimum, 0, 800),
   ]);
@@ -249,17 +249,17 @@ it("row callbacks prioritize frame size over split and suppress unrelated legacy
     ready(peer);
     ready(required(row.Lower()));
     format.CallSwClientNotify(hint);
-    expect(row.selected).toEqual([required(hint.m_pNew).GetChgSet().GetItemIfSet(90, false)]);
+    expect(row.selected).toEqual([required(hint.m_pNew).GetChgSet().GetItemIfSet(93, false)]);
     expect(row.selected[0]).toBe(peer.selected[0]);
     expect(state(row)).toEqual([false, false, true, false]);
     expect(state(required(row.Lower()))).toEqual([false, false, true, false]);
     ready(row);
-    const split = delta(doc, format, [new SvxBoxItem(113), new SwFormatRowSplit(false)]);
+    const split = delta(doc, format, [new SvxBoxItem(116), new SwFormatRowSplit(false)]);
     format.CallSwClientNotify(split);
-    expect(row.selected.at(-1)).toBe(required(split.m_pNew).GetChgSet().GetItemIfSet(129, false));
+    expect(row.selected.at(-1)).toBe(required(split.m_pNew).GetChgSet().GetItemIfSet(132, false));
     expect(state(row)).toEqual([true, true, true, false]);
     for (const hint of [
-      new LegacyModifyHint(undefined, new SvxBoxItem(113)),
+      new LegacyModifyHint(undefined, new SvxBoxItem(116)),
       { kind: "format-inheritance-changed", formatId: format.GetName() } as const,
       { kind: "document-state-changed" } as const,
     ])
@@ -270,12 +270,12 @@ it("row callbacks prioritize frame size over split and suppress unrelated legacy
     format.CallSwClientNotify(new LegacyModifyHint(undefined, new SwFormatFrameSize()));
     expect(state(row)).toEqual([false, false, true, false]);
     ready(row);
-    format.CallSwClientNotify(new LegacyModifyHint(new SvxBoxItem(113), undefined));
+    format.CallSwClientNotify(new LegacyModifyHint(new SvxBoxItem(116), undefined));
     expect(state(row)).toEqual([false, false, true, true]);
     ready(row);
     format.CallSwClientNotify(new AttrSetChangeHint(hint.m_pOld, undefined));
     expect(state(row)).toEqual([true, true, true, false]);
-    format.CallSwClientNotify(delta(doc, format, [new SvxBoxItem(113)]));
+    format.CallSwClientNotify(delta(doc, format, [new SvxBoxItem(116)]));
     expect(state(row)).toEqual([false, false, true, true]);
   } finally {
     row.Dispose();
@@ -305,7 +305,7 @@ it("real shared cell attributes invalidate print areas, preserve locks and refre
     expect(format.SetFormatAttr(new SwFormatVertOrient(700, 3, 7))).toBe(true);
     format.UnlockModify();
     expect(state(frame)).toEqual([true, true, true, false]);
-    expect(format.ResetFormatAttr(109)).toBe(true);
+    expect(format.ResetFormatAttr(112)).toBe(true);
     expect(state(frame)).toEqual([true, false, true, true]);
     ready(frame);
     format.CallSwClientNotify(new LegacyModifyHint(undefined, new SwFormatVertOrient()));

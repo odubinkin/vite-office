@@ -69,8 +69,8 @@ it("mounted native notifier updates original row height cell alignment and inher
     expect(session.view.GetWrtShell().CaptureCursorState()).toEqual(cursor);
     act(
       /** Restores actual native defaults and inherited font values. @returns Nothing. */ () => {
-        format.ResetFormatAttr(109);
-        rowFormat.ResetFormatAttr(90);
+        format.ResetFormatAttr(112);
+        rowFormat.ResetFormatAttr(93);
         doc.GetDfltTextFormatColl().ResetFormatAttr(RES_CHRATR_FONTSIZE);
       },
     );

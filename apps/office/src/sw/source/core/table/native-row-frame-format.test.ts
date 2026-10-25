@@ -46,21 +46,21 @@ it("native row format has exact ranges and concrete pool defaults without author
   expect(format.DerivedFrom()).toBe(doc.GetDfltFrameFormat());
   expect(format.GetAttrSet().GetParent()).toBe(doc.GetDfltFrameFormat().GetAttrSet());
   expect(format.GetAttrSet().GetRanges()).toEqual([
-    [89, 90],
-    [98, 99],
-    [105, 105],
-    [107, 107],
-    [109, 109],
-    [112, 114],
-    [129, 129],
-    [137, 137],
-    [160, 160],
+    [92, 93],
+    [101, 102],
+    [108, 108],
+    [110, 110],
+    [112, 112],
+    [115, 117],
+    [132, 132],
+    [140, 140],
+    [163, 163],
   ]);
   expect(format.GetRowSplit()).toBeInstanceOf(SwFormatRowSplit);
-  expect(format.GetRowSplit().Which()).toBe(129);
+  expect(format.GetRowSplit().Which()).toBe(132);
   expect(format.GetRowSplit().GetValue()).toBe(true);
   expect(format.GetFrameSize()).toBeInstanceOf(SwFormatFrameSize);
-  expect(format.GetFrameSize().Which()).toBe(90);
+  expect(format.GetFrameSize().Which()).toBe(93);
   expect(format.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Variable);
   expect(format.GetFrameSize().GetWidthSizeType()).toBe(SwFrameSize.Fixed);
   expect(format.GetFrameSize().GetWidth()).toBe(0);

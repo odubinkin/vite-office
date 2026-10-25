@@ -77,97 +77,97 @@ export const RES_TXTATR_AUTOFMT = 53 as const;
 export const RES_TXTATR_INETFMT = 54 as const;
 
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
-export const RES_PARATR_ADJUST = 65 as const;
+export const RES_PARATR_ADJUST = 67 as const;
 
 /** Paragraph split permission, matching pinned `RES_PARATR_SPLIT`. */
-export const RES_PARATR_SPLIT = 66 as const;
+export const RES_PARATR_SPLIT = 68 as const;
 
 /** Minimum lines before a paragraph split, matching pinned `RES_PARATR_ORPHANS`. */
-export const RES_PARATR_ORPHANS = 67 as const;
+export const RES_PARATR_ORPHANS = 69 as const;
 
 /** Minimum lines after a paragraph split, matching pinned `RES_PARATR_WIDOWS`. */
-export const RES_PARATR_WIDOWS = 68 as const;
+export const RES_PARATR_WIDOWS = 70 as const;
 
 /** Paragraph tab-stop collection, `RES_PARATR_BEGIN + 5`. */
-export const RES_PARATR_TABSTOP = 69 as const;
+export const RES_PARATR_TABSTOP = 71 as const;
 
 /** Proportional paragraph line spacing, `RES_PARATR_BEGIN`. */
-export const RES_PARATR_LINESPACING = 64 as const;
+export const RES_PARATR_LINESPACING = 66 as const;
 
 /** Paragraph numbering-rule name, `RES_PARATR_BEGIN + 9`. */
-export const RES_PARATR_NUMRULE = 73 as const;
+export const RES_PARATR_NUMRULE = 75 as const;
 
 /** Paragraph outline level, matching pinned RES_PARATR_BEGIN + 16. */
-export const RES_PARATR_OUTLINELEVEL = 80 as const;
+export const RES_PARATR_OUTLINELEVEL = 82 as const;
 
 /** Paragraph list identity, first item after regular paragraph attributes. */
-export const RES_PARATR_LIST_ID = 83 as const;
+export const RES_PARATR_LIST_ID = 86 as const;
 
 /** Paragraph list level. */
-export const RES_PARATR_LIST_LEVEL = 84 as const;
+export const RES_PARATR_LIST_LEVEL = 87 as const;
 
 /** Paragraph list restart flag. */
-export const RES_PARATR_LIST_ISRESTART = 85 as const;
+export const RES_PARATR_LIST_ISRESTART = 88 as const;
 
 /** Paragraph explicit list restart value. */
-export const RES_PARATR_LIST_RESTARTVALUE = 86 as const;
+export const RES_PARATR_LIST_RESTARTVALUE = 89 as const;
 
 /** Paragraph counted-in-list flag. */
-export const RES_PARATR_LIST_ISCOUNTED = 87 as const;
+export const RES_PARATR_LIST_ISCOUNTED = 90 as const;
 
 /** Native frame-size item, RES_FRMATR_BEGIN + 1. */
-export const RES_FRM_SIZE = 90 as const;
+export const RES_FRM_SIZE = 93 as const;
 
 /** Vertical frame orientation, RES_FRMATR_BEGIN + 20. */
-export const RES_VERT_ORIENT = 109 as const;
+export const RES_VERT_ORIENT = 112 as const;
 
 /** Native horizontal frame orientation, RES_FRMATR_BEGIN +21. */
-export const RES_HORI_ORIENT = 110 as const;
+export const RES_HORI_ORIENT = 113 as const;
 
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
-export const RES_BOX = 113 as const;
+export const RES_BOX = 116 as const;
 /** Original page text grid, RES_FRMATR_BEGIN +33. */
-export const RES_TEXTGRID = 122 as const;
+export const RES_TEXTGRID = 125 as const;
 
 /** Direct paragraph text-left margin, matching `RES_MARGIN_TEXTLEFT`. */
-export const RES_MARGIN_TEXTLEFT = 93 as const;
+export const RES_MARGIN_TEXTLEFT = 96 as const;
 
 /** First-line paragraph indent, matching `RES_MARGIN_FIRSTLINE`. */
-export const RES_MARGIN_FIRSTLINE = 92 as const;
+export const RES_MARGIN_FIRSTLINE = 95 as const;
 
 /** Right paragraph margin, matching `RES_MARGIN_RIGHT`. */
-export const RES_MARGIN_RIGHT = 94 as const;
+export const RES_MARGIN_RIGHT = 97 as const;
 
 /** Original frame left/right spacing, matching RES_LR_SPACE. */
-export const RES_LR_SPACE = 98 as const;
+export const RES_LR_SPACE = 101 as const;
 
 /** Upper/lower paragraph spacing, matching `RES_UL_SPACE`. */
-export const RES_UL_SPACE = 99 as const;
+export const RES_UL_SPACE = 102 as const;
 
 /** Paragraph page descriptor and number offset, matching pinned `RES_PAGEDESC`. */
-export const RES_PAGEDESC = 100 as const;
+export const RES_PAGEDESC = 103 as const;
 
 /** Page or column break mode, matching pinned `RES_BREAK`. */
-export const RES_BREAK = 101 as const;
+export const RES_BREAK = 104 as const;
 
 /** Keep paragraph with the following paragraph, matching `RES_KEEP`. */
-export const RES_KEEP = 117 as const;
+export const RES_KEEP = 120 as const;
 
 /** Paragraph line-number participation, matching `RES_LINENUMBER`. */
-export const RES_LINENUMBER = 123 as const;
+export const RES_LINENUMBER = 126 as const;
 
 /** Table adjacent-border merging, RES_FRMATR_BEGIN + 43. */
-export const RES_COLLAPSING_BORDERS = 132 as const;
+export const RES_COLLAPSING_BORDERS = 135 as const;
 
 /** Native table split attribute, RES_FRMATR_BEGIN +31. */
-export const RES_LAYOUT_SPLIT = 120 as const;
+export const RES_LAYOUT_SPLIT = 123 as const;
 /** Native row split attribute, RES_FRMATR_BEGIN +40. */
-export const RES_ROW_SPLIT = 129 as const;
+export const RES_ROW_SPLIT = 132 as const;
 
 /** Native cell formula identity; concrete calculation remains unimplemented. */
-export const RES_BOXATR_FORMULA = 158 as const;
+export const RES_BOXATR_FORMULA = 161 as const;
 /** Native cell numeric value identity; concrete value processing remains unimplemented. */
-export const RES_BOXATR_VALUE = 159 as const;
+export const RES_BOXATR_VALUE = 162 as const;
 
 /** WhichIds supported by the current Writer text-node auto-attribute set. */
 export const WRITER_TEXT_NODE_WHICH_RANGES = [
@@ -243,3 +243,51 @@ export const WRITER_CHARACTER_WHICH_RANGES = [
   [RES_CHRATR_CTL_POSTURE, RES_CHRATR_CTL_WEIGHT],
   [RES_CHRATR_HIGHLIGHT, RES_CHRATR_HIGHLIGHT],
 ] as const;
+
+/** Original RES_TXTATR_BEGIN range boundary from hintids.hxx. */
+export const RES_TXTATR_BEGIN = 49 as const;
+
+/** Original RES_TXTATR_END range boundary from hintids.hxx. */
+export const RES_TXTATR_END = 66 as const;
+
+/** Original RES_PARATR_BEGIN range boundary from hintids.hxx. */
+export const RES_PARATR_BEGIN = 66 as const;
+
+/** Original RES_PARATR_END range boundary from hintids.hxx. */
+export const RES_PARATR_END = 86 as const;
+
+/** Original RES_PARATR_LIST_BEGIN range boundary from hintids.hxx. */
+export const RES_PARATR_LIST_BEGIN = 86 as const;
+
+/** Original RES_PARATR_LIST_END range boundary from hintids.hxx. */
+export const RES_PARATR_LIST_END = 92 as const;
+
+/** Original RES_FRMATR_BEGIN range boundary from hintids.hxx. */
+export const RES_FRMATR_BEGIN = 92 as const;
+
+/** Original RES_FRMATR_END range boundary from hintids.hxx. */
+export const RES_FRMATR_END = 146 as const;
+
+/** Original RES_GRFATR_BEGIN range boundary from hintids.hxx. */
+export const RES_GRFATR_BEGIN = 146 as const;
+
+/** Original RES_GRFATR_END range boundary from hintids.hxx. */
+export const RES_GRFATR_END = 160 as const;
+
+/** Original RES_BOXATR_BEGIN range boundary from hintids.hxx. */
+export const RES_BOXATR_BEGIN = 160 as const;
+
+/** Original RES_BOXATR_END range boundary from hintids.hxx. */
+export const RES_BOXATR_END = 163 as const;
+
+/** Original RES_UNKNOWNATR_BEGIN range boundary from hintids.hxx. */
+export const RES_UNKNOWNATR_BEGIN = 163 as const;
+
+/** Original RES_UNKNOWNATR_END range boundary from hintids.hxx. */
+export const RES_UNKNOWNATR_END = 164 as const;
+
+/** Original frame protection identity, RES_FRMATR_BEGIN +18. */
+export const RES_PROTECT = 110 as const;
+
+/** Original cell number-format identity, RES_BOXATR_BEGIN. */
+export const RES_BOXATR_FORMAT = 160 as const;

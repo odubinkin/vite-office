@@ -8,7 +8,7 @@ it("native UNO proportions survive original table ItemSet copy without recomputi
   const doc = new SwDoc(),
     table = doc.nodes.MakeTableNode("LRValue"),
     format = table.GetFrameFormat();
-  const item = new SvxLRSpaceItem(98);
+  const item = new SvxLRSpaceItem(101);
   item.SetTextFirstLineOffset(SvxIndentValue.twips(-3), 50);
   item.SetLeft(SvxIndentValue.twips(-5), 50);
   item.SetRight(SvxIndentValue.twips(7), 50);

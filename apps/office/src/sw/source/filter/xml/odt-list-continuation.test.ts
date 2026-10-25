@@ -482,7 +482,7 @@ it("imports native root continuation and default IDs through common and automati
           );
           expect(state(copied)).toEqual(expected(test.before));
           const record = encodeWriterDocument(doc);
-          expect(record.swModelVersion).toBe(16);
+          expect(record.swModelVersion).toBe(17);
           const worker = decodeWriterDocument(record);
           expect(worker.GetNumRuleTable()[0]).not.toBe(doc.GetNumRuleTable()[0]);
           expect(state(worker)).toEqual(expected(test.before));

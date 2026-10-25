@@ -624,7 +624,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     node.SetParagraphAlignment("right");
     applyWriterParagraphList(node, { kind: "bullet", level: 1, styleId: "Bullets" });
     const snapshot = serializeWriterDocument(writer);
-    expect(snapshot).toMatchObject({ swModelVersion: 16 });
+    expect(snapshot).toMatchObject({ swModelVersion: 17 });
     expect(snapshot.textNodes[0]).toMatchObject({
       formatCollId: "heading-1",
       hints: [],
@@ -721,7 +721,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
 
     const snapshot = encodeWriterDocument(writer);
     expect(snapshot).toMatchObject({
-      swModelVersion: 16,
+      swModelVersion: 17,
       pageDescriptors: [
         { followName: "First Page", value: { name: "Standard" } },
         { followName: "Standard", value: { leftMargin: 720, name: "First Page" } },

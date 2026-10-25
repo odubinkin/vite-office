@@ -37,7 +37,7 @@ it.each([false, true])(
       size.SetWidthPercentRelation(3);
       size.SetHeightPercent(255);
       size.SetHeightPercentRelation(4);
-      const border = new SvxBoxItem(113);
+      const border = new SvxBoxItem(116);
       border.SetDistance(123, 0);
       const orient = new SwFormatVertOrient(321, 2, 3);
       original.SetFormatAttr(border);
@@ -84,8 +84,8 @@ it.each([false, true])(
         expect(third.GetFrameFormat()).not.toBe(restored);
         expect(restored.DerivedFrom()).toBe(doc.GetDfltFrameFormat());
         expect(restored.GetRowSplit().GetValue()).toBe(true);
-        expect((restored.GetAttrSet().Get(113) as SvxBoxItem).GetDistance(0)).toBe(123);
-        expect((restored.GetAttrSet().Get(109) as SwFormatVertOrient).GetPos()).toBe(321);
+        expect((restored.GetAttrSet().Get(116) as SvxBoxItem).GetDistance(0)).toBe(123);
+        expect((restored.GetAttrSet().Get(112) as SwFormatVertOrient).GetPos()).toBe(321);
         if (authored) {
           expect(restored.GetFrameSize().GetHeight()).toBe(880);
           expect(restored.GetFrameSize().GetWidth()).toBe(700);

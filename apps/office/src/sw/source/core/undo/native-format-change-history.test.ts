@@ -51,7 +51,7 @@ it("original cell frames consume native inheritance and remain attached through 
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(shell.Undo()).toBe(true);
       expect(box.GetFrameFormat().DerivedFrom()).toBe(doc.GetDfltFrameFormat());
-      expect(box.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient());
+      expect(box.GetFrameFormat().GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
       expect(frame.GetFormat()).toBe(box.GetFrameFormat());
       expect(shell.Redo()).toBe(true);
       expect(box.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient(240, 3, 7));

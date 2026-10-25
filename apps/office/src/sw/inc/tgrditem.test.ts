@@ -47,7 +47,7 @@ function query(
 
 it("retains complete native default fields, typed queries, mutable copies and all equality fields", /** Each field is native item state, not a browser-only approximation. @returns Nothing. */ () => {
   const item = new SwTextGridItem();
-  expect(item.Which()).toBe(122);
+  expect(item.Which()).toBe(125);
   expect(item.QueryValue()).toEqual([
     0xc0c0c0,
     20,

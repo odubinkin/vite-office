@@ -265,21 +265,21 @@ it("matches native complete policy counter cache notification and traversal sequ
         node = required(texts[at]);
       events.splice(0);
       if (kind === 0) {
-        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 87]]);
+        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 90]]);
         items.Put(new SwNumRuleItem("Counters"));
-        items.Put(new SfxStringItem(83, "A"));
-        items.Put(new SfxInt16Item(84, required(test.levels[at])));
+        items.Put(new SfxStringItem(86, "A"));
+        items.Put(new SfxInt16Item(87, required(test.levels[at])));
         node.SetAttr(items);
       }
       if (kind === 1) node.SetCountedInList(Boolean(value));
       if (kind === 2) {
-        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 87]]);
-        items.Put(new SfxBoolItem(85, true));
-        items.Put(new SfxInt16Item(86, value));
+        const items = new SfxItemSet(doc.GetAttrPool(), [[1, 90]]);
+        items.Put(new SfxBoolItem(88, true));
+        items.Put(new SfxInt16Item(89, value));
         node.SetAttr(items);
       }
       if (kind === 3) node.SetAttrListLevel(value);
-      if (kind === 4) node.ResetAttr(73);
+      if (kind === 4) node.ResetAttr(75);
       if (kind === 5) rule.Validate(doc);
       if (kind === 6) {
         rule.SetContinusNum(Boolean(value));

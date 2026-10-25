@@ -54,7 +54,7 @@ it.each(["default", "unknown", "inherited", "invalid", "disabled"])(
       table = doc.nodes.MakeTableNode("AbsentHeadline", { headerRows: 2, repeatHeaderRows: true }),
       input = new SfxItemSet(
         doc.GetAttrPool(),
-        state === "unknown" ? [[120, 120]] : [[21150, 21150]],
+        state === "unknown" ? [[123, 123]] : [[21150, 21150]],
       ),
       parent = new SfxItemSet(doc.GetAttrPool(), [[21150, 21150]]);
     try {

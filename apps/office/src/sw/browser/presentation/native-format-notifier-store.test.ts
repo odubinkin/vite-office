@@ -58,12 +58,12 @@ it("native format store invalidates actual root and Sfx caches from original row
     expect(signal).not.toHaveBeenCalled();
     expect(first.GetFrameFormat()).toBe(format);
     expect(row.GetFrameFormat()).toBe(rowFormat);
-    expect(second.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient());
+    expect(second.GetFrameFormat().GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
     expect(first.GetParagraphs()[0]).toBe(node);
     expect(node.GetText()).toBe("Original cell text");
     expect(session.view.GetWrtShell().CaptureCursorState()).toEqual(cursor);
     unsubscribe();
-    format.ResetFormatAttr(109);
+    format.ResetFormatAttr(112);
     expect(publish).toHaveBeenCalledTimes(3);
     session.viewStore.Close();
     expect(format.GetNotifier().HasListeners()).toBe(false);

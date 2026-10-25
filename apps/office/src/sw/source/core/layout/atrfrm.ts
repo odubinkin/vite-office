@@ -1,7 +1,6 @@
 /** @fileoverview Represents table frame-format identity from pinned atrfrm.cxx; fly frames and the full frame attribute collection remain unverified. */
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
-import type { SwDoc } from "../doc/doc";
 import type { WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
@@ -42,9 +41,5 @@ export class SwFrameFormat extends SwFormat {
   /** Reads effective complete native vertical orientation. @returns Owned, inherited or pooled item. */
   public GetVertOrient(): SwFormatVertOrient {
     return this.GetAttrSet().Get(RES_VERT_ORIENT) as SwFormatVertOrient;
-  }
-  /** Resolves the owning native document. @returns Attribute-pool owner. */
-  public GetDoc(): SwDoc {
-    return this.GetAttrSet().GetDoc();
   }
 }

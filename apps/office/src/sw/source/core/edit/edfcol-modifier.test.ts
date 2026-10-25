@@ -44,7 +44,7 @@ function fixture() {
     node = required(doc.paragraphs[0]);
   node.SetText("CtrlResetText");
   const target = doc.MakeTextFormatColl("Ctrl target", doc.GetDfltTextFormatColl(), "CtrlTarget");
-  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
+  target.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 95));
   const owner = new SwDocShell(
     doc,
     createDocument({ id: "ctrl-reset", title: "Ctrl", suiteId: "writer" }),
@@ -105,7 +105,7 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
     ) => {
       const { doc, node, target, owner, shell, dispatch } = fixture();
       node.SetTextHints(hints(doc, 2, 5));
-      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
       const original = required(node.GetpSwpHints()).clone();
       shell.SetPaM(new SwPosition(node, 4), new SwPosition(node, 1));
       const request = new SfxRequest(5552, [
@@ -214,14 +214,14 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
       const { doc, node, target, shell, dispatch } = fixture();
       doc.EnsureNumRule("CtrlRule", "numbered");
       target.SetFormatAttr(new SwNumRuleItem("CtrlRule"));
-      target.SetFormatAttr(new SfxInt16Item(84, 2));
+      target.SetFormatAttr(new SfxInt16Item(87, 2));
       if (repeated) node.ChgFormatColl(target);
       node.SetAttr(new SwNumRuleItem("CtrlRule"));
-      node.SetAttr(new SfxStringItem(83, "CtrlList"));
-      node.SetAttr(new SfxInt16Item(84, 4));
-      node.SetAttr(new SfxBoolItem(85, true));
-      node.SetAttr(new SfxInt16Item(86, 7));
-      node.SetAttr(new SfxBoolItem(87, false));
+      node.SetAttr(new SfxStringItem(86, "CtrlList"));
+      node.SetAttr(new SfxInt16Item(87, 4));
+      node.SetAttr(new SfxBoolItem(88, true));
+      node.SetAttr(new SfxInt16Item(89, 7));
+      node.SetAttr(new SfxBoolItem(90, false));
       const before = required(node.GetpSwAttrSet()).Clone();
       dispatch.Execute(".uno:StyleApply", { Template: "Ctrl target", KeyModifier: 8192 });
       expect(node.GetAttrListLevel()).toBe(2);
@@ -250,11 +250,11 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
         target.SetFormatAttr(new SwNumRuleItem("AfterRule"));
       }
       node.SetAttr(new SwNumRuleItem("BeforeRule"));
-      node.SetAttr(new SfxStringItem(83, "BeforeList"));
-      node.SetAttr(new SfxInt16Item(84, 4));
-      node.SetAttr(new SfxBoolItem(85, true));
-      node.SetAttr(new SfxInt16Item(86, 7));
-      node.SetAttr(new SfxBoolItem(87, false));
+      node.SetAttr(new SfxStringItem(86, "BeforeList"));
+      node.SetAttr(new SfxInt16Item(87, 4));
+      node.SetAttr(new SfxBoolItem(88, true));
+      node.SetAttr(new SfxInt16Item(89, 7));
+      node.SetAttr(new SfxBoolItem(90, false));
       const before = required(node.GetpSwAttrSet()).Clone();
       dispatch.Execute(".uno:StyleApply", { Template: "Ctrl target", KeyModifier: 8192 });
       for (const which of [73, 83, 84, 85, 86, 87])
@@ -286,21 +286,21 @@ describe("native Ctrl paragraph StyleApply", /** Checks request to real core his
       doc.EnsureNumRule("ProtectedCtrl", "numbered");
       if (ruleState !== 0) node.SetAttr(new SwNumRuleItem(ruleState === 1 ? "" : "ProtectedCtrl"));
       if (pageState !== 0) node.SetAttr(new SwFormatPageDesc(pageState === 1 ? "" : "Standard", 3));
-      if (breakState !== 0) node.SetAttr(new SfxInt16Item(101, breakState === 1 ? 0 : 4));
-      node.SetAttr(new SfxInt16Item(84, 4));
+      if (breakState !== 0) node.SetAttr(new SfxInt16Item(104, breakState === 1 ? 0 : 4));
+      node.SetAttr(new SfxInt16Item(87, 4));
       node.SetAttr(new SvxWeightItem(8, 15));
-      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+      node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 95));
       const resetSet = createParagraphStyleResetSet(doc);
       expect(resetSet.GetItemIfSet(15, false)?.QueryValue()).toBe(5);
-      for (const which of [83, 84, 85, 86, 87])
+      for (const which of [86, 87, 88, 89, 90])
         expect(resetSet.GetItemIfSet(which, false)).toBeUndefined();
       setTextFormatCollAtNode(node, target, false, resetSet);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(73, false) !== undefined).toBe(ruleState === 2);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(100, false) !== undefined).toBe(pageState === 2);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(101, false) !== undefined).toBe(breakState === 2);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(75, false) !== undefined).toBe(ruleState === 2);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(103, false) !== undefined).toBe(pageState === 2);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(104, false) !== undefined).toBe(breakState === 2);
       expect(node.GetpSwAttrSet()?.GetItemIfSet(15, false)).toBeUndefined();
       expect(node.GetParagraphFirstLineIndent()).toBe(240);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(84, false)?.QueryValue()).toBe(4);
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(87, false)?.QueryValue()).toBe(4);
     },
   );
 

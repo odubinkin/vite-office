@@ -48,15 +48,15 @@ it("real cell attribute history retains original frame clients and exact native 
     const hint = required(changes[0])[1] as AttrSetChangeHint;
     expect(changes[0]?.[0]).toBe(first.GetFrameFormat());
     expect(required(hint.m_pNew).GetTheChgdSet()).toBe(first.GetFrameFormat().GetAttrSet());
-    expect(required(hint.m_pOld).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient());
-    expect(required(hint.m_pNew).GetChgSet().Get(109)).toEqual(new SwFormatVertOrient(720, 2, 7));
+    expect(required(hint.m_pOld).GetChgSet().Get(112).equals(new SwFormatVertOrient())).toBe(true);
+    expect(required(hint.m_pNew).GetChgSet().Get(112)).toEqual(new SwFormatVertOrient(720, 2, 7));
     expect(second.GetFrameFormat()).toBe(original);
     expect(a.GetFormat()).toBe(first.GetFrameFormat());
     expect(repeat.GetFormat()).toBe(first.GetFrameFormat());
     expect(b.GetFormat()).toBe(original);
     for (let cycle = 0; cycle < 3; cycle++) {
       expect(shell.Undo()).toBe(true);
-      expect(a.GetFormat().GetVertOrient()).toEqual(new SwFormatVertOrient());
+      expect(a.GetFormat().GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
       expect(a.GetFormat()).toBe(first.GetFrameFormat());
       expect(repeat.GetFormat()).toBe(first.GetFrameFormat());
       expect(b.GetFormat()).toBe(second.GetFrameFormat());
@@ -105,7 +105,7 @@ it("real row height native deltas and history preserve complete original frame i
     );
     expect(changes).toHaveLength(1);
     const hint = required(changes[0])[1] as AttrSetChangeHint;
-    expect(required(hint.m_pNew).GetChgSet().Get(90)).toEqual(size);
+    expect(required(hint.m_pNew).GetChgSet().Get(93)).toEqual(size);
     expect(required(hint.m_pNew).GetTheChgdSet()).toBe(row.GetFrameFormat().GetAttrSet());
     expect(frame.HasFixSize()).toBe(true);
     for (let cycle = 0; cycle < 3; cycle++) {

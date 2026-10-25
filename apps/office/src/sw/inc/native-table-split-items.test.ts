@@ -7,8 +7,8 @@ import { SfxItemSet, SfxItemState } from "../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
 
 it.each([
-  [SwFormatLayoutSplit, 120],
-  [SwFormatRowSplit, 129],
+  [SwFormatLayoutSplit, 123],
+  [SwFormatRowSplit, 132],
 ] as const)(
   "native split class%s retains true default and independent concrete clone",
   /** Checks native constructor, inherited boolean contract and complete copy identity. @param Type - Native class. @param which - Literal pinned identity. @returns Nothing. */
@@ -35,8 +35,8 @@ it.each([
   },
 );
 it.each([
-  [SwFormatLayoutSplit, 120],
-  [SwFormatRowSplit, 129],
+  [SwFormatLayoutSplit, 123],
+  [SwFormatRowSplit, 132],
 ] as const)(
   "Writer split pool%s preserves concrete defaults restored values and direct states",
   /** Checks real Writer registration, native inheritance and owned restoration. @param Type - Native class. @param which - Literal pinned identity. @returns Nothing. */

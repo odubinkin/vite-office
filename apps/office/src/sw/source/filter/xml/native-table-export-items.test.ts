@@ -52,7 +52,7 @@ it.each([
     right,
   ) => {
     const f = fixture(),
-      lr = new SvxLRSpaceItem(98);
+      lr = new SvxLRSpaceItem(101);
     lr.SetLeft(SvxIndentValue.twips(120));
     lr.SetRight(SvxIndentValue.twips(240));
     f.format.SetFormatAttr(lr);
@@ -78,16 +78,16 @@ it.each([false, true])(
     const f = fixture(),
       parent = new SwFrameFormat(f.doc.GetAttrPool(), "ExportParent");
     try {
-      f.format.ResetFormatAttr(90);
-      f.format.ResetFormatAttr(110);
+      f.format.ResetFormatAttr(93);
+      f.format.ResetFormatAttr(113);
       f.format.SetDerivedFrom(parent);
       if (inherited) {
         parent.SetFormatAttr(new SwFormatFrameSize(0, 7200));
         parent.SetFormatAttr(new SwFormatHoriOrient(0, H.CENTER));
-        parent.SetFormatAttr(new SvxULSpaceItem(120, 240, 99));
+        parent.SetFormatAttr(new SvxULSpaceItem(120, 240, 102));
         parent.SetFormatAttr(new SwFormatLayoutSplit(false));
-        parent.SetFormatAttr(new SfxBoolItem(132, true));
-        const lr = new SvxLRSpaceItem(98);
+        parent.SetFormatAttr(new SfxBoolItem(135, true));
+        const lr = new SvxLRSpaceItem(101);
         lr.SetLeft(SvxIndentValue.twips(360));
         lr.SetRight(SvxIndentValue.twips(480));
         parent.SetFormatAttr(lr);
@@ -95,7 +95,7 @@ it.each([false, true])(
       const projection = vi.spyOn(f.table, "GetFormat");
       try {
         expect(properties(f.doc)).toBe("");
-        expect(f.format.GetAttrSet().GetItemIfSet(99, false)).toBeUndefined();
+        expect(f.format.GetAttrSet().GetItemIfSet(102, false)).toBeUndefined();
         expect(f.format.GetULSpace().GetUpper()).toBe(inherited ? 120 : 0);
         expect(projection).not.toHaveBeenCalled();
       } finally {
@@ -114,10 +114,10 @@ it.each([false, true])(
   ) => {
     const f = fixture(),
       parent = new SwFrameFormat(f.doc.GetAttrPool(), "MarginGuard"),
-      lr = new SvxLRSpaceItem(98);
+      lr = new SvxLRSpaceItem(101);
     try {
       f.format.SetDerivedFrom(parent);
-      f.format.ResetFormatAttr(110);
+      f.format.ResetFormatAttr(113);
       if (inherited) parent.SetFormatAttr(new SwFormatHoriOrient(0, H.NONE));
       lr.SetLeft(SvxIndentValue.twips(120));
       lr.SetRight(SvxIndentValue.twips(240));
@@ -126,7 +126,7 @@ it.each([false, true])(
       expect(attrs).not.toContain("table:align");
       expect(attrs.includes("fo:margin-left=")).toBe(inherited);
       expect(attrs.includes("fo:margin-right=")).toBe(inherited);
-      f.format.ResetFormatAttr(98);
+      f.format.ResetFormatAttr(101);
       expect(properties(f.doc)).not.toContain("fo:margin-");
     } finally {
       f.format.SetDerivedFrom();
@@ -140,10 +140,10 @@ it.each([false, true])(
     collapse,
   ) => {
     const f = fixture();
-    f.format.SetFormatAttr(new SvxULSpaceItem(120, 240, 99));
+    f.format.SetFormatAttr(new SvxULSpaceItem(120, 240, 102));
     f.format.SetFormatAttr(new SwFormatHoriOrient(0, H.NONE));
     f.format.SetFormatAttr(new SwFormatLayoutSplit(collapse));
-    f.format.SetFormatAttr(new SfxBoolItem(132, collapse));
+    f.format.SetFormatAttr(new SfxBoolItem(135, collapse));
     f.table.SetRowsToRepeat(0);
     const projection = vi.spyOn(f.table, "GetFormat");
     try {
@@ -162,9 +162,9 @@ it.each([false, true])(
       expect(reopened.GetFrameFormat().GetULSpace()).toEqual(f.format.GetULSpace());
       expect(reopened.GetFrameFormat().GetFrameSize().GetWidth()).toBe(3000);
       expect(
-        (reopened.GetFrameFormat().GetAttrSet().Get(120) as SwFormatLayoutSplit).GetValue(),
+        (reopened.GetFrameFormat().GetAttrSet().Get(123) as SwFormatLayoutSplit).GetValue(),
       ).toBe(collapse);
-      expect((reopened.GetFrameFormat().GetAttrSet().Get(132) as SfxBoolItem).GetValue()).toBe(
+      expect((reopened.GetFrameFormat().GetAttrSet().Get(135) as SfxBoolItem).GetValue()).toBe(
         collapse,
       );
       expect(reopened.GetRowsToRepeat()).toBe(0);

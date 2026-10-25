@@ -236,8 +236,8 @@ it("rejects malformed page-item transport without accepting unknown fields as na
       useOn: 0,
       formats: [
         [
-          { which: 90, value: { Width: 100, Height: 100 } },
-          { which: 90, value: { Width: 100, Height: 100 } },
+          { which: 93, value: { Width: 100, Height: 100 } },
+          { which: 93, value: { Width: 100, Height: 100 } },
         ],
         [],
         [],

@@ -105,7 +105,7 @@ it("resets list attributes on removal and clears synthesized suppression on retu
           item,
         ) => item.Which(),
       ),
-  ).toEqual([73, 80]);
+  ).toEqual([75, 82]);
   expect(node.IsEmptyListStyleDueToSetOutlineLevelAttr()).toBe(true);
   const attrs = node.GetpSwAttrSet();
   node.SetEmptyListStyleDueToSetOutlineLevelAttr();
@@ -187,7 +187,7 @@ it("applies assigned heading levels independently of numbering and honors false 
   const item = node.GetDoc().GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_OUTLINELEVEL);
   expect(item).toBeInstanceOf(SfxUInt16Item);
   expect(item.QueryValue()).toBe(0);
-  expect(doc.GetAttrPool().CreateItem({ which: 80, value: 10 })).toEqual(new SfxUInt16Item(80, 10));
+  expect(doc.GetAttrPool().CreateItem({ which: 82, value: 10 })).toEqual(new SfxUInt16Item(82, 10));
 });
 
 it("retains the shared helper branches for explicit rule changes without paragraph reset", /** Verifies empty-rule, same-rule reattachment and invalid outline-level guards directly at the native helper boundary. @returns Nothing. */ () => {

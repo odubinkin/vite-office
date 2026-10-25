@@ -16,6 +16,7 @@ import { SwFrameFormat } from "../layout/atrfrm";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatFrameSize, SwFrameSize } from "../../../inc/fmtfsize";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
+import { SwTableBoxNumFormat } from "../attr/cellatr";
 import { TableBoxFormatChanged } from "../../../inc/hints";
 /** Requires an original owner. @param value - Optional owner. @returns Actual owner. */
 function required<T>(value: T | undefined): T {
@@ -45,22 +46,22 @@ it("native cell format owns exact ranges and concrete inherited defaults", /** C
   expect(format.DerivedFrom()).toBe(f.doc.GetDfltFrameFormat());
   expect(format.GetAttrSet().GetParent()).toBe(f.doc.GetDfltFrameFormat().GetAttrSet());
   expect(format.GetAttrSet().GetRanges()).toEqual([
-    [89, 90],
-    [98, 99],
-    [105, 105],
-    [107, 107],
-    [109, 109],
-    [112, 114],
-    [127, 127],
-    [137, 137],
-    [157, 159],
-    [160, 160],
+    [92, 93],
+    [101, 102],
+    [108, 108],
+    [110, 110],
+    [112, 112],
+    [115, 117],
+    [130, 130],
+    [140, 140],
+    [160, 162],
+    [163, 163],
   ]);
   expect(format.GetVertOrient()).toBeInstanceOf(SwFormatVertOrient);
   expect(format.GetVertOrient().GetPos()).toBe(0);
   expect(format.GetVertOrient().GetVertOrient()).toBe(0);
   expect(format.GetVertOrient().GetRelationOrient()).toBe(1);
-  expect(format.GetBox().Which()).toBe(113);
+  expect(format.GetBox().Which()).toBe(116);
   expect(format.GetBox().GetDistance(0)).toBe(0);
   expect(format.GetFrameSize().GetWidth()).toBe(0);
   expect(format.GetFrameSize().GetHeightSizeType()).toBe(SwFrameSize.Variable);
@@ -86,14 +87,14 @@ it("shared cell claim copies every direct item and preserves unrelated peers", /
   size.SetHeightPercentRelation(4);
   format.SetFormatAttr(size);
   format.SetFormatAttr(new SwFormatVertOrient(720, 3, 7));
-  format.SetFormatAttr(new SfxUInt16Item(127, 37));
+  format.SetFormatAttr(new SwTableBoxNumFormat(37));
   format.SetAuto(false);
   const copy = f.first.ClaimFrameFormat();
   expect(copy).not.toBe(format);
   expect(copy.GetFrameSize().equals(size)).toBe(true);
   expect(copy.GetFrameSize()).not.toBe(format.GetFrameSize());
   expect(copy.GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
-  expect(copy.GetAttrSet().Get(127).QueryValue()).toBe(37);
+  expect(copy.GetAttrSet().Get(160).QueryValue()).toBe(37);
   expect(copy.IsAuto()).toBe(false);
   expect(copy.DerivedFrom()).toBe(f.doc.GetDfltFrameFormat());
   expect(f.second.GetFrameFormat()).toBe(format);
@@ -119,7 +120,7 @@ it("shared cell claim copies every direct item and preserves unrelated peers", /
   expect(copy.IsDisposed()).toBe(true);
   expect(format.IsDisposed()).toBe(true);
 });
-it.each([158, 159])(
+it.each([161, 162])(
   "calculation item %s remains exclusive while shared construction excludes calculation attributes",
   /** Checks native direct SET exclusion without a calculation engine. @param which - Native item ID. @returns Nothing. */ (
     which,
@@ -129,8 +130,8 @@ it.each([158, 159])(
     format.SetFormatAttr(new SfxUInt16Item(which, 23));
     const first = new SwTableBox(format, f.first.GetStartNode());
     expect(first.GetFrameFormat()).not.toBe(format);
-    expect(first.GetFrameFormat().GetAttrSet().GetItemIfSet(158, false)).toBeUndefined();
-    expect(first.GetFrameFormat().GetAttrSet().GetItemIfSet(159, false)).toBeUndefined();
+    expect(first.GetFrameFormat().GetAttrSet().GetItemIfSet(161, false)).toBeUndefined();
+    expect(first.GetFrameFormat().GetAttrSet().GetItemIfSet(162, false)).toBeUndefined();
     expect(format.GetAttrSet().Get(which).QueryValue()).toBe(23);
     first.Dispose();
     const solo = f.doc.MakeTableBoxFormat();
@@ -192,7 +193,7 @@ it("native border publication reuses shared formats only for identical changed-s
     last = required(boxes.at(-1)),
     original = first.GetFrameFormat();
   original.SetFormatAttr(new SwFormatVertOrient(720, 3, 7));
-  original.SetFormatAttr(new SfxUInt16Item(127, 37));
+  original.SetFormatAttr(new SwTableBoxNumFormat(37));
   for (const box of boxes) box.ChgFrameFormat(original);
   expect(table.GetFrameFormat().GetName()).toBe("Borders");
   const position = new SwPosition(required(first.GetParagraphs()[0]), 0),
@@ -200,14 +201,14 @@ it("native border publication reuses shared formats only for identical changed-s
   position.Dispose();
   cursor.SetMark();
   cursor.GetMark().Assign(required(last.GetParagraphs()[0]), 0);
-  const item = new SvxBoxItem(113);
+  const item = new SvxBoxItem(116);
   item.SetAllDistances(80);
   for (const edge of [0, 1, 2, 3]) item.SetLine(new SvxBorderLine(new Color(0x112233), 20), edge);
   const info = new SvxBoxInfoItem(SID_ATTR_BORDER_INNER);
   info.SetLine(new SvxBorderLine(new Color(0x445566), 10), 0);
   info.SetLine(new SvxBorderLine(new Color(0x445566), 10), 1);
   const value = new SfxItemSet(doc.GetAttrPool(), [
-    [113, 113],
+    [116, 116],
     [SID_ATTR_BORDER_INNER, SID_ATTR_BORDER_INNER],
   ]);
   value.Put(item);
@@ -222,7 +223,7 @@ it("native border publication reuses shared formats only for identical changed-s
   expect(middle.GetBox().GetTop()).toBeUndefined();
   expect(middle.GetBox().GetRight()).toBeUndefined();
   expect(middle.GetBox().GetDistance(0)).toBe(80);
-  expect(middle.GetAttrSet().Get(127).QueryValue()).toBe(37);
+  expect(middle.GetAttrSet().Get(160).QueryValue()).toBe(37);
   expect(middle.GetVertOrient()).toEqual(new SwFormatVertOrient(720, 3, 7));
   expect(doc.GetUndoManager().GetUndoActionCount()).toBe(1);
   cursor.Dispose();

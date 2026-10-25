@@ -11,6 +11,7 @@ import {
   SwFormatChangeHint,
   type SwModelHint,
 } from "../../../inc/hints";
+import type { SwDoc } from "../doc/doc";
 import { SwAttrSet, type SwAttrPool } from "./swatrset";
 import type { SvxULSpaceItem, SvxLRSpaceItem } from "../../../../editeng/source/items/frmitems";
 import type { SwFormatHoriOrient } from "../../../inc/fmtornt";
@@ -37,6 +38,11 @@ export class SwFormat extends BroadcastingModify {
       this.RegisterToModify(derivedFrom);
       this.attributeSet.SetParent(derivedFrom.GetAttrSet());
     }
+  }
+
+  /** Original document lookup belongs to every native format, through its actual attribute pool. @returns Document. */
+  public GetDoc(): SwDoc {
+    return this.attributeSet.GetDoc();
   }
 
   /** Returns the UI format name. @returns Format name. */

@@ -379,7 +379,7 @@ it("exports native implicit restart positions and direct starts through genuine 
         expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected(test.before));
         const record = encodeWriterDocument(doc);
-        expect(record.swModelVersion).toBe(16);
+        expect(record.swModelVersion).toBe(17);
         const worker = decodeWriterDocument(record);
         expect(worker.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(worker)).toEqual(expected(test.before));

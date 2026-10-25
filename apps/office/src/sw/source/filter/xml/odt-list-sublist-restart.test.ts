@@ -237,7 +237,7 @@ it("imports native repeated-sublist restart and pending return through real pack
         expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected);
         const record = encodeWriterDocument(imported);
-        expect(record.swModelVersion).toBe(16);
+        expect(record.swModelVersion).toBe(17);
         expect(state(decodeWriterDocument(record))).toEqual(expected);
         const exported = writeOdtDocument(imported, { title: "Sublist" });
         const xml =

@@ -43,7 +43,7 @@ describe("ODT canonical state validation", /** Registers current-schema rejectio
     expect(
       /** Rejects a direct outline item beyond the named-style export slice. @returns Content XML when validation unexpectedly succeeds. */ () =>
         exportContentXml(directOutline),
-    ).toThrow("ODT export does not support WhichId 80 on paragraph at node");
+    ).toThrow("ODT export does not support WhichId 82 on paragraph at node");
     expect(outlinedParagraph.GetAttrOutlineLevel()).toBe(4);
     const invalidCharacter = createWriterDocument();
     const invalidCharacterSet = invalidCharacter

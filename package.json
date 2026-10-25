@@ -46,7 +46,7 @@
     "test:static": "npm run build && node scripts/check-static-build.mjs",
     "typecheck": "npm run typecheck:tools && npm run typecheck --workspace @vite-office/office",
     "typecheck:tools": "tsc --project tsconfig.tools.json",
-    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run check:calc-resources && npm run test:tooling && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity",
+    "verify": "npm run format:check && npm run lint && npm run typecheck && npm run check:dependencies && npm run check:writer-resources && npm run check:calc-resources && npm run test:tooling && npm run test:coverage && npm run test:inventory:coverage && npm run test:e2e && npm run test:static && npm run check:docs && npm run check:file-size && npm run check:source-tree && npm run check:writer-hintids && npm run check:source-provenance && npm run inventory:invariants && npm run inventory:parity",
     "test:writer": "npm run test:writer --workspace @vite-office/office --",
     "test:coverage:writer": "npm run test:coverage:writer --workspace @vite-office/office --",
     "test:e2e:writer": "npm run build && playwright test --config apps/office/playwright.config.ts --project writer",
@@ -65,7 +65,8 @@
     "inventory:parity:calc": "tsx scripts/libreoffice-inventory/registry-cli.ts check --scope calc",
     "inventory:parity:shared": "tsx scripts/libreoffice-inventory/registry-cli.ts check --scope shared",
     "generate:calc-resources": "tsx scripts/generate-calc-ui-resources.ts",
-    "check:calc-resources": "tsx scripts/generate-calc-ui-resources.ts --check"
+    "check:calc-resources": "tsx scripts/generate-calc-ui-resources.ts --check",
+    "check:writer-hintids": "tsx scripts/check-writer-hintids.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.12.1",

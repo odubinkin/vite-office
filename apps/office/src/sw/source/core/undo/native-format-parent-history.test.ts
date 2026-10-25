@@ -25,7 +25,7 @@ it("restored native roots and rejected cycles remain stable through repeated tab
     expect(format.GetVertOrient().GetVertOrient()).toBe(2);
     expect(format.SetDerivedFrom()).toBe(true);
     expect(format.DerivedFrom()).toBe(root);
-    expect(format.GetVertOrient()).toEqual(new SwFormatVertOrient());
+    expect(format.GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
     const rowParent = doc.MakeTableLineFormat(),
       rowFormat = row.GetFrameFormat();
     rowParent.SetFormatAttr(new SwFormatFrameSize(SwFrameSize.Fixed, 0, 960));
@@ -45,7 +45,7 @@ it("restored native roots and rejected cycles remain stable through repeated tab
       expect(shell.Undo()).toBe(true);
       expect(row.GetFrameFormat().GetFrameSize().GetHeight()).toBe(0);
       expect(shell.Undo()).toBe(true);
-      expect(box.GetFrameFormat().GetVertOrient()).toEqual(new SwFormatVertOrient());
+      expect(box.GetFrameFormat().GetVertOrient().equals(new SwFormatVertOrient())).toBe(true);
       expect(box.GetFrameFormat().DerivedFrom()).toBe(root);
       expect(row.GetFrameFormat().DerivedFrom()).toBe(root);
       expect(shell.Redo()).toBe(true);

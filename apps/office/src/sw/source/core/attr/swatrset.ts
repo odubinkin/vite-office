@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { RES_PROTECT } from "../../../inc/hintids";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { Color, ColorTransparency, COL_AUTO } from "../../../../tools/inc/color";
 import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
@@ -185,10 +186,10 @@ export class SwAttrPool extends SfxItemPool {
       },
     );
     this.RegisterDefaultItem(
-      new SvxProtectItem(127),
+      new SvxProtectItem(RES_PROTECT),
       /** Restores the existing browser protection snapshot. @param value - Stored flags. @returns Native item. */
       (value) => {
-        const item = new SvxProtectItem(127);
+        const item = new SvxProtectItem(RES_PROTECT);
         if (!Array.isArray(value)) throw new Error("Stored Writer protection is invalid.");
         item.SetContentProtect(Boolean(value[0]));
         item.SetSizeProtect(Boolean(value[1]));

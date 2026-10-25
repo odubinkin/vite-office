@@ -26,14 +26,14 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
         doc.GetAttrPool(),
         state === "unknown"
           ? [
-              [113, 113],
-              [120, 120],
-              [132, 132],
+              [116, 116],
+              [123, 123],
+              [135, 135],
               [10023, 10023],
             ]
           : [[1, 32767]],
       ),
-      parent = new SfxItemSet(doc.GetAttrPool(), [[129, 129]]),
+      parent = new SfxItemSet(doc.GetAttrPool(), [[132, 132]]),
       submit = vi.fn(),
       cancel = vi.fn();
     table.AddColumnWidth(3000);
@@ -65,7 +65,7 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
       expect((checkbox as HTMLInputElement).indeterminate).toBe(expected === undefined);
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       expect(submit.mock.calls[0]?.[0]).not.toHaveProperty("rowSplit");
-      expect(submit.mock.calls[0]?.[0].items.GetItemIfSet(129, false)).toBeUndefined();
+      expect(submit.mock.calls[0]?.[0].items.GetItemIfSet(132, false)).toBeUndefined();
       fireEvent.click(screen.getByRole("checkbox", { name: tableLabel }));
       expect(checkbox).toBeDisabled();
       expect(checkbox).toHaveAttribute(
@@ -84,8 +84,8 @@ it.each(["false", "true", "default", "unknown", "invalid", "disabled", "inherite
       fireEvent.click(screen.getByRole("button", { name: "OK" }));
       const output = submit.mock.calls.at(-1)?.[0];
       expect(output.rowSplit).toBe(expected !== true);
-      expect(output.items.Get(129)).toBeInstanceOf(SwFormatRowSplit);
-      expect(output.items.Get(129).GetValue()).toBe(expected !== true);
+      expect(output.items.Get(132)).toBeInstanceOf(SwFormatRowSplit);
+      expect(output.items.Get(132).GetValue()).toBe(expected !== true);
       fireEvent.click(screen.getByRole("button", { name: "Reset" }));
       expect(screen.getByRole("checkbox", { name: rowLabel })).toHaveAttribute(
         "aria-checked",

@@ -6,14 +6,14 @@
     "id": "writer.which-id.RES_PARATR_ADJUST",
     "kind": "which-id",
     "local": {
-      "marker": "export const RES_PARATR_ADJUST = 65 as const;",
+      "marker": "export const RES_PARATR_ADJUST = 67 as const;",
       "path": "apps/office/src/sw/inc/hintids.ts",
-      "value": 65
+      "value": 67
     },
     "upstream": {
       "marker": "RES_PARATR_ADJUST(RES_PARATR_BEGIN + 1)",
       "path": "sw/inc/hintids.hxx",
-      "value": 65
+      "value": 67
     }
   }
 }

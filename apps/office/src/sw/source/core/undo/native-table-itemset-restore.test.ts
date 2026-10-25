@@ -43,7 +43,7 @@ it.each([false, true])(
       size.SetHeightPercent(37);
       size.SetWidthPercentRelation(3);
       size.SetHeightPercentRelation(4);
-      const lr = new SvxLRSpaceItem(98);
+      const lr = new SvxLRSpaceItem(101);
       lr.SetLeft(SvxIndentValue.twips(-120));
       lr.SetRight(SvxIndentValue.twips(240));
       lr.SetGutterMargin(31);
@@ -54,10 +54,10 @@ it.each([false, true])(
       const items = [
         size,
         lr,
-        new SvxULSpaceItem(120, 240, 99, true),
+        new SvxULSpaceItem(120, 240, 102, true),
         new SwFormatHoriOrient(77, 0, 3, true),
         new SwFormatLayoutSplit(false),
-        new SfxBoolItem(132, true),
+        new SfxBoolItem(135, true),
       ];
       const owner = inherited ? parent : format;
       if (inherited) format.SetDerivedFrom(parent);
@@ -78,16 +78,16 @@ it.each([false, true])(
         project = vi.spyOn(table, "GetFormat"),
         replay = vi.spyOn(table, "SetFormat");
       const after = new SfxItemSet(doc.GetAttrPool(), [
-        [90, 90],
-        [98, 99],
-        [110, 110],
-        [120, 120],
-        [132, 132],
+        [93, 93],
+        [101, 102],
+        [113, 113],
+        [123, 123],
+        [135, 135],
       ]);
       const resized = size.Clone();
       resized.SetWidth(9000);
       after.Put(resized);
-      after.Put(new SvxULSpaceItem(360, 480, 99));
+      after.Put(new SvxULSpaceItem(360, 480, 102));
       after.Put(new SwFormatLayoutSplit(true));
       doc.GetUndoManager().Clear();
       expect(shell.SetTableAttr(after)).toBe(true);

@@ -6,14 +6,14 @@
     "id": "writer.which-id.RES_PARATR_NUMRULE",
     "kind": "which-id",
     "local": {
-      "marker": "export const RES_PARATR_NUMRULE = 73 as const;",
+      "marker": "export const RES_PARATR_NUMRULE = 75 as const;",
       "path": "apps/office/src/sw/inc/hintids.ts",
-      "value": 73
+      "value": 75
     },
     "upstream": {
       "marker": "RES_PARATR_NUMRULE(RES_PARATR_BEGIN + 9)",
       "path": "sw/inc/hintids.hxx",
-      "value": 73
+      "value": 75
     }
   }
 }
