@@ -1,0 +1,120 @@
+{
+  "task": "202610251549-R2DJ64",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "coverage": {
+    "ooxml": {
+      "lines": {
+        "total": 297,
+        "covered": 297,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 320,
+        "covered": 320,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 77,
+        "covered": 77,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 186,
+        "covered": 186,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "ooxml-package": {
+      "lines": {
+        "total": 104,
+        "covered": 104,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 118,
+        "covered": 118,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 66,
+        "covered": 66,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "sourceSha256": {
+    "apps/office/src/oox/source/core/xmlfilterbase.ts": "ed67167191ebe42ca38fed03b59f53a5d4ae1fecdc231bd8987804cedf05d6d4",
+    "apps/office/src/oox/source/core/upstream-packages.test.ts": "c5aabaa40289bdf2d69a94495c3ba08f17a5b70d2b940cf3aefe157d4b88ec9d",
+    "apps/office/src/oox/source/core/relations.test.ts": "def4b866491021d5cc569ab0851163d2e6f72cd7206b4a490d037dd676097760",
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "7246317aa60d7c698454390568cf9772a775f0742c790603f105e52d9733eda4",
+    "apps/office/src/oox/source/core/relations.ts": "67573e1665009cdb8d384b4dab457ef70918670cad51fd5a1aa7351313b8be49",
+    "apps/office/src/oox/source/core/fragmenthandler.ts": "c63684c6d432f83127525f0220cf51b3b490abdc04f6cf1735e3ee68b4783899",
+    "apps/office/src/oox/source/core/relationshandler.ts": "00f6156935152f7c835ce7e34782f11e9aaa6abfbc5c860b67a567928795975a",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "332755792a4a86ad6c0691e9a95f666e8576d92139d6d614fc4a8b39d51ed324",
+    "apps/office/src/tools/source/fsys/urlobj.ts": "51e083f46ed4f23372b5d4b67c306859b412687858903872d48656a5d1c111e4",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "86f35a4955fc3e0a705f88cfcfaff8a34231a5536913f9952eae3bdc4bf3169d",
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts": "1d35374d1d29888c7dc9003ffdb62822b94ed5d0329d1580b1fb0b53eb8afdf0",
+    "apps/office/src/package/source/zippackage/ZipPackage.ts": "31f944b1c30e91fc6438400aa5d45308a98fb36f3432b33fdabef731029193fe",
+    "scripts/check-module-boundaries.mjs": "753df3194897e1011bc5076806455a0558b37ed4186e6ace79e26b096d8a9007"
+  },
+  "tests": [
+    {
+      "command": "npm run test:shared -- src/oox src/comphelper/source/xml/ofopxmlhelper.test.ts src/package/source/zipapi/ZipFile.test.ts src/sax/source/fastparser/fastparser.test.ts",
+      "result": "pass",
+      "cases": 74
+    },
+    {
+      "command": "npm run test:coverage:shared --workspace @vite-office/office -- src/oox src/comphelper/source/xml/ofopxmlhelper.test.ts '--coverage.include=src/oox/**/*.ts' --coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts --coverage.include=src/tools/source/fsys/urlobj.ts --coverage.reportsDirectory=coverage/ooxml",
+      "result": "pass",
+      "cases": 57
+    },
+    {
+      "command": "npm run test:coverage:shared --workspace @vite-office/office -- src/comphelper/source/xml/ofopxmlhelper.test.ts src/package/source/zippackage/native-plain-manifest.test.ts src/package/source/manifest/native-manifest-import.test.ts src/package/source/manifest/native-manifest-export.test.ts --coverage.include=src/package/source/zippackage/ZipPackage.ts --coverage.reportsDirectory=coverage/ooxml-package",
+      "result": "pass",
+      "cases": 40
+    },
+    {
+      "command": "npm run test:shared -- src/oox/source/core/upstream-packages.test.ts",
+      "result": "pass",
+      "cases": 4,
+      "skipped": 0
+    }
+  ],
+  "gatesPassed": [
+    "npm run typecheck",
+    "npm run build",
+    "npm run check:dependencies",
+    "npm run check:docs",
+    "npm run check:file-size",
+    "npm run check:source-tree",
+    "npm run check:source-provenance",
+    "npm run inventory:registry:build",
+    "npm run inventory:invariants",
+    "npm run inventory:parity",
+    "node scripts/check-static-build.mjs",
+    "ap doctor",
+    "node .agentplane/policy/check-routing.mjs",
+    "git diff --check",
+    "Scoped ESLint and Prettier for all changed source/test/tool paths"
+  ],
+  "notes": [
+    "Coverage profiles are separate current-source full-file profiles, not sums of overlapping tests.",
+    "Pinned package checks validate fragment routing/parsing, not Writer/Calc feature import.",
+    "Initial hello fixture assertion and JSDoc errors were corrected without changing fixtures or production behavior.",
+    "Doctor passed with an existing managed hook readiness warning; hook installation is outside approved scope.",
+    "Full suite not due: first task after SWRD7X checkpoint. DOCX/XLSX model and UI integration remains in dependent tasks."
+  ]
+}
