@@ -172,6 +172,21 @@ it("uses native SAL UTF-7 conversion for RTF code page 65000", () => {
   }
 });
 
+it("uses pinned ISO-2022-JP and ISO-2022-KR RTF decoders", () => {
+  const cases: readonly (readonly [number, string, string])[] = [
+    [50220, String.raw`\'1b\'24\'42\'24\'22\'1b\'28\'42`, "あ"],
+    [50225, String.raw`\'1b\'24\'29\'43\'0e\'30\'21\'0f`, "가"],
+  ];
+  for (const [codepage, bytes, expected] of cases) {
+    const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}${bytes}}`);
+    try {
+      expect(document.paragraphs[0]?.GetText()).toBe(expected);
+    } finally {
+      document.Dispose();
+    }
+  }
+});
+
 it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
   const cases: readonly (readonly [number, string, string])[] = [
     [1250, "8c", "Ś"],

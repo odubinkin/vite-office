@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 54
+revision: 55
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T21:36:21.250Z"
+doc_updated_at: "2026-10-25T21:41:49.191Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Native TXT/RTF/Markdown paths and broad SAL single-byte, DBCS, EUC-JP, ISCII and UTF-8 byte conversion were implemented in prior task commits. This batch adds pinned SAL UTF-7 text-to-Unicode conversion and RTF code page 65000 dispatch; targeted RTF/UTF-7 tests (99), typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER114 records the pinned disabled UTF-7 streaming-context restoration, preserved locally. Remaining current-model gaps include ISO-2022 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit; full current-slice closure remains pending. Capability matrix: docs/program/writer-native-text-filter-slice.md. This batch ports the pinned SAL ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220/50225, binding existing JIS X 0208 and KS X 1001 tables, preserving streaming context, source bad-input actions and UI-connected RTF dispatch. Command: npx vitest run apps/office/src/sal/textenc/convertiso2022.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts apps/office/src/sal/textenc/tcvtutf7.test.ts apps/office/src/sal/textenc/tcvtmb.test.ts. Result: pass. Evidence: 108 tests in four files. Scope: ISO-2022 state transitions and RTF integration, adjacent UTF-7/DBCS regressions. Command: npm run typecheck; npx eslint changed source --max-warnings 0; npx prettier --check changed source. Result: pass. Scope: changed TypeScript. Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:dependencies. Result: pass. Evidence: 1406 runtime modules mapped by provenance; Writer/shared registries and 1405 runtime-source boundaries pass. Remaining gaps include full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics, the remaining byte/code-page matrix and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. No final verification or full-slice parity claim yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Native TXT/RTF/Markdown paths and broad SAL single-byte, DBCS, EUC-JP, ISCII and UTF-8 byte conversion were implemented in prior task commits. This batch adds pinned SAL UTF-7 text-to-Unicode conversion and RTF code page 65000 dispatch; targeted RTF/UTF-7 tests (99), typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER114 records the pinned disabled UTF-7 streaming-context restoration, preserved locally. Remaining current-model gaps include ISO-2022 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit; full current-slice closure remains pending. Capability matrix: docs/program/writer-native-text-filter-slice.md. This batch ports the pinned SAL ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220/50225, binding existing JIS X 0208 and KS X 1001 tables, preserving streaming context, source bad-input actions and UI-connected RTF dispatch. Command: npx vitest run apps/office/src/sal/textenc/convertiso2022.test.ts apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts apps/office/src/sal/textenc/tcvtutf7.test.ts apps/office/src/sal/textenc/tcvtmb.test.ts. Result: pass. Evidence: 108 tests in four files. Scope: ISO-2022 state transitions and RTF integration, adjacent UTF-7/DBCS regressions. Command: npm run typecheck; npx eslint changed source --max-warnings 0; npx prettier --check changed source. Result: pass. Scope: changed TypeScript. Command: npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:dependencies. Result: pass. Evidence: 1406 runtime modules mapped by provenance; Writer/shared registries and 1405 runtime-source boundaries pass. Remaining gaps include full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics, the remaining byte/code-page matrix and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. No final verification or full-slice parity claim yet.

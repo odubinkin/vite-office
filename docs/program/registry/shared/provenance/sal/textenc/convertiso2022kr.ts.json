@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertiso2022kr.ts",
+    "upstreamPath": "sal/textenc/convertiso2022kr.cxx",
+    "localSymbols": [
+      "ImplConvertIso2022KrToUnicode",
+      "ImplCreateIso2022KrToUnicodeContext",
+      "ImplResetIso2022KrToUnicodeContext",
+      "ImplDestroyIso2022KrToUnicodeContext",
+      "ImplIso2022KrToUnicodeContext"
+    ],
+    "upstreamSymbols": [
+      "ImplConvertIso2022KrToUnicode",
+      "ImplCreateIso2022KrToUnicodeContext",
+      "ImplResetIso2022KrToUnicodeContext",
+      "ImplDestroyIso2022KrToUnicodeContext",
+      "ImplIso2022KrToUnicodeContext"
+    ],
+    "preservedResponsibilities": [
+      "Pinned ISO-2022-KR text-to-Unicode state transitions, KS X 1001 lookup, streaming context and SAL bad-input handling for RTF code page 50225."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-ISO-2022-KR reverse conversion is not used by the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022kr.ts",
+          "marker": "ImplConvertIso2022KrToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.test.ts",
+          "marker": "decodes KS X 1001"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022kr.cxx",
+          "marker": "ImplConvertIso2022KrToUnicode"
+        }
+      ]
+    }
+  }
+}

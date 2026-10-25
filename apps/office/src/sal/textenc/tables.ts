@@ -44,6 +44,8 @@ import {
   RTL_TEXTENCODING_ISO_8859_9,
   RTL_TEXTENCODING_ISO_8859_15,
   RTL_TEXTENCODING_ISCII_DEVANAGARI,
+  RTL_TEXTENCODING_ISO_2022_JP,
+  RTL_TEXTENCODING_ISO_2022_KR,
   RTL_TEXTENCODING_KOI8_R,
   RTL_TEXTENCODING_KOI8_U,
   RTL_TEXTENCODING_MS_874,
@@ -249,6 +251,8 @@ export function getTextToUnicodeData(
   | Readonly<{ kind: "utf7" }>
   | Readonly<{ kind: "eucjp"; data: ImplEUCJPConvertData }>
   | Readonly<{ kind: "iscii" }>
+  | Readonly<{ kind: "iso2022jp" }>
+  | Readonly<{ kind: "iso2022kr" }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
   | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
   | undefined {
@@ -257,6 +261,8 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_UTF7) return { kind: "utf7" };
   if (encoding === RTL_TEXTENCODING_EUC_JP) return { kind: "eucjp", data: aImplEUCJPCvtData };
   if (encoding === RTL_TEXTENCODING_ISCII_DEVANAGARI) return { kind: "iscii" };
+  if (encoding === RTL_TEXTENCODING_ISO_2022_JP) return { kind: "iso2022jp" };
+  if (encoding === RTL_TEXTENCODING_ISO_2022_KR) return { kind: "iso2022kr" };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_JAPANESE)
     return { kind: "dbcs", data: aImplAPPLEJAPANESEDBCSCvtData };
