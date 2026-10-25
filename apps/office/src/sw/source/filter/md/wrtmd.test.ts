@@ -45,6 +45,45 @@ it("round trips headings, list items and ordinary escaped text", /** Checks nati
   }
 });
 
+it("exports a named style through its closest built-in heading ancestor", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing body paragraph.");
+  const heading2 = source.GetTextFormatColl("heading-2");
+  const heading4 = source.GetTextFormatColl("heading-4");
+  const parent = source.MakeTextFormatColl("Section parent", heading2);
+  const child = source.MakeTextFormatColl("Section child", parent);
+  paragraph.SetText("Inherited heading");
+  paragraph.ChgFormatColl(child);
+  const later = source.nodes.MakeTextNode("Closer heading");
+  const closer = source.MakeTextFormatColl("Closer", heading4);
+  later.ChgFormatColl(closer);
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "## Inherited heading\n\n#### Closer heading\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("keeps source block-quote-before-heading marker order", () => {
+  const source = createWriterDocument();
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing body paragraph.");
+  const quotation = source.GetTextFormatColl("quotations");
+  quotation.SetDerivedFrom(source.GetTextFormatColl("heading-3"));
+  paragraph.ChgFormatColl(quotation);
+  paragraph.SetText("Quoted heading");
+  try {
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(source))).toBe(
+      "> ### Quoted heading\n",
+    );
+  } finally {
+    source.Dispose();
+  }
+});
+
 it("writes a Markdown table from actual Writer rows", /** Checks table writer and parser agree on body order. @returns Nothing. */ () => {
   const source = createWriterDocument();
   source.paragraphs[0]?.SetText("Before");

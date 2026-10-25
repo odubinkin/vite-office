@@ -15,10 +15,23 @@ import {
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
 import type { SwDoc } from "../../core/doc/doc";
+import { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwFormat } from "../../core/attr/format";
 import { SwTableNode } from "../../core/docnode/node";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+
+const headingLevels = new Map(
+  WRITER_PARAGRAPH_STYLE_POOL.flatMap((style) => {
+    const match = /^heading-([1-6])$/u.exec(style.id);
+    return match === null ? [] : [[style.poolId, Number(match[1])] as const];
+  }),
+);
+const quotationPoolId = WRITER_PARAGRAPH_STYLE_POOL.find(
+  (style) => style.id === "quotations",
+)?.poolId;
 
 /** Serializes the current Writer body through the native Markdown writer boundary. */
 export class SwMDWriter {
@@ -63,11 +76,19 @@ export class SwMDWriter {
 
 /** Emits upstream-style heading, list, quote and fenced-code paragraph markers. @param node - Body paragraph. @returns Markdown block. */
 function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>): string {
-  const style = node.GetParagraphStyle(),
-    heading = /^heading-([1-6])$/u.exec(style);
+  const format = node.GetTextFormatColl();
+  let headingLevel = 0;
+  for (
+    let ancestor: SwFormat | undefined = format;
+    ancestor !== undefined;
+    ancestor = ancestor.DerivedFrom()
+  ) {
+    if (headingLevel === 0 && ancestor instanceof SwTextFormatColl)
+      headingLevel = headingLevels.get(ancestor.poolId) ?? 0;
+  }
   const text = writeRuns(node);
-  if (heading !== null) return `${"#".repeat(Number(heading[1]))} ${text}`;
-  if (style === "quotations") return `> ${text}`;
+  const quote = format.poolId === quotationPoolId ? "> " : "";
+  if (headingLevel > 0) return `${quote}${"#".repeat(headingLevel)} ${text}`;
   if (node.GetNumRule() !== undefined) {
     const level = node.GetActualListLevel();
     let marker = node.GetNumString();
@@ -75,10 +96,10 @@ function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>):
     const prefix = `${" ".repeat(listPrefixSizes.get(level - 1) ?? 0)}${marker} `;
     if (prefix.length > 1) {
       listPrefixSizes.set(level, prefix.length);
-      return prefix + text;
+      return quote + prefix + text;
     }
   }
-  return text;
+  return quote + text;
 }
 
 /** Source formatting counters, including negative values from explicit none items. */
