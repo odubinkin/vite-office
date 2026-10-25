@@ -162,7 +162,23 @@ export class RtfExport {
     if (defaultTabs.Count() > 0) output += `\\deftab${defaultTabs.At(0).GetTabPos()}`;
     output += this.WriteInitialPageDescription(document, blocks[0]);
     output += "\n";
-    for (const block of blocks) {
+    let currentPage = this.ResolvePageDescription(document, blocks[0]);
+    for (const [blockIndex, block] of blocks.entries()) {
+      if (blockIndex > 0) {
+        const item = this.GetDirectPageDescriptionItem(block);
+        if (item !== undefined) {
+          const page = document.FindPageDesc(item.GetPageDescName()) ?? currentPage;
+          if (currentPage.GetFollow() !== page) {
+            output += "\\sect\\sectd\\sectunlocked1";
+            output += this.WriteSectionPageDescription(page, false);
+            const restart = item.GetNumOffset();
+            if (restart !== undefined) output += `\\pgnstarts${restart}\\pgnrestart`;
+            if (page.GetFollow() !== page) output += "\\titlepg";
+            output += "\\sbkpage\n";
+          }
+          currentPage = page;
+        }
+      }
       if (block instanceof SwTableNode) {
         for (const row of block.GetTable().GetTabLines()) {
           const boxes = row.GetTabBoxes();
@@ -250,14 +266,8 @@ export class RtfExport {
     document: SwDoc,
     firstBlock: SwTextNode | SwTableNode | undefined,
   ): string {
-    const set =
-      firstBlock instanceof SwTableNode
-        ? firstBlock.GetTable().GetFrameFormat().GetAttrSet()
-        : firstBlock?.GetSwAttrSet();
-    const pageItem = set?.Get(RES_PAGEDESC) as SwFormatPageDesc | undefined;
-    const page =
-      (pageItem === undefined ? undefined : document.FindPageDesc(pageItem.GetPageDescName())) ??
-      document.GetPageDesc();
+    const pageItem = firstBlock === undefined ? undefined : this.GetPageDescriptionItem(firstBlock);
+    const page = this.ResolvePageDescription(document, firstBlock);
     let output = "";
     if (pageItem !== undefined && pageItem.GetPageDescName().length > 0) {
       for (let index = 0; index < document.GetPageDescCnt(); index++)
@@ -277,7 +287,7 @@ export class RtfExport {
   }
 
   /** Mirrors OutPageDescription for the currently represented physical page fields. */
-  private WriteSectionPageDescription(page: SwPageDesc): string {
+  private WriteSectionPageDescription(page: SwPageDesc, titlePage = true): string {
     const follow = page.GetFollow();
     const value = follow.GetValue();
     let output = "";
@@ -287,8 +297,40 @@ export class RtfExport {
     if (value.rightMargin !== 0) output += `\\margrsxn${value.rightMargin}`;
     if (value.topMargin !== 0) output += `\\margtsxn${value.topMargin}`;
     if (value.bottomMargin !== 0) output += `\\margbsxn${value.bottomMargin}`;
-    if (follow !== page) output += "\\titlepg";
+    if (titlePage && follow !== page) output += "\\titlepg";
     return output;
+  }
+
+  /** Reads the item set selected by upstream GetSwAttrSet for the initial page. */
+  private GetPageDescriptionItem(block: SwTextNode | SwTableNode): SwFormatPageDesc | undefined {
+    const set =
+      block instanceof SwTableNode
+        ? block.GetTable().GetFrameFormat().GetAttrSet()
+        : block.GetSwAttrSet();
+    return set.Get(RES_PAGEDESC) as SwFormatPageDesc;
+  }
+
+  /** Reads only a block's authored item, as OutputSectionBreaks receives GetpSwAttrSet. */
+  private GetDirectPageDescriptionItem(
+    block: SwTextNode | SwTableNode,
+  ): SwFormatPageDesc | undefined {
+    const set =
+      block instanceof SwTableNode
+        ? block.GetTable().GetFrameFormat().GetAttrSet()
+        : block.GetpSwAttrSet();
+    return set?.GetItemIfSet(RES_PAGEDESC, false) as SwFormatPageDesc | undefined;
+  }
+
+  /** Resolves the first layout descriptor through the represented document page table. */
+  private ResolvePageDescription(
+    document: SwDoc,
+    block: SwTextNode | SwTableNode | undefined,
+  ): SwPageDesc {
+    const pageItem = block === undefined ? undefined : this.GetPageDescriptionItem(block);
+    return (
+      (pageItem === undefined ? undefined : document.FindPageDesc(pageItem.GetPageDescName())) ??
+      document.GetPageDesc()
+    );
   }
 
   /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */

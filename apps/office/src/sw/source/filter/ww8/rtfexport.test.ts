@@ -324,6 +324,60 @@ it("selects the first RTF page descriptor inherited from a paragraph style", () 
   }
 });
 
+it("writes a native RTF page section and restart before a later paragraph", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("Before");
+    const alternate = source.MakePageDesc("Second Page", source.GetPageDesc());
+    source.ChgPageDesc({ ...alternate.GetValue(), width: 15120, leftMargin: 990 }, "Second Page");
+    const next = source.nodes.MakeTextNode("After");
+    next.SetAttr(new SwFormatPageDesc("Second Page", 7));
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf).toContain(
+      String.raw`\sect\sectd\sectunlocked1\pgwsxn15120\pghsxn15840\marglsxn990`,
+    );
+    expect(rtf).toContain(String.raw`\pgnstarts7\pgnrestart\sbkpage`);
+    expect(rtf.indexOf(String.raw`\sect\sectd`)).toBeLessThan(rtf.indexOf("After"));
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("writes a page section before a table with its own page descriptor", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("Before");
+    const alternate = source.MakePageDesc("Table Page", source.GetPageDesc());
+    source.ChgPageDesc({ ...alternate.GetValue(), width: 14500 }, "Table Page");
+    const table = source.nodes.MakeTableNode("Grid");
+    table.GetFrameFormat().SetFormatAttr(new SwFormatPageDesc("Table Page"));
+    const row = source.nodes.AppendTableRow(table, 1);
+    row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Cell");
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf).toContain(String.raw`\sect\sectd\sectunlocked1\pgwsxn14500`);
+    expect(rtf.indexOf(String.raw`\sect\sectd`)).toBeLessThan(rtf.indexOf(String.raw`\trowd`));
+  } finally {
+    source.Dispose();
+  }
+});
+
+it("keeps the source RTF section suppression when a page follows the previous page", () => {
+  const source = createWriterDocument();
+  try {
+    source.paragraphs[0]?.SetText("First");
+    const follow = source.MakePageDesc("Follow", source.GetPageDesc());
+    source.GetPageDesc().SetFollow(follow);
+    const next = source.nodes.MakeTextNode("Second");
+    next.SetAttr(new SwFormatPageDesc("Follow", 9));
+    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(rtf).toContain(String.raw`\titlepg`);
+    expect(rtf).not.toContain(String.raw`\sect\sectd`);
+    expect(rtf).not.toContain(String.raw`\pgnstarts9`);
+  } finally {
+    source.Dispose();
+  }
+});
+
 it.each([1, 2, 3, 5, 6])(
   "retains source RTF no-op for represented break mode %i without columns or sections",
   (mode) => {

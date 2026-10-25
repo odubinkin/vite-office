@@ -14,10 +14,10 @@
       "RtfExport::WriteNumbering"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body text, character decoration/position, source-escaped hyperlink URL fields spanning character-run changes with optional target frame but source-omitted hyperlink name, point bookmarks, paragraph alignment/indentation and native default tab distance, the first physical page descriptor through global paper/margin and section controls, paragraph style references, table alignment/left offset/cell boundaries, row height/split and direct cell vertical orientation/border/padding controls derived from native items, plus list definitions including source-mapped level numbering formats, starts, bullet glyphs and paragraph listtext as RTF; uncounted paragraphs omit list controls."
+      "Writes represented Writer body text, character decoration/position, source-escaped hyperlink URL fields spanning character-run changes with optional target frame but source-omitted hyperlink name, point bookmarks, paragraph alignment/indentation and native default tab distance, initial physical page properties and direct later paragraph/table page-style section transitions with page-number restart and follow-page suppression, paragraph style references, table alignment/left offset/cell boundaries, row height/split and direct cell vertical orientation/border/padding controls derived from native items, plus list definitions including source-mapped level numbering formats, starts, bullet glyphs and paragraph listtext as RTF; uncounted paragraphs omit list controls."
     ],
     "omittedResponsibilities": [
-      "Later page-style and section transitions, follow-page geometry, page-number restart, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
+      "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
     ],
     "evidence": {
       "local": [
@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "writes initial native page geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "writes a native RTF page section and restart"
         }
       ],
       "upstream": [
@@ -82,6 +86,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
           "marker": "RtfExport::OutPageDescription"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
+          "marker": "RtfExport::PrepareNewPageDesc"
         }
       ]
     }
