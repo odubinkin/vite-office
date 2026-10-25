@@ -96,6 +96,15 @@ it("uses pinned SAL IBM 437 and 850 tables for PC and font charsets", () => {
   }
 });
 
+it("uses pinned SAL Windows-1252 undefined-byte handling", () => {
+  const document = read(String.raw`{\rtf1\ansi A\'81\'80\'8dB}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("A\uFFFD\u20AC\uFFFDB");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
   const prefix = new TextEncoder().encode(
     String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,
