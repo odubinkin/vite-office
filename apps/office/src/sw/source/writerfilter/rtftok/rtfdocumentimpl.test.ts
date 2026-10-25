@@ -8,6 +8,8 @@ import { SwFrameSize } from "../../../inc/fmtfsize";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -18,6 +20,7 @@ import {
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
   RES_BREAK,
+  RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
@@ -111,6 +114,25 @@ it("uses upstream flag presence for keep, spacing and page-before controls", () 
     expect((second?.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem).GetValue()).toBe(false);
     expect((second?.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item).GetValue()).toBe(2);
     expect((second?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetContext()).toBe(true);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("imports RTF line rules into named style and direct paragraph items", () => {
+  const document = read(
+    "{\\rtf1\\ansi{\\stylesheet{\\s1\\sl360\\slmult1 Named;}}\\pard\\s1 Styled\\par\\pard\\sl-420\\slmult0 Fixed}",
+  );
+  try {
+    const styled = document.paragraphs[0];
+    const fixed = document.paragraphs[1];
+    const inherited = styled?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    expect(styled?.GetParagraphStyle()).toBe("named");
+    expect(inherited.GetLineSpaceRule()).toBe(SvxLineSpaceRule.Auto);
+    expect(inherited.GetPropLineSpace()).toBe(150);
+    const direct = fixed?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    expect(direct.GetLineSpaceRule()).toBe(SvxLineSpaceRule.Fix);
+    expect(direct.GetLineHeight()).toBe(420);
   } finally {
     document.Dispose();
   }

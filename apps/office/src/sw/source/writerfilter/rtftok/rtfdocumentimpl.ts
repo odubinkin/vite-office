@@ -9,6 +9,8 @@ import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import {
@@ -28,6 +30,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
+  RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
@@ -79,6 +82,8 @@ interface RtfParagraphState {
   tabAdjustment: SvxTabAdjust;
   tabFill: string;
   pageBreakBefore: boolean;
+  lineSpace: number;
+  lineMulti: number;
   alignmentSet?: boolean;
   leftSet?: boolean;
   rightSet?: boolean;
@@ -91,6 +96,7 @@ interface RtfParagraphState {
   widowControlSet?: boolean;
   tabStopsSet?: boolean;
   pageBreakBeforeSet?: boolean;
+  lineSpacingSet?: boolean;
   styleIndex?: number;
   listOverride?: number;
   listLevel: number;
@@ -189,6 +195,8 @@ const DEFAULT_PARAGRAPH: RtfParagraphState = {
   tabAdjustment: SvxTabAdjust.Left,
   tabFill: " ",
   pageBreakBefore: false,
+  lineSpace: 240,
+  lineMulti: 0,
   listLevel: 0,
 };
 const SKIPPED_DESTINATIONS = new Set([
@@ -242,6 +250,8 @@ const STYLE_PROPERTY_CONTROLS = new Set([
   "widctlpar",
   "nowidctlpar",
   "tx",
+  "sl",
+  "slmult",
 ]);
 const CHARACTER_PROPERTY_CONTROLS = new Set([
   "b",
@@ -556,6 +566,8 @@ export class RtfDocumentImpl {
     if (controls.has("widctlpar") || controls.has("nowidctlpar"))
       collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.widowControl ? 2 : 0));
     if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
+    if (controls.has("sl") || controls.has("slmult"))
+      collection.SetFormatAttr(createRtfLineSpacing(paragraph));
   }
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values. */
@@ -597,6 +609,7 @@ export class RtfDocumentImpl {
     if (paragraph.state.tabStopsSet) node.SetAttr(createRtfTabStops(paragraph.state.tabStops));
     if (paragraph.state.pageBreakBeforeSet)
       node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
+    if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
     const override = paragraph.state.listOverride;
     if (override !== undefined) {
       const sourceList = this.listOverrides.get(override),
@@ -1141,6 +1154,10 @@ export class RtfDocumentImpl {
         tabAdjustment: SvxTabAdjust.Left,
         tabFill: " ",
       };
+    else if (name === "sl" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, lineSpace: parameter, lineSpacingSet: true };
+    else if (name === "slmult" && parameter !== undefined)
+      state.paragraph = { ...state.paragraph, lineMulti: parameter, lineSpacingSet: true };
   }
 
   /** Appends text with group-scoped character state. @param value - Visible text. @param state - Current group. */
@@ -1217,6 +1234,18 @@ export class RtfDocumentImpl {
 function createRtfTabStops(stops: readonly SvxTabStop[]): SvxTabStopItem {
   const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
   for (const stop of stops) item.Insert(stop);
+  return item;
+}
+
+/** Maps Word line height modes through the native Writer spacing item. */
+function createRtfLineSpacing(paragraph: RtfParagraphState): SvxLineSpacingItem {
+  const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+  const space = paragraph.lineSpace;
+  if (space < 0) {
+    item.SetLineHeight(-space);
+    item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+  } else if (paragraph.lineMulti > 0) item.SetPropLineSpace(Math.round((space * 100) / 240));
+  else item.SetLineHeight(space);
   return item;
 }
 

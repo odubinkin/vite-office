@@ -13,8 +13,14 @@ import { getWriterParagraphAlignment } from "../../core/txtnode/ndtxt-hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxInterLineSpaceRule, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
+import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import type { SwAttrSet } from "../../core/attr/swatrset";
+import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import {
   SvxFirstLineIndentItem,
@@ -32,6 +38,7 @@ import {
   RES_PARATR_SPLIT,
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
+  RES_PARATR_LINESPACING,
 } from "../../../inc/hintids";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
@@ -61,6 +68,13 @@ export class RtfAttributeOutput {
         : 0,
       (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
       false,
+      this.WriteLineSpacing(
+        paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+        paragraph.GetSwAttrSet(),
+        paragraph.GetText().length === 0
+          ? LATIN
+          : GetScriptClass(paragraph.GetText().codePointAt(0) ?? 0),
+      ),
     );
   }
 
@@ -82,6 +96,7 @@ export class RtfAttributeOutput {
         : 0,
       (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
       true,
+      this.WriteLineSpacing(items.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem, items, LATIN),
     );
   }
 
@@ -99,6 +114,7 @@ export class RtfAttributeOutput {
     tabOffset: number,
     breakValue: number,
     styleDefinition: boolean,
+    lineSpacing: string,
   ): string {
     let output =
       alignment === "center"
@@ -131,7 +147,34 @@ export class RtfAttributeOutput {
       output += `\\tx${tab.GetTabPos() + tabOffset}`;
     }
     if (breakValue === 4 || (styleDefinition && breakValue === 6)) output += "\\pagebb";
+    output += lineSpacing;
     return output;
+  }
+
+  /** Converts the native line rule through the shared Word formula and RTF sl/slmult controls. */
+  private WriteLineSpacing(item: SvxLineSpacingItem, set: SwAttrSet, script: number): string {
+    let space = 240;
+    let multi = 0;
+    switch (item.GetLineSpaceRule()) {
+      case SvxLineSpaceRule.Fix:
+        space = -((item.GetLineHeight() << 16) >> 16);
+        break;
+      case SvxLineSpaceRule.Min:
+        space = item.GetLineHeight();
+        break;
+      case SvxLineSpaceRule.Auto:
+        if (item.GetInterLineSpaceRule() === SvxInterLineSpaceRule.Fix)
+          space =
+            item.GetInterLineSpace() +
+            AttrSetToLineHeight(set, script, set.GetDoc().GetDefaultFontDevice());
+        else {
+          if (item.GetInterLineSpaceRule() !== SvxInterLineSpaceRule.Off)
+            space = Math.round((240 * item.GetPropLineSpace()) / 100);
+          multi = 1;
+        }
+        break;
+    }
+    return `\\sl${(space << 16) >> 16}\\slmult${multi}`;
   }
 
   /** Emits represented direct character controls. @param attributes - Native run values. @returns RTF controls. */

@@ -1,6 +1,6 @@
 /** @fileoverview RTF writer round trips through the represented native reader and Writer hints. */
 import { expect, it } from "vitest";
-import { createWriterDocument } from "../../core/doc/doc";
+import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
@@ -25,6 +25,9 @@ import {
 import { SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
+import { SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
@@ -36,6 +39,9 @@ import {
   RES_PARATR_WIDOWS,
   RES_PARATR_TABSTOP,
   RES_BREAK,
+  RES_PARATR_LINESPACING,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
 } from "../../../inc/hintids";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
@@ -231,6 +237,111 @@ it("emits native page-before break controls and preserves the source first-run i
     expect((imported.paragraphs[1]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(4);
   } finally {
     imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it.each([
+  ["fixed", -300, 0, 300],
+  ["minimum", 360, 0, 360],
+  ["proportional", 360, 1, 150],
+] as const)(
+  "round trips %s native line spacing through RTF sl controls",
+  (mode, space, multi, value) => {
+    const source = createWriterDocument();
+    const paragraph = source.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    paragraph.SetText(mode);
+    const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    if (mode === "proportional") item.SetPropLineSpace(value);
+    else {
+      item.SetLineHeight(value);
+      if (mode === "fixed") item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+    }
+    paragraph.SetAttr(item);
+    let imported;
+    try {
+      const bytes = new RtfExport().ExportDocument(source);
+      expect(new TextDecoder().decode(bytes)).toContain(`\\sl${space}\\slmult${multi}`);
+      imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+      const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+      expect(result.GetLineSpaceRule()).toBe(
+        mode === "fixed"
+          ? SvxLineSpaceRule.Fix
+          : mode === "minimum"
+            ? SvxLineSpaceRule.Min
+            : SvxLineSpaceRule.Auto,
+      );
+      expect(mode === "proportional" ? result.GetPropLineSpace() : result.GetLineHeight()).toBe(
+        value,
+      );
+    } finally {
+      imported?.Dispose();
+      source.Dispose();
+    }
+  },
+);
+
+it("adds measured font height to native RTF leading as the pinned Word exporter does", () => {
+  const measured: [string, number][] = [];
+  const source = new SwDoc({
+    defaultFontDevice: {
+      getDefaultFont: () => undefined,
+      measureTextHeight: (family, height) => {
+        measured.push([family, height]);
+        return 270;
+      },
+    },
+  });
+  const paragraph = source.paragraphs[0];
+  if (paragraph === undefined) throw new Error("Missing paragraph.");
+  paragraph.SetText("Leading");
+  const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+  item.SetInterLineSpace(80);
+  paragraph.SetAttr(item);
+  let imported;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    expect(new TextDecoder().decode(bytes)).toContain("\\sl350\\slmult0");
+    expect(measured).toHaveLength(1);
+    expect(measured[0]?.[1]).toBeGreaterThan(0);
+    imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
+    expect(result.GetLineSpaceRule()).toBe(SvxLineSpaceRule.Min);
+    expect(result.GetLineHeight()).toBe(350);
+  } finally {
+    imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("measures the actual CJK paragraph font when exporting native RTF leading", () => {
+  const measured: [string, number][] = [];
+  const source = new SwDoc({
+    defaultFontDevice: {
+      getDefaultFont: () => undefined,
+      measureTextHeight: (family, height) => {
+        measured.push([family, height]);
+        return 300;
+      },
+    },
+  });
+  try {
+    const paragraph = source.paragraphs[0];
+    if (paragraph === undefined) throw new Error("Missing paragraph.");
+    paragraph.SetText("日本語");
+    const font = new SvxFontItem(RES_CHRATR_CJK_FONT);
+    font.SetFamilyName("CJK Test");
+    paragraph.SetAttr(font);
+    paragraph.SetAttr(new SvxFontHeightItem(360, 100, RES_CHRATR_CJK_FONTSIZE));
+    const spacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    spacing.SetInterLineSpace(40);
+    paragraph.SetAttr(spacing);
+    expect(new TextDecoder().decode(new RtfExport().ExportDocument(source))).toContain(
+      "\\sl340\\slmult0",
+    );
+    expect(measured).toEqual([["CJK Test", 360]]);
+  } finally {
     source.Dispose();
   }
 });

@@ -16,6 +16,8 @@ export interface DefaultFontDevice {
     language: string,
     script: WriterFontScript,
   ): string | undefined;
+  /** Measures the selected physical font height in document twips for filter output. */
+  measureTextHeight?(family: string, heightTwips: number): number;
 }
 
 const fallbackFamilies: Readonly<
