@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 53
+revision: 54
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T21:31:03.941Z"
+doc_updated_at: "2026-10-25T21:36:21.250Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 9bcd5473c27b cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950 and JOHAB/MS-1361, EUC-CN/KR/JP, and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese. This batch ports pinned stateful ISCII Devanagari-to-Unicode conversion, its exact 256-value byte map, nukta and halant combinations, context reset and Writer RTF code page 57002 dispatch. Focused RTF/ISCII tests (97), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER113 records the pinned lookahead condition that reads beyond the provided source span; the local bounded view uses zero for an absent next byte. Repository-wide check:docs has pre-existing JSDoc failures; changed source has no diagnostics. Remaining current-model gaps include ISO-2022 and UTF-7 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Native TXT/RTF/Markdown paths and broad SAL single-byte, DBCS, EUC-JP, ISCII and UTF-8 byte conversion were implemented in prior task commits. This batch adds pinned SAL UTF-7 text-to-Unicode conversion and RTF code page 65000 dispatch; targeted RTF/UTF-7 tests (99), typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER114 records the pinned disabled UTF-7 streaming-context restoration, preserved locally. Remaining current-model gaps include ISO-2022 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Prior commits through 9bcd5473c27b cover native TXT/RTF/Markdown paths, SAL single-byte and UTF-8 decoding, DBCS MS-932/936/949/950 and JOHAB/MS-1361, EUC-CN/KR/JP, and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese. This batch ports pinned stateful ISCII Devanagari-to-Unicode conversion, its exact 256-value byte map, nukta and halant combinations, context reset and Writer RTF code page 57002 dispatch. Focused RTF/ISCII tests (97), office typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER113 records the pinned lookahead condition that reads beyond the provided source span; the local bounded view uses zero for an absent next byte. Repository-wide check:docs has pre-existing JSDoc failures; changed source has no diagnostics. Remaining current-model gaps include ISO-2022 and UTF-7 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Native TXT/RTF/Markdown paths and broad SAL single-byte, DBCS, EUC-JP, ISCII and UTF-8 byte conversion were implemented in prior task commits. This batch adds pinned SAL UTF-7 text-to-Unicode conversion and RTF code page 65000 dispatch; targeted RTF/UTF-7 tests (99), typecheck, changed-path ESLint/Prettier, source provenance, Writer/shared registry and module-boundary checks pass. WRITER114 records the pinned disabled UTF-7 streaming-context restoration, preserved locally. Remaining current-model gaps include ISO-2022 RTF code pages, full md4c syntax/callback parity and URL normalization, RTF field/style/list/table/paragraph/section differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally; network approval is pending. Full current-slice parity is not confirmed; no final verification yet.

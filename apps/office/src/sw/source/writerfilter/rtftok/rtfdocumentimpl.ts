@@ -72,6 +72,7 @@ import { ImplSymbolToUnicode } from "../../../../sal/textenc/tcvtbyte";
 import { rtl_getTextEncodingFromWindowsCodePage } from "../../../../sal/textenc/tencinfo";
 import { getTextToUnicodeData } from "../../../../sal/textenc/tables";
 import { ImplConvertUtf8ToUnicode } from "../../../../sal/textenc/tcvtutf8";
+import { ImplUTF7ToUnicode } from "../../../../sal/textenc/tcvtutf7";
 import { ImplDBCSToUnicode, ImplEUCJPToUnicode } from "../../../../sal/textenc/tcvtmb";
 import {
   ImplConvertIsciiDevanagariToUnicode,
@@ -1499,10 +1500,10 @@ export class RtfDocumentImpl {
                 [0],
                 [0],
               )
-            : encoding.kind === "iscii"
-              ? ImplConvertIsciiDevanagariToUnicode(
+            : encoding.kind === "utf7"
+              ? ImplUTF7ToUnicode(
                   null,
-                  ImplCreateIsciiDevanagariToUnicodeContext(),
+                  null,
                   bytes,
                   bytes.length,
                   destination,
@@ -1511,10 +1512,10 @@ export class RtfDocumentImpl {
                   [0],
                   [0],
                 )
-              : encoding.kind === "eucjp"
-                ? ImplEUCJPToUnicode(
-                    encoding.data,
+              : encoding.kind === "iscii"
+                ? ImplConvertIsciiDevanagariToUnicode(
                     null,
+                    ImplCreateIsciiDevanagariToUnicodeContext(),
                     bytes,
                     bytes.length,
                     destination,
@@ -1523,8 +1524,8 @@ export class RtfDocumentImpl {
                     [0],
                     [0],
                   )
-                : encoding.kind === "dbcs"
-                  ? ImplDBCSToUnicode(
+                : encoding.kind === "eucjp"
+                  ? ImplEUCJPToUnicode(
                       encoding.data,
                       null,
                       bytes,
@@ -1535,17 +1536,29 @@ export class RtfDocumentImpl {
                       [0],
                       [0],
                     )
-                  : convertCharToUnicode(
-                      encoding.data,
-                      null,
-                      bytes,
-                      bytes.length,
-                      destination,
-                      destination.length,
-                      flags,
-                      [0],
-                      [0],
-                    );
+                  : encoding.kind === "dbcs"
+                    ? ImplDBCSToUnicode(
+                        encoding.data,
+                        null,
+                        bytes,
+                        bytes.length,
+                        destination,
+                        destination.length,
+                        flags,
+                        [0],
+                        [0],
+                      )
+                    : convertCharToUnicode(
+                        encoding.data,
+                        null,
+                        bytes,
+                        bytes.length,
+                        destination,
+                        destination.length,
+                        flags,
+                        [0],
+                        [0],
+                      );
       let text = "";
       for (let offset = 0; offset < written; offset += 8192)
         text += String.fromCharCode(

@@ -163,6 +163,15 @@ it("uses native SAL UTF-8 conversion for RTF code page 65001", () => {
   }
 });
 
+it("uses native SAL UTF-7 conversion for RTF code page 65000", () => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg65000\'41\'2b\'2d\'2b\'41\'4f\'6b\'2d\'5a}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("A+éZ");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
   const cases: readonly (readonly [number, string, string])[] = [
     [1250, "8c", "Ś"],

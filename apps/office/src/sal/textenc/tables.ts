@@ -63,6 +63,7 @@ import {
   RTL_TEXTENCODING_MS_1258,
   RTL_TEXTENCODING_SYMBOL,
   RTL_TEXTENCODING_UTF8,
+  RTL_TEXTENCODING_UTF7,
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 import {
@@ -239,12 +240,13 @@ export function getSingleByteConvertData(
   }
 }
 
-/** Preserves the distinct Symbol, UTF-8, and single-byte converter dispatch. */
+/** Preserves distinct Symbol, UTF-8, UTF-7, multibyte, and single-byte converter dispatch. */
 export function getTextToUnicodeData(
   encoding: rtl_TextEncoding,
 ):
   | Readonly<{ kind: "symbol" }>
   | Readonly<{ kind: "utf8" }>
+  | Readonly<{ kind: "utf7" }>
   | Readonly<{ kind: "eucjp"; data: ImplEUCJPConvertData }>
   | Readonly<{ kind: "iscii" }>
   | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
@@ -252,6 +254,7 @@ export function getTextToUnicodeData(
   | undefined {
   if (encoding === RTL_TEXTENCODING_SYMBOL) return { kind: "symbol" };
   if (encoding === RTL_TEXTENCODING_UTF8) return { kind: "utf8" };
+  if (encoding === RTL_TEXTENCODING_UTF7) return { kind: "utf7" };
   if (encoding === RTL_TEXTENCODING_EUC_JP) return { kind: "eucjp", data: aImplEUCJPCvtData };
   if (encoding === RTL_TEXTENCODING_ISCII_DEVANAGARI) return { kind: "iscii" };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
