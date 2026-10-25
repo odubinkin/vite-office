@@ -1190,3 +1190,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::text_callback`, inserts `MD_TEXT_NORMAL` and `MD_TEXT_CODE` but has an empty branch for `MD_TEXT_ENTITY` and `MD_TEXT_NULLCHAR`.
 - Observation: a recognized entity such as `&amp;` contributes no text, while an unrecognized entity-like sequence remains normal text. This follows the callback switch; it is not an independently compiled desktop result.
 - Preservation: the local Markdown reader detects recognized HTML references and omits them, retaining unknown names and literal code-span content. Null-character callbacks are likewise omitted.
+
+### WRITER107 — Markdown nested list type can retain the earlier marker kind
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::StartNumberedBulletList`, changes a level format to ordered or bullet only when `GetNumFormat(nLevel) == nullptr`. A later list of the other type at the same level reuses the existing rule and skips that change. `StartNumberedBulletListItem` then assigns the same rule to the paragraph.
+- Observation: sibling nested lists of different Markdown marker types can display the first level's marker kind for both, until the outer list ends and a new rule is created. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown importer now shares one document-owned rule across nested lists and keeps the first format used at a level. A focused test covers the reused-level case.

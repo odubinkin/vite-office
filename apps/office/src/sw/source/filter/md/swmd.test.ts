@@ -87,6 +87,44 @@ it("imports ordered and bullet lists with native levels and identities", /** Che
   }
 });
 
+it("shares one native rule across mixed nested list callbacks and configures each used level", () => {
+  const document = read("1. First\n   - Nested\n2. Second\n");
+  try {
+    const [first, nested, second] = document.paragraphs;
+    expect(first?.GetNumRule()).toBe(nested?.GetNumRule());
+    expect(second?.GetNumRule()).toBe(first?.GetNumRule());
+    expect(document.paragraphs.map((node) => node.GetListKind())).toEqual([
+      "numbered",
+      "bullet",
+      "numbered",
+    ]);
+    expect(document.paragraphs.map((node) => node.GetListId())).toEqual([
+      first?.GetListId(),
+      first?.GetListId(),
+      first?.GetListId(),
+    ]);
+    expect(document.paragraphs.every((node) => node.IsCountedInList())).toBe(true);
+    expect(first?.GetNumRule()?.Get(1).GetBulletChar()).toBe(0x2022);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("retains the first format at a reused Markdown list level as upstream does", () => {
+  const document = read("1. Root\n   - Bullet\n   1. Numbered syntax\n2. Root again");
+  try {
+    expect(document.paragraphs.map((node) => node.GetListKind())).toEqual([
+      "numbered",
+      "bullet",
+      "bullet",
+      "numbered",
+    ]);
+    expect(document.paragraphs[1]?.GetNumRule()).toBe(document.paragraphs[2]?.GetNumRule());
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("imports a leading table and column alignment into actual Writer cells", /** Checks Markdown table owner and body order. @returns Nothing. */ () => {
   const document = read("| Name | Value |\n| :--- | ---: |\n| A | 42 |\n\nAfter\n");
   try {

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/md/mdnum.ts",
+    "upstreamPath": "sw/source/filter/md/mdnum.hxx",
+    "localSymbols": [
+      "SwMdNumRuleInfo"
+    ],
+    "upstreamSymbols": [
+      "SwMdNumRuleInfo"
+    ],
+    "preservedResponsibilities": [
+      "Owns one document numbering rule across mixed nested Markdown list types, initializes the first type at each level and fills untouched levels after the list closes."
+    ],
+    "omittedResponsibilities": [
+      "The complete md4c list callback stack, task-list content controls and all native list-format fields remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "shares one native rule across mixed nested list callbacks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdnum.hxx",
+          "marker": "class SwMdNumRuleInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/swmd.cxx",
+          "marker": "SwMarkdownParser::StartNumberedBulletList"
+        }
+      ]
+    }
+  }
+}

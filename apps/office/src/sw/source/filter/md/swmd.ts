@@ -1,11 +1,11 @@
 /** @fileoverview Writer Markdown reader and block parser following sw/source/filter/md/swmd.cxx. */
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
-import { applyWriterParagraphList } from "../../core/doc/list";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwpHints } from "../../core/txtnode/ndhints";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { createWriterTextRuns } from "../basflt/writer-transfer";
 import { parseMarkdownSpans } from "./mdcallbcks";
+import { SwMdNumRuleInfo, type MarkdownListItem } from "./mdnum";
 import {
   readMarkdownTableAlignment,
   readMarkdownTableRow,
@@ -17,7 +17,7 @@ import {
 interface MarkdownParagraph {
   readonly runs: readonly WriterTextRun[];
   readonly style?: string;
-  readonly list?: Readonly<{ kind: "bullet" | "numbered"; level: number; id: string }>;
+  readonly list?: MarkdownListItem;
 }
 
 /** Ordered Markdown body blocks. */
@@ -35,12 +35,13 @@ export class MarkdownReader {
       .replaceAll("\r", "\n");
     const blocks = new SwMarkdownParser(baseURL).CallParser(text);
     const document = new SwDoc(options);
+    const listRules = new SwMdNumRuleInfo();
     let useFirstParagraph = true;
     for (const block of blocks) {
       if (block.kind === "paragraph") {
         const node = useFirstParagraph ? document.paragraphs[0] : document.nodes.MakeTextNode();
         if (node === undefined) throw new Error("Writer body has no text node.");
-        applyMarkdownParagraph(node, block.value);
+        applyMarkdownParagraph(node, block.value, listRules);
         useFirstParagraph = false;
       } else {
         const table = useFirstParagraph
@@ -51,30 +52,34 @@ export class MarkdownReader {
           for (const [index, cell] of row.entries()) {
             const node = line.GetTabBoxes()[index]?.GetParagraphs()[0];
             if (node === undefined) throw new Error("Markdown table cell is missing.");
-            applyMarkdownParagraph(node, { runs: parseMarkdownSpans(cell.text, baseURL) });
+            applyMarkdownParagraph(
+              node,
+              { runs: parseMarkdownSpans(cell.text, baseURL) },
+              listRules,
+            );
             node.SetParagraphAlignment(cell.alignment);
           }
         }
       }
     }
+    listRules.Finish();
     return document;
   }
 }
 
 /** Applies callback-produced paragraph content through native format and hint owners. @param node - Target paragraph. @param value - Parsed block. */
-function applyMarkdownParagraph(node: SwTextNode, value: MarkdownParagraph): void {
+function applyMarkdownParagraph(
+  node: SwTextNode,
+  value: MarkdownParagraph,
+  listRules: SwMdNumRuleInfo,
+): void {
   if (value.style !== undefined) node.ChgFormatColl(node.GetDoc().GetTextFormatColl(value.style));
   const runs = value.runs;
   node.SetText(runs.map((run) => run.text).join(""));
   const hints = new SwpHints(node.GetDoc().GetAttrPool());
   hints.setTextRuns(runs, node.GetSwAttrSet());
   node.SetTextHints(hints);
-  if (value.list !== undefined)
-    applyWriterParagraphList(node, {
-      kind: value.list.kind,
-      level: value.list.level,
-      listId: value.list.id,
-    });
+  if (value.list !== undefined) listRules.Apply(node, value.list);
 }
 
 /** Parses represented md4c block callbacks into ordered Writer body blocks. */
@@ -89,14 +94,14 @@ export class SwMarkdownParser {
     let offset = 0,
       nextListId = 0,
       activeListId: string | undefined,
-      activeListKind: "bullet" | "numbered" | undefined;
+      activeRootListKind: "bullet" | "numbered" | undefined;
     let listIndents: { indent: number; continuation: number }[] = [];
     while (offset < lines.length) {
       const line = lines[offset] as string;
       if (line.trim().length === 0) {
         offset++;
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       const fence = /^ {0,3}(`{3,}|~{3,})(.*)$/u.exec(line);
@@ -117,7 +122,7 @@ export class SwMarkdownParser {
           value: { runs: createWriterTextRuns(code.join("\n")), style: "preformatted-text" },
         });
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       const heading = /^ {0,3}(#{1,6})(?:\s+|$)(.*)$/u.exec(line);
@@ -132,7 +137,7 @@ export class SwMarkdownParser {
         });
         offset++;
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       const nextLine = lines[offset + 1];
@@ -147,7 +152,7 @@ export class SwMarkdownParser {
         });
         offset += 2;
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       if (isThematicBreak(line)) {
@@ -157,10 +162,10 @@ export class SwMarkdownParser {
         });
         offset++;
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
-      if (activeListKind === undefined && /^(?: {4}|\t)/u.test(line)) {
+      if (activeRootListKind === undefined && /^(?: {4}|\t)/u.test(line)) {
         const code: string[] = [];
         while (offset < lines.length) {
           const current = lines[offset] as string;
@@ -177,7 +182,7 @@ export class SwMarkdownParser {
           value: { runs: createWriterTextRuns(code.join("\n")), style: "preformatted-text" },
         });
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       const alignment = nextLine === undefined ? undefined : readMarkdownTableAlignment(nextLine);
@@ -196,13 +201,13 @@ export class SwMarkdownParser {
           rows.push(readMarkdownTableRow(lines[offset++] as string, alignment));
         blocks.push({ kind: "table", rows });
         activeListId = undefined;
-        activeListKind = undefined;
+        activeRootListKind = undefined;
         continue;
       }
       const list = /^(\s*)([-+*]|\d+[.)])\s+(.+)$/u.exec(line);
       if (list !== null && !/^(?:\s*[-*]\s*){3,}$/u.test(line)) {
         const kind = /^\d/u.test(list[2] as string) ? "numbered" : "bullet";
-        if (activeListKind === undefined) listIndents = [];
+        if (activeRootListKind === undefined) listIndents = [];
         const indent = (list[1] as string).replaceAll("\t", "    ").length;
         let level = 0;
         for (const [index, previous] of listIndents.entries()) {
@@ -218,9 +223,9 @@ export class SwMarkdownParser {
           indent,
           continuation: indent + (list[2] as string).length + 1,
         };
-        if (activeListKind !== kind) activeListId = undefined;
+        if (level === 0 && activeRootListKind !== kind) activeListId = undefined;
         activeListId ??= `Markdown-list-${++nextListId}`;
-        activeListKind = kind;
+        if (level === 0) activeRootListKind = kind;
         blocks.push({
           kind: "paragraph",
           value: {
@@ -236,7 +241,7 @@ export class SwMarkdownParser {
         continue;
       }
       activeListId = undefined;
-      activeListKind = undefined;
+      activeRootListKind = undefined;
       const quote = /^ {0,3}> ?(.*)$/u.exec(line);
       if (quote !== null) {
         const contents: string[] = [];

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T19:31:02.162Z"
+doc_updated_at: "2026-10-25T19:37:55.763Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md; earlier commits through b9b1fa5d94be cover native TXT, RTF, and Markdown paths and upstream asymmetries WRITER096-106. This batch aligns RTF table row controls with pinned RtfAttributeOutput::TableDefinition: orientation, default left-to-right TableBidi, height, then row split. The current table frame has no direction item, so right-to-left table direction is outside its represented model. Focused RTF reader/exporter tests (77) and TXT/Markdown tests (39), office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md. Commits through 4472126431c5 cover native TXT, RTF and Markdown paths, including source-ordered RTF table row controls and retained upstream asymmetries WRITER096-106. This batch moves Markdown list import to a document-owned SwNumRule with initially unset levels: mixed nested list kinds share one rule, first-used level formats and unused-level completion follow the pinned StartNumberedBulletList and EndNumberedBulletList decisions. The formerly passed id field had no effect at the Writer list boundary and is removed. WRITER107 records the suspicious source behavior when a later nested list reuses a level with another marker kind. Focused 94 RTF/TXT and 24 Markdown tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md; earlier commits through b9b1fa5d94be cover native TXT, RTF, and Markdown paths and upstream asymmetries WRITER096-106. This batch aligns RTF table row controls with pinned RtfAttributeOutput::TableDefinition: orientation, default left-to-right TableBidi, height, then row split. The current table frame has no direction item, so right-to-left table direction is outside its represented model. Focused RTF reader/exporter tests (77) and TXT/Markdown tests (39), office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. The capability matrix is docs/program/writer-native-text-filter-slice.md. Commits through 4472126431c5 cover native TXT, RTF and Markdown paths, including source-ordered RTF table row controls and retained upstream asymmetries WRITER096-106. This batch moves Markdown list import to a document-owned SwNumRule with initially unset levels: mixed nested list kinds share one rule, first-used level formats and unused-level completion follow the pinned StartNumberedBulletList and EndNumberedBulletList decisions. The formerly passed id field had no effect at the Writer list boundary and is removed. WRITER107 records the suspicious source behavior when a later nested list reuses a level with another marker kind. Focused 94 RTF/TXT and 24 Markdown tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. Remaining current-model gaps include complete md4c syntax/callback parity, URL normalization, RTF field/style/list/table/paragraph and section-chain differentials, physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and network approval has not been granted. Full current-slice parity is not confirmed; no final verification yet.

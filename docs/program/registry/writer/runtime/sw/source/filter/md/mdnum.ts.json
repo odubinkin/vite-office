@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/md/mdnum.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "markdown-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/md/mdnum.ts#SwMdNumRuleInfo",
+        "vendor/libreoffice-reference/sw/source/filter/md/mdnum.hxx#SwMdNumRuleInfo"
+      ],
+      "justification": "Document-owned Markdown list rules and source level-format decisions are represented; complete md4c callback parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwMdNumRuleInfo"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/md/mdnum.hxx",
+      "upstreamSymbols": [
+        "SwMdNumRuleInfo"
+      ]
+    }
+  }
+}
