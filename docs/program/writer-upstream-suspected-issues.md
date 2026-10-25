@@ -1238,3 +1238,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtutf7.cxx`, `ImplUTF7ToUnicode`, comments out the branch that restores `mbShifted`, `mbFirst`, `mbWroteOne`, `mnBitBuffer` and `mnBufferBits` from its context, while still writing the resulting values to that context at return. The source marks the implementation unfinished.
 - Observation: a shifted Base64 sequence split across converter calls cannot resume from the preceding chunk even when the caller retains the native context. This is a source-level finding; compiled desktop behavior remains unverified.
 - Preservation: the local converter initializes conversion state on every call and still stores the final values in the context, matching the pinned source. The current RTF byte path supplies a complete byte run to one call.
+
+### WRITER115 — Apple Arabic and Hebrew code pages have no SAL converter
+
+- Source: pinned `sal/textenc/tencinfo.cxx`, `rtl_getTextEncodingFromWindowsCodePage`, maps Windows code pages 10004 and 10005 to `RTL_TEXTENCODING_APPLE_ARABIC` and `RTL_TEXTENCODING_APPLE_HEBREW`; pinned `sal/textenc/tables.cxx` records `nullptr` with `TODO!` for both entries. `sal/textenc/textcvt.cxx`, `rtl_convertTextToUnicode`, routes a missing converter to `ImplDummyToUnicode`.
+- Observation: RTF byte sequences marked with those code pages decode each byte as U+00xx rather than Arabic or Hebrew characters. The source explicitly marks the converter entries unfinished. Compiled desktop behavior remains unverified.
+- Preservation: the local RTF path dispatches missing converters to the same SAL dummy byte mapping and does not synthesize an Apple Arabic/Hebrew table.

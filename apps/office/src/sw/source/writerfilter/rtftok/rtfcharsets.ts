@@ -46,13 +46,3 @@ export const RTF_FONT_SUFFIX_CODEPAGE: ReadonlyMap<string, number> = new Map([
   ["(Arabic)", 1256],
   ["(Vietnamese)", 1258],
 ]);
-
-/** Browser decoder labels for the Windows code pages represented by the RTF table. */
-export function rtfDecoderLabel(codepage: number): string {
-  if (codepage === 932) return "shift_jis";
-  if (codepage === 936) return "gbk";
-  if (codepage === 949) return "euc-kr";
-  if (codepage === 950) return "big5";
-  if (codepage === 10000) return "macintosh";
-  return `windows-${codepage}`;
-}

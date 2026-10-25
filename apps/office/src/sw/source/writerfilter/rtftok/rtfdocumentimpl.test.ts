@@ -187,6 +187,25 @@ it("uses pinned ISO-2022-JP and ISO-2022-KR RTF decoders", () => {
   }
 });
 
+it("uses the SAL dummy converter for code pages with no registered converter", () => {
+  for (const codepage of [10004, 10005, 99999]) {
+    const document = read(String.raw`{\rtf1\ansi\ansicpg${codepage}\'41\'db}`);
+    try {
+      expect(document.paragraphs[0]?.GetText()).toBe("AÛ");
+    } finally {
+      document.Dispose();
+    }
+  }
+  const fonts = read(
+    String.raw`{\rtf1\ansi{\fonttbl{\f0\fcharset84 Arabic;}{\f1\fcharset83 Hebrew;}}\f0\'db\f1\'ff}`,
+  );
+  try {
+    expect(fonts.paragraphs[0]?.GetText()).toBe("Ûÿ");
+  } finally {
+    fonts.Dispose();
+  }
+});
+
 it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
   const cases: readonly (readonly [number, string, string])[] = [
     [1250, "8c", "Ś"],

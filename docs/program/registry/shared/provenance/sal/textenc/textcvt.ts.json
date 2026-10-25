@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/textcvt.ts",
+    "upstreamPath": "sal/textenc/textcvt.cxx",
+    "localSymbols": [
+      "ImplDummyToUnicode"
+    ],
+    "upstreamSymbols": [
+      "ImplDummyToUnicode"
+    ],
+    "preservedResponsibilities": [
+      "Pinned SAL fallback for missing text-to-Unicode converters: byte-to-U+00xx output, early undefined-error flags, and destination capacity/consumption semantics."
+    ],
+    "omittedResponsibilities": [
+      "The Unicode-to-text dummy conversion and the full rtl converter lifecycle are outside the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.ts",
+          "marker": "ImplDummyToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.test.ts",
+          "marker": "copies every byte to the same-numbered Unicode unit"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
+          "marker": "ImplDummyToUnicode"
+        }
+      ]
+    }
+  }
+}

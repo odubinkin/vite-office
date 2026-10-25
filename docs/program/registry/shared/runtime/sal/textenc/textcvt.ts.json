@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/textcvt.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/textcvt.ts#ImplDummyToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/textcvt.cxx#ImplDummyToUnicode",
+        "apps/office/src/sal/textenc/textcvt.test.ts#copies every byte to the same-numbered Unicode unit"
+      ],
+      "justification": "Pinned SAL missing-converter fallback retains byte-to-U+00xx output and native error/capacity flags. The full converter lifecycle and Unicode-to-text reverse path are outside the current RTF import path. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplDummyToUnicode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/textcvt.cxx",
+      "upstreamSymbols": [
+        "ImplDummyToUnicode"
+      ]
+    }
+  }
+}

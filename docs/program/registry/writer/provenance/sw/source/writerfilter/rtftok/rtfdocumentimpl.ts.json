@@ -28,7 +28,8 @@
       "Dispatches RTF EUC-JP bytes through the source-owned ImplEUCJPToUnicode path.",
       "Dispatches RTF ISCII Devanagari bytes through a fresh source-owned converter context.",
       "Dispatches RTF code page 65000 bytes through the pinned SAL UTF-7 text-to-Unicode state machine.",
-      "Dispatches RTF code pages 50220/50225 through pinned SAL ISO-2022-JP/KR state machines and source-owned JIS/KS tables."
+      "Dispatches RTF code pages 50220/50225 through pinned SAL ISO-2022-JP/KR state machines and source-owned JIS/KS tables.",
+      "Uses the pinned SAL ImplDummyToUnicode fallback for RTF code pages without converter data, including Apple Arabic/Hebrew and unknown code pages; removes browser decoder lookup."
     ],
     "omittedResponsibilities": [
       "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."

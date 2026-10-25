@@ -7,19 +7,30 @@
     "state": "active",
     "suite": "writer",
     "subsystem": "rtf-filter",
-    "capabilityIds": ["CAP-0121"],
+    "capabilityIds": [
+      "CAP-0121"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "none",
-      "evidence": ["apps/office/src/sw/source/writerfilter/rtftok/rtfcharsets.ts#RTF_CHARSET_CODEPAGE", "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfcharsets.cxx#aRTFEncodings"],
-      "justification": "Ported RTF charset and font suffix tables; browser decoder coverage remains incomplete.",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfcharsets.ts#RTF_CHARSET_CODEPAGE",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfcharsets.cxx#aRTFEncodings"
+      ],
+      "justification": "Ported RTF charset and font suffix tables. Byte conversion is dispatched through native SAL converters, including the pinned missing-converter fallback.",
       "knownViolations": [],
-      "localSymbols": ["RTF_CHARSET_CODEPAGE", "RTF_FONT_SUFFIX_CODEPAGE", "rtfDecoderLabel"],
+      "localSymbols": [
+        "RTF_CHARSET_CODEPAGE",
+        "RTF_FONT_SUFFIX_CODEPAGE"
+      ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/rtftok/rtfcharsets.cxx",
-      "upstreamSymbols": ["aRTFEncodings", "aRTFFontNameSuffixes"]
+      "upstreamSymbols": [
+        "aRTFEncodings",
+        "aRTFFontNameSuffixes"
+      ]
     }
   }
 }
