@@ -68,8 +68,8 @@ import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { RtfSyntaxError, RtfTokenizer, type RtfToken } from "./rtftokenizer";
 import { RTF_CHARSET_CODEPAGE, RTF_FONT_SUFFIX_CODEPAGE, rtfDecoderLabel } from "./rtfcharsets";
 import { convertCharToUnicode } from "../../../../sal/textenc/convertsimple.hxx";
-import { aImplIBM437ByteCvtData, aImplIBM850ByteCvtData } from "../../../../sal/textenc/tcvtlat1";
-import { aImplMS1252ByteCvtData } from "../../../../sal/textenc/textenc";
+import { rtl_getTextEncodingFromWindowsCodePage } from "../../../../sal/textenc/tencinfo";
+import { getSingleByteConvertData } from "../../../../sal/textenc/tables";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 
@@ -1459,18 +1459,11 @@ export class RtfDocumentImpl {
 
   /** Converts ANSI bytes only after the current group and selected font are known. */
   private DecodeBytes(bytes: Uint8Array, state: RtfState): string {
-    if (
-      state.currentCodepage === 437 ||
-      state.currentCodepage === 850 ||
-      state.currentCodepage === 1252
-    ) {
+    const data = getSingleByteConvertData(
+      rtl_getTextEncodingFromWindowsCodePage(state.currentCodepage),
+    );
+    if (data !== undefined) {
       const destination = new Uint16Array(bytes.length);
-      const data =
-        state.currentCodepage === 437
-          ? aImplIBM437ByteCvtData
-          : state.currentCodepage === 850
-            ? aImplIBM850ByteCvtData
-            : aImplMS1252ByteCvtData;
       const written = convertCharToUnicode(
         data,
         null,

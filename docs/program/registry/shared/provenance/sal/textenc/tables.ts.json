@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tables.ts",
+    "upstreamPath": "sal/textenc/tables.cxx",
+    "localSymbols": [
+      "getSingleByteConvertData"
+    ],
+    "upstreamSymbols": [
+      "sal_getFullTextEncodingData"
+    ],
+    "preservedResponsibilities": [
+      "Selects the represented SAL single-byte byte-converter data by rtl_TextEncoding; the full native encoding-data registry remains outside this slice."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tables.ts",
+          "marker": "getSingleByteConvertData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tables.cxx",
+          "marker": "sal_getFullTextEncodingData"
+        }
+      ]
+    }
+  }
+}

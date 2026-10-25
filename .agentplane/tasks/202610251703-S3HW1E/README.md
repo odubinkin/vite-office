@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 40
+revision: 41
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-25T20:03:56.011Z"
+doc_updated_at: "2026-10-25T20:13:29.275Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -53,7 +53,7 @@ sections:
   Rollback Plan: |-
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
-  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 791eea61a18c cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, streaming Shift-JIS lexical feedback, and pinned SAL IBM 437/850 tables. This batch routes default Windows-1252 RTF bytes through the already-ported SAL converter, replacing browser control-code handling for undefined bytes with native replacement semantics. Focused 115 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-109 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
+  Findings: "Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through e5bd93233971 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, streaming Shift-JIS lexical feedback, and pinned SAL IBM 437/850 plus Windows-1252 byte conversion. This batch ports complete pinned SAL Windows-874 and Windows-1250/1251/1253–1258 forward/reverse tables and aggregates; the full 68-case Windows-code-page lookup and represented single-byte data registry select them for RTF. Literal tables and lookup switch were compared with pinned sources. Focused 117 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer and shared registry, module-boundary and diff checks pass. The repo-wide file-size check still fails on three pre-existing over-limit files (ndtxt.ts, rtfexport.test.ts, rtfdocumentimpl.ts); none was introduced by this batch. WRITER096-109 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet."
 id_source: "generated"
 ---
 ## Summary
@@ -86,4 +86,4 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Findings
 
-Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through 791eea61a18c cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, streaming Shift-JIS lexical feedback, and pinned SAL IBM 437/850 tables. This batch routes default Windows-1252 RTF bytes through the already-ported SAL converter, replacing browser control-code handling for undefined bytes with native replacement semantics. Focused 115 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer registry, module-boundary and diff checks pass. WRITER096-109 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.
+Interim audit, not closure. Capability matrix: docs/program/writer-native-text-filter-slice.md. Commits through e5bd93233971 cover native TXT, RTF and Markdown paths, RTF table control order, mixed Markdown list levels, Unicode fallback/hex breaks, document-owned ANSI code-page selection, streaming Shift-JIS lexical feedback, and pinned SAL IBM 437/850 plus Windows-1252 byte conversion. This batch ports complete pinned SAL Windows-874 and Windows-1250/1251/1253–1258 forward/reverse tables and aggregates; the full 68-case Windows-code-page lookup and represented single-byte data registry select them for RTF. Literal tables and lookup switch were compared with pinned sources. Focused 117 RTF/document-shell tests, office TypeScript, changed-path ESLint/Prettier, source provenance, Writer and shared registry, module-boundary and diff checks pass. The repo-wide file-size check still fails on three pre-existing over-limit files (ndtxt.ts, rtfexport.test.ts, rtfdocumentimpl.ts); none was introduced by this batch. WRITER096-109 document retained source asymmetries. Remaining current-model gaps include complete md4c syntax/callback parity and URL normalization; other browser-unsupported legacy code pages and the full code-page differential matrix; RTF field/style/list/table/paragraph and section-chain differentials; physical font metrics and compiled upstream comparisons. Pinned md4c source is absent locally and separate network approval remains pending. Full current-slice parity is not confirmed; no final verification yet.

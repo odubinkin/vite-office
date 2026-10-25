@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtest1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtest1.ts#aImplMS1250ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplMS1250ByteCvtData"
+      ],
+      "justification": "Pinned Windows-1250/1251/1253/1254/1257 forward and reverse tables and byte-converter aggregates. Broader SAL codec parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplMS1250ByteCvtData",
+        "aImplMS1251ByteCvtData",
+        "aImplMS1253ByteCvtData",
+        "aImplMS1254ByteCvtData",
+        "aImplMS1257ByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtest1.tab",
+      "upstreamSymbols": [
+        "aImplMS1250ByteCvtData",
+        "aImplMS1251ByteCvtData",
+        "aImplMS1253ByteCvtData",
+        "aImplMS1254ByteCvtData",
+        "aImplMS1257ByteCvtData"
+      ]
+    }
+  }
+}

@@ -105,6 +105,42 @@ it("uses pinned SAL Windows-1252 undefined-byte handling", () => {
   }
 });
 
+it("uses pinned SAL tables for Windows-1250 through 1258 code pages", () => {
+  const cases: readonly (readonly [number, string, string])[] = [
+    [1250, "8c", "Ś"],
+    [1251, "c6", "Ж"],
+    [1253, "c1", "Α"],
+    [1254, "d0", "Ğ"],
+    [1255, "e0", "א"],
+    [1256, "c7", "ا"],
+    [1257, "c0", "Ą"],
+    [1258, "d5", "Ơ"],
+  ];
+  for (const [codepage, byte, expected] of cases) {
+    const document = read(`{\\rtf1\\ansi\\ansicpg${codepage}\\'${byte}}`);
+    try {
+      expect(document.paragraphs[0]?.GetText()).toBe(expected);
+    } finally {
+      document.Dispose();
+    }
+  }
+  const undefinedByte = read(String.raw`{\rtf1\ansi\ansicpg1251\'98}`);
+  try {
+    expect(undefinedByte.paragraphs[0]?.GetText()).toBe("\uFFFD");
+  } finally {
+    undefinedByte.Dispose();
+  }
+});
+
+it("uses pinned SAL Windows-874 Thai and undefined-byte mapping", () => {
+  const document = read(String.raw`{\rtf1\ansi\ansicpg874\'a1\'81}`);
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("ก\uFFFD");
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("keeps Shift-JIS trailing RTF delimiters inside one encoded character", () => {
   const prefix = new TextEncoder().encode(
     String.raw`{\rtf1\ansi\ansicpg1252{\fonttbl{\f0 Arial;}{\f1\fcharset128 MS Gothic;}}\f1 `,

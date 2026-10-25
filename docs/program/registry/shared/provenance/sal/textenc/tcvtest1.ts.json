@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtest1.ts",
+    "upstreamPath": "sal/textenc/tcvtest1.tab",
+    "localSymbols": [
+      "aImplMS1250ByteCvtData",
+      "aImplMS1251ByteCvtData",
+      "aImplMS1253ByteCvtData",
+      "aImplMS1254ByteCvtData",
+      "aImplMS1257ByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplMS1250ByteCvtData",
+      "aImplMS1251ByteCvtData",
+      "aImplMS1253ByteCvtData",
+      "aImplMS1254ByteCvtData",
+      "aImplMS1257ByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Windows-1250/1251/1253/1254/1257 forward and reverse tables and byte-converter aggregates."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtest1.ts",
+          "marker": "aImplMS1250ByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab",
+          "marker": "aImplMS1250ByteCvtData"
+        }
+      ]
+    }
+  }
+}
