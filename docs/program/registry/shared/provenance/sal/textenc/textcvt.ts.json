@@ -7,16 +7,20 @@
     "localPath": "apps/office/src/sal/textenc/textcvt.ts",
     "upstreamPath": "sal/textenc/textcvt.cxx",
     "localSymbols": [
-      "ImplDummyToUnicode"
+      "ImplDummyToUnicode",
+      "ImplUnicodeToDummy"
     ],
     "upstreamSymbols": [
-      "ImplDummyToUnicode"
+      "ImplDummyToUnicode",
+      "ImplUnicodeToDummy"
     ],
     "preservedResponsibilities": [
-      "Pinned SAL fallback for missing text-to-Unicode converters: byte-to-U+00xx output, early undefined-error flags, and destination capacity/consumption semantics."
+      "Pinned SAL fallback for missing text-to-Unicode converters: byte-to-U+00xx output, early undefined-error flags, and destination capacity/consumption semantics.",
+      "For the default OString/OUString conversion flags, a missing converter copies each source byte to UTF-16 or truncates each UTF-16 unit to its low byte without throwing."
     ],
     "omittedResponsibilities": [
-      "The Unicode-to-text dummy conversion and the full rtl converter lifecycle are outside the current Writer RTF import path."
+      "The Unicode-to-text dummy conversion and the full rtl converter lifecycle are outside the current Writer RTF import path.",
+      "Flag-specific error branches, destination-capacity/status cells, converter factories and all multibyte/contextual converter procedures remain unported."
     ],
     "evidence": {
       "local": [
@@ -27,12 +31,20 @@
         {
           "path": "apps/office/src/sal/textenc/textcvt.test.ts",
           "marker": "copies every byte to the same-numbered Unicode unit"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.ts",
+          "marker": "ImplUnicodeToDummy"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
           "marker": "ImplDummyToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
+          "marker": "ImplUnicodeToDummy"
         }
       ]
     }

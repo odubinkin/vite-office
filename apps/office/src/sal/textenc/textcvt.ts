@@ -11,6 +11,7 @@ import * as cvt from "../inc/rtl/textcvt.h";
  * @param sourceConverted - Mutable consumed-byte count.
  * @returns Number of written UTF-16 units.
  */
+export function ImplDummyToUnicode(source: Uint8Array): string;
 export function ImplDummyToUnicode(
   source: Uint8Array | Int8Array,
   sourceBytes: number,
@@ -19,7 +20,30 @@ export function ImplDummyToUnicode(
   flags: number,
   info: [number],
   sourceConverted: [number],
-): number {
+): number;
+export function ImplDummyToUnicode(
+  source: Uint8Array | Int8Array,
+  sourceBytes?: number,
+  destination?: Uint16Array,
+  destinationChars?: number,
+  flags?: number,
+  info?: [number],
+  sourceConverted?: [number],
+): number | string {
+  if (sourceBytes === undefined) {
+    let result = "";
+    for (let i = 0; i < source.length; i += 1024)
+      result += String.fromCharCode(...source.subarray(i, i + 1024));
+    return result;
+  }
+  if (
+    destination === undefined ||
+    destinationChars === undefined ||
+    flags === undefined ||
+    info === undefined ||
+    sourceConverted === undefined
+  )
+    throw new Error("Incomplete native conversion arguments");
   if (
     (flags & cvt.RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) ===
       cvt.RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR ||
@@ -45,4 +69,11 @@ export function ImplDummyToUnicode(
   }
   sourceConverted[0] = converted;
   return output;
+}
+
+/** The source ImplUnicodeToDummy truncates each UTF-16 code unit to its low byte. @param source - Input UTF-16 text. @returns Converted bytes. */
+export function ImplUnicodeToDummy(source: string): Uint8Array {
+  const result = new Uint8Array(source.length);
+  for (let i = 0; i < source.length; i++) result[i] = source.charCodeAt(i) & 0xff;
+  return result;
 }

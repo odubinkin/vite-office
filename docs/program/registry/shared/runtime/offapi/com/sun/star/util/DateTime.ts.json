@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/util/DateTime.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": ["CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": ["apps/office/src/offapi/com/sun/star/util/DateTime.ts#DateTime", "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl#DateTime"],
+      "justification": "The published DateTime scalar fields and IDL defaults are represented for the source SAX ISO date-time parser used by Calc CSV admission. Generated UNO binding remains outside this consumed path.",
+      "knownViolations": [],
+      "localSymbols": ["DateTime"],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "offapi/com/sun/star/util/DateTime.idl",
+      "upstreamSymbols": ["DateTime", "NanoSeconds", "Seconds", "Minutes", "Hours", "Day", "Month", "Year", "IsUTC"]
+    }
+  }
+}

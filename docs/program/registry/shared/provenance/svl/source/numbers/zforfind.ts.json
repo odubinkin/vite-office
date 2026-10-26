@@ -1,0 +1,184 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforfind.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforfind.cxx",
+    "localSymbols": [
+      "ImpSvNumberInputScan",
+      "TransformInput",
+      "SV_MAX_COUNT_INPUT_STRINGS",
+      "GetTimeRef",
+      "GetLogical",
+      "ImplGetDay",
+      "ImplGetMonth",
+      "ImplGetYear",
+      "MayBeIso8601",
+      "MayBeMonthDate",
+      "MatchedReturn",
+      "InitText",
+      "GetMonth",
+      "GetDayOfWeek",
+      "GetCurrency",
+      "IsAcceptedDatePattern",
+      "SkipDatePatternSeparator",
+      "GetDatePatternNumbers",
+      "IsDatePatternNumberOfType",
+      "GetDatePatternOrder",
+      "GetDateOrder",
+      "GetMiddleMonthLongDateOrder",
+      "CanForceToIso8601",
+      "IsAcceptableIso8601",
+      "ScanStringNumFor",
+      "ScanStartString",
+      "ScanEndString",
+      "ScanMidString",
+      "IsNumberFormatMain"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberInputScan::ImpSvNumberInputScan",
+      "TransformInput",
+      "ImpSvNumberInputScan::Reset",
+      "ImpSvNumberInputScan::ChangeIntl",
+      "ImpSvNumberInputScan::InvalidateDateAcceptancePatterns",
+      "ImpSvNumberInputScan::ChangeNullDate",
+      "ImpSvNumberInputScan::NextNumberStringSymbol",
+      "ImpSvNumberInputScan::SkipThousands",
+      "ImpSvNumberInputScan::NumberStringDivision",
+      "ImpSvNumberInputScan::StringContains",
+      "ImpSvNumberInputScan::StringPtrContains",
+      "ImpSvNumberInputScan::StringContainsImpl",
+      "ImpSvNumberInputScan::StringPtrContainsImpl",
+      "ImpSvNumberInputScan::StringContainsWord",
+      "ImpSvNumberInputScan::SkipChar",
+      "ImpSvNumberInputScan::SkipBlanks",
+      "ImpSvNumberInputScan::SkipString",
+      "ImpSvNumberInputScan::GetDecSep",
+      "ImpSvNumberInputScan::GetSign",
+      "ImpSvNumberInputScan::GetESign",
+      "ImpSvNumberInputScan::GetNextNumber",
+      "ImpSvNumberInputScan::GetThousandSep",
+      "ImpSvNumberInputScan::GetTimeAmPm",
+      "ImpSvNumberInputScan::GetTime100SecSep",
+      "ImpSvNumberInputScan::GetTimeRef",
+      "ImpSvNumberInputScan::GetLogical",
+      "ImpSvNumberInputScan::ImplGetDay",
+      "ImpSvNumberInputScan::ImplGetMonth",
+      "ImpSvNumberInputScan::ImplGetYear",
+      "ImpSvNumberInputScan::MayBeIso8601",
+      "ImpSvNumberInputScan::MayBeMonthDate",
+      "ImpSvNumberInputScan::MatchedReturn",
+      "ImpSvNumberInputScan::InitText",
+      "ImpSvNumberInputScan::GetMonth",
+      "ImpSvNumberInputScan::GetDayOfWeek",
+      "ImpSvNumberInputScan::GetCurrency",
+      "ImpSvNumberInputScan::IsAcceptedDatePattern",
+      "ImpSvNumberInputScan::SkipDatePatternSeparator",
+      "ImpSvNumberInputScan::GetDatePatternNumbers",
+      "ImpSvNumberInputScan::IsDatePatternNumberOfType",
+      "ImpSvNumberInputScan::GetDatePatternOrder",
+      "ImpSvNumberInputScan::GetDateOrder",
+      "ImpSvNumberInputScan::GetMiddleMonthLongDateOrder",
+      "ImpSvNumberInputScan::CanForceToIso8601",
+      "ImpSvNumberInputScan::IsAcceptableIso8601",
+      "ImpSvNumberInputScan::ScanStringNumFor",
+      "ImpSvNumberInputScan::ScanStartString",
+      "ImpSvNumberInputScan::ScanEndString",
+      "ImpSvNumberInputScan::ScanMidString",
+      "ImpSvNumberInputScan::IsNumberFormatMain"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG replaces projected input-date/year fields with the actual language-owned ImpSvNumberInputScan instance. Its source defaults, twenty fragment slots, parse-state reset, cached-separator locale invalidation, raw null-date assignment and two-digit-year accessors are represented. The exact source ASCII-digit/non-digit division, near-capacity complete-thousands-group collapse, substring skips, native blank characters, date-word boundaries, locale decimal and grouping separators, leading/exponent signs and numeric-fragment step are represented, including the source embedded-NUL cursor behavior. IsNumberFormat and its classification/conversion stages remain unported; no heuristic substitute is claimed.",
+      "Task AQF9AG ports source AM/PM matching and fractional-second separator recognition, including ISO dot/comma acceptance and locale fallback.",
+      "Task AQF9AG ports source time-part conversion, AM/PM adjustment, duration/lax bounds, leap second and fractional seconds; output is written even for rejected times.",
+      "Task AQF9AG ports whole-input logical-word comparison against the native format-scanner keywords.",
+      "Task AQF9AG ports source cached ISO and named-month date-shape checks, bounded day and year numeric-fragment conversion, and the matched-string return marker. Complete date acceptance and value conversion remain unported.",
+      "Task AQF9AG ports InitText, GetMonth and GetDayOfWeek over source default-calendar names, preserving full/abbreviated/genitive/partitive order and source German and September alternate spellings.",
+      "Task AQF9AG ports IsAcceptedDatePattern over source-generated locale sequences, including source pattern priority, decimal-separator ambiguity, signed year separators, month/day plausibility, trailing spaces and evaluation-order combination. The dependent SkipDatePatternSeparator/GetDatePatternNumbers/IsDatePatternNumberOfType/GetDatePatternOrder methods retain the accepted-pattern cache.",
+      "Task AQF9AG ports the native accepted-pattern/locale/compiled-format date order and ISO forcing policy, including ambiguous two-digit years.",
+      "Task AQF9AG ports source zero-based numeric month conversion with its calendar-count invalid sentinel and middle-month long-date ordering from named-month shape, exact format, locale order and day validity.",
+      "Task AQF9AG ports GetCurrency's active-language currency table lookup, uppercase symbol cache, source cursor advancement and explicit compiled-format currency-token fallback.",
+      "Task AQF9AG ports source compiled-format literal/currency token selection, negative sign/condition tests and input scanner ScanStringNumFor with native case-ignore comparison across subformats and suffixes.",
+      "Task AQF9AG ports ScanStartString over source sign, decimal, currency, month/day-name, date-pattern and compiled-literal owners, retaining matched-string flags and early-return ordering.",
+      "Task AQF9AG ports source ScanEndString trailing sign, decimal, percent, currency, date/time, AM/PM, weekday and compiled-literal control flow, retaining the disabled ISO timezone branch.",
+      "Task AQF9AG ports source ScanMidString decimal, fraction, grouping, date/time, month, exponent and compiled-format matching order over the existing scanner fields; NF_RECOGNIZE_ISO8601_TIMEZONES remains disabled as pinned upstream.",
+      "Task AQF9AG ports source IsNumberFormatMain fragment-count dispatch, logical keyword branch, preset FRACTION branches, format-literal count reconciliation and final scanned type selection. Numeric value conversion in IsNumberFormat remains separate.",
+      "Task AQF9AG ports TransformInput's non-ASCII digit gate and NATNUM0 forwarding to the source native-number wrapper, using the current language's Locale."
+    ],
+    "omittedResponsibilities": [
+      "Input number classification and conversion and native-number transliteration remain unported; GetCurrency is ready but not yet called by the main classification path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "ImpSvNumberInputScan"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.test.ts",
+          "marker": "inputScanner.GetYear2000"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.test.ts",
+          "marker": "collapses only complete"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "ScanStringNumFor"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "ScanStartString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "ScanEndString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "ScanMidString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+          "marker": "IsNumberFormatMain"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ImpSvNumberInputScan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ChangeIntl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::NumberStringDivision"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStringNumFor"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStartString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanEndString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanMidString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::IsNumberFormatMain"
+        }
+      ]
+    }
+  }
+}

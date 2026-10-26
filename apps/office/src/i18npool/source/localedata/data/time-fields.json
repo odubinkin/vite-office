@@ -1,0 +1,1706 @@
+{
+  "af_NA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "af_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ak_GH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AN",
+    "timePM": "EW"
+  },
+  "am_ET": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ጡዋት",
+    "timePM": "ከሰዓት"
+  },
+  "an_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "ar_AE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_BH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_DZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": "٫",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_EG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_IQ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_JO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_KW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_LB": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_LY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_MA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_OM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_QA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_SA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_SY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_TN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ar_YE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ص",
+    "timePM": "م"
+  },
+  "ast_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "axk_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "az_AZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "be_BY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "beq_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "bg_BG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "пр. об.",
+    "timePM": "сл. об."
+  },
+  "bkw_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "bm_ML": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "s.fɛ",
+    "timePM": "w.fɛ"
+  },
+  "bn_BD": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "পূর্বাহ্ণ",
+    "timePM": "অপরাহ্ণ"
+  },
+  "bn_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "পূর্বাহ্ণ",
+    "timePM": "অপরাহ্ণ"
+  },
+  "bo_CN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "སྔ་ཆ",
+    "timePM": "ཕྱི་ཆ"
+  },
+  "bo_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "སྔ་ཆ",
+    "timePM": "ཕྱི་ཆ"
+  },
+  "br_FR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "bs_BA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "bvx_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ca_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ca_ES_valencia": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "cs_CZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "dop.",
+    "timePM": "odp."
+  },
+  "cu_RU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "до по́лꙋд.",
+    "timePM": "по по́лꙋд."
+  },
+  "cv_RU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "cy_GB": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "da_DK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "dde_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "de_AT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "vorm.",
+    "timePM": "nachm."
+  },
+  "de_CH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "vorm.",
+    "timePM": "nachm."
+  },
+  "de_DE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "vorm.",
+    "timePM": "nachm."
+  },
+  "de_LI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "vorm.",
+    "timePM": "nachm."
+  },
+  "de_LU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "vorm.",
+    "timePM": "nachm."
+  },
+  "dsb_DE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "dopołdnja",
+    "timePM": "wótpołdnja"
+  },
+  "dv_MV": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "މކ",
+    "timePM": "މފ"
+  },
+  "dz_BT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "སྔ་ཆ",
+    "timePM": "ཕྱི་ཆ"
+  },
+  "ebo_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ND",
+    "timePM": "LK"
+  },
+  "ee_GH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AN",
+    "timePM": "EW"
+  },
+  "el_GR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ΠΜ",
+    "timePM": "ΜΜ"
+  },
+  "en_AU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_BW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_BZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_CA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_DK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_GB": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_GH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "en_GM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_GY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_HK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_IE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "en_IL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_JM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_KE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_LK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_MU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_MW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_MY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_NA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_NG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_NZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_PH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_TT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_US": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_ZM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "en_ZW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "eo": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "atm",
+    "timePM": "ptm"
+  },
+  "es_AR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_BO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_CL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_CO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_CR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_DO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_EC": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_GT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_HN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_MX": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_NI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_PA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_PE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_PR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_PY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "es_SV": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "es_UY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "es_VE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "et_EE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "e.l",
+    "timePM": "p.l"
+  },
+  "eu_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ext_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "fa_IR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": "٫",
+    "timeAM": "صبح",
+    "timePM": "بعدازظهر"
+  },
+  "fi_FI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ap.",
+    "timePM": "ip."
+  },
+  "fo_FO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_BE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_BF": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_BJ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_CA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_CH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_CI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_FR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_GN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_LU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_MC": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_ML": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_NE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_SN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fr_TG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fur_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "fy_NL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ma",
+    "timePM": "mi"
+  },
+  "ga_IE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "gd_GB": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "m",
+    "timePM": "f"
+  },
+  "gl_ES": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a. m.",
+    "timePM": "p. m."
+  },
+  "gos_NL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "gsc_FR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "deu matin",
+    "timePM": "deu vrèspe"
+  },
+  "gu_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "gug_PY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ha_Latn_GH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ha_Latn_NG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "haw_US": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "he_IL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "hi_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "hil_PH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "hr_HR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "hsb_DE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "dopołdnja",
+    "timePM": "popołdnju"
+  },
+  "ht_HT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "hu_HU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "de.",
+    "timePM": "du."
+  },
+  "hy_AM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ia": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "id_ID": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ilo_PH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "is_IS": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "f.h.",
+    "timePM": "e.h."
+  },
+  "it_CH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "it_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "iyx_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ja_JP": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "午前",
+    "timePM": "午後"
+  },
+  "jbo": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "PDM",
+    "timePM": "BDM"
+  },
+  "ka_GE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "kab_DZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "n tufat",
+    "timePM": "n tmeddit"
+  },
+  "kk_KZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "kkw_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "kl_GL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "km_KH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ព្រឹក",
+    "timePM": "ល្ងាច"
+  },
+  "kmr_Latn_TR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "BN",
+    "timePM": "PN"
+  },
+  "kn_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "kng_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ko_KR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "오전",
+    "timePM": "오후"
+  },
+  "ky_KG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "la_VA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "lb_LU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "moies",
+    "timePM": "nomëttes"
+  },
+  "ldi_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "lg_UG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "lgr_SB": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "lif_NP": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "पूर्वान्ह",
+    "timePM": "अपरान्ह"
+  },
+  "lij_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "lld_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ln_CD": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "lo_LA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ກ່ອນທ່ຽງ",
+    "timePM": "ຫລັງທ່ຽງ"
+  },
+  "lt_LT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "priešpiet",
+    "timePM": "popiet"
+  },
+  "ltg_LV": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "lv_LV": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mai_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "पूर्वाह्न",
+    "timePM": "अपराह्न"
+  },
+  "mdw_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mfe_MU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "min_ID": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mk_MK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mkw_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ml_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mn_Cyrl_MN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mn_Mong_MN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mos_BF": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mr_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ms_MY": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "mt_MT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "QN",
+    "timePM": "WN"
+  },
+  "my_MM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "နံနက်",
+    "timePM": "ညနေ"
+  },
+  "myv_RU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "в.м.",
+    "timePM": "ч.л."
+  },
+  "nb_NO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "nds_DE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "vüörm.",
+    "timePM": "naom."
+  },
+  "ne_NP": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "पूर्वान्ह",
+    "timePM": "अपरान्ह"
+  },
+  "ngz_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "njx_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "njy_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "nl_BE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "nl_NL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "nn_NO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "no_NO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "nr_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "nso_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ny_MW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "oc_ES_aranes": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "oc_FR_lengadoc": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "om_ET": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "or_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "ପୂର୍ବାହ୍ନ",
+    "timePM": "ଅପରାହ୍ନ"
+  },
+  "pa_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "ਸ਼ਾਮ"
+  },
+  "pap_BQ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "pap_CW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "pdc_US": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pjt_AU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pl_PL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "plt_MG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pt_AO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pt_BR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pt_MZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pt_PT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "pui_CO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "pc",
+    "timePM": "cp"
+  },
+  "puu_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ro_MD": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ro_RO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ru_RU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "rue_SK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "дообіду",
+    "timePM": "пообідї"
+  },
+  "rw_RW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sat_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sat_Olck_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sc_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "sdj_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sg_CF": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ND",
+    "timePM": "LK"
+  },
+  "shs_CA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sid_ET": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sk_SK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "dop.",
+    "timePM": "odp."
+  },
+  "sl_SI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "dop.",
+    "timePM": "pop."
+  },
+  "so_SO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "XH",
+    "timePM": "XD"
+  },
+  "sq_AL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "e paradites",
+    "timePM": "e pasdites"
+  },
+  "sr_CS": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "пре.",
+    "timePM": "поп."
+  },
+  "sr_Latn_CS": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "pre.",
+    "timePM": "pop."
+  },
+  "sr_Latn_ME": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "pre.",
+    "timePM": "pop."
+  },
+  "sr_Latn_RS": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "pre.",
+    "timePM": "pop."
+  },
+  "sr_ME": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "пре.",
+    "timePM": "поп."
+  },
+  "sr_RS": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "пре.",
+    "timePM": "поп."
+  },
+  "ss_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "st_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sun_ID": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "sv_FI": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "fm",
+    "timePM": "em"
+  },
+  "sv_SE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "fm",
+    "timePM": "em"
+  },
+  "sw_TZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "UM",
+    "timePM": "MU"
+  },
+  "szl_PL": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ta_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "te_IN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tek_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tg_TJ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ПЧ",
+    "timePM": "БЧ"
+  },
+  "th_TH": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ti_ER": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tk_TM": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ÖÖ",
+    "timePM": "ÖS"
+  },
+  "tn_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tpi_PG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tr_TR": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ts_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tsa_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "tt_RU": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "көндез",
+    "timePM": "кич"
+  },
+  "tyx_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "ND",
+    "timePM": "LK"
+  },
+  "ug_CN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "چ ب",
+    "timePM": "چ ك"
+  },
+  "uk_UA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ur_PK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "قبل دوپہر",
+    "timePM": "بعد دوپہر"
+  },
+  "uz_UZ": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "ve_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "vec_IT": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "a.m.",
+    "timePM": "p.m."
+  },
+  "vi_VN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "sáng",
+    "timePM": "chiều"
+  },
+  "vif_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "vro_EE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "i.l",
+    "timePM": "p.l"
+  },
+  "wa_BE": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "xh_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "xku_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "yi_US": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "yom_CG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ",",
+    "timeAM": "AM",
+    "timePM": "PM"
+  },
+  "zh_CN": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "上午",
+    "timePM": "下午"
+  },
+  "zh_HK": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "上午",
+    "timePM": "下午"
+  },
+  "zh_MO": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "上午",
+    "timePM": "下午"
+  },
+  "zh_SG": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "上午",
+    "timePM": "下午"
+  },
+  "zh_TW": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "上午",
+    "timePM": "下午"
+  },
+  "zu_ZA": {
+    "timeSeparator": ":",
+    "time100SecSeparator": ".",
+    "timeAM": "AM",
+    "timePM": "PM"
+  }
+}

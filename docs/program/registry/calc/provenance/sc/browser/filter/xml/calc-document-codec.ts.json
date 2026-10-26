@@ -24,7 +24,7 @@
       ]
     },
     "localPath": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
-    "rationale": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.",
+    "rationale": "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation. This is local browser integration infrastructure; no native LibreOffice file ownership or semantic parity is claimed.\nAQF9AG finalizes document import before exposing the decoded model. Existing edit-text reconstruction uses the document text bridge and invalidates cached import positions after external cell-store mutation; the browser transfer format remains unchanged.",
     "responsibilities": [
       "Transfers supported native Calc cells, formula source, sparse patterns and geometry across the worker boundary; XML remains the durable representation."
     ],

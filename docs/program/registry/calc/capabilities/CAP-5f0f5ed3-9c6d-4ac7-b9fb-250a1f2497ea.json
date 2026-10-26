@@ -1,0 +1,81 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea",
+    "capabilityId": "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea",
+    "suite": "calc",
+    "subsystem": "text-csv-filter",
+    "type": "filter",
+    "maturity": "implemented",
+    "assertions": [
+      "Task AQF9AG connects CSV import and export through Calc text-filter owners, ScDocShell and the existing browser file dialog for the current-sheet profile, including plain multiline edit-text cells."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Browser byte ports adapt native SvStream while preserving the existing Calc document shell and file-dialog ownership."
+    },
+    "capability": "Calc current-sheet CSV file import and export",
+    "gaps": [
+      "Rich text attributes, locale number formats, full filter option dialog and non-UTF-8 export remain unported."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/docsh.cxx",
+          "marker": "SC_TEXT_CSV_FILTER_NAME"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/impex.cxx",
+          "marker": "ScImportExport::ExtText2Doc"
+        }
+      ],
+      "tests": [
+        {
+          "path": "vendor/libreoffice-reference/sc/qa/unit/ucalc.cxx",
+          "marker": "CPPUNIT_TEST_FIXTURE(Test, testImportStream)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/asciiopt.hxx",
+          "marker": "class ScAsciiOptions"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+          "marker": "AsciiSave"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.ts",
+          "marker": "ScImportExport"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
+          "marker": "opens CSV through the text filter"
+        }
+      ],
+      "docs": [
+        {
+          "path": ".agentplane/tasks/202610251610-AQF9AG/README.md",
+          "marker": "CSV"
+        }
+      ]
+    },
+    "aspect": "persistence-filter",
+    "atomicOperation": "calc-current-sheet-csv-file-io",
+    "scopeLimitations": [
+      "The current Calc model lacks full rich-text attributes and number-format services. The browser uses existing primary ODS persistence and deliberate save UI policy."
+    ]
+  }
+}

@@ -45,6 +45,23 @@ it("imports independent modern ODF XML with scoped formula namespace alias and s
   expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(4);
 });
 
+it("imports ODF paragraph boundaries into edit-text cells", () => {
+  const doc = new ScDocument();
+  new ScXMLImport(doc).importContent(
+    `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row><table:table-cell office:value-type="string"><text:p>first</text:p><text:p>second</text:p></table:table-cell></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,
+  );
+  const cell = doc.GetRefCellValue(new ScAddress());
+  expect(cell.getType()).toBe(4);
+  const edit = cell.getEditText();
+  assert(edit);
+  const value = edit.GetText();
+  try {
+    expect(text(value)).toBe("first\nsecond");
+  } finally {
+    value.dispose();
+  }
+});
+
 /** Independent ODF test envelope;no exporter participates in parser/default or failure assertions. @param rows - Rows. @param tableAttributes - Attributes. @returns XML. */
 function independent(rows: string, tableAttributes = 'table:name="Data"'): string {
   return `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:f="urn:oasis:names:tc:opendocument:xmlns:of:1.2"><office:body><office:spreadsheet><table:table ${tableAttributes}>${rows}</table:table><table:named-expressions/></office:spreadsheet></office:body></office:document-content>`;
@@ -109,11 +126,9 @@ it("rejects unsupported cell services and malformed structure explicitly", /** E
     '<table:table-cell table:number-columns-spanned="2"/>',
     '<table:table-cell table:number-rows-spanned="2"/>',
     '<table:table-cell table:formula="f:=1" table:number-columns-repeated="2"/>',
-    "<table:table-cell><text:p>x</text:p><text:p>y</text:p></table:table-cell>",
     "<table:table-cell><text:p><text:span>x</text:span></text:p></table:table-cell>",
     "<table:table-cell><text:p><text:line-break/></text:p></table:table-cell>",
     '<table:table-cell><text:p><text:s text:c="1000001"/></text:p></table:table-cell>',
-    '<table:table-cell office:string-value="a&#10;b" office:value-type="string"/>',
     '<table:table-cell table:formula="unknown:=1"/>',
     "<table:table-cell><text:span>x</text:span></table:table-cell>",
     '<table:table-cell><unknown xmlns="urn:unknown"/></table:table-cell>',

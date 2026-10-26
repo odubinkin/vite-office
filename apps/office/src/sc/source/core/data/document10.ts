@@ -669,6 +669,7 @@ export function ValidNewTabName(this: ScDocument, name: OUStringConstReference):
   return true;
 }
 
+
 /** Existing scalar sheet insertion body moved unchanged from the size-bounded facade. @param this - Actual document. @param position - Sheet position. @param name - Native name. @returns Inserted. */
 export function InsertTab(
   this: ScDocument,
@@ -823,4 +824,27 @@ export function HasClipFilteredRows(this: ScDocument): boolean {
       )
         return true;
   return false;
+}
+/** Returns a sheet's data-only extent and clears outputs for a missing sheet. @param this - Document. @param tab - Sheet. @param endCol - Column output. @param endRow - Row output. @returns Whether occupied. */
+export function GetCellArea(
+  this: ScDocument,
+  tab: number,
+  endCol: [number],
+  endRow: [number],
+): boolean {
+  const table = this.FetchTable(tab);
+  if (table) return table.GetCellArea(endCol, endRow);
+  endCol[0] = endRow[0] = 0;
+  return false;
+}
+/** Adopts a compiled formula or disposes it when the destination sheet is absent. @param this - Document. @param position - Target. @param cell - Owned formula. @returns Adopted formula or null. */
+export function SetFormulaCell(
+  this: ScDocument,
+  position: ScAddress,
+  cell: ScFormulaCell,
+): ScFormulaCell | null {
+  const table = this.FetchTable(position.Tab());
+  if (table) return table.SetFormulaCell(position.Col(), position.Row(), cell);
+  cell.Dispose();
+  return null;
 }

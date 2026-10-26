@@ -76,13 +76,16 @@ def catalogs(source: Path) -> dict[str, list[dict[str, object]]]:
     return result
 
 
-def locale_fields(source: Path) -> tuple[dict[str, dict[str, str]], dict[str, str]]:
-    """Project LCInfoNode's five original fields and LC_CTYPE's referenced DateSeparator."""
+def locale_fields(source: Path) -> tuple[dict[str, dict[str, str]], dict[str, str], dict[str, dict[str, str]], dict[str, dict[str, str]], dict[str, dict[str, str]]]:
+    """Project LC_INFO and referenced LC_CTYPE/LC_MISC fields consumed by the formatter."""
     roots = registered_roots(source)
     info = {}
     dates = {}
+    times = {}
+    long_dates = {}
+    reserved = {}
 
-    def date_separator(name: str, trail: tuple[str, ...] = ()) -> str:
+    def ctype(name: str, trail: tuple[str, ...] = ()) -> ET.Element:
         """Follow the original LC_CTYPE ref without borrowing another locale's LC_INFO."""
         if name in trail:
             raise ValueError("Cyclic LC_CTYPE reference")
@@ -91,11 +94,27 @@ def locale_fields(source: Path) -> tuple[dict[str, dict[str, str]], dict[str, st
             raise ValueError("Missing LC_CTYPE: " + name)
         reference = node.get("ref", "")
         if reference:
-            return date_separator(reference.replace("-", "_"), trail + (name,))
-        value = node.findtext("Separators/DateSeparator")
+            return ctype(reference.replace("-", "_"), trail + (name,))
+        return node
+
+    def field(node: ET.Element, name: str, path: str) -> str:
+        """Require the original generated string field rather than a guessed default."""
+        value = node.findtext(path)
         if value is None:
-            raise ValueError("Missing DateSeparator: " + name)
+            raise ValueError("Missing " + path + ": " + name)
         return value
+
+    def misc(name: str, trail: tuple[str, ...] = ()) -> ET.Element:
+        """Follow the original LC_MISC generated ref to the source reserved-word array."""
+        if name in trail:
+            raise ValueError("Cyclic LC_MISC reference")
+        node = roots[name].find("LC_MISC")
+        if node is None:
+            raise ValueError("Missing LC_MISC: " + name)
+        reference = node.get("ref", "")
+        if reference:
+            return misc(reference.replace("-", "_"), trail + (name,))
+        return node
 
     for name in sorted(roots):
         node = roots[name].find("LC_INFO")
@@ -108,8 +127,150 @@ def locale_fields(source: Path) -> tuple[dict[str, dict[str, str]], dict[str, st
             "CountryDefaultName": node.findtext("Country/DefaultName", ""),
             "Variant": node.findtext("Variant", ""),
         }
-        dates[name] = date_separator(name)
-    return info, dates
+        native_ctype = ctype(name)
+        dates[name] = field(native_ctype, name, "Separators/DateSeparator")
+        times[name] = {
+            "timeSeparator": field(native_ctype, name, "Separators/TimeSeparator"),
+            "time100SecSeparator": field(native_ctype, name, "Separators/Time100SecSeparator"),
+            "timeAM": field(native_ctype, name, "TimeAM"),
+            "timePM": field(native_ctype, name, "TimePM"),
+        }
+        long_dates[name] = {
+            "dayOfWeek": field(native_ctype, name, "Separators/LongDateDayOfWeekSeparator"),
+            "day": field(native_ctype, name, "Separators/LongDateDaySeparator"),
+            "month": field(native_ctype, name, "Separators/LongDateMonthSeparator"),
+        }
+        native_misc = misc(name)
+        true_word = native_misc.findtext("ReservedWords/trueWord")
+        false_word = native_misc.findtext("ReservedWords/falseWord")
+        reserved[name] = {
+            "trueWord": true_word if true_word is not None else "true",
+            "falseWord": false_word if false_word is not None else "false",
+        }
+    return info, dates, times, long_dates, reserved
+
+
+def date_acceptance_patterns(source: Path) -> dict[str, list[str]]:
+    """Mirror LCFormatNode::generateCode's explicit and edit-format date patterns."""
+    roots = registered_roots(source)
+    resolved: dict[str, list[str]] = {}
+
+    def generated(name: str, format_code: str) -> list[str]:
+        """Translate formatindex 21 using LocaleNode's modifier, quote and separator rules."""
+        ctype = roots[name].find("LC_CTYPE")
+        if ctype is None:
+            raise ValueError("Missing LC_CTYPE: " + name)
+        raw_separator = "" if ctype.get("ref") else ctype.findtext("Separators/DateSeparator", "")
+        date_separator = raw_separator[0] if raw_separator else ""
+        format_separator = date_separator
+        pattern: list[str] = []
+        alternate: list[str] = []
+        detected = 0
+        modifier = False
+        quoted = False
+        index = 0
+        while index < len(format_code) and detected < 7:
+            char = format_code[index]
+            index += 1
+            if modifier:
+                if char == "]":
+                    modifier = False
+                continue
+            if quoted:
+                if char == '"':
+                    quoted = False
+                continue
+            if char in "YyMmDd":
+                token = char.upper()
+                bit = {"Y": 4, "M": 2, "D": 1}[token]
+                if not detected & bit:
+                    pattern.append(token)
+                    if alternate:
+                        alternate.append(token)
+                    detected |= bit
+                continue
+            if char == "[":
+                modifier = True
+                continue
+            if char == '"':
+                quoted = True
+                continue
+            if char in "AJTGPKV":
+                localized = None
+                bits = detected & 7
+                if char == "A" and bits in (0, 3):
+                    localized = ("Y", 4)
+                elif char == "J" and bits in (0, 6):
+                    localized = ("D", 1)
+                elif char == "J" and bits == 3:
+                    localized = ("Y", 4)
+                elif char in "TGP" and bits == 0:
+                    localized = ("D", 1)
+                elif char == "K" and bits == 1:
+                    localized = ("M", 2)
+                elif char == "V" and bits == 3:
+                    localized = ("Y", 4)
+                if localized:
+                    token, bit = localized
+                    pattern.append(token)
+                    if alternate:
+                        alternate.append(token)
+                    detected |= bit
+                continue
+            if char == "\\" and index < len(format_code):
+                char = format_code[index]
+                index += 1
+            elif char in "-./":
+                format_separator = char
+            if not date_separator:
+                date_separator = char
+            if not format_separator:
+                format_separator = char
+            if date_separator != format_separator and not alternate:
+                alternate = pattern.copy()
+            if char == date_separator or char == format_separator:
+                pattern.append(date_separator)
+            if char == format_separator and alternate:
+                alternate.append(format_separator)
+        first = "".join(pattern)
+        if detected & 7 != 7 or len(first) < 5:
+            raise ValueError(f"Failed source date pattern for {name}: {format_code!r} -> {first!r}")
+        result = [first]
+        if alternate:
+            second = "".join(alternate)
+            if len(second) < 5:
+                raise ValueError(f"Failed second source date pattern for {name}: {second!r}")
+            result.append(second)
+        return result
+
+    def patterns(name: str, trail: tuple[str, ...] = ()) -> list[str]:
+        """Follow LC_FORMAT refs, which delegate getDateAcceptancePatterns to the leaf locale."""
+        if name in resolved:
+            return resolved[name]
+        if name in trail:
+            raise ValueError("Cyclic LC_FORMAT date pattern reference")
+        node = roots[name].find("LC_FORMAT")
+        if node is None:
+            raise ValueError("Missing LC_FORMAT: " + name)
+        if reference := node.get("ref"):
+            result = patterns(reference.replace("-", "_"), trail + (name,))
+        else:
+            result = []
+            for child in node.findall("DateAcceptancePattern"):
+                value = child.text or ""
+                if value not in result:
+                    result.append(value)
+            edit = next((item.findtext("FormatCode") for item in node.findall("FormatElement")
+                         if item.get("formatindex") == "21"), None)
+            if edit is None:
+                raise ValueError("Missing DATE_SYS_DDMMYYYY formatindex 21: " + name)
+            for value in generated(name, edit):
+                if value not in result:
+                    result.append(value)
+        resolved[name] = result
+        return result
+
+    return {name: patterns(name) for name in sorted(roots)}
 
 
 def localized_keyword_languages(source: Path) -> list[dict[str, object]]:
@@ -139,11 +300,15 @@ def main() -> None:
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     expected = catalogs(args.source_root)
-    info, dates = locale_fields(args.source_root)
+    info, dates, times, long_dates, reserved = locale_fields(args.source_root)
     outputs = {
         args.output: expected,
         args.output.with_name("language-country-info.json"): info,
         args.output.with_name("date-separators.json"): dates,
+        args.output.with_name("time-fields.json"): times,
+        args.output.with_name("long-date-separators.json"): long_dates,
+        args.output.with_name("reserved-words.json"): reserved,
+        args.output.with_name("date-acceptance-patterns.json"): date_acceptance_patterns(args.source_root),
         Path("apps/office/src/svl/source/numbers/data/keyword-localization.json"): localized_keyword_languages(args.source_root),
     }
     for path, values in outputs.items():
@@ -153,7 +318,7 @@ def main() -> None:
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(json.dumps(values, ensure_ascii=False, indent=2) + "\n")
-    print(f"Locale number formats/LC_INFO/date fields verified: {len(expected)} locales, {sum(map(len, expected.values()))} ordered format records; {len(outputs)} resources")
+    print(f"Locale number formats and fields verified: {len(expected)} locales, {sum(map(len, expected.values()))} ordered format records; {len(outputs)} resources")
 
 
 

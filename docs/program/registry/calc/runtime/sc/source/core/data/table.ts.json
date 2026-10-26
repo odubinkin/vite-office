@@ -64,6 +64,7 @@
       "knownViolations": [],
       "localSymbols": [
         "ScTable",
+        "SetName",
         "DeleteBeforeCopyFromClip",
         "CopyFromClip",
         "SetDirtyFromClip",

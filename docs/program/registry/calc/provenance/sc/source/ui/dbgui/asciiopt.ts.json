@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/dbgui/asciiopt.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/dbgui/asciiopt.cxx",
+    "localSymbols": [
+      "ScAsciiOptions"
+    ],
+    "upstreamSymbols": [
+      "ScAsciiOptions::ReadFromString"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG maps ScAsciiOptions CSV option parsing to the existing Calc document and file-dialog path. Numeric option tokens use the source o3tl::toInt32 prefix, overflow and narrowing behavior; source defaults, delimiter weighting and surplus-token tolerance are represented. ScImportExport::SetExtOptions copies ScAsciiOptions and its column metadata as the native owned value does. Full formatter-driven date/currency classification, rich edit-text, the native options dialog and the complete text filter remain incomplete and are not claimed as parity.",
+      "Task AQF9AG preserves UTF-16 code-unit separator serialization and forwards DETECT separators to SfxObjectShell::DetectCsvSeparators with the source stream. BOM probing covers the first phase of source encoding detection; ICU charset guessing remains unrepresented."
+    ],
+    "omittedResponsibilities": [
+      "Full LibreOffice text filter, rich edit text, locale formatter, encoding conversion and UI option dialog are not yet ported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.ts",
+          "marker": "ScAsciiOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.test.ts",
+          "marker": "ScAsciiOptions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/dbgui/asciiopt.cxx",
+          "marker": "ScAsciiOptions::ReadFromString"
+        }
+      ]
+    }
+  }
+}

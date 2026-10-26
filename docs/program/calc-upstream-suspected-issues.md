@@ -3998,3 +3998,63 @@ Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected mark
 - Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
 - Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.
 - Preservation: keep native lower_bound direction and both guards, with no predecessor/longest-prefix fallback. Tests over the shipped VCL data retain exact matching and the missed prefix behavior.
+
+### CALC-285 — CSV import and export give token 6 different meanings
+
+Pinned `sc/source/ui/dbgui/asciiopt.cxx` writes token 6 as `bQuotedFieldAsText`, while `sc/source/ui/dbgui/imoptdlg.cxx` reads that same token as `bQuoteAllText` when an imported CSV is later exported. Selecting quoted fields as text during import can therefore cause every text cell to be quoted on export, even though the two options express different user choices. This may be a deliberate compatibility concession for the shared persistent filter string; no confirmed upstream defect is claimed. Preserve the token mapping in both Calc option owners instead of silently translating one meaning into the other.
+
+### CALC-286 — CSV import strips a terminal line feed from quoted data
+
+Pinned `sc/source/ui/docshell/impex.cxx`, `ScImportExport::ExtText2Doc`, removes one trailing `\n` from every field returned by `ScanNextFieldFromString`. A quoted field whose intended content ends in a line feed, such as `"A\n",2`, therefore imports as `A` rather than `A\n`. The comment attributes this to broken CSV generators, but the rule also affects valid quoted data. Preserve the one-character trim in our importer; a source change would need separate upstream review.
+
+### CALC-287 — CSV trailing empty field depends on the pass-start range width
+
+Pinned `sc/source/ui/docshell/impex.cxx`, `ScImportExport::ExtText2Doc`, captures `const nLastCol = nEndCol` once at the start of each pass, outside the row loop. It sets `bIsLastColEmpty` after a field only when the next destination column equals that captured value. Although `nEndCol` grows after each row, `nLastCol` does not change until another pass starts. With the whole-document constructor, `bUndo` is false and the sole pass starts at column zero: neither row of `A,\nB,` clears a pre-existing second cell, even with skip-empty disabled. An Undo range-determination pass can give the subsequent writing pass a different captured width. If the trailing-empty flag is set and the source column has `SC_COL_SKIP`, it remains set until a non-skipped column clears it. Preserve the pass boundary, range-width condition and skip handling. The earlier local description and tests incorrectly treated the captured width as changing after each row; they have been corrected against the source loop.
+
+### CALC-288 — Fixed-width quoted CSV admits one character past its cell limit
+
+Pinned `sc/source/ui/docshell/impex.cxx`, `lcl_GetFixed`, tests `nSpace - nStart - 3 <= nArbitraryCellLengthLimit` for a quoted field, but the accepted copy length is `nSpace - nStart - 2`. With the limit at 65,535, a quoted field containing 65,536 characters is copied intact without setting `bOverflowCell`; one more character takes the truncating overflow branch. Preserve this boundary and overflow flag rather than normalizing it to the unquoted-field check.
+
+### CALC-289 — Embedded NUL fills the input scanner's fragment capacity
+
+Pinned `svl/source/numbers/zforfind.cxx`, `NextNumberStringSymbol` stops at the first NUL without advancing its pointer, while `NumberStringDivision` continues until the pointer reaches the `OUString` length or twenty fragment slots have been filled. For `1\0A`, the scanner records `1` followed by nineteen empty nonnumeric fragments; downstream classification rejects the input at the capacity check. Preserve the source cursor and slot behavior rather than skipping or truncating the NUL.
+
+### CALC-290 — UTF-16BE line reader swaps the compacted index after a NUL
+
+Pinned `tools/source/stream/stream.cxx`, `SvStream::ReadUniStringLine`, swaps `buf[n]` before reading `c = buf[j]`. The two indices diverge after an embedded NUL because `n` counts retained code units while `j` counts source units. With a UTF-16BE BOM and code units `A`, NUL, LF, CR, `B`, CR, the LF and CR are read from their unswapped slots, are not recognized as line breaks, and the returned line contains `A\u0A00\u0D00\u4200\u0D00`. This differs from the apparent intent to skip NUL and split lines. The consumed local `SvStream` path preserves the original swap/compaction order, with a literal byte witness in `apps/office/src/tools/source/stream/stream.test.ts`. Source inspection and the ported test support this observation; a compiled native differential run remains outstanding.
+
+### CALC-291 — Fixed-width CSV omits the final empty column's padding
+
+Pinned `sc/source/ui/docshell/docsh.cxx`, `ScDocShell::AsciiSave`, writes fixed-width padding for an empty column only while its index is less than `nEndCol`. A populated cell at `nEndCol` writes its own width, but an empty final column contributes no width on a sparse or entirely empty row. For cells `A1=A` and `C3=C` at five-character widths, the first two exported rows contain only ten characters before their line feeds, while the third contains fifteen. An entirely empty sheet exports only a line feed. The asymmetry may be unintended, but complete caller expectations are not established. Preserve the source loop bounds and row terminators; the local CSV export tests cover both cases.
+
+### CALC-292 — Indian grouping accepts either group width at each separator
+
+Pinned `svl/source/numbers/zforfind.cxx`, `ImpSvNumberInputScan::GetThousandSep`, checks the following numeric fragment against both the current width and `DigitGroupingIterator::advance()` width. With the `{3,2,0}` grouping used for India and Bhutan, a separator followed by either two or three digits passes at this stage. The source FIXME notes that the method does not track separator positions and can therefore accept mixed widths. Later classification may reject some complete strings; no end-to-end acceptance claim is made. Preserve this predicate and its short-circuit order, with local scanner tests for both widths.
+
+### CALC-293 — Stream line limit skips one character after truncation
+
+Pinned `tools/source/stream/stream.cxx`, `SvStream::ReadLine` and `SvStream::ReadUniStringLine`, clamp `nTotalLen` to the caller's maximum and then advance the seek position by one byte or UTF-16 code unit whenever the buffered read moved beyond that position. This correctly consumes a line terminator when the limit coincides with it, but on a longer line it discards the first character beyond the limit. For `ABCDE\n` with a limit of three bytes, consecutive reads return `ABC` and `E`; `D` is lost. Preserve the original seek behavior in the consumed `SvStream` path. CSV passes its own large source line limit, so this observation concerns oversized input rather than ordinary CSV rows.
+
+### CALC-294 — Digit grouping depends only on country for India and Bhutan
+
+Pinned `unotools/source/i18n/localedatawrapper.cxx`, `LocaleDataWrapper::loadDigitGrouping`, assigns `{3,2,0}` for every locale whose LC_INFO country is `IN` or `BT`, and `{3,0,0}` everywhere else. Its own TODO says this is simplified and that free-form grouping would require a new locale-data element and API. Consequently the grouping sequence cannot reflect a language-specific pattern within one country or another country's non-three-digit grouping convention. Whether any shipped locale currently needs a different sequence is unverified. Preserve this source country test and both arrays; do not infer grouping from format codes or host Intl data.
+
+### CALC-295 — CSV date-name setup changes the first transliterator to English
+
+Pinned `sc/source/ui/docshell/impex.cxx`, `ScImportExport::ExtText2Doc`, creates and loads `aTransliteration` for `eDocLang`. When the language is not US English, it creates `pEnglishTransliteration` but calls `aTransliteration.loadModuleIfNeeded(LANGUAGE_ENGLISH_US)` again instead of loading the new wrapper. Later `lcl_PutString` uses `aTransliteration` for local month names and `pEnglishTransliteration` for English fallback. The first comparison therefore uses an English-loaded module while the fallback wrapper first loads its default language on demand. Whether this affects a given locale depends on case-mapping behavior, but the owner selection looks accidental. Preserve that call order and receiver when the date-name CSV path is represented; do not silently correct it in the port.
+
+### CALC-296 — CSV import retains a previously detected BOM across streams
+
+Pinned `sc/source/ui/docshell/impex.cxx`, `ScImportExport::ExtText2Doc`, sets `mbIncludeBOM` to true when `SvStream::StartReadingUnicodeText` consumes a BOM, but does not clear it when a later call on the same `ScImportExport` instance reads a stream without one. The flag therefore still reports a BOM after a BOM-bearing stream followed by a BOM-free stream. This may be harmless if callers create one importer per stream; the object contract does not make that invariant clear. Preserve the source's conditional assignment rather than resetting the flag. The local `impex.test.ts` exercises both imports through one instance.
+
+### CALC-297 — ISO date-time timezone adjustment counts offset minutes twice or cancels them
+
+Pinned `sax/source/tools/converter.cxx`, `lcl_ConvertToUTC`, adds `nOffsetMinutes` to the output minutes before testing the offset sign. Its negative-offset branch adds those minutes again, while its positive-offset branch subtracts them after a comparison against the already increased value. For `2024-01-02T03:04:05-01:30`, `Converter::parseDateTime` therefore produces 05:04:05 UTC; for `+01:30`, it produces 02:04:05 UTC. Ordinary offset arithmetic would give 04:34:05 and 01:34:05. The source order looks accidental. Preserve it in the local `sax::Converter` port; the focused date parser test records both witnesses. The CSV importer's ISO precheck uses only the parser's success flag, so this arithmetic does not by itself establish a wrong CSV cell value.
+
+### CALC-298 — Scalar document-import setters bypass shared-formula detachment
+
+Pinned `sc/source/core/data/documentimport.cxx` explains in `unshareDoomedCell` that replacing a shared-formula cell directly through the cell store can leave a stale group length or a dead top-cell pointer. Matrix/spill setters call that helper, and the pointer formula setter explicitly unshares its overwritten formula. The numeric, shared-string, edit-object and source-string formula setters instead call `rCells.set` directly without that detachment. This may be harmless for a fresh import document, but these setters also accept existing documents. Preserve the direct writes in the port rather than silently replacing them with normal editing setters. The admitted import path uses fresh documents; no native crash or invalid-pointer execution has been attempted.
+
+### CALC-299 — One-sheet block-position cache retains failed initialization
+
+Pinned `sc/source/core/data/mtvelements.cxx`, `TableColumnBlockPositionSet::getBlockPosition`, inserts a default `ColumnBlockPosition` into its map before calling `ScTable::InitColumnBlockPosition`. If initialization fails, the first call returns null but leaves that entry in the map; the next call for the same column returns its uninitialized position. `ScDocumentImportImpl` validates its column domain before reaching this cache, so ordinary import avoids this case. Preserve the insertion/initialization order and explicit invalidation contract rather than erasing a failed entry automatically.

@@ -2,7 +2,12 @@
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
-import { toUpper } from "../../../i18npool/source/characterclassification/cclass_unicode";
+import {
+  getCharacterType,
+  KCharacterType,
+  toUpper,
+} from "../../../i18npool/source/characterclassification/cclass_unicode";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 
 /** Original whole-string overload after projecting its existing getMyLocale state. @param rStr - Actual input. @param locale - Prepared original state. @returns Actual mapped value. */
 export function uppercase(rStr: OUStringConstReference, locale: LocaleConstReference): OUString;
@@ -25,5 +30,88 @@ export function uppercase(
   } catch (error) {
     if (!(error instanceof Exception)) throw error;
     return new OUString(rStr.getStr().subarray(nPos, nPos + nCount), nCount);
+  }
+}
+
+/** Original immutable-language CharClass over the already implemented character-classification service operations. */
+export class CharClass {
+  private readonly locale: Locale;
+  /** Original nonempty UTF-16 ASCII digit scan used by the CSV sheet option. @param value - String view. @returns Whether every code unit is an ASCII digit. */
+  static isAsciiNumeric(value: string): boolean {
+    if (!value.length) return false;
+    for (let index = 0; index < value.length; index++) {
+      const code = value.charCodeAt(index);
+      if (code < 48 || code > 57) return false;
+    }
+    return true;
+  }
+  /** Owns the prepared Locale projection of the source LanguageTag. @param locale - Initial locale. */
+  constructor(locale: LocaleConstReference) {
+    this.locale = new Locale(locale);
+  }
+  /** Original borrowed getMyLocale result. @returns Current locale. */
+  getMyLocale(): Readonly<Locale> {
+    return this.locale;
+  }
+  /** Original whole-string uppercase overload. @param value - Input. @returns Uppercased value. */
+  uppercase(value: OUStringConstReference): OUString {
+    return uppercase(value, this.locale);
+  }
+  /** Original classifier forwarding with catch-only-UNO-Exception zero fallback. @param value - Input. @param position - UTF-16 offset. @returns Native KCharacterType mask. */
+  getCharacterType(value: OUStringConstReference, position: number): number {
+    try {
+      return getCharacterType(value, position);
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return 0;
+    }
+  }
+  /** Original ASCII fast path and KCharacterType::DIGIT fallback. @param value - Input. @param position - UTF-16 offset. @returns Digit classification. */
+  isDigit(value: OUStringConstReference, position: number): boolean {
+    const code = value.getStr()[position] as number;
+    if (code < 128) return code >= 48 && code <= 57;
+    try {
+      return (getCharacterType(value, position) & KCharacterType.DIGIT) !== 0;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    }
+  }
+  /** Original all-codepoint isNumeric overload. @param value - Input. @returns Whether every codepoint is a digit. */
+  isNumeric(value: OUStringConstReference): boolean {
+    if (!value.getLength()) return false;
+    try {
+      const position: [number] = [0];
+      while (position[0] < value.getLength()) {
+        if (!this.isDigit(value, position[0])) return false;
+        value.iterateCodePoints(position);
+      }
+      return true;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    }
+  }
+  /** Original ASCII alphanumeric fast path and letter-or-numeric type mask. @param value - Input. @param position - UTF-16 offset. @returns Classification. */
+  isLetterNumeric(value: OUStringConstReference, position: number): boolean {
+    const code = value.getStr()[position] as number;
+    if (code < 128)
+      return (
+        (code >= 48 && code <= 57) || (code >= 65 && code <= 90) || (code >= 97 && code <= 122)
+      );
+    try {
+      return (
+        (getCharacterType(value, position) &
+          (KCharacterType.ALPHA | KCharacterType.LETTER | KCharacterType.DIGIT)) !==
+        0
+      );
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    }
+  }
+  /** Releases the owned locale after dependent scanners stop borrowing it. @returns Nothing. */
+  dispose(): void {
+    this.locale.dispose();
   }
 }

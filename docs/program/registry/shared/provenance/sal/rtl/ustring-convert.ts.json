@@ -1,0 +1,27 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/ustring.hxx",
+    "localSymbols": ["OStringToOUString", "OUStringToOString"],
+    "upstreamSymbols": ["OStringToOUString", "OUStringToOString"],
+    "preservedResponsibilities": [
+      "CSV byte conversion uses the original single-byte descriptor conversion procedures and OString/OUString conversion flags for the authenticated ported registry; Unicode writes little-endian UTF-16 and UTF-8 uses browser byte primitives."
+    ],
+    "omittedResponsibilities": [
+      "Full SAL converter registry, contextual/multibyte converters, complete stream ownership and every original constructor/error contract remain unported. The original SAL dummy conversion now handles missing registry entries."
+    ],
+    "evidence": {
+      "local": [{"path": "apps/office/src/sal/rtl/ustring-convert.ts", "marker": "OUStringToOString"}],
+      "upstream": [{"path": "vendor/libreoffice-reference/include/rtl/ustring.hxx", "marker": "OUStringToOString"}]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Keep the newly connected byte-conversion wrappers adjacent to the existing ustring owner while the remaining original inline OUString helpers stay in sal/inc/rtl/ustring.ts."
+    }
+  }
+}

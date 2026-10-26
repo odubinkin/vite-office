@@ -7,6 +7,158 @@ import {
   rtl_math_stringToDouble,
   rtl_math_uStringToDouble,
 } from "../../../sal/inc/rtl/math.h";
+import { getDaysInMonth } from "../../../comphelper/source/misc/date";
+import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+
+/** Source o3tl::trim whitespace predicate for UTF-16 string views. */
+function dateWhitespace(code: number): boolean {
+  return (code > 0 && code <= 32) ||
+    (code >= 0x2000 && (code <= 0x200b || code >= 0x2028) && code <= 0x2029);
+}
+
+/** Source readUnsignedNumber and readDateTimeComponent, retaining the consumed cursor. */
+function dateComponent(input: string, cursor: [number], width: number, exact: boolean): number | null {
+  const start = cursor[0];
+  let value = 0;
+  while (cursor[0] < input.length) {
+    const digit = input.charCodeAt(cursor[0]) - 48;
+    if (digit < 0 || digit > 9) break;
+    value = value * 10 + digit;
+    cursor[0]++;
+  }
+  const count = cursor[0] - start;
+  if (!count || value >= 2147483647 || count < width || (exact && count > width)) return null;
+  return value;
+}
+
+/** Original lcl_ConvertToUTC arithmetic, including its minute adjustment order. */
+function convertDateTimeToUTC(value: DateTime, offset: number): void {
+  let offsetHours = Math.trunc(Math.abs(offset) / 60);
+  const offsetMinutes = Math.abs(offset) % 60;
+  value.Minutes += offsetMinutes;
+  if (offset < 0) {
+    value.Minutes += offsetMinutes;
+    if (value.Minutes >= 60) {
+      value.Minutes -= 60;
+      offsetHours++;
+    }
+    value.Hours += offsetHours;
+    if (value.Hours < 24) return;
+    let days = 0;
+    while (value.Hours >= 24) {
+      value.Hours -= 24;
+      days++;
+    }
+    if (!value.Day) return;
+    value.Day += days;
+    const last = getDaysInMonth(value.Month, value.Year);
+    if (value.Day <= last) return;
+    value.Day -= last;
+    value.Month++;
+    if (value.Month <= 12) return;
+    value.Month = 1;
+    value.Year++;
+  } else if (offset > 0) {
+    if (value.Minutes < offsetMinutes) {
+      value.Minutes += 60;
+      offsetHours++;
+    }
+    value.Minutes -= offsetMinutes;
+    let days = 0;
+    while (value.Hours < offsetHours) {
+      value.Hours += 24;
+      days++;
+    }
+    value.Hours -= offsetHours;
+    if (!value.Day) return;
+    if (days < value.Day) {
+      value.Day -= days;
+      return;
+    }
+    const previousMonth = value.Month === 1 ? 12 : value.Month - 1;
+    const daysInPreviousMonth = getDaysInMonth(previousMonth, value.Year);
+    value.Day += daysInPreviousMonth;
+    value.Month--;
+    if (!value.Month) {
+      value.Month = 12;
+      value.Year--;
+    }
+    value.Day -= days;
+  }
+}
+
+/** Original strict sax::Converter date/date-time overload used as a CSV ISO precheck. */
+function parseDateTime(output: DateTime, source: string): boolean {
+  let first = 0, last = source.length;
+  while (first < last && dateWhitespace(source.charCodeAt(first))) first++;
+  while (last > first && dateWhitespace(source.charCodeAt(last - 1))) last--;
+  const input = source.slice(first, last), cursor: [number] = [0];
+  const negative = input[0] === "-";
+  if (negative) cursor[0]++;
+  const year = dateComponent(input, cursor, 1, false);
+  if (year === null || year <= 0 || year > (negative ? 32768 : 32767) || input[cursor[0]] !== "-") return false;
+  cursor[0]++;
+  const month = dateComponent(input, cursor, 2, true);
+  if (month === null || month <= 0 || month > 12 || input[cursor[0]] !== "-") return false;
+  cursor[0]++;
+  const day = dateComponent(input, cursor, 2, true);
+  if (day === null || day <= 0 || day > getDaysInMonth(month, negative ? -year : year)) return false;
+  const hasTime = input[cursor[0]] === "T" || input[cursor[0]] === "t";
+  if (hasTime) cursor[0]++;
+  let hours = 0, minutes = 0, seconds = 0, nanoseconds = 0;
+  if (hasTime) {
+    const hour = dateComponent(input, cursor, 2, true);
+    if (hour === null || hour > 24 || input[cursor[0]] !== ":") return false;
+    cursor[0]++;
+    const minute = dateComponent(input, cursor, 2, true);
+    if (minute === null || minute >= 60 || input[cursor[0]] !== ":") return false;
+    cursor[0]++;
+    const second = dateComponent(input, cursor, 2, true);
+    if (second === null || second >= 60) return false;
+    hours = hour; minutes = minute; seconds = second;
+    if (input[cursor[0]] === "." || input[cursor[0]] === ",") {
+      cursor[0]++;
+      const start = cursor[0];
+      while (cursor[0] < input.length) {
+        const digit = input.charCodeAt(cursor[0]) - 48;
+        if (digit < 0 || digit > 9) break;
+        if (cursor[0] - start < 9) nanoseconds = nanoseconds * 10 + digit;
+        cursor[0]++;
+      }
+      if (cursor[0] === start) return false;
+      for (let digits = Math.min(cursor[0] - start, 9); digits < 9; digits++) nanoseconds *= 10;
+    }
+    if (hours === 24 && (minutes !== 0 || seconds !== 0 || nanoseconds !== 0)) return false;
+  }
+  let timezone = false, negativeOffset = false, offsetHours = 0, offsetMinutes = 0;
+  if (cursor[0] < input.length) {
+    const marker = input[cursor[0]];
+    if (marker !== "+" && marker !== "-" && marker !== "Z" && marker !== "z") return false;
+    timezone = true;
+    negativeOffset = marker === "-";
+    cursor[0]++;
+    if (marker === "+" || marker === "-") {
+      const hour = dateComponent(input, cursor, 2, true);
+      if (hour === null || hour > 14 || input[cursor[0]] !== ":") return false;
+      cursor[0]++;
+      const minute = dateComponent(input, cursor, 2, true);
+      if (minute === null || minute >= 60 || (hour === 14 && minute !== 0)) return false;
+      offsetHours = hour; offsetMinutes = minute;
+    }
+  }
+  if (cursor[0] !== input.length) return false;
+  output.Year = negative ? -year : year;
+  output.Month = month;
+  output.Day = day;
+  output.Hours = hours;
+  output.Minutes = minutes;
+  output.Seconds = seconds;
+  output.NanoSeconds = nanoseconds;
+  output.IsUTC = timezone;
+  if (timezone)
+    convertDateTimeToUTC(output, (negativeOffset ? -1 : 1) * (offsetHours * 60 + offsetMinutes));
+  return true;
+}
 
 /** Native core length targets implemented by Writer XML import. */
 export type CoreMeasureUnit = "twip" | "mm100";
@@ -21,6 +173,7 @@ export const Converter = {
   convertColor,
   convertBool,
   convertPercent,
+  parseDateTime,
   /** Native UTF16 signed32 number conversion through the original length-bounded signed64 parser,clamp and complete-consumption test. Byte-string overloads remain unported. @param output - Always initialized scalar output. @param input - UTF16 view. @param min - Signed32 lower bound. @param max - Signed32 upper bound. @returns Native success. */
   convertNumber(output: [number], input: string, min = -2147483648, max = 2147483647): boolean {
     output[0] = 0;

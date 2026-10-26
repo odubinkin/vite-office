@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unotools/source/i18n/calendarwrapper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": ["CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": ["apps/office/src/unotools/source/i18n/calendarwrapper.ts", "apps/office/src/i18npool/source/localedata/native-calendar-items.test.ts", "scripts/extract-libreoffice-calendar-items.py"],
+      "justification": "Task AQF9AG binds default-calendar name and count queries to the pinned generated LC_CALENDAR sections for all 284 registered locale services. Date arithmetic, alternate calendars and full UNO CalendarItem2 transport are pending.",
+      "knownViolations": [],
+      "localSymbols": ["CalendarWrapper", "loadDefaultCalendar", "getMonths", "getGenitiveMonths", "getPartitiveMonths", "getDays", "getNumberOfMonthsInYear", "getNumberOfDaysInWeek"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "unotools/source/i18n/calendarwrapper.cxx",
+      "upstreamSymbols": ["CalendarWrapper::loadDefaultCalendar", "CalendarWrapper::getMonths", "CalendarWrapper::getGenitiveMonths", "CalendarWrapper::getPartitiveMonths", "CalendarWrapper::getDays", "CalendarWrapper::getNumberOfMonthsInYear", "CalendarWrapper::getNumberOfDaysInWeek"]
+    }
+  }
+}

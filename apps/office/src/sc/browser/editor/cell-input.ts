@@ -127,6 +127,15 @@ export function cellPresentation(
   if (ref.hasString()) {
     const formula = ref.getFormula();
     if (formula) return { text: text(formula.GetString().getString()), alignment: "left" };
+    const edit = ref.getEditText();
+    if (edit) {
+      const value = edit.GetText();
+      try {
+        return { text: text(value), alignment: "left" };
+      } finally {
+        value.dispose();
+      }
+    }
     const value = doc.GetSharedString(pos);
     try {
       return { text: text(value.getString()), alignment: "left" };

@@ -8,6 +8,9 @@ import { MapUnit } from "../../../tools/inc/mapunit";
 import { NamedColor } from "../../inc/namedcolor";
 import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
+import { DetectCsvSeparators } from "./objstor";
+import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import type { SvStream } from "../../../tools/source/stream/stream";
 
 /** Identifies the externally observable lifecycle of a locally held document shell. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
@@ -39,6 +42,10 @@ export interface CreateDocumentInput {
 
 /** Framework document shell owning identity, title, modified state, and the primary medium. */
 export class SfxObjectShell extends SfxBroadcaster {
+  /** Source objstor.cxx CSV separator selection from the stream's original position. */
+  static DetectCsvSeparators(stream: SvStream, encoding: rtl_TextEncoding, delimiter: string): string {
+    return DetectCsvSeparators(stream, encoding, delimiter);
+  }
   private readonly m_aRecentColors = new Map<number, NamedColor>();
   /** Original objcont.cxx optional value copy. The native broadcaster role is inherited through SfxShell upstream; its complete command/lifecycle class remains unported here. @param slotId - Native slot. @returns Independent optional value. */
   public GetRecentColor(slotId: number): NamedColor | undefined {

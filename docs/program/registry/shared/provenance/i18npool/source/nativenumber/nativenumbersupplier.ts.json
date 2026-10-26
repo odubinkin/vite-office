@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
+    "status": "mapped",
+    "upstreamPath": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+    "localSymbols": ["NativeNumberSupplierService"],
+    "upstreamSymbols": ["NativeNumberSupplierService::getNativeNumberString", "NativeToAscii", "NativeToAscii_numberMaker", "getLanguageNumber"],
+    "preservedResponsibilities": ["Task AQF9AG maps the source NATNUM0 path, language gate, source number-character tables, multiplier recursion and output offsets."],
+    "omittedResponsibilities": ["NATNUM1 through NATNUM12 and UNO service construction remain outside the represented path."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts", "marker": "class NativeNumberSupplierService"}, {"path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.test.ts", "marker": "upstream language gate"}],
+      "upstream": [{"path": "i18npool/source/nativenumber/nativenumbersupplier.cxx", "marker": "NativeToAscii(const OUString&"}, {"path": "i18npool/source/nativenumber/data/numberchar.h", "marker": "NumberChar[][10]"}]
+    }
+  }
+}

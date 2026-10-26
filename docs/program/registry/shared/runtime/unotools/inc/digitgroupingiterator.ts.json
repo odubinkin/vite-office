@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unotools/inc/digitgroupingiterator.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": ["CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/unotools/inc/digitgroupingiterator.ts",
+        "apps/office/src/unotools/inc/digitgroupingiterator.test.ts",
+        "vendor/libreoffice-reference/include/unotools/digitgroupingiterator.hxx"
+      ],
+      "justification": "Task AQF9AG ports the original grouping iterator over a copied UNO signed32 sequence: sanitized nonnegative widths, three-digit empty fallback, zero-sentinel repetition, signed32 position overflow guard, reset and forward separator positions. LocaleDataWrapper supplies the source country grouping for CSV number-format scanning. Native C++ value ABI and unrelated locale-formatting callers are outside the current browser slice.",
+      "knownViolations": [],
+      "localSymbols": ["DigitGroupingIterator"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/unotools/digitgroupingiterator.hxx",
+      "upstreamSymbols": ["DigitGroupingIterator", "createForwardSequence"]
+    }
+  }
+}

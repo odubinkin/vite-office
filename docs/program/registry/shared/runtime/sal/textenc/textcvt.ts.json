@@ -18,17 +18,22 @@
       "evidence": [
         "apps/office/src/sal/textenc/textcvt.ts#ImplDummyToUnicode",
         "vendor/libreoffice-reference/sal/textenc/textcvt.cxx#ImplDummyToUnicode",
-        "apps/office/src/sal/textenc/textcvt.test.ts#copies every byte to the same-numbered Unicode unit"
+        "apps/office/src/sal/textenc/textcvt.test.ts#copies every byte to the same-numbered Unicode unit",
+        "apps/office/src/sal/textenc/textcvt.ts",
+        "apps/office/src/sal/rtl/ustring-convert.test.ts",
+        "vendor/libreoffice-reference/sal/textenc/textcvt.cxx"
       ],
-      "justification": "Pinned SAL missing-converter fallback retains byte-to-U+00xx output and native error/capacity flags. The full converter lifecycle and Unicode-to-text reverse path are outside the current RTF import path. Compiled upstream differential remains unverified.",
+      "justification": "Pinned SAL missing-converter fallback retains byte-to-U+00xx output and native error/capacity flags. The full converter lifecycle and Unicode-to-text reverse path are outside the current RTF import path. Compiled upstream differential remains unverified. The default missing-converter fallback is ported for CSV; original flag, capacity and converter-factory contracts remain pending.",
       "knownViolations": [],
       "localSymbols": [
-        "ImplDummyToUnicode"
+        "ImplDummyToUnicode",
+        "ImplUnicodeToDummy"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/textcvt.cxx",
       "upstreamSymbols": [
-        "ImplDummyToUnicode"
+        "ImplDummyToUnicode",
+        "ImplUnicodeToDummy"
       ]
     }
   }

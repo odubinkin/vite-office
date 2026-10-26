@@ -19,19 +19,23 @@
         "apps/office/src/sal/textenc/tencinfo.ts",
         "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx",
         "apps/office/src/sal/textenc/tencinfo.ts#rtl_getTextEncodingFromWindowsCodePage",
-        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromWindowsCodePage"
+        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromWindowsCodePage",
+        "apps/office/src/sal/textenc/native-text-encoding-info.json"
       ],
-      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified. Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback. Broader SAL codec parity remains unverified.",
+      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified. Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback. Broader SAL codec parity remains unverified. Pinned source metadata for the 55 represented single-byte converters and UTF-8 preserves the rtl_getTextEncodingInfo size gates, unknown-data fallback and Calc CSV CONTEXT/ASCII branch selection. Remaining source registry data and queries are outside this current slice.",
       "knownViolations": [],
       "localSymbols": [
         "rtl_getBestWindowsCharsetFromTextEncoding",
-        "rtl_getTextEncodingFromWindowsCodePage"
+        "rtl_getTextEncodingFromWindowsCodePage",
+        "rtl_getTextEncodingInfo",
+        "rtl_TextEncodingInfo"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tencinfo.cxx",
       "upstreamSymbols": [
         "rtl_getBestWindowsCharsetFromTextEncoding",
-        "rtl_getTextEncodingFromWindowsCodePage"
+        "rtl_getTextEncodingFromWindowsCodePage",
+        "rtl_getTextEncodingInfo"
       ]
     }
   }

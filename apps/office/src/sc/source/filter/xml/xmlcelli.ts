@@ -12,7 +12,7 @@ import { ScXMLCellTextParaContext } from "./celltextparacontext";
 /** Cell state is a transient native XML context,not an imported cell model. */
 export class ScXMLTableRowCellContext extends ScXMLImportContext {
   private readonly style: import("../../../inc/patattr").ScPatternAttr | null;
-  private paragraph: string | undefined;
+  private readonly paragraphs: string[] = [];
   private readonly repeat: number;
   private readonly type: string | null;
   private readonly source: string | null;
@@ -45,10 +45,9 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
     if (this.source !== null && (this.repeat > 1 || row.repeat > 1))
       throw new Error("ODS repeated formula services are not implemented");
   }
-  /** Allows exactly one plain paragraph;multiline rich text needs its real edit-engine owner. @param value - Decoded paragraph. @returns Nothing. */
+  /** Appends native text paragraphs, preserving the EditEngine line boundary. @param value - Decoded paragraph. @returns Nothing. */
   setParagraph(value: string): void {
-    if (this.paragraph !== undefined) throw new Error("ODS multiline cell text is not implemented");
-    this.paragraph = value;
+    this.paragraphs.push(value);
   }
   /** Creates actual simple text child state. @param element - Token. @returns Context. */
   override createFastChildContext(element: XMLToken): SvXMLImportContext {
@@ -62,7 +61,8 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
       pos = new ScAddress(this.row.col, this.row.start, this.row.table.tab);
     this.row.col += this.repeat;
     if (this.covered) return;
-    const value = this.stringValue || this.paragraph;
+    const value =
+      this.stringValue || (this.paragraphs.length ? this.paragraphs.join("\n") : undefined);
     if (this.style !== null) {
       const endCol = Math.min(owner.GetDocument().MaxCol(), pos.Col() + this.repeat - 1),
         endRow = Math.min(owner.GetDocument().MaxRow(), pos.Row() + this.row.repeat - 1);
@@ -74,8 +74,6 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
         owner.unsupported("cell range overflow");
     }
     if (this.source === null && this.type !== "float" && value === undefined) return;
-    if (value !== undefined && /[\r\n]/.test(value))
-      throw new Error("ODS multiline cell string is not implemented");
     const columns = Math.min(this.repeat, owner.GetDocument().MaxCol() - pos.Col() + 1),
       rows = Math.min(this.row.repeat, owner.GetDocument().MaxRow() - pos.Row() + 1);
     if (columns < this.repeat || rows < this.row.repeat) owner.unsupported("cell range overflow");
@@ -95,7 +93,10 @@ export class ScXMLTableRowCellContext extends ScXMLImportContext {
           if (this.source !== null)
             doc.setFormulaCell(address, string, FormulaGrammar.Grammar.GRAM_ODFF);
           else if (this.type === "float") doc.setNumericCell(address, numeric[0]);
-          else doc.setStringCell(address, string);
+          else if (this.paragraphs.length > 1 || (value !== undefined && /[\r\n]/.test(value))) {
+            owner.GetDocument().SetTextCell(address, string);
+            doc.invalidateBlockPositionSet(address.Tab());
+          } else doc.setStringCell(address, string);
         }
     } finally {
       string.dispose();

@@ -1,0 +1,338 @@
+{
+  "1": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "2": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "3": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "4": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "5": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "6": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "7": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "8": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "11": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 162
+  },
+  "12": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "13": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "14": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "15": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "16": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "17": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "18": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "19": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "20": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "21": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "22": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "23": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "24": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "25": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "26": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "27": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "28": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "29": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "30": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "31": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "32": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "33": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "34": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "35": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "36": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "37": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "38": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 146
+  },
+  "39": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "40": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 2,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "42": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "43": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "44": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "47": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "51": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "52": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "54": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "55": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "74": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "76": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 6,
+    "AverageCharSize": 1,
+    "Flags": 142
+  },
+  "77": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "78": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "81": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 8
+  },
+  "87": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "88": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "93": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 130
+  },
+  "95": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  },
+  "96": {
+    "MinimumCharSize": 1,
+    "MaximumCharSize": 1,
+    "AverageCharSize": 1,
+    "Flags": 2
+  }
+}

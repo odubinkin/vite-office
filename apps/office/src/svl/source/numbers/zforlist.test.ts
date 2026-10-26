@@ -260,6 +260,7 @@ import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
 import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
 import { SvNumberformat } from "./zformat";
 import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
+import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 /** Actual source-backed fields/owners used by native table operations;no service peer is fabricated. @returns Owned native values. */
 function tableValues() {
   const languageText = unicode("de"),
@@ -269,7 +270,8 @@ function tableValues() {
     mapper = new NumberFormatCodeMapper(),
     code = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(code.Code),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish),
+    localeData = new LocaleDataWrapper(locale),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
     decimal = unicode(","),
     table = new SvNFFormatData();
   return {
@@ -284,6 +286,7 @@ function tableValues() {
     dispose() {
       table.dispose();
       scanner.dispose();
+      localeData.dispose();
       decimal.dispose();
       name.dispose();
       code.dispose();
@@ -450,7 +453,10 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
     input = unicode("general");
   try {
     const scanner = current.GetFormatScanner(),
+      inputScanner = current.pStringScanner,
+      charClass = current.GetCharClass(),
       decimal = current.GetNumDecimalSep(),
+      localeData = current.GetLocaleData(),
       locale = current.fields.locale;
     expect(current.GetIniLanguage()).toBe(0x0407);
     expect(current.GetEvalDateFormat()).toBe(NfEvalDateFormat.International);
@@ -460,7 +466,15 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
       text(current.GetNumThousandSep()),
       text(current.GetDateSep()),
     ]).toEqual([",", "", ".", "."]);
+    expect(text(localeData.getNumDecimalSep())).toBe(",");
+    expect(text(localeData.getNumThousandSep())).toBe(".");
     expect(current.GetStandardPrec()).toBe(2);
+    expect(inputScanner.GetYear2000()).toBe(1950);
+    expect(inputScanner.GetNumericsCount()).toBe(0);
+    expect(inputScanner.GetDecPos()).toBe(0);
+    expect(inputScanner.fields.nMatchedAllStrings).toBe(0x08);
+    expect(inputScanner.fields.maNullDate.GetDate()).toBe(18991230);
+    inputScanner.SetYear2000(1980);
     current.ChangeStandardPrec(65535);
     current.SetEvalDateFormat(NfEvalDateFormat.InternationalThenFormat);
     expect(current.GetEvalDateFormat()).toBe(2);
@@ -471,9 +485,17 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
     current.ChangeIntl(0x0409);
     expect(current.GetIniLanguage()).toBe(0x0407);
     expect(current.GetFormatScanner()).toBe(scanner);
+    expect(current.pStringScanner).toBe(inputScanner);
+    expect(current.GetCharClass()).not.toBe(charClass);
+    expect(text(charClass.getMyLocale().Language)).toBe("de");
+    expect(text(current.GetCharClass().getMyLocale().Language)).toBe("en");
+    expect(inputScanner.GetYear2000()).toBe(1980);
     expect(current.GetStandardPrec()).toBe(65535);
     expect(scanner.GetResultStringsCnt()).toBe(1);
     expect(current.GetNumDecimalSep()).toBe(decimal);
+    expect(current.GetLocaleData()).toBe(localeData);
+    expect(text(localeData.getNumDecimalSep())).toBe(".");
+    expect(text(localeData.getNumThousandSep())).toBe(",");
     expect([
       text(decimal),
       text(current.GetNumDecimalSepAlt()),
@@ -513,6 +535,67 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
 
 import { SvNumberFormatter, SvNFEngine } from "./zforlist";
 import { Color } from "../../../tools/inc/color";
+
+it("uses the source input-line precision and restores General display precision", () => {
+  const formatter = new SvNumberFormatter(0x0407),
+    output = unicode(""),
+    color: [Color | null] = [null];
+  try {
+    formatter.GetOutputString(1.2345, 0, output, color);
+    expect(text(output)).toBe("1,23");
+    const input = formatter.GetInputLineString(1.2345, 0);
+    try {
+      expect(text(input)).toBe("1,2345");
+    } finally {
+      input.dispose();
+    }
+    expect(formatter.GetStandardPrec()).toBe(2);
+    formatter.GetOutputString(1.2345, 0, output, color);
+    expect(text(output)).toBe("1,23");
+  } finally {
+    output.dispose();
+    formatter.dispose();
+  }
+});
+
+it("generates and dispatches the source Boolean and Text standard formats", () => {
+  const formatter = new SvNumberFormatter(0x0407),
+    output = unicode(""),
+    literal = unicode("CSV text"),
+    color: [Color | null] = [null];
+  try {
+    expect(text((formatter.GetEntry(48) as SvNumberformat).GetFormatstring())).toBe("LOGISCH");
+    expect(text((formatter.GetEntry(49) as SvNumberformat).GetFormatstring())).toBe("@");
+    expect(formatter.GetType(48)).toBe(SvNumFormatType.LOGICAL);
+    expect(formatter.GetType(49)).toBe(SvNumFormatType.TEXT);
+    formatter.GetOutputString(1, 48, output, color);
+    expect(text(output)).toBe("WAHR");
+    formatter.GetOutputString(0, 48, output, color);
+    expect(text(output)).toBe("FALSCH");
+    formatter.GetOutputString(1.2345, 49, output, color);
+    expect(text(output)).toBe("1,23");
+    formatter.ChangeStandardPrec(65535);
+    formatter.GetOutputString(1e-10, 49, output, color);
+    expect(text(output)).toBe("0,0000000001");
+    formatter.ChangeStandardPrec(2);
+    formatter.GetOutputString(literal, 49, output, color);
+    expect(text(output)).toBe("CSV text");
+    color[0] = new Color(0x123456);
+    formatter.GetOutputString(literal, 404, output, color);
+    expect(text(output)).toBe("CSV text");
+    expect(color[0]).toBeNull();
+    const input = formatter.GetInputLineString(1.2345, 49);
+    try {
+      expect(text(input)).toBe("1,23");
+    } finally {
+      input.dispose();
+    }
+  } finally {
+    formatter.dispose();
+    output.dispose();
+    literal.dispose();
+  }
+});
 
 it("composes actual formatter providers,language,parsed table,settings and numeric/string output", /** Real owned source graph is constructed rather than a fake formatter or parsed-state fixture. @returns Nothing. */ () => {
   const formatter = new SvNumberFormatter(0x0407),
@@ -563,10 +646,8 @@ it("composes actual formatter providers,language,parsed table,settings and numer
         formatter.ChangeNullDate(0, 0, 0),
     ).toThrow(/valid null/);
     expect(formatter.GetNullDate().GetDate()).toBe(20000101);
-    expect(
-      /** Unported builtin keys are not supplied as fake General entries. @returns Entry. */ () =>
-        formatter.GetEntry(1),
-    ).toThrow(/admits only/);
+    expect(formatter.GetEntry(1)).toBeNull();
+    expect(formatter.GetType(1)).toBe(SvNumFormatType.UNDEFINED);
     fallback.ChangeStandardPrec(65535);
     fallback.GetOutputString(1.25, 0, out, color);
     expect(text(out)).toBe("1.25");
@@ -606,14 +687,12 @@ it("keeps real engine fallback and separately represented input/format null-date
     expect(text(out)).toBe("1,23");
     const entry = values.table.GetEntry(0) as SvNumberformat;
     entry.SetType(2);
-    expect(
-      /** Unported date substitution/output does not produce General text. @returns Nothing. */ () =>
-        SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color),
-    ).toThrow(/outside General/);
+    SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color);
+    expect(text(out)).toBe("literal");
     entry.SetType(16);
     SvNFEngine.ChangeNullDate(current, 32, 2, 1999);
     expect(current.GetNullDate().GetDate()).toBe(19990304);
-    expect(current.fields.inputNullDate.GetDate()).toBe(19990232);
+    expect(current.pStringScanner.fields.maNullDate.GetDate()).toBe(19990232);
   } finally {
     current.dispose();
     out.dispose();

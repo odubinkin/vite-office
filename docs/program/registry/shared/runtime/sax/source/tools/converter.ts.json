@@ -37,6 +37,7 @@
         "vendor/libreoffice-reference/xmloff/source/core/xmluconv.cxx#SvXMLUnitConverter::convertMeasureToXML",
         "vendor/libreoffice-reference/sax/source/tools/converter.cxx#void Converter::convertMeasure( OUStringBuffer&",
         "apps/office/src/sax/source/tools/converter-double.test.ts",
+        "apps/office/src/sax/source/tools/converter-date.test.ts#retains the pinned source UTC adjustment order",
         "vendor/libreoffice-reference/sax/source/tools/converter.cxx#rtl_math_uStringToDouble",
         "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
         "apps/office/src/sw/source/filter/xml/odt-native-character-values.test.ts",
@@ -47,14 +48,17 @@
       "localSymbols": [
         "CoreMeasureUnit",
         "Converter",
-        "convertMeasureToXML"
+        "convertMeasureToXML",
+        "parseDateTime"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "sax/source/tools/converter.cxx",
       "upstreamSymbols": [
         "Converter::convertMeasure",
         "lcl_parseMeasure",
-        "lcl_convertMeasure"
+        "lcl_convertMeasure",
+        "Converter::parseDateTime",
+        "lcl_ConvertToUTC"
       ]
     }
   }

@@ -8,10 +8,12 @@
     "upstreamPath": "sal/textenc/tables.cxx",
     "localSymbols": [
       "getSingleByteConvertData",
-      "getTextToUnicodeData"
+      "getTextToUnicodeData",
+      "Impl_getByteConvertData"
     ],
     "upstreamSymbols": [
-      "sal_getFullTextEncodingData"
+      "sal_getFullTextEncodingData",
+      "Impl_getTextEncodingData"
     ],
     "preservedResponsibilities": [
       "Selects the represented SAL single-byte byte-converter data and the distinct Symbol converter by rtl_TextEncoding; the full native encoding-data registry remains outside this slice.",
@@ -29,10 +31,12 @@
       "Selects the pinned EUC-JP converter aggregate and distinct native conversion path for Writer RTF bytes.",
       "Selects the pinned ISCII Devanagari contextual converter for Writer RTF code page 57002.",
       "Selects the pinned UTF-7 converter path for RTF code page 65000.",
-      "Selects pinned ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220 and 50225."
+      "Selects pinned ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220 and 50225.",
+      "Lookup of 55 native single-byte converter descriptors, generated from the authenticated LibreOffice descriptor capture already used by SAL converter tests."
     ],
     "omittedResponsibilities": [
-      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice.",
+      "The original registry also owns multibyte/contextual converters and factory dispatch. Metadata for represented encodings is owned by tencinfo.ts; other registry branches remain unported."
     ],
     "evidence": {
       "local": [
@@ -43,12 +47,20 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
           "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tables.ts",
+          "marker": "Impl_getByteConvertData"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/tables.cxx",
           "marker": "sal_getFullTextEncodingData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tables.cxx",
+          "marker": "Impl_getTextEncodingData"
         }
       ]
     }

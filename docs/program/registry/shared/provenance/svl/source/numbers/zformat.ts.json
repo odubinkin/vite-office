@@ -11,7 +11,18 @@
       "ImpSvNumberformatInfo",
       "ImpSvNumFor",
       "SvNumberformat",
-      "SvNumberformatConstReference"
+      "SvNumberformatConstReference",
+      "IsMinuteSecondFormat",
+      "GetDateOrder",
+      "GetExactDateOrder",
+      "GetNewCurrencySymbol",
+      "GetNumForString",
+      "IsSecondSubformatRealNegative",
+      "IsNegativeWithoutSign",
+      "HasStringNegativeSign",
+      "ImpGetNumForStringElementCount",
+      "IsNumForStringElementCountEqual",
+      "GetNumForInfoScannedType"
     ],
     "upstreamSymbols": [
       "SvNumberformat::GetOutputString",
@@ -23,13 +34,28 @@
       "ImpSvNumFor::Enlarge",
       "ImpSvNumFor::Copy",
       "SvNumberformat::SvNumberformat",
-      "SvNumberformat::ImpCopyNumberformat"
+      "SvNumberformat::ImpCopyNumberformat",
+      "SvNumberformat::IsMinuteSecondFormat",
+      "SvNumberformat::GetDateOrder",
+      "SvNumberformat::GetExactDateOrder",
+      "ImpSvNumFor::GetNewCurrencySymbol",
+      "SvNumberformat::GetNewCurrencySymbol",
+      "SvNumberformat::GetNumForString",
+      "SvNumberformat::IsNegativeWithoutSign",
+      "SvNumberformat::HasStringNegativeSign",
+      "SvNumberformat::ImpGetNumForStringElementCount"
     ],
     "preservedResponsibilities": [
       "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
       "Task76 now owns actual ImpSvNumberformatInfo arrays/scalars and ImpSvNumFor default initialization,resize,prefix preservation,copy and reverse lifetime. SvNumberformat owns four real subformats,normalized code,type,language and standard flag;the admitted empty/single-General NatNum0 constructor runs actual lexical/type/final scan,Enlarge and CopyInfo before setting type. Empty-code count0 produces native checkPos1;unrepresented pattern families throw at admission rather than returning fabricated native syntax errors. Original copy and scanner-exchange construction copy actual owned token values and metadata;standard NUMBER output resets real output/color fields and consumes explicit current-language precision/decimal projections. Input-number/native-number constructor arguments are erased only where unconsumed in this admitted branch. Full language/table/formatter construction,conditions,prefixes,other patterns,nonstandard output and paste integration remain pending.",
       "Actual entry GetType/SetType/IsStandard,owned comment access/copy and formatter-private last-insert-key field access now support original table insertion/General generation. The original C++ friend access tag is erased explicitly;only format-table/formatter callers may use the shared nThousand field as a last key. Comment destruction precedes format string/subformat destruction.",
-      "The original borrowed const parsed-entry public surface is projected without mutation,destruction or formatter-private key access. No additional entry owner is allocated."
+      "The original borrowed const parsed-entry public surface is projected without mutation,destruction or formatter-private key access. No additional entry owner is allocated.",
+      "Task AQF9AG ports the source first-subformat minute-second token-state predicate, including bracket and fractional-digit states.",
+      "Task AQF9AG ports GetDateOrder and GetExactDateOrder over original compiled date tokens and the scanner's locale-data fallback.",
+      "Task AQF9AG ports first CURRENCY/CURREXT token lookup in ImpSvNumFor and ordered section lookup in SvNumberformat, including source output clearing rules.",
+      "Task AQF9AG ports source GetNumForString forward/backward token search, second-section real-negative condition defaults, negative-without-sign check and edge-minus predicate for input recognition.",
+      "Task AQF9AG ports the source compiled-subformat literal count and scanned-type queries used by IsNumberFormatMain, including its first complete-count shortcut.",
+      "Task AQF9AG admits the source numeric standard Boolean and Text output branches in SvNumberformat::GetOutputString: matching Boolean keyword selects the locale's uppercase TRUE/FALSE word, while Text uses ImpGetOutputStandard before the numeric standard-format precision switch, including its 300-decimal cap for both special precision sentinels. The text overload selects the TEXT/4th section and substitutes the input at @ or General tokens; IsTextFormat and HasTextFormat retain source type and section tests."
     ],
     "omittedResponsibilities": [
       "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
@@ -47,6 +73,14 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.ts",
           "marker": "ImpSvNumberformatInfo"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.ts",
+          "marker": "GetNumForString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.ts",
+          "marker": "IsNumForStringElementCountEqual"
         }
       ],
       "upstream": [
@@ -73,6 +107,18 @@
         {
           "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
           "marker": "SetType"
+        },
+        {
+          "path": "svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::GetNumForString"
+        },
+        {
+          "path": "include/svl/zformat.hxx",
+          "marker": "IsSecondSubformatRealNegative"
+        },
+        {
+          "path": "include/svl/zformat.hxx",
+          "marker": "IsNumForStringElementCountEqual"
         }
       ]
     }

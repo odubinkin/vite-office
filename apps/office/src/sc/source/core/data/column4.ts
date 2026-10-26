@@ -15,7 +15,13 @@ import {
   type BlockFunction,
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
-import { formula_block, element_type_formula } from "../../../inc/mtvelements";
+import {
+  formula_block,
+  element_type_formula,
+  element_type_numeric,
+  element_type_string,
+  element_type_edittext,
+} from "../../../inc/mtvelements";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import { ScFormulaCell, ScFormulaCellGroup, ScMatrixMode } from "../../../inc/formulacell";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
@@ -36,6 +42,19 @@ import { delayed_delete_vector_iterator } from "../../../../external/mdds/includ
 import type { ScColumn } from "../../../inc/column";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+/** Reads the native cell discriminator from the actual typed block. @param this - Column. @param row - Row. @returns Cell type. */
+export function GetCellType(this: ScColumn, row: number): CellType {
+  const kind = this.GetCellStore().get_type(row);
+  return kind === element_type_numeric
+    ? CellType.CELLTYPE_VALUE
+    : kind === element_type_string
+      ? CellType.CELLTYPE_STRING
+      : kind === element_type_edittext
+        ? CellType.CELLTYPE_EDIT
+        : kind === element_type_formula
+          ? CellType.CELLTYPE_FORMULA
+          : CellType.CELLTYPE_NONE;
+}
 /** Original handler subscribes actual groups without replacing areas with per-cell listeners. */
 export class StartListeningFormulaCellsHandler implements BlockFunction {
   private mnStartRow = -1;

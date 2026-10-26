@@ -7,11 +7,21 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { uppercase } from "../../../unotools/inc/charclass";
 import { SvNumFormatType } from "../../inc/zforlist";
+import { NfKeywordIndex } from "../../inc/nfkeytab";
+import { NfSymbolType } from "../../inc/nfsymbol";
+import {
+  LANGUAGE_GERMAN,
+  LANGUAGE_GERMAN_SWISS,
+  LANGUAGE_GERMAN_AUSTRIAN,
+  LANGUAGE_GERMAN_LUXEMBOURG,
+  LANGUAGE_GERMAN_LIECHTENSTEIN,
+} from "../../../i18nlangtag/inc/lang";
+import { getLoadedLocale, type LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 import type { ImpSvNumberformatInfo } from "./zformat";
 /** Original keyword localization enum values from zforscan.hxx. */
 export const KeywordLocalization = { LocaleLegacy: 0, EnglishOnly: 1, AllowEnglish: 2 } as const;
 /** Original keyword discriminator from nfkeytab.hxx. */
-export const NF_KEY_GENERAL = 39;
+export const NF_KEY_GENERAL = NfKeywordIndex.GENERAL;
 /** Original flag set by FinalScan when the General keyword occurs. */
 export const FLAG_STANDARD_IN_FORMAT = 1000;
 
@@ -79,11 +89,17 @@ export function extractStandardGeneralName(code: OUStringConstReference): OUStri
 export class ImpSvNumberformatScan {
   private readonly sNameStandardFormat: OUString;
   private readonly generalKeyword: OUString;
+  private readonly booleanKeyword = new OUString();
   private readonly englishGeneral = new OUString(Uint16Array.of(71, 69, 78, 69, 82, 65, 76), 7);
+  private readonly englishTrue = new OUString(Uint16Array.of(84, 82, 85, 69), 4);
+  private readonly englishFalse = new OUString(Uint16Array.of(70, 65, 76, 83, 69), 5);
+  private readonly trueKeyword = new OUString();
+  private readonly falseKeyword = new OUString();
   private readonly symbol = new OUString();
   private nResultStringsCnt = 0;
   private eScannedType: number = SvNumFormatType.UNDEFINED;
   private nThousand = 0;
+  private resultTokenType: number = NF_KEY_GENERAL;
   private nStandardPrec = 2;
   private readonly maNullDate = new ToolsDate(30, 12, 1899);
   /** Consumed native scanner constructor/dependent-General-keyword initialization. The caller owns prepared locale fields,as the native language-data owner does. @param locale - Borrowed actual CharClass locale. @param standardName - Actual extracted standard name from loaded locale format0. @param localization - Original selected keyword-localization field after dependent-keyword initialization. @returns Actual scanner state. */
@@ -91,9 +107,67 @@ export class ImpSvNumberformatScan {
     private locale: LocaleConstReference,
     standardName: OUStringConstReference,
     private localization: number,
+    private readonly localeData: LocaleDataWrapper,
   ) {
     this.sNameStandardFormat = new OUString(standardName);
     this.generalKeyword = uppercase(standardName, locale);
+    this.SetBooleanKeyword();
+  }
+  /** Original SetDependentKeywords keeps BOOLEAN English except for localized German dialects. @returns Nothing. */
+  private SetBooleanKeyword(): void {
+    const loaded = getLoadedLocale(this.locale);
+    const language = convertLocaleToLanguage(loaded);
+    loaded.dispose();
+    const keyword =
+      this.localization !== KeywordLocalization.EnglishOnly &&
+        [
+          LANGUAGE_GERMAN,
+          LANGUAGE_GERMAN_SWISS,
+          LANGUAGE_GERMAN_AUSTRIAN,
+          LANGUAGE_GERMAN_LUXEMBOURG,
+          LANGUAGE_GERMAN_LIECHTENSTEIN,
+        ].includes(language)
+        ? new OUString(Uint16Array.of(76, 79, 71, 73, 83, 67, 72), 7)
+        : new OUString(Uint16Array.of(66, 79, 79, 76, 69, 65, 78), 7);
+    try {
+      this.booleanKeyword.assign(keyword);
+    } finally {
+      keyword.dispose();
+    }
+  }
+  /** Original GetKeywords()[NF_KEY_BOOLEAN] for built-in format generation. @returns Borrowed keyword. */
+  GetBooleanString(): OUStringConstReference {
+    return this.booleanKeyword;
+  }
+  /** Original GetLoc borrows the current language's locale-data wrapper. @returns Current locale data. */
+  GetLoc(): LocaleDataWrapper {
+    return this.localeData;
+  }
+  /** Original lazy TRUE_WORD lookup, uppercase conversion and empty-word English fallback. @returns Borrowed uppercase native keyword. */
+  GetTrueString(): OUStringConstReference {
+    if (this.trueKeyword.isEmpty()) {
+      const upper = uppercase(this.localeData.getTrueWord(), this.locale);
+      try {
+        this.trueKeyword.assign(upper);
+        if (this.trueKeyword.isEmpty()) this.trueKeyword.assign(this.englishTrue);
+      } finally {
+        upper.dispose();
+      }
+    }
+    return this.trueKeyword;
+  }
+  /** Original lazy FALSE_WORD lookup, uppercase conversion and empty-word English fallback. @returns Borrowed uppercase native keyword. */
+  GetFalseString(): OUStringConstReference {
+    if (this.falseKeyword.isEmpty()) {
+      const upper = uppercase(this.localeData.getFalseWord(), this.locale);
+      try {
+        this.falseKeyword.assign(upper);
+        if (this.falseKeyword.isEmpty()) this.falseKeyword.assign(this.englishFalse);
+      } finally {
+        upper.dispose();
+      }
+    }
+    return this.falseKeyword;
   }
   /** Original ChangeIntl/next dependent-General-keyword initialization over explicitly prepared current language fields. Scanner identity,parse state and standard precision are preserved;full lazy keyword/service initialization remains unported. @param locale - New actual CharClass locale. @param standardName - Actual loaded-locale standard name. @param localization - Native selected keyword policy. @returns Nothing. */
   ChangeIntl(
@@ -103,7 +177,10 @@ export class ImpSvNumberformatScan {
   ): void {
     this.locale = locale;
     this.localization = localization;
+    this.trueKeyword.clear();
+    this.falseKeyword.clear();
     this.sNameStandardFormat.assign(standardName);
+    this.SetBooleanKeyword();
     const upper = uppercase(standardName, locale);
     try {
       this.generalKeyword.assign(upper);
@@ -116,6 +193,7 @@ export class ImpSvNumberformatScan {
     this.nResultStringsCnt = 0;
     this.eScannedType = SvNumFormatType.UNDEFINED;
     this.nThousand = 0;
+    this.resultTokenType = NF_KEY_GENERAL;
   }
   /** Original null-date member borrow. @returns Actual owned Date value. */
   GetNullDate(): DateConstReference {
@@ -153,19 +231,29 @@ export class ImpSvNumberformatScan {
     const upper = uppercase(code, this.locale);
     try {
       let foundEnglish = false;
-      if (!upper.equals(this.generalKeyword)) {
+      if (code.getLength() === 1 && code.getStr()[0] === 64) {
+        this.symbol.assign(code);
+        this.eScannedType = SvNumFormatType.TEXT;
+        this.resultTokenType = NfSymbolType.DEL;
+      } else if (upper.equals(this.booleanKeyword)) {
+        this.symbol.assign(code);
+        this.eScannedType = SvNumFormatType.LOGICAL;
+        this.resultTokenType = NfKeywordIndex.BOOLEAN;
+      } else if (!upper.equals(this.generalKeyword)) {
         if (
           this.localization === KeywordLocalization.AllowEnglish &&
           upper.equals(this.englishGeneral)
         )
           foundEnglish = true;
         else
-          throw new Error("Number-format patterns other than single General are not implemented");
+          throw new Error("Number-format patterns other than single General, BOOLEAN or @ are not implemented");
       }
-      // Symbol_Division uses original case for a locale keyword and the locale name for an English match.
-      this.symbol.assign(foundEnglish ? this.sNameStandardFormat : code);
-      this.eScannedType = SvNumFormatType.NUMBER;
-      this.nThousand = FLAG_STANDARD_IN_FORMAT;
+      if (this.eScannedType === SvNumFormatType.UNDEFINED) {
+        // Symbol_Division uses original case for a locale keyword and the locale name for an English match.
+        this.symbol.assign(foundEnglish ? this.sNameStandardFormat : code);
+        this.eScannedType = SvNumFormatType.NUMBER;
+        this.nThousand = FLAG_STANDARD_IN_FORMAT;
+      }
       this.nResultStringsCnt = 1;
       code.assign(this.symbol);
       return 0;
@@ -177,7 +265,7 @@ export class ImpSvNumberformatScan {
   CopyInfo(info: ImpSvNumberformatInfo, count: number): void {
     for (let index = 0; index < count; ++index) {
       (info.sStrArray[index] as OUString).assign(this.symbol);
-      info.nTypeArray[index] = NF_KEY_GENERAL;
+      info.nTypeArray[index] = this.resultTokenType;
     }
     info.eScannedType = this.eScannedType;
     info.bThousand = false;
@@ -190,8 +278,13 @@ export class ImpSvNumberformatScan {
   dispose(): void {
     this.Reset();
     this.symbol.dispose();
+    this.falseKeyword.dispose();
+    this.trueKeyword.dispose();
+    this.englishFalse.dispose();
+    this.englishTrue.dispose();
     this.englishGeneral.dispose();
     this.generalKeyword.dispose();
+    this.booleanKeyword.dispose();
     this.sNameStandardFormat.dispose();
   }
 }

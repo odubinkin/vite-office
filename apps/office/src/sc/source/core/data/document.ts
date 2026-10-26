@@ -12,6 +12,7 @@ import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
 import { GetStringScriptType as classifyString } from "./documen6";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import {
   SvxBoxItem,
@@ -51,8 +52,7 @@ import {
   ValidTab,
 } from "../../../inc/address";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
-import { CellType, InsertDeleteFlags, ScGlobal } from "../../../inc/global";
-import type { HasAttrFlags } from "../../../inc/global";
+import { CellType, InsertDeleteFlags, ScGlobal, type HasAttrFlags } from "../../../inc/global";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SharedString } from "../../../../svl/inc/sharedstring";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
@@ -771,10 +771,7 @@ export class ScDocument {
   }
   /** Borrows the native numeric/string/formula cell view. @param position - Cell. @returns View. */
   GetRefCellValue(position: ScAddress): ScRefCellValue {
-    return (
-      this.FetchTable(position.Tab())?.GetRefCellValue(position.Col(), position.Row()) ??
-      new ScRefCellValue()
-    );
+    return documen7.GetRefCellValue.call(this, position);
   }
   /** Borrows a source broadcaster. @param position - Cell. @returns Broadcaster or null. */
   GetBroadcaster(position: ScAddress): SvtBroadcaster<SfxHint> | null {
@@ -891,10 +888,7 @@ export class ScDocument {
   }
   /** Transfers a compiled formula into the canonical sheet/column store. Position/document matching is the caller precondition. @param position - Target. @param cell - Matching native owner. @returns Adopted cell or null for an absent sheet. */
   SetFormulaCell(position: ScAddress, cell: ScFormulaCell): ScFormulaCell | null {
-    const table = this.FetchTable(position.Tab());
-    if (table) return table.SetFormulaCell(position.Col(), position.Row(), cell);
-    cell.Dispose();
-    return null;
+    return document10.SetFormulaCell.call(this, position, cell);
   }
   /** Borrows the actual formula cell, or native null. @param position - Cell. @returns Formula cell or null. */
   GetFormulaCell(position: ScAddress): ScFormulaCell | null {
@@ -944,6 +938,10 @@ export class ScDocument {
   GetTableCount(): number {
     return this.maTabs.length;
   }
+  /** Returns the source document's data-only sheet extent with zero outputs for a missing sheet. @param tab - Sheet. @param endCol - Last occupied column. @param endRow - Last occupied row. @returns Whether occupied. */
+  GetCellArea(tab: number, endCol: [number], endRow: [number]): boolean {
+    return document10.GetCellArea.call(this, tab, endCol, endRow);
+  }
   /** Borrows a real existing sheet or native null result. @param tab - Sheet. @returns Owner or null. */
   FetchTable(tab: number): ScTable | null {
     return ValidTab(tab) ? (this.maTabs[tab] ?? null) : null;
@@ -965,6 +963,19 @@ export class ScDocument {
   InsertTab(position: number, name: OUStringConstReference): boolean {
     return document10.InsertTab.call(this, position, name);
   }
+  /** Original ScDocument::RenameTab name checks and stream invalidation over represented sheets. Chart and solver services are outside this core slice. @param tab - Existing sheet. @param name - New name. @param externalDocument - Composed external name flag. @returns Renamed. */
+  RenameTab(tab: number, name: OUStringConstReference, externalDocument = false): boolean {
+    const table = this.FetchTable(tab);
+    if (!table || (!externalDocument && !ScDocument.ValidTabName(name))) return false;
+    for (let index = 0; index < this.maTabs.length; index++) {
+      const other = this.maTabs[index];
+      if (other && index !== tab && ScGlobal.GetTransliteration().isEqual(name, other.GetName()))
+        return false;
+    }
+    table.SetName(name);
+    for (const current of this.maTabs) current?.SetStreamValid(false);
+    return true;
+  }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {
     return document10.DeleteTab.call(this, tab);
@@ -985,9 +996,13 @@ export class ScDocument {
   GetSharedString(position: ScAddress): SharedString {
     return documen7.GetSharedString.call(this, position);
   }
-  /** Implements the literal single-line content portion of SetTextCell;rich edit-text and number-format attributes are explicit gaps. @param position - Cell address. @param value - Literal Unicode input. @returns Nothing. */
+  /** Stores a string as shared or edit text according to its content. @param position - Cell address. @param value - Text. @returns Nothing. */
   SetTextCell(position: ScAddress, value: OUStringConstReference): void {
     documen7.SetTextCell.call(this, position, value);
+  }
+  /** Native edit-cell setter transfers an EditEngine text object into the real table. @param position - Cell. @param value - Owned edit text. @returns Nothing. */
+  SetEditText(position: ScAddress, value: EditTextObject): void {
+    this.FetchTable(position.Tab())?.SetEditText(position.Col(), position.Row(), value);
   }
   /** Clears an existing scalar cell without allocating a missing column or sheet. @param position - Cell address. @returns Nothing. */
   SetEmptyCell(position: ScAddress): void {

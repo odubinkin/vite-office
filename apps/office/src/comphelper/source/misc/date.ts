@@ -1,7 +1,68 @@
-/** @fileoverview Original comphelper::date validity/leap/month/normalize responsibilities from date.hxx/date.cxx;day-number conversions are separate unported responsibilities. Native sal widths and assert-enabled preconditions are explicit. */
+/** @fileoverview Original comphelper::date year/day counting, validity, leap, month and normalization responsibilities from date.hxx/date.cxx. Native sal widths and assert-enabled preconditions are explicit. */
 /** Original signed16 conversion after integer promotion/assignment. @param value - Native arithmetic result. @returns Original short. */
 function short(value: number): number {
   return (value << 16) >> 16;
+}
+/** Original YearToDays uses C++ integer division toward zero and excludes civil year zero. @param year - Native signed16 year. @returns Days before the first day of the year. */
+export function yearToDays(year: number): number {
+  year = short(year);
+  if (year === 0) throw new Error("year != 0 assertion");
+  const value = (offset: number, target: number): number =>
+    offset +
+    target * 365 +
+    Math.trunc(target / 4) -
+    Math.trunc(target / 100) +
+    Math.trunc(target / 400);
+  return year < 0 ? value(-366, year + 1) : value(0, year - 1);
+}
+/** Original convertDateToDays adds source-order whole months to YearToDays without normalizing. @param day - Native uint16 day. @param month - Native uint16 month. @param year - Native signed16 year. @returns Day number from zero. */
+export function convertDateToDays(day: number, month: number, year: number): number {
+  day &= 65535;
+  month &= 65535;
+  year = short(year);
+  let days = yearToDays(year);
+  for (let i = 1; i < month; i++) days += getDaysInMonth(i, year);
+  return days + day;
+}
+/** Original convertDateToDaysNormalizing preserves the common Calc null-date fast path. @param day - Native uint16 day. @param month - Native uint16 month. @param year - Native signed16 year. @returns Normalized day number. */
+export function convertDateToDaysNormalizing(day: number, month: number, year: number): number {
+  day &= 65535;
+  month &= 65535;
+  year = short(year);
+  if (year === 1899 && month === 12 && day === 30) return 693594;
+  const fields: DateFields = [day, month, year];
+  normalize(fields);
+  return convertDateToDays(...fields);
+}
+/** Original convertDaysToDate clamps to signed16 year bounds, then searches the proleptic Gregorian year and month. @param days - Signed32 day number. @returns Native day/month/year fields. */
+export function convertDaysToDate(days: number): DateFields {
+  days |= 0;
+  if (days <= -11968265) return [1, 1, -32768];
+  if (days >= 11967900) return [31, 12, 32767];
+  const sign = days <= 0 ? -1 : 1;
+  let tempDays: number,
+    i = 0,
+    year: number,
+    recalculate: boolean;
+  do {
+    year = short(Math.trunc(days / 365) - i * sign);
+    if (year === 0) year = sign;
+    tempDays = days - yearToDays(year);
+    recalculate = false;
+    if (tempDays < 1) {
+      i += sign;
+      recalculate = true;
+    } else if (tempDays > 365 && (tempDays !== 366 || !isLeapYear(year))) {
+      i -= sign;
+      recalculate = true;
+    }
+  } while (recalculate);
+  let month = 1;
+  while (tempDays > getDaysInMonth(month, year)) {
+    tempDays -= getDaysInMonth(month, year);
+    month++;
+  }
+  return [tempDays & 65535, month, year];
 }
 /** Original proleptic Gregorian leap test,including BCE years -1,-5,etc and the year-zero assertion. @param year - Native signed16 year. @returns Leap status. */
 export function isLeapYear(year: number): boolean {

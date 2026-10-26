@@ -6,8 +6,49 @@ import {
   getDaysInMonth,
   isValidDate,
   normalize,
+  yearToDays,
+  convertDateToDays,
+  convertDateToDaysNormalizing,
+  convertDaysToDate,
   type DateFields,
 } from "../../../comphelper/source/misc/date";
+
+it("counts source Gregorian days through the BCE boundary and Calc null date", () => {
+  expect(yearToDays(-2)).toBe(-731);
+  expect(yearToDays(-1)).toBe(-366);
+  expect(yearToDays(1)).toBe(0);
+  expect(yearToDays(2)).toBe(365);
+  expect(convertDateToDays(1, 1, -32768)).toBe(-11968265);
+  expect(convertDateToDays(31, 12, 32767)).toBe(11967900);
+  expect(convertDateToDays(30, 12, 1899)).toBe(693594);
+  expect(convertDateToDaysNormalizing(31, 2, 2024)).toBe(convertDateToDays(2, 3, 2024));
+  const source = new Date(31, 2, 2024);
+  expect(source.GetAsNormalizedDays()).toBe(convertDateToDays(2, 3, 2024));
+  expect(source.GetDate()).toBe(20240231);
+  expect(new Date(30, 12, 1899).GetAsNormalizedDays()).toBe(693594);
+  expect(convertDaysToDate(0)).toEqual([31, 12, -1]);
+  expect(convertDaysToDate(1)).toEqual([1, 1, 1]);
+  expect(convertDaysToDate(-11968266)).toEqual([1, 1, -32768]);
+  expect(convertDaysToDate(11967901)).toEqual([31, 12, 32767]);
+  for (const fields of [
+    [1, 1, -32768],
+    [29, 2, -1],
+    [31, 12, -1],
+    [1, 1, 1],
+    [29, 2, 2000],
+    [31, 12, 32767],
+  ] as DateFields[])
+    expect(convertDaysToDate(convertDateToDays(...fields))).toEqual(fields);
+  const incremented = new Date(30, 12, 1899);
+  incremented.AddDays(1);
+  expect(incremented.GetDate()).toBe(18991231);
+  incremented.AddDays(1);
+  expect(incremented.GetDate()).toBe(19000101);
+  incremented.AddDays(-2);
+  expect(incremented.GetDate()).toBe(18991230);
+  incremented.AddDays(0);
+  expect(incremented.GetDate()).toBe(18991230);
+});
 
 it("retains packed value/copy/member assignment and constructor width/precondition contracts", /** Raw construction is not eager normalization or a host Date conversion. @returns Nothing. */ () => {
   const invalid = new Date(31, 2, 2023),

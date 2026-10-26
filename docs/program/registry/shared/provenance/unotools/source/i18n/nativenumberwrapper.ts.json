@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/i18n/nativenumberwrapper.cxx",
+    "localSymbols": ["NativeNumberWrapper"],
+    "upstreamSymbols": ["NativeNumberWrapper::getNativeNumberString"],
+    "preservedResponsibilities": ["Task AQF9AG forwards the represented NATNUM0 mode to the native supplier and catches only UNO exceptions, returning an empty string on that failure."],
+    "omittedResponsibilities": ["The other native-number modes and UNO service construction remain outside this represented path."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/unotools/source/i18n/nativenumberwrapper.ts", "marker": "class NativeNumberWrapper"}],
+      "upstream": [{"path": "unotools/source/i18n/nativenumberwrapper.cxx", "marker": "NativeNumberWrapper::getNativeNumberString("}]
+    }
+  }
+}

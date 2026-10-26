@@ -61,12 +61,9 @@ import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { CellType, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
-import {
-  element_type_numeric,
-  element_type_string,
-  celltextattr_element_callbacks,
-} from "../../../inc/mtvelements";
+import { element_type_numeric, celltextattr_element_callbacks } from "../../../inc/mtvelements";
 import { CellTextAttr } from "../../../inc/celltextattr";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { ScDocument } from "../../../inc/document";
 import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ScMarkData } from "../../../inc/markdata";
@@ -689,6 +686,14 @@ export class ScColumn extends ScColumnData {
     this.StartListeningUnshared(rows);
     if (broadcast) this.BroadcastNewCell(row);
   }
+  /** Inserts the actual owned edit object into the native edit-text block. @param row - Row. @param value - Transferred owner. @returns Nothing. */
+  SetEditText(row: number, value: EditTextObject): void {
+    column3.SetEditText.call(this, row, value);
+  }
+  /** Borrows a stored edit object. @param row - Row. @returns Owner or null. */
+  GetEditText(row: number): EditTextObject | null {
+    return column3.GetEditText.call(this, row);
+  }
   /** Compiles and stores a supported formula in the actual typed block store. @param row - Row. @param formula - Source. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(row: number, formula: OUStringConstReference, grammar: Grammar): void {
     if (!this.rDocument.ValidRow(row)) return;
@@ -916,14 +921,7 @@ export class ScColumn extends ScColumnData {
   }
   /** Reads the scalar discriminator;unsupported cell alternatives cannot be inserted in this store. @param row - Valid row. @returns Cell type. */
   GetCellType(row: number): CellType {
-    const kind = this.maCells.get_type(row);
-    return kind === element_type_numeric
-      ? CellType.CELLTYPE_VALUE
-      : kind === element_type_string
-        ? CellType.CELLTYPE_STRING
-        : kind === element_type_formula
-          ? CellType.CELLTYPE_FORMULA
-          : CellType.CELLTYPE_NONE;
+    return column4.GetCellType.call(this, row);
   }
   /** Reads numeric or numeric-formula values with the native zero fallback. @param row - Valid row. @returns Value. */
   GetValue(row: number): number {

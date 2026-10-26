@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/ondemand.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/ondemand.hxx",
+    "localSymbols": [
+      "OnDemandCharClass",
+      "OnDemandTransliterationWrapper"
+    ],
+    "upstreamSymbols": [
+      "OnDemandCharClass",
+      "OnDemandTransliterationWrapper"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG ports the source OnDemandCharClass two-slot cache: matching locales reuse their classifier, an unseen locale replaces the slot opposite the current one, and GetCharClass borrows the selected classifier. Prepared Locale values stand for source LanguageTag/service construction; full LanguageTag and UNO provider ABI are still unported.",
+      "Task AQF9AG adds the source lazy IGNORE_CASE transliteration owner, locale invalidation and stable borrowed GetTransliteration accessor over the native transliteration module."
+    ],
+    "omittedResponsibilities": [
+      "Full LanguageTag identity and UNO context construction remain outside this represented cache."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/ondemand.ts",
+          "marker": "class OnDemandCharClass"
+        },
+        {
+          "path": "apps/office/src/svl/inc/ondemand.test.ts",
+          "marker": "reuses either matching classifier"
+        },
+        {
+          "path": "apps/office/src/svl/inc/ondemand.ts",
+          "marker": "class OnDemandTransliterationWrapper"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/ondemand.hxx",
+          "marker": "class OnDemandCharClass"
+        },
+        {
+          "path": "include/svl/ondemand.hxx",
+          "marker": "class OnDemandTransliterationWrapper"
+        }
+      ]
+    }
+  }
+}

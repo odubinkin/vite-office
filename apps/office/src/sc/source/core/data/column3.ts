@@ -56,6 +56,27 @@ import type { CopyFromClipContext } from "../../../inc/clipcontext";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import { ScMatrixMode } from "../../../inc/formulacell";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
+import { edittext_element_callbacks, element_type_edittext } from "../../../inc/mtvelements";
+
+/** Inserts the actual owned edit object into the native edit-text block. @param this - Column. @param row - Row. @param value - Transferred owner. @returns Nothing. */
+export function SetEditText(this: ScColumn, row: number, value: EditTextObject): void {
+  if (!this.GetDoc().ValidRow(row)) return;
+  const rows = this["DetachFormulaCell"](row);
+  value.NormalizeString(this.GetDoc().GetSharedStringPool());
+  this["maCells"].set(row, value, edittext_element_callbacks);
+  this["maCellTextAttrs"].set(row, new CellTextAttr(), celltextattr_element_callbacks);
+  this["StartListeningUnshared"](rows);
+  this["BroadcastNewCell"](row);
+}
+/** Borrows a stored edit object. @param this - Column. @param row - Row. @returns Owner or null. */
+export function GetEditText(this: ScColumn, row: number): EditTextObject | null {
+  const cells = this.GetCellStore();
+  if (cells.get_type(row) !== element_type_edittext) return null;
+  const output: [EditTextObject | null] = [null];
+  cells.get(row, edittext_element_callbacks, output);
+  return output[0];
+}
 /** Original block functor retains existing groups and joins adjacent compatible owners. */
 export class GroupFormulaCells {
   /** Borrows optional actual changed-group positions. @param mpGroupPos - Native output or null. @returns Functor. */

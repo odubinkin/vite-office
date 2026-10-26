@@ -1,5 +1,5 @@
 /** @fileoverview Original CharClass uppercase overload responsibility exposed as an explicit prepared-locale field binding; full CharClass/service APIs remain pending. */
-export { uppercase } from "../source/i18n/charclass";
+export { uppercase, CharClass } from "../source/i18n/charclass";
 
 import type { OUString, OUStringConstReference } from "../../sal/inc/rtl/ustring";
 /** Borrowed const CharClass operation consumed by SharedStringPool. This erased contract neither constructs a classification service nor claims the remaining CharClass API. */

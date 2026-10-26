@@ -19,6 +19,7 @@ import type { SfxHint } from "../../../../svl/inc/hint";
 import type { Grammar } from "../../../../formula/inc/grammar";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import type { ScFormulaCell } from "../../../inc/formulacell";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import { ScAddress, INITIALCOLCOUNT } from "../../../inc/address";
 import { ScColumn, ScColumnData } from "../../../inc/column";
 import { CellType, InsertDeleteFlags } from "../../../inc/global";
@@ -30,7 +31,6 @@ import type { ScMergePatternState } from "../../../inc/attarray";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
 import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScMarkData } from "../../../inc/markdata";
-
 import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
 import {
   ScCompressedArray,
@@ -561,6 +561,10 @@ export class ScTable {
     while (current >= 0 && row[0] < this.rDocument.MaxRow())
       row[0] = Math.max(row[0], (this.aCol[current--] as ScColumn).GetLastDataPos());
   }
+  /** Returns the data-only sheet extent. @param endCol - Last column. @param endRow - Last row. @returns Whether occupied. */
+  GetCellArea(endCol: [number], endRow: [number]): boolean {
+    return table2.GetCellArea.call(this, endCol, endRow);
+  }
   private readonly aCol: ScColumn[] = [];
   private readonly aDefaultColData: ScColumnData;
   private readonly aName: OUString;
@@ -848,6 +852,10 @@ export class ScTable {
   GetName(): OUStringConstReference {
     return this.aName;
   }
+  /** Original ScTable::SetName assigns the real name and invalidates the stream through its document caller. @param name - New sheet name. @returns Nothing. */
+  SetName(name: OUStringConstReference): void {
+    this.aName.assign(name);
+  }
   /** Updates sheet and existing column coordinates after sheet insertion. @param tab - New position. @returns Nothing. */
   SetTabNo(tab: number): void {
     this.nTab = tab;
@@ -962,8 +970,11 @@ export class ScTable {
   }
   /** Writes an already shared literal string. @param col - Column. @param row - Row. @param value - Actual shared value. @returns Nothing. */
   SetRawString(col: number, row: number, value: SharedStringConstReference): void {
-    if (this.rDocument.ValidColRow(col, row))
-      this.CreateColumnIfNotExists(col).SetRawString(row, value);
+    table2.SetRawString.call(this, col, row, value);
+  }
+  /** Stores an owned EditEngine object. @param col - Column. @param row - Row. @param value - Object. @returns Nothing. */
+  SetEditText(col: number, row: number, value: EditTextObject): void {
+    table2.SetEditText.call(this, col, row, value);
   }
   /** Clears only an existing column;clearing an empty region does not allocate it. @param col - Column. @param row - Row. @returns Nothing. */
   SetEmptyCell(col: number, row: number): void {

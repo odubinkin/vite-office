@@ -33,6 +33,8 @@ export const NfIndexTableOffset = {
   NF_CURRENCY_1000DEC2_CCC: 16,
   NF_CURRENCY_1000DEC2_DASHED: 17,
   NF_CURRENCY_END: 17,
+  NF_BOOLEAN: 48,
+  NF_TEXT: 49,
   NF_INDEX_TABLE_RESERVED_START: 51,
   NF_INDEX_TABLE_ENTRIES: 62,
 } as const;
@@ -48,4 +50,10 @@ export const NfEvalDateFormat = {
   Format: 1,
   InternationalThenFormat: 2,
   FormatThenInternational: 3,
+} as const;
+
+/** Original IsNumberFormat input flags from zforlist.hxx. */
+export const SvNumInputOptions = {
+  NONE: 0,
+  LAX_TIME: 1,
 } as const;

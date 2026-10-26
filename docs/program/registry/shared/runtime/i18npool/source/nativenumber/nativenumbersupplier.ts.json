@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-format-input",
+    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts#NativeNumberSupplierService",
+        "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.test.ts",
+        "i18npool/source/nativenumber/nativenumbersupplier.cxx#NativeToAscii"
+      ],
+      "justification": "Task AQF9AG carries the source NATNUM0 language gate, native-character tables, multiplier recursion, lookahead and offset behavior needed by number input scanning. Other native number modes remain unrepresented.",
+      "knownViolations": [],
+      "localSymbols": ["NativeNumberSupplierService"],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "i18npool/source/nativenumber/nativenumbersupplier.cxx",
+      "upstreamSymbols": ["NativeNumberSupplierService::getNativeNumberString", "NativeToAscii", "NativeToAscii_numberMaker", "getLanguageNumber"]
+    }
+  }
+}

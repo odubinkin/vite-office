@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/source/i18n/transliterationwrapper.ts",
+    "status": "mapped",
+    "upstreamPath": "unotools/source/i18n/transliterationwrapper.cxx",
+    "localSymbols": ["TransliterationWrapper"],
+    "upstreamSymbols": ["TransliterationWrapper::TransliterationWrapper", "TransliterationWrapper::loadModuleIfNeeded", "TransliterationWrapper::equals", "TransliterationWrapper::isEqual"],
+    "preservedResponsibilities": ["Task AQF9AG binds the source IGNORE_CASE wrapper to the native Transliteration_caseignore owner, preserving first-call and language-change module loads, equals/isEqual forwarding, UNO-only failure handling and owned module lifetime."],
+    "omittedResponsibilities": ["Other transliteration modes, UNO service construction and full LanguageTag identity remain outside this represented path."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/unotools/source/i18n/transliterationwrapper.ts", "marker": "class TransliterationWrapper"}, {"path": "apps/office/src/unotools/source/i18n/transliterationwrapper.test.ts", "marker": "uses native IGNORE_CASE"}],
+      "upstream": [{"path": "unotools/source/i18n/transliterationwrapper.cxx", "marker": "TransliterationWrapper::isEqual"}]
+    }
+  }
+}

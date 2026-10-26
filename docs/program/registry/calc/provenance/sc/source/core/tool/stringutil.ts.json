@@ -7,16 +7,21 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/stringutil.cxx",
     "localSymbols": [
-      "ScStringUtil"
+      "ScStringUtil",
+      "ScSetStringParam"
     ],
     "upstreamSymbols": [
-      "ScStringUtil::parseSimpleNumber"
+      "ScStringUtil::parseSimpleNumber",
+      "ScStringUtil::isMultiline",
+      "ScSetStringParam::ScSetStringParam",
+      "ScSetStringParam::setTextInput",
+      "ScSetStringParam::setNumericInput"
     ],
     "preservedResponsibilities": [
-      "Task YYAGKX ports the Unicode ScStringUtil::parseSimpleNumber scanner with original space/NBSP trimming and group normalization, decimal/alternative separators, first-group permissiveness, three-digit subsequent groups, exponent/sign ordering and scientific default true. Real RTL Unicode conversion preserves binary64 status, full parse-end checks and output-reference assignment on converter failure; early prechecks preserve the output. JS code-unit arrays replace only the temporary native Unicode buffer. The original testCSV numeric cases are executed plus source-derived boundaries. No Number coercion, new locale/formatter service, byte overload, other ScStringUtil operation or full module parity claim."
+      "Task YYAGKX ports the Unicode ScStringUtil::parseSimpleNumber scanner with original space/NBSP trimming and group normalization, decimal/alternative separators, first-group permissiveness, three-digit subsequent groups, exponent/sign ordering and scientific default true. Real RTL Unicode conversion preserves binary64 status, full parse-end checks and output-reference assignment on converter failure; early prechecks preserve the output. JS code-unit arrays replace only the temporary native Unicode buffer. The original testCSV numeric cases are executed plus source-derived boundaries. Task AQF9AG adds ScSetStringParam's source defaults, TextFormatPolicy values, text/numeric switches and unchanged formatter/listening/link members, and ScStringUtil::isMultiline's CR/LF scan for the CSV literal branch. No Number coercion, byte overload, other ScStringUtil operation or full module parity claim."
     ],
     "omittedResponsibilities": [
-      "Byte-string overload, ScSetStringParam, full formatter/date input classification, GetQuotedToken and other ScStringUtil helpers are outside this operation.",
+      "Byte-string overload, full formatter/date input classification, GetQuotedToken and other ScStringUtil helpers are outside this operation.",
       "This is a source-backed Unicode scanner slice, not broad native module parity or full original QA execution."
     ],
     "evidence": {
