@@ -1,4 +1,14 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import type { wwFont } from "./wrtw8sty";
+import { RES_CHRATR_FONT } from "../../../inc/hintids";
+import type { RtfExport } from "./rtfexport";
+import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
+import { FontMapExport, rtl_TextEncodingToWinCharsetRTF } from "./writerwordglue";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { RtfAssociatedProperties, GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
 export { GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -65,12 +75,106 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput {
   private readonly associated: RtfAssociatedProperties;
-  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup.  @returns Constructed instance. */
+  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup. @param exporter - Original document encoding owner.  @returns Constructed instance. */
   public constructor(
-    private readonly fontIndex: (family: string) => number,
+    private readonly fontIndex: (font: SvxFontItem | wwFont) => number,
     private readonly colorIndex: (color: string) => number,
+    private readonly exporter: Pick<
+      RtfExport,
+      "GetCurrentEncoding" | "SetCurrentEncoding" | "GetDefaultEncoding" | "Strm"
+    >,
   ) {
-    this.associated = new RtfAssociatedProperties(fontIndex);
+    this.associated = new RtfAssociatedProperties(
+      /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
+      (font, assoc) => this.OutputCharFontAssoc(font, assoc),
+    );
+  }
+
+  /** Original non-associated font output changes the document encoding; associated output only emits its slot. @param font - Native font item. @param assoc - Original association flag. @returns RTF controls. */
+  public OutputCharFontAssoc(font: SvxFontItem, assoc: boolean): string {
+    const result = `\\${assoc ? "af" : "f"}${this.fontIndex(font)}`;
+    if (assoc) return result;
+    const mapped = new FontMapExport(font.GetFamilyName());
+    const charset = rtl_TextEncodingToWinCharsetRTF(
+      mapped.msPrimary,
+      mapped.msSecondary,
+      font.GetCharSet(),
+    );
+    this.exporter.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(charset));
+    if (this.exporter.GetCurrentEncoding() === RTL_TEXTENCODING_DONTKNOW)
+      this.exporter.SetCurrentEncoding(this.exporter.GetDefaultEncoding());
+    return result;
+  }
+
+  /** Original font name is hex-encoded without Unicode fallback. @param name - Mapped family name. @returns Nothing. */
+  public StartFont(name: string): void {
+    this.exporter.Strm().WriteOString(OutString(name, this.exporter.GetCurrentEncoding(), false));
+  }
+  /** Original font terminator restores default encoding. @returns Nothing. */
+  public EndFont(): void {
+    this.exporter.Strm().WriteOString(";}");
+    this.exporter.SetCurrentEncoding(this.exporter.GetDefaultEncoding());
+  }
+  /** Original optional alternate family group uses the current font encoding without Unicode. @param name - Mapped alternate name. @returns Nothing. */
+  public FontAlternateName(name: string): void {
+    this.exporter
+      .Strm()
+      .WriteOString("{\\*\\falt ")
+      .WriteOString(OutString(name, this.exporter.GetCurrentEncoding(), false))
+      .WriteChar("}");
+  }
+  /** Original byte charset control also changes the export encoding without the run-font fallback. @param charset - Windows charset byte. @returns Nothing. */
+  public FontCharset(charset: number): void {
+    charset &= 0xff;
+    this.exporter.Strm().WriteOString("\\fcharset").WriteNumberAsString(charset).WriteChar(" ");
+    this.exporter.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(charset));
+  }
+  /** Original family group uses the complete FFN font identity. @param family - Native family enum. @param font - Actual registered font. @returns Nothing. */
+  public FontFamilyType(family: FontFamily, font: wwFont): void {
+    let keyword = "\\fnil";
+    switch (family) {
+      case FontFamily.FAMILY_ROMAN:
+        keyword = "\\froman";
+        break;
+      case FontFamily.FAMILY_SWISS:
+        keyword = "\\fswiss";
+        break;
+      case FontFamily.FAMILY_MODERN:
+        keyword = "\\fmodern";
+        break;
+      case FontFamily.FAMILY_SCRIPT:
+        keyword = "\\fscript";
+        break;
+      case FontFamily.FAMILY_DECORATIVE:
+        keyword = "\\fdecor";
+        break;
+    }
+    this.exporter
+      .Strm()
+      .WriteOString("{\\f")
+      .WriteNumberAsString(this.fontIndex(font))
+      .WriteOString(keyword);
+  }
+  /** Original pitch control maps fixed/variable/other to 1/2/0. @param pitch - Native font pitch. @returns Nothing. */
+  public FontPitchType(pitch: FontPitch): void {
+    this.exporter
+      .Strm()
+      .WriteOString("\\fprq")
+      .WriteNumberAsString(
+        pitch === FontPitch.PITCH_FIXED ? 1 : pitch === FontPitch.PITCH_VARIABLE ? 2 : 0,
+      );
+  }
+
+  /** Original RawText serializes through the native RTF utility. @param text - Logical UTF16 view. @param encoding - Native destination encoding. @returns Encoded run fragment in the string-buffer binding. */
+  public RawText(text: string, encoding: rtl_TextEncoding): string {
+    return OutString(text, encoding);
+  }
+
+  /** Original RunText uses current export encoding and deliberately ignores the supplied character encoding and symbol font. @param text - Logical run text. @param encoding - Ignored source parameter. @param symbolFont - Ignored source parameter. @returns Encoded run fragment. */
+  public RunText(text: string, encoding: rtl_TextEncoding, symbolFont: string): string {
+    void encoding;
+    void symbolFont;
+    return this.RawText(text, this.exporter.GetCurrentEncoding());
   }
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
@@ -291,7 +395,7 @@ export class RtfAttributeOutput {
     else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
     else if (attributes.strikeout !== undefined) result += "\\strike";
     if (fontAttributes && attributes.fontFamily !== undefined)
-      result += `\\f${this.fontIndex(attributes.fontFamily)}`;
+      result += `\\f${this.fontIndex(new SvxFontItem(FontFamily.FAMILY_DONTKNOW, attributes.fontFamily, "", FontPitch.PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT))}`;
     if (fontAttributes && attributes.fontSizeTwips !== undefined)
       result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
     if (attributes.escapement !== undefined)

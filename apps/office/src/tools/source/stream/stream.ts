@@ -51,6 +51,22 @@ export class SvStream {
     return bytes.length;
   }
 
+  /** Original std::string_view write uses raw bytes and its logical length, including embedded NUL. The existing byte-string binding carries bytes as code units. @param value - Byte string view. @returns This stream. */
+  WriteOString(value: string): SvStream {
+    this.WriteBytes(Uint8Array.from(value, (unit) => unit.charCodeAt(0) & 0xff));
+    return this;
+  }
+
+  /** Original char write narrows to one byte before stream output. @param value - Native char byte or single-byte character. @returns This stream. */
+  WriteChar(value: number | string): SvStream {
+    return this.WriteUChar(typeof value === "number" ? value : value.charCodeAt(0));
+  }
+
+  /** Original integer instantiations of WriteNumberAsString serialize OString decimal text. @param value - Admitted native integer. @returns This stream. */
+  WriteNumberAsString(value: number): SvStream {
+    return this.WriteOString(value.toString());
+  }
+
   /** Source WriteUChar byte output used by the optional UTF-8 BOM. @param value - Native unsigned byte. @returns This stream. */
   WriteUChar(value: number): SvStream {
     this.WriteBytes(Uint8Array.of(value & 0xff));

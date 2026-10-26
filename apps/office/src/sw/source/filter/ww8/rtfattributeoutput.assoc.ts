@@ -42,8 +42,8 @@ export class RtfAssociatedProperties {
   private m_bIsRTL = false;
   private m_nScript: number = ScriptType.LATIN;
   private m_bControlLtrRtl = false;
-  /** Borrows the current native font table sink. @param fontIndex - Actual export font lookup. @returns Owner. */
-  constructor(private readonly fontIndex: (family: string) => number) {}
+  /** Borrows the current native font table sink. @param outputFont - Native OutputCharFontAssoc sink. @returns Owner. */
+  constructor(private readonly outputFont: (font: SvxFontItem, associated: boolean) => string) {}
   /** Original run-state producer contract. @param isRTL - Original bidi state. @param script - Original i18n script. @returns Nothing. */
   RTLAndCJKState(isRTL: boolean, script: number): void {
     this.m_bIsRTL = isRTL;
@@ -56,8 +56,7 @@ export class RtfAssociatedProperties {
     for (const which of family) {
       const item = items.GetItemIfSet(which, false);
       if (item === undefined) continue;
-      if (item instanceof SvxFontItem)
-        result += `\\${assoc ? "af" : "f"}${this.fontIndex(item.GetFamilyName())}`;
+      if (item instanceof SvxFontItem) result += this.outputFont(item, assoc);
       else if (item instanceof SvxFontHeightItem)
         result += `\\${assoc ? "afs" : "fs"}${Math.trunc(item.GetHeight() / 10)}`;
       else if (item instanceof SvxLanguageItem)

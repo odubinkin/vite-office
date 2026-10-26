@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtfexport.ts#RtfExport",
         "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx#RtfExport::WriteNumbering",
-        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts"
+        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts"
       ],
-      "justification": "Represented native RTF export now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified. RTF run collection now borrows actual SwAttrIter/CharFormat item stacks for named and automatic hints. Every represented script font is registered before the font table is serialized; style and run property modes are distinguished. The source RTLAndCJKState consumer is exposed, but complete native MSWord script/bidi production, full font identity/encoding and parser language mapping remain unverified.",
+      "justification": "Represented native RTF export now carries current-model character decoration, links and paragraph indentation; complete upstream responsibilities remain unverified. RTF run collection now borrows actual SwAttrIter/CharFormat item stacks for named and automatic hints. Every represented script font is registered before the font table is serialized; style and run property modes are distinguished. The source RTLAndCJKState consumer is exposed, but complete native MSWord script/bidi production, full font identity/encoding and parser language mapping remain unverified. Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString. The name-only Map font table is replaced by wwFontHelper with native FFN identity, preserving different metadata for equal family names. The actual export stream is used for native font-table methods and final byte writes; TextEncoder no longer owns RTF byte output. Source InitFontTable seed/order/default and automatic-style usage enumeration remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "RtfExport",

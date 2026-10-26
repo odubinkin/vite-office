@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
         "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx"
+        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts"
       ],
-      "justification": "Original associated-character stage of MoveProperties: shallow fixed Western/CJK/CTL traversal, associated versus normal keywords, CJK langfe exception, exact native posture/weight/height reduction, independent bidi/script flags, one-shot run-state reset and StyleDefinition state preservation. The outer writer collects its borrowed effective character items into a temporary native set and releases it after emission. Full MSWord run script/bidi production, complete general-formatting buffers, font identity/charset-to-current-encoding effects, paragraph-marker properties and RTF language/associated-format import remain unverified or unported. The existing font-table callback identifies names; no fake encoding or bidi provider is introduced.",
+      "justification": "Original associated-character stage of MoveProperties: shallow fixed Western/CJK/CTL traversal, associated versus normal keywords, CJK langfe exception, exact native posture/weight/height reduction, independent bidi/script flags, one-shot run-state reset and StyleDefinition state preservation. The outer writer collects its borrowed effective character items into a temporary native set and releases it after emission. Full MSWord run script/bidi production, complete general-formatting buffers, font identity/charset-to-current-encoding effects, paragraph-marker properties and RTF language/associated-format import remain unverified or unported. The existing font-table callback identifies names; no fake encoding or bidi provider is introduced. Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString. The font sink receives the original complete font item and association flag and delegates actual OutputCharFontAssoc emission.",
       "knownViolations": [],
       "localSymbols": [
         "GetCharacterPropertiesMode",

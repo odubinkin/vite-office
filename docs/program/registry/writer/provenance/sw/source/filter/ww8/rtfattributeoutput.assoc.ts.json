@@ -34,10 +34,12 @@
       "RtfAttributeOutput::RTLAndCJKState"
     ],
     "preservedResponsibilities": [
-      "Original associated-character stage of MoveProperties: shallow fixed Western/CJK/CTL traversal, associated versus normal keywords, CJK langfe exception, exact native posture/weight/height reduction, independent bidi/script flags, one-shot run-state reset and StyleDefinition state preservation. The outer writer collects its borrowed effective character items into a temporary native set and releases it after emission."
+      "Original associated-character stage of MoveProperties: shallow fixed Western/CJK/CTL traversal, associated versus normal keywords, CJK langfe exception, exact native posture/weight/height reduction, independent bidi/script flags, one-shot run-state reset and StyleDefinition state preservation. The outer writer collects its borrowed effective character items into a temporary native set and releases it after emission.",
+      "Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString.",
+      "The font sink receives the original complete font item and association flag and delegates actual OutputCharFontAssoc emission."
     ],
     "omittedResponsibilities": [
-      "Full MSWord run script/bidi production, complete general-formatting buffers, font identity/charset-to-current-encoding effects, paragraph-marker properties and RTF language/associated-format import remain unverified or unported. The existing font-table callback identifies names; no fake encoding or bidi provider is introduced."
+      "Full MSWord run script/bidi production, complete general-formatting buffers, complete font table identity, paragraph-marker properties and RTF language/associated-format import remain unverified or unported. Complete wwFontHelper initialization and native document/style usage enumeration remain incomplete."
     ],
     "filenameDivergence": {
       "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",

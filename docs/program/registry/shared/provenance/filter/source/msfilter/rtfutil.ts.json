@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/filter/source/msfilter/rtfutil.ts",
+    "status": "mapped",
+    "upstreamPath": "filter/source/msfilter/rtfutil.cxx",
+    "localSymbols": [
+      "OutHex",
+      "OutChar",
+      "OutString",
+      "OutStringUpr"
+    ],
+    "upstreamSymbols": [
+      "OutHex",
+      "OutChar",
+      "OutString",
+      "OutStringUpr"
+    ],
+    "preservedResponsibilities": [
+      "Original UInt32/UInt8 hex narrowing, UTF16 code-unit emission, RTF aliases and escaping, checked SAL conversion with ignored result and initially empty OString, signed Unicode controls, exact fallback widths/reset, and upr/ud grouping. Actual shared SAL byte ownership and converters are used."
+    ],
+    "omittedResponsibilities": [
+      "Hex stream output, picture and OLE utilities are not part of this text-string owner; no complete RTF/SAL ABI certification is asserted."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/filter/source/msfilter/rtfutil.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/filter/source/msfilter/rtfutil.cxx",
+          "marker": "OutHex"
+        }
+      ]
+    }
+  }
+}

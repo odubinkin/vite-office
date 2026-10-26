@@ -88,8 +88,8 @@ const allowedEdges = new Map([
     ]),
   ],
   ["external", new Set()],
-  // Native Library_msfilter uses Tools colors for the Word highlight palette.
-  ["filter", new Set(["tools"])],
+  // Native Library_msfilter uses Tools colors and SAL rtl strings/converters in rtfutil.cxx.
+  ["filter", new Set(["tools", "sal"])],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
   ["formula", new Set(["offapi", "sal", "svl"])],

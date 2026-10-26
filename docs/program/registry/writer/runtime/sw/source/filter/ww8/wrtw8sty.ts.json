@@ -20,9 +20,10 @@
         "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
         "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
         "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts#MSWordStyles",
-        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx#MSWordStyles::BuildStylesTable"
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx#MSWordStyles::BuildStylesTable",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts"
       ],
-      "justification": "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending. The current paragraph-style graph uses pinned reserved Word slots and source collection order; full style vocabulary remains unverified.",
+      "justification": "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending. The current paragraph-style graph uses pinned reserved Word slots and source collection order; full style vocabulary remains unverified. Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "wwFont",

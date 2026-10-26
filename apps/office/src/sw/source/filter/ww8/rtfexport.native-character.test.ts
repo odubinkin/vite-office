@@ -59,6 +59,7 @@ it.each([
     const output = new RtfAttributeOutput(
       () => 0,
       () => 0,
+      new RtfExport(),
     ).WriteNativeCharacter(node.GetSwAttrSet());
     expect(output).toMatch(weight === FontWeight.WEIGHT_BOLD ? /\\b(?!0)/ : /\\b0/);
   } finally {
@@ -80,6 +81,7 @@ it.each([
     const output = new RtfAttributeOutput(
       () => 0,
       () => 0,
+      new RtfExport(),
     ).WriteNativeCharacter(node.GetSwAttrSet());
     expect(output).toMatch(posture === FontItalic.ITALIC_NONE ? /\\i0/ : /\\i(?!0)/);
   } finally {

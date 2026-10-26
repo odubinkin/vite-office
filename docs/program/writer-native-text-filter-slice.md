@@ -282,3 +282,27 @@ SwpHints now retains the original borrowed history registration and explicit old
 InsertItem now calls original InsertHint/TryInsertHint decisions for every registered ranged family, including ordinary INET insertion. NOHINTADJUST does not bypass native nesting. XML import retains the original portion-building/merge distinction; DONTEXPAND and native range-update payloads follow source order. The INET normal-style client and transient visited/validity flags retain original initialization; full GetCharFormat URL-history resolution remains pending. Native SwClient multiple inheritance is bound by composition of the actual client class with a weak callback, explicit removal and JS-GC teardown.
 
 The represented INET nesting family retains source four-pass overlap, truncation, recursive replacement and history behavior. All zero/nonzero intervals through four UTF16 units are covered, including original object retention and empty-interior pointer destruction (WRITER171). No Ruby/meta/fieldmark/content-control stand-ins were introduced. Generic item-set range insertion and its common document/history owner still remain before HTMLReader composition; this block does not close Markdown/RTF completeness.
+
+The represented RTF text path now uses the pinned `SwWW8AttrIter::GetSnippet`
+control substitutions and `RtfAttributeOutput::RunText` / `RawText` before
+`msfilter::rtfutil::OutString`. The string utility retains native UTF16-unit
+conversion, ignored checked-conversion results, per-unit `uc` widths, signed
+`u` values and hexadecimal fallback bytes. Non-associated font controls update
+the actual export current encoding through `FontMapExport` and the source RTF
+charset predicate; associated controls do not change it. The source ASCII
+`DEF_ENCODING` is normalized through the Windows-charset round trip to MS1252.
+Style names and hyperlink values use the same utility. The current item pool
+has no `RES_CHRATR_CASEMAP`, so title-case transformation is not admitted by
+this snippet owner. Full MSWord script/bidi run production, complete font-table
+initialization and native automatic-style usage iteration remain open;
+this checkpoint is not a complete font-table or text-filter parity certificate.
+
+The name-only RTF font map has been replaced by `wwFontHelper`. Font-table
+serialization now visits the native ID vector and calls `wwFont::WriteRtf`
+through actual `RtfAttributeOutput` stream methods. Equal family names retain
+separate native FFN identities when their metadata differs. Family, pitch and
+charset controls, legacy-only primary/alternate font names, and default encoding
+restoration follow the source. The export returns bytes from `SvStream` rather
+than UTF8-encoding the assembled RTF with `TextEncoder`. Source font-table seed
+order, global Writer default-font initialization, automatic-style usage traversal
+and used numbering/bullet font collection remain incomplete.

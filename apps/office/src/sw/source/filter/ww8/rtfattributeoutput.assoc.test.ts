@@ -87,7 +87,7 @@ it.each(fixtures)(
         [1, H.RES_CHRATR_LANGUAGE, 1033],
       ] as const)
         if (mask & bit) set.Put(new SvxLanguageItem(value, which));
-      const owner = new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => 0);
+      const owner = new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => "");
       expect(owner.MoveProperties(set, M.StyleDefinition)).toBe(western);
       expect(owner.MoveProperties(set, M.ForRun)).toBe(western);
       owner.RTLAndCJKState(false, S.ASIAN);
@@ -114,7 +114,7 @@ it("does not accidentally pull family items from the formatting parent", /** Nat
     parent.Put(new SvxLanguageItem(1033, H.RES_CHRATR_LANGUAGE));
     set.SetParent(parent);
     expect(
-      new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => 0).MoveProperties(
+      new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => "").MoveProperties(
         set,
         M.StyleDefinition,
       ),
@@ -145,8 +145,8 @@ it("uses fixed native item order, exact weight reduction and unsigned language v
     );
     const owner = new RtfAssociatedProperties(
       /** Fixed actual table slot. @param family - Value. @returns Slot. */ (family) => {
-        expect(family).toBe("Native");
-        return 7;
+        expect(family.GetFamilyName()).toBe("Native");
+        return "\\f7";
       },
     );
     expect(owner.MoveProperties(set, M.StyleDefinition)).toBe("\\f7\\fs24\\lang65535\\i\\ulw\\b0");
@@ -196,6 +196,7 @@ it("exports named-style CJK/CTL fonts and languages through the actual native hi
     const output = new RtfAttributeOutput(
       /** Current font sink. @returns Slot. */ () => 0,
       /** Current color sink. @returns Slot. */ () => 0,
+      new RtfExport(),
     );
     output.RTLAndCJKState(true, S.COMPLEX);
     expect(output.WriteNativeCharacter(set, M.ForRun).endsWith("\\rtlch\\f0\\lang1025")).toBe(true);
@@ -213,7 +214,7 @@ it("borrows word-line mode from the ancillary parent while excluding its languag
     parent.Put(new SvxWordLineModeItem(true, H.RES_CHRATR_WORDLINEMODE));
     set.SetParent(parent);
     set.Put(new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, H.RES_CHRATR_UNDERLINE));
-    const owner = new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => 0);
+    const owner = new RtfAssociatedProperties(/** Unused font sink. @returns Slot. */ () => "");
     expect(owner.MoveProperties(set, M.StyleDefinition)).toBe("\\ulw");
     owner.RTLAndCJKState(false, S.ASIAN);
     expect(owner.MoveProperties(set, M.ForRun)).toBe("\\loch\\aulw\\hich\\aulw\\dbch");

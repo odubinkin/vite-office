@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts#RtfAttributeOutput",
         "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx#RtfAttributeOutput::OutputCharEscapement",
-        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts"
+        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts"
       ],
-      "justification": "Represented RTF paragraph and character items use upstream-shaped attribute output; complete source parity remains unverified. Native WriteNativeCharacter now delegates original associated-group ordering rather than emitting only Western fonts. Basic underline keywords move to the source association stage while non-associated underline color remains before it. All three native language values are emitted in their original families. Source caller collection uses a temporary actual set without mutating the borrowed input; native run script/bidi production and full paragraph-marker/general-property owners remain open.",
+      "justification": "Represented RTF paragraph and character items use upstream-shaped attribute output; complete source parity remains unverified. Native WriteNativeCharacter now delegates original associated-group ordering rather than emitting only Western fonts. Basic underline keywords move to the source association stage while non-associated underline color remains before it. All three native language values are emitted in their original families. Source caller collection uses a temporary actual set without mutating the borrowed input; native run script/bidi production and full paragraph-marker/general-property owners remain open. Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString. FontFamilyType, FontPitchType, FontCharset, StartFont, FontAlternateName and EndFont write to the actual export SvStream. Associated font controls now borrow the complete SvxFontItem rather than only its name.",
       "knownViolations": [],
       "localSymbols": [
         "RtfAttributeOutput",

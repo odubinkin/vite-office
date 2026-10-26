@@ -19,7 +19,8 @@
     "preservedResponsibilities": [
       "Calc CSV's consumed in-memory SvStream operations retain the original allowed-encoding BOM switch, byte position, byte versus Unicode physical-line decoding, source 0xFFFE default and explicit line limits (CALC-293), opposite CR/LF pair handling, Unicode NUL compaction, UTF-16BE swapped-buffer order after NUL (CALC-290) and EOF after an unsuccessful read.",
       "Task AQF9AG adds source GetStreamEncoding and SetStreamEncoding state for CSV separator detection, plus the consumed UTF-16 BOM, encoded-text and single-character output calls used by AsciiSave. ICU-backed DetectEncoding remains unrepresented.",
-      "Adds native ReadChar, ReadUtf16, good and SeekRel operations consumed by SvParser, retaining signed byte references, current stream endianness, byte offsets and EOF only on unsuccessful read. The existing memory-stream binding has no device/pending I/O; generic native stream error/lifetime semantics are not claimed."
+      "Adds native ReadChar, ReadUtf16, good and SeekRel operations consumed by SvParser, retaining signed byte references, current stream endianness, byte offsets and EOF only on unsuccessful read. The existing memory-stream binding has no device/pending I/O; generic native stream error/lifetime semantics are not claimed.",
+      "Native WriteOString raw byte-view writes, WriteChar byte narrowing and the represented integer WriteNumberAsString instantiations support the RTF export stream. These byte writes preserve embedded NUL and high bytes without UTF8 recoding. Generic float formatting and full stream/device error services are not admitted by these integer/byte operations."
     ],
     "omittedResponsibilities": [
       "General file and buffer ownership, stream errors and other SvStream operations remain unported."

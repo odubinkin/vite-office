@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/wrtw8nds.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx#SwWW8AttrIter::GetSnippet"
+      ],
+      "justification": "Original represented text-snippet UTF16 slicing, hard line break, hard/soft hyphen substitutions, and CH_TXTATR_BREAKWORD removal. The current Writer item pool has no RES_CHRATR_CASEMAP, so only source non-title-case behavior is admitted. RTF run emission consumes this owner before RunText/RawText. Full MSWord attribute/script/bidi iteration, capitalization with ICU/break iterators and other wrtw8nds.cxx responsibilities remain unported and are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwWW8AttrIter"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/wrtw8nds.cxx",
+      "upstreamSymbols": [
+        "SwWW8AttrIter::GetSnippet"
+      ]
+    }
+  }
+}

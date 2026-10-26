@@ -35,6 +35,7 @@ it("writes source highlight palette indices independent of document color indice
       0,
     /** Checks writes source highlight palette indices independent of document color indices. @returns Test completion or assertion result. */ () =>
       23,
+    new RtfExport(),
   );
   const plain = { bold: false, italic: false, underline: false };
   expect(output.WriteCharacter({ ...plain, highlight: "#6666ff" })).toContain("\\highlight2");
