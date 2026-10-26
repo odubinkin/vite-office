@@ -849,7 +849,6 @@ export function SetFormulaCell(
 }
 
 /** Original ScDocument::RenameTab name checks and stream invalidation over represented sheets. Chart and solver services are outside this core slice. @param tab - Existing sheet. @param name - New name. @param externalDocument - Composed external name flag. @returns Renamed.  @param this - Original document owner. */
-
 export function RenameTab(
   this: ScDocument,
   tab: number,

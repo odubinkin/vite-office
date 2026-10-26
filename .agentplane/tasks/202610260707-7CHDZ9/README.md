@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 10
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T07:37:27.601Z"
+doc_updated_at: "2026-10-26T07:52:00.697Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -68,6 +68,10 @@ sections:
     - Observation: User explicitly approved consolidating all file-size and JSDoc fixes in main before reverse synchronization. Initial full gates found 7 files at or above 1000 lines and missing documentation in 96 files.
       Impact: Incoming development branches cannot independently satisfy repository-wide verification until integration repairs are shared.
       Resolution: Decompose the scanner, RTF parser/tests, Calc facade declarations and text-node vocabulary; keep one native class instance and its state, use the existing out-of-class fragment pattern, register source provenance and preserve conservative unverified parity status. Add missing declaration documentation; retain all strict gates.
+
+    - Observation: The initial application coverage run was superseded by the source decomposition and stopped with SIGINT (exit 130), after revealing one obsolete Calc formatter assertion and two exhaustive Unicode replay timeout failures.
+      Impact: The old run discovered tests before the new split files existed and cannot certify the final source tree.
+      Resolution: Replace the obsolete unsupported-format assertion with the source-supported numeric output check; preserve all 65536-unit and all-codepoint assertions with a bounded 300-second budget for exhaustive native replays under Istanbul. All 163 split RTF tests, all 10 Calc resource tests, strict JSDoc, file size, type and provenance checks pass. A fresh complete application coverage run is executing on the final tree.
 id_source: "generated"
 ---
 ## Summary
@@ -116,3 +120,7 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: User explicitly approved consolidating all file-size and JSDoc fixes in main before reverse synchronization. Initial full gates found 7 files at or above 1000 lines and missing documentation in 96 files.
   Impact: Incoming development branches cannot independently satisfy repository-wide verification until integration repairs are shared.
   Resolution: Decompose the scanner, RTF parser/tests, Calc facade declarations and text-node vocabulary; keep one native class instance and its state, use the existing out-of-class fragment pattern, register source provenance and preserve conservative unverified parity status. Add missing declaration documentation; retain all strict gates.
+
+- Observation: The initial application coverage run was superseded by the source decomposition and stopped with SIGINT (exit 130), after revealing one obsolete Calc formatter assertion and two exhaustive Unicode replay timeout failures.
+  Impact: The old run discovered tests before the new split files existed and cannot certify the final source tree.
+  Resolution: Replace the obsolete unsupported-format assertion with the source-supported numeric output check; preserve all 65536-unit and all-codepoint assertions with a bounded 300-second budget for exhaustive native replays under Istanbul. All 163 split RTF tests, all 10 Calc resource tests, strict JSDoc, file size, type and provenance checks pass. A fresh complete application coverage run is executing on the final tree.

@@ -43,6 +43,7 @@ function observe(c: number): number[] {
 }
 
 describe("original ICU scalar dependency", /** Groups unchanged native replay evidence. @returns Nothing. */ () => {
+  // Exhaustive native fixture replay retains every assertion under full-suite coverage instrumentation.
   it("matches every unchanged native Unicode codepoint and complete initialized trie observation", /** Verifies complete native rows and raw digest. @returns Nothing. */ () => {
     const encoded = JSON.parse(
       gunzipSync(Buffer.from(fixture.compressedRows, "base64")).toString("utf8"),
@@ -87,7 +88,7 @@ describe("original ICU scalar dependency", /** Groups unchanged native replay ev
     }
     expect(createHash("sha256").update(actual).digest("hex")).toBe(fixture.rawHash);
     expect(actual.equals(expected)).toBe(true);
-  });
+  }, 300_000);
 
   it("preserves original signed invalid identities and every captured option/pointer observation", /** Verifies signed boundaries, options and native slot pointer effects. @returns Nothing. */ () => {
     for (const [i, c] of fixture.boundaries.entries())
