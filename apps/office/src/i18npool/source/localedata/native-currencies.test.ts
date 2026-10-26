@@ -177,6 +177,11 @@ it("constructs native currency entries with row precision and source symbol synt
         expect(symbolCode(rowEntry, false, true)).toBe("[$DM]");
         expect(symbolCode(rowEntry, true)).toBe("[$DEM]");
         expect(symbolCode(quotedEntry, false)).toBe('[$"X-Y"-407]');
+        rowEntry.SetLanguage(LANGUAGE_SYSTEM);
+        expect(symbolCode(rowEntry, false)).toBe("[$DM]");
+        expect(symbolCode(rowEntry, true)).toBe("[$DEM]");
+        rowEntry.SetLanguage(LANGUAGE_GERMAN);
+        expect(rowEntry.equals(sameEntry)).toBe(true);
       } finally {
         quotedEntry.dispose();
         sameEntry.dispose();
@@ -198,6 +203,10 @@ it("initializes the source currency table with default-first and separate legacy
     const mark = SvNumberFormatter.GetCurrencyEntry("DEM", LANGUAGE_GERMAN);
     expect(mark && text(mark.GetSymbol())).toBe("DM");
     expect(SvNumberFormatter.GetLegacyOnlyCurrencyEntry("Pts", "ESP")?.GetLanguage()).toBeDefined();
+    expect(SvNumberFormatter.GetCurrencyEntry("Missing bank symbol", LANGUAGE_GERMAN)).toBeNull();
+    expect(SvNumberFormatter.GetCurrencyEntry(LANGUAGE_SYSTEM)).toBe(
+      SvNumberFormatter.MatchSystemCurrency() ?? table[0],
+    );
   } finally {
     SvNumberFormatter.resetTheCurrencyTable();
   }

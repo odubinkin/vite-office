@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T11:10:08.938Z"
+doc_updated_at: "2026-10-26T11:47:06.711Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -88,6 +88,10 @@ sections:
     - Observation: Added native RTF admission, inheritance, table geometry, control mappings, style slot limits and tokenizer boundaries; calendar cache, leading fragment and literal-token tests; SAX timezone rollover and invalid fields; Symbol policy/capacity tests; Markdown list completion and ODF border rejection.
       Impact: The latest focused execution passes 25 files and 336 tests. The preceding RTF coverage run reached 100% lines, statements and functions, with 95.06% branches. These are scoped diagnostics, not a successful complete application coverage gate.
       Resolution: Retained the original state owners and source ordering. Removed unreachable private fallback paths whose constructors or bounded local loops already establish the invariant. Current typecheck, lint, JSDoc, size and provenance gates pass; full coverage and final repository synchronization remain pending.
+
+    - Observation: Extended native coverage with UTF-7/UTF-8 reset and failure policies, CSV legacy charset round trips and admission bounds, rich-text cell snapshot ownership, locale currency/date-format fixtures, style/default-attribute undo capture, and UNO-only wrapper exception boundaries.
+      Impact: Focused runs pass, including 44 files and 410 tests before the latest CSV and currency cases. UTF-7, UTF-8, Symbol and CSV option modules pass 100% in all metrics (27 tests, 4 files). The cumulative diagnostic residual decreased to 252 statements and 484 branch outcomes; this is not a completed whole-application verification.
+      Resolution: Removed only dense-array fallbacks already excluded by native token count guards, and corrected outdated rich-text API documentation. Typecheck, lint, JSDoc, file size and source provenance pass. Full coverage, final npm verify, publication and reverse branch synchronization remain open.
 id_source: "generated"
 ---
 ## Summary
@@ -156,3 +160,7 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: Added native RTF admission, inheritance, table geometry, control mappings, style slot limits and tokenizer boundaries; calendar cache, leading fragment and literal-token tests; SAX timezone rollover and invalid fields; Symbol policy/capacity tests; Markdown list completion and ODF border rejection.
   Impact: The latest focused execution passes 25 files and 336 tests. The preceding RTF coverage run reached 100% lines, statements and functions, with 95.06% branches. These are scoped diagnostics, not a successful complete application coverage gate.
   Resolution: Retained the original state owners and source ordering. Removed unreachable private fallback paths whose constructors or bounded local loops already establish the invariant. Current typecheck, lint, JSDoc, size and provenance gates pass; full coverage and final repository synchronization remain pending.
+
+- Observation: Extended native coverage with UTF-7/UTF-8 reset and failure policies, CSV legacy charset round trips and admission bounds, rich-text cell snapshot ownership, locale currency/date-format fixtures, style/default-attribute undo capture, and UNO-only wrapper exception boundaries.
+  Impact: Focused runs pass, including 44 files and 410 tests before the latest CSV and currency cases. UTF-7, UTF-8, Symbol and CSV option modules pass 100% in all metrics (27 tests, 4 files). The cumulative diagnostic residual decreased to 252 statements and 484 branch outcomes; this is not a completed whole-application verification.
+  Resolution: Removed only dense-array fallbacks already excluded by native token count guards, and corrected outdated rich-text API documentation. Typecheck, lint, JSDoc, file size and source provenance pass. Full coverage, final npm verify, publication and reverse branch synchronization remain open.

@@ -93,7 +93,21 @@ it("retains requested fraction classification for integer and mixed-number shape
     IsNumberFormatMain(value: OUString, format: null): boolean;
   };
   try {
-    for (const value of ["1", "-1", "1/2", "-1/2", "1 2/3", "-1 2/3"]) {
+    for (const value of [
+      "1",
+      "-1",
+      "+1",
+      "1.",
+      "-1.",
+      "+1.",
+      "1/2",
+      "-1/2",
+      "1 2/3",
+      "-1 2/3",
+      "1 2",
+      "1 2 3",
+      "1 2 3 4",
+    ]) {
       language.pStringScanner.fields.eSetType = SvNumFormatType.FRACTION;
       const input = unicode(value);
       try {

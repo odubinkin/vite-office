@@ -674,6 +674,14 @@ it("keeps real engine fallback and separately represented input/format null-date
       /** An absent required format0 is an invalid source state. @returns Nothing. */ () =>
         SvNFEngine.GetOutputString(current, values.table, 1, 0, out, color),
     ).toThrow(/absent/);
+    expect(
+      /** Rejects missing text-format fallback before producing output. @returns Nothing. */ () =>
+        SvNFEngine.GetOutputString(current, values.table, textValue, 404, out, color),
+    ).toThrow("Required native standard text format is absent");
+    expect(
+      /** Rejects missing numeric fallback in input-line conversion. @returns No owned output. */ () =>
+        SvNFEngine.GetInputLineString(current, values.table, 1, 404),
+    ).toThrow("Required native standard format0 is absent");
     generateStandardNumberFormat(
       values.table,
       values.mapper,
@@ -689,6 +697,12 @@ it("keeps real engine fallback and separately represented input/format null-date
     entry.SetType(2);
     SvNFEngine.GetOutputString(current, values.table, textValue, 0, out, color);
     expect(text(out)).toBe("literal");
+    const precision = current.GetStandardPrec();
+    expect(
+      /** Exercises temporary output cleanup on an unrepresented numeric type. @returns No owned output. */ () =>
+        SvNFEngine.GetInputLineString(current, values.table, 1.2345, 0),
+    ).toThrow("SvNumberformat nonstandard output is not implemented");
+    expect(current.GetStandardPrec()).toBe(precision);
     entry.SetType(16);
     SvNFEngine.ChangeNullDate(current, 32, 2, 1999);
     expect(current.GetNullDate().GetDate()).toBe(19990304);

@@ -47,34 +47,35 @@ export class ScAsciiOptions {
   /** Reads the versioned native filter-options string and uses the source stream for separator detection when supplied. @param value - Comma-token options. @param stream - Optional source byte stream. @returns Nothing. */
   ReadFromString(value: string, stream?: SvStream): void {
     if (!value) return;
+    // split() creates dense tokens; each indexed read below is admitted by a length check.
     const tokens = value.split(",");
-    const field = tokens[0] ?? "";
+    const field = tokens[0] as string;
     this.bFixedLen = field === "FIX";
     this.bMergeFieldSeps = false;
     if (field !== "DETECT")
       this.aFieldSeps = this.bFixedLen ? "" : ScAsciiOptions.DecodeSeps(field, this);
-    if (tokens.length > 1) this.cTextSep = String.fromCharCode(toInt32(tokens[1] ?? ""));
+    if (tokens.length > 1) this.cTextSep = String.fromCharCode(toInt32(tokens[1] as string));
     if (tokens.length > 2) {
       if (tokens[2] === "DETECT") {
         if (stream) {
           stream.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
           this.eCharSet = stream.GetStreamEncoding();
         }
-      } else this.eCharSet = ScGlobal.GetCharsetValue(tokens[2] ?? "");
+      } else this.eCharSet = ScGlobal.GetCharsetValue(tokens[2] as string);
     }
     if (field === "DETECT" && stream)
       this.aFieldSeps = SfxObjectShell.DetectCsvSeparators(stream, this.eCharSet, this.cTextSep);
-    if (tokens.length > 3) this.nStartRow = toInt32(tokens[3] ?? "");
+    if (tokens.length > 3) this.nStartRow = toInt32(tokens[3] as string);
     if (tokens.length > 4) {
-      const columns = (tokens[4] ?? "").split("/");
+      const columns = (tokens[4] as string).split("/");
       this.mvColStart = [];
       this.mvColFormat = [];
       for (let i = 0; i + 1 < columns.length; i += 2) {
-        this.mvColStart.push(toInt32(columns[i] ?? ""));
-        this.mvColFormat.push(toInt32(columns[i + 1] ?? "") & 0xff);
+        this.mvColStart.push(toInt32(columns[i] as string));
+        this.mvColFormat.push(toInt32(columns[i + 1] as string) & 0xff);
       }
     }
-    if (tokens.length > 5) this.eLang = toInt32(tokens[5] ?? "") & 0xffff;
+    if (tokens.length > 5) this.eLang = toInt32(tokens[5] as string) & 0xffff;
     if (tokens.length > 6) this.bQuotedFieldAsText = tokens[6] === "true";
     this.bDetectSpecialNumber = tokens.length > 7 ? tokens[7] === "true" : true;
     this.bSaveAsShown = tokens.length > 8 ? tokens[8] === "true" : true;
@@ -143,9 +144,7 @@ export class ScAsciiOptions {
       [",", "\t", ";", " "].find(
         /** Computes the sep result. @param sep - Sep. @returns The computed result. */ (sep) =>
           value.includes(sep),
-      ) ??
-      value[0] ??
-      ""
+      ) ?? (value[0] as string)
     );
   }
 }

@@ -14,6 +14,8 @@ it("uses native IGNORE_CASE comparison and preserves source full-string match be
     match1: [number] = [9],
     match2: [number] = [9];
   try {
+    expect(wrapper.getType()).toBe(TransliterationFlags.IGNORE_CASE);
+    expect(wrapper.needLanguageForTheMode()).toBe(true);
     wrapper.loadModuleIfNeeded(LANGUAGE_ENGLISH_US);
     expect(wrapper.isEqual(first, second)).toBe(true);
     expect(wrapper.isEqual(first, longer)).toBe(false);
@@ -25,6 +27,13 @@ it("uses native IGNORE_CASE comparison and preserves source full-string match be
     first.dispose();
     wrapper.dispose();
   }
+});
+
+it("rejects modes outside the represented native case-ignore module", /** Checks the wrapper admission boundary before a caller can rely on another transliteration mode. @returns Nothing. */ () => {
+  expect(
+    /** Attempts an unrepresented mode. @returns No usable wrapper. */ () =>
+      new TransliterationWrapper(TransliterationFlags.NONE),
+  ).toThrow("TransliterationWrapper mode is outside the represented module set");
 });
 
 it("lazily creates and reuses the transliteration wrapper across locale invalidation", /** Checks lazily creates and reuses the transliteration wrapper across locale invalidation. @returns Test completion or assertion result. */ () => {

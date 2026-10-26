@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 import * as cvt from "../inc/rtl/textcvt.h";
 import {
   ImplUTF7CreateUTF7TextToUnicodeContext,
+  ImplUTF7DestroyTextToUnicodeContext,
   ImplUTF7ResetTextToUnicodeContext,
   ImplUTF7ToUnicode,
 } from "./tcvtutf7";
@@ -99,4 +100,35 @@ it("preserves the pinned disabled context restore across chunks", /** Checks pre
   ImplUTF7ResetTextToUnicodeContext(context);
   expect(context.mbShifted).toBe(false);
   expect(context.mnBitBuffer).toBe(0);
+  ImplUTF7DestroyTextToUnicodeContext(context);
+});
+
+it("keeps source accounting when shift termination encounters errors or an exhausted destination", /** Checks replacement and error policy on explicit shift terminators, leftover bits and invalid direct bytes. @returns Nothing. */ () => {
+  const invalid = cvt.RTL_TEXTTOUNICODE_INFO_INVALID;
+  const error = cvt.RTL_TEXTTOUNICODE_INFO_ERROR;
+  const small = error | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+  const stop = cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR;
+  const flush = cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+  const cases: [string, number, number, number[], number, number][] = [
+    ["+-", 0, 0, [], small, 1],
+    ["+-", 0, 1, [0x2b], 0, 2],
+    ["+B-x", stop, 2, [], invalid | error, 4],
+    ["+B-x", stop | flush, 2, [], invalid | error, 3],
+    ["+AOk-", 0, 0, [], small, 3],
+    ["+AOl-", 0, 2, [0xe9], error | cvt.RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL, 5],
+    ["+AOl-x", stop, 2, [0xe9], invalid | error, 6],
+    ["+AOl-x", stop | flush, 2, [0xe9], invalid | error, 5],
+    ["+AOl-x", cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE, 2, [0xe9, 0x78], invalid, 6],
+    ["+AOl-x", 0, 1, [0xe9], invalid | small, 5],
+  ];
+  for (const [source, flags, capacity, units, info, consumed] of cases) {
+    expect(convert(ascii(source), flags, capacity), source).toEqual({ units, info, consumed });
+  }
+  expect(convert([0x80], stop)).toEqual({ units: [], info: invalid | error, consumed: 1 });
+  expect(convert([0x80], cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE)).toEqual({
+    units: [],
+    info: invalid,
+    consumed: 1,
+  });
+  expect(convert([0x80], 0, 0)).toEqual({ units: [], info: invalid | small, consumed: 0 });
 });

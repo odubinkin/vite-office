@@ -19,6 +19,61 @@ import { SvxTabStopItem, SvxTabStop, SvxTabAdjust } from "../../../../editeng/in
 import { lcl_SetNewDefTabStops } from "./docfmt";
 import { SwClient } from "../../../inc/calbck";
 import type { SwModelHint } from "../../../inc/hints";
+import { SfxItemPool } from "../../../../svl/source/items/itempool";
+
+it("propagates changed default font heights through the actual secondary pool slot mapping", /** Checks native slot-to-Which remapping on independently owned pool defaults. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  const pool = doc.GetAttrPool();
+  const secondary = new SfxItemPool();
+  // This isolated pool fixture uses its own WhichId and the original font-height slot.
+  secondary.RegisterDefaultItem(new SvxFontHeightItem(200, 100, 4000), undefined, 10015);
+  pool.SetSecondaryPool(secondary);
+  try {
+    doc.SetDefault(new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE));
+    const primary = doc.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem;
+    const remapped = secondary.GetUserDefaultItem(4000) as SvxFontHeightItem;
+    expect(primary.GetHeight()).toBe(360);
+    expect(remapped.GetHeight()).toBe(360);
+    expect(remapped.Which()).toBe(4000);
+    expect(remapped).not.toBe(primary);
+  } finally {
+    pool.SetSecondaryPool(null);
+    doc.Dispose();
+  }
+});
+
+it("updates authored tab stops when mixed document defaults are undone and redone", /** Checks native default-format notifications together with tab-stop history and an inherited authored item. @returns Nothing. */ () => {
+  const session = createWriterDocumentSession();
+  const doc = session.docShell.GetDoc();
+  const shell = session.view.GetWrtShell();
+  try {
+    const style = doc.MakeTextFormatColl("Default tabs");
+    const authored = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    authored.Insert(new SvxTabStop(100, SvxTabAdjust.Left));
+    authored.Insert(new SvxTabStop(200, SvxTabAdjust.Default));
+    authored.Insert(new SvxTabStop(300, SvxTabAdjust.Default));
+    style.SetFormatAttr(authored);
+    const next = new SfxItemSet(doc.GetAttrPool(), [
+      [RES_CHRATR_FONTSIZE, RES_CHRATR_FONTSIZE],
+      [RES_PARATR_TABSTOP, RES_PARATR_TABSTOP],
+    ]);
+    const oldFont = doc.GetDefault(RES_CHRATR_FONTSIZE).Clone() as SvxFontHeightItem;
+    const tabs = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+    tabs.Insert(new SvxTabStop(720, SvxTabAdjust.Default));
+    next.Put(tabs);
+    next.Put(new SvxFontHeightItem(360, 100, RES_CHRATR_FONTSIZE));
+    doc.GetUndoManager().Clear();
+    doc.SetDefault(next);
+    expect((style.GetAttrSet().Get(RES_PARATR_TABSTOP) as SvxTabStopItem).Count()).toBe(2);
+    expect((doc.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(360);
+    expect(shell.Undo()).toBe(true);
+    expect(doc.GetDefault(RES_CHRATR_FONTSIZE).equals(oldFont)).toBe(true);
+    expect(shell.Redo()).toBe(true);
+    expect((doc.GetDefault(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight()).toBe(360);
+  } finally {
+    session.Close();
+  }
+});
 
 it("changes native pool/master/left mode, preserves authored first-page modes and only undoes the pool default", /** Exercises actual shell undo with the source's deliberate frame/default asymmetry. @returns Nothing. */ () => {
   const session = createWriterDocumentSession(),

@@ -1,10 +1,84 @@
 /** @fileoverview Native CSV filter token compatibility from asciiopt.cxx and imoptdlg.cxx. */
 import { expect, it } from "vitest";
-import { RTL_TEXTENCODING_DONTKNOW, RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import {
+  RTL_TEXTENCODING_DONTKNOW,
+  RTL_TEXTENCODING_UTF8,
+  RTL_TEXTENCODING_MS_1252,
+  RTL_TEXTENCODING_APPLE_ROMAN,
+  RTL_TEXTENCODING_IBM_437,
+  RTL_TEXTENCODING_IBM_850,
+  RTL_TEXTENCODING_IBM_860,
+  RTL_TEXTENCODING_IBM_861,
+  RTL_TEXTENCODING_IBM_863,
+  RTL_TEXTENCODING_IBM_865,
+} from "../../../../sal/inc/rtl/textenc";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { ScGlobal } from "../../../inc/global";
 import { ScAsciiOptions } from "./asciiopt";
 import { ScImportOptions } from "./imoptdlg";
+
+it("round-trips original legacy charset aliases through persistent CSV options", /** Checks native encoding values and canonical serialized names across both import-option owners. @returns Nothing. */ () => {
+  const cases = [
+    ["ansi", RTL_TEXTENCODING_MS_1252, "ANSI"],
+    ["MAC", RTL_TEXTENCODING_APPLE_ROMAN, "MAC"],
+    ["IBMPC_437", RTL_TEXTENCODING_IBM_437, "IBMPC_437"],
+    ["IBMPC", RTL_TEXTENCODING_IBM_850, "IBMPC_850"],
+    ["IBMPC_850", RTL_TEXTENCODING_IBM_850, "IBMPC_850"],
+    ["IBMPC_860", RTL_TEXTENCODING_IBM_860, "IBMPC_860"],
+    ["IBMPC_861", RTL_TEXTENCODING_IBM_861, "IBMPC_861"],
+    ["IBMPC_863", RTL_TEXTENCODING_IBM_863, "IBMPC_863"],
+    ["IBMPC_865", RTL_TEXTENCODING_IBM_865, "IBMPC_865"],
+    ["UTF8", RTL_TEXTENCODING_UTF8, "76"],
+    ["unknown", RTL_TEXTENCODING_UTF8, "76"],
+  ] as const;
+  for (const [alias, encoding, canonical] of cases) {
+    const options = new ScAsciiOptions();
+    options.ReadFromString(`44,34,${alias}`);
+    expect(options.eCharSet, alias).toBe(encoding);
+    expect(options.WriteToString().split(",")[2], alias).toBe(canonical);
+    const imported = new ScImportOptions(options.WriteToString());
+    expect(imported.eCharSet, alias).toBe(encoding);
+    expect(imported.BuildString().split(",")[2], alias).toBe(canonical);
+  }
+});
+
+it("keeps copied column metadata independent and preserves options on empty input", /** Checks original copy ownership and the source empty-string no-op. @returns Nothing. */ () => {
+  const source = new ScAsciiOptions();
+  source.ReadFromString(
+    "FIX,34,UTF-8,3,1/9/5/1,1033,true,false,false,true,true,0,false,true,false",
+  );
+  const copy = new ScAsciiOptions(source);
+  copy.ReadFromString("");
+  expect(copy).toEqual(source);
+  expect(copy.mvColStart).not.toBe(source.mvColStart);
+  expect(copy.mvColFormat).not.toBe(source.mvColFormat);
+  copy.mvColStart[0] = 20;
+  copy.mvColFormat[0] = 0;
+  expect(source.mvColStart).toEqual([1, 5]);
+  expect(source.mvColFormat).toEqual([9, 1]);
+  expect(source.WriteToString()).toBe(
+    "FIX,34,76,3,1/9/5/1,1033,true,false,false,true,true,0,false,true,false",
+  );
+});
+
+it("serializes empty separators, missing column formats and system charset explicitly", /** Checks persistent fallback values without changing the original column arrays. @returns Nothing. */ () => {
+  const options = new ScAsciiOptions();
+  options.aFieldSeps = "";
+  options.cTextSep = "";
+  options.bCharSetSystem = true;
+  options.mvColStart = [1];
+  const tokens = options.WriteToString().split(",");
+  expect(tokens.slice(0, 3)).toEqual(["0", "0", ScGlobal.GetCharsetString(0)]);
+  expect(tokens[4]).toBe("1/0");
+  expect(options.mvColFormat).toEqual([]);
+  expect(ScAsciiOptions.DecodeSeps("44/MRG")).toBe(",");
+  expect(ScAsciiOptions.GetWeightedFieldSep("|:", false)).toBe("|");
+  expect(ScAsciiOptions.GetWeightedFieldSep("", false)).toBe("");
+  options.aFieldSeps = ";";
+  options.ReadFromString("DETECT,34,DETECT");
+  expect(options.aFieldSeps).toBe(";");
+  expect(options.eCharSet).toBe(RTL_TEXTENCODING_UTF8);
+});
 
 it("retains the native CSV defaults and 15-token option ordering", /** Checks retains the native CSV defaults and 15-token option ordering. @returns Test completion or assertion result. */ () => {
   const options = new ScAsciiOptions();
@@ -34,6 +108,19 @@ it("preserves legacy token defaults and weighted multi-separator selection", /**
   const exportOptions = new ScImportOptions(options.WriteToString());
   expect(exportOptions.nFieldSepCode).toBe(",");
   expect(exportOptions.bSaveAsShown).toBe(true);
+});
+
+it("retains unprovided quote and charset fields in the shortest legacy options", /** Checks one-token and two-token native formats while applying the legacy boolean defaults. @returns Nothing. */ () => {
+  const options = new ScAsciiOptions();
+  options.ReadFromString("44");
+  expect(options.aFieldSeps).toBe(",");
+  expect(options.cTextSep).toBe('"');
+  expect(options.eCharSet).toBe(RTL_TEXTENCODING_UTF8);
+  expect(options.bDetectSpecialNumber).toBe(true);
+  options.ReadFromString("59,39");
+  expect(options.aFieldSeps).toBe(";");
+  expect(options.cTextSep).toBe("'");
+  expect(options.eCharSet).toBe(RTL_TEXTENCODING_UTF8);
 });
 
 it("serializes each UTF-16 separator unit as source OUString indexing does", /** Checks serializes each UTF-16 separator unit as source OUString indexing does. @returns Test completion or assertion result. */ () => {

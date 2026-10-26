@@ -1,4 +1,4 @@
-/** @fileoverview Owning scalar/formula ScCellValue and borrowed scalar/formula/document ScRefCellValue families. Rich text remains unsupported. */
+/** @fileoverview Owning scalar, rich-text and formula ScCellValue snapshots and borrowed ScRefCellValue views. */
 import type { ScDocument } from "../../../inc/document";
 import type { ScAddress } from "../../../inc/address";
 import type { ScFormulaCell } from "../../../inc/formulacell";
@@ -120,7 +120,7 @@ export class ScCellValue {
     this.maData = value.maData;
     value.reset_to_empty();
   }
-  /** Original document commit copies owned content. The current kernel literal text setter implements native SetString/setTextInput's plain-text branch;rich text and number formats remain unsupported. @param rDoc - Destination document. @param rPos - Destination cell. @returns Nothing. */
+  /** Original document commit copies owned content, including independently cloned edit text and formulas. Number-format transport remains separate. @param rDoc - Destination document. @param rPos - Destination cell. @returns Nothing. */
   commit(rDoc: ScDocument, rPos: ScAddress): void {
     switch (this.getType()) {
       case CellType.CELLTYPE_STRING:

@@ -40,6 +40,26 @@ it("converts native digits, decimal, minus and CJK multipliers through the sourc
   expect(convert("二百三十", "zh", "CN")).toBe("230");
 });
 
+it("retains multiplier recursion, decimal punctuation and Chinese region gates", /** Checks canonical integer expansions and source punctuation lookahead through the real supplier. @returns Nothing. */ () => {
+  for (const [source, expected] of [
+    ["", ""],
+    ["十二", "12"],
+    ["百", "100"],
+    ["一万", "10000"],
+    ["一万零三", "10003"],
+    ["一万二千三百四十五", "12345"],
+    ["一亿二千万", "120000000"],
+    ["－１２，３４５．６", "-12,345.6"],
+    ["．X", "．X"],
+    ["−１２", "-12"],
+    ["負壱百", "-100"],
+  ] as const)
+    expect(convert(source, "ja", "JP"), source).toBe(expected);
+  for (const country of ["CN", "TW", "HK", "MO"])
+    expect(convert("１２３", "zh", country), country).toBe("123");
+  expect(convert("１２３", "zho", "CN")).toBe("１２３");
+});
+
 it("preserves the supplier's offset sequence for simple native digits", /** Checks preserves the supplier's offset sequence for simple native digits. @returns Test completion or assertion result. */ () => {
   const input = unicode("１２"),
     lang = unicode("ja"),

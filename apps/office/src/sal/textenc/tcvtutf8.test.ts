@@ -1,7 +1,47 @@
 /** @fileoverview Source-contract checks for the SAL UTF-8 decoder. */
 import { expect, it } from "vitest";
 import * as cvt from "../inc/rtl/textcvt.h";
-import { ImplConvertUtf8ToUnicode, ImplCreateUtf8ToUnicodeContext } from "./tcvtutf8";
+import {
+  ImplConvertUtf8ToUnicode,
+  ImplCreateUtf8ToUnicodeContext,
+  ImplResetUtf8ToUnicodeContext,
+} from "./tcvtutf8";
+
+it("resets an incomplete UTF-8 sequence before accepting a fresh signed stream", /** Checks streaming reset through conversion of an actual unfinished source prefix and subsequent BOM. @returns Nothing. */ () => {
+  const context = ImplCreateUtf8ToUnicodeContext();
+  const output = new Uint16Array(4);
+  const info: [number] = [0];
+  const consumed: [number] = [0];
+  expect(
+    ImplConvertUtf8ToUnicode(
+      null,
+      context,
+      Uint8Array.of(0xe2, 0x82),
+      2,
+      output,
+      4,
+      0,
+      info,
+      consumed,
+    ),
+  ).toBe(0);
+  expect(info[0]).toBe(cvt.RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL);
+  ImplResetUtf8ToUnicodeContext(context);
+  const written = ImplConvertUtf8ToUnicode(
+    null,
+    context,
+    Uint8Array.of(0xef, 0xbb, 0xbf, 0x41),
+    4,
+    output,
+    4,
+    cvt.RTL_TEXTTOUNICODE_FLAGS_GLOBAL_SIGNATURE,
+    info,
+    consumed,
+  );
+  expect([...output.subarray(0, written)]).toEqual([0x41]);
+  expect(info[0]).toBe(0);
+  expect(consumed[0]).toBe(4);
+});
 
 /** Converts one source chunk with the original destination and status outputs.
  * @param source - Encoded bytes.
@@ -101,4 +141,51 @@ it("applies the source invalid-input flags and Java UTF-8 variant", /** Checks m
     ImplConvertUtf8ToUnicode({}, null, Uint8Array.of(0xc0, 0x80), 2, destination, 2, 0, [0], [0]),
   ).toBe(1);
   expect(destination[0]).toBe(0);
+});
+
+it("retains native consumption at malformed-byte, flush and replacement-capacity boundaries", /** Checks obsolete five/six-byte leads, invalid standalone bytes and flushed partial sequences. @returns Nothing. */ () => {
+  for (const source of [[0x80], [0xfe], [0xfc, 0x80, 0x80, 0x80, 0x80, 0x80]]) {
+    expect(convert(source)).toEqual({
+      units: [0xfffd],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
+      consumed: source.length,
+    });
+  }
+  expect(
+    convert(
+      [0xe2, 0x41],
+      cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR | cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH,
+    ),
+  ).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+    consumed: 0,
+  });
+  expect(convert([0xff], cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+    consumed: 1,
+  });
+  expect(
+    convert([0xe2], cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR | cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH),
+  ).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+    consumed: 0,
+  });
+  expect(convert([0xff], 0, 0)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+    consumed: 0,
+  });
+  expect(convert([0xe2], cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH, 0)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+    consumed: 1,
+  });
+  const output = new Uint16Array(1);
+  const info: [number] = [0];
+  expect(ImplConvertUtf8ToUnicode({}, null, Uint8Array.of(0), 1, output, 1, 0, info, [0])).toBe(1);
+  expect(output[0]).toBe(0xfffd);
+  expect(info[0]).toBe(cvt.RTL_TEXTTOUNICODE_INFO_INVALID);
 });
