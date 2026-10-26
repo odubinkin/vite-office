@@ -1,0 +1,174 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "native-pseudo-character-run-body-binding",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "complete": false,
+  "sourceGitBlobs": {
+    "apps/office/src/sw/source/filter/ww8/writerwordglue.ts": "e73f027a7f61ae0d025e39e8690d72fa39a711b4",
+    "apps/office/src/sw/source/filter/inc/msfilter.ts": "e3187e52059df4bc0743467073fd30be3c6f9b16",
+    "apps/office/src/sw/source/filter/ww8/native-character-runs.test.ts": "5cfa90b3ac7eb09543b88ee3580c27cb7ca0e229",
+    "apps/office/src/tools/source/string/tenccvt.ts": "bf7f3d705659597dc3ef997a7dc3a07c13082c12",
+    "apps/office/src/tools/inc/tenccvt.ts": "7c2e0ae2488473aa95a53a6eaeb3db8f8ce526fa",
+    "scripts/check-module-boundaries.mjs": "7e8d3b2e4dfafd5de463f8df0498fab254788b89"
+  },
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 91,
+        "covered": 91,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 110,
+        "covered": 109,
+        "skipped": 0,
+        "pct": 99.09
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 51,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 94.11
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/inc/msfilter.ts": {
+      "lines": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 1,
+        "covered": 1,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 7,
+        "covered": 7,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/filter/ww8/writerwordglue.ts": {
+      "lines": {
+        "total": 74,
+        "covered": 74,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 87,
+        "covered": 86,
+        "skipped": 0,
+        "pct": 98.85
+      },
+      "branches": {
+        "total": 39,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 92.3
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/tools/source/string/tenccvt.ts": {
+      "lines": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "tests": {
+    "rangeAndBackendProfile": {
+      "files": 5,
+      "cases": 29,
+      "caseResult": "pass",
+      "coverageResult": "fail statements109/110 branches48/51, thresholds unchanged"
+    },
+    "wordFilterRegressions": {
+      "files": 11,
+      "cases": 127,
+      "result": "pass"
+    },
+    "moduleBoundaryTests": {
+      "files": 1,
+      "cases": 48,
+      "result": "pass"
+    }
+  },
+  "checks": {
+    "typecheck": "pass tools/office",
+    "buildAndStatic": "pass",
+    "scopedEslintAndPrettier": "pass",
+    "jsdoc": "pass3487",
+    "dependencies": "pass1491sources7530imports200edges",
+    "tree": "pass115required32retired",
+    "sourceProvenance": "pass1492modules",
+    "registry": "pass340capabilities34invariants3388records0semanticviolations",
+    "size": "pass3491files",
+    "routing": "pass",
+    "doctor": "0errors1preexisting-hook-warning"
+  },
+  "admission": [
+    "getPseudoCharRunsForDirection is a field-specific body binding, not an implementation of the upstream one-argument public API",
+    "actual native direction result is a required scalar input; no direction service or guessed fallback is fabricated",
+    "genuine existing script queries and default-mode ICU level buffer bind native service/allocation/run-table operations; other bidi modes and status/allocation APIs are not represented",
+    "native records and charset maps retain original field widths, aliases and first-script-only charset choice"
+  ],
+  "coverageGaps": [
+    "negative endOfScript guard",
+    "missing direction entry guard",
+    "missing script entry guard"
+  ],
+  "pending": [
+    "actual SwDoc.GetTextDirection/core layout query and native public wrapper",
+    "SwWW8AttrIter and real text/style/section/numbering traversal",
+    "full document import/loading and production DOCX/XLSX file UI/browser acceptance",
+    "previous RunText and MSWordStyles coverage gaps and whole-task verification"
+  ]
+}
