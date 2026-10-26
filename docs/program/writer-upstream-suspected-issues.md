@@ -1496,3 +1496,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `svtools/source/svrtf/svparser.cxx`, `SvParser::SetSrcEncoding`, accepts UCS2 in its outer condition but still resets the encoding to DONTKNOW when `rtl_createTextToUnicodeConverter` returns null. `sal/textenc/tables.cxx` has no UCS2 entry in its bounded descriptor table. The BOM-detection path in `GetNextChar` instead assigns UCS2 directly.
 - Observation: explicit encoding selection and BOM selection take different paths; the former can fall back to raw-byte reading while the latter reads UTF-16. This is a source-level trace, not a compiled desktop reproduction.
 - Preservation: keep the explicit setter's missing-converter fallback and the separate direct assignment during the source BOM probe.
+
+### WRITER157 — Invalid in-family character pool IDs retain their original identity
+
+- Source: pinned `sw/source/core/doc/DocumentStylePoolManager.cxx`, `GetFormatFromPool`, character-format branch.
+- Observation: the invalid-ID comment says to return the first format, but the code only substitutes its UI resource name. It still searches and creates using the original invalid pool ID. Repeated invalid IDs can therefore produce distinct owners sharing the first character format's UI name. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: retain the original invalid ID and name fallback independently; do not normalize the ID or deduplicate formats by name.

@@ -1,0 +1,132 @@
+[
+  {
+    "poolId": 1024,
+    "name": "Footnote Symbol",
+    "uiName": "Footnote Characters"
+  },
+  {
+    "poolId": 1025,
+    "name": "Page Number",
+    "uiName": "Page Number"
+  },
+  {
+    "poolId": 1026,
+    "name": "Caption characters",
+    "uiName": "Caption Characters"
+  },
+  {
+    "poolId": 1027,
+    "name": "Drop Caps",
+    "uiName": "Drop Caps"
+  },
+  {
+    "poolId": 1028,
+    "name": "Numbering Symbols",
+    "uiName": "Numbering Symbols"
+  },
+  {
+    "poolId": 1029,
+    "name": "Bullet Symbols",
+    "uiName": "Bullets"
+  },
+  {
+    "poolId": 1030,
+    "name": "Internet link",
+    "uiName": "Internet Link"
+  },
+  {
+    "poolId": 1031,
+    "name": "Visited Internet Link",
+    "uiName": "Visited Internet Link"
+  },
+  {
+    "poolId": 1032,
+    "name": "Placeholder",
+    "uiName": "Placeholder"
+  },
+  {
+    "poolId": 1033,
+    "name": "Index Link",
+    "uiName": "Index Link"
+  },
+  {
+    "poolId": 1034,
+    "name": "Endnote Symbol",
+    "uiName": "Endnote Characters"
+  },
+  {
+    "poolId": 1035,
+    "name": "Line numbering",
+    "uiName": "Line Numbering"
+  },
+  {
+    "poolId": 1036,
+    "name": "Main index entry",
+    "uiName": "Main Index Entry"
+  },
+  {
+    "poolId": 1037,
+    "name": "Footnote anchor",
+    "uiName": "Footnote Anchor"
+  },
+  {
+    "poolId": 1038,
+    "name": "Endnote anchor",
+    "uiName": "Endnote Anchor"
+  },
+  {
+    "poolId": 1039,
+    "name": "Rubies",
+    "uiName": "Rubies"
+  },
+  {
+    "poolId": 1040,
+    "name": "Vertical Numbering Symbols",
+    "uiName": "Vertical Numbering Symbols"
+  },
+  {
+    "poolId": 1074,
+    "name": "Emphasis",
+    "uiName": "Emphasis"
+  },
+  {
+    "poolId": 1075,
+    "name": "Citation",
+    "uiName": "Quotation"
+  },
+  {
+    "poolId": 1076,
+    "name": "Strong Emphasis",
+    "uiName": "Strong Emphasis"
+  },
+  {
+    "poolId": 1077,
+    "name": "Source Text",
+    "uiName": "Source Text"
+  },
+  {
+    "poolId": 1078,
+    "name": "Example",
+    "uiName": "Example"
+  },
+  {
+    "poolId": 1079,
+    "name": "User Entry",
+    "uiName": "User Entry"
+  },
+  {
+    "poolId": 1080,
+    "name": "Variable",
+    "uiName": "Variable"
+  },
+  {
+    "poolId": 1081,
+    "name": "Definition",
+    "uiName": "Definition"
+  },
+  {
+    "poolId": 1082,
+    "name": "Teletype",
+    "uiName": "Teletype"
+  }
+]

@@ -322,6 +322,9 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // Native number.cxx SwDefBulletConfig owns a vcl::Font value, without a device/browser adapter.
+  if (source === "sw/source/core/doc/number-bullet.ts" && target === "vcl/source/font/font")
+    return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.
   if (

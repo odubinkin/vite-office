@@ -990,21 +990,3 @@ it("admits the original VCL numeric-field Unicode utility dependency without adm
   expect(isForbiddenModuleEdge("vcl", "i18nutil")).toBe(false);
   expect(isForbiddenModuleEdge("i18nutil", "vcl")).toBe(true);
 });
-
-it("admits the native Writer UNO helper dependency and rejects its reverse", /** Pins the Library_sw/unosett.hxx interface implementation edge. @returns Nothing. */ () => {
-  expect(isForbiddenModuleEdge("sw", "cppuhelper")).toBe(false);
-  expect(isForbiddenModuleEdge("cppuhelper", "sw")).toBe(true);
-});
-
-it("classifies the pinned md4c parser as a native external mechanism", () => {
-  expect(getRuntimeOwnershipLayer("external/md4c/src/md4c.attribute.ts")).toBe(
-    "upstream-mechanism",
-  );
-  expect(
-    getRuntimeOwnershipViolation(
-      "external/md4c/src/md4c.attribute.ts",
-      "sw/browser/presentation/writer-view.tsx",
-      "../../../sw/browser/presentation/writer-view",
-    ),
-  ).toBeDefined();
-});

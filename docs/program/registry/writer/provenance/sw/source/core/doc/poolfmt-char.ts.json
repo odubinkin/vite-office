@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt-char.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt-char.ts",
+          "marker": "applyWriterCharacterStyleDefaults"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx",
+          "marker": "DocumentStylePoolManager::GetFormatFromPool"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+    "localSymbols": [
+      "applyWriterCharacterStyleDefaults"
+    ],
+    "upstreamSymbols": [
+      "DocumentStylePoolManager::GetFormatFromPool"
+    ],
+    "preservedResponsibilities": [
+      "Character pool default switch for all represented item families; rotation, case mapping and ruby emphasis families remain outside the current kernel."
+    ],
+    "omittedResponsibilities": [
+      "Full compiled Writer parity and unrepresented character families remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/poolfmt-char.ts",
+      "rationale": "Character pool default switch for all represented item families; rotation, case mapping and ruby emphasis families remain outside the current kernel.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

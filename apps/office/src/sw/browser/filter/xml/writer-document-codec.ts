@@ -1,4 +1,11 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import {
+  encodeCharacterStyles,
+  restoreCharacterStyles,
+  decodeCharacterStyleReference,
+  type WriterCharacterStyleRecord,
+} from "./writer-character-style-codec";
+import { encodeNumberFormat, type WriterNumberFormatRecord } from "./writer-number-format-codec";
 import { upgradeWriterWhichIds } from "./writer-which-id-migration";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import {
@@ -14,19 +21,8 @@ import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
 import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
 
-import {
-  SvxNumType,
-  createWriterNumFormat,
-  getWriterNumFormatBullet,
-  getWriterNumFormatKind,
-  SwNumRule,
-  SwNumRuleType,
-} from "../../../source/core/doc/number";
-import {
-  encodeFontMetadata,
-  restoreFontMetadata,
-  type FontMetadataRecord,
-} from "../../../../vcl/browser/font-metadata-codec";
+import { createWriterNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
+import { restoreFontMetadata } from "../../../../vcl/browser/font-metadata-codec";
 import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -56,7 +52,6 @@ import {
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
-import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import {
   RES_PARATR_OUTLINELEVEL,
   RES_BOX,
@@ -79,31 +74,6 @@ import {
   encodeSwFormatINetFormatRecord,
   type WriterInternetFormatRecord,
 } from "./item-codec";
-
-/** Primitive graph record for one numbering level. */
-interface WriterNumberFormatRecord {
-  readonly bulletFont: string;
-  readonly bulletFontPresent?: boolean;
-  readonly bulletFontMetadata?: FontMetadataRecord;
-  readonly bulletGlyph?: number;
-  readonly showSymbol?: boolean;
-  readonly numberingType?: "arabic" | "char-special" | "none";
-  readonly bulletChar?: string;
-  readonly firstLineIndent: number;
-  readonly indentAt: number;
-  readonly includeUpperLevels: number;
-  readonly kind: Exclude<WriterParagraphListKind, "none">;
-  readonly labelFollowedBy: "listtab" | "nothing" | "space";
-  readonly listTabPosition: number;
-  readonly positionAndSpaceMode: "label-alignment" | "label-width-and-position";
-  readonly absLSpace?: number;
-  readonly firstLineOffset?: number;
-  readonly charTextDistance?: number;
-  readonly listFormat?: string;
-  readonly prefix: string;
-  readonly start: number;
-  readonly suffix: string;
-}
 
 /** Native scalar rule state transported independently of copy-constructor policy. */
 interface WriterNumberRuleScalarState {
@@ -361,6 +331,7 @@ export interface WriterDocumentRecord {
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
+  readonly characterFormats?: readonly WriterCharacterStyleRecord[];
   readonly pageDescriptors: readonly Readonly<{
     followName: string;
     value: WriterPageDescriptorValue;
@@ -421,6 +392,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
+    characterFormats: encodeCharacterStyles(document),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
@@ -449,39 +421,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
             _,
             level,
           ) => {
-            const format = rule.Get(level);
-            const font = format.GetBulletFont();
-            return {
-              ...format.GetPositionProperties(),
-              bulletFont: font?.GetFamilyName() ?? "",
-              ...(font === undefined
-                ? {}
-                : {
-                    bulletFontMetadata: encodeFontMetadata(font),
-                  }),
-              numberingType:
-                format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
-                  ? "none"
-                  : format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
-                    ? "char-special"
-                    : "arabic",
-              bulletFontPresent: format.GetBulletFont() !== undefined,
-              bulletGlyph: format.GetBulletChar(),
-              showSymbol: format.IsShowSymbol(),
-              bulletChar:
-                format.GetBulletChar() <= 0x10ffff ? getWriterNumFormatBullet(format) : "",
-              firstLineIndent: format.GetFirstLineIndent(),
-              indentAt: format.GetIndentAt(),
-              includeUpperLevels: format.GetIncludeUpperLevels(),
-              ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
-              kind: getWriterNumFormatKind(format),
-              labelFollowedBy: format.GetLabelFollowedBy(),
-              listTabPosition: format.GetListtabPos(),
-              positionAndSpaceMode: format.GetPositionAndSpaceMode(),
-              prefix: format.GetPrefix(),
-              start: format.GetStart(),
-              suffix: format.GetSuffix(),
-            };
+            return encodeNumberFormat(document, rule.Get(level));
           },
         ),
         listId: rule.GetDefaultListId(),
@@ -669,6 +609,7 @@ export function* decodeWriterDocumentSteps(
       settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
         getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
     document.GetDocumentSettingManager().SetValues(settings);
+    restoreCharacterStyles(document, record.characterFormats);
     if (record.textFormatCollections[0]?.id !== "default")
       throw new Error("Stored Writer style is invalid.");
     for (const style of record.textFormatCollections) {
@@ -687,6 +628,9 @@ export function* decodeWriterDocumentSteps(
       else if (style.outlineAssignment === true && !factoryAssignment)
         collection.AssignToListLevelOfOutlineStyle(0);
       collection.SetFormatName(style.name);
+      if (!Number.isInteger(style.poolId) || style.poolId < 0 || style.poolId > 65535)
+        throw new Error("Stored Writer paragraph style pool identity is invalid.");
+      collection.SetPoolFormatId(style.poolId);
       collection.ResetAllFormatAttr();
       decodeSfxItemSet(collection.GetAttrSet(), style.items);
       if (
@@ -766,6 +710,7 @@ export function* decodeWriterDocumentSteps(
           start: format.start,
           suffix: format.suffix,
         });
+        decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
         if (format.bulletFontPresent === true) {

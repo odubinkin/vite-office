@@ -211,3 +211,16 @@ surrogate, out-of-range and five-byte sequences. Tests retain native grouping,
 BOM preservation and the actual written UTF-16 length. This closes the decoder
 shortcut used by Markdown callback text/attributes; it does not certify other
 string conversion branches or the remaining writer-format matrix rows.
+
+Character-format prerequisites now include the native common-format UNKNOWN pool
+identity, exact normal/HTML character pool IDs and distinct UI/programmatic names,
+represented pool default items, shipped default-bullet fields and real numbering
+SwClient registration. Browser graph transport preserves style identity, duplicate
+names, derivation, direct items and numbering references. Number-label projection
+applies the represented character-style overlay in native order after paragraph
+resets and before an explicit bullet face. The table insertion body now resides
+in its native ndtbl owner. These are prerequisites: ranged character-style hints,
+HTML/CSS document reading and the remaining filter matrix are still open. Dynamic
+ConfigItem subscriptions and unrepresented rotation/case-map/ruby-emphasis items
+are not simulated by the shipped-resource binding. WRITER157 records the invalid
+character-pool identity fallback.

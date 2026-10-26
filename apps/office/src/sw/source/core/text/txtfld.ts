@@ -40,7 +40,7 @@ export interface SwNumberPortionFont {
   readonly color: string;
 }
 
-/** Resolves the represented font-construction branch of SwTextFormatter::NewNumberPortion; character style, paragraph-mark and redline overlays remain unrepresented. @param node - Original paragraph-property owner. @returns Immutable font values for a text number/bullet portion. */
+/** Resolves the represented font-construction branch of SwTextFormatter::NewNumberPortion; paragraph-mark and redline overlays remain unrepresented. @param node - Original paragraph-property owner. @returns Immutable font values for a text number/bullet portion. */
 export function resolveSwNumberPortionFont(
   node: SwTextNode,
 ): Readonly<SwNumberPortionFont> | undefined {
@@ -54,37 +54,53 @@ export function resolveSwNumberPortionFont(
     .GetDoc()
     .GetDocumentSettingManager()
     .get("DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT");
-  const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
+  const style = format.GetCharFormat()?.GetAttrSet();
+  const font = (style?.GetItemIfSet(RES_CHRATR_FONT) ??
+    node.GetAttr(RES_CHRATR_FONT)) as SvxFontItem;
+  /** Native SetDiffFnt overlays explicit character-style items after paragraph resets. @param which - Native WhichId. @param resetItem - Optional reset value. @returns Effective item. */
+  const effective = (which: number, resetItem?: ReturnType<SwTextNode["GetAttr"]>) =>
+    style?.GetItemIfSet(which) ?? resetItem ?? node.GetAttr(which);
   const bulletFont = bullet ? format.GetBulletFont() : undefined;
   const generic = bulletFont === undefined ? getFontFamilyGeneric(font.GetFamily()) : undefined;
   return Object.freeze({
     familyName: bulletFont === undefined ? font.GetFamilyName() : bulletFont.GetFamilyName(),
     ...(generic === undefined ? {} : { genericFamily: generic }),
-    heightTwips: (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight(),
-    weight:
-      bullet && reset
-        ? FontWeight.WEIGHT_NORMAL
-        : (node.GetAttr(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight(),
-    posture:
-      bullet && reset
-        ? FontItalic.ITALIC_NONE
-        : (node.GetAttr(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
-    underline: reset
-      ? FontLineStyle.LINESTYLE_NONE
-      : (node.GetAttr(RES_CHRATR_UNDERLINE) as SvxUnderlineItem).GetLineStyle(),
-    ...((node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetBoolValue()
-      ? { strikeout: (node.GetAttr(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetStrikeout() }
+    heightTwips: (effective(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight(),
+    weight: (
+      effective(
+        RES_CHRATR_WEIGHT,
+        bullet && reset
+          ? new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT)
+          : undefined,
+      ) as SvxWeightItem
+    ).GetWeight(),
+    posture: (
+      effective(
+        RES_CHRATR_POSTURE,
+        bullet && reset
+          ? new SvxPostureItem(FontItalic.ITALIC_NONE, RES_CHRATR_POSTURE)
+          : undefined,
+      ) as SvxPostureItem
+    ).GetPosture(),
+    underline: (
+      effective(
+        RES_CHRATR_UNDERLINE,
+        reset
+          ? new SvxUnderlineItem(FontLineStyle.LINESTYLE_NONE, RES_CHRATR_UNDERLINE)
+          : undefined,
+      ) as SvxUnderlineItem
+    ).GetLineStyle(),
+    ...((effective(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetBoolValue()
+      ? { strikeout: (effective(RES_CHRATR_CROSSEDOUT) as SvxCrossedOutItem).GetStrikeout() }
       : {}),
-    ...((node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc() !== 0
+    ...((effective(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc() !== 0
       ? {
           escapement: Object.freeze({
-            offset: (node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc(),
-            height: (
-              node.GetAttr(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem
-            ).GetProportionalHeight(),
+            offset: (effective(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc(),
+            height: (effective(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetProportionalHeight(),
           }),
         }
       : {}),
-    color: writerTextColorValue(node.GetAttr(RES_CHRATR_COLOR) as SvxColorItem),
+    color: writerTextColorValue(effective(RES_CHRATR_COLOR) as SvxColorItem),
   });
 }

@@ -1,0 +1,11 @@
+{
+  "scope": "writer",
+  "capabilityCount": 235,
+  "moduleCount": 1277,
+  "invariantCount": 34,
+  "globalRecordCount": 3451,
+  "checkExitCode": 0,
+  "runtime": {
+    "semanticViolationCount": 0
+  }
+}

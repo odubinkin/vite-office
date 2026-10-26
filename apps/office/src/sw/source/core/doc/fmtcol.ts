@@ -14,6 +14,7 @@ import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import {
   WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
+  SwPoolFormatId,
   type WriterParagraphStyleDefinition,
   type WriterParagraphStyleGroup,
 } from "../../../inc/poolfmt";
@@ -52,11 +53,17 @@ export class SwTextFormatColl extends SwFormatColl {
     public readonly id: WriterParagraphStyle,
     name: string,
     parent?: SwTextFormatColl,
-    public readonly poolId = 0,
+    poolId: number = SwPoolFormatId.UNKNOWN,
     public readonly group: WriterParagraphStyleGroup = "text",
   ) {
     super(pool, name, parent);
     this.nextTextFormatColl = this;
+    this.SetPoolFormatId(poolId);
+  }
+
+  /** Existing browser readonly identity view delegates to the original shared format field. @returns Pool identity. */
+  public get poolId(): number {
+    return this.GetPoolFormatId();
   }
 
   /** Changes the follow-style collection. @param next - New follow style. @returns Nothing. */
