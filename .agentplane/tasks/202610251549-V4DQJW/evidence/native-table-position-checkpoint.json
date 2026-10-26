@@ -1,0 +1,73 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original TablePositionHandler default/attribute/output/equality and actual SvRef/SequenceAsHashMap/UNO lifetime;12 exact pinned generated resource IDs. Full table parsing/model/UI application is not claimed.",
+  "sourceBlobs": {
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "677da87ac017bd70db8f67decc5b1fb6174cd013",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "b165108eec2cb170333bf6bf4d4d5f4ca07413af",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "15ef750d4e9f6c0040c3615705ca92617e46e426",
+    "docs/program/writer-upstream-suspected-issues.md": "e10cafe0f28dbf338776c76bd8bc391f1cba2678",
+    "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.test.ts": "1dc4f14fd9dc5d429a51f307841a4aabeed62e8d",
+    "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts": "10f52f9a7a2c3d7682ee5e73cf4f892adeb07bcc",
+    "docs/program/registry/writer/capabilities/CAP-fcc6ceaf-fc9c-441c-8624-a74483fbf27e.json": "a480b1735ce441eb3bd0b3f8a6b9db1a5b7b022f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TablePositionHandler.ts.json": "5c72090983bac8e90a55a04888bb06ae6872c7ba",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TablePositionHandler.ts.json": "07800c786b963163082d87d52e33a6b11f993c2c"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts src/comphelper/source/misc/sequenceashashmap.test.ts --coverage.include=src/sw/source/writerfilter/dmapper/TablePositionHandler.ts --coverage.reportsDirectory=coverage/native-table-position --maxWorkers=2",
+      "result": "pass:263 related tests/22 files; whole new executable owner unchanged scoped100 S104/B48/F10/L90",
+      "perFile": {
+        "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts": {
+          "s": {
+            "covered": 104,
+            "total": 104
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          },
+          "b": {
+            "covered": 48,
+            "total": 48
+          }
+        }
+      }
+    },
+    "resourceIds": "pass:all consumed IDs compare against actual unchanged pinned resourceids.py/model.xml;12 newly consumed constants retain exact native numbers",
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production build, relative-resource and no-backend smoke)",
+    "eslint": "pass:three changed source/test/resource files max-warnings0",
+    "prettier": "pass:three changed source/test/resource files; docs/program intentionally ignored by existing configuration",
+    "dependencies": "pass:1528runtime sources/7785relative imports/205allowed edges; no new edge",
+    "jsdoc": "pass:3545authored source files",
+    "size": "pass:3549authored files; unchanged <1000hard limit",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:Writer2tests/1file, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "provenance": "pass:1529modules/1324mapped/178browser adaptations/27local infrastructure",
+    "registry": {
+      "moduleCount": 1529,
+      "capabilityCount": 345,
+      "invariantCount": 34,
+      "globalRecordCount": 3467
+    },
+    "doctor": "pass:0errors; existing managed hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "preservedFindings": [
+    "WRITER164:unknown anchors leave relation locals uninitialized; no repair default or native invalid-value/ABI claim.",
+    "WRITER165:equality ignores margins and overlap; equal handlers can produce different corresponding properties."
+  ],
+  "resolvedValidationFindings": [
+    "Initial test callers assumed OOXMLValue/OOXMLProperty expose dispose; existing resource values instead hold immutable host alternatives and expose no such method. Corrected test ownership to existing public contracts; actual returned OUString and UNO/handler owners still use explicit source destruction. No production value-owner substitution was introduced."
+  ],
+  "limitations": [
+    "All valid-input anchor relations/specs, defined defaults, signed/limited conversion, overlap omission and six-field equality are source-backed actual-owner tests. There is no complete compiled native TablePositionHandler differential capture or ported floating-table QA claim.",
+    "Invalid-anchor diagnostic invokes only public callbacks, traverses host uninitialized relation branches and inspects/asserts only independent initialized properties. Native indeterminate relation values, undefined behavior, physical bytes and ABI remain unverified. Coverage is host branch evidence, not certification of a defined native invalid-input result.",
+    "Release-build LoggedProperties forwarding binds to existing Properties callbacks and real SvRefBase; debug logging/physical virtual inheritance/thread/allocation-failure behavior remain unverified.",
+    "Actual CT_TblPPr XML factory admission, DomainMapperTableManager/TableManager/DomainMapperTableHandler table model application, complete DOCX/XLSX import/export and existing production desktop/mobile UI acceptance remain incomplete. No UI path changed in this prerequisite block.",
+    "Full suite not due under approved ten-task cadence. Prior unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 46
+revision: 47
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T21:01:47.496Z"
+doc_updated_at: "2026-10-26T21:09:13.564Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -204,6 +204,10 @@ sections:
     - Observation: SequenceAsHashMap prerequisite restores original Any/typed-sequence overload distinctions, actual Unicode key and Any ownership, partial mutation on errors, NamedValue generated values and output reuse of PropertyValue Handle/State. Initial compile/raw-compound/hash-test failures were resolved using existing C owners and actual RTL37 hash, with no guard changes.
       Impact: 81 related tests/15 files pass; both new executable owners unchanged scoped100 S165 B70 F38 L153. Typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
       Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-sequence-map-checkpoint.json. Preserve WRITER162/163 and CALC-302/303. Host unordered binding/physical ABI and compiled native whole-module parity remain unverified; unconsumed template/iterator/JSON families remain explicit omissions. TablePositionHandler/TableManager and full DOCX/XLSX model/export/UI work remains pending; task DOING and broad parity flags false.
+
+    - Observation: Floating-table positioning prerequisite adds original TablePositionHandler defaults/attributes/UNO output/equality, actual SvRef lifetime and12 exact generated resource IDs. WRITER164 records unrepaired invalid-anchor uninitialized relations; WRITER165 records equality ignoring margins and overlap.
+      Impact: 263 related tests/22 files pass; new owner unchanged scoped100 S104 B48 F10 L90. All consumed IDs match actual pinned generator. Typecheck/build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+      Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-table-position-checkpoint.json. Valid source defaults/specs/anchors and actual output lifetime are checked. Invalid-anchor host branch observation inspects only independent initialized properties and makes no native indeterminate-value/UB/ABI claim. Initial caller dispose assumptions were corrected to existing OOXML resource APIs. CT_TblPPr parser admission, actual table managers/model and complete DOCX/XLSX UI workflows remain pending; task DOING and broad parity flags false.
 id_source: "generated"
 ---
 ## Summary
@@ -384,3 +388,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: SequenceAsHashMap prerequisite restores original Any/typed-sequence overload distinctions, actual Unicode key and Any ownership, partial mutation on errors, NamedValue generated values and output reuse of PropertyValue Handle/State. Initial compile/raw-compound/hash-test failures were resolved using existing C owners and actual RTL37 hash, with no guard changes.
   Impact: 81 related tests/15 files pass; both new executable owners unchanged scoped100 S165 B70 F38 L153. Typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
   Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-sequence-map-checkpoint.json. Preserve WRITER162/163 and CALC-302/303. Host unordered binding/physical ABI and compiled native whole-module parity remain unverified; unconsumed template/iterator/JSON families remain explicit omissions. TablePositionHandler/TableManager and full DOCX/XLSX model/export/UI work remains pending; task DOING and broad parity flags false.
+
+- Observation: Floating-table positioning prerequisite adds original TablePositionHandler defaults/attributes/UNO output/equality, actual SvRef lifetime and12 exact generated resource IDs. WRITER164 records unrepaired invalid-anchor uninitialized relations; WRITER165 records equality ignoring margins and overlap.
+  Impact: 263 related tests/22 files pass; new owner unchanged scoped100 S104 B48 F10 L90. All consumed IDs match actual pinned generator. Typecheck/build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+  Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-table-position-checkpoint.json. Valid source defaults/specs/anchors and actual output lifetime are checked. Invalid-anchor host branch observation inspects only independent initialized properties and makes no native indeterminate-value/UB/ABI claim. Initial caller dispose assumptions were corrected to existing OOXML resource APIs. CT_TblPPr parser admission, actual table managers/model and complete DOCX/XLSX UI workflows remain pending; task DOING and broad parity flags false.
