@@ -1,0 +1,104 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original shared SequenceAsHashMap overload/reset/merge/extraction/lifetime and NamedValue generated compound binding, prerequisite for Writer table positioning and actual downstream UNO consumers. Full format/model/UI integration is not claimed.",
+  "sourceBlobs": {
+    "docs/program/calc-upstream-suspected-issues.md": "cd44874e97ca6b056cffcab612be09cd565b259d",
+    "docs/program/writer-upstream-suspected-issues.md": "762d10583959e6c0d9e51eeca8b4f62f33e46507",
+    "apps/office/src/comphelper/source/misc/sequenceashashmap.test.ts": "25ada325b3c1676b7a987e286988cd75573f9526",
+    "apps/office/src/comphelper/source/misc/sequenceashashmap.ts": "e7d46242d649e1c14b95b68417e93536c3b93e29",
+    "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts": "b318f73eb96d84f5db492db8f53164e5cd6c895a",
+    "docs/program/registry/shared/capabilities/CAP-34803de3-61a5-4ecb-b79c-457948e23768.json": "175231c7b1a657ebcced80a1d9bac48dc1b2df45",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/sequenceashashmap.ts.json": "f5d909f335279d1f2804fa4ad37ab985228a39f3",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/NamedValue.ts.json": "6230af71d9d691eb46bb568ad695337c6d7e00a5",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/sequenceashashmap.ts.json": "3231a4947086cb97f20a65609badda1f705f7a75",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/NamedValue.ts.json": "c1ad6f28ff864b6e1d8ded34b9f620c698d42962"
+  },
+  "upstream": {
+    "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "blobs": {
+      "include/comphelper/sequenceashashmap.hxx": "60e0d21fcd0e939408670c160be39c52782411f9",
+      "comphelper/source/misc/sequenceashashmap.cxx": "7c3c99016912079c57142a751294a8b37286a5b5",
+      "udkapi/com/sun/star/beans/NamedValue.idl": "cd1b6aefb06b78e74e8280cc6b8619a7be857c8f"
+    },
+    "evidence": "Source-backed local owner tests, not compiled native SequenceAsHashMap differential execution or ported downstream QA."
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/comphelper/ src/udkapi/com/sun/star/beans/ src/cppu/inc/com/sun/star/uno/ src/cppuhelper/source/native-weak-object.test.ts --coverage.include=src/comphelper/source/misc/sequenceashashmap.ts --coverage.include=src/udkapi/com/sun/star/beans/NamedValue.ts --coverage.reportsDirectory=coverage/native-sequence-map --maxWorkers=2",
+      "result": "pass:81 tests/15 files, both new executable owners unchanged scoped100",
+      "statements": "165/165",
+      "branches": "70/70",
+      "functions": "38/38",
+      "lines": "153/153",
+      "perFile": {
+        "apps/office/src/comphelper/source/misc/sequenceashashmap.ts": {
+          "s": {
+            "covered": 142,
+            "total": 142
+          },
+          "f": {
+            "covered": 27,
+            "total": 27
+          },
+          "b": {
+            "covered": 60,
+            "total": 60
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts": {
+          "s": {
+            "covered": 23,
+            "total": 23
+          },
+          "f": {
+            "covered": 11,
+            "total": 11
+          },
+          "b": {
+            "covered": 10,
+            "total": 10
+          }
+        }
+      }
+    },
+    "typecheck": "pass:npm run typecheck (tools and app); final source rechecked",
+    "production": "pass:npm run test:static (production compilation/build and relative-resource/no-backend smoke)",
+    "eslint": "pass:three new source/test files, max-warnings0",
+    "prettier": "pass:three new source/test files; docs/program intentionally ignored by existing configuration",
+    "dependencies": "pass:1527 runtime sources/7772 relative imports/205 allowed edges; no new edge",
+    "jsdoc": "pass:3543 authored source files",
+    "size": "pass:3547 authored files; all new source/test modules below500 lines and unchanged <1000 hard limit",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "resources": "pass:Writer2resource tests/1file, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "provenance": "pass:1528modules/1323mapped/178browser adaptations/27local infrastructure",
+    "registry": {
+      "moduleCount": 1528,
+      "capabilityCount": 344,
+      "invariantCount": 34,
+      "globalRecordCount": 3464
+    },
+    "doctor": "pass:0errors; pre-existing managed hook-shim readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "preservedFindings": [
+    "WRITER162/CALC-302:typed sequences clear and accept empty fields, Any element sequences merge/reject/retain earlier writes; outer Any rejects Sequence<Any>.",
+    "WRITER163/CALC-303:output assignment retains existing PropertyValue Handle/State, unlike freshly allocated output."
+  ],
+  "resolvedValidationFindings": [
+    "Initial typecheck exposed the existing const-only OUString borrowed view and original rtl_uString header location; output now assigns the actual field cell through original rtl_uString_assign.",
+    "Initial actual Sequence output exposed C compound Any cells without class prototypes; assignments now invoke the actual shared uno_type_any_assign C owner with original acquire/release callbacks. Any element extraction borrows the existing public method body over the actual C fields without a copied value or alternate provider.",
+    "The initial hash-collision test incorrectly assumed multiplier31. The original RTL hash uses37; actual Aa and B< keys provide equal hashes with different Unicode content, preserving hash-then-string comparison without private state mutation.",
+    "Typed input names borrow the actual existing OUString cell view rather than introducing an extra acquired field projection."
+  ],
+  "limitations": [
+    "Host Map binds unspecified unordered key lookup/iteration with exact UTF16 code units and actual owning pairs; native bucket layout/reserve/iteration order, allocation-failure traces, physical ABI and threads are unverified.",
+    "Native end/erase(iterator), implicit map copy assignment and unconsumed unpack/default template specializations remain unported. The implemented signed32 specialization retains default initialization and original return-default behavior.",
+    "JSON/reflection helpers declared by separate original headers and merely co-located in sequenceashashmap.cxx remain unported; no substitute reflection provider is introduced.",
+    "No complete native SequenceAsHashMap compiler capture is claimed. The referenced unowriter test is an unported downstream map consumer; local tests use actual shared native-derived owners and weak component lifetime.",
+    "Actual TablePositionHandler/TableManager/DomainMapperTableManager, concrete Writer text range/model application and full Writer DOCX/Calc XLSX import/export/production desktop/mobile UI acceptance remain incomplete. No UI changed in this block.",
+    "Full suite not due under approved ten-task cadence. Earlier unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

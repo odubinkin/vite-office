@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 45
+revision: 46
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T20:50:38.440Z"
+doc_updated_at: "2026-10-26T21:01:47.496Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -200,6 +200,10 @@ sections:
     - Observation: Native table data checkpoint: CellData/RowData/TableData now use actual UNO Reference and tools SvRef owners; required complete text/component SDK contracts and EventObject compound ownership are present. Initial SDK provenance basename-only validation failed and was resolved with actual declared method symbols; all guards remain unchanged.
       Impact: 50 focused tests/12 files cover ten owners at unchanged scoped100 (S314 B116 F105 L295); 12 intrusive-reference tests/2 files cover SvRef at scoped100; 237 Writer regressions/19 files pass. Native original normal and ASan/UBSan vector stream has17 observations; all five captures match,15 source hashes and14 commands exit0. Typecheck/build/static, lint/format, dependencies/resources/docs/size/tree/provenance/registry and routing pass. Doctor retains one existing hook readiness warning.
       Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-table-data-checkpoint.json. Preserve WRITER161 start-only validity and native temporary destruction; no end/returned-pointer repair. Source-backed TableData is not claimed as native full differential execution. Full TableManager/DomainMapperTableManager, concrete Writer range services and DOCX/XLSX model/export/UI workflows remain incomplete; task remains DOING with broad parity flags false. Full suite is not due under approved cadence.
+
+    - Observation: SequenceAsHashMap prerequisite restores original Any/typed-sequence overload distinctions, actual Unicode key and Any ownership, partial mutation on errors, NamedValue generated values and output reuse of PropertyValue Handle/State. Initial compile/raw-compound/hash-test failures were resolved using existing C owners and actual RTL37 hash, with no guard changes.
+      Impact: 81 related tests/15 files pass; both new executable owners unchanged scoped100 S165 B70 F38 L153. Typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+      Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-sequence-map-checkpoint.json. Preserve WRITER162/163 and CALC-302/303. Host unordered binding/physical ABI and compiled native whole-module parity remain unverified; unconsumed template/iterator/JSON families remain explicit omissions. TablePositionHandler/TableManager and full DOCX/XLSX model/export/UI work remains pending; task DOING and broad parity flags false.
 id_source: "generated"
 ---
 ## Summary
@@ -376,3 +380,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native table data checkpoint: CellData/RowData/TableData now use actual UNO Reference and tools SvRef owners; required complete text/component SDK contracts and EventObject compound ownership are present. Initial SDK provenance basename-only validation failed and was resolved with actual declared method symbols; all guards remain unchanged.
   Impact: 50 focused tests/12 files cover ten owners at unchanged scoped100 (S314 B116 F105 L295); 12 intrusive-reference tests/2 files cover SvRef at scoped100; 237 Writer regressions/19 files pass. Native original normal and ASan/UBSan vector stream has17 observations; all five captures match,15 source hashes and14 commands exit0. Typecheck/build/static, lint/format, dependencies/resources/docs/size/tree/provenance/registry and routing pass. Doctor retains one existing hook readiness warning.
   Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-table-data-checkpoint.json. Preserve WRITER161 start-only validity and native temporary destruction; no end/returned-pointer repair. Source-backed TableData is not claimed as native full differential execution. Full TableManager/DomainMapperTableManager, concrete Writer range services and DOCX/XLSX model/export/UI workflows remain incomplete; task remains DOING with broad parity flags false. Full suite is not due under approved cadence.
+
+- Observation: SequenceAsHashMap prerequisite restores original Any/typed-sequence overload distinctions, actual Unicode key and Any ownership, partial mutation on errors, NamedValue generated values and output reuse of PropertyValue Handle/State. Initial compile/raw-compound/hash-test failures were resolved using existing C owners and actual RTL37 hash, with no guard changes.
+  Impact: 81 related tests/15 files pass; both new executable owners unchanged scoped100 S165 B70 F38 L153. Typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+  Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-sequence-map-checkpoint.json. Preserve WRITER162/163 and CALC-302/303. Host unordered binding/physical ABI and compiled native whole-module parity remain unverified; unconsumed template/iterator/JSON families remain explicit omissions. TablePositionHandler/TableManager and full DOCX/XLSX model/export/UI work remains pending; task DOING and broad parity flags false.
