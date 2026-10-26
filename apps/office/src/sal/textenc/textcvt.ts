@@ -1,4 +1,4 @@
-/** @fileoverview Missing-converter fallback from sal/textenc/textcvt.cxx. */
+/** @fileoverview Converter dispatch and missing-converter fallback from sal/textenc/textcvt.cxx. */
 import * as cvt from "../inc/rtl/textcvt.h";
 import type { rtl_TextEncoding } from "../inc/rtl/textenc";
 import { getTextToUnicodeData } from "./tables";
@@ -7,9 +7,14 @@ import * as utf7 from "./tcvtutf7";
 import * as iscii from "./convertisciidevangari";
 import * as jp from "./convertiso2022jp";
 import * as kr from "./convertiso2022kr";
-import { ImplSymbolToUnicode } from "./tcvtbyte";
-import { ImplDBCSToUnicode, ImplEUCJPToUnicode } from "./tcvtmb";
-import { convertCharToUnicode } from "./convertsimple.hxx";
+import { ImplSymbolToUnicode, ImplUnicodeToSymbol } from "./tcvtbyte";
+import {
+  ImplDBCSToUnicode,
+  ImplEUCJPToUnicode,
+  ImplUnicodeToDBCS,
+  ImplUnicodeToEUCJP,
+} from "./tcvtmb";
+import { convertCharToUnicode, convertUnicodeToChar } from "./convertsimple.hxx";
 
 /** Preserves the pinned byte-to-U+00xx fallback when SAL has no converter.
  * @param source - Borrowed source bytes.
@@ -109,6 +114,7 @@ const nativeTextConverters = new Map<number, rtl_TextToUnicodeConverter>();
 export function rtl_createTextToUnicodeConverter(
   encoding: rtl_TextEncoding,
 ): rtl_TextToUnicodeConverter {
+  encoding &= 0xffff;
   if (!nativeTextConverters.has(encoding))
     nativeTextConverters.set(encoding, getTextToUnicodeData(encoding) ?? null);
   return nativeTextConverters.get(encoding) as rtl_TextToUnicodeConverter;
@@ -311,6 +317,9 @@ export function rtl_convertTextToUnicode(
         consumed,
       );
     case "single-byte":
+      // The source JIS X 0201 descriptor has no forward callback; do not substitute a decoder.
+      if (converter.textToUnicode === null)
+        throw new TypeError("Native text-to-Unicode callback is null.");
       return convertCharToUnicode(
         converter.data,
         context,
@@ -318,6 +327,258 @@ export function rtl_convertTextToUnicode(
         sourceBytes,
         destination,
         destinationChars,
+        flags,
+        status,
+        consumed,
+      );
+  }
+}
+
+/** Both native directions expose the same static ImplTextConverter descriptor. */
+export type rtl_UnicodeToTextConverter = rtl_TextToUnicodeConverter;
+/** Native opaque reverse context includes the pointer-one stateless sentinel. */
+export type rtl_UnicodeToTextContext = unknown;
+/** Native factory returns the same descriptor address for both directions. @param encoding - Unsigned native encoding ID. @returns Static descriptor or null. */
+export function rtl_createUnicodeToTextConverter(
+  encoding: rtl_TextEncoding,
+): rtl_UnicodeToTextConverter {
+  return rtl_createTextToUnicodeConverter(encoding);
+}
+/** Static descriptor destruction has no side effects. @param converter - Descriptor. @returns Nothing. */
+export function rtl_destroyUnicodeToTextConverter(converter: rtl_UnicodeToTextConverter): void {
+  void converter;
+}
+/** Creates the original reverse context or pointer-one sentinel. @param converter - Descriptor. @returns Matching source state. */
+export function rtl_createUnicodeToTextContext(
+  converter: rtl_UnicodeToTextConverter,
+): rtl_UnicodeToTextContext {
+  if (converter === null) return null;
+  switch (converter.kind) {
+    case "utf8":
+      return utf8.ImplCreateUnicodeToUtf8Context();
+    case "utf7":
+      return utf7.ImplUTF7CreateUnicodeToTextContext();
+    case "iscii":
+      return iscii.ImplCreateUnicodeToIsciiDevanagariContext();
+    case "iso2022jp":
+      return jp.ImplCreateUnicodeToIso2022JpContext();
+    case "iso2022kr":
+      return kr.ImplCreateUnicodeToIso2022KrContext();
+    default:
+      return 1;
+  }
+}
+/** Resets the original contextual owner when the native guards permit it. @param converter - Descriptor. @param context - Matching opaque state. @returns Nothing. */
+export function rtl_resetUnicodeToTextContext(
+  converter: rtl_UnicodeToTextConverter,
+  context: rtl_UnicodeToTextContext,
+): void {
+  if (converter === null || !context) return;
+  switch (converter.kind) {
+    case "utf8":
+      utf8.ImplResetUnicodeToUtf8Context(context as utf8.ImplUnicodeToUtf8Context);
+      break;
+    case "utf7":
+      utf7.ImplUTF7ResetUnicodeToTextContext(context as utf7.ImplUTF7FromUCContextData);
+      break;
+    case "iscii":
+      iscii.ImplResetUnicodeToIsciiDevanagariContext(
+        context as iscii.UnicodeToIsciiDevanagariContext,
+      );
+      break;
+    case "iso2022jp":
+      jp.ImplResetUnicodeToIso2022JpContext(context as jp.ImplUnicodeToIso2022JpContext);
+      break;
+    case "iso2022kr":
+      kr.ImplResetUnicodeToIso2022KrContext(context as kr.ImplUnicodeToIso2022KrContext);
+      break;
+  }
+}
+/** Releases native contextual owners through JavaScript ownership; the source callbacks have no further side effects. @param converter - Descriptor. @param context - Matching source state. @returns Nothing. */
+export function rtl_destroyUnicodeToTextContext(
+  converter: rtl_UnicodeToTextConverter,
+  context: rtl_UnicodeToTextContext,
+): void {
+  if (converter === null || !context) return;
+  switch (converter.kind) {
+    case "utf7":
+      utf7.ImplUTF7DestroyUnicodeToTextContext(context as utf7.ImplUTF7FromUCContextData);
+      break;
+    case "iscii":
+      iscii.ImplDestroyUnicodeToIsciiDevanagariContext(
+        context as iscii.UnicodeToIsciiDevanagariContext,
+      );
+      break;
+    case "iso2022jp":
+      jp.ImplDestroyUnicodeToIso2022JpContext(context as jp.ImplUnicodeToIso2022JpContext);
+      break;
+    case "iso2022kr":
+      kr.ImplDestroyUnicodeToIso2022KrContext(context as kr.ImplUnicodeToIso2022KrContext);
+      break;
+  }
+}
+/** Original reverse callback dispatch, assertion flag domain and missing-descriptor fallback.
+ * @param converter - Static descriptor.
+ * @param context - Optional native state.
+ * @param source - UTF-16 units.
+ * @param sourceChars - Input size.
+ * @param destination - Output bytes.
+ * @param destinationBytes - Capacity.
+ * @param flags - Native reverse flags.
+ * @param info - Optional status pointer.
+ * @param converted - Optional consumed pointer.
+ * @returns Bytes written.
+ */
+export function rtl_convertUnicodeToText(
+  converter: rtl_UnicodeToTextConverter,
+  context: rtl_UnicodeToTextContext,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number] | null,
+  converted: [number] | null,
+): number {
+  const status = info ?? [0],
+    consumed = converted ?? [0];
+  if (
+    (flags & cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK) >
+      cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT ||
+    (flags & cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_MASK) >
+      cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT ||
+    (flags &
+      ~(
+        cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_MASK |
+        cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_MASK |
+        cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
+        cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACESTR |
+        cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
+        cvt.RTL_UNICODETOTEXT_FLAGS_NONSPACING_IGNORE |
+        cvt.RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE |
+        cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE |
+        cvt.RTL_UNICODETOTEXT_FLAGS_NOCOMPOSITE |
+        cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH |
+        cvt.RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE
+      )) !==
+      0
+  )
+    throw new Error("Invalid native Unicode-to-text conversion flags.");
+  if (converter === null)
+    return ImplUnicodeToDummy(
+      source,
+      sourceChars,
+      destination,
+      destinationBytes,
+      flags,
+      status,
+      consumed,
+    );
+  switch (converter.kind) {
+    case "utf8":
+      return utf8.ImplConvertUnicodeToUtf8(
+        null,
+        context as utf8.ImplUnicodeToUtf8Context | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "utf7":
+      return utf7.ImplUnicodeToUTF7(
+        null,
+        context as utf7.ImplUTF7FromUCContextData | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "iscii":
+      return iscii.ImplConvertUnicodeToIsciiDevanagari(
+        null,
+        context as iscii.UnicodeToIsciiDevanagariContext,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "iso2022jp":
+      return jp.ImplConvertUnicodeToIso2022Jp(
+        null,
+        context as jp.ImplUnicodeToIso2022JpContext | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "iso2022kr":
+      return kr.ImplConvertUnicodeToIso2022Kr(
+        null,
+        context as kr.ImplUnicodeToIso2022KrContext | null,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "symbol":
+      return ImplUnicodeToSymbol(
+        null,
+        context,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "eucjp":
+      return ImplUnicodeToEUCJP(
+        converter.data,
+        context,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "dbcs":
+      return ImplUnicodeToDBCS(
+        converter.data,
+        context,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
+        flags,
+        status,
+        consumed,
+      );
+    case "single-byte":
+      return convertUnicodeToChar(
+        converter.data,
+        context,
+        source,
+        sourceChars,
+        destination,
+        destinationBytes,
         flags,
         status,
         consumed,

@@ -1649,9 +1649,24 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/convertisciidevangari.cxx`, `UnicodeToIsciiDevanagari::convert`, final pending-surrogate branch.
 - Observation: when a high surrogate remains and neither ERROR nor DESTBUFFERTOSMALL is set, the source sets SRCBUFFERTOSMALL if FLUSH is present and leaves the surrogate in the context. Without FLUSH it invokes the invalid-input helper, which may replace the surrogate and clear state. The isolated unchanged-source ASan/UBSan witness confirms these branches, status, output and source counts.
 - Preservation: retain the source condition and state transitions. Do not reverse the FLUSH test to follow another codec's streaming behavior.
+- Additional evidence: the original ISO-2022-JP/KR reverse owners use the same final pending-high-surrogate FLUSH condition as ISCII. The isolated ASan/UBSan ISO witness verifies these branches and final shift/designation state for mixed and saved-context vectors. The port retains the condition and any separate final shift reset.
+
 
 ### WRITER181 — ISCII context requirements differ from the generic string wrapper's null context
 
 - Source: pinned `sal/textenc/convertisciidevangari.cxx`, `ImplConvertUnicodeToIsciiDevanagari`, casts its context and unconditionally calls its member function; that function reads `m_cHighSurrogate`. Pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, calls `rtl_convertUnicodeToText` with a null context. The ISCII descriptor in `convertisciidevangari.tab` supplies this context-dependent reverse callback.
 - Observation: the generic string-wrapper route provides no ISCII context despite the converter's unconditional object access. This is a source-level contract finding; null-object execution is undefined and is excluded from the native witness. Direct reverse-call tests use the actual context constructor and reset contract.
 - Preservation: keep the converter's context ownership requirement. Do not manufacture a context inside its callback or silently substitute another encoding to conceal the source contract mismatch.
+
+
+### WRITER182 — JIS X 0201 exposes an encoding descriptor with a null forward callback
+
+- Source: pinned `sal/textenc/tcvtjp6.tab`, `aImplJISX0201TextEncodingData`, sets the text-to-Unicode function pointer to nullptr while retaining `convertUnicodeToChar` as its reverse function. `rtl_createTextToUnicodeConverter` in `sal/textenc/textcvt.cxx` returns that descriptor, and `rtl_convertTextToUnicode` unconditionally invokes the descriptor's forward callback.
+- Observation: an existing encoding descriptor does not guarantee a callable forward converter. Invoking the null callback is undefined native execution, not the missing-descriptor dummy path. This is a source-level contract finding; no null callback is executed by the native witnesses.
+- Preservation: retain descriptor identity, reverse conversion, stateless context and explicit null forward callback. The JavaScript callback binding raises a TypeError at invocation instead of supplying a decoder or routing to the missing-descriptor fallback; this does not claim a portable C++ undefined-execution outcome.
+
+### WRITER183 — JIS X 0201 maps U+FF65 to ASCII Z and lacks yen/overline mappings
+
+- Source: pinned `sal/textenc/tcvtjp6.tab`, `aImplJISX0201Tab`, contains 0x5A at offset 4 of the U+FF61..U+FF9F range, between 0xA4 and 0xA6. Its byte-converter descriptor supplies this range and no extra Unicode-to-byte mapping table.
+- Observation: the original data maps U+FF65 to byte 5A; yen U+00A5 and overline U+203E have no mapping and follow the undefined-input policy. This is source table/algorithm evidence; the generic JIS factory is not independently compiled by the ISO-2022 witness.
+- Preservation: retain the captured original table and missing aliases. Do not replace 0x5A with 0xA5 or add familiar JIS Roman mappings to make a conventional encoder result.

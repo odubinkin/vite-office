@@ -32,7 +32,8 @@
       "Selects the pinned ISCII Devanagari contextual converter for Writer RTF code page 57002.",
       "Selects the pinned UTF-7 converter path for RTF code page 65000.",
       "Selects pinned ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220 and 50225.",
-      "Lookup of 55 native single-byte converter descriptors, generated from the authenticated LibreOffice descriptor capture already used by SAL converter tests."
+      "Lookup of 55 native single-byte converter descriptors, generated from the authenticated LibreOffice descriptor capture already used by SAL converter tests.",
+      "The duplicate 47-entry handwritten single-byte switch is replaced by the existing pinned 55-descriptor capture, making all represented reverse data reachable through the shared factory. JIS X0201 records its actual null text-to-Unicode callback separately from absent encoding data. Native unsigned16 lookup binding is preserved. Other native registry encoding families and native function-pointer ABI remain unported."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice.",
@@ -51,6 +52,10 @@
         {
           "path": "apps/office/src/sal/textenc/tables.ts",
           "marker": "Impl_getByteConvertData"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.factory.test.ts",
+          "marker": "binds every represented single-byte descriptor"
         }
       ],
       "upstream": [

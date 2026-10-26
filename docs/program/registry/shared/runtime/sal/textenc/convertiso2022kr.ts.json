@@ -18,16 +18,25 @@
       "evidence": [
         "apps/office/src/sal/textenc/convertiso2022kr.ts#ImplConvertIso2022KrToUnicode",
         "vendor/libreoffice-reference/sal/textenc/convertiso2022kr.cxx#ImplConvertIso2022KrToUnicode",
-        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes KS X 1001"
+        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes KS X 1001",
+        "apps/office/src/sal/textenc/convertiso2022.encode.test.ts",
+        "apps/office/src/sal/textenc/convertiso2022.encode.native.json",
+        "scripts/sal-iso2022-native-probe.mjs"
       ],
-      "justification": "Pinned ISO-2022-KR text-to-Unicode states, KS X 1001 table lookup, context, incomplete-input behavior and SAL bad-input actions. Reverse conversion is outside RTF import. Compiled upstream differential remains unverified.",
+      "justification": "Pinned original forward state machine remains preserved. Original reverse ISO-2022-KR mapping, streaming state, partial designation/shift writes, original error replacement prefix, surrogate bookkeeping and final FLUSH conditions. An isolated unchanged-source ASan/UBSan witness verifies bytes, status, consumed units and final context against actual JIS/KS tables and original shared helpers; known out-of-array source reads are classified before execution. Full SAL ABI and string-wrapper/Writer integration remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplConvertIso2022KrToUnicode",
         "ImplCreateIso2022KrToUnicodeContext",
         "ImplResetIso2022KrToUnicodeContext",
         "ImplDestroyIso2022KrToUnicodeContext",
-        "ImplIso2022KrToUnicodeContext"
+        "ImplIso2022KrToUnicodeContext",
+        "ImplConvertUnicodeToIso2022Kr",
+        "ImplCreateUnicodeToIso2022KrContext",
+        "ImplResetUnicodeToIso2022KrContext",
+        "ImplDestroyUnicodeToIso2022KrContext",
+        "ImplUnicodeToIso2022KrContext",
+        "ImplUnicodeToIso2022KrSet"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/convertiso2022kr.cxx",
@@ -36,7 +45,13 @@
         "ImplCreateIso2022KrToUnicodeContext",
         "ImplResetIso2022KrToUnicodeContext",
         "ImplDestroyIso2022KrToUnicodeContext",
-        "ImplIso2022KrToUnicodeContext"
+        "ImplIso2022KrToUnicodeContext",
+        "ImplConvertUnicodeToIso2022Kr",
+        "ImplCreateUnicodeToIso2022KrContext",
+        "ImplResetUnicodeToIso2022KrContext",
+        "ImplDestroyUnicodeToIso2022KrContext",
+        "ImplUnicodeToIso2022KrContext",
+        "ImplUnicodeToIso2022KrSet"
       ]
     }
   }

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 92
+revision: 93
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-26T22:41:37.555Z"
+doc_updated_at: "2026-10-26T22:52:24.979Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -231,6 +231,22 @@ sections:
     Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
     Result: pass. Evidence: both inventories report semanticViolationCount 0; source/boundary/size gates pass. Semantic admission remains unverified outside the exact witness scope.
     Observation: initial explicit plus-capacity test used numeric status 2; source reverse DESTBUFFERTOSMALL is 4. Corrected the test to use its native named constant; exhaustive native digests already agreed. First ISCII probe compilation rejected streaming char16_t directly to std::cout in C++20; the driver now serializes state through unsigned casts without changing converter bodies. Probe flag combinations now resolve source named constants rather than numeric guesses. No task scope or verification criteria changed.
+
+    ### Native ISO-2022 reverse owners and shared reverse factory checkpoint
+    Implemented original ISO-2022-JP/KR reverse state/context/reset/flush/error-prefix algorithms. Added the native reverse descriptor/context/convert APIs, preserving shared static forward/reverse handle identity, unsigned16 IDs, source assertion flag masks, null descriptors, stateless pointer-one contexts and actual contextual callbacks. Replaced the duplicate 47-case handwritten byte-data switch with the existing 55-descriptor native capture. The source JIS X0201 null forward callback is represented explicitly; invoking it raises a JS TypeError rather than supplying a fake forward decoder or dummy fallback for an existing descriptor. Current represented families only; full SAL registry/ABI and checked string-wrapper/RTF font integration remain open. Existing Markdown WIP is excluded from the checkpoint.
+    Command: node scripts/sal-iso2022-native-probe.mjs
+    Result: pass. Evidence: unchanged original JP/KR owners and source aggregates/tables, original shared error/classification bodies and selected original character/integer declarations compile and execute under ASan/UBSan. 64 BMP digests cover 4193792 defined cases plus 1890 mixed/saved/null-context vectors. Sixteen original KSC table unit ranges classified and excluded before native lookup; no portable bytes assigned to native undefined reads. The witness does not execute a full SAL factory or Writer UI.
+    Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts src/svtools/source/svrtf/svparser.test.ts src/svtools/source/svhtml
+    Result: pass. Evidence: 275 tests / 21 files, including compiled ISO digests/vectors, generic reverse byte dispatch for each family, 55 single-byte descriptors, shared identity, partial JIS continuation, reset/sentinel/null guards, source flag admission and JIS callback absence.
+    Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.native-character.test.ts
+    Result: pass. Evidence: 207 tests / 7 files.
+    Command: npx eslint apps/office/src/sal/textenc/convertiso2022jp.ts apps/office/src/sal/textenc/convertiso2022kr.ts apps/office/src/sal/textenc/convertiso2022.encode.test.ts apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/textcvt.ts apps/office/src/sal/textenc/textcvt.factory.test.ts scripts/sal-iso2022-native-probe.mjs; npm run typecheck --workspace @vite-office/office
+    Result: pass. Scope: codec/factory checkpoint.
+    Command: npx prettier --check apps/office/src/sal/textenc/convertiso2022jp.ts apps/office/src/sal/textenc/convertiso2022kr.ts apps/office/src/sal/textenc/convertiso2022.encode.test.ts apps/office/src/sal/textenc/convertiso2022.encode.native.json apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/textcvt.ts apps/office/src/sal/textenc/textcvt.factory.test.ts scripts/sal-iso2022-native-probe.mjs; git diff --check
+    Result: pass. Scope: current checkpoint.
+    Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
+    Result: pass. Evidence: both semanticViolationCount values are 0; source/boundary/size checks pass. Native pointer/allocation ABI and broader service admission remain unverified.
+    Observation: initial factory test expected conventional JIS yen/overline aliases. Original tcvtjp6.tab supplies neither and maps U+FF65 to 0x5A; corrected the test to the source table and retained the source behavior, documented in WRITER182-183. WRITER180 now records equivalent ISO pending-surrogate FLUSH evidence. A follow-up source search returned no checked string-wrapper implementation, and an earlier guessed data filename was absent; the authoritative route was recomputed before further mutation. No scope or verification criteria changed.
 id_source: "generated"
 ---
 ## Summary
@@ -440,3 +456,19 @@ Result: pass. Scope: current checkpoint.
 Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
 Result: pass. Evidence: both inventories report semanticViolationCount 0; source/boundary/size gates pass. Semantic admission remains unverified outside the exact witness scope.
 Observation: initial explicit plus-capacity test used numeric status 2; source reverse DESTBUFFERTOSMALL is 4. Corrected the test to use its native named constant; exhaustive native digests already agreed. First ISCII probe compilation rejected streaming char16_t directly to std::cout in C++20; the driver now serializes state through unsigned casts without changing converter bodies. Probe flag combinations now resolve source named constants rather than numeric guesses. No task scope or verification criteria changed.
+
+### Native ISO-2022 reverse owners and shared reverse factory checkpoint
+Implemented original ISO-2022-JP/KR reverse state/context/reset/flush/error-prefix algorithms. Added the native reverse descriptor/context/convert APIs, preserving shared static forward/reverse handle identity, unsigned16 IDs, source assertion flag masks, null descriptors, stateless pointer-one contexts and actual contextual callbacks. Replaced the duplicate 47-case handwritten byte-data switch with the existing 55-descriptor native capture. The source JIS X0201 null forward callback is represented explicitly; invoking it raises a JS TypeError rather than supplying a fake forward decoder or dummy fallback for an existing descriptor. Current represented families only; full SAL registry/ABI and checked string-wrapper/RTF font integration remain open. Existing Markdown WIP is excluded from the checkpoint.
+Command: node scripts/sal-iso2022-native-probe.mjs
+Result: pass. Evidence: unchanged original JP/KR owners and source aggregates/tables, original shared error/classification bodies and selected original character/integer declarations compile and execute under ASan/UBSan. 64 BMP digests cover 4193792 defined cases plus 1890 mixed/saved/null-context vectors. Sixteen original KSC table unit ranges classified and excluded before native lookup; no portable bytes assigned to native undefined reads. The witness does not execute a full SAL factory or Writer UI.
+Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts src/svtools/source/svrtf/svparser.test.ts src/svtools/source/svhtml
+Result: pass. Evidence: 275 tests / 21 files, including compiled ISO digests/vectors, generic reverse byte dispatch for each family, 55 single-byte descriptors, shared identity, partial JIS continuation, reset/sentinel/null guards, source flag admission and JIS callback absence.
+Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.native-character.test.ts
+Result: pass. Evidence: 207 tests / 7 files.
+Command: npx eslint apps/office/src/sal/textenc/convertiso2022jp.ts apps/office/src/sal/textenc/convertiso2022kr.ts apps/office/src/sal/textenc/convertiso2022.encode.test.ts apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/textcvt.ts apps/office/src/sal/textenc/textcvt.factory.test.ts scripts/sal-iso2022-native-probe.mjs; npm run typecheck --workspace @vite-office/office
+Result: pass. Scope: codec/factory checkpoint.
+Command: npx prettier --check apps/office/src/sal/textenc/convertiso2022jp.ts apps/office/src/sal/textenc/convertiso2022kr.ts apps/office/src/sal/textenc/convertiso2022.encode.test.ts apps/office/src/sal/textenc/convertiso2022.encode.native.json apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/textcvt.ts apps/office/src/sal/textenc/textcvt.factory.test.ts scripts/sal-iso2022-native-probe.mjs; git diff --check
+Result: pass. Scope: current checkpoint.
+Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
+Result: pass. Evidence: both semanticViolationCount values are 0; source/boundary/size checks pass. Native pointer/allocation ABI and broader service admission remain unverified.
+Observation: initial factory test expected conventional JIS yen/overline aliases. Original tcvtjp6.tab supplies neither and maps U+FF65 to 0x5A; corrected the test to the source table and retained the source behavior, documented in WRITER182-183. WRITER180 now records equivalent ISO pending-surrogate FLUSH evidence. A follow-up source search returned no checked string-wrapper implementation, and an earlier guessed data filename was absent; the authoritative route was recomputed before further mutation. No scope or verification criteria changed.

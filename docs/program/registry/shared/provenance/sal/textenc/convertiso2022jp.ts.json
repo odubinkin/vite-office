@@ -11,20 +11,31 @@
       "ImplCreateIso2022JpToUnicodeContext",
       "ImplResetIso2022JpToUnicodeContext",
       "ImplDestroyIso2022JpToUnicodeContext",
-      "ImplIso2022JpToUnicodeContext"
+      "ImplIso2022JpToUnicodeContext",
+      "ImplConvertUnicodeToIso2022Jp",
+      "ImplCreateUnicodeToIso2022JpContext",
+      "ImplResetUnicodeToIso2022JpContext",
+      "ImplDestroyUnicodeToIso2022JpContext",
+      "ImplUnicodeToIso2022JpContext"
     ],
     "upstreamSymbols": [
       "ImplConvertIso2022JpToUnicode",
       "ImplCreateIso2022JpToUnicodeContext",
       "ImplResetIso2022JpToUnicodeContext",
       "ImplDestroyIso2022JpToUnicodeContext",
-      "ImplIso2022JpToUnicodeContext"
+      "ImplIso2022JpToUnicodeContext",
+      "ImplConvertUnicodeToIso2022Jp",
+      "ImplCreateUnicodeToIso2022JpContext",
+      "ImplResetUnicodeToIso2022JpContext",
+      "ImplDestroyUnicodeToIso2022JpContext",
+      "ImplUnicodeToIso2022JpContext"
     ],
     "preservedResponsibilities": [
-      "Pinned ISO-2022-JP text-to-Unicode state transitions, JIS X 0208 lookup, streaming context and SAL bad-input handling for RTF code page 50220."
+      "Pinned ISO-2022-JP text-to-Unicode state transitions, JIS X 0208 lookup, streaming context and SAL bad-input handling for RTF code page 50220.",
+      "Original reverse ISO-2022-JP mapping, streaming state, partial designation/shift writes, original error replacement prefix, surrogate bookkeeping and final FLUSH conditions. An isolated unchanged-source ASan/UBSan witness verifies bytes, status, consumed units and final context against actual JIS/KS tables and original shared helpers; known out-of-array source reads are classified before execution. Full SAL ABI and string-wrapper/Writer integration remain unverified."
     ],
     "omittedResponsibilities": [
-      "Unicode-to-ISO-2022-JP reverse conversion is not used by the current Writer RTF import path."
+      "Full SAL ABI and complete format orchestration remain unverified; byte certification excludes original undefined table reads."
     ],
     "evidence": {
       "local": [
@@ -35,12 +46,28 @@
         {
           "path": "apps/office/src/sal/textenc/convertiso2022.test.ts",
           "marker": "decodes JIS Roman"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022jp.ts",
+          "marker": "ImplConvertUnicodeToIso2022Jp"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.encode.test.ts",
+          "marker": "matches original BMP outputs"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.encode.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022jp.cxx",
           "marker": "ImplConvertIso2022JpToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022jp.cxx",
+          "marker": "ImplConvertUnicodeToIso2022Jp"
         }
       ]
     }

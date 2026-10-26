@@ -22,19 +22,44 @@
         "apps/office/src/sal/textenc/textcvt.ts",
         "apps/office/src/sal/rtl/ustring-convert.test.ts",
         "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
-        "apps/office/src/svtools/source/svrtf/svparser.test.ts"
+        "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+        "apps/office/src/sal/textenc/textcvt.factory.test.ts"
       ],
-      "justification": "Both pinned sal/textenc/textcvt.cxx fallback procedures preserve the original buffer, source span, output capacity, flags, status and consumed-counter contracts. Writer and Calc consume the same original signatures; no convenience overload is added. Focused tests cover unsigned byte widening, low-byte truncation, both early error masks, destination exhaustion, explicit spans and empty input. Full rtl converter lifecycle and compiled upstream differential remain unverified. Native text-to-Unicode descriptor/context API now dispatches the existing source converters, retaining null handles, the pointer-one stateless sentinel, real UTF8/UTF7/ISCII/ISO-2022 contexts, reset behavior, native flag admission and missing-converter fallback. Four direct HTML/SvParser tests and one factory/streaming dispatch test exercise the new consumer. Context storage is released by GC; this is not native pointer/allocation ABI parity.",
+      "justification": "Both pinned sal/textenc/textcvt.cxx fallback procedures preserve the original buffer, source span, output capacity, flags, status and consumed-counter contracts. Writer and Calc consume the same original signatures; no convenience overload is added. Focused tests cover unsigned byte widening, low-byte truncation, both early error masks, destination exhaustion, explicit spans and empty input. Full rtl converter lifecycle and compiled upstream differential remain unverified. Native text-to-Unicode descriptor/context API now dispatches the existing source converters, retaining null handles, the pointer-one stateless sentinel, real UTF8/UTF7/ISCII/ISO-2022 contexts, reset behavior, native flag admission and missing-converter fallback. Four direct HTML/SvParser tests and one factory/streaming dispatch test exercise the new consumer. Context storage is released by GC; this is not native pointer/allocation ABI parity. Native reverse converter/context APIs now route every represented descriptor family to actual Unicode-to-text owners, preserving shared forward/reverse descriptor identity, unsigned16 IDs, null handles, stateless pointer-one context, original reverse flag assertion domain, reset/destruction guards and missing-converter fallback. JIS X0201 retains its source null forward callback; the JS binding throws instead of substituting a forward service for an undefined native call. Context memory uses GC and does not certify native pointer/allocation ABI. Generic checked string wrappers and unrepresented encoding families remain open.",
       "knownViolations": [],
       "localSymbols": [
         "ImplDummyToUnicode",
-        "ImplUnicodeToDummy"
+        "ImplUnicodeToDummy",
+        "rtl_createTextToUnicodeConverter",
+        "rtl_destroyTextToUnicodeConverter",
+        "rtl_createTextToUnicodeContext",
+        "rtl_resetTextToUnicodeContext",
+        "rtl_destroyTextToUnicodeContext",
+        "rtl_createUnicodeToTextConverter",
+        "rtl_destroyUnicodeToTextConverter",
+        "rtl_createUnicodeToTextContext",
+        "rtl_resetUnicodeToTextContext",
+        "rtl_destroyUnicodeToTextContext",
+        "rtl_convertTextToUnicode",
+        "rtl_convertUnicodeToText"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/textcvt.cxx",
       "upstreamSymbols": [
         "ImplDummyToUnicode",
-        "ImplUnicodeToDummy"
+        "ImplUnicodeToDummy",
+        "rtl_createTextToUnicodeConverter",
+        "rtl_destroyTextToUnicodeConverter",
+        "rtl_createTextToUnicodeContext",
+        "rtl_resetTextToUnicodeContext",
+        "rtl_destroyTextToUnicodeContext",
+        "rtl_createUnicodeToTextConverter",
+        "rtl_destroyUnicodeToTextConverter",
+        "rtl_createUnicodeToTextContext",
+        "rtl_resetUnicodeToTextContext",
+        "rtl_destroyUnicodeToTextContext",
+        "rtl_convertTextToUnicode",
+        "rtl_convertUnicodeToText"
       ]
     }
   }
