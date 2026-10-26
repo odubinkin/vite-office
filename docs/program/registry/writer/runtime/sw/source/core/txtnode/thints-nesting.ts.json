@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+        "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx"
+      ],
+      "justification": "Original INET/INET four-pass nesting retains the asymmetric empty predicate, SPLIT_OTHER policy, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source. Ruby/meta/content-control/input-field/fieldmark owners are not represented by the current kernel. No stand-in hints or fieldmark breaks are synthesized; the mapped mechanism covers every registered actual nesting family. MAX_HINTS retains the source 64-bit size_t profile, beyond reachable JS-array counts.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TryInsertInternetNesting",
+        "MAX_HINTS"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/thints.cxx",
+      "upstreamSymbols": [
+        "SwpHints::TryInsertNesting",
+        "MakeTextAttrNesting"
+      ]
+    }
+  }
+}

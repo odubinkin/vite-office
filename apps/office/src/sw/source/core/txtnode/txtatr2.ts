@@ -6,7 +6,9 @@ import {
   type AttrSetChangeHint,
   type ObjectDyingHint,
 } from "../../../inc/hints";
-import type { LegacyModifyHint } from "../../../inc/calbck";
+import { SwClient, type SwModify, type LegacyModifyHint } from "../../../inc/calbck";
+import type { SwModelHint } from "../../../inc/hints";
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import {
   RES_UPDATEATTR_FMT_CHG,
   RES_UPDATEATTR_ATTRSET_CHG,
@@ -19,6 +21,64 @@ import { SwTextAttrEnd, SwTextAttrNesting } from "./txatbase";
 /** Concrete native internet attribute with locked nesting defaults and an item backlink. */
 export class SwTextINetFormat extends SwTextAttrNesting<SwFormatINetFormat> {
   private m_pTextNode: SwTextNode | undefined;
+  private readonly client = new InternetFormatClient(this);
+  private m_bVisited = false;
+  private m_bVisitedValid = false;
+  /** Original cache flag; it is not a persistent document property. @returns Visited cache. */
+  public IsVisited(): boolean {
+    return this.m_bVisited;
+  }
+  /** Original cache assignment. @param value - Cache. @returns Nothing. */
+  public SetVisited(value: boolean): void {
+    this.m_bVisited = value;
+  }
+  /** Original cache validity. @returns Whether cache was resolved. */
+  public IsVisitedValid(): boolean {
+    return this.m_bVisitedValid;
+  }
+  /** Original cache-validity assignment. @param value - Validity. @returns Nothing. */
+  public SetVisitedValid(value: boolean): void {
+    this.m_bVisitedValid = value;
+  }
+  /** Original insertion-time node/normal-pool-style initialization. @param node - Actual node. @returns Nothing. */
+  public InitINetFormat(node: SwTextNode): void {
+    this.ChgTextNode(node);
+    const format = node.GetDoc().GetCharFormatFromPool(SwPoolFormatId.CHR_INET_NORMAL);
+    if (format === undefined) throw new Error("Missing native internet pool format.");
+    format.Add(this.client);
+  }
+  /** Borrowed SwClient base query, represented by composition because JS has one class base. @returns Original style registration. */
+  public GetRegisteredIn(): SwModify | undefined {
+    return this.client.GetRegisteredIn();
+  }
+  /** Original SwClient base destruction/detach binding. @returns Nothing. */
+  public EndListeningAll(): void {
+    this.client.EndListeningAll();
+  }
+  /** Original represented SwClientNotify dispatch, with no invented URL-history provider. @param source - Actual registered source. @param hint - Actual source hint. @returns Nothing. */
+  public SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    void source;
+    let which: number;
+    switch (hint.kind) {
+      case "format-change":
+        which = RES_UPDATEATTR_FMT_CHG;
+        break;
+      case "attr-set-change":
+        which = RES_UPDATEATTR_ATTRSET_CHG;
+        break;
+      case "object-dying":
+        which = RES_UPDATEATTR_OBJECTDYING;
+        break;
+      case "legacy-modify":
+        which = hint.GetWhich();
+        break;
+      default:
+        return;
+    }
+    if (this.m_pTextNode === undefined) return;
+    const update = new SwUpdateAttr(this.GetStart(), this.GetEnd(), which);
+    this.m_pTextNode.TriggerNodeUpdate(new UpdateAttrHint(update, update));
+  }
 
   /** Returns the optional owning text node. @returns Native nullable node backlink. */
   public GetpTextNode(): SwTextNode | undefined {
@@ -106,3 +166,29 @@ export class SwTextCharFormat extends SwTextAttrEnd<SwFormatCharFormat> {
     return clone;
   }
 }
+
+/** JS binding of SwTextINetFormat's independent SwClient base; the callback borrows the actual attribute. */
+class InternetFormatClient extends SwClient {
+  private readonly owner: WeakRef<SwTextINetFormat>;
+  /** Binds native multiple inheritance without a second document/style graph. @param owner - Actual attribute. @returns Client base. */
+  public constructor(owner: SwTextINetFormat) {
+    super();
+    this.owner = new WeakRef(owner);
+    internetFormatFinalizers.register(owner, new WeakRef(this));
+  }
+  /** Original virtual dispatch; source SwTextINetFormat does not call the SwClient default handler. @param source - Original owner. @param hint - Original hint. @returns Nothing. */
+  protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
+    void source;
+    const owner = this.owner.deref();
+    if (owner === undefined) this.EndListeningAll();
+    else if (hint.kind === "model-transaction") {
+      // Existing browser batches are unpacked before the original native virtual filter.
+      for (const nested of hint.hints) owner.SwClientNotify(source, nested);
+    } else owner.SwClientNotify(source, hint);
+  }
+}
+/** Actual JS collection binds destruction of the borrowed native SwClient base; no refcount/provider is emulated. */
+const internetFormatFinalizers = new FinalizationRegistry<WeakRef<SwClient>>(
+  /** Releases the registered native base when its text attribute is unreachable. @param client - Borrowed native base. @returns Nothing. */
+  (client) => client.deref()?.Dispose(),
+);

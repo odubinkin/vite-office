@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+          "marker": "InsertTextNodeHint"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+          "marker": "Source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::InsertHint"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwpHints::TryInsertHint"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "localSymbols": [
+      "InsertTextNodeHint",
+      "TryInsertTextNodeHint",
+      "DestroyTextNodeAttribute"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::InsertHint",
+      "SwpHints::TryInsertHint"
+    ],
+    "preservedResponsibilities": [
+      "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner."
+    ],
+    "omittedResponsibilities": [
+      "Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner."
+    }
+  }
+}

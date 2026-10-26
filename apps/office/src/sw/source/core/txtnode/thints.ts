@@ -1,7 +1,7 @@
 /** @fileoverview Ports MakeTextAttr construction and represented GetParaAttr character queries for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
 import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 import { MergeTextHintPortions } from "./thints-merge";
-import { BuildTextHintPortions, CheckCharacterHintSortNumber } from "./thints-portions";
+import { InsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { CharFormat } from "../text/atrstck";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwTextNode } from "./ndtxt";
@@ -55,54 +55,22 @@ export function InsertTextNodeItem(
   end: number,
   mode: SetAttrMode,
 ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
-  assertTextRange(node.Len(), start, end);
-  const copyEmpty =
-    !(mode & SetAttrMode.NOHINTADJUST) && (mode & SetAttrMode.IS_COPY) !== 0 && start === end;
-  if (
-    !(mode & SetAttrMode.NOHINTADJUST) &&
-    !copyEmpty &&
-    !(attr instanceof SwFormatCharFormat) &&
-    !(attr instanceof SwFormatAutoFormat)
-  )
-    throw new Error("Writer InsertItem without NOHINTADJUST is not implemented.");
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END)
     throw new Error("Writer InsertItem requires a text-attribute item.");
   const hint = MakeTextAttr(node.GetDoc(), attr, start, end);
-  const hints = node.GetOrCreateSwpHints();
-  if (
-    copyEmpty &&
-    !(hint instanceof SwTextCharFormat) &&
-    !(hint.format instanceof SwFormatAutoFormat)
-  ) {
-    for (const previous of hints.entries()) {
-      if (previous.start !== start || previous.end !== end || previous.Which() !== hint.Which())
-        continue;
-      hints.DeleteAtPos(hints.entries().indexOf(previous));
-    }
-  }
-  if (
-    (hint instanceof SwTextCharFormat || hint.format instanceof SwFormatAutoFormat) &&
-    !(mode & SetAttrMode.NOHINTADJUST)
-  ) {
-    BuildTextHintPortions(hints, node, hint, mode);
-    if (start < end) hints.MergePortions(node);
-  } else {
-    if (hint instanceof SwTextCharFormat) CheckCharacterHintSortNumber(hints, hint);
-    hints.Insert(hint);
-    hints.NoteInHistory(hint, true);
-  }
-  node.GetDoc().NotifyModelChange({
-    kind: "attribute-set-changed",
-    nodeIndex: node.GetNodes().indexOfOrUndefined(node),
-  });
-  return hints.entries().includes(hint) ? hint : undefined;
+  const success = InsertTextNodeHint(node, hint, mode);
+  return success && node.GetpSwpHints()?.entries().includes(hint) ? hint : undefined;
 }
 
 /** Implements ClearSwpHintsArr for the two currently supported ranged families. @param node - Actual owner. @param deleteFields - Native field policy;unsupported field hints are absent. @returns Nothing. */
 export function ClearTextNodeHints(node: SwTextNode, deleteFields: boolean): void {
   void deleteFields;
   const map = node.GetpSwpHints();
-  while (map !== undefined && map.Count() > 0) map.DeleteAtPos(0);
+  while (map !== undefined && map.Count() > 0) {
+    const hint = map.Get(0);
+    map.DeleteAtPos(0);
+    DestroyTextNodeAttribute(hint);
+  }
 }
 
 /** Merges complete matching character/automatic portions, retaining original first owners and source format-ignore boundaries; INET and zero extents are excluded. @param hints - Actual maps. @returns Whether any second portion was removed. */
@@ -282,6 +250,7 @@ export function DeleteTextNodeAttributes(
       if (hint.GetEnd() === end) {
         const update = new SwUpdateAttr(start, end, which);
         hints.DeleteAtPos(index);
+        DestroyTextNodeAttribute(hint);
         node.CallSwClientNotify(new UpdateAttrHint(undefined, update));
       }
     }

@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import { InsertTextNodeHint } from "./thints-insert";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import { UpdateTextNodeReplacementIndices } from "./ndtxt-hints";
 import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
@@ -188,6 +189,14 @@ export class SwTextNode extends SwContentNode {
     mode = SetAttrMode.DEFAULT,
   ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
+  }
+
+  /** Original ownership-transfer insertion for represented native ranged families. @param hint - Actual detached attribute. @param mode - Native insertion flags. @returns Success independent of identity retention after merging. */
+  public InsertHint(
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    mode = SetAttrMode.DEFAULT,
+  ): boolean {
+    return InsertTextNodeHint(this, hint, mode);
   }
 
   /** Deletes represented same-family attributes with exact start/end, retaining the native forward-loop behavior. @param which - Native family. @param start - Exact start. @param end - Exact end. @returns Nothing. */

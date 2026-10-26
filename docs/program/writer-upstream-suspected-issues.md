@@ -1582,3 +1582,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::DeleteAttributes`; its preceding FIXME says that sort numbers for character formats are not respected.
 - Observation: after deleting an exact family/start/end match, the forward loop increments its index without compensating for the shifted array. With three same-span character-style hints, the first and third are deleted and the second remains. This is a source-level trace, not compiled Writer evidence.
 - Preservation: retain the exact forward traversal and family/range matching. Do not delete all equal-span character styles in one call or repair sort-number handling. Native new-attribute reset history continues to use this original owner.
+
+
+### WRITER171 — An empty hyperlink inside another hyperlink is removed by recursive repair
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::TryInsertNesting`, asymmetric `isNestedAny` and pass-four recursive insertion.
+- Observation: an empty new INET strictly inside an existing INET is initially inserted. Re-inserting the old right-hand fragment then treats that empty attribute as overwritten and destroys it. The original URL remains as two adjacent fragments; InsertHint returns success while InsertItem returns no surviving incoming pointer. Empty insertions at the old boundaries take a different path. This is a source-level trace, not compiled native evidence.
+- Preservation: retain insertion-before-repair order, the asymmetric boundary predicate and the original recursion. Do not force an empty incoming hyperlink to survive or merge the two original fragments.

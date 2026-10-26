@@ -370,7 +370,7 @@ describe("native delete attribute history", /** Registers history and actual she
     expect(atEnd.m_pHints).toBeUndefined();
     expect(owner.node.getHyperlinkAt(3)).toBeUndefined();
   });
-  it("reports unimplemented variants and skips non-text target nodes explicitly", /** Checks bounded contracts without certifying missing history families or BuildPortions. @returns Nothing. */ function boundsCase(): void {
+  it("retains native item ownership and skips non-text history targets", /** Checks bounded contracts without certifying missing history families or BuildPortions. @returns Nothing. */ function boundsCase(): void {
     const owner = fixture(),
       history = new SwHistory();
     history.CopyAttr(undefined, owner.node.GetIndex(), 0, 8, true);
@@ -382,10 +382,7 @@ describe("native delete attribute history", /** Registers history and actual she
     history.AddTextAttr(owner.attr, owner.node.GetIndex(), true);
     expect(history.at(0)).toBeInstanceOf(SwHistoryResetText);
     expect((history.at(0) as SwHistoryResetText).GetWhich()).toBe(owner.attr.Which());
-    expect(
-      /** Requests ordinary InsertItem without portions port. @returns Attribute that is not implemented. */ () =>
-        requireInsertedHint(owner.node.InsertItem(owner.item, 2, 4)),
-    ).toThrow("NOHINTADJUST");
+
     expect(
       /** Rejects character items at the native text-item boundary. @returns Nothing. */ () =>
         requireInsertedHint(owner.node.InsertItem(owner.node.GetAttr(15), 2, 4, undoMode)),

@@ -1,5 +1,6 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
 import { SwContentIndexUpdateMode } from "../bastyp/index";
+import { SwTextINetFormat } from "./txtatr2";
 import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -95,6 +96,9 @@ export function ReplaceTextNodeHints(
   next: SwpHints | undefined,
 ): SwpHints | undefined {
   if (previous === next) return next;
+  const retained = new Set(next?.entries() ?? []);
+  for (const hint of previous?.entries() ?? [])
+    if (!retained.has(hint) && hint instanceof SwTextINetFormat) hint.EndListeningAll();
   next?.BindToTextNode(node);
   previous?.BindToTextNode(undefined);
   return next;

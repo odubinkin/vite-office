@@ -27,7 +27,7 @@
         },
         {
           "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
-          "marker": "copyEmpty"
+          "marker": "InsertTextNodeHint"
         },
         {
           "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
@@ -40,6 +40,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-ranged-attribute-history.test.ts",
           "marker": "source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+          "marker": "Source"
         }
       ],
       "upstream": [
@@ -82,6 +86,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
           "marker": "SwTextNode::DeleteAttributes"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::InsertItem"
         }
       ]
     },
@@ -106,7 +114,8 @@
       "Iteration149 source-confirmed continued-input failure exposed raw empty-source hint concatenation after multi-paragraph deletion. Native CutImpl zero length calls CopyAttr, which inserts copied items at one boundary. Bounded AUTO equal-boundary automatic item merge and INET equal-empty overwrite now run through native InsertItem(IS_COPY); NOHINTADJUST priority and explicit nonempty-copy guard remain. Existing ndtxt-hints owns the split within1000-line node limit. Nonempty full CutImpl/BuildPortions and general nesting/layout/history lifetimes remain unverified.",
       "TaskN700C9 follow-up replaces display-stack state aggregation by consumed native GetParaAttr/GetPaMAttr ring/node traversal: default versus SET/INVALID, source partial-hint adjacency and collapsed DontExpand boundaries, original10000 limits and label skip. Complete-node edits use native direct character values with selective hint reset, registered SwRegHistory old/reset deltas and unchanged action preservation. Empty selected table cells and explicit marked zero-width attributes participate; zero-attribute Undo removes only the changed original family and retains adjacent values. Ordinary browser caret typing continues to use the existing native-item pending owner; full BreakIterator word/URL-expansion, general GetParaAttr character-style/merged/graphic/OLE services and complete document InsertItemSet history remain unverified. No status/default/classification promotion.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
-      "S3HW1E: Original represented DeleteAttributes exact-family/start/end traversal and its forward index after deletion, native old/new range notifications and empty-map release are retained. Source NOHINTADJUST insertion now explicitly records new-attribute reset history."
+      "S3HW1E: Original represented DeleteAttributes exact-family/start/end traversal and its forward index after deletion, native old/new range notifications and empty-map release are retained. Source NOHINTADJUST insertion now explicitly records new-attribute reset history.",
+      "S3HW1E removes the old default-INET insertion rejection and special empty-copy replacement shortcut. Original InsertItem now constructs once, calls node/native hint insertion and returns a pointer only while that actual identity survives. Source destruction of represented INET client bases follows clear and exact-deletion paths."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/thints.cxx",

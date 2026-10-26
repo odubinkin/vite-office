@@ -2,6 +2,8 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { TryInsertTextNodeHint } from "./thints-insert";
+import { TryInsertInternetNesting } from "./thints-nesting";
 import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
@@ -38,7 +40,7 @@ import {
   compareWhichStartPairs,
 } from "./ndhints-range";
 import { GetTextAttrAt } from "./ndtxt-attribute-query";
-import { GetTextAttrMode } from "../../../inc/swtypes";
+import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
 import {
   createSwFormatAutoFormat,
   projectWriterCharacterAttributes,
@@ -268,6 +270,19 @@ export class SwpHints {
         entry,
       ) => entry !== hint,
     );
+  }
+
+  /** Original TryInsertHint entrypoint at the actual map owner. @param hint - New attribute. @param node - Actual node. @param mode - Native flags. @returns Success. */
+  public TryInsertHint(
+    hint: RangedTextAttr,
+    node: SwTextNode,
+    mode = SetAttrMode.DEFAULT,
+  ): boolean {
+    return TryInsertTextNodeHint(this, hint, node, mode);
+  }
+  /** Original nesting entrypoint for the registered internet family. @param node - Actual node. @param hint - Initialized INET attribute. @returns Success. */
+  public TryInsertNesting(node: SwTextNode, hint: SwTextINetFormat): boolean {
+    return TryInsertInternetNesting(this, node, hint);
   }
 
   /** Merges registered automatic-style portions and normalizes native format-ignore boundaries. @param node - Native owning paragraph. @returns Whether merged. */
