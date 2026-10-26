@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+        "apps/office/src/external/icu/source/common/uloc.subtags.test.ts",
+        "scripts/icu-locale-subtags-native-probe.mjs",
+        "scripts/icu-locale-tables.mjs"
+      ],
+      "justification": "Original complete ulocimp_getSubtags ByteSink overload, with optional independent language/script/region/variant sinks and original end-pointer checkpoints. Explicit narrow-byte views retain embedded NUL, ASCII casing, two null-delimited ISO table sections, root/und stripping, exactly-four-letter scripts, permissive two/three-unit regions, 179-unit variant limit, append-before-error state and original va-posix scan. Data tables are extracted verbatim from pinned uloc.cpp with source hash and deterministic check script. The unchanged ICU78.3 internal API matches 676128 exact native cases over7043 spans, all32 nullable-output combinations and three incoming statuses. This is the actual internal parser prerequisite, not a replacement Locale owner, full normalization, public default/C-string API, BCP47 converter or calendar constructor. Native allocator/ABI/EBCDIC remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_getSubtags"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "ulocimp_getSubtags"
+      ]
+    }
+  }
+}

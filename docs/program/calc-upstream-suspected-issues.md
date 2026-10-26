@@ -4140,3 +4140,24 @@ Pinned ICU78.3 `source/common/ustrcase.cpp`, `_cmpFold`, rewinds `s1` when foldi
 ### CALC-319 — ICU calendar orphaning changes the zone without invalidating computed fields
 
 Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces `fZone` with a default-zone clone but leaves `fAreFieldsSet` unchanged. After computing UTC0 in Europe/Paris, switching the default to Etc/GMT+5 and orphaning the calendar zone returns the original Paris owner and exposes the new default zone, while the cached ZONE_OFFSET field remains3600000. Calling `setTimeZone` with a clone of the already-current zone then invalidates the fields and yields -18000000 for the same UTC time. Preserve orphaning versus adoption/setter invalidation boundaries; do not add an orphan invalidation. The unchanged native Calendar class and local owned-zone regression verify the stale-field result.
+
+### CALC-320 — ICU legacy variant parsing includes a final POSIX terminator
+
+- Upstream: `external/icu` ICU78.3 `source/common/uloc.cpp`, `_getVariant` separator branch.
+- Observation: its historical trailing-separator condition tests any final match of `.@_-`, including POSIX field terminators. Thus the explicit internal view `en_US_FOO.` yields variant `FOO.`, and `en_US_FOO@` yields `FOO@`; adding another byte after the terminator yields only `FOO`.
+- Suspected issue: the comment mentions trailing separators, but the same branch includes a trailing charset/keyword marker as variant content. This is an internal legacy parser observation, not a claim that these are valid fully normalized locale IDs.
+- Local behavior: preserved verbatim, including consumed-pointer checkpoints and incremental sink output. Covered by the unchanged ICU internal ByteSink witness in `scripts/icu-locale-subtags-native-probe.mjs` and source regression tests. No full Locale/BCP47 conversion behavior is inferred.
+
+### CALC-321 — ICU internal va-posix scan does not update the existing-variant flag
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getSubtags` extension loop.
+- Observation: each matched `-va-posix` appends `POSIX` but leaves `hasVariant` unchanged. The raw view `en-u-va-posix-va-posix` therefore yields `POSIXPOSIX`, while a preceding legacy variant causes separators before both additions.
+- Suspected issue: repeated extension matches are concatenated according to the original legacy-variant state rather than current sink content. A repeated Unicode key is not a valid BCP47 tag; this finding concerns the exposed internal parser and must not be generalized to the full language-tag conversion pipeline.
+- Local behavior: preserve the original append and end-pointer behavior without adding validation or deduplication. Verified against unchanged ICU78.3 by the native subtag probe.
+
+### CALC-322 — ICU keyword count guard precedes duplicate suppression
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getKeywords`.
+- Observation: the internal 25-key count guard runs before parsing or ignoring a duplicate. Exactly 25 unique pairs succeed; appending another already-seen key yields `U_INTERNAL_PROGRAM_ERROR` and no appended output. A trailing semicolon plus spaces still succeeds because the empty-input check runs first.
+- Suspected issue: an ignored duplicate can turn an otherwise valid maximum-size input into an internal error, although earlier duplicate entries do not contribute to the limit.
+- Local behavior: preserved without deduplication before the guard or a replacement error code. Covered by unchanged native keyword ByteSink comparisons and source regression tests. This concerns the internal legacy keyword-normalization operation; public keyword-value retrieval has separate validation behavior.

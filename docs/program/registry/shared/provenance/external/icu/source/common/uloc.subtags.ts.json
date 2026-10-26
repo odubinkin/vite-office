@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
+    "localSymbols": [
+      "ulocimp_getSubtags"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_getSubtags",
+      "_getLanguage",
+      "_getScript",
+      "_getRegion",
+      "_getVariant"
+    ],
+    "preservedResponsibilities": [
+      "Original complete ulocimp_getSubtags ByteSink overload, with optional independent language/script/region/variant sinks and original end-pointer checkpoints. Explicit narrow-byte views retain embedded NUL, ASCII casing, two null-delimited ISO table sections, root/und stripping, exactly-four-letter scripts, permissive two/three-unit regions, 179-unit variant limit, append-before-error state and original va-posix scan. Data tables are extracted verbatim from pinned uloc.cpp with source hash and deterministic check script. The unchanged ICU78.3 internal API matches 676128 exact native cases over7043 spans, all32 nullable-output combinations and three incoming statuses. This is the actual internal parser prerequisite, not a replacement Locale owner, full normalization, public default/C-string API, BCP47 converter or calendar constructor. Native allocator/ABI/EBCDIC remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Locale normalization/default construction and resource fallback remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+          "marker": "ulocimp_getSubtags"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.subtags.test.ts",
+          "marker": "va-posix"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc.cpp",
+          "marker": "ulocimp_getSubtags"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+      "rationale": "Original large uloc.cpp implementation is split by source responsibility to keep the repository file-size budget while preserving the exact internal parser contract.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

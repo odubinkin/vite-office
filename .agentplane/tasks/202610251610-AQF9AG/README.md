@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -19,10 +19,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-10-26T20:15:11.741Z"
+  updated_at: "2026-10-26T20:25:48.455Z"
   updated_by: "CODER"
-  note: "Current host/default and Calendar ownership block passes native310, shared151, Calc89, browser CSV1, build and declared static checks. Overall CSV goal remains incomplete: calendar locale construction/service and public formatter/ParseString/setAutoInput integration remain pending. Full suite cadence unchanged."
-  attempts: 2
+  note: "Locale internal parser/sort prerequisite block passes native676128 +47358 +75189, ICU82 unit tests and scoped static checks. The overall CSV task remains incomplete: actual Locale/calendar construction and LibreOffice formatter/auto-input integration are still pending. Full-suite cadence unchanged."
+  attempts: 3
 commit: null
 comments:
   -
@@ -64,6 +64,9 @@ comments:
   -
     author: "CODER"
     body: "AQF9AG host/default ownership block: ports the original timezone.cpp host decision flow and default once/adopt/clone lifecycle, plus actual Calendar fZone get/adopt/set/orphan ownership. The explicit Intl host binding lives under external/icu/browser; pinned ICU resolves the semantic zone and standard offset, with no seasonal sampling. Browser libc abbreviation/raw-bias absence is documented rather than certified as native OS equivalence. CALC-319 preserves orphanTimeZone cached-field behavior. Command: npx tsx scripts/icu-timezone-default-native-probe.mjs. Result: pass. Evidence: 310 exact cases (144 host, 5 default, 160 Calendar ownership/cache, 1 actual semantic host capture), unchanged entire timezone.cpp and olsontz.cpp compiled with only OS/clock hooks redirected, actual native ICU libraries/data. Scope: original detection and ownership decision flow, not locale constructors, full native OS binding or ABI. Commands: npm run test:shared -- src/external/icu src/tools/source/datetime src/unotools/source/i18n/calendarwrapper.test.ts src/svl/source/numbers/zforfind; npm run test:calc -- src/sc/source/core/data/columnset.test.ts src/sc/source/ui/docshell src/sc/source/ui/dbgui/asciiopt.test.ts. Result: pass. Evidence: 151 tests/30 suites and 89 tests/6 suites; affected default-zone suite rechecked after browser-binding relocation (6 cases). Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:source-provenance; npm run check:dependencies; npm run check:calc-resources; npm run inventory:parity:shared; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Evidence: 1519 provenance modules, 1518 runtime sources/7633 imports/201 edges, 3535 JSDoc files; registry parityReady remains false. Command: npx playwright test --config=apps/office/playwright.config.ts --project=calc csv.spec.ts. Result: pass, 1 actual browser CSV import/ODS save/export flow. Full suite not run: same open task, user focused-check cadence. Validation fixes: browser binding moved out of source tree, public uchar reexports distinguished from locally declared symbols, witness hook documentation added. Overall task remains incomplete: Gregorian/locale constructors, LibreOffice calendar service, GetDateRef/public formatter/ParseString/setAutoInput and final CSV audit remain pending. No merge or publication performed."
+  -
+    author: "CODER"
+    body: "AQF9AG locale-construction prerequisites: ported the complete original ulocimp_getSubtags ByteSink overload and ulocimp_getKeywords internal legacy normalization path. Source paired ISO tables are extracted verbatim with retained null-separated obsolete sections and a deterministic source-hash check. Narrow spans, embedded NUL, append output, nullable sinks, end-pointer checkpoints, source limits, first duplicates and distinct internal errors are preserved. Added actual unstable uarrsort quicksort and generalized immutable scalar/record storage without replacing the source sorting algorithm. CALC-320/321/322 document trailing variant terminators, repeated va-posix append state and capacity-before-duplicate behavior, all retained. Command: npx tsx scripts/icu-locale-subtags-native-probe.mjs. Result: pass. Evidence: 676128 exact cases over7043 narrow spans, all32 optional-output combinations and three incoming statuses against unchanged ICU78.3 internal API. Command: npx tsx scripts/icu-locale-keywords-native-probe.mjs. Result: pass. Evidence: 41526 keyword cases plus5832 stable/unstable record cases with exact comparator counts and equal-key identity permutations. Command: npx tsx scripts/icu-transition-native-probe.mjs. Result: pass. Evidence:75189 existing actual rule/transition/calendar cases after the shared sort changes. Scope: original internal parser/sort operations, not full Locale construction, public C-string/default APIs, BCP47 conversion or calendar services. Command: npm run test:shared -- src/external/icu. Result: pass,82 tests/17 suites. Commands: npm run typecheck; targeted ICU/locale-probe ESLint and Prettier; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:calc; npm run inventory:parity:shared; node scripts/icu-locale-tables.mjs --check; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Evidence:1521 provenance modules,1520 runtime sources/7638 imports/201 edges,3542 JSDoc source files. The native subtag witness caught and corrected a counted-buffer projection on one-character languages before a separator; test helper unused parameters were corrected for typecheck. No full suite run: same open task and focused-check cadence. Existing browser CSV/build checks passed at previous checkpoint; no UI paths changed in this block. Remaining: actual Locale normalization/BCP47/likely-subtags and resource-fallback services required by Gregorian constructors, LibreOffice calendar service, GetDateRef/public formatter/ParseString/setAutoInput and final CSV audit. Goal remains incomplete; native allocator/ABI/EBCDIC and mutable comparator behavior remain uncertified."
 events:
   -
     type: "status"
@@ -144,8 +147,19 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Current host/default and Calendar ownership block passes native310, shared151, Calc89, browser CSV1, build and declared static checks. Overall CSV goal remains incomplete: calendar locale construction/service and public formatter/ParseString/setAutoInput integration remain pending. Full suite cadence unchanged."
+  -
+    type: "comment"
+    at: "2026-10-26T20:25:47.483Z"
+    author: "CODER"
+    body: "AQF9AG locale-construction prerequisites: ported the complete original ulocimp_getSubtags ByteSink overload and ulocimp_getKeywords internal legacy normalization path. Source paired ISO tables are extracted verbatim with retained null-separated obsolete sections and a deterministic source-hash check. Narrow spans, embedded NUL, append output, nullable sinks, end-pointer checkpoints, source limits, first duplicates and distinct internal errors are preserved. Added actual unstable uarrsort quicksort and generalized immutable scalar/record storage without replacing the source sorting algorithm. CALC-320/321/322 document trailing variant terminators, repeated va-posix append state and capacity-before-duplicate behavior, all retained. Command: npx tsx scripts/icu-locale-subtags-native-probe.mjs. Result: pass. Evidence: 676128 exact cases over7043 narrow spans, all32 optional-output combinations and three incoming statuses against unchanged ICU78.3 internal API. Command: npx tsx scripts/icu-locale-keywords-native-probe.mjs. Result: pass. Evidence: 41526 keyword cases plus5832 stable/unstable record cases with exact comparator counts and equal-key identity permutations. Command: npx tsx scripts/icu-transition-native-probe.mjs. Result: pass. Evidence:75189 existing actual rule/transition/calendar cases after the shared sort changes. Scope: original internal parser/sort operations, not full Locale construction, public C-string/default APIs, BCP47 conversion or calendar services. Command: npm run test:shared -- src/external/icu. Result: pass,82 tests/17 suites. Commands: npm run typecheck; targeted ICU/locale-probe ESLint and Prettier; npm run check:docs; npm run check:source-provenance; npm run check:dependencies; npm run inventory:parity:calc; npm run inventory:parity:shared; node scripts/icu-locale-tables.mjs --check; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Evidence:1521 provenance modules,1520 runtime sources/7638 imports/201 edges,3542 JSDoc source files. The native subtag witness caught and corrected a counted-buffer projection on one-character languages before a separator; test helper unused parameters were corrected for typecheck. No full suite run: same open task and focused-check cadence. Existing browser CSV/build checks passed at previous checkpoint; no UI paths changed in this block. Remaining: actual Locale normalization/BCP47/likely-subtags and resource-fallback services required by Gregorian constructors, LibreOffice calendar service, GetDateRef/public formatter/ParseString/setAutoInput and final CSV audit. Goal remains incomplete; native allocator/ABI/EBCDIC and mutable comparator behavior remain uncertified."
+  -
+    type: "verify"
+    at: "2026-10-26T20:25:48.455Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Locale internal parser/sort prerequisite block passes native676128 +47358 +75189, ICU82 unit tests and scoped static checks. The overall CSV task remains incomplete: actual Locale/calendar construction and LibreOffice formatter/auto-input integration are still pending. Full-suite cadence unchanged."
 doc_version: 3
-doc_updated_at: "2026-10-26T20:15:11.796Z"
+doc_updated_at: "2026-10-26T20:25:48.511Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -203,6 +217,36 @@ sections:
     Attempts: 2
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T20:15:10.792Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+    - old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251610-AQF9AG
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-26T20:25:48.455Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Locale internal parser/sort prerequisite block passes native676128 +47358 +75189, ICU82 unit tests and scoped static checks. The overall CSV task remains incomplete: actual Locale/calendar construction and LibreOffice formatter/auto-input integration are still pending. Full-suite cadence unchanged.
+    Attempts: 3
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T20:25:47.483Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
     Details:
 
@@ -309,6 +353,36 @@ Note: Current host/default and Calendar ownership block passes native310, shared
 Attempts: 2
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T20:15:10.792Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-calc/.agentplane/tasks/202610251610-AQF9AG/blueprint/resolved-snapshot.json
+- old_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- current_digest: 9765e7baf957119dd041387ce8e7f87d647f940a8424720b7b6612daa2948032
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251610-AQF9AG
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251610-AQF9AG
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-26T20:25:48.455Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Locale internal parser/sort prerequisite block passes native676128 +47358 +75189, ICU82 unit tests and scoped static checks. The overall CSV task remains incomplete: actual Locale/calendar construction and LibreOffice formatter/auto-input integration are still pending. Full-suite cadence unchanged.
+Attempts: 3
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T20:25:47.483Z, excerpt_hash=sha256:937525f42462a31c9a07f1f35afbc69c1715671b5e67a8f0d2dd6313848ea7d0
 
 Details:
 

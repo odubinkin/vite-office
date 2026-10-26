@@ -19,9 +19,11 @@
       "evidence": [
         "apps/office/src/external/icu/source/common/uarrsort.ts",
         "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
-        "scripts/icu-transition-native-probe.mjs"
+        "scripts/icu-transition-native-probe.mjs",
+        "scripts/icu-locale-keywords-native-probe.mjs",
+        "apps/office/src/external/icu/source/common/uloc.keywords.test.ts"
       ],
-      "justification": "AQF9AG ports the consumed stable UDate/itemSize8 sorting path and source stable binary/linear insertion search, including comparator order and sticky status validation. Typed literal true excludes the unported unstable quicksort path; scalar array indices project native byte addressing. Native allocation failure and invalid buffer preconditions remain outside the binding. TimeArrayTimeZoneRule uses this actual source sort, including duplicate/signed-zero/nonfinite values; unchanged ICU78.3 transition witness covers these paths. No full array ABI or generic unstable-sort parity is claimed.",
+      "justification": "Original stable binary search/insertion sort and unstable smaller-side-recursive/larger-side-iterative quicksort now operate directly on the one scalar/immutable-record owner. The original MIN_QSORT9 dispatch and subarray threshold, pivot/swap order, stable last-equal insertion, argument guards and sticky status are retained. Unchanged ICU78.3 matches5832 record cases with exact comparator counts and equal-key permutations; existing TimeArrayTimeZoneRule uses the same stable algorithm. Native byte layout/allocator/ABI and comparators mutating records/pivot state remain uncertified. Locale keyword parsing now uses the actual false-stability path rather than a replacement host sort.",
       "knownViolations": [],
       "localSymbols": [
         "uprv_stableBinarySearch",

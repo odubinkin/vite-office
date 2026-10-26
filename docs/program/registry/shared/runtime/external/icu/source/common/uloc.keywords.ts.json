@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+        "apps/office/src/external/icu/source/common/uloc.keywords.test.ts",
+        "scripts/icu-locale-keywords-native-probe.mjs"
+      ],
+      "justification": "Original ulocimp_getKeywords ByteSink path retains 25-key and25-unit-buffer checks, ASCII key casing and all-space removal, deferred output, first strcmp duplicate, exact counted key/NUL-list output and actual unstable sorting. The full stable/unstable uarrsort algorithms now operate on immutable scalar/record values; the source keyword record width48 is a positive native-width projection, not a JavaScript layout/ABI claim. Unchanged ICU78.3 matches41526 keyword cases and5832 record sort cases including exact comparator counts and equal-key identity permutations. Public keyword-value validation, full Locale normalization/BCP47 conversion, default locale and calendar construction remain pending. Native allocator/ABI/EBCDIC and mutating comparators are uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_getKeywords"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "ulocimp_getKeywords"
+      ]
+    }
+  }
+}
