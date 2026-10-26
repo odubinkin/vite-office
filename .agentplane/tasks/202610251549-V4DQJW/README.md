@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 40
+revision: 41
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T19:10:41.673Z"
+doc_updated_at: "2026-10-26T19:28:25.243Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -180,6 +180,10 @@ sections:
     - Observation: Native track-change metadata prerequisite implemented: original RedlineParams/TrackChangesHandler, normal generated DateTime type/value owner, original signed32 getToken overloads, Word-compatible date helper and real send-before-clear context action. WRITER154/155 preserve timezone/fraction and signed-year behavior.
       Impact: Real committed Strict/Transitional TrackChange XML reaches actual native value owners before property-set replacement. Six affected executable modules pass scoped100 coverage. Full table model redline creation, color-component owners, style/document orchestration and DOCX/XLSX UI remain incomplete; no acceptance or parity promotion.
       Resolution: Command/results/evidence/scope: evidence/native-track-change-owners-checkpoint.json records199 tests/20 files at S1053/B556/F217/L978 all100, exact native generation, actual Any/Sequence<DateTime>/PropertyValue lifetime checks, existing SAX regressions, typecheck/build/static and related quality checks. Keep task DOING and goal active. Next implement actual UnoComplexColor weak/interface dependencies and CellColorHandler before TablePropertiesHandler. Prior TransColToIco coverage observation remains open; no full suite due or verification-pass record at this checkpoint.
+
+    - Observation: Checkpoint: ported original non-aggregating OWeakObject, internal OWeakConnectionPoint and weak.hxx helpers. Runtime and provenance records retain unverified parity and explicitly document the absent native exception bridge. Initial test spelling, evidence markers and callback JSDoc failures were corrected without production shortcuts or weakened gates.
+      Impact: Actual weak reference invalidation, no-resurrection guard, reverse pointer/root identity removal, detached callback order and last RuntimeException selection now have executable owners. Real WeakImplHelper, UnoComplexColor/CellColorHandler and complete DOCX/XLSX model/UI workflows remain pending. Existing msfilter fallback coverage observation remains open.
+      Resolution: Pass:72 related tests/15 files, two changed owners S203/B66/F40/L190 all100, tools/app typecheck, production build/static smoke, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry, doctor and routing. Evidence:native-weak-object-checkpoint.json. Doctor retains only preexisting managed hook-shim warning. Full suite not due; no merge/publication or task completion.
 id_source: "generated"
 ---
 ## Summary
@@ -336,3 +340,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native track-change metadata prerequisite implemented: original RedlineParams/TrackChangesHandler, normal generated DateTime type/value owner, original signed32 getToken overloads, Word-compatible date helper and real send-before-clear context action. WRITER154/155 preserve timezone/fraction and signed-year behavior.
   Impact: Real committed Strict/Transitional TrackChange XML reaches actual native value owners before property-set replacement. Six affected executable modules pass scoped100 coverage. Full table model redline creation, color-component owners, style/document orchestration and DOCX/XLSX UI remain incomplete; no acceptance or parity promotion.
   Resolution: Command/results/evidence/scope: evidence/native-track-change-owners-checkpoint.json records199 tests/20 files at S1053/B556/F217/L978 all100, exact native generation, actual Any/Sequence<DateTime>/PropertyValue lifetime checks, existing SAX regressions, typecheck/build/static and related quality checks. Keep task DOING and goal active. Next implement actual UnoComplexColor weak/interface dependencies and CellColorHandler before TablePropertiesHandler. Prior TransColToIco coverage observation remains open; no full suite due or verification-pass record at this checkpoint.
+
+- Observation: Checkpoint: ported original non-aggregating OWeakObject, internal OWeakConnectionPoint and weak.hxx helpers. Runtime and provenance records retain unverified parity and explicitly document the absent native exception bridge. Initial test spelling, evidence markers and callback JSDoc failures were corrected without production shortcuts or weakened gates.
+  Impact: Actual weak reference invalidation, no-resurrection guard, reverse pointer/root identity removal, detached callback order and last RuntimeException selection now have executable owners. Real WeakImplHelper, UnoComplexColor/CellColorHandler and complete DOCX/XLSX model/UI workflows remain pending. Existing msfilter fallback coverage observation remains open.
+  Resolution: Pass:72 related tests/15 files, two changed owners S203/B66/F40/L190 all100, tools/app typecheck, production build/static smoke, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry, doctor and routing. Evidence:native-weak-object-checkpoint.json. Doctor retains only preexisting managed hook-shim warning. Full suite not due; no merge/publication or task completion.
