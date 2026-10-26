@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 39
+revision: 40
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T18:35:17.679Z"
+doc_updated_at: "2026-10-26T19:10:41.673Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -176,6 +176,10 @@ sections:
     - Observation: Native border checkpoint implemented: original BorderHandler and TDefTableHandler, exact OOXML-to-Word style lookup, native editeng style bridge, MakeBorderLine and Unicode color helper. Original table carryover/cell reset-first-value behavior, distinct interop getters and discarded cell ComplexColor remain unchanged (WRITER152/153).
       Impact: Strict/Transitional ZIP styles XML now resolves actual table/cell borders through native contexts into generated border/property owners. Four affected executable modules have100 coverage. Expanded five-owner coverage still fails unchanged100 threshold on one existing TransColToIco terminal fallback; the task remains incomplete, with no acceptance or parity promotion.
       Resolution: Command/results/evidence/scope: evidence/native-border-handlers-checkpoint.json records252 related regression tests passing, expanded49-case raw coverage S887/888 B677/677 F68/68 L875/876, four full100 modules and the single unchanged uncovered fallback, native generated context/list tables, typecheck/build/static and quality checks. Preserve the fallback, thresholds and real Color contract; no fake provider or coverage repair. Continue remaining table-property/style orchestration, export and DOCX/XLSX UI under the approved task; no full suite due.
+
+    - Observation: Native track-change metadata prerequisite implemented: original RedlineParams/TrackChangesHandler, normal generated DateTime type/value owner, original signed32 getToken overloads, Word-compatible date helper and real send-before-clear context action. WRITER154/155 preserve timezone/fraction and signed-year behavior.
+      Impact: Real committed Strict/Transitional TrackChange XML reaches actual native value owners before property-set replacement. Six affected executable modules pass scoped100 coverage. Full table model redline creation, color-component owners, style/document orchestration and DOCX/XLSX UI remain incomplete; no acceptance or parity promotion.
+      Resolution: Command/results/evidence/scope: evidence/native-track-change-owners-checkpoint.json records199 tests/20 files at S1053/B556/F217/L978 all100, exact native generation, actual Any/Sequence<DateTime>/PropertyValue lifetime checks, existing SAX regressions, typecheck/build/static and related quality checks. Keep task DOING and goal active. Next implement actual UnoComplexColor weak/interface dependencies and CellColorHandler before TablePropertiesHandler. Prior TransColToIco coverage observation remains open; no full suite due or verification-pass record at this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -328,3 +332,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native border checkpoint implemented: original BorderHandler and TDefTableHandler, exact OOXML-to-Word style lookup, native editeng style bridge, MakeBorderLine and Unicode color helper. Original table carryover/cell reset-first-value behavior, distinct interop getters and discarded cell ComplexColor remain unchanged (WRITER152/153).
   Impact: Strict/Transitional ZIP styles XML now resolves actual table/cell borders through native contexts into generated border/property owners. Four affected executable modules have100 coverage. Expanded five-owner coverage still fails unchanged100 threshold on one existing TransColToIco terminal fallback; the task remains incomplete, with no acceptance or parity promotion.
   Resolution: Command/results/evidence/scope: evidence/native-border-handlers-checkpoint.json records252 related regression tests passing, expanded49-case raw coverage S887/888 B677/677 F68/68 L875/876, four full100 modules and the single unchanged uncovered fallback, native generated context/list tables, typecheck/build/static and quality checks. Preserve the fallback, thresholds and real Color contract; no fake provider or coverage repair. Continue remaining table-property/style orchestration, export and DOCX/XLSX UI under the approved task; no full suite due.
+
+- Observation: Native track-change metadata prerequisite implemented: original RedlineParams/TrackChangesHandler, normal generated DateTime type/value owner, original signed32 getToken overloads, Word-compatible date helper and real send-before-clear context action. WRITER154/155 preserve timezone/fraction and signed-year behavior.
+  Impact: Real committed Strict/Transitional TrackChange XML reaches actual native value owners before property-set replacement. Six affected executable modules pass scoped100 coverage. Full table model redline creation, color-component owners, style/document orchestration and DOCX/XLSX UI remain incomplete; no acceptance or parity promotion.
+  Resolution: Command/results/evidence/scope: evidence/native-track-change-owners-checkpoint.json records199 tests/20 files at S1053/B556/F217/L978 all100, exact native generation, actual Any/Sequence<DateTime>/PropertyValue lifetime checks, existing SAX regressions, typecheck/build/static and related quality checks. Keep task DOING and goal active. Next implement actual UnoComplexColor weak/interface dependencies and CellColorHandler before TablePropertiesHandler. Prior TransColToIco coverage observation remains open; no full suite due or verification-pass record at this checkpoint.
