@@ -339,7 +339,7 @@ it("round trips represented paragraph styles through the RTF stylesheet", () => 
     const bytes = new RtfExport().ExportDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain("\\stylesheet");
-    expect(encoded).toMatch(/\{\\s0[^}]*\\b[^}]*Heading 2;/u);
+    expect(encoded).toMatch(/\{\\s2[^}]*\\b[^}]*heading 2;/u);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs.map((node) => node.GetParagraphStyle())).toEqual([
       "heading-2",
@@ -347,6 +347,65 @@ it("round trips represented paragraph styles through the RTF stylesheet", () => 
     ]);
   } finally {
     imported?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("round trips native RTF stylesheet parent and next links through reserved slots", () => {
+  const source = createWriterDocument();
+  source
+    .GetDfltTextFormatColl()
+    .SetFormatAttr(new SvxAdjustItem(SvxAdjust.Center, RES_PARATR_ADJUST));
+  const parent = source.MakeTextFormatColl("Parent", source.GetDfltTextFormatColl());
+  const child = source.MakeTextFormatColl("Child", parent);
+  const follow = source.MakeTextFormatColl("Follow", source.GetDfltTextFormatColl());
+  child.SetNextTextFormatColl(follow);
+  source.paragraphs[0]?.ChgFormatColl(child);
+  let restored;
+  try {
+    const encoded = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    expect(encoded).toMatch(/\{\\s0\\snext0\\qc[^}]* Normal;/u);
+    expect(encoded).toMatch(/\{\\s16\\sbasedon15\\snext17[^}]* Child;/u);
+    expect(encoded).toMatch(/\{\\s17\\sbasedon0\\snext17[^}]* Follow;/u);
+    restored = new RtfDocumentImpl().Resolve(
+      new RtfTokenizer(new TextEncoder().encode(encoded)).Tokenize(),
+    );
+    const restoredChild = restored.FindTextFormatCollByName("Child");
+    expect(restoredChild?.DerivedFrom()?.GetName()).toBe("Parent");
+    expect(restoredChild?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(restored.paragraphs[0]?.GetTextFormatColl()).toBe(restoredChild);
+    expect(
+      (
+        restored.GetDfltTextFormatColl().GetAttrSet().Get(RES_PARATR_ADJUST) as SvxAdjustItem
+      ).GetAdjust(),
+    ).toBe(SvxAdjust.Center);
+  } finally {
+    restored?.Dispose();
+    source.Dispose();
+  }
+});
+
+it("preserves Word builtin style names and gives them priority over custom name collisions", () => {
+  const source = createWriterDocument();
+  const custom = source.MakeTextFormatColl("Body Text", source.GetDfltTextFormatColl());
+  const builtin = source.GetTextFormatColl("text-body");
+  source.MakeTextFormatColl("Alias (WW)", source.GetDfltTextFormatColl());
+  source.paragraphs[0]?.ChgFormatColl(custom);
+  source.nodes.MakeTextNode("Builtin").ChgFormatColl(builtin);
+  let restored;
+  try {
+    const bytes = new RtfExport().ExportDocument(source);
+    const encoded = new TextDecoder().decode(bytes);
+    expect(encoded).toContain(" Body Text1;");
+    expect(encoded).toContain(" Body Text;");
+    expect(encoded).toContain(" Alias;");
+    restored = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
+    expect(restored.paragraphs[0]?.GetTextFormatColl().GetName()).toBe("Body Text1");
+    expect(restored.paragraphs[1]?.GetTextFormatColl()).toBe(
+      restored.GetTextFormatColl("text-body"),
+    );
+  } finally {
+    restored?.Dispose();
     source.Dispose();
   }
 });

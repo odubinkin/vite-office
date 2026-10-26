@@ -102,3 +102,21 @@ maps incoming `\\qd` to OOXML distribute, which `DomainMapper` applies as
 block alignment plus block last-line adjustment. Body paragraphs and named
 stylesheet entries preserve that independent native last-line value; a direct
 `\\qj` replaces it with ordinary block alignment.
+
+RTF paragraph-style references now use the represented `MSWordStyles` table:
+fifteen reserved Word slots, Standard in slot zero, Heading 1–9 in slots 1–9,
+then all other materialized document collections in creation order, with the
+source 4091-style limit. The current core exposes Standard as its first
+collection and has no separate hidden root collection to skip. Export carries
+`\\sbasedon` and `\\snext`; import creates owners before resolving these links
+and applies base definitions before descendants, including forward references.
+The represented built-in Word names and source `(WW)` suffix removal and ASCII
+case-insensitive collision allocation are carried by `wrtw8sty.ts`. Standard's
+native settings survive through the Word name `Normal`.
+
+Pinned `createStyleProperties` ignores zero first/left/right indents in style
+definitions without `\\sbasedon`, but keeps the same explicit zero fields when
+a base is specified. The local reader preserves this direct-item distinction.
+The rest of `RTFSprms::cloneAndDeduplicate`, all style-property families and
+additional `StyleSheetTable::ConvertStyleName` input aliases remain open; the
+style row is not closed by these graph and name tests alone.

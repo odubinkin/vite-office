@@ -24,6 +24,9 @@ import {
   RES_PAGEDESC,
   RES_PARATR_LINESPACING,
   RES_PARATR_ADJUST,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_FIRSTLINE,
 } from "../../../inc/hintids";
 import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
 import { RtfDocumentImpl } from "./rtfdocumentimpl";
@@ -956,6 +959,37 @@ it("creates a document-owned collection for an external RTF paragraph style", ()
     expect(projectWriterTextRuns(reopened.paragraphs[0])[0]?.attributes.bold).toBe(true);
   } finally {
     reopened?.Dispose();
+    document.Dispose();
+  }
+});
+
+it("resolves forward stylesheet based-on and next references after all styles exist", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2 Styled}",
+  );
+  try {
+    const child = document.FindTextFormatCollByName("Child");
+    expect(child?.DerivedFrom()?.GetName()).toBe("Parent");
+    expect(child?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(document.paragraphs[0]?.GetTextFormatColl()).toBe(child);
+    expect(projectWriterTextRuns(document.paragraphs[0])[0]?.attributes.bold).toBe(true);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("ignores zero stylesheet indents only when based-on is absent", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s2\\li0\\ri0\\fi0 Root;}{\\s3\\sbasedon0\\li0\\ri0\\fi0 Derived;}}\\s2 Root\\par\\pard\\s3 Derived}",
+  );
+  try {
+    const root = document.FindTextFormatCollByName("Root");
+    const derived = document.FindTextFormatCollByName("Derived");
+    for (const which of [RES_MARGIN_TEXTLEFT, RES_MARGIN_RIGHT, RES_MARGIN_FIRSTLINE]) {
+      expect(root?.GetAttrSet().GetItemIfSet(which, false)).toBeUndefined();
+      expect(derived?.GetAttrSet().GetItemIfSet(which, false)).toBeDefined();
+    }
+  } finally {
     document.Dispose();
   }
 });

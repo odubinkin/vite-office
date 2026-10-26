@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": ["CAP-0121"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts#MSWordStyles",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx#MSWordStyles::BuildStylesTable"
+      ],
+      "justification": "The current paragraph-style graph uses pinned reserved Word slots and source collection order; full style vocabulary remains unverified.",
+      "knownViolations": [],
+      "localSymbols": ["MSWordStyles"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/wrtw8sty.cxx",
+      "upstreamSymbols": ["MSWordStyles::BuildStylesTable", "MSWordStyles::GetSlot"]
+    }
+  }
+}

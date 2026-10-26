@@ -85,6 +85,7 @@ import { OSTRING_TO_OUSTRING_CVTFLAGS } from "../../../../sal/inc/rtl/ustring.h"
 import { RTL_TEXTTOUNICODE_FLAGS_FLUSH } from "../../../../sal/inc/rtl/textcvt.h";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { WORD_PARAGRAPH_STYLE_NAMES } from "../../filter/ww8/wrtw8sty";
 
 /** Paragraph properties represented by the current Writer model. */
 interface RtfParagraphState {
@@ -153,6 +154,8 @@ interface RtfState {
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
   styleName?: string;
+  basedOnStyleIndex?: number;
+  nextStyleIndex?: number;
   styleControls: Set<string>;
   characterControls: Set<string>;
   bookmarkName?: string;
@@ -365,6 +368,8 @@ export class RtfDocumentImpl {
       character: WriterCharacterAttributes;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
+      basedOnStyleIndex?: number;
+      nextStyleIndex?: number;
     }>
   >();
   private readonly importedStyles = new Map<number, SwTextFormatColl>();
@@ -456,12 +461,18 @@ export class RtfDocumentImpl {
       document.GetAttrPool().SetUserDefaultItem(defaultTabs);
     }
     this.importedStyles.clear();
+    this.importedStyles.set(0, document.GetDfltTextFormatColl());
     for (const [index, definition] of this.styles) {
       const { name } = definition;
       const id =
-        name === "Default Paragraph Style" || name === "Standard"
+        name === "Default Paragraph Style" || name === "Standard" || name === "Normal"
           ? "default"
-          : getWriterParagraphStyleId(name);
+          : ([...WORD_PARAGRAPH_STYLE_NAMES].find(
+              /** Matches a canonical Word builtin name. @param entry - Native ID and Word name. @returns Exact name match. */ ([
+                ,
+                wordName,
+              ]) => wordName === name,
+            )?.[0] ?? getWriterParagraphStyleId(name));
       let identity = id || name;
       let suffix = 1;
       while (document.FindTextFormatColl(identity) !== undefined)
@@ -471,7 +482,32 @@ export class RtfDocumentImpl {
           ? document.MakeTextFormatColl(name, document.GetTextFormatColl("default"), identity)
           : document.GetTextFormatColl(id);
       this.importedStyles.set(index, collection);
-      this.ApplyStyleDefinition(collection, definition);
+    }
+    for (const [index, definition] of this.styles) {
+      const collection = this.importedStyles.get(index);
+      const parent = this.importedStyles.get(definition.basedOnStyleIndex ?? -1);
+      if (collection === undefined) continue;
+      if (parent !== undefined && parent !== collection) collection.SetDerivedFrom(parent);
+      const next = this.importedStyles.get(definition.nextStyleIndex ?? -1);
+      if (next !== undefined) collection.SetNextTextFormatColl(next);
+    }
+    const appliedStyles = new Set<number>();
+    for (const index of this.styles.keys()) {
+      const ancestry: number[] = [];
+      const pending = new Set<number>();
+      let current: number | undefined = index;
+      while (current !== undefined && !appliedStyles.has(current) && !pending.has(current)) {
+        ancestry.push(current);
+        pending.add(current);
+        current = this.styles.get(current)?.basedOnStyleIndex;
+      }
+      for (const slot of ancestry.reverse()) {
+        const definition = this.styles.get(slot);
+        const collection = this.importedStyles.get(slot);
+        if (definition !== undefined && collection !== undefined)
+          this.ApplyStyleDefinition(collection, definition);
+        appliedStyles.add(slot);
+      }
     }
     let firstParagraph = true;
     const sectionStyles = new Map<number, string>();
@@ -642,6 +678,7 @@ export class RtfDocumentImpl {
       character: WriterCharacterAttributes;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
+      basedOnStyleIndex?: number;
     },
   ): void {
     const controls = definition.controls;
@@ -681,15 +718,17 @@ export class RtfDocumentImpl {
       if (paragraph.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
       collection.SetFormatAttr(adjust);
     }
-    if (controls.has("li") || controls.has("lin"))
+    // createStyleProperties removes zero indents only when no basedOn exists.
+    const hasBase = definition.basedOnStyleIndex !== undefined;
+    if ((controls.has("li") || controls.has("lin")) && (hasBase || paragraph.left !== 0))
       collection.SetFormatAttr(
         new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
       );
-    if (controls.has("ri") || controls.has("rin"))
+    if ((controls.has("ri") || controls.has("rin")) && (hasBase || paragraph.right !== 0))
       collection.SetFormatAttr(
         new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
       );
-    if (controls.has("fi") || controls.has("li"))
+    if ((controls.has("fi") || controls.has("li")) && (hasBase || paragraph.firstLine !== 0))
       collection.SetFormatAttr(
         new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
       );
@@ -798,6 +837,12 @@ export class RtfDocumentImpl {
         ...(previous?.field === undefined ? {} : { field: previous.field }),
         ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
         ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
+        ...(previous?.basedOnStyleIndex === undefined
+          ? {}
+          : { basedOnStyleIndex: previous.basedOnStyleIndex }),
+        ...(previous?.nextStyleIndex === undefined
+          ? {}
+          : { nextStyleIndex: previous.nextStyleIndex }),
         styleControls: new Set(previous?.styleControls),
         characterControls: new Set(previous?.characterControls),
       });
@@ -815,6 +860,12 @@ export class RtfDocumentImpl {
             character: { ...previous.character },
             paragraph: { ...previous.paragraph },
             controls: new Set(previous.styleControls),
+            ...(previous.basedOnStyleIndex === undefined
+              ? {}
+              : { basedOnStyleIndex: previous.basedOnStyleIndex }),
+            ...(previous.nextStyleIndex === undefined
+              ? {}
+              : { nextStyleIndex: previous.nextStyleIndex }),
           });
       }
       if (previous?.destination === "bookmarkstart") {
@@ -954,9 +1005,19 @@ export class RtfDocumentImpl {
       state.styleIndex = token.parameter ?? 0;
       state.styleName = "";
       state.styleControls = new Set();
+      delete state.basedOnStyleIndex;
+      delete state.nextStyleIndex;
       return;
     }
     if (state.destination === "styleentry") {
+      if (token.name === "sbasedon") {
+        if (token.parameter !== undefined) state.basedOnStyleIndex = token.parameter;
+        return;
+      }
+      if (token.name === "snext") {
+        if (token.parameter !== undefined) state.nextStyleIndex = token.parameter;
+        return;
+      }
       if (STYLE_PROPERTY_CONTROLS.has(token.name)) {
         state.styleControls.add(token.name);
         this.DispatchBodyControl(token.name, token.parameter, state);

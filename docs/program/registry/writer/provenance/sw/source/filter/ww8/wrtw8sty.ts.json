@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
+    "upstreamPath": "sw/source/filter/ww8/wrtw8sty.cxx",
+    "localSymbols": ["MSWordStyles"],
+    "upstreamSymbols": ["MSWordStyles::BuildStylesTable", "MSWordStyles::GetSlot", "MSWordStyles::BuildWwNames"],
+    "preservedResponsibilities": [
+      "Reserves the source fifteen Word style slots, assigns Standard to slot zero and materialized Heading 1-9 collections to slots 1-9, and assigns remaining document paragraph collections in source order with the source 4091-style limit.",
+      "Maps the represented built-in pool identities to their source Word style names, strips the source (WW) suffix for user styles and allocates unique ASCII-case-insensitive names with builtin names first."
+    ],
+    "omittedResponsibilities": [
+      "The current Writer document API has no character-style collection table; numbering-style slots are disabled by the pinned RTF constructor's bListStyles=false default. Full desktop style metadata remains unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native RTF stylesheet parent and next links"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "preserves Word builtin style names"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::BuildStylesTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::GetSlot"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::BuildWwNames"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/styles.cxx",
+          "marker": "GetEnglishNameFromSti"
+        }
+      ]
+    }
+  }
+}

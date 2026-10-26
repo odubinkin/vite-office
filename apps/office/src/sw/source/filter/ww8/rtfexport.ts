@@ -16,7 +16,7 @@ import { SwTableNode } from "../../core/docnode/node";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
@@ -45,6 +45,7 @@ import {
   type Color,
 } from "../../../../tools/inc/color";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { MSWordStyles } from "./wrtw8sty";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
 const RTF_DEFAULT_COLORS = [
@@ -95,6 +96,9 @@ export class RtfExport {
     for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
     this.lists.clear();
     this.styles.clear();
+    const styleTable = new MSWordStyles(document);
+    for (const [index, style] of styleTable.GetStyles().entries())
+      if (style !== undefined) this.styles.set(style.id, { index, style });
     const blocks = document.GetNodes().getBodyContent();
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
@@ -106,8 +110,6 @@ export class RtfExport {
           this.IndexColor(run.attributes.underlineColor);
       }
       const paragraph = node as SwTextNode;
-      const style = paragraph.GetTextFormatColl();
-      if (!this.styles.has(style.id)) this.styles.set(style.id, { index: this.styles.size, style });
       const rule = paragraph.GetNumRule();
       if (rule !== undefined && !this.lists.has(rule.GetName())) {
         const levels = Array.from(
@@ -169,17 +171,18 @@ export class RtfExport {
       }
       output += "}";
     }
-    if (this.styles.size > 0) {
-      output += "{\\stylesheet";
-      for (const { index, style } of this.styles.values()) {
-        const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
-          character = this.attributeOutput.WriteCharacter(
-            projectWriterCharacterAttributes(style.GetAttrSet()),
-          );
-        output += `{\\s${index}${paragraph}${character} ${escapeRtf(style.GetName())};}`;
-      }
-      output += "}";
+    output += "{\\stylesheet";
+    for (const { index, style } of this.styles.values()) {
+      const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
+        character = this.attributeOutput.WriteCharacter(
+          projectWriterCharacterAttributes(style.GetAttrSet()),
+        );
+      const parent = style.DerivedFrom();
+      const base = parent instanceof SwTextFormatColl ? styleTable.GetSlot(parent) : 0x0fff;
+      const next = styleTable.GetSlot(style.GetNextTextFormatColl());
+      output += `{\\s${index}${base === 0x0fff ? "" : `\\sbasedon${base}`}\\snext${next}${paragraph}${character} ${escapeRtf(styleTable.GetWWName(style))};}`;
     }
+    output += "}";
     if (this.lists.size > 0) {
       output += "{\\*\\listtable";
       for (const list of this.lists.values()) {
