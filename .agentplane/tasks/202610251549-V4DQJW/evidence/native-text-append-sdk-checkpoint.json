@@ -1,0 +1,138 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified SDK prerequisite checkpoint; task remains DOING",
+  "scope": "Original XParagraphAppend/XTextPortionAppend/XTextContentAppend/XTextAppend/XTextRangeCompare contracts and normal shared CPPU bindings. This closes missing typed append/compare declarations; it does not migrate concrete Writer raw-object services or claim document/UI filter completion.",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts": "fd4d4155cb508cb54a3b8dce9fa0be72109819e0",
+    "docs/program/registry/shared/capabilities/CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d.json": "32ed8891768d8514b7a2d2b0d81c382734bb2db0",
+    "apps/office/src/offapi/com/sun/star/text/XParagraphAppend.ts": "970a832c7ec70dcb96db20c43d76966c0bb61d56",
+    "apps/office/src/offapi/com/sun/star/text/XTextAppend.ts": "b79727c20048227c112070f4c62751e9d844d34d",
+    "apps/office/src/offapi/com/sun/star/text/XTextContentAppend.ts": "516edafb3d9a280267276786b1bb526ed1a056bc",
+    "apps/office/src/offapi/com/sun/star/text/XTextPortionAppend.ts": "af32317a14fcd1ccc20cab67172193995eb677d3",
+    "apps/office/src/offapi/com/sun/star/text/XTextRangeCompare.ts": "d10d2257258c51d66118ed371ea6c28a730a9e15",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XParagraphAppend.ts.json": "1a359fd0dad01158286a3b915dc94fd2138da375",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextAppend.ts.json": "f52bc4e613adb03fca2e5b21e235353b73d2d4b4",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextContentAppend.ts.json": "28cd22d3fa611427ad5c30baf0f3cb7e3e254fbc",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextPortionAppend.ts.json": "d7e0c727c5f25ff86faa22f6a42c7bd444b8d28f",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextRangeCompare.ts.json": "cf4924cd370739bb6a75a5ba84abd217ec996336",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XParagraphAppend.ts.json": "4d87f243ea5217e0a5bf559dc0a9fee080c4290b",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextAppend.ts.json": "5aaecc1152f0ee7a8ed89fb32a5f374cafc4b9bd",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextContentAppend.ts.json": "8a8a74e27964d5b2443bbc4adc07bb1c85adbaed",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextPortionAppend.ts.json": "23971d07934c4f6aee062b87e405cae0cb178aab",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextRangeCompare.ts.json": "98e17c369bfaad14a0ddc976cf15145272f39596"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/cppuhelper/source/native-implbase.test.ts --coverage.include=src/offapi/com/sun/star/text/XParagraphAppend.ts --coverage.include=src/offapi/com/sun/star/text/XTextPortionAppend.ts --coverage.include=src/offapi/com/sun/star/text/XTextContentAppend.ts --coverage.include=src/offapi/com/sun/star/text/XTextAppend.ts --coverage.include=src/offapi/com/sun/star/text/XTextRangeCompare.ts --coverage.reportsDirectory=coverage/native-text-append-sdk --maxWorkers=2",
+      "result": "pass:18tests/2files; all five new executable SDK-binding owners unchanged scoped100 S45/B10/F15/L45",
+      "perFile": {
+        "apps/office/src/offapi/com/sun/star/text/XParagraphAppend.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextAppend.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextContentAppend.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextPortionAppend.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextRangeCompare.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        }
+      },
+      "evidenceScope": "Actual normal shared typelib descriptions, cached identities, interface names, direct-base order and existing helper regressions; not concrete Writer component/virtual-call/model or native compiled differential parity."
+    },
+    "writerRegressions": {
+      "command": "npm run test:writer -- src/sw/source/core/unocore/native-text-import-api.test.ts src/sw/source/core/unocore/native-import-api-states.test.ts src/sw/source/core/unocore/native-import-failure-contracts.test.ts --maxWorkers=2",
+      "result": "pass:44tests/3files; existing concrete core behavior unchanged, not a claim of migration to new SDK interfaces"
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production build and relative-resource/no-backend smoke)",
+    "eslint": "pass:five new SDK modules and updated normal-interface test max-warnings0",
+    "prettier": "pass:same six authored source/test files; docs/program intentionally ignored by existing configuration",
+    "dependencies": "pass:1534runtime sources/7825relative imports/205allowed edges; no new edge",
+    "jsdoc": "pass:3551authored source files",
+    "size": "pass:3555authored files; all new SDK owners below500lines and unchanged <1000hard limit",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:Writer2tests/1file, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "provenance": "pass:1535modules/1330mapped/178browser adaptations/27local infrastructure",
+    "registry": {
+      "moduleCount": 1535,
+      "capabilityCount": 345,
+      "invariantCount": 34,
+      "globalRecordCount": 3479
+    },
+    "doctor": "pass:0errors; pre-existing managed hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "Actual XTextAppend has exactly ordered direct bases XText, XParagraphAppend and XTextPortionAppend. XTextContentAppend is independent; it is not added as an invented fourth base.",
+    "Current core SwXText/SwXTextRange/SwXTextCursor return raw host objects and use array property arguments, so they cannot yet serve the actual SDK Reference/Sequence contract. Native concrete createXTextCursorByRange/finishSwParagraphInsert helpers and proper native append/undo ownership must be restored on their real owners before full TableManager/DomainMapperTableHandler wiring; no facade/dummy handler is introduced here."
+  ],
+  "limitations": [
+    "Original complete IDL declarations and normal generated static type binding reuse existing actual shared owners. Normal reflection remains incomplete; no method-metadata/default/interface provider is invented.",
+    "Concrete Writer UNO Reference/Sequence/queryInterface service migration, original helper/class responsibilities and append/undo path alignment remain pending. Existing raw model methods are not advertised as implementing these new interfaces.",
+    "Native physical multiple-inheritance/vtable ABI, native threads, comprehensive reflection and compiled native whole-module differential/full QA parity remain unverified.",
+    "Real table managers/handler/model application, full Writer DOCX and Calc XLSX import/export and existing production desktop/mobile UI acceptance remain incomplete. No UI changed in this prerequisite block.",
+    "Full suite not due under approved ten-task cadence; prior unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local SDK prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

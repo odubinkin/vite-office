@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 48
+revision: 49
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T21:15:44.636Z"
+doc_updated_at: "2026-10-26T21:22:56.617Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -212,6 +212,10 @@ sections:
     - Observation: CT_TblPPr parser prerequisite admits complete original ten attribute/resource mappings and preserves all existing generated lookup rows. Native factoryCreateElementMap data now has its own generated-data module and the same factory API via re-export. Actual Strict/Transitional committed ZIP styles properties reach TablePositionHandler and real UNO output.
       Impact: 124focused tests/8files unchanged scoped100 S178 B92 F22 L159 for two procedural owners plus two literal-only data owners;256Writer regressions/21files pass. Generator check, typecheck/build/static, lint/format, dependencies/resources/docs/size/tree/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
       Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-position-factory-checkpoint.json. Corrected an ad-hoc suffix assumption and runtime AST ownership metadata; no source/validator weakening. Native counts53defines/107attributes/355elements/428resources/315lists/41actions. Resource delivery is not frame/model insertion; actual table managers/handler and full DOCX/XLSX model/export/UI remain pending. Task DOING, broad parity flags false; full suite not due.
+
+    - Observation: Core table-application audit found missing actual append SDK contracts and raw-object Writer UNO boundaries. Added complete original XParagraphAppend/XTextPortionAppend/XTextContentAppend/XTextAppend/XTextRangeCompare declarations and normal CPPU bindings, preserving exactly three ordered XTextAppend bases. No facade or dummy table handler is introduced.
+      Impact: 18related tests/2files pass; five new SDK owners unchanged scoped100 S45 B10 F15 L45.44existing Writer core import regression tests/3files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass; existing doctor hook warning retained.
+      Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-text-append-sdk-checkpoint.json. Evidence covers SDK/type contracts, not concrete Writer component migration. SwXText/SwXTextRange/SwXTextCursor still require real Reference/Sequence/query/helper and append/undo ownership alignment before actual table managers/model application. Full DOCX/XLSX model/export/UI remains pending; task DOING, broad parity flags false; full suite not due.
 id_source: "generated"
 ---
 ## Summary
@@ -400,3 +404,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: CT_TblPPr parser prerequisite admits complete original ten attribute/resource mappings and preserves all existing generated lookup rows. Native factoryCreateElementMap data now has its own generated-data module and the same factory API via re-export. Actual Strict/Transitional committed ZIP styles properties reach TablePositionHandler and real UNO output.
   Impact: 124focused tests/8files unchanged scoped100 S178 B92 F22 L159 for two procedural owners plus two literal-only data owners;256Writer regressions/21files pass. Generator check, typecheck/build/static, lint/format, dependencies/resources/docs/size/tree/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
   Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-position-factory-checkpoint.json. Corrected an ad-hoc suffix assumption and runtime AST ownership metadata; no source/validator weakening. Native counts53defines/107attributes/355elements/428resources/315lists/41actions. Resource delivery is not frame/model insertion; actual table managers/handler and full DOCX/XLSX model/export/UI remain pending. Task DOING, broad parity flags false; full suite not due.
+
+- Observation: Core table-application audit found missing actual append SDK contracts and raw-object Writer UNO boundaries. Added complete original XParagraphAppend/XTextPortionAppend/XTextContentAppend/XTextAppend/XTextRangeCompare declarations and normal CPPU bindings, preserving exactly three ordered XTextAppend bases. No facade or dummy table handler is introduced.
+  Impact: 18related tests/2files pass; five new SDK owners unchanged scoped100 S45 B10 F15 L45.44existing Writer core import regression tests/3files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass; existing doctor hook warning retained.
+  Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-text-append-sdk-checkpoint.json. Evidence covers SDK/type contracts, not concrete Writer component migration. SwXText/SwXTextRange/SwXTextCursor still require real Reference/Sequence/query/helper and append/undo ownership alignment before actual table managers/model application. Full DOCX/XLSX model/export/UI remains pending; task DOING, broad parity flags false; full suite not due.
