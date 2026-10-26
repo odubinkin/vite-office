@@ -4161,3 +4161,10 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the internal 25-key count guard runs before parsing or ignoring a duplicate. Exactly 25 unique pairs succeed; appending another already-seen key yields `U_INTERNAL_PROGRAM_ERROR` and no appended output. A trailing semicolon plus spaces still succeeds because the empty-input check runs first.
 - Suspected issue: an ignored duplicate can turn an otherwise valid maximum-size input into an internal error, although earlier duplicate entries do not contribute to the limit.
 - Local behavior: preserved without deduplication before the guard or a replacement error code. Covered by unchanged native keyword ByteSink comparisons and source regression tests. This concerns the internal legacy keyword-normalization operation; public keyword-value retrieval has separate validation behavior.
+
+### CALC-323 — ICU lvariant recognition is case-sensitive and accepts a longer prefix
+
+- Upstream: ICU78.3 `source/common/uloc_tag.cpp`, `ultag_parse` private-use loop.
+- Observation: the ICU-specific `lvariant` bridge uses `strncmp` with the marker length before validating the whole subtag. Thus `en-x-foo-lvariant-posix` creates variant `POSIX` and drops the earlier private-use portion, whereas `en-x-foo-LVARIANT-posix` remains private-use text `foo-lvariant-posix`. The overlong marker `lvariantLONG` also activates the bridge and allows following short legacy variants.
+- Suspected issue: the recognition depends on original case despite lowercasing the ordinary private-use result, and it accepts a marker with an arbitrary suffix before checking private-use subtag bounds. This is ICU compatibility parsing, not a statement about valid BCP47 tags or the separate full locale converter.
+- Local behavior: preserve the exact prefix check, case sensitivity, partial acceptance and pointer checkpoints. Verified by compiling the entire unchanged original `uloc_tag.cpp` in the language-tag witness translation unit and comparing its actual internal parser/getters. No corrective normalization or new invalid-tag error is added.
