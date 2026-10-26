@@ -1,0 +1,91 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "native-font-registration",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "complete": false,
+  "pauseRequestedByUser": true,
+  "sourceGitBlobs": {
+    "apps/office/src/sal/textenc/tencinfo.ts": "697dd7f7c361dcf0ff42fae0428315ba34136646",
+    "apps/office/src/sal/textenc/windows-charsets.json": "16fa6b94a56f764f4c6c5766c42e043f85847193",
+    "apps/office/src/sw/source/filter/ww8/writerwordglue.ts": "d828a5c559fba26927b573b633afbcbcfc4f92b7",
+    "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts": "165bd5fd974738f2b4d37e5c1ddbab506faaf715",
+    "apps/office/src/sw/source/filter/ww8/native-font-registration.test.ts": "3be592f396fe7523000233364c704c6cb5210b15",
+    "apps/office/src/unotools/inc/fontdefs.ts": "bc9e39cd6ca02a7c4debf7ecf225fd013e79171f",
+    "apps/office/src/unotools/source/config/fontcfg.ts": "ad74355c0e3016f29de3285eb4f586bef4f9702a",
+    "apps/office/src/unotools/source/config/data/font-substitutions-ms.json": "8025d9de22e727572a457d01971b5c013452d614",
+    "apps/office/src/unotools/source/config/native-font-substitutions.test.ts": "289e3c6ca25bb5c1fcabd79c2321e567ccf9255e",
+    "apps/office/src/unotools/source/misc/fontdefs.ts": "f98545066c625e91f2920105a7ba4bfbefd917f2",
+    "scripts/extract-native-font-data.py": "385dbb752e6754a7ec284a13b9e3a646a8879413"
+  },
+  "coverage": {
+    "lines": {
+      "total": 266,
+      "covered": 266,
+      "skipped": 0,
+      "pct": 100
+    },
+    "statements": {
+      "total": 301,
+      "covered": 301,
+      "skipped": 0,
+      "pct": 100
+    },
+    "functions": {
+      "total": 33,
+      "covered": 33,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branches": {
+      "total": 153,
+      "covered": 153,
+      "skipped": 0,
+      "pct": 100
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "tests": {
+    "files": 8,
+    "cases": 52,
+    "result": "pass-scoped100",
+    "scope": [
+      "unotools/config",
+      "unotools/misc",
+      "native Word font registration",
+      "ODT/ODS/font-default regressions"
+    ]
+  },
+  "checks": {
+    "resourceExtraction": "python3 scripts/extract-native-font-data.py --check; pass320 VCL records,88 SAL records,97 slots plus core dispatch",
+    "buildAndOfficeTypecheck": "pass",
+    "toolsTypecheck": "pass",
+    "staticSmoke": "pass",
+    "scopedEslint": "pass",
+    "scopedPrettier": "pass",
+    "jsdoc": "pass3282files",
+    "dependencies": "pass1358sources6971imports193edges",
+    "sourceTree": "pass115required32retired",
+    "sourceProvenance": "pass1359modules",
+    "registry": "pass339capabilities1359modules34invariants3120records",
+    "size": "pass3286files",
+    "routing": "pass",
+    "doctor": "0errors1preexisting-hook-warning"
+  },
+  "admission": [
+    "FontSubstConfiguration Name/MS fields only, prevalidated shipped en provider binding; dynamic provider failures/other locales/other fields unported",
+    "All-locale SAL metadata only; converter/loader interfaces not fabricated",
+    "wwFont and registration/vector methods only; font initialization/XML/embedding and exporter association unported"
+  ],
+  "pending": [
+    "prior RunText unchanged scoped100 branch gap254/255",
+    "SwDoc DOCX traversal, full package orchestration and format import",
+    "DOCX production UI paths and browser acceptance",
+    "Calc XLSX and UI task"
+  ],
+  "stopRule": "Finish this block, commit and verify clean tracked state, pause goal for user merge, await explicit resume."
+}

@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 29
+revision: 30
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T06:32:43.063Z"
+doc_updated_at: "2026-10-26T06:52:57.696Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -136,6 +136,10 @@ sections:
     - Observation: Final admitted run signatures now retain original position/node/length and default boolean flags; RunText uses native UTF8 default and actual UNO LINE_BREAK=1. Final combined profile after these contract corrections: all70 cases pass, statements489/489 functions115/115 lines456/456, branches254/255. The earlier253/254 count is superseded.
       Impact: The unchanged scoped100 gate still fails on the same RunText source branch; overall task acceptance remains incomplete.
       Resolution: Checkpoint evidence records exact current source Git blobs, complete coverage totals, successful checks and pending whole-task requirements. Do not certify coverage or UI readiness.
+
+    - Observation: Completed the current font-registration block before the user-requested merge pause. Native FontMapExport, Writer charset wrapper, wwFont FFN identity/copy, wwFontHelper ordered map registration/ID vector, shared GetSubsFontName and fixed-en MS configuration fields are implemented. python3 scripts/extract-native-font-data.py --check validates all320 VCL records and88 charset records across all97 native full-table slots plus core dispatch. Final focused coverage:52 cases/8 files, six executable owners, statements301/301 branches153/153 functions33/33 lines266/266. Relevant ODT/ODS/default-font regressions pass. Build/typecheck/static, scoped lint/format/docs, dependency/tree/provenance/registry/size/routing pass; doctor has0errors and its preexisting hook warning.
+      Impact: This proves the admitted registration block only. Missing-provider/unknown-locale configuration paths and other FontNameAttr fields are outside the explicit resource binding; full font initialization/XML/embedding and DocxExport association remain pending. The prior RunText coverage gap, import/export traversal, package orchestration and DOCX/XLSX UI acceptance remain open. No overall task verification OK or completion is asserted.
+      Resolution: Preserve source lower_bound mismatch as WRITER114/CALC-291. Commit only the current block and its traceability artifacts, leave the existing unrelated Calc README untouched, then pause the active goal at the user's explicit request so they can merge concurrent format work. Do not start another implementation block until resumed.
 id_source: "generated"
 ---
 ## Summary
@@ -248,3 +252,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Final admitted run signatures now retain original position/node/length and default boolean flags; RunText uses native UTF8 default and actual UNO LINE_BREAK=1. Final combined profile after these contract corrections: all70 cases pass, statements489/489 functions115/115 lines456/456, branches254/255. The earlier253/254 count is superseded.
   Impact: The unchanged scoped100 gate still fails on the same RunText source branch; overall task acceptance remains incomplete.
   Resolution: Checkpoint evidence records exact current source Git blobs, complete coverage totals, successful checks and pending whole-task requirements. Do not certify coverage or UI readiness.
+
+- Observation: Completed the current font-registration block before the user-requested merge pause. Native FontMapExport, Writer charset wrapper, wwFont FFN identity/copy, wwFontHelper ordered map registration/ID vector, shared GetSubsFontName and fixed-en MS configuration fields are implemented. python3 scripts/extract-native-font-data.py --check validates all320 VCL records and88 charset records across all97 native full-table slots plus core dispatch. Final focused coverage:52 cases/8 files, six executable owners, statements301/301 branches153/153 functions33/33 lines266/266. Relevant ODT/ODS/default-font regressions pass. Build/typecheck/static, scoped lint/format/docs, dependency/tree/provenance/registry/size/routing pass; doctor has0errors and its preexisting hook warning.
+  Impact: This proves the admitted registration block only. Missing-provider/unknown-locale configuration paths and other FontNameAttr fields are outside the explicit resource binding; full font initialization/XML/embedding and DocxExport association remain pending. The prior RunText coverage gap, import/export traversal, package orchestration and DOCX/XLSX UI acceptance remain open. No overall task verification OK or completion is asserted.
+  Resolution: Preserve source lower_bound mismatch as WRITER114/CALC-291. Commit only the current block and its traceability artifacts, leave the existing unrelated Calc README untouched, then pause the active goal at the user's explicit request so they can merge concurrent format work. Do not start another implementation block until resumed.
