@@ -1,11 +1,10 @@
 /** @fileoverview Original ICU78.3 uloc.cpp legacy subtag parser over explicit narrow-byte string views and optional append sinks. No Locale normalization, BCP47 conversion, default locale or calendar service is substituted here. */
+import { asByteSink } from "./bytestream";
 import data from "../data/misc/uloc.json";
 import { UErrorCode, U_FAILURE } from "./unicode/utypes";
-/** Original consumed ByteSink Append boundary; strings represent narrow-byte spans, including embedded NUL. */
-export interface LocaleByteSink {
-  /** Appends original narrow units. @param bytes - Owned/borrowed span. @returns Nothing. */
-  Append(bytes: string): void;
-}
+/** Original consumed append-only projection of the shared ByteSink contract. */
+export type { ByteStringSink as LocaleByteSink } from "./unicode/bytestream";
+import type { ByteStringSink as LocaleByteSink } from "./unicode/bytestream";
 /** Source ASCII platform separator predicate. @param c - Narrow unit. @returns Separator. */
 function _isIDSeparator(c: string | undefined): boolean {
   return c === "_" || c === "-";
@@ -69,17 +68,30 @@ function _getLanguage(id: string, sink: LocaleByteSink | null, status: [number])
     ++len;
   }
   if (sink === null || len === 0) return skip + len;
-  let value = lower(id.slice(0, len));
-  if (len >= 2 && id.length >= 2 && _isIDSeparator(id[1]))
-    value = value.slice(0, 1) + "-" + value.slice(2);
+  const actual = asByteSink(sink),
+    minCapacity = Math.max(len, 4),
+    scratch = new Uint8Array(11),
+    capacity: [number] = [0],
+    buffer = actual.GetAppendBuffer(
+      minCapacity,
+      minCapacity,
+      scratch,
+      scratch.length,
+      capacity,
+    ) as Uint8Array;
+  for (let i = 0; i < len; ++i) buffer[i] = lower(id[i] as string).charCodeAt(0);
+  if (id.length >= 2 && _isIDSeparator(id[1])) buffer[1] = 45;
   if (len === 3) {
-    const index = _findIndex(data.tables.LANGUAGES_3, value);
+    buffer[3] = 0;
+    let key = "";
+    for (let i = 0; i < len; ++i) key += String.fromCharCode(buffer[i] as number);
+    const index = _findIndex(data.tables.LANGUAGES_3, key);
     if (index !== null) {
-      sink.Append(data.tables.LANGUAGES[index] as string);
+      actual.Append(data.tables.LANGUAGES[index] as string);
       return skip + len;
     }
   }
-  sink.Append(value);
+  actual.Append(buffer, len);
   return skip + len;
 }
 /** Original exactly-four-letter script parser. @param id - Remaining span. @param sink - Optional output. @returns Consumed units. */
@@ -95,7 +107,15 @@ function _getScript(id: string, sink: LocaleByteSink | null): number {
     ++len;
   }
   if (len !== 4) return 0;
-  if (sink !== null) sink.Append(upper(id[0] as string) + lower(id.slice(1, 4)));
+  if (sink !== null) {
+    const actual = asByteSink(sink),
+      scratch = new Uint8Array(4),
+      capacity: [number] = [0],
+      buffer = actual.GetAppendBuffer(4, 4, scratch, 4, capacity) as Uint8Array;
+    buffer[0] = upper(id[0] as string).charCodeAt(0);
+    for (let i = 1; i < 4; ++i) buffer[i] = lower(id[i] as string).charCodeAt(0);
+    actual.Append(buffer, 4);
+  }
   return len;
 }
 /** Original two/three-unit region parser does not add an ASCII-letter validation. @param id - Remaining span. @param sink - Optional output. @returns Consumed units. */
@@ -107,15 +127,22 @@ function _getRegion(id: string, sink: LocaleByteSink | null): number {
   }
   if (len < 2) return 0;
   if (sink === null) return len;
-  const value = upper(id.slice(0, len));
+  const actual = asByteSink(sink),
+    scratch = new Uint8Array(4),
+    capacity: [number] = [0],
+    buffer = actual.GetAppendBuffer(4, 4, scratch, 4, capacity) as Uint8Array;
+  for (let i = 0; i < len; ++i) buffer[i] = upper(id[i] as string).charCodeAt(0);
   if (len === 3) {
-    const index = _findIndex(data.tables.COUNTRIES_3, value);
+    buffer[3] = 0;
+    let key = "";
+    for (let i = 0; i < len; ++i) key += String.fromCharCode(buffer[i] as number);
+    const index = _findIndex(data.tables.COUNTRIES_3, key);
     if (index !== null) {
-      sink.Append(data.tables.COUNTRIES[index] as string);
+      actual.Append(data.tables.COUNTRIES[index] as string);
       return len;
     }
   }
-  sink.Append(value);
+  actual.Append(buffer, len);
   return len;
 }
 /** Original multi-variant parser preserves historical trailing separator consumption, append-before-error output and POSIX scanning. @param id - Remaining span. @param prev - Preceding delimiter. @param sink - Optional append output. @param needSeparator - Existing variant flag. @param status - Sticky status. @returns Consumed units or zero. */
@@ -143,7 +170,14 @@ export function _getVariant(
       if (sink !== null) {
         if (needSeparator) sink.Append("_");
         else needSeparator = true;
-        sink.Append(upper(sub.slice(0, limit)));
+        const actual = asByteSink(sink),
+          scratch = new Uint8Array(179),
+          capacity: [number] = [0],
+          minCapacity = Math.min(limit, 179),
+          buffer = actual.GetAppendBuffer(minCapacity, minCapacity, scratch, 179, capacity);
+        for (let i = 0; i < limit; ++i)
+          (buffer as Uint8Array)[i] = upper(sub[i] as string).charCodeAt(0);
+        actual.Append(buffer, limit);
       }
       if (finished) return index;
       sub = sub.slice(next);

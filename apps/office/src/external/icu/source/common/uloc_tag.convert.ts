@@ -1,4 +1,5 @@
 /** @fileoverview Original ICU78.3 forLanguageTag ByteSink conversion and extension-to-legacy keyword helpers from uloc_tag.cpp. This fragment operates on the actual parsed tag owner and source key/type map views. */
+import { ByteSinkUtil } from "./bytesinkutil";
 import * as T from "./uloc_tag";
 import * as K from "./uloc.keytype";
 import type { LocaleByteSink } from "./uloc.subtags";
@@ -286,4 +287,23 @@ export function ulocimp_forLanguageTag(
     if (isEmpty && extensionCount > 0) sink.Append("und");
     _appendKeywords(actual, sink, status);
   }
+}
+
+/** Original C-buffer language-tag wrapper uses NUL-terminated input and preserves partial parsedLength even if output overflows. @param langtag - Readable C tag. @param buffer - Output. @param capacity - Native capacity. @param parsedLength - Optional consumed count. @param status - Sticky status. @returns Required length/failure zero. */
+export function uloc_forLanguageTag(
+  langtag: string,
+  buffer: Uint8Array | null,
+  capacity: number,
+  parsedLength: [number] | null,
+  status: [number],
+): number {
+  return ByteSinkUtil.viaByteSinkToTerminatedChars(
+    buffer,
+    capacity,
+    /** Runs the original internal conversion directly. @param sink - Checked owner. @param s - Status. @returns Nothing. */ (
+      sink,
+      s,
+    ) => ulocimp_forLanguageTag(langtag, -1, sink, parsedLength, s),
+    status,
+  );
 }

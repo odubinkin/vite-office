@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/bytesinkutil.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/bytesinkutil.ts",
+        "apps/office/src/external/icu/source/common/bytesinkutil.test.ts",
+        "scripts/icu-bytesink-native-probe.mjs"
+      ],
+      "justification": "Original static ByteSinkUtil terminated-array adapter invokes the actual checked owner, returns zero on conversion errors before termination while retaining partial bytes, returns attempted length on overflow and otherwise delegates original u_terminateChars. The callback receives the complete source-shaped ByteSink API. Native primitive and keyword/facade probes verify full buffers/guards, status/warning clearing, exact capacity, negative/zero capacity and source failure timing. Other editing/UTF/CharString ByteSinkUtil helpers and native capacity/pointer/allocator/ABI precondition violations are outside this binding.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ByteSinkUtil"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/bytesinkutil.h",
+      "upstreamSymbols": [
+        "ByteSinkUtil"
+      ]
+    }
+  }
+}

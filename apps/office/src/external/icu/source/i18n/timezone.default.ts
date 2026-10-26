@@ -1,7 +1,9 @@
 /** @fileoverview Original ICU78.3 host detection and default-zone initialization/adoption/clone lifecycle from timezone.cpp. The browser host hook binding is separate from the source decision logic; native mutex/allocator/cleanup remain uncertified. */
 import { UnicodeString } from "../common/unistr";
 import { browserTimeZoneHost, type TimeZoneHost } from "../../browser/putil-tz";
-import { createSystemTimeZone, getUnknown } from "./timezone.create";
+import type { LocaleConstReference } from "../common/locid";
+import { UErrorCode, U_FAILURE } from "../common/unicode/utypes";
+import { createTimeZone, createSystemTimeZone, getUnknown } from "./timezone.create";
 import { SimpleTimeZone } from "./simpletz";
 import type { TimeZone, TimeZoneConstReference } from "./timezone";
 let DEFAULT_ZONE: TimeZone | null = null;
@@ -50,4 +52,18 @@ export function adoptDefault(zone: TimeZone | null): void {
 /** Original const-reference setter clones before adopting. @param zone - Copied zone. @returns Nothing. */
 export function setDefault(zone: TimeZoneConstReference): void {
   adoptDefault(zone.clone());
+}
+
+/** Original locale-zone factory ignores malformed, oversized and exactly-un-terminated keyword results, then returns a cloned default. A valid unknown ID still follows createTimeZone Unknown fallback. @param locale - Actual borrowed locale. @returns Owned zone/null on native allocation failure. */
+export function forLocaleOrDefault(locale: LocaleConstReference): TimeZone | null {
+  const buffer = new Uint8Array(96),
+    status: [number] = [0];
+  let count = locale.getKeywordValue("timezone", buffer, buffer.length, status);
+  if (U_FAILURE(status[0]) || status[0] === UErrorCode.U_STRING_NOT_TERMINATED_WARNING) count = 0;
+  if (count > 0) {
+    let id = "";
+    for (let i = 0; i < count; ++i) id += String.fromCharCode(buffer[i] as number);
+    return createTimeZone(new UnicodeString(id, count));
+  }
+  return createDefault();
 }

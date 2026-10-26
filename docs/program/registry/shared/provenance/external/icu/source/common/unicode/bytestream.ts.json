@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/bytestream.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/bytestream.h",
+    "localSymbols": [
+      "ByteSink",
+      "CheckedArrayByteSink"
+    ],
+    "upstreamSymbols": [
+      "ByteSink",
+      "CheckedArrayByteSink"
+    ],
+    "preservedResponsibilities": [
+      "Original public ByteSink/CheckedArrayByteSink header surface reexports the one actual common/bytestream.ts implementation owner; no parallel sink state is constructed. The counted immutable-string interface is the existing narrow-span platform projection. All algorithms and source native proof live with the bytestream.cpp owner; this header does not claim additional stream classes, native layout or ABI."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; native pointer/allocator/ABI and complete locale/calendar integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/bytestream.ts",
+          "marker": "ByteSink"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/bytestream.h",
+          "marker": "CheckedArrayByteSink"
+        }
+      ]
+    }
+  }
+}

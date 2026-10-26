@@ -4196,3 +4196,24 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: operator== compares only C names. A bogus Locale returns the empty name, as does root, so equality is true even though isBogus differs.
 - Suspected issue: code using name equality alone cannot distinguish an invalid value from a valid root Locale. This may be intentional compatibility behavior, but it differs from comparing the payload states.
 - Local behavior: preserve name-only equality without adding a bogus-state guard. The unchanged native Locale witness compares this case after every clone/transition-to-bogus scenario.
+
+### CALC-328 — Locale keyword getter overloads have different bogus-state guards
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, the C-buffer and ByteSink `Locale::getKeywordValue` overloads.
+- Observation: the C-buffer overload delegates getName directly, so a bogus Locale with empty name can return no value with success and terminate the supplied buffer. The counted-key ByteSink overload instead checks isBogus and sets `U_ILLEGAL_ARGUMENT_ERROR` before lookup.
+- Suspected issue: nominally equivalent getters distinguish invalid owner state differently. This may be legacy API compatibility behavior; the port must not unify the guards.
+- Local behavior: preserve both paths and their exact buffer/status effects. Covered by unchanged native keyword/Locale/facade comparisons, including bogus flags and incoming statuses.
+
+### CALC-329 — Keyword validation failure can retain an unterminated output prefix
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getKeywordValue`; `bytesinkutil.h`, `viaByteSinkToTerminatedChars`.
+- Observation: the selected value is validated and appended one byte at a time. A later invalid byte leaves its valid prefix in the sink. The C adapter then returns zero on the error before termination, so a buffer initially filled with nonzero bytes retains, for example, `AB` without an added NUL for value `AB!CD`.
+- Suspected issue: callers cannot infer an empty or terminated output from result length zero on failure. The caller must inspect the original error status; this finding is not a claim that generic ICU error outputs are valid strings.
+- Local behavior: preserve the partial writes, failure zero, unchanged remaining bytes and skipped termination. Native comparisons inspect allocated buffer/guard bytes, never read a failed output as an unbounded C string.
+
+### CALC-330 — Checked sink attempted-count overflow is classified as buffer overflow
+
+- Upstream: ICU78.3 `source/common/bytestream.cpp`, `CheckedArrayByteSink::Append`; `bytesinkutil.h`, terminated-array adapter.
+- Observation: the source has a TODO to distinguish integer overflow. It saturates attempted bytes at INT32_MAX and sets the same overflow flag used for exhausted destination capacity. The adapter consequently uses `U_BUFFER_OVERFLOW_ERROR` for that flag, with the saturated attempted length.
+- Suspected issue: a caller cannot recover the complete required length once logical output exceeds the signed32 count, and the status does not distinguish count saturation from ordinary insufficient capacity.
+- Local behavior: preserve saturation and the source overflow flag/status selection. The primitive native witness verifies 524290 appends of actual readable 4096-byte chunks with zero destination capacity, without overstating any individual source span or allocating multi-gigabyte storage. Adapter classification also follows the unchanged source branch.

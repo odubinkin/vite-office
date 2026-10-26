@@ -1,4 +1,8 @@
 /** @fileoverview Consumed original ICU78.3 Locale constructors, ordinary init payload/getters, clone/copy, root/default ownership and strict forLanguageTag factory. Modern alias-resource canonicalization and likely-subtag APIs remain unported. */
+import { ByteSinkUtil } from "./bytesinkutil";
+import type { ByteStringSink } from "./unicode/bytestream";
+import { ulocimp_getKeywordValue, uloc_getKeywordValue } from "./uloc.keywordvalue";
+import { ulocimp_toLegacyKeyWithFallback, ulocimp_toBcpTypeWithFallback } from "./uloc.keytype";
 import { ulocimp_getName } from "./uloc.normalize";
 import { ulocimp_forLanguageTag } from "./uloc_tag.convert";
 import { getDefaultLocale, locale_set_default_internal } from "./locid.default";
@@ -94,20 +98,34 @@ export class Locale {
   /** Original ordinary init branch; source field/payload selection is retained, without certifying native capacity/OOM or modern canonicalize=true alias processing. @param localeID - Explicit non-null C locale ID. @returns This owner. */
   private init(localeID: string): this {
     this.payload = { type: "bogus" };
-    let fullName = "";
     const status: [number] = [0];
-    ulocimp_getName(
-      localeID,
-      {
-        /** Appends actual normalized CharString bytes. @param value - Span. @returns Nothing. */ Append(
-          value: string,
-        ) {
-          fullName += value;
-        },
-      },
+    let buffer = new Uint8Array(17);
+    let required = ByteSinkUtil.viaByteSinkToTerminatedChars(
+      buffer,
+      17,
+      /** Uses the actual native init parse path. @param sink - Checked owner. @param s - Status. @returns Nothing. */ (
+        sink,
+        s,
+      ) => ulocimp_getName(localeID, sink, s),
       status,
     );
-    if (U_FAILURE(status[0])) return this;
+    if (status[0] === UErrorCode.U_BUFFER_OVERFLOW_ERROR || required >= 17) {
+      buffer = new Uint8Array(required + 1);
+      status[0] = 0;
+      required = ByteSinkUtil.viaByteSinkToTerminatedChars(
+        buffer,
+        required + 1,
+        /** Retries with the original required length plus NUL. @param sink - Checked owner. @param s - Status. @returns Nothing. */ (
+          sink,
+          s,
+        ) => ulocimp_getName(localeID, sink, s),
+        status,
+      );
+    }
+    if (U_FAILURE(status[0]) || status[0] === UErrorCode.U_STRING_NOT_TERMINATED_WARNING)
+      return this;
+    let fullName = "";
+    for (let i = 0; i < required; ++i) fullName += String.fromCharCode(buffer[i] as number);
     const length = fullName.length,
       field = [0, 0, 0, 0, 0],
       fieldLen = [0, 0, 0, 0, 0],
@@ -217,6 +235,65 @@ export class Locale {
     return this.payload.type === "bogus" || this.payload.variantBegin === 0
       ? ""
       : (cstring(this.getBaseName().slice(this.payload.variantBegin)) as string);
+  }
+  /** Original C-buffer keyword getter has no separate bogus guard. @param name - C key/null. @param buffer - Writable output. @param capacity - Native capacity. @param status - Sticky status. @returns Result length. */
+  getKeywordValue(
+    name: string | null,
+    buffer: Uint8Array | null,
+    capacity: number,
+    status: [number],
+  ): number;
+  /** Original counted-key ByteSink getter rejects bogus before dispatch. @param name - Counted key. @param sink - Output. @param status - Sticky status. @returns Nothing. */
+  getKeywordValue(name: string, sink: ByteStringSink, status: [number]): void;
+  /** Original overload dispatch preserves the distinct incoming-error/bogus/C-key rules. @param name - Key. @param output - Actual checked buffer or append owner. @param third - Capacity/status. @param fourth - C status. @returns Native result length or nothing. */
+  getKeywordValue(
+    name: string | null,
+    output: Uint8Array | null | ByteStringSink,
+    third: number | [number],
+    fourth?: [number],
+  ): number | void {
+    if (typeof third === "number")
+      return uloc_getKeywordValue(
+        this.getName(),
+        name,
+        output as Uint8Array | null,
+        third,
+        fourth as [number],
+      );
+    if (U_FAILURE(third[0])) return;
+    if (this.isBogus()) {
+      third[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    ulocimp_getKeywordValue(this.getName(), name as string, output as ByteStringSink, third);
+  }
+  /** Original Unicode keyword getter uses actual legacy/value map views and the source ByteSink bogus guard. @param name - Counted Unicode key. @param sink - Output. @param status - Sticky status. @returns Nothing. */
+  getUnicodeKeywordValue(name: string, sink: ByteStringSink, status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    const key = ulocimp_toLegacyKeyWithFallback(name);
+    if (key === null) {
+      status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    let legacy = "";
+    this.getKeywordValue(
+      key.value,
+      {
+        /** Owns the actual intermediate CharString output. @param value - Span. @returns Nothing. */ Append(
+          value: string,
+        ) {
+          legacy += value;
+        },
+      },
+      status,
+    );
+    if (U_FAILURE(status[0])) return;
+    const unicode = ulocimp_toBcpTypeWithFallback(name, legacy);
+    if (unicode === null) {
+      status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+      return;
+    }
+    sink.Append(unicode.value);
   }
   /** Original fixed cache constructs all19 default objects before assigning the explicit values. This retains initial host-default lookup even when the first query is getRoot. @param index - Source ELocalePos. @returns Borrowed fixed owner. */
   private static getLocale(index: number): LocaleConstReference {

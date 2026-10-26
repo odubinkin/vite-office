@@ -33,7 +33,7 @@ function getShortestSubtagLength(id: string): number {
   return length;
 }
 /** Original loose BCP47 detection predicate. @param id - Counted view. @returns Convert first. */
-function _hasBCP47Extension(id: string): boolean {
+export function _hasBCP47Extension(id: string): boolean {
   return !id.includes("@") && getShortestSubtagLength(id) === 1;
 }
 /** Original complete legacy canonicalization body. @param localeID - Counted narrow view. @param sink - Existing append output. @param options - Source mask0/1/2. @param err - Sticky status. @returns Nothing. */

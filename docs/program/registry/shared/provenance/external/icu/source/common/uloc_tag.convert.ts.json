@@ -7,13 +7,16 @@
     "localPath": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
     "upstreamPath": "vendor/icu-reference/source/common/uloc_tag.cpp",
     "localSymbols": [
-      "ulocimp_forLanguageTag"
+      "ulocimp_forLanguageTag",
+      "uloc_forLanguageTag"
     ],
     "upstreamSymbols": [
-      "ulocimp_forLanguageTag"
+      "ulocimp_forLanguageTag",
+      "uloc_forLanguageTag"
     ],
     "preservedResponsibilities": [
-      "Complete original internal ByteSink forLanguageTag conversion operates on actual ULanguageTag buffer/list owner and source key/type resource maps. Original nested-loop variant pointer swaps, ordered attribute/keyword lists, first duplicates, typeless yes, input-alias lowercase conversion, POSIX flag/underscore behavior, und/private-use rules, partial parsing and existing output append are retained. The unchanged ICU78.3 internal API and real data match121338 cases over6741 spans across all source type/alias inputs, explicit/NUL lengths, sticky statuses and optional parsedLength. Native pools/allocator/mutex/lifetime/ABI, reverse conversion, public C output-buffer capacity/termination and complete Locale/calendar construction remain uncertified or pending."
+      "Complete original internal ByteSink forLanguageTag conversion operates on actual ULanguageTag buffer/list owner and source key/type resource maps. Original nested-loop variant pointer swaps, ordered attribute/keyword lists, first duplicates, typeless yes, input-alias lowercase conversion, POSIX flag/underscore behavior, und/private-use rules, partial parsing and existing output append are retained. The unchanged ICU78.3 internal API and real data match121338 cases over6741 spans across all source type/alias inputs, explicit/NUL lengths, sticky statuses and optional parsedLength. Native pools/allocator/mutex/lifetime/ABI, reverse conversion, public C output-buffer capacity/termination and complete Locale/calendar construction remain uncertified or pending.",
+      "Adds original C-buffer uloc_forLanguageTag using the actual checked adapter, NUL input and source parsedLength preservation even on output overflow. The internal converter remains the one existing owner/path; no precomputed replacement output is used. C facade capacity/status/full-buffer effects match unchanged ICU78.3."
     ],
     "omittedResponsibilities": [
       "Only the stated source responsibilities are ported; complete locale/calendar service integration and native allocator/ABI remain uncertified."

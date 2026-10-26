@@ -1,5 +1,7 @@
 /** @fileoverview Original host/default lifecycle and actual Calendar owned-zone semantics, plus the explicit browser host binding. */
 import { afterEach, expect, it, vi } from "vitest";
+import { Locale } from "../common/locid";
+import { forLocaleOrDefault } from "./timezone.default";
 import { UnicodeString } from "../common/unistr";
 import * as Host from "../../browser/putil-tz";
 import {
@@ -164,4 +166,27 @@ it("retains cached fields after orphanTimeZone until a source invalidating opera
   cal.setTimeZone(cal.getTimeZone());
   expect(cal.get(F.UCAL_ZONE_OFFSET, status)).toBe(-18000000);
   expect(cal.getTime(status)).toBe(0);
+});
+it("uses locale timezone keyword only when its checked C buffer is terminated", /** Source capacity96 warning/error falls back to default; unknown well-formed IDs still create Unknown. @returns Nothing. */ () => {
+  const id = new UnicodeString();
+  setDefault(createTimeZone(new UnicodeString("GMT+05:30")));
+  expect(forLocaleOrDefault(new Locale("@timezone=America/New_York"))?.getID(id).getBuffer()).toBe(
+    "America/New_York",
+  );
+  expect(forLocaleOrDefault(new Locale("@timezone=Not/AZone"))?.getID(id).getBuffer()).toBe(
+    "Etc/Unknown",
+  );
+  expect(
+    forLocaleOrDefault(new Locale("@timezone=" + "x".repeat(95)))
+      ?.getID(id)
+      .getBuffer(),
+  ).toBe("Etc/Unknown");
+  expect(
+    forLocaleOrDefault(new Locale("@timezone=" + "x".repeat(96)))
+      ?.getID(id)
+      .getBuffer(),
+  ).toBe("GMT+05:30");
+  expect(forLocaleOrDefault(new Locale("@timezone=America/New_York!"))?.getID(id).getBuffer()).toBe(
+    "GMT+05:30",
+  );
 });
