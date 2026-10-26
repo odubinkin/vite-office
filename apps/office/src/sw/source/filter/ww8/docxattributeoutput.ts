@@ -10,6 +10,19 @@ import type { SvxPostureItem, SvxWeightItem } from "../../../../editeng/source/i
 import type { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import type { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import type { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import type { SvxContourItem } from "../../../../editeng/inc/contouritem";
+import type { SvxShadowedItem } from "../../../../editeng/inc/shdditem";
+import type { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
+import type { SvxCharReliefItem } from "../../../../editeng/inc/charreliefitem";
+import type { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import type { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
+import type { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import type { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
+import type { SvxBlinkItem } from "../../../../editeng/inc/blinkitem";
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import { SvxCaseMap } from "../../../../editeng/inc/svxenum";
+import { FontRelief } from "../../../../vcl/inc/fntstyle";
+import { FontEmphasisMark } from "../../../../tools/inc/fontenum";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { LINE_BREAK } from "../../../../offapi/com/sun/star/text/ControlCharacter";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
@@ -115,6 +128,7 @@ export function impl_WriteRunText(
 /** Native owner for the admitted untracked text and collected character properties. */
 export class DocxAttributeOutput {
   private m_pFontsAttrList: FastAttributeList | null = null;
+  private m_pEastAsianLayoutAttrList: FastAttributeList | null = null;
   private m_oFontSize: number | undefined;
   private m_bCharPostureWritten = false;
   private m_sRawText = "";
@@ -231,11 +245,12 @@ export class DocxAttributeOutput {
   /** Original per-run resets and schema order. @returns Nothing. */
   InitCollectedRunProperties(): void {
     this.m_pFontsAttrList = null;
+    this.m_pEastAsianLayoutAttrList = null;
     this.m_oFontSize = undefined;
     this.m_bCharPostureWritten = false;
     this.m_pSerializer.mark(11, runOrder);
   }
-  /** Original collected fonts detach and optional font height, including zero. @returns Nothing. */
+  /** Original collected font/height and East Asian layout flush with detach/reset ownership; color/language remain unported. @returns Nothing. */
   WriteCollectedRunProperties(): void {
     if (this.m_pFontsAttrList) {
       const fonts = this.m_pFontsAttrList;
@@ -245,6 +260,11 @@ export class DocxAttributeOutput {
     if (this.m_oFontSize !== undefined) {
       this.m_pSerializer.singleElementNS(w, token("sz"), val, String(this.m_oFontSize));
       this.m_oFontSize = undefined;
+    }
+    if (this.m_pEastAsianLayoutAttrList) {
+      const layout = this.m_pEastAsianLayoutAttrList;
+      this.m_pEastAsianLayoutAttrList = null;
+      this.m_pSerializer.singleElementNS(w, token("eastAsianLayout"), layout);
     }
   }
   /** Native untracked-property completion prepends properties before pending text. @returns Nothing. */
@@ -408,6 +428,96 @@ export class DocxAttributeOutput {
       default:
         this.m_pSerializer.singleElementNS(w, token("strike"));
         break;
+    }
+  }
+  /** Original caps/smallCaps mapping; unsupported modes explicitly clear both Word flags. @param item - Actual case item. @returns Nothing. */
+  CharCaseMap(item: SvxCaseMapItem): void {
+    switch (item.GetValue()) {
+      case SvxCaseMap.SmallCaps:
+        this.m_pSerializer.singleElementNS(w, token("smallCaps"));
+        break;
+      case SvxCaseMap.Uppercase:
+        this.m_pSerializer.singleElementNS(w, token("caps"));
+        break;
+      default:
+        this.m_pSerializer.singleElementNS(w, token("smallCaps"), val, "false");
+        this.m_pSerializer.singleElementNS(w, token("caps"), val, "false");
+    }
+  }
+  /** Original outline flag and explicit false spelling. @param item - Actual contour item. @returns Nothing. */
+  CharContour(item: SvxContourItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("outline"));
+    else this.m_pSerializer.singleElementNS(w, token("outline"), val, "false");
+  }
+  /** Original shadow flag and explicit false spelling. @param item - Actual shadowed item. @returns Nothing. */
+  CharShadow(item: SvxShadowedItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("shadow"));
+    else this.m_pSerializer.singleElementNS(w, token("shadow"), val, "false");
+  }
+  /** Original blink flag selects Word background animation or none. @param item - Actual blink item. @returns Nothing. */
+  CharAnimatedText(item: SvxBlinkItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("effect"),
+      val,
+      item.GetValue() ? "blinkBackground" : "none",
+    );
+  }
+  /** Original bidi item hook intentionally emits no XML. @param item - Unused item. @returns Nothing. */
+  CharBidiRTL(item: SfxPoolItem): void {
+    void item;
+  }
+  /** Original nonzero rotation contributes collected vertical flags without selecting a rotation angle. @param item - Actual rotation item. @returns Nothing. */
+  CharRotate(item: SvxCharRotateItem): void {
+    if (!item.GetValue()) return;
+    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("vert"), "true");
+    if (item.IsFitToLine()) this.m_pEastAsianLayoutAttrList.addNS(w, token("vertCompress"), "true");
+  }
+  /** Original exact emphasis flag combinations, with all remaining values mapped to none. @param item - Actual emphasis item. @returns Nothing. */
+  CharEmphasisMark(item: SvxEmphasisMarkItem): void {
+    const value = item.GetEmphasisMark(),
+      m = FontEmphasisMark;
+    let emphasis: string;
+    if (value === (m.Dot | m.PosAbove)) emphasis = "dot";
+    else if (value === (m.Accent | m.PosAbove)) emphasis = "comma";
+    else if (value === (m.Circle | m.PosAbove)) emphasis = "circle";
+    else if (value === (m.Dot | m.PosBelow)) emphasis = "underDot";
+    else emphasis = "none";
+    this.m_pSerializer.singleElementNS(w, token("em"), val, emphasis);
+  }
+  /** Original two-line enable and bracket priority; disabled input does not clear previously collected flags. @param item - Actual two-line item. @returns Nothing. */
+  CharTwoLines(item: SvxTwoLinesItem): void {
+    if (!item.GetValue()) return;
+    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("combine"), "true");
+    const start = item.GetStartBracket(),
+      end = item.GetEndBracket();
+    if (!start && !end) return;
+    let bracket: string;
+    if (start === 123 || end === 125) bracket = "curly";
+    else if (start === 60 || end === 62) bracket = "angle";
+    else if (start === 91 || end === 93) bracket = "square";
+    else bracket = "round";
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("combineBrackets"), bracket);
+  }
+  /** Original explicit signed16 min/max template arguments precede OOXML width clamping. @param item - Actual unsigned16 width item. @returns Nothing. */
+  CharScaleWidth(item: SvxCharScaleWidthItem): void {
+    const width = Math.max(1, Math.min((item.GetValue() << 16) >> 16, 600));
+    this.m_pSerializer.singleElementNS(w, token("w"), val, String(width));
+  }
+  /** Original embossed/engraved mapping, with all remaining values explicitly clearing both flags. @param item - Actual relief item. @returns Nothing. */
+  CharRelief(item: SvxCharReliefItem): void {
+    switch (item.GetValue()) {
+      case FontRelief.Embossed:
+        this.m_pSerializer.singleElementNS(w, token("emboss"));
+        break;
+      case FontRelief.Engraved:
+        this.m_pSerializer.singleElementNS(w, token("imprint"));
+        break;
+      default:
+        this.m_pSerializer.singleElementNS(w, token("emboss"), val, "false");
+        this.m_pSerializer.singleElementNS(w, token("imprint"), val, "false");
     }
   }
 }

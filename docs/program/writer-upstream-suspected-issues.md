@@ -1412,3 +1412,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `sw::util::GetPseudoCharRuns`.
 - Observation: the function selects and extends a font charset from the first script before it builds the script boundaries. Every emitted CharRunEntry receives that same charset even when later runs use another script with a different paragraph font charset. Empty text uses Latin. Effects on encoding-dependent Word filters remain unverified; DOCX RunText ignores its charset parameter.
 - Preservation: keep first-script font lookup and charset reuse, with no per-script refresh or guessed UTF8 replacement. Real three-script node tests retain this behavior for Latin-, CJK- and CTL-first text. The negative-script-end and missing-table guards are also kept despite remaining uncovered with the concrete successful backend.
+
+### WRITER144 — DOCX character width narrows to signed16 before clamping
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `DocxAttributeOutput::CharScaleWidth`; unsigned storage is `SvxCharScaleWidthItem`.
+- Observation: the explicit `std::min<sal_Int16>` template parameter converts the unsigned width before the advertised OOXML range clamp. On the current native compiler, stored values 32768 and 65535 therefore become negative and export as 1 rather than 600. The real short Any width contract can store 65535 from -1, so this is more than an arbitrary widened JavaScript input. Desktop producer reachability and document impact remain unverified.
+- Preservation: perform original signed16 narrowing before min/max; do not widen to a JavaScript unsigned clamp. Literal real-item DOCX tests pin 0/1/100/600/601/32767/32768/65535. The task evidence char-width-narrowing-probe.json records a compiled C++ template-conversion check only; it does not claim a compiled native DOCX export or whole-module parity.
