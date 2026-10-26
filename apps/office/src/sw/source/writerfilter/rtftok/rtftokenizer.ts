@@ -32,7 +32,8 @@ export class RtfTokenizer {
 
   /** Returns the current parser state's remaining Unicode fallback characters.  @returns The number result. */
   private get fallback(): number {
-    return this.groupFallback.at(-1) ?? 0;
+    // The sentinel entry survives every checked group pop.
+    return this.groupFallback.at(-1) as number;
   }
 
   /** Updates only the current group state, matching native push/pop behavior.  @param value - Value. @returns The computed result. */
@@ -68,7 +69,7 @@ export class RtfTokenizer {
         this.FlushText();
         this.depth++;
         if (this.depth > 1024) throw new RtfSyntaxError("RTF group nesting is too deep.");
-        this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) ?? 1);
+        this.groupUnicodeSkip.push(this.groupUnicodeSkip.at(-1) as number);
         this.groupFallback.push(this.fallback);
         this.Emit({ kind: "group-start" });
       } else if (byte === 0x7d) {
@@ -153,7 +154,7 @@ export class RtfTokenizer {
       if (codeUnit >= -32768 && codeUnit <= 65535) {
         this.FlushText();
         this.Emit({ kind: "text", value: String.fromCharCode(codeUnit & 0xffff) });
-        this.fallback = this.groupUnicodeSkip.at(-1) ?? 1;
+        this.fallback = this.groupUnicodeSkip.at(-1) as number;
       }
     } else {
       // The native fallback counter is consumed by characters, not control words.

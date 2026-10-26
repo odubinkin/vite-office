@@ -56,6 +56,7 @@ export class RtfAttributeOutput {
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
+    const text = paragraph.GetText();
     return this.WriteParagraphValues(
       paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
       paragraph.GetParagraphTextLeftMargin(),
@@ -76,9 +77,7 @@ export class RtfAttributeOutput {
       this.WriteLineSpacing(
         paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
         paragraph.GetSwAttrSet(),
-        paragraph.GetText().length === 0
-          ? LATIN
-          : GetScriptClass(paragraph.GetText().codePointAt(0) ?? 0),
+        text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
       ),
     );
   }
@@ -233,7 +232,8 @@ export class RtfAttributeOutput {
       result += `\\f${this.fontIndex(attributes.fontFamily)}`;
     if (attributes.fontSizeTwips !== undefined)
       result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
-    if (attributes.escapement !== undefined) result += this.WriteEscapement(attributes);
+    if (attributes.escapement !== undefined)
+      result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
     if (attributes.color !== undefined)
       result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
     if (attributes.highlight !== undefined)
@@ -241,10 +241,11 @@ export class RtfAttributeOutput {
     return result;
   }
 
-  /** Emits source super/subscript or proportional up/down controls. @param attributes - Effective run values. @returns RTF controls. */
-  private WriteEscapement(attributes: WriterCharacterAttributes): string {
-    const value = attributes.escapement;
-    if (value === undefined) return "";
+  /** Emits source super/subscript or proportional up/down controls. @param value - Admitted escapement value. @param fontSizeTwips - Font height or native default. @returns RTF controls. */
+  private WriteEscapement(
+    value: NonNullable<WriterCharacterAttributes["escapement"]>,
+    fontSizeTwips: number | undefined,
+  ): string {
     const { offset, height } = value;
     if (height === DFLT_ESC_PROP || height < 1 || height > 100) {
       if (offset === DFLT_ESC_SUB || offset === DFLT_ESC_AUTO_SUB) return "\\sub";
@@ -256,7 +257,7 @@ export class RtfAttributeOutput {
     if (offset === DFLT_ESC_AUTO_SUPER) effectiveOffset = Math.trunc(0.8 * (100 - height));
     else if (offset === DFLT_ESC_AUTO_SUB) effectiveOffset = Math.trunc(-0.2 * (100 - height));
     if (effectiveOffset === 0) return "";
-    const fontHeight = attributes.fontSizeTwips ?? 240;
+    const fontHeight = fontSizeTwips ?? 240;
     const halfPoints = Math.round((fontHeight * Math.abs(effectiveOffset)) / 1000);
     return `{\\*\\updnprop${height * 100 + (automatic ? 1 : 0)}}\\${effectiveOffset > 0 ? "up" : "dn"}${halfPoints}`;
   }

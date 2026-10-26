@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T10:15:36.630Z"
+doc_updated_at: "2026-10-26T11:10:08.938Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -84,6 +84,10 @@ sections:
     - Observation: The full browser run completed with 536/537 passing; the only failure was the Calc 1280px column-width scenario hitting its 30-second whole-test budget. The unchanged scenario passed alone in 15.9 seconds. Inventory tooling coverage passed all 124 cases and all four 100-percent gates.
       Impact: No application behavior mismatch was identified by the browser failure; whole-application coverage remains the outstanding integration gate.
       Resolution: Added actual serialized RTF write/read cases, native scanner classification/state/date-order cases, sparse and rich-text CSV exports, pool worker transfer cases and SAL error/ABI tests. The focused regression set passed 135 cases across 17 files before the latest extensions; the extended RTF set passed 47 cases. Four encoding production modules now pass all four 100-percent gates with 39 cases: ISCII, ISO-2022-JP, ISO-2022-KR and DBCS/EUC-JP. Removed only unreachable ISCII control paths and replaced impossible fallback reads against pinned ISO tables with native indexed access, protected by complete admitted-row table invariants. No threshold reduction or ignore pragma was added. Full-project publication remains pending the remaining uncovered modules.
+
+    - Observation: Added native RTF admission, inheritance, table geometry, control mappings, style slot limits and tokenizer boundaries; calendar cache, leading fragment and literal-token tests; SAX timezone rollover and invalid fields; Symbol policy/capacity tests; Markdown list completion and ODF border rejection.
+      Impact: The latest focused execution passes 25 files and 336 tests. The preceding RTF coverage run reached 100% lines, statements and functions, with 95.06% branches. These are scoped diagnostics, not a successful complete application coverage gate.
+      Resolution: Retained the original state owners and source ordering. Removed unreachable private fallback paths whose constructors or bounded local loops already establish the invariant. Current typecheck, lint, JSDoc, size and provenance gates pass; full coverage and final repository synchronization remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -148,3 +152,7 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: The full browser run completed with 536/537 passing; the only failure was the Calc 1280px column-width scenario hitting its 30-second whole-test budget. The unchanged scenario passed alone in 15.9 seconds. Inventory tooling coverage passed all 124 cases and all four 100-percent gates.
   Impact: No application behavior mismatch was identified by the browser failure; whole-application coverage remains the outstanding integration gate.
   Resolution: Added actual serialized RTF write/read cases, native scanner classification/state/date-order cases, sparse and rich-text CSV exports, pool worker transfer cases and SAL error/ABI tests. The focused regression set passed 135 cases across 17 files before the latest extensions; the extended RTF set passed 47 cases. Four encoding production modules now pass all four 100-percent gates with 39 cases: ISCII, ISO-2022-JP, ISO-2022-KR and DBCS/EUC-JP. Removed only unreachable ISCII control paths and replaced impossible fallback reads against pinned ISO tables with native indexed access, protected by complete admitted-row table invariants. No threshold reduction or ignore pragma was added. Full-project publication remains pending the remaining uncovered modules.
+
+- Observation: Added native RTF admission, inheritance, table geometry, control mappings, style slot limits and tokenizer boundaries; calendar cache, leading fragment and literal-token tests; SAX timezone rollover and invalid fields; Symbol policy/capacity tests; Markdown list completion and ODF border rejection.
+  Impact: The latest focused execution passes 25 files and 336 tests. The preceding RTF coverage run reached 100% lines, statements and functions, with 95.06% branches. These are scoped diagnostics, not a successful complete application coverage gate.
+  Resolution: Retained the original state owners and source ordering. Removed unreachable private fallback paths whose constructors or bounded local loops already establish the invariant. Current typecheck, lint, JSDoc, size and provenance gates pass; full coverage and final repository synchronization remain pending.

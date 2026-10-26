@@ -79,13 +79,13 @@ export interface RtfState {
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
-  styleName?: string;
+  styleName: string;
   basedOnStyleIndex?: number;
   nextStyleIndex?: number;
   styleControls: Set<string>;
   characterControls: Set<string>;
-  bookmarkName?: string;
-  levelText?: string;
+  bookmarkName: string;
+  levelText: string;
 }
 /** Parsed paragraph before the source graph is applied atomically. */
 export interface RtfParagraph {
@@ -430,12 +430,13 @@ export function parseRtfHyperlinkInstruction(instruction: string): WriterHyperli
   let targetFrame = "";
   let name = "";
   for (let index = 1; index < parts.length; index++) {
-    const part = parts[index];
+    // Command tokenization returns a dense local array; this loop admits only existing entries.
+    const part = parts[index] as string;
     if (part === "\\l") url += `#${parts[++index] ?? ""}`;
     else if (part === "\\t") targetFrame = parts[++index] ?? "";
     else if (part === "\\o") name = parts[++index] ?? "";
     else if (part !== "\\m" && part !== "\\n" && part !== "\\h")
-      url = part?.replaceAll("\\\\", "\\") ?? "";
+      url = part.replaceAll("\\\\", "\\");
   }
   if (url.length === 0) return undefined;
   if (url.startsWith("file:///")) url = url.replaceAll("\\", "/");

@@ -109,9 +109,9 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     this["importedStyles"].set(index, collection);
   }
   for (const [index, definition] of this["styles"]) {
-    const collection = this["importedStyles"].get(index);
+    // The preceding loop created a collection for every key in this unchanged styles map.
+    const collection = this["importedStyles"].get(index) as SwTextFormatColl;
     const parent = this["importedStyles"].get(definition.basedOnStyleIndex ?? -1);
-    if (collection === undefined) continue;
     if (parent !== undefined && parent !== collection) collection.SetDerivedFrom(parent);
     const next = this["importedStyles"].get(definition.nextStyleIndex ?? -1);
     if (next !== undefined) collection.SetNextTextFormatColl(next);
@@ -140,9 +140,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     let sectionStyle = sectionStyles.get(block.section);
     const startsSection = block.section > 0 && sectionStyle === undefined;
     if (block.section > 0 && sectionStyle === undefined) {
-      let number = block.section;
-      while (document.FindPageDesc(`Converted${number}`) !== undefined) number++;
-      sectionStyle = `Converted${number}`;
+      // This fresh document receives one generated page descriptor per unique parsed section ID.
+      sectionStyle = `Converted${block.section}`;
       const page = document.MakePageDesc(sectionStyle);
       document.ChgPageDesc(
         { ...defaultPage, ...this["sectionPages"][block.section], name: sectionStyle },
@@ -151,8 +150,10 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       sectionStyles.set(block.section, page.GetName());
     }
     if (block.kind === "paragraph") {
-      const node = firstParagraph ? document.paragraphs[0] : document.nodes.MakeTextNode();
-      if (node === undefined) throw new Error("Writer body has no text node.");
+      // A fresh SwDoc owns its initial text node; later nodes are returned by the native constructor.
+      const node = firstParagraph
+        ? (document.paragraphs[0] as SwTextNode)
+        : document.nodes.MakeTextNode();
       this["ApplyParagraph"](node, block.paragraph);
       if (startsSection && sectionStyle !== undefined)
         node.SetAttr(
@@ -224,8 +225,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
         }
         if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
         for (const [index, cell] of row.cells.entries()) {
-          const box = line.GetTabBoxes()[index];
-          if (box === undefined) throw new Error("RTF table cell is missing.");
+          // AppendTableRow created exactly row.cells.length boxes before this bounded iteration.
+          const box = line.GetTabBoxes()[index] as ReturnType<typeof line.GetTabBoxes>[number];
           const vertical = row.verticals[index];
           if (vertical !== undefined) {
             const item = box.GetVertOrient();
@@ -277,9 +278,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
           for (const [paragraphIndex, paragraph] of cell.entries()) {
             const node =
               paragraphIndex === 0
-                ? box.GetParagraphs()[0]
+                ? (box.GetParagraphs()[0] as SwTextNode)
                 : document.nodes.AppendTableCellParagraph(box);
-            if (node === undefined) throw new Error("RTF table paragraph is missing.");
             this["ApplyParagraph"](node, paragraph);
           }
         }

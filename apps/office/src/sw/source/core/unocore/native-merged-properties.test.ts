@@ -14,6 +14,32 @@ import { applyTextImportProperties } from "../../../../xmloff/source/text/txtprm
 import { SwXStyle } from "./unostyle";
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
 
+it("rejects invalid XML border values before applying collected paragraph properties", /** Checks actual XML handler failures through a Writer cursor and leaves its native attributes intact. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  const model = new SwXTextDocument(document);
+  const cursor = model.getText().createTextCursor();
+  try {
+    expect(
+      /** Sends an unsupported border token through the native XML handler. @returns Nothing. */ () =>
+        applyTextImportProperties(cursor, {}, { borderTop: "invalid-border" }),
+    ).toThrow("Unsupported ODF paragraph border: invalid-border");
+    expect(
+      /** Sends unsupported compound widths after a valid border token. @returns Nothing. */ () =>
+        applyTextImportProperties(
+          cursor,
+          {},
+          { borderTop: "0.1cm solid #112233", borderLineWidthTop: "invalid-widths" },
+        ),
+    ).toThrow("Unsupported ODF paragraph border widths: invalid-widths");
+    expect(document.paragraphs).toHaveLength(1);
+    expect(document.paragraphs[0]?.GetText()).toBe("");
+  } finally {
+    cursor.dispose();
+    model.dispose();
+    document.Dispose();
+  }
+});
+
 it("preserves native color values and theme metadata across API replacement without mutating the original", /** Exercises the real pooled-item/API boundary with automatic and alpha colors. @returns Nothing. */ () => {
   const entry = SwUnoPropertyMap.get("CharColor");
   assert(entry, "CharColor must be exposed by the actual Writer property map");

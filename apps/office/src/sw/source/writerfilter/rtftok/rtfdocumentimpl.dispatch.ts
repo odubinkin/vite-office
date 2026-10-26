@@ -43,6 +43,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       currentCodepage: previous?.currentCodepage ?? this["defaultCodepage"],
       ...(previous?.fontCodepage === undefined ? {} : { fontCodepage: previous.fontCodepage }),
       colorIndex: previous?.colorIndex ?? 0,
+      // Destination text buffers begin empty in every group; the old optional buffers did likewise.
+      styleName: "",
+      bookmarkName: "",
+      levelText: "",
       ...(previous?.field === undefined ? {} : { field: previous.field }),
       ...(previous?.hyperlink === undefined ? {} : { hyperlink: previous.hyperlink }),
       ...(previous?.styleIndex === undefined ? {} : { styleIndex: previous.styleIndex }),
@@ -64,8 +68,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
       this["CommitFont"](previous);
     if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
-      const name = previous.styleName?.split(";")[0]?.trim();
-      if (name !== undefined && name.length > 0)
+      const name = (previous.styleName.split(";")[0] as string).trim();
+      if (name.length > 0)
         this["styles"].set(previous.styleIndex, {
           name,
           character: { ...previous.character },
@@ -80,8 +84,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         });
     }
     if (previous?.destination === "bookmarkstart") {
-      const name = previous.bookmarkName?.trim();
-      if (name !== undefined && name.length > 0)
+      const name = previous.bookmarkName.trim();
+      if (name.length > 0)
         this["marks"].push({
           name,
           offset: this["runs"].reduce(
@@ -94,15 +98,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         });
     }
     if (previous?.destination === "leveltext") {
-      const glyph = [...(previous.levelText ?? "")].find(
+      const glyph = [...previous.levelText].find(
         /** Computes the value result. @param value - Value. @returns The computed result. */ (
           value,
-        ) => (value.codePointAt(0) ?? 0) > 0x20 && value !== ";",
+        ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
       );
       if (glyph !== undefined) {
         const level = this["currentListLevels"].at(-1);
-        const bullet = glyph.codePointAt(0);
-        if (level !== undefined && bullet !== undefined) level.bullet = bullet;
+        if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
       }
     }
     if (previous?.destination === "list")
@@ -121,17 +124,16 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     // resolveChars converts hex CR and LF into separate PAR controls except
     // in destinations such as LEVELTEXT, where their bytes remain data.
     if (state.destination === "body") this["DispatchBodyControl"]("par", undefined, state);
-    else if (state.destination === "leveltext")
-      state.levelText = (state.levelText ?? "") + token.value;
+    else if (state.destination === "leveltext") state.levelText += token.value;
     return;
   }
   if (token.kind === "text" || token.kind === "ansi-bytes") {
     const value = token.kind === "text" ? token.value : this["DecodeBytes"](token.value, state);
     if (state.destination === "fonttbl") this["ReadFontText"](value, state);
-    else if (state.destination === "styleentry") state.styleName = (state.styleName ?? "") + value;
+    else if (state.destination === "styleentry") state.styleName += value;
     else if (state.destination === "bookmarkstart" || state.destination === "bookmarkend")
-      state.bookmarkName = (state.bookmarkName ?? "") + value;
-    else if (state.destination === "leveltext") state.levelText = (state.levelText ?? "") + value;
+      state.bookmarkName += value;
+    else if (state.destination === "leveltext") state.levelText += value;
     else if (state.destination === "colortbl") this["ReadColorText"](value);
     else if (state.destination === "fldinst" && state.field !== undefined)
       state.field.instruction += value;

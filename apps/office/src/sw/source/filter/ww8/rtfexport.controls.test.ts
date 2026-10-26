@@ -16,6 +16,8 @@ import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import { RtfDocumentImpl } from "../../writerfilter/rtftok/rtfdocumentimpl";
+import { createWriterTextFragment } from "../basflt/writer-transfer";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { RtfExport } from "./rtfexport";
 
 it("indexes named-style colors and escapes soft lines, tabs and end bookmarks", /** Checks actual style collection and paragraph output rather than the exporter's private helpers. @returns Nothing. */ () => {
@@ -36,6 +38,68 @@ it("indexes named-style colors and escapes soft lines, tabs and end bookmarks", 
     expect(rtf).toContain("\\red101\\green67\\blue33;");
     expect(rtf).toContain("A\\line B\\tab C");
     expect(rtf).toContain("{\\*\\bkmkstart End}{\\*\\bkmkend End}");
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps NONE and unknown native border styles empty before selecting an RTF line control", /** Checks the native width implementation invariant used by the nonempty border serializer. @returns Nothing. */ () => {
+  for (const style of [BorderLineStyle.NONE, 99 as BorderLineStyle]) {
+    expect(new SvxBorderLine(new Color(0x123456), 60, style).isEmpty()).toBe(true);
+  }
+});
+
+it("sorts native soft boundaries and stops splitting at a self-following page style", /** Checks source mark order independently of the paragraph's stored text. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    assert(paragraph);
+    paragraph.SetText("AlphaBetaGamma");
+    document.GetIDocumentMarkAccess().AddSoftPageBreak(paragraph, 9);
+    document.GetIDocumentMarkAccess().AddSoftPageBreak(paragraph, 5);
+    const follow = document.MakePageDesc("Follow", document.GetPageDesc());
+    document.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
+    follow.SetFollow(follow);
+    document.GetPageDesc().SetFollow(follow);
+    const imported = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(document));
+    try {
+      expect(
+        imported.paragraphs.map(
+          /** Reads actual paragraph text. @param node - Native node. @returns Text. */ (node) =>
+            node.GetText(),
+        ),
+      ).toEqual(["Alpha", "BetaGamma"]);
+    } finally {
+      imported.Dispose();
+    }
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("ends the RTF hyperlink field before the following plain run", /** Checks the native hint range across the exporter and reader. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const paragraph = document.paragraphs[0];
+    assert(paragraph);
+    const attributes = { bold: false, italic: false, underline: false };
+    const fragment = createWriterTextFragment(paragraph, [
+      { text: "linked", attributes, hyperlink: { url: "https://example.test" } },
+      { text: "plain", attributes },
+    ]);
+    paragraph.SetText(fragment.text);
+    paragraph.SetTextHints(fragment.hints);
+    const imported = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(document));
+    try {
+      const restored = imported.paragraphs[0];
+      assert(restored);
+      const runs = projectWriterTextRuns(restored);
+      expect(runs[0]?.hyperlink?.url).toBe("https://example.test");
+      expect(runs.at(-1)?.hyperlink).toBeUndefined();
+      expect(restored.GetText()).toBe("linkedplain");
+    } finally {
+      imported.Dispose();
+    }
   } finally {
     document.Dispose();
   }

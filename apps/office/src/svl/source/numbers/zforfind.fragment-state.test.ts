@@ -49,10 +49,23 @@ it("rejects middle separators that contradict an already classified fragment", /
     [" JAN ", { nMonth: 1 }, false],
     [" JAN ", { eScannedType: Type.TIME }, false],
     [" JAN ", {}, true, Type.DATE],
+    [". ", {}, false],
+    [" .", {}, false],
+    [" / ", { eSetType: Type.FRACTION, nNumericsCnt: 2 }, true, Type.FRACTION],
+    [" / ", { eSetType: Type.FRACTION, nNumericsCnt: 3 }, true, Type.FRACTION],
+    ["/JAN-", {}, true, Type.DATE],
+    ["/JAN-", { nMonth: 1 }, false],
+    ["/JAN-", { eScannedType: Type.TIME }, false],
+    ["JAN ", {}, false],
+    [" JAN. ", {}, true, Type.DATE],
+    ["E", { nThousand: 0, nNumericsCnt: 2, nDecPos: 2 }, true, Type.SCIENTIFIC],
+    ["E", { nESign: -1 }, true, Type.SCIENTIFIC],
+    [" ", {}, true],
   ];
   try {
     for (const [value, initial, accepted, type] of cases) {
       scanner.Reset();
+      state.eSetType = Type.UNDEFINED;
       state.nMatchedAllStrings = 0;
       state.bDecSepInDateSeps = false;
       Object.assign(state, initial);
@@ -105,10 +118,22 @@ it("admits trailing signs, currency and clock markers only in compatible native 
     [" PM", { eScannedType: Type.DATE }, false],
     [" PM", { eScannedType: Type.DATETIME }, true, Type.DATETIME],
     [" PM", { nDecPos: 2, nNumericsCnt: 2 }, false],
+    ["$()", {}, false],
+    [")", { nSign: -1, bNegCheck: true }, true],
+    ["/JAN.", {}, true, Type.DATE],
+    ["/JAN.", { nMonth: 1 }, false],
+    ["/JAN.", { eScannedType: Type.TIME }, false],
+    ["JAN", {}, false],
+    [" MON.", { eScannedType: Type.DATE }, true, Type.DATE],
+    [", MONDAY ", { eScannedType: Type.DATE }, true, Type.DATE],
+    [". ", {}, true],
+    [" .", {}, false],
+    ["$ )", { nSign: -1, bNegCheck: true }, true, Type.CURRENCY],
   ];
   try {
     for (const [value, initial, accepted, type] of cases) {
       scanner.Reset();
+      state.eSetType = Type.UNDEFINED;
       state.nMatchedAllStrings = 0;
       state.bDecSepInDateSeps = false;
       Object.assign(state, initial);

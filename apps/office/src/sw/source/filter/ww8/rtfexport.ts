@@ -163,16 +163,15 @@ export class RtfExport {
       for (const [family, index] of this.fonts) output += `{\\f${index} ${escapeRtf(family)};}`;
       output += "}";
     }
-    if (this.colors.size > 0) {
-      output += "{\\colortbl;";
-      for (const color of this.colors.keys()) {
-        const red = Number.parseInt(color.slice(1, 3), 16),
-          green = Number.parseInt(color.slice(3, 5), 16),
-          blue = Number.parseInt(color.slice(5, 7), 16);
-        output += `\\red${red}\\green${green}\\blue${blue};`;
-      }
-      output += "}";
+    // The fixed Word highlight palette is registered at the beginning of every export.
+    output += "{\\colortbl;";
+    for (const color of this.colors.keys()) {
+      const red = Number.parseInt(color.slice(1, 3), 16),
+        green = Number.parseInt(color.slice(3, 5), 16),
+        blue = Number.parseInt(color.slice(5, 7), 16);
+      output += `\\red${red}\\green${green}\\blue${blue};`;
     }
+    output += "}";
     output += "{\\stylesheet";
     for (const { index, style } of this.styles.values()) {
       const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
@@ -560,8 +559,8 @@ export class RtfExport {
       if (sliceEnd <= sliceStart) continue;
       let cursor = sliceStart;
       while (markIndex < marks.length) {
-        const mark = marks[markIndex];
-        if (mark === undefined) break;
+        // filter() produced a dense local array and this loop is bounded by its unchanged length.
+        const mark = marks[markIndex] as (typeof marks)[number];
         const position = mark.GetMarkPos().GetContentIndex();
         if (position >= sliceEnd) break;
         writeRun({ ...run, text: run.text.slice(cursor - runStart, position - runStart) });
@@ -573,7 +572,7 @@ export class RtfExport {
     }
     if (activeLink !== undefined) output += "}}";
     for (; markIndex < marks.length; markIndex++)
-      output += this.WriteBookmark(marks[markIndex]?.GetName() ?? "");
+      output += this.WriteBookmark((marks[markIndex] as (typeof marks)[number]).GetName());
     return output;
   }
 
@@ -592,7 +591,7 @@ export class RtfExport {
 
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
   private WriteRun(run: WriterTextRun): string {
-    if (run.text.length === 0) return "";
+    // The paragraph writer admits only nonempty slices before calling this private method.
     const controls = this.attributeOutput.WriteCharacter(run.attributes);
     return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
@@ -605,7 +604,8 @@ export class RtfExport {
     const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
     const size =
       width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
-    return `\\${control}\\${rtfBorderStyle(style, width)}${size}\\brdrcf${this.IndexColor(borderColor(line))}`;
+    // Native NONE and unknown styles have an empty width implementation and returned above.
+    return `\\${control}\\${rtfBorderStyle(style as Exclude<BorderLineStyle, BorderLineStyle.NONE>, width)}${size}\\brdrcf${this.IndexColor(borderColor(line))}`;
   }
 
   /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */
@@ -645,7 +645,10 @@ function rtfColorKey(color: Readonly<Color>): string {
 }
 
 /** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
-function rtfBorderStyle(style: BorderLineStyle, width: number): string {
+function rtfBorderStyle(
+  style: Exclude<BorderLineStyle, BorderLineStyle.NONE>,
+  width: number,
+): string {
   switch (style) {
     case BorderLineStyle.SOLID:
       return width === 1 ? "brdrhair" : "brdrs";
@@ -682,8 +685,6 @@ function rtfBorderStyle(style: BorderLineStyle, width: number): string {
       return "brdrdashd";
     case BorderLineStyle.DASH_DOT_DOT:
       return "brdrdashdd";
-    default:
-      return "brdrnone";
   }
 }
 

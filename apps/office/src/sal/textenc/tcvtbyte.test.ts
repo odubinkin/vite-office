@@ -1,5 +1,6 @@
 /** @fileoverview Source-backed Symbol converter boundaries. */
 import { expect, it } from "vitest";
+import * as cvt from "../inc/rtl/textcvt.h";
 import {
   RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
   RTL_TEXTTOUNICODE_INFO_ERROR,
@@ -25,6 +26,63 @@ it("maps Symbol controls directly and printable bytes to private use", /** Check
   expect(consumed[0]).toBe(4);
   expect(info[0]).toBe(0);
   expect([...output]).toEqual([0, 0x1f, 0xf020, 0xf0ff]);
+});
+
+it("preserves Symbol destination exhaustion and undefined-character policies", /** Checks native counters for full buffers, replacement, ignore and error stops. @returns Nothing. */ () => {
+  const cases: [number[], number, number, number[], number, number][] = [
+    [
+      [0x41],
+      0,
+      0,
+      [],
+      0,
+      cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL,
+    ],
+    [
+      [0x41, 0x42],
+      1,
+      0,
+      [0x41],
+      1,
+      cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL,
+    ],
+    [
+      [0xf100],
+      1,
+      cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+      [],
+      0,
+      cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_UNDEFINED,
+    ],
+    [
+      [0x100, 0x41],
+      2,
+      cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE,
+      [0x41],
+      2,
+      cvt.RTL_UNICODETOTEXT_INFO_UNDEFINED,
+    ],
+    [[0x100, 0x41], 2, 0, [0x3f, 0x41], 2, cvt.RTL_UNICODETOTEXT_INFO_UNDEFINED],
+  ];
+  for (const [units, capacity, flags, expected, consumed, status] of cases) {
+    const output = new Uint8Array(capacity);
+    const info: [number] = [123];
+    const count: [number] = [123];
+    const written = ImplUnicodeToSymbol(
+      null,
+      null,
+      Uint16Array.from(units),
+      units.length,
+      output,
+      capacity,
+      flags,
+      info,
+      count,
+    );
+    expect([...output.subarray(0, written)], JSON.stringify(units)).toEqual(expected);
+    expect(count[0]).toBe(consumed);
+    expect(info[0]).toBe(status);
+  }
 });
 
 it("stops Symbol conversion at destination capacity before consuming source", /** Checks stops Symbol conversion at destination capacity before consuming source. @returns Test completion or assertion result. */ () => {
