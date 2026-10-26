@@ -237,3 +237,14 @@ Writer graph. RSID-only fields, native pointer tie-breaking and unrepresented
 help/link-style services remain outside this prerequisite. WRITER158/159 record
 the retained source notification and sort-number concerns. The full HTML/CSS
 reader and the remaining TXT/RTF/Markdown matrix are still open.
+
+The native CSS1 syntax dependency now follows the pinned Writer lexer, selector
+and declaration grammar, original callback timing, input/line/EOF rewinds and
+error-recovery loops. Native selector/expression owners retain linked values,
+const successor reads, numeric fields, operators, lengths and URL/Color out
+parameters. Existing SAL/o3tl owners handle decimal parsing, integral prefixes
+and length units; the consumed unsigned16/error16 hex specialization joins the
+existing signed32 default family. Source-only checks cover parser callbacks and
+quirks plus all UTF16 scalar hex classifications. WRITER160–165 preserve the
+observed source behaviors. Document CSS cascade/application and the HTML reader
+remain open; this syntax checkpoint is not compiled Writer parity evidence.

@@ -1514,3 +1514,39 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::BuildPortions`, named character-format branch.
 - Observation: under `DONTREPLACE`, replacing an already present style removes the equal style, counts surviving distinct styles and assigns that count as the new sort number. It does not renumber survivors or choose their maximum plus one. A portion initially containing style orders zero and one can therefore end with two order-one styles. Native comparators subsequently use pointer identity for a remaining tie. This is a source-level trace, not a compiled Writer reproduction.
 - Preservation: keep the count-based assignment and surviving sort numbers. Do not repair them by renumbering. Native address tie-breaking is not claimed by the portable JS graph; no synthetic pointer allocator is introduced.
+
+### WRITER160 — CSS1 six-hex recognition is independent of grammatical context
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Parser::GetNextToken`, numeric and identifier branches.
+- Observation: six hexadecimal characters become `CSS1_HEXCOLOR` even when the grammar expects an identifier. A selector such as `.abcdef` cannot take the normal class branch; subsequent tokens can be interpreted as a new selector during recovery. This is a source-level trace, not compiled Writer evidence.
+- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order.
+
+### WRITER161 — Empty CSS strings enter the scanner's unconditional first append
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, quoted `CSS1Parser::GetNextToken` branch.
+- Observation: after reading the opening quote, the scanner uses a do-while loop. An immediately closing quote is appended as content, and later input can be consumed until another matching quote or EOF. An opening quote followed directly by EOF appends the UTF16 EOF sentinel. This is source-level behavior.
+- Preservation: retain the do-while and EOF branches; do not replace them with a CSS string tokenizer or special-case empty strings.
+
+### WRITER162 — Eight-hex CSS color conversion omits leading zeroes before right padding
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, hash scanner and `CSS1Expression::GetColor`.
+- Observation: the scanner blends eight-digit RGBA over white and converts the RGB integer to an unpadded hexadecimal string. GetColor subsequently reads six positions and supplies zeroes at missing positions on the right. For example, the source trace for `#0000ffff` becomes the token `ff` and then RGB `ff0000`. This is a source trace, not a compiled desktop reproduction.
+- Preservation: retain the unpadded integer conversion and the original right-padding loop independently.
+
+### WRITER163 — CSS URL extraction strips single quotes despite its double-quote comment
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Expression::GetURL`.
+- Observation: the comment mentions double quotes, but the implemented three stripping passes remove spaces, single quotes and spaces. Double quotes remain in the returned URL text. URL resolution after this helper is not certified by this observation.
+- Preservation: keep the exact stripping characters and pass order.
+
+### WRITER164 — Skipped CSS declarations can retain a numeric value for a later identifier
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `ParseStyleOption`, `ParseDeclaration` and scanner numeric fields.
+- Observation: malformed-property recovery advances tokens without clearing `m_nValue`. A skipped numeric declaration can therefore leave its scalar value on a later identifier expression, until normal term construction resets it. The source trace for `font-weight:bold; -vendor-x:1px; color:blue` gives the blue identifier a numeric field of one. This concerns callback fields, not a claim about visible final color.
+- Preservation: retain numeric-field reset only at the original initialization and expression-construction points.
+
+### WRITER165 — Fractional CSS RGB components use the alpha-like multiplication branch
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Expression::GetColor` RGB branch.
+- Observation: after an integer-prefix check, any component containing a decimal point is multiplied by 255 and narrowed to an unsigned byte. This applies to RGB components as well as alpha. A negative fractional prefix between minus one and zero can bypass the initial negative check because its integer prefix is zero. This is a source-level trace.
+- Preservation: retain the original condition order, multiplication, integer truncation and byte narrowing; do not apply channel-specific normalization.

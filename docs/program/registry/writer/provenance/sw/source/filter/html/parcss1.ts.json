@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/parcss1.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/parcss1.ts",
+          "marker": "CSS1Parser"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/parcss1.cxx",
+          "marker": "CSS1Parser::GetNextToken"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/parcss1.cxx",
+    "localSymbols": [
+      "CSS1Parser"
+    ],
+    "upstreamSymbols": [
+      "CSS1Parser::GetNextToken",
+      "CSS1Parser::ParseStyleSheet",
+      "CSS1Parser::ParseDeclaration"
+    ],
+    "preservedResponsibilities": [
+      "Native CSS1 UTF16 scanner, saved input/line/EOF rewinds, unit conversion, context-independent token priorities, progress checks, selector/declaration callback timing, linked grammar and malformed-input recovery. Existing SAL/o3tl owners handle numbers and length units. No browser CSS parser or regex grammar substitute. Document CSS application remains with its unimplemented HTML/CSS owners; compiled Writer/parser parity remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Document CSS cascade/application, unrepresented HTML objects, native allocator/ABI and compiled Writer parity remain unverified."
+    ]
+  }
+}

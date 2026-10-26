@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/parcss1.h.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/parcss1.h.ts",
+          "marker": "CSS1Token"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/parcss1.hxx",
+          "marker": "CSS1Token"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/parcss1.cxx",
+          "marker": "CSS1Expression::GetColor"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/parcss1.hxx",
+    "localSymbols": [
+      "CSS1Token",
+      "CSS1ParserState",
+      "CSS1SelectorType",
+      "CSS1Selector",
+      "CSS1Expression",
+      "css1Units"
+    ],
+    "upstreamSymbols": [
+      "CSS1Token",
+      "CSS1Selector",
+      "CSS1Expression"
+    ],
+    "preservedResponsibilities": [
+      "Original complete CSS1 token/state/selector values, linked selector/expression fields, reset/operator/length contracts and native URL/Color operations. CSS1Expression out parameters use ordinary JS reference cells or actual mutable Color values; UTF16 views adapt immutable strings to existing SAL/o3tl. Source color and lexer quirks are preserved as WRITER160..165. Native allocator/ABI, out-of-domain floating casts and compiled full Writer parity are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Document CSS cascade/application, unrepresented HTML objects, native allocator/ABI and compiled Writer parity remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/parcss1.h.ts",
+      "rationale": "Native parcss1.hxx declarations and inline expression contracts have a TypeScript header owner; the scanner/grammar remain in parcss1.ts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
