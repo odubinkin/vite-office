@@ -1,0 +1,113 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified model prerequisite checkpoint; task remains DOING",
+  "scope": "Replace ignored automatic-style family routing with original character/paragraph pools and caches; restore all4family IDs, paragraph-list ignorable insertion and exact document constructor range. Preserve original generic subtype assertions/shared-pool subtype collision. Native paragraph creation/table application is not yet wired.",
+  "sourceBlobs": {
+    "apps/office/src/svl/source/items/stylepool.test.ts": "60fcec5c193fcc5075baa581afa714e36881e95f",
+    "apps/office/src/svl/source/items/stylepool.ts": "0e7335b7a85f0ef093358e0171d7735327d87ffc",
+    "apps/office/src/sw/inc/istyleaccess.ts": "a939730aa9b9ab4cd53b5da73e3553e00eeae994",
+    "apps/office/src/sw/source/core/doc/doc.ts": "4c75887ad04298325b4757d5b137543560a03513",
+    "apps/office/src/sw/source/core/doc/swstylemanager.ts": "ba72751e6d0c0ccfaaad36ed28a35237ef7d7556",
+    "docs/program/registry/shared/provenance/svl/source/items/stylepool.ts.json": "ab2c5cd9a9418c50f54a53f2a8fa95c628b2e869",
+    "docs/program/registry/shared/runtime/svl/source/items/stylepool.ts.json": "27c3987a1d48659d252266b21cb349bb8ef0faad",
+    "docs/program/registry/writer/provenance/sw/inc/istyleaccess.ts.json": "af953df670807bb6777c8cc1c2fbcc8786d3d671",
+    "docs/program/registry/writer/provenance/sw/source/core/doc/doc.ts.json": "2b18c0fe84071d1ab7b80981e07c085d5c36b7a5",
+    "docs/program/registry/writer/provenance/sw/source/core/doc/swstylemanager.ts.json": "fff30767d15537cd2b49157df45c5ff3a8080d31",
+    "docs/program/registry/writer/runtime/sw/inc/istyleaccess.ts.json": "d55712889b86d40af51fb2d617e2044ba063e8bc",
+    "docs/program/registry/writer/runtime/sw/source/core/doc/doc.ts.json": "b78a8cb9db9d2246721865bef97c03cefaa4512b",
+    "docs/program/registry/writer/runtime/sw/source/core/doc/swstylemanager.ts.json": "3ada063185392f197b9a456d2c907e2df0e88ea1",
+    "docs/program/writer-upstream-suspected-issues.md": "82a00b3e0ce7c678456c80945333be62de5eece9",
+    "apps/office/src/sw/source/core/doc/native-automatic-style-families.test.ts": "9d310308ff772fdf5fa4839c8c4465fc82f1da0c",
+    "docs/program/registry/writer/capabilities/CAP-41e9bba1-f869-4026-988e-b48b2686dbfe.json": "9389559332e9836bee24900972cc295c1e6ce7bd"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/svl/source/items/stylepool.test.ts src/sw/source/core/doc/native-automatic-style-families.test.ts src/sw/source/core/doc/automatic-style-handles.test.ts --coverage.include=src/svl/source/items/stylepool.ts --coverage.include=src/sw/source/core/doc/swstylemanager.ts --coverage.include=src/sw/inc/istyleaccess.ts --coverage.reportsDirectory=coverage/native-style-families --maxWorkers=2",
+      "result": "pass:20tests/3files; two expanded procedural mechanisms plus family enum unchanged scoped100 S93/B54/F20/L87",
+      "perFile": {
+        "apps/office/src/svl/source/items/stylepool.ts": {
+          "s": {
+            "covered": 53,
+            "total": 53
+          },
+          "f": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 27,
+            "total": 27
+          }
+        },
+        "apps/office/src/sw/inc/istyleaccess.ts": {
+          "s": {
+            "covered": 5,
+            "total": 5
+          },
+          "f": {
+            "covered": 1,
+            "total": 1
+          },
+          "b": {
+            "covered": 0,
+            "total": 0
+          }
+        },
+        "apps/office/src/sw/source/core/doc/swstylemanager.ts": {
+          "s": {
+            "covered": 35,
+            "total": 35
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          },
+          "b": {
+            "covered": 27,
+            "total": 27
+          }
+        }
+      },
+      "scope": "Whole StylePool/SwStyleManager insertion/routing/cache mechanisms and enum; existing SwDoc constructor wiring is exercised by actual-owner cases/regressions, not claimed as whole-file SwDoc coverage."
+    },
+    "writerRegressions": {
+      "command": "npm run test:writer -- src/sw/source/core/doc/ src/sw/source/filter/xml/odt-property-roundtrip.test.ts src/sw/source/filter/xml/odt-roundtrip.test.ts --maxWorkers=2",
+      "result": "pass:389tests/32files"
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production compilation/build and relative-resource/no-backend smoke)",
+    "eslint": "pass:four changed production modules and two tests max-warnings0",
+    "prettier": "pass:same six source/test paths; docs/program intentionally ignored by existing configuration",
+    "dependencies": "pass:1534runtime sources/7826relative imports/205allowed edges; no new edge",
+    "jsdoc": "pass:3552authored source files",
+    "size": "pass:3556authored files; SwDoc989lines, unchanged <1000hard limit",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:Writer2tests/1file, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "provenance": "pass:1535modules/1330mapped/178browser adaptations/27local infrastructure",
+    "registry": {
+      "moduleCount": 1535,
+      "capabilityCount": 346,
+      "invariantCount": 34,
+      "globalRecordCount": 3480
+    },
+    "doctor": "pass:0errors; pre-existing managed hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "preservedFindings": [
+    "WRITER166:shared non-character pool keys omit SfxItemSet subtype. Generic PARA validates input but can return a retained generic leaf; found-PARA getByName preserves the native subtype assertion. No new discriminator, extra family pool or silent conversion is introduced."
+  ],
+  "resolvedValidationFindings": [
+    "The initial new test assumed SetRanges exists. Corrected it to the existing public MergeRange operation, keeping range-template cloning independent without private mutation or new test-only API.",
+    "The existing JSDoc gate detected two new native child-flag parameters lacking documentation; supplied both parameter docs without altering validation."
+  ],
+  "limitations": [
+    "Native shared_ptr use_count-aware traversal and skip-unused/skip-ignorable output, parent-name and typed overloads and the IStyleAccess getAllStyles API remain unported. The existing bounded retained-handle enumeration still supplies cache fallback, so native full cache/usage/lifetime parity is not claimed.",
+    "Existing raw handle naming/lifetime/ordering, physical C++ ABI/thread/native assert process and complete compiled differential/full QA parity remain unverified. Assertion tests exercise host errors, not native abort/release-build behavior.",
+    "The cited native ODF paragraph AutoStyles enumeration is an unported downstream QA consumer, not a ported family-cache suite or proof of native iterator behavior. Local actual-owner tests cover only the implemented source branches.",
+    "AttrSetHandleHelper GetNewAutoStyle/SetModifyAtAttr, original SwTextNode MakeNewTextNode/AppendNode/layout, paragraph append/undo and concrete UNO Reference/Sequence boundaries remain pending before full table model application.",
+    "Complete Writer DOCX and Calc XLSX import/export/model and existing production desktop/mobile UI acceptance remain incomplete. No UI changed in this prerequisite block.",
+    "Full suite not due under approved ten-task cadence; earlier unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local model prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

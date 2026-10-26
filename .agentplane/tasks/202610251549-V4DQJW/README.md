@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 49
+revision: 50
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T21:22:56.617Z"
+doc_updated_at: "2026-10-26T21:45:20.725Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -216,6 +216,10 @@ sections:
     - Observation: Core table-application audit found missing actual append SDK contracts and raw-object Writer UNO boundaries. Added complete original XParagraphAppend/XTextPortionAppend/XTextContentAppend/XTextAppend/XTextRangeCompare declarations and normal CPPU bindings, preserving exactly three ordered XTextAppend bases. No facade or dummy table handler is introduced.
       Impact: 18related tests/2files pass; five new SDK owners unchanged scoped100 S45 B10 F15 L45.44existing Writer core import regression tests/3files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass; existing doctor hook warning retained.
       Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-text-append-sdk-checkpoint.json. Evidence covers SDK/type contracts, not concrete Writer component migration. SwXText/SwXTextRange/SwXTextCursor still require real Reference/Sequence/query/helper and append/undo ownership alignment before actual table managers/model application. Full DOCX/XLSX model/export/UI remains pending; task DOING, broad parity flags false; full suite not due.
+
+    - Observation: Paragraph-creation audit exposed ignored family arguments in the automatic-style manager. Restored all4native family IDs, exactly two pools/caches, generic PARA input/found-handle assertions, null-name cache slots and cache clearing. StylePool now clones/partitions ignorable range items; SwDoc supplies exact paragraph list range86..91. WRITER166 preserves the shared-pool subtype collision.
+      Impact: 20focused tests/3files pass at unchanged scoped100 S93 B54 F20 L87 for the expanded mechanisms/enum;389Writer core/ODT regressions/32files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+      Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-style-families-checkpoint.json. Corrected test range API and missing parameter docs; no guard weakened. Native use_count-aware iterator/cache fallback parity remains unported/unverified; current raw retained-handle fallback is explicit. GetNewAutoStyle/SetModifyAtAttr, paragraph creation/undo, table managers/model and complete DOCX/XLSX UI remain pending. Task DOING, broad parity flags false; full suite not due.
 id_source: "generated"
 ---
 ## Summary
@@ -408,3 +412,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Core table-application audit found missing actual append SDK contracts and raw-object Writer UNO boundaries. Added complete original XParagraphAppend/XTextPortionAppend/XTextContentAppend/XTextAppend/XTextRangeCompare declarations and normal CPPU bindings, preserving exactly three ordered XTextAppend bases. No facade or dummy table handler is introduced.
   Impact: 18related tests/2files pass; five new SDK owners unchanged scoped100 S45 B10 F15 L45.44existing Writer core import regression tests/3files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass; existing doctor hook warning retained.
   Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-text-append-sdk-checkpoint.json. Evidence covers SDK/type contracts, not concrete Writer component migration. SwXText/SwXTextRange/SwXTextCursor still require real Reference/Sequence/query/helper and append/undo ownership alignment before actual table managers/model application. Full DOCX/XLSX model/export/UI remains pending; task DOING, broad parity flags false; full suite not due.
+
+- Observation: Paragraph-creation audit exposed ignored family arguments in the automatic-style manager. Restored all4native family IDs, exactly two pools/caches, generic PARA input/found-handle assertions, null-name cache slots and cache clearing. StylePool now clones/partitions ignorable range items; SwDoc supplies exact paragraph list range86..91. WRITER166 preserves the shared-pool subtype collision.
+  Impact: 20focused tests/3files pass at unchanged scoped100 S93 B54 F20 L87 for the expanded mechanisms/enum;389Writer core/ODT regressions/32files pass. Typecheck/build/static, scoped lint/format, dependencies/docs/size/tree/resources/provenance/registry and doctor/routing/diff pass. Existing doctor hook warning remains.
+  Resolution: Evidence: .agentplane/tasks/202610251549-V4DQJW/evidence/native-style-families-checkpoint.json. Corrected test range API and missing parameter docs; no guard weakened. Native use_count-aware iterator/cache fallback parity remains unported/unverified; current raw retained-handle fallback is explicit. GetNewAutoStyle/SetModifyAtAttr, paragraph creation/undo, table managers/model and complete DOCX/XLSX UI remain pending. Task DOING, broad parity flags false; full suite not due.
