@@ -10,6 +10,7 @@ import {
   rtl_uString_release,
   rtl_uString_iterateCodePoints,
   rtl_ustr_compare_WithLength,
+  rtl_ustr_toInt32,
   rtl_ustr_toInt64,
   rtl_ustr_reverseCompare_WithLength,
   rtl_ustr_hashCode_WithLength,
@@ -62,6 +63,7 @@ export type OUStringConstReference = Readonly<
   Pick<
     OUString,
     | "iterateCodePoints"
+    | "toInt32"
     | "toInt64"
     | "getLength"
     | "getStr"
@@ -86,6 +88,11 @@ export type OUStringConstReference = Readonly<
 
 /** Original OUString value owner; explicit move factories and dispose adapt C++ rvalues and destructor invocation. */
 export class OUString {
+  /** Original NUL-terminated signed32 query, with native radix and overflow rules. @param radix - Original default decimal radix. @returns Signed32 or zero. */
+  public toInt32(radix = 10): number {
+    return rtl_ustr_toInt32(this.pData.buffer, radix);
+  }
+
   /** Original const NUL-terminated integer conversion;embedded zeros end parsing even when logical length continues. @param radix - Original default decimal radix. @returns Exact signed64 or zero on overflow. */
   public toInt64(radix = 10): bigint {
     return rtl_ustr_toInt64((this.pData as rtl_uString).buffer, radix);

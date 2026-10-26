@@ -34,7 +34,8 @@
       "rtl_ustr_reverseCompare_WithLength",
       "rtl_ustr_toInt64_WithLength",
       "RTL_USTR_MAX_VALUEOFDOUBLE",
-      "OSTRING_TO_OUSTRING_CVTFLAGS"
+      "OSTRING_TO_OUSTRING_CVTFLAGS",
+      "rtl_ustr_toInt32"
     ],
     "upstreamSymbols": [
       "RTL_USTR_MAX_VALUEOFINT32",
@@ -90,7 +91,8 @@
       "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending.",
       "TaskCMHQFZ adds original double output macro25 and its native Unicode-header alias for OUStringBuffer double/G17 insertion. Existing integer/float macros and C implementations remain unchanged;native actual header buffer output and declared25value are checked without broad parity promotion.",
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
-      "Exports the pinned OSTRING_TO_OUSTRING_CVTFLAGS bit combination used by native Writer RTF byte conversion."
+      "Exports the pinned OSTRING_TO_OUSTRING_CVTFLAGS bit combination used by native Writer RTF byte conversion.",
+      "Task202610251549-V4DQJW: Declares the original shared SAL signed32 C string conversion. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."

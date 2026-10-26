@@ -303,10 +303,15 @@ export function HandleSignChar(
   if (data[iter[0]] === 43) iter[0]++;
   return false;
 }
-/** Original signed64 numeric_limits specialization computes the quotient/remainder overflow guard. @param nRadix - Original admitted radix. @param bNeg - Original negative-input flag. @param unsigned - Original unsigned64 template specialization. @returns Exact original quotient and small remainder. */
-export function DivMod(nRadix: number, bNeg: boolean, unsigned = false): readonly [bigint, number] {
-  const min = -(1n << 63n),
-    max = (1n << (unsigned ? 64n : 63n)) - 1n,
+/** Original numeric_limits integral specialization computes the quotient/remainder overflow guard. @param nRadix - Original admitted radix. @param bNeg - Original negative-input flag. @param unsigned - Original unsigned integral specialization. @param bits - Native integral template width. @returns Exact original quotient and small remainder. */
+export function DivMod(
+  nRadix: number,
+  bNeg: boolean,
+  unsigned = false,
+  bits: 32 | 64 = 64,
+): readonly [bigint, number] {
+  const min = -(1n << BigInt(bits - 1)),
+    max = (1n << BigInt(unsigned ? bits : bits - 1)) - 1n,
     radix = BigInt(nRadix);
   return bNeg && !unsigned
     ? [-(min / radix), Number(-(min % radix))]
@@ -320,12 +325,13 @@ export function implGetDigit(ch: number, nRadix: number): number {
   else if (ch >= 65 && ch <= 90) n = ch - 65 + 10;
   return n < nRadix ? n : -1;
 }
-/** Original signed64 known-length toInt specialization. Explicit UTF16 storage and offset adapt the original with_length iterator; its constructor assertion is retained at the public C owner before entry. BigInt preserves native unsigned accumulation and signed64 limits. @param data - Borrowed units, nullable for zero length. @param length - Original known length. @param nRadix - Original signed16 admitted radix. @param unsigned - Original unsigned64 integral specialization. @returns Original signed64 value or overflow-to-zero. */
+/** Original signed integral known-length toInt template. Explicit UTF16 storage and offset adapt the original with_length iterator; its constructor assertion is retained at the public C owner before entry. BigInt preserves native unsigned accumulation and the selected integral limits. @param data - Borrowed units, nullable for zero length. @param length - Original known length. @param nRadix - Original signed16 admitted radix. @param unsigned - Original unsigned integral specialization. @param bits - Native integral template width. @returns Original integral value or overflow-to-zero. */
 export function toInt(
   data: Uint16Array | Uint8Array | null,
   length: number,
   nRadix: number,
   unsigned = false,
+  bits: 32 | 64 = 64,
 ): bigint {
   if (nRadix < RTL_STR_MIN_RADIX || nRadix > RTL_STR_MAX_RADIX)
     throw new Error("assert(nRadix >= RTL_STR_MIN_RADIX && nRadix <= RTL_STR_MAX_RADIX)");
@@ -337,8 +343,8 @@ export function toInt(
     iter[0]++;
   if (iter[0] === length) return 0n;
   const bNeg = HandleSignChar(data as Uint16Array | Uint8Array, iter, !unsigned),
-    [nDiv, nMod] = DivMod(nRadix, bNeg, unsigned);
-  // Original assert(nDiv > 0) is necessarily true for signed64 limits and every admitted radix2..36.
+    [nDiv, nMod] = DivMod(nRadix, bNeg, unsigned, bits);
+  // Original assert(nDiv > 0) is necessarily true for signed32/signed64 limits and every admitted radix2..36.
   let n = 0n;
   while (iter[0] !== length) {
     const nDigit = implGetDigit((data as Uint16Array | Uint8Array)[iter[0]] as number, nRadix);
@@ -348,7 +354,7 @@ export function toInt(
     n += BigInt(nDigit);
     iter[0]++;
   }
-  if (bNeg) return n === 1n << 63n ? -(1n << 63n) : -n;
+  if (bNeg) return n === 1n << BigInt(bits - 1) ? -(1n << BigInt(bits - 1)) : -n;
   return n;
 }
 

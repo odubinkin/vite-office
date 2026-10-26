@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/SizeType.ts",
+    "localSymbols": [
+      "SizeType"
+    ],
+    "upstreamPath": "offapi/com/sun/star/text/SizeType.idl",
+    "upstreamSymbols": [
+      "SizeType",
+      "VARIABLE",
+      "FIX",
+      "MIN"
+    ],
+    "preservedResponsibilities": [
+      "Original short SizeType constants VARIABLE0/FIX1/MIN2 consumed by the native MeasureHandler; no runtime UNO type/service registration is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/SizeType.ts",
+          "marker": "SizeType"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-table-value-handlers.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/text/SizeType.idl",
+          "marker": "SizeType"
+        }
+      ]
+    }
+  }
+}

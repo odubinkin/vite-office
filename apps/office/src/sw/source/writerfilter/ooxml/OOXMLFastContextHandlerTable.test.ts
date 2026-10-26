@@ -1,4 +1,8 @@
 /** @fileoverview Native resource-table and property-table contexts through real DOCX ZIP input, SAX factories, value tables and ordered reference callbacks. */
+import { MeasureHandler } from "../dmapper/MeasureHandler";
+import { CellMarginHandler } from "../dmapper/CellMarginHandler";
+import { LatentStyleHandler } from "../dmapper/LatentStyleHandler";
+import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { expect, it } from "vitest";
 import {
   OOXMLFastContextHandler as Base,
@@ -17,7 +21,7 @@ import { StreamType_t } from "../inc/ooxml/OOXMLDocument";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { WriteRelationsInfoSequence } from "../../../../comphelper/source/xml/ofopxmlhelper";
-import { text } from "../../core/unocore/unocrsrhelper";
+import { text, unicode } from "../../core/unocore/unocrsrhelper";
 
 /** Test-only callback receiver rejects accidental non-table delivery. @returns Actual Stream callback contract and retained table references. */
 function receiver() {
@@ -71,6 +75,23 @@ function values(properties: Reference<Properties>): [number, Value][] {
       if (value) result.push([sprm.getId(), value]);
     },
   });
+  return result;
+}
+/** Resolves one actual nested modifier without a replacement parser or value projection. @param properties - Native set. @param id - Modifier ID. @returns Referenced property set. */
+function nested(properties: Reference<Properties>, id: number): Reference<Properties> {
+  let result: Reference<Properties> | null = null;
+  properties.resolve({
+    /** Attributes belong to the containing set, not the requested nested modifier. @param attribute - ID. @param value - Value. @returns Nothing. */
+    attribute(attribute, value) {
+      void attribute;
+      void value;
+    },
+    /** Borrows the exact stored reference. @param modifier - Native modifier. @returns Nothing. */
+    sprm(modifier) {
+      if (modifier.getId() === id) result = modifier.getProps();
+    },
+  });
+  if (!result) throw new Error("Missing native nested properties: " + id);
   return result;
 }
 /** Gets one actual resource's Unicode value and releases its temporary owner. @param properties - Set. @param id - Native identity. @returns String or absent. */
@@ -135,7 +156,7 @@ it.each([
     put(
       storage,
       "styles/data.xml",
-      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent></w:styles>`,
+      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr><w:tblPr><w:tblInd w:w="1440" w:type="dxa"/><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles></w:styles>`,
     );
     const main = await OOXMLStreamImpl.createStream(new ZipStorage(storage.commit())),
       part = await OOXMLStreamImpl.createStream(main, StreamType_t.STYLES),
@@ -165,7 +186,7 @@ it.each([
           entry,
         ) => entry[0],
       ),
-    ).toEqual([0, 1, 2, 3]);
+    ).toEqual([0, 1, 2, 3, 4]);
     const defaults = styles[0]?.[1] as Reference<Properties>,
       normal = styles[1]?.[1] as Reference<Properties>,
       strong = styles[2]?.[1] as Reference<Properties>;
@@ -180,6 +201,58 @@ it.each([
     expect(string(strong, N.LN_CT_Style_styleId)).toBe("Strong");
     expect(string(strong, N.LN_CT_Style_name)).toBe("Strong");
     expect(string(styles[3]?.[1] as Reference<Properties>, N.LN_CT_Style_styleId)).toBe("Chosen");
+    const tableProperties = nested(normal, N.LN_CT_Style_tblPr),
+      indent = new MeasureHandler(),
+      row = new MeasureHandler(),
+      margins = new CellMarginHandler(),
+      cell = new CellMarginHandler(),
+      latent = new LatentStyleHandler();
+    nested(tableProperties, N.LN_CT_TblPrBase_tblInd).resolve(indent);
+    nested(tableProperties, N.LN_CT_TblPrBase_tblCellMar).resolve(margins);
+    nested(nested(normal, N.LN_CT_Style_trPr), N.LN_CT_TrPrBase_trHeight).resolve(row);
+    nested(nested(normal, N.LN_CT_Style_tcPr), N.LN_CT_TcPrBase_tcMar).resolve(cell);
+    const latentProperties = styles[4]?.[1] as Reference<Properties>;
+    expect(string(latentProperties, N.LN_CT_LatentStyles_count)).toBe("276");
+    nested(latentProperties, N.LN_CT_LatentStyles_lsdException).resolve(latent);
+    expect(indent.getValue()).toBe(1440);
+    expect(indent.getMeasureValue()).toBe(2540);
+    expect(row.getValue()).toBe(720);
+    expect(row.getMeasureValue()).toBe(1270);
+    expect(row.GetRowHeightSizeType()).toBe(SizeType.FIX);
+    expect([
+      margins.m_nTopMargin,
+      margins.m_nLeftMargin,
+      margins.m_nBottomMargin,
+      margins.m_nRightMargin,
+    ]).toEqual([212, 423, 0, 635]);
+    expect([cell.m_nLeftMargin, cell.m_nRightMargin]).toEqual([847, 1058]);
+    expect(
+      latent.getAttributes().map(
+        /** Reads original string alternative of each latent style field. @param property - Generated value. @returns Name/text pair. */ (
+          property,
+        ) => {
+          const value = unicode("");
+          expect(property.Value.extract(value, "OUString")).toBe(true);
+          try {
+            return [text(property.Name), text(value)];
+          } finally {
+            value.dispose();
+          }
+        },
+      ),
+    ).toEqual([
+      ["name", "Заголовок😀"],
+      ["locked", "false"],
+      ["uiPriority", "9"],
+      ["semiHidden", "0"],
+      ["unhideWhenUsed", "1"],
+      ["qFormat", "true"],
+    ]);
+    indent.dispose();
+    row.dispose();
+    margins.dispose();
+    cell.dispose();
+    latent.dispose();
   },
 );
 

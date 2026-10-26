@@ -1448,3 +1448,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.hxx`, `TableStyleSheetEntry::GetProperties` comment, versus its body in `StyleSheetTable.cxx`.
 - Observation: the declaration describes properties corresponding to the mask plus parent styles. The implementation creates a plain PropertyMap and merges only GetLocalPropertiesFromMask; it performs no imported-parent lookup. Parent merging may be deliberately performed by callers, and the comment may be stale. No desktop rendering defect is asserted.
 - Preservation: retain the local-only body and separate GetMergedInheritedProperties helper. Literal tests keep conditional results independent of the entry's ordinary base properties and unmasked whole-table bucket; imported ancestor-property precedence is tested separately. Do not combine these stages solely to match the header comment.
+
+
+### WRITER150 — cell-margin raw metadata outlives the converted temporary
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `lcl_attribute` and `createGrabBag`.
+- Observation: after each modifier only m_nValue resets to zero. m_nWidth and m_nType persist, so an empty following edge is marked valid with converted zero while its interop entry can retain the preceding edge's nonzero raw width and unit. A non-dxa unit only warns; the width still undergoes the absolute twip conversion. Missing-width input and non-dxa units may be excluded by conforming producers; native document/layout impact remains unverified.
+- Preservation: keep all three independent fields and the exact resolution/reset order. Real nested resource tests retain raw width1440 in an empty next edge while its applied margin is0, and retain conversion of a pct-typed width. Do not synthesize missing attributes or clear the raw fields locally.
+
+### WRITER151 — cell-margin start/end mapping keeps a hardcoded LTR direction
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `const bool rtl = false; // TODO`.
+- Observation: start/end map to left/right without consulting the document/table direction. Upstream explicitly leaves direction detection as a TODO; whether later table import stages compensate remains unverified. No native RTL rendering reproduction is claimed.
+- Preservation: retain the effective native LTR mapping and all twelve table/cell edge aliases. Tests cover exact source spelling in interop values, last-write overwrite and independent edge validity. Do not introduce a local text-direction guess into this handler.

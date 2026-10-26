@@ -21,7 +21,8 @@ CONSUMED = (
     "CT_Document CT_Body CT_P CT_R CT_Text CT_PPr CT_RPr CT_Style CT_Styles "
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_DecimalNumber CT_String "
-    "CT_VerticalAlignRun CT_Highlight EG_RPrBase"
+    "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "
+    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase"
 ).split()
 
 

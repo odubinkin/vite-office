@@ -250,6 +250,11 @@ export function internRelease(data: rtl_uString): void {
   }
 }
 
+/** Original NUL-terminated signed32 C conversion instantiates the shared native integral parser at signed32 width. @param data - Terminated UTF16. @param radix - Native signed16 radix. @returns Signed32 or zero on overflow. */
+export function rtl_ustr_toInt32(data: Uint16Array | null, radix: number): number {
+  return Number(str.toInt(data, str.getLength(data), (radix << 16) >> 16, false, 32));
+}
+
 /** Original NUL-terminated signed64 C conversion. The existing getLength view supplies the same valid terminated range to the shared parser;no numeric coercion or second parser is introduced. @param data - Native terminated UTF16. @param radix - Native admitted radix. @returns Exact signed64 or overflow-to-zero. */
 export function rtl_ustr_toInt64(data: Uint16Array | null, radix: number): bigint {
   return str.toInt(data, str.getLength(data), radix);
