@@ -1,0 +1,118 @@
+{
+  "task": "202610251549-V4DQJW",
+  "checkpoint": "native-fastattribs-and-docx-run-output",
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "complete": false,
+  "sourceGitBlobs": {
+    "apps/office/src/sax/source/tools/fastattribs.ts": "f6daebeb378ec51056fa09de820a8a86db7c0d7f",
+    "apps/office/src/sax/source/tools/fastattribs.test.ts": "2c77f846430997aa8b693f3c16e7f8f58366b872",
+    "apps/office/src/sax/source/tools/fastserializer.ts": "d057ae01e8171975b5c3ec55d8f46469e411158c",
+    "apps/office/src/sax/inc/fshelper.ts": "a4ede3cc61d3f080e2d4ed18edfa8049fc6a0d9e",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "06c592be43398d8ddf654b4eda3801a994542d5f",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.test.ts": "56dac8aec9b10db1355c7ac9315e2d17a6d9a6a3"
+  },
+  "tests": {
+    "shared": {
+      "files": 10,
+      "cases": 67,
+      "result": "pass-scoped100"
+    },
+    "withWriter": {
+      "files": 11,
+      "cases": 70,
+      "caseResult": "pass",
+      "coverageResult": "fail-unchanged-scoped100-gate",
+      "uncovered": "DocxAttributeOutput.RunText break emission false path, source-reviewed as apparently unreachable for immutable text; no exclusions, threshold reductions or source condition rewrite"
+    }
+  },
+  "coverage": {
+    "docx-attribute-list": {
+      "lines": {
+        "total": 323,
+        "covered": 323,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 347,
+        "covered": 347,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 93,
+        "covered": 93,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 195,
+        "covered": 195,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "docx-run-output": {
+      "lines": {
+        "total": 456,
+        "covered": 456,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 489,
+        "covered": 489,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 115,
+        "covered": 115,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 255,
+        "covered": 254,
+        "skipped": 0,
+        "pct": 99.6
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "checks": {
+    "build": "pass (tsc and Vite)",
+    "static": "pass",
+    "toolsTypecheck": "pass",
+    "scopedEslint": "pass",
+    "scopedPrettier": "pass",
+    "docs": "pass3277",
+    "dependencies": "pass1355sources6957imports193edges before added type-only native node import",
+    "sourceTree": "pass115paths32retiredroots",
+    "sourceProvenance": "pass1356modules",
+    "registry": "pass339capabilities34invariants3114records0semanticviolations",
+    "size": "pass3281files",
+    "routing": "pass",
+    "doctor": "0errors1preexisting-hook-shim-warning"
+  },
+  "pending": [
+    "full exporter/base association and native method contexts",
+    "Western font registration",
+    "SwDoc traversal, package orchestration and styles/lists/tables/page output",
+    "complete import document/section integration",
+    "DOCX/XLSX production file UI and real browser scenarios",
+    "unchanged full new-owner scoped100 coverage gate",
+    "Calc XLSX task"
+  ]
+}

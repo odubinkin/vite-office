@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 27
+revision: 29
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-25T22:35:22.874Z"
+doc_updated_at: "2026-10-26T06:32:43.063Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -128,6 +128,14 @@ sections:
     - Observation: Final native serializer closure is59 tests/5 files, with unchanged scoped100: statements290/290, branches171/171, functions78/78, lines269/269. Native independent mark/cache flags and getData-before-pop order are preserved. A genuinely closed ZIP output tests failed mark setup leaving a nonempty stack with a true empty flag, subsequent merge no-op and start bypass. Earlier58-case metrics precede this source-error-contract addition.
       Impact: WRITER108–111 and CALC-286–289 document preserved escaping, sorted buckets, native retained-buffer suspicion and mark failure asymmetry. Final build/typecheck/static smoke pass; this remains an export infrastructure prerequisite, not a DOCX/XLSX application feature acceptance.
       Resolution: Retain source flag/error order without healing native state. Proceed to actual DocxExport/DocxAttributeOutput and part traversal; native import cursor/section completion and both application file UI workflows remain required. Keep task and goal active; no full suite is due.
+
+    - Observation: Native FastAttributeList and DocxAttributeOutput admitted untracked run/character-property owners are ported over actual serializer, ZIP fragments and shared Sfx items. Command: focused SAX/oox coverage profile; Result: pass, 67 cases, statements347/347 branches195/195 functions93/93 lines323/323. Command: same profile plus docxattributeoutput.test.ts with all six owners included; Result: fail coverage gate despite all70 cases passing, branches253/254. The retained native RunText if condition has an apparently unreachable false path for immutable text. No exclusion, threshold change, fake string or branch rewrite was introduced.
+      Impact: Full DOCX acceptance is still unproven. Native run output is partial: exporter/base association, complete contexts, Western font registration, SwDoc traversal/package orchestration/import and UI remain pending. scoped100 for the full new-owner profile is not achieved; do not record verification OK or complete the task.
+      Resolution: Retain native condition and document WRITER112/113 plus CALC-290. Shared attribute-list owners pass scoped100. Continue the real exporter association and document traversal, and resolve coverage evidence without changing verification criteria. Source/provenance/registry, dependency/tree, build/static and focused lint checks are recorded separately in checkpoint evidence.
+
+    - Observation: Final admitted run signatures now retain original position/node/length and default boolean flags; RunText uses native UTF8 default and actual UNO LINE_BREAK=1. Final combined profile after these contract corrections: all70 cases pass, statements489/489 functions115/115 lines456/456, branches254/255. The earlier253/254 count is superseded.
+      Impact: The unchanged scoped100 gate still fails on the same RunText source branch; overall task acceptance remains incomplete.
+      Resolution: Checkpoint evidence records exact current source Git blobs, complete coverage totals, successful checks and pending whole-task requirements. Do not certify coverage or UI readiness.
 id_source: "generated"
 ---
 ## Summary
@@ -232,3 +240,11 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Final native serializer closure is59 tests/5 files, with unchanged scoped100: statements290/290, branches171/171, functions78/78, lines269/269. Native independent mark/cache flags and getData-before-pop order are preserved. A genuinely closed ZIP output tests failed mark setup leaving a nonempty stack with a true empty flag, subsequent merge no-op and start bypass. Earlier58-case metrics precede this source-error-contract addition.
   Impact: WRITER108–111 and CALC-286–289 document preserved escaping, sorted buckets, native retained-buffer suspicion and mark failure asymmetry. Final build/typecheck/static smoke pass; this remains an export infrastructure prerequisite, not a DOCX/XLSX application feature acceptance.
   Resolution: Retain source flag/error order without healing native state. Proceed to actual DocxExport/DocxAttributeOutput and part traversal; native import cursor/section completion and both application file UI workflows remain required. Keep task and goal active; no full suite is due.
+
+- Observation: Native FastAttributeList and DocxAttributeOutput admitted untracked run/character-property owners are ported over actual serializer, ZIP fragments and shared Sfx items. Command: focused SAX/oox coverage profile; Result: pass, 67 cases, statements347/347 branches195/195 functions93/93 lines323/323. Command: same profile plus docxattributeoutput.test.ts with all six owners included; Result: fail coverage gate despite all70 cases passing, branches253/254. The retained native RunText if condition has an apparently unreachable false path for immutable text. No exclusion, threshold change, fake string or branch rewrite was introduced.
+  Impact: Full DOCX acceptance is still unproven. Native run output is partial: exporter/base association, complete contexts, Western font registration, SwDoc traversal/package orchestration/import and UI remain pending. scoped100 for the full new-owner profile is not achieved; do not record verification OK or complete the task.
+  Resolution: Retain native condition and document WRITER112/113 plus CALC-290. Shared attribute-list owners pass scoped100. Continue the real exporter association and document traversal, and resolve coverage evidence without changing verification criteria. Source/provenance/registry, dependency/tree, build/static and focused lint checks are recorded separately in checkpoint evidence.
+
+- Observation: Final admitted run signatures now retain original position/node/length and default boolean flags; RunText uses native UTF8 default and actual UNO LINE_BREAK=1. Final combined profile after these contract corrections: all70 cases pass, statements489/489 functions115/115 lines456/456, branches254/255. The earlier253/254 count is superseded.
+  Impact: The unchanged scoped100 gate still fails on the same RunText source branch; overall task acceptance remains incomplete.
+  Resolution: Checkpoint evidence records exact current source Git blobs, complete coverage totals, successful checks and pending whole-task requirements. Do not certify coverage or UI readiness.
