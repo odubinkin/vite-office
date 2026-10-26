@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresbund.path.ts",
+        "apps/office/src/external/icu/source/common/uresdata.path.test.ts",
+        "scripts/icu-resource-path-native-probe.mjs"
+      ],
+      "justification": "Original table-only key-path helper remains distinct from res_findResource array-index traversal and rejects an unconsumed suffix. Original horizontal-inheritance path reconstruction uses counted original/current paths, exact segment walks and remaining C key, preserving embedded NUL and clear-before-sticky-error behavior. Narrow counted strings project consumed CharString storage; no alternate locale/path heuristic is introduced. Unchanged native uresbund.cpp witness passes80502 queries over all982 raw default-package roots and selected nested calendar/zone/locale containers, all256 narrow bytes, full recursive raw content digests, canonical C keys, caller pointer offsets, every mutated path byte, counted inheritance strings and sticky statuses.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getTableItemByKeyPath",
+        "createPath"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresbund.cpp",
+      "upstreamSymbols": [
+        "getTableItemByKeyPath",
+        "createPath"
+      ]
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "getTableItemByKeyPath",
+      "createPath"
+    ],
+    "upstreamSymbols": [
+      "getTableItemByKeyPath",
+      "createPath"
+    ],
+    "preservedResponsibilities": [
+      "Original table-only key-path helper remains distinct from res_findResource array-index traversal and rejects an unconsumed suffix. Original horizontal-inheritance path reconstruction uses counted original/current paths, exact segment walks and remaining C key, preserving embedded NUL and clear-before-sticky-error behavior. Narrow counted strings project consumed CharString storage; no alternate locale/path heuristic is introduced.",
+      "Unchanged native uresbund.cpp witness passes80502 queries over all982 raw default-package roots and selected nested calendar/zone/locale containers, all256 narrow bytes, full recursive raw content digests, canonical C keys, caller pointer offsets, every mutated path byte, counted inheritance strings and sticky statuses."
+    ],
+    "omittedResponsibilities": [
+      "Public bundle result initialization, alias resolution, locale fallback dispatch and ownership are separate pending responsibilities. Packed binary offsets/layout, native allocation/OOM, physically invalid or overlapping pointers, other strtol ABIs, arbitrary external packages and invalid counted input ranges remain uncertified.",
+      "The raw keyed helper projects the consumed resource/key outputs; unconsumed indexR writes that depend on packed TABLE/TABLE16/TABLE32 representation are not claimed by the decoded public-type graph."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+          "marker": "getTableItemByKeyPath"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresdata.path.test.ts",
+          "marker": "Original raw resource path"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "createPath"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+      "rationale": "Split original large resource source by raw path primitives and bundle inheritance-path helpers while preserving original algorithms and shared raw resource ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

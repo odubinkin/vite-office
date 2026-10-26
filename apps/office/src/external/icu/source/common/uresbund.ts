@@ -2,6 +2,12 @@
 import zoneinfo64 from "../data/misc/zoneinfo64.json";
 import keyTypeData from "../data/misc/keyTypeData.json";
 import langInfo from "../data/misc/langInfo.json";
+import {
+  res_countArrayItems,
+  res_getTableItemByKey,
+  res_getTableItemByIndex,
+  res_getArrayItem,
+} from "./uresdata.path";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 
 export const UResType = {
@@ -60,13 +66,7 @@ export function ures_openDirect(
 }
 /** Original scalar/table/array public size. @param bundle - Handle or null. @returns Size; scalar resources always have size one. */
 export function ures_getSize(bundle: UResourceBundle | null): number {
-  const resource = bundle?.resource;
-  if (!resource) return 0;
-  return resource.type === 2
-    ? resource.keys.length
-    : resource.type === 8
-      ? resource.value.length
-      : 1;
+  return res_countArrayItems(bundle?.resource ?? null);
 }
 /** Original public type query. @param bundle - Handle. @returns Type or NONE. */
 export function ures_getType(bundle: UResourceBundle | null): number {
@@ -102,8 +102,12 @@ export function ures_getByKey(
   }
   const resource = bundle.resource;
   if (resource?.type !== 2) status[0] = E.U_RESOURCE_TYPE_MISMATCH;
-  else if (!Object.hasOwn(resource.value, key)) status[0] = E.U_MISSING_RESOURCE_ERROR;
-  else return result(resource.value[key] as Resource, key, fillIn);
+  else {
+    const canonical: [string | null] = [key],
+      child = res_getTableItemByKey(resource, canonical);
+    if (child === null) status[0] = E.U_MISSING_RESOURCE_ERROR;
+    else return result(child, canonical[0], fillIn);
+  }
   return fillIn;
 }
 /** Original indexed lookup; indexing any scalar at zero copies its bundle. @param bundle - Source. @param index - Native int32 index. @param fillIn - Result owner. @param status - Nullable sticky status. @returns Result or original fillIn on failure. */
@@ -125,10 +129,11 @@ export function ures_getByIndex(
   }
   const resource = bundle.resource as Resource;
   if (resource.type === 2) {
-    const key = resource.keys[index] as string;
-    return result(resource.value[key] as Resource, key, fillIn);
+    const key: [string | null] = [null],
+      child = res_getTableItemByIndex(resource, index, key);
+    return result(child, key[0], fillIn);
   }
-  if (resource.type === 8) return result(resource.value[index] as Resource, null, fillIn);
+  if (resource.type === 8) return result(res_getArrayItem(resource, index), null, fillIn);
   return ures_copyResb(fillIn, bundle, status);
 }
 /** Original typed scalar getter guard. @param bundle - Handle. @param status - Sticky status. @returns Whether source may be read. */
@@ -204,7 +209,7 @@ export function ures_getStringByKey(
   const child = ures_getByKey(bundle, key, null, status);
   if (child === null) return null;
   const parent = bundle?.resource;
-  if (parent?.type === 2 && parent.aliasIndices.includes(parent.keys.indexOf(key)))
+  if (parent?.type === 2 && parent.aliasIndices.includes(parent.keys.indexOf(child.key as string)))
     return ures_getString(child, length, status);
   if (child.resource?.type !== 0) {
     if (status !== null) status[0] = E.U_RESOURCE_TYPE_MISMATCH;

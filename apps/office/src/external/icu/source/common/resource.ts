@@ -1,5 +1,6 @@
 /** @fileoverview Original ICU78.3 consumed ResourceValue/ResourceArray/ResourceTable contract from resource.h/uresdata.cpp. Immutable decoded mapped nodes project native resource offsets; alias/fallback dispatch and unconsumed value convenience APIs remain outside this layer. */
 import type { Resource } from "./uresbund";
+import { res_getTableItemByKey } from "./uresdata.path";
 /** Original abstract value boundary consumed by likely-subtag loading. */
 export abstract class ResourceValue {
   /** Original public type. @returns Resource type. */
@@ -67,10 +68,10 @@ export class ResourceTable {
   }
   /** Original C key comparison and concrete output write; no status output. @param key - C key. @param value - Output. @returns Found. */
   findValue(key: string, value: ResourceValue): boolean {
-    const end = key.indexOf("\0");
-    if (end >= 0) key = key.slice(0, end);
-    if (this.resource === null || !Object.hasOwn(this.resource.value, key)) return false;
-    setResource(value, this.resource.value[key] as Resource);
+    const canonical: [string | null] = [key],
+      resource = res_getTableItemByKey(this.resource, canonical);
+    if (resource === null) return false;
+    setResource(value, resource);
     return true;
   }
 }

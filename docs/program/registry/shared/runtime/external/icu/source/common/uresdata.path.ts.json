@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresdata.path.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresdata.path.ts",
+        "apps/office/src/external/icu/source/common/uresdata.path.test.ts",
+        "scripts/icu-resource-path-native-probe.mjs"
+      ],
+      "justification": "Original raw table/array lookup, public item count and mutable resource-path walk retain C key canonicalization, failed outputs, signed32 bounds, separator overwrites, caller pointer advances, unchanged empty-path key, scalar/alias stopping and remaining suffix. Native long64 strtol whitespace/sign/saturation/end-pointer and int32 narrowing are retained, including CALC-340. ResPointer projects borrowed mutable byte storage plus offset; immutable decoded nodes project mapped resources. Unchanged native uresbund.cpp witness passes80502 queries over all982 raw default-package roots and selected nested calendar/zone/locale containers, all256 narrow bytes, full recursive raw content digests, canonical C keys, caller pointer offsets, every mutated path byte, counted inheritance strings and sticky statuses.",
+      "knownViolations": [],
+      "localSymbols": [
+        "res_countArrayItems",
+        "res_getTableItemByKey",
+        "res_getTableItemByIndex",
+        "res_getArrayItem",
+        "res_findResource"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresdata.cpp",
+      "upstreamSymbols": [
+        "res_countArrayItems",
+        "res_getTableItemByKey",
+        "res_getTableItemByIndex",
+        "res_getArrayItem",
+        "res_findResource"
+      ]
+    }
+  }
+}
