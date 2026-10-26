@@ -52,6 +52,8 @@ export class RtfDocumentImpl {
     Readonly<{
       name: string;
       character: WriterCharacterAttributes;
+      autoKerning?: boolean;
+      baselineHalfPoints?: number;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
@@ -129,6 +131,8 @@ export class RtfDocumentImpl {
     collection: SwTextFormatColl,
     definition: {
       character: WriterCharacterAttributes;
+      autoKerning?: boolean;
+      baselineHalfPoints?: number;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
@@ -166,6 +170,8 @@ export class RtfDocumentImpl {
       previous !== undefined &&
       equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
       equalControls(previous.controls, state.characterControls) &&
+      previous.autoKerning === state.autoKerning &&
+      previous.baselineHalfPoints === state.baselineHalfPoints &&
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
@@ -173,6 +179,10 @@ export class RtfDocumentImpl {
       this.runs.push({
         text: value,
         attributes: { ...state.character },
+        ...(state.baselineHalfPoints === undefined
+          ? {}
+          : { baselineHalfPoints: state.baselineHalfPoints }),
+        ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
         controls: new Set(state.characterControls),
         ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
       });

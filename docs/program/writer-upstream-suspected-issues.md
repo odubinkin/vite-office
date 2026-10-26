@@ -1406,3 +1406,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `OutTBLBorderLine`, emits `\\brdrth` and halves the converted width when the native line exceeds 255 twips. The pinned tokenizer registers `brdrth` as a flag, while `rtfdispatchflag.cxx` has no `BRDRTH` case. The flag therefore does not double the border width on import.
 - Observation: the source path writes a 300-twip solid border as `\\brdrs\\brdrth\\brdrw150`, which the reader passes onward as 150 twips. A bare `\\brdrth` does not establish a line style. This is a source-level trace; compiled desktop reproduction remains unverified.
 - Preservation: both local paragraph and cell borders retain the ignored flag. Tests pin the reduced round-trip width and the absence of a line for a bare thick flag. No compensating width multiplier is added to the importer.
+
+### WRITER142 — Positive paragraph-style position substitutes automatic superscript
+
+- Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_position`, defers ordinary run positions and negative paragraph-style positions. Other nonzero stylesheet positions instead insert `DFLT_ESC_AUTO_SUPER` or `DFLT_ESC_AUTO_SUB` with `DFLT_ESC_PROP`; the source explicitly says `DON'T FIXME` and describes the missing final-font-size calculation.
+- Observation: a positive paragraph-style position does not retain its numeric half-point offset, while a negative paragraph-style position follows the deferred calculation. This asymmetric branch is source-derived; compiled desktop differential behavior remains unverified.
+- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import remains outside this completed block.

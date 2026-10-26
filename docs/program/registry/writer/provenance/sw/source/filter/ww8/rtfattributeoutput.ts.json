@@ -19,13 +19,18 @@
       "RtfAttributeOutput::ParaTabStop",
       "RtfAttributeOutput::PageBreakBefore",
       "RtfAttributeOutput::ParaLineSpacing_Impl",
-      "RtfAttributeOutput::OutputCharCrossedOut"
+      "RtfAttributeOutput::OutputCharCrossedOut",
+      "RtfAttributeOutput::OutputCharAutoKern",
+      "RtfAttributeOutput::OutputCharFontSizeAssoc",
+      "RtfAttributeOutput::OutputCharPostureAssoc",
+      "RtfAttributeOutput::OutputCharWeightAssoc"
     ],
     "preservedResponsibilities": [
       "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
       "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items.",
       "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco, including native brush colors projected with alpha.",
-      "Owns shared source OutTBLBorderLine and OutBorderLine emission for cells and paragraph FormatBox, including uniform box form, explicit no-border overrides, native border styles, color indices, distances and the source thick-width flag."
+      "Owns shared source OutTBLBorderLine and OutBorderLine emission for cells and paragraph FormatBox, including uniform box form, explicit no-border overrides, native border styles, color indices, distances and the source thick-width flag.",
+      "Emits native Western font height with integral half-point truncation, posture with the source non-NONE comparison, weight only for exact WEIGHT_BOLD, explicit font resets and native auto-kerning independently from the browser character projection."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -59,6 +64,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
           "marker": "exports and imports native paragraph border style"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.native-character.test.ts",
+          "marker": "retains adjacent native hints"
         }
       ],
       "upstream": [
@@ -85,6 +94,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::FormatBox"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharAutoKern"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharFontSizeAssoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharPostureAssoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharWeightAssoc"
         }
       ]
     }

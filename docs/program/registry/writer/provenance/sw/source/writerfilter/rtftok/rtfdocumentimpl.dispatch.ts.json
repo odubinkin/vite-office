@@ -14,7 +14,9 @@
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: Dispatch, DispatchBodyControl. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+      "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: Dispatch, DispatchBodyControl. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced.",
+      "Retains group-scoped auto-kerning values and explicit resets in native paragraph styles and interned range item sets. Nonzero RTF kerning thresholds map to true as in DomainMapper; imported ranges also survive the Worker document codec.",
+      "Retains signed half-point baseline positions until final run/style font height resolution, with pinned rounding, MAX_ESC_POS clamping, zero-value admission and positive paragraph-style automatic substitution (WRITER142)."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -28,6 +30,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.dispatch.ts",
           "marker": "DispatchBodyControl"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.native-character.test.ts",
+          "marker": "inherits style auto-kerning"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.native-character.test.ts",
+          "marker": "resolves baseline half points"
         }
       ],
       "upstream": [
@@ -78,6 +88,22 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
           "marker": "\"ulhair\"_ostr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::KERNING:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_EG_RPrBase_kern:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::UP:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
+          "marker": "case NS_ooxml::LN_EG_RPrBase_position:"
         }
       ]
     },

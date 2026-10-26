@@ -1,4 +1,10 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxPostureItem } from "../../../../editeng/inc/postitem";
+import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   DFLT_ESC_AUTO_SUB,
@@ -31,8 +37,18 @@ import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass"
 import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
+  FontLineStyle,
+  FontStrikeout,
+  FontWeight,
+  FontItalic,
+} from "../../../../tools/inc/fontenum";
+import {
+  RES_CHRATR_AUTOKERN,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
   RES_BREAK,
   RES_BOX,
   RES_KEEP,
@@ -51,6 +67,7 @@ import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
+import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
@@ -262,11 +279,11 @@ export class RtfAttributeOutput {
       .join("");
   }
 
-  /** Emits represented direct character controls. @param attributes - Native run values. @returns RTF controls. */
-  public WriteCharacter(attributes: WriterCharacterAttributes): string {
+  /** Emits represented direct character controls. @param attributes - Native run values. @param fontAttributes - Include projected font properties for legacy callers. @returns RTF controls. */
+  public WriteCharacter(attributes: WriterCharacterAttributes, fontAttributes = true): string {
     let result = "";
-    if (attributes.bold) result += "\\b";
-    if (attributes.italic) result += "\\i";
+    if (fontAttributes && attributes.bold) result += "\\b";
+    if (fontAttributes && attributes.italic) result += "\\i";
     const underlineStyle =
       attributes.underlineStyle ??
       (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
@@ -301,9 +318,9 @@ export class RtfAttributeOutput {
     if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
     else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
     else if (attributes.strikeout !== undefined) result += "\\strike";
-    if (attributes.fontFamily !== undefined)
+    if (fontAttributes && attributes.fontFamily !== undefined)
       result += `\\f${this.fontIndex(attributes.fontFamily)}`;
-    if (attributes.fontSizeTwips !== undefined)
+    if (fontAttributes && attributes.fontSizeTwips !== undefined)
       result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
     if (attributes.escapement !== undefined)
       result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
@@ -311,6 +328,27 @@ export class RtfAttributeOutput {
       result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
     if (attributes.highlight !== undefined)
       result += `\\highlight${TransColToIco(writerColorFromPrimitive(attributes.highlight, "transparent"))}`;
+    return result;
+  }
+
+  /** Emits font and auto-kerning items without the lossy browser projection. @param items - Effective native items. @returns Source RTF controls. */
+  public WriteNativeCharacter(items: SfxItemSet): string {
+    let result = this.WriteCharacter(
+      projectWriterCharacterAttributes(items, items.GetParent()),
+      false,
+    );
+    const kern = items.GetItemIfSet(RES_CHRATR_AUTOKERN, true) as SvxAutoKernItem | undefined;
+    if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
+    const font = items.GetItemIfSet(RES_CHRATR_FONT, true) as SvxFontItem | undefined;
+    if (font !== undefined) result += `\\f${this.fontIndex(font.GetFamilyName())}`;
+    const size = items.GetItemIfSet(RES_CHRATR_FONTSIZE, true) as SvxFontHeightItem | undefined;
+    if (size !== undefined) result += `\\fs${Math.trunc(size.GetHeight() / 10)}`;
+    const posture = items.GetItemIfSet(RES_CHRATR_POSTURE, true) as SvxPostureItem | undefined;
+    if (posture !== undefined)
+      result += posture.GetPosture() === FontItalic.ITALIC_NONE ? "\\i0" : "\\i";
+    const weight = items.GetItemIfSet(RES_CHRATR_WEIGHT, true) as SvxWeightItem | undefined;
+    if (weight !== undefined)
+      result += weight.GetWeight() === FontWeight.WEIGHT_BOLD ? "\\b" : "\\b0";
     return result;
   }
 

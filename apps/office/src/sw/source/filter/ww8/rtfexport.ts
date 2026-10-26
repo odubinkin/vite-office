@@ -26,7 +26,12 @@ import {
   type Color,
 } from "../../../../tools/inc/color";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { RES_BOX, RES_PAGEDESC, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import {
+  RES_BOX,
+  RES_PAGEDESC,
+  RES_PARATR_TABSTOP,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwDoc } from "../../core/doc/doc";
@@ -36,7 +41,9 @@ import { SwTableNode } from "../../core/docnode/node";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
@@ -100,7 +107,7 @@ export class RtfExport {
     const blocks = document.GetNodes().getBodyContent();
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
-      for (const run of projectWriterTextRuns(node as SwTextNode)) {
+      for (const run of this.GetTextRuns(node as SwTextNode)) {
         if (run.attributes.fontFamily !== undefined) this.IndexFont(run.attributes.fontFamily);
         if (run.attributes.color !== undefined && run.attributes.color !== "auto")
           this.IndexColor(run.attributes.color);
@@ -164,9 +171,7 @@ export class RtfExport {
     output += "{\\stylesheet";
     for (const { index, style } of this.styles.values()) {
       const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
-        character = this.attributeOutput.WriteCharacter(
-          projectWriterCharacterAttributes(style.GetAttrSet()),
-        );
+        character = this.attributeOutput.WriteNativeCharacter(style.GetAttrSet());
       const parent = style.DerivedFrom();
       const base = parent instanceof SwTextFormatColl ? styleTable.GetSlot(parent) : 0x0fff;
       const next = styleTable.GetSlot(style.GetNextTextFormatColl());
@@ -530,7 +535,7 @@ export class RtfExport {
     let markIndex = 0;
     let activeLink: WriterHyperlink | undefined;
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
-      run: WriterTextRun,
+      run: WriterTextRun & { items: SfxItemSet },
     ): void => {
       if (run.text.length === 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
@@ -540,7 +545,7 @@ export class RtfExport {
       }
       output += this.WriteRun(run);
     };
-    for (const run of projectWriterTextRuns(paragraph)) {
+    for (const run of this.GetTextRuns(paragraph)) {
       const runStart = offset;
       offset += run.text.length;
       const sliceStart = Math.max(start, runStart);
@@ -578,10 +583,42 @@ export class RtfExport {
     return `{\\field{\\*\\fldinst HYPERLINK "${url}"${target} }{\\fldrslt `;
   }
 
+  /** Visits native hint boundaries before any UI run coalescing. @param paragraph - Native text owner. @returns Effective item runs. */
+  private GetTextRuns(paragraph: SwTextNode): readonly (WriterTextRun & { items: SfxItemSet })[] {
+    const text = paragraph.GetText();
+    const hints = paragraph.GetpSwpHints()?.entries() ?? [];
+    const boundaries = new Set([0, text.length]);
+    for (const hint of hints) {
+      boundaries.add(Math.min(text.length, hint.start));
+      boundaries.add(Math.min(text.length, hint.end));
+    }
+    const ordered = [...boundaries].sort((left, right) => left - right);
+    const runs: (WriterTextRun & { items: SfxItemSet })[] = [];
+    for (let index = 0; index + 1 < ordered.length; index++) {
+      const start = ordered[index] as number;
+      const end = ordered[index + 1] as number;
+      const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+      items.SetParent(paragraph.GetSwAttrSet());
+      const active = hints.filter((hint) => hint.start <= start && end <= hint.end);
+      const auto = active.find((hint) => hint.format instanceof SwFormatAutoFormat);
+      if (auto?.format instanceof SwFormatAutoFormat) items.PutSet(auto.format.GetStyleHandle());
+      const inet = [...active].reverse().find((hint) => hint.format instanceof SwFormatINetFormat);
+      runs.push({
+        text: text.slice(start, end),
+        items,
+        attributes: projectWriterCharacterAttributes(items, items.GetParent()),
+        ...(inet?.format instanceof SwFormatINetFormat
+          ? { hyperlink: inet.format.GetHyperlink() }
+          : {}),
+      });
+    }
+    return runs;
+  }
+
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
-  private WriteRun(run: WriterTextRun): string {
+  private WriteRun(run: WriterTextRun & { items: SfxItemSet }): string {
     // The paragraph writer admits only nonempty slices before calling this private method.
-    const controls = this.attributeOutput.WriteCharacter(run.attributes);
+    const controls = this.attributeOutput.WriteNativeCharacter(run.items);
     return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
 

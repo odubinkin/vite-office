@@ -37,6 +37,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       destination: previous?.destination ?? "body",
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
+      ...(previous?.baselineHalfPoints === undefined
+        ? {}
+        : { baselineHalfPoints: previous.baselineHalfPoints }),
+      ...(previous?.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
       paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
       fontIndex: previous?.fontIndex ?? 0,
       currentCodepage: previous?.currentCodepage ?? this["defaultCodepage"],
@@ -75,6 +79,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         this["styles"].set(previous.styleIndex, {
           name,
           character: { ...previous.character },
+          ...(previous.baselineHalfPoints === undefined
+            ? {}
+            : { baselineHalfPoints: previous.baselineHalfPoints }),
+          ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
           paragraph: { ...previous.paragraph },
           controls: new Set(previous.styleControls),
           ...(previous.basedOnStyleIndex === undefined
@@ -325,6 +333,7 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
+  if ((name === "up" || name === "dn") && parameter === 0) return;
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (name === "sect") {
     if (this["runs"].length > 0) this["CommitParagraph"](state);
@@ -627,7 +636,13 @@ export function DispatchBodyControl(
     );
     return;
   }
+  if (name === "kerning") {
+    state.autoKerning = (parameter ?? 0) !== 0;
+    return;
+  }
   if (name === "plain") {
+    delete state.baselineHalfPoints;
+    state.autoKerning = false;
     state.character = { ...DEFAULT_CHARACTER };
     state.characterControls.clear();
     state.currentCodepage =
@@ -679,7 +694,8 @@ export function DispatchBodyControl(
             ? FontStrikeout.STRIKEOUT_DOUBLE
             : FontStrikeout.STRIKEOUT_SINGLE,
     };
-  else if (name === "super" || name === "sub")
+  else if (name === "super" || name === "sub") {
+    delete state.baselineHalfPoints;
     state.character = {
       ...state.character,
       escapement: {
@@ -687,13 +703,16 @@ export function DispatchBodyControl(
         height: DFLT_ESC_PROP,
       },
     };
-  else if (name === "nosupersub") {
+  } else if (name === "nosupersub") {
+    delete state.baselineHalfPoints;
     const character = { ...state.character };
     Reflect.deleteProperty(character, "escapement");
     state.character = character;
   } else if ((name === "up" || name === "dn") && parameter !== undefined) {
     const up = name === "up",
       fontHeight = state.character.fontSizeTwips ?? 240;
+    if (this["pendingUpDn"]?.automatic) delete state.baselineHalfPoints;
+    else state.baselineHalfPoints = parameter * (up ? 1 : -1);
     const offset = this["pendingUpDn"]?.automatic
       ? up
         ? DFLT_ESC_AUTO_SUPER

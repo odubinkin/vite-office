@@ -1,4 +1,5 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
+import { DFLT_ESC_SUPER, DFLT_ESC_SUB, MAX_ESC_POS } from "../../../../editeng/inc/escapementitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule, SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -73,6 +74,8 @@ export interface RtfState {
     | "skip";
   starred: boolean;
   character: WriterCharacterAttributes;
+  autoKerning?: boolean;
+  baselineHalfPoints?: number;
   paragraph: RtfParagraphState;
   fontIndex: number;
   currentCodepage: number;
@@ -99,6 +102,8 @@ export interface RtfParagraph {
 /** Parsed RTF text plus controls explicitly active at that span. */
 export interface RtfRun extends WriterTextRun {
   readonly controls: ReadonlySet<string>;
+  readonly autoKerning?: boolean;
+  readonly baselineHalfPoints?: number;
 }
 /** Ordered body content with native rows and cell paragraphs. */
 export type RtfBlock =
@@ -202,6 +207,7 @@ export const SKIPPED_DESTINATIONS = new Set([
   "xmlnstbl",
 ]);
 export const STYLE_PROPERTY_CONTROLS = new Set([
+  "kerning",
   "box",
   "brdrt",
   "brdrl",
@@ -250,6 +256,7 @@ export const STYLE_PROPERTY_CONTROLS = new Set([
   "slmult",
 ]);
 export const CHARACTER_PROPERTY_CONTROLS = new Set([
+  "kerning",
   "b",
   "i",
   "ul",
@@ -305,6 +312,16 @@ export function equalCharacter(
     a.escapement?.offset === b.escapement?.offset &&
     a.escapement?.height === b.escapement?.height
   );
+}
+/** Resolves the deferred OOXML position with native rounding and clamping. @param position - Signed half points. @param fontHeight - Final font height in twips. @returns Percentage offset. */
+export function resolveRtfBaseline(position: number, fontHeight: number): number {
+  const value =
+    fontHeight === 0
+      ? position > 0
+        ? DFLT_ESC_SUPER
+        : DFLT_ESC_SUB
+      : Math.sign(position) * Math.round(Math.abs((position * 1000) / fontHeight));
+  return Math.max(-MAX_ESC_POS, Math.min(MAX_ESC_POS, value));
 }
 /** Keeps absent RTF direct controls inherited from the selected paragraph style.  @param run - Run. @param inherited - Inherited. @returns The WriterCharacterAttributes result. */
 export function resolveRtfRunAttributes(
@@ -367,7 +384,18 @@ export function resolveRtfRunAttributes(
         ? {}
         : { strikeout: inherited.strikeout }),
     ...(has("super", "sub", "up", "dn", "nosupersub")
-      ? { escapement: run.attributes.escapement ?? { offset: 0, height: 100 } }
+      ? {
+          escapement:
+            run.baselineHalfPoints === undefined
+              ? (run.attributes.escapement ?? { offset: 0, height: 100 })
+              : {
+                  offset: resolveRtfBaseline(
+                    run.baselineHalfPoints,
+                    (has("fs") ? run.attributes.fontSizeTwips : inherited.fontSizeTwips) ?? 240,
+                  ),
+                  height: run.attributes.escapement?.height ?? 100,
+                },
+        }
       : inherited.escapement === undefined
         ? {}
         : { escapement: inherited.escapement }),

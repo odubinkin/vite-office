@@ -148,3 +148,21 @@ document codec preserves the direct paragraph box without a second transport
 representation. A separate `RES_PARATR_CONNECT_BORDER` value has no explicit
 control in the pinned `FormatBox` export path; the local exporter retains that
 source omission.
+
+The RTF writer visits native hint boundaries and consumes effective character
+item sets before any browser run coalescing. Western weight uses the pinned
+exact `WEIGHT_BOLD` comparison (including explicit `\b0` for other weights),
+posture uses the pinned non-`ITALIC_NONE` comparison, and font height is truncated
+to integral half points. Native auto-kerning imports and exports through styles,
+paragraph inheritance and range hints, including group restoration, `\plain`,
+explicit false overrides and Worker serialization. As in pinned DomainMapper,
+a nonzero RTF minimum-size threshold becomes a boolean. Independent CJK/CTL
+association groups and complete font-table metadata remain open; these tests
+do not certify those paths or compiled upstream differential parity.
+
+Run baseline positions retain signed half points until their final font height
+is known, including later `\fs` controls and paragraph-style inheritance, with
+native half-away-from-zero rounding, clamping and zero-value admission. Positive
+paragraph-style positions deliberately substitute automatic superscript, while
+negative ones use deferred numeric conversion, preserving the source asymmetry
+recorded as WRITER142.

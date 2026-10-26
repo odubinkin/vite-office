@@ -1,4 +1,10 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { DFLT_ESC_AUTO_SUPER, DFLT_ESC_PROP } from "../../../../editeng/inc/escapementitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
+import { MakeTextAttr } from "../../core/txtnode/thints";
+import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   SvxFirstLineIndentItem,
@@ -16,6 +22,8 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
+  RES_CHRATR_FONTSIZE,
+  RES_CHRATR_AUTOKERN,
   RES_BREAK,
   RES_BOX,
   RES_PARATR_CONNECT_BORDER,
@@ -52,6 +60,7 @@ import {
   createRtfTabStops,
   hasRtfUnderlineControl,
   resolveRtfRunAttributes,
+  resolveRtfBaseline,
   type RtfDocumentImplContext,
   type RtfParagraph,
   type RtfParagraphState,
@@ -310,6 +319,8 @@ export function ApplyStyleDefinition(
   collection: SwTextFormatColl,
   definition: {
     character: WriterCharacterAttributes;
+    autoKerning?: boolean;
+    baselineHalfPoints?: number;
     paragraph: RtfParagraphState;
     controls: ReadonlySet<string>;
     basedOnStyleIndex?: number;
@@ -317,7 +328,7 @@ export function ApplyStyleDefinition(
 ): void {
   const controls = definition.controls;
   const current = projectWriterCharacterAttributes(collection.GetAttrSet());
-  const target: WriterCharacterAttributes = {
+  let target: WriterCharacterAttributes = {
     ...current,
     ...(controls.has("b") ? { bold: definition.character.bold } : {}),
     ...(controls.has("i") ? { italic: definition.character.italic } : {}),
@@ -340,12 +351,34 @@ export function ApplyStyleDefinition(
     ...(controls.has("cf") ? { color: definition.character.color } : {}),
     ...(controls.has("highlight") ? { highlight: definition.character.highlight } : {}),
   };
+  if (definition.baselineHalfPoints !== undefined) {
+    const position = definition.baselineHalfPoints;
+    // DomainMapper deliberately substitutes automatic superscript for positive paragraph-style positions (WRITER142).
+    target = {
+      ...target,
+      escapement:
+        position > 0
+          ? { offset: DFLT_ESC_AUTO_SUPER, height: DFLT_ESC_PROP }
+          : {
+              offset: resolveRtfBaseline(
+                position,
+                target.fontSizeTwips ??
+                  (
+                    collection.GetAttrSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
+                  ).GetHeight(),
+              ),
+              height: target.escapement?.height ?? 100,
+            },
+    };
+  }
   const items = createSwFormatAutoFormat(
     collection.GetAttrSet().GetDoc().GetAttrPool(),
     target,
     current,
   ).GetStyleHandle();
   for (const item of items.entries()) collection.SetFormatAttr(item);
+  if (definition.autoKerning !== undefined)
+    collection.SetFormatAttr(new SvxAutoKernItem(definition.autoKerning, RES_CHRATR_AUTOKERN));
   const paragraph = definition.paragraph;
   if (
     ["ql", "qc", "qr", "qj", "qd"].some(
@@ -423,6 +456,7 @@ export function ApplyParagraph(
   const runs = paragraph.runs.map(
     /** Computes the run result. @param run - Run. @returns The computed result. */ (run) => ({
       text: run.text,
+      ...(run.autoKerning === undefined ? {} : { autoKerning: run.autoKerning }),
       ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
       attributes: resolveRtfRunAttributes(run, inherited),
     }),
@@ -436,7 +470,19 @@ export function ApplyParagraph(
       .join(""),
   );
   const hints = new SwpHints(node.GetDoc().GetAttrPool());
-  hints.setTextRuns(runs, node.GetSwAttrSet());
+  let offset = 0;
+  for (const run of runs) {
+    const start = offset;
+    offset += run.text.length;
+    if (offset === start) continue;
+    const format = createSwFormatAutoFormat(node.GetDoc().GetAttrPool(), run.attributes, inherited);
+    const items = format.GetStyleHandle().Clone();
+    if (run.autoKerning !== undefined)
+      items.Put(new SvxAutoKernItem(run.autoKerning, RES_CHRATR_AUTOKERN));
+    if (items.Count() > 0) hints.Insert(MakeTextAttr(node.GetDoc(), items, start, offset));
+    if (run.hyperlink !== undefined)
+      hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(run.hyperlink), start, offset));
+  }
   node.SetTextHints(hints);
   for (const mark of paragraph.marks)
     node.GetDoc().GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
