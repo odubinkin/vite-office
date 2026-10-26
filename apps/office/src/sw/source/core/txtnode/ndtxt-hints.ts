@@ -302,3 +302,15 @@ export function CreateTextNodeColorFragment(
     ),
   };
 }
+
+/** Reads the existing direct-format control state from actual native hints at this source-owned split. @param node - Actual paragraph. @param start - Inclusive range. @param end - Exclusive range. @param format - Queried property. @returns Existing immutable UI state. */
+export function GetTextNodeRangeFormatState(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  format: WriterCharacterFormat,
+): "mixed" | "off" | "on" {
+  AssertTextNodeRange(node, start, end);
+  const hints = node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  return hints.getCharacterFormatState(node.Len(), start, end, format, node.GetSwAttrSet());
+}

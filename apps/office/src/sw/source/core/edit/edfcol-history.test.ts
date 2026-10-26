@@ -1,4 +1,5 @@
 /** @fileoverview Checks native collection/reset history ownership, different initial/redo flags and full-node history ranges. */
+import type { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { afterEach, describe, expect, it } from "vitest";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { SfxListUndoAction } from "../../../../svl/source/undo/undo";
@@ -57,7 +58,7 @@ function hint(
   doc: SwDoc,
   kind: string,
   length: number,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   const items = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
   items.Put(new SvxWeightItem(8, 15));
   const result = new SwTextAttrEnd(

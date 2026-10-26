@@ -2,7 +2,7 @@
 > vite-office@0.1.0 check:file-size
 > node scripts/check-file-size.mjs
 
-File-size check scanned 3534 authored files.
+File-size check scanned 3539 authored files.
 Decomposition review candidates:
 apps/office/e2e/calc/clipboard-copy.spec.ts: 961 lines
 apps/office/src/configmgr/source/xcsparser.ts: 571 lines
@@ -144,7 +144,7 @@ apps/office/src/svtools/inc/htmltokn.ts: 779 lines
 apps/office/src/sw/browser/editor/browser-writer-edit-window.ts: 773 lines
 apps/office/src/sw/browser/editor/WriterPlainTextEditor.test.tsx: 585 lines
 apps/office/src/sw/browser/editor/WriterPlainTextEditor.tsx: 586 lines
-apps/office/src/sw/browser/filter/xml/writer-document-codec.ts: 934 lines
+apps/office/src/sw/browser/filter/xml/writer-document-codec.ts: 893 lines
 apps/office/src/sw/browser/presentation/writer-view-projection.ts: 757 lines
 apps/office/src/sw/browser/presentation/writer-view.test.tsx: 844 lines
 apps/office/src/sw/browser/presentation/writer-view.tsx: 995 lines
@@ -154,10 +154,10 @@ apps/office/src/sw/browser/presentation/WriterPageLayout.test.tsx: 876 lines
 apps/office/src/sw/browser/presentation/WriterRulers.tsx: 733 lines
 apps/office/src/sw/browser/presentation/WriterTableDialog.tsx: 745 lines
 apps/office/src/sw/source/core/attr/native-format-attribute-notify.test.ts: 577 lines
-apps/office/src/sw/source/core/attr/swatrset.ts: 839 lines
+apps/office/src/sw/source/core/attr/swatrset.ts: 840 lines
 apps/office/src/sw/source/core/crsr/native-search-contract-boundaries.test.ts: 663 lines
 apps/office/src/sw/source/core/crsr/swcrsr.ts: 518 lines
-apps/office/src/sw/source/core/doc/doc.ts: 954 lines
+apps/office/src/sw/source/core/doc/doc.ts: 967 lines
 apps/office/src/sw/source/core/doc/number.ts: 724 lines
 apps/office/src/sw/source/core/doc/writer-attributes.test.ts: 787 lines
 apps/office/src/sw/source/core/doc/writer-model.test.ts: 972 lines
@@ -171,9 +171,9 @@ apps/office/src/sw/source/core/layout/newfrm.ts: 984 lines
 apps/office/src/sw/source/core/layout/tabfrm.ts: 616 lines
 apps/office/src/sw/source/core/SwNumberTree/SwNumberTree.ts: 506 lines
 apps/office/src/sw/source/core/table/swtable.ts: 904 lines
-apps/office/src/sw/source/core/txtnode/ndhints.ts: 941 lines
-apps/office/src/sw/source/core/txtnode/ndtxt.ts: 996 lines
-apps/office/src/sw/source/core/txtnode/txatbase.ts: 584 lines
+apps/office/src/sw/source/core/txtnode/ndhints.ts: 948 lines
+apps/office/src/sw/source/core/txtnode/ndtxt.ts: 997 lines
+apps/office/src/sw/source/core/txtnode/txatbase.ts: 588 lines
 apps/office/src/sw/source/core/undo/native-format-node-index.test.ts: 547 lines
 apps/office/src/sw/source/core/undo/native-list-rule-range.test.ts: 544 lines
 apps/office/src/sw/source/core/undo/unattr.ts: 568 lines
@@ -197,7 +197,7 @@ apps/office/src/sw/source/uibase/app/docsh.ts: 657 lines
 apps/office/src/sw/source/uibase/docvw/edtwin.ts: 555 lines
 apps/office/src/sw/source/uibase/shells/tabsh.ts: 705 lines
 apps/office/src/sw/source/uibase/shells/textsh1.ts: 998 lines
-apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts: 544 lines
+apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts: 564 lines
 apps/office/src/sw/source/uibase/wrtsh/native-table-plain-paste.test.ts: 586 lines
 apps/office/src/sw/source/uibase/wrtsh/wrtsh1.test.ts: 980 lines
 apps/office/src/sw/source/uibase/wrtsh/wrtsh1.ts: 986 lines

@@ -1,4 +1,5 @@
 /** @fileoverview Checks node-owned ignore expansion and DEFAULT insertion using literal source-independent ranges. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { describe, expect, it, vi } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwTableNode, SwTableBoxStartNode } from "../docnode/node";
@@ -31,7 +32,7 @@ function attribute(
   start: number,
   end: number,
 ) {
-  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
   if (family === 54) {
     const item = new SwFormatINetFormat("url", "target");
     item.SetName("name");

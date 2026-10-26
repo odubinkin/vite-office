@@ -1,5 +1,6 @@
 /** @fileoverview Ports supported SwDoc paragraph collection reset/range and MoveLeftMargin operations from pinned sw/source/core/doc/docfmt.cxx. */
 
+import type { SwCharFormat } from "../../../inc/charfmt";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { BroadcastingModify } from "../../../inc/calbck";
 import { SwAttrSet } from "../attr/swatrset";
@@ -25,7 +26,7 @@ import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
-import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
 import {
   SvxTextLeftMarginItem,
   SvxFirstLineIndentItem,
@@ -214,21 +215,10 @@ export function InsertPoolItem(
   for (const node of getTextFormatCollNodes(document, range)) {
     const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0;
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
-    if (item instanceof SwFormatINetFormat)
+    if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
+    else if (item instanceof SwFormatINetFormat)
       node.SetHyperlink(start, end, item.GetValue() ? item.GetHyperlink() : undefined);
-    else if (item instanceof SwFormatAutoFormat)
-      node.SetTextHints(
-        setCharacterItems(
-          node.GetOrCreateSwpHints(),
-          document.GetAttrPool(),
-          node.Len(),
-          start,
-          end,
-          item.GetStyleHandle().entries(),
-          node.GetSwAttrSet(),
-          true,
-        ),
-      );
+    else if (item instanceof SwFormatAutoFormat) node.InsertItem(item, start, end, mode);
     else if (
       item.Which() < RES_CHRATR_END &&
       start !== end &&
@@ -441,4 +431,23 @@ export function SetDefault(document: SwDoc, source: SfxPoolItem | SfxItemSet): v
     notify.DisposeModify();
   }
   document.GetDocumentStateManager().SetModified();
+}
+
+/** Copies the represented native CopyFormat character branch, preserving name lookup, parent recursion, direct items and pool identity. @param doc - Destination. @param source - Actual character owner. @returns Destination style. */
+export function CopyCharFormat(doc: SwDoc, source: SwCharFormat): SwCharFormat {
+  if (!source.IsAuto() || source.GetRegisteredIn() === undefined) {
+    const existing = doc.FindCharFormatByName(source.GetName());
+    if (existing !== undefined) return existing;
+  }
+  const defaultFormat = doc.GetDfltCharFormat();
+  const oldParent = source.DerivedFrom() as SwCharFormat | undefined;
+  const parent =
+    oldParent !== undefined && oldParent !== defaultFormat
+      ? CopyCharFormat(doc, oldParent)
+      : defaultFormat;
+  const format = doc.MakeCharFormat(source.GetName(), parent);
+  format.SetAuto(source.IsAuto());
+  for (const item of source.GetAttrSet().entries()) format.SetFormatAttr(item);
+  format.SetPoolFormatId(source.GetPoolFormatId());
+  return format;
 }

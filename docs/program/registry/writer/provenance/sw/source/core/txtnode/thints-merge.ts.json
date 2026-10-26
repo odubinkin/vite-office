@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
+          "marker": "MergeTextHintPortions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwpHints::MergePortions"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "localSymbols": [
+      "MergeTextHintPortions"
+    ],
+    "upstreamSymbols": [
+      "SwpHints::MergePortions",
+      "lcl_Compare_Attributes"
+    ],
+    "preservedResponsibilities": [
+      "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full compiled Writer model/UNO/layout parity, unregistered fields and external document loading remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
+      "rationale": "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

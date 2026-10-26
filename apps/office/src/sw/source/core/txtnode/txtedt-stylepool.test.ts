@@ -8,7 +8,7 @@ import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 import { MakeTextAttr } from "./thints";
-import type { SwFormatINetFormat } from "./fmtatr2";
+import type { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
 import { resetParagraphTextAttributes, ResetTextNodeHintItems } from "./txtedt";
 import { SwUndoAttr } from "../undo/unattr";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -31,7 +31,9 @@ function input(doc: SwDoc, weight = 8): SfxItemSet {
   return set;
 }
 /** Reads the automatic handle of a registered hint. @param hint - Real range. @returns Shared style. */
-function handle(hint: SwTextAttrEnd<SwFormatINetFormat | SwFormatAutoFormat>): SfxItemSet {
+function handle(
+  hint: SwTextAttrEnd<SwFormatINetFormat | SwFormatAutoFormat | SwFormatCharFormat>,
+): SfxItemSet {
   return (hint.format as SwFormatAutoFormat).GetStyleHandle();
 }
 

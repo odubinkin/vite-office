@@ -2,9 +2,11 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   setFontItem,
+  projectCharacterHintAttributes,
   setCharacterItems,
   createCharacterFormatItems,
   createFontHeightItems,
@@ -16,12 +18,13 @@ import {
   RES_CHRATR_FONT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
+  RES_TXTATR_CHARFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwTextNode } from "./ndtxt";
 import type { SwAttrPool } from "../attr/swatrset";
 import { MakeTextAttr, MergeTextNodePortions } from "./thints";
-import { SwTextINetFormat } from "./txtatr2";
+import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
 import {
   hintWhichStartBound,
@@ -46,11 +49,12 @@ import {
   equalWriterHyperlinks,
   normalizeWriterHyperlink,
   SwFormatINetFormat,
+  SwFormatCharFormat,
   type WriterHyperlink,
 } from "./fmtatr2";
 
 /** Bounded implemented ranged item families held by the native maps. */
-type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
 
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
@@ -62,7 +66,8 @@ export class SwpHints {
       throw new Error("Writer hints require the owning document pool.");
     this.m_pTextNode = node;
     for (const hint of this.m_HintsByStart)
-      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(node);
+      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+        hint.ChgTextNode(node);
   }
 
   private m_HintsByStart: RangedTextAttr[] = [];
@@ -85,14 +90,16 @@ export class SwpHints {
   private set hintsByStart(hints: RangedTextAttr[]) {
     for (const hint of this.m_HintsByStart) {
       hint.m_pHints = undefined;
-      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(undefined);
+      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+        hint.ChgTextNode(undefined);
     }
     this.m_HintsByStart = hints;
     this.m_HintsByEnd = [...hints].sort(compareHintsByEnd);
     this.m_HintsByWhichAndStart = [...hints].sort(compareHintsByWhichAndStart);
     for (const hint of hints) {
       hint.m_pHints = this;
-      if (hint instanceof SwTextINetFormat) hint.ChgTextNode(this.m_pTextNode);
+      if (hint instanceof SwTextINetFormat || hint instanceof SwTextCharFormat)
+        hint.ChgTextNode(this.m_pTextNode);
     }
     this.m_StartMapNeedsSortingRange = [0x7fffffff, -1];
     this.m_EndMapNeedsSortingRange = [0x7fffffff, -1];
@@ -667,7 +674,8 @@ export class SwpHints {
           hint.end >= hint.start &&
           ((hint.format instanceof SwFormatAutoFormat &&
             hint.format.GetStyleHandle().Count() > 0) ||
-            (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0)),
+            (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0) ||
+            hint.format instanceof SwFormatCharFormat),
       )
       .sort(compareHints);
     const normalized: RangedTextAttr[] = [];
@@ -685,7 +693,11 @@ export class SwpHints {
           previous = candidate;
           break;
         }
-        if (previous !== undefined && hint.start < previous.end)
+        if (
+          previous !== undefined &&
+          hint.Which() !== RES_TXTATR_CHARFMT &&
+          hint.start < previous.end
+        )
           throw new Error("Overlapping Writer same-type hints are not normalized.");
         if (
           previous !== undefined &&
@@ -726,7 +738,6 @@ export class SwpHints {
   public toTextRuns(text: string, inherited: SfxItemSet): readonly WriterTextRunLike[] {
     if (text.length === 0) return [];
     const runs: WriterTextRunLike[] = [];
-    const inheritedAttributes = this.projectInherited(inherited);
     const boundaries = new Set([0, text.length]);
     this.hintsByStart.forEach(
       /** Collects visible hint boundaries. @param hint - Ordered hint. @returns Nothing. */ (
@@ -745,13 +756,9 @@ export class SwpHints {
       const end = ordered[index + 1] as number;
       /* istanbul ignore next -- Unique sorted hint boundaries always increase. */
       if (end <= start) continue;
-      const auto = this.findFamilyHint(RES_TXTATR_AUTOFMT, start, end);
       const inet = this.findFamilyHint(RES_TXTATR_INETFMT, start, end);
       runs.push({
-        attributes:
-          auto?.format instanceof SwFormatAutoFormat
-            ? projectWriterCharacterAttributes(auto.format.GetStyleHandle(), inherited)
-            : inheritedAttributes,
+        attributes: projectCharacterHintAttributes(this.pool, this.hintsByStart, start, inherited),
         ...(inet?.format instanceof SwFormatINetFormat
           ? { hyperlink: inet.format.GetHyperlink() }
           : {}),
@@ -771,13 +778,7 @@ export class SwpHints {
       throw new Error("Writer character-format caret is outside the text node.");
     if (text.length === 0) return this.projectInherited(inherited);
     const characterOffset = offset === 0 ? 0 : offset - 1;
-    const hint = this.findFamilyHint(RES_TXTATR_AUTOFMT, characterOffset, characterOffset + 1);
-    return hint === undefined
-      ? this.projectInherited(inherited)
-      : projectWriterCharacterAttributes(
-          (hint.format as SwFormatAutoFormat).GetStyleHandle(),
-          inherited,
-        );
+    return projectCharacterHintAttributes(this.pool, this.hintsByStart, characterOffset, inherited);
   }
 
   /** Reads hyperlink metadata inherited by a caret. @param text - Canonical node text. @param offset - Caret offset. @returns Hyperlink or undefined. */
@@ -797,13 +798,14 @@ export class SwpHints {
 
   /** Copies text attributes through native construction, including same-document copies. @param pool - Destination document pool. @returns Fresh hints with constructor flags and destination-owned automatic handles. */
   public CopyTo(pool: SwAttrPool): SwpHints {
-    return new SwpHints(
-      pool,
-      this.hintsByStart.map(
-        /** Reconstructs one copied attribute. @param hint - Source attribute. @returns Fresh destination attribute. */
-        (hint) => MakeTextAttr(pool.GetDoc(), hint.format, hint.start, hint.end),
-      ),
-    );
+    const result = new SwpHints(pool);
+    for (const hint of this.hintsByStart) {
+      const copied = MakeTextAttr(pool.GetDoc(), hint.format, hint.start, hint.end);
+      if (copied instanceof SwTextCharFormat) CheckCharacterHintSortNumber(result, copied);
+      result.Insert(copied);
+    }
+    result.assignOwned(result.entries());
+    return result;
   }
 
   /** Projects inherited character defaults through the item model. @param inherited - Node/style set. @returns Browser properties. */
@@ -825,7 +827,11 @@ export class SwpHints {
     if (start === end) return [];
     const boundaries = new Set([start, end]);
     for (const hint of this.hintsByStart) {
-      if (!(hint.format instanceof SwFormatAutoFormat)) continue;
+      if (
+        !(hint.format instanceof SwFormatAutoFormat) &&
+        !(hint.format instanceof SwFormatCharFormat)
+      )
+        continue;
       if (hint.start > start && hint.start < end) boundaries.add(hint.start);
       if (hint.end > start && hint.end < end) boundaries.add(hint.end);
     }
@@ -841,12 +847,13 @@ export class SwpHints {
         index,
       ) => {
         const segmentEnd = ordered[index + 1] as number;
-        const hint = this.findFamilyHint(RES_TXTATR_AUTOFMT, segmentStart, segmentEnd);
         return {
-          attributes:
-            hint?.format instanceof SwFormatAutoFormat
-              ? projectWriterCharacterAttributes(hint.format.GetStyleHandle(), inherited)
-              : this.projectInherited(inherited),
+          attributes: projectCharacterHintAttributes(
+            this.pool,
+            this.hintsByStart,
+            segmentStart,
+            inherited,
+          ),
           end: segmentEnd,
           start: segmentStart,
         };

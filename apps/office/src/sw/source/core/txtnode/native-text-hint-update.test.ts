@@ -1,4 +1,5 @@
 /** @fileoverview Verifies literal native AUTO/INET text-update coordinates and actual ownership without upstream access. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
@@ -18,7 +19,7 @@ function attr(
   mask: number,
   start: number,
   end: number,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   const format =
     family === 54
       ? new SwFormatINetFormat({ url: "owned", name: "Link" })
@@ -38,7 +39,7 @@ function attr(
 /** Checks actual map and item identity after one native update. @param owner - Existing container. @param original - Actual attribute. @param start - Literal start. @param end - Literal end. @returns Nothing. */
 function owned(
   owner: SwpHints,
-  original: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+  original: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
   start: number,
   end: number,
 ): void {

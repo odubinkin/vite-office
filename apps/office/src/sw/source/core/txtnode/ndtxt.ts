@@ -1,6 +1,9 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import type { SwFormatCharFormat } from "./fmtatr2";
+import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
+import type { UpdateAttrHint } from "../../../inc/hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
@@ -72,6 +75,7 @@ import {
   CreateTextNodeToggledFragment,
   getSvxAdjust,
   GetTextNodeCharacterItems,
+  GetTextNodeRangeFormatState,
   getWriterParagraphAlignment,
   InsertTextNodeHints,
   MoveTextAttrToAttrSet,
@@ -80,6 +84,7 @@ import {
 } from "./ndtxt-hints";
 import {
   CaptureSwTextNodeListItems,
+  NotifyTextNodeNumRuleChanged,
   GetSwTextNodeListLabel,
   GetSwTextNodeNumString,
   HasSwTextNodeVisibleNumbering,
@@ -169,13 +174,18 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
-  /** Inserts a supported native item through the undo NOHINTADJUST path. @param attr - Ranged item. @param start - Start offset. @param end - End offset. @param mode - Native insertion flags. @returns Fresh actual owned attribute. */
+  /** Publishes the native generic range update to original node clients and the existing document projection, then refreshes outline membership outside destruction. @param hint - Borrowed native range hint. @returns Nothing. */
+  public TriggerNodeUpdate(hint: UpdateAttrHint): void {
+    TriggerTextNodeUpdate(this, hint);
+  }
+
+  /** Inserts a supported native item through the undo NOHINTADJUST path. @param attr - Ranged item. @param start - Start offset. @param end - End offset. @param mode - Native insertion flags. @returns Original surviving attribute or undefined after native portion replacement. */
   public InsertItem(
     attr: SfxPoolItem,
     start: number,
     end: number,
     mode = SetAttrMode.DEFAULT,
-  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
   }
 
@@ -450,17 +460,9 @@ export class SwTextNode extends SwContentNode {
   }
   /** Rebinds numbering clients and emits the existing model invalidation adapter. @returns Nothing. */
   public NumRuleChgd(): void {
-    if (this.IsInList()) {
-      const rule = this.GetNumRule();
-      if (rule !== undefined && rule !== this.mpNodeNum?.GetNumRule())
-        this.mpNodeNum?.ChangeNumRule(rule);
-    }
-    const index = this.GetNodes().indexOfOrUndefined(this);
-    this.GetDoc().NotifyModelChange({
-      kind: "numbering-changed",
-      ...(index === undefined ? {} : { nodeIndex: index }),
-    });
+    NotifyTextNodeNumRuleChanged(this);
   }
+
   /** Reads outline membership independent of rule name. @returns Outline state for connected normal-document paragraphs. */
   public IsOutline(): boolean {
     return IsOutlineAtTextNode(this);
@@ -806,8 +808,14 @@ export class SwTextNode extends SwContentNode {
   }
 
   /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @returns Whether any state was collected. */
-  public GetParaAttr(set: SfxItemSet, start: number, end: number, onlyText = false): boolean {
-    return thints.GetTextNodeParaAttr(this, set, start, end, onlyText);
+  public GetParaAttr(
+    set: SfxItemSet,
+    start: number,
+    end: number,
+    onlyText = false,
+    fromCharacterFormat = true,
+  ): boolean {
+    return thints.GetTextNodeParaAttr(this, set, start, end, onlyText, fromCharacterFormat);
   }
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
   public GetCharacterItemsAt(offset: number): SfxItemSet {
@@ -820,14 +828,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     format: WriterCharacterFormat,
   ): "mixed" | "off" | "on" {
-    AssertTextNodeRange(this, start, end);
-    return this.GetTextHints().getCharacterFormatState(
-      this.mText.length,
-      start,
-      end,
-      format,
-      this.GetSwAttrSet(),
-    );
+    return GetTextNodeRangeFormatState(this, start, end, format);
   }
 
   /** Reads the hyperlink inherited by a caret. @param offset - UTF-16 caret offset. @returns Hyperlink metadata or undefined. */

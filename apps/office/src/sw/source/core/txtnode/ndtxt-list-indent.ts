@@ -202,3 +202,17 @@ export function GetSwTextNodeListLabel(node: SwTextNode): string | undefined {
     return getWriterNumFormatBullet(format);
   return rule.MakeNumString(node.GetNumberVector(), level);
 }
+
+/** Runs native NumRuleChgd against the actual paragraph, retaining the existing model invalidation adapter. @param node - Canonical paragraph. @returns Nothing. */
+export function NotifyTextNodeNumRuleChanged(node: SwTextNode): void {
+  if (node.IsInList()) {
+    const rule = node.GetNumRule();
+    const number = node.GetNum();
+    if (rule !== undefined && rule !== number?.GetNumRule()) number?.ChangeNumRule(rule);
+  }
+  const index = node.GetNodes().indexOfOrUndefined(node);
+  node.GetDoc().NotifyModelChange({
+    kind: "numbering-changed",
+    ...(index === undefined ? {} : { nodeIndex: index }),
+  });
+}

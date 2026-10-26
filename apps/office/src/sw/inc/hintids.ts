@@ -78,6 +78,9 @@ export const RES_TXTATR_AUTOFMT = 53 as const;
 /** Ranged internet-format attribute, `RES_TXTATR_WITHEND_BEGIN + 5`. */
 export const RES_TXTATR_INETFMT = 54 as const;
 
+/** Native ranged character-style reference. */
+export const RES_TXTATR_CHARFMT = 55 as const;
+
 /** Paragraph adjustment item, `RES_PARATR_BEGIN + 1`. */
 export const RES_PARATR_ADJUST = 67 as const;
 
@@ -314,3 +317,8 @@ export const POOLATTR_END = 164 as const;
 export function isDrawingLayerAttribute(which: number): boolean {
   return XATTR_START <= which && XATTR_END > which;
 }
+
+/** Native format notification discriminants, following RES_UNKNOWNATR_END and seven format IDs. */
+export const RES_UPDATEATTR_FMT_CHG = RES_UNKNOWNATR_END + 7;
+export const RES_UPDATEATTR_ATTRSET_CHG = RES_UNKNOWNATR_END + 8;
+export const RES_UPDATEATTR_OBJECTDYING = RES_UNKNOWNATR_END + 9;

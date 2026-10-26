@@ -1,4 +1,5 @@
 /** @fileoverview Checks native old-attribute history and actual delete undo without reading or invoking upstream. */
+import type { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { describe, expect, it, vi } from "vitest";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
@@ -27,7 +28,7 @@ function fixture(family = 54, mask = 0, ignored = 0, locked = false) {
   const doc = new SwDoc(),
     node = required(doc.paragraphs[0]);
   node.SetText("abcdefgh");
-  let value: SwFormatAutoFormat | SwFormatINetFormat;
+  let value: SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat;
   if (family === 54) {
     value = new SwFormatINetFormat("url", "target");
     value.SetName("name");
@@ -41,7 +42,9 @@ function fixture(family = 54, mask = 0, ignored = 0, locked = false) {
         underline: false,
       }),
     );
-  const attr = node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST);
+  const attr = requireInsertedHint(
+    node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+  );
   attr.SetLockExpandFlag(false);
   attr.dontExpand = Boolean(mask & 1);
   attr.dontExpandStart = Boolean(mask & 2);
@@ -235,11 +238,13 @@ describe("native delete attribute history", /** Registers history and actual she
         history = new SwHistory();
       owner.node.ClearSwpHintsArr(true);
       for (const start of [0, 2, 4]) {
-        const hint = owner.node.InsertItem(
-          new SwFormatINetFormat("url" + start, ""),
-          start,
-          start + 1,
-          undoMode,
+        const hint = requireInsertedHint(
+          owner.node.InsertItem(
+            new SwFormatINetFormat("url" + start, ""),
+            start,
+            start + 1,
+            undoMode,
+          ),
         );
         history.AddTextAttr(hint, owner.node.GetIndex(), false);
       }
@@ -278,11 +283,13 @@ describe("native delete attribute history", /** Registers history and actual she
       history = new SwHistory();
     owner.node.ClearSwpHintsArr(true);
     for (const start of [0, 2, 4]) {
-      const hint = owner.node.InsertItem(
-        new SwFormatINetFormat("url" + start, ""),
-        start,
-        start + 1,
-        undoMode,
+      const hint = requireInsertedHint(
+        owner.node.InsertItem(
+          new SwFormatINetFormat("url" + start, ""),
+          start,
+          start + 1,
+          undoMode,
+        ),
       );
       history.AddTextAttr(hint, owner.node.GetIndex(), false);
     }
@@ -309,8 +316,8 @@ describe("native delete attribute history", /** Registers history and actual she
       history = new SwHistory(),
       item = owner.item;
     owner.node.ClearSwpHintsArr(true);
-    const left = owner.node.InsertItem(item, 0, 2, undoMode),
-      right = owner.node.InsertItem(item, 2, 4, undoMode);
+    const left = requireInsertedHint(owner.node.InsertItem(item, 0, 2, undoMode)),
+      right = requireInsertedHint(owner.node.InsertItem(item, 2, 4, undoMode));
     left.SetFormatIgnoreEnd(true);
     right.SetFormatIgnoreStart(true);
     history.CopyAttr(owner.node.GetpSwpHints(), owner.node.GetIndex(), 0, 8, true);
@@ -346,7 +353,9 @@ describe("native delete attribute history", /** Registers history and actual she
   );
   it("retains interior zero history but excludes zero at the native copy end", /** Checks zero lifetime follows CopyAttr rather than broad snapshots. @returns Nothing. */ function zeroCase(): void {
     const owner = fixture(),
-      atEnd = owner.node.InsertItem(new SwFormatINetFormat("end", ""), 8, 8, undoMode);
+      atEnd = requireInsertedHint(
+        owner.node.InsertItem(new SwFormatINetFormat("end", ""), 8, 8, undoMode),
+      );
     owner.attr.SetStart(2);
     owner.attr.SetEnd(2);
     setTestSelection(owner.shell, {
@@ -376,11 +385,11 @@ describe("native delete attribute history", /** Registers history and actual she
     ).toThrow("not implemented");
     expect(
       /** Requests ordinary InsertItem without portions port. @returns Attribute that is not implemented. */ () =>
-        owner.node.InsertItem(owner.item, 2, 4),
+        requireInsertedHint(owner.node.InsertItem(owner.item, 2, 4)),
     ).toThrow("NOHINTADJUST");
     expect(
       /** Rejects character items at the native text-item boundary. @returns Nothing. */ () =>
-        owner.node.InsertItem(owner.node.GetAttr(15), 2, 4, undoMode),
+        requireInsertedHint(owner.node.InsertItem(owner.node.GetAttr(15), 2, 4, undoMode)),
     ).toThrow("text-attribute item");
     expect(
       /** Attempts duplicate native ownership. @returns Nothing. */ () =>
@@ -426,3 +435,10 @@ describe("native delete attribute history", /** Registers history and actual she
     ]).toEqual([0, 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024]);
   });
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

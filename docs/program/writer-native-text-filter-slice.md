@@ -224,3 +224,16 @@ HTML/CSS document reading and the remaining filter matrix are still open. Dynami
 ConfigItem subscriptions and unrepresented rotation/case-map/ruby-emphasis items
 are not simulated by the shipped-resource binding. WRITER157 records the invalid
 character-pool identity fallback.
+
+The ranged character-style prerequisite now has native character items/text
+attributes, source style-name disambiguation, actual owner notifications and
+cross-document style copying. Native portion building handles named/automatic
+insertions and replacement; complete matching portions merge as groups. Native
+InsertItem now returns no owner after its original hint was split or merged away.
+The existing browser codec retains style references, sort numbers and mutable
+character-hint flags; run/control/formatter reads resolve the actual styles.
+Related source-only, model, undo and Worker tests do not certify the compiled
+Writer graph. RSID-only fields, native pointer tie-breaking and unrepresented
+help/link-style services remain outside this prerequisite. WRITER158/159 record
+the retained source notification and sort-number concerns. The full HTML/CSS
+reader and the remaining TXT/RTF/Markdown matrix are still open.

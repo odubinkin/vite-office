@@ -36,7 +36,9 @@ function fixture(family = 54, mask = 0, ignored = 0, text = "abcdefgh") {
           }),
         );
   if (value instanceof SwFormatINetFormat) value.SetName("original-name");
-  const hint = node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST);
+  const hint = requireInsertedHint(
+    node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+  );
   hint.SetLockExpandFlag(false);
   hint.dontExpand = Boolean(mask & 1);
   hint.dontExpandStart = Boolean(mask & 2);
@@ -165,17 +167,19 @@ it("native split history drops absent and excluded zero-end attribute histories"
   const state = createWriterCollapsedCursorState(node, 4, node.GetCharacterItemsAt(4)),
     noHints = new SwUndoSplitNode(node, 4, state, state);
   expect(noHints.GetPayloadSize()).toBe(1);
-  node.InsertItem(
-    new SwFormatAutoFormat(
-      createWriterCharacterItemSet(doc.GetAttrPool(), {
-        bold: true,
-        italic: false,
-        underline: false,
-      }),
+  requireInsertedHint(
+    node.InsertItem(
+      new SwFormatAutoFormat(
+        createWriterCharacterItemSet(doc.GetAttrPool(), {
+          bold: true,
+          italic: false,
+          underline: false,
+        }),
+      ),
+      4,
+      4,
+      SetAttrMode.NOHINTADJUST,
     ),
-    4,
-    4,
-    SetAttrMode.NOHINTADJUST,
   );
   const copy = vi.spyOn(SwHistory.prototype, "CopyAttr"),
     rollback = vi.spyOn(SwHistory.prototype, "TmpRollback"),
@@ -220,17 +224,19 @@ it("native split history retains original metadata independently and refreshes n
 it("native split history restores full-span AUTO after promotion and retains unchanged items on redo", /** Checks original full range restoration after source native hint movement. @returns Nothing. */ () => {
   const owner = fixture(55);
   owner.node.ClearSwpHintsArr(true);
-  const hint = owner.node.InsertItem(
-    new SwFormatAutoFormat(
-      createWriterCharacterItemSet(owner.doc.GetAttrPool(), {
-        bold: true,
-        italic: true,
-        underline: false,
-      }),
+  const hint = requireInsertedHint(
+    owner.node.InsertItem(
+      new SwFormatAutoFormat(
+        createWriterCharacterItemSet(owner.doc.GetAttrPool(), {
+          bold: true,
+          italic: true,
+          underline: false,
+        }),
+      ),
+      0,
+      8,
+      SetAttrMode.NOHINTADJUST,
     ),
-    0,
-    8,
-    SetAttrMode.NOHINTADJUST,
   );
   hint.SetFormatIgnoreStart(true);
   point(owner, 4);
@@ -267,7 +273,9 @@ it("native split history payload scales with attributes and releases on destruct
     expect(action.GetPayloadSize()).toBe(1);
   }
   const state = createWriterCollapsedCursorState(small.node, 4, small.node.GetCharacterItemsAt(4));
-  small.node.InsertItem(new SwFormatINetFormat("other", ""), 0, 2, SetAttrMode.NOHINTADJUST);
+  requireInsertedHint(
+    small.node.InsertItem(new SwFormatINetFormat("other", ""), 0, 2, SetAttrMode.NOHINTADJUST),
+  );
   const two = new SwUndoSplitNode(small.node, 4, state, state);
   expect(two.GetPayloadSize()).toBe(9);
 });
@@ -283,7 +291,9 @@ it("native table cell Enter restores original ranged history and leaves adjacent
     node = required(box.GetParagraphs()[0]);
   node.SetText("abcdefgh");
   neighbor.SetText("neighbor");
-  node.InsertItem(new SwFormatINetFormat("cell-url", ""), 2, 6, SetAttrMode.NOHINTADJUST);
+  requireInsertedHint(
+    node.InsertItem(new SwFormatINetFormat("cell-url", ""), 2, 6, SetAttrMode.NOHINTADJUST),
+  );
   const shell = new SwView(
       new SwDocShell(
         doc,
@@ -309,3 +319,10 @@ it("native table cell Enter restores original ranged history and leaves adjacent
     expect(doc.paragraphs).toEqual([body]);
   }
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

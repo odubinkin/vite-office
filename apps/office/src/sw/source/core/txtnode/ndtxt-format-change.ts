@@ -1,5 +1,5 @@
 /** @fileoverview Ports the anonymous-namespace format-change numbering helpers from pinned sw/source/core/txtnode/ndtxt.cxx; split from ndtxt.ts to preserve the module-size gate. */
-
+import type { UpdateAttrHint } from "../../../inc/hints";
 import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -139,4 +139,14 @@ export function DontExpandFormat(
     }
   }
   return changed;
+}
+
+/** Runs the original generic range-notification branch against the actual node and outline owner, followed by the existing document projection binding. @param node - Canonical node. @param hint - Native borrowed range hint. @returns Nothing. */
+export function TriggerTextNodeUpdate(node: SwTextNode, hint: UpdateAttrHint): void {
+  node.CallSwClientNotify(hint);
+  node.GetDoc().NotifyModelChange({
+    kind: "attribute-set-changed",
+    nodeIndex: node.GetNodes().indexOfOrUndefined(node),
+  });
+  if (!node.GetDoc().IsInDtor()) node.GetNodes().UpdateOutlineNode(node);
 }

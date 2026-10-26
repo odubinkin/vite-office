@@ -37,7 +37,9 @@ function fixture(family = 54, mask = 0, locked = false, ignore = false) {
           }),
         );
   if (value instanceof SwFormatINetFormat) value.SetName("name");
-  const attr = node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST);
+  const attr = requireInsertedHint(
+    node.InsertItem(value, 2, 6, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+  );
   attr.SetLockExpandFlag(false);
   attr.dontExpand = Boolean(mask & 1);
   attr.dontExpandStart = Boolean(mask & 2);
@@ -298,3 +300,10 @@ describe("native same-node selected insertion", /** Registers independent shell 
     expect(manager.GetUndoNodes().Count()).toBe(0);
   });
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

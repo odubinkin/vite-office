@@ -1,5 +1,10 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
 import {
+  encodeTextHint,
+  decodeTextHint,
+  type WriterTextHintRecord,
+} from "./writer-text-hint-codec";
+import {
   encodeCharacterStyles,
   restoreCharacterStyles,
   decodeCharacterStyleReference,
@@ -55,25 +60,15 @@ import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
 import {
   RES_PARATR_OUTLINELEVEL,
   RES_BOX,
-  WRITER_CHARACTER_WHICH_RANGES,
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
-import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
-import { MakeTextAttr } from "../../../source/core/txtnode/thints";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import {
   getDefaultDocumentSettings,
   type DocumentSettingId,
 } from "../../../source/core/doc/DocumentSettingManager";
-import {
-  decodeSfxItemSet,
-  decodeSfxPoolItem,
-  encodeSfxItemSet,
-  decodeSwFormatINetFormatRecord,
-  encodeSwFormatINetFormatRecord,
-  type WriterInternetFormatRecord,
-} from "./item-codec";
+import { decodeSfxItemSet, decodeSfxPoolItem, encodeSfxItemSet } from "./item-codec";
 
 /** Native scalar rule state transported independently of copy-constructor policy. */
 interface WriterNumberRuleScalarState {
@@ -307,20 +302,6 @@ function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
 }
 
 /** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */
-type WriterTextHintRecord =
-  | Readonly<{
-      end: number;
-      items: readonly SfxPoolItemSnapshot[];
-      kind: "auto-format";
-      start: number;
-    }>
-  | Readonly<{
-      end: number;
-      hyperlink: WriterInternetFormatRecord;
-      kind: "hyperlink";
-      start: number;
-    }>;
-
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly bodyOrder?: readonly ("text" | "table")[];
@@ -512,20 +493,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         .map(
           /** Encodes one canonical ranged text attribute. @param hint - Writer hint. @returns Primitive hint record. */ (
             hint,
-          ): WriterTextHintRecord =>
-            hint.format instanceof SwFormatAutoFormat
-              ? {
-                  end: hint.end,
-                  items: encodeSfxItemSet(hint.format.GetStyleHandle()),
-                  kind: "auto-format",
-                  start: hint.start,
-                }
-              : {
-                  end: hint.end,
-                  hyperlink: encodeSwFormatINetFormatRecord(hint.format),
-                  kind: "hyperlink",
-                  start: hint.start,
-                },
+          ): WriterTextHintRecord => encodeTextHint(document, hint),
         ) ?? [],
     text: node.GetText(),
   };
@@ -849,16 +817,7 @@ export function* decodeWriterDocumentSteps(
     /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
       hint,
     ) => {
-      if (hint.kind === "hyperlink")
-        return MakeTextAttr(
-          document,
-          decodeSwFormatINetFormatRecord(hint.hyperlink),
-          hint.start,
-          hint.end,
-        );
-      const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
-      decodeSfxItemSet(items, hint.items);
-      return MakeTextAttr(document, items, hint.start, hint.end);
+      return decodeTextHint(document, hint);
     },
   );
   const position = new SwPosition(node, 0, "redline");

@@ -1,5 +1,11 @@
 /** @fileoverview Implements Writer's hyperlink pool item from pinned LibreOffice `sw/source/core/txtnode/fmtatr2.cxx` and `sw/inc/fmtinfmt.hxx`. */
 
+import type { SwTextCharFormat } from "./txtatr2";
+import type { SwCharFormat } from "../../../inc/charfmt";
+import type { SwModelHint } from "../../../inc/hints";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { SvtListener, type SvtDyingHint } from "../../../../svl/source/notify/listener";
+import { RES_TXTATR_CHARFMT } from "../../../inc/hintids";
 import type { SwTextINetFormat } from "./txtatr2";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
@@ -193,3 +199,76 @@ export class SwFormatINetFormat extends SfxPoolItem {
     return JSON.stringify(this.GetHyperlink());
   }
 }
+
+/** Original non-shareable character-format reference and synchronous notifier forwarding. */
+export class SwFormatCharFormat extends SfxPoolItem {
+  /** Internal native item-to-text-attribute backlink; copies start unbound. */
+  public m_pTextAttribute: SwTextCharFormat | undefined;
+  private m_pCharFormat: SwCharFormat | undefined;
+  private readonly listener: CharacterFormatListener;
+  /** Borrows an actual style or copies the reference without the text backlink. @param format - Native style/copy source. @returns Item. */
+  constructor(format?: SwCharFormat | SwFormatCharFormat) {
+    super(RES_TXTATR_CHARFMT);
+    this.setNonShareable();
+    this.m_pCharFormat = format instanceof SwFormatCharFormat ? format.GetCharFormat() : format;
+    this.listener = new CharacterFormatListener(this);
+    if (this.m_pCharFormat !== undefined)
+      this.listener.StartListening(this.m_pCharFormat.GetNotifier());
+    characterFormatFinalizers.register(this, new WeakRef(this.listener));
+  }
+  /** Returns the borrowed native character owner. @returns Style or undefined. */
+  GetCharFormat(): SwCharFormat | undefined {
+    return this.m_pCharFormat;
+  }
+  /** Copies native pointer identity with a fresh notifier receiver. @returns Non-shareable item. */
+  Clone(): SwFormatCharFormat {
+    return new SwFormatCharFormat(this);
+  }
+  /** Compares actual style identity independently of native backlinks. @param other - Candidate item. @returns Equality. */
+  equals(other: SfxPoolItem): boolean {
+    return other instanceof SwFormatCharFormat && other.m_pCharFormat === this.m_pCharFormat;
+  }
+  /** Forwards represented native hints; unbound items retain the source early return before death clearing. @param hint - Original notification. @returns Nothing. */
+  Notify(hint: SwModelHint): void {
+    if (this.m_pTextAttribute === undefined) return;
+    switch (hint.kind) {
+      case "format-change":
+      case "attr-set-change":
+      case "legacy-modify":
+        this.m_pTextAttribute.TriggerNodeUpdate(hint);
+        break;
+      case "object-dying":
+        this.m_pTextAttribute.TriggerNodeUpdate(hint);
+        this.m_pCharFormat = undefined;
+        break;
+    }
+  }
+  /** Exposes the native programmatic character name through the existing primitive value boundary. @returns Programmatic name. */
+  override QueryValue(): string {
+    return this.m_pCharFormat === undefined
+      ? ""
+      : SwStyleNameMapper.FillProgName(this.m_pCharFormat.GetName(), SwGetPoolIdFromName.ChrFmt);
+  }
+  /** Native assignment through UNO is intentionally unsupported. @returns False. */
+  override PutValue(): false {
+    return false;
+  }
+}
+/** JS GC binding for native multiple inheritance: the broadcaster borrows the item without extending its lifetime. */
+class CharacterFormatListener extends SvtListener<SwModelHint> {
+  private readonly owner: WeakRef<SwFormatCharFormat>;
+  /** Borrows the actual item. @param owner - Native item. @returns Receiver. */
+  constructor(owner: SwFormatCharFormat) {
+    super();
+    this.owner = new WeakRef(owner);
+  }
+  /** Delivers original synchronous hints; broadcaster teardown is handled by SvtListener itself. @param hint - Original hint. @returns Nothing. */
+  override Notify(hint: SwModelHint | SvtDyingHint): void {
+    if (hint.kind !== "dying") this.owner.deref()?.Notify(hint);
+  }
+}
+/** Native item destruction's listener detach follows actual JS collection; no refcount/address state is emulated. */
+const characterFormatFinalizers = new FinalizationRegistry<WeakRef<SvtListener<SwModelHint>>>(
+  /** Ends registrations when the actual item becomes unreachable. @param listener - Native receiver. @returns Nothing. */
+  (listener) => listener.deref()?.Dispose(),
+);

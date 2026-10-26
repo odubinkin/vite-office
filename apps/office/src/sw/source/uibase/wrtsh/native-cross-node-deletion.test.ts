@@ -51,7 +51,9 @@ function fixture(middleCount = 0, family = 54) {
       const value =
         family === 54 ? new SwFormatINetFormat("url", "target") : new SwFormatAutoFormat(items);
       if (value instanceof SwFormatINetFormat) value.SetName("original");
-      const hint = node.InsertItem(value, 1, 3, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST);
+      const hint = requireInsertedHint(
+        node.InsertItem(value, 1, 3, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+      );
       hint.SetLockExpandFlag(false);
       hint.dontExpand = false;
       hint.dontExpandStart = false;
@@ -439,3 +441,10 @@ describe("native join flags and body-text kernel", /** Registers direct core and
     b.Dispose();
   });
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

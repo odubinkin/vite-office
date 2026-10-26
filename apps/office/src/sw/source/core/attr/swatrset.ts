@@ -119,7 +119,7 @@ import { SwTextGridItem } from "../../../inc/tgrditem";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
-import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "./cellatr";
 import { SwFormatPageDesc } from "./fmtpdsc";
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
@@ -239,7 +239,8 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores native adjacent-border merging. @param value - Stored boolean. @returns Owned item. */
       (value) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
     );
-    this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
+    this.RegisterDefaultItem(new SwFormatINetFormat());
+    this.RegisterDefaultItem(new SwFormatCharFormat());
     this.RegisterDefaultItem(
       new SwParaConnectBorderItem(),
       /** Restores the concrete paragraph-border connection item. @param value - Stored boolean. @returns Native item. */

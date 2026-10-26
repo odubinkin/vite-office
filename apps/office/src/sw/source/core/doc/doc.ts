@@ -81,7 +81,7 @@ import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import type { SwNumRule } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
-import { moveLeftMargin, InsertPoolItem } from "./docfmt";
+import { moveLeftMargin, InsertPoolItem, CopyCharFormat } from "./docfmt";
 import { SwUndoMoveLeftMargin } from "../undo/unattr";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
@@ -203,6 +203,15 @@ export class SwDoc {
   }
   private mbDtor = false;
   private mbInReading = false;
+  private mbInXMLImport = false;
+  /** Reads the native XML-import portion-building policy. @returns Import flag. */
+  public IsInXMLImport(): boolean {
+    return this.mbInXMLImport;
+  }
+  /** Sets the original XML-import flag around its owning import. @param importing - New flag. @returns Nothing. */
+  public SetInXMLImport(importing: boolean): void {
+    this.mbInXMLImport = importing;
+  }
   /** Reports the native document destruction phase. @returns Destruction flag. */
   public IsInDtor(): boolean {
     return this.mbDtor;
@@ -396,6 +405,10 @@ export class SwDoc {
     const format = this.stylePoolManager.MakeCharFormat(name, parent);
     this.stateManager.SetModified();
     return format;
+  }
+  /** Copies an actual source character format with its native name/parent policy. @param source - Actual source. @returns Destination-owned style. */
+  public CopyCharFormat(source: SwCharFormat): SwCharFormat {
+    return CopyCharFormat(this, source);
   }
   /** Native default graphic collection. @returns Document-owned collection. */
   public GetDfltGrfFormatColl(): SwGrfFormatColl {

@@ -1,4 +1,5 @@
 /** @fileoverview Checks native fresh automatic hint flags versus retained flags through actual text reset and Writer command/history owners. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { afterEach, describe, expect, it } from "vitest";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
@@ -24,7 +25,9 @@ function required<T>(value: T | undefined): T {
   return value;
 }
 /** Reads independently registered flags. @param hint - Real hint. @returns Literal flag tuple. */
-function flags(hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>): boolean[] {
+function flags(
+  hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+): boolean[] {
   return [hint.dontExpand, hint.dontExpandStart, hint.dontMoveAttr];
 }
 /** Builds actual node with concrete automatic items and an independent internet hint. @param mask - Three source flags. @param start - Hint start. @param end - Hint end. @returns Real model owners. */

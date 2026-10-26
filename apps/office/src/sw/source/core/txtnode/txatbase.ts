@@ -1,6 +1,7 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import {
   writerTextColorValue,
   writerHighlightColorValue,
@@ -46,6 +47,7 @@ import {
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
+  RES_TXTATR_CHARFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
@@ -150,7 +152,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
 
 /** Native text attribute base with a start position and an optional end. */
 export class SwTextAttr<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > {
   private m_nStart: number;
   private m_bDontExpand = false;
@@ -180,8 +182,10 @@ export class SwTextAttr<
     return this.format;
   }
   /** Returns the native family. @returns WhichId. */
-  public Which(): typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT {
-    return this.GetAttr().Which() as typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT;
+  public Which():
+    typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT {
+    return this.GetAttr().Which() as
+      typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT;
   }
   /** Returns the start. @returns UTF-16 offset. */
   public GetStart(): number {
@@ -356,7 +360,7 @@ export class SwTextAttr<
 
 /** Native ranged text attribute with end-change notifications. */
 export class SwTextAttrEnd<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > extends SwTextAttr<TFormat> {
   protected m_nEnd: number;
   /** Initializes a ranged item. @param format - Owned item. @param start - Start offset. @param end - End offset. @returns Nothing. */
@@ -404,7 +408,7 @@ export class SwTextAttrEnd<
 
 /** Native range whose constructor prohibits expansion and marks nesting. */
 export class SwTextAttrNesting<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > extends SwTextAttrEnd<TFormat> {
   /** Initializes native nesting defaults. @param format - Owned item. @param start - Start. @param end - End. @returns Nothing. */
   protected constructor(format: TFormat, start: number, end: number) {

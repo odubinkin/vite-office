@@ -1,4 +1,5 @@
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
+import type { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
 import type { SwModelHint } from "../../../inc/hints";
@@ -157,14 +158,14 @@ export class SwHistoryChangeFormatColl extends SwHistoryHint {
 }
 /** Cloned native item and original coordinates,retaining only format-ignore flags. */
 export class SwHistorySetText extends SwHistoryHint {
-  private readonly m_pAttr: SwFormatAutoFormat | SwFormatINetFormat;
+  private readonly m_pAttr: SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat;
   private readonly m_nStart: number;
   private readonly m_nEnd: number;
   private readonly m_bFormatIgnoreStart: boolean;
   private readonly m_bFormatIgnoreEnd: boolean;
   /** Records the old item independently of subsequent edits. @param hint - Original attribute. @param m_nNodeIndex - Native node index. @returns Nothing. */
   public constructor(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
     private readonly m_nNodeIndex: number,
   ) {
     super(HISTORY_HINT.HSTRY_SETTXTHNT);
@@ -185,6 +186,7 @@ export class SwHistorySetText extends SwHistoryHint {
       this.m_nEnd,
       SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
     );
+    if (attr === undefined) return;
     if (this.m_bFormatIgnoreStart) attr.SetFormatIgnoreStart(true);
     if (this.m_bFormatIgnoreEnd) attr.SetFormatIgnoreEnd(true);
   }
@@ -282,7 +284,7 @@ export class SwHistory {
   }
   /** Captures the implemented old-ranged-attribute variant. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - New-attribute reset history is not yet implemented. @returns Nothing. */
   public AddTextAttr(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
     nodeIndex: number,
     newAttr: boolean,
   ): void {

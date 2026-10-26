@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+    "classification": "local-infrastructure",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "storage-contract",
+    "capabilityIds": [
+      "CAP-0112",
+      "CAP-0131",
+      "CAP-c13ec941-1af7-4a09-810f-df267da27388"
+    ],
+    "semantic": {
+      "behaviorStatus": "not-applicable",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
+      ],
+      "justification": "Existing browser hint graph envelopes now preserve actual character-style references, sort number and mutable native flags; automatic/internet records retain their prior representation. Native pool item QueryValue/UNO remain independent from this browser graph.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeTextHint",
+        "decodeTextHint"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

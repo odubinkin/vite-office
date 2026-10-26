@@ -1502,3 +1502,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/doc/DocumentStylePoolManager.cxx`, `GetFormatFromPool`, character-format branch.
 - Observation: the invalid-ID comment says to return the first format, but the code only substitutes its UI resource name. It still searches and creates using the original invalid pool ID. Repeated invalid IDs can therefore produce distinct owners sharing the first character format's UI name. This is a source-level trace, not a compiled Writer reproduction.
 - Preservation: retain the original invalid ID and name fallback independently; do not normalize the ID or deduplicate formats by name.
+
+### WRITER158 — Unbound character-format items return before clearing a dying style
+
+- Source: pinned `sw/source/core/txtnode/fmtatr2.cxx`, `SwFormatCharFormat::Notify`.
+- Observation: the method immediately returns when no text attribute is bound. Its later `SwObjectDying` branch clears the character-format pointer only after forwarding to the bound text attribute. An unbound copied item therefore does not take that clearing branch. This is a source-level lifetime concern; no claim is made about dereferencing an expired native pointer.
+- Preservation: retain the early return and the bound-item forwarding/clear order. JS collection handles object lifetime; no native address/refcount model or unsafe native dereference is emulated.
+
+### WRITER159 — Character-style replacement can duplicate native sort numbers
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::BuildPortions`, named character-format branch.
+- Observation: under `DONTREPLACE`, replacing an already present style removes the equal style, counts surviving distinct styles and assigns that count as the new sort number. It does not renumber survivors or choose their maximum plus one. A portion initially containing style orders zero and one can therefore end with two order-one styles. Native comparators subsequently use pointer identity for a remaining tie. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: keep the count-based assignment and surviving sort numbers. Do not repair them by renumbering. Native address tie-breaking is not claimed by the portable JS graph; no synthetic pointer allocator is introduced.

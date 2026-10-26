@@ -1,4 +1,5 @@
 /** @fileoverview Checks native insertion flags using literal, source-independent AUTO/INET boundary expectations. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { describe, expect, it, vi } from "vitest";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
@@ -23,7 +24,7 @@ function attribute(
   start: number,
   end: number,
 ) {
-  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
   if (family === 54) {
     const item = new SwFormatINetFormat("url", "target");
     item.SetName("name");

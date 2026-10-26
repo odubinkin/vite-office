@@ -49,17 +49,19 @@ function automatic(
   end = node.Len(),
   kind: "bold" | "italic" = "bold",
 ) {
-  return node.InsertItem(
-    new SwFormatAutoFormat(
-      createWriterCharacterItemSet(node.GetDoc().GetAttrPool(), {
-        bold: kind === "bold",
-        italic: kind === "italic",
-        underline: false,
-      }),
+  return requireInsertedHint(
+    node.InsertItem(
+      new SwFormatAutoFormat(
+        createWriterCharacterItemSet(node.GetDoc().GetAttrPool(), {
+          bold: kind === "bold",
+          italic: kind === "italic",
+          underline: false,
+        }),
+      ),
+      start,
+      end,
+      SetAttrMode.NOHINTADJUST,
     ),
-    start,
-    end,
-    SetAttrMode.NOHINTADJUST,
   );
 }
 /** Reads one actual character state. @param node - Native owner. @param offset - Caret. @returns Supported projection for assertions. */
@@ -76,11 +78,8 @@ it("native moved boundary preserves sparse direct items ranged overrides and ind
     underline: false,
   }).Clone();
   overrideItems.Put(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
-  const hint = node.InsertItem(
-      new SwFormatAutoFormat(overrideItems),
-      1,
-      3,
-      SetAttrMode.NOHINTADJUST,
+  const hint = requireInsertedHint(
+      node.InsertItem(new SwFormatAutoFormat(overrideItems), 1, 3, SetAttrMode.NOHINTADJUST),
     ),
     storage = doc.GetUndoManager().GetUndoNodes(),
     snapshot = node.CaptureTextFragment(0, 4),
@@ -385,3 +384,10 @@ it("native selected table plain paste retains both cells character formatting th
     shell.Close();
   }
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

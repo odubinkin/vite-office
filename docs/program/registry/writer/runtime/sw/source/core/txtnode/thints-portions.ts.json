@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/thints-portions.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/thints-portions.ts",
+        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
+      ],
+      "justification": "Native automatic/character portion boundaries, replacement policy, named-style membership, paragraph-item reduction, reuse decisions and NOHINTADJUST sort numbers for the represented families. Existing shell/history snapshot owners remain independent; no native allocator or pointer ABI is simulated.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BuildTextHintPortions",
+        "CheckCharacterHintSortNumber"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/txtnode/thints.cxx",
+      "upstreamSymbols": [
+        "SwpHints::BuildPortions",
+        "lcl_CheckSortNumber"
+      ]
+    }
+  }
+}
