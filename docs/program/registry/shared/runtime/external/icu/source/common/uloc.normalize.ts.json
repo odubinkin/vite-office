@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+        "apps/office/src/external/icu/source/common/uloc.normalize.test.ts",
+        "scripts/icu-locale-native-probe.mjs",
+        "scripts/icu-locale-tables.mjs"
+      ],
+      "justification": "Original complete _canonicalize body retains levels0/1/2, exact loose BCP47 detection/underscore rewriting, source language-tag conversion, original subtag/keyword fragments, i-default lookup, charset64 bound, POSIX variant separators, source legacy canonicalization table and append/failure timing. The original shortest-subtag loop omits the final pending segment (CALC-325); no classifier correction is added. Source table pairs are extracted in original order with deterministic check and pinned hash. Native comparison covers36135 normalization cases including counted NUL/high bytes, canonical/base modes, actual keywords and sticky statuses. Legacy canonicalize here is not the modern Locale alias-resource API. Native allocator/ABI and complete Locale/calendar service integration remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_getName",
+        "ulocimp_getBaseName",
+        "ulocimp_canonicalize"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "ulocimp_getName",
+        "ulocimp_getBaseName",
+        "ulocimp_canonicalize"
+      ]
+    }
+  }
+}

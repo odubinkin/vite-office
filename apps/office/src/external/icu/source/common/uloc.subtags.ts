@@ -119,7 +119,7 @@ function _getRegion(id: string, sink: LocaleByteSink | null): number {
   return len;
 }
 /** Original multi-variant parser preserves historical trailing separator consumption, append-before-error output and POSIX scanning. @param id - Remaining span. @param prev - Preceding delimiter. @param sink - Optional append output. @param needSeparator - Existing variant flag. @param status - Sticky status. @returns Consumed units or zero. */
-function _getVariant(
+export function _getVariant(
   id: string,
   prev: string,
   sink: LocaleByteSink | null,

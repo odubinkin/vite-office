@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
+    "localSymbols": [
+      "ulocimp_getName",
+      "ulocimp_getBaseName",
+      "ulocimp_canonicalize"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_getName",
+      "ulocimp_getBaseName",
+      "ulocimp_canonicalize"
+    ],
+    "preservedResponsibilities": [
+      "Original complete _canonicalize body retains levels0/1/2, exact loose BCP47 detection/underscore rewriting, source language-tag conversion, original subtag/keyword fragments, i-default lookup, charset64 bound, POSIX variant separators, source legacy canonicalization table and append/failure timing. The original shortest-subtag loop omits the final pending segment (CALC-325); no classifier correction is added. Source table pairs are extracted in original order with deterministic check and pinned hash. Native comparison covers36135 normalization cases including counted NUL/high bytes, canonical/base modes, actual keywords and sticky statuses. Legacy canonicalize here is not the modern Locale alias-resource API. Native allocator/ABI and complete Locale/calendar service integration remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Modern alias-resource canonicalization, likely subtags, locale resource fallback and calendar services remain pending; native allocation/ABI is uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+          "marker": "ulocimp_getName"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.normalize.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc.cpp",
+          "marker": "ulocimp_getName"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+      "rationale": "Original large source implementation is split by normalization/default ownership responsibility while sharing actual Locale owners and original parser/conversion modules.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

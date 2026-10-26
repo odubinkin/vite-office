@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/locid.default.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/locid.default.ts",
+        "apps/office/src/external/icu/source/common/locid.test.ts",
+        "scripts/icu-locale-native-probe.mjs",
+        "scripts/icu-locale-tables.mjs"
+      ],
+      "justification": "Original default-locale ownership/cache path canonicalizes only null/host IDs, normalizes explicit IDs, looks up by first normalized C name and inserts under the actual Locale name. getDefault returns the borrowed cached owner; setters preserve incoming failures and actual copied/default/fixed owner distinctions. Native host-independent decision flow is verified with the same semantic host ID through an unchanged locid.cpp platform-function redirect. C-string cache identity and cache reuse are retained without native addresses. The browser supplies only its semantic locale identity; POSIX environment/category/charset equivalence, native mutex/cleanup/hash/allocator/ABI, modern alias-resource canonicalization and full calendar services remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "locale_set_default_internal",
+        "locale_set_default",
+        "locale_get_default",
+        "getDefaultLocale"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/locid.cpp",
+      "upstreamSymbols": [
+        "locale_set_default_internal",
+        "locale_set_default",
+        "locale_get_default",
+        "Locale::getDefault"
+      ]
+    }
+  }
+}

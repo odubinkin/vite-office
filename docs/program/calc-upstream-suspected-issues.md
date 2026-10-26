@@ -4175,3 +4175,24 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the fallback comment lists `[/_-+]` as allowed internal punctuation, but the implementation recognizes only underscore, slash and hyphen. An unknown type `a+b` returns no value, while `a-b` can alias the input. Known mapped timezone names containing plus may still succeed through the resource map before this fallback.
 - Suspected issue: the documented fallback alphabet disagrees with executable code. This is not a reason to add plus support or a new error to the port.
 - Local behavior: preserve the exact grammar and map-first ordering, including public C versus counted internal boundaries. Verified against unchanged ICU78.3 map/fallback APIs, with input-alias identity observed separately from canonical resource values.
+
+### CALC-325 — ICU shortest-subtag classifier omits the final segment
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `getShortestSubtagLength` and `_hasBCP47Extension`.
+- Observation: the shortest-length accumulator is updated only on separators; the final pending segment is never folded into it. Consequently `en-u` is not classified for BCP47 conversion and normalizes as legacy `en__U`, while `en-u-ca` enters the language-tag path and normalizes as `en@calendar=yes`.
+- Suspected issue: the helper comment describes the shortest subtag but the last segment is excluded. This distinction affects automatic constructor normalization; the separate strict language-tag factory follows its own source rules.
+- Local behavior: preserve the exact loop and source branch selection, without adding a new heuristic or rejection. Covered by unchanged ICU native name/base/legacy-canonical comparisons and source regression tests.
+
+### CALC-326 — ICU Heap variant offset can exceed the empty base-name storage
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, `Locale::init`, `Locale::Heap::Alloc::getBaseName/getVariant`; `unicode/locid.h`, `Nest::fits`.
+- Observation: a sufficiently long keywordless POSIX-style name beginning with `@` uses Heap storage. With no `=`, init leaves `variantBegin` at the full normalized length, while Heap::getBaseName returns empty storage for a full name starting with `@`. getVariant then adds that nonzero offset to the empty base-name pointer.
+- Suspected issue: the derived pointer can lie outside the storage. For example `@` followed by 30 letters retains a nonbogus full name and empty base name, but the source variant pointer arithmetic has no defined string result.
+- Local behavior: preserve the payload selection, base-name rule and variant offset calculation. Native full/base/component observations are verified; native getVariant is deliberately not invoked for this source-derived out-of-range case. The JavaScript offset/string projection does not claim to reproduce undefined native bytes, pointer behavior or ABI. This is a source-review finding, not a native outcome certificate.
+
+### CALC-327 — ICU Locale equality treats bogus and root names as equal
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, `Locale::operator==` and `Locale::getField`.
+- Observation: operator== compares only C names. A bogus Locale returns the empty name, as does root, so equality is true even though isBogus differs.
+- Suspected issue: code using name equality alone cannot distinguish an invalid value from a valid root Locale. This may be intentional compatibility behavior, but it differs from comparing the payload states.
+- Local behavior: preserve name-only equality without adding a bogus-state guard. The unchanged native Locale witness compares this case after every clone/transition-to-bogus scenario.

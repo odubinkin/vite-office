@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
     "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
     "localSymbols": [
-      "ulocimp_getSubtags"
+      "ulocimp_getSubtags",
+      "_getVariant"
     ],
     "upstreamSymbols": [
       "ulocimp_getSubtags",
@@ -17,7 +18,8 @@
       "_getVariant"
     ],
     "preservedResponsibilities": [
-      "Original complete ulocimp_getSubtags ByteSink overload, with optional independent language/script/region/variant sinks and original end-pointer checkpoints. Explicit narrow-byte views retain embedded NUL, ASCII casing, two null-delimited ISO table sections, root/und stripping, exactly-four-letter scripts, permissive two/three-unit regions, 179-unit variant limit, append-before-error state and original va-posix scan. Data tables are extracted verbatim from pinned uloc.cpp with source hash and deterministic check script. The unchanged ICU78.3 internal API matches 676128 exact native cases over7043 spans, all32 nullable-output combinations and three incoming statuses. This is the actual internal parser prerequisite, not a replacement Locale owner, full normalization, public default/C-string API, BCP47 converter or calendar constructor. Native allocator/ABI/EBCDIC remain uncertified."
+      "Original complete ulocimp_getSubtags ByteSink overload, with optional independent language/script/region/variant sinks and original end-pointer checkpoints. Explicit narrow-byte views retain embedded NUL, ASCII casing, two null-delimited ISO table sections, root/und stripping, exactly-four-letter scripts, permissive two/three-unit regions, 179-unit variant limit, append-before-error state and original va-posix scan. Data tables are extracted verbatim from pinned uloc.cpp with source hash and deterministic check script. The unchanged ICU78.3 internal API matches 676128 exact native cases over7043 spans, all32 nullable-output combinations and three incoming statuses. This is the actual internal parser prerequisite, not a replacement Locale owner, full normalization, public default/C-string API, BCP47 converter or calendar constructor. Native allocator/ABI/EBCDIC remain uncertified.",
+      "The exact existing _getVariant helper is now shared with original level-two normalization, without a duplicate variant parser or changed behavior. The ISO-table witness explicitly selects its four source ISO arrays because the same generated data owner now also contains original CANONICALIZE_MAP pairs."
     ],
     "omittedResponsibilities": [
       "Locale normalization/default construction and resource fallback remain pending."

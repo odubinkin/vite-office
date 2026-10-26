@@ -74,7 +74,12 @@ const ids = new Set([
   "@",
   ".",
 ]);
-for (const table of Object.values(data.tables))
+for (const table of [
+  data.tables.LANGUAGES,
+  data.tables.LANGUAGES_3,
+  data.tables.COUNTRIES,
+  data.tables.COUNTRIES_3,
+])
   for (const value of table)
     if (value !== null) {
       ids.add(value);

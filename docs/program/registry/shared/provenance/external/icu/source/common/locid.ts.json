@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/locid.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/locid.cpp",
+    "localSymbols": [
+      "Locale"
+    ],
+    "upstreamSymbols": [
+      "Locale"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed Locale ordinary constructors/init(false), logical Nest/Heap/bogus payload, C name/component/base/variant getters, copy/clone/assignment, name-only equality, fixed locale cache, borrowed default query/setter and strict forLanguageTag factory. Source all-null shortcut, keyword-vs-script separators, variant trimming, field offsets and payload selection are retained. The full19-entry fixed cache default-constructs before assignment, preserving getRoot initial default-host lookup and fixed alias identities. Browser host ID is a separate explicit adaptation. Unchanged entire locid.cpp with only its host-ID function redirected to the same browser-semantic ID, plus original libraries/data, matches52221 current cases with source/data hashes. CALC-325/326/327 preserve classifier, variant-offset and equality findings. The out-of-range native variant-pointer result is source-reviewed but deliberately not invoked/certified. Logical immutable strings project native payload ownership; native capacity/OOM/Nest/Heap move/destructor/mutex/ABI, modern alias-resource canonicalize(true), likely subtags and calendar service integration remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Modern alias-resource canonicalization, likely subtags, locale resource fallback and calendar services remain pending; native allocation/ABI is uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/locid.ts",
+          "marker": "Locale"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/locid.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/locid.cpp",
+          "marker": "Locale::Locale"
+        }
+      ]
+    }
+  }
+}

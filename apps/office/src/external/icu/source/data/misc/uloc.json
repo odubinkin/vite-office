@@ -1763,6 +1763,18 @@
       "YUG",
       "ZAR",
       null
+    ],
+    "CANONICALIZE_MAP": [
+      ["art__LOJBAN", "jbo"],
+      ["hy__AREVELA", "hy"],
+      ["hy__AREVMDA", "hyw"],
+      ["zh__GUOYU", "zh"],
+      ["zh__HAKKA", "hak"],
+      ["zh__XIANG", "hsn"],
+      ["zh_GAN", "gan"],
+      ["zh_MIN_NAN", "nan"],
+      ["zh_WUU", "wuu"],
+      ["zh_YUE", "yue"]
     ]
   }
 }

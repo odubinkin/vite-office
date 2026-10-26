@@ -18,6 +18,16 @@ for (const name of ["LANGUAGES", "LANGUAGES_3", "COUNTRIES", "COUNTRIES_3"]) {
     ) => match[1] ?? null,
   );
 }
+const canonical = text.match(
+  /constexpr CanonicalizationMap CANONICALIZE_MAP\[\]\s*=\s*\{([\s\S]+?)\n\};/u,
+)?.[1];
+if (!canonical) throw Error("Missing canonicalization table");
+tables.CANONICALIZE_MAP = [...canonical.matchAll(/\{\s*"([^"]*)"\s*,\s*"([^"]*)"\s*\}/gu)].map(
+  /** Retains original pair order. @param match - Pair. @returns Source pair. */ (match) => [
+    match[1],
+    match[2],
+  ],
+);
 for (const prefix of ["LANGUAGES", "COUNTRIES"])
   if (tables[prefix].length !== tables[prefix + "_3"].length) throw Error("Paired length mismatch");
 const value = {
