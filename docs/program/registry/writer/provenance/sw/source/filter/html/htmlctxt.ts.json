@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmlctxt.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlctxt.ts",
+          "marker": "HTMLAttrContext"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlctxt.test.ts",
+          "marker": "raw HTML offsets"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlctxt.cxx",
+          "marker": "HTMLAttrContext::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.hxx",
+          "marker": "HTMLAttrContext"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmlctxt.cxx",
+    "localSymbols": [
+      "HTMLAttrContext",
+      "SwHTMLAppendMode"
+    ],
+    "upstreamSymbols": [
+      "HTMLAttrContext"
+    ],
+    "preservedResponsibilities": [
+      "Native represented HTML context constructors/defaults, borrowed attribute deque, pool-style/default-style selection, class text, changed-margin/spacing out parameters, uint16/signed-short narrowing, restart/visibility/append flags and actual saved numbering-rule identity."
+    ],
+    "omittedResponsibilities": [
+      "SaveDocContext/frame item-set ownership and restoration, section/frame dispatch and complete HTMLReader integration remain pending."
+    ]
+  }
+}
