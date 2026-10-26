@@ -4217,3 +4217,17 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the source has a TODO to distinguish integer overflow. It saturates attempted bytes at INT32_MAX and sets the same overflow flag used for exhausted destination capacity. The adapter consequently uses `U_BUFFER_OVERFLOW_ERROR` for that flag, with the saturated attempted length.
 - Suspected issue: a caller cannot recover the complete required length once logical output exceeds the signed32 count, and the status does not distinguish count saturation from ordinary insufficient capacity.
 - Local behavior: preserve saturation and the source overflow flag/status selection. The primitive native witness verifies 524290 appends of actual readable 4096-byte chunks with zero destination capacity, without overstating any individual source span or allocating multi-gigabyte storage. Adapter classification also follows the unchanged source branch.
+
+### CALC-331 — BytesTrie string traversal promotes signed char differently from byte traversal
+
+- Upstream: ICU78.3 `source/common/bytestrie.cpp`, the single-byte and `const char*` `BytesTrie::next` overloads; `unicode/bytestrie.h`, `first`.
+- Observation: single-byte next/first adds 256 to a negative input once, accepting the signed byte representation of 128..255. The string overload instead assigns `*s++` directly to int32 and compares that value with serialized uint8 bytes. On the pinned native target with signed char, a string containing FF can fail where single-byte next(-1) succeeds on the same trie. This also occurs in linear matches and after branch transitions. NUL and counted lengths retain their original distinct handling.
+- Suspected issue: the advertised byte-sequence overloads do not give equivalent results for high bytes on signed-char targets. Unsigned-char targets can differ; the differential evidence certifies the actual signed-char reference build, not an assumed platform-independent result.
+- Local behavior: preserve signed8 promotion in the counted/C string overload and the original one-time negative adjustment in byte overloads. No normalization is added to unify them. Compared against original ICU libraries using builder fixtures covering all 256 bytes and the actual langInfo likely trie.
+
+### CALC-332 — BytesTrie unique-value traversal can forget a candidate across binary sub-branches
+
+- Upstream: ICU78.3 `source/common/bytestrie.cpp`, `findUniqueValueFromBranch`.
+- Observation: after successfully traversing the first half of a binary branch, the function updates the candidate through the reference argument but does not set its local haveUniqueValue flag. The next half can replace that candidate. An unchanged native BytesTrieBuilder fixture with one-byte keys 0..7 mapped to 11 and 8..15 mapped to 22 gives hasUniqueValue=true and candidate22 at the root, while direct reads still give both 11 and 22. Both original builder modes reproduce it.
+- Suspected issue: a successful unique-value query can report one value for a subtree containing different values. The recursive flag propagation appears incomplete.
+- Local behavior: retain the source control flow and output writes, including candidate changes on false returns. The native reader comparison and regression test cover the differing-subtree fixture; no corrective flag assignment is introduced.

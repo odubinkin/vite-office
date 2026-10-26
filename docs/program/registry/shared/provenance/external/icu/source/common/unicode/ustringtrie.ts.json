@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/ustringtrie.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/ustringtrie.h",
+    "localSymbols": [
+      "UStringTrieResult",
+      "USTRINGTRIE_MATCHES",
+      "USTRINGTRIE_HAS_VALUE",
+      "USTRINGTRIE_HAS_NEXT"
+    ],
+    "upstreamSymbols": [
+      "UStringTrieResult",
+      "USTRINGTRIE_MATCHES",
+      "USTRINGTRIE_HAS_VALUE",
+      "USTRINGTRIE_HAS_NEXT"
+    ],
+    "preservedResponsibilities": [
+      "Original result enum retains values0..3 and the original result comparison/bit predicates, including numeric low-bit HAS_NEXT rather than a substituted boolean. Consumed by the actual serialized BytesTrie reader and directly tested."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI, invalid source preconditions and complete likely-subtag/Calendar/CSV integration remain uncertified; the stated reader/query surface is the scope of this binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/ustringtrie.ts",
+          "marker": "UStringTrieResult"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/bytestrie.test.ts",
+          "marker": "original ICU"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/ustringtrie.h",
+          "marker": "USTRINGTRIE_HAS_NEXT"
+        }
+      ]
+    }
+  }
+}

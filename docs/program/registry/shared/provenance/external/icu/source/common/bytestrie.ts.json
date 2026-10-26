@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/bytestrie.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/bytestrie.cpp",
+    "localSymbols": [
+      "BytesTrie",
+      "nextString",
+      "findUniqueValueFromBranch",
+      "getNextBytes"
+    ],
+    "upstreamSymbols": [
+      "BytesTrie::next",
+      "BytesTrie::findUniqueValueFromBranch",
+      "BytesTrie::getNextBytes"
+    ],
+    "preservedResponsibilities": [
+      "Original borrowed byte-serialized trie reader preserves all non-Iterator current/first/next byte and counted/C span overloads, compact signed32 values and delta jumps, source binary/linear branches, shallow copy, pointer-identity State restore, opaque uint64 valid-pointer states, recursive unique-value output and ordered next-byte enumeration. Native comparison passes1085402 operations against both unchanged builder modes and every prefix of all8310 actual langInfo likely keys, including all5 compact value widths and all5 delta widths in source-valid explicit serialized branches. The source signed-char span behavior and unique-value binary-subtree candidate omission are preserved (CALC-331/332). No lookup-table replacement or Intl likely-subtag inference is introduced. Iterator, builder port/adopted native allocation and destruction, invalid serialized storage/pointers, getValue without a value result, stopped/null uint64 pointer subtraction and native ABI remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI, invalid source preconditions and complete likely-subtag/Calendar/CSV integration remain uncertified; the stated reader/query surface is the scope of this binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/bytestrie.ts",
+          "marker": "BytesTrie"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/bytestrie.test.ts",
+          "marker": "original ICU"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/bytestrie.cpp",
+          "marker": "BytesTrie::getNextBytes"
+        }
+      ]
+    }
+  }
+}
