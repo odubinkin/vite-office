@@ -1616,3 +1616,22 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::MoveProperties`, non-RTL run switch; the COMPLEX case carries the source question about using CTL.
 - Observation: with an explicit COMPLEX script and false bidi RTL flag, CTL values are emitted as associated properties before the normal Western group. The COMPLEX branch shares the LATIN/default path instead of the RTL path that emits normal CTL keywords last. This is a source-level trace, not compiled native or rendering evidence.
 - Preservation: retain the independent bidi/script state and the original COMPLEX switch branch. Do not infer the RTL flag merely from script or make CTL the normal-keyword group for every complex run.
+
+
+### WRITER176 — Reverse DBCS/JIS table ranges can exceed their actual arrays
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplUnicodeToDBCS` and `ImplUnicodeToEUCJP`; original high-table entries and arrays in `tcvtkr2/5/6.tab`, `tcvttcn2/6.tab`, `tcvtscn4/6.tab` and `tcvtjp3/5/6.tab`.
+- Observation: some inclusive high-table limits exceed the actual pointed-to array length. For example KSC5601 high page 0x77 advertises low bytes 0x01 through 0xFB while its array ends at low 0xF3; BIG5 page 0x8B advertises through 0xFF while its array ends at 0x9F. The unchanged converter dereferences those offsets without a physical array bound check. The compiled source audit classifies 269 affected descriptor/unit pairs among 786432 BMP cases across the represented eleven DBCS descriptors plus EUC-JP. These reads are C++ undefined behavior; observed neighboring-array bytes are not a portable native result.
+- Preservation: retain the original arrays, inclusive limits and lookup decisions. Do not pad tables, clamp limits or synthesize mappings. The native witness audits and records these cases before executing converter bodies; byte digests cover the 786163 defined cases. The existing JS array/bitwise binding has no certified corresponding native byte value for undefined reads.
+
+### WRITER177 — DBCS private-byte conversion passes through a signed plain char
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplUnicodeToDBCS` private-byte assignment and following zero check.
+- Observation: with PRIVATE_MAPTO0, the assignment narrows the low byte through plain char before storing it in unsigned16 cConv. In the explicit signed-char profile, U+F180 becomes cConv 0xFF80 and emits two bytes FF 80; U+F1FF emits FF FF. Low byte zero re-enters the shared undefined handler, as the preceding source FIXME describes. The compiled unchanged source confirms this profile; other plain-char ABI profiles are not certified.
+- Preservation: retain the original assignment and zero recheck. Keep signedness explicit in the native witness and the current logical byte binding instead of silently emitting one unsigned byte for every private character.
+
+### WRITER178 — RTF CanEncode uses text-to-Unicode flags for Unicode-to-text conversion
+
+- Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `CanEncode`; `include/rtl/textcvt.h` flag definitions.
+- Observation: UNDEFINED_ERROR has the same value in both flag families, but TEXTTOUNICODE INVALID_ERROR is 0x0100, which is UNICODETOTEXT UNDEFINED_REPLACE rather than UNICODETOTEXT INVALID_ERROR (0x0010). The RTF predicate therefore requests undefined-character replacement and does not request the apparent invalid-input error action. This is a source-level flag trace; the complete font-name predicate is not yet integrated or compiled in this slice.
+- Preservation: retain the original flag values when connecting the native font-name conversion path. Do not replace them with the similarly named flags from the opposite family.

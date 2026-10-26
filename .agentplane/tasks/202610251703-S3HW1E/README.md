@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 89
+revision: 90
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-26T22:02:16.165Z"
+doc_updated_at: "2026-10-26T22:32:04.355Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -189,6 +189,20 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office. Result: pass. Scoped ESLint/Prettier, git diff --check, source-provenance, dependency, file-size and Writer Which-ID checks passed. Writer inventory semanticViolationCount is zero. No network/SDK or full all-app suite.
     - Matrix now distinguishes implemented native language export association from open import language controls, native MSWord bidi/script production and paragraph-marker character-property paths. These remain required for full slice closure, along with complete font identity/encoding, common insertion/undo, real word/locale services and HTMLReader/CSS application. Overall task stays DOING; pre-existing Markdown callback WIP stays excluded from this checkpoint.
     - Shell integration: npm run test:writer -- src/sw/source/uibase/app/docsh.test.ts -t RTF passed the one matching RTF atomic-open scenario; 17 unrelated tests were excluded by the declared name filter.
+
+    ### Native reverse DBCS/EUC-JP codec checkpoint
+    Implemented original ImplUnicodeToDBCS and ImplUnicodeToEUCJP with source reverse tables, EUDC, buffer/consumption flags and undefined-character helper. Added an independent compiled witness using pinned original C++ functions, original factory/header bindings and actual source tables. No SDK or network access. The probe uses signed plain char; unused Unicode ignore classification services trap and are outside this witness scope. Full SAL and RTF font-table integration remain open.
+    Command: node scripts/sal-dbcs-native-probe.mjs
+    Result: pass. Evidence: 786163 defined BMP cases agree with compiled native bytes/status/consumption; 269 original out-of-array accesses classified before execution, without assigning native byte outcomes. Forward/reverse matrix covers 143112 entries and retains native noninverse counts. Scope: represented 11 DBCS encodings and EUC-JP reverse algorithms. WRITER176-178 document array bounds, signed private-byte conversion, and RTF CanEncode flag-family behavior.
+    Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+    Result: pass. Evidence: 125 tests / 15 files. Final independently regenerated factory fixture also passed npm run test:shared -- src/sal/textenc/tcvtmb.encode.test.ts (28 tests).
+    Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.native-character.test.ts
+    Result: pass. Evidence: 207 tests / 7 files.
+    Command: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/sal/textenc/tcvtmb.ts apps/office/src/sal/textenc/tcvtmb.encode.test.ts scripts/sal-dbcs-native-probe.mjs; npx prettier --check apps/office/src/sal/textenc/tcvtmb.ts apps/office/src/sal/textenc/tcvtmb.encode.test.ts apps/office/src/sal/textenc/tcvtmb.encode.native.json scripts/sal-dbcs-native-probe.mjs; git diff --check
+    Result: pass. Scope: current codec checkpoint.
+    Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared
+    Result: pass. Evidence: final Writer and shared inventory runs exit 0; source/size/boundary/Which checks pass. Scope: checkpoint metadata and existing WIP registry consistency.
+    Observation: initial native harness lacked source GBKOFF; initial tests assumed inverse tables and incorrect surrogate/encoding constants; compiled investigation exposed source out-of-array ranges. Resolution: copied original macro, used actual factory IDs and native divergence counts, excluded undefined C++ reads from byte certification while independently auditing their exact ranges. Initial provenance record referenced scripts as a local source, unsupported by its path resolver; removed that record while retaining runtime evidence and this producer reference. Lost completed process handle was recovered by rerunning bounded lint and inventory checks. No scope expansion or whole-task completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -356,3 +370,17 @@ S3HW1E native RTF associated-character export checkpoint:
 - Command: npm run typecheck --workspace @vite-office/office. Result: pass. Scoped ESLint/Prettier, git diff --check, source-provenance, dependency, file-size and Writer Which-ID checks passed. Writer inventory semanticViolationCount is zero. No network/SDK or full all-app suite.
 - Matrix now distinguishes implemented native language export association from open import language controls, native MSWord bidi/script production and paragraph-marker character-property paths. These remain required for full slice closure, along with complete font identity/encoding, common insertion/undo, real word/locale services and HTMLReader/CSS application. Overall task stays DOING; pre-existing Markdown callback WIP stays excluded from this checkpoint.
 - Shell integration: npm run test:writer -- src/sw/source/uibase/app/docsh.test.ts -t RTF passed the one matching RTF atomic-open scenario; 17 unrelated tests were excluded by the declared name filter.
+
+### Native reverse DBCS/EUC-JP codec checkpoint
+Implemented original ImplUnicodeToDBCS and ImplUnicodeToEUCJP with source reverse tables, EUDC, buffer/consumption flags and undefined-character helper. Added an independent compiled witness using pinned original C++ functions, original factory/header bindings and actual source tables. No SDK or network access. The probe uses signed plain char; unused Unicode ignore classification services trap and are outside this witness scope. Full SAL and RTF font-table integration remain open.
+Command: node scripts/sal-dbcs-native-probe.mjs
+Result: pass. Evidence: 786163 defined BMP cases agree with compiled native bytes/status/consumption; 269 original out-of-array accesses classified before execution, without assigning native byte outcomes. Forward/reverse matrix covers 143112 entries and retains native noninverse counts. Scope: represented 11 DBCS encodings and EUC-JP reverse algorithms. WRITER176-178 document array bounds, signed private-byte conversion, and RTF CanEncode flag-family behavior.
+Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+Result: pass. Evidence: 125 tests / 15 files. Final independently regenerated factory fixture also passed npm run test:shared -- src/sal/textenc/tcvtmb.encode.test.ts (28 tests).
+Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ww8/rtfexport.native-character.test.ts
+Result: pass. Evidence: 207 tests / 7 files.
+Command: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/sal/textenc/tcvtmb.ts apps/office/src/sal/textenc/tcvtmb.encode.test.ts scripts/sal-dbcs-native-probe.mjs; npx prettier --check apps/office/src/sal/textenc/tcvtmb.ts apps/office/src/sal/textenc/tcvtmb.encode.test.ts apps/office/src/sal/textenc/tcvtmb.encode.native.json scripts/sal-dbcs-native-probe.mjs; git diff --check
+Result: pass. Scope: current codec checkpoint.
+Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared
+Result: pass. Evidence: final Writer and shared inventory runs exit 0; source/size/boundary/Which checks pass. Scope: checkpoint metadata and existing WIP registry consistency.
+Observation: initial native harness lacked source GBKOFF; initial tests assumed inverse tables and incorrect surrogate/encoding constants; compiled investigation exposed source out-of-array ranges. Resolution: copied original macro, used actual factory IDs and native divergence counts, excluded undefined C++ reads from byte certification while independently auditing their exact ranges. Initial provenance record referenced scripts as a local source, unsupported by its path resolver; removed that record while retaining runtime evidence and this producer reference. Lost completed process handle was recovered by rerunning bounded lint and inventory checks. No scope expansion or whole-task completion claim.
