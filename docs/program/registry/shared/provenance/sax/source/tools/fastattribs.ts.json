@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sax/source/tools/fastattribs.ts",
+    "status": "mapped",
+    "upstreamPath": "sax/source/tools/fastattribs.cxx",
+    "localSymbols": [
+      "FastAttributeList"
+    ],
+    "upstreamSymbols": [
+      "FastAttributeList::add",
+      "FastAttributeList::clear",
+      "FastAttributeList::createClone"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sax/source/tools/fastattribs.ts",
+          "marker": "FastAttributeList"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sax/source/tools/fastattribs.cxx",
+          "marker": "FastAttributeList::add"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted."
+    ],
+    "omittedResponsibilities": [
+      "Complete native ABI/interfaces and full format orchestration remain unverified; see explicit admission scope."
+    ]
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Native FastSerializerHelper token/attribute and mark forwarding over the actual serializer; component-service acquisition is an explicit injected lexical handler binding. */
+import { FastAttributeList } from "../source/tools/fastattribs";
 import {
   FastSaxSerializer,
   TokenValue,
@@ -17,8 +18,14 @@ export function FSNS(namespace: number, element: number): number {
 }
 /** Native variadic attribute/value pairs; null models a missing optional/char pointer. */
 type Attributes = readonly (number | string | Uint8Array | null)[];
-/** Original convenience owner, with consumed text/byte overloads; native floating conversion and FastAttributeList overloads remain separate responsibilities. */
+/** Native attribute-list overload or variadic pairs. */
+type ElementAttributes = Attributes | readonly [FastAttributeList];
+/** Original convenience owner, with consumed text/byte overloads; native floating conversion remain separate responsibilities. */
 export class FastSerializerHelper {
+  /** Original export-side factory supplies a null token handler. @returns Empty native attribute list. */
+  static createAttrList(): FastAttributeList {
+    return new FastAttributeList(null);
+  }
   private mpSerializer: FastSaxSerializer | undefined;
   /** Original header flag plus explicit binding of its acquired token service. @param output - Actual output stream. @param writeHeader - Original declaration flag. @param tokens - Actual native lexical handler. @returns Helper. */
   constructor(output: OutputStream, writeHeader: boolean, tokens: FastTokenHandler) {
@@ -69,29 +76,37 @@ export class FastSerializerHelper {
   }
   /** Original variadic start. @param token - Element token. @param attributes - Native pairs. @returns Nothing. */ startElement(
     token: number,
-    ...attributes: Attributes
+    ...attributes: ElementAttributes
   ): void {
-    this.push(attributes);
-    this.serializer().startFastElement(token);
+    if (attributes[0] instanceof FastAttributeList)
+      this.serializer().startFastElement(token, attributes[0]);
+    else {
+      this.push(attributes as Attributes);
+      this.serializer().startFastElement(token);
+    }
   }
   /** Original namespace start. @param namespace - Lexical namespace token. @param token - Local token. @param attributes - Native pairs. @returns Nothing. */ startElementNS(
     namespace: number,
     token: number,
-    ...attributes: Attributes
+    ...attributes: ElementAttributes
   ): void {
     this.startElement(FSNS(namespace, token), ...attributes);
   }
   /** Original variadic single element. @param token - Token. @param attributes - Native pairs. @returns Nothing. */ singleElement(
     token: number,
-    ...attributes: Attributes
+    ...attributes: ElementAttributes
   ): void {
-    this.push(attributes);
-    this.serializer().singleFastElement(token);
+    if (attributes[0] instanceof FastAttributeList)
+      this.serializer().singleFastElement(token, attributes[0]);
+    else {
+      this.push(attributes as Attributes);
+      this.serializer().singleFastElement(token);
+    }
   }
   /** Original namespace empty element. @param namespace - Namespace token. @param token - Local token. @param attributes - Native pairs. @returns Nothing. */ singleElementNS(
     namespace: number,
     token: number,
-    ...attributes: Attributes
+    ...attributes: ElementAttributes
   ): void {
     this.singleElement(FSNS(namespace, token), ...attributes);
   }

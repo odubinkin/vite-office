@@ -1,4 +1,5 @@
 /** @fileoverview Native FastSaxSerializer UTF8 escaping, token emission and mark/sort owners from fastserializer.cxx; JS byte arrays bind original value sequences and GC erases physical reference counts. */
+import { FastAttributeList } from "./fastattribs";
 import { MergeMarks } from "../../inc/fshelper";
 import { CachedOutputStream, type OutputStream, type ForMergeBase } from "./CachedOutputStream";
 /** Native token-handler dependency is supplied by the actual caller in place of component-service construction. */
@@ -244,27 +245,50 @@ export class FastSaxSerializer {
       this.writeBytes(bytes.subarray(index, index + 1));
     }
   }
-  /** Original start flushes before updating sorted-mark element identity. @param token - Element token. @returns Nothing. */
-  startFastElement(token: number): void {
+  /** Original start flushes before updating sorted-mark element identity. @param token - Element token. @param attributes - Optional native full list. @returns Nothing. */
+  startFastElement(token: number, attributes: FastAttributeList | null = null): void {
     if (!this.mbMarkStackEmpty) {
       this.maCachedOutputStream.flush();
       (this.maMarkStack.at(-1) as ForMerge).setCurrentElement(token);
     }
     this.write("<");
     this.writeId(token);
-    this.writeTokenValueList();
+    if (attributes) this.writeFastAttributeList(attributes);
+    else this.writeTokenValueList();
     this.write(">");
   }
-  /** Original single-element path keeps its own token/buffer transition sequence. @param token - Element token. @returns Nothing. */
-  singleFastElement(token: number): void {
+  /** Original single-element path keeps its own token/buffer transition sequence. @param token - Element token. @param attributes - Optional native full list. @returns Nothing. */
+  singleFastElement(token: number, attributes: FastAttributeList | null = null): void {
     if (!this.mbMarkStackEmpty) {
       this.maCachedOutputStream.flush();
       (this.maMarkStack.at(-1) as ForMerge).setCurrentElement(token);
     }
     this.write("<");
     this.writeId(token);
-    this.writeTokenValueList();
+    if (attributes) this.writeFastAttributeList(attributes);
+    else this.writeTokenValueList();
     this.write("/>");
+  }
+  /** Original full-list path leaves queued variadic values untouched and preserves the VML raw-prefix exception. @param attributes - Native contiguous list. @returns Nothing. */
+  private writeFastAttributeList(attributes: FastAttributeList): void {
+    const tokens = attributes.getFastAttributeTokens();
+    for (let index = 0; index < tokens.length; ++index) {
+      this.write(" ");
+      this.writeId(tokens[index] as number);
+      this.write('="');
+      const value = attributes.getFastAttributeValue(index);
+      const prefix = value[0] === 35 ? "#_x0000_t" : "_x0000_t";
+      const escape = !prefix
+        .split("")
+        .every(
+          /** Native prefix byte comparison. @param character - ASCII prefix unit. @param offset - Prefix offset. @returns Byte equality. */ (
+            character,
+            offset,
+          ) => value[offset] === character.charCodeAt(0),
+        );
+      this.write(value.subarray(0, attributes.AttributeValueLength(index)), escape);
+      this.write('"');
+    }
   }
   /** Original ordered attribute-vector emission consumes all borrowed entries after their immediate writes. @returns Nothing. */
   private writeTokenValueList(): void {
@@ -278,7 +302,7 @@ export class FastSaxSerializer {
     }
     this.maTokenValues.length = 0;
   }
-  /** Original close does not update a sorted mark's current element. @param token - Token. @returns Nothing. */ endFastElement(
+  /** Original close does not update a sorted mark's current element. @param token - Token. @param attributes - Optional native full list. @returns Nothing. */ endFastElement(
     token: number,
   ): void {
     this.write("</");

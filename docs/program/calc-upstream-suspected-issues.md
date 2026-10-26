@@ -3986,3 +3986,9 @@ Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected mark
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element starts.
 - Observation: mark pushes before a fallible cache destination switch and sets its independent empty flag afterwards. A flush failure can therefore leave a nonempty stack with an empty flag. Merge follows the flag and returns; starts bypass mark-element flushing, while the end invariant is no longer satisfied. Supported Calc export reachability and desktop impact remain unverified.
 - Preservation: retain flag defaults, update order and release-build guard. Shared tests use a genuinely closed ZIP stream; no stack rollback or flag normalization is added.
+
+### CALC-290 — full-list VML attribute prefix bypasses all XML escaping
+
+- Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::writeFastAttributeList`.
+- Observation: the prefix exception for `#_x0000_t` or `_x0000_t` disables the entire escape path, including quotes and ampersands, rather than only OOXML x-escaping. A matching value containing XML punctuation can therefore produce malformed attribute syntax. Desktop reachability is unverified. Native duplicate attributes are also emitted in release builds; their check is debug-only.
+- Preservation: retain prefix checks and raw emission, duplicate ordering and the independent queued token/value vector. Exact byte tests cover both prefixes and ordinary escaped attributes without introducing a sanitizer.

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sax/source/tools/fastattribs.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sax/source/tools/fastattribs.ts",
+        "apps/office/src/sax/source/tools/fastattribs.test.ts",
+        "vendor/libreoffice-reference/sax/source/tools/fastattribs.cxx"
+      ],
+      "justification": "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastAttributeList"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sax/source/tools/fastattribs.cxx",
+      "upstreamSymbols": [
+        "FastAttributeList::add",
+        "FastAttributeList::clear",
+        "FastAttributeList::createClone"
+      ]
+    }
+  }
+}

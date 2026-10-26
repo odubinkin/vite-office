@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writerfilter-docx",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/docxattributeoutput.cxx"
+      ],
+      "justification": "Native untracked text/run-property emission with original6/7/8/9/10/11 marks, complete native rPr schema order, collected optional font height and eastAsian/cs font attributes; actual shared font/posture/weight/spacing/strike items. Preserve UTF16 control segmentation, final-segment-only symbol font and per-code-unit symbol emission. Explicit consumed serializer constructor binding replaces no fake exporter. Full native DocxExport association/base class, Western CharFont font registration, fields/redlines/paragraphs/tables/styles/package orchestration remain unported. Run begin/end retain native node/position/length/default flags while admitting only the untracked path; do not claim complete native signatures or UI export. Coverage gate remains unmet: native RunText has an apparently unreachable false branch for break emission; no thresholds/exclusions/source branch have been changed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "DocxAttributeOutput",
+        "impl_WriteRunText"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/docxattributeoutput.cxx",
+      "upstreamSymbols": [
+        "DocxAttributeOutput::RunText",
+        "DocxAttributeOutput::InitCollectedRunProperties",
+        "DocxAttributeOutput::CharFontSize",
+        "impl_WriteRunText"
+      ]
+    }
+  }
+}
