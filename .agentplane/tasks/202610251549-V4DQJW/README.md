@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 32
+revision: 33
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T15:48:11.867Z"
+doc_updated_at: "2026-10-26T16:05:32.939Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -148,6 +148,10 @@ sections:
     - Observation: Ported the source GetPseudoCharRuns body as an explicit getPseudoCharRunsForDirection field binding, original CharRunEntry/CharRuns declarations and Tools extended charset helpers. Actual SwTextNode fonts/GetWhichOfScript, real BreakIteratorImpl and existing ICU default-mode levels are used. Preserve UTF16 supplementary boundaries, leading weak/trailing scripts, distinct embedding levels even at equal RTL parity, empty Latin defaults, original merge/erase order and initial-script charset reuse. No browser run DTO, direction guess or fake script/bidi provider was introduced.
       Impact: The original one-argument GetPseudoCharRuns API and SwDoc.GetTextDirection/layout integration remain unported; the required direction-result argument is explicit and is not a permanent public-contract parity claim. SwWW8AttrIter/actual document traversal still remain. The targeted profile passes29 cases/5 files but fails unchanged coverage at statements109/110 branches48/51; three source defensive paths are not reached by the successful concrete backend. No exclusions, criterion changes or fake error results were used. Overall task verification cannot be OK.
       Resolution: Preserve charset reuse as WRITER143. Native Library_sw.mk explicitly links i18npool and ICU; dependency checker directions are source-backed and48 checker tests pass. All127 Word-filter regressions pass. Tools/app typecheck/build/static, scoped lint/format/JSDoc, dependency/tree/provenance/registry/size/routing pass; doctor has0errors and its existing hook warning. A declaration-only Tools header is recorded without pretending re-exports are owned executable symbols; no validator was weakened. Continue core direction and iterator integration before whole-format/UI acceptance.
+
+    - Observation: Ported native SwFindNearestNode, WriterListener/SwModify GetInfo and four-format SwPageDesc.GetInfo. Command: npm run test:writer with37 related attr/doc/layout files and maxWorkers=2. Result: pass339 tests. Focused coverage tests pass21; full modified-module threshold FAIL retained at S258/326 B122/153 F74/99 L234/293. Added owners S21/21 B18/18 F6/6; no coverage exclusions or threshold changes. Checkpoint: evidence/native-nearest-node-query-checkpoint.json.
+      Impact: Document/layout direction still cannot be admitted: content-node style registration and deleted/undo-node lifetimes plus SwFormatPageDesc pointer identity remain missing. DOCX/XLSX UI readiness is not claimed; task remains DOING. Typecheck/build/lint/dependencies/docs/tree/provenance/registry/size/static/routing passed; doctor0 errors and1 existing hook warning.
+      Resolution: Commit the source and exact blob-bound evidence as a partial checkpoint, then stop for user-managed merge. Do not merge/integrate or start another block. Continue native node lifetime/page ownership before GetTextDirection and the one-argument Word character-run caller; preserve existing I/O/recovery defaults.
 id_source: "generated"
 ---
 ## Summary
@@ -272,3 +276,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Ported the source GetPseudoCharRuns body as an explicit getPseudoCharRunsForDirection field binding, original CharRunEntry/CharRuns declarations and Tools extended charset helpers. Actual SwTextNode fonts/GetWhichOfScript, real BreakIteratorImpl and existing ICU default-mode levels are used. Preserve UTF16 supplementary boundaries, leading weak/trailing scripts, distinct embedding levels even at equal RTL parity, empty Latin defaults, original merge/erase order and initial-script charset reuse. No browser run DTO, direction guess or fake script/bidi provider was introduced.
   Impact: The original one-argument GetPseudoCharRuns API and SwDoc.GetTextDirection/layout integration remain unported; the required direction-result argument is explicit and is not a permanent public-contract parity claim. SwWW8AttrIter/actual document traversal still remain. The targeted profile passes29 cases/5 files but fails unchanged coverage at statements109/110 branches48/51; three source defensive paths are not reached by the successful concrete backend. No exclusions, criterion changes or fake error results were used. Overall task verification cannot be OK.
   Resolution: Preserve charset reuse as WRITER143. Native Library_sw.mk explicitly links i18npool and ICU; dependency checker directions are source-backed and48 checker tests pass. All127 Word-filter regressions pass. Tools/app typecheck/build/static, scoped lint/format/JSDoc, dependency/tree/provenance/registry/size/routing pass; doctor has0errors and its existing hook warning. A declaration-only Tools header is recorded without pretending re-exports are owned executable symbols; no validator was weakened. Continue core direction and iterator integration before whole-format/UI acceptance.
+
+- Observation: Ported native SwFindNearestNode, WriterListener/SwModify GetInfo and four-format SwPageDesc.GetInfo. Command: npm run test:writer with37 related attr/doc/layout files and maxWorkers=2. Result: pass339 tests. Focused coverage tests pass21; full modified-module threshold FAIL retained at S258/326 B122/153 F74/99 L234/293. Added owners S21/21 B18/18 F6/6; no coverage exclusions or threshold changes. Checkpoint: evidence/native-nearest-node-query-checkpoint.json.
+  Impact: Document/layout direction still cannot be admitted: content-node style registration and deleted/undo-node lifetimes plus SwFormatPageDesc pointer identity remain missing. DOCX/XLSX UI readiness is not claimed; task remains DOING. Typecheck/build/lint/dependencies/docs/tree/provenance/registry/size/static/routing passed; doctor0 errors and1 existing hook warning.
+  Resolution: Commit the source and exact blob-bound evidence as a partial checkpoint, then stop for user-managed merge. Do not merge/integrate or start another block. Continue native node lifetime/page ownership before GetTextDirection and the one-argument Word character-run caller; preserve existing I/O/recovery defaults.

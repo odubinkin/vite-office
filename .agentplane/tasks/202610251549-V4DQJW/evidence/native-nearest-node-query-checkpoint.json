@@ -1,0 +1,132 @@
+{
+  "task": "202610251549-V4DQJW",
+  "scope": "Native nearest-node query, live Writer listener GetInfo and page-format dispatch; no text-node registration or DOCX UI admission",
+  "status": "partial checkpoint; task remains DOING, no parity promotion",
+  "sourceBlobs": {
+    "apps/office/src/sw/inc/calbck.ts": "70970bbfb468bc91958b3d7bf704ddfc49c4639e",
+    "apps/office/src/sw/inc/hints.ts": "3d107c325f945a74cb14eed8fe4f96b41e0b1436",
+    "apps/office/src/sw/source/core/layout/pagedesc.ts": "e53b58430c37a8f7e3de25b98ef1c47dc24770ca",
+    "docs/program/registry/writer/provenance/sw/inc/calbck.ts.json": "bfa519b59c4a5a314dd84b0db3d66411e620d544",
+    "docs/program/registry/writer/provenance/sw/inc/hints.ts.json": "95929332ccf2d882cb047c224b04edc67bf47dfa",
+    "docs/program/registry/writer/provenance/sw/source/core/layout/pagedesc.ts.json": "306be39870ea81153028902c68a101bf2f402ac3",
+    "docs/program/registry/writer/runtime/sw/inc/calbck.ts.json": "8d57edfdb809b68a3defc1f50aecb8eaf62cdc9d",
+    "docs/program/registry/writer/runtime/sw/inc/hints.ts.json": "103ae27f787f2e336b851ae0061f0470fcbd00bd",
+    "docs/program/registry/writer/runtime/sw/source/core/layout/pagedesc.ts.json": "94a17fe118b1c2dea0329b8be1dedab006ecf1c6",
+    "apps/office/src/sw/source/core/attr/native-nearest-node-query.test.ts": "85df1f4697cf51104c78d7ef2e6199bec64e30ee"
+  },
+  "checks": {
+    "relatedWriterRegression": {
+      "result": "pass",
+      "files": 37,
+      "tests": 339,
+      "selection": "Existing attr/doc/layout tests importing inc/calbck, inc/hints or layout/pagedesc, plus pagedesc.test.ts; maxWorkers=2"
+    },
+    "focusedCoverage": {
+      "result": "fail",
+      "testsPassed": 21,
+      "files": 3,
+      "statements": "258/326",
+      "branches": "122/153",
+      "functions": "74/99",
+      "lines": "234/293",
+      "threshold": 100,
+      "coverageFileSha256": "218f6bf171b93313383622e54c046aab6e814a4e2b66244a3baa57307c0308cc",
+      "newOwnerCounters": [
+        {
+          "path": "apps/office/src/sw/inc/calbck.ts",
+          "inclusiveLines": [
+            [
+              61,
+              64
+            ],
+            [
+              130,
+              135
+            ]
+          ],
+          "counters": {
+            "statements": {
+              "covered": 8,
+              "total": 8
+            },
+            "functions": {
+              "covered": 2,
+              "total": 2
+            },
+            "branches": {
+              "covered": 4,
+              "total": 4
+            }
+          }
+        },
+        {
+          "path": "apps/office/src/sw/inc/hints.ts",
+          "inclusiveLines": [
+            [
+              13,
+              33
+            ]
+          ],
+          "counters": {
+            "statements": {
+              "covered": 6,
+              "total": 6
+            },
+            "functions": {
+              "covered": 3,
+              "total": 3
+            },
+            "branches": {
+              "covered": 8,
+              "total": 8
+            }
+          }
+        },
+        {
+          "path": "apps/office/src/sw/source/core/layout/pagedesc.ts",
+          "inclusiveLines": [
+            [
+              47,
+              52
+            ]
+          ],
+          "counters": {
+            "statements": {
+              "covered": 7,
+              "total": 7
+            },
+            "functions": {
+              "covered": 1,
+              "total": 1
+            },
+            "branches": {
+              "covered": 6,
+              "total": 6
+            }
+          }
+        }
+      ],
+      "note": "All added executable owners covered. Full modified-module coverage remains below unchanged threshold; no excluded branches, mocked source APIs, threshold reductions or task verification pass."
+    },
+    "typecheck": "pass",
+    "build": "pass; existing chunk-size warning",
+    "eslint": "pass",
+    "dependencies": "pass:1491 sources/7531 imports/200 edges",
+    "jsdoc": "pass:3488 authored files",
+    "sourceTree": "pass",
+    "sourceProvenance": "pass:1492 runtime modules",
+    "registry": "pass:340 capabilities/1492 modules/34 invariants/3388 records/0 semantic violations",
+    "size": "pass",
+    "staticBuild": "pass",
+    "routing": "pass",
+    "diffCheck": "pass",
+    "doctor": "0 errors/1 existing hook-shim warning"
+  },
+  "remaining": [
+    "Native content-node/format registration and undo node lifetime",
+    "Native SwFormatPageDesc descriptor identity and FindPageDesc",
+    "Native document/layout text direction and exact one-argument GetPseudoCharRuns caller",
+    "DOCX import/export orchestration and production UI routes; Calc XLSX task not started in this block"
+  ],
+  "stopRule": "Stop after this checkpoint for user-managed merge; no integrate/merge."
+}
