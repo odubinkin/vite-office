@@ -1493,3 +1493,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `docmodel/source/uno/UnoComplexColor.cxx`, `UnoComplexColor::resolveColor`, and `offapi/com/sun/star/util/XComplexColor.idl`.
 - Observation: the interface accepts an XTheme when resolving a color, but the concrete component explicitly ignores that argument and returns its previously stored final color, including transparency. Changing the supplied theme therefore cannot recompute a theme-indexed color through this method. This may be intentional cached-color behavior; native document/UI impact and the intended resolution contract remain unverified.
 - Preservation: retain the unused argument and signed32 final-color conversion. The actual component test supplies a nonnull theme whose virtual methods detect any lookup, changes the original source value after construction, and retains the copied final color. Do not add theme lookup or transformation application to this method.
+
+### WRITER157 — explicit shading fill leaves automatic-fill state sticky
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::lcl_attribute` and `getProperties`.
+- Observation: an explicit fill sets m_bAutoFillColor false, but a later auto fill only converts the raw fill to white and does not restore that flag. Reusing the receiver for explicit fill followed by auto therefore produces opaque white and paragraph FillStyle SOLID; a fresh receiver with auto produces the automatic sentinel and FillStyle NONE. Normal producer duplication/reuse and visible document impact remain unverified.
+- Preservation: retain the one-way flag assignment and independent fill-specified state. Actual resource tests retain both fresh-auto and explicit-then-auto results; do not reset the flag when parsing auto.
+
+### WRITER158 — paragraph nil shading falls through to character properties
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::getProperties`.
+- Observation: the paragraph branch excludes the nil token, but the following branch treats every non-Form mode as character output. Paragraph mode with nil and a specified fill therefore emits CharBackColor, and emits CharBackgroundComplexColor when a fill theme is present, instead of paragraph fill properties. Whether later native consumers discard or compensate for this output remains unverified.
+- Preservation: keep the exact branch structure and conditions. The owner test retains a paragraph nil witness with CharBackColor and no FillColor; do not replace the fallthrough with an early return or paragraph-specific clearing policy.
+
+### WRITER159 — shading complex colors retain a default final color beside a computed scalar
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `getComplexColor`, `getFillComplexColor` and `getProperties`; `docmodel/source/uno/UnoComplexColor.cxx`, `resolveColor`.
+- Observation: the handler computes a scalar brush color, while its independent ComplexColor builders set only theme identity and transformations. They do not copy that scalar or raw RGB into final color. The created UNO component can therefore resolve to default black alongside a nonblack FillColor or CharBackColor. Paragraph output creates a component even for an Unused color; character output creates one only for a themed fill. Whether downstream color-item application intentionally fills the cached final color is unverified; no native rendering defect is claimed.
+- Preservation: retain the separate scalar and theme-only values, insertion conditions and unchanged component resolver. Real Any/Reference tests check the copied theme/transforms, scalar background and zero final color independently; do not initialize final color locally or add palette resolution.

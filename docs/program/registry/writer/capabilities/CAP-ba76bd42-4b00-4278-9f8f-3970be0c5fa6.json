@@ -150,6 +150,10 @@
         {
           "path": "apps/office/src/sw/browser/filter/xml/writer-page-format-codec.ts",
           "marker": "WriterPageFormatRecord"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/CellColorHandler.ts",
+          "marker": "CellColorHandler"
         }
       ],
       "tests": [
@@ -184,12 +188,28 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-docx-bool-properties.test.ts",
           "marker": "maps native DOCX kerning threshold"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-cell-color.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
         {
           "path": "docs/program/writer-docx.md",
           "marker": "Implemented import resources"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER157"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER158"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER159"
         }
       ]
     },
@@ -282,6 +302,10 @@
         {
           "path": "xmloff/source/style/NamedBoolPropertyHdl.cxx",
           "marker": "XMLNamedBoolPropertyHdl::importXML"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/CellColorHandler.cxx",
+          "marker": "CellColorHandler::getProperties"
         }
       ],
       "tests": [
@@ -304,7 +328,8 @@
     "aspect": "model-operation",
     "atomicOperation": "writer-docx-import-current-core-slice",
     "scopeLimitations": [
-      "V4DQJW remains an active implementation task. Current tested resources are prerequisite evidence and do not narrow or complete the requested document/UI import scope."
+      "V4DQJW remains an active implementation task. Current tested resources are prerequisite evidence and do not narrow or complete the requested document/UI import scope.",
+      "Original complete CellColorHandler attribute/modifier callbacks,38 lexical shading cases,37 Word brush weights,37 character pattern mappings, integer per-channel blend, distinct Form/Paragraph/Character insertion and non-clearing generated interop sequences. Independent foreground/fill themes preserve tint-before-shade and signed16 narrowing. Actual TablePropertyMap/Any/PropertyValue/Sequence, shared Tools Color and real UnoComplexColor/Reference owners are reused; no replacement theme/component or inferred default provider. Preserve sticky automatic-fill state, paragraph-nil character fallthrough and theme-only ComplexColor with default final color (WRITER157..159). Strict/Transitional committed ZIP style-cell XML passes actual relationship selection, OOXMLDocument/SAX/native-generated CT_Shd factory resources and receiver callbacks. Resource delivery is not document model insertion. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper/style application, document orchestration, DOCX/XLSX export and existing desktop/mobile UI workflows remain incomplete. Physical ABI/native threads and compiled differential/full QA parity remain unverified; no capability/default/parity promotion. The single handler source retains the original single handler and its literal switch responsibilities under the unchanged1000-line limit, avoiding a filename-only split."
     ],
     "implemented": false,
     "contractParity": false,
