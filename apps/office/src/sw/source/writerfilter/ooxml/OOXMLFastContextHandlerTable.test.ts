@@ -10,6 +10,8 @@ import {
 import { MeasureHandler } from "../dmapper/MeasureHandler";
 import { CellMarginHandler } from "../dmapper/CellMarginHandler";
 import { CellColorHandler } from "../dmapper/CellColorHandler";
+import { TablePositionHandler } from "../dmapper/TablePositionHandler";
+import { SequenceAsHashMap } from "../../../../comphelper/source/misc/sequenceashashmap";
 import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
 import { LatentStyleHandler } from "../dmapper/LatentStyleHandler";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
@@ -174,7 +176,7 @@ it.each([
     put(
       storage,
       "styles/data.xml",
-      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles><w:style w:type="table" w:styleId="Grid"><w:name w:val="Grid"/><w:tblPr><w:tblInd w:w="1440" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="8" w:color="123456"/><w:bottom w:val="double" w:sz="8" w:color="auto"/></w:tblBorders><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:shd w:val="pct25" w:color="auto" w:fill="4070A0" w:themeFill="accent2" w:themeFillTint="80"/><w:tcBorders><w:left w:val="dotted" w:sz="16" w:color="ABCDEF"/><w:right w:val="single" w:sz="8"/></w:tcBorders><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style></w:styles>`,
+      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles><w:style w:type="table" w:styleId="Grid"><w:name w:val="Grid"/><w:tblPr><w:tblpPr w:horzAnchor="page" w:vertAnchor="text" w:tblpXSpec="outside" w:tblpYSpec="bottom" w:tblpX="1440" w:tblpY="-720" w:leftFromText="120" w:rightFromText="240" w:topFromText="-120" w:bottomFromText="360"/><w:tblInd w:w="1440" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="8" w:color="123456"/><w:bottom w:val="double" w:sz="8" w:color="auto"/></w:tblBorders><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:shd w:val="pct25" w:color="auto" w:fill="4070A0" w:themeFill="accent2" w:themeFillTint="80"/><w:tcBorders><w:left w:val="dotted" w:sz="16" w:color="ABCDEF"/><w:right w:val="single" w:sz="8"/></w:tcBorders><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style></w:styles>`,
     );
     const main = await OOXMLStreamImpl.createStream(new ZipStorage(storage.commit())),
       part = await OOXMLStreamImpl.createStream(main, StreamType_t.STYLES),
@@ -227,6 +229,36 @@ it.each([
       margins = new CellMarginHandler(),
       cell = new CellMarginHandler(),
       latent = new LatentStyleHandler();
+    const position = new TablePositionHandler(),
+      positionProperties = nested(tableProperties, N.LN_CT_TblPrBase_tblpPr);
+    expect(values(positionProperties)).toHaveLength(10);
+    positionProperties.resolve(position);
+    const positionSequence = position.getTablePosition(),
+      positionMap = new SequenceAsHashMap(positionSequence, "PropertyValue");
+    positionSequence.dispose();
+    position.dispose();
+    for (const [name, expected] of [
+      ["HoriOrient", 5],
+      ["HoriOrientRelation", 7],
+      ["HoriOrientPosition", 2540],
+      ["VertOrient", 3],
+      ["VertOrientRelation", 0],
+      ["VertOrientPosition", -1270],
+      ["LeftMargin", 212],
+      ["RightMargin", 423],
+      ["TopMargin", -212],
+      ["BottomMargin", 635],
+    ] as const) {
+      const key = unicode(name),
+        value = positionMap.getValue(key);
+      try {
+        expect(value.get("sal_Int32"), name).toBe(expected);
+      } finally {
+        value.dispose();
+        key.dispose();
+      }
+    }
+    positionMap.dispose();
     nested(tableProperties, N.LN_CT_TblPrBase_tblInd).resolve(indent);
     nested(tableProperties, N.LN_CT_TblPrBase_tblCellMar).resolve(margins);
     nested(nested(grid, N.LN_CT_Style_trPr), N.LN_CT_TrPrBase_trHeight).resolve(row);

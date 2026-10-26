@@ -22,7 +22,7 @@ CONSUMED = (
     "CT_DocDefaults CT_PPrDefault CT_RPrDefault CT_Fonts CT_Underline CT_Color "
     "CT_Ind CT_Spacing CT_Jc CT_OnOff CT_HpsMeasure CT_DecimalNumber CT_String "
     "CT_VerticalAlignRun CT_Highlight EG_RPrBase CT_TblWidth CT_Height "
-    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd"
+    "CT_TblCellMar CT_TcMar CT_LatentStyles CT_LsdException CT_TblPrBase CT_TrPrBase CT_TcPrBase CT_Border CT_TblBorders CT_TcBorders CT_TrackChange CT_Markup CT_Shd CT_TblPPr"
 ).split()
 
 
@@ -165,12 +165,15 @@ def main():
     # attribute/element/resource context lookups. Keep that generated data
     # responsibility separate while retaining one native factory owner/API.
     write_tables(OUTPUT / "OOXMLFactory_wml.lists.ts", {"lists": data["lists"]}, args.check)
-    context_data = {key: rows for key, rows in data.items() if key != "lists"}
-    write_tables(OUTPUT / "OOXMLFactory_wml.tables.ts", context_data, args.check, True)
+    # factoryCreateElementMap is a distinct native lookup responsibility.
+    # Retain its exact records and the same factory API via a static re-export.
+    write_tables(OUTPUT / "OOXMLFactory_wml.elements.ts", {"elements": data["elements"]}, args.check)
+    context_data = {key: rows for key, rows in data.items() if key not in ("lists", "elements")}
+    write_tables(OUTPUT / "OOXMLFactory_wml.tables.ts", context_data, args.check, ("elements", "lists"))
     print("Writer OOXML factory:", ", ".join(f"{key}={len(rows)}" for key, rows in data.items()))
 
 
-def write_tables(path, data, check, reexport_lists=False):
+def write_tables(path, data, check, reexports=()):
     """Write source-generated namespace/stream tables with their original owners."""
     text = "/** @fileoverview Consumed native factory tables generated through unchanged pinned namespaces/modelpreprocess/factoryinc/resourceids/factoryimpl_ns owners; do not edit by hand. */\n"
     # Native generated table rows are deliberately one record per line, keeping
@@ -181,8 +184,8 @@ def write_tables(path, data, check, reexport_lists=False):
             text += "{\n" + "".join("  " + json.dumps(str(k)) + ": " + json.dumps(v) + ",\n" for k, v in rows.items()) + "} as const;\n"
         else:
             text += "[\n" + "".join("  " + json.dumps(row, ensure_ascii=False) + ",\n" for row in rows) + "] as const;\n"
-    if reexport_lists:
-        text += '\nexport { lists } from "./OOXMLFactory_wml.lists";\n'
+    for name in reexports:
+        text += '\nexport { ' + name + ' } from "./OOXMLFactory_wml.' + name + '";\n'
     if check:
         if not path.exists() or path.read_text() != text:
             raise SystemExit("Writer OOXML native factory tables are stale.")

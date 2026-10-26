@@ -20,10 +20,11 @@
       "TablePositionHandler::operator=="
     ],
     "preservedResponsibilities": [
-      "Original floating table defaults vertAnchor margin/horzAnchor text, empty specs, zero coordinates/margins/overlap, exact attribute alternatives and no-op sprm are retained. Actual SequenceAsHashMap emits independent typed properties: four zero border distances, signed limited-twip margins/positions, four default BorderLine2 values, original Hori/Vert/RelOrientation shorts, FillTransparence100 and AllowOverlap false only for never. Equality retains only six original position fields and ignores margins/overlap. Actual SvRefBase lifetime and reverse Unicode member destruction are reused; release-build LoggedProperties forwarding is erased into existing Properties callbacks, with no substitute manager/model service."
+      "Original floating table defaults vertAnchor margin/horzAnchor text, empty specs, zero coordinates/margins/overlap, exact attribute alternatives and no-op sprm are retained. Actual SequenceAsHashMap emits independent typed properties: four zero border distances, signed limited-twip margins/positions, four default BorderLine2 values, original Hori/Vert/RelOrientation shorts, FillTransparence100 and AllowOverlap false only for never. Equality retains only six original position fields and ignores margins/overlap. Actual SvRefBase lifetime and reverse Unicode member destruction are reused; release-build LoggedProperties forwarding is erased into existing Properties callbacks, with no substitute manager/model service.",
+      "Native factoryCreateElementMap lookup data is emitted as its own generated-data responsibility, preserving exact355 original rows, one OOXMLFactory_wml owner/API and static tables.elements re-export. Attribute/resource/action lookup data remains in the context table module; getListValue lexical data remains separate. The unchanged pinned generators/model additionally admit CT_TblPPr:53defines/107attributes/355elements/428resources/315lists/41actions. Actual Strict/Transitional committed ZIP relationship selection, OOXMLDocument and SAX deliver all ten position attributes through the original nested Properties reference into TablePositionHandler. Actual SequenceAsHashMap/UNO results retain original orientation relations, coordinates and signed limited-twip margins after handler destruction. This is parser resource delivery, not document/frame insertion. Full table-body orchestration and model application remain pending."
     ],
     "omittedResponsibilities": [
-      "Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. CT_TblPPr XML factory admission, DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+      "Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false."
     ],
     "evidence": {
       "local": [
@@ -33,6 +34,10 @@
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
           "marker": "@fileoverview"
         }
       ],
