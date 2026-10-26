@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 15
+revision: 16
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T11:47:06.711Z"
+doc_updated_at: "2026-10-26T12:44:52.097Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -92,6 +92,10 @@ sections:
     - Observation: Extended native coverage with UTF-7/UTF-8 reset and failure policies, CSV legacy charset round trips and admission bounds, rich-text cell snapshot ownership, locale currency/date-format fixtures, style/default-attribute undo capture, and UNO-only wrapper exception boundaries.
       Impact: Focused runs pass, including 44 files and 410 tests before the latest CSV and currency cases. UTF-7, UTF-8, Symbol and CSV option modules pass 100% in all metrics (27 tests, 4 files). The cumulative diagnostic residual decreased to 252 statements and 484 branch outcomes; this is not a completed whole-application verification.
       Resolution: Removed only dense-array fallbacks already excluded by native token count guards, and corrected outdated rich-text API documentation. Typecheck, lint, JSDoc, file size and source provenance pass. Full coverage, final npm verify, publication and reverse branch synchronization remain open.
+
+    - Observation: Regression tests exposed two real integration bugs: paragraph-border QueryValue wrapped the generated BorderLine2 value in a scalar array, causing compound Any copy to fail; Calc input-line projection read the null shared-string alternative of edit cells and sent existing multiline text through the plain-input admission guard.
+      Impact: Valid paragraph-border reads and selecting existing rich-text or multiline Calc cells could fail. The new tests reproduce both failures before the fixes.
+      Resolution: Pass the actual BorderLine2 compound to Any. Read owned input text from the real EditTextObject and preserve existing multiline input projection; retain text quoting for numeric-looking text. Seven focused unit tests and the production CSV browser regression pass, and the production build, affected-file lint, JSDoc and provenance checks pass. Full verification remains pending.
 id_source: "generated"
 ---
 ## Summary
@@ -164,3 +168,7 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: Extended native coverage with UTF-7/UTF-8 reset and failure policies, CSV legacy charset round trips and admission bounds, rich-text cell snapshot ownership, locale currency/date-format fixtures, style/default-attribute undo capture, and UNO-only wrapper exception boundaries.
   Impact: Focused runs pass, including 44 files and 410 tests before the latest CSV and currency cases. UTF-7, UTF-8, Symbol and CSV option modules pass 100% in all metrics (27 tests, 4 files). The cumulative diagnostic residual decreased to 252 statements and 484 branch outcomes; this is not a completed whole-application verification.
   Resolution: Removed only dense-array fallbacks already excluded by native token count guards, and corrected outdated rich-text API documentation. Typecheck, lint, JSDoc, file size and source provenance pass. Full coverage, final npm verify, publication and reverse branch synchronization remain open.
+
+- Observation: Regression tests exposed two real integration bugs: paragraph-border QueryValue wrapped the generated BorderLine2 value in a scalar array, causing compound Any copy to fail; Calc input-line projection read the null shared-string alternative of edit cells and sent existing multiline text through the plain-input admission guard.
+  Impact: Valid paragraph-border reads and selecting existing rich-text or multiline Calc cells could fail. The new tests reproduce both failures before the fixes.
+  Resolution: Pass the actual BorderLine2 compound to Any. Read owned input text from the real EditTextObject and preserve existing multiline input projection; retain text quoting for numeric-looking text. Seven focused unit tests and the production CSV browser regression pass, and the production build, affected-file lint, JSDoc and provenance checks pass. Full verification remains pending.

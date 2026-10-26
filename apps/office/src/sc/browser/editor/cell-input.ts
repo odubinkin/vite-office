@@ -1,4 +1,4 @@
-/** @fileoverview Browser scalar input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
+/** @fileoverview Browser scalar, formula and rich-text input/display bindings. History captures the actual native ScCellValue owner;only transient user input uses a browser parsing union. */
 import type { SharedStringConstReference } from "../../../svl/inc/sharedstring";
 import { ScFormulaCell } from "../../inc/formulacell";
 import { ScCellValue } from "../../inc/cellvalue";
@@ -69,7 +69,7 @@ export function applyCell(doc: ScDocument, pos: ScAddress, content: CalcCellInpu
 /** Recognizes current plain scalar input with the source simple-number scanner. Date/currency/format services remain explicitly outside this plain-input binding. @param value - Input. @returns Typed input. @throws {Error} For unsupported multiline content. */
 export function parseCellInput(value: string): CalcCellInput {
   if (/[\r\n]/.test(value))
-    throw new Error("Multiline cells are not supported by the current Calc core.");
+    throw new Error("Multiline entry is not supported by the Calc input line.");
   if (!value) return { kind: "empty" };
   if (value.length > 1 && value[0] === "'") return { kind: "text", value: value.slice(1) };
   if (value.length > 1 && value[0] === "=") return { kind: "formula", value };
@@ -84,7 +84,7 @@ export function parseCellInput(value: string): CalcCellInput {
   if (value.length > 1 && (value[0] === "+" || value[0] === "-")) return { kind: "formula", value };
   return { kind: "text", value };
 }
-/** Reads the actual source formula or scalar input,including native empty-code error display. @param doc - Model. @param pos - Cell. @returns Input-line text. */
+/** Reads the actual source formula, scalar or edit text,including native empty-code error display. @param doc - Model. @param pos - Cell. @returns Input-line text. */
 export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   const formula = doc.GetFormulaCell(pos);
   if (formula) {
@@ -100,7 +100,17 @@ export function cellInputText(doc: ScDocument, pos: ScAddress): string {
   const content = doc.GetRefCellValue(pos);
   if (content.getType() === CellType.CELLTYPE_NONE) return "";
   if (content.getType() === CellType.CELLTYPE_VALUE) return doubleToString(content.getDouble());
-  const value = text((content.getSharedString() as SharedStringConstReference).getString());
+  const edit = content.getEditText();
+  let value: string;
+  if (edit) {
+    const source = edit.GetText();
+    try {
+      value = text(source);
+    } finally {
+      source.dispose();
+    }
+  } else value = text((content.getSharedString() as SharedStringConstReference).getString());
+  if (/[\r\n]/u.test(value)) return value;
   return parseCellInput(value).kind !== "text" || value.startsWith("'") ? "'" + value : value;
 }
 /** Projects scalar/formula results without evaluating on the browser side. @param doc - Model. @param pos - Cell. @param showFormulas - Original formula-output mode. @returns Display value. */

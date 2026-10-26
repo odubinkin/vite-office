@@ -131,7 +131,7 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     const edge = { 3: 0, 4: 1, 1: 2, 2: 3 }[entry.member & 0x7f];
     if (edge === undefined || !(item instanceof SvxBoxItem)) illegal("Unknown paragraph border");
     return new Any(
-      [SvxBoxItem.SvxLineToLine(item.GetLine(edge), true)],
+      SvxBoxItem.SvxLineToLine(item.GetLine(edge), true),
       cppu_detail_getUnoType_BorderLine2,
     );
   }

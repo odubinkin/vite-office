@@ -22,6 +22,11 @@ test("imports CSV, saves the primary ODS copy and exports the active sheet", /**
   });
   await expect(page.getByRole("dialog")).toHaveCount(0);
   await expect(page.getByRole("textbox", { name: "Input line", exact: true })).toHaveValue("Name");
+  const address = page.getByRole("textbox", { name: "Name Box", exact: true });
+  await address.fill("A3");
+  await address.press("Enter");
+  await expect(address).toHaveValue("A3");
+  await expect(page.getByRole("gridcell", { name: "A3", exact: true })).toHaveText(/two\s+lines/u);
   await page.getByRole("menuitem", { name: "File", exact: true }).click();
   await page.getByRole("menuitem", { name: "Export…", exact: true }).click();
   const downloadPromise = page.waitForEvent("download");

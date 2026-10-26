@@ -14,6 +14,47 @@ import {
 } from "../editor/cell-input";
 import { FormulaGrammar } from "../../../formula/inc/grammar";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { EditTextObjectImpl, TextRotation } from "../../../editeng/inc/editobj";
+import { SvtScriptType } from "../../../svl/inc/languageoptions";
+import { MapUnit } from "../../../tools/inc/mapunit";
+
+it("displays and edits native rich-text cells without reading an absent shared-string variant", /** Checks repeated display ownership and preservation of text that resembles a number. @returns Nothing. */ () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  const pos = new ScAddress();
+  try {
+    for (const [lines, display, input] of [
+      [["First", "Second"], "First\nSecond", "First\nSecond"],
+      [["12"], "12", "'12"],
+    ] as const) {
+      const edit = new EditTextObjectImpl(
+        null,
+        MapUnit.Map100thMM,
+        false,
+        TextRotation.NONE,
+        SvtScriptType.LATIN,
+      );
+      for (const line of lines) {
+        const value = unicode(line);
+        try {
+          edit.CreateAndInsertContent().SetText(value);
+        } finally {
+          value.dispose();
+        }
+      }
+      doc.SetEditText(pos, edit);
+      expect(cellPresentation(doc, pos)).toEqual({ text: display, alignment: "left" });
+      expect(cellPresentation(doc, pos)).toEqual({ text: display, alignment: "left" });
+      expect(edit.GetParagraphCount()).toBe(lines.length);
+      expect(cellInputText(doc, pos)).toBe(input);
+      doc.SetValue(pos, 42);
+      expect(edit.GetParagraphCount()).toBe(0);
+      expect(cellPresentation(doc, pos)).toEqual({ text: "42", alignment: "right" });
+    }
+  } finally {
+    shell.Close();
+  }
+});
 it("edits canonical scalars and formulas with real dependency updates and token-valued Undo/Redo", /** No browser workbook or substitute evaluator participates. @returns Nothing. */ () => {
   const c = new CalcViewController(),
     doc = c.shell.GetDocument(),
