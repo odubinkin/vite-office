@@ -36,7 +36,8 @@
       "convertTwipToMm100_Limited",
       "convertTwipToMm100_LimitedRoundUp",
       "convertTwipToMm100_LimitedUnsigned",
-      "MakeBorderLine"
+      "MakeBorderLine",
+      "ConvertDateStringToDateTime"
     ],
     "upstreamSymbols": [
       "convertTwipToMm100_Limited",
@@ -45,7 +46,8 @@
     ],
     "preservedResponsibilities": [
       "Original signed32 narrowing, asymmetric positive twip limit, integral unit conversion, floating upward rounding and unsigned negative suppression.",
-      "Task202610251549-V4DQJW: Adds all original OOXML border-to-Word style cases and MakeBorderLine palette/auto-color/width conversion; only native style/total-width/color result fields are assigned, retaining inherited component widths. Full native table-property/style parsing and model application, document orchestration, native component ABI/lifetime, full DOCX/XLSX import/export and production UI admission remain incomplete or unverified. No parity/capability/default status promotion."
+      "Task202610251549-V4DQJW: Adds all original OOXML border-to-Word style cases and MakeBorderLine palette/auto-color/width conversion; only native style/total-width/color result fields are assigned, retaining inherited component widths. Full native table-property/style parsing and model application, document orchestration, native component ABI/lifetime, full DOCX/XLSX import/export and production UI admission remain incomplete or unverified. No parity/capability/default status promotion.",
+      "Task202610251549-V4DQJW: Original Word-compatible date helper retains local clock fields, ignored numeric offsets/fractions, false IsUTC and exact minus-delimiter token splitting with unsigned16 assignments. Negative/large-year behavior is preserved and documented as WRITER154/155. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

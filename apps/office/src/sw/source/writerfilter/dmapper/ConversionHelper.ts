@@ -1,4 +1,6 @@
 /** @fileoverview Consumed original ConversionHelper twip-to-mm100 admission rules; shared integral and floating unit owners perform the actual conversion. */
+import { DateTime } from "../../../../offapi/com/sun/star/util/DateTime";
+import { getToken, toInt32 } from "../../../../o3tl/inc/string_view";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { BorderLine2 } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import {
@@ -456,4 +458,21 @@ export function MakeBorderLine(
     style === SvxBorderLineStyle.NONE ? 0 : ConvertBorderWidthFromWord(style, thickness, lineType);
   result.LineWidth = convertTwipToMm100_Limited(Math.trunc(converted));
   result.Color = color;
+}
+
+/** Original Word-compatible date parser deliberately ignores timezone/fractional semantics and keeps IsUTC false. @param value - Borrowed original UTF16 string view. @returns Actual generated DateTime value. */
+export function ConvertDateStringToDateTime(value: Uint16Array): DateTime {
+  const result = new DateTime(),
+    index: [number] = [0];
+  const date = getToken(value, 0, 84, index),
+    time = getToken(value, 0, 90, index);
+  index[0] = 0;
+  result.Year = toInt32(getToken(date, 0, 45, index)) & 0xffff;
+  result.Month = toInt32(getToken(date, 0, 45, index)) & 0xffff;
+  if (index[0] !== -1) result.Day = toInt32(date.subarray(index[0])) & 0xffff;
+  index[0] = 0;
+  result.Hours = toInt32(getToken(time, 0, 58, index)) & 0xffff;
+  result.Minutes = toInt32(getToken(time, 0, 58, index)) & 0xffff;
+  if (index[0] !== -1) result.Seconds = toInt32(time.subarray(index[0])) & 0xffff;
+  return result;
 }

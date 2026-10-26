@@ -1474,3 +1474,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/BorderHandler.cxx`, `BorderHandler::lcl_sprm`, compared with `TDefTableHandler::localResolve`.
 - Observation: the table-border handler neither resets current width/type/color before resolving a new side nor requires nested properties before materializing a supported side. A later side missing attributes can inherit the preceding side's parameters; a null-property side is still marked filled. The cell-border handler instead resets width/type/color and ignores null-property children. Whether valid producers exercise missing/default attributes in a way that causes visible differences remains unverified.
 - Preservation: retain the distinct table and cell algorithms. Actual native resource tests keep table width/color carryover and null-reference materialization, cell per-child resets and first-vector-element precedence. Strict/Transitional ZIP tests retain independently specified table/cell borders. Do not unify the two handlers or insert local per-side defaults into BorderHandler.
+
+
+### WRITER154 — track-change dates retain local clock fields and an unknown timezone
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, and `TrackChangesHandler::getRedlineProperties`.
+- Observation: the helper explicitly describes an MS Office compatibility workaround: it separates the time at uppercase Z, parses integer clock fields, and leaves DateTime.IsUTC at its default false. Numeric timezone offsets and fractional seconds are not applied. A lexical Z therefore does not set IsUTC, and +02:30 does not shift 10:42:05. This is documented native compatibility behavior; downstream metadata/display intent remains unverified, and no defect is asserted.
+- Preservation: retain the original signed32 getToken overload, prefix integer conversion and generated field assignments. Tests keep identical local clock fields for Z/positive/negative offsets, zero nanoseconds and false IsUTC; committed Strict/Transitional ZIP TrackChange attributes reach the actual receiver before clearProps. Do not route this helper through the generic SAX ISO parser or a browser Date conversion.
+
+### WRITER155 — the optional signed year in the date comment is split as a delimiter
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, whose format comment includes an optional leading minus.
+- Observation: the implementation unconditionally reads the first year token using '-' as a delimiter. For -2024-01-02 it therefore assigns Year0, Month2024 and Day1; there is no special leading-sign path or calendar validation. The public DateTime IDL has a signed year, but this helper also narrows the parsed year through unsigned16 before assignment. Native producer reachability and document impact for BCE/large years remain unverified.
+- Preservation: keep the exact token split and original unsigned16 assignments, followed by the DateTime field's declared signed16 year width. Literal owner tests retain the negative-year result and the signed narrowing of year32768; no local calendar repair is introduced.

@@ -7,19 +7,38 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "number-formatting",
-    "capabilityIds": ["CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"],
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "B",
-      "evidence": ["apps/office/src/offapi/com/sun/star/util/DateTime.ts#DateTime", "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl#DateTime"],
-      "justification": "The published DateTime scalar fields and IDL defaults are represented for the source SAX ISO date-time parser used by Calc CSV admission. Generated UNO binding remains outside this consumed path.",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/util/DateTime.ts#DateTime",
+        "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl#DateTime"
+      ],
+      "justification": "Original DateTime IDL fields now use native declared-width scalar cells, generated default/copy/assignment/equality semantics and actual normal static CPPU type metadata. Actual Any and Sequence<DateTime> field transport is verified together with the separate SAX parser and Writer TrackChangesHandler date properties. Native physical C++ ABI and unconsumed generated header operations remain unverified. Full DOCX/XLSX model/filter/UI workflows are incomplete; no parity/default/capability status promotion.",
       "knownViolations": [],
-      "localSymbols": ["DateTime"],
+      "localSymbols": [
+        "DateTime",
+        "cppu_detail_getUnoType_DateTime"
+      ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "offapi/com/sun/star/util/DateTime.idl",
-      "upstreamSymbols": ["DateTime", "NanoSeconds", "Seconds", "Minutes", "Hours", "Day", "Month", "Year", "IsUTC"]
+      "upstreamSymbols": [
+        "DateTime",
+        "NanoSeconds",
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Day",
+        "Month",
+        "Year",
+        "IsUTC"
+      ]
     }
   }
 }

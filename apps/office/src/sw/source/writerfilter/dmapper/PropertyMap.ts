@@ -37,6 +37,20 @@ export enum GrabBagType {
 const PropertyValues = Sequence.specialize<PropertyValue>(cppu_detail_getUnoType_PropertyValue, 48);
 const propertySequenceType = ["Sequence", cppu_detail_getUnoType_PropertyValue] as const;
 
+/** Original RedlineParams member owner; native token is uninitialized until its importing producer assigns it. */
+export class RedlineParams {
+  readonly m_sAuthor = new OUString();
+  readonly m_sDate = new OUString();
+  m_nToken!: number;
+  readonly m_aRevertProperties = new PropertyValues();
+  /** Original Unicode and sequence member destruction. @returns Nothing. */
+  dispose(): void {
+    this.m_sAuthor.dispose();
+    this.m_sDate.dispose();
+    this.m_aRevertProperties.dispose();
+  }
+}
+
 /** Native Unicode binding for literal grab-bag names. @param value - Text. @returns Owned string. */
 function unicode(value: string): OUString {
   return new OUString(

@@ -684,4 +684,7 @@ export const NS_ooxml = Object.freeze({
   LN_Value_St_ThemeColor_text1: 93286,
   LN_Value_St_ThemeColor_background2: 93287,
   LN_Value_St_ThemeColor_text2: 93288,
+  LN_CT_Markup_id: 92099,
+  LN_CT_TrackChange_author: 92100,
+  LN_CT_TrackChange_date: 92101,
 });

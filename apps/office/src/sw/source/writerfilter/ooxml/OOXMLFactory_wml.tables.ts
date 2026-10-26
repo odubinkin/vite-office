@@ -47,6 +47,8 @@ export const defines = {
   "1769537": "CT_Border",
   "1770081": "CT_TblBorders",
   "1770099": "CT_TcBorders",
+  "1770127": "CT_TrackChange",
+  "1769805": "CT_Markup",
   "1770233": "ST_Border",
   "1770287": "ST_HighlightColor",
   "1770288": "ST_Hint",
@@ -146,6 +148,10 @@ export const attributes = [
   [1769537, "doc:space", "Integer", 1770346],
   [1769537, "doc:shadow", "Boolean", 1770323],
   [1769537, "doc:frame", "Boolean", 1770323],
+  [1770127, "doc:id", "Integer", 1770252],
+  [1770127, "doc:author", "String", 1770385],
+  [1770127, "doc:date", "String", 1770251],
+  [1769805, "doc:id", "Integer", 1770252],
 ] as const;
 
 /** Native elements table. */
@@ -912,6 +918,10 @@ export const resources = [
   [1770099, "doc:insideV", 92753],
   [1770099, "doc:tl2br", 92754],
   [1770099, "doc:tr2bl", 92755],
+  [1770127, "doc:id", 92099],
+  [1770127, "doc:author", 92100],
+  [1770127, "doc:date", 92101],
+  [1769805, "doc:id", 92099],
   [0, "doc:settings", 93294],
   [0, "doc:fonts", 93247],
   [0, "doc:numbering", 93157],
@@ -946,6 +956,22 @@ export const actions = [
   [1770141, "start", "setDefaultStringValue", 0, 0],
   [1770141, "attribute", "setValue", "doc:val", 0],
   [1769740, "attribute", "setValue", "doc:val", 0],
+  [1770127, "end", "sendPropertiesWithId", 92102, 92102],
+  [1770127, "end", "clearProps", 92102, 0],
+  [1770127, "end", "sendPropertiesWithId", 92105, 92105],
+  [1770127, "end", "clearProps", 92105, 0],
+  [1770127, "end", "sendPropertiesWithId", 92108, 92108],
+  [1770127, "end", "clearProps", 92108, 0],
+  [1770127, "end", "sendPropertiesWithId", 92111, 92111],
+  [1770127, "end", "clearProps", 92111, 0],
+  [1770127, "end", "sendPropertiesWithId", 92114, 92114],
+  [1770127, "end", "clearProps", 92114, 0],
+  [1770127, "end", "sendPropertiesWithId", 92117, 92117],
+  [1770127, "end", "clearProps", 92117, 0],
+  [1770127, "end", "sendPropertiesWithId", 92120, 92120],
+  [1770127, "end", "clearProps", 92120, 0],
+  [1770127, "end", "sendPropertiesWithId", 92123, 92123],
+  [1770127, "end", "clearProps", 92123, 0],
 ] as const;
 
 export { lists } from "./OOXMLFactory_wml.lists";

@@ -117,6 +117,10 @@ export class OOXMLFastContextHandler {
   ): void {
     void properties;
   }
+  /** Original clearProps replaces through the virtual setter; the base setter deliberately remains inert. @returns Nothing. */
+  clearProps(): void {
+    this.setPropertySet(new OOXMLPropertySet());
+  }
   /** Original nullable property hook. @returns Set or null. */ getPropertySet(): OOXMLPropertySet | null {
     return null;
   }

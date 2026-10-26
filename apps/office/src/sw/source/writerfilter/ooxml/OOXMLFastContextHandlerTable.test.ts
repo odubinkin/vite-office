@@ -14,6 +14,7 @@ import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
 import { expect, it } from "vitest";
 import {
   OOXMLFastContextHandler as Base,
+  OOXMLFastContextHandlerProperties as PropertiesContext,
   OOXMLFastContextHandlerTable as TableContext,
   OOXMLFastContextHandlerPropertyTable as PropertyTable,
   ResourceEnum_t,
@@ -21,6 +22,8 @@ import {
 import { OOXMLFastDocumentHandler } from "./OOXMLFastDocumentHandler";
 import { OOXMLStreamImpl } from "./OOXMLStreamImpl";
 import { OOXMLDocument } from "./OOXMLDocumentImpl";
+import { OOXMLFactory_wml } from "./OOXMLFactory_wml";
+import { defines } from "./OOXMLFactory_wml.tables";
 import { OOXMLFactory } from "./OOXMLFactory";
 import { nativeToken as token } from "./OOXMLFactory_wml";
 import { OOXMLPropertySet, OOXMLPropertyType, OOXMLValue as V } from "./OOXMLPropertySet";
@@ -381,4 +384,55 @@ it("clones property sets before unconditional property-table delivery even at ze
     /** The factory reaches the native property-table owner but preserves the unported definition guard. @returns Never. */ () =>
       OOXMLFactory.createFastChildContextFromStart(new Base(), token("doc:settings")),
   ).toThrow("OOXML definition is not implemented");
+});
+
+it("retains original send-before-clear actions and virtual property-set replacement", /** Actual factory contexts send the old set before replacing it; the base setter remains inert. @returns Nothing. */ async () => {
+  const output = receiver(),
+    delivered: Reference<Properties>[] = [];
+  output.stream.props =
+    /** Records original resource-reference delivery. @param properties - Native set. @returns Nothing. */ (
+      properties,
+    ) => {
+      delivered.push(properties);
+    };
+  const document = new OOXMLDocument(await OOXMLStreamImpl.createStream(new ZipStorage()), null),
+    root = new OOXMLFastDocumentHandler(output.stream, document, 0).getContextHandler(),
+    context = new PropertiesContext(root);
+  const definition = Object.entries(defines).find(
+    /** Selects the exact native TrackChange definition. @param entry - Generated pair. @returns Match. */ (
+      entry,
+    ) => entry[1] === "CT_TrackChange",
+  );
+  if (!definition) throw new Error("Missing original TrackChange definition");
+  context.setDefine(Number(definition[0]));
+  const factory = OOXMLFactory_wml.getInstance(),
+    actions = factory.getActions(context.getDefine(), "end");
+  expect(actions).toHaveLength(16);
+  for (let index = 0; index < actions.length; index += 2) {
+    const action = actions[index];
+    if (!action) throw new Error("Missing native action");
+    expect([action[2], actions[index + 1]?.[2]]).toEqual(["sendPropertiesWithId", "clearProps"]);
+    context.setId(action[3]);
+    context.newProperty(N.LN_CT_TrackChange_author, V.createInteger(index));
+    const before = context.getPropertySet();
+    context.endFastElement(token("doc:customXmlInsRangeStart"));
+    expect(context.getPropertySet()).not.toBe(before);
+    expect([...context.getPropertySet()]).toHaveLength(0);
+    const wrapped = delivered.at(-2);
+    if (!wrapped) throw new Error("Missing wrapped resource");
+    expect(nested(wrapped, action[4])).toBe(before);
+    expect([...before]).toHaveLength(1);
+  }
+  context.setForwardEvents(false);
+  const firstAction = actions[0];
+  if (!firstAction) throw new Error("Missing source action");
+  context.setId(firstAction[3]);
+  context.newProperty(N.LN_CT_TrackChange_author, V.createInteger(99));
+  const count = delivered.length;
+  context.endFastElement(token("doc:customXmlInsRangeStart"));
+  expect(delivered.length).toBe(count + 1);
+  expect([...context.getPropertySet()]).toHaveLength(0);
+  const base = new Base();
+  base.clearProps();
+  expect(base.getPropertySet()).toBeNull();
 });
