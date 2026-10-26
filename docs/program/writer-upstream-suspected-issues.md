@@ -1320,8 +1320,8 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 ### WRITER106 — Markdown entity callbacks discard recognized source text
 
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::text_callback`, inserts `MD_TEXT_NORMAL` and `MD_TEXT_CODE` but has an empty branch for `MD_TEXT_ENTITY` and `MD_TEXT_NULLCHAR`.
-- Observation: a recognized entity such as `&amp;` contributes no text, while an unrecognized entity-like sequence remains normal text. This follows the callback switch; it is not an independently compiled desktop result.
-- Preservation: the local Markdown reader detects recognized HTML references and omits them, retaining unknown names and literal code-span content. Null-character callbacks are likewise omitted.
+- Observation: syntactic entities such as `&amp;` and unknown `&madeup;` contribute no text. Pinned md4c 0.5.3 recognizes ASCII named-entity syntax without an HTML entity dictionary; malformed sequences remain normal text. A compiled md4c helper fixture confirms recognition; the Writer callback switch supplies omission. This is not a compiled desktop result.
+- Preservation: the local Markdown reader uses the source md4c entity recognizer and omits every syntactic entity, including unknown names, while retaining escaped text and literal code-span content. Null-character callbacks are likewise omitted. The earlier HTML-dictionary approximation was removed after the pinned dependency became available.
 
 ### WRITER107 — Markdown nested list type can retain the earlier marker kind
 
@@ -1412,3 +1412,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_position`, defers ordinary run positions and negative paragraph-style positions. Other nonzero stylesheet positions instead insert `DFLT_ESC_AUTO_SUPER` or `DFLT_ESC_AUTO_SUB` with `DFLT_ESC_PROP`; the source explicitly says `DON'T FIXME` and describes the missing final-font-size calculation.
 - Observation: a positive paragraph-style position does not retain its numeric half-point offset, while a negative paragraph-style position follows the deferred calculation. This asymmetric branch is source-derived; compiled desktop differential behavior remains unverified.
 - Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import remains outside this completed block.
+
+### WRITER143 — md4c tag recognizer accepts a slash in a closing tag
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_tag`, sets attribute state to -1 for closing tags but tests `attr_state <= 2` for both `>` and `/>`.
+- Observation: the compiled native helper accepts `</a/>` even though its comment permits the optional slash only on an opening tag. This is a dependency-level scanner finding, not a native Writer rendering result.
+- Preservation: the TypeScript tag automaton retains the numeric state comparisons and the compiled fixture pins this accepted form; no HTML normalization is inserted.

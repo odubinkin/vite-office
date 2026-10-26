@@ -307,10 +307,10 @@ it("maps hard and soft line breaks through Markdown text callbacks", /** Checks 
   }
 });
 
-it("omits entity and null-character callbacks while keeping unknown, escaped and code text", /** Checks omits entity and null-character callbacks while keeping unknown, escaped and code text. @returns Test completion or assertion result. */ () => {
+it("omits syntactic entity and null-character callbacks while keeping escaped and code text", /** Checks omits syntactic entity and null-character callbacks while keeping escaped and code text. @returns Test completion or assertion result. */ () => {
   const document = read("A &amp; B &#65; &madeup; \\&amp; `&copy;` \\? N\u0000UL");
   try {
-    expect(document.paragraphs[0]?.GetText()).toBe("A  B  &madeup; &amp; &copy; ? NUL");
+    expect(document.paragraphs[0]?.GetText()).toBe("A  B   &amp; &copy; ? NUL");
   } finally {
     document.Dispose();
   }

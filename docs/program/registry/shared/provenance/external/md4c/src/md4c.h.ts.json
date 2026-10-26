@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/md4c/src/md4c.h.ts",
+    "upstreamPath": "vendor/md4c-reference/src/md4c.h",
+    "localSymbols": [
+      "MD_BLOCKTYPE",
+      "MD_SPANTYPE",
+      "MD_TEXTTYPE",
+      "MD_ALIGN",
+      "MD_PARSER",
+      "MD_ATTRIBUTE"
+    ],
+    "upstreamSymbols": [
+      "MD_BLOCKTYPE",
+      "MD_SPANTYPE",
+      "MD_TEXTTYPE",
+      "MD_ALIGN",
+      "MD_PARSER",
+      "MD_ATTRIBUTE"
+    ],
+    "preservedResponsibilities": [
+      "Direct TypeScript port of the pinned md4c 0.5.3 public contracts, byte/Unicode/attribute/reference-label/HTML/link scanner responsibility. Unicode data is extracted verbatim from the LibreOffice download.lst SHA-256-pinned archive. Compiled native helper fixtures cover every Unicode scalar, malformed UTF-8 and scanner bounds. Native allocation/pointer storage uses JS arrays and GC; UTF-8 byte offsets, numeric states, limits, signed-byte fallback and little-endian label hashing remain explicit. The complete md_parse block/mark/inline pipeline and Writer callback integration remain pending; no complete parser or Markdown parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete md_parse block construction, reference-definition storage, mark resolution, inline emission and complete Writer integration remain pending. Native physical memory allocation and ABI are not simulated."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.h.ts",
+          "marker": "MD_BLOCKTYPE"
+        },
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.primitives.test.ts",
+          "marker": "matches compiled md4c classification"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/md4c-reference/src/md4c.h",
+          "marker": "MD_BLOCKTYPE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/download.lst",
+          "marker": "MD4C_SHA256SUM"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/md4c/src/md4c.h.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains md4c.c function groups and md4c.h callback contracts as bounded TypeScript responsibility files under the native external library owner."
+    }
+  }
+}

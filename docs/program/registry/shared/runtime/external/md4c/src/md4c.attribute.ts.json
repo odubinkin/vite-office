@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/md4c/src/md4c.attribute.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "markdown-parser",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/md4c/src/md4c.attribute.ts",
+        "apps/office/src/external/md4c/src/md4c.primitives.test.ts",
+        "apps/office/src/external/md4c/src/native-primitives.json",
+        "scripts/generate-md4c-native-fixtures.py"
+      ],
+      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 public contracts, byte/Unicode/attribute/reference-label/HTML/link scanner responsibility. Unicode data is extracted verbatim from the LibreOffice download.lst SHA-256-pinned archive. Compiled native helper fixtures cover every Unicode scalar, malformed UTF-8 and scanner bounds. Native allocation/pointer storage uses JS arrays and GC; UTF-8 byte offsets, numeric states, limits, signed-byte fallback and little-endian label hashing remain explicit. The complete md_parse block/mark/inline pipeline and Writer callback integration remain pending; no complete parser or Markdown parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "md_is_entity_str",
+        "md_build_attribute"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/md4c-reference/src/md4c.c",
+      "upstreamSymbols": [
+        "md_is_entity_str",
+        "md_build_attribute"
+      ]
+    }
+  }
+}

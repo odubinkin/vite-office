@@ -995,3 +995,16 @@ it("admits the native Writer UNO helper dependency and rejects its reverse", /**
   expect(isForbiddenModuleEdge("sw", "cppuhelper")).toBe(false);
   expect(isForbiddenModuleEdge("cppuhelper", "sw")).toBe(true);
 });
+
+it("classifies the pinned md4c parser as a native external mechanism", () => {
+  expect(getRuntimeOwnershipLayer("external/md4c/src/md4c.attribute.ts")).toBe(
+    "upstream-mechanism",
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "external/md4c/src/md4c.attribute.ts",
+      "sw/browser/presentation/writer-view.tsx",
+      "../../../sw/browser/presentation/writer-view",
+    ),
+  ).toBeDefined();
+});

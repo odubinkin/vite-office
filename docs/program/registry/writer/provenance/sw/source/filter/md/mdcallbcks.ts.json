@@ -13,7 +13,8 @@
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs; preserves the pinned empty entity/null-character text callbacks by omitting recognized HTML references and null characters while retaining unrecognized text and literal code spans. Relative hyperlink targets resolve against a supplied document base URL while fragment-only targets remain unchanged."
+      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs; preserves the pinned empty entity/null-character text callbacks by omitting recognized HTML references and null characters while retaining unrecognized text and literal code spans. Relative hyperlink targets resolve against a supplied document base URL while fragment-only targets remain unchanged.",
+      "Uses the pinned md4c syntactic entity recognizer instead of a host HTML entity dictionary, so every native named/numeric entity callback is omitted, including unknown names."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -34,7 +35,7 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "omits entity and null-character callbacks"
+          "marker": "omits syntactic entity and null-character callbacks"
         }
       ],
       "upstream": [
@@ -49,6 +50,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
           "marker": "MD_TEXT_ENTITY"
+        },
+        {
+          "path": "vendor/md4c-reference/src/md4c.c",
+          "marker": "md_is_entity_str"
         }
       ]
     }

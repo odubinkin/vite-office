@@ -223,6 +223,8 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // sw/Library_sw.mk links the pinned external md4c parser.
+      "external",
       // Native sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx includes sax/tools/converter.hxx;
       // sw/Library_sw.mk links sax for these original OOXML lexical conversions.
       "sax",
@@ -385,6 +387,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
   if (portablePath.startsWith("external/harfbuzz/src/")) return "upstream-mechanism";
+  if (portablePath.startsWith("external/md4c/src/")) return "upstream-mechanism";
   if (
     portablePath.startsWith("sal/rtl/") ||
     portablePath.startsWith("sal/inc/rtl/") ||

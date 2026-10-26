@@ -1,5 +1,6 @@
 /** @fileoverview Markdown span callbacks for Writer text hints, following sw/source/filter/md/mdcallbcks.cxx. */
-import { decodeHTMLStrict } from "entities";
+import { md_is_entity_str } from "../../../../external/md4c/src/md4c.attribute";
+const UTF8 = new TextEncoder();
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
@@ -62,13 +63,11 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
         continue;
       }
       if (character === "&") {
-        const entity =
-          /^&(?:#(?:[0-9]{1,7}|[xX][0-9A-Fa-f]{1,6})|[A-Za-z][A-Za-z0-9]{1,31});/u.exec(
-            text.slice(offset),
-          )?.[0];
-        if (entity !== undefined && decodeHTMLStrict(entity) !== entity) {
+        // Native named-entity recognition is syntactic and has no HTML dictionary.
+        const entityEnd = md_is_entity_str(UTF8.encode(text.slice(offset, offset + 64)), 0);
+        if (entityEnd >= 0) {
           // Pinned MD_TEXT_ENTITY callback has no insertion branch.
-          offset += entity.length;
+          offset += entityEnd;
           continue;
         }
       }
