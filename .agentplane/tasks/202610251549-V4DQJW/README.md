@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 42
+revision: 43
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T19:42:39.028Z"
+doc_updated_at: "2026-10-26T19:55:06.697Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -188,6 +188,10 @@ sections:
     - Observation: Implemented original non-aggregating WeakImplHelper/class_data reverse initialization, actual typelib direct/deep lookup and XTypeProvider normal binding, then real UnoComplexColor/factories. Source-backed module edges preserve original headers/library dependencies. WRITER156 and CALC-300 retain the resolver ignoring a supplied theme. Native layout/binary bridge/full QA parity remains explicitly unverified.
       Impact: DOCX CellColorHandler now has its actual UNO complex-color component dependency. Tests use real typelib records, inheritance and Reference/WeakReferenceHelper ownership; no alternate query/type/default provider. Full TablePropertiesHandler/model/DOCX-XLSX export and existing desktop/mobile UI integration remain incomplete.
       Resolution: Pass:121 related tests/20 files, four new executable owners S118/B36/F32/L104 all100,48 boundary tests, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry, doctor and routing. Evidence:native-complex-color-component-checkpoint.json with26 source blobs. Validation corrections are recorded; thresholds unchanged. Full suite not due; no merge/publication/task completion.
+
+    - Observation: Implemented complete original CellColorHandler Form/Paragraph/Character paths,38 lexical shading cases,37 brush weights,37 character pattern mappings, independent foreground/fill theme transforms, non-clearing interop and actual UnoComplexColor Any lifetime. Added normal FillStyle type binding and original CT_Shd generator admission. Preserved and documented WRITER157..159.
+      Impact: Real Strict/Transitional committed ZIP style-cell XML now reaches the shading receiver through existing relationship streams, OOXMLDocument, SAX and native factory resources. Resource output does not yet imply table/style/model application. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper orchestration and complete DOCX/XLSX/UI workflows remain pending; no fake table manager/comment-state provider.
+      Resolution: Pass:253 related tests/20 files, two executable owners S407/B169/F21/L404 all100, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, native generation check, dependencies/docs/size/tree/provenance/registry, doctor/routing/diff. Evidence:native-cell-color-checkpoint.json with18 source blobs. Corrected generated count assertion and typed test XTheme reference; thresholds unchanged. Full suite not due; no merge/publication/completion.
 id_source: "generated"
 ---
 ## Summary
@@ -352,3 +356,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Implemented original non-aggregating WeakImplHelper/class_data reverse initialization, actual typelib direct/deep lookup and XTypeProvider normal binding, then real UnoComplexColor/factories. Source-backed module edges preserve original headers/library dependencies. WRITER156 and CALC-300 retain the resolver ignoring a supplied theme. Native layout/binary bridge/full QA parity remains explicitly unverified.
   Impact: DOCX CellColorHandler now has its actual UNO complex-color component dependency. Tests use real typelib records, inheritance and Reference/WeakReferenceHelper ownership; no alternate query/type/default provider. Full TablePropertiesHandler/model/DOCX-XLSX export and existing desktop/mobile UI integration remain incomplete.
   Resolution: Pass:121 related tests/20 files, four new executable owners S118/B36/F32/L104 all100,48 boundary tests, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry, doctor and routing. Evidence:native-complex-color-component-checkpoint.json with26 source blobs. Validation corrections are recorded; thresholds unchanged. Full suite not due; no merge/publication/task completion.
+
+- Observation: Implemented complete original CellColorHandler Form/Paragraph/Character paths,38 lexical shading cases,37 brush weights,37 character pattern mappings, independent foreground/fill theme transforms, non-clearing interop and actual UnoComplexColor Any lifetime. Added normal FillStyle type binding and original CT_Shd generator admission. Preserved and documented WRITER157..159.
+  Impact: Real Strict/Transitional committed ZIP style-cell XML now reaches the shading receiver through existing relationship streams, OOXMLDocument, SAX and native factory resources. Resource output does not yet imply table/style/model application. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper orchestration and complete DOCX/XLSX/UI workflows remain pending; no fake table manager/comment-state provider.
+  Resolution: Pass:253 related tests/20 files, two executable owners S407/B169/F21/L404 all100, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, native generation check, dependencies/docs/size/tree/provenance/registry, doctor/routing/diff. Evidence:native-cell-color-checkpoint.json with18 source blobs. Corrected generated count assertion and typed test XTheme reference; thresholds unchanged. Full suite not due; no merge/publication/completion.
