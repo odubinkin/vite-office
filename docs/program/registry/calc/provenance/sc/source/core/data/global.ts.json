@@ -40,6 +40,7 @@
     "localPath": "apps/office/src/sc/source/core/data/global.ts",
     "localSymbols": [
       "ScGlobal",
+      "GetTransliteration",
       "bThreadedGroupCalcInProgress"
     ],
     "omittedResponsibilities": [
@@ -57,6 +58,7 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/global.cxx",
     "upstreamSymbols": [
+      "ScGlobal::GetTransliteration",
       "ScGlobal::bThreadedGroupCalcInProgress",
       "ScGlobal::EETextObjEqual",
       "ScGlobal::GetErrorString"

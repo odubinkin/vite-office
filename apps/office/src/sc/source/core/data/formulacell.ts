@@ -103,6 +103,10 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
   SetResultToken(token: FormulaToken | null): void {
     this.aResult.SetToken(token);
   }
+  /** Original cached numeric result assignment without changing dirty state. @param value - Cached result. @returns Nothing. */
+  SetResultDouble(value: number): void {
+    this.aResult.SetDouble(value);
+  }
   /** Original normal source recompilation over the same actual formula owner. Shared/named/formatter services retain their existing explicit boundaries. @param formula - Source formula. @param noListening - Native listener suppression. @param grammar - Original input grammar. @returns Nothing. */
   Compile(formula: OUStringConstReference, noListening: boolean, grammar: Grammar): void {
     if (this.rDocument.IsClipOrUndo()) return;

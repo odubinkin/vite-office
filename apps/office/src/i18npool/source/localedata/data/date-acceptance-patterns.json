@@ -1,0 +1,1284 @@
+{
+  "af_NA": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "af_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "ak_GH": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "am_ET": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "an_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_AE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_BH": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_DZ": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_EG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_IQ": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_JO": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_KW": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_LB": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_LY": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_MA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_OM": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_QA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_SA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_SY": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_TN": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ar_YE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ast_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "axk_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "az_AZ": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "be_BY": [
+    "D/M/",
+    "D.M.",
+    "D.M.Y"
+  ],
+  "beq_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "bg_BG": [
+    "D.M.Y г.",
+    "D.M.Y г.",
+    "D.M.Y Г.",
+    "D.M.Y Г.",
+    "D.M.",
+    "D.M.Y"
+  ],
+  "bkw_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "bm_ML": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "bn_BD": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "bn_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "bo_CN": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "bo_IN": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "br_FR": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "bs_BA": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "bvx_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ca_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ca_ES_valencia": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "cs_CZ": [
+    "D.M.",
+    "D. M.",
+    "D. M. Y",
+    "D. M.",
+    "D. M. Y",
+    "D.M.Y"
+  ],
+  "cu_RU": [
+    "D.M.",
+    "D/M/",
+    "D.M.Y"
+  ],
+  "cv_RU": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "cy_GB": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "da_DK": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "dde_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "de_AT": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "de_CH": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "de_DE": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "de_LI": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "de_LU": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "dsb_DE": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "dv_MV": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "dz_BT": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "ebo_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ee_GH": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "el_GR": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "en_AU": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "en_BW": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_BZ": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "en_CA": [
+    "M-D",
+    "M/D/Y",
+    "M/D",
+    "Y-M-D"
+  ],
+  "en_DK": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "en_GB": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_GH": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "en_GM": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_GY": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_HK": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_IE": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_IL": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "en_IN": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_JM": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "en_KE": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_LK": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_MU": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_MW": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_MY": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_NA": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "en_NG": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_NZ": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "en_PH": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "en_TT": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "en_US": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "en_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "en_ZM": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "en_ZW": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "eo": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "es_AR": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_BO": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_CL": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "es_CO": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_CR": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_DO": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_EC": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_GT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_HN": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_MX": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_NI": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_PA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_PE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_PR": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_PY": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_SV": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_UY": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "es_VE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "et_EE": [
+    "D.M",
+    "D. M",
+    "D.M.",
+    "D. M.",
+    "D.M.Y"
+  ],
+  "eu_ES": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "ext_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "fa_IR": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "fi_FI": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "fo_FO": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "fr_BE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "fr_BF": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_BJ": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_CA": [
+    "M-D",
+    "M/D/Y",
+    "M/D",
+    "Y-M-D"
+  ],
+  "fr_CH": [
+    "D/M",
+    "D.M.",
+    "D.M.Y"
+  ],
+  "fr_CI": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_FR": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_GN": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_LU": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "fr_MC": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_ML": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_NE": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_SN": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fr_TG": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "fur_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "fy_NL": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "ga_IE": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "gd_GB": [
+    "D/M",
+    "D.M.Y",
+    "D-M",
+    "D/M/Y"
+  ],
+  "gl_ES": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "gos_NL": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "gsc_FR": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "gu_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "gug_PY": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ha_Latn_GH": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "ha_Latn_NG": [
+    "M/D",
+    "D/M/Y"
+  ],
+  "haw_US": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "he_IL": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "hi_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "hil_PH": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "hr_HR": [
+    "D.M",
+    "D.M.Y.",
+    "D/M/Y",
+    "D/M",
+    "D.M.Y"
+  ],
+  "hsb_DE": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "ht_HT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "hu_HU": [
+    "M-D",
+    "M.D",
+    "M.D.",
+    "M. D.",
+    "Y-M-D",
+    "Y.M.D.",
+    "Y. M. D.",
+    "Y.M.D"
+  ],
+  "hy_AM": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ia": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "id_ID": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ilo_PH": [
+    "M/D",
+    "M-D",
+    "M/D/Y"
+  ],
+  "is_IS": [
+    "D.M.",
+    "D. M.",
+    "D. M. Y",
+    "D/M/",
+    "D.M.Y"
+  ],
+  "it_CH": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "it_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "iyx_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ja_JP": [
+    "M-D",
+    "M/D",
+    "M／D",
+    "Y.M.D",
+    "Y／M／D",
+    "Y年M月D日",
+    "M月D日",
+    "Y/M/D"
+  ],
+  "jbo": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ka_GE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "kab_DZ": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "kk_KZ": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "kkw_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "kl_GL": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "km_KH": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "kmr_Latn_TR": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "kn_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "kng_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ko_KR": [
+    "M/D",
+    "M-D",
+    "M.D.",
+    "M월D일",
+    "Y.M.D.",
+    "Y년M월D일",
+    "Y/M/D"
+  ],
+  "ky_KG": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "la_VA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "lb_LU": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ldi_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "lg_UG": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "lgr_SB": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "lif_NP": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "lij_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "lld_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ln_CD": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "lo_LA": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "lt_LT": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "ltg_LV": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "lv_LV": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "mai_IN": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "mdw_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "mfe_MU": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "min_ID": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "mk_MK": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "mkw_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ml_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "mn_Cyrl_MN": [
+    "M.D",
+    "Y.M.D"
+  ],
+  "mn_Mong_MN": [
+    "M.D",
+    "Y.M.D"
+  ],
+  "mos_BF": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "mr_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "ms_MY": [
+    "D/M",
+    "D-M",
+    "D/M/Y"
+  ],
+  "mt_MT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "my_MM": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "myv_RU": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "nb_NO": [
+    "D.M",
+    "D/M/Y",
+    "D/M",
+    "D/M Y",
+    "D.M.Y"
+  ],
+  "nds_DE": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "ne_NP": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "ngz_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "njx_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "njy_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "nl_BE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "nl_NL": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "nn_NO": [
+    "D.M",
+    "D/M/Y",
+    "D/M",
+    "D/M Y",
+    "D.M.Y"
+  ],
+  "no_NO": [
+    "D.M",
+    "D/M/Y",
+    "D/M",
+    "D/M Y",
+    "D.M.Y"
+  ],
+  "nr_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "nso_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "ny_MW": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "oc_ES_aranes": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "oc_FR_lengadoc": [
+    "D/M",
+    "D.M.Y",
+    "D-M-Y",
+    "D/M/Y"
+  ],
+  "om_ET": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "or_IN": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "pa_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "pap_BQ": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "pap_CW": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "pdc_US": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "pjt_AU": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "pl_PL": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "plt_MG": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "pt_AO": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "pt_BR": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "pt_MZ": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "pt_PT": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "pui_CO": [
+    "D/M",
+    "D-M-Y"
+  ],
+  "puu_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ro_MD": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ro_RO": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ru_RU": [
+    "D.M.",
+    "D/M/",
+    "D.M.Y"
+  ],
+  "rue_SK": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "rw_RW": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "sat_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "sat_Olck_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "sc_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "sdj_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "sg_CF": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "shs_CA": [
+    "M-D",
+    "M/D/Y",
+    "M/D",
+    "Y-M-D"
+  ],
+  "sid_ET": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "sk_SK": [
+    "D.M.",
+    "D. M.",
+    "D. M. Y",
+    "D. M.",
+    "D. M. Y",
+    "D.M.Y"
+  ],
+  "sl_SI": [
+    "D. M. Y",
+    "D.M.",
+    "D. M.",
+    "D.M.Y"
+  ],
+  "so_SO": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "sq_AL": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_CS": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_Latn_CS": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_Latn_ME": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_Latn_RS": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_ME": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sr_RS": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ss_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "st_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "sun_ID": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "sv_FI": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "sv_SE": [
+    "D/M",
+    "D/M Y",
+    "Y-M-D"
+  ],
+  "sw_TZ": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "szl_PL": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ta_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "te_IN": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "tek_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "tg_TJ": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "th_TH": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ti_ER": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "tk_TM": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "tn_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "tpi_PG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "tr_TR": [
+    "D.M",
+    "D/M",
+    "D/M/Y",
+    "D-M",
+    "D-M-Y",
+    "D.M.Y"
+  ],
+  "ts_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "tsa_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "tt_RU": [
+    "D.M.",
+    "D.M.Y"
+  ],
+  "tyx_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "ug_CN": [
+    "M-D",
+    "Y-M-D"
+  ],
+  "uk_UA": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ur_PK": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "uz_UZ": [
+    "D.M",
+    "D.M.Y"
+  ],
+  "ve_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "vec_IT": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "vi_VN": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "vif_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "vro_EE": [
+    "D.M",
+    "D. M",
+    "D.M.",
+    "D. M.",
+    "D.M.Y"
+  ],
+  "wa_BE": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "xh_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ],
+  "xku_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "yi_US": [
+    "M/D",
+    "M/D/Y"
+  ],
+  "yom_CG": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "zh_CN": [
+    "M-D",
+    "M/D",
+    "M／D",
+    "Y.M.D",
+    "Y／M／D",
+    "Y年M月D日",
+    "M月D日",
+    "Y/M/D"
+  ],
+  "zh_HK": [
+    "D/M",
+    "D/M/Y"
+  ],
+  "zh_MO": [
+    "D-M",
+    "D-M-Y"
+  ],
+  "zh_SG": [
+    "M/D",
+    "Y/M/D"
+  ],
+  "zh_TW": [
+    "M月D日",
+    "M-D",
+    "M/D",
+    "Y年M月D日",
+    "Y.M.D",
+    "Y/M/D"
+  ],
+  "zu_ZA": [
+    "M-D",
+    "M/D",
+    "Y/M/D",
+    "Y-M-D"
+  ]
+}

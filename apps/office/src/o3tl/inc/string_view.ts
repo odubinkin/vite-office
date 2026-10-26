@@ -67,9 +67,15 @@ export function implIsWhitespace(c: number): boolean {
   if (c <= 0x200b || c >= 0x2028) return true;
   return false;
 }
-/** Original bounded UTF16 string-view conversion through the shared signed64 C owner, retaining signed32 overflow-to-zero. @param str - Borrowed logical UTF16 view. @param radix - Original radix, default10. @returns Exact original signed32 value. */
-export function toInt32(str: Uint16Array | Uint8Array, radix = 10): number {
-  let n = toInt64(str, radix);
+/** Original bounded UTF16 string-view conversion through the shared signed64 C owner, retaining signed32 overflow-to-zero. JS strings adapt to the same UTF16 view. @param str - Borrowed logical UTF16 or byte view. @param radix - Original radix, default10. @returns Exact original signed32 value. */
+export function toInt32(str: Uint16Array | Uint8Array | string, radix = 10): number {
+  let view: Uint16Array | Uint8Array;
+  if (typeof str === "string") {
+    const units = new Uint16Array(str.length);
+    for (let i = 0; i < str.length; i++) units[i] = str.charCodeAt(i);
+    view = units;
+  } else view = str;
+  let n = toInt64(view, radix);
   if (n < BigInt(SAL_MIN_INT32) || n > BigInt(SAL_MAX_INT32)) n = 0n;
   return Number(n);
 }

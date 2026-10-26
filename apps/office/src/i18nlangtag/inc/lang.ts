@@ -23,6 +23,11 @@ export const LANGUAGE_SYSTEM = LanguageType(0x0000);
 export const LANGUAGE_INVARIANT = LanguageType(0x007f);
 /** Original German ID used by SvxLanguageItem factory. */
 export const LANGUAGE_GERMAN = LanguageType(0x0407);
+/** Original German regional language IDs used by number-format keyword localization. */
+export const LANGUAGE_GERMAN_SWISS = LanguageType(0x0807);
+export const LANGUAGE_GERMAN_AUSTRIAN = LanguageType(0x0c07);
+export const LANGUAGE_GERMAN_LUXEMBOURG = LanguageType(0x1007);
+export const LANGUAGE_GERMAN_LIECHTENSTEIN = LanguageType(0x1407);
 
 /** Original US English fallback/fast-path identity. */
 export const LANGUAGE_ENGLISH_US = LanguageType(0x0409);

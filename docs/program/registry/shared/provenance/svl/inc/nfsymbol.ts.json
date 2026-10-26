@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/nfsymbol.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/nfsymbol.hxx",
+    "localSymbols": [
+      "NfSymbolType"
+    ],
+    "upstreamSymbols": [
+      "NfSymbolType"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG carries the complete pinned NfSymbolType numeric ordering for the native compiled number-format token parser."
+    ],
+    "omittedResponsibilities": [
+      "The token definitions do not implement format scanning or classification by themselves."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/nfsymbol.ts",
+          "marker": "NfSymbolType"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/nfsymbol.hxx",
+          "marker": "NfSymbolType"
+        }
+      ]
+    }
+  }
+}

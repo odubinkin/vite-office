@@ -22,7 +22,22 @@
       "getLocaleAllFormats",
       "Formats",
       "getLocaleLanguageCountryInfo",
-      "getLocaleDateSeparator"
+      "getLocaleDateSeparator",
+      "getLocaleTime100SecSeparator",
+      "getLocaleTimeAM",
+      "getLocaleTimePM",
+      "getLocaleTrueWord",
+      "getLocaleFalseWord",
+      "getLocaleCalendarItems",
+      "calendarResources",
+      "dateAcceptanceResources",
+      "getLocaleDateAcceptancePatterns",
+      "LocaleCurrency",
+      "currencyResources",
+      "getLocaleCurrencies",
+      "getAllInstalledLocaleNames",
+      "getLocaleLongDateSeparators",
+      "getLocaleTimeSeparator"
     ],
     "upstreamSymbols": [
       "LocaleDataImpl::getLocaleItem2",
@@ -31,7 +46,12 @@
       "LocaleDataImpl::getTransliterations",
       "LocaleDataImpl::getAllFormats",
       "LocaleDataImpl::getLanguageCountryInfo",
-      "LocaleDataImpl::getLocaleItem"
+      "LocaleDataImpl::getLocaleItem",
+      "LocaleDataImpl::getReservedWord",
+      "LocaleDataImpl::getDateAcceptancePatterns",
+      "LocaleDataImpl::getAllCurrencies",
+      "LocaleDataImpl::getAllInstalledLocaleNames",
+      "getLocaleItem"
     ],
     "preservedResponsibilities": [
       "Task156 value checkpoint: SvxTabStop default/position/copy/assignment, independent mutable scalar lvalues, const borrowed values and position-only ordering are implemented over ordinary JS values. Constructor nul resolves through a field-specific browser system-locale binding using285original decimal resources and306source-projected language-only fallback results, including original numeric language-ID overrides. Native Locale first-name/language/en_US lookup and non-ISO fallback order are preserved; source krm spelling is retained. The system input uses raw browser language (Intl host locale only when unavailable), never current Intl decimal data. General SvtSysLocale/LocaleDataWrapper/LanguageTag service contracts and language-tag canonicalization are not claimed or replaced with fake classes; this is a narrow host/resource binding for the existing real tab consumer. Shared SortedVector is reused; insert/clone/snapshots copy tab values independently, payload equality ignores Which and counted zero spacing deduplicates. Existing unrelated paragraph-adjustment behavior remains unchanged. Full SvxTabStopItem typed Any/merge/hash and moving existing browser JSON APIs to Writer remain pending in this same task. No localized UI labels, ICU implementation, native compiler/probes or new lifetime engine.",
@@ -43,7 +63,14 @@
       "Adds the original getTransliterations resource-field responsibility with every ordered LC_TRANSLITERATION/ref result from all284 actual aLibTable locales from the285-XML tree (ti_ET is unregistered). The source-derived projection/checker mirrors LocaleNode::LCTransliterationNode ref generation;the existing real locale-name/language/qlt/default field resolver is generalized without changing prior decimal/measurement values. Returned module names use actual owned Sequence<OUString> values. This field binding does not implement the whole LocaleDataImpl/XLocaleData service,load native dynamic libraries,filter unimplemented services or promote semantic/default/readiness status. Native JavaScript handles physical data and lifetime.",
       "Task76 adds the original getAllFormats resource-field responsibility:both LC_FORMAT sections from all284 registered native locales,exact original order,FormatElement fields,ref chains and outer-to/leaf-from currency replacement. Generated resources contain15186 actual rows and are checked against the pinned XML/LocaleNode/filewriter implementations. Existing native locale/language/qlt/default fallback is reused;each query returns independent scalar value rows. This field binding is not a full LocaleDataImpl/UNO service and does not promote full formatter or Calc paste readiness.",
       "Task76 ports original NumberFormatCodeMapper default/index/usage/all-code queries,exact selector mapping and the original complete-Locale FIFO cache,including CALC-271 strict size>3/four-entry behavior. Native getAllFormats transport now returns real shared Sequence<FormatElement> compounds;actual generated NumberFormatCode fields,short widths,string copies and borrowed mutable references reuse existing SAL/CPPU construction,COW and destruction. No array-backed fake Sequence,new refcount/type provider or document binary representation is introduced. The prepared resource-field binding replaces only native LocaleData service-manager lookup;native mutex threads,UNO interface/service ABI and XServiceInfo are not claimed. Full SvNumberFormatter construction/scanning,ScCellFormat,document paste/history and task74 remain pending.",
-      "Task76 adds exact five LC_INFO fields and referenced LC_CTYPE DateSeparator for all284 registered services. The existing native locale resolver selects independent value projections;no whole LanguageCountryInfo UNO struct/service or fabricated locale identity is introduced. Generator --check compares all15186 existing format rows plus all identity/date records and native keyword language constants against pinned source. Native temporary query/fallback Locale and OUString owners are now released explicitly after primitive field extraction,without changing fallback order. CALC-274 retains ti_ET request fallback to en_US because native language-only fallback chooses unregistered ti_ET despite registered ti_ER."
+      "Task76 adds exact five LC_INFO fields and referenced LC_CTYPE DateSeparator for all284 registered services. The existing native locale resolver selects independent value projections;no whole LanguageCountryInfo UNO struct/service or fabricated locale identity is introduced. Generator --check compares all15186 existing format rows plus all identity/date records and native keyword language constants against pinned source. Native temporary query/fallback Locale and OUString owners are now released explicitly after primitive field extraction,without changing fallback order. CALC-274 retains ti_ET request fallback to en_US because native language-only fallback chooses unregistered ti_ET despite registered ti_ER.",
+      "Task AQF9AG projects LC_CTYPE Time100SecSeparator, TimeAM and TimePM from the pinned registered locale XML resources with the existing locale fallback order for the source number-input scanner.",
+      "Task AQF9AG projects LC_MISC TRUE_WORD and FALSE_WORD through the original generated reference chain and LocaleNode missing-field defaults for all 284 registered locale resources.",
+      "Task AQF9AG extracts default LC_CALENDAR unoid and month/day name sections with source reference resolution for all 284 registered locale services. The field binding keeps the native locale fallback and supplies the CalendarWrapper/input-scanner owner; default identities are 283 Gregorian and one Persian.",
+      "Task AQF9AG ports LocaleNode's explicit-before-generated date acceptance pattern arrays, including edit formatindex 21, separators and LC_FORMAT refs, for all 284 registered locales.",
+      "Task AQF9AG extracts LC_CURRENCY rows for all 284 registered locales in native aLibTable order, resolves generated section references, preserves Currency2 LegacyOnly and returns independent field projections through the existing native locale resolver. Installed Locale enumeration follows aLibTable order and source LC_INFO identities.",
+      "Task AQF9AG extracts the three wrapper-exposed LC_CTYPE long-date separators for all 284 services through generated section refs, without inferring them from host locale data.",
+      "Task AQF9AG projects the pinned LC_CTYPE TIME_SEPARATOR field for every installed locale in source order."
     ],
     "omittedResponsibilities": [
       "Complete LanguageTag/LocaleData service and configuration-event synchronization remain pending. Task188 implements public system fallback and current configured scalar field behavior."
@@ -85,6 +112,10 @@
         {
           "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
           "marker": "getLocaleLanguageCountryInfo"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+          "marker": "getLocaleTimeSeparator"
         }
       ],
       "upstream": [
@@ -111,6 +142,10 @@
         {
           "path": "vendor/libreoffice-reference/i18npool/source/localedata/localedata.cxx",
           "marker": "LocaleDataImpl::getLocaleItem"
+        },
+        {
+          "path": "i18npool/source/localedata/data/en_US.xml",
+          "marker": "TimeSeparator"
         }
       ]
     }

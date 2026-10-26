@@ -1,0 +1,22 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/textenc/textcvt.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/textenc/textcvt.cxx",
+    "localSymbols": ["ImplDummyToUnicode", "ImplUnicodeToDummy"],
+    "upstreamSymbols": ["ImplDummyToUnicode", "ImplUnicodeToDummy"],
+    "preservedResponsibilities": [
+      "For the default OString/OUString conversion flags, a missing converter copies each source byte to UTF-16 or truncates each UTF-16 unit to its low byte without throwing."
+    ],
+    "omittedResponsibilities": [
+      "Flag-specific error branches, destination-capacity/status cells, converter factories and all multibyte/contextual converter procedures remain unported."
+    ],
+    "evidence": {
+      "local": [{"path": "apps/office/src/sal/textenc/textcvt.ts", "marker": "ImplUnicodeToDummy"}],
+      "upstream": [{"path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx", "marker": "ImplUnicodeToDummy"}]
+    }
+  }
+}

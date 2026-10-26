@@ -13,19 +13,72 @@
       "getNumDecimalSep",
       "getNumDecimalSepAlt",
       "getNumThousandSep",
+      "loadDigitGrouping",
+      "getDigitGrouping",
       "getDateSep",
       "getLoadedLocale",
-      "createNumberFormatCodeMapper"
+      "createNumberFormatCodeMapper",
+      "getTime100SecSep",
+      "getTimeAM",
+      "getTimePM",
+      "getTrueWord",
+      "getFalseWord",
+      "getDateAcceptancePatterns",
+      "DateOrder",
+      "LongDateOrder",
+      "scanDateOrderImpl",
+      "loadDateOrders",
+      "getDateOrder",
+      "getLongDateOrder",
+      "getCurrSymbol",
+      "getCurrBankSymbol",
+      "getCurrDigits",
+      "scanCurrFormatImpl",
+      "loadCurrencyFormats",
+      "getCurrPositiveFormat",
+      "getCurrNegativeFormat",
+      "getCurrZeroChar",
+      "getAllCurrencies",
+      "getInstalledLocaleNames",
+      "getLongDateDayOfWeekSep",
+      "getLongDateDaySep",
+      "getLongDateMonthSep",
+      "getTimeSep"
     ],
     "upstreamSymbols": [
       "LocaleDataWrapper::mapMeasurementStringToEnum",
       "LocaleDataWrapper::getLoadedLanguageTag",
-      "NumberFormatMapper::create"
+      "NumberFormatMapper::create",
+      "LocaleDataWrapper::getDateAcceptancePatterns",
+      "LocaleDataWrapper::scanDateOrderImpl",
+      "LocaleDataWrapper::loadDateOrders",
+      "LocaleDataWrapper::getDateOrder",
+      "LocaleDataWrapper::getLongDateOrder",
+      "LocaleDataWrapper::loadData",
+      "LocaleDataWrapper::getCurrSymbol",
+      "LocaleDataWrapper::getCurrBankSymbol",
+      "LocaleDataWrapper::getCurrDigits",
+      "LocaleDataWrapper::scanCurrFormatImpl",
+      "LocaleDataWrapper::loadCurrencyFormats",
+      "LocaleDataWrapper::getCurrPositiveFormat",
+      "LocaleDataWrapper::getCurrNegativeFormat",
+      "LocaleDataWrapper::getAllCurrencies",
+      "LocaleDataWrapper::getInstalledLocaleNames"
     ],
     "preservedResponsibilities": [
       "Task185 adds real ScDocOptions/ScTpCalcItem with native defaults,memberwise copies,native-width scalar assignments,lazy shared SearchParam transitions and source equality including cached mode but omitting IgnoreLineBreaks. Existing locale fallback serves both original decimal and MeasurementSystem fields from285shipped LC_CTYPE resources;one system Locale binding is reused. Normal shipped Common.xcs TwoDigitYear1950 and unlimited precision65535 are bound as formatter default responsibilities,without fabricating a formatter/configuration service. Full user configuration,ScDocCfg,formatter/pools and complete Calc document/UI/ODS remain pending. GC handles physical ownership;source value behavior remains explicit.",
       "Task76 adds original cached decimal/alternate/group/date field projections as owned actual OUStrings for the consuming native language-data owner. getLoadedLocale projects the actual LC_INFO Locale consumed before original getLoadedLanguageTag constructs LanguageTag;it does not fabricate a LanguageTag or whole LocaleDataWrapper service. Actual Locale constructors/string copies/destruction preserve field ownership. Full wrapper/cache/service ABI and LanguageTag canonicalization remain unported.",
-      "The field-specific NumberFormatMapper::create context lookup is bound to actual owned NumberFormatCodeMapper instances. No replacement context,service manager,format database or numeric model is created;existing native provider/Sequence/Locale/SAL owners remain authoritative. Full UNO/reference/service-manager ABI is not claimed. The formatter owns the real provider through its clients and destroys it afterward."
+      "The field-specific NumberFormatMapper::create context lookup is bound to actual owned NumberFormatCodeMapper instances. No replacement context,service manager,format database or numeric model is created;existing native provider/Sequence/Locale/SAL owners remain authoritative. Full UNO/reference/service-manager ABI is not claimed. The formatter owns the real provider through its clients and destroys it afterward.",
+      "Task AQF9AG adds source loadDigitGrouping/getDigitGrouping with the loaded LC_INFO country: India and Bhutan use {3,2,0}, all others {3,0,0}. The actual UNO signed32 sequence is borrowed by the source DigitGroupingIterator.",
+      "Task AQF9AG caches the original locale time hundredth-second separator and AM/PM tokens as owned OUStrings for source input scanning.",
+      "Task AQF9AG owns the loaded LC_MISC true/false reserved words and refreshes them on locale change for the source format scanner.",
+      "Task AQF9AG owns the source-generated date acceptance pattern sequence, returns the same borrowed sequence reference, and refreshes its contents on locale change.",
+      "Task AQF9AG ports scanDateOrderImpl/loadDateOrders from the source-ordered DATE format sequence, preserving edit-index preference, medium/long defaults and localized legacy date letters.",
+      "Task AQF9AG caches the source default LC_CURRENCY symbol, bank symbol and decimal places, including the source first-entry and ShellsAndPebbles fallbacks, and refreshes these fields on locale change.",
+      "Task AQF9AG ports scanCurrFormatImpl/loadCurrencyFormats over source-ordered CURRENCY codes, retaining medium/default and negative-section selection, escaped quotes, bracketed currency tokens, symbol spacing and native positive/negative layout indices; getCurrZeroChar preserves the upstream ASCII-zero stub.",
+      "Task AQF9AG adds a wrapper-owned Locale for getAllCurrencies delegation and source-ordered installed Locale enumeration consumed by SvNumberFormatter currency table initialization.",
+      "Task AQF9AG owns and refreshes the native LC_CTYPE long-date day-of-week, day and month separators for the input scanner.",
+      "Task AQF9AG adds the source TIME_SEPARATOR getter with a stable borrowed OUString field, refreshed on locale change."
     ],
     "omittedResponsibilities": [
       "Full ScDocCfg,user configuration,formatter services and connected Calc document/UI/ODS remain pending."
@@ -39,6 +92,10 @@
         {
           "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
           "marker": "getNumDecimalSep"
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
+          "marker": "getTimeSep"
         }
       ],
       "upstream": [
@@ -69,6 +126,10 @@
         {
           "path": "vendor/libreoffice-reference/unotools/source/i18n/localedatawrapper.cxx",
           "marker": "NumberFormatMapper::create"
+        },
+        {
+          "path": "include/unotools/localedatawrapper.hxx",
+          "marker": "getTimeSep()"
         }
       ]
     }

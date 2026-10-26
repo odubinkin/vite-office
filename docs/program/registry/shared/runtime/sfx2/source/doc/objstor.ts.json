@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sfx2/source/doc/objstor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-csv-filter",
+    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": ["apps/office/src/sfx2/source/doc/objstor.ts#DetectCsvSeparators", "apps/office/src/sfx2/source/doc/objstor.test.ts", "sfx2/source/doc/objstor.cxx#SfxObjectShell::DetectCsvSeparators"],
+      "justification": "Task AQF9AG ports the source CSV separator scanner's sep= header, quoted-field skipping, per-line occurrence counts, distinct-count tie resolution, source priority order, 500ms bound and seek restoration. ICU charset detection remains outside this owner.",
+      "knownViolations": [],
+      "localSymbols": ["DetectCsvSeparators"],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sfx2/source/doc/objstor.cxx",
+      "upstreamSymbols": ["SfxObjectShell::DetectCsvSeparators"]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "text-csv-filter",
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/dbgui/asciiopt.ts",
+        "apps/office/src/sc/source/ui/dbgui/asciiopt.test.ts",
+        "vendor/libreoffice-reference/sc/source/ui/dbgui/asciiopt.cxx"
+      ],
+      "justification": "Task AQF9AG maps ScAsciiOptions CSV option parsing to the existing Calc document and file-dialog path. Numeric option tokens use the source o3tl::toInt32 prefix, overflow and narrowing behavior; source defaults, delimiter weighting and surplus-token tolerance are represented. ScImportExport::SetExtOptions copies ScAsciiOptions and its column metadata as the native owned value does. Task AQF9AG retains UTF-16 separator serialization and forwards DETECT separator input to SfxObjectShell::DetectCsvSeparators. ICU-based charset guessing, formatter-driven date/currency classification, rich edit-text, the native options dialog and the complete text filter remain incomplete and are not claimed as parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScAsciiOptions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/dbgui/asciiopt.cxx",
+      "upstreamSymbols": [
+        "ScAsciiOptions::ReadFromString"
+      ]
+    }
+  }
+}

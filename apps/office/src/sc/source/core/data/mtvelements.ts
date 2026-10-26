@@ -4,7 +4,12 @@ import {
   type base_element_block,
 } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
 import type { EventValueOps } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/main.ts";
-import { element_type_formula, element_type_cellnote } from "../../../inc/mtvelements";
+import {
+  element_type_formula,
+  element_type_cellnote,
+  element_type_edittext,
+  edittext_block,
+} from "../../../inc/mtvelements";
 import type { ScColumn } from "../../../inc/column";
 import {
   numeric_block,
@@ -18,6 +23,31 @@ import { ScRefCellValue } from "../../../inc/cellvalue";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import { ColumnBlockPosition } from "../../../inc/mtvelements";
 import type { ScDocument } from "../../../inc/document";
+import type { ScTable } from "../../../inc/table";
+
+/** Original one-sheet block-position cache used by ScDocumentImport. */
+export class TableColumnBlockPositionSet {
+  private readonly table: ScTable;
+  private readonly columns = new Map<number, ColumnBlockPosition>();
+  /** Resolves the native sheet once. @param document - Document. @param tab - Existing sheet. */
+  constructor(document: ScDocument, tab: number) {
+    const table = document.FetchTable(tab);
+    if (!table) throw new RangeError(`Passed table index ${tab} is invalid.`);
+    this.table = table;
+  }
+  /** Source insertion precedes initialization, including a retained failed entry. @param col - Column. @returns Cached position or null on failed initialization. */
+  getBlockPosition(col: number): ColumnBlockPosition | null {
+    const existing = this.columns.get(col);
+    if (existing) return existing;
+    const position = new ColumnBlockPosition();
+    this.columns.set(col, position);
+    return this.table.InitColumnBlockPosition(position, col) ? position : null;
+  }
+  /** Invalidates all hints after external store changes. @returns Nothing. */
+  invalidate(): void {
+    this.columns.clear();
+  }
+}
 /** Original per-document cached column cursor ownership;workers use independent instances rather than a physical mutex facade. */
 export class ColumnBlockPositionSet {
   private readonly maTables = new Map<number, Map<number, ColumnBlockPosition>>();
@@ -101,6 +131,8 @@ export function toRefCell(
   if (block.type === element_type_numeric)
     return new ScRefCellValue(numeric_block.at(data, offset));
   if (block.type === element_type_string) return new ScRefCellValue(string_block.at(data, offset));
+  if (block.type === element_type_edittext)
+    return new ScRefCellValue(edittext_block.at(data, offset));
   if (block.type === element_type_formula)
     return new ScRefCellValue(formula_block.at(data, offset) as ScFormulaCell);
   return new ScRefCellValue();

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/unotools/source/i18n/transliterationwrapper.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-format-input",
+    "capabilityIds": ["CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/unotools/source/i18n/transliterationwrapper.ts#TransliterationWrapper",
+        "apps/office/src/unotools/source/i18n/transliterationwrapper.test.ts",
+        "unotools/source/i18n/transliterationwrapper.cxx#TransliterationWrapper::isEqual"
+      ],
+      "justification": "Task AQF9AG maps the source IGNORE_CASE wrapper path to the already implemented native Transliteration_caseignore module. It preserves first-call loading, current-language reloading, source equals/isEqual forwarding, UNO-only failure handling and owned module lifetime. Other transliteration modes and UNO service construction are outside the represented slice.",
+      "knownViolations": [],
+      "localSymbols": ["TransliterationWrapper"],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "unotools/source/i18n/transliterationwrapper.cxx",
+      "upstreamSymbols": ["TransliterationWrapper::TransliterationWrapper", "TransliterationWrapper::loadModuleIfNeeded", "TransliterationWrapper::equals", "TransliterationWrapper::isEqual"]
+    }
+  }
+}

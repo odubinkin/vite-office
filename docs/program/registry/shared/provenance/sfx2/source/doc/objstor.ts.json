@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sfx2/source/doc/objstor.ts",
+    "status": "mapped",
+    "upstreamPath": "sfx2/source/doc/objstor.cxx",
+    "localSymbols": ["DetectCsvSeparators"],
+    "upstreamSymbols": ["SfxObjectShell::DetectCsvSeparators"],
+    "preservedResponsibilities": ["Task AQF9AG ports source CSV separator detection's header check, quote state, per-line common-character counts, stability selection, priority ordering, timeout and stream rewind."],
+    "omittedResponsibilities": ["DetectCsvFilterOptions and ICU-based charset detection remain outside this represented source path."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/sfx2/source/doc/objstor.ts", "marker": "function DetectCsvSeparators"}, {"path": "apps/office/src/sfx2/source/doc/objstor.test.ts", "marker": "counts common separators"}],
+      "upstream": [{"path": "sfx2/source/doc/objstor.cxx", "marker": "void SfxObjectShell::DetectCsvSeparators"}]
+    }
+  }
+}

@@ -8,6 +8,7 @@
     "upstreamPath": "sc/source/core/data/table2.cxx",
     "localSymbols": [
       "ScTable",
+      "SetName",
       "DeleteBeforeCopyFromClip",
       "CopyFromClip",
       "SetDirtyFromClip",
@@ -236,6 +237,10 @@
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::SetName"
+        },
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::SetValue"

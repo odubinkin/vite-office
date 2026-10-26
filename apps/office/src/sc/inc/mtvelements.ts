@@ -3,12 +3,14 @@ import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR } from "../../external/mdds/inclu
 import { SvtBroadcaster } from "../../svl/source/notify/broadcast";
 import type { SfxHint } from "../../svl/inc/hint";
 import type { ScFormulaCell } from "./formulacell";
+import type { EditTextObject } from "../../editeng/inc/editobj";
 import { CellStoreEvent, cell_store_event_value_ops } from "../source/core/data/mtvelements";
 export {
   CellStoreEvent,
   cell_store_event_value_ops,
   toRefCell,
   ColumnBlockPositionSet,
+  TableColumnBlockPositionSet,
 } from "../source/core/data/mtvelements";
 import { MDDS_MTV_DEFINE_ELEMENT_CALLBACKS } from "../../external/mdds/include/mdds/multi_type_vector/macro.ts";
 import { SharedString } from "../../svl/inc/sharedstring";
@@ -185,11 +187,27 @@ export const formula_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(
   null as ScFormulaCell | null,
   formula_block,
 );
-/** Supported scalar/formula alternatives, with native logical block events. Rich edit-text remains unsupported. */
+/** Native owned edit-text pointer block; the actual EditEngine object owns its paragraphs. */
+export const edittext_block = managed_element_block<EditTextObject>(element_type_edittext, {
+  /** Copies an inserted edit object when mdds copies a managed block. @param source - Source text. @returns Copy. */
+  copy_construct(source) {
+    return source.Clone();
+  },
+  /** Releases paragraphs when a cell is replaced or removed. @param value - Removed object. @returns Nothing. */
+  delete(value) {
+    value.dispose();
+  },
+});
+export const edittext_element_callbacks = MDDS_MTV_DEFINE_ELEMENT_CALLBACKS_PTR(
+  element_type_edittext,
+  null as EditTextObject | null,
+  edittext_block,
+);
+/** Native scalar, edit-text and formula alternatives, with logical block events. */
 export const CellStoreTraits = {
   ...default_traits,
   event_func: CellStoreEvent,
-  block_funcs: element_block_funcs(numeric_block, string_block, formula_block),
+  block_funcs: element_block_funcs(numeric_block, string_block, edittext_block, formula_block),
 };
 const cell_store_constructor = (multi_type_vector<CellStoreEvent>).bind(
   null,

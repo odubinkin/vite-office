@@ -8,8 +8,16 @@
     "upstreamPath": "comphelper/source/misc/date.cxx",
     "localSymbols": [
       "isLeapYear",
+      "yearToDays",
+      "convertDateToDays",
+      "convertDateToDaysNormalizing",
+      "convertDaysToDate",
       "getDaysInMonth",
       "isValidDate",
+      "YearToDays",
+      "convertDateToDays",
+      "convertDateToDaysNormalizing",
+      "convertDaysToDate",
       "normalize"
     ],
     "upstreamSymbols": [
@@ -17,7 +25,7 @@
       "normalize"
     ],
     "preservedResponsibilities": [
-      "Actual comphelper date.hxx/date.cxx validity,leap/month and normalization algorithms preserve source condition order,BCE traversal,empty/valid returns,year-zero skipping,month-driven signed16 narrowing and day-overflow clamps. DateFields projects the original three addressed uint16/uint16/int16 values. The native assert-enabled month/year preconditions are explicit;the postassert release-mode invalid-month return cannot be reached in this profile and is erased with that proof. CALC275-276 preserve suspicious BCE direction/month-year wrap. Calendar day-number conversion and broader date APIs remain unported."
+      "Actual comphelper date.hxx/date.cxx forward and inverse year/day counting, validity, leap/month and normalization algorithms preserve source integer division, condition order, BCE traversal, signed16 clamping, empty/valid returns, year-zero skipping, month-driven signed16 narrowing and day-overflow clamps. DateFields projects the original three addressed uint16/uint16/int16 values. The native assert-enabled month/year preconditions are explicit. CALC275-276 preserve suspicious BCE direction/month-year wrap. The common 1899-12-30 day number and normalizing conversion follow date.cxx. Broader calendar APIs remain unported."
     ],
     "omittedResponsibilities": [
       "Only represented native value/normalization responsibilities are ported;clock,UNO/calendar ABI,day arithmetic and full formatter/document integration remain unported."

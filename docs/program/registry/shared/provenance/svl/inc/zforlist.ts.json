@@ -12,7 +12,8 @@
       "NfIndexTableOffset",
       "SV_MAX_COUNT_STANDARD_FORMATS",
       "NUMBERFORMAT_ENTRY_NOT_FOUND",
-      "NfEvalDateFormat"
+      "NfEvalDateFormat",
+      "SvNumInputOptions"
     ],
     "upstreamSymbols": [
       "SvNumFormatType",
@@ -20,14 +21,16 @@
       "NfIndexTableOffset",
       "SV_MAX_COUNT_STANDARD_FORMATS",
       "NUMBERFORMAT_ENTRY_NOT_FOUND",
-      "NfEvalDateFormat"
+      "NfEvalDateFormat",
+      "SvNumInputOptions"
     ],
     "preservedResponsibilities": [
       "Block75 group ownership/listener work in progress adds original token GenHash,hash-aware copy/move/Clear and source-token equality. Size_t and double hashing bind to the observed libc++64 primitive profile,consistent with the existing OUStringHash64 target;11 real primitive outputs match normal and ASan/UBSan,without claiming whole Calc native differential or32-bit/other standard-library ABI parity. ScCompiler generates the hash at the original source-scanning stage. Original shared compiler return-format lifecycle and the SvNumFormatType values support actual cell/group metadata. The owned-array formula constructor now preserves existing RPN and errors rather than recompiling source order. ScFormulaCellGroup owns real shared code;cell creation,sharing/unsharing,synchronization,top destruction and position queries retain actual identities. Group listeners borrow actual mdds formula block pointers,select formulas under all fixed/relative row policies,and consume real sparse segmented ColumnSpanSet bulk spans. Area keys include the group flag;native ordinary/group bulk delivery,sorted listener-key teardown and actual Svt query result owners are represented. CALC255-256 retain source overnotification and conditional grouped-area ownership suspicions. This does not complete production column comparison/join/split/rejoin,group admission contexts,document modes,compileCode/compute-II services,table-operation cell services or clipboard fill/paste Undo. Those and final all-Calc/changed-shared raw100,browser/Worker/ODS/native observations and task acceptance remain pending. No broad behavior,contract or default parity is certified.",
       "Task76: Original SV_COUNTRY_LANGUAGE_OFFSET=10000 is shared by actual pattern and column General-format key handling. Formatter services remain separate unported owners.",
       "Task76 adds original General and currency index constants consumed by actual format-code selection.",
       "Native builtin limit100,missing-key uint32 sentinel and reserved-index bounds51/62 support actual format-table insertion.",
-      "Task76 adds original NfEvalDateFormat enum0..3 and International0 default used by actual language state;date parsing remains a separate unported responsibility."
+      "Task76 adds original NfEvalDateFormat enum0..3 and International0 default used by actual language state;date parsing remains a separate unported responsibility.",
+      "Task AQF9AG adds source NONE/LAX_TIME input flags for time classification."
     ],
     "omittedResponsibilities": [
       "Only represented value/notification responsibilities are implemented;remaining task75/native services and final acceptance are pending."

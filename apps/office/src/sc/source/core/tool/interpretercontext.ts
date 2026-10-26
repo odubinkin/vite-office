@@ -30,4 +30,17 @@ export class ScInterpreterContext {
   ): void {
     this.GetFormatTable().GetOutputString(value, key, output, color, useStarFormat);
   }
+  /** Original nonthreaded input-line string forwarding through the document's formatter. @param value - Numeric value. @param key - Format key. @param filtering - Source default false. @param forceSystemLocale - Source default false. @returns Owned input string. */
+  NFGetInputLineString(
+    value: number,
+    key: number,
+    filtering = false,
+    forceSystemLocale = false,
+  ): OUString {
+    return this.GetFormatTable().GetInputLineString(value, key, filtering, forceSystemLocale);
+  }
+  /** Forwards the source text-format predicate through the actual formatter. @param key - Native format key. @returns Text format. */
+  NFIsTextFormat(key: number): boolean {
+    return this.GetFormatTable().IsTextFormat(key);
+  }
 }

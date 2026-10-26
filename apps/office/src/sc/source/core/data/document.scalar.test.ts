@@ -74,10 +74,21 @@ it("keeps sheet positions,names and native invalid-coordinate defaults", /** Cle
   expect(doc.FetchTable(0)?.GetAllocatedColumnsCount()).toBe(count);
   expect(doc.GetName(99, name)).toBe(false);
   expect(text(name)).toBe("");
-  expect(
-    /** Rejects the explicitly unsupported edit-text alternative. @returns Nothing. */ () =>
-      doc.SetTextCell(new ScAddress(0, 0, 0), unicode("a\nb")),
-  ).toThrow(/Multiline/);
+  doc.SetTextCell(new ScAddress(0, 0, 0), unicode("a\nb"));
+  expect(doc.GetCellType(new ScAddress(0, 0, 0))).toBe(CellType.CELLTYPE_EDIT);
+});
+
+it("renames a sheet with source external-name and case-insensitive duplicate rules", () => {
+  const doc = new ScDocument();
+  expect(doc.InsertTab(0, unicode("First"))).toBe(true);
+  expect(doc.InsertTab(1, unicode("Data"))).toBe(true);
+  expect(doc.RenameTab(0, unicode("data"), true)).toBe(false);
+  expect(doc.RenameTab(0, unicode("bad/name"))).toBe(false);
+  expect(doc.RenameTab(0, unicode("bad/name"), true)).toBe(true);
+  const name = new OUString();
+  expect(doc.GetName(0, name)).toBe(true);
+  expect(text(name)).toBe("bad/name");
+  name.dispose();
 });
 
 it("reuses the real shared pool for literal strings and preserves empty-string cell identity", /** Distinguishes an explicitly stored empty shared string from a missing cell and text-input deletion. @returns Nothing. */ () => {

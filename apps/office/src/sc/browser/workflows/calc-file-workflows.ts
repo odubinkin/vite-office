@@ -82,18 +82,19 @@ export class CalcFileWorkflows {
     if (!(await openBrowserCalcDocument(this.controller.shell, this.Store(), id)))
       throw new Error("The saved document no longer exists.");
   }
-  /** Imports ODS with a collision-resolved identity and persists its primary copy. @param file - Source. @param bytes - Package. @param identity - Selected identity. @returns Completion. */
+  /** Imports ODS or CSV with a collision-resolved identity and persists its primary copy. @param file - Source. @param bytes - Input. @param identity - Selected identity. @returns Completion. */
   async Import(file: File, bytes: Uint8Array, identity: ImportedDocumentIdentity): Promise<void> {
     const store = this.Store(),
-      shell = this.controller.shell;
+      shell = this.controller.shell,
+      csv = /\.csv$/i.test(file.name);
     await shell.Open(
       bytes,
       createDocument({ id: identity.id, suiteId: "calc", title: identity.title }),
       {
         kind: "input",
         name: file.name,
-        filterId: "calc8",
-        mediaType: ScDocShell.ODS_MEDIA_TYPE,
+        filterId: csv ? ScDocShell.CSV_FILTER_NAME : "calc8",
+        mediaType: csv ? ScDocShell.CSV_MEDIA_TYPE : ScDocShell.ODS_MEDIA_TYPE,
         source: { kind: "external", reference: file },
       },
     );
@@ -115,6 +116,41 @@ export class CalcFileWorkflows {
           mediaType: ScDocShell.ODS_MEDIA_TYPE,
           name,
         }),
+    );
+  }
+  /** Routes native CSV sheet selection through the document shell, then downloads each resulting stream without changing primary identity. @param filterOptions - Native CSV filter string, if supplied. @returns Completion. */
+  async DownloadCsv(filterOptions?: string): Promise<void> {
+    const shell = this.controller.shell,
+      name = createDownloadFilename(shell.GetTitle(), ".csv");
+    await shell.Export(
+      {
+        kind: "export",
+        name,
+        filterId: ScDocShell.CSV_FILTER_NAME,
+        mediaType: ScDocShell.CSV_MEDIA_TYPE,
+        ...(filterOptions === undefined ? {} : { filterOptions }),
+      },
+      /** Delivers each stream produced from the export medium's native filter options. @param _document - Exported model. @param medium - Actual export medium. @returns Completion. */ async (
+        _document,
+        medium,
+      ) => {
+        const streams = shell.ConvertToCsv(
+          medium.filterOptions,
+          this.controller.viewData.GetTabNumber(),
+        );
+        for (const stream of streams)
+          this.documentExport.export({
+            data: stream.bytes,
+            mediaType: ScDocShell.CSV_MEDIA_TYPE,
+            name:
+              stream.sheetName === null
+                ? name
+                : createDownloadFilename(
+                    `${name.slice(0, -4)}-${stream.sheetName}`,
+                    name.slice(-4),
+                  ),
+          });
+      },
     );
   }
 }

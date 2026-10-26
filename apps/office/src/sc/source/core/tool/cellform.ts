@@ -11,6 +11,46 @@ import type { SharedStringConstReference } from "../../../../svl/inc/sharedstrin
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 /** Original static-only ScCellFormat API;the namespace has no substitute document or cell state. */
 export const ScCellFormat = {
+  /** Original GetInputString dispatch for scalar, edit and formula cells. The current formatter admits General; numeric formatting stays owned by NFGetInputLineString. @param cell - Borrowed cell. @param format - Format key. @param context - Actual context or null. @param doc - Actual document. @param filtering - Source default false. @param forceSystemLocale - Source default false. @returns Owned input text. */
+  GetInputString(
+    cell: ScRefCellValue,
+    format: number,
+    context: ScInterpreterContext | null,
+    doc: ScDocument,
+    filtering = false,
+    forceSystemLocale = false,
+  ): OUString {
+    const current = context ?? doc.GetNonThreadedContext();
+    switch (cell.getType()) {
+      case CellType.CELLTYPE_STRING:
+        return new OUString((cell.getSharedString() as SharedStringConstReference).getString());
+      case CellType.CELLTYPE_EDIT:
+        return cell.getEditText()?.GetText() ?? new OUString();
+      case CellType.CELLTYPE_VALUE:
+        return current.NFGetInputLineString(cell.getDouble(), format, filtering, forceSystemLocale);
+      case CellType.CELLTYPE_FORMULA: {
+        const formula = cell.getFormula() as ScFormulaCell;
+        let value: OUString | null = null;
+        if (formula.IsEmptyDisplayedAsString()) {
+          // Native optional remains disengaged.
+        } else if (formula.IsValue())
+          value = current.NFGetInputLineString(
+            formula.GetValue(),
+            format,
+            filtering,
+            forceSystemLocale,
+          );
+        else value = new OUString(formula.GetString().getString());
+        if (formula.GetErrCode() !== FormulaError.NONE) {
+          value?.dispose();
+          return new OUString();
+        }
+        return value ?? new OUString();
+      }
+      default:
+        return new OUString();
+    }
+  },
   /** Original first GetString overload preserves color reset,context selection and scalar/formula evaluation order. The admitted core has native macro level0;macro callbacks and their running-cell branch remain unported. @param cell - Actual borrowed cell. @param format - Native format key. @param color - Native output pointer. @param context - Actual context or native null. @param doc - Actual document. @param nullValues - Original defaulttrue display-zero flag. @param formula - Original defaultfalse formula-output flag. @param star - Original defaultfalse formatter flag. @returns Owned native output. */
   GetString(
     cell: ScRefCellValue,

@@ -106,8 +106,9 @@ const allowedEdges = new Map([
   ["sal", new Set(["o3tl"])],
   // Native SimpleReferenceObject uses SAL OSL interlocked operations;Library_salhelper links sal.
   ["salhelper", new Set(["sal"])],
-  // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
-  ["sax", new Set(["sal", "udkapi"])],
+  // Original converter.cxx uses comphelper::date and published util::DateTime;
+  // Library_sax links comphelper and uses the SDK API.
+  ["sax", new Set(["comphelper", "offapi", "sal", "udkapi"])],
   [
     "sc",
     new Set([
@@ -121,6 +122,8 @@ const allowedEdges = new Map([
       "framework",
       // Library_sc.mk links i18nlangtag; global.cxx includes i18nlangtag/mslangid.hxx.
       "i18nlangtag",
+      // Library_sc.mk links i18nutil; global.cxx constructs its TransliterationWrapper with i18nutil flags.
+      "i18nutil",
       "o3tl",
       "offapi",
       "package",
@@ -141,7 +144,8 @@ const allowedEdges = new Map([
     ]),
   ],
   // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
-  ["sfx2", new Set(["svl", "tools"])],
+  // Library_sfx.mk links SAL; objstor.cxx takes rtl_TextEncoding directly.
+  ["sfx2", new Set(["sal", "svl", "tools"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.
@@ -155,6 +159,8 @@ const allowedEdges = new Map([
       "comphelper",
       "cppu",
       "i18nlangtag",
+      // Original ondemand.hxx includes i18nutil/transliteration.hxx; Library_svl links i18nutil.
+      "i18nutil",
       "o3tl",
       "offapi",
       "sal",
@@ -261,11 +267,13 @@ const allowedEdges = new Map([
   // The browser field binding uses that producer and the original generated Locale triplet directly.
   // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
   // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
-  ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag"])],
+  // Original transliterationwrapper.cxx includes i18nutil flags and generated i18n Transliteration API.
+  ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi"])],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
-  ["tools", new Set(["o3tl", "cppu", "comphelper"])],
+  // Original stream.cxx includes rtl/string.hxx and rtl/ustring.hxx for text conversion.
+  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   ["xmloff", new Set(["udkapi", "cppu", "o3tl", "offapi", "sal", "sax", "tools", "unotools"])],

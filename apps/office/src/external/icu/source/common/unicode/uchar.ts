@@ -360,8 +360,20 @@ export enum UBlockCode {
 
 /** Consumed original integer property identities; remaining property declarations are unported. */
 export enum UProperty {
+  UCHAR_DEFAULT_IGNORABLE_CODE_POINT = 5,
   UCHAR_BLOCK = 0x1001,
+  UCHAR_EAST_ASIAN_WIDTH = 0x1004,
   UCHAR_SCRIPT = 0x100a,
+}
+
+/** Original ICU East Asian Width values used by Calc fixed-column import. */
+export enum UEastAsianWidth {
+  U_EA_NEUTRAL,
+  U_EA_AMBIGUOUS,
+  U_EA_HALFWIDTH,
+  U_EA_FULLWIDTH,
+  U_EA_NARROW,
+  U_EA_WIDE,
 }
 
 /** Original ICU78.3 general-category numeric identities. */

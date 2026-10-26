@@ -2,6 +2,29 @@
 import { expect, it } from "vitest";
 import { formatStandardNumber } from "./zformat";
 import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
+
+it("reads the first source currency token and only its adjacent extension", () => {
+  const section = new ImpSvNumFor(), symbol = unicode("old"), extension = unicode("old-ext"),
+    curr = unicode("DM"), suffix = unicode("407");
+  try {
+    expect(section.GetNewCurrencySymbol(symbol, extension)).toBe(false);
+    expect([text(symbol), text(extension)]).toEqual(["old", "old-ext"]);
+    section.Enlarge(2);
+    const info = section.Info();
+    info.nTypeArray[0] = NfSymbolType.CURRENCY;
+    info.nTypeArray[1] = NfSymbolType.CURREXT;
+    (info.sStrArray[0] as typeof symbol).assign(curr);
+    (info.sStrArray[1] as typeof symbol).assign(suffix);
+    expect(section.HasNewCurrency()).toBe(true);
+    expect(section.GetNewCurrencySymbol(symbol, extension)).toBe(true);
+    expect([text(symbol), text(extension)]).toEqual(["DM", "407"]);
+    info.nTypeArray[1] = NfSymbolType.STRING;
+    expect(section.GetNewCurrencySymbol(symbol, extension)).toBe(true);
+    expect(text(extension)).toBe("");
+  } finally {
+    section.dispose(); suffix.dispose(); curr.dispose(); extension.dispose(); symbol.dispose();
+  }
+});
 /** Reads and releases the real returned OUString. @param value - Input value. @param precision - Actual standard precision. @param decimal - Locale decimal unit. @returns Displayed text. */
 function formatted(value: number, precision = UNLIMITED_PRECISION, decimal = "."): string {
   const output = formatStandardNumber(value, precision, decimal.charCodeAt(0));
@@ -63,6 +86,156 @@ import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvNumFormatType } from "../../inc/zforlist";
+import { NfKeywordIndex } from "../../inc/nfkeytab";
+import { NfSymbolType } from "../../inc/nfsymbol";
+
+it("finds source literal/currency tokens in either direction and checks edge minus signs", () => {
+  const mapper = new NumberFormatCodeMapper(),
+    locale = new Locale(unicode("en"), unicode("US"), unicode("")),
+    mapped = mapper.getFormatCode(0, locale),
+    name = extractStandardGeneralName(mapped.Code),
+    localeData = new LocaleDataWrapper(locale),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    code = unicode("General"),
+    format = new SvNumberformat(code, scanner, [0], [0x0409]),
+    section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[1] as ImpSvNumFor,
+    word = unicode(" - "), currency = unicode("USD"), interior = unicode("A-B");
+  try {
+    section.Enlarge(3);
+    const info = section.Info();
+    info.nTypeArray.splice(0, 3, NfSymbolType.DIGIT, NfSymbolType.STRING, NfSymbolType.CURRENCY);
+    (info.sStrArray[1] as typeof word).assign(word);
+    (info.sStrArray[2] as typeof currency).assign(currency);
+    const first = format.GetNumForString(1, 0, true),
+      last = format.GetNumForString(1, 0xffff, true);
+    expect(first && text(first)).toBe(" - ");
+    expect(last && text(last)).toBe("USD");
+    expect(format.GetNumForString(2, 0, true)).toBeNull();
+    expect(format.IsNumForStringElementCountEqual(1, 3, 1)).toBe(true);
+    expect(format.IsNumForStringElementCountEqual(1, 2, 0)).toBe(true);
+    expect(format.IsNumForStringElementCountEqual(1, 2, 1)).toBe(false);
+    info.eScannedType = SvNumFormatType.CURRENCY;
+    expect(format.GetNumForInfoScannedType(1)).toBe(SvNumFormatType.CURRENCY);
+    expect(format.GetNumForInfoScannedType(4)).toBe(SvNumFormatType.UNDEFINED);
+    expect(format.IsSecondSubformatRealNegative()).toBe(true);
+    expect(format.IsNegativeWithoutSign()).toBe(false);
+    expect(SvNumberformat.HasStringNegativeSign(interior)).toBe(false);
+    expect(SvNumberformat.HasStringNegativeSign(word)).toBe(true);
+  } finally {
+    interior.dispose(); currency.dispose(); word.dispose(); format.dispose(); code.dispose();
+    scanner.dispose(); localeData.dispose(); name.dispose(); mapped.dispose(); mapper.dispose(); locale.dispose();
+  }
+});
+import { DateOrder, LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
+
+it("recognizes the source compiled minute-second token grammar", () => {
+  const language = unicode("en"),
+    country = unicode("US"),
+    empty = unicode(""),
+    locale = new Locale(language, country, empty),
+    mapper = new NumberFormatCodeMapper(),
+    mapped = mapper.getFormatCode(0, locale),
+    name = extractStandardGeneralName(mapped.Code),
+    localeData = new LocaleDataWrapper(locale),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    code = unicode("general"),
+    entry = new SvNumberformat(code, scanner, [0], [0x0409]);
+  const first = (entry as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
+  /** Loads actual compiled token slots, as the format scanner does before the source predicate is called. @param tokens - Native token types and text. @returns Nothing. */
+  function load(tokens: readonly (readonly [number, string])[]): void {
+    first.Enlarge(tokens.length);
+    tokens.forEach(([type, value], index) => {
+      first.Info().nTypeArray[index] = type;
+      const string = unicode(value);
+      try {
+        (first.Info().sStrArray[index] as import("../../../sal/inc/rtl/ustring").OUString).assign(
+          string,
+        );
+      } finally {
+        string.dispose();
+      }
+    });
+  }
+  try {
+    load([
+      [NfKeywordIndex.MI, "MM"],
+      [NfSymbolType.TIMESEP, ":"],
+      [NfKeywordIndex.SS, "SS"],
+    ]);
+    expect(entry.IsMinuteSecondFormat()).toBe(false);
+    entry.SetType(SvNumFormatType.TIME);
+    expect(entry.IsMinuteSecondFormat()).toBe(true);
+    load([
+      [NfSymbolType.DEL, "["],
+      [NfKeywordIndex.MMI, "MM"],
+      [NfSymbolType.DEL, "]"],
+      [NfSymbolType.TIMESEP, ":"],
+      [NfKeywordIndex.S, "S"],
+      [NfSymbolType.TIME100SECSEP, "."],
+      [NfSymbolType.DIGIT, "0"],
+    ]);
+    expect(entry.IsMinuteSecondFormat()).toBe(true);
+    load([
+      [NfKeywordIndex.H, "H"],
+      [NfSymbolType.TIMESEP, ":"],
+      [NfKeywordIndex.MI, "M"],
+      [NfSymbolType.TIMESEP, ":"],
+      [NfKeywordIndex.S, "S"],
+    ]);
+    expect(entry.IsMinuteSecondFormat()).toBe(false);
+  } finally {
+    entry.dispose();
+    code.dispose();
+    scanner.dispose();
+    localeData.dispose();
+    name.dispose();
+    mapped.dispose();
+    mapper.dispose();
+    locale.dispose();
+    language.dispose();
+    country.dispose();
+    empty.dispose();
+  }
+});
+
+it("derives original date order from compiled first-subformat tokens", () => {
+  const language = unicode("en"),
+    country = unicode("US"),
+    empty = unicode("");
+  const locale = new Locale(language, country, empty),
+    mapper = new NumberFormatCodeMapper(),
+    mapped = mapper.getFormatCode(0, locale),
+    name = extractStandardGeneralName(mapped.Code),
+    localeData = new LocaleDataWrapper(locale),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    code = unicode("general"),
+    entry = new SvNumberformat(code, scanner, [0], [0x0409]);
+  try {
+    expect(entry.GetDateOrder()).toBe(DateOrder.MDY);
+    expect(entry.GetExactDateOrder()).toBe(0);
+    entry.SetType(SvNumFormatType.DATE);
+    const first = (entry as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
+    first.Enlarge(3);
+    first.Info().nTypeArray.splice(0, 3, NfKeywordIndex.YYYY, NfKeywordIndex.MM, NfKeywordIndex.DD);
+    expect(entry.GetDateOrder()).toBe(DateOrder.YMD);
+    expect(entry.GetExactDateOrder()).toBe(0x594d44);
+    first.Info().nTypeArray.splice(0, 3, NfKeywordIndex.DD, NfKeywordIndex.MM, NfKeywordIndex.YYYY);
+    expect(entry.GetDateOrder()).toBe(DateOrder.DMY);
+    expect(entry.GetExactDateOrder()).toBe(0x444d59);
+  } finally {
+    entry.dispose();
+    code.dispose();
+    scanner.dispose();
+    localeData.dispose();
+    name.dispose();
+    mapped.dispose();
+    mapper.dispose();
+    locale.dispose();
+    empty.dispose();
+    country.dispose();
+    language.dispose();
+  }
+});
 
 it("owns compiled subformat tokens with original resize,copy and scalar defaults", /** Real OUString slots retain their prefix identity and independent copied lifetimes. @returns Nothing. */ () => {
   const source = new ImpSvNumFor(),
@@ -124,8 +297,14 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     mapper = new NumberFormatCodeMapper(),
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish),
-    otherScanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.LocaleLegacy),
+    localeData = new LocaleDataWrapper(locale),
+    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    otherScanner = new ImpSvNumberformatScan(
+      locale,
+      name,
+      KeywordLocalization.LocaleLegacy,
+      localeData,
+    ),
     code = unicode("general"),
     out = unicode("previous"),
     check: [number] = [-1];
@@ -179,6 +358,7 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     entry.dispose();
     otherScanner.dispose();
     scanner.dispose();
+    localeData.dispose();
     name.dispose();
     mapped.dispose();
     mapper.dispose();

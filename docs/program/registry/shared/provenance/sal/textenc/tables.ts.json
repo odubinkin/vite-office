@@ -1,0 +1,22 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/textenc/tables.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/textenc/tables.cxx",
+    "localSymbols": ["Impl_getByteConvertData"],
+    "upstreamSymbols": ["Impl_getTextEncodingData"],
+    "preservedResponsibilities": [
+      "Lookup of 55 native single-byte converter descriptors, generated from the authenticated LibreOffice descriptor capture already used by SAL converter tests."
+    ],
+    "omittedResponsibilities": [
+      "The original registry also owns multibyte/contextual converters and factory dispatch. Metadata for represented encodings is owned by tencinfo.ts; other registry branches remain unported."
+    ],
+    "evidence": {
+      "local": [{"path": "apps/office/src/sal/textenc/tables.ts", "marker": "Impl_getByteConvertData"}],
+      "upstream": [{"path": "vendor/libreoffice-reference/sal/textenc/tables.cxx", "marker": "Impl_getTextEncodingData"}]
+    }
+  }
+}

@@ -8,7 +8,8 @@
     "upstreamPath": "include/unotools/charclass.hxx",
     "localSymbols": [
       "uppercase",
-      "CharClassUppercaseReference"
+      "CharClassUppercaseReference",
+      "CharClass"
     ],
     "upstreamSymbols": [
       "CharClass",
@@ -16,7 +17,8 @@
     ],
     "preservedResponsibilities": [
       "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending.",
-      "Task167 exposes only the erased original const receiver uppercase operation consumed by SharedStringPool; this is not a constructed classifier/service."
+      "Task167 exposes only the erased original const receiver uppercase operation consumed by SharedStringPool; this is not a constructed classifier/service.",
+      "Task AQF9AG also exposes the concrete immutable-locale CharClass from this header boundary."
     ],
     "omittedResponsibilities": [
       "Full class/service construction, other classification/transliteration operations, diagnostic logging and actual Calc string pool/document/UI/ODS owners remain unimplemented."

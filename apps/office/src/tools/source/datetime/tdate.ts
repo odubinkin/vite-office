@@ -1,5 +1,5 @@
-/** @fileoverview Original tools::Date packed value,DMY/copy construction,validity and Normalize responsibilities over the actual shared comphelper date algorithms. System clock,UNO conversion,day arithmetic and other operations remain unported. */
-import { isValidDate, normalize, type DateFields } from "../../../comphelper/source/misc/date";
+/** @fileoverview Original tools::Date packed value,DMY/copy construction,validity, normalization and normalized-day counting over the actual shared comphelper date algorithms. System clock,UNO conversion and other operations remain unported. */
+import { convertDateToDays, convertDaysToDate, isValidDate, normalize, type DateFields } from "../../../comphelper/source/misc/date";
 /** Original borrowed const Date value contract,with no new lifetime owner. */
 export interface DateConstReference {
   /** Original raw packed field. @returns Signed32 date. */
@@ -14,6 +14,8 @@ export interface DateConstReference {
   GetYear(): number;
   /** Original calendar validity. @returns Validity. */
   IsValidDate(): boolean;
+  /** Original normalized day number. @returns Day number from zero. */
+  GetAsNormalizedDays(): number;
 }
 /** Original packed signed32 date value;no JavaScript Date or alternate calendar backend is used. */
 export class Date implements DateConstReference {
@@ -65,6 +67,18 @@ export class Date implements DateConstReference {
   /** Original validity delegates actual extracted fields to comphelper. @returns Validity. */
   IsValidDate(): boolean {
     return isValidDate(this.GetDay(), this.GetMonth(), this.GetYear());
+  }
+  /** Original null-date fast path and normalized day conversion without changing this packed value. @returns Day number from zero. */
+  GetAsNormalizedDays(): number {
+    if (this.mnDate === 18991230) return 693594;
+    const fields: DateFields = [this.GetDay(), this.GetMonth(), this.GetYear()];
+    normalize(fields);
+    return convertDateToDays(...fields);
+  }
+  /** Original AddDays leaves a zero increment untouched and reconstructs via the clamped inverse conversion. @param days - Signed32 day delta. @returns Nothing. */
+  AddDays(days: number): void {
+    days |= 0;
+    if (days !== 0) this.setDateFromDMY(...convertDaysToDate((this.GetAsNormalizedDays() + days) | 0));
   }
   /** Original Normalize only repacks when the shared algorithm reports a change. @returns Nothing. */
   Normalize(): void {

@@ -76,6 +76,8 @@ export class SfxMedium {
   readonly source: Readonly<SfxMediumSource>;
   /** Filter identity selected independently of its MIME type. */
   readonly filterId?: string;
+  /** Native filter options carried by the medium item set. */
+  readonly filterOptions?: string;
   private open = true;
 
   /** Creates one explicit medium identity. @param input - Validated medium route. @returns Nothing. */
@@ -96,6 +98,7 @@ export class SfxMedium {
     this.readOnly = defaults.readOnly;
     this.source = Object.freeze(source);
     if (input.filterId !== undefined) this.filterId = input.filterId;
+    if (input.filterOptions !== undefined) this.filterOptions = input.filterOptions;
     if (input.mediaType !== undefined) this.mediaType = input.mediaType;
   }
 
@@ -140,6 +143,7 @@ export class SfxMedium {
 interface SfxMediumInputCommon {
   readonly displayName?: string;
   readonly filterId?: string;
+  readonly filterOptions?: string;
   readonly lastOperation?: SfxMediumOperationStatus;
   readonly mediaType?: string;
   readonly name: string;

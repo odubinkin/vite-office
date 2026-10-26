@@ -24,6 +24,28 @@ import { ScMergeAttr } from "../../../inc/attrib";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import { ATTR_MERGE } from "../../../inc/scitems";
 import type { CopyFromClipContext } from "../../../inc/clipcontext";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
+import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+/** Returns the data-only extent consumed by the native text exporter. @param this - Table. @param endCol - Last column. @param endRow - Last row. @returns Whether data exists. */
+export function GetCellArea(this: ScTable, endCol: [number], endRow: [number]): boolean {
+  this.GetLastDataPos(endCol, endRow);
+  return this["aCol"].some((column) => !column.IsEmptyData());
+}
+/** Stores an owned EditEngine cell object at a valid position. @param this - Table. @param col - Column. @param row - Row. @param value - Object. @returns Nothing. */
+export function SetEditText(this: ScTable, col: number, row: number, value: EditTextObject): void {
+  if (this["rDocument"].ValidColRow(col, row))
+    this.CreateColumnIfNotExists(col).SetEditText(row, value);
+}
+/** Writes a shared string at a valid cell. @param this - Table. @param col - Column. @param row - Row. @param value - Shared string. @returns Nothing. */
+export function SetRawString(
+  this: ScTable,
+  col: number,
+  row: number,
+  value: SharedStringConstReference,
+): void {
+  if (this["rDocument"].ValidColRow(col, row))
+    this.CreateColumnIfNotExists(col).SetRawString(row, value);
+}
 /** Original validated general clipboard rectangle;CONTENTS preserves destination attributes and row/column geometry. @param this - Actual destination sheet. @param context - Native paste context. @param col1 - First destination column. @param row1 - First destination row. @param col2 - Last destination column. @param row2 - Last destination row. @param dx - Source-to-destination column displacement. @param dy - Source-to-destination row displacement. @param source - Actual clipboard sheet. @returns Nothing. */
 export function CopyFromClip(
   this: ScTable,

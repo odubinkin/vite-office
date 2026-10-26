@@ -20,15 +20,20 @@
         "apps/office/src/sc/source/core/tool/stringutil.test.ts",
         "vendor/libreoffice-reference/sc/source/core/tool/stringutil.cxx"
       ],
-      "justification": "Task YYAGKX ports the Unicode ScStringUtil::parseSimpleNumber scanner with original space/NBSP trimming and group normalization, decimal/alternative separators, first-group permissiveness, three-digit subsequent groups, exponent/sign ordering and scientific default true. Real RTL Unicode conversion preserves binary64 status, full parse-end checks and output-reference assignment on converter failure; early prechecks preserve the output. JS code-unit arrays replace only the temporary native Unicode buffer. The original testCSV numeric cases are executed plus source-derived boundaries. No Number coercion, new locale/formatter service, byte overload, other ScStringUtil operation or full module parity claim.",
+      "justification": "Task YYAGKX ports the Unicode ScStringUtil::parseSimpleNumber scanner with original space/NBSP trimming and group normalization, decimal/alternative separators, first-group permissiveness, three-digit subsequent groups, exponent/sign ordering and scientific default true. Real RTL Unicode conversion preserves binary64 status, full parse-end checks and output-reference assignment on converter failure; early prechecks preserve the output. JS code-unit arrays replace only the temporary native Unicode buffer. The original testCSV numeric cases are executed plus source-derived boundaries. Task AQF9AG adds ScSetStringParam's source defaults, TextFormatPolicy values, text/numeric switches and unchanged formatter/listening/link members, and ScStringUtil::isMultiline's CR/LF scan for the CSV literal branch. Full formatter/date input classification, byte overload, other ScStringUtil operations and full module parity remain unported.",
       "knownViolations": [],
       "localSymbols": [
-        "ScStringUtil"
+        "ScStringUtil",
+        "ScSetStringParam"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sc/source/core/tool/stringutil.cxx",
       "upstreamSymbols": [
-        "ScStringUtil::parseSimpleNumber"
+        "ScStringUtil::parseSimpleNumber",
+        "ScStringUtil::isMultiline",
+        "ScSetStringParam::ScSetStringParam",
+        "ScSetStringParam::setTextInput",
+        "ScSetStringParam::setNumericInput"
       ]
     }
   }

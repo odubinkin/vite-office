@@ -10,6 +10,14 @@ import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../../sal/inc/rtl/string.h
 import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
 
 describe("original bounded signed integer conversion", /** Groups the actual shared native dependency observations. @returns Nothing. */ () => {
+  it("adapts JavaScript UTF-16 strings to the same bounded source view", () => {
+    for (const token of ["2x", "-7suffix", "2147483648", "4294967296", "😀12", "  +19!"]) {
+      const units = Uint16Array.from({ length: token.length }, (_, index) =>
+        token.charCodeAt(index),
+      );
+      expect(toInt32(token)).toBe(toInt32(units));
+    }
+  });
   it("matches every complete original integer, predicate, prefix and default result", /** Observes all original output bytes using actual shared runtime owners. @returns Nothing. */ () => {
     const expected = gunzipSync(Buffer.from(fixture.integer.gzipBase64, "base64")),
       actual = Buffer.alloc(expected.length);

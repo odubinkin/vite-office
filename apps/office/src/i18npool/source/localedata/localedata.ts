@@ -2,7 +2,13 @@
 import transliterations from "./data/transliterations.json" with { type: "json" };
 import languageCountryInfo from "./data/language-country-info.json" with { type: "json" };
 import dateSeparators from "./data/date-separators.json" with { type: "json" };
+import timeFields from "./data/time-fields.json" with { type: "json" };
+import reservedWords from "./data/reserved-words.json" with { type: "json" };
 import numberFormats from "./data/number-formats.json" with { type: "json" };
+import calendarItems from "./data/calendar-items.json" with { type: "json" };
+import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
+import currencies from "./data/currencies.json" with { type: "json" };
+import longDateSeparators from "./data/long-date-separators.json" with { type: "json" };
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import numeric from "./data/numeric-separators.json" with { type: "json" };
 import separators from "./data/decimal-separators.json" with { type: "json" };
@@ -42,6 +48,46 @@ export interface LocaleFormatElement {
 const numberFormatResources = new Map<string, readonly LocaleFormatElement[]>(
   Object.entries(numberFormats),
 );
+/** Original default LC_CALENDAR name arrays with generated section refs resolved. */
+const calendarResources = new Map<string, LocaleCalendarItems>(Object.entries(calendarItems));
+/** Original generated getDateAcceptancePatterns_ arrays in source order. */
+const dateAcceptanceResources = new Map<string, readonly string[]>(
+  Object.entries(dateAcceptancePatterns),
+);
+/** Original source-ordered LC_CURRENCY rows after generated section references. */
+const currencyResources = new Map<string, readonly LocaleCurrency[]>(Object.entries(currencies));
+/** Native LC_CTYPE separators used in long-date input and format matching. */
+const longDateResources = new Map<string, LocaleLongDateSeparators>(Object.entries(longDateSeparators));
+/** Original generated LocaleDataItem2 long-date separator fields. */
+export interface LocaleLongDateSeparators {
+  readonly dayOfWeek: string;
+  readonly day: string;
+  readonly month: string;
+}
+/** Original Currency2 fields consumed by the locale wrapper and number-format currency table. */
+export interface LocaleCurrency {
+  readonly id: string;
+  readonly symbol: string;
+  readonly bankSymbol: string;
+  readonly name: string;
+  readonly decimalPlaces: number;
+  readonly default: boolean;
+  readonly usedInCompatibleFormatCodes: boolean;
+  readonly legacyOnly: boolean;
+}
+/** CalendarItem2 name fields consumed by CalendarWrapper and number input scanning. */
+export interface LocaleCalendarItem {
+  readonly full: string;
+  readonly abbreviated: string;
+}
+/** Ordered source default-calendar name sections; alternate calendars remain separate. */
+export interface LocaleCalendarItems {
+  readonly id: string;
+  readonly months: readonly LocaleCalendarItem[];
+  readonly genitiveMonths: readonly LocaleCalendarItem[];
+  readonly partitiveMonths: readonly LocaleCalendarItem[];
+  readonly days: readonly LocaleCalendarItem[];
+}
 /** Actual embedded decimal resource values;no current Intl data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
 /** Original LC_CTYPE measurement resource values. */
@@ -110,15 +156,88 @@ const languageCountryResources = new Map<string, LocaleLanguageCountryInfo>(
 );
 /** Source-generated original LC_CTYPE DateSeparator after native ref resolution. */
 const dateResources = new Map<string, string>(Object.entries(dateSeparators));
+/** Actual referenced LC_CTYPE time fields in native registered-locale order. */
+const timeResources = new Map<
+  string,
+  { timeSeparator: string; time100SecSeparator: string; timeAM: string; timePM: string }
+>(Object.entries(timeFields));
+/** Generated LC_MISC TRUE_WORD/FALSE_WORD fields after native ref and missing-field fallback. */
+const reservedResources = new Map<string, { trueWord: string; falseWord: string }>(
+  Object.entries(reservedWords),
+);
 /** Actual loaded LC_INFO fields use the same native service resolution as other fields;the caller receives its own value projection. @param locale - Original requested locale. @returns Loaded locale identity fields. */
 export function getLocaleLanguageCountryInfo(
   locale: LocaleConstReference,
 ): LocaleLanguageCountryInfo {
   return { ...getLocaleDataField(locale, languageCountryResources) };
 }
+/** Returns source-ordered default-calendar names using the native locale service fallback. @param locale - Requested locale. @returns Pinned LC_CALENDAR name sections. */
+export function getLocaleCalendarItems(locale: LocaleConstReference): LocaleCalendarItems {
+  const source = getLocaleDataField(locale, calendarResources);
+  return {
+    id: source.id,
+    months: source.months.map((item) => ({ ...item })),
+    genitiveMonths: source.genitiveMonths.map((item) => ({ ...item })),
+    partitiveMonths: source.partitiveMonths.map((item) => ({ ...item })),
+    days: source.days.map((item) => ({ ...item })),
+  };
+}
+/** Original generated date acceptance patterns, including those derived from the edit format. @param locale - Requested locale. @returns Independent ordered pattern values. */
+export function getLocaleDateAcceptancePatterns(locale: LocaleConstReference): string[] {
+  return [...getLocaleDataField(locale, dateAcceptanceResources)];
+}
+/** Original getAllCurrencies source order and locale-service fallback, with independently owned value rows. @param locale - Requested locale. @returns Currency2 scalar rows. */
+export function getLocaleCurrencies(locale: LocaleConstReference): LocaleCurrency[] {
+  return getLocaleDataField(locale, currencyResources).map((row) => ({ ...row }));
+}
+/** Original getLocaleItem2 long-date fields, resolved through the same locale service/ref chain. @param locale - Requested locale. @returns Independent scalar fields. */
+export function getLocaleLongDateSeparators(locale: LocaleConstReference): LocaleLongDateSeparators {
+  return { ...getLocaleDataField(locale, longDateResources) };
+}
+/** Original installed-locale enumeration follows aLibTable, not sorted LC_INFO keys. Every caller owns its returned Locale values. @returns Source-ordered installed locales. */
+export function getAllInstalledLocaleNames(): Locale[] {
+  return Object.keys(currencies).map((name) => {
+    const info = languageCountryResources.get(name);
+    if (!info) throw new Error(`Pinned locale identity is absent: ${name}`);
+    const language = unicode(info.Language),
+      country = unicode(info.Country),
+      variant = unicode(info.Variant);
+    try {
+      return new Locale(language, country, variant);
+    } finally {
+      variant.dispose();
+      country.dispose();
+      language.dispose();
+    }
+  });
+}
 /** Original date-separator field with the same locale/ref fallback. @param locale - Requested locale. @returns Source date separator. */
 export function getLocaleDateSeparator(locale: LocaleConstReference): string {
   return getLocaleDataField(locale, dateResources);
+}
+/** Original LocaleDataItem2 hundredth-second separator from generated LC_CTYPE. @param locale - Requested locale. @returns Source field. */
+export function getLocaleTime100SecSeparator(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, timeResources).time100SecSeparator;
+}
+/** Original LocaleDataItem2 time separator from generated LC_CTYPE. @param locale - Requested locale. @returns Source field. */
+export function getLocaleTimeSeparator(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, timeResources).timeSeparator;
+}
+/** Original locale AM token from generated LC_CTYPE. @param locale - Requested locale. @returns Source field. */
+export function getLocaleTimeAM(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, timeResources).timeAM;
+}
+/** Original locale PM token from generated LC_CTYPE. @param locale - Requested locale. @returns Source field. */
+export function getLocaleTimePM(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, timeResources).timePM;
+}
+/** Original reservedWords TRUE_WORD slot. @param locale - Requested locale. @returns Loaded native word. */
+export function getLocaleTrueWord(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, reservedResources).trueWord;
+}
+/** Original reservedWords FALSE_WORD slot. @param locale - Requested locale. @returns Loaded native word. */
+export function getLocaleFalseWord(locale: LocaleConstReference): string {
+  return getLocaleDataField(locale, reservedResources).falseWord;
 }
 
 /** Original decimal field through shared locale-name fallback resolution. @param locale - Prepared locale. @returns Separator. */

@@ -4,11 +4,279 @@ import { ScXMLImportWrapper } from "../../filter/xml/xmlwrap";
 import { CalcViewController } from "../../../browser/controller/calc-view-controller";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
+import { ScDocShell } from "./docsh";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ScImportOptions } from "../dbgui/imoptdlg";
+import {
+  RTL_TEXTENCODING_ASCII_US,
+  RTL_TEXTENCODING_MS_1252,
+  RTL_TEXTENCODING_MS_1251,
+  RTL_TEXTENCODING_UNICODE,
+  RTL_TEXTENCODING_UTF8,
+} from "../../../../sal/inc/rtl/textenc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
 /** Builds valid replacement state. @param title - Title. @returns State. */
 function state(title = "Opened") {
   return createDocument({ id: crypto.randomUUID(), suiteId: "calc", title });
 }
+
+it("opens CSV through the text filter and exports the canonical cells without adopting the export medium", async () => {
+  const shell = new ScDocShell();
+  const bytes = new TextEncoder().encode('Name,Amount,Formula\n"A, B",42,=B2*2\n');
+  await shell.Open(bytes, state("Imported CSV"), {
+    kind: "input",
+    name: "input.csv",
+    filterId: ScDocShell.CSV_FILTER_NAME,
+    mediaType: ScDocShell.CSV_MEDIA_TYPE,
+    source: { kind: "external", reference: bytes },
+  });
+  const document = shell.GetDocument();
+  const sheetName = unicode("");
+  expect(document.GetName(0, sheetName)).toBe(true);
+  expect(text(sheetName)).toBe("input");
+  sheetName.dispose();
+  expect(text(document.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("A, B");
+  expect(document.GetValue(new ScAddress(1, 1, 0))).toBe(42);
+  expect(document.GetValue(new ScAddress(2, 1, 0))).toBe(84);
+  const medium = shell.GetMedium();
+  const csv = new TextDecoder().decode(shell.AsciiSave());
+  expect(csv).toContain('"A, B",42,84\n');
+  expect(shell.GetMedium()).toBe(medium);
+  shell.Close();
+});
+it("passes CSV DETECT options through the source shell separator scanner", async () => {
+  const shell = new ScDocShell();
+  const bytes = new TextEncoder().encode('"A,B";42\n"C,D";43\n');
+  try {
+    await shell.Open(bytes, state("Detected CSV"), {
+      kind: "input",
+      name: "detected.csv",
+      filterId: ScDocShell.CSV_FILTER_NAME,
+      mediaType: ScDocShell.CSV_MEDIA_TYPE,
+      filterOptions: "DETECT,34,UTF-8",
+      source: { kind: "external", reference: bytes },
+    });
+    const document = shell.GetDocument();
+    expect(text(document.GetSharedString(new ScAddress(0, 0, 0)).getString())).toBe("A,B");
+    expect(document.GetValue(new ScAddress(1, 0, 0))).toBe(42);
+    expect(document.GetValue(new ScAddress(1, 1, 0))).toBe(43);
+  } finally {
+    shell.Close();
+  }
+});
+it("rewinds the detected source stream before importing a BOM-prefixed CSV", async () => {
+  const shell = new ScDocShell();
+  const bytes = new TextEncoder().encode("\uFEFFsep=;\nA;42\n");
+  try {
+    await shell.Open(bytes, state("Detected BOM CSV"), {
+      kind: "input",
+      name: "detected-bom.csv",
+      filterId: ScDocShell.CSV_FILTER_NAME,
+      mediaType: ScDocShell.CSV_MEDIA_TYPE,
+      filterOptions: "DETECT,34,DETECT",
+      source: { kind: "external", reference: bytes },
+    });
+    const document = shell.GetDocument();
+    expect(text(document.GetSharedString(new ScAddress(0, 0, 0)).getString())).toBe("sep=");
+    expect(text(document.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("A");
+    expect(document.GetValue(new ScAddress(1, 1, 0))).toBe(42);
+    expect(shell.GetMedium()?.filterOptions?.split(",")[13]).toBe("true");
+  } finally {
+    shell.Close();
+  }
+});
+it("writes source fixed-width fields using Calc column widths and standard numeric alignment", () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument();
+  const table = doc.FetchTable(0);
+  expect(table).not.toBeNull();
+  if (!table) return;
+  table.SetColWidthOnly(0, 600);
+  table.SetColWidthOnly(1, 600);
+  doc.SetTextCell(new ScAddress(0, 0, 0), unicode("hi"));
+  doc.SetValue(new ScAddress(1, 0, 0), 42);
+  const options = new ScImportOptions();
+  options.bFixedWidth = true;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("hi      42\n");
+  shell.Close();
+});
+it("uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors", () => {
+  const shell = new ScDocShell(),
+    document = shell.GetDocument();
+  expect(document.InsertTab(1, unicode("Data"))).toBe(true);
+  document.SetTextCell(new ScAddress(0, 0, 0), unicode("First"));
+  document.SetTextCell(new ScAddress(0, 0, 1), unicode("Second"));
+  const options = new ScImportOptions(),
+    decode = (bytes: Uint8Array) => new TextDecoder().decode(bytes);
+  expect(shell.ConvertToCsv(undefined, 1).map((stream) => decode(stream.bytes))).toEqual([
+    "Second\n",
+  ]);
+  expect(shell.ConvertToCsv("", 1).map((stream) => decode(stream.bytes))).toEqual(["Second\n"]);
+  options.nSheetToExport = -1;
+  const all = shell.ConvertToCsv(options.BuildString(), 1);
+  expect(all.map((stream) => stream.sheetName)).toEqual(["Sheet1", "Data"]);
+  expect(all.map((stream) => decode(stream.bytes))).toEqual(["First\n", "Second\n"]);
+  options.nSheetToExport = 1;
+  expect(
+    shell.ConvertToCsv(options.BuildString(), 1).map((stream) => decode(stream.bytes)),
+  ).toEqual(["First\n"]);
+  options.nSheetToExport = 3;
+  expect(() => shell.ConvertToCsv(options.BuildString(), 1)).toThrow(RangeError);
+  options.nSheetToExport = -23;
+  expect(() => shell.ConvertToCsv(options.BuildString(), 1)).toThrow(RangeError);
+  shell.Close();
+});
+it("follows upstream empty fixed-width column bounds across sparse rows", () => {
+  const shell = new ScDocShell();
+  const doc = shell.GetDocument(),
+    table = doc.FetchTable(0);
+  expect(table).not.toBeNull();
+  if (!table) return;
+  for (let col = 0; col < 3; col++) table.SetColWidthOnly(col, 600);
+  doc.SetTextCell(new ScAddress(0, 0, 0), unicode("A"));
+  doc.SetTextCell(new ScAddress(2, 2, 0), unicode("C"));
+  const options = new ScImportOptions();
+  options.bFixedWidth = true;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe(
+    "A         \n          \n          C    \n",
+  );
+  shell.Close();
+});
+it("writes only the source row terminator for an empty fixed-width sheet", () => {
+  const shell = new ScDocShell();
+  const options = new ScImportOptions();
+  options.bFixedWidth = true;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("\n");
+  shell.Close();
+});
+it("exports numeric cells through the source input-line formatter independently of display precision", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetValue(new ScAddress(), 1.2345);
+  shell.GetDocument().GetFormatTable().ChangeStandardPrec(0);
+  const options = new ScImportOptions();
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("1.2345\n");
+  options.bSaveAsShown = true;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("1\n");
+  expect(shell.GetDocument().GetFormatTable().GetStandardPrec()).toBe(0);
+  shell.Close();
+});
+it("ignores trailing CSV filter tokens beyond the upstream fourteen-token contract", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("A,B"));
+  const options = new ScImportOptions();
+  const source = options.BuildString();
+  expect(new ScImportOptions(`${source},unknown`).BuildString()).toBe(source);
+  expect(shell.AsciiSave(`${source},unknown`)).toEqual(shell.AsciiSave(source));
+  shell.Close();
+});
+it("uses the stream charset for Unicode BOM and limits the IncludeBOM option to UTF-8", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("A"));
+  const options = new ScImportOptions();
+  options.bIncludeBOM = false;
+  options.SetTextEncoding(RTL_TEXTENCODING_UNICODE);
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([0xff, 0xfe, 0x41, 0, 0x0a, 0]);
+  options.SetTextEncoding(RTL_TEXTENCODING_UTF8);
+  options.bIncludeBOM = true;
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([0xef, 0xbb, 0xbf, 0x41, 0x0a]);
+  shell.Close();
+});
+it("converts ANSI CSV text through the original MS-1252 byte table", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("Café €"));
+  const options = new ScImportOptions();
+  options.SetTextEncoding(RTL_TEXTENCODING_MS_1252);
+  expect(options.aStrFont).toBe("ANSI");
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([
+    0x43, 0x61, 0x66, 0xe9, 0x20, 0x80, 0x0a,
+  ]);
+  shell.Close();
+});
+it("uses the original MS-1251 converter when the filter string selects that encoding", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("Привет"));
+  const options = new ScImportOptions();
+  options.SetTextEncoding(RTL_TEXTENCODING_MS_1251);
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([
+    0xcf, 0xf0, 0xe8, 0xe2, 0xe5, 0xf2, 0x0a,
+  ]);
+  shell.Close();
+});
+it("escapes a delimiter produced by source character replacement after ASCII encoding", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("“"));
+  const options = new ScImportOptions();
+  options.SetTextEncoding(RTL_TEXTENCODING_ASCII_US);
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([0x22, 0x22, 0x22, 0x22, 0x0a]);
+  shell.Close();
+});
+it("doubles the complete encoded UTF-8 text delimiter before writing CSV bytes", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("Café"));
+  const options = new ScImportOptions();
+  options.nTextSepCode = "é";
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([
+    ...new TextEncoder().encode("éCafééé\n"),
+  ]);
+  shell.Close();
+});
+it("forces ASCII double quotes around a top-left sep directive even with another text delimiter", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
+  const options = new ScImportOptions();
+  options.nTextSepCode = "|";
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe('"sep=,"\n');
+  shell.Close();
+});
+it("treats zero text and field separator codes as disabled in the native export branches", () => {
+  const shell = new ScDocShell(),
+    document = shell.GetDocument(),
+    options = new ScImportOptions();
+  document.SetTextCell(new ScAddress(0, 0, 0), unicode('A,"B"'));
+  options.nTextSepCode = "\0";
+  options.bQuoteAllText = true;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe('A,"B"\n');
+  document.SetTextCell(new ScAddress(0, 0, 0), unicode("A"));
+  document.SetTextCell(new ScAddress(1, 0, 0), unicode("B"));
+  options.nTextSepCode = '"';
+  options.nFieldSepCode = "\0";
+  options.bQuoteAllText = false;
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("AB\n");
+  shell.Close();
+});
+it("does not rewrite a sep directive when the native field separator code is zero", () => {
+  const shell = new ScDocShell(),
+    options = new ScImportOptions();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
+  options.nFieldSepCode = "\0";
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("sep=;\n");
+  shell.Close();
+});
+it("writes the sep directive without quotes when the native text separator code is zero", () => {
+  const shell = new ScDocShell(),
+    options = new ScImportOptions();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
+  options.nTextSepCode = "\0";
+  expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("sep=,\n");
+  shell.Close();
+});
+it("follows SAL's missing-converter byte fallback without an export-option error", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("€"));
+  const options = new ScImportOptions();
+  options.SetTextEncoding(9999);
+  expect([...shell.AsciiSave(options.BuildString())]).toEqual([0xac, 0x0a]);
+  shell.Close();
+});
+it("exports with surplus filter tokens using the native recognized positions", () => {
+  const shell = new ScDocShell();
+  shell.GetDocument().SetTextCell(new ScAddress(), unicode("A"));
+  const options = new ScImportOptions();
+  expect(new TextDecoder().decode(shell.AsciiSave(`${options.BuildString()},ignored,extra`))).toBe(
+    "A\n",
+  );
+  shell.Close();
+});
 /** Creates a deferred source save completion. @returns Controls. */
 function pending() {
   let resolve!: (value: { generation: number }) => void, reject!: (reason: unknown) => void;

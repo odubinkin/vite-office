@@ -1,7 +1,38 @@
 /** @fileoverview Original testCSV numeric detection cases plus Unicode scanner boundaries against real RTL conversion. */
 import { expect, it } from "vitest";
-import { ScStringUtil } from "../../../inc/stringutil";
+import { ScSetStringParam, ScStringUtil } from "../../../inc/stringutil";
+import { SingleCellListening } from "../../../inc/types";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+it("retains ScSetStringParam defaults and the source text/numeric policy switches", () => {
+  const param = new ScSetStringParam();
+  expect(param.mpNumFormatter).toBeNull();
+  expect(param.mbDetectNumberFormat).toBe(true);
+  expect(param.mbDetectScientificNumberFormat).toBe(true);
+  expect(param.meSetTextNumFormat).toBe(ScSetStringParam.Never);
+  expect(param.mbHandleApostrophe).toBe(true);
+  expect(param.meStartListening).toBe(SingleCellListening);
+  expect(param.mbCheckLinkFormula).toBe(false);
+  param.mbCheckLinkFormula = true;
+  param.setTextInput();
+  expect(param.mbDetectNumberFormat).toBe(false);
+  expect(param.mbDetectScientificNumberFormat).toBe(false);
+  expect(param.mbHandleApostrophe).toBe(false);
+  expect(param.meSetTextNumFormat).toBe(ScSetStringParam.Always);
+  param.setNumericInput();
+  expect(param.mbDetectNumberFormat).toBe(true);
+  expect(param.mbDetectScientificNumberFormat).toBe(true);
+  expect(param.mbHandleApostrophe).toBe(true);
+  expect(param.meSetTextNumFormat).toBe(ScSetStringParam.Never);
+  expect(param.mbCheckLinkFormula).toBe(true);
+});
+it("detects either native multiline separator without treating other control characters as breaks", () => {
+  for (const [value, multiline] of [
+    ["A\rB", true],
+    ["A\nB", true],
+    ["A\tB", false],
+  ] as const)
+    expect(ScStringUtil.isMultiline(unicode(value))).toBe(multiline);
+});
 it("preserves pinned CSV numeric detection and output references", /** Runs all original Unicode CSV cases without Number coercion. @returns Nothing. */ () => {
   const cases: readonly [string, boolean, boolean, number][] = [
     ["foo", false, false, 0],

@@ -1,11 +1,57 @@
-/** @fileoverview Unicode ScStringUtil simple-number scanner from pinned stringutil.cxx; byte overload and formatter-driven input classification remain unsupported. */
+/** @fileoverview ScSetStringParam policy and Unicode ScStringUtil simple-number scanner from pinned stringutil.cxx; formatter-driven input classification remains separate. */
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import { SingleCellListening, type StartListeningType } from "../../../inc/types";
 import {
   rtl_math_uStringToDouble,
   rtl_math_ConversionStatus,
 } from "../../../../sal/inc/rtl/math.h";
+
+/** ScSetStringParam::TextFormatPolicy from stringutil.hxx. */
+export enum TextFormatPolicy {
+  Always,
+  SpecialNumberOnly,
+  Keep,
+  Never,
+}
+
+/** Original ScDocument::SetString input policy and source defaults. */
+export class ScSetStringParam {
+  static readonly Always = TextFormatPolicy.Always;
+  static readonly SpecialNumberOnly = TextFormatPolicy.SpecialNumberOnly;
+  static readonly Keep = TextFormatPolicy.Keep;
+  static readonly Never = TextFormatPolicy.Never;
+  mpNumFormatter: SvNumberFormatter | null = null;
+  mbDetectNumberFormat = true;
+  mbDetectScientificNumberFormat = true;
+  meSetTextNumFormat = TextFormatPolicy.Never;
+  mbHandleApostrophe = true;
+  meStartListening: StartListeningType = SingleCellListening;
+  mbCheckLinkFormula = false;
+  /** Selects the original unconditional text-input policy. @returns Nothing. */
+  setTextInput(): void {
+    this.mbDetectNumberFormat = false;
+    this.mbDetectScientificNumberFormat = false;
+    this.mbHandleApostrophe = false;
+    this.meSetTextNumFormat = TextFormatPolicy.Always;
+  }
+  /** Selects the original maximum numeric-detection policy. @returns Nothing. */
+  setNumericInput(): void {
+    this.mbDetectNumberFormat = true;
+    this.mbDetectScientificNumberFormat = true;
+    this.mbHandleApostrophe = true;
+    this.meSetTextNumFormat = TextFormatPolicy.Never;
+  }
+}
 /** Original Calc string helper responsibility, sharing the existing RTL numeric conversion owner. */
 export const ScStringUtil = {
+  /** Source view scan reports either CR or LF as multiline content. @param rStr - Borrowed UTF-16 text. @returns Whether an edit cell is needed for literal text. */
+  isMultiline(rStr: OUStringConstReference): boolean {
+    const units = rStr.getStr();
+    for (let index = 0; index < rStr.getLength(); index++)
+      if (units[index] === 10 || units[index] === 13) return true;
+    return false;
+  },
   /** Validates native simple decimal/scientific input before RTL conversion. Precheck failures preserve the output; RTL failures retain its assigned result. Grouping is deliberately the source three-digit policy, including its first-group permissiveness. @param rStr - Borrowed UTF16 input. @param dsep - Decimal separator code unit. @param gsep - Group separator code unit. @param dsepa - Alternate decimal code unit or zero. @param rVal - Mutable numeric output reference. @param bDetectScientificNumber - Native default allows exponent notation. @returns Whether the entire trimmed number was consumed with OK status. */
   parseSimpleNumber(
     rStr: OUStringConstReference,

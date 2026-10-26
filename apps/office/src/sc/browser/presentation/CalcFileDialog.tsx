@@ -1,4 +1,4 @@
-/** @fileoverview Calc ODS resource/IO adapter for the shared Writer-style browser file dialog. */
+/** @fileoverview Calc ODS/CSV resource/IO adapter for the shared browser file dialog. */
 import { readBrowserFile } from "../../../vcl/browser/browser-file";
 import { BrowserFileDialog } from "../../../framework/browser/presentation/BrowserFileDialog";
 import type { BrowserFileDialogKind } from "../../../framework/browser/workflows/file-dialog-controller";
@@ -23,18 +23,18 @@ export function CalcFileDialog({
       onClose={onClose}
       store={workflows.store}
       format={{
-        accept: ".ods,application/vnd.oasis.opendocument.spreadsheet",
-        importDescription: "ODS files are supported",
-        invalidFileMessage: "Choose an ODS file.",
-        documentLabel: "ODS document",
+        accept: ".ods,.csv,application/vnd.oasis.opendocument.spreadsheet,text/csv",
+        importDescription: "ODS and CSV files are supported",
+        invalidFileMessage: "Choose an ODS or CSV file.",
+        documentLabel: "Calc document",
         accepts:
           /** Recognizes supported Calc input. @param file - Computer file. @returns Supported. */ (
             file,
-          ) => /\.ods$/i.test(file.name),
+          ) => /\.(ods|csv)$/i.test(file.name),
         importedTitle:
           /** Removes the source extension for the browser title. @param filename - Source name. @returns Title. */ (
             filename,
-          ) => filename.replace(/\.ods$/i, "") || "Imported document",
+          ) => filename.replace(/\.(ods|csv)$/i, "") || "Imported document",
       }}
       openImportedFile={
         /** Opens actual package bytes under the selected browser identity. @param file - Source. @param bytes - ODS. @param identity - Resolved identity. @returns Completion. */ (
@@ -59,6 +59,13 @@ export function CalcFileDialog({
           appearance: "indigo",
           download: /** Exports actual ODS bytes. @returns Completion. */ () =>
             workflows.Download(),
+        },
+        {
+          label: "CSV",
+          description: "Comma-separated values",
+          appearance: "emerald",
+          download: /** Exports the active sheet as CSV. @returns Completion. */ () =>
+            workflows.DownloadCsv(),
         },
       ]}
     />

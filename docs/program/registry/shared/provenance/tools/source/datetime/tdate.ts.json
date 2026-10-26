@@ -13,10 +13,12 @@
     "upstreamSymbols": [
       "Date::setDateFromDMY",
       "Date::IsValidDate",
+      "Date::GetAsNormalizedDays",
+      "Date::AddDays",
       "Date::Normalize"
     ],
     "preservedResponsibilities": [
-      "Actual tools Date packed signed32 value,DMY/raw/copy constructors,implicit member assignment,absolute day/month and signed16 year extraction,validity and normalization delegate to genuine shared comphelper algorithms. DateConstReference projects the original borrowed const value surface;no host JavaScript Date,timezone or alternate calendar provider is used. Native representability assertions and year0 constructor diagnostic-only policy are preserved. SYSTEM clock,UNO conversions,day arithmetic and other Date operations remain unported."
+      "Actual tools Date packed signed32 value,DMY/raw/copy constructors,implicit member assignment,absolute day/month and signed16 year extraction,validity, normalization, GetAsNormalizedDays and AddDays delegate to genuine shared comphelper algorithms. DateConstReference projects the original borrowed const value surface; no host JavaScript Date, timezone or alternate calendar provider is used. The 1899-12-30 fast path and nonmutating normalized-day conversion follow tdate.cxx. Native representability assertions and year0 constructor diagnostic-only policy are preserved. SYSTEM clock, UNO conversions and other Date operations remain unported."
     ],
     "omittedResponsibilities": [
       "Only represented native value/normalization responsibilities are ported;clock,UNO/calendar ABI,day arithmetic and full formatter/document integration remain unported."

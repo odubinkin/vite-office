@@ -31,13 +31,15 @@
         "createDocument",
         "GetRecentColor",
         "SetRecentColor",
+        "DetectCsvSeparators",
         "GetMapUnit",
         "SetMapUnit"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "include/sfx2/objsh.hxx",
       "upstreamSymbols": [
-        "SfxObjectShell"
+        "SfxObjectShell",
+        "DetectCsvSeparators"
       ]
     }
   }

@@ -7,7 +7,8 @@ import { processOdsWorkerRequest, type OdsWorkerRequest } from "./ods-worker-run
 import { encodeCalcDocument, decodeCalcDocument } from "./calc-document-codec";
 import { ScDocument } from "../../../inc/document";
 import { ScAddress } from "../../../inc/address";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { CellType } from "../../../inc/global";
 import { writeOdsXml } from "../../../source/filter/xml/xmlwrap";
 import { createInlineOdsFilterService } from "../../../source/filter/xml/ods-filter-service";
 import { createCalcSession } from "../../composition/calc-module";
@@ -48,6 +49,20 @@ function model(): ScDocument {
   doc.SetValue(new ScAddress(), 7);
   return doc;
 }
+it("transfers edit-text cells through the browser worker document record", () => {
+  const doc = model(),
+    pos = new ScAddress(1, 0, 0);
+  doc.SetTextCell(pos, unicode("first\nsecond"));
+  const loaded = decodeCalcDocument(encodeCalcDocument(doc));
+  expect(loaded.GetCellType(pos)).toBe(CellType.CELLTYPE_EDIT);
+  const value = loaded.GetRefCellValue(pos).getEditText()?.GetText();
+  expect(value).toBeDefined();
+  try {
+    if (value) expect(text(value)).toBe("first\nsecond");
+  } finally {
+    value?.dispose();
+  }
+});
 afterEach(
   /** Checks the browser XML and worker regression boundary.  @returns Regression result or completion. */ () => {
     vi.unstubAllGlobals();

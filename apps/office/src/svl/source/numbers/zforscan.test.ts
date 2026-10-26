@@ -58,16 +58,18 @@ it("extracts every registered locale's actual index-zero standard name", /** Onl
 import { ImpSvNumberformatScan, KeywordLocalization } from "./zforscan";
 import { ImpSvNumFor } from "./zformat";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 
 it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These are original General paths;other token families remain explicit admission failures. @returns Nothing. */ () => {
   const language = unicode("de"),
     country = unicode("DE"),
     empty = unicode(""),
     locale = new Locale(language, country, empty),
-    name = unicode("Standard");
+    name = unicode("Standard"),
+    localeData = new LocaleDataWrapper(locale);
   try {
     for (const mode of Object.values(KeywordLocalization)) {
-      const scanner = new ImpSvNumberformatScan(locale, name, mode),
+      const scanner = new ImpSvNumberformatScan(locale, name, mode, localeData),
         code = unicode("sTaNdArD"),
         english = unicode("GENERAL"),
         unsupported = unicode("0.00"),
@@ -119,6 +121,7 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
       }
     }
   } finally {
+    localeData.dispose();
     name.dispose();
     locale.dispose();
     language.dispose();

@@ -1,0 +1,1422 @@
+{
+  "af_NA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "af_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ak_GH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "am_ET": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "an_ES": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " de "
+  },
+  "ar_AE": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_BH": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_DZ": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_EG": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_IQ": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_JO": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_KW": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_LB": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_LY": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_MA": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_OM": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": " "
+  },
+  "ar_QA": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_SA": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_SY": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_TN": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ar_YE": {
+    "dayOfWeek": "، ",
+    "day": "، ",
+    "month": "، "
+  },
+  "ast_ES": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " de "
+  },
+  "axk_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "az_AZ": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "be_BY": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "beq_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "bg_BG": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "bkw_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "bm_ML": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "bn_BD": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "bn_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "bo_CN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "bo_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "br_FR": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "bs_BA": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "bvx_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ca_ES": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "ca_ES_valencia": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "cs_CZ": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "cu_RU": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "cv_RU": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "cy_GB": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "da_DK": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "dde_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "de_AT": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "de_CH": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "de_DE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "de_LI": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "de_LU": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "dsb_DE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "dv_MV": {
+    "dayOfWeek": " ،",
+    "day": " ،",
+    "month": " "
+  },
+  "dz_BT": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ebo_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ee_GH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "el_GR": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "en_AU": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "en_BW": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_BZ": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "en_CA": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "en_DK": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "en_GB": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_GH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "en_GM": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_GY": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_HK": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_IE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_IL": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "en_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_JM": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": ","
+  },
+  "en_KE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_LK": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_MU": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_MW": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_MY": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_NA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_NG": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_NZ": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "en_PH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "en_TT": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "en_US": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "en_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_ZM": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "en_ZW": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "eo": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "es_AR": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_BO": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_CL": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_CO": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_CR": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_DO": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_EC": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_ES": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_GT": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_HN": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_MX": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_NI": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_PA": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_PE": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_PR": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_PY": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_SV": {
+    "dayOfWeek": " ",
+    "day": " de ",
+    "month": " de "
+  },
+  "es_UY": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "es_VE": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "et_EE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "eu_ES": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "ext_ES": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "fa_IR": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fi_FI": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": "ta "
+  },
+  "fo_FO": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "fr_BE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_BF": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_BJ": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_CA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_CH": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_CI": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_FR": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_GN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_LU": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_MC": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_ML": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_NE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_SN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fr_TG": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "fur_IT": {
+    "dayOfWeek": ", ",
+    "day": " di ",
+    "month": " dal "
+  },
+  "fy_NL": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ga_IE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "gd_GB": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "gl_ES": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "gos_NL": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "gsc_FR": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "gu_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "gug_PY": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ha_Latn_GH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ha_Latn_NG": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": ", "
+  },
+  "haw_US": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "he_IL": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "hi_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "hil_PH": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "hr_HR": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "hsb_DE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "ht_HT": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "hu_HU": {
+    "dayOfWeek": " ",
+    "day": ".",
+    "month": " "
+  },
+  "hy_AM": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": ", "
+  },
+  "ia": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "id_ID": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ilo_PH": {
+    "dayOfWeek": ", ",
+    "day": " ti ",
+    "month": " iti "
+  },
+  "is_IS": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "it_CH": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": " "
+  },
+  "it_IT": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "iyx_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ja_JP": {
+    "dayOfWeek": ", ",
+    "day": "日",
+    "month": "月"
+  },
+  "jbo": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ka_GE": {
+    "dayOfWeek": ", ",
+    "day": " ",
+    "month": ", "
+  },
+  "kab_DZ": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "kk_KZ": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "kkw_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "kl_GL": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "km_KH": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "kmr_Latn_TR": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "kn_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "kng_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ko_KR": {
+    "dayOfWeek": "",
+    "day": "일",
+    "month": "월"
+  },
+  "ky_KG": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "la_VA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "lb_LU": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "ldi_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "lg_UG": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "lgr_SB": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "lif_NP": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "lij_IT": {
+    "dayOfWeek": " a-i ",
+    "day": " de ",
+    "month": " do "
+  },
+  "lld_IT": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ln_CD": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "lo_LA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "lt_LT": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ltg_LV": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "lv_LV": {
+    "dayOfWeek": "",
+    "day": " ",
+    "month": " "
+  },
+  "mai_IN": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "mdw_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "mfe_MU": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "min_ID": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "mk_MK": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "mkw_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ml_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "mn_Cyrl_MN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "mn_Mong_MN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "mos_BF": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "mr_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ms_MY": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "mt_MT": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "my_MM": {
+    "dayOfWeek": "၊ ",
+    "day": "၊ ",
+    "month": " "
+  },
+  "myv_RU": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "nb_NO": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "nds_DE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "ne_NP": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ngz_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "njx_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "njy_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "nl_BE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "nl_NL": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "nn_NO": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "no_NO": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "nr_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "nso_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ny_MW": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "oc_ES_aranes": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "oc_FR_lengadoc": {
+    "dayOfWeek": " ",
+    "day": ", ",
+    "month": " de "
+  },
+  "om_ET": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "or_IN": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pa_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "pap_BQ": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pap_CW": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pdc_US": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pjt_AU": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pl_PL": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "plt_MG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "pt_AO": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "pt_BR": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "pt_MZ": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "pt_PT": {
+    "dayOfWeek": ", ",
+    "day": " de ",
+    "month": " de "
+  },
+  "pui_CO": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "puu_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ro_MD": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ro_RO": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ru_RU": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "rue_SK": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "rw_RW": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sat_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sat_Olck_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sc_IT": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sdj_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sg_CF": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "shs_CA": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sid_ET": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sk_SK": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "sl_SI": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "so_SO": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sq_AL": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sr_CS": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sr_Latn_CS": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sr_Latn_ME": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sr_Latn_RS": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sr_ME": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "sr_RS": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ss_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "st_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sun_ID": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sv_FI": {
+    "dayOfWeek": " ",
+    "day": ". ",
+    "month": " "
+  },
+  "sv_SE": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "sw_TZ": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "szl_PL": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ta_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "te_IN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "tek_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "tg_TJ": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "th_TH": {
+    "dayOfWeek": "",
+    "day": " ",
+    "month": " "
+  },
+  "ti_ER": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "tk_TM": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "tn_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "tpi_PG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "tr_TR": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ts_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "tsa_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "tt_RU": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "tyx_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "ug_CN": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "uk_UA": {
+    "dayOfWeek": "",
+    "day": " ",
+    "month": " "
+  },
+  "ur_PK": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "uz_UZ": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "ve_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "vec_IT": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "vi_VN": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "vif_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "vro_EE": {
+    "dayOfWeek": ", ",
+    "day": ". ",
+    "month": " "
+  },
+  "wa_BE": {
+    "dayOfWeek": " ",
+    "day": " di ",
+    "month": " "
+  },
+  "xh_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  },
+  "xku_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "yi_US": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "yom_CG": {
+    "dayOfWeek": ", ",
+    "day": ", ",
+    "month": " "
+  },
+  "zh_CN": {
+    "dayOfWeek": "",
+    "day": "日",
+    "month": "月"
+  },
+  "zh_HK": {
+    "dayOfWeek": "",
+    "day": "日",
+    "month": "月"
+  },
+  "zh_MO": {
+    "dayOfWeek": "",
+    "day": "日",
+    "month": "月"
+  },
+  "zh_SG": {
+    "dayOfWeek": "",
+    "day": "日",
+    "month": "月"
+  },
+  "zh_TW": {
+    "dayOfWeek": "",
+    "day": "日",
+    "month": "月"
+  },
+  "zu_ZA": {
+    "dayOfWeek": " ",
+    "day": " ",
+    "month": " "
+  }
+}

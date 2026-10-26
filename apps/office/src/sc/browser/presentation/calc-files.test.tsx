@@ -12,6 +12,8 @@ import { CalcFileDialog } from "./CalcFileDialog";
 import { ScAddress } from "../../inc/address";
 import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
 import { ScDocShell } from "../../source/ui/docshell/docsh";
+import { ScImportOptions } from "../../source/ui/dbgui/imoptdlg";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import type { DocumentExportRequest } from "../../../svl/source/misc/storage";
 
@@ -35,6 +37,73 @@ function ods(): Uint8Array {
   c.Close();
   return bytes;
 }
+
+it("imports CSV from the file dialog and downloads the active sheet through the text filter", async () => {
+  const db = store(),
+    c = new CalcViewController();
+  let exported: DocumentExportRequest | undefined;
+  const workflows = new CalcFileWorkflows(c, db, undefined, {
+    export: /** Captures the platform download. @param request - Bytes. @returns Nothing. */ (
+      request,
+    ) => {
+      exported = request;
+    },
+  });
+  const onClose = vi.fn();
+  render(<CalcFileDialog workflows={workflows} kind="open" onClose={onClose} />);
+  fireEvent.click(screen.getByRole("tab", { name: "On computer" }));
+  const input = screen.getByLabelText("Browse");
+  fireEvent.change(input, {
+    target: { files: [new File(['Name,Value\n"A, B",42\n'], "sample.csv", { type: "text/csv" })] },
+  });
+  await waitFor(
+    /** Waits for import and primary ODS persistence. @returns Assertion. */ () =>
+      expect(onClose).toHaveBeenCalledTimes(1),
+  );
+  expect(c.shell.GetTitle()).toBe("sample");
+  const sheetName = unicode("");
+  expect(c.shell.GetDocument().GetName(0, sheetName)).toBe(true);
+  expect(text(sheetName)).toBe("sample");
+  sheetName.dispose();
+  expect(c.shell.GetDocument().GetValue(new ScAddress(1, 1, 0))).toBe(42);
+  expect(await db.list()).toHaveLength(1);
+  cleanup();
+  render(<CalcFileDialog workflows={workflows} kind="export" onClose={vi.fn()} />);
+  fireEvent.click(screen.getByRole("button", { name: "Download CSV" }));
+  await waitFor(
+    /** Waits for CSV download bytes. @returns Assertion. */ () => expect(exported).toBeDefined(),
+  );
+  if (exported === undefined) throw new Error("Expected CSV export.");
+  expect(exported.name).toBe("sample.csv");
+  expect(exported.mediaType).toBe("text/csv");
+  expect(new TextDecoder().decode(exported.data as Uint8Array)).toBe('Name,Value\n"A, B",42\n');
+  c.Close();
+});
+it("routes the native all-sheet CSV selector to separate browser downloads", async () => {
+  const controller = new CalcViewController(),
+    document = controller.shell.GetDocument(),
+    downloads: DocumentExportRequest[] = [];
+  expect(document.InsertTab(1, unicode("Data"))).toBe(true);
+  document.SetTextCell(new ScAddress(0, 0, 0), unicode("First"));
+  document.SetTextCell(new ScAddress(0, 0, 1), unicode("Second"));
+  const workflows = new CalcFileWorkflows(controller, undefined, undefined, {
+    export: (request) => {
+      downloads.push(request);
+    },
+  });
+  const options = new ScImportOptions();
+  options.nSheetToExport = -1;
+  await workflows.DownloadCsv(options.BuildString());
+  expect(downloads.map(({ name }) => name)).toEqual([
+    "Untitled Calc Document-Sheet1.csv",
+    "Untitled Calc Document-Data.csv",
+  ]);
+  expect(downloads.map(({ data }) => new TextDecoder().decode(data as Uint8Array))).toEqual([
+    "First\n",
+    "Second\n",
+  ]);
+  controller.Close();
+});
 /** Reads one actual committed primary record. @param db - Store. @returns Record. */
 async function first(db: IndexedDbDocumentStore) {
   const record = (await db.list())[0];
@@ -165,7 +234,7 @@ it("imports computer ODS,offers name collision choices,and preserves real formul
     file = new File([bytes as BlobPart], "Budget.ods");
   fireEvent.change(input, { target: { files: [new File(["bad"], "bad.txt")] } });
   await screen.findByRole("alert");
-  expect(screen.getByRole("alert")).toHaveTextContent("Choose an ODS file");
+  expect(screen.getByRole("alert")).toHaveTextContent("Choose an ODS or CSV file");
   fireEvent.change(input, { target: { files: [file] } });
   await waitFor(
     /** Waits for actual ODS storage. @returns Assertion. */ () =>

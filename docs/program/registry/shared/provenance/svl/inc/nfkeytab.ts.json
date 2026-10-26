@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/nfkeytab.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/nfkeytab.hxx",
+    "localSymbols": [
+      "NfKeywordIndex"
+    ],
+    "upstreamSymbols": [
+      "NfKeywordIndex"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG carries the complete pinned NfKeywordIndex numeric ordering for the native compiled number-format token parser."
+    ],
+    "omittedResponsibilities": [
+      "The token definitions do not implement format scanning or classification by themselves."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/nfkeytab.ts",
+          "marker": "NfKeywordIndex"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/nfkeytab.hxx",
+          "marker": "NfKeywordIndex"
+        }
+      ]
+    }
+  }
+}

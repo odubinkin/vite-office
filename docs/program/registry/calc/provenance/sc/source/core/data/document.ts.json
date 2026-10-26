@@ -8,6 +8,7 @@
     "upstreamPath": "sc/source/core/data/document.cxx",
     "localSymbols": [
       "ScDocument",
+      "RenameTab",
       "EndListeningFormulaCells",
       "DeleteBeforeCopyFromClip",
       "SetDirtyFromClip",
@@ -47,6 +48,7 @@
       "ScDocument::GetValue",
       "ScDocument::GetCellType",
       "ScDocument::GetName",
+      "ScDocument::RenameTab",
       "ScDocument::InsertTab",
       "ScDocument::SetDirtyFromClip",
       "ScDocument::AddCondFormatData",

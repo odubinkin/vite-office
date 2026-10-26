@@ -274,15 +274,29 @@ export class ScXMLExport {
       }
     } else if (type === CellType.CELLTYPE_VALUE)
       value = ` office:value-type="float" office:value="${doubleToString(cell.getDouble())}"`;
-    else {
-      // The iterator/store trait contract leaves only the supported literal-string family.
+    else if (type === CellType.CELLTYPE_EDIT) {
+      value = ' office:value-type="string"';
+      const edit = cell.getEditText();
+      if (edit) {
+        const paragraphs: string[] = [];
+        for (let i = 0; i < edit.GetParagraphCount(); i++) {
+          const part = edit.GetText(i);
+          try {
+            paragraphs.push(`<text:p>${exportText(text(part))}</text:p>`);
+          } finally {
+            part.dispose();
+          }
+        }
+        children = paragraphs.join("");
+      }
+    } else {
       value = ' office:value-type="string"';
       const string = cell.getSharedString() as SharedStringConstReference;
       children = this.textParagraph(text(string.getString()));
     }
     return `<table:table-cell${attribute}${formula}${value}>${children}</table:table-cell>`;
   }
-  /** Reuses actual shared Writer/Calc inline encoding;multiline/rich edit text is an explicit boundary. @param value - Literal simple text. @returns Paragraph XML. */
+  /** Reuses actual shared Writer/Calc inline encoding for a simple literal paragraph. @param value - Literal simple text. @returns Paragraph XML. */
   private textParagraph(value: string): string {
     if (/[\r\n]/.test(value)) throw new Error("ODS multiline cell export is not implemented");
     return `<text:p>${exportText(value)}</text:p>`;

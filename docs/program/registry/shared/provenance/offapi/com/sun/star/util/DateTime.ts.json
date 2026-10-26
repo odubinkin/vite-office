@@ -1,0 +1,18 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/util/DateTime.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/util/DateTime.idl",
+    "localSymbols": ["DateTime"],
+    "upstreamSymbols": ["DateTime", "NanoSeconds", "Seconds", "Minutes", "Hours", "Day", "Month", "Year", "IsUTC"],
+    "preservedResponsibilities": ["Published scalar field names and zero/false defaults consumed by sax::Converter::parseDateTime."],
+    "omittedResponsibilities": ["Generated UNO type description and Any/Sequence bindings are outside the consumed CSV date precheck."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/offapi/com/sun/star/util/DateTime.ts", "marker": "class DateTime"}],
+      "upstream": [{"path": "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl", "marker": "published struct DateTime"}]
+    }
+  }
+}

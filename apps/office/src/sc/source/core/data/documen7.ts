@@ -36,6 +36,9 @@ import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { CellType, HasAttrFlags, InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
+import { MapUnit } from "../../../../tools/inc/mapunit";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { HardRecalcState, type ScDocument } from "./document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
@@ -45,6 +48,15 @@ import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
 import { type StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+
+/** Borrows the real cell-store value or its empty default. @param this - Document. @param position - Cell. @returns Reference. */
+export function GetRefCellValue(this: ScDocument, position: ScAddress): ScRefCellValue {
+  return (
+    this.FetchTable(position.Tab())?.GetRefCellValue(position.Col(), position.Row()) ??
+    new ScRefCellValue()
+  );
+}
 
 /** Original document.cxx initialized-column cursor forwarding. @param this - Actual document. @param position - Actual cursor. @param tab - Sheet. @param col - Column. @returns Initialized. */
 export function InitColumnBlockPosition(
@@ -885,7 +897,7 @@ export function AddCondFormatData(
   this.FetchTable(tab)?.AddCondFormatData(ranges, index);
 }
 
-/** Original literal SetTextCell body on the same document;rich edit-text remains outside this slice. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
+/** Original literal SetTextCell routes multiline content into an EditEngine object. @param this - Actual document. @param position - Cell. @param value - Literal text. @returns Nothing. */
 export function SetTextCell(
   this: ScDocument,
   position: ScAddress,
@@ -893,7 +905,26 @@ export function SetTextCell(
 ): void {
   const table = this.FetchTable(position.Tab());
   if (!table || !this.ValidColRow(position.Col(), position.Row())) return;
-  if (/[\r\n]/.test(text(value))) throw new Error("Multiline edit-text cells are not implemented");
+  const literal = text(value);
+  if (/[\r\n]/.test(literal)) {
+    const edit = new EditTextObjectImpl(
+      null,
+      MapUnit.Map100thMM,
+      false,
+      TextRotation.NONE,
+      SvtScriptType.LATIN,
+    );
+    for (const line of literal.split(/\r\n|\r|\n/)) {
+      const paragraph = unicode(line);
+      try {
+        edit.CreateAndInsertContent().SetText(paragraph);
+      } finally {
+        paragraph.dispose();
+      }
+    }
+    table.SetEditText(position.Col(), position.Row(), edit);
+    return;
+  }
   if (!value.getLength()) {
     table.SetEmptyCell(position.Col(), position.Row());
     return;

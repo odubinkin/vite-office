@@ -1,0 +1,1138 @@
+{
+  "af_NA": {
+    "trueWord": "waar",
+    "falseWord": "vals"
+  },
+  "af_ZA": {
+    "trueWord": "waar",
+    "falseWord": "vals"
+  },
+  "ak_GH": {
+    "trueWord": "Yiw",
+    "falseWord": "Daabi"
+  },
+  "am_ET": {
+    "trueWord": "አውነት",
+    "falseWord": "ሔሰት"
+  },
+  "an_ES": {
+    "trueWord": "Verdadero",
+    "falseWord": "Falso"
+  },
+  "ar_AE": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_BH": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_DZ": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_EG": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_IQ": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_JO": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_KW": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_LB": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_LY": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_MA": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_OM": {
+    "trueWord": "صحيح",
+    "falseWord": "خاطئ"
+  },
+  "ar_QA": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_SA": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_SY": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_TN": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ar_YE": {
+    "trueWord": "صح",
+    "falseWord": "خطأ"
+  },
+  "ast_ES": {
+    "trueWord": "Braero",
+    "falseWord": "Falso"
+  },
+  "axk_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "az_AZ": {
+    "trueWord": "düz",
+    "falseWord": "yanlış"
+  },
+  "be_BY": {
+    "trueWord": "сапраўдна",
+    "falseWord": "несапраўдна"
+  },
+  "beq_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "bg_BG": {
+    "trueWord": "вярно",
+    "falseWord": "невярно"
+  },
+  "bkw_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "bm_ML": {
+    "trueWord": "Tiɲɛ",
+    "falseWord": "Nkalon"
+  },
+  "bn_BD": {
+    "trueWord": "সত্য",
+    "falseWord": "মিথ্যা"
+  },
+  "bn_IN": {
+    "trueWord": "সত্য",
+    "falseWord": "মিথ্যা"
+  },
+  "bo_CN": {
+    "trueWord": "ཨིན་",
+    "falseWord": "མེན་"
+  },
+  "bo_IN": {
+    "trueWord": "ཨིན་",
+    "falseWord": "མེན་"
+  },
+  "br_FR": {
+    "trueWord": "gwir",
+    "falseWord": "fals"
+  },
+  "bs_BA": {
+    "trueWord": "tacno",
+    "falseWord": "netacno"
+  },
+  "bvx_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ca_ES": {
+    "trueWord": "veritat",
+    "falseWord": "fals"
+  },
+  "ca_ES_valencia": {
+    "trueWord": "veritat",
+    "falseWord": "fals"
+  },
+  "cs_CZ": {
+    "trueWord": "pravda",
+    "falseWord": "nepravda"
+  },
+  "cu_RU": {
+    "trueWord": "вѣ́рнѡ",
+    "falseWord": "ло́жнѡ"
+  },
+  "cv_RU": {
+    "trueWord": "тĕрĕс",
+    "falseWord": "суя"
+  },
+  "cy_GB": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "da_DK": {
+    "trueWord": "sand",
+    "falseWord": "falsk"
+  },
+  "dde_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "de_AT": {
+    "trueWord": "wahr",
+    "falseWord": "falsch"
+  },
+  "de_CH": {
+    "trueWord": "wahr",
+    "falseWord": "falsch"
+  },
+  "de_DE": {
+    "trueWord": "wahr",
+    "falseWord": "falsch"
+  },
+  "de_LI": {
+    "trueWord": "wahr",
+    "falseWord": "falsch"
+  },
+  "de_LU": {
+    "trueWord": "wahr",
+    "falseWord": "falsch"
+  },
+  "dsb_DE": {
+    "trueWord": "wěrno",
+    "falseWord": "njewěrno"
+  },
+  "dv_MV": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "dz_BT": {
+    "trueWord": "ཨིན་",
+    "falseWord": "མེན་"
+  },
+  "ebo_CG": {
+    "trueWord": "ngaŋwa",
+    "falseWord": "mpya"
+  },
+  "ee_GH": {
+    "trueWord": "ɛ",
+    "falseWord": "ao"
+  },
+  "el_GR": {
+    "trueWord": "σωστό",
+    "falseWord": "λάθος"
+  },
+  "en_AU": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_BW": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_BZ": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_CA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_DK": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_GB": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_GH": {
+    "trueWord": "True",
+    "falseWord": "False"
+  },
+  "en_GM": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_GY": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_HK": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_IE": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_IL": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_IN": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_JM": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_KE": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_LK": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_MU": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_MW": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_MY": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_NA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_NG": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_NZ": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_PH": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_TT": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_US": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_ZM": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "en_ZW": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "eo": {
+    "trueWord": "vera",
+    "falseWord": "falsa"
+  },
+  "es_AR": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_BO": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_CL": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_CO": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_CR": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_DO": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_EC": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_ES": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_GT": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_HN": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_MX": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_NI": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_PA": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_PE": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_PR": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_PY": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_SV": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_UY": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "es_VE": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "et_EE": {
+    "trueWord": "tõene",
+    "falseWord": "väär"
+  },
+  "eu_ES": {
+    "trueWord": "egiazkoa",
+    "falseWord": "faltsua"
+  },
+  "ext_ES": {
+    "trueWord": "verdadero",
+    "falseWord": "falso"
+  },
+  "fa_IR": {
+    "trueWord": "درست",
+    "falseWord": "نادرست"
+  },
+  "fi_FI": {
+    "trueWord": "Tosi",
+    "falseWord": "Epätosi"
+  },
+  "fo_FO": {
+    "trueWord": "sonn",
+    "falseWord": "ósonn"
+  },
+  "fr_BE": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_BF": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_BJ": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_CA": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_CH": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_CI": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_FR": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_GN": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_LU": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_MC": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_ML": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_NE": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_SN": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fr_TG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "fur_IT": {
+    "trueWord": "vêr",
+    "falseWord": "fals"
+  },
+  "fy_NL": {
+    "trueWord": "wier",
+    "falseWord": "net wier"
+  },
+  "ga_IE": {
+    "trueWord": "fíor",
+    "falseWord": "falsa"
+  },
+  "gd_GB": {
+    "trueWord": "Fìor",
+    "falseWord": "Breug"
+  },
+  "gl_ES": {
+    "trueWord": "verdadeiro",
+    "falseWord": "falso"
+  },
+  "gos_NL": {
+    "trueWord": "woar",
+    "falseWord": "onwoar"
+  },
+  "gsc_FR": {
+    "trueWord": "exacte",
+    "falseWord": "faus"
+  },
+  "gu_IN": {
+    "trueWord": "ખરું",
+    "falseWord": "ખોટું"
+  },
+  "gug_PY": {
+    "trueWord": "te'ete",
+    "falseWord": "gua'u"
+  },
+  "ha_Latn_GH": {
+    "trueWord": "Gaskiya",
+    "falseWord": "Karya"
+  },
+  "ha_Latn_NG": {
+    "trueWord": "Gaskiya",
+    "falseWord": "Karya"
+  },
+  "haw_US": {
+    "trueWord": "ʻOiaʻiʻo",
+    "falseWord": "Hewa"
+  },
+  "he_IL": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "hi_IN": {
+    "trueWord": "सही",
+    "falseWord": "गलत"
+  },
+  "hil_PH": {
+    "trueWord": "tuod",
+    "falseWord": "palso"
+  },
+  "hr_HR": {
+    "trueWord": "točno",
+    "falseWord": "netočno"
+  },
+  "hsb_DE": {
+    "trueWord": "prawje",
+    "falseWord": "wopak"
+  },
+  "ht_HT": {
+    "trueWord": "Vre",
+    "falseWord": "Fo"
+  },
+  "hu_HU": {
+    "trueWord": "Igaz",
+    "falseWord": "Hamis"
+  },
+  "hy_AM": {
+    "trueWord": "ճշմարիտ",
+    "falseWord": "կեղծ"
+  },
+  "ia": {
+    "trueWord": "ver",
+    "falseWord": "false"
+  },
+  "id_ID": {
+    "trueWord": "benar",
+    "falseWord": "salah"
+  },
+  "ilo_PH": {
+    "trueWord": "pudno",
+    "falseWord": "ubbaw"
+  },
+  "is_IS": {
+    "trueWord": "Rétt",
+    "falseWord": "Rangt"
+  },
+  "it_CH": {
+    "trueWord": "vero",
+    "falseWord": "falso"
+  },
+  "it_IT": {
+    "trueWord": "vero",
+    "falseWord": "falso"
+  },
+  "iyx_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ja_JP": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "jbo": {
+    "trueWord": "jetnu",
+    "falseWord": "jitfa"
+  },
+  "ka_GE": {
+    "trueWord": "ჭეშმარიტი",
+    "falseWord": "მცდარი"
+  },
+  "kab_DZ": {
+    "trueWord": "ih",
+    "falseWord": "ala"
+  },
+  "kk_KZ": {
+    "trueWord": "ақиқат",
+    "falseWord": "жалған"
+  },
+  "kkw_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "kl_GL": {
+    "trueWord": "eqqortoq",
+    "falseWord": "eqqunngitsoq"
+  },
+  "km_KH": {
+    "trueWord": "ត្រូវ",
+    "falseWord": "ខុស"
+  },
+  "kmr_Latn_TR": {
+    "trueWord": "rast",
+    "falseWord": "şaş"
+  },
+  "kn_IN": {
+    "trueWord": "ಸಹೀ",
+    "falseWord": "ಗಲತ್"
+  },
+  "kng_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ko_KR": {
+    "trueWord": "참",
+    "falseWord": "거짓"
+  },
+  "ky_KG": {
+    "trueWord": "чындык",
+    "falseWord": "жалган"
+  },
+  "la_VA": {
+    "trueWord": "verum",
+    "falseWord": "falsum"
+  },
+  "lb_LU": {
+    "trueWord": "wouer",
+    "falseWord": "falsch"
+  },
+  "ldi_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "lg_UG": {
+    "trueWord": "Kituufu",
+    "falseWord": "Ssi Kituufu"
+  },
+  "lgr_SB": {
+    "trueWord": "Uthui",
+    "falseWord": "Teigha"
+  },
+  "lif_NP": {
+    "trueWord": "ठीक",
+    "falseWord": "बेठीक"
+  },
+  "lij_IT": {
+    "trueWord": "veo",
+    "falseWord": "fäso"
+  },
+  "lld_IT": {
+    "trueWord": "Veira",
+    "falseWord": "Fauz"
+  },
+  "ln_CD": {
+    "trueWord": "mpenzá",
+    "falseWord": "mpenzá tɛ́"
+  },
+  "lo_LA": {
+    "trueWord": "ແມ່ນແລ້ວ",
+    "falseWord": "ບໍ່ແມ່ນ"
+  },
+  "lt_LT": {
+    "trueWord": "teisingai",
+    "falseWord": "neteisingai"
+  },
+  "ltg_LV": {
+    "trueWord": "patīss",
+    "falseWord": "oploms"
+  },
+  "lv_LV": {
+    "trueWord": "patiess",
+    "falseWord": "aplams"
+  },
+  "mai_IN": {
+    "trueWord": "सही",
+    "falseWord": "गलत"
+  },
+  "mdw_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "mfe_MU": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "min_ID": {
+    "trueWord": "bana",
+    "falseWord": "salah"
+  },
+  "mk_MK": {
+    "trueWord": "точно",
+    "falseWord": "неточно"
+  },
+  "mkw_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ml_IN": {
+    "trueWord": "അതെ",
+    "falseWord": "അല്ല"
+  },
+  "mn_Cyrl_MN": {
+    "trueWord": "үнэн",
+    "falseWord": "худал"
+  },
+  "mn_Mong_MN": {
+    "trueWord": "ᠦᠨᠡᠨ",
+    "falseWord": "ᠬᠤᠳᠠᠯ"
+  },
+  "mos_BF": {
+    "trueWord": "sɩda",
+    "falseWord": "zĩri"
+  },
+  "mr_IN": {
+    "trueWord": "सही",
+    "falseWord": "गलत"
+  },
+  "ms_MY": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "mt_MT": {
+    "trueWord": "Veru",
+    "falseWord": "Falz"
+  },
+  "my_MM": {
+    "trueWord": "မှန်",
+    "falseWord": "မှား"
+  },
+  "myv_RU": {
+    "trueWord": "Виде",
+    "falseWord": "Авиде"
+  },
+  "nb_NO": {
+    "trueWord": "sann",
+    "falseWord": "usann"
+  },
+  "nds_DE": {
+    "trueWord": "waor",
+    "falseWord": "falsk"
+  },
+  "ne_NP": {
+    "trueWord": "ठीक",
+    "falseWord": "बेठीक"
+  },
+  "ngz_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "njx_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "njy_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "nl_BE": {
+    "trueWord": "waar",
+    "falseWord": "onwaar"
+  },
+  "nl_NL": {
+    "trueWord": "waar",
+    "falseWord": "onwaar"
+  },
+  "nn_NO": {
+    "trueWord": "sann",
+    "falseWord": "usann"
+  },
+  "no_NO": {
+    "trueWord": "sann",
+    "falseWord": "usann"
+  },
+  "nr_ZA": {
+    "trueWord": "qiniso",
+    "falseWord": "mamala"
+  },
+  "nso_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "ny_MW": {
+    "trueWord": "Choona",
+    "falseWord": "Chabodza"
+  },
+  "oc_ES_aranes": {
+    "trueWord": "vertat",
+    "falseWord": "faus"
+  },
+  "oc_FR_lengadoc": {
+    "trueWord": "verai",
+    "falseWord": "fals"
+  },
+  "om_ET": {
+    "trueWord": "Dhugaa",
+    "falseWord": "Soba"
+  },
+  "or_IN": {
+    "trueWord": "ସତ",
+    "falseWord": "ମିଛ"
+  },
+  "pa_IN": {
+    "trueWord": "ਸਹੀ",
+    "falseWord": "ਗਲਤ"
+  },
+  "pap_BQ": {
+    "trueWord": "Berdat",
+    "falseWord": "No Berdat"
+  },
+  "pap_CW": {
+    "trueWord": "Berdat",
+    "falseWord": "No Berdat"
+  },
+  "pdc_US": {
+    "trueWord": "waahr",
+    "falseWord": "falsch"
+  },
+  "pjt_AU": {
+    "trueWord": "tjukaṟuru",
+    "falseWord": "ngunti"
+  },
+  "pl_PL": {
+    "trueWord": "prawda",
+    "falseWord": "fałsz"
+  },
+  "plt_MG": {
+    "trueWord": "Marina",
+    "falseWord": "Diso"
+  },
+  "pt_AO": {
+    "trueWord": "verdadeiro",
+    "falseWord": "falso"
+  },
+  "pt_BR": {
+    "trueWord": "verdadeiro",
+    "falseWord": "falso"
+  },
+  "pt_MZ": {
+    "trueWord": "verdadeiro",
+    "falseWord": "falso"
+  },
+  "pt_PT": {
+    "trueWord": "verdadeiro",
+    "falseWord": "falso"
+  },
+  "pui_CO": {
+    "trueWord": "ȓ",
+    "falseWord": "üi"
+  },
+  "puu_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ro_MD": {
+    "trueWord": "adevărat",
+    "falseWord": "fals"
+  },
+  "ro_RO": {
+    "trueWord": "adevărat",
+    "falseWord": "fals"
+  },
+  "ru_RU": {
+    "trueWord": "истина",
+    "falseWord": "ложь"
+  },
+  "rue_SK": {
+    "trueWord": "Правда",
+    "falseWord": "Неправда"
+  },
+  "rw_RW": {
+    "trueWord": "nibyo",
+    "falseWord": "sibyo"
+  },
+  "sat_IN": {
+    "trueWord": "ᱥᱟᱹᱨᱤ",
+    "falseWord": "ᱵᱷᱩᱞ"
+  },
+  "sat_Olck_IN": {
+    "trueWord": "ᱥᱟᱹᱨᱤ",
+    "falseWord": "ᱵᱷᱩᱞ"
+  },
+  "sc_IT": {
+    "trueWord": "Beru",
+    "falseWord": "Farsu"
+  },
+  "sdj_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "sg_CF": {
+    "trueWord": "Taâ-tënë",
+    "falseWord": "Wätäkä"
+  },
+  "shs_CA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "sid_ET": {
+    "trueWord": "Halale",
+    "falseWord": "Xara"
+  },
+  "sk_SK": {
+    "trueWord": "pravda",
+    "falseWord": "nepravda"
+  },
+  "sl_SI": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "so_SO": {
+    "trueWord": "Run",
+    "falseWord": "Been"
+  },
+  "sq_AL": {
+    "trueWord": "e vërtetë",
+    "falseWord": "e rremë"
+  },
+  "sr_CS": {
+    "trueWord": "тачно",
+    "falseWord": "нетачно"
+  },
+  "sr_Latn_CS": {
+    "trueWord": "tačno",
+    "falseWord": "netačno"
+  },
+  "sr_Latn_ME": {
+    "trueWord": "tačno",
+    "falseWord": "netačno"
+  },
+  "sr_Latn_RS": {
+    "trueWord": "tačno",
+    "falseWord": "netačno"
+  },
+  "sr_ME": {
+    "trueWord": "тачно",
+    "falseWord": "нетачно"
+  },
+  "sr_RS": {
+    "trueWord": "тачно",
+    "falseWord": "нетачно"
+  },
+  "ss_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "st_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "sun_ID": {
+    "trueWord": "leres",
+    "falseWord": "lepat"
+  },
+  "sv_FI": {
+    "trueWord": "sant",
+    "falseWord": "falskt"
+  },
+  "sv_SE": {
+    "trueWord": "sant",
+    "falseWord": "falskt"
+  },
+  "sw_TZ": {
+    "trueWord": "kweli",
+    "falseWord": "sikweli"
+  },
+  "szl_PL": {
+    "trueWord": "prowda",
+    "falseWord": "fałsz"
+  },
+  "ta_IN": {
+    "trueWord": "ஸரி",
+    "falseWord": "தப்ப"
+  },
+  "te_IN": {
+    "trueWord": "నిజము",
+    "falseWord": "అపాదము"
+  },
+  "tek_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "tg_TJ": {
+    "trueWord": "Ҳаққонӣ",
+    "falseWord": "Қалбакӣ"
+  },
+  "th_TH": {
+    "trueWord": "จริง",
+    "falseWord": "เท็จ"
+  },
+  "ti_ER": {
+    "trueWord": "ሓቂ",
+    "falseWord": "ሓሶት"
+  },
+  "tk_TM": {
+    "trueWord": "Dogry",
+    "falseWord": "Ýalňyş"
+  },
+  "tn_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  },
+  "tpi_PG": {
+    "trueWord": "Tru",
+    "falseWord": "Giaman"
+  },
+  "tr_TR": {
+    "trueWord": "doğru",
+    "falseWord": "yanlış"
+  },
+  "ts_ZA": {
+    "trueWord": "ntiyiso",
+    "falseWord": "vunwa"
+  },
+  "tsa_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "tt_RU": {
+    "trueWord": "чын",
+    "falseWord": "ялган"
+  },
+  "tyx_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "ug_CN": {
+    "trueWord": "راست",
+    "falseWord": "يالغان"
+  },
+  "uk_UA": {
+    "trueWord": "істина",
+    "falseWord": "брехня"
+  },
+  "ur_PK": {
+    "trueWord": "راست",
+    "falseWord": "غلط"
+  },
+  "uz_UZ": {
+    "trueWord": "haqiqiy",
+    "falseWord": "Soxta"
+  },
+  "ve_ZA": {
+    "trueWord": "ngoho",
+    "falseWord": "a si ngoho"
+  },
+  "vec_IT": {
+    "trueWord": "Vero",
+    "falseWord": "Falso"
+  },
+  "vi_VN": {
+    "trueWord": "đúng",
+    "falseWord": "sai"
+  },
+  "vif_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "vro_EE": {
+    "trueWord": "tõtõ",
+    "falseWord": "võlsś"
+  },
+  "wa_BE": {
+    "trueWord": "vraiy",
+    "falseWord": "fås"
+  },
+  "xh_ZA": {
+    "trueWord": "yinyaniso",
+    "falseWord": "asiyonyaniso"
+  },
+  "xku_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "yi_US": {
+    "trueWord": "אמת",
+    "falseWord": "פֿאַלש"
+  },
+  "yom_CG": {
+    "trueWord": "vrai",
+    "falseWord": "faux"
+  },
+  "zh_CN": {
+    "trueWord": "TRUE",
+    "falseWord": "FALSE"
+  },
+  "zh_HK": {
+    "trueWord": "真",
+    "falseWord": "假"
+  },
+  "zh_MO": {
+    "trueWord": "真",
+    "falseWord": "假"
+  },
+  "zh_SG": {
+    "trueWord": "TRUE",
+    "falseWord": "FALSE"
+  },
+  "zh_TW": {
+    "trueWord": "真",
+    "falseWord": "假"
+  },
+  "zu_ZA": {
+    "trueWord": "true",
+    "falseWord": "false"
+  }
+}

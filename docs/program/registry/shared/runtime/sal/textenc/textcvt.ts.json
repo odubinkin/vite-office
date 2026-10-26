@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/textcvt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": ["CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": ["apps/office/src/sal/textenc/textcvt.ts", "apps/office/src/sal/rtl/ustring-convert.test.ts", "vendor/libreoffice-reference/sal/textenc/textcvt.cxx"],
+      "justification": "The default missing-converter fallback is ported for CSV; original flag, capacity and converter-factory contracts remain pending.",
+      "knownViolations": [],
+      "localSymbols": ["ImplDummyToUnicode", "ImplUnicodeToDummy"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/textcvt.cxx",
+      "upstreamSymbols": ["ImplDummyToUnicode", "ImplUnicodeToDummy"]
+    }
+  }
+}

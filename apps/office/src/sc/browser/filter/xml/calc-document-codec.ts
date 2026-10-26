@@ -20,7 +20,7 @@ import type { ScTable } from "../../../inc/table";
 type Cell = readonly [
   col: number,
   row: number,
-  kind: "number" | "text" | "formula",
+  kind: "number" | "text" | "edit" | "formula",
   value: number | string,
 ];
 /** Actual sparse pattern span; -1 selects the native default column. */
@@ -95,7 +95,16 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         }
       } else if (cell.getType() === CellType.CELLTYPE_VALUE)
         sheet.cells.push([col[0], row[0], "number", cell.getDouble()]);
-      else {
+      else if (cell.getType() === CellType.CELLTYPE_EDIT) {
+        const edit = cell.getEditText();
+        if (!edit) throw new Error("Calc edit cell is unavailable.");
+        const value = edit.GetText();
+        try {
+          sheet.cells.push([col[0], row[0], "edit", text(value)]);
+        } finally {
+          value.dispose();
+        }
+      } else {
         const string = cell.getSharedString();
         if (!string) throw new Error("Calc worker cell type is unsupported.");
         sheet.cells.push([col[0], row[0], "text", text(string.getString())]);
@@ -217,13 +226,16 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
       }
       for (const [col, row, kind, value] of sheet.cells) {
         const pos = new ScAddress(col, row, tab);
-        if (kind === "number") document.SetValue(pos, value as number);
+        if (kind === "number") importer.docImport.setNumericCell(pos, value as number);
         else {
           const string = unicode(value as string);
           try {
             if (kind === "formula")
-              document.SetFormula(pos, string, FormulaGrammar.Grammar.GRAM_ODFF);
-            else importer.docImport.setStringCell(pos, string);
+              importer.docImport.setFormulaCell(pos, string, FormulaGrammar.Grammar.GRAM_ODFF);
+            else if (kind === "edit") {
+              document.SetTextCell(pos, string);
+              importer.docImport.invalidateBlockPositionSet(pos.Tab());
+            } else importer.docImport.setStringCell(pos, string);
           } finally {
             string.dispose();
           }
@@ -231,6 +243,7 @@ function* decodeSteps(record: CalcDocumentRecord): Generator<void, ScDocument> {
         yield;
       }
     }
+    importer.docImport.finalize();
     document.SetAutoCalc(true);
     complete = true;
     return document;

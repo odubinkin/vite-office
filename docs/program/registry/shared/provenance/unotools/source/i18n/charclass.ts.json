@@ -7,16 +7,25 @@
     "status": "mapped",
     "upstreamPath": "unotools/source/i18n/charclass.cxx",
     "localSymbols": [
-      "uppercase"
+      "uppercase",
+      "CharClass",
+      "isAsciiNumeric"
     ],
     "upstreamSymbols": [
-      "CharClass::uppercase"
+      "CharClass::uppercase",
+      "CharClass::CharClass",
+      "CharClass::isDigit",
+      "CharClass::isNumeric",
+      "CharClass::isLetterNumeric",
+      "CharClass::getCharacterType",
+      "CharClass::isAsciiNumeric"
     ],
     "preservedResponsibilities": [
-      "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending."
+      "Task166 implements only the original required CharClass uppercase field operation across original unotools/i18npool module boundaries, with genuine prepared Locale/OUString, the original ToUpper mapping mode and existing i18nutil getValue data. Preserve full/range overloads, classifier clamp, untouched input neighbor context, multi-unit/supplementary mappings and the catch-only-UNO-Exception unchanged-range fallback. Native whole-string JS replacement is disproven by six source mapping witnesses in en/tr/az/lt/el; native JS ASCII agreement does not establish whole-Unicode equivalence. Reuse existing scalar adaptation; no new ICU, full CharClass/UNO/Transliteration provider or memory manager. JS typed arrays erase native buffer allocation strategy. Full service construction, LanguageTag/system locale resolution, diagnostic logging, other operations and actual SharedStringPool/document/ODS/UI owners remain pending.",
+      "Task AQF9AG adds a concrete immutable-locale CharClass with source ASCII fast paths, Unicode KCharacterType classification, and existing native uppercase mapping; the source two-slot OnDemandCharClass owns instances across language switches. The exact nonempty ASCII-digit scan now serves ScImportOptions' sheet token validation."
     ],
     "omittedResponsibilities": [
-      "Full class/service construction, other classification/transliteration operations, diagnostic logging and actual Calc string pool/document/UI/ODS owners remain unimplemented."
+      "Remaining CharClass methods, full LanguageTag/UNO provider construction and diagnostics are unported."
     ],
     "evidence": {
       "local": [
@@ -27,6 +36,10 @@
         {
           "path": "apps/office/src/unotools/source/i18n/native-uppercase.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/unotools/source/i18n/native-charclass.test.ts",
+          "marker": "native ASCII and Unicode digit"
         }
       ],
       "upstream": [

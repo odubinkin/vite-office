@@ -21,7 +21,7 @@
         "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
         "vendor/libreoffice-reference/sc/source/core/tool/cellform.cxx"
       ],
-      "justification": "Original ScCellFormat first GetString overload resets color,selects actual context and dispatches empty/numeric/shared-string/formula values through real NFGetOutputString. Preserves zero suppression,formula output,error-before-empty/value ordering and the current native no-macro interpreter-level ellipsis path. Current core admits macro level0 only;macro/running callbacks,rich text,coordinate overload and other format families remain unported. Default formula grammar resolves to the real formula document grammar. No browser formatting,alternate cells or fake formatter services are introduced.",
+      "justification": "Original ScCellFormat first GetString overload resets color,selects actual context and dispatches empty/numeric/shared-string/formula values through real NFGetOutputString. Preserves zero suppression,formula output,error-before-empty/value ordering and the current native no-macro interpreter-level ellipsis path. Current core admits macro level0 only;macro/running callbacks,rich text,coordinate overload and other format families remain unported. Default formula grammar resolves to the real formula document grammar. No browser formatting,alternate cells or fake formatter services are introduced. CSV export now uses GetInputString scalar/formula dispatch and the real input-line formatter for numeric values; the represented format table remains General-only.",
       "knownViolations": [],
       "localSymbols": [
         "ScCellFormat"
@@ -29,7 +29,8 @@
       "sourceResponsibility": "divergent",
       "upstreamFile": "sc/source/core/tool/cellform.cxx",
       "upstreamSymbols": [
-        "ScCellFormat::GetString"
+        "ScCellFormat::GetString",
+        "ScCellFormat::GetInputString"
       ]
     }
   }

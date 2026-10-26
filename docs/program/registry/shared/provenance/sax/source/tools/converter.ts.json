@@ -42,6 +42,10 @@
           "marker": "reads ODS scalar numbers"
         },
         {
+          "path": "apps/office/src/sax/source/tools/converter-date.test.ts",
+          "marker": "retains the pinned source UTC adjustment order"
+        },
+        {
           "path": "apps/office/src/sc/browser/presentation/calc-character-format.test.tsx",
           "marker": "@fileoverview"
         },
@@ -101,7 +105,8 @@
     "localSymbols": [
       "CoreMeasureUnit",
       "Converter",
-      "convertMeasureToXML"
+      "convertMeasureToXML",
+      "parseDateTime"
     ],
     "omittedResponsibilities": [
       "Remaining measure targets/overloads and XML output units beyond CM, broader converter APIs and unaudited legacy caller policies remain unimplemented or unverified."
@@ -120,7 +125,9 @@
       "Converter::convertMeasure",
       "lcl_parseMeasure",
       "lcl_convertMeasure",
-      "Converter::convertDouble"
+      "Converter::convertDouble",
+      "Converter::parseDateTime",
+      "lcl_ConvertToUTC"
     ]
   },
   "legacyOrder": 36

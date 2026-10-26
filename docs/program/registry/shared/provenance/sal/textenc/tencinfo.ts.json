@@ -1,0 +1,28 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/textenc/tencinfo.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/textenc/tencinfo.cxx",
+    "localSymbols": ["rtl_getTextEncodingInfo", "rtl_TextEncodingInfo"],
+    "upstreamSymbols": ["rtl_getTextEncodingInfo"],
+    "preservedResponsibilities": [
+      "The source size-gated field writes and unknown-encoding fallback use min/max/average character sizes and flags captured from pinned ImplTextEncodingData for all 55 represented single-byte converters plus UTF-8. The CONTEXT/ASCII choice used by Calc CSV export therefore follows the native metadata rather than a guessed encoding category."
+    ],
+    "omittedResponsibilities": [
+      "Metadata for unrepresented multi-byte/contextual converters and unrelated tencinfo queries remains outside this runtime slice."
+    ],
+    "evidence": {
+      "local": [
+        { "path": "apps/office/src/sal/textenc/tencinfo.ts", "marker": "rtl_getTextEncodingInfo" },
+        { "path": "apps/office/src/sal/textenc/tencinfo.test.ts", "marker": "covers all represented" }
+      ],
+      "upstream": [
+        { "path": "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx", "marker": "rtl_getTextEncodingInfo" },
+        { "path": "vendor/libreoffice-reference/sal/textenc/textenc.cxx", "marker": "aImplUTF8TextEncodingData" }
+      ]
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tencinfo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": ["CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/textenc/tencinfo.ts",
+        "apps/office/src/sal/textenc/native-text-encoding-info.json",
+        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx"
+      ],
+      "justification": "Pinned source metadata for the 55 represented single-byte converters and UTF-8 preserves the rtl_getTextEncodingInfo size gates, unknown-data fallback and Calc CSV CONTEXT/ASCII branch selection. Remaining source registry data and queries are outside this current slice.",
+      "knownViolations": [],
+      "localSymbols": ["rtl_getTextEncodingInfo", "rtl_TextEncodingInfo"],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tencinfo.cxx",
+      "upstreamSymbols": ["rtl_getTextEncodingInfo"]
+    }
+  }
+}

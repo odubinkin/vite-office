@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/dbgui/imoptdlg.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/dbgui/imoptdlg.cxx",
+    "localSymbols": [
+      "ScImportOptions"
+    ],
+    "upstreamSymbols": [
+      "ScImportOptions::BuildString"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG maps the ScImportOptions CSV filter-string contract to the existing Calc export path. Its native short-string DONTKNOW encoding/defaults, legacy four-token behavior, recognized fourteen-token positions, delimiter weighting, surplus-token tolerance and signed32 numeric token parsing are represented. Encoding conversion and Calc export are owned by their source-aligned SAL and ScDocShell modules; formatter-driven date/currency classification remains incomplete and is not claimed as parity."
+    ],
+    "omittedResponsibilities": [
+      "The native CSV options UI dialog and full LibreOffice filter family remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/dbgui/imoptdlg.ts",
+          "marker": "ScImportOptions"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/dbgui/asciiopt.test.ts",
+          "marker": "ScImportOptions"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/dbgui/imoptdlg.cxx",
+          "marker": "ScImportOptions::BuildString"
+        }
+      ]
+    }
+  }
+}

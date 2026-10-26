@@ -4,6 +4,8 @@ import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Loc
 import { u_charType } from "../../../external/icu/source/common/uchar";
 import { UCharCategory as C } from "../../../external/icu/source/common/unicode/uchar";
 import * as K from "../../../offapi/com/sun/star/i18n/KCharacterType";
+/** Shared source KCharacterType masks for the unotools CharClass consumer. */
+export { K as KCharacterType };
 import { iterateCodePoints } from "../../../o3tl/inc/string_view";
 import { transliterateUppercase } from "../transliteration/transliteration_body";
 

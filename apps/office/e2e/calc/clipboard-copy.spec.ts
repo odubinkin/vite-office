@@ -22,6 +22,7 @@ type Fixture = typeof import("../../src/sc/source/ui/inc/editable") &
   typeof import("../../src/svl/source/numbers/zforscan") &
   typeof import("../../src/sal/inc/rtl/math") &
   typeof import("../../src/i18npool/source/localedata/localedata") &
+  typeof import("../../src/unotools/source/i18n/localedatawrapper") &
   typeof import("../../src/udkapi/com/sun/star/lang/Locale") &
   typeof import("../../src/i18npool/inc/numberformatcode") &
   typeof import("../../src/offapi/com/sun/star/i18n/NumberFormatCode") &
@@ -92,6 +93,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
     },
     { module: "src/sal/inc/rtl/math.ts", names: ["round"] },
     { module: "src/i18npool/source/localedata/localedata.ts", names: ["getLocaleFormatElements"] },
+    { module: "src/unotools/source/i18n/localedatawrapper.ts", names: ["LocaleDataWrapper"] },
     { module: "src/udkapi/com/sun/star/lang/Locale.ts", names: ["Locale"] },
     { module: "src/i18npool/inc/numberformatcode.ts", names: ["NumberFormatCodeMapper"] },
     { module: "src/offapi/com/sun/star/i18n/NumberFormatCode.ts", names: ["NumberFormatCode"] },
@@ -442,10 +444,12 @@ test("copies sparse clipboard blocks and completes real dependency notifications
           standardName = n.extractStandardGeneralName(
             n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(selectedFormat)).Code,
           ),
+          localeData = new n.LocaleDataWrapper(locale),
           scanner = new n.ImpSvNumberformatScan(
             locale,
             standardName,
             n.KeywordLocalization.AllowEnglish,
+            localeData,
           ),
           code = n.unicode("general"),
           compiledCheck: [number] = [-1],
@@ -550,6 +554,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         compiled.dispose();
         code.dispose();
         scanner.dispose();
+        localeData.dispose();
         standardName.dispose();
         decimal.dispose();
         mappedSequence.dispose();
