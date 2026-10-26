@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/timezone.create.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/timezone.create.ts",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "scripts/icu-olson-native-probe.mjs",
+        "scripts/icu-timezone-custom-native-probe.mjs"
+      ],
+      "justification": "Original internal createSystemTimeZone factory with local-zero or explicit sticky status, synchronous open/construct/failure cleanup ordering and actual Olson ownership. The free function projects the native anonymous-namespace helper without a TimeZone/concrete import initialization cycle. Public system/custom/Unknown dispatch now wraps this source internal helper; host/system-default lifecycle is ported separately in timezone.default.ts. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified. AQF9AG completes public system/custom/Unknown createTimeZone dispatch, independently initialized static GMT/Unknown borrowed const owners, owned fallback clones and both public getCanonicalID overloads. Original output clearing, incoming status guard, special Unknown identity, CLDR/system branch, custom error reset and aliased input/output behavior are retained. Host/default creation now lives in timezone.default.ts.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createSystemTimeZone",
+        "createTimeZone",
+        "getGMT",
+        "getUnknown",
+        "getCanonicalID"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/timezone.cpp",
+      "upstreamSymbols": [
+        "createSystemTimeZone",
+        "TimeZone::createTimeZone",
+        "TimeZone::getGMT",
+        "TimeZone::getUnknown",
+        "TimeZone::getCanonicalID"
+      ]
+    }
+  }
+}

@@ -26,7 +26,9 @@
       "ucase_tolower",
       "ucase_totitle",
       "ucase_toupper",
-      "value"
+      "value",
+      "ucase_toFullFolding",
+      "FullFoldingPointer"
     ],
     "upstreamSymbols": [
       "GET_EXCEPTIONS",
@@ -41,18 +43,15 @@
       "u_tolower",
       "u_toupper",
       "u_totitle",
-      "u_foldCase"
+      "u_foldCase",
+      "ucase_toFullFolding"
     ],
     "preservedResponsibilities": [
-      "Original ICU78.3 scalar uppercase/title/fold retain frozen UTrie2 stage/index/high/error lookup, original exception slots/population-count data/signed deltas and conditional Turkic option behavior. Public scalar delegates remain in the actual ucase.cpp owner; uchar declarations reexport them. Full generated Unicode17 arrays and singleton fields remain source data, with typed-array index/data16 shared backing offsets preserved. Per explicit user native-first instruction, simple lowercase uses String.fromCodePoint(c).toLowerCase().codePointAt(0) after original signed32 conversion and explicit out-of-range identity; this matches all1114112 original codepoints in measured Node24.13.1 and real Chrome154. Complete comparison report retains every native mismatch and original LibreOffice table-filter reachability; native upper/title/fold are not equivalent. Complete unchanged original scalar scopes and29 full original files compile from the exact pinned archive; native/sanitized complete71,303,168-byte rows and all ancillary data agree. Portable replay restores every16-field row and full raw SHA,669 populated original data slots and2048 valid generic single/double macro callers. Broad ICU/library, arbitrary browser versions/native Unicode data, C++ physical const/pointer ABI, invalid memory, original full-string/locale/context APIs/UnicodeSets, literal upstream QA and actual CharClass/SharedStringPool/Calc cells/UI remain unverified. No JavaScript fold proxy or fake service/data/document substitutes those missing owners."
+      "Original ICU78.3 scalar lower/upper/title/fold now all use the actual pinned UTrie2, exception slots, signed deltas and conditional-fold algorithms. AQF9AG removes the former JS toLowerCase scalar adapter rather than relying on the host Unicode version. The consumed ucase_toFullFolding returns original complemented-unchanged/scalar/string-length tags, resets its borrowed pointer, retains iDot/Turkic mappings and exposes readonly spans into original full-mapping data. Existing portable complete scalar/trie/exception fixture replay still passes; unchanged native libraries additionally match93592688 bytes of lower/digit/full-fold observations across1114112 Unicode points plus two nonnegative out-of-range inputs and all8 fold options. Full locale/context string mapping, UnicodeSets, CharClass/service/document integration and native physical pointer/allocator/lifetime/ABI/undefined inputs remain uncertified."
     ],
     "omittedResponsibilities": [
-      "Only the demonstrated scalar dependency closure is implemented. Native lowercase is certified only for measured Node24/Chrome154; exhaustive pinned replay detects other-engine mismatches but no universal engine or Unicode-version guarantee is claimed. Complete original locale-aware string mapping, UNO CharClass service and SharedStringPool remain missing. No whole-library parity, physical const/pointer ABI, invalid memory or literal full upstream QA claim."
+      "Full locale/context string mapping and service/document integration remain incomplete. No native allocator/lifetime/physical pointer ABI or undefined-input parity is claimed."
     ],
-    "stackDivergence": {
-      "kind": "browser-adaptation",
-      "rationale": "Explicit native-first user instruction chooses exhaustive native simple-lowercase scalar adapter; Node24/Chrome154 match all pinned Unicode points. Original identity for invalid signed32 values remains explicit. Original upper/title/fold/data algorithms remain necessary."
-    },
     "evidence": {
       "local": [
         {
@@ -62,6 +61,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/ucase.test.ts",
           "marker": "matches every unchanged native Unicode codepoint and complete initialized trie observation"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.custom.test.ts",
+          "marker": "full folding"
         }
       ],
       "upstream": [

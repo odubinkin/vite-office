@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/zonemeta.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/zonemeta.ts",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "scripts/icu-olson-native-probe.mjs",
+        "scripts/icu-timezone-custom-native-probe.mjs"
+      ],
+      "justification": "Original consumed CLDR canonical lookup and cache, including input length/bogus/invariant checks, local-status isolation, type-map then alias then Olson-link resolution and guarded cache insertion. Original NUL-terminated key semantics and slash replacement order are retained. Map/immutable UTF16 strings project native hash/cache and borrowed data under a synchronous browser lifetime. Native mutex/cleanup/allocation and broader metazone/custom-ID services remain unported. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified. Original numeric-offset custom creation and its distinct uint8 formatter are now ported. CALC-316 retains the source hour/minute-only condition producing ID GMT for a seconds-only nonzero raw offset. It is not merged with the different TimeZone string-ID formatter; native defined numeric cases match. Signed INT_MIN negation/other native undefined inputs are outside the witness. CALC-317 records and preserves NUL-terminated canonical cache keys versus counted system-ID lookup, including warmed-cache success for an otherwise rejected counted ID.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ZoneMeta",
+        "getCanonicalCLDRID",
+        "resourceKey",
+        "createCustomTimeZone",
+        "formatCustomID"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/zonemeta.cpp",
+      "upstreamSymbols": [
+        "ZoneMeta::getCanonicalCLDRID",
+        "ZoneMeta::findTimeZoneID",
+        "ZoneMeta::createCustomTimeZone",
+        "ZoneMeta::formatCustomID"
+      ]
+    }
+  }
+}

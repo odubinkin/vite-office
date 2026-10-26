@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/calendar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/calendar.ts",
+        "apps/office/src/external/icu/source/i18n/gregocal.test.ts",
+        "scripts/icu-calendar-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+        "scripts/icu-calendar-time-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs",
+        "scripts/icu-olson-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+        "scripts/icu-timezone-default-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports actual Calendar field/stamp/date/week state and the original complete bidirectional UTC/field algorithms: time limits, lazy flags, validation, explicit zone/clock-field precedence, repeated/skipped-time options, strict gaps and NEXT_VALID previous-transition lookup. The known-concrete BasicTimeZone detection recognizes actual SimpleTimeZone and OlsonTimeZone; RuleBased/VTimeZone recognition awaits their actual classes. Locale/zone constructors remain abstract. Native scalar/week and UTC-field probes are retained, and45789 actual rule/transition/full-time cases match unchanged ICU78.3. CALC-310/311 preserve source nonleap-February29 NEXT_VALID behavior and release generic lookback logic; native debug assertions/ABI/undefined outputs are not certified. System/IANA construction and full LibreOffice calendar/formatter/CSV service integration remain incomplete. Known-concrete BasicTimeZone recognition now includes actual OlsonTimeZone alongside SimpleTimeZone. The native Olson witness checks actual Calendar fields-to-UTC and normalized public fields on all pinned IANA zones plus strict FIRST/LAST/NEXT_VALID gap/fold cases, including Apia day skip and Lord Howe half-hour transitions. Locale/default construction and RuleBased/VTimeZone classes remain pending. AQF9AG adds actual fZone ownership and source get/adopt/set/orphanTimeZone operations. Null adoption is ignored, const setter clones, adopt invalidates only computed fields, and orphan replaces the zone with a default clone without invalidating cached fields (CALC-319). The unchanged native Calendar and TimeZone implementations match explicit owned-zone/cache cases in the 310-case timezone-default probe. Locale/Gregorian constructors and full LibreOffice calendar/formatter/CSV service integration remain incomplete; tests bootstrap explicit zone/week state without overriding the owned getter.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Calendar",
+        "resolveFields",
+        "computeJulianDay",
+        "handleComputeJulianDay",
+        "computeGregorianFields",
+        "recalculateStamp"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/calendar.cpp",
+      "upstreamSymbols": [
+        "Calendar",
+        "resolveFields",
+        "computeJulianDay",
+        "handleComputeJulianDay",
+        "computeGregorianFields",
+        "recalculateStamp"
+      ]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/simpletz.cpp",
+    "localSymbols": [
+      "initTransitionRules",
+      "getNextTransition",
+      "getPreviousTransition",
+      "getTimeZoneRules"
+    ],
+    "upstreamSymbols": [
+      "SimpleTimeZone::initTransitionRules",
+      "SimpleTimeZone::getNextTransition",
+      "SimpleTimeZone::getPreviousTransition",
+      "SimpleTimeZone::getTimeZoneRules"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports actual SimpleTimeZone lazy rule construction with adopted DateTimeRule and owned Annual/Initial/Transition objects, original first-transition ordering, next/previous strict comparisons, borrowed rule output/capacity and cache behavior. Fragments operate on the one original owner. The next-transition cached first assignment continues into annual selection and can return false with changed output, per CALC-307; ID-only updates retain stale rule names, per CALC-309. Source cache reset order is preserved, with native leak finding CALC-308 documented rather than introducing a second cache. Single-thread synchronous initialization projects serialization; native mutex, allocation-failure, ABI and invalid lifetime states are uncertified. Unchanged ICU78.3 libraries/data match45789 combined annual/rule/transition/Calendar time cases; the probe and focused unit tests are limited to the stated operations. System/IANA/locale factories and full LibreOffice calendar/formatter/CSV integration remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibility is ported. Native allocation/concurrency/ABI and complete factories/services remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+          "marker": "initTransitionRules"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+          "marker": "actual source rules"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/simpletz.cpp",
+          "marker": "SimpleTimeZone::initTransitionRules"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+      "rationale": "Source transition responsibilities are split from scalar SimpleTimeZone to keep the authored file-size budget while operating directly on its same owner and state.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

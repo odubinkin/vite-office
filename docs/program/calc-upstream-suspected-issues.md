@@ -4058,3 +4058,85 @@ Pinned `sc/source/core/data/documentimport.cxx` explains in `unshareDoomedCell` 
 ### CALC-299 — One-sheet block-position cache retains failed initialization
 
 Pinned `sc/source/core/data/mtvelements.cxx`, `TableColumnBlockPositionSet::getBlockPosition`, inserts a default `ColumnBlockPosition` into its map before calling `ScTable::InitColumnBlockPosition`. If initialization fails, the first call returns null but leaves that entry in the map; the next call for the same column returns its uninitialized position. `ScDocumentImportImpl` validates its column domain before reaching this cache, so ordinary import avoids this case. Preserve the insertion/initialization order and explicit invalidation contract rather than erasing a failed entry automatically.
+
+### CALC-300 — Scientific input range failure returns before applying its leading sign
+
+Pinned `svl/source/numbers/zforfind.cxx`, `ImpSvNumberInputScan::IsNumberFormat`, handles RTL scientific-conversion `OutOfRange` by immediately returning success with type Text and either positive `DBL_MAX` or positive zero, depending on the exponent sign. The later `nStringScanSign` and `nSign` application is skipped. Consequently the output value for `-1E9999` is positive `DBL_MAX`, and `-1E-9999` yields positive zero. The retained Text type may make the numeric output irrelevant to many callers, but the sign differs from the ordinary conversion path. Preserve the early return, unchanged scanned-category/sign state and output values; the local numeric-result tests exercise the actual scanner and RTL converter. This result fragment is not yet the public formatter or CSV auto-input path.
+
+### CALC-301 — ICU subnormal negative time can produce a negative millis-in-day
+
+Pinned ICU78.3 `source/i18n/gregoimp.cpp`, `ClockMath::floorDivide(double,int32_t,int32_t*)`, floors the quotient after division but floors the numerator separately when computing the remainder. For `-DBL_TRUE_MIN` milliseconds divided by 86400000, binary64 division underflows to negative zero while flooring the numerator yields -1. Consequently `Grego::timeToFields` returns 1970-01-01 with millis-in-day -1 and success. The unchanged native source reproduces this result, and the local test preserves it without clamping or adjusting the day. Normal LibreOffice calendar entrypoints can round or constrain their input before this helper, so incorrect CSV date values are not established by this witness.
+
+### CALC-302 — ICU byte-weekday negation can admit the invalid value -128
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::decodeStartRule` and `decodeEndRule`, negate a negative encoded weekday and narrow it back to `int8_t`. With -128, the native compiler used by the witness narrows 128 back to -128. The subsequent validation checks only whether the decoded weekday exceeds Saturday, so -128 passes. A rule pair with March day14/weekday-128 and November day-7/weekday-128 constructs successfully and enables DST. The normal encoded weekday domain is -7 through7; accepting this value appears unintended. Preserve the signed-byte narrowing and upper-bound-only validation. The unchanged native comparison and local test cover the witness; no shipped IANA rule or incorrect CSV cell is established by this input.
+
+### CALC-303 — ICU documents negative day-of-month rules that its decoder rejects
+
+Pinned ICU78.3 `source/i18n/unicode/simpletz.h`, the `setStartRule` documentation, describes a negative day with weekday zero as counting backward from the end of the month. In `source/i18n/simpletz.cpp`, weekday zero instead selects `DOM_MODE`, and both rule decoders reject days below one. Thus a start rule for March day-2/weekday0 returns `U_ILLEGAL_ARGUMENT_ERROR` rather than selecting the next-to-last day. The setter has already stored the new fields and updated the active-rule flag before the error. Preserve the source rejection and partial mutation; do not introduce end-of-month interpretation or rollback. The native comparison and local rule test cover this documentation/implementation mismatch.
+
+### CALC-304 — ICU negative-DST overlaps reverse former/latter offset choices
+
+Pinned ICU78.3 `source/i18n/unicode/simpletz.h` explicitly allows negative DST savings. In `source/i18n/simpletz.cpp`, `SimpleTimeZone::getOffsetFromLocal` nevertheless separates its adjustment cases using `savingsDST > 0`. For a raw-zero zone with savings -3600000 and a second-Sunday-in-March 02:00 wall start, the clock moves backward from 02:00 to 01:00 on 2024-03-10. Local 01:30 therefore occurs first at UTC01:30 with offset0 and later at UTC02:30 with offset-3600000. The unchanged native method returns offset-3600000 for `UCAL_TZ_LOCAL_FORMER` and offset0 for `UCAL_TZ_LOCAL_LATTER`, reversing these two interpretations. Preserve the branch and its subtraction of negative savings. The native rule comparison and local regression cover both outputs; effects through other ICU zone implementations or CSV date input are not established.
+
+### CALC-305 — ICU transition assignment dereferences empty source rules
+
+Pinned ICU78.3 `source/i18n/tztrans.cpp`, `TimeZoneTransition` default construction leaves both rule pointers null, and copy construction checks each pointer before cloning. Assignment instead passes `*right.fFrom` and `*right.fTo` unconditionally to the rule setters. Assigning a distinct default-constructed source therefore dereferences null, although copying that source is supported. Preserve the assignment structure and its initialized-source requirement; do not silently make it a nullable copy. The local tests exercise empty copy construction and initialized assignment. No native null dereference was executed or crash outcome certified.
+
+### CALC-306 — ICU annual-rule equality omits name and offset state
+
+Pinned ICU78.3 `source/i18n/tzrule.cpp`, `AnnualTimeZoneRule::operator==`, compares dynamic type, date rule and year range without calling `TimeZoneRule::operator==`. Consequently two annual rules with equal dates/ranges but different names, raw offsets and DST savings compare equal. The same pair can return false from `isEquivalentTo`, which does include the base numeric state. This is surprising for an equality relation and affects virtual rule comparison inside transitions. Preserve both original methods. The unchanged native comparison checks equal dates with names a/b and offsets/savings 0/3600000 versus 3600000/0.
+
+### CALC-307 — ICU next-transition first-result assignment has no early return
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::getNextTransition`, copies the cached first transition into the output when the base precedes it, then continues to the annual-rule selection. Normally this overwrites the copied initial-rule source with an annual-rule source. If standard and DST starts tie, both subsequent strict comparisons fail: the method returns false after changing the output to the cached first transition. An omitted early return appears possible, but equal-rule policy is not established. Preserve the assignment, comparison order and return value. Native and local tests cover equal UTC March1 starts and a base in the preceding year.
+
+### CALC-308 — ICU timezone assignment clears existing cache pointers without deleting them
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::operator=`, ends by calling `clearTransitionRules`. That helper nulls all four cache pointers; it does not delete their owned objects. `deleteTransitionRules`, used by normal reinitialization and destruction, performs the deletion before clearing. Assigning into a zone whose transition cache was already initialized therefore appears to lose the old native allocations. Preserve the source cache reset order in the browser value projection. This is an ownership finding from source review; native leak instrumentation and allocator/ABI parity are not claimed.
+
+The same clear-without-delete pattern occurs in `source/i18n/olsontz.cpp`, `OlsonTimeZone::operator=`: the previous transition/rule cache is reset after cloning the replacement final zone. Preserve that reset boundary as well; native leak instrumentation is not claimed for either owner.
+
+### CALC-309 — ICU ID-only updates leave cached transition names stale
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp` constructs rule names from the current ID plus `(STD)`/`(DST)` during lazy initialization. The inherited `TimeZone::setID` only replaces the ID and does not invalidate this cache. After querying rules for ID zone and changing it to renamed, the ID query returns renamed while rule names remain zone(STD)/zone(DST). A later rule setter rebuilds the names. Whether cached names are intentionally independent after construction is unverified. Preserve this invalidation boundary; the native borrowed-rule comparison and local test cover both states.
+
+### CALC-310 — ICU February29 rules disagree between offsets and transition queries
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `compareToRule`, clamps a DOM February29 rule to February28 in nonleap years. In `source/i18n/tzrule.cpp`, `AnnualTimeZoneRule::getStartInYear` instead passes DOM February29 to Gregorian day conversion, producing March1; only its DOW_LEQ_DOM case adjusts February29 explicitly. A raw-zero, one-hour-DST zone starting February29 at 02:00 wall and ending October1 at 02:00 therefore has differing offset and transition timelines. With startYear2000, `Calendar` NEXT_VALID input 2023-02-28 02:30 returns UTC2022-10-01 01:00, the earlier annual transition, with success. Preserve both calculations and the previous-transition lookup. The unchanged native witness returns 1664586000000, also asserted locally. The default skipped-time option is LAST; a wrong CSV default result is not established.
+
+### CALC-311 — ICU generic repeated-time debug assertion contradicts its safety window
+
+Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::computeZoneOffset`, says the maximum historical negative offset change is three hours and uses a six-hour lookback. In its non-Basic FIRST-occurrence branch, the debug assertion nevertheless requires `offsetDelta < -6*60*60*1000`. An unchanged zone with delta0, or the documented smaller negative change, fails that assertion. Release logic then separately tests `offsetDelta < 0`. Preserve the release branch and its lookback. Native debug assertions are outside this browser release projection, and no full custom-zone/debug-build result is claimed.
+
+### CALC-312 — ICU indexed string resource lookup can return null with success
+
+Pinned ICU78.3 `source/common/uresbund.cpp`, `ures_getStringByIndex`, passes a non-alias table or array child directly through `ures_getStringWithAlias` to `res_getString`. A nonstring child returns null and resets the length to zero without changing a successful status. By contrast, `ures_getString` on the same child sets `U_RESOURCE_TYPE_MISMATCH`, and non-alias `ures_getStringByKey` sets that error while retaining the incoming length. Alias children use the scalar getter, setting the error and length0 in both paths. For example, index0 of the pinned zoneinfo64 root is the Names array: indexed string lookup returns null, length0 and success. Preserve these distinct behaviors instead of adding a uniform error. The unchanged native resource witness covers every node and keyed child with success, warning and failure input statuses.
+
+### CALC-313 — ICU Olson assignment keeps the recipient ID while replacing its canonical ID and rules
+
+Pinned ICU78.3 `source/i18n/olsontz.cpp`, `OlsonTimeZone::operator=`, copies canonical ID, resource pointers, final-zone state and transition counts without calling the base `TimeZone::operator=`. Assigning Etc/GMT+5 into Etc/GMT+1 therefore retains the requested ID Etc/GMT+1 while its canonical ID and offsets come from Etc/GMT+5. Copy construction first invokes the base copy constructor, so it retains the source ID instead. Preserve this distinction. The unchanged native witness checks warmed-cache assignment, cloned identity, equality/rule comparison and resulting offset; a local regression checks the fixed-zone example.
+
+### CALC-314 — ICU Olson same-rules shortcut accepts two null maps before checking offsets
+
+Pinned ICU78.3 `source/i18n/olsontz.cpp`, `OlsonTimeZone::hasSameRules`, returns true when the two `typeMapData` pointers are equal, before comparing final-zone or numeric offset state. Two fixed historical zones without transitions have null maps. Consequently Etc/GMT+1 and Etc/GMT+5 report the same rules even though their raw offsets are -3600000 and -18000000. Equality still checks their IDs separately. Preserve the early pointer/null comparison and native shared-buffer identity; do not add an offset check ahead of it. The unchanged native witness and local regression verify this result.
+
+### CALC-315 — ICU integer parsing consumes supplementary decimal digits twice
+
+Pinned ICU78.3 `source/common/util_props.cpp`, `ICU_Utility::parseNumber`, obtains a code point through `UnicodeString::char32At(p)` but advances with `++p`. `char32At` combines a surrogate pair from either its lead or trail position. A supplementary decimal digit is therefore processed twice. For example mathematical double-struck digit one U+1D7D9 yields integer11 and position2, while `u_digit` correctly returns1 for the code point. Public `TimeZone::createTimeZone` consequently accepts GMT+𝟙 as GMT+11:00 with raw offset39600000. Preserve the original code-unit advancement, digit/property data and custom-ID parser. The unchanged native utility/public-factory witness and local regression check these outputs.
+
+### CALC-316 — ICU numeric custom zones omit a seconds-only offset from the ID
+
+Pinned ICU78.3 `source/i18n/zonemeta.cpp`, `ZoneMeta::formatCustomID`, appends a sign and offset only when hour or minute is nonzero. Seconds alone are omitted. `ZoneMeta::createCustomTimeZone(30000)` therefore returns ID GMT with raw offset30000. The distinct formatter in `source/i18n/timezone.cpp` includes seconds in its condition, so `TimeZone::createTimeZone` with GMT+00:00:30 returns that full normalized ID for the same raw offset. Preserve the two source formatters and their different conditions. The unchanged native witness and local regression cover the numeric and string paths.
+
+### CALC-317 — ICU canonical lookup can ignore a NUL suffix after its cache is populated
+
+Pinned ICU78.3 `source/i18n/zonemeta.cpp`, `ZoneMeta::getCanonicalCLDRID`, validates and hashes a NUL-terminated UTF16 cache key, whereas system-ID lookup in `source/i18n/timezone.cpp` compares the full counted UnicodeString. After resolving America/New_York, public canonical lookup of America/New_York followed by NUL and trailing returns canonical America/New_York, system=true and success. Creating a zone from the same counted input returns Etc/Unknown. A fresh native process without the prior resolution instead returns an empty canonical output, system=false and `U_ILLEGAL_ARGUMENT_ERROR`. These are malformed IDs, but the cache-dependent difference is observable through the public APIs. Preserve the source counted-string versus C-string/cache behavior; do not trim the factory input or add canonical validation. Separate unchanged native cold/warm queries and a local warmed-cache regression verify the finding.
+
+### CALC-318 — ICU comparison prefix tracking rewinds a different counter from its source pointer
+
+Pinned ICU78.3 `source/common/ustrcase.cpp`, `_cmpFold`, rewinds `s1` when folding a supplementary code point encountered at the second string's trail surrogate, but decrements `m2`. The analogous first-string branch rewinds `s2` and decrements `m2`. This suggests a possible mismatch between the rewound input and its prefix-match counter. The consumed `u_strncasecmp` entrypoint requests no prefix-length outputs, so its comparison result is unaffected; the local port explicitly omits the unused prefix tracking. Native prefix-length behavior and the unported prefix-match API are not certified. If that responsibility is added, retain the original counter updates rather than silently correcting the suspected mismatch.
+
+### CALC-319 — ICU calendar orphaning changes the zone without invalidating computed fields
+
+Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces `fZone` with a default-zone clone but leaves `fAreFieldsSet` unchanged. After computing UTC0 in Europe/Paris, switching the default to Etc/GMT+5 and orphaning the calendar zone returns the original Paris owner and exposes the new default zone, while the cached ZONE_OFFSET field remains3600000. Calling `setTimeZone` with a clone of the already-current zone then invalidates the fields and yields -18000000 for the same UTC time. Preserve orphaning versus adoption/setter invalidation boundaries; do not add an orphan invalidation. The unchanged native Calendar class and local owned-zone regression verify the stale-field result.

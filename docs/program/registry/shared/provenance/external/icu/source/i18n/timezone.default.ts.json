@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/timezone.default.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/timezone.cpp",
+    "localSymbols": [
+      "detectHostTimeZoneFromHost",
+      "detectHostTimeZone",
+      "createDefault",
+      "adoptDefault",
+      "setDefault"
+    ],
+    "upstreamSymbols": [
+      "TimeZone::detectHostTimeZone",
+      "TimeZone::createDefault",
+      "TimeZone::adoptDefault",
+      "TimeZone::setDefault"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the original timezone.cpp host detection decision body and default-zone once/adopt/copy lifecycle. Empty-name failure, short-name raw-offset mismatch rejection, fixed-zone fallback, Unknown clone and ordered platform hooks are preserved. Browser platform hooks remain an explicit separate adaptation. The unchanged timezone.cpp/olsontz.cpp and ICU78.3 libraries/data match 310 native cases, including 144 injected host captures, default initialization/adoption and 160 Calendar ownership/cache cases. Locale forLocaleOrDefault, calendar constructors, native allocator/mutex/cleanup/ABI and undefined ownership inputs remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.default.ts",
+          "marker": "detectHostTimeZoneFromHost"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+          "marker": "orphanTimeZone"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/timezone.cpp",
+          "marker": "TimeZone::detectHostTimeZone"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/timezone.default.ts",
+      "rationale": "Original implementation is split by responsibility to retain the repository file-size budget and synchronous source ownership/dispatch without base/concrete class evaluation cycles. Shared fragments operate directly on the one actual owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

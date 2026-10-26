@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/datetime/duration.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/datetime/duration.cxx",
+    "localSymbols": [
+      "Duration"
+    ],
+    "upstreamSymbols": [
+      "Duration::Duration"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports tools::Duration Time/DateTime difference constructors, SetTimeDiff, ApplyTime and scalar getters for the DateTime::Sub path. It subtracts date integers and nanoseconds separately, normalizes day/time signs, and moves Time hours beyond24 into whole days for the Time-only constructor. Float-day construction, normalization constructors and Add/Mult/unary arithmetic remain unported. The DateTime overload retains its upstream normalized-date/time precondition."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated scalar constructor/conversion slice is ported; complete native clock/platform/calendar behavior and native compiled differential QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/datetime/duration.ts",
+          "marker": "Duration"
+        },
+        {
+          "path": "apps/office/src/tools/source/datetime/datetime.test.ts",
+          "marker": "normalizes large signed Time differences"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/tools/source/datetime/duration.cxx",
+          "marker": "Duration::Duration"
+        }
+      ]
+    }
+  }
+}

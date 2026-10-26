@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 simple scalar case algorithms and public delegates; full/string/context APIs are not represented. */
+/** @fileoverview Original ICU78.3 scalar case algorithms, public scalar delegates and full-fold mapping over pinned tables; locale/context string mapping remains unported. */
 import {
   _FOLD_CASE_OPTIONS_MASK,
   UCASE_EXC_SHIFT,
@@ -7,6 +7,8 @@ import {
   UCASE_EXC_UPPER,
   UCASE_EXC_TITLE,
   UCASE_EXC_DELTA,
+  UCASE_EXC_FULL_MAPPINGS,
+  UCASE_FULL_LOWER,
   UCASE_EXC_DOUBLE_SLOTS,
   UCASE_EXC_NO_SIMPLE_CASE_FOLDING,
   UCASE_EXC_DELTA_IS_NEGATIVE,
@@ -67,11 +69,82 @@ export function GET_SLOT_VALUE(excWord: number, idx: number, pe: ExceptionPointe
   }
 }
 
-/** Native simple-lowercase adapter, exhaustively matched against pinned ICU in Node24 and Chrome154. @param c - Integral UChar32. @returns Original simple scalar mapping. */
+/** Original table-driven simple lowercase, without a host casing provider. @param c - Integral UChar32. @returns Original simple scalar mapping. */
 export function ucase_tolower(c: number): number {
   c |= 0;
-  if (c >>> 0 > 0x10ffff) return c;
-  return String.fromCodePoint(c).toLowerCase().codePointAt(0) as number;
+  const props = UTRIE2_GET16(ucase_props_singleton.trie, c);
+  if (!UCASE_HAS_EXCEPTION(props)) {
+    if (UCASE_IS_UPPER_OR_TITLE(props)) c += UCASE_GET_DELTA(props);
+  } else {
+    const pe = GET_EXCEPTIONS(ucase_props_singleton, props),
+      excWord = pe.data[pe.index++] as number;
+    if (HAS_SLOT(excWord, UCASE_EXC_DELTA) && UCASE_IS_UPPER_OR_TITLE(props)) {
+      const delta = GET_SLOT_VALUE(excWord, UCASE_EXC_DELTA, pe);
+      return (excWord & UCASE_EXC_DELTA_IS_NEGATIVE) === 0 ? c + delta : c - delta;
+    }
+    if (HAS_SLOT(excWord, UCASE_EXC_LOWER)) c = GET_SLOT_VALUE(excWord, UCASE_EXC_LOWER, pe);
+  }
+  return c;
+}
+
+/** Borrowed native const-char16 mapping span; index is the pointed-to unit. */
+export interface FullFoldingPointer {
+  readonly data: Readonly<ArrayLike<number>>;
+  readonly index: number;
+}
+const iDot = new Uint16Array([0x69, 0x307]);
+/** Original scalar/full-string folding with complemented unchanged output and reset borrowed pointer. @param c - Nonnegative UChar32. @param output - Native string pointer output. @param options - Fold options. @returns Code point, string length up to31, or complemented unchanged input. */
+export function ucase_toFullFolding(
+  c: number,
+  output: [FullFoldingPointer | null],
+  options: number,
+): number {
+  c |= 0;
+  options >>>= 0;
+  let result = c;
+  output[0] = null;
+  const props = UTRIE2_GET16(ucase_props_singleton.trie, c);
+  if (!UCASE_HAS_EXCEPTION(props)) {
+    if (UCASE_IS_UPPER_OR_TITLE(props)) result = c + UCASE_GET_DELTA(props);
+  } else {
+    const pe = GET_EXCEPTIONS(ucase_props_singleton, props),
+      excWord = pe.data[pe.index++] as number,
+      pe2 = { ...pe };
+    if (excWord & UCASE_EXC_CONDITIONAL_FOLD) {
+      if ((options & _FOLD_CASE_OPTIONS_MASK) === U_FOLD_CASE_DEFAULT) {
+        if (c === 0x49) return 0x69;
+        if (c === 0x130) {
+          output[0] = { data: iDot, index: 0 };
+          return 2;
+        }
+      } else {
+        if (c === 0x49) return 0x131;
+        if (c === 0x130) return 0x69;
+      }
+    } else if (HAS_SLOT(excWord, UCASE_EXC_FULL_MAPPINGS)) {
+      let full = GET_SLOT_VALUE(excWord, UCASE_EXC_FULL_MAPPINGS, pe);
+      ++pe.index;
+      pe.index += full & UCASE_FULL_LOWER;
+      full = (full >> 4) & 0xf;
+      if (full !== 0) {
+        output[0] = { data: pe.data, index: pe.index };
+        return full;
+      }
+    }
+    if (excWord & UCASE_EXC_NO_SIMPLE_CASE_FOLDING) return ~c;
+    if (HAS_SLOT(excWord, UCASE_EXC_DELTA) && UCASE_IS_UPPER_OR_TITLE(props)) {
+      const delta = GET_SLOT_VALUE(excWord, UCASE_EXC_DELTA, pe2);
+      return (excWord & UCASE_EXC_DELTA_IS_NEGATIVE) === 0 ? c + delta : c - delta;
+    }
+    const index = HAS_SLOT(excWord, UCASE_EXC_FOLD)
+      ? UCASE_EXC_FOLD
+      : HAS_SLOT(excWord, UCASE_EXC_LOWER)
+        ? UCASE_EXC_LOWER
+        : -1;
+    if (index < 0) return ~c;
+    result = GET_SLOT_VALUE(excWord, index, pe2);
+  }
+  return result === c ? ~result : result;
 }
 
 /** Original simple uppercase. @param c - Integral UChar32. @returns Original simple scalar mapping. */

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/timezone.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/timezone.ts",
+        "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+        "scripts/icu-calendar-time-native-probe.mjs",
+        "scripts/icu-olson-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "scripts/icu-timezone-custom-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports original TimeZone default/ID/base-copy construction, owned UnicodeString identity assignment/query/update, native dynamic-type plus ID equality and the original generic UDate/local offset loop. assignBase projects explicitly qualified base assignment without changing derived scalar rules; TS constructors project native dynamic type. The consumed numeric abstract raw/field-offset and clone boundaries remain original responsibilities. The actual SimpleTimeZone implementation now supplies periodic rules and identity/copy behavior; both native and local Calendar time witnesses use real SimpleTimeZone. IANA/custom/system factories and other native display/enumeration/ABI APIs remain unported. The consumed public pure virtual useDaylightTime and original base getDSTSavings are now exposed; Olson delegates the no-final-zone default to this source base owner. Internal system-zone creation is implemented by timezone.create over actual Olson resources; public custom/unknown/system-default factory dispatch is still pending. The consumed borrowed const TimeZone surface excludes ID mutation while allowing owned cloning; public synchronous factory/canonical dispatch is now implemented in timezone.create without a base/concrete class initialization cycle. Host/default factory entrypoints remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TimeZone",
+        "getOffset",
+        "getOffsetForFields",
+        "useDaylightTime",
+        "getDSTSavings",
+        "TimeZoneConstReference"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/timezone.cpp",
+      "upstreamSymbols": [
+        "TimeZone::getOffset",
+        "TimeZone::getDSTSavings",
+        "TimeZone::getGMT"
+      ]
+    }
+  }
+}

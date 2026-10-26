@@ -3,6 +3,7 @@ import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
 import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_DONTKNOW,
@@ -246,6 +247,8 @@ export class ScDocShell extends SfxObjectShell {
         stream.SetStreamEncoding(options.eCharSet);
         stream.Seek(0);
         if (!converter.ImportStream(stream)) throw new Error("CSV import failed.");
+        candidate.StartAllListeners();
+        candidate.SetAllFormulasDirty(new SetFormulaDirtyContext());
         if (medium.name) {
           // INetURLObject::getBase scans the last segment up to ';' and ignores its leading dot.
           const segmentEnd =

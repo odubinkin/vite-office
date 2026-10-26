@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/timezone.create.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/timezone.cpp",
+    "localSymbols": [
+      "createSystemTimeZone",
+      "createTimeZone",
+      "getGMT",
+      "getUnknown",
+      "getCanonicalID"
+    ],
+    "upstreamSymbols": [
+      "createSystemTimeZone",
+      "TimeZone::createTimeZone",
+      "TimeZone::getGMT",
+      "TimeZone::getUnknown",
+      "TimeZone::getCanonicalID"
+    ],
+    "preservedResponsibilities": [
+      "Original internal createSystemTimeZone factory with local-zero or explicit sticky status, synchronous open/construct/failure cleanup ordering and actual Olson ownership. The free function projects the native anonymous-namespace helper without a TimeZone/concrete import initialization cycle. Public system/custom/Unknown dispatch now wraps this source internal helper; host/system-default lifecycle is ported separately in timezone.default.ts. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified.",
+      "AQF9AG completes public system/custom/Unknown createTimeZone dispatch, independently initialized static GMT/Unknown borrowed const owners, owned fallback clones and both public getCanonicalID overloads. Original output clearing, incoming status guard, special Unknown identity, CLDR/system branch, custom error reset and aliased input/output behavior are retained. Host/default creation now lives in timezone.default.ts."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.create.ts",
+          "marker": "createSystemTimeZone"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+          "marker": "CalendarWitness"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/timezone.cpp",
+          "marker": "createSystemTimeZone"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/timezone.create.ts",
+      "rationale": "Original implementation is split by responsibility to retain the repository file-size budget and synchronous source ownership/dispatch without base/concrete class evaluation cycles. Shared fragments operate directly on the one actual owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/gregocal.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/gregocal.ts",
+        "apps/office/src/external/icu/source/i18n/gregocal.test.ts",
+        "scripts/icu-calendar-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports GregorianCalendar default hybrid-cutover state, Julian and Gregorian field arithmetic, signed64 month starts and normalized month lengths, source field/era/week-year resolution and full two-pass Julian-day cutover handling, with its original day/week shifts and limit table. Native constructors, custom cutover mutation, fields-to-UTC completion and concrete timezone ownership, add/roll/clone and remaining service behavior are not ported. The class stays abstract until those required original backend paths exist. The unchanged compiled ICU library with its real pinned resource data matches63050 scalar/stamp/field cases; this is not a full calendar/formatter/CSV parity claim. Source weekNumber/computeWeekFields formulas and direct-field versus stamped writes are preserved. Native UTC public field queries cover nine explicit week configurations. Internal helpers use protected TypeScript visibility during the staged port; native private-access/ABI guarantees are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GregorianCalendar"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/gregocal.cpp",
+      "upstreamSymbols": [
+        "GregorianCalendar"
+      ]
+    }
+  }
+}

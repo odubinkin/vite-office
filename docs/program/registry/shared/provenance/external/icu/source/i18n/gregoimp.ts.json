@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/gregoimp.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/gregoimp.cpp",
+    "localSymbols": [
+      "ClockMath",
+      "Grego"
+    ],
+    "upstreamSymbols": [
+      "ClockMath",
+      "Grego"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports ICU78.3 ClockMath and proleptic Grego scalar conversions, month/cycle arithmetic, sticky statuses and partial output writes. C++ int32/int64/double overloads have explicit TypeScript names and ref outputs use one-element tuples. Signed64 day arithmetic uses bigint. The unchanged native source comparison covers29758 cases with separate binary64 multiply/subtract (-ffp-contract=off); ARM contracted FMA extreme remainders are outside this witness scope. Native undefined inputs and unsupported month indices are not certified. This helper does not implement GregorianCalendar Julian cutover, Calendar field resolution, the LibreOffice calendar service, formatter GetDateRef or CSV auto-input."
+    ],
+    "omittedResponsibilities": [
+      "Full ICU calendar/service graph and unconsumed APIs remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/gregoimp.ts",
+          "marker": "ClockMath"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/gregoimp.cpp",
+          "marker": "ClockMath"
+        }
+      ]
+    }
+  }
+}

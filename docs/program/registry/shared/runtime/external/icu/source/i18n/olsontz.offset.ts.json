@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/olsontz.offset.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/olsontz.offset.ts",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "scripts/icu-olson-native-probe.mjs"
+      ],
+      "justification": "Original Olson resource construction/validation with optional-resource status resets, signed16 counts and int64 pre/post32 transition decoding; final rule construction without setting its start year; canonical metadata lookup and failed empty state. Original field validation/BCE negation, final cutover dispatch and complete historical gap/fold mask selection operate on the actual single Olson owner. Native integer/buffer undefined inputs and allocation failures remain uncertified. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "construct",
+        "getHistoricalOffset",
+        "getOffsetForFields"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/olsontz.cpp",
+      "upstreamSymbols": [
+        "OlsonTimeZone::OlsonTimeZone",
+        "OlsonTimeZone::getHistoricalOffset",
+        "OlsonTimeZone::getOffset"
+      ]
+    }
+  }
+}

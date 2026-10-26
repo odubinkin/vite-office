@@ -1,0 +1,53 @@
+/** @fileoverview Original ICU78.3 host detection and default-zone initialization/adoption/clone lifecycle from timezone.cpp. The browser host hook binding is separate from the source decision logic; native mutex/allocator/cleanup remain uncertified. */
+import { UnicodeString } from "../common/unistr";
+import { browserTimeZoneHost, type TimeZoneHost } from "../../browser/putil-tz";
+import { createSystemTimeZone, getUnknown } from "./timezone.create";
+import { SimpleTimeZone } from "./simpletz";
+import type { TimeZone, TimeZoneConstReference } from "./timezone";
+let DEFAULT_ZONE: TimeZone | null = null;
+let defaultZoneInitialized = false;
+
+/** Original detectHostTimeZone body over its actual platform dependency boundary. No time-zone rules or fallback policy are injected by the host. @param host - Native host hooks. @returns Owned detected/fixed/Unknown zone. */
+export function detectHostTimeZoneFromHost(host: TimeZoneHost): TimeZone {
+  host.uprv_tzset();
+  host.uprv_tzname_clear_cache();
+  const hostID = host.uprv_tzname(0),
+    rawOffset = (host.uprv_timezone() * -1000) | 0;
+  let detected = true,
+    id = new UnicodeString(hostID);
+  if (id.length() === 0) {
+    id = new UnicodeString("Etc/Unknown");
+    detected = false;
+  }
+  let zone: TimeZone | null = createSystemTimeZone(id);
+  const length = id.length();
+  if (zone !== null && rawOffset !== zone.getRawOffset() && length >= 3 && length <= 4) zone = null;
+  if (zone === null && detected) zone = new SimpleTimeZone(rawOffset, id);
+  if (zone === null) zone = getUnknown().clone();
+  return zone;
+}
+/** Original public host detection delegates only its platform queries to the browser binding. @returns Owned zone. */
+export function detectHostTimeZone(): TimeZone {
+  return detectHostTimeZoneFromHost(browserTimeZoneHost);
+}
+/** Original initialization skips host detection after an earlier adoptDefault/setDefault. @returns Nothing. */
+function initDefault(): void {
+  if (DEFAULT_ZONE !== null) return;
+  DEFAULT_ZONE = detectHostTimeZone();
+}
+/** Original once-only initialization and owned result clone. Native allocator-null returns are retained in the result type, without simulating allocation failures. @returns Owned default-zone clone or null. */
+export function createDefault(): TimeZone | null {
+  if (!defaultZoneInitialized) {
+    initDefault();
+    defaultZoneInitialized = true;
+  }
+  return DEFAULT_ZONE !== null ? DEFAULT_ZONE.clone() : null;
+}
+/** Original non-null pointer adoption leaves the once-only state unchanged. @param zone - Transferred zone or ignored null. @returns Nothing. */
+export function adoptDefault(zone: TimeZone | null): void {
+  if (zone !== null) DEFAULT_ZONE = zone;
+}
+/** Original const-reference setter clones before adopting. @param zone - Copied zone. @returns Nothing. */
+export function setDefault(zone: TimeZoneConstReference): void {
+  adoptDefault(zone.clone());
+}

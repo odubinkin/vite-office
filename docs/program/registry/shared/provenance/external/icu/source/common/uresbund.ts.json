@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "UResourceBundle",
+      "ures_getByIndex",
+      "ures_getStringByIndex",
+      "ures_getIntVector"
+    ],
+    "upstreamSymbols": [
+      "ures_getByIndex",
+      "ures_getStringByIndex",
+      "ures_getIntVector"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports consumed synchronous direct-resource handle/getter contracts over complete pinned ICU78.3 zoneinfo64/keyTypeData snapshots. Unchanged native resource APIs export public values, native table key order, shared binary/vector storage groups and resolved-alias indices; JSON is the browser storage representation. Native mapped data ownership is projected as borrowed readonly scalar buffers and reusable handles. Original sticky warnings/errors, unchanged failed fillIn, scalar size one, failed integer minus-one, length mutation and indexed alias/non-alias string behavior (CALC-312) are preserved. Generator --check and a separate unchanged native witness verify the snapshots and all tree nodes. Arbitrary package opening, locale fallback, dynamic alias machinery, iteration, native allocation/lifetime/ABI and complete timezone/calendar service integration remain unported or uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported; allocation/lifetime/ABI and the complete ICU service graph remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.ts",
+          "marker": "UResourceBundle"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "ures_getByIndex"
+        },
+        {
+          "path": "vendor/icu-reference/source/common/uresdata.cpp",
+          "marker": "res_countArrayItems"
+        }
+      ]
+    }
+  }
+}

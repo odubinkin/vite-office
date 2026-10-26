@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/olsontz.transitions.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/olsontz.cpp",
+    "localSymbols": [
+      "initTransitionRules",
+      "getNextTransition",
+      "getPreviousTransition",
+      "countTransitionRules",
+      "getTimeZoneRules"
+    ],
+    "upstreamSymbols": [
+      "OlsonTimeZone::initTransitionRules",
+      "OlsonTimeZone::getNextTransition",
+      "OlsonTimeZone::getPreviousTransition",
+      "OlsonTimeZone::countTransitionRules",
+      "OlsonTimeZone::getTimeZoneRules"
+    ],
+    "preservedResponsibilities": [
+      "Original lazy initial/historical/final rule construction and ownership, first-real transition filtering, source final-millis inclusion, distinct final-zone start-year clone and first-final transition. Next/previous queries retain inclusive boundaries and name/offset non-transition suppression; borrowed-rule extraction preserves slot order, capacity, partial outputs and original count semantics. Functions operate directly on the real Olson owner; GC/synchronous initialization do not certify native allocator/mutex/lifetime contracts. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.transitions.ts",
+          "marker": "initTransitionRules"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+          "marker": "CalendarWitness"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/olsontz.cpp",
+          "marker": "OlsonTimeZone::initTransitionRules"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/olsontz.transitions.ts",
+      "rationale": "Original implementation is split by responsibility to retain the repository file-size budget and synchronous source ownership/dispatch without base/concrete class evaluation cycles. Shared fragments operate directly on the one actual owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

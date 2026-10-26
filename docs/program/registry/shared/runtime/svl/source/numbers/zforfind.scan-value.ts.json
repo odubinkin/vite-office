@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+        "apps/office/src/svl/source/numbers/zforfind.scan-value.test.ts",
+        "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx"
+      ],
+      "justification": "AQF9AG ports the numeric/logical result cases and terminal overflow/failure outputs from ImpSvNumberInputScan::IsNumberFormat as an implementation fragment over the same actual scanner state. It joins numeric fragments by nThousand/nDecPos, converts percentages and simple/mixed fractions, preserves sign multiplication and uses the existing RTL owner for scientific conversion. OutOfRange returns Text with a positive bound before input sign application, preserving CALC-300. StringToDouble binds correctly rounded binary64 conversion only for the source-validated unsigned fixed-decimal fragments within the full scanner input limit; it is not a text-recognition API. GetTimeRef uses this same source helper for its fractional-second fragment. The result fragment requires the source category/count checks and numeric category dispatch to have succeeded. It is not yet connected to a public IsNumberFormat or CSV auto-input; remaining validation, calendar date conversion and formatter format selection are unported. Tests use the actual input scanner classifications and RTL conversion, not a synthetic workbook or compiled native differential oracle. The same fragment now includes source post-classification signed-year/BCE handling, unclosed-parenthesis rejection, category-specific numeric-part count checks, matched-format grouping reconciliation and date-pattern acceptance gates. It invokes the existing source scanner helpers on the real owner. Public input orchestration and actual calendar conversion remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StringToDouble",
+        "ConvertScannedNumber",
+        "CheckScannedNumber"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforfind.cxx",
+      "upstreamSymbols": [
+        "StringToDouble",
+        "ImpSvNumberInputScan::IsNumberFormat"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uinvchar.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uinvchar.cpp",
+    "localSymbols": [
+      "uprv_isInvariantUString"
+    ],
+    "upstreamSymbols": [
+      "uprv_isInvariantUString"
+    ],
+    "preservedResponsibilities": [
+      "Consumed original invariantChars bit masks and counted/NUL-terminated UTF16 predicate. The unchanged native witness compares all65536 code units; counted NUL and terminated text retain different source behavior. EBCDIC/platform conversion tables and other invariant conversion APIs are unported. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uinvchar.ts",
+          "marker": "uprv_isInvariantUString"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+          "marker": "CalendarWitness"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uinvchar.cpp",
+          "marker": "uprv_isInvariantUString"
+        }
+      ]
+    }
+  }
+}

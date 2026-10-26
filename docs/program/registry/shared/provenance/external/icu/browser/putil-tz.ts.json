@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/icu/browser/putil-tz.ts",
+    "rationale": "Browser binding for consumed uprv_tzset/uprv_tzname_clear_cache/uprv_tzname/uprv_timezone hooks. Intl exposes a semantic IANA/fixed-offset identity; actual pinned ICU factories provide its standard offset. The browser has no independent libc standard-bias/abbreviation channel. Unmapped/failed identities use the original empty-name host-remapping-failure channel. There are no sampled seasonal dates or independent timezone-rule heuristics. Native detection decisions are implemented separately in timezone.default.ts; independent OS raw-bias equivalence and native platform ABI are not certified.",
+    "responsibilities": [
+      "Browser binding for consumed uprv_tzset/uprv_tzname_clear_cache/uprv_tzname/uprv_timezone hooks. Intl exposes a semantic IANA/fixed-offset identity; actual pinned ICU factories provide its standard offset. The browser has no independent libc standard-bias/abbreviation channel. Unmapped/failed identities use the original empty-name host-remapping-failure channel. There are no sampled seasonal dates or independent timezone-rule heuristics. Native detection decisions are implemented separately in timezone.default.ts; independent OS raw-bias equivalence and native platform ABI are not certified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Intl semantic timezone identity replaces unavailable libc host name and independent standard offset queries; pinned ICU zone owners supply standard offset."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/browser/putil-tz.ts",
+          "marker": "browserTimeZoneHost"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+          "marker": "Intl"
+        }
+      ]
+    }
+  }
+}

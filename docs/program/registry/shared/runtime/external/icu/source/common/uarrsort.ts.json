@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uarrsort.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uarrsort.ts",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports the consumed stable UDate/itemSize8 sorting path and source stable binary/linear insertion search, including comparator order and sticky status validation. Typed literal true excludes the unported unstable quicksort path; scalar array indices project native byte addressing. Native allocation failure and invalid buffer preconditions remain outside the binding. TimeArrayTimeZoneRule uses this actual source sort, including duplicate/signed-zero/nonfinite values; unchanged ICU78.3 transition witness covers these paths. No full array ABI or generic unstable-sort parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uprv_stableBinarySearch",
+        "uprv_sortArray"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uarrsort.cpp",
+      "upstreamSymbols": [
+        "uprv_stableBinarySearch",
+        "uprv_sortArray"
+      ]
+    }
+  }
+}

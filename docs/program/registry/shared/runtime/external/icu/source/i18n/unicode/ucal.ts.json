@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/unicode/ucal.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/unicode/ucal.ts",
+        "apps/office/src/external/icu/source/i18n/gregoimp.test.ts",
+        "scripts/icu-grego-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports complete consumed ICU weekday/date-field/local-time and wall-time enums with their original values, aliases and masks; other C calendar APIs remain unported.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UCalendarDaysOfWeek",
+        "UCalendarDateFields",
+        "UTimeZoneLocalOption",
+        "UCalendarWallTimeOption"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/unicode/ucal.h",
+      "upstreamSymbols": [
+        "UCalendarDaysOfWeek",
+        "UCalendarDateFields",
+        "UTimeZoneLocalOption",
+        "UCalendarWallTimeOption"
+      ]
+    }
+  }
+}

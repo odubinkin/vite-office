@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/utypes.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/utypes.h",
+    "localSymbols": [
+      "UErrorCode",
+      "U_SUCCESS",
+      "U_FAILURE"
+    ],
+    "upstreamSymbols": [
+      "UErrorCode",
+      "U_SUCCESS",
+      "U_FAILURE"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports consumed ICU78.3 UDate, millis-per-day and status predicates/constants. Negative warnings remain successful; positive statuses remain failures. Other ICU error constants, compiler/platform declarations and generic export machinery are not ported."
+    ],
+    "omittedResponsibilities": [
+      "Full ICU calendar/service graph and unconsumed APIs remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/utypes.ts",
+          "marker": "UErrorCode"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/utypes.h",
+          "marker": "UErrorCode"
+        }
+      ]
+    }
+  }
+}

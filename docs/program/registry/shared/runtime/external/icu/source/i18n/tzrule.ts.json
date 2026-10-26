@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/tzrule.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/tzrule.ts",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports TimeZoneRule owned name/offset state, base-qualified assignment, equality/equivalence and start-query contract; InitialTimeZoneRule copy/clone and no-start methods; AnnualTimeZoneRule copy/adopt/deep assignment, date/year getters, Gregorian annual starts and inclusive next/previous/first/final selection. An explicit ownership argument projects C++ reference-copy versus pointer-adoption overloads; borrowed const types exclude mutators. Annual equality intentionally omits the numeric/name base while equivalence includes numeric offsets, per CALC-306. Source assertion-only Gregorian conversion status behavior is retained in the release flow. TimeArrayTimeZoneRule now owns sorted historical starts and ports copy/clone/assignment, full equality/equivalence, explicit count/index outputs and original first/final/next/previous searches with ordered previous-offset subtraction. The stable source sort preserves duplicates, signed zeros and source comparator behavior for nonfinite values; invalid buffer preconditions and native allocation/lifetime/ABI/concurrency remain uncertified. Unchanged ICU78.3 libraries/data match75189 combined annual/rule/transition/Calendar time cases; the probe and focused unit tests are limited to the stated operations. System/IANA/locale factories and full LibreOffice calendar/formatter/CSV integration remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TimeZoneRule",
+        "InitialTimeZoneRule",
+        "AnnualTimeZoneRule",
+        "getStartInYear",
+        "TimeArrayTimeZoneRule",
+        "getStartTimeAt"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/tzrule.cpp",
+      "upstreamSymbols": [
+        "TimeZoneRule::TimeZoneRule",
+        "InitialTimeZoneRule::getFirstStart",
+        "AnnualTimeZoneRule::getStartInYear",
+        "AnnualTimeZoneRule::operator==",
+        "TimeArrayTimeZoneRule::initStartTimes",
+        "TimeArrayTimeZoneRule::getNextStart"
+      ]
+    }
+  }
+}

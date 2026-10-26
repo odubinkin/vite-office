@@ -193,6 +193,10 @@ export class ScTable {
   DeleteEmptyBroadcasters(): void {
     for (const column of this.aCol) column.DeleteEmptyBroadcasters();
   }
+  /** Source whole-sheet listening with optional ColumnSet selection. @param context - Shared listening context. @param all - Include every formula. @returns Nothing. */
+  StartListeners(context: StartListeningContext, all: boolean): void {
+    table2.StartListeners.call(this, context, all);
+  }
   /** Original table2 clipboard listening clamps to actual allocated columns and native bounds. @param start - Start context. @param end - End context. @param col1 - First column. @param row1 - First row. @param col2 - Last column. @param row2 - Last row. @returns Nothing. */
   StartListeningFormulaCells(
     start: StartListeningContext,
