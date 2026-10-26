@@ -172,6 +172,23 @@ construction, reference-label hash/comparison, HTML automaton and link scanners.
 A local clang build of the unmodified dependency supplies differential fixtures:
 all Unicode scalars, malformed byte sequences and native scanner bounds. The
 entity recognizer is connected to Writer and removes the former HTML-dictionary
-approximation (WRITER106). Full block analysis, mark resolution and callback
-emission remain pending; these primitive tests do not close the grammar row.
+approximation (WRITER106). The full pipeline is now ported as described below; the primitive checks alone do not close the Writer integration row.
 The accepted malformed closing HTML tag is preserved as WRITER143.
+
+The md4c block-analysis phase now includes its complete line/container state
+machine, reused pivots, compact block queue, loose-list backpatching, task
+markers, fences, raw HTML, table and setext transitions, reference-definition
+removal, reference-only setext downgrade and native reference hash buckets.
+A compiled-source corpus compares the meaningful block/line/reference records
+on 733 bundled CommonMark 0.31.2, extension and local examples with the exact
+LibreOffice flag set. HTML declaration/prefix quirks are preserved as WRITER144/145.
+
+The complete md4c pipeline now resolves inline marks, references, emphasis, links,
+autolinks, code and HTML and emits native block/span/text callbacks. All 813
+compiled-source callback streams match exactly, including attribute byte ranges,
+text chunk boundaries, extension flags and NULL behavior. Every callback prefix
+is checked for nonzero abort propagation. Together the external parser tests
+contain 1654 passing cases. ABI/configuration tests also cover unsupported ABI,
+configuration copying and userdata identity. Source quirks are retained as
+WRITER146–151. Writer callbacks and native document-owner integration remain
+open; parser differential evidence does not certify the Writer document model.

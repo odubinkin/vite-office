@@ -1418,3 +1418,51 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_tag`, sets attribute state to -1 for closing tags but tests `attr_state <= 2` for both `>` and `/>`.
 - Observation: the compiled native helper accepts `</a/>` even though its comment permits the optional slash only on an opening tag. This is a dependency-level scanner finding, not a native Writer rendering result.
 - Preservation: the TypeScript tag automaton retains the numeric state comparisons and the compiled fixture pins this accepted form; no HTML normalization is inserted.
+
+### WRITER144 — md4c HTML declaration detection uses ASCII instead of uppercase letters
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_block_start_condition`, comments that HTML type four begins with `<!` followed by an uppercase letter, but tests `ISASCII(off+1)`.
+- Observation: compiled native helpers select type four for `<!lowercase>` and `<![CDATA[x]]>`. The latter reaches this branch before the type-five CDATA test, so it uses the generic `>` closer instead of the CDATA-specific branch. Full native Writer HTML import has not been reproduced.
+- Preservation: retain this ASCII test and branch order. The block scanner and complete block-queue differential fixtures pin this behavior.
+
+### WRITER145 — md4c raw pre/script/style/textarea blocks accept name prefixes
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_block_start_condition`, checks each type-one tag name by case-insensitive prefix without a following delimiter test.
+- Observation: the compiled scanner classifies `<prefix>` as a type-one `pre` block, which can continue until `</pre>` or EOF. This is a native dependency grammar result, not proof of native Writer rendering.
+- Preservation: keep the prefix test and source closers; do not replace it with a host HTML tokenizer or an exact-tag check.
+
+### WRITER146 — md4c wiki delimiter disabling has a reversed interval
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_resolve_links`.
+- Observation: The wiki-label branch calls md_disable_marks with delim_index + 1 as the first index and delim_index as the end. Its half-open loop performs no iterations. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep the original bounds and mark resolution; the native callback corpus covers wiki labels.
+
+### WRITER147 — md4c nested autolink suppression retests the first nested mark
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_resolve_links`.
+- Observation: Both nested-boundary loops test first_nested->ch, including the loop moving last_nested. This can retain a different right boundary than a last_nested test would. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Retain the first-mark condition in both loops; native callback fixtures cover nested spans and links.
+
+### WRITER148 — md4c NULL replacement retains the NULL in the following verbatim chunk
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_text_with_null_replacement`.
+- Observation: After the NULL callback, off advances but the source pointer does not. A following CODE or HTML chunk can include the same NULL byte. Compiled callback fixtures reproduce this sequence. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Preserve both the NULL callback and following raw chunk; do not insert a host replacement character in the parser.
+
+### WRITER149 — md4c empty table intervals shift later cells left
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_process_table_row`.
+- Observation: Zero-width pipe intervals are skipped; subsequent nonempty cells are emitted first and missing cells are appended at the end. Compiled callbacks preserve this cell order. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep interval skipping and trailing cell completion, including their order.
+
+### WRITER150 — md4c collapsed tab marks have no space-emission branch
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_collect_marks and md_process_inlines`.
+- Observation: The whitespace-collapse option records the actual tab byte, but inline emission handles the space-byte mark. A tab can consequently disappear rather than emit a space. LibreOffice does not enable this option. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep the source flag-specific behavior; option fixtures compare compiled callbacks.
+
+### WRITER151 — md4c URI scheme recognition accepts an ASCII digit first
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_autolink_uri`.
+- Observation: The initial scheme-byte check uses ISASCII instead of an alphabetic predicate. Compiled native callbacks recognize forms such as <1a:x> as a URI autolink. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Retain the source predicate and subsequent scheme checks; do not substitute URL validation.

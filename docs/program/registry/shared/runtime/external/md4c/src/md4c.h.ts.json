@@ -21,7 +21,7 @@
         "apps/office/src/external/md4c/src/native-primitives.json",
         "scripts/generate-md4c-native-fixtures.py"
       ],
-      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 public contracts, byte/Unicode/attribute/reference-label/HTML/link scanner responsibility. Unicode data is extracted verbatim from the LibreOffice download.lst SHA-256-pinned archive. Compiled native helper fixtures cover every Unicode scalar, malformed UTF-8 and scanner bounds. Native allocation/pointer storage uses JS arrays and GC; UTF-8 byte offsets, numeric states, limits, signed-byte fallback and little-endian label hashing remain explicit. The complete md_parse block/mark/inline pipeline and Writer callback integration remain pending; no complete parser or Markdown parity is claimed.",
+      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity.",
       "knownViolations": [],
       "localSymbols": [
         "MD_BLOCKTYPE",

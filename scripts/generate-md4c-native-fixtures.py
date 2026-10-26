@@ -102,11 +102,73 @@ for index, (operation, text) in enumerate(SCANS):
         extra.append("ok=md_is_link_title(&ctx,lines,%d,0,&end,&bl,&el,&cb,&ce);" % len(starts))
     extra.append('printf("%s[%%d,%%u,%%u,%%u,%%u,%%u]",ok,end,cb,ce,bl,el);}' % ("," if index else ""))
 extra.append('printf("]");')
+BLOCK_SCANS = [
+    ("hr", "* * *", 0), ("hr", "- - x", 0), ("atx", "### title", 0),
+    ("atx", "####### title", 0), ("atx", "#title", 0), ("atx", "#title", 2),
+    ("setext", "=\t", 0), ("setext", "--- x", 0),
+    ("table", "|:-|-:|", 0), ("table", "---", 0),
+    ("table", "|" + "-|" * 128, 0), ("table", "|" + "-|" * 129, 0),
+    ("fence", "``` lang`bad", 0), ("fence", "~~~~ lang`ok", 0),
+    ("closing", "`` x", 3), ("closing", "`````  \t", 3), ("closing", "```x", 3),
+    ("html_start", "<prefix>", 0), ("html_start", "<![CDATA[x]]>", 0),
+    ("html_start", "<!lowercase>", 0), ("html_start", "<basefont>", 0),
+    ("html_start", "<div/>", 0), ("html_start", "<my-tag>", 0),
+    ("html_end", "x-->", 2), ("html_end", "x-->\n", 2),
+    ("html_end", "</PRE>", 1), ("html_end", "text", 6), ("html_end", "\n", 6),
+    ("container", "123456789. item", 0), ("container", "1234567890. item", 0),
+    ("container", "* item", 3), ("container", "* item", 4),
+    ("container", ">item", 0), ("indent", "\t \tfoo", 1),
+]
+extra.append('printf(",\\\"blockScans\\\":[");')
+for index, (operation, text, argument) in enumerate(BLOCK_SCANS):
+    raw = text.encode("utf-8")
+    values = ",".join(str(byte) for byte in raw) or "0"
+    extra.append("{ const char text[]={%s}; MD_CTX ctx={0}; ctx.text=text; ctx.size=%d; ctx.parser.flags=%d; ctx.code_indent_offset=4; ctx.code_fence_length=3; ctx.html_block_type=%d; MD_CONTAINER c={0}; OFF end=0,beg=0,killer=0; unsigned level=0,cols=0,indent=0; int ok=0;" % (values,len(raw),argument,argument))
+    calls = {
+        "hr":"ok=md_is_hr_line(&ctx,0,&end,&killer);",
+        "atx":"ok=md_is_atxheader_line(&ctx,0,&beg,&end,&level);",
+        "setext":"ok=md_is_setext_underline(&ctx,0,&end,&level);",
+        "table":"ok=md_is_table_underline(&ctx,0,&end,&cols);",
+        "fence":"ok=md_is_opening_code_fence(&ctx,0,&end);",
+        "closing":"ok=md_is_closing_code_fence(&ctx,text[0],0,&end);",
+        "html_start":"ok=md_is_html_block_start_condition(&ctx,0);",
+        "html_end":"ok=md_is_html_block_end_condition(&ctx,0,&end);",
+        "container":"ok=md_is_container_mark(&ctx,%d,0,&end,&c);" % argument,
+        "indent":"indent=md_line_indentation(&ctx,%d,0,&end); ok=1;" % argument,
+    }
+    extra.append(calls[operation])
+    extra.append('printf("%s[%%d,%%u,%%u,%%u,%%u,%%u,%%u,%%u,%%u,%%u,%%u,%%u]",ok,end,beg,level,killer,cols,ctx.code_fence_length,(unsigned char)c.ch,c.start,c.mark_indent,c.contents_indent,indent);}' % ("," if index else ""))
+extra.append('printf("]");')
+REF_CASES = [
+    ("[x]: /one\n[x]", 100),
+    ("[x]: /one\n[X]: /two\n[x]", 100),
+    ("[Straße]: <a b> \"title\"\n[STRASSE]", 100),
+    ("[a\n b]: /target\n[a b]", 100),
+    ("[x]: /one \"title\" trailing\n[x]", 100),
+    ("[x]: /one\n  \"title\" trailing\n[x]", 100),
+    ("[x]: /t\n[x]", 3), ("[x]: /t\n[x]", 4),
+    ("[x]: /one\n[x]", 100),
+    ("".join("[key%d]: /target%d\n" % (i,i) for i in range(12)) + "[KEY0]: /later\n[key0]", 1000),
+]
+extra.append('printf(",\\\"referenceCases\\\":[");')
+for index,(text,budget) in enumerate(REF_CASES):
+    raw=text.encode("utf-8"); values=",".join(str(byte) for byte in raw)
+    starts=[0]+[i+1 for i,byte in enumerate(raw) if byte==10]
+    ends=[i for i,byte in enumerate(raw) if byte==10]+[len(raw)]
+    lines=",".join("{%d,%d}" % pair for pair in zip(starts,ends))
+    extra.append("{ const char text[]={%s}; MD_LINE lines[]={%s}; MD_CTX ctx={0}; ctx.text=text; ctx.size=%d; ctx.max_ref_def_output=%d; unsigned consumed=0; int n; while(consumed<%d && (n=md_is_link_reference_definition(&ctx,lines+consumed,%d-consumed))>0) consumed+=n; md_build_ref_def_hashtable(&ctx);" % (values,lines,len(raw),budget,len(starts),len(starts)))
+    extra.append('printf("%s[%%u,%%d,[",consumed,ctx.n_ref_defs);' % ("," if index else ""))
+    extra.append('for(int i=0;i<ctx.n_ref_defs;i++){ MD_REF_DEF* d=&ctx.ref_defs[i]; printf("%s[%u,%u,[",i?",":"",d->dest_beg,d->dest_end); for(unsigned j=0;j<d->label_size;j++) printf("%s%u",j?",":"",(unsigned char)d->label[j]); printf("],["); for(unsigned j=0;j<d->title_size;j++) printf("%s%u",j?",":"",(unsigned char)d->title[j]); printf("]]"); } printf("],[");')
+    extra.append('const char* queries[]={"x","X","strasse","a b","key0","KEY0","key9","missing"}; for(unsigned i=0;i<8;i++){ const MD_REF_DEF* d=md_lookup_ref_def(&ctx,queries[i],strlen(queries[i])); printf("%s%d",i?",":"",d?(int)d->dest_beg:-1); } printf("],[");')
+    extra.append("MD_LINK_ATTR attr={0}; for(int i=0;i<2;i++){int ok=md_is_link_reference(&ctx,lines,%d,%d,%d,&attr); printf(\"%%s[%%d,%%u]\",i?\",\":\"\",ok,ctx.max_ref_def_output);} printf(\"]]\"); md_free_ref_def_hashtable(&ctx); md_free_ref_defs(&ctx);}" % (len(starts),starts[-1],ends[-1]))
+extra.append('printf("]");')
 source = SOURCE.read_text().replace('puts("]}"); return 0;', 'printf("]");\n' + "\n".join(extra) + '\nputs("}"); return 0;')
 SOURCE.write_text(source)
 subprocess.run(["clang", "-std=c99", "-O2", str(SOURCE), "-o", str(BUILD / "primitive-reference")], check=True, cwd=ROOT)
 result = subprocess.check_output([str(BUILD / "primitive-reference")], cwd=ROOT)
 data = json.loads(result)
+data["blockScans"] = [dict(operation=case[0], text=case[1], argument=case[2], result=value) for case, value in zip(BLOCK_SCANS, data["blockScans"])]
+data["referenceCases"] = [dict(text=case[0], budget=case[1], result=value) for case,value in zip(REF_CASES,data["referenceCases"])]
 data["sourceSha256"] = hashlib.sha256(NATIVE_SOURCE.read_bytes()).hexdigest()
 for case, value in zip(SCANS, data["scans"]):
     operation, text = case

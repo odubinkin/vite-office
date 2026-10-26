@@ -17,10 +17,10 @@
       "md_link_label_cmp"
     ],
     "preservedResponsibilities": [
-      "Direct TypeScript port of the pinned md4c 0.5.3 public contracts, byte/Unicode/attribute/reference-label/HTML/link scanner responsibility. Unicode data is extracted verbatim from the LibreOffice download.lst SHA-256-pinned archive. Compiled native helper fixtures cover every Unicode scalar, malformed UTF-8 and scanner bounds. Native allocation/pointer storage uses JS arrays and GC; UTF-8 byte offsets, numeric states, limits, signed-byte fallback and little-endian label hashing remain explicit. The complete md_parse block/mark/inline pipeline and Writer callback integration remain pending; no complete parser or Markdown parity is claimed."
+      "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity."
     ],
     "omittedResponsibilities": [
-      "Complete md_parse block construction, reference-definition storage, mark resolution, inline emission and complete Writer integration remain pending. Native physical memory allocation and ABI are not simulated."
+      "Native allocation failures and C pointer ABI are not emulated. Writer callback integration remains pending."
     ],
     "evidence": {
       "local": [
