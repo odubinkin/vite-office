@@ -20,22 +20,29 @@
         "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx",
         "apps/office/src/sal/textenc/tencinfo.ts#rtl_getTextEncodingFromWindowsCodePage",
         "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromWindowsCodePage",
-        "apps/office/src/sal/textenc/native-text-encoding-info.json"
+        "apps/office/src/sal/textenc/native-text-encoding-info.json",
+        "scripts/sal-text-encoding-metadata.mjs",
+        "apps/office/src/sal/textenc/native-text-encoding-info.sources.json",
+        "apps/office/src/sal/textenc/tencinfo.test.ts"
       ],
-      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified. Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback. Broader SAL codec parity remains unverified. Pinned source metadata for the 55 represented single-byte converters and UTF-8 preserves the rtl_getTextEncodingInfo size gates, unknown-data fallback and Calc CSV CONTEXT/ASCII branch selection. Remaining source registry data and queries are outside this current slice.",
+      "justification": "Native best-Windows-charset metadata, full Windows code-page lookup, rtl_getTextEncodingInfo size gates and missing-data fallback are retained. Full pinned WITH_LOCALE_ALL metadata now binds all 88 original encoding records, including multibyte/contextual min/max/average sizes and flags, independently extracted from original factory and descriptor aggregates by scripts/sal-text-encoding-metadata.mjs. Original Windows charset switch and octet-encoding range/SYSTEM exclusion are preserved with unsigned byte/uint16 inputs. Metadata presence does not admit unported converter services. Full SAL ABI, other queries and broader codec parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "rtl_getBestWindowsCharsetFromTextEncoding",
         "rtl_getTextEncodingFromWindowsCodePage",
         "rtl_getTextEncodingInfo",
-        "rtl_TextEncodingInfo"
+        "rtl_TextEncodingInfo",
+        "rtl_getTextEncodingFromWindowsCharset",
+        "rtl_isOctetTextEncoding"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tencinfo.cxx",
       "upstreamSymbols": [
         "rtl_getBestWindowsCharsetFromTextEncoding",
         "rtl_getTextEncodingFromWindowsCodePage",
-        "rtl_getTextEncodingInfo"
+        "rtl_getTextEncodingInfo",
+        "rtl_getTextEncodingFromWindowsCharset",
+        "rtl_isOctetTextEncoding"
       ]
     }
   }

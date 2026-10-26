@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 90
+revision: 91
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-26T22:32:04.355Z"
+doc_updated_at: "2026-10-26T22:35:20.443Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -203,6 +203,20 @@ sections:
     Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared
     Result: pass. Evidence: final Writer and shared inventory runs exit 0; source/size/boundary/Which checks pass. Scope: checkpoint metadata and existing WIP registry consistency.
     Observation: initial native harness lacked source GBKOFF; initial tests assumed inverse tables and incorrect surrogate/encoding constants; compiled investigation exposed source out-of-array ranges. Resolution: copied original macro, used actual factory IDs and native divergence counts, excluded undefined C++ reads from byte certification while independently auditing their exact ranges. Initial provenance record referenced scripts as a local source, unsupported by its path resolver; removed that record while retaining runtime evidence and this producer reference. Lost completed process handle was recovered by rerunning bounded lint and inventory checks. No scope expansion or whole-task completion claim.
+
+    ### Native encoding metadata and Windows charset checkpoint
+    Replaced incomplete 56-record min/max/average/flags capture with all 88 original WITH_LOCALE_ALL descriptors, keeping original source factory bindings, the existing independent best-Windows-charset table, source field gates and missing-data defaults. Added original Windows charset-to-encoding switch, octet-ID range with SYSTEM hole and native unsigned argument binding. This admits metadata only; reverse converter factory, checked string conversion and RTF native font serialization remain unfinished.
+    Command: node scripts/sal-text-encoding-metadata.mjs --check
+    Result: pass. Evidence: all 88 source descriptors and pinned source hashes match generated metadata; extracted charset bytes also match the previously captured charset table. Scope: full-locale metadata, not converter-service availability.
+    Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+    Result: pass. Evidence: 127 tests / 15 files, including CJK buffer sizes, contextual flags, short output structures, complete Windows charset byte domain and unsigned argument contracts.
+    Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts
+    Result: pass. Evidence: 19 tests / 2 files for shared metadata consumers.
+    Command: npm run typecheck --workspace @vite-office/office; npx eslint scripts/sal-text-encoding-metadata.mjs apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/textenc/tencinfo.test.ts; npx prettier --check scripts/sal-text-encoding-metadata.mjs apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/textenc/tencinfo.test.ts apps/office/src/sal/textenc/native-text-encoding-info.json apps/office/src/sal/textenc/native-text-encoding-info.sources.json; git diff --check
+    Result: pass. Scope: current metadata checkpoint.
+    Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
+    Result: pass. Evidence: source/boundary/size checks pass, both registry semanticViolationCount values are 0.
+    Observation: first metadata extractor missed the final source array element because it has no comma; fixed the parser to recognize the original closing brace delimiter. Initial test expected UTF7 flags 143; original tcvtuni1.tab explicitly omits ASCII and includes 7BIT, giving 173; corrected only the test. Removed a non-null test assertion rejected by ESLint using a typed const tuple. No native behavior changed to satisfy tests.
 id_source: "generated"
 ---
 ## Summary
@@ -384,3 +398,17 @@ Result: pass. Scope: current codec checkpoint.
 Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run check:writer-hintids; npm run inventory:parity:writer; npm run inventory:parity:shared
 Result: pass. Evidence: final Writer and shared inventory runs exit 0; source/size/boundary/Which checks pass. Scope: checkpoint metadata and existing WIP registry consistency.
 Observation: initial native harness lacked source GBKOFF; initial tests assumed inverse tables and incorrect surrogate/encoding constants; compiled investigation exposed source out-of-array ranges. Resolution: copied original macro, used actual factory IDs and native divergence counts, excluded undefined C++ reads from byte certification while independently auditing their exact ranges. Initial provenance record referenced scripts as a local source, unsupported by its path resolver; removed that record while retaining runtime evidence and this producer reference. Lost completed process handle was recovered by rerunning bounded lint and inventory checks. No scope expansion or whole-task completion claim.
+
+### Native encoding metadata and Windows charset checkpoint
+Replaced incomplete 56-record min/max/average/flags capture with all 88 original WITH_LOCALE_ALL descriptors, keeping original source factory bindings, the existing independent best-Windows-charset table, source field gates and missing-data defaults. Added original Windows charset-to-encoding switch, octet-ID range with SYSTEM hole and native unsigned argument binding. This admits metadata only; reverse converter factory, checked string conversion and RTF native font serialization remain unfinished.
+Command: node scripts/sal-text-encoding-metadata.mjs --check
+Result: pass. Evidence: all 88 source descriptors and pinned source hashes match generated metadata; extracted charset bytes also match the previously captured charset table. Scope: full-locale metadata, not converter-service availability.
+Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+Result: pass. Evidence: 127 tests / 15 files, including CJK buffer sizes, contextual flags, short output structures, complete Windows charset byte domain and unsigned argument contracts.
+Command: npm run test:calc -- src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts
+Result: pass. Evidence: 19 tests / 2 files for shared metadata consumers.
+Command: npm run typecheck --workspace @vite-office/office; npx eslint scripts/sal-text-encoding-metadata.mjs apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/textenc/tencinfo.test.ts; npx prettier --check scripts/sal-text-encoding-metadata.mjs apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/textenc/tencinfo.test.ts apps/office/src/sal/textenc/native-text-encoding-info.json apps/office/src/sal/textenc/native-text-encoding-info.sources.json; git diff --check
+Result: pass. Scope: current metadata checkpoint.
+Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
+Result: pass. Evidence: source/boundary/size checks pass, both registry semanticViolationCount values are 0.
+Observation: first metadata extractor missed the final source array element because it has no comma; fixed the parser to recognize the original closing brace delimiter. Initial test expected UTF7 flags 143; original tcvtuni1.tab explicitly omits ASCII and includes 7BIT, giving 173; corrected only the test. Removed a non-null test assertion rejected by ESLint using a typed const tuple. No native behavior changed to satisfy tests.
