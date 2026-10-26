@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 91
+revision: 92
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-26T22:35:20.443Z"
+doc_updated_at: "2026-10-26T22:41:37.555Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -217,6 +217,20 @@ sections:
     Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
     Result: pass. Evidence: source/boundary/size checks pass, both registry semanticViolationCount values are 0.
     Observation: first metadata extractor missed the final source array element because it has no comma; fixed the parser to recognize the original closing brace delimiter. Initial test expected UTF7 flags 143; original tcvtuni1.tab explicitly omits ASCII and includes 7BIT, giving 173; corrected only the test. Removed a non-null test assertion rejected by ESLint using a typed const tuple. No native behavior changed to satisfy tests.
+
+    ### Native UTF-7 and ISCII reverse owners checkpoint
+    Implemented complete original reverse UTF-7 state machine/context and UnicodeToIsciiDevanagari context/ranges/compound mappings/surrogate and bad-input control flow. Retained ignored UTF7 flags/context restoration and the ISCII FLUSH branch rather than normalizing them. Original source findings are recorded in WRITER114 and WRITER179-181. Shared reverse factory, checked string conversion and RTF font integration remain open; Markdown WIP is intentionally not staged.
+    Command: node scripts/sal-utf7-native-probe.mjs; node scripts/sal-iscii-native-probe.mjs
+    Result: pass. Evidence: compiled original owner bodies under ASan/UBSan. UTF7: 589824 BMP/capacity cases + 240 mixed/flag vectors. ISCII: 2097152 BMP/capacity/flag cases + 1080 saved-context/mixed vectors. Original ISCII helper/classification bodies and selected original character/integer/range declarations are included, no substitute classifiers. Scope: isolated reverse output bytes, status, consumption and final context with primitive SAL bindings; full SAL ABI/desktop service is not certified. ISCII null contexts and forward out-of-span lookahead are not executed.
+    Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+    Result: pass. Evidence: 174 tests / 17 files, including exact digests and vectors from both native witnesses.
+    Command: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/sal/textenc/tcvtutf7.ts apps/office/src/sal/textenc/tcvtutf7.encode.test.ts apps/office/src/sal/textenc/convertisciidevangari.ts apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts scripts/sal-utf7-native-probe.mjs scripts/sal-iscii-native-probe.mjs
+    Result: pass. Scope: reverse owner implementations, tests and witness producers.
+    Command: npx prettier --check apps/office/src/sal/textenc/tcvtutf7.ts apps/office/src/sal/textenc/tcvtutf7.encode.test.ts apps/office/src/sal/textenc/tcvtutf7.encode.native.json apps/office/src/sal/textenc/convertisciidevangari.ts apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts apps/office/src/sal/textenc/convertisciidevangari.encode.native.json scripts/sal-utf7-native-probe.mjs scripts/sal-iscii-native-probe.mjs; git diff --check
+    Result: pass. Scope: current checkpoint.
+    Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
+    Result: pass. Evidence: both inventories report semanticViolationCount 0; source/boundary/size gates pass. Semantic admission remains unverified outside the exact witness scope.
+    Observation: initial explicit plus-capacity test used numeric status 2; source reverse DESTBUFFERTOSMALL is 4. Corrected the test to use its native named constant; exhaustive native digests already agreed. First ISCII probe compilation rejected streaming char16_t directly to std::cout in C++20; the driver now serializes state through unsigned casts without changing converter bodies. Probe flag combinations now resolve source named constants rather than numeric guesses. No task scope or verification criteria changed.
 id_source: "generated"
 ---
 ## Summary
@@ -412,3 +426,17 @@ Result: pass. Scope: current metadata checkpoint.
 Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
 Result: pass. Evidence: source/boundary/size checks pass, both registry semanticViolationCount values are 0.
 Observation: first metadata extractor missed the final source array element because it has no comma; fixed the parser to recognize the original closing brace delimiter. Initial test expected UTF7 flags 143; original tcvtuni1.tab explicitly omits ASCII and includes 7BIT, giving 173; corrected only the test. Removed a non-null test assertion rejected by ESLint using a typed const tuple. No native behavior changed to satisfy tests.
+
+### Native UTF-7 and ISCII reverse owners checkpoint
+Implemented complete original reverse UTF-7 state machine/context and UnicodeToIsciiDevanagari context/ranges/compound mappings/surrogate and bad-input control flow. Retained ignored UTF7 flags/context restoration and the ISCII FLUSH branch rather than normalizing them. Original source findings are recorded in WRITER114 and WRITER179-181. Shared reverse factory, checked string conversion and RTF font integration remain open; Markdown WIP is intentionally not staged.
+Command: node scripts/sal-utf7-native-probe.mjs; node scripts/sal-iscii-native-probe.mjs
+Result: pass. Evidence: compiled original owner bodies under ASan/UBSan. UTF7: 589824 BMP/capacity cases + 240 mixed/flag vectors. ISCII: 2097152 BMP/capacity/flag cases + 1080 saved-context/mixed vectors. Original ISCII helper/classification bodies and selected original character/integer/range declarations are included, no substitute classifiers. Scope: isolated reverse output bytes, status, consumption and final context with primitive SAL bindings; full SAL ABI/desktop service is not certified. ISCII null contexts and forward out-of-span lookahead are not executed.
+Command: npm run test:shared -- src/sal/textenc src/sal/rtl/ustring-convert.test.ts
+Result: pass. Evidence: 174 tests / 17 files, including exact digests and vectors from both native witnesses.
+Command: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/sal/textenc/tcvtutf7.ts apps/office/src/sal/textenc/tcvtutf7.encode.test.ts apps/office/src/sal/textenc/convertisciidevangari.ts apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts scripts/sal-utf7-native-probe.mjs scripts/sal-iscii-native-probe.mjs
+Result: pass. Scope: reverse owner implementations, tests and witness producers.
+Command: npx prettier --check apps/office/src/sal/textenc/tcvtutf7.ts apps/office/src/sal/textenc/tcvtutf7.encode.test.ts apps/office/src/sal/textenc/tcvtutf7.encode.native.json apps/office/src/sal/textenc/convertisciidevangari.ts apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts apps/office/src/sal/textenc/convertisciidevangari.encode.native.json scripts/sal-utf7-native-probe.mjs scripts/sal-iscii-native-probe.mjs; git diff --check
+Result: pass. Scope: current checkpoint.
+Command: npm run check:source-provenance; npm run check:dependencies; npm run check:file-size; npm run inventory:parity:shared; npm run inventory:parity:writer
+Result: pass. Evidence: both inventories report semanticViolationCount 0; source/boundary/size gates pass. Semantic admission remains unverified outside the exact witness scope.
+Observation: initial explicit plus-capacity test used numeric status 2; source reverse DESTBUFFERTOSMALL is 4. Corrected the test to use its native named constant; exhaustive native digests already agreed. First ISCII probe compilation rejected streaming char16_t directly to std::cout in C++20; the driver now serializes state through unsigned casts without changing converter bodies. Probe flag combinations now resolve source named constants rather than numeric guesses. No task scope or verification criteria changed.

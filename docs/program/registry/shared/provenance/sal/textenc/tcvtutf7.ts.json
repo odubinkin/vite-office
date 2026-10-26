@@ -11,20 +11,31 @@
       "ImplUTF7CreateUTF7TextToUnicodeContext",
       "ImplUTF7ResetTextToUnicodeContext",
       "ImplUTF7DestroyTextToUnicodeContext",
-      "ImplUTF7ToUCContextData"
+      "ImplUTF7ToUCContextData",
+      "ImplUnicodeToUTF7",
+      "ImplUTF7CreateUnicodeToTextContext",
+      "ImplUTF7ResetUnicodeToTextContext",
+      "ImplUTF7DestroyUnicodeToTextContext",
+      "ImplUTF7FromUCContextData"
     ],
     "upstreamSymbols": [
       "ImplUTF7ToUnicode",
       "ImplUTF7CreateUTF7TextToUnicodeContext",
       "ImplUTF7ResetTextToUnicodeContext",
       "ImplUTF7DestroyTextToUnicodeContext",
-      "ImplUTF7ToUCContextData"
+      "ImplUTF7ToUCContextData",
+      "ImplUnicodeToUTF7",
+      "ImplUTF7CreateUnicodeToTextContext",
+      "ImplUTF7ResetUnicodeToTextContext",
+      "ImplUTF7DestroyUnicodeToTextContext",
+      "ImplUTF7FromUCContextData"
     ],
     "preservedResponsibilities": [
-      "Pinned UTF-7 text-to-Unicode state machine, Base64 indices, invalid-input statuses and source context contract, including the disabled context restore in upstream."
+      "Pinned UTF-7 text-to-Unicode state machine, Base64 indices, invalid-input statuses and source context contract, including the disabled context restore in upstream.",
+      "Original reverse UTF-7 shift/Base64 state machine, exact must-shift table including form-feed/carriage-return distinction, ignored flags, partial destination writes, source consumption and disabled context restoration. Compiled unchanged C++ with ASan/UBSan agrees on 589824 BMP/capacity cases and 240 mixed vectors. Original owner bodies use primitive SAL type bindings only; this does not certify full SAL ABI or generic string integration."
     ],
     "omittedResponsibilities": [
-      "Unicode-to-UTF-7 reverse conversion is not used by the current Writer RTF import path."
+      "Full SAL converter factory and checked string-wrapper integration remain unimplemented; the native witness covers the documented isolated reverse algorithms."
     ],
     "evidence": {
       "local": [
@@ -35,12 +46,28 @@
         {
           "path": "apps/office/src/sal/textenc/tcvtutf7.test.ts",
           "marker": "decodes direct bytes, shifted UTF-16 units and escaped plus"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf7.ts",
+          "marker": "ImplUnicodeToUTF7"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf7.encode.test.ts",
+          "marker": "matches native"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf7.encode.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/tcvtutf7.cxx",
           "marker": "ImplUTF7ToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtutf7.cxx",
+          "marker": "ImplUnicodeToUTF7"
         }
       ]
     }

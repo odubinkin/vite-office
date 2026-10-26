@@ -1370,6 +1370,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtutf7.cxx`, `ImplUTF7ToUnicode`, comments out the branch that restores `mbShifted`, `mbFirst`, `mbWroteOne`, `mnBitBuffer` and `mnBufferBits` from its context, while still writing the resulting values to that context at return. The source marks the implementation unfinished.
 - Observation: a shifted Base64 sequence split across converter calls cannot resume from the preceding chunk even when the caller retains the native context. This is a source-level finding; compiled desktop behavior remains unverified.
 - Preservation: the local converter initializes conversion state on every call and still stores the final values in the context, matching the pinned source. The current RTF byte path supplies a complete byte run to one call.
+- Reverse evidence: `ImplUnicodeToUTF7` likewise disables restoration of `mbShifted`, `mnBitBuffer`, and `mnBufferBits`, stores the final fields and ignores its flags argument. The port preserves this. The isolated unchanged-source ASan/UBSan witness confirms reverse outputs and saved state for 589824 BMP/capacity cases and 240 mixed vectors with a deliberately nonzero incoming context; full desktop behavior is not certified.
 
 ### WRITER115 — Apple Arabic and Hebrew code pages have no SAL converter
 
@@ -1635,3 +1636,22 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `CanEncode`; `include/rtl/textcvt.h` flag definitions.
 - Observation: UNDEFINED_ERROR has the same value in both flag families, but TEXTTOUNICODE INVALID_ERROR is 0x0100, which is UNICODETOTEXT UNDEFINED_REPLACE rather than UNICODETOTEXT INVALID_ERROR (0x0010). The RTF predicate therefore requests undefined-character replacement and does not request the apparent invalid-input error action. This is a source-level flag trace; the complete font-name predicate is not yet integrated or compiled in this slice.
 - Preservation: retain the original flag values when connecting the native font-name conversion path. Do not replace them with the similarly named flags from the opposite family.
+
+
+### WRITER179 — UTF-7 directly emits form feed but shifts carriage return
+
+- Source: pinned `sal/textenc/tcvtutf7.cxx`, `aImplMustShiftTab` and `ImplUnicodeToUTF7`. The table marks 0x0C as direct, with a comment naming it CR, while 0x0D is marked for Base64 shifting.
+- Observation: the unchanged compiled source emits U+000C as byte 0C and U+000D as `+AA0-`. The source table differs from its own control-character comment. The isolated ASan/UBSan native witness confirms the output.
+- Preservation: retain the original 128-entry table. Do not swap 0x0C/0x0D or normalize line endings inside the converter.
+
+### WRITER180 — ISCII reverse conversion retains a trailing high surrogate when FLUSH is set
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `UnicodeToIsciiDevanagari::convert`, final pending-surrogate branch.
+- Observation: when a high surrogate remains and neither ERROR nor DESTBUFFERTOSMALL is set, the source sets SRCBUFFERTOSMALL if FLUSH is present and leaves the surrogate in the context. Without FLUSH it invokes the invalid-input helper, which may replace the surrogate and clear state. The isolated unchanged-source ASan/UBSan witness confirms these branches, status, output and source counts.
+- Preservation: retain the source condition and state transitions. Do not reverse the FLUSH test to follow another codec's streaming behavior.
+
+### WRITER181 — ISCII context requirements differ from the generic string wrapper's null context
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `ImplConvertUnicodeToIsciiDevanagari`, casts its context and unconditionally calls its member function; that function reads `m_cHighSurrogate`. Pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, calls `rtl_convertUnicodeToText` with a null context. The ISCII descriptor in `convertisciidevangari.tab` supplies this context-dependent reverse callback.
+- Observation: the generic string-wrapper route provides no ISCII context despite the converter's unconditional object access. This is a source-level contract finding; null-object execution is undefined and is excluded from the native witness. Direct reverse-call tests use the actual context constructor and reset contract.
+- Preservation: keep the converter's context ownership requirement. Do not manufacture a context inside its callback or silently substitute another encoding to conceal the source contract mismatch.
