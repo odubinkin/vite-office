@@ -4,8 +4,40 @@ import { SharedString } from "../../svl/inc/sharedstring";
 import { OUString } from "../../sal/inc/rtl/ustring";
 import { CellTextAttr } from "./celltextattr";
 import { SvtScriptType } from "../../svl/inc/languageoptions";
-import { string_block as S, celltextattr_block as A } from "./mtvelements";
+import { string_block as S, celltextattr_block as A, edittext_block } from "./mtvelements";
+import { EditTextObjectImpl, TextRotation } from "../../editeng/inc/editobj";
+import { MapUnit } from "../../tools/inc/mapunit";
 import fixture from "../../external/mdds/include/mdds/multi_type_vector/native-object-value-cases.json";
+
+it("clones native managed rich-text blocks into independent EditTextObject owners", /** Checks the Calc copy constructor specialization and both managed destruction paths. @returns Nothing. */ () => {
+  const edit = new EditTextObjectImpl(
+    null,
+    MapUnit.Map100thMM,
+    false,
+    TextRotation.NONE,
+    SvtScriptType.LATIN,
+  );
+  const value = new OUString(new Uint16Array([65]), 1);
+  edit.CreateAndInsertContent().SetText(value);
+  value.dispose();
+  const original = edittext_block.create_block(1);
+  edittext_block.set_value(original, 0, edit);
+  const clone = edittext_block.clone_block(original);
+  const copied = edittext_block.begin(clone).get();
+  try {
+    expect(copied).not.toBe(edit);
+    expect(copied?.GetParagraphCount()).toBe(1);
+    expect(copied?.GetText(0).getStr()[0]).toBe(65);
+    edit.CreateAndInsertContent();
+    expect(edit.GetParagraphCount()).toBe(2);
+    expect(copied?.GetParagraphCount()).toBe(1);
+  } finally {
+    edittext_block.delete_block(original);
+    edittext_block.delete_block(clone);
+  }
+  expect(edit.GetParagraphCount()).toBe(0);
+  expect(copied?.GetParagraphCount()).toBe(0);
+});
 it("matches whole original Calc object value block stream", /** Compares actual string refcounts and independent native metadata through every captured operation. @returns Nothing. */ () => {
   const lines = ["calc"];
   const x = new OUString(new Uint16Array([65, 0]), 1);

@@ -1,5 +1,5 @@
 /** @fileoverview Native selection/default policies over actual generated compound values and shared UNO COW. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -261,6 +261,31 @@ import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlis
 import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
 import { SvNumberformat } from "./zformat";
 import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+
+it("rejects an empty built-in Boolean code after the real scanner reports an empty format", /** Checks initialization cleanup through a service-code fixture while retaining the actual parser and format owners. @returns Nothing. */ () => {
+  const values = tableValues();
+  const empty = unicode("");
+  const code = vi.spyOn(values.scanner, "GetBooleanString").mockReturnValue(empty);
+  try {
+    expect(
+      /** Generates native builtins against the empty service code. @returns No complete table. */ () =>
+        generateStandardNumberFormat(
+          values.table,
+          values.mapper,
+          values.locale,
+          values.scanner,
+          values.language,
+          values.decimal,
+          0,
+        ),
+    ).toThrow("Built-in format scan failed");
+    expect(values.table.GetEntry(0)).not.toBeNull();
+  } finally {
+    code.mockRestore();
+    empty.dispose();
+    values.dispose();
+  }
+});
 /** Actual source-backed fields/owners used by native table operations;no service peer is fabricated. @returns Owned native values. */
 function tableValues() {
   const languageText = unicode("de"),

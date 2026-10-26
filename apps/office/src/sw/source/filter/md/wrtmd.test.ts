@@ -1,8 +1,14 @@
 /** @fileoverview Verifies native Writer Markdown output and represented round trips. */
 import { expect, it } from "vitest";
-import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
-import { FontWeight } from "../../../../tools/inc/fontenum";
-import { RES_CHRATR_CJK_WEIGHT, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { SvxWeightItem, SvxPostureItem } from "../../../../editeng/source/items/textitem";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { FontWeight, FontItalic, FontStrikeout } from "../../../../tools/inc/fontenum";
+import {
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_WEIGHT,
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_POSTURE,
+} from "../../../inc/hintids";
 import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
@@ -11,6 +17,41 @@ import { SwTableNode } from "../../core/docnode/node";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
+
+it("opens and closes native strike and italic attributes and preserves explicit resets", /** Checks source formatting counters without exporting them as boolean-only style substitutes. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  const strike = doc.paragraphs[0];
+  if (!strike) throw new Error("Missing initial paragraph");
+  try {
+    strike.SetText("Strike");
+    strike.SetAttr(new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT));
+    const italic = doc.nodes.MakeTextNode("Emphasis");
+    italic.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    const plain = doc.nodes.MakeTextNode("Plain");
+    plain.SetAttr(new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT));
+    plain.SetAttr(new SvxPostureItem(FontItalic.ITALIC_NONE, RES_CHRATR_POSTURE));
+    // Upstream ShouldCloseIt also emits closing delimiters for a zero-to-negative reset.
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(doc))).toBe(
+      "~~Strike~~\n\n*Emphasis*\n\n~~*Plain\n",
+    );
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("exports native empty cells and empty tables without inventing visible text", /** Checks table construction boundaries before any cell content is authored. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  try {
+    const table = doc.nodes.MakeTableNode("Empty", {}, doc.paragraphs[0]);
+    expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(doc))).not.toContain("|");
+    const row = doc.nodes.AppendTableRow(table, 1);
+    row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetParagraphAlignment("center");
+    const markdown = new TextDecoder().decode(new SwMDWriter().WriteDocument(doc));
+    expect(markdown).toContain("|  |\n| :-: |");
+  } finally {
+    doc.Dispose();
+  }
+});
 
 it("round trips headings, list items and ordinary escaped text", /** Checks native style/numbering and escaping. @returns Nothing. */ () => {
   const source = createWriterDocument();

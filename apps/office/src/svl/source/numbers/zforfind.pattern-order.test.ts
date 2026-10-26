@@ -37,6 +37,10 @@ it("evaluates full, partial and unusual source date orders after actual pattern 
     ["M/Y/D", "12/2024/31", DateOrder.MDY],
     ["D/Y/M", "31/2024/12", DateOrder.MDY],
     ["Y/D", "2024/31", DateOrder.MDY],
+    ["Y/M/D/Y", "2024/12/31/2025", DateOrder.YMD],
+    ["M/M", "12/11", DateOrder.MDY],
+    ["D/D", "31/30", DateOrder.MDY],
+    ["Y/Y", "2024/2025", DateOrder.MDY],
   ];
   try {
     for (const [pattern, value, order] of cases) {

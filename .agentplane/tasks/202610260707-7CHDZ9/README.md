@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T12:44:52.097Z"
+doc_updated_at: "2026-10-26T14:03:52.517Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -96,6 +96,14 @@ sections:
     - Observation: Regression tests exposed two real integration bugs: paragraph-border QueryValue wrapped the generated BorderLine2 value in a scalar array, causing compound Any copy to fail; Calc input-line projection read the null shared-string alternative of edit cells and sent existing multiline text through the plain-input admission guard.
       Impact: Valid paragraph-border reads and selecting existing rich-text or multiline Calc cells could fail. The new tests reproduce both failures before the fixes.
       Resolution: Pass the actual BorderLine2 compound to Any. Read owned input text from the real EditTextObject and preserve existing multiline input projection; retain text quoting for numeric-looking text. Seven focused unit tests and the production CSV browser regression pass, and the production build, affected-file lint, JSDoc and provenance checks pass. Full verification remains pending.
+
+    - Observation: The user explicitly approved scoped verification only: do not repeat the full project run; execute the newly added tests and checks for any changed implementation.
+      Impact: The previous full-suite evidence remains historical. Whole-application 100 percent coverage is not established; accumulated diagnostics still show uncovered source paths. No coverage threshold or instrumentation exclusion is changed.
+      Resolution: Skipped: repeat npm run verify and full application/browser suites. Reason: redundant full rerun explicitly declined by the user. Risk: final aggregate coverage and all-suite interaction are not reconfirmed. Approval: user message on 2026-10-26. Verify new tests and affected implementation locally, then complete publication and branch synchronization.
+
+    - Observation: The final test block adds native date/time classification, cached formula and rejected edit ownership, sparse clipboard, cell input formatting, currency initialization/retry, managed edit-block cloning, Markdown tables and CSV separator cases. Currency initialization, separator statistics and Markdown alignment remove proven unreachable alternatives; no public API or coverage threshold changes.
+      Impact: 95 tests in 15 changed/new test files pass; the broader focused selection also passed 573 tests in 63 files. Typecheck, changed-path ESLint, JSDoc, file size, source provenance, doctor and policy routing pass. Scoped coverage command exits nonzero against application-wide thresholds, so it is diagnostic only and is not claimed as a whole-application coverage pass.
+      Resolution: Command: npx vitest run with the 15 paths listed in .agentplane/tmp/pending-test-paths.json. Result: pass. Evidence: .agentplane/tmp/final-added-tests.log. Scope: all uncommitted new/extended tests and their native implementation owners. Preserve prior complete-suite evidence and the user's approved full-rerun skip.
 id_source: "generated"
 ---
 ## Summary
@@ -172,3 +180,11 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: Regression tests exposed two real integration bugs: paragraph-border QueryValue wrapped the generated BorderLine2 value in a scalar array, causing compound Any copy to fail; Calc input-line projection read the null shared-string alternative of edit cells and sent existing multiline text through the plain-input admission guard.
   Impact: Valid paragraph-border reads and selecting existing rich-text or multiline Calc cells could fail. The new tests reproduce both failures before the fixes.
   Resolution: Pass the actual BorderLine2 compound to Any. Read owned input text from the real EditTextObject and preserve existing multiline input projection; retain text quoting for numeric-looking text. Seven focused unit tests and the production CSV browser regression pass, and the production build, affected-file lint, JSDoc and provenance checks pass. Full verification remains pending.
+
+- Observation: The user explicitly approved scoped verification only: do not repeat the full project run; execute the newly added tests and checks for any changed implementation.
+  Impact: The previous full-suite evidence remains historical. Whole-application 100 percent coverage is not established; accumulated diagnostics still show uncovered source paths. No coverage threshold or instrumentation exclusion is changed.
+  Resolution: Skipped: repeat npm run verify and full application/browser suites. Reason: redundant full rerun explicitly declined by the user. Risk: final aggregate coverage and all-suite interaction are not reconfirmed. Approval: user message on 2026-10-26. Verify new tests and affected implementation locally, then complete publication and branch synchronization.
+
+- Observation: The final test block adds native date/time classification, cached formula and rejected edit ownership, sparse clipboard, cell input formatting, currency initialization/retry, managed edit-block cloning, Markdown tables and CSV separator cases. Currency initialization, separator statistics and Markdown alignment remove proven unreachable alternatives; no public API or coverage threshold changes.
+  Impact: 95 tests in 15 changed/new test files pass; the broader focused selection also passed 573 tests in 63 files. Typecheck, changed-path ESLint, JSDoc, file size, source provenance, doctor and policy routing pass. Scoped coverage command exits nonzero against application-wide thresholds, so it is diagnostic only and is not claimed as a whole-application coverage pass.
+  Resolution: Command: npx vitest run with the 15 paths listed in .agentplane/tmp/pending-test-paths.json. Result: pass. Evidence: .agentplane/tmp/final-added-tests.log. Scope: all uncommitted new/extended tests and their native implementation owners. Preserve prior complete-suite evidence and the user's approved full-rerun skip.

@@ -93,6 +93,11 @@ it("matches leading, middle and trailing literals through complete compiled-form
     [[0, "MID", 0], "12WRONG34", false, Type.UNDEFINED],
     [[0, "TAIL"], "123WRONG", false, Type.UNDEFINED],
     [[0, "TAIL"], "123", true, Type.NUMBER],
+    [[0, "-", 0, "-", 0, "-", 0], "2024-12-31-4", true, Type.NUMBER],
+    [[0, "-", 0, "-", 0], "2024-12-31", true, Type.NUMBER],
+    [[0, "/", 0, "/", 0, "/", 0], "1/2/3/4", true, Type.NUMBER],
+    [[".", 0, ".", 0], ".1.2", true, Type.NUMBER],
+    [["X", 0], "X12X", false, Type.UNDEFINED],
   ];
   try {
     for (const [tokens, source, accepted, type] of cases) {

@@ -39,7 +39,6 @@ export function readMarkdownTableAlignment(
 ): readonly WriterParagraphAlignment[] | undefined {
   const cells = splitMarkdownTableRow(source);
   if (
-    cells.length === 0 ||
     cells.some(
       /** Computes the cell result. @param cell - Cell. @returns The computed result. */ (cell) =>
         !/^:?-+:?$/u.test(cell),

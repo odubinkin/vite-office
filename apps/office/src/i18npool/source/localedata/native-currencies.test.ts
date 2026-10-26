@@ -1,5 +1,5 @@
 /** @fileoverview Pinned LC_CURRENCY ordering, locale references and LocaleDataWrapper default selection. */
-import { expect, it } from "vitest";
+import { expect, it, vi } from "vitest";
 import { LANGUAGE_GERMAN, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NfCurrencyEntry, SvNumberFormatter } from "../../../svl/source/numbers/zforlist";
@@ -203,11 +203,83 @@ it("initializes the source currency table with default-first and separate legacy
     const mark = SvNumberFormatter.GetCurrencyEntry("DEM", LANGUAGE_GERMAN);
     expect(mark && text(mark.GetSymbol())).toBe("DM");
     expect(SvNumberFormatter.GetLegacyOnlyCurrencyEntry("Pts", "ESP")?.GetLanguage()).toBeDefined();
+    expect(SvNumberFormatter.GetLegacyOnlyCurrencyEntry("Pts", "Missing bank")).toBeNull();
     expect(SvNumberFormatter.GetCurrencyEntry("Missing bank symbol", LANGUAGE_GERMAN)).toBeNull();
     expect(SvNumberFormatter.GetCurrencyEntry(LANGUAGE_SYSTEM)).toBe(
       SvNumberFormatter.MatchSystemCurrency() ?? table[0],
     );
   } finally {
     SvNumberFormatter.resetTheCurrencyTable();
+  }
+});
+
+it("uses the system fallback entry when the installed-locale service returns no rows", /** Checks the original nullable system match and missing-language currency lookup. @returns Nothing. */ () => {
+  SvNumberFormatter.resetTheCurrencyTable();
+  const installed = vi.spyOn(LocaleDataWrapper, "getInstalledLocaleNames").mockReturnValue([]);
+  try {
+    const table = SvNumberFormatter.GetTheCurrencyTable();
+    expect(table).toHaveLength(1);
+    expect(SvNumberFormatter.MatchSystemCurrency()).toBeNull();
+    expect(SvNumberFormatter.GetCurrencyEntry(LANGUAGE_SYSTEM)).toBe(table[0]);
+    expect(SvNumberFormatter.GetCurrencyEntry(LANGUAGE_GERMAN)).toBe(table[0]);
+  } finally {
+    installed.mockRestore();
+    SvNumberFormatter.resetTheCurrencyTable();
+  }
+});
+
+it("disposes unpublished currency rows after a service failure and retries initialization", /** Checks duplicate and legacy ownership through explicit native locale service fixtures. @returns Nothing. */ () => {
+  SvNumberFormatter.resetTheCurrencyTable();
+  const spanish = withLocale("es", "ES", getLocaleCurrencies);
+  const first = spanish[0];
+  if (!first) throw new Error("Pinned Spanish default currency is missing");
+  const installed = vi
+    .spyOn(LocaleDataWrapper, "getInstalledLocaleNames")
+    .mockImplementation(
+      /** Returns independently owned native Locale response values. @returns Installed fixture locales. */ () => [
+        withLocale(
+          "es",
+          "ES",
+          /** Copies the response locale. @param locale - Borrowed value. @returns Owner. */ (
+            locale,
+          ) => new Locale(locale),
+        ),
+        withLocale(
+          "en",
+          "US",
+          /** Copies the response locale. @param locale - Borrowed value. @returns Owner. */ (
+            locale,
+          ) => new Locale(locale),
+        ),
+      ],
+    );
+  const failure = new Error("Currency service failed");
+  const rows = vi
+    .spyOn(LocaleDataWrapper.prototype, "getAllCurrencies")
+    .mockReturnValueOnce([...spanish, { ...first, default: false }])
+    .mockImplementationOnce(
+      /** Reports a service error after legacy rows have been collected. @returns No rows. */ () => {
+        throw failure;
+      },
+    );
+  const disposals = vi.spyOn(NfCurrencyEntry.prototype, "dispose");
+  try {
+    expect(
+      /** Initializes the actual table from the response fixtures. @returns No published table. */ () =>
+        SvNumberFormatter.GetTheCurrencyTable(),
+    ).toThrow(failure);
+    expect(disposals).toHaveBeenCalledTimes(spanish.length + 2);
+    rows.mockRestore();
+    installed.mockRestore();
+    const table = SvNumberFormatter.GetTheCurrencyTable();
+    expect(table.length).toBeGreaterThan(284);
+    (SvNumberFormatter as unknown as { ImpInitCurrencyTable(): void }).ImpInitCurrencyTable();
+    expect(SvNumberFormatter.GetTheCurrencyTable()).toBe(table);
+    expect(SvNumberFormatter.GetLegacyOnlyCurrencyEntry("Pts", "ESP")).not.toBeNull();
+  } finally {
+    rows.mockRestore();
+    installed.mockRestore();
+    SvNumberFormatter.resetTheCurrencyTable();
+    disposals.mockRestore();
   }
 });

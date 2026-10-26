@@ -34,6 +34,7 @@ it("forces ambiguous short ISO years only when native date-order policy permits"
       ["123-12-31", DateOrder.DMY, true],
       ["2024-12-31", DateOrder.DMY, true],
       ["24/12/31", DateOrder.YMD, false],
+      ["12-12-31", 99 as DateOrder, false],
     ] as const) {
       scanner.Reset();
       for (const pattern of state.sDateAcceptancePatterns) pattern.dispose();
@@ -45,6 +46,16 @@ it("forces ambiguous short ISO years only when native date-order policy permits"
       } finally {
         input.dispose();
       }
+    }
+    scanner.Reset();
+    for (const pattern of state.sDateAcceptancePatterns) pattern.dispose();
+    state.sDateAcceptancePatterns = [unicode("D/M/Y")];
+    const unmatched = unicode("24-12-31");
+    try {
+      scanner.NumberStringDivision(unmatched);
+      expect(scanner.CanForceToIso8601(DateOrder.Invalid)).toBe(true);
+    } finally {
+      unmatched.dispose();
     }
   } finally {
     language.dispose();
@@ -88,6 +99,12 @@ it("compares actual format order with pattern order in all four date evaluation 
       }
     }
     for (const [types, value, shortOrder, longOrder] of [
+      [
+        [NfKeywordIndex.MM, NfKeywordIndex.DD, NfKeywordIndex.YYYY],
+        "12 JAN 2024",
+        DateOrder.MDY,
+        LongDateOrder.MDY,
+      ],
       [
         [NfKeywordIndex.YYYY, NfKeywordIndex.MM, NfKeywordIndex.DD],
         "12 JAN 2024",

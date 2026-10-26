@@ -1,4 +1,4 @@
-/** @fileoverview Native ScCellFormat GetString scalar/formula dispatch over real values and formatter. English resource binding and nonthreaded/no-macro interpreter paths match the current core slice;rich text,macro and other format families remain unported. */
+/** @fileoverview Native ScCellFormat display dispatch for scalar/formula cells and input-line dispatch for scalar/edit/formula cells. English resources and nonthreaded interpreter paths use existing native owners;macro and other format families remain unported. */
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { Color } from "../../../../tools/inc/color";
 import { CellType, ScGlobal } from "../../../inc/global";

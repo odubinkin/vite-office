@@ -80,7 +80,8 @@ export function DetectCsvSeparators(
         )
           current.distinctCounts++;
       }
-      maxLinesWithChar = Math.max(maxLinesWithChar, stats.get(character)?.lines ?? 0);
+      // Both branches above leave this candidate in the same unchanged stats map.
+      maxLinesWithChar = Math.max(maxLinesWithChar, (stats.get(character) as SeparatorStats).lines);
     }
     previousLines.push(counts);
     counts = new Map<string, number>();

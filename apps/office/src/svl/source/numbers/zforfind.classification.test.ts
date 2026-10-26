@@ -117,6 +117,17 @@ it("retains requested fraction classification for integer and mixed-number shape
         input.dispose();
       }
     }
+    language.ChangeIntl(0x0401);
+    for (const value of ["1٫", "1."]) {
+      language.pStringScanner.fields.eSetType = SvNumFormatType.FRACTION;
+      const input = unicode(value);
+      try {
+        expect(scanner.IsNumberFormatMain(input, null), value).toBe(true);
+        expect(language.pStringScanner.fields.eScannedType).toBe(SvNumFormatType.FRACTION);
+      } finally {
+        input.dispose();
+      }
+    }
   } finally {
     language.dispose();
     mapper.dispose();

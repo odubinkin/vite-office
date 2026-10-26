@@ -389,6 +389,7 @@ it("uses source day and year fragment bounds and two-digit-year expansion", /** 
     scanner.SetYear2000(1930);
     expect(SvNumberFormatter.ExpandTwoDigitYear(29, 1930)).toBe(2029);
     expect(SvNumberFormatter.ExpandTwoDigitYear(30, 1930)).toBe(1930);
+    expect(SvNumberFormatter.ExpandTwoDigitYear(2024, 1930)).toBe(2024);
     const formatter = new SvNumberFormatter(0x0409);
     try {
       formatter.SetYear2000(1930);

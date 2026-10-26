@@ -692,8 +692,7 @@ export class SvNumberFormatter {
     if (currencyTable) return;
     const entries: NfCurrencyEntry[] = [];
     const legacy: NfCurrencyEntry[] = [];
-    let secondary = 0,
-      matching = 0;
+    let matching = 0;
     const systemLanguage = getConfiguredSystemLanguage();
     const systemLocale = convertLanguageToLocale(systemLanguage, false);
     try {
@@ -743,10 +742,8 @@ export class SvNumberFormatter {
                   entry.dispose();
                   continue;
                 }
-                // Empty ooSetupCurrency defaults to LANGUAGE_SYSTEM; only a configured override can select this arm.
-                if (!secondary && entry.GetLanguage() === LANGUAGE_SYSTEM)
-                  secondary = entries.length;
-                if (!matching && entry.GetLanguage() === systemLanguage) matching = entries.length;
+                // Every row shares this locale's language; its default entry handled the system match above.
+                // The represented empty ooSetupCurrency setting has no secondary currency override.
                 entries.push(entry);
               }
             }
@@ -756,7 +753,7 @@ export class SvNumberFormatter {
         }
       }
       legacyOnlyCurrencyTable = legacy;
-      systemCurrencyPosition = secondary || matching;
+      systemCurrencyPosition = matching;
       currencyTable = entries;
     } catch (error) {
       for (const entry of entries) entry.dispose();
