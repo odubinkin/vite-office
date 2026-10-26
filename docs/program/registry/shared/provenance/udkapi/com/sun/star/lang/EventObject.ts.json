@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/lang/EventObject.idl",
+    "localSymbols": [
+      "EventObject",
+      "cppu_detail_getUnoType_EventObject"
+    ],
+    "upstreamSymbols": [
+      "EventObject",
+      "Source"
+    ],
+    "preservedResponsibilities": [
+      "Original generated default/copy/member constructors, assignment, stable Source Reference, equality and destruction use actual shared Reference/Any/Sequence compound ownership. The compiler address adapter aliases the sole original pointer field without acquiring/releasing or supplying a second pointer/type/default provider. Real Any/Sequence copies retain the component until all owners are destroyed."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/lang/EventObject.idl",
+          "marker": "EventObject"
+        }
+      ]
+    }
+  }
+}

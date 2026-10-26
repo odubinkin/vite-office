@@ -1,0 +1,130 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d",
+    "capabilityId": "CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original text range and component SDK contracts with EventObject compound ownership"
+    ],
+    "capability": "Original text range and component SDK contracts with EventObject compound ownership",
+    "gaps": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/text/XTextRange.idl",
+          "marker": "XTextRange"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XSimpleText.idl",
+          "marker": "XSimpleText"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XText.idl",
+          "marker": "XText"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextCursor.idl",
+          "marker": "XTextCursor"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextContent.idl",
+          "marker": "XTextContent"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XComponent.idl",
+          "marker": "XComponent"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XEventListener.idl",
+          "marker": "XEventListener"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/EventObject.idl",
+          "marker": "EventObject"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "cppu::UnoType<css::lang::EventObject>::get()"
+        }
+      ],
+      "docs": [
+        {
+          "path": "udkapi/com/sun/star/lang/EventObject.idl",
+          "marker": "EventObject"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextRange.ts",
+          "marker": "XTextRange"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XSimpleText.ts",
+          "marker": "XSimpleText"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XText.ts",
+          "marker": "XText"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextCursor.ts",
+          "marker": "XTextCursor"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextContent.ts",
+          "marker": "XTextContent"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XComponent.ts",
+          "marker": "XComponent"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XEventListener.ts",
+          "marker": "XEventListener"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
+          "marker": "EventObject"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER161"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    },
+    "scopeLimitations": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "Referenced native QA is an unported downstream consumer, not a claim of ported native QA or native TableData differential execution. Local source-backed tests use actual shared owners; native vector evidence covers only original SvRef destruction order."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "text-component-sdk-compound-lifecycle"
+  }
+}

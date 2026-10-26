@@ -64,6 +64,7 @@ const driver = String.raw`#include <tools/ref.hxx>
 #include <initializer_list>
 #include <string_view>
 #include <utility>
+#include <vector>
 void emit(std::initializer_list<unsigned int> values){for(auto value:values)std::printf("%u\n",value);}
 struct Probe;
 tools::SvRef<Probe>* watch=nullptr;
@@ -96,7 +97,8 @@ void copyBase(){
  tools::SvRef<SvRefBase> plain(new SvRefBase);emit({45,plain->GetRefCount()});plain.clear();
 }
 void boundary(){Probe object(11);for(unsigned int i=0;i<(1U<<30);++i)object.AddNextRef();emit({50,object.GetRefCount()});for(unsigned int i=0;i<(1U<<30);++i)object.ReleaseRef();emit({51,object.GetRefCount()});}
-int main(int argc,char**argv){if(argc!=2)return 2;std::string_view mode(argv[1]);if(mode=="lifecycle")lifecycle();else if(mode=="assignments")assignments();else if(mode=="base")copyBase();else if(mode=="boundary")boundary();else return 3;}
+void vector(){std::vector<tools::SvRef<Probe>> refs;refs.emplace_back(new Probe(12));refs.emplace_back(new Probe(13));emit({60,refs.front()->GetRefCount(),refs.back()->GetRefCount()});}
+int main(int argc,char**argv){if(argc!=2)return 2;std::string_view mode(argv[1]);if(mode=="lifecycle")lifecycle();else if(mode=="assignments")assignments();else if(mode=="base")copyBase();else if(mode=="boundary")boundary();else if(mode=="vector")vector();else return 3;}
 `;
 // Only concrete caller code is authored here; every library body/header stays unchanged.
 writeFileSync(`${target}/driver.cpp`, driver);
@@ -151,7 +153,7 @@ function build(sanitized) {
 const normal = build(false),
   sanitized = build(true),
   captures = {};
-for (const mode of ["lifecycle", "assignments", "base", "boundary"]) {
+for (const mode of ["lifecycle", "assignments", "base", "boundary", "vector"]) {
   const outputs = [];
   for (const binary of [normal, sanitized]) {
     const result = spawnSync(binary, [mode], {

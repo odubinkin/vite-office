@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/TableData.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-6492284a-276f-4021-b111-403fbecdda95"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/TableData.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-table-data.test.ts",
+        "sw/source/writerfilter/dmapper/TableData.hxx"
+      ],
+      "justification": "Original header-owned cell/row/table hierarchy uses actual SvRefBase/SvRef and UNO range References, native by-value map parameter, open state, unsigned32 span/grid/depth, borrowed member pointer access, shallow shared row copies and completed/current row ownership. CellData::IsValid from TableManager.cxx is co-located with its owning class and retains start-only check, ignored temporary result and catch-only RuntimeException. Explicit reverse member/vector destruction follows language order and pinned native libc++ SvRef vector capture. No TableManager substitute or document projection is introduced. Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CellData",
+        "RowData",
+        "TableData"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/writerfilter/dmapper/TableData.hxx",
+      "upstreamSymbols": [
+        "CellData",
+        "RowData",
+        "TableData"
+      ]
+    }
+  }
+}

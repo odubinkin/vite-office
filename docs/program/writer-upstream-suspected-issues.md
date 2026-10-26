@@ -1517,3 +1517,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`; native PropertyMap inherits SvRefBase and uses this pointer owner.
 - Observation: move assignment releases the existing object, reads the source pointer and then clears the source, with no self-move guard. When source and destination are the same SvRef, the result is empty and its reference is released. A separate alias can keep the pointee alive. This may be an allowed moved-from contract rather than a defect; no Writer document failure is claimed.
 - Preservation: retain the exact release/read/clear order and empty self-move result. Complete original normal and ASan/UBSan caller traces retain a surviving alias while the self-moved reference becomes empty. Do not replace the implementation with a self-move no-op or swap policy.
+
+### WRITER161 — cell validity ignores the end and the returned start pointer
+
+- Source: pinned `sw/source/writerfilter/dmapper/TableManager.cxx`, `CellData::IsValid`, and `sw/source/writerfilter/dmapper/TableData.hxx`.
+- Observation: validity requires a nonnull stored start and a getStart call that does not throw RuntimeException. The returned Reference is discarded without a null check, and the stored end/open state is not examined. A nonnull start whose getStart returns an empty Reference is therefore accepted, including a cell with an empty end. This may intentionally test range accessibility; native producer reachability and document impact remain unverified.
+- Preservation: retain the start-only check, temporary destruction and catch-only RuntimeException. Actual component caller tests retain empty result/end acceptance, disposed/runtime failure rejection and foreign exception propagation. Do not add an end check, returned-pointer check or catch-all repair.

@@ -164,11 +164,21 @@ function replay(mode: keyof typeof fixture.captures): number[] {
       object.endScope();
       break;
     }
+    case "vector": {
+      const cells = [new SvRef(new Probe(12)), new SvRef(new Probe(13))];
+      emit(
+        60,
+        (cells[0] as SvRef<Probe>).operatorArrow().GetRefCount(),
+        (cells[1] as SvRef<Probe>).operatorArrow().GetRefCount(),
+      );
+      for (let index = cells.length; index--;) (cells[index] as SvRef<Probe>).dispose();
+      break;
+    }
   }
   return observations;
 }
 
-it.each(["lifecycle", "assignments", "base", "boundary"] as const)(
+it.each(["lifecycle", "assignments", "base", "boundary", "vector"] as const)(
   "matches the entire original normal and sanitized SvRef %s trace",
   /** Compares all initialized values and the complete native stdout digest. @param mode - Original caller mode. @returns Nothing. */ (
     mode,
