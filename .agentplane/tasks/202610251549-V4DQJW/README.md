@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T16:05:32.939Z"
+doc_updated_at: "2026-10-26T16:06:50.978Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -152,6 +152,10 @@ sections:
     - Observation: Ported native SwFindNearestNode, WriterListener/SwModify GetInfo and four-format SwPageDesc.GetInfo. Command: npm run test:writer with37 related attr/doc/layout files and maxWorkers=2. Result: pass339 tests. Focused coverage tests pass21; full modified-module threshold FAIL retained at S258/326 B122/153 F74/99 L234/293. Added owners S21/21 B18/18 F6/6; no coverage exclusions or threshold changes. Checkpoint: evidence/native-nearest-node-query-checkpoint.json.
       Impact: Document/layout direction still cannot be admitted: content-node style registration and deleted/undo-node lifetimes plus SwFormatPageDesc pointer identity remain missing. DOCX/XLSX UI readiness is not claimed; task remains DOING. Typecheck/build/lint/dependencies/docs/tree/provenance/registry/size/static/routing passed; doctor0 errors and1 existing hook warning.
       Resolution: Commit the source and exact blob-bound evidence as a partial checkpoint, then stop for user-managed merge. Do not merge/integrate or start another block. Continue native node lifetime/page ownership before GetTextDirection and the one-argument Word character-run caller; preserve existing I/O/recovery defaults.
+
+    - Observation: Correction to the preceding checkpoint stop note: the latest user instruction continue resumes work after the earlier user-managed merge; do not reinstate the previous pause. Source commit8879316c3931 has all10 paths matching the evidence blobs.
+      Impact: Goal and Writer task remain active. The earlier checkpoint wording about stopping for another merge was an incorrect carryover from the superseded pause.
+      Resolution: Continue native text-node style registration and undo lifetime integration under the approved task. No merge/integrate is authorized or performed.
 id_source: "generated"
 ---
 ## Summary
@@ -280,3 +284,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Ported native SwFindNearestNode, WriterListener/SwModify GetInfo and four-format SwPageDesc.GetInfo. Command: npm run test:writer with37 related attr/doc/layout files and maxWorkers=2. Result: pass339 tests. Focused coverage tests pass21; full modified-module threshold FAIL retained at S258/326 B122/153 F74/99 L234/293. Added owners S21/21 B18/18 F6/6; no coverage exclusions or threshold changes. Checkpoint: evidence/native-nearest-node-query-checkpoint.json.
   Impact: Document/layout direction still cannot be admitted: content-node style registration and deleted/undo-node lifetimes plus SwFormatPageDesc pointer identity remain missing. DOCX/XLSX UI readiness is not claimed; task remains DOING. Typecheck/build/lint/dependencies/docs/tree/provenance/registry/size/static/routing passed; doctor0 errors and1 existing hook warning.
   Resolution: Commit the source and exact blob-bound evidence as a partial checkpoint, then stop for user-managed merge. Do not merge/integrate or start another block. Continue native node lifetime/page ownership before GetTextDirection and the one-argument Word character-run caller; preserve existing I/O/recovery defaults.
+
+- Observation: Correction to the preceding checkpoint stop note: the latest user instruction continue resumes work after the earlier user-managed merge; do not reinstate the previous pause. Source commit8879316c3931 has all10 paths matching the evidence blobs.
+  Impact: Goal and Writer task remain active. The earlier checkpoint wording about stopping for another merge was an incorrect carryover from the superseded pause.
+  Resolution: Continue native text-node style registration and undo lifetime integration under the approved task. No merge/integrate is authorized or performed.

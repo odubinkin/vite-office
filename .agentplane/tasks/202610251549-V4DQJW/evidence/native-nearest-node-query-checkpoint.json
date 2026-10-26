@@ -128,5 +128,6 @@
     "Native document/layout text direction and exact one-argument GetPseudoCharRuns caller",
     "DOCX import/export orchestration and production UI routes; Calc XLSX task not started in this block"
   ],
-  "stopRule": "Stop after this checkpoint for user-managed merge; no integrate/merge."
+  "stopRule": "The user resumed work after the previous merge with continue. Goal remains active; no automatic merge or integrate.",
+  "sourceCommit": "8879316c3931"
 }
