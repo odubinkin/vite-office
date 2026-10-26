@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 38
+revision: 39
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T18:12:07.800Z"
+doc_updated_at: "2026-10-26T18:35:17.679Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -172,6 +172,10 @@ sections:
     - Observation: Native table value receiver checkpoint implemented and validated. Original MeasureHandler, CellMarginHandler and LatentStyleHandler use actual RTL/UNO owners; source-generated style table/row/cell/latent contexts preserve native IDs, kinds and ordering. WRITER150/151 preserve raw-margin carryover and fixed LTR direction.
       Impact: Moves real Strict/Transitional ZIP styles XML into native value receivers. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parse/application, DomainMapper.table and production DOCX/XLSX import/export UI remain incomplete; no task acceptance or parity promotion.
       Resolution: Command/results/evidence/scope: evidence/native-table-value-handlers-checkpoint.json records new3-owner100 coverage (S207/B55/F22/L206),104 OOXML regressions,72 shared RTL regressions, tools/app typecheck, build/static, scoped lint/format, native generation, dependency/docs/size/tree/provenance/registry/routing/diff checks. Doctor retains only pre-existing hook-shim warning. Keep task DOING and goal active; continue native style application, export and UI without another approval or full-suite run at this checkpoint.
+
+    - Observation: Native border checkpoint implemented: original BorderHandler and TDefTableHandler, exact OOXML-to-Word style lookup, native editeng style bridge, MakeBorderLine and Unicode color helper. Original table carryover/cell reset-first-value behavior, distinct interop getters and discarded cell ComplexColor remain unchanged (WRITER152/153).
+      Impact: Strict/Transitional ZIP styles XML now resolves actual table/cell borders through native contexts into generated border/property owners. Four affected executable modules have100 coverage. Expanded five-owner coverage still fails unchanged100 threshold on one existing TransColToIco terminal fallback; the task remains incomplete, with no acceptance or parity promotion.
+      Resolution: Command/results/evidence/scope: evidence/native-border-handlers-checkpoint.json records252 related regression tests passing, expanded49-case raw coverage S887/888 B677/677 F68/68 L875/876, four full100 modules and the single unchanged uncovered fallback, native generated context/list tables, typecheck/build/static and quality checks. Preserve the fallback, thresholds and real Color contract; no fake provider or coverage repair. Continue remaining table-property/style orchestration, export and DOCX/XLSX UI under the approved task; no full suite due.
 id_source: "generated"
 ---
 ## Summary
@@ -320,3 +324,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Native table value receiver checkpoint implemented and validated. Original MeasureHandler, CellMarginHandler and LatentStyleHandler use actual RTL/UNO owners; source-generated style table/row/cell/latent contexts preserve native IDs, kinds and ordering. WRITER150/151 preserve raw-margin carryover and fixed LTR direction.
   Impact: Moves real Strict/Transitional ZIP styles XML into native value receivers. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parse/application, DomainMapper.table and production DOCX/XLSX import/export UI remain incomplete; no task acceptance or parity promotion.
   Resolution: Command/results/evidence/scope: evidence/native-table-value-handlers-checkpoint.json records new3-owner100 coverage (S207/B55/F22/L206),104 OOXML regressions,72 shared RTL regressions, tools/app typecheck, build/static, scoped lint/format, native generation, dependency/docs/size/tree/provenance/registry/routing/diff checks. Doctor retains only pre-existing hook-shim warning. Keep task DOING and goal active; continue native style application, export and UI without another approval or full-suite run at this checkpoint.
+
+- Observation: Native border checkpoint implemented: original BorderHandler and TDefTableHandler, exact OOXML-to-Word style lookup, native editeng style bridge, MakeBorderLine and Unicode color helper. Original table carryover/cell reset-first-value behavior, distinct interop getters and discarded cell ComplexColor remain unchanged (WRITER152/153).
+  Impact: Strict/Transitional ZIP styles XML now resolves actual table/cell borders through native contexts into generated border/property owners. Four affected executable modules have100 coverage. Expanded five-owner coverage still fails unchanged100 threshold on one existing TransColToIco terminal fallback; the task remains incomplete, with no acceptance or parity promotion.
+  Resolution: Command/results/evidence/scope: evidence/native-border-handlers-checkpoint.json records252 related regression tests passing, expanded49-case raw coverage S887/888 B677/677 F68/68 L875/876, four full100 modules and the single unchanged uncovered fallback, native generated context/list tables, typecheck/build/static and quality checks. Preserve the fallback, thresholds and real Color contract; no fake provider or coverage repair. Continue remaining table-property/style orchestration, export and DOCX/XLSX UI under the approved task; no full suite due.

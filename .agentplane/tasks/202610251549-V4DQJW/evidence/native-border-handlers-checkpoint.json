@@ -1,0 +1,185 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "implemented prerequisite checkpoint; task remains DOING; expanded coverage gate remains rework",
+  "scope": "Original complete table/cell border handlers, native border/style/color conversions and source-generated border XML contexts. No full model/filter/UI completion claim.",
+  "sourceBlobs": {
+    "apps/office/src/editeng/source/items/borderline.ts": "83023be73a5e08b21e84f4cfbef63889312f6aae",
+    "apps/office/src/filter/source/msfilter/util.ts": "3c6967aec0687aef66f8ebb2d1ba43b4b8efcab1",
+    "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts": "ff69f7b7bbdf835493dedd8ec3536d02c4f777eb",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "0c4c6d316406b1c146b930544b584e7a03c96632",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "8fe46f82d202fbd4d3940834bdfc61eba116b110",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "432cf2ee419bd3ba50ac6589f17b69f5c6108f2e",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "848d03f5f54d9e849dde8c4e6308f25df24f1388",
+    "docs/program/registry/shared/provenance/editeng/source/items/borderline.ts.json": "157dbe54302eeeb94867c8242907a8a11cc5f42f",
+    "docs/program/registry/shared/provenance/filter/source/msfilter/util.ts.json": "a04c503ae071e5b06a60b31bc9d8dc781a70a636",
+    "docs/program/registry/shared/runtime/editeng/source/items/borderline.ts.json": "08e9ec49d70310474f336e3353f104598cbf3142",
+    "docs/program/registry/shared/runtime/filter/source/msfilter/util.ts.json": "9ec97be06e39f92319b5b771f6de439892abed4b",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/ConversionHelper.ts.json": "a0cde28011082fa1f6cbf55e9b9da091f5387442",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "2305efab0c44b3e434fbc431e12d485ce3c59434",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "df012179e2f524af8cd53a0dc466de91e33c8348",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/ConversionHelper.ts.json": "b01cf8df8fe6f467a551ae88bec9da28555e5a5d",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "d9fd38ce5033ad5c6f4b9da37767be173a2018ee",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "50a60a04666085a41c26fd51f5b1588e8e513e8d",
+    "docs/program/writer-upstream-suspected-issues.md": "42292d2cca0716e19f22935413bf2a27b417593f",
+    "scripts/check-module-boundaries.mjs": "ed31ba5f4425e44dbe88084846b926b74618af74",
+    "scripts/writer-ooxml/generate-factory.py": "b7c8f23412531979e1383b3777db59ee8e7a7ed7",
+    "apps/office/src/sw/source/writerfilter/dmapper/BorderHandler.ts": "a0b8a5a99c28f3cf3f49f36f61f6ec813e645339",
+    "apps/office/src/sw/source/writerfilter/dmapper/TDefTableHandler.ts": "22b5c120c930119a2f0be2bc5c13b0ce3dbbe35d",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-border-handlers.test.ts": "5aab25d938e78bcf58236c77d7fa3be04da2a27f",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts": "fab18856c192d7cf9cdf310cc62b847e0bd6b07c",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/BorderHandler.ts.json": "3485a5d47d365d2b61f0ed4007f88ada0e9d6df7",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TDefTableHandler.ts.json": "f36bac3fc7a6353129690f853d711a9bdf088357",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "966e82547a8fa88c89dc2a45fa0817f805ef1709",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/BorderHandler.ts.json": "9669277efd752a863feed7e3d00a7c70518710a3",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TDefTableHandler.ts.json": "76fb708d1a19dedfe4a38d6461cc9dcb2085a093",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "716a2af318d1f77274bc7a8b18cdca53391d83a5"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage -- src/sw/source/writerfilter/dmapper/native-border-handlers.test.ts src/sw/source/writerfilter/dmapper/DomainMapper.test.ts src/editeng/source/items/boxitem.test.ts src/filter/source/msfilter/util.test.ts --coverage.include=src/sw/source/writerfilter/dmapper/BorderHandler.ts --coverage.include=src/sw/source/writerfilter/dmapper/TDefTableHandler.ts --coverage.include=src/sw/source/writerfilter/dmapper/ConversionHelper.ts --coverage.include=src/editeng/source/items/borderline.ts --coverage.include=src/filter/source/msfilter/util.ts --coverage.reportsDirectory=coverage/native-border-handler-owners --maxWorkers=2",
+      "result": "FAIL unchanged100 threshold:49 tests/4 files pass; S887/888 B677/677 F68/68 L875/876. Four affected modules at100; only unchanged TransColToIco terminal return1 remains uncovered. New ConvertColorOU function is covered.",
+      "perFile": {
+        "apps/office/src/editeng/source/items/borderline.ts": {
+          "s": {
+            "covered": 115,
+            "total": 115
+          },
+          "b": {
+            "covered": 138,
+            "total": 138
+          },
+          "f": {
+            "covered": 25,
+            "total": 25
+          }
+        },
+        "apps/office/src/filter/source/msfilter/util.ts": {
+          "s": {
+            "covered": 39,
+            "total": 40
+          },
+          "b": {
+            "covered": 12,
+            "total": 12
+          },
+          "f": {
+            "covered": 5,
+            "total": 5
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/BorderHandler.ts": {
+          "s": {
+            "covered": 145,
+            "total": 145
+          },
+          "b": {
+            "covered": 39,
+            "total": 39
+          },
+          "f": {
+            "covered": 17,
+            "total": 17
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts": {
+          "s": {
+            "covered": 212,
+            "total": 212
+          },
+          "b": {
+            "covered": 205,
+            "total": 205
+          },
+          "f": {
+            "covered": 5,
+            "total": 5
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/TDefTableHandler.ts": {
+          "s": {
+            "covered": 376,
+            "total": 376
+          },
+          "b": {
+            "covered": 283,
+            "total": 283
+          },
+          "f": {
+            "covered": 16,
+            "total": 16
+          }
+        }
+      },
+      "uncovered": [
+        {
+          "path": "apps/office/src/filter/source/msfilter/util.ts",
+          "location": {
+            "start": {
+              "line": 58,
+              "column": 2
+            },
+            "end": {
+              "line": 58,
+              "column": null
+            }
+          },
+          "source": "  return 1;"
+        }
+      ],
+      "coverageSha256": "1a138312988ceb1370bdfeac55636f6b5c3b8b73f91f4e6d01a49417e3e04405",
+      "limitation": "Terminal fallback belongs to the existing TransColToIco function; its reachability with actual native Color values remains unverified. No fake Color/provider, coverage exclusion, threshold change or removal of the original fallback."
+    },
+    "dmapperRegression": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/dmapper/ --maxWorkers=2",
+      "result": "pass:68 tests/8 files"
+    },
+    "ooxmlRegression": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/ --maxWorkers=2",
+      "result": "pass:104 tests/6 files; after moving border/table data to a separate actual table-style entry in the XML fixture, changed file rerun passes5/5"
+    },
+    "sharedBorderRegression": {
+      "command": "npm run test:shared -- src/editeng/source/items/boxitem.test.ts src/filter/source/msfilter/util.test.ts --maxWorkers=2",
+      "result": "pass:32 tests/2 files"
+    },
+    "boundaryToolRegression": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers=2",
+      "result": "pass:48 tests/1 file"
+    },
+    "typecheck": "pass:tools+app; app rechecked after final XML-fixture improvement",
+    "build": "pass; existing chunk-size warning",
+    "static": "pass",
+    "eslint": "pass:10 scoped source/test/tool files; final XML fixture rechecked",
+    "prettier": "pass:29 matched intentional paths; Python validated through actual native generation",
+    "nativeGeneration": "pass:unchanged pinned generators; namespaces1 defines48 attributes84 elements355 resources405 lists277 actions25",
+    "dependencies": "pass:1506 sources/7620 relative imports/201 allowed cross-module edges; new filter-to-sal edge corresponds to actual native msfilter Unicode return type",
+    "jsdoc": "pass:3510 authored files",
+    "size": "pass:3514 authored files; original TDefTableHandler owner stays under1000 lines. Generated getListValue lexical data is separated from context lookup data; same OOXMLFactory_wml API, no filename-only implementation split or threshold change.",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "sourceProvenance": "pass:1507 modules",
+    "registry": "pass:340 capabilities/1507 modules/34 invariants/3418 records; no parity/default/capability status promotion",
+    "doctor": "0 errors/1 pre-existing managed hook-shim warning",
+    "routing": "pass",
+    "diff": "pass"
+  },
+  "suspectedUpstreamIssues": [
+    "WRITER152: cell-border ComplexColor is constructed but not inserted/returned",
+    "WRITER153: table current-border parameters carry across sibling sides; cell handler resets them and retains first side value"
+  ],
+  "resolvedFailures": [
+    "Initial scoped100 missed a saved native interop-vector copy because only one table side was resolved; real second-side resolution now exercises the copy.",
+    "Expanded shared coverage exposed legacy width conversion families/default parameters; actual scalar export/import and GuessLinesWidths defaults now cover them without implementation changes. Existing TransColToIco fallback remains an explicit coverage gap.",
+    "Native grouped border style fallthrough needed a recognized explanatory comment for ESLint; cell edge temporary Unicode lifetime uses a documented lexical capture body, removing non-null assertion without changing native case dispatch.",
+    "Moved lexical list records need explicit generated-data filename divergence provenance and no longer appear as locally declared symbols in the context-table runtime record. Both checks now pass."
+  ],
+  "boundaries": [
+    "No vendor modifications, network/outside-repository access, subagents, policy changes, publication or recovery/autosave/UI behavior changes.",
+    "No full suite due under approved Verify Steps. No evaluator pass, whole-task verify pass, finish or goal completion.",
+    "New border handlers use genuine BorderLine2/Any/PropertyValue/Sequence/ComplexColor and original shared editeng width rules; debug-only native assertions and physical C++ ABI are not claimed."
+  ],
+  "remaining": [
+    "Resolve or establish source-backed evidence for the existing TransColToIco fallback coverage gap while retaining the original behavior and100 threshold.",
+    "Implement remaining CellColorHandler and TrackChangesHandler dependencies, then actual TablePropertiesHandler/TblStylePrHandler and StyleSheetTable parse/application through DomainMapper.table.",
+    "Preserve the native entry/type-conversion lifetime: lcl_entry pushes the initial entry property map before table-style conversion creates a new map; no premature dispose of a still-referenced map.",
+    "Complete document/section/list/table orchestration, canonical DOCX export traversal/package reopen and desktop/mobile UI acceptance, then Calc XLSX task."
+  ]
+}
