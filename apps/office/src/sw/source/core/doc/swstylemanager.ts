@@ -1,36 +1,76 @@
-/** @fileoverview Ports document-owned character style insertion from pinned sw/source/core/doc/swstylemanager.cxx. */
+/** @fileoverview Original automatic-style family routing, character/paragraph pools and name caches over the actual StylePool owner. Native usage iteration and parent-name/typed overloads remain unported. */
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { StylePool } from "../../../../svl/source/items/stylepool";
-import type { IStyleAccess, SwAutoStyleFamily } from "../../../inc/istyleaccess";
-
-/** Internal native style-access owner, distinct from named paragraph style management. */
-class SwStyleManager implements IStyleAccess {
-  private readonly charCache = new Map<string, SfxItemSet>();
-  private readonly autoCharPool = new StylePool();
-
-  /** Inserts into the document's automatic character pool. @param set - Concrete character items. @param family - Implemented character family. @returns Shared style handle. */
-  public getAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily.AUTO_STYLE_CHAR): SfxItemSet {
-    void family;
-    return this.autoCharPool.insertItemSet(set);
+import { SwAttrSet } from "../attr/swatrset";
+import { SwAutoStyleFamily as F, type IStyleAccess } from "../../../inc/istyleaccess";
+/** Original internal cache; operator[] lookup publishes an empty slot on a miss. */
+class SwStyleCache {
+  private readonly mMap = new Map<string, SfxItemSet | undefined>();
+  /** Original addStyleName retains the actual handle under its native logical identity. @param style - Borrowed style handle. @returns Nothing. */
+  addStyleName(style: SfxItemSet): void {
+    this.mMap.set(StylePool.nameOf(style), style);
   }
-  /** Interns and caches by native handle identity. @param set - Character items. @param family - Character family. @returns Shared native handle. */
-  cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily.AUTO_STYLE_CHAR): SfxItemSet {
-    const handle = this.getAutomaticStyle(set, family);
-    this.charCache.set(StylePool.nameOf(handle), handle);
-    return handle;
+  /** Existing insertion-owner enumeration supplies the cache. Native usage-aware leaf selection remains unverified. @param pool - Actual pool. @returns Nothing. */
+  addCompletePool(pool: StylePool): void {
+    for (const handle of pool.getAllStyles()) this.addStyleName(handle);
   }
-  /** Looks up a registered native identity. @param name - Opaque style name. @param family - Character family. @returns Native handle. */
-  getByName(name: string, family: SwAutoStyleFamily.AUTO_STYLE_CHAR): SfxItemSet | undefined {
-    void family;
-    const cached = this.charCache.get(name);
-    if (cached) return cached;
-    for (const handle of this.autoCharPool.getAllStyles())
-      this.charCache.set(StylePool.nameOf(handle), handle);
-    return this.charCache.get(name);
+  /** Original operator[] lookup. @param name - Logical pointer name. @returns Retained handle or empty slot. */
+  getByName(name: string): SfxItemSet | undefined {
+    if (!this.mMap.has(name)) this.mMap.set(name, undefined);
+    return this.mMap.get(name);
+  }
+  /** Original clear releases cache handles. @returns Nothing. */
+  clear(): void {
+    this.mMap.clear();
   }
 }
-
-/** Creates a document's bounded native automatic-style owner. @returns Style-access manager. */
-export function createStyleManager(): IStyleAccess {
-  return new SwStyleManager();
+/** Original manager uses exactly two pools and caches; RUBY/PARA/NOTXT all select the paragraph side. */
+class SwStyleManager implements IStyleAccess {
+  private readonly m_aAutoCharPool = new StylePool();
+  private readonly m_aAutoParaPool: StylePool;
+  private readonly maCharCache = new SwStyleCache();
+  private readonly maParaCache = new SwStyleCache();
+  /** Original paragraph pool receives an empty ignorable range template; character pool has none. @param ignorableParagraphItems - Original optional range template. @returns Manager. */
+  constructor(ignorableParagraphItems?: SfxItemSet) {
+    this.m_aAutoParaPool = new StylePool(ignorableParagraphItems);
+  }
+  /** Original generic SfxItemSet overload asserts the paragraph subtype, then selects the original pool. @param set - Borrowed items. @param family - Original family. @returns Shared style handle. */
+  getAutomaticStyle(set: SfxItemSet, family: F): SfxItemSet {
+    if (family === F.AUTO_STYLE_PARA && !(set instanceof SwAttrSet))
+      throw new Error("assert paragraph automatic style requires SwAttrSet");
+    const pool = family === F.AUTO_STYLE_CHAR ? this.m_aAutoCharPool : this.m_aAutoParaPool;
+    return pool.insertItemSet(set);
+  }
+  /** Original cache insertion retains family separation and native paragraph assertion. @param set - Borrowed items. @param family - Original family. @returns Shared style. */
+  cacheAutomaticStyle(set: SfxItemSet, family: F): SfxItemSet {
+    if (family === F.AUTO_STYLE_PARA && !(set instanceof SwAttrSet))
+      throw new Error("assert paragraph automatic style requires SwAttrSet");
+    const pool = family === F.AUTO_STYLE_CHAR ? this.m_aAutoCharPool : this.m_aAutoParaPool,
+      handle = pool.insertItemSet(set);
+    const cache = family === F.AUTO_STYLE_CHAR ? this.maCharCache : this.maParaCache;
+    cache.addStyleName(handle);
+    return handle;
+  }
+  /** Original family lookup fills the relevant cache on a miss and asserts a found paragraph handle's subtype. @param name - Logical pointer name. @param family - Original family. @returns Retained handle or absent. */
+  getByName(name: string, family: F): SfxItemSet | undefined {
+    const pool = family === F.AUTO_STYLE_CHAR ? this.m_aAutoCharPool : this.m_aAutoParaPool,
+      cache = family === F.AUTO_STYLE_CHAR ? this.maCharCache : this.maParaCache;
+    let style = cache.getByName(name);
+    if (style === undefined) {
+      cache.addCompletePool(pool);
+      style = cache.getByName(name);
+    }
+    if (style !== undefined && family === F.AUTO_STYLE_PARA && !(style instanceof SwAttrSet))
+      throw new Error("assert paragraph cached style requires SwAttrSet");
+    return style;
+  }
+  /** Original clears both caches without resetting pools. @returns Nothing. */
+  clearCaches(): void {
+    this.maCharCache.clear();
+    this.maParaCache.clear();
+  }
+}
+/** Original creates a document-owned manager with the supplied paragraph ignorable range. @param ignorableParagraphItems - Original optional empty range template. @returns Actual style-access owner. */
+export function createStyleManager(ignorableParagraphItems?: SfxItemSet): IStyleAccess {
+  return new SwStyleManager(ignorableParagraphItems);
 }

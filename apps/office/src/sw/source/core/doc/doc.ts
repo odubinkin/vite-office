@@ -26,7 +26,7 @@ import {
   type SwTableBox,
   type SwTableBoxFormat as SwTableBoxFormatValue,
 } from "../table/swtable";
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwTabCols } from "../bastyp/tabcol";
 import type { SwTabFrame } from "../layout/tabfrm";
 import {
@@ -67,6 +67,8 @@ import { createStyleManager } from "./swstylemanager";
 import type { IStyleAccess } from "../../../inc/istyleaccess";
 import { SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import {
+  RES_PARATR_LIST_BEGIN,
+  RES_PARATR_LIST_END,
   RES_PARATR_NUMRULE,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -247,7 +249,9 @@ export class SwDoc {
     this.defaultGrfFormatColl = new SwGrfFormatColl(this.attrPool, "Graphikformatvorlage");
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale, this)];
-    this.styleAccess = createStyleManager();
+    this.styleAccess = createStyleManager(
+      new SfxItemSet(this.attrPool, [[RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1]]),
+    );
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
