@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/external/icu/source/common/unicode/utypes.ts",
         "apps/office/src/external/icu/source/i18n/gregoimp.test.ts",
-        "scripts/icu-grego-native-probe.mjs"
+        "scripts/icu-grego-native-probe.mjs",
+        "scripts/icu-resource-iterator-native-probe.mjs"
       ],
-      "justification": "AQF9AG ports consumed ICU78.3 UDate, millis-per-day and status predicates/constants. Negative warnings remain successful; positive statuses remain failures. Other ICU error constants, compiler/platform declarations and generic export machinery are not ported.",
+      "justification": "AQF9AG ports consumed ICU78.3 UDate, millis-per-day and status predicates/constants. Negative warnings remain successful; positive statuses remain failures. Other ICU error constants, compiler/platform declarations and generic export machinery are not ported. Adds original U_INDEX_OUTOFBOUNDS_ERROR8 for the actual resource iterator exhaustion contract, independently observed in the native iterator comparison. Other unconsumed status constants remain outside this partial declaration.",
       "knownViolations": [],
       "localSymbols": [
         "UErrorCode",

@@ -87,3 +87,40 @@ it("borrows shared native vector storage and treats vectors as one resource", /*
   expect(R.ures_getSize(null)).toBe(0);
   expect(R.ures_getKey(null)).toBeNull();
 });
+it("copies scalar iterator state and leaves exhausted reusable outputs intact", /** Iteration is state on the actual source handle. @returns Nothing. */ () => {
+  const status: [number] = [0],
+    root = R.ures_openDirect(null, "zoneinfo64", status),
+    names = R.ures_getByKey(root, "Names", null, status),
+    scalar = R.ures_getByIndex(names, 0, null, status);
+  expect(R.ures_hasNext(scalar)).toBe(true);
+  const copied = R.ures_getNextResource(scalar, null, status);
+  expect(R.ures_hasNext(scalar)).toBe(false);
+  expect(R.ures_hasNext(copied)).toBe(false);
+  expect(R.ures_hasNext(R.ures_getByIndex(copied, 0, null, status))).toBe(false);
+  expect(R.ures_getNextResource(scalar, copied, status)).toBe(copied);
+  expect(status[0]).toBe(E.U_INDEX_OUTOFBOUNDS_ERROR);
+  R.ures_resetIterator(scalar);
+  expect(R.ures_hasNext(scalar)).toBe(true);
+  expect(R.ures_getNextResource(scalar, copied, status)).toBe(copied);
+  expect(R.ures_hasNext(scalar)).toBe(true);
+  status[0] = 0;
+  expect(R.ures_getNextResource(scalar, scalar, status)).toBe(scalar);
+  expect(R.ures_hasNext(scalar)).toBe(false);
+});
+it("resets reusable child cursors and respects null iterator operations", /** Bundle copy preserves its cursor while child initialization clears it. @returns Nothing. */ () => {
+  const status: [number] = [0],
+    root = R.ures_openDirect(null, "zoneinfo64", status),
+    names = R.ures_getByKey(root, "Names", null, status);
+  let child = R.ures_getNextResource(names, null, status);
+  expect(R.ures_getString(child, null, status)).toBe("ACT");
+  expect(R.ures_hasNext(child)).toBe(true);
+  child = R.ures_getNextResource(names, child, status);
+  expect(R.ures_getString(child, null, status)).toBe("AET");
+  expect(R.ures_hasNext(child)).toBe(true);
+  R.ures_resetIterator(names);
+  expect(R.ures_getString(R.ures_getNextResource(names, child, status), null, status)).toBe("ACT");
+  expect(R.ures_hasNext(null)).toBe(false);
+  R.ures_resetIterator(null);
+  expect(R.ures_getNextResource(null, child, status)).toBe(child);
+  expect(status[0]).toBe(E.U_ILLEGAL_ARGUMENT_ERROR);
+});

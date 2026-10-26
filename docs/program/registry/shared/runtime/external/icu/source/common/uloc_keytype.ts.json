@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc_keytype.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc_keytype.ts",
+        "apps/office/src/external/icu/source/common/uloc_keytype.test.ts",
+        "scripts/icu-keytype-native-probe.mjs"
+      ],
+      "justification": "Original resource-backed initFromResourceBundle and bidirectional key/type maps retain counted ASCII-case-insensitive string_view identity, original canonical/shared aliases, timezone resource-only colon replacement, optional alias statuses, source special-type flags/grammar and input-alias views. Iterator operations consume actual pinned keyTypeData resources. KeyTypeStringView preserves the source input-pointer distinction used by the locale converter without inventing native addresses. The unchanged ICU78.3 libraries/data match95336 map/fallback/C-wrapper cases over23834 pairs, all source resource aliases, byte payloads/casing, special grammars and null C inputs. Native pools/mutex/cleanup/allocation/ABI and resource-failure recovery remain uncertified. Locale/default/likely-subtags/calendar services remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_toBcpKey",
+        "ulocimp_toLegacyKey",
+        "ulocimp_toBcpType",
+        "ulocimp_toLegacyType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc_keytype.cpp",
+      "upstreamSymbols": [
+        "ulocimp_toBcpKey",
+        "ulocimp_toLegacyKey",
+        "ulocimp_toBcpType",
+        "ulocimp_toLegacyType"
+      ]
+    }
+  }
+}

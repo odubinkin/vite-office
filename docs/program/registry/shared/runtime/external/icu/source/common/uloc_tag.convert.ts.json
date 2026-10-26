@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+        "apps/office/src/external/icu/source/common/uloc_tag.convert.test.ts",
+        "scripts/icu-language-tag-conversion-native-probe.mjs"
+      ],
+      "justification": "Complete original internal ByteSink forLanguageTag conversion operates on actual ULanguageTag buffer/list owner and source key/type resource maps. Original nested-loop variant pointer swaps, ordered attribute/keyword lists, first duplicates, typeless yes, input-alias lowercase conversion, POSIX flag/underscore behavior, und/private-use rules, partial parsing and existing output append are retained. The unchanged ICU78.3 internal API and real data match121338 cases over6741 spans across all source type/alias inputs, explicit/NUL lengths, sticky statuses and optional parsedLength. Native pools/allocator/mutex/lifetime/ABI, reverse conversion, public C output-buffer capacity/termination and complete Locale/calendar construction remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_forLanguageTag"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc_tag.cpp",
+      "upstreamSymbols": [
+        "ulocimp_forLanguageTag"
+      ]
+    }
+  }
+}

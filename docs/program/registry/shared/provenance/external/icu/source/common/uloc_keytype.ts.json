@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc_keytype.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc_keytype.cpp",
+    "localSymbols": [
+      "ulocimp_toBcpKey",
+      "ulocimp_toLegacyKey",
+      "ulocimp_toBcpType",
+      "ulocimp_toLegacyType"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_toBcpKey",
+      "ulocimp_toLegacyKey",
+      "ulocimp_toBcpType",
+      "ulocimp_toLegacyType"
+    ],
+    "preservedResponsibilities": [
+      "Original resource-backed initFromResourceBundle and bidirectional key/type maps retain counted ASCII-case-insensitive string_view identity, original canonical/shared aliases, timezone resource-only colon replacement, optional alias statuses, source special-type flags/grammar and input-alias views. Iterator operations consume actual pinned keyTypeData resources. KeyTypeStringView preserves the source input-pointer distinction used by the locale converter without inventing native addresses. The unchanged ICU78.3 libraries/data match95336 map/fallback/C-wrapper cases over23834 pairs, all source resource aliases, byte payloads/casing, special grammars and null C inputs. Native pools/mutex/cleanup/allocation/ABI and resource-failure recovery remain uncertified. Locale/default/likely-subtags/calendar services remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; complete locale/calendar service integration and native allocator/ABI remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_keytype.ts",
+          "marker": "ulocimp_toBcpKey"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_keytype.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc_keytype.cpp",
+          "marker": "ulocimp_toBcpKey"
+        }
+      ]
+    }
+  }
+}

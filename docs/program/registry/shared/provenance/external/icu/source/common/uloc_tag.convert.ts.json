@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc_tag.cpp",
+    "localSymbols": [
+      "ulocimp_forLanguageTag"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_forLanguageTag"
+    ],
+    "preservedResponsibilities": [
+      "Complete original internal ByteSink forLanguageTag conversion operates on actual ULanguageTag buffer/list owner and source key/type resource maps. Original nested-loop variant pointer swaps, ordered attribute/keyword lists, first duplicates, typeless yes, input-alias lowercase conversion, POSIX flag/underscore behavior, und/private-use rules, partial parsing and existing output append are retained. The unchanged ICU78.3 internal API and real data match121338 cases over6741 spans across all source type/alias inputs, explicit/NUL lengths, sticky statuses and optional parsedLength. Native pools/allocator/mutex/lifetime/ABI, reverse conversion, public C output-buffer capacity/termination and complete Locale/calendar construction remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; complete locale/calendar service integration and native allocator/ABI remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+          "marker": "ulocimp_forLanguageTag"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_tag.convert.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc_tag.cpp",
+          "marker": "ulocimp_forLanguageTag"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+      "rationale": "Original implementation is split by conversion/fallback responsibility to retain the repository file-size budget while operating directly on the actual parsed owner and shared resource maps.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -33,6 +33,7 @@ type Status = [number] | null;
 const mappedBuffers = new Map<number, readonly number[]>();
 /** Original reusable bundle handle; storage and keys borrow the immutable mapped resource. */
 export class UResourceBundle {
+  fIndex = -1;
   /** Projects native result initialization; a default stack bundle has no resource. @param resource - Borrowed storage. @param key - Borrowed table key. @returns Handle. */
   constructor(
     public resource: Resource | null = null,
@@ -71,13 +72,14 @@ export function ures_getKey(bundle: UResourceBundle | null): string | null {
 }
 /** Original reusable result initialization; source storage is captured before overwriting the handle. @param resource - Borrowed storage. @param key - Table key. @param fillIn - Reused handle. @returns Handle. */
 function result(
-  resource: Resource,
+  resource: Resource | null,
   key: string | null,
   fillIn: UResourceBundle | null,
 ): UResourceBundle {
   if (fillIn === null) return new UResourceBundle(resource, key);
   fillIn.resource = resource;
   fillIn.key = key;
+  fillIn.fIndex = -1;
   return fillIn;
 }
 /** Original direct table lookup and unchanged fillIn on failure. @param bundle - Source. @param key - Key. @param fillIn - Result owner. @param status - Nullable sticky status. @returns Reused/new handle or original fillIn on failure. */
@@ -121,7 +123,7 @@ export function ures_getByIndex(
     return result(resource.value[key] as Resource, key, fillIn);
   }
   if (resource.type === 8) return result(resource.value[index] as Resource, null, fillIn);
-  return result(resource, bundle.key, fillIn);
+  return ures_copyResb(fillIn, bundle, status);
 }
 /** Original typed scalar getter guard. @param bundle - Handle. @param status - Sticky status. @returns Whether source may be read. */
 function readable(bundle: UResourceBundle | null, status: Status): boolean {
@@ -223,4 +225,49 @@ export function ures_getStringByIndex(
     return null;
   }
   return ures_getString(child, length, status);
+}
+
+/** Original bundle copy retains the source iterator cursor; self-copy and null source are no-ops. Native path storage/refcount/allocator ownership is not simulated. @param fillIn - Reusable/new owner. @param original - Copied source/null. @param status - Sticky status. @returns Result owner. */
+export function ures_copyResb(
+  fillIn: UResourceBundle | null,
+  original: UResourceBundle | null,
+  status: [number],
+): UResourceBundle | null {
+  if (U_FAILURE(status[0]) || fillIn === original) return fillIn;
+  if (original !== null) {
+    const index = original.fIndex;
+    fillIn = result(original.resource, original.key, fillIn);
+    fillIn.fIndex = index;
+  }
+  return fillIn;
+}
+/** Original iterator reset ignores null. @param bundle - Actual owner. @returns Nothing. */
+export function ures_resetIterator(bundle: UResourceBundle | null): void {
+  if (bundle !== null) bundle.fIndex = -1;
+}
+/** Original strict cursor/size query. @param bundle - Actual owner/null. @returns Remaining resource. */
+export function ures_hasNext(bundle: UResourceBundle | null): boolean {
+  return bundle !== null && bundle.fIndex < ures_getSize(bundle) - 1;
+}
+/** Original getNextResource increments the actual source cursor before dispatch and retains fillIn on failure. Scalar copies preserve the incremented cursor; child initialization resets its cursor. @param bundle - Iterated owner/null. @param fillIn - Reusable child/null. @param status - Nullable sticky status. @returns Child or prior fillIn. */
+export function ures_getNextResource(
+  bundle: UResourceBundle | null,
+  fillIn: UResourceBundle | null,
+  status: Status,
+): UResourceBundle | null {
+  if (status === null || U_FAILURE(status[0])) return fillIn;
+  if (bundle === null) {
+    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+    return fillIn;
+  }
+  if (bundle.fIndex === ures_getSize(bundle) - 1) {
+    status[0] = E.U_INDEX_OUTOFBOUNDS_ERROR;
+    return fillIn;
+  }
+  ++bundle.fIndex;
+  const resource = bundle.resource;
+  if (resource === null) return fillIn;
+  if (resource.type === 0 || resource.type === 1 || resource.type === 7 || resource.type === 14)
+    return ures_copyResb(fillIn, bundle, status);
+  return ures_getByIndex(bundle, bundle.fIndex, fillIn, status);
 }

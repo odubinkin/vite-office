@@ -4168,3 +4168,10 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the ICU-specific `lvariant` bridge uses `strncmp` with the marker length before validating the whole subtag. Thus `en-x-foo-lvariant-posix` creates variant `POSIX` and drops the earlier private-use portion, whereas `en-x-foo-LVARIANT-posix` remains private-use text `foo-lvariant-posix`. The overlong marker `lvariantLONG` also activates the bridge and allows following short legacy variants.
 - Suspected issue: the recognition depends on original case despite lowercasing the ordinary private-use result, and it accepts a marker with an arbitrary suffix before checking private-use subtag bounds. This is ICU compatibility parsing, not a statement about valid BCP47 tags or the separate full locale converter.
 - Local behavior: preserve the exact prefix check, case sensitivity, partial acceptance and pointer checkpoints. Verified by compiling the entire unchanged original `uloc_tag.cpp` in the language-tag witness translation unit and comparing its actual internal parser/getters. No corrective normalization or new invalid-tag error is added.
+
+### CALC-324 — ICU legacy type fallback rejects plus despite its explanatory comment
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `isWellFormedLegacyType` and `ulocimp_toLegacyTypeWithFallback`.
+- Observation: the fallback comment lists `[/_-+]` as allowed internal punctuation, but the implementation recognizes only underscore, slash and hyphen. An unknown type `a+b` returns no value, while `a-b` can alias the input. Known mapped timezone names containing plus may still succeed through the resource map before this fallback.
+- Suspected issue: the documented fallback alphabet disagrees with executable code. This is not a reason to add plus support or a new error to the port.
+- Local behavior: preserve the exact grammar and map-first ordering, including public C versus counted internal boundaries. Verified against unchanged ICU78.3 map/fallback APIs, with input-alias identity observed separately from canonical resource values.

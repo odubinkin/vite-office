@@ -7,13 +7,15 @@
     "localPath": "apps/office/src/external/icu/source/common/uinvchar.ts",
     "upstreamPath": "vendor/icu-reference/source/common/uinvchar.cpp",
     "localSymbols": [
-      "uprv_isInvariantUString"
+      "uprv_isInvariantUString",
+      "u_UCharsToChars"
     ],
     "upstreamSymbols": [
-      "uprv_isInvariantUString"
+      "uprv_isInvariantUString",
+      "u_UCharsToChars"
     ],
     "preservedResponsibilities": [
-      "Consumed original invariantChars bit masks and counted/NUL-terminated UTF16 predicate. The unchanged native witness compares all65536 code units; counted NUL and terminated text retain different source behavior. EBCDIC/platform conversion tables and other invariant conversion APIs are unported. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified."
+      "Original invariantChars bit masks and counted/NUL-terminated UTF16 predicate are retained, with all65536 code units checked by the existing Olson native witness. The counted ASCII-platform u_UCharsToChars release path now preserves source NUL substitution for non-invariant units; the key/type witness independently matches all65536 conversion outputs. Native debug assertions, EBCDIC, remaining conversion APIs, general UnicodeString extraction/FixedString allocation, ABI and full locale/calendar service integration remain uncertified or pending."
     ],
     "omittedResponsibilities": [
       "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
