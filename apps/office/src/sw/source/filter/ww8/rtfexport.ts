@@ -1,4 +1,8 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { CharFormat } from "../../core/text/atrstck";
+import { SwAttrIter } from "../../core/text/itratr";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
@@ -42,11 +46,10 @@ import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
-import { RtfAttributeOutput } from "./rtfattributeoutput";
+import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
 import { MSWordStyles } from "./wrtw8sty";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
@@ -108,7 +111,7 @@ export class RtfExport {
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
       for (const run of this.GetTextRuns(node as SwTextNode)) {
-        if (run.attributes.fontFamily !== undefined) this.IndexFont(run.attributes.fontFamily);
+        this.IndexCharacterFonts(run.items);
         if (run.attributes.color !== undefined && run.attributes.color !== "auto")
           this.IndexColor(run.attributes.color);
         if (run.attributes.underlineColor !== undefined && run.attributes.underlineColor !== "auto")
@@ -139,7 +142,7 @@ export class RtfExport {
     for (const { style } of this.styles.values()) {
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
-      if (attributes.fontFamily !== undefined) this.IndexFont(attributes.fontFamily);
+      this.IndexCharacterFonts(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
@@ -592,6 +595,7 @@ export class RtfExport {
       boundaries.add(Math.min(text.length, hint.start));
       boundaries.add(Math.min(text.length, hint.end));
     }
+    const iterator = new SwAttrIter(paragraph);
     const ordered = [...boundaries].sort((left, right) => left - right);
     const runs: (WriterTextRun & { items: SfxItemSet })[] = [];
     for (let index = 0; index + 1 < ordered.length; index++) {
@@ -600,8 +604,11 @@ export class RtfExport {
       const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       items.SetParent(paragraph.GetSwAttrSet());
       const active = hints.filter((hint) => hint.start <= start && end <= hint.end);
-      const auto = active.find((hint) => hint.format instanceof SwFormatAutoFormat);
-      if (auto?.format instanceof SwFormatAutoFormat) items.PutSet(auto.format.GetStyleHandle());
+      iterator.Seek(start);
+      for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+        for (let which: number = first; which <= last; ++which)
+          if (active.some((hint) => CharFormat.IsItemIncluded(which, hint)))
+            items.Put(iterator.GetAttrHandler().ReadItem(which));
       const inet = [...active].reverse().find((hint) => hint.format instanceof SwFormatINetFormat);
       runs.push({
         text: text.slice(start, end),
@@ -618,7 +625,10 @@ export class RtfExport {
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
   private WriteRun(run: WriterTextRun & { items: SfxItemSet }): string {
     // The paragraph writer admits only nonempty slices before calling this private method.
-    const controls = this.attributeOutput.WriteNativeCharacter(run.items);
+    const controls = this.attributeOutput.WriteNativeCharacter(
+      run.items,
+      GetCharacterPropertiesMode.ForRun,
+    );
     return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
 
@@ -632,6 +642,14 @@ export class RtfExport {
     ]) {
       const line = box.GetLine(edge);
       if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
+    }
+  }
+
+  /** Registers all represented script-font values before the font table is serialized. @param items - Actual effective character owner. @returns Nothing. */
+  private IndexCharacterFonts(items: SfxItemSet): void {
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+      const item = items.GetItemIfSet(which, true);
+      if (item instanceof SvxFontItem) this.IndexFont(item.GetFamilyName());
     }
   }
 

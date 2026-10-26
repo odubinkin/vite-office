@@ -127,7 +127,11 @@ it("writes native underline line styles with the pinned RTF controls", /** Check
       paragraph.SetText(fragment.text);
       paragraph.SetTextHints(fragment.hints);
       const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
-      expect(rtf).toContain(`\\${control}\\ulc0 `);
+      expect(rtf).toContain(
+        ["ul", "uldb", "uld", "ulnone"].includes(control)
+          ? `\\ulc0\\${control} `
+          : `\\${control}\\ulc0 `,
+      );
       const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
       try {
         const importedParagraph = imported.paragraphs[0];
@@ -171,7 +175,7 @@ it("round trips native word-only underline through RTF ulw", /** Checks the sour
     paragraph.SetTextHints(fragment.hints);
     expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
     const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
-    expect(rtf).toContain("\\ulw\\ulc0 ");
+    expect(rtf).toContain("\\ulc0\\ulw ");
     const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
     try {
       const importedParagraph = imported.paragraphs[0];
@@ -207,7 +211,7 @@ it("round trips an explicit native underline color through the RTF color table",
     const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
     expect(rtf).toContain("\\red51\\green34\\blue17;");
     expect(rtf).toContain("{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;");
-    expect(rtf).toContain("\\uldb\\ulc17 colored");
+    expect(rtf).toContain("\\ulc17\\uldb colored");
     const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
     try {
       const importedParagraph = imported.paragraphs[0];

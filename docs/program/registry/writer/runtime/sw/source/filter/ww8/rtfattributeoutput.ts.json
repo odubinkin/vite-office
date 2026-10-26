@@ -17,12 +17,14 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts#RtfAttributeOutput",
-        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx#RtfAttributeOutput::OutputCharEscapement"
+        "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx#RtfAttributeOutput::OutputCharEscapement",
+        "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts"
       ],
-      "justification": "Represented RTF paragraph and character items use upstream-shaped attribute output; complete source parity remains unverified.",
+      "justification": "Represented RTF paragraph and character items use upstream-shaped attribute output; complete source parity remains unverified. Native WriteNativeCharacter now delegates original associated-group ordering rather than emitting only Western fonts. Basic underline keywords move to the source association stage while non-associated underline color remains before it. All three native language values are emitted in their original families. Source caller collection uses a temporary actual set without mutating the borrowed input; native run script/bidi production and full paragraph-marker/general-property owners remain open.",
       "knownViolations": [],
       "localSymbols": [
-        "RtfAttributeOutput"
+        "RtfAttributeOutput",
+        "RTLAndCJKState"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/rtfattributeoutput.cxx",

@@ -1609,3 +1609,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/bastyp/breakit.cxx`, `SwBreakIt::GetRealScriptOfText`, initial end-of-text decrement; `i18npool/source/breakiterator/breakiteratorImpl.cxx`, `beginOfScript` and `endOfScript`.
 - Observation: end-of-text lookup subtracts one UTF16 unit. For a single supplementary CJK character this lands on its low surrogate, which has weak classification. The backward weak-run search can advance beyond that offset after meeting the preceding strong scalar; neither direction then recovers the CJK script, so the result falls back to the application language's script. At offset zero the same text is Asian. This is a source-level trace, not compiled native evidence.
 - Preservation: keep the original code-unit decrement, unnormalized input offsets and backward-run advancement. Do not replace them with codepoint-aware caret adjustment.
+
+
+### WRITER175 — Non-RTL COMPLEX character properties select the Western normal-keyword group
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::MoveProperties`, non-RTL run switch; the COMPLEX case carries the source question about using CTL.
+- Observation: with an explicit COMPLEX script and false bidi RTL flag, CTL values are emitted as associated properties before the normal Western group. The COMPLEX branch shares the LATIN/default path instead of the RTL path that emits normal CTL keywords last. This is a source-level trace, not compiled native or rendering evidence.
+- Preservation: retain the independent bidi/script state and the original COMPLEX switch branch. Do not infer the RTL flag merely from script or make CTL the normal-keyword group for every complex run.

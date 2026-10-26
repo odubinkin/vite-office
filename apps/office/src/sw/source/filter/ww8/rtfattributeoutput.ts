@@ -1,10 +1,9 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
-import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { RtfAssociatedProperties, GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
+export { GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
-import { SvxFontItem } from "../../../../editeng/inc/fontitem";
-import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import { SvxPostureItem } from "../../../../editeng/inc/postitem";
-import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   DFLT_ESC_AUTO_SUB,
@@ -37,18 +36,11 @@ import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass"
 import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import {
-  FontLineStyle,
-  FontStrikeout,
-  FontWeight,
-  FontItalic,
-} from "../../../../tools/inc/fontenum";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   RES_CHRATR_AUTOKERN,
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
-  RES_CHRATR_POSTURE,
-  RES_CHRATR_WEIGHT,
+  WRITER_CHARACTER_WHICH_RANGES,
+  RES_CHRATR_UNDERLINE,
   RES_BREAK,
   RES_BOX,
   RES_KEEP,
@@ -72,11 +64,14 @@ import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput {
+  private readonly associated: RtfAssociatedProperties;
   /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup.  @returns Constructed instance. */
   public constructor(
     private readonly fontIndex: (family: string) => number,
     private readonly colorIndex: (color: string) => number,
-  ) {}
+  ) {
+    this.associated = new RtfAssociatedProperties(fontIndex);
+  }
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
@@ -284,9 +279,70 @@ export class RtfAttributeOutput {
     let result = "";
     if (fontAttributes && attributes.bold) result += "\\b";
     if (fontAttributes && attributes.italic) result += "\\i";
-    const underlineStyle =
-      attributes.underlineStyle ??
-      (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
+    if (attributes.underline || attributes.underlineStyle !== undefined)
+      result += this.WriteUnderlineValue(
+        attributes.underlineStyle ??
+          (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE),
+        attributes.underlineWordMode ?? false,
+        attributes.underlineColor,
+        false,
+      );
+    if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
+    else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
+    else if (attributes.strikeout !== undefined) result += "\\strike";
+    if (fontAttributes && attributes.fontFamily !== undefined)
+      result += `\\f${this.fontIndex(attributes.fontFamily)}`;
+    if (fontAttributes && attributes.fontSizeTwips !== undefined)
+      result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
+    if (attributes.escapement !== undefined)
+      result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
+    if (attributes.color !== undefined)
+      result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
+    if (attributes.highlight !== undefined)
+      result += `\\highlight${TransColToIco(writerColorFromPrimitive(attributes.highlight, "transparent"))}`;
+    return result;
+  }
+
+  /** Original native run-state producer. @param isRTL - Bidi direction. @param script - Original script. @returns Nothing. */
+  public RTLAndCJKState(isRTL: boolean, script: number): void {
+    this.associated.RTLAndCJKState(isRTL, script);
+  }
+
+  /** Collects actual inherited character items before source associated-group emission; the borrowed caller set is never cleared. @param items - Effective native items. @param mode - Original mode, style by default for existing style writers. @returns Source RTF controls. */
+  public WriteNativeCharacter(
+    items: SfxItemSet,
+    mode = GetCharacterPropertiesMode.StyleDefinition,
+  ): string {
+    const local = new SfxItemSet(items.GetPool(), WRITER_CHARACTER_WHICH_RANGES);
+    for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+      for (let which: number = first; which <= last; ++which) {
+        const item = items.GetItemIfSet(which, true);
+        if (item !== undefined) local.Put(item);
+      }
+    const projected = projectWriterCharacterAttributes(local);
+    const general = { ...projected, underline: false };
+    Reflect.deleteProperty(general, "underlineStyle");
+    let result = this.WriteCharacter(general, false);
+    const underline = local.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+    if (underline instanceof SvxUnderlineItem)
+      result += this.WriteUnderlineValue(
+        underline.GetLineStyle(),
+        projected.underlineWordMode ?? false,
+        projected.underlineColor,
+        true,
+      );
+    const kern = local.GetItemIfSet(RES_CHRATR_AUTOKERN, false) as SvxAutoKernItem | undefined;
+    if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
+    return result + this.associated.MoveProperties(local, mode);
+  }
+
+  /** Source non-associated underline selection: four basic styles defer their keyword to associated groups but retain the shared color. @param underlineStyle - Actual line style. @param wordMode - Ancillary native word mode. @param color - Existing color-table value binding. @param deferBasic - Whether associated groups emit basic keywords. @returns Native underline/color controls. */
+  private WriteUnderlineValue(
+    underlineStyle: FontLineStyle,
+    wordMode: boolean,
+    color: string | undefined,
+    deferBasic: boolean,
+  ): string {
     const underlineControl: Partial<Record<FontLineStyle, string>> = {
       [FontLineStyle.LINESTYLE_SINGLE]: "ul",
       [FontLineStyle.LINESTYLE_DOUBLE]: "uldb",
@@ -307,49 +363,19 @@ export class RtfAttributeOutput {
       [FontLineStyle.LINESTYLE_DOUBLEWAVE]: "ululdbwave",
     };
     const underline =
-      underlineStyle === FontLineStyle.LINESTYLE_SINGLE && attributes.underlineWordMode
+      underlineStyle === FontLineStyle.LINESTYLE_SINGLE && wordMode
         ? "ulw"
         : underlineControl[underlineStyle];
-    if (
-      underline !== undefined &&
-      (attributes.underline || attributes.underlineStyle !== undefined)
-    )
-      result += `\\${underline}\\ulc${attributes.underlineColor === undefined || attributes.underlineColor === "auto" ? 0 : this.colorIndex(attributes.underlineColor)}`;
-    if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
-    else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
-    else if (attributes.strikeout !== undefined) result += "\\strike";
-    if (fontAttributes && attributes.fontFamily !== undefined)
-      result += `\\f${this.fontIndex(attributes.fontFamily)}`;
-    if (fontAttributes && attributes.fontSizeTwips !== undefined)
-      result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
-    if (attributes.escapement !== undefined)
-      result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
-    if (attributes.color !== undefined)
-      result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
-    if (attributes.highlight !== undefined)
-      result += `\\highlight${TransColToIco(writerColorFromPrimitive(attributes.highlight, "transparent"))}`;
-    return result;
-  }
-
-  /** Emits font and auto-kerning items without the lossy browser projection. @param items - Effective native items. @returns Source RTF controls. */
-  public WriteNativeCharacter(items: SfxItemSet): string {
-    let result = this.WriteCharacter(
-      projectWriterCharacterAttributes(items, items.GetParent()),
-      false,
+    if (underline === undefined) return "";
+    const basic =
+      underlineStyle === FontLineStyle.LINESTYLE_SINGLE ||
+      underlineStyle === FontLineStyle.LINESTYLE_DOUBLE ||
+      underlineStyle === FontLineStyle.LINESTYLE_NONE ||
+      underlineStyle === FontLineStyle.LINESTYLE_DOTTED;
+    return (
+      (deferBasic && basic ? "" : "\\" + underline) +
+      `\\ulc${color === undefined || color === "auto" ? 0 : this.colorIndex(color)}`
     );
-    const kern = items.GetItemIfSet(RES_CHRATR_AUTOKERN, true) as SvxAutoKernItem | undefined;
-    if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
-    const font = items.GetItemIfSet(RES_CHRATR_FONT, true) as SvxFontItem | undefined;
-    if (font !== undefined) result += `\\f${this.fontIndex(font.GetFamilyName())}`;
-    const size = items.GetItemIfSet(RES_CHRATR_FONTSIZE, true) as SvxFontHeightItem | undefined;
-    if (size !== undefined) result += `\\fs${Math.trunc(size.GetHeight() / 10)}`;
-    const posture = items.GetItemIfSet(RES_CHRATR_POSTURE, true) as SvxPostureItem | undefined;
-    if (posture !== undefined)
-      result += posture.GetPosture() === FontItalic.ITALIC_NONE ? "\\i0" : "\\i";
-    const weight = items.GetItemIfSet(RES_CHRATR_WEIGHT, true) as SvxWeightItem | undefined;
-    if (weight !== undefined)
-      result += weight.GetWeight() === FontWeight.WEIGHT_BOLD ? "\\b" : "\\b0";
-    return result;
   }
 
   /** Emits source super/subscript or proportional up/down controls. @param value - Admitted escapement value. @param fontSizeTwips - Font height or native default. @returns RTF controls. */
