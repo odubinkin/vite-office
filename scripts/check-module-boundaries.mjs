@@ -225,6 +225,8 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // sw/Library_sw.mk links i18npool; breakit.hxx exposes the actual script-query producer.
+      "i18npool",
       // sw/Library_sw.mk links i18nlangtag; mdcallbcks.cxx consumes the application LanguageTag.
       "i18nlangtag",
       // sw/Library_sw.mk links the pinned external md4c parser.

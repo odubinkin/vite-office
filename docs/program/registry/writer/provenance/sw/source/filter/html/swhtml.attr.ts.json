@@ -33,21 +33,24 @@
       "HTMLAttrTable",
       "NewAttr",
       "DeleteAttr",
-      "SaveAttrTab"
+      "SaveAttrTab",
+      "EndAttr"
     ],
     "upstreamSymbols": [
       "HTMLAttr",
       "HTMLAttrTable",
       "NewAttr",
       "DeleteAttr",
-      "SaveAttrTab"
+      "SaveAttrTab",
+      "EndAttr"
     ],
     "preservedResponsibilities": [
       "Native deferred HTMLAttr item clones, raw content offsets, actual SwNodeIndex endpoints, copy/Reset/SetStart and open/previous chains. Stable mutable tuples represent borrowed HTMLAttr** slots; the original table field order and retained shared table identity are preserved. OSL_ENSURE diagnostics do not become new runtime failures.",
-      "Native NewAttr chain admission, DeleteAttr middle/head correction and pending-queue preservation, and SaveAttrTab original field-order traversal and open-head/table rebinding. Split helpers borrow the actual SwHTMLParser fields through a structural interface; they do not reconstruct state."
+      "Native NewAttr chain admission, DeleteAttr middle/head correction and pending-queue preservation, and SaveAttrTab original field-order traversal and open-head/table rebinding. Split helpers borrow the actual SwHTMLParser fields through a structural interface; they do not reconstruct state.",
+      "Native EndAttr preserves empty-range admission, Latin/CJK/CTL script splits, previous-chain retention, front/back queue priority, middle/head correction and source return semantics. Its borrowed script producer is the existing i18npool BreakIteratorImpl; native SwBreakIt service wiring remains part of unfinished HTMLReader composition. Only the zero/end-offset GoInContent boundary branch is consumed here, through source checked GoPos admission and endpoint assignment; general character movement/SwPaM.Move is not claimed."
     ],
     "omittedResponsibilities": [
-      "EndAttr/SetAttr_ application, full HTMLReader dispatch and compiled native behavior are still pending; JavaScript garbage collection replaces native item/table deallocation."
+      "SetAttr_ application, complete native parser/service composition, full HTMLReader dispatch and compiled native behavior remain pending. JavaScript garbage collection replaces native item/table deallocation."
     ],
     "filenameDivergence": {
       "localPath": "apps/office/src/sw/source/filter/html/swhtml.attr.ts",

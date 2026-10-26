@@ -1,5 +1,6 @@
 /** @fileoverview Implements Writer cell traversal over the actual SwPaM/SwNodes owners from swcrsr.cxx. */
 import { SwPaM, SwPosition, GoNextPos, GoPreviousPos } from "./pam";
+import { SwNodes } from "../docnode/nodes";
 import { FindText } from "./findtxt";
 import { FindRanges, SwDocPositions } from "../../../inc/cshtyp";
 import type { SearchOptions2 } from "../../../../i18nutil/inc/searchopt";
@@ -102,7 +103,7 @@ function lcl_MakeSelFwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean)
   pam.DeleteMark();
   if (!first) {
     pam.GetPoint().Assign(start);
-    const node = GoNextPos(pam.GetPoint());
+    const node = SwNodes.GoNext(pam.GetPoint());
     if (node === undefined) return false;
     pam.GetPoint().Assign(node, 0);
   } else if (
@@ -112,7 +113,7 @@ function lcl_MakeSelFwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean)
     return false;
   pam.SetMark();
   pam.GetPoint().Assign(end);
-  const node = GoPreviousPos(pam.GetPoint());
+  const node = SwNodes.GoPrevious(pam.GetPoint(), true);
   if (node === undefined) return false;
   pam.GetPoint().Assign(node, node.Len());
   return pam.GetMark().compare(pam.GetPoint()) < 0;
@@ -123,7 +124,7 @@ function lcl_MakeSelBkwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean
   pam.DeleteMark();
   if (!first) {
     pam.GetPoint().Assign(start);
-    const node = GoPreviousPos(pam.GetPoint());
+    const node = SwNodes.GoPrevious(pam.GetPoint(), true);
     if (node === undefined) return false;
     pam.GetPoint().Assign(node, node.Len());
   } else if (
@@ -133,7 +134,7 @@ function lcl_MakeSelBkwrd(start: SwNode, end: SwNode, pam: SwPaM, first: boolean
     return false;
   pam.SetMark();
   pam.GetPoint().Assign(end);
-  const node = GoNextPos(pam.GetPoint());
+  const node = SwNodes.GoNext(pam.GetPoint());
   if (node === undefined) return false;
   pam.GetPoint().SetContent(0);
   return pam.GetPoint().compare(pam.GetMark()) < 0;

@@ -1,6 +1,16 @@
 /** @fileoverview Native deferred HTML attribute owners from swhtml.hxx and swhtml.cxx. */
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SwNodeIndex, type SwPosition, type SwPaM } from "../../core/crsr/pam";
+import {
+  SwNodeIndex,
+  type SwPosition,
+  type SwPaM,
+  GoNextPos,
+  GoPreviousPos,
+} from "../../core/crsr/pam";
+import type { BreakIteratorImpl } from "../../../../i18npool/source/breakiterator/breakiteratorImpl";
+import { LATIN, ASIAN, COMPLEX } from "../../../../offapi/com/sun/star/i18n/ScriptType";
+import * as H from "../../../inc/hintids";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwNode } from "../../core/docnode/node";
 
 /** A stable borrowed HTMLAttr** slot; the tuple owns no attribute copy. */
@@ -345,4 +355,124 @@ export function SaveAttrTab(parser: SwHTMLAttributeState, saved: HTMLAttrTable):
     }
     current[0] = null;
   }
+}
+
+/** Source script-dependent item classification; script type stays zero for unrelated items. @param attr - Native attribute. @returns Script dependency and native ScriptType. */
+function lcl_swhtml_getItemInfo(attr: HTMLAttr): readonly [boolean, number] {
+  switch (attr.GetItem().Which()) {
+    case H.RES_CHRATR_FONT:
+    case H.RES_CHRATR_FONTSIZE:
+    case H.RES_CHRATR_LANGUAGE:
+    case H.RES_CHRATR_POSTURE:
+    case H.RES_CHRATR_WEIGHT:
+      return [true, LATIN];
+    case H.RES_CHRATR_CJK_FONT:
+    case H.RES_CHRATR_CJK_FONTSIZE:
+    case H.RES_CHRATR_CJK_LANGUAGE:
+    case H.RES_CHRATR_CJK_POSTURE:
+    case H.RES_CHRATR_CJK_WEIGHT:
+      return [true, ASIAN];
+    case H.RES_CHRATR_CTL_FONT:
+    case H.RES_CHRATR_CTL_FONTSIZE:
+    case H.RES_CHRATR_CTL_LANGUAGE:
+    case H.RES_CHRATR_CTL_POSTURE:
+    case H.RES_CHRATR_CTL_WEIGHT:
+      return [true, COMPLEX];
+    default:
+      return [false, 0];
+  }
+}
+/** Native GoInContent boundary branch used only at zero/end offsets by EndAttr. @param parser - Borrowed parser fields. @param backward - Whether moving from paragraph start to preceding paragraph end. @returns Whether a native content neighbor was admitted. */
+function moveAttributeBoundary(parser: SwHTMLAttributeState, backward: boolean): boolean {
+  const point = parser.m_pPam.GetPoint();
+  const node = backward ? GoPreviousPos(point, true) : GoNextPos(point, true);
+  if (node === undefined) return false;
+  point.SetContent(backward ? node.Len() : 0);
+  return true;
+}
+/** Ends a native deferred attribute, preserving script splitting and delayed-list ordering.
+ * @param parser - Borrowed actual parser fields.
+ * @param attr - Open native owner.
+ * @param checkEmpty - Original empty-range policy.
+ * @param breakIterator - Borrowed native script service supplied by SwBreakIt in the original owner.
+ * @returns Whether the original owner has a nonempty/admitted range.
+ */
+export function EndAttr(
+  parser: SwHTMLAttributeState,
+  attr: HTMLAttr,
+  checkEmpty: boolean,
+  breakIterator: BreakIteratorImpl,
+): boolean {
+  let result = true;
+  const head = attr.m_ppHead;
+  const endPosition = parser.m_pPam.GetPoint();
+  let endContent = endPosition.GetContentIndex();
+  let last: HTMLAttr | null = null;
+  if (head !== null && attr !== head[0]) {
+    last = head[0];
+    while (last !== null && last.GetNext() !== attr) last = last.GetNext();
+  }
+  let movedBack = false;
+  const which = attr.GetItem().Which();
+  if (
+    endContent === 0 &&
+    H.RES_PARATR_BEGIN <= which &&
+    endPosition.GetNodeIndex() !== attr.GetStartParagraphIdx()
+  ) {
+    movedBack = moveAttributeBoundary(parser, true);
+    endContent = parser.m_pPam.GetPoint().GetContentIndex();
+  }
+  const next = attr.GetNext();
+  let insert =
+    !checkEmpty ||
+    (H.RES_PARATR_BEGIN <= which && movedBack) ||
+    H.RES_PAGEDESC === which ||
+    H.RES_BREAK === which ||
+    endPosition.GetNodeIndex() !== attr.GetStartParagraphIdx() ||
+    endContent !== attr.GetStartContent();
+  let scriptDependent = false,
+    scriptItem = 0;
+  if (insert && endPosition.GetNodeIndex() === attr.GetStartParagraphIdx())
+    [scriptDependent, scriptItem] = lcl_swhtml_getItemInfo(attr);
+  const startNode = attr.GetStartParagraph().GetNode();
+  if (insert && scriptDependent && startNode instanceof SwTextNode) {
+    const text = startNode.GetText(),
+      units = new Uint16Array(text.length);
+    for (let i = 0; i < text.length; i++) units[i] = text.charCodeAt(i);
+    let scriptText = breakIterator.getScriptType(units, attr.GetStartContent());
+    let scriptEnd = breakIterator.endOfScript(units, attr.GetStartContent(), scriptText);
+    while (scriptEnd < endContent && scriptEnd !== -1) {
+      if (scriptItem === scriptText) {
+        const pending = attr.Clone(endPosition.GetNode(), scriptEnd);
+        pending.ClearPrev();
+        if (next !== null) next.InsertPrev(pending);
+        else if (pending.m_bInsAtStart) parser.m_aSetAttrTab.unshift(pending);
+        else parser.m_aSetAttrTab.push(pending);
+      }
+      attr.m_nStartContent = scriptEnd;
+      scriptText = breakIterator.getScriptType(units, scriptEnd);
+      scriptEnd = breakIterator.endOfScript(units, scriptEnd, scriptText);
+    }
+    insert = scriptItem === scriptText;
+  }
+  if (insert) {
+    attr.m_nEndPara.Assign(endPosition.GetNode());
+    attr.m_nEndContent = endContent;
+    attr.m_bInsAtStart = H.RES_TXTATR_INETFMT !== which && H.RES_TXTATR_CHARFMT !== which;
+    if (next !== null) next.InsertPrev(attr);
+    else if (attr.m_bInsAtStart) parser.m_aSetAttrTab.unshift(attr);
+    else parser.m_aSetAttrTab.push(attr);
+  } else {
+    const previous = attr.GetPrev();
+    result = false;
+    if (previous !== null) {
+      if (next !== null) next.InsertPrev(previous);
+      else if (previous.m_bInsAtStart) parser.m_aSetAttrTab.unshift(previous);
+      else parser.m_aSetAttrTab.push(previous);
+    }
+  }
+  if (last !== null) last.m_pNext = next;
+  else if (head !== null) head[0] = next;
+  if (movedBack) moveAttributeBoundary(parser, false);
+  return result;
 }

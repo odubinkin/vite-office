@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer model positions and point-and-mark selections from the pinned LibreOffice `sw/source/core/crsr/pam.cxx` boundary.
  */
 
+import { goNext, goPrevious } from "../docnode/nodes.navigation";
 import { Ring } from "../../../inc/ring";
 import { SwContentNode, type SwNode } from "../docnode/node";
 import type { SwNodes } from "../docnode/nodes";
@@ -324,23 +325,77 @@ function getWriterSinglePaMTextRanges(cursor: SwPaM): readonly WriterTextRange[]
     );
 }
 
-/** Native GoNextPos's consumed bChk=false branch: move to the next content node, at offset zero. @param position - Registered position to move. @returns Found content node or undefined. */
-export function GoNextPos(position: SwPosition): SwContentNode | undefined {
-  return GoAdjacentPos(position, 1);
-}
-/** Native GoPreviousPos's consumed bChk=false branch also assigns zero, not the previous node's end. @param position - Registered position to move. @returns Found content node or undefined. */
-export function GoPreviousPos(position: SwPosition): SwContentNode | undefined {
-  return GoAdjacentPos(position, -1);
-}
-/** Resolves original model content neighbors, including text in table sections. @param position - Registered source. @param direction - Native node direction. @returns Next content owner. */
-function GoAdjacentPos(position: SwPosition, direction: 1 | -1): SwContentNode | undefined {
-  const nodes = position.GetNode().GetNodes();
-  for (let i = position.GetNodeIndex() + direction; i >= 0 && i < nodes.Count(); i += direction) {
-    const node = nodes.at(i);
-    if (node instanceof SwContentNode) {
-      position.Assign(node, 0);
-      return node;
+/** Original fixed-section range classification, including second-level boundaries outside body content.
+ * @param start - Source node.
+ * @param end - Target node.
+ * @param checkSection - Whether non-body ranges must share a second-level section.
+ * @returns Native range admission.
+ */
+export function CheckNodesRange(start: SwNode, end: SwNode, checkSection: boolean): boolean {
+  const nodes = start.GetNodes(),
+    first = start.GetIndex(),
+    last = end.GetIndex();
+  const classify =
+    /** Applies original Chk_Both/Chk_One/Chk_None classification. @param base - Fixed end node. @returns Native enum value. */ (
+      base: SwNode,
+    ): number => {
+      const lower = base.StartOfSectionNode().GetIndex(),
+        upper = base.GetIndex();
+      const a = lower < first && upper >= first,
+        b = lower < last && upper >= last;
+      return a && b ? 0 : a || b ? 1 : 2;
+    };
+  let section = classify(nodes.GetEndOfContent());
+  if (section !== 2) return section === 0;
+  for (const base of [
+    nodes.GetEndOfAutotext(),
+    nodes.GetEndOfPostIts(),
+    nodes.GetEndOfInserts(),
+    nodes.GetEndOfRedlines(),
+  ]) {
+    section = classify(base);
+    if (section === 2) continue;
+    if (section !== 0) return false;
+    if (!checkSection) return true;
+    const node = nodes.at(first);
+    let surrounding = node.IsStartNode() ? node : node.StartOfSectionNode();
+    if (surrounding === nodes.at(last).StartOfSectionNode()) return true;
+    if (surrounding.StartOfSectionNode().GetIndex() === 0) return false;
+    for (;;) {
+      const parent = surrounding.StartOfSectionNode();
+      if (parent.EndOfSectionNode() === base) break;
+      surrounding = parent;
     }
+    const lower = surrounding.GetIndex(),
+      upper = surrounding.EndOfSectionNode().GetIndex();
+    return lower <= first && first <= upper && lower <= last && last <= upper;
   }
-  return undefined;
+  return false;
+}
+/** Original GoNextPos, retaining the existing unchecked call profile as the default. @param position - Registered position. @param check - Native fixed/second-level section check. @returns Found content owner or undefined. */
+export function GoNextPos(position: SwPosition, check = false): SwContentNode | undefined {
+  return GoAdjacentPos(position, 1, check);
+}
+/** Original GoPreviousPos assigns zero, not the previous node's end. @param position - Registered position. @param check - Native fixed/second-level section check. @returns Found content owner or undefined. */
+export function GoPreviousPos(position: SwPosition, check = false): SwContentNode | undefined {
+  return GoAdjacentPos(position, -1, check);
+}
+/** Source SwNodes adjacency and GoPos range check before committing cursor movement. @param position - Registered source. @param direction - Native direction. @param check - Native range-check policy. @returns Found content owner. */
+function GoAdjacentPos(
+  position: SwPosition,
+  direction: 1 | -1,
+  check: boolean,
+): SwContentNode | undefined {
+  const index = new SwNodeIndex(position.GetNode());
+  const node = direction > 0 ? goNext(index) : goPrevious(index, false);
+  if (node !== undefined) {
+    if (
+      check &&
+      Math.abs(node.GetIndex() - position.GetNodeIndex()) !== 1 &&
+      !CheckNodesRange(position.GetNode(), node, true)
+    )
+      return undefined;
+    position.Assign(node, 0);
+  }
+  return node;
 }

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/docnode/nodes.navigation.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/docnode/nodes.navigation.ts",
+          "marker": "goPrevious"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/pam-selection.test.ts",
+          "marker": "global section"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "startOfGlobalSection"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/docnode/nodes.cxx",
+    "localSymbols": [
+      "goNext",
+      "goPrevious"
+    ],
+    "upstreamSymbols": [
+      "goNext",
+      "goPrevious"
+    ],
+    "preservedResponsibilities": [
+      "Original content-neighbor goNext/goPrevious scans, final-sentinel exclusion, explicit canCrossBoundary flag and represented global-section lower-bound selection. Lookup borrows actual SwNodeIndex/SwNodes/SwContentNode owners and never mutates the source index."
+    ],
+    "omittedResponsibilities": [
+      "Specialized fly/header/footer/footnote start-node classes and compiled native movement differential remain outside this represented lookup profile."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/docnode/nodes.navigation.ts",
+      "rationale": "Native private lookup helpers are split from the SwNodes table/cursor composition to preserve TypeScript initialization without changing source lookup or public static contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
