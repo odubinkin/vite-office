@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-table-borders",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-border-handlers.test.ts"
+      ],
+      "justification": "Source-generated native getListValue lexical-dispatch data is separate from context attribute/element/resource lookup data, retaining one OOXMLFactory_wml owner/API and tables.lists re-export. Original pinned generator order, native IDs and first-match spelling behavior are retained. This is a generated data-responsibility boundary, not an additional parser, runtime provider or claim of an upstream file with this TS name. Full native table-property/style parsing and model application, document orchestration, native component ABI/lifetime, full DOCX/XLSX import/export and production UI admission remain incomplete or unverified. No parity/capability/default status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "lists"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+      "upstreamSymbols": [
+        "getListValue"
+      ]
+    }
+  }
+}

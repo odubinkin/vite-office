@@ -295,3 +295,59 @@ export class SvxBorderLine {
     return line;
   }
 }
+
+/** Original Word border-style mapping, including unsupported styles mapped to solid/double and default NONE. @param wordLineStyle - Native signed32 Word style. @returns Native editeng style. */
+export function ConvertBorderStyleFromWord(wordLineStyle: number): BorderLineStyle {
+  switch (wordLineStyle | 0) {
+    // First the single lines
+    case 1:
+    case 2: // thick line
+    case 5: // hairline
+    // falls through: unsupported special cases also map to a single line
+    case 20:
+      return BorderLineStyle.SOLID;
+    case 6:
+      return BorderLineStyle.DOTTED;
+    case 7:
+      return BorderLineStyle.DASHED;
+    case 22:
+      return BorderLineStyle.FINE_DASHED;
+    case 8:
+      return BorderLineStyle.DASH_DOT;
+    case 9:
+      return BorderLineStyle.DASH_DOT_DOT;
+    // then the shading beams which we represent by a double line
+    case 23:
+      return BorderLineStyle.DOUBLE;
+    // then the double lines, for which we have good matches
+    case 3:
+    case 10: // Don't have triple so use double
+    case 21: // Don't have double wave: use double instead
+      return BorderLineStyle.DOUBLE;
+    case 11:
+      return BorderLineStyle.THINTHICK_SMALLGAP;
+    case 12:
+    case 13: // Don't have thin thick thin, so use thick thin
+      return BorderLineStyle.THICKTHIN_SMALLGAP;
+    case 14:
+      return BorderLineStyle.THINTHICK_MEDIUMGAP;
+    case 15:
+    case 16: // Don't have thin thick thin, so use thick thin
+      return BorderLineStyle.THICKTHIN_MEDIUMGAP;
+    case 17:
+      return BorderLineStyle.THINTHICK_LARGEGAP;
+    case 18:
+    case 19: // Don't have thin thick thin, so use thick thin
+      return BorderLineStyle.THICKTHIN_LARGEGAP;
+    case 24:
+      return BorderLineStyle.EMBOSSED;
+    case 25:
+      return BorderLineStyle.ENGRAVED;
+    case 26:
+      return BorderLineStyle.OUTSET;
+    case 27:
+      return BorderLineStyle.INSET;
+    default:
+      return BorderLineStyle.NONE;
+  }
+}

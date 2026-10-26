@@ -1,4 +1,12 @@
 /** @fileoverview Native resource-table and property-table contexts through real DOCX ZIP input, SAX factories, value tables and ordered reference callbacks. */
+import { BorderHandler } from "../dmapper/BorderHandler";
+import { TDefTableHandler } from "../dmapper/TDefTableHandler";
+import { TablePropertyMap } from "../dmapper/PropertyMap";
+import { PropertyIds as P } from "../dmapper/PropertyIds";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { MeasureHandler } from "../dmapper/MeasureHandler";
 import { CellMarginHandler } from "../dmapper/CellMarginHandler";
 import { LatentStyleHandler } from "../dmapper/LatentStyleHandler";
@@ -156,7 +164,7 @@ it.each([
     put(
       storage,
       "styles/data.xml",
-      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr><w:tblPr><w:tblInd w:w="1440" w:type="dxa"/><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles></w:styles>`,
+      `<w:styles xmlns:w="${namespace}" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"><w:docDefaults><w:rPrDefault><w:rPr><w:b/></w:rPr></w:rPrDefault></w:docDefaults><w:style w:styleId="Normal" w:default="1" w:type="paragraph"><w:name w:val="Normal"/><w:rPr><w:sz w:val="24"/></w:rPr></w:style><w:style w:type="character" w:styleId="Strong"><w:name w:val="Strong"/><w:rPr><w:b/></w:rPr></w:style><mc:AlternateContent><mc:Choice Requires="w14"><w:style w:styleId="Chosen"><w:name w:val="Chosen"/></w:style></mc:Choice><mc:Fallback><w:style w:styleId="Skipped"><w:name w:val="Skipped"/></w:style></mc:Fallback></mc:AlternateContent><w:latentStyles w:defLockedState="0" w:defUIPriority="99" w:defSemiHidden="1" w:defUnhideWhenUsed="1" w:defQFormat="0" w:count="276"><w:lsdException w:name="Заголовок😀" w:locked="false" w:uiPriority="9" w:semiHidden="0" w:unhideWhenUsed="1" w:qFormat="true"/></w:latentStyles><w:style w:type="table" w:styleId="Grid"><w:name w:val="Grid"/><w:tblPr><w:tblInd w:w="1440" w:type="dxa"/><w:tblBorders><w:top w:val="single" w:sz="8" w:color="123456"/><w:bottom w:val="double" w:sz="8" w:color="auto"/></w:tblBorders><w:tblCellMar><w:top w:w="120" w:type="dxa"/><w:start w:w="240" w:type="dxa"/><w:bottom w:w="-120" w:type="dxa"/><w:end w:w="360" w:type="dxa"/></w:tblCellMar></w:tblPr><w:trPr><w:trHeight w:val="720" w:hRule="exact"/></w:trPr><w:tcPr><w:tcBorders><w:left w:val="dotted" w:sz="16" w:color="ABCDEF"/><w:right w:val="single" w:sz="8"/></w:tcBorders><w:tcMar><w:left w:w="480" w:type="dxa"/><w:right w:w="600" w:type="dxa"/></w:tcMar></w:tcPr></w:style></w:styles>`,
     );
     const main = await OOXMLStreamImpl.createStream(new ZipStorage(storage.commit())),
       part = await OOXMLStreamImpl.createStream(main, StreamType_t.STYLES),
@@ -186,7 +194,7 @@ it.each([
           entry,
         ) => entry[0],
       ),
-    ).toEqual([0, 1, 2, 3, 4]);
+    ).toEqual([0, 1, 2, 3, 4, 5]);
     const defaults = styles[0]?.[1] as Reference<Properties>,
       normal = styles[1]?.[1] as Reference<Properties>,
       strong = styles[2]?.[1] as Reference<Properties>;
@@ -201,7 +209,9 @@ it.each([
     expect(string(strong, N.LN_CT_Style_styleId)).toBe("Strong");
     expect(string(strong, N.LN_CT_Style_name)).toBe("Strong");
     expect(string(styles[3]?.[1] as Reference<Properties>, N.LN_CT_Style_styleId)).toBe("Chosen");
-    const tableProperties = nested(normal, N.LN_CT_Style_tblPr),
+    const grid = styles[5]?.[1] as Reference<Properties>;
+    expect(string(grid, N.LN_CT_Style_styleId)).toBe("Grid");
+    const tableProperties = nested(grid, N.LN_CT_Style_tblPr),
       indent = new MeasureHandler(),
       row = new MeasureHandler(),
       margins = new CellMarginHandler(),
@@ -209,8 +219,8 @@ it.each([
       latent = new LatentStyleHandler();
     nested(tableProperties, N.LN_CT_TblPrBase_tblInd).resolve(indent);
     nested(tableProperties, N.LN_CT_TblPrBase_tblCellMar).resolve(margins);
-    nested(nested(normal, N.LN_CT_Style_trPr), N.LN_CT_TrPrBase_trHeight).resolve(row);
-    nested(nested(normal, N.LN_CT_Style_tcPr), N.LN_CT_TcPrBase_tcMar).resolve(cell);
+    nested(nested(grid, N.LN_CT_Style_trPr), N.LN_CT_TrPrBase_trHeight).resolve(row);
+    nested(nested(grid, N.LN_CT_Style_tcPr), N.LN_CT_TcPrBase_tcMar).resolve(cell);
     const latentProperties = styles[4]?.[1] as Reference<Properties>;
     expect(string(latentProperties, N.LN_CT_LatentStyles_count)).toBe("276");
     nested(latentProperties, N.LN_CT_LatentStyles_lsdException).resolve(latent);
@@ -248,6 +258,34 @@ it.each([
       ["unhideWhenUsed", "1"],
       ["qFormat", "true"],
     ]);
+    const tableBorders = new BorderHandler(true),
+      cellBorders = new TDefTableHandler();
+    nested(tableProperties, N.LN_CT_TblPrBase_tblBorders).resolve(tableBorders);
+    nested(nested(grid, N.LN_CT_Style_tcPr), N.LN_CT_TcPrBase_tcBorders).resolve(cellBorders);
+    const tableMap = tableBorders.getProperties(),
+      cellMap = new TablePropertyMap();
+    cellBorders.fillCellProperties(cellMap);
+    for (const [map, id, width, color] of [
+      [tableMap, P.PROP_TOP_BORDER, 35, 0x123456],
+      [tableMap, P.PROP_BOTTOM_BORDER, 106, 0],
+      [cellMap, P.PROP_LEFT_BORDER, 71, 0xabcdef],
+      [cellMap, P.PROP_RIGHT_BORDER, 35, 0],
+    ] as const) {
+      const property = map.getProperty(id),
+        line = new BorderLine2();
+      if (!property) throw new Error("Missing parsed border");
+      try {
+        expect(property[1].extract(line, cppu_detail_getUnoType_BorderLine2)).toBe(true);
+        expect(line.LineWidth).toBe(width);
+        expect(line.Color).toBe(color);
+      } finally {
+        property[1].dispose();
+      }
+    }
+    tableMap.dispose();
+    cellMap.dispose();
+    tableBorders.dispose();
+    cellBorders.dispose();
     indent.dispose();
     row.dispose();
     margins.dispose();

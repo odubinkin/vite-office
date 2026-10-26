@@ -1,5 +1,6 @@
 /** @fileoverview MS filter color-index conversion from filter/source/msfilter/util.cxx. */
-import { Color } from "../../../tools/inc/color";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { Color, COL_AUTO } from "../../../tools/inc/color";
 
 /** The sixteen fixed MS Word colors in their RTF index order. */
 const WORD_COLORS = [
@@ -55,4 +56,19 @@ export function TransColToIco(color: Readonly<Color>): number {
     if (best >= 0) return best + 1;
   }
   return 1;
+}
+
+/** Original six-uppercase-hex color serialization, with exact automatic-color sentinel handling. @param color - Original color. @returns Owned Unicode string. */
+export function ConvertColorOU(color: Readonly<Color>): OUString {
+  if (color.equals(COL_AUTO))
+    return OUString.createFromAscii(new Uint8Array([97, 117, 116, 111, 0]));
+  const digits = "0123456789ABCDEF",
+    buffer = new Uint16Array(7),
+    channels = [color.GetRed(), color.GetGreen(), color.GetBlue()];
+  for (let index = 0; index < 3; ++index) {
+    const value = channels[index] as number;
+    buffer[index * 2] = digits.charCodeAt((value >> 4) & 15);
+    buffer[index * 2 + 1] = digits.charCodeAt(value & 15);
+  }
+  return new OUString(buffer);
 }
