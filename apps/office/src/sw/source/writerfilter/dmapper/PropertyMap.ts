@@ -24,6 +24,7 @@ import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertySta
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import type { rtl_uString } from "../../../../sal/inc/rtl/ustring.h";
 import { PropertyIds as P, getPropertyName } from "./PropertyIds";
+import { SvRefBase } from "../../../../tools/inc/ref";
 
 /** Original discriminant order. */
 export enum GrabBagType {
@@ -116,7 +117,7 @@ export class PropValue {
 }
 
 /** Native map orders numeric property IDs, prioritizes style/numbering properties and retains its original nonempty result cache. */
-export class PropertyMap {
+export class PropertyMap extends SvRefBase {
   private readonly values: PropertyValue[] = [];
   private readonly map = new Map<P, PropValue>();
   /** Native cache invalidation releases original generated values. @returns Nothing. */
@@ -311,6 +312,11 @@ export class PropertyMap {
     this.Invalidate();
     for (const value of this.map.values()) value.dispose();
     this.map.clear();
+  }
+  /** Original intrusive last-release dispatches the actual map/subclass destructor before the empty SvRefBase destructor. @returns Nothing. */
+  protected override destroy(): void {
+    this.dispose();
+    super.destroy();
   }
 }
 

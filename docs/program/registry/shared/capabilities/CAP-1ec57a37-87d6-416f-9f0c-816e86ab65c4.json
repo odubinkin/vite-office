@@ -1,0 +1,96 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-1ec57a37-87d6-416f-9f0c-816e86ab65c4",
+    "capabilityId": "CAP-1ec57a37-87d6-416f-9f0c-816e86ab65c4",
+    "suite": "shared",
+    "subsystem": "intrusive-reference",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain native first/next-reference distinction, no-delete gate, exact copy/move/clear/destructor ordering and self-move behavior.",
+      "Use the actual original owner for PropertyMap subtype/cache/Any destruction after the last SvRef alias."
+    ],
+    "capability": "Original SvRefBase SvRef intrusive ownership and real PropertyMap last-release destruction",
+    "gaps": [
+      "Complete existing pointer-carrier migration, table data/manager consumption and DOCX/XLSX model/export/UI workflows remain incomplete.",
+      "Physical layout/native allocator/thread/ABI, compatibility frame wrappers, invalid process behavior and native full QA parity are unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/tools/ref.hxx",
+          "marker": "SvRefBase"
+        },
+        {
+          "path": "tools/source/ref/ref.cxx",
+          "marker": "SvRefBase::~SvRefBase"
+        }
+      ],
+      "tests": [
+        {
+          "path": "svtools/qa/unit/testHtmlReader.cxx",
+          "marker": "tools::SvRef<TestHTMLParser>"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/tools/ref.hxx",
+          "marker": "Classes that want to be referenced-counted"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/tools/inc/ref.ts",
+          "marker": "SvRefBase"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts",
+          "marker": "extends SvRefBase"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/tools/inc/ref.test.ts",
+          "marker": "matches the entire original"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-ref.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "scripts/tools-ref-native-probe.mjs",
+          "marker": "Original SvRef"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER160"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-301"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original SvRefBase31-bit count/no-delete1 gate, dummy copy/base assignment, AddFirstRef versus AddNextRef, live count assertions and last-release diagnostic count before virtual destruction. Original SvRef raw/copy/move constructors, clear versus destructor publication, acquire-before-release copy assignment, release-before-read move assignment, implicit raw-pointer prvalue selecting move assignment, equality/asserted access and make_ref argument forwarding are implemented. Direct JS fields represent the original logical fields; there is no allocator, GC finalizer, second count registry, type/default provider or compatibility pointer substitute. Actual PropertyMap now inherits this native base and last-release dispatches its existing subtype destructor/cache/Any cleanup. Original full ref.hxx and ref.cxx are compiled unchanged with15 complete verified original blobs, normal and ASan/UBSan:four complete traces contain33/72/34/11 initialized observations and match pure replay. Live count boundary is reached through real public increments/releases, without private mutation or post-lifetime storage reads. Native assert aborts bind to host Errors but process/ABI equivalence on invalid inputs is not claimed. LeakSanitizer is unsupported on the host and disabled; no leak-detection claim. WeakBase/frame compatibility wrappers, physical allocation/layout/thread/ABI and complete consumers are not certified. Not all existing map pointer carriers have been migrated; real TableData/TableManager/DomainMapperTableManager and full DOCX/XLSX model/export/UI remain incomplete. Broad parity/default/verification flags stay unverified."
+    },
+    "scopeLimitations": [
+      "Original SvRefBase31-bit count/no-delete1 gate, dummy copy/base assignment, AddFirstRef versus AddNextRef, live count assertions and last-release diagnostic count before virtual destruction. Original SvRef raw/copy/move constructors, clear versus destructor publication, acquire-before-release copy assignment, release-before-read move assignment, implicit raw-pointer prvalue selecting move assignment, equality/asserted access and make_ref argument forwarding are implemented. Direct JS fields represent the original logical fields; there is no allocator, GC finalizer, second count registry, type/default provider or compatibility pointer substitute. Actual PropertyMap now inherits this native base and last-release dispatches its existing subtype destructor/cache/Any cleanup. Original full ref.hxx and ref.cxx are compiled unchanged with15 complete verified original blobs, normal and ASan/UBSan:four complete traces contain33/72/34/11 initialized observations and match pure replay. Live count boundary is reached through real public increments/releases, without private mutation or post-lifetime storage reads. Native assert aborts bind to host Errors but process/ABI equivalence on invalid inputs is not claimed. LeakSanitizer is unsupported on the host and disabled; no leak-detection claim. WeakBase/frame compatibility wrappers, physical allocation/layout/thread/ABI and complete consumers are not certified. Not all existing map pointer carriers have been migrated; real TableData/TableManager/DomainMapperTableManager and full DOCX/XLSX model/export/UI remain incomplete. Broad parity/default/verification flags stay unverified.",
+      "The referenced native HTML-reader QA is an unported downstream SvRef constructor/destructor consumer, not a claim of native ownership QA coverage or a ported parser suite. Direct ownership evidence is the new complete original ref.hxx/ref.cxx native caller and pure replay."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "intrusive-reference-copy-move-lifecycle"
+  }
+}
