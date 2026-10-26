@@ -1,10 +1,11 @@
 ---
 id: "202610260707-7CHDZ9"
 title: "Integrate Writer and Calc branches and synchronize main"
-status: "DOING"
+result_summary: "verified-202610260707-7CHDZ9"
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -18,7 +19,7 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-26T14:08:08.663Z"
+  updated_at: "2026-10-26T14:08:28.946Z"
   updated_by: "CODER"
   note: "verified-202610260707-7CHDZ9"
   attempts: 0
@@ -43,11 +44,19 @@ quality_review:
   findings:
     - "Writer and Calc histories are included in main; reverse synchronization leaves each checkout on its requested named branch with no new tracked work."
     - "Both native text converter buffer APIs match pinned upstream; invented string overload removed. DS_Store, documentation and source-size repairs are shared centrally."
-commit: null
+commit:
+  hash: "bfe0fc7bfced1bc060b647fe3916f82986663308"
+  message: "🧩 7CHDZ9 code: record scoped verification and branch synchronization"
 comments:
   -
     author: "CODER"
     body: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
+  -
+    author: "CODER"
+    body: "Verified: verified-202610260707-7CHDZ9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    author: "CODER"
+    body: "Verified: Integrated Writer and Calc into main, passed new and affected tests under the user-approved scoped verification contract, published all named branches and preserved the unrelated draft."
 events:
   -
     type: "status"
@@ -68,8 +77,26 @@ events:
     author: "CODER"
     state: "ok"
     note: "verified-202610260707-7CHDZ9"
+  -
+    type: "verify"
+    at: "2026-10-26T14:08:28.946Z"
+    author: "CODER"
+    state: "ok"
+    note: "verified-202610260707-7CHDZ9"
+  -
+    type: "status"
+    at: "2026-10-26T14:08:29.078Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: verified-202610260707-7CHDZ9. Guided shortcut recorded verification and is closing the direct task with traceable commit metadata."
+  -
+    type: "comment"
+    at: "2026-10-26T14:09:18.393Z"
+    author: "CODER"
+    body: "Verified: Integrated Writer and Calc into main, passed new and affected tests under the user-approved scoped verification contract, published all named branches and preserved the unrelated draft."
 doc_version: 3
-doc_updated_at: "2026-10-26T14:08:08.720Z"
+doc_updated_at: "2026-10-26T14:09:18.393Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -187,6 +214,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-26T14:08:28.946Z — VERIFY — ok
+
+    By: CODER
+
+    Note: verified-202610260707-7CHDZ9
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T14:08:08.720Z, excerpt_hash=sha256:ea107f04d9b20a3b664e0e484b86cdde71c64c01ef7bb9ef303b7d4a89e866d2
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610260707-7CHDZ9/blueprint/resolved-snapshot.json
+    - old_digest: 5cec1eddea368a34442bdab9e7c37e31dcbd24813e218d08fe9685500d18ee49
+    - current_digest: 5cec1eddea368a34442bdab9e7c37e31dcbd24813e218d08fe9685500d18ee49
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610260707-7CHDZ9
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610260707-7CHDZ9 --result verified-202610260707-7CHDZ9 --commit bfe0fc7bfced1bc060b647fe3916f82986663308
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve original commit hashes in task findings; use ordinary revert commits if rollback is needed. Do not reset, force-push, or delete existing work."
   Findings: |-
@@ -243,6 +300,10 @@ sections:
     - Observation: The final test block adds native date/time classification, cached formula and rejected edit ownership, sparse clipboard, cell input formatting, currency initialization/retry, managed edit-block cloning, Markdown tables and CSV separator cases. Currency initialization, separator statistics and Markdown alignment remove proven unreachable alternatives; no public API or coverage threshold changes.
       Impact: 95 tests in 15 changed/new test files pass; the broader focused selection also passed 573 tests in 63 files. Typecheck, changed-path ESLint, JSDoc, file size, source provenance, doctor and policy routing pass. Scoped coverage command exits nonzero against application-wide thresholds, so it is diagnostic only and is not claimed as a whole-application coverage pass.
       Resolution: Command: npx vitest run with the 15 paths listed in .agentplane/tmp/pending-test-paths.json. Result: pass. Evidence: .agentplane/tmp/final-added-tests.log. Scope: all uncommitted new/extended tests and their native implementation owners. Preserve prior complete-suite evidence and the user's approved full-rerun skip.
+extensions:
+  implementation_commit:
+    hash: "b8ff53300161ba6505fae4def018293d8a1c6c68"
+    message: "🧩 7CHDZ9 code: cover native import and number format boundaries"
 id_source: "generated"
 ---
 ## Summary
@@ -364,6 +425,36 @@ DecisionContextRef:
 - operator_action: run_exact_argv
 - can_execute_now: true
 - safe_command: agentplane task complete 202610260707-7CHDZ9 --result verified-202610260707-7CHDZ9 --commit b8ff53300161ba6505fae4def018293d8a1c6c68
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
+### 2026-10-26T14:08:28.946Z — VERIFY — ok
+
+By: CODER
+
+Note: verified-202610260707-7CHDZ9
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-26T14:08:08.720Z, excerpt_hash=sha256:ea107f04d9b20a3b664e0e484b86cdde71c64c01ef7bb9ef303b7d4a89e866d2
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610260707-7CHDZ9/blueprint/resolved-snapshot.json
+- old_digest: 5cec1eddea368a34442bdab9e7c37e31dcbd24813e218d08fe9685500d18ee49
+- current_digest: 5cec1eddea368a34442bdab9e7c37e31dcbd24813e218d08fe9685500d18ee49
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610260707-7CHDZ9
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610260707-7CHDZ9 --result verified-202610260707-7CHDZ9 --commit bfe0fc7bfced1bc060b647fe3916f82986663308
 - diagnostic_command: none
 - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
 - freshness: route=computed_local remote=remote_skipped
