@@ -2,6 +2,19 @@
 
 /** Exact original generated resource IDs for the represented Writer DOCX slice. */
 export const NS_ooxml = Object.freeze({
+  LN_CT_TblPPr_vertAnchor: 92733,
+  LN_CT_TblPPr_tblpYSpec: 92734,
+  LN_CT_TblPPr_horzAnchor: 92735,
+  LN_CT_TblPPr_tblpXSpec: 92736,
+  LN_CT_TblPPr_tblpY: 92737,
+  LN_CT_TblPPr_tblpX: 92738,
+  LN_CT_TblPPr_leftFromText: 92739,
+  LN_CT_TblPPr_rightFromText: 92740,
+  LN_CT_TblPPr_topFromText: 92741,
+  LN_CT_TblPPr_bottomFromText: 92742,
+  LN_Value_ST_TblOverlap_never: 92815,
+  LN_Value_ST_TblOverlap_overlap: 92816,
+
   LN_tblDepth: 90010,
   LN_inTbl: 90011,
   LN_AG_Parids_paraId: 92724,

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-fcc6ceaf-fc9c-441c-8624-a74483fbf27e"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.test.ts",
+        "sw/source/writerfilter/dmapper/TablePositionHandler.cxx"
+      ],
+      "justification": "Original floating table defaults vertAnchor margin/horzAnchor text, empty specs, zero coordinates/margins/overlap, exact attribute alternatives and no-op sprm are retained. Actual SequenceAsHashMap emits independent typed properties: four zero border distances, signed limited-twip margins/positions, four default BorderLine2 values, original Hori/Vert/RelOrientation shorts, FillTransparence100 and AllowOverlap false only for never. Equality retains only six original position fields and ignores margins/overlap. Actual SvRefBase lifetime and reverse Unicode member destruction are reused; release-build LoggedProperties forwarding is erased into existing Properties callbacks, with no substitute manager/model service. Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. CT_TblPPr XML factory admission, DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "TablePositionHandler",
+        "setTableOverlap",
+        "attribute",
+        "sprm",
+        "getTablePosition",
+        "operatorEquals"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/writerfilter/dmapper/TablePositionHandler.cxx",
+      "upstreamSymbols": [
+        "TablePositionHandler::lcl_attribute",
+        "TablePositionHandler::getTablePosition",
+        "TablePositionHandler::operator=="
+      ]
+    }
+  }
+}

@@ -1535,3 +1535,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
 - Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
 - Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
+
+### WRITER164 — unknown floating-table anchors leave orientation relations uninitialized
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, getTablePosition.
+- Observation: horizontal and vertical relation locals have no initializer. Only margin/page/text assign a value before insertion into the frame property map. A different anchor therefore reads an indeterminate native short. Normal schema/producer reachability and document impact remain unverified; no native value or repeatable invalid-input result is claimed.
+- Preservation: retain the three exact branches with no repair default. Host locals remain uninitialized rather than defaulting to FRAME/PAGE_FRAME. Valid-input tests check all three source relations. A separate host diagnostic covers the unknown-anchor branches and checks only independent initialized properties; it never inspects or asserts the relation payload and does not certify native undefined behavior or ABI.
+
+### WRITER165 — floating-table position equality ignores wrapping distances and overlap
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, operator==.
+- Observation: comparison includes the two anchors, two spec strings and x/y coordinates, but omits four distances from surrounding text and the table-overlap ID. Equal handlers can therefore return different margin or AllowOverlap properties. Whether downstream table grouping intentionally ignores these differences remains unverified; no native document defect is claimed.
+- Preservation: retain the six-field comparison and original short circuit. Public attribute tests vary every compared field, then show that differing margins/overlap leave equality true while actual output properties differ. Do not add those fields to equality.
