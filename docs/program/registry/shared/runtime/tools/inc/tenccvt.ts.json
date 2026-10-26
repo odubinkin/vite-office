@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/inc/tenccvt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-encoding",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/inc/tenccvt.ts",
+        "vendor/libreoffice-reference/include/tools/tenccvt.hxx"
+      ],
+      "justification": "Original public extended-charset declarations forward to their genuine implementation owner. Other encoding helpers remain unported; no fake width/codec service is provided. This header only re-exports implementation declarations; it owns no executable local function symbol.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/tools/tenccvt.hxx",
+      "upstreamSymbols": [
+        "GetExtendedCompatibilityTextEncoding",
+        "GetExtendedTextEncoding"
+      ]
+    }
+  }
+}

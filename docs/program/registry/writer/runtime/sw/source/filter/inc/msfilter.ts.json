@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/inc/msfilter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writerfilter-docx",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/inc/msfilter.ts",
+        "vendor/libreoffice-reference/sw/source/filter/inc/msfilter.hxx"
+      ],
+      "justification": "Original mutable CharRunEntry fields and CharRuns value-result declaration. Preserve signed32 end, unsigned16 script/charset fields and native end-only record layout rather than a browser text-run DTO. Allocation/refcounts are bound to JS. Full one-argument GetPseudoCharRuns and the other header responsibilities are not admitted.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CharRunEntry",
+        "CharRuns"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/inc/msfilter.hxx",
+      "upstreamSymbols": [
+        "CharRunEntry",
+        "CharRuns"
+      ]
+    }
+  }
+}

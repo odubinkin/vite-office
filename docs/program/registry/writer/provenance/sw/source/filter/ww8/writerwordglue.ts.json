@@ -8,32 +8,50 @@
     "upstreamPath": "sw/source/filter/ww8/writerwordglue.cxx",
     "localSymbols": [
       "FontMapExport",
-      "rtl_TextEncodingToWinCharset"
+      "rtl_TextEncodingToWinCharset",
+      "getPseudoCharRunsForDirection",
+      "IfBeforeStart"
     ],
     "upstreamSymbols": [
       "FontMapExport::FontMapExport",
       "FindBestMSSubstituteFont",
-      "rtl_TextEncodingToWinCharset"
+      "rtl_TextEncodingToWinCharset",
+      "GetPseudoCharRuns",
+      "IfBeforeStart"
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
           "marker": "FontMapExport"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
+          "marker": "getPseudoCharRunsForDirection"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/writerwordglue.cxx",
           "marker": "FontMapExport::FontMapExport"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/writerwordglue.cxx",
+          "marker": "GetPseudoCharRuns"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/Library_sw.mk",
+          "marker": "icuuc"
         }
       ]
     },
     "preservedResponsibilities": [
-      "Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported."
+      "Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported.",
+      "V4DQJW adds the field-specific getPseudoCharRunsForDirection binding of GetPseudoCharRuns, using actual SwTextNode/GetWhichOfScript font items, genuine BreakIteratorImpl script queries, existing ICU default-mode resolved levels and original CharRunEntry records. Preserve empty-Latin run, UTF16 offsets, first-script-only charset selection/extension, weak/trailing-script handling, level rather than parity boundaries, merge order, source guards and erase predicate. The native SwDoc.GetTextDirection result is a required explicit input, never guessed. This helper does not pretend to implement the upstream one-argument entry point; the actual core layout-direction API/public wrapper and exporter traversal remain pending. Existing default-mode ICU level binding replaces physical UBiDi allocation/run tables only for this consumed mode; other modes and status/allocation APIs are not fabricated. Three native defensive branches remain uncovered under the successful concrete backend and the unchanged scoped100 gate fails; no fake provider/error result or exclusion was added."
     ],
     "omittedResponsibilities": [
-      "Full native framework/ABI and complete format orchestration are not certified; see admission."
+      "Full native framework/ABI and complete format orchestration are not certified; see admission.",
+      "Native one-argument GetPseudoCharRuns/core direction acquisition, SwWW8AttrIter integration and whole document traversal remain pending; explicit field binding is not a permanent public API parity claim."
     ]
   }
 }

@@ -1406,3 +1406,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `CharFont`; `writerwordglue.cxx`, `FontMapExport`; `wrtw8sty.cxx`, `wwFont::WriteDocx`.
 - Observation: CharFont writes the original GetFamilyName value into w:ascii/w:hAnsi, but font registration tokenizes that value and the font table uses the first family token. For `Liberation Sans;Fallback`, run attributes retain the complete list while fontTable contains `Liberation Sans`. Consumer lookup behavior and desktop impact remain unverified.
 - Preservation: keep original values and registration-before-guards order. A real ZIP font-part test pins the mismatch without normalizing the run attribute or dropping fonts registered by later duplicate-attribute calls.
+
+### WRITER143 — pseudo character runs retain the initial script font charset
+
+- Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `sw::util::GetPseudoCharRuns`.
+- Observation: the function selects and extends a font charset from the first script before it builds the script boundaries. Every emitted CharRunEntry receives that same charset even when later runs use another script with a different paragraph font charset. Empty text uses Latin. Effects on encoding-dependent Word filters remain unverified; DOCX RunText ignores its charset parameter.
+- Preservation: keep first-script font lookup and charset reuse, with no per-script refresh or guessed UTF8 replacement. Real three-script node tests retain this behavior for Latin-, CJK- and CTL-first text. The negative-script-end and missing-table guards are also kept despite remaining uncovered with the concrete successful backend.

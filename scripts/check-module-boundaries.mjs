@@ -246,6 +246,11 @@ const allowedEdges = new Map([
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
       "i18nutil",
+      // Native sw/Library_sw.mk links i18npool and ICU (icui18n/icuuc).
+      // writerwordglue.cxx::GetPseudoCharRuns calls the concrete break service and unicode/ubidi.h;
+      // actual existing script queries/default-mode levels bind those dependencies without fake services.
+      "i18npool",
+      "external",
       "o3tl",
       "offapi",
       "package",
