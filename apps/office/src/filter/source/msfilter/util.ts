@@ -7,7 +7,7 @@ const WORD_COLORS = [
   0x008080, 0x008000, 0x800080, 0x800000, 0x808000, 0x808080, 0xc0c0c0,
 ] as const;
 
-/** Calculates the source three-channel chromatic scheme at one variance. */
+/** Calculates the source three-channel chromatic scheme at one variance.  @param color - Color. @param variance - Variance. @returns The readonly number[] result. */
 function calculateScheme(color: Readonly<Color>, variance: number): readonly number[] {
   const red = color.GetRed(),
     green = color.GetGreen(),
@@ -19,19 +19,30 @@ function calculateScheme(color: Readonly<Color>, variance: number): readonly num
   ];
 }
 
-/** Source `msfilter::util::TransColToIco`: exact palette match, then scheme-aware nearest color. */
+/** Source `msfilter::util::TransColToIco`: exact palette match, then scheme-aware nearest color.  @param color - Color. @returns The number result. */
 export function TransColToIco(color: Readonly<Color>): number {
   if (color.toUInt32() === 0xffffffff) return 0;
   const exact = WORD_COLORS.indexOf(color.toUInt32() as (typeof WORD_COLORS)[number]);
   if (exact >= 0) return exact + 1;
-  const palette = WORD_COLORS.map((value) => new Color(value));
+  const palette = WORD_COLORS.map(
+    /** Computes the value result. @param value - Value. @returns The computed result. */ (value) =>
+      new Color(value),
+  );
   for (let variance = 0; variance <= 255; variance++) {
     const sourceScheme = calculateScheme(color, variance);
     let best = -1,
       bestError = 65535;
     for (const [index, candidate] of palette.entries()) {
       const candidateScheme = calculateScheme(candidate, variance);
-      if (!sourceScheme.every((value, channel) => value === candidateScheme[channel])) continue;
+      if (
+        !sourceScheme.every(
+          /** Computes the value result. @param value - Value. @param channel - Channel. @returns The computed result. */ (
+            value,
+            channel,
+          ) => value === candidateScheme[channel],
+        )
+      )
+        continue;
       const error =
         Math.abs(color.GetRed() - candidate.GetRed()) +
         Math.abs(color.GetGreen() - candidate.GetGreen()) +

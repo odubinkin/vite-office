@@ -1,7 +1,7 @@
 /** @fileoverview Normalizes browser and filter text-run transfer records at the Writer filter boundary. */
 
-import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
+import { equalWriterHyperlinks, normalizeWriterHyperlink } from "../../core/txtnode/fmtatr2";
 import { SwpHints, type WriterTextRunLike } from "../../core/txtnode/ndhints";
 import type { SwTextFragment, SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -156,7 +156,7 @@ function areWriterCharacterAttributesEqual(
   );
 }
 
-/** Accepts only native strikeout values represented by the current character item. */
+/** Accepts only native strikeout values represented by the current character item.  @param value - Value. @returns The value is FontStrikeout result. */
 function isWriterStrikeout(value: unknown): value is FontStrikeout {
   return (
     typeof value === "number" &&
@@ -166,7 +166,7 @@ function isWriterStrikeout(value: unknown): value is FontStrikeout {
   );
 }
 
-/** Accepts the integer offset and relative height carried by SvxEscapementItem. */
+/** Accepts the integer offset and relative height carried by SvxEscapementItem.  @param value - Value. @returns The value is { offset: number; height: number } result. */
 function isWriterEscapement(value: unknown): value is { offset: number; height: number } {
   if (!isRecord(value)) return false;
   return (

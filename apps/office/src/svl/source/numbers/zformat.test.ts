@@ -1,11 +1,14 @@
 /** @fileoverview Native General NUMBER notation,precision and locale separator boundaries over real SAL conversion and rounding. */
 import { expect, it } from "vitest";
-import { formatStandardNumber } from "./zformat";
 import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
+import { formatStandardNumber } from "./zformat";
 
-it("reads the first source currency token and only its adjacent extension", () => {
-  const section = new ImpSvNumFor(), symbol = unicode("old"), extension = unicode("old-ext"),
-    curr = unicode("DM"), suffix = unicode("407");
+it("reads the first source currency token and only its adjacent extension", /** Checks reads the first source currency token and only its adjacent extension. @returns Test completion or assertion result. */ () => {
+  const section = new ImpSvNumFor(),
+    symbol = unicode("old"),
+    extension = unicode("old-ext"),
+    curr = unicode("DM"),
+    suffix = unicode("407");
   try {
     expect(section.GetNewCurrencySymbol(symbol, extension)).toBe(false);
     expect([text(symbol), text(extension)]).toEqual(["old", "old-ext"]);
@@ -22,7 +25,11 @@ it("reads the first source currency token and only its adjacent extension", () =
     expect(section.GetNewCurrencySymbol(symbol, extension)).toBe(true);
     expect(text(extension)).toBe("");
   } finally {
-    section.dispose(); suffix.dispose(); curr.dispose(); extension.dispose(); symbol.dispose();
+    section.dispose();
+    suffix.dispose();
+    curr.dispose();
+    extension.dispose();
+    symbol.dispose();
   }
 });
 /** Reads and releases the real returned OUString. @param value - Input value. @param precision - Actual standard precision. @param decimal - Locale decimal unit. @returns Displayed text. */
@@ -79,17 +86,18 @@ it("preserves fixed precision,negative-zero suppression and the original magnitu
   expect(formatted(123.4, 65536)).toBe("123");
 });
 
-import { Color } from "../../../tools/inc/color";
-import { ImpSvNumFor, SvNumberformat } from "./zformat";
-import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
+import { Color } from "../../../tools/inc/color";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { SvNumFormatType } from "../../inc/zforlist";
+import { DateOrder, LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { NfSymbolType } from "../../inc/nfsymbol";
+import { SvNumFormatType } from "../../inc/zforlist";
+import { ImpSvNumFor, SvNumberformat } from "./zformat";
+import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
 
-it("finds source literal/currency tokens in either direction and checks edge minus signs", () => {
+it("finds source literal/currency tokens in either direction and checks edge minus signs", /** Checks finds source literal/currency tokens in either direction and checks edge minus signs. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     locale = new Locale(unicode("en"), unicode("US"), unicode("")),
     mapped = mapper.getFormatCode(0, locale),
@@ -99,7 +107,9 @@ it("finds source literal/currency tokens in either direction and checks edge min
     code = unicode("General"),
     format = new SvNumberformat(code, scanner, [0], [0x0409]),
     section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[1] as ImpSvNumFor,
-    word = unicode(" - "), currency = unicode("USD"), interior = unicode("A-B");
+    word = unicode(" - "),
+    currency = unicode("USD"),
+    interior = unicode("A-B");
   try {
     section.Enlarge(3);
     const info = section.Info();
@@ -122,13 +132,21 @@ it("finds source literal/currency tokens in either direction and checks edge min
     expect(SvNumberformat.HasStringNegativeSign(interior)).toBe(false);
     expect(SvNumberformat.HasStringNegativeSign(word)).toBe(true);
   } finally {
-    interior.dispose(); currency.dispose(); word.dispose(); format.dispose(); code.dispose();
-    scanner.dispose(); localeData.dispose(); name.dispose(); mapped.dispose(); mapper.dispose(); locale.dispose();
+    interior.dispose();
+    currency.dispose();
+    word.dispose();
+    format.dispose();
+    code.dispose();
+    scanner.dispose();
+    localeData.dispose();
+    name.dispose();
+    mapped.dispose();
+    mapper.dispose();
+    locale.dispose();
   }
 });
-import { DateOrder, LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 
-it("recognizes the source compiled minute-second token grammar", () => {
+it("recognizes the source compiled minute-second token grammar", /** Checks recognizes the source compiled minute-second token grammar. @returns Test completion or assertion result. */ () => {
   const language = unicode("en"),
     country = unicode("US"),
     empty = unicode(""),
@@ -144,17 +162,22 @@ it("recognizes the source compiled minute-second token grammar", () => {
   /** Loads actual compiled token slots, as the format scanner does before the source predicate is called. @param tokens - Native token types and text. @returns Nothing. */
   function load(tokens: readonly (readonly [number, string])[]): void {
     first.Enlarge(tokens.length);
-    tokens.forEach(([type, value], index) => {
-      first.Info().nTypeArray[index] = type;
-      const string = unicode(value);
-      try {
-        (first.Info().sStrArray[index] as import("../../../sal/inc/rtl/ustring").OUString).assign(
-          string,
-        );
-      } finally {
-        string.dispose();
-      }
-    });
+    tokens.forEach(
+      /** Checks recognizes the source compiled minute-second token grammar. @param input1 - Input1. @param index - Index. @returns Test completion or assertion result. */ (
+        [type, value],
+        index,
+      ) => {
+        first.Info().nTypeArray[index] = type;
+        const string = unicode(value);
+        try {
+          (first.Info().sStrArray[index] as import("../../../sal/inc/rtl/ustring").OUString).assign(
+            string,
+          );
+        } finally {
+          string.dispose();
+        }
+      },
+    );
   }
   try {
     load([
@@ -198,7 +221,7 @@ it("recognizes the source compiled minute-second token grammar", () => {
   }
 });
 
-it("derives original date order from compiled first-subformat tokens", () => {
+it("derives original date order from compiled first-subformat tokens", /** Checks derives original date order from compiled first-subformat tokens. @returns Test completion or assertion result. */ () => {
   const language = unicode("en"),
     country = unicode("US"),
     empty = unicode("");

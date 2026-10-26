@@ -11,7 +11,7 @@ export type RtfToken =
 
 /** Reports a malformed RTF stream before it can replace the active Writer model. */
 export class RtfSyntaxError extends Error {
-  /** Creates one input error. @param message - Failure detail. */
+  /** Creates one input error. @param message - Failure detail.  @returns Constructed instance. */
   public constructor(message: string) {
     super(message);
     this.name = "RtfSyntaxError";
@@ -30,17 +30,17 @@ export class RtfTokenizer {
   private groupFallback: number[] = [0];
   private bytes: number[] = [];
 
-  /** Returns the current parser state's remaining Unicode fallback characters. */
+  /** Returns the current parser state's remaining Unicode fallback characters.  @returns The number result. */
   private get fallback(): number {
     return this.groupFallback.at(-1) ?? 0;
   }
 
-  /** Updates only the current group state, matching native push/pop behavior. */
+  /** Updates only the current group state, matching native push/pop behavior.  @param value - Value. @returns The computed result. */
   private set fallback(value: number) {
     this.groupFallback[this.groupFallback.length - 1] = value;
   }
 
-  /** Captures caller-owned source bytes. @param source - Complete RTF bytes. */
+  /** Captures caller-owned source bytes. @param source - Complete RTF bytes.  @returns Constructed instance. */
   public constructor(source: Uint8Array) {
     this.source = source;
   }
@@ -51,14 +51,14 @@ export class RtfTokenizer {
     return this.tokens;
   }
 
-  /** Drives the document listener while its group/font encoding is still current. */
+  /** Drives the document listener while its group/font encoding is still current.  @param onToken - On Token. @param currentCodepage - Current Codepage. @returns Nothing. */
   public Parse(onToken: (token: RtfToken) => void, currentCodepage: () => number): void {
     this.onToken = onToken;
     this.currentCodepage = currentCodepage;
     this.Scan();
   }
 
-  /** Reads the stream, dispatching each event before consuming later bytes. */
+  /** Reads the stream, dispatching each event before consuming later bytes.  @returns Nothing. */
   private Scan(): void {
     if (this.source[0] !== 0x7b || this.source[1] !== 0x5c || this.source[2] !== 0x72)
       throw new RtfSyntaxError("RTF document header is missing.");
@@ -94,7 +94,7 @@ export class RtfTokenizer {
       throw new RtfSyntaxError("RTF document has trailing content.");
   }
 
-  /** Reads one control word, escaped character or hex byte. */
+  /** Reads one control word, escaped character or hex byte.  @returns Nothing. */
   private ReadEscape(): void {
     const first = this.source[this.offset++];
     if (first === undefined) throw new RtfSyntaxError("Incomplete RTF control.");
@@ -166,7 +166,7 @@ export class RtfTokenizer {
     }
   }
 
-  /** Adds one raw text byte, or consumes one fallback character after Unicode. @param byte - Input byte. */
+  /** Adds one raw text byte, or consumes one fallback character after Unicode. @param byte - Input byte.  @returns Nothing. */
   private AppendByte(byte: number): void {
     if (this.fallback !== 0) {
       this.fallback--;
@@ -175,21 +175,21 @@ export class RtfTokenizer {
     this.bytes.push(byte);
   }
 
-  /** Passes bytes to the document parser, which owns the active group and font encoding. */
+  /** Passes bytes to the document parser, which owns the active group and font encoding.  @returns Nothing. */
   private FlushText(): void {
     if (this.bytes.length === 0) return;
     this.Emit({ kind: "ansi-bytes", value: Uint8Array.from(this.bytes) });
     this.bytes = [];
   }
 
-  /** Publishes an event to the stream listener and lexical test buffer. */
+  /** Publishes an event to the stream listener and lexical test buffer.  @param token - Token. @returns Nothing. */
   private Emit(token: RtfToken): void {
     this.tokens.push(token);
     this.onToken?.(token);
   }
 }
 
-/** Mirrors the pinned resolveChars Shift-JIS lead-byte range. */
+/** Mirrors the pinned resolveChars Shift-JIS lead-byte range.  @param byte - Byte. @returns The boolean result. */
 function isShiftJisLead(byte: number): boolean {
   return (byte >= 0x80 && byte <= 0x9f) || byte >= 0xe0;
 }

@@ -1,8 +1,8 @@
 /** @fileoverview Markdown span callbacks for Writer text hints, following sw/source/filter/md/mdcallbcks.cxx. */
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { decodeHTMLStrict } from "entities";
-import type { WriterTextRun } from "../basflt/writer-transfer";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import type { WriterTextRun } from "../basflt/writer-transfer";
 
 const DEFAULT_ATTRIBUTES: WriterCharacterAttributes = {
   bold: false,
@@ -10,7 +10,7 @@ const DEFAULT_ATTRIBUTES: WriterCharacterAttributes = {
   underline: false,
 };
 
-/** Resolves the md4c hyperlink callback through the supplied document base URL. */
+/** Resolves the md4c hyperlink callback through the supplied document base URL.  @param baseURL - Base URL. @param target - Target. @returns The string result. */
 function resolveMarkdownLink(baseURL: string, target: string): string {
   if (target.length === 0 || target.startsWith("#")) return target;
   try {
@@ -24,7 +24,7 @@ function resolveMarkdownLink(baseURL: string, target: string): string {
 /** Converts represented md4c span events into native Writer run inputs. @param source - One Markdown inline body. @param baseURL - Source document URL when available. @returns Styled text portions. */
 export function parseMarkdownSpans(source: string, baseURL = ""): readonly WriterTextRun[] {
   const runs: WriterTextRun[] = [];
-  /** Appends a text callback with the current span stack. @param text - Visible text. @param attributes - Active direct attributes. @param url - Active hyperlink. */
+  /** Appends a text callback with the current span stack. @param text - Visible text. @param attributes - Active direct attributes. @param url - Active hyperlink.  @returns Nothing. */
   function append(text: string, attributes: WriterCharacterAttributes, url?: string): void {
     if (text.length === 0) return;
     const hyperlink = url === undefined ? undefined : { url };
@@ -43,7 +43,7 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
       ...(hyperlink === undefined ? {} : { hyperlink }),
     });
   }
-  /** Dispatches nested emphasis, link, code and escaped-character spans. @param text - Source range. @param attributes - Inherited attributes. @param url - Inherited link. */
+  /** Dispatches nested emphasis, link, code and escaped-character spans. @param text - Source range. @param attributes - Inherited attributes. @param url - Inherited link.  @returns Nothing. */
   function visit(text: string, attributes: WriterCharacterAttributes, url?: string): void {
     for (let offset = 0; offset < text.length;) {
       const character = text[offset] as string;
@@ -144,7 +144,7 @@ export function parseMarkdownSpans(source: string, baseURL = ""): readonly Write
   return runs;
 }
 
-/** md4c backslash escapes any ASCII punctuation, not only markup delimiters. */
+/** md4c backslash escapes any ASCII punctuation, not only markup delimiters.  @param character - Character. @returns The boolean result. */
 function isAsciiPunctuation(character: string): boolean {
   const code = character.charCodeAt(0);
   return (

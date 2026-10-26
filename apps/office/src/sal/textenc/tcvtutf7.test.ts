@@ -33,10 +33,14 @@ function convert(source: readonly number[], flags = 0, capacity = source.length)
 
 /** Converts ASCII source text to bytes. @param text - Source text. @returns Byte values. */
 function ascii(text: string): number[] {
-  return [...text].map((character) => character.charCodeAt(0));
+  return [...text].map(
+    /** Computes the character result. @param character - Character. @returns Test completion or assertion result. */ (
+      character,
+    ) => character.charCodeAt(0),
+  );
 }
 
-it("decodes direct bytes, shifted UTF-16 units and escaped plus", () => {
+it("decodes direct bytes, shifted UTF-16 units and escaped plus", /** Checks decodes direct bytes, shifted UTF-16 units and escaped plus. @returns Test completion or assertion result. */ () => {
   expect(convert(ascii("A+-+AOk-Z"))).toEqual({
     units: [0x41, 0x2b, 0x00e9, 0x5a],
     info: 0,
@@ -44,7 +48,7 @@ it("decodes direct bytes, shifted UTF-16 units and escaped plus", () => {
   });
 });
 
-it("keeps pinned empty-shift and incomplete-bit error behavior", () => {
+it("keeps pinned empty-shift and incomplete-bit error behavior", /** Checks keeps pinned empty-shift and incomplete-bit error behavior. @returns Test completion or assertion result. */ () => {
   expect(convert(ascii("+"))).toEqual({
     units: [],
     info: cvt.RTL_TEXTTOUNICODE_INFO_ERROR | cvt.RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL,
@@ -57,7 +61,7 @@ it("keeps pinned empty-shift and incomplete-bit error behavior", () => {
   });
 });
 
-it("reports direct invalid bytes and destination exhaustion with SAL status", () => {
+it("reports direct invalid bytes and destination exhaustion with SAL status", /** Checks reports direct invalid bytes and destination exhaustion with SAL status. @returns Test completion or assertion result. */ () => {
   expect(convert([0x80])).toEqual({
     units: [0xfffd],
     info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
@@ -77,7 +81,7 @@ it("reports direct invalid bytes and destination exhaustion with SAL status", ()
   });
 });
 
-it("preserves the pinned disabled context restore across chunks", () => {
+it("preserves the pinned disabled context restore across chunks", /** Checks preserves the pinned disabled context restore across chunks. @returns Test completion or assertion result. */ () => {
   const context = ImplUTF7CreateUTF7TextToUnicodeContext();
   const first = new Uint16Array(2);
   const info: [number] = [0];

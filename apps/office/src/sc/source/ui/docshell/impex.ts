@@ -1,15 +1,15 @@
 /** @fileoverview CSV stream conversion owner from sc/source/ui/docshell/impex.cxx. */
+import { UEastAsianWidth, UProperty } from "../../../../external/icu/source/common/unicode/uchar";
+import { u_getIntPropertyValue } from "../../../../external/icu/source/common/uprops";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import { SvStream } from "../../../../tools/source/stream/stream";
 import { MAXCOLCOUNT, ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScDocumentImport } from "../../../inc/documentimport";
 import { ScStringUtil } from "../../../inc/stringutil";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ScAsciiOptions, SC_COL_SKIP, SC_COL_TEXT } from "../dbgui/asciiopt";
-import { SvStream } from "../../../../tools/source/stream/stream";
-import { u_getIntPropertyValue } from "../../../../external/icu/source/common/uprops";
-import { UEastAsianWidth, UProperty } from "../../../../external/icu/source/common/unicode/uchar";
-import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
+import { SC_COL_SKIP, SC_COL_TEXT, ScAsciiOptions } from "../dbgui/asciiopt";
 
 /** One logical CSV field, including the native quoted-field signal. */
 interface CsvField {
@@ -145,7 +145,7 @@ export function ReadCsvLine(
   }
 }
 
-/** Source lcl_appendLineData's UTF-16 cell limit. */
+/** Source lcl_appendLineData's UTF-16 cell limit.  @param field - Field. @param data - Data. @param overflowCell - Overflow Cell. @returns The string result. */
 function appendLineData(field: string, data: string, overflowCell: [boolean]): string {
   const available = nArbitraryCellLengthLimit - field.length;
   if (data.length > available) overflowCell[0] = true;
@@ -187,7 +187,7 @@ function scanQuotedString(
   return { value, next };
 }
 
-/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing. */
+/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing.  @param formatter - Formatter. */
 function lcl_PutString(
   docImport: ScDocumentImport,
   pos: ScAddress,
@@ -277,7 +277,7 @@ export class ScImportExport {
   private overflowCol = false;
   private overflowCell = false;
   private includeBOM = false;
-  /** Binds the canonical destination document. @param document - Actual model. */
+  /** Binds the canonical destination document. @param document - Actual model.  @returns Constructed instance. */
   constructor(private readonly document: ScDocument) {}
   /** Source ScanNextFieldFromString over a UTF-16 cursor: quoted content, dirty suffix, ASCII-space trimming, and merged separators. @param line - Null-treated logical line. @param start - Current pointer offset. @param quote - Text separator. @param separators - Field separators. @param merge - Merge consecutive separators. @param removeSpace - Trim unquoted ASCII blanks. @param overflowCell - Native cell-overflow output. @returns Field and pointer past its separator. */
   static ScanNextFieldFromString(
@@ -357,7 +357,7 @@ export class ScImportExport {
     if (initialPosition !== stream.Tell()) this.includeBOM = true;
     const separators: [string] = [options.aFieldSeps],
       detectSeparator: [number] = [0xffff];
-    const readLine = (): string =>
+    const readLine = /** Implements read Line. @returns The string result. */ (): string =>
       ReadCsvLine(stream, !options.bFixedLen, separators, options.cTextSep, detectSeparator);
     const formatter = new SvNumberFormatter(options.eLang),
       docImport = new ScDocumentImport(this.document);
@@ -495,7 +495,7 @@ export class ScImportExport {
     return width;
   }
 
-  /** Applies lcl_GetFixed's trailing-space and quote checks without separator unescaping. @param line - Input record. @param start - UTF-16 start. @param next - UTF-16 end. @returns Source field. */
+  /** Applies lcl_GetFixed's trailing-space and quote checks without separator unescaping. @param line - Input record. @param start - UTF-16 start. @param next - UTF-16 end. @returns Source field.  @param overflowCell - Overflow Cell. */
   private static GetFixed(
     line: string,
     start: number,

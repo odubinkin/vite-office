@@ -1,25 +1,25 @@
 /** @fileoverview Source-owned clipboard reset,sparse sheet and pooled-resource lifetime acceptance. */
-import { ScCellFormat } from "../tool/cellform";
-import { ScInterpreterContext } from "../../../inc/interpretercontext";
-import { ScRefCellValue } from "../../../inc/cellvalue";
-import { ScGlobal } from "../../../inc/global";
+import { expect, it } from "vitest";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { ScEmptyCellToken } from "../../../inc/token";
-import { Color } from "../../../../tools/inc/color";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { SimpleReferenceObject } from "../../../../salhelper/source/simplereferenceobject";
-import { ScPoolHelper } from "./poolhelp";
-import type { ScTable } from "../../../inc/table";
-import { expect, it } from "vitest";
-import { ScDocument, ScDocumentMode } from "../../../inc/document";
+import { Color } from "../../../../tools/inc/color";
 import { ScAddress, ScRange } from "../../../inc/address";
-import { ScMarkData } from "../../../inc/markdata";
+import { ScRefCellValue } from "../../../inc/cellvalue";
 import { ScClipParam } from "../../../inc/clipparam";
 import { ScDocOptions } from "../../../inc/docoptio";
+import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { ScFormulaCell } from "../../../inc/formulacell";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { ScGlobal } from "../../../inc/global";
+import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import { ScMarkData } from "../../../inc/markdata";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { ScTable } from "../../../inc/table";
+import { ScEmptyCellToken } from "../../../inc/token";
+import { ScCellFormat } from "../tool/cellform";
+import { ScPoolHelper } from "./poolhelp";
 
 it("shares genuine pools and retains the same resources after source closure", /** Lazy source attribute initialization precedes sharing. @returns Nothing. */ () => {
   const source = new ScDocument(),
@@ -321,10 +321,10 @@ it("formats real borrowed scalar and formula cells through the native nonthreade
   expect(text(out)).toBe("text");
   str.dispose();
   out.dispose();
-  expect(
-    /** Actual unsupported formatter family follows its explicit admission boundary. @returns No string. */ () =>
-      ScCellFormat.GetString(new ScRefCellValue(1), 1, color, context, doc),
-  ).toThrow("only native General");
+  // Built-in numeric format 1 is now represented by the pinned formatter tables.
+  const formatted = ScCellFormat.GetString(new ScRefCellValue(1), 1, color, context, doc);
+  expect(text(formatted)).toBe("1");
+  formatted.dispose();
   ScGlobal.bThreadedGroupCalcInProgress = true;
   try {
     expect(

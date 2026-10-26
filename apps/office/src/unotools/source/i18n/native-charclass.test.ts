@@ -1,11 +1,11 @@
 /** @fileoverview Original CharClass locale ownership and Unicode classification used by number input. */
 import { expect, it } from "vitest";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { KCharacterType } from "../../../i18npool/source/characterclassification/cclass_unicode";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { CharClass } from "./charclass";
-import { KCharacterType } from "../../../i18npool/source/characterclassification/cclass_unicode";
 
-it("requires a nonempty run of ASCII digits for native filter sheet numbers", () => {
+it("requires a nonempty run of ASCII digits for native filter sheet numbers", /** Checks requires a nonempty run of ASCII digits for native filter sheet numbers. @returns Test completion or assertion result. */ () => {
   expect(CharClass.isAsciiNumeric("123")).toBe(true);
   expect(["", "1x", "-1", "١", "𝟙"].map(CharClass.isAsciiNumeric)).toEqual([
     false,
@@ -16,7 +16,7 @@ it("requires a nonempty run of ASCII digits for native filter sheet numbers", ()
   ]);
 });
 
-it("keeps the construction locale for source uppercase", () => {
+it("keeps the construction locale for source uppercase", /** Checks keeps the construction locale for source uppercase. @returns Test completion or assertion result. */ () => {
   const tr = new Locale(unicode("tr"), unicode("TR"), unicode("")),
     classifier = new CharClass(tr),
     input = unicode("i");
@@ -32,7 +32,7 @@ it("keeps the construction locale for source uppercase", () => {
   }
 });
 
-it("uses native ASCII and Unicode digit/letter-number categories", () => {
+it("uses native ASCII and Unicode digit/letter-number categories", /** Checks uses native ASCII and Unicode digit/letter-number categories. @returns Test completion or assertion result. */ () => {
   const locale = new Locale(unicode("en"), unicode("US"), unicode("")),
     classifier = new CharClass(locale),
     ascii = unicode("A3_"),

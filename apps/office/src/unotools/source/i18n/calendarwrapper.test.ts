@@ -1,7 +1,7 @@
 /** @fileoverview Source CalendarWrapper name/count boundary over pinned LC_CALENDAR. */
 import { expect, it } from "vitest";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CalendarWrapper, type CalendarItem2Names } from "./calendarwrapper";
 
 /** Releases a caller-owned calendar name sequence. @param items - Names. @returns Nothing. */
@@ -12,7 +12,7 @@ function release(items: CalendarItem2Names[]): void {
   }
 }
 
-it("loads source default calendar, keeps empty grammatical sections, and returns owned names", () => {
+it("loads source default calendar, keeps empty grammatical sections, and returns owned names", /** Checks loads source default calendar, keeps empty grammatical sections, and returns owned names. @returns Test completion or assertion result. */ () => {
   const language = unicode("en"),
     country = unicode("US"),
     variant = unicode("");
@@ -20,13 +20,19 @@ it("loads source default calendar, keeps empty grammatical sections, and returns
     wrapper = new CalendarWrapper();
   try {
     const beforeLoad = wrapper.getUniqueID();
-    try { expect(text(beforeLoad)).toBe(""); }
-    finally { beforeLoad.dispose(); }
+    try {
+      expect(text(beforeLoad)).toBe("");
+    } finally {
+      beforeLoad.dispose();
+    }
     expect(wrapper.getNumberOfMonthsInYear()).toBe(0);
     wrapper.loadDefaultCalendar(locale);
     const id = wrapper.getUniqueID();
-    try { expect(text(id)).toBe("gregorian"); }
-    finally { id.dispose(); }
+    try {
+      expect(text(id)).toBe("gregorian");
+    } finally {
+      id.dispose();
+    }
     expect(wrapper.getNumberOfMonthsInYear()).toBe(12);
     expect(wrapper.getNumberOfDaysInWeek()).toBe(7);
     const months = wrapper.getMonths(),

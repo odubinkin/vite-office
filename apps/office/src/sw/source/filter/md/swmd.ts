@@ -1,7 +1,7 @@
 /** @fileoverview Writer Markdown reader and block parser following sw/source/filter/md/swmd.cxx. */
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwpHints } from "../../core/txtnode/ndhints";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterTextRun } from "../basflt/writer-transfer";
 import { createWriterTextRuns } from "../basflt/writer-transfer";
 import { parseMarkdownSpans } from "./mdcallbcks";
@@ -68,7 +68,7 @@ export class MarkdownReader {
   }
 }
 
-/** Applies callback-produced paragraph content through native format and hint owners. @param node - Target paragraph. @param value - Parsed block. */
+/** Applies callback-produced paragraph content through native format and hint owners. @param node - Target paragraph. @param value - Parsed block.  @param listRules - List Rules. @returns Nothing. */
 function applyMarkdownParagraph(
   node: SwTextNode,
   value: MarkdownParagraph,
@@ -76,7 +76,14 @@ function applyMarkdownParagraph(
 ): void {
   if (value.style !== undefined) node.ChgFormatColl(node.GetDoc().GetTextFormatColl(value.style));
   const runs = value.runs;
-  node.SetText(runs.map((run) => run.text).join(""));
+  node.SetText(
+    runs
+      .map(
+        /** Computes the run result. @param run - Run. @returns The computed result. */ (run) =>
+          run.text,
+      )
+      .join(""),
+  );
   const hints = new SwpHints(node.GetDoc().GetAttrPool());
   hints.setTextRuns(runs, node.GetSwAttrSet());
   node.SetTextHints(hints);
@@ -85,7 +92,7 @@ function applyMarkdownParagraph(
 
 /** Parses represented md4c block callbacks into ordered Writer body blocks. */
 export class SwMarkdownParser {
-  /** Retains the source medium URL for hyperlink span callbacks. */
+  /** Retains the source medium URL for hyperlink span callbacks.  @param baseURL - Base URL. @returns Constructed instance. */
   public constructor(private readonly baseURL = "") {}
 
   /** Calls the block parser once for one normalized source. @param source - Markdown text. @returns Ordered blocks. */
@@ -297,7 +304,7 @@ function isBlockStart(line: string, following: string | undefined): boolean {
   );
 }
 
-/** Mirrors md4c's three-marker thematic block recognition after optional indentation. */
+/** Mirrors md4c's three-marker thematic block recognition after optional indentation.  @param line - Line. @returns The boolean result. */
 function isThematicBreak(line: string): boolean {
   const content = /^ {0,3}(.*)$/u.exec(line)?.[1];
   if (content === undefined) return false;

@@ -92,7 +92,7 @@
           "marker": "aImplUniToDBCSTab_GB_4E"
         },
         {
-          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
         }
       ],

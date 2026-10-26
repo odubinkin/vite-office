@@ -1,0 +1,253 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforfind.cxx",
+    "localSymbols": [
+      "GetDayOfWeek",
+      "SkipChar",
+      "SkipBlanks",
+      "SkipString",
+      "GetDecSep",
+      "GetTimeAmPm",
+      "GetTime100SecSep",
+      "GetTimeRef",
+      "GetSign",
+      "GetESign",
+      "GetNextNumber",
+      "GetThousandSep",
+      "GetLogical",
+      "ImplGetDay",
+      "ImplGetMonth",
+      "ImplGetYear",
+      "MayBeIso8601",
+      "MayBeMonthDate",
+      "IsAcceptedDatePattern",
+      "SkipDatePatternSeparator",
+      "GetDatePatternNumbers",
+      "IsDatePatternNumberOfType",
+      "GetDatePatternOrder",
+      "GetDateOrder",
+      "GetMiddleMonthLongDateOrder",
+      "CanForceToIso8601",
+      "IsAcceptableIso8601",
+      "MatchedReturn"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberInputScan::ImpSvNumberInputScan",
+      "TransformInput",
+      "ImpSvNumberInputScan::Reset",
+      "ImpSvNumberInputScan::ChangeIntl",
+      "ImpSvNumberInputScan::InvalidateDateAcceptancePatterns",
+      "ImpSvNumberInputScan::ChangeNullDate",
+      "ImpSvNumberInputScan::NextNumberStringSymbol",
+      "ImpSvNumberInputScan::SkipThousands",
+      "ImpSvNumberInputScan::NumberStringDivision",
+      "ImpSvNumberInputScan::StringContains",
+      "ImpSvNumberInputScan::StringPtrContains",
+      "ImpSvNumberInputScan::StringContainsImpl",
+      "ImpSvNumberInputScan::StringPtrContainsImpl",
+      "ImpSvNumberInputScan::StringContainsWord",
+      "ImpSvNumberInputScan::SkipChar",
+      "ImpSvNumberInputScan::SkipBlanks",
+      "ImpSvNumberInputScan::SkipString",
+      "ImpSvNumberInputScan::GetDecSep",
+      "ImpSvNumberInputScan::GetSign",
+      "ImpSvNumberInputScan::GetESign",
+      "ImpSvNumberInputScan::GetNextNumber",
+      "ImpSvNumberInputScan::GetThousandSep",
+      "ImpSvNumberInputScan::GetTimeAmPm",
+      "ImpSvNumberInputScan::GetTime100SecSep",
+      "ImpSvNumberInputScan::GetTimeRef",
+      "ImpSvNumberInputScan::GetLogical",
+      "ImpSvNumberInputScan::ImplGetDay",
+      "ImpSvNumberInputScan::ImplGetMonth",
+      "ImpSvNumberInputScan::ImplGetYear",
+      "ImpSvNumberInputScan::MayBeIso8601",
+      "ImpSvNumberInputScan::MayBeMonthDate",
+      "ImpSvNumberInputScan::MatchedReturn",
+      "ImpSvNumberInputScan::InitText",
+      "ImpSvNumberInputScan::GetMonth",
+      "ImpSvNumberInputScan::GetDayOfWeek",
+      "ImpSvNumberInputScan::GetCurrency",
+      "ImpSvNumberInputScan::IsAcceptedDatePattern",
+      "ImpSvNumberInputScan::SkipDatePatternSeparator",
+      "ImpSvNumberInputScan::GetDatePatternNumbers",
+      "ImpSvNumberInputScan::IsDatePatternNumberOfType",
+      "ImpSvNumberInputScan::GetDatePatternOrder",
+      "ImpSvNumberInputScan::GetDateOrder",
+      "ImpSvNumberInputScan::GetMiddleMonthLongDateOrder",
+      "ImpSvNumberInputScan::CanForceToIso8601",
+      "ImpSvNumberInputScan::IsAcceptableIso8601",
+      "ImpSvNumberInputScan::ScanStringNumFor",
+      "ImpSvNumberInputScan::ScanStartString",
+      "ImpSvNumberInputScan::ScanEndString",
+      "ImpSvNumberInputScan::ScanMidString",
+      "ImpSvNumberInputScan::IsNumberFormatMain"
+    ],
+    "preservedResponsibilities": [
+      "Source decomposition of svl/source/numbers/zforfind.ts: GetDayOfWeek, SkipChar, SkipBlanks, SkipString, GetDecSep, GetTimeAmPm, GetTime100SecSep, GetTimeRef, GetSign, GetESign, GetNextNumber, GetThousandSep, GetLogical, ImplGetDay, ImplGetMonth, ImplGetYear, MayBeIso8601, MayBeMonthDate, IsAcceptedDatePattern, SkipDatePatternSeparator, GetDatePatternNumbers, IsDatePatternNumberOfType, GetDatePatternOrder, GetDateOrder, GetMiddleMonthLongDateOrder, CanForceToIso8601, IsAcceptableIso8601, MatchedReturn. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+    ],
+    "omittedResponsibilities": [
+      "This fragment does not certify full upstream parity or compiled differential behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetDayOfWeek"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "SkipChar"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "SkipBlanks"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "SkipString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetDecSep"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetTimeAmPm"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetTime100SecSep"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetTimeRef"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetSign"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetESign"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetNextNumber"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetThousandSep"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetLogical"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "ImplGetDay"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "ImplGetMonth"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "ImplGetYear"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "MayBeIso8601"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "MayBeMonthDate"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "IsAcceptedDatePattern"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "SkipDatePatternSeparator"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetDatePatternNumbers"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "IsDatePatternNumberOfType"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetDatePatternOrder"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetDateOrder"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "GetMiddleMonthLongDateOrder"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "CanForceToIso8601"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "IsAcceptableIso8601"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+          "marker": "MatchedReturn"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ImpSvNumberInputScan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ChangeIntl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::NumberStringDivision"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStringNumFor"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStartString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanEndString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanMidString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::IsNumberFormatMain"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforfind.cxx",
+    "localSymbols": [
+      "ScanMidString",
+      "ScanEndString",
+      "IsNumberFormatMain"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberInputScan::ImpSvNumberInputScan",
+      "TransformInput",
+      "ImpSvNumberInputScan::Reset",
+      "ImpSvNumberInputScan::ChangeIntl",
+      "ImpSvNumberInputScan::InvalidateDateAcceptancePatterns",
+      "ImpSvNumberInputScan::ChangeNullDate",
+      "ImpSvNumberInputScan::NextNumberStringSymbol",
+      "ImpSvNumberInputScan::SkipThousands",
+      "ImpSvNumberInputScan::NumberStringDivision",
+      "ImpSvNumberInputScan::StringContains",
+      "ImpSvNumberInputScan::StringPtrContains",
+      "ImpSvNumberInputScan::StringContainsImpl",
+      "ImpSvNumberInputScan::StringPtrContainsImpl",
+      "ImpSvNumberInputScan::StringContainsWord",
+      "ImpSvNumberInputScan::SkipChar",
+      "ImpSvNumberInputScan::SkipBlanks",
+      "ImpSvNumberInputScan::SkipString",
+      "ImpSvNumberInputScan::GetDecSep",
+      "ImpSvNumberInputScan::GetSign",
+      "ImpSvNumberInputScan::GetESign",
+      "ImpSvNumberInputScan::GetNextNumber",
+      "ImpSvNumberInputScan::GetThousandSep",
+      "ImpSvNumberInputScan::GetTimeAmPm",
+      "ImpSvNumberInputScan::GetTime100SecSep",
+      "ImpSvNumberInputScan::GetTimeRef",
+      "ImpSvNumberInputScan::GetLogical",
+      "ImpSvNumberInputScan::ImplGetDay",
+      "ImpSvNumberInputScan::ImplGetMonth",
+      "ImpSvNumberInputScan::ImplGetYear",
+      "ImpSvNumberInputScan::MayBeIso8601",
+      "ImpSvNumberInputScan::MayBeMonthDate",
+      "ImpSvNumberInputScan::MatchedReturn",
+      "ImpSvNumberInputScan::InitText",
+      "ImpSvNumberInputScan::GetMonth",
+      "ImpSvNumberInputScan::GetDayOfWeek",
+      "ImpSvNumberInputScan::GetCurrency",
+      "ImpSvNumberInputScan::IsAcceptedDatePattern",
+      "ImpSvNumberInputScan::SkipDatePatternSeparator",
+      "ImpSvNumberInputScan::GetDatePatternNumbers",
+      "ImpSvNumberInputScan::IsDatePatternNumberOfType",
+      "ImpSvNumberInputScan::GetDatePatternOrder",
+      "ImpSvNumberInputScan::GetDateOrder",
+      "ImpSvNumberInputScan::GetMiddleMonthLongDateOrder",
+      "ImpSvNumberInputScan::CanForceToIso8601",
+      "ImpSvNumberInputScan::IsAcceptableIso8601",
+      "ImpSvNumberInputScan::ScanStringNumFor",
+      "ImpSvNumberInputScan::ScanStartString",
+      "ImpSvNumberInputScan::ScanEndString",
+      "ImpSvNumberInputScan::ScanMidString",
+      "ImpSvNumberInputScan::IsNumberFormatMain"
+    ],
+    "preservedResponsibilities": [
+      "Source decomposition of svl/source/numbers/zforfind.ts: ScanMidString, ScanEndString, IsNumberFormatMain. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+    ],
+    "omittedResponsibilities": [
+      "This fragment does not certify full upstream parity or compiled differential behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+          "marker": "ScanMidString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+          "marker": "ScanEndString"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+          "marker": "IsNumberFormatMain"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ImpSvNumberInputScan"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ChangeIntl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::NumberStringDivision"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStringNumFor"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanStartString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanEndString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::ScanMidString"
+        },
+        {
+          "path": "svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::IsNumberFormatMain"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

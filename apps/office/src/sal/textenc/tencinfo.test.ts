@@ -20,7 +20,7 @@ function info(size = 12): rtl_TextEncodingInfo {
   };
 }
 
-it("covers all represented single-byte converters and UTF-8 with pinned source flags", () => {
+it("covers all represented single-byte converters and UTF-8 with pinned source flags", /** Checks covers all represented single-byte converters and UTF-8 with pinned source flags. @returns Test completion or assertion result. */ () => {
   expect(Object.keys(sourceInfo).length).toBe(Object.keys(descriptors).length + 1);
   for (const key of [...Object.keys(descriptors), "76"]) {
     const value = info();
@@ -41,7 +41,7 @@ it("covers all represented single-byte converters and UTF-8 with pinned source f
   expect(vietnamese.MaximumCharSize).toBe(2);
 });
 
-it("retains the native missing-encoding and short-structure return order", () => {
+it("retains the native missing-encoding and short-structure return order", /** Checks retains the native missing-encoding and short-structure return order. @returns Test completion or assertion result. */ () => {
   const full = info(),
     short = info(7),
     tiny = info(4);

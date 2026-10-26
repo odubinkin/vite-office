@@ -1,35 +1,35 @@
 /** @fileoverview Original document10.cxx delayed formula-group ownership and regroup routing. */
-import type { ScPatternAttr } from "../../../inc/patattr";
+import { ScGlobal } from "../../../inc/global";
+
 import type { OUString, OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { ScHorizontalCellIterator } from "../../../inc/dociter";
-import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import { SfxHintId } from "../../../../svl/inc/hint";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
-import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
-import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
-import { UpdateScriptTypes } from "./column4";
+import { MAXTAB, SC_TAB_APPEND, ValidTab } from "../../../inc/address";
+import { ScMF } from "../../../inc/attrib";
+import { ScHorizontalCellIterator } from "../../../inc/dociter";
+import { InsertDeleteFlags, UpdateRefMode } from "../../../inc/global";
+import type { ScPatternAttr } from "../../../inc/patattr";
+import { ScRangeList } from "../../../inc/rangelst";
+import { RefUpdateContext, SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { AutoCalcSwitch } from "../../../inc/scopetools";
 import { ScBulkBroadcast } from "../inc/bcaslot";
-import { SfxHintId } from "../../../../svl/inc/hint";
-import { ScRangeList } from "../../../inc/rangelst";
-import { ScMF } from "../../../inc/attrib";
-import { InsertDeleteFlags } from "../../../inc/global";
-import { MAXTAB, ValidTab, SC_TAB_APPEND } from "../../../inc/address";
+import { StartListeners, SetDirtyIncludingEmptyCells as dirtyColumn } from "./column3";
+import { UpdateScriptTypes } from "./column4";
 import { BroadcastAction } from "./documen7";
 import { ExtendMerge as extendTableMerge } from "./table2";
-import { RefUpdateContext } from "../../../inc/refupdatecontext";
-import { UpdateRefMode } from "../../../inc/global";
+import { EndListeningIntersectedGroups as endTableGroups } from "./table7";
 
-import { CopyToDocContext, CopyFromClipContext } from "../../../inc/clipcontext";
-import type { ScMarkData } from "../../../inc/markdata";
-import { ColumnSpanSet } from "../../../inc/columnspanset";
-import type { ScColumn } from "../../../inc/column";
-import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
-import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
-import { ScTable } from "../../../inc/table";
-import { ScAddress, ScRange } from "../../../inc/address";
 import { uppercase } from "../../../../unotools/inc/charclass";
+import { ScAddress, ScRange } from "../../../inc/address";
+import { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
+import type { ScColumn } from "../../../inc/column";
+import { ColumnSpanSet } from "../../../inc/columnspanset";
 import { ScDocument } from "../../../inc/document";
 import type { ScFormulaCell } from "../../../inc/formulacell";
+import { EndListeningContext, StartListeningContext } from "../../../inc/listenercontext";
+import type { ScMarkData } from "../../../inc/markdata";
+import { ColumnBlockPositionSet } from "../../../inc/mtvelements";
+import { ScTable } from "../../../inc/table";
 /** Original merged-anchor query returns false for an absent sheet and delegates otherwise. @param this - Actual document. @param position - Queried cell. @returns Merged anchor. */
 export function IsMerged(this: ScDocument, position: ScAddress): boolean {
   const table = this.FetchTable(position.Tab());
@@ -669,7 +669,6 @@ export function ValidNewTabName(this: ScDocument, name: OUStringConstReference):
   return true;
 }
 
-
 /** Existing scalar sheet insertion body moved unchanged from the size-bounded facade. @param this - Actual document. @param position - Sheet position. @param name - Native name. @returns Inserted. */
 export function InsertTab(
   this: ScDocument,
@@ -847,4 +846,24 @@ export function SetFormulaCell(
   if (table) return table.SetFormulaCell(position.Col(), position.Row(), cell);
   cell.Dispose();
   return null;
+}
+
+/** Original ScDocument::RenameTab name checks and stream invalidation over represented sheets. Chart and solver services are outside this core slice. @param tab - Existing sheet. @param name - New name. @param externalDocument - Composed external name flag. @returns Renamed.  @param this - Original document owner. */
+
+export function RenameTab(
+  this: ScDocument,
+  tab: number,
+  name: OUStringConstReference,
+  externalDocument = false,
+): boolean {
+  const table = this.FetchTable(tab);
+  if (!table || (!externalDocument && !ScDocument.ValidTabName(name))) return false;
+  for (let index = 0; index < this["maTabs"].length; index++) {
+    const other = this["maTabs"][index];
+    if (other && index !== tab && ScGlobal.GetTransliteration().isEqual(name, other.GetName()))
+      return false;
+  }
+  table.SetName(name);
+  for (const current of this["maTabs"]) current?.SetStreamValid(false);
+  return true;
 }

@@ -1,20 +1,24 @@
 /** @fileoverview Verifies complete Writer style and font ODT round-trip compatibility. */
 import { describe, expect, it, vi } from "vitest";
-import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
-import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
-import { Color } from "../../../../tools/inc/color";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
 import { ZipOutputStream } from "../../../../package/source/zipapi/ZipOutputStream";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { Color } from "../../../../tools/inc/color";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
+import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import {
+  RES_BOX,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
-  RES_BOX,
   RES_PARATR_CONNECT_BORDER,
 } from "../../../inc/hintids";
 import { getWriterOdfStyleName, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
@@ -22,12 +26,8 @@ import { createWriterDocument } from "../../core/doc/doc";
 import { SwParaConnectBorderItem } from "../../core/para/paratr";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
-import { encodeWriterDocument } from "../../../browser/filter/xml/writer-document-codec";
 import { readOdtDocument } from "./swxml";
 import { writeOdtDocument } from "./wrtxml";
-import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
-import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-import { getFontFamilyFromGeneric } from "../../../../xmloff/source/style/fonthdl";
 /** Rebuilds an ODT after transforming its named-style stream. @param bytes - Source package. @param transform - styles.xml transform. @returns Rebuilt package. */
 async function rewriteStylesXml(
   bytes: Uint8Array,
@@ -46,7 +46,7 @@ async function rewriteStylesXml(
 }
 
 describe("Writer ODT font and style compatibility", /** Groups file compatibility tests. @returns Nothing. */ () => {
-  it("round-trips the materialized thematic-line border and connection items", async () => {
+  it("round-trips the materialized thematic-line border and connection items", /** Checks round-trips the materialized thematic-line border and connection items. @returns Test completion or assertion result. */ async () => {
     const writer = createWriterDocument();
     const style = writer.GetTextFormatColl("horizontal-line");
     const box = (style.GetAttrSet().Get(RES_BOX) as SvxBoxItem).Clone();

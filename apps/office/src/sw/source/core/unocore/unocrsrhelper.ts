@@ -1,43 +1,48 @@
-import { SwParaConnectBorderItem } from "../para/paratr";
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
 import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 
-import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
-import { SetAttrMode } from "../../../inc/swtypes";
-import { SwXNumberingRules } from "./unosett";
-import { SwNumRule } from "../doc/number";
+import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { cppu_detail_getUnoType as indexReplaceType } from "../../../../cppu/inc/com/sun/star/container/XIndexReplace";
+import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Reference, UNO_QUERY } from "../../../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../../../cppu/inc/com/sun/star/uno/RuntimeException";
-import { IllegalArgumentException } from "../../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
-import { UnknownPropertyException } from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
+import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SetAttrMode } from "../../../inc/swtypes";
+import { SwNumRule } from "../doc/number";
+import { SwXNumberingRules } from "./unosett";
 
-import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
-import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/container/NoSuchElementException";
 import { ElementExistException } from "../../../../cppu/inc/com/sun/star/container/ElementExistException";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { NoSuchElementException } from "../../../../cppu/inc/com/sun/star/container/NoSuchElementException";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { Color, ColorTransparency } from "../../../../tools/inc/color";
+import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { SvxFontItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../../offapi/com/sun/star/table/BorderLine2";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { SvxFontItem, SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
-import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
-import { SwPaM } from "../crsr/pam";
-import { SwTextNode } from "../txtnode/ndtxt";
-import { SwFormatINetFormat } from "../txtnode/fmtatr2";
-import { SwFormatAutoFormat } from "../txtnode/txatbase";
-import { SwFormatPageDesc } from "../attr/fmtpdsc";
-import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
-import { SwNumRuleItem } from "../para/paratr";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
+import type { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
 import * as H from "../../../inc/hintids";
-import { setTextFormatCollAtNode } from "../doc/docfmt";
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { MID_PAGEDESC_PAGEDESCNAME } from "../../../inc/unomid";
+import { SwFormatPageDesc } from "../attr/fmtpdsc";
+import { SwPaM } from "../crsr/pam";
+import { setTextFormatCollAtNode } from "../doc/docfmt";
 import { SwStyleNameMapper } from "../doc/SwStyleNameMapper";
+import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
+import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwTextNode } from "../txtnode/ndtxt";
+import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwUnoPropertyMap, type SwUnoPropertyEntry } from "./unomap";
 /** Native argument failure, with the real generated exception value. @param message - Original message input. @returns The represented native operation result. */
 export function illegal(message: string): never {
@@ -122,6 +127,14 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
     );
   }
   const out = new Any();
+  if (entry.kind === "border") {
+    const edge = { 3: 0, 4: 1, 1: 2, 2: 3 }[entry.member & 0x7f];
+    if (edge === undefined || !(item instanceof SvxBoxItem)) illegal("Unknown paragraph border");
+    return new Any(
+      [SvxBoxItem.SvxLineToLine(item.GetLine(edge), true)],
+      cppu_detail_getUnoType_BorderLine2,
+    );
+  }
   if (entry.kind === "any") {
     (item as unknown as { QueryValue(out: Any, member: number): boolean }).QueryValue(
       out,
@@ -143,11 +156,8 @@ export function queryItem(item: SfxPoolItem, entry: SwUnoPropertyEntry): Any {
       out.insert([item.GetValue().toInt32()], "sal_Int32");
       return out;
     }
-    const color = (item as SfxStringItem).GetValue();
-    value =
-      color === "auto" || color === "automatic" || color === "transparent"
-        ? -1
-        : parseInt(color.replace("#", ""), 16);
+    if (!(item instanceof SvxBrushItem)) illegal("Invalid character highlight item");
+    value = item.GetColor().toInt32();
   } else if (
     item instanceof SfxBoolItem ||
     item instanceof SfxInt16Item ||
@@ -199,20 +209,22 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
   }
   const copy = item.Clone();
   if (copy === null) invalid("Invalid pooled item");
+  if (entry.kind === "border") {
+    if (!(copy instanceof SvxBoxItem)) illegal("Invalid paragraph border item");
+    const line = new BorderLine2();
+    if (!value.extract(line, cppu_detail_getUnoType_BorderLine2)) illegal("Expected BorderLine2");
+    if (!copy.PutValue(line, entry.member)) illegal("Invalid paragraph border");
+    return copy;
+  }
   if (entry.kind === "color") {
     const n = scalar(value, "sal_Int32") as number;
     if (copy instanceof SvxColorItem) {
       copy.SetValue(new Color(ColorTransparency, n, "ColorTransparencyTag"));
       return copy;
     }
-    return new SfxStringItem(
-      item.Which(),
-      n === -1
-        ? item.Which() === H.RES_CHRATR_HIGHLIGHT
-          ? "transparent"
-          : "auto"
-        : `#${(n & 0xffffff).toString(16).padStart(6, "0")}`,
-    );
+    if (!(copy instanceof SvxBrushItem)) illegal("Invalid character highlight item");
+    copy.SetColor(new Color(ColorTransparency, n, "ColorTransparencyTag"));
+    return copy;
   }
   if (entry.kind === "font") {
     if (!(copy as SvxFontItem).PutValue(value, entry.member)) illegal("Invalid font member");

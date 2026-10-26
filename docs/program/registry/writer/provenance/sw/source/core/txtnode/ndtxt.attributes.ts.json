@@ -1,0 +1,281 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "WRITER_CHARACTER_FORMATS"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "WriterCharacterFormat"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "SwTextFragment"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "WRITER_PARAGRAPH_ALIGNMENTS"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "WriterParagraphAlignment"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+          "marker": "isWriterParagraphAlignment"
+        }
+      ],
+      "upstream": [
+        {
+          "marker": "SwTextNode",
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::GetNumber"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveMe"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::RemoveChild"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLevelInListTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::SetLastValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNumberTree.cxx",
+          "marker": "SwNumberTreeNode::InvalidateTree"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNum("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumberVector("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::AddToList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::RemoveFromList()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "HandleSetAttrAtTextNode::HandleSetAttrAtTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PostRemove()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::ChangeNumRule("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::GetTextNodeList("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::RemoveTextNode("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "SwNumRule::Validate("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::addListItem("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
+          "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::ChgFormatColl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::ChgTextCollUpdateNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumRule"
+        },
+        {
+          "marker": "SwTextNode::SetListRestart(",
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx"
+        },
+        {
+          "marker": "SwTextNode::SetAttrListRestartValue(",
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetAttrListRestartValue()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/osl/diagnose.h",
+          "marker": "#define OSL_ENSURE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/sal/detail/log.h",
+          "marker": "#define SAL_DETAIL_WARN_IF_FORMAT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::IsNotifiable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::IsNotificationEnabled"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwNodeNum.hxx",
+          "marker": "bool m_isHiddenRedlines;"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/SwNumberTree/SwNodeNum.cxx",
+          "marker": "SwNodeNum::PreAdd"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/text/itrcrsr.cxx",
+          "marker": "SwTextMargin::CtorInitTextMargin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetFirstLineOfsWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentSettingManager.cxx",
+          "marker": "mbAutoFirstLineIndentDisregardLineSpace(true)"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/dialog/svxruler.cxx",
+          "marker": "SvxRuler::UpdatePara"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/uibase/uiview/viewtab.cxx",
+          "marker": "SwView::StateTabWin"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::FormatToTextAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CopyAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::CutImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "void SwpHints::BuildPortions"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "void SwTextNode::MoveTextAttr_To_AttrSet()"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode *SwTextNode::SplitContentNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode *SwTextNode::SplitContentNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "bool CopyDirectListLevel"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode* SwTextNode::MakeNewTextNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetNumString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::HasVisibleNumberingOrBullet"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetLeftMarginWithNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::GetLeftMarginForTabCalculation"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+    "localSymbols": [
+      "WRITER_CHARACTER_FORMATS",
+      "WriterCharacterFormat",
+      "SwTextFragment",
+      "WRITER_PARAGRAPH_ALIGNMENTS",
+      "WriterParagraphAlignment",
+      "isWriterParagraphAlignment"
+    ],
+    "omittedResponsibilities": [
+      "This fragment does not certify full upstream parity or compiled differential behavior."
+    ],
+    "preservedResponsibilities": [
+      "Source decomposition of sw/source/core/txtnode/ndtxt.ts: WRITER_CHARACTER_FORMATS, WriterCharacterFormat, SwTextFragment, WRITER_PARAGRAPH_ALIGNMENTS, WriterParagraphAlignment, isWriterParagraphAlignment. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+    ],
+    "status": "mapped",
+    "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",
+    "upstreamSymbols": [
+      "SwTextNode",
+      "SwNodes::MakeTextNode",
+      "SwTextNode::SwTextNode",
+      "sw::TextNodeNotificationSuppressor",
+      "SwTextNode::SetListRestart(",
+      "SwTextNode::SetAttrListRestartValue(",
+      "SwTextNode::GetAttrListRestartValue()",
+      "SwTextNode::MoveTextAttr_To_AttrSet",
+      "SwTextNode::MakeNewTextNode",
+      "CopyDirectListLevel",
+      "SwTextNode::GetNumString",
+      "SwTextNode::HasVisibleNumberingOrBullet",
+      "SwTextNode::GetLeftMarginWithNum",
+      "SwTextNode::GetLeftMarginForTabCalculation",
+      "SwTextNode::ReplaceText"
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The native OSL_ENSURE warning transport uses the existing console.warn diagnostic sink in the browser. Return/item ownership follows unchanged native getter and effective attribute owners; SAL build/filter/location/backtrace infrastructure is not ported or claimed."
+    },
+    "rationale": "undefinedCorrectionP5FPXY (3/10 after accepted full N337G1): original typed SvxFirstLineIndentItem declaration moves from immutable scalar frmitems adapter to lrspitem native owner, retaining same-binding export. Zero TWIP/uint16 percentage100/auto false defaults, owned stable double/unit measure and by-value input, independent native copy, native SetTextFirstLineOffset, percentage-only setter, SetAutoFirst, font metrics, equality/scaling and represented UNO8/9/10/13 replace numeric core serialization. All existing authors migrate to native typed constructors/setters without a production compatibility constructor. First-line-only automatic ODF delta clones and retains untouched native units/proportions; direct caller/paragraph history uses existing native Clone values. Existing integer scalar or [integer,1] browser records, coercion and rejection stay at codec/pool boundaries; unsupported new rich units/proportions/fractions reject rather than flatten. Preserve all canonical status/default/classification/history and registered IO exceptions; current declaration owner changes precisely and no general native hash/presentation/UNO/VCL/rich wire/font UI completion claim. Pending final current-source related acceptance and metadata evidence.\nApprovedP5FPXY native authoring refinement: remove the non-upstream SwTextNode.SetParagraphFirstLineIndent wrapper, whose only14callers were tests. Eight exact old caller files now use original SetAttr with typed item; four newly scoped files retain every old case and expected argument. No other paragraph getter/setter or registered IO deviation removed. Whole final ten modules are verified by fresh actual current-source maps after wrapper removal; previous profile maps superseded and not reused.\nVerifiedP5FPXY: original typed first-line item owns double/signed16 unit,uint16 percentage and auto mode under lrspitem native declaration; same export identity retained and obsolete test-only numeric SwTextNode helper removed. Original constructors,setters,stable constant measure,copy/equality,context resolution,metric scaling and UNO8/9/10/13 implemented; absolute writes directly assign measure and reset percentage100, original Any2Bool and unsupported default0 preserved. Mutable original caller acceptance plus3UndoRedo cycles retain independent item,node,cursor,style client; old scalar/automatic graph,JSON,Worker records unchanged at browser boundaries. Current final related14188/14188 cases503files71fresh; entire ten changed modules actual Istanbul100all-four1904lines2083statements566functions1707branches, complete current nonnegative maps; no superseded/earlier maps,filter,counter or threshold modifications. Thirty-two exact historical fixture/observer files preserve original cases and expected arguments except one source-backed fractional constructor contract; fourteen retired wrapper calls now direct native SetAttr, all768other repository historical test files byte-identical. Twenty canonical histories/status/default/classification records preserved with actual current declaration-owner migration. Current static/TS7/build/JSDoc/dependency/size and27Chromium cases12files passed once absent both references; separate nine source/metadata audits passed after restoration,source proof eight pinned files. WRITER-003 records preserved original unsupported default query. Exact-SHA same-agent non-independent quality pending commit. Rich unit/percentage wire,font-relative UI,general native lifetime/hash/presentation/UNO/VCL/history architecture remain unverified; registered IO deviations unchanged. Broad goal incomplete, cadence3/10 after N337G1; pause after next accepted full run and repairs. Correction7RCNDA: original typed paragraph text-left declaration is owned by lrspitem.hxx-aligned lrspitem.ts, frmitems retains the identical export binding. Native default/value/copy/Clone, stable typed measure/by-value setter, uint16 proportion, separate rounded hanging full/fixed/variable components, UNO status0/absolute11/relative6/unit15 and ScaleMetrics/HasMetrics are represented. Existing TWIP scalar codec/coercion remains at browser boundary; rich states reject rather than flatten. All previous semantic/default/status/classification/history retained; rich transport and original MoveLeftMargin range/history plus full general pooling/lifetime/hash/presentation/UNO/VCL remain unverified. Verification pending202610101650-7RCNDA. Verified7RCNDA: final14251/14251 related app cases505files63fresh; ten entire changed production modules actual Istanbul100 lines1798/statements1962/functions523/branches1616, current complete maps and zero negative counters. Final27/27 Chromium cases12files, zero skips/flaky/retries. TS7/static/build/dependency/JSDoc/file-size gates pass with both references absent; restored metadata nine checks pass after correcting the actual native left-margin declaration owner, without a fabricated violation or runtime replay. 780of802 old test files byte-identical;22 exact native measure/query migrations preserve old case/input/expected contracts except the source-backed fractional constructor admission. Twenty canonical historical/status/default/classification prefixes retained except exact local declaration owner retirement; registered recovery/open/save/settings deviations untouched. WRITER-002 records literal source percentage asymmetry. Original MoveLeftMargin range/history, rich margin wire/font-context UI/hash/presentation/general UNO/VCL and compiled native differential remain unverified. Cadence1/10 after BZ14P4 accepted full baseline; goal active. Evidence .agentplane/tasks/202610101650-7RCNDA/evidence/verification.json.",
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

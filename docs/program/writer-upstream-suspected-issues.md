@@ -1107,133 +1107,133 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: native offset65535 queries as signed16 -1 and exports as -1. Importing positive65535 saturates to32767,whereas importing -1 reaches unsigned65535. Thus numerically equivalent modulo65536 XML inputs can produce different offsets. Zero is valid in ODF1.3;older-version special handling is outside the current fixed1.3 writer. This is preserved source behavior,not a confirmed upstream defect.
 - Preservation: use the original Any member projection,SAX lexical conversion,signed16 saturation and signed XML output. Invalid lexical input leaves a property unset;exact auto means void. Tests pin boundaries and actual Writer ODT/browser worker cycles.
 
-### WRITER093 — OOXML content-type helper searches extension defaults before full-part overrides
+### WRITER120 — OOXML content-type helper searches extension defaults before full-part overrides
 
 - Source: pinned `comphelper/source/xml/ofopxmlhelper.cxx`, `OFOPXMLHelper::GetContentTypeByName`.
 - Observation: the helper searches the extension key in Overrides and Defaults before searching the full part key. Given default `xml = application/xml` and override `/word/document.xml = document-main`, it returns `application/xml`. This is surprising relative to OPC override precedence. The separate `ZipPackage::parseContentType` applies defaults then overrides; no incorrect desktop document result or reachable consumer defect is established here.
 - Preservation: retain exact search order, case-sensitive matching and first duplicate. `apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts` pins this result. Main-part selection uses the native office-document relationship path rather than changing this helper to infer a format from an extension. Shared finding also appears in the other application's issue ledger.
 
-### WRITER094 — PropertyMap overwrite insertion discards an explicit document-default marker
+### WRITER121 — PropertyMap overwrite insertion discards an explicit document-default marker
 
 - Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `PropertyMap::Insert`; `PropertyMap.hxx`, `PropValue` constructors.
 - Observation: `Insert(id, value, true, NO_GRAB_BAG, true)` constructs the two-argument `PropValue`, leaving its document-default flag false. The non-overwrite branch forwards the explicit flag. Thus the marker's effect depends on overwrite mode even for a previously missing property. This may be intentional caller discipline; no incorrect desktop document result is established.
 - Preservation: retain both constructor selections. The actual property-map tests check default-marker reads and inherited merges rather than normalizing overwrite insertion.
 
-### WRITER095 — PropertyMap caches the first nonempty character-grab-bag projection across later flag changes
+### WRITER122 — PropertyMap caches the first nonempty character-grab-bag projection across later flag changes
 
 - Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `PropertyMap::GetPropertyValues`.
 - Observation: a nonempty cached property vector returns before consulting `bCharGrabBag`. With one ordinary property and one character grab-bag entry, calling with false first makes a later true call omit that bag; reversing the order retains it on a later false call. If false produces an empty vector, a later true call recomputes. Consumer call ordering and whether any desktop defect follows remain unverified.
 - Preservation: retain the nonempty-cache test and invalidation rules. Native typed-sequence tests cover both call orders and recomputation after invalidation.
 
-### WRITER096 — imported-style property lookup guards a direct self-parent but not longer inheritance cycles
+### WRITER123 — imported-style property lookup guards a direct self-parent but not longer inheritance cycles
 
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx`, `GetPropertyFromStyleSheet` and `lcl_getParent`.
 - Observation: lookup walks base style IDs until a property is found, no parent exists, or the next entry equals the current entry. A two-entry cycle with the requested property absent satisfies none of those conditions. Whether earlier style admission guarantees a cycle-free graph for every caller is unverified; this is not a confirmed desktop defect.
 - Preservation: keep the direct-self guard and lookup order. Tests cover direct-self termination, missing parents, inherited properties and paragraph-before-character DocDefaults. They do not execute a nonterminating cycle or silently introduce a visited-set repair.
 
-### WRITER097 — a factory definition without generated child cases uses the root/start fallback
+### WRITER124 — a factory definition without generated child cases uses the root/start fallback
 
 - Source: pinned `sw/source/writerfilter/ooxml/factoryimpl_ns.py`, `factoryCreateElementMap`, `factoryCreateElementMapFromStart` and `factoryGetResourceId`; `factoryimpl.py`, `createFastChildContextFromFactory`.
 - Observation: only definitions with child cases appear in the generated element switch. Its default branch searches namespace start elements. Therefore the known leaf definition `CT_OnOff` can resolve a `w:document` child through the same fallback as the initial context. This is outside the WordprocessingML schema and may be intentional permissive parser behavior. No incorrect desktop result on a valid document is established.
 - Preservation: retain case-versus-default selection and unchanged failure output cells. Factory tests distinguish a paragraph context with generated cases, which rejects a document child, from the no-child-case leaf and initial contexts, which use the original start fallback. No schema-tightening repair is introduced.
 
-### WRITER098 — Word kerning minimum-size thresholds collapse to one boolean
+### WRITER125 — Word kerning minimum-size thresholds collapse to one boolean
 
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_kern`; `sw/source/core/bastyp/init.cxx`, `RES_CHRATR_AUTOKERN`.
 - Observation: the importer assigns `CharAutoKerning = (nIntValue != 0)` and explicitly notes that Writer does not bind automatic kerning to Word's minimum font size. Thus positive thresholds 2 and 28 have the same native model value. This is a known format/model limitation rather than a newly confirmed upstream defect.
 - Preservation: keep the boolean projection and original concrete `SvxAutoKernItem` with false pool default, Which17 and slot10067. Actual-model and primary ODT roundtrips test zero and multiple nonzero thresholds. Do not add a font-size-dependent substitute or raw-threshold document DTO.
 
-### WRITER099 — underline type mapping sets word-only mode for words but does not clear it for other types
+### WRITER126 — underline type mapping sets word-only mode for words but does not clear it for other types
 
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `handleUnderlineType`.
 - Observation: `words` inserts `CharWordMode = true` before selecting single underline. The other underline cases update `CharUnderline` without inserting a false word-mode value. On the same property context, `words` followed by `single` therefore retains true word mode. The effect on every style-inheritance path and whether a valid desktop document exposes an unintended result remain unverified.
 - Preservation: keep the separate property writes. Tests pin word mode remaining true after a later single underline; they do not normalize that update into a false word-mode reset.
 
-### WRITER100 — nested textbox content overwrites one saved group state
+### WRITER127 — nested textbox content overwrites one saved group state
 
 - Source: pinned `sw/source/writerfilter/ooxml/OOXMLParserState.cxx`, `startTxbxContent` and `endTxbxContent`.
 - Observation: entering nested textbox content emits a warning but still overwrites the single saved paragraph/character/last-paragraph flags. The first close restores the inner entry state; the second close warns and returns, so the outer entry flags are not restored. Whether a valid supported document reaches this nesting remains unverified; no desktop defect is confirmed.
 - Preservation: keep the single saved state and unmatched-close return. Do not introduce a textbox state stack. Tests exercise ordinary, nested and unmatched transitions while retaining the section flag throughout.
 
-### WRITER101 — MCE Choice uses exact Requires spelling and does not stop after an earlier supported Choice
+### WRITER128 — MCE Choice uses exact Requires spelling and does not stop after an earlier supported Choice
 
 - Source: pinned `sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx`, `prepareMceContext`.
 - Observation: the handler compares the entire Requires value against four literal prefixes (`wps`, `wpg`, `w14`, `wpc`), without splitting the whitespace-separated list or resolving feature namespace aliases. It also sets the took-choice flag without testing whether an earlier supported Choice was already taken. Consequently a multi-prefix Requires goes to Fallback, while two separately supported Choices both deliver content. Reachability and desktop impact for valid supported documents remain unverified.
 - Preservation: retain the exact spelling tests, supported-prefix array, multiple-Choice delivery and nested alternate-state save/restore. Do not replace these checks with a standards-correct feature set or first-choice selection.
 
-### WRITER102 — SAX callback failures retain the first cause but report the locator after the input block
+### WRITER129 — SAX callback failures retain the first cause but report the locator after the input block
 
 - Source: pinned `sax/source/fastparser/fastparser.cxx`, `Entity::saveException`, `Entity::throwException` and `FastSaxParserImpl::parse`.
 - Observation: a consumer failure is saved without immediately stopping the remaining callbacks in the current16KiB block. Later failures are discarded, and the SAXParseException locator is read after the block, rather than captured at the first failing callback. The reported location may consequently differ from where the wrapped first failure arose. The continuation is explicitly intentional for fdo#81214; whether the diagnostic location causes a user-visible defect is unverified.
 - Preservation: retain first-failure selection, continued callbacks, null failed-start frames,16KiB checkpoints and current locator wrapping. Tests do not replace this behavior with immediate cancellation or the first-failure position.
 
-### WRITER103 — default page mode updates two frames and undo restores only the pool default
+### WRITER130 — default page mode updates two frames and undo restores only the pool default
 
 - Source: pinned `sw/source/core/doc/docdesc.cxx`, `SwDoc::SetDefaultPageMode`; `sw/source/core/undo/unattr.cxx`, `SwUndoDefaultAttr::UndoImpl`.
 - Observation: the mode setter changes the pool default, then directly converts each descriptor's master and left grid. It does not convert first-master or first-left grids. Default-attribute undo restores the pool item through `SetDefault`, without rerunning the page-mode setter, leaving authored master/left grid conversions in place. Valid document impact in the desktop application remains unverified.
 - Preservation: retain all four actual frame owners, the two-frame conversion and pool-only undo. The actual-model test checks authored first-page grids and repeated undo/redo without extending the undo scope.
 
-### WRITER104 — default-tab mutation retains one trailing default and reports change without removal
+### WRITER131 — default-tab mutation retains one trailing default and reports change without removal
 
 - Source: pinned `sw/source/core/doc/docfmt.cxx`, `lcl_SetNewDefTabStops` and `SwDoc::SetDefault`; `sw/source/core/doc/doc.cxx`, `SwDoc::ForEachParaAtrTabStopItem`.
 - Observation: after finding the last non-default tab, the helper increments its index before removal, retaining the first trailing default. For every nonempty item with unequal old/new widths it reports true, even when no stop was removed. Traversal can visit the same inherited item through a node and its style; upstream explicitly notes that mutation of shared pooled items needs further consideration. Desktop impact remains unverified.
 - Preservation: retain the exact increment, unconditional true result, shared-item traversal and non-short-circuit accumulation. Tests cover repeated visits and unchanged-but-true calls; no unique-item registry or corrected removal boundary is introduced.
 
-### WRITER105 — failed document page-mode bool extraction changes mode to false
+### WRITER132 — failed document page-mode bool extraction changes mode to false
 
 - Source: pinned `sw/source/uibase/uno/unotxdoc.cxx`, `SwXTextDocument::setPropertyValue`, `WID_DOC_DEFAULT_PAGE_MODE` case.
 - Observation: the setter initializes a bool to false, ignores the result of Any extraction and calls `SetDefaultPageMode`. An incompatible value therefore sets false instead of raising a type error. Whether this is intended API behavior remains unverified.
 - Preservation: retain the failed-extraction false fallback and the separate document property dispatch identity. Tests use real typed Any values and actual pool/page owners.
 
-### WRITER106 — drawing attribute membership excludes the inclusive final attribute
+### WRITER133 — drawing attribute membership excludes the inclusive final attribute
 
 - Source: pinned `sw/inc/hintids.hxx`, `isDrawingLayerAttribute`; `include/svx/xdef.hxx`, `XATTR_END`.
 - Observation: XATTR_END aliases the inclusive XATTR_TEXT_LAST (XATTR_FORMTXTSHDWTRANSP,1047), while the predicate requires WhichId strictly less than XATTR_END. The final drawing attribute is therefore excluded from this predicate, including its default-format notification branch. Desktop impact remains unverified.
 - Preservation: retain the strict upper comparison and the original constants in their SVX owner. Boundary tests explicitly reject1047; no inclusive-end correction is introduced.
 
-### WRITER107 — section style creation failure retains its name and prevents creation on retry
+### WRITER134 — section style creation failure retains its name and prevents creation on retry
 
 - Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.cxx`, `SectionPropertyMap::GetPageStyle`.
 - Observation: the method stores an unused page-style name before calling the document factory. A UNO exception from that factory is caught while the name remains nonempty. A later call enters lookup for the retained name instead of trying creation again; when no style was inserted, lookup fails again. Reachability in supported desktop imports and user-visible impact remain unverified.
 - Preservation: retain name assignment order, the UNO-only catch and lookup-on-retry path. Tests inject a real UNO failure at the actual model factory and confirm the missing style is not created on retry. Host implementation errors remain visible.
 
-### WRITER108 — fast serializer assumes an existing x-escape prefix is already escaped
+### WRITER135 — fast serializer assumes an existing x-escape prefix is already escaped
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::write`.
 - Observation: an input matching `_x005F_xHHHH_` is emitted unchanged rather than escaping its leading underscore. `_x0020_` is also deliberately retained. The source explicitly assumes the first form was already escaped but not unescaped earlier. If it instead originated as literal document text and the consumer decodes that value as an OOXML basic string, literal content may change. Desktop reachability and impact remain unverified.
 - Preservation: retain exact hex/case checks, the blank exception and suppression positions for adjacent escapes. Byte-output tests pin the source behavior without normalizing all literal patterns.
 
-### WRITER109 — sorted serializer marks omit the initial unknown bucket
+### WRITER136 — sorted serializer marks omit the initial unknown bucket
 
 - Source: pinned `sax/source/tools/fastserializer.hxx`, `ForSort` initialization; `fastserializer.cxx`, `ForSort::setCurrentElement`, `append` and `sort`.
 - Observation: the current token starts at zero and changes only for tokens present in the supplied order. Output before the first recognized token accumulates under zero and is omitted if zero is absent from that order. Later unrecognized elements stay in the preceding recognized bucket. Repeated order entries repeat their bucket. Whether valid Writer export paths reach unintended omissions remains unverified.
 - Preservation: retain the original buckets and supplied-order traversal, including sorted PREPEND acting as APPEND. Tests pin each behavior; no fallback bucket or order deduplication is added.
 
-### WRITER110 — cached SAX output reuses a sequence buffer after forwarding a shared sequence
+### WRITER137 — cached SAX output reuses a sequence buffer after forwarding a shared sequence
 
 - Source: pinned `sax/source/tools/CachedOutputStream.hxx`, `flush` and `writeBytes`; `include/com/sun/star/uno/Sequence.hxx`, `toUnoSequence`.
 - Observation: flush changes the cached sequence length and passes its UNO reinterpretation to the output stream. Subsequent writes reuse the same raw buffer. A stream retaining a copied native Sequence may therefore observe changed content or length despite ordinary sequence value expectations. This is source-level suspicion; native retention/copy-on-write behavior and desktop impact have not been compiled or demonstrated.
 - Preservation: retain buffer reuse, flush order and synchronous output calls. Host byte views are explicitly borrowed and actual ZIP output copies them immediately; a simulated native allocator or copy-on-write layer is not introduced. Exact native ABI/retention behavior remains unverified.
 
-### WRITER111 — failed initial serializer mark setup leaves its empty flag inconsistent
+### WRITER138 — failed initial serializer mark setup leaves its empty flag inconsistent
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element start methods.
 - Observation: mark pushes its object before switching cache output, and updates the separate empty-stack flag after that switch. If flushing the previous stream throws, the stack retains a mark while the flag remains true. Later merge calls return based on that flag and element starts bypass mark setup. The native end-document invariant fails. Desktop reachability and impact remain unverified.
 - Preservation: keep the separate flag and exact fallible-operation order. A real closed ZIP stream test confirms translated failure behavior. Do not derive the flag from stack length or roll back the pushed mark.
 
-### WRITER112 — full-list VML attribute prefix bypasses all XML escaping
+### WRITER139 — full-list VML attribute prefix bypasses all XML escaping
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::writeFastAttributeList`.
 - Observation: the prefix exception for `#_x0000_t` or `_x0000_t` disables the entire escape path, including quotes and ampersands, rather than only OOXML x-escaping. A matching value containing XML punctuation can therefore produce malformed attribute syntax. Desktop reachability is unverified. Native duplicate attributes are also emitted in release builds; their check is debug-only.
 - Preservation: retain prefix checks and raw emission, duplicate ordering and the independent queued token/value vector. Exact byte tests cover both prefixes and ordinary escaped attributes without introducing a sanitizer.
 
-### WRITER113 — RunText symbol font affects only its final control-delimited segment
+### WRITER140 — RunText symbol font affects only its final control-delimited segment
 
 - Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `RunText` and `impl_WriteRunText`.
 - Observation: delimiter flush calls omit the symbol-font argument; only the final flush receives it. A symbol run containing a tab therefore emits preceding characters as ordinary text and the final characters as symbols. Symbols are emitted per UTF16 code unit, including surrogate halves. The break-emission condition also retains a false branch that appears unreachable for immutable text: an empty segment follows a control character and thus satisfies `prevUnicode < 32`. Desktop impact remains unverified.
 - Preservation: retain exact argument propagation, UTF16 iteration, short-circuit condition and schema marks. Tests cover bytes without replacing the condition or excluding it from instrumentation. The scoped100 branch coverage gate remains open for that native branch.
 
-### WRITER114 — configured font lower_bound does not select a shorter prefix entry
+### WRITER141 — configured font lower_bound does not select a shorter prefix entry
 
 - Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
 - Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.

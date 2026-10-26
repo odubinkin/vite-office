@@ -2,8 +2,8 @@
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { LANGUAGE_NONE, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";
-import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { Transliteration_caseignore } from "../../../i18npool/source/transliteration/transliteration_caseignore";
+import { TransliterationFlags } from "../../../i18nutil/inc/transliteration";
 import { TransliterationModules } from "../../../offapi/com/sun/star/i18n/TransliterationModules";
 import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 
@@ -13,17 +13,21 @@ export class TransliterationWrapper {
   private language = LANGUAGE_SYSTEM;
   private firstCall = true;
 
-  /** Creates the source wrapper for the currently represented IGNORE_CASE mode. @param type - Source mode. */
+  /** Creates the source wrapper for the currently represented IGNORE_CASE mode. @param type - Source mode.  @returns Constructed instance. */
   constructor(private readonly type: TransliterationFlags) {
     if (type !== TransliterationFlags.IGNORE_CASE)
       throw new Error("TransliterationWrapper mode is outside the represented module set");
   }
 
   /** Returns the source module mode. @returns Mode. */
-  getType(): TransliterationFlags { return this.type; }
+  getType(): TransliterationFlags {
+    return this.type;
+  }
 
   /** Source language-sensitive mode query. @returns Whether mode depends on language. */
-  needLanguageForTheMode(): boolean { return true; }
+  needLanguageForTheMode(): boolean {
+    return true;
+  }
 
   /** Loads the native module with the current source language. @returns Nothing. */
   private loadModuleImpl(): void {
@@ -38,7 +42,7 @@ export class TransliterationWrapper {
     }
   }
 
-  /** Source first-call and language-change reload rules. */
+  /** Source first-call and language-change reload rules.  @param language - Language. @returns Nothing. */
   loadModuleIfNeeded(language: number): void {
     let load = this.firstCall;
     this.firstCall = false;
@@ -49,10 +53,16 @@ export class TransliterationWrapper {
     if (load) this.loadModuleImpl();
   }
 
-  /** Source comparison forwards to the actual case-ignore module and catches only UNO exceptions. */
+  /** Source comparison forwards to the actual case-ignore module and catches only UNO exceptions.  @param first - First. @param pos1 - Pos1. @param count1 - Count1. @param match1 - Match1. @param second - Second. @param pos2 - Pos2. @param count2 - Count2. @param match2 - Match2. @returns The boolean result. */
   equals(
-    first: OUStringConstReference, pos1: number, count1: number, match1: [number],
-    second: OUStringConstReference, pos2: number, count2: number, match2: [number],
+    first: OUStringConstReference,
+    pos1: number,
+    count1: number,
+    match1: [number],
+    second: OUStringConstReference,
+    pos2: number,
+    count2: number,
+    match2: [number],
   ): boolean {
     try {
       if (this.firstCall) this.loadModuleImpl();
@@ -63,11 +73,13 @@ export class TransliterationWrapper {
     }
   }
 
-  /** Source full-string isEqual calls equals with both complete lengths. */
+  /** Source full-string isEqual calls equals with both complete lengths.  @param first - First. @param second - Second. @returns The boolean result. */
   isEqual(first: OUStringConstReference, second: OUStringConstReference): boolean {
     return this.equals(first, 0, first.getLength(), [0], second, 0, second.getLength(), [0]);
   }
 
   /** Releases the owned native module. @returns Nothing. */
-  dispose(): void { this.trans.dispose(); }
+  dispose(): void {
+    this.trans.dispose();
+  }
 }

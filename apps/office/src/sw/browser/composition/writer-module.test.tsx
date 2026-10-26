@@ -15,16 +15,21 @@ import {
 afterEach(
   /** Runs the test callback. @returns Test callback result. */ () => vi.unstubAllGlobals(),
 );
-afterEach(() => vi.restoreAllMocks());
+afterEach(
+  /** Computes the callback result. @returns Test completion or assertion result. */ () =>
+    vi.restoreAllMocks(),
+);
 
 describe("Writer browser composition", /** Groups Writer browser composition. @returns Test callback result. */ () => {
-  it("uses browser font metrics when native RTF leading needs output-device height", () => {
+  it("uses browser font metrics when native RTF leading needs output-device height", /** Checks uses browser font metrics when native RTF leading needs output-device height. @returns Test completion or assertion result. */ () => {
     const context = {
       font: "",
-      measureText: vi.fn(() => ({
-        fontBoundingBoxAscent: 11,
-        fontBoundingBoxDescent: 5,
-      })),
+      measureText: vi.fn(
+        /** Checks uses browser font metrics when native RTF leading needs output-device height. @returns Test completion or assertion result. */ () => ({
+          fontBoundingBoxAscent: 11,
+          fontBoundingBoxDescent: 5,
+        }),
+      ),
     };
     vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
       context as unknown as CanvasRenderingContext2D,

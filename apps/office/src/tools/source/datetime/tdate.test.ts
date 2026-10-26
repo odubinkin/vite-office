@@ -1,19 +1,19 @@
 /** @fileoverview Original Date normalization QA examples and native width/BCE/boundary contracts over genuine Date values and shared comphelper algorithms. */
 import { expect, it } from "vitest";
-import { Date } from "./tdate";
 import {
-  isLeapYear,
-  getDaysInMonth,
-  isValidDate,
-  normalize,
-  yearToDays,
   convertDateToDays,
   convertDateToDaysNormalizing,
   convertDaysToDate,
+  getDaysInMonth,
+  isLeapYear,
+  isValidDate,
+  normalize,
+  yearToDays,
   type DateFields,
 } from "../../../comphelper/source/misc/date";
+import { Date } from "./tdate";
 
-it("counts source Gregorian days through the BCE boundary and Calc null date", () => {
+it("counts source Gregorian days through the BCE boundary and Calc null date", /** Checks counts source Gregorian days through the BCE boundary and Calc null date. @returns Test completion or assertion result. */ () => {
   expect(yearToDays(-2)).toBe(-731);
   expect(yearToDays(-1)).toBe(-366);
   expect(yearToDays(1)).toBe(0);

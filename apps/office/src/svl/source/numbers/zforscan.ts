@@ -1,22 +1,25 @@
 /** @fileoverview Original standard-name extraction and admitted single-General scanner state/compilation;full language/service initialization and other pattern families remain unported. */
-import localizedKeywordLanguages from "./data/keyword-localization.json" with { type: "json" };
-import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
-import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
-import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
-import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
-import { uppercase } from "../../../unotools/inc/charclass";
-import { SvNumFormatType } from "../../inc/zforlist";
-import { NfKeywordIndex } from "../../inc/nfkeytab";
-import { NfSymbolType } from "../../inc/nfsymbol";
 import {
   LANGUAGE_GERMAN,
-  LANGUAGE_GERMAN_SWISS,
   LANGUAGE_GERMAN_AUSTRIAN,
-  LANGUAGE_GERMAN_LUXEMBOURG,
   LANGUAGE_GERMAN_LIECHTENSTEIN,
+  LANGUAGE_GERMAN_LUXEMBOURG,
+  LANGUAGE_GERMAN_SWISS,
 } from "../../../i18nlangtag/inc/lang";
-import { getLoadedLocale, type LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
+import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
+import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { Date as ToolsDate, type DateConstReference } from "../../../tools/source/datetime/tdate";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { uppercase } from "../../../unotools/inc/charclass";
+import {
+  getLoadedLocale,
+  type LocaleDataWrapper,
+} from "../../../unotools/source/i18n/localedatawrapper";
+import { NfKeywordIndex } from "../../inc/nfkeytab";
+import { NfSymbolType } from "../../inc/nfsymbol";
+import { SvNumFormatType } from "../../inc/zforlist";
+import localizedKeywordLanguages from "./data/keyword-localization.json" with { type: "json" };
 import type { ImpSvNumberformatInfo } from "./zformat";
 /** Original keyword localization enum values from zforscan.hxx. */
 export const KeywordLocalization = { LocaleLegacy: 0, EnglishOnly: 1, AllowEnglish: 2 } as const;
@@ -102,7 +105,7 @@ export class ImpSvNumberformatScan {
   private resultTokenType: number = NF_KEY_GENERAL;
   private nStandardPrec = 2;
   private readonly maNullDate = new ToolsDate(30, 12, 1899);
-  /** Consumed native scanner constructor/dependent-General-keyword initialization. The caller owns prepared locale fields,as the native language-data owner does. @param locale - Borrowed actual CharClass locale. @param standardName - Actual extracted standard name from loaded locale format0. @param localization - Original selected keyword-localization field after dependent-keyword initialization. @returns Actual scanner state. */
+  /** Consumed native scanner constructor/dependent-General-keyword initialization. The caller owns prepared locale fields,as the native language-data owner does. @param locale - Borrowed actual CharClass locale. @param standardName - Actual extracted standard name from loaded locale format0. @param localization - Original selected keyword-localization field after dependent-keyword initialization. @returns Actual scanner state.  @param localeData - Locale Data. */
   constructor(
     private locale: LocaleConstReference,
     standardName: OUStringConstReference,
@@ -120,13 +123,13 @@ export class ImpSvNumberformatScan {
     loaded.dispose();
     const keyword =
       this.localization !== KeywordLocalization.EnglishOnly &&
-        [
-          LANGUAGE_GERMAN,
-          LANGUAGE_GERMAN_SWISS,
-          LANGUAGE_GERMAN_AUSTRIAN,
-          LANGUAGE_GERMAN_LUXEMBOURG,
-          LANGUAGE_GERMAN_LIECHTENSTEIN,
-        ].includes(language)
+      [
+        LANGUAGE_GERMAN,
+        LANGUAGE_GERMAN_SWISS,
+        LANGUAGE_GERMAN_AUSTRIAN,
+        LANGUAGE_GERMAN_LUXEMBOURG,
+        LANGUAGE_GERMAN_LIECHTENSTEIN,
+      ].includes(language)
         ? new OUString(Uint16Array.of(76, 79, 71, 73, 83, 67, 72), 7)
         : new OUString(Uint16Array.of(66, 79, 79, 76, 69, 65, 78), 7);
     try {
@@ -246,7 +249,9 @@ export class ImpSvNumberformatScan {
         )
           foundEnglish = true;
         else
-          throw new Error("Number-format patterns other than single General, BOOLEAN or @ are not implemented");
+          throw new Error(
+            "Number-format patterns other than single General, BOOLEAN or @ are not implemented",
+          );
       }
       if (this.eScannedType === SvNumFormatType.UNDEFINED) {
         // Symbol_Division uses original case for a locale keyword and the locale name for an English match.

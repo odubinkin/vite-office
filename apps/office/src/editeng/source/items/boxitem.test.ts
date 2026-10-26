@@ -1,6 +1,6 @@
 /** @fileoverview Verifies represented native line/box/info contracts with independent numeric expectations. */
-import { Color, ColorTransparency } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
+import { Color, ColorTransparency } from "../../../tools/inc/color";
 import {
   ConvertBorderWidthFromWord,
   ConvertBorderWidthToWord,
@@ -9,13 +9,13 @@ import {
   roundBorderMetric,
 } from "./borderline";
 import {
-  SvxBoxItem,
-  SvxBoxItemLine,
   SvxBoxInfoItem,
   SvxBoxInfoItemLine,
   SvxBoxInfoItemValidFlags,
+  SvxBoxItem,
+  SvxBoxItemLine,
+  SvxSizeItem,
 } from "./frmitems";
-import { SvxSizeItem } from "./frmitems";
 
 /** Observes all published native fields at the existing browser-record assertions and inputs. @param line - Optional native border. @param convert - Convert to mm100. @returns The complete existing six-field browser record. */
 function lineRecord(line: SvxBorderLine | undefined, convert = false) {
@@ -202,7 +202,7 @@ it("owns native line state, replaces metric scale and preserves custom doubles",
   expect(roundBorderMetric(1, 0.5)).toBe(1);
   expect(new SvxBorderLine(new Color(0), 65535).GetScaledWidth()).toBe(65535);
 });
-it("uses source Word border-width conversions including double and hairline behavior", () => {
+it("uses source Word border-width conversions including double and hairline behavior", /** Checks uses source Word border-width conversions including double and hairline behavior. @returns Test completion or assertion result. */ () => {
   expect(ConvertBorderWidthToWord(SvxBorderLineStyle.SOLID, 30)).toBe(30);
   expect(ConvertBorderWidthToWord(SvxBorderLineStyle.DOUBLE, 45)).toBe(15);
   expect(ConvertBorderWidthToWord(SvxBorderLineStyle.THINTHICK_LARGEGAP, 60)).toBe(15);

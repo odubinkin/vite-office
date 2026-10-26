@@ -6,7 +6,7 @@ import {
 } from "../inc/rtl/textcvt.h";
 import { ImplSymbolToUnicode, ImplUnicodeToSymbol } from "./tcvtbyte";
 
-it("maps Symbol controls directly and printable bytes to private use", () => {
+it("maps Symbol controls directly and printable bytes to private use", /** Checks maps Symbol controls directly and printable bytes to private use. @returns Test completion or assertion result. */ () => {
   const output = new Uint16Array(4);
   const info: [number] = [123];
   const consumed: [number] = [123];
@@ -27,7 +27,7 @@ it("maps Symbol controls directly and printable bytes to private use", () => {
   expect([...output]).toEqual([0, 0x1f, 0xf020, 0xf0ff]);
 });
 
-it("stops Symbol conversion at destination capacity before consuming source", () => {
+it("stops Symbol conversion at destination capacity before consuming source", /** Checks stops Symbol conversion at destination capacity before consuming source. @returns Test completion or assertion result. */ () => {
   const output = new Uint16Array(1);
   const info: [number] = [0];
   const consumed: [number] = [0];
@@ -38,7 +38,7 @@ it("stops Symbol conversion at destination capacity before consuming source", ()
   expect(info[0]).toBe(RTL_TEXTTOUNICODE_INFO_ERROR | RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL);
 });
 
-it("reverses Symbol private-use units and accepted low-byte aliases", () => {
+it("reverses Symbol private-use units and accepted low-byte aliases", /** Checks reverses Symbol private-use units and accepted low-byte aliases. @returns Test completion or assertion result. */ () => {
   const output = new Uint8Array(3);
   const info: [number] = [5];
   const consumed: [number] = [5];

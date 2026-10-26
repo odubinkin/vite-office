@@ -1,50 +1,49 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
-import type { SwDoc } from "../../core/doc/doc";
-import { getWriterNumFormatKind } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
-import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
-import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import {
   ConvertBorderWidthToWord,
   type SvxBorderLine,
 } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
-import { SwTableNode } from "../../core/docnode/node";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
-import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import type { WriterTextRun } from "../basflt/writer-transfer";
-import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
-import { RtfAttributeOutput } from "./rtfattributeoutput";
-import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import { RES_PARATR_TABSTOP } from "../../../inc/hintids";
-import { RES_PAGEDESC } from "../../../inc/hintids";
-import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import type { SwPageDesc } from "../../core/layout/pagedesc";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
   COL_BLACK,
+  COL_BLUE,
+  COL_BROWN,
+  COL_CYAN,
+  COL_GRAY,
+  COL_GREEN,
   COL_LIGHTBLUE,
   COL_LIGHTCYAN,
+  COL_LIGHTGRAY,
   COL_LIGHTGREEN,
   COL_LIGHTMAGENTA,
   COL_LIGHTRED,
-  COL_YELLOW,
-  COL_WHITE,
-  COL_BLUE,
-  COL_CYAN,
-  COL_GREEN,
   COL_MAGENTA,
   COL_RED,
-  COL_BROWN,
-  COL_GRAY,
-  COL_LIGHTGRAY,
+  COL_WHITE,
+  COL_YELLOW,
   type Color,
 } from "../../../../tools/inc/color";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { RES_PAGEDESC, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import type { SwDoc } from "../../core/doc/doc";
+import { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { getWriterNumFormatKind } from "../../core/doc/number";
+import { SwTableNode } from "../../core/docnode/node";
+import type { SwPageDesc } from "../../core/layout/pagedesc";
+import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import type { WriterTextRun } from "../basflt/writer-transfer";
+import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { MSWordStyles } from "./wrtw8sty";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
@@ -70,8 +69,11 @@ const RTF_DEFAULT_COLORS = [
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport {
   private readonly attributeOutput = new RtfAttributeOutput(
-    (family) => this.IndexFont(family),
-    (color) => this.IndexColor(color),
+    /** Computes the family result. @param family - Family. @returns The computed result. */ (
+      family,
+    ) => this.IndexFont(family),
+    /** Computes the color result. @param color - Color. @returns The computed result. */ (color) =>
+      this.IndexColor(color),
   );
   private readonly fonts = new Map<string, number>();
   private readonly colors = new Map<string, number>();
@@ -253,8 +255,15 @@ export class RtfExport {
             [SvxBoxItemLine.RIGHT, "trpaddfr", "trpaddr"],
           ] as const)
             output += `\\${unitControl}3\\${valueControl}${tableBox.GetDistance(edge)}`;
-          const nativeWidths = boxes.map((box) => box.GetFrameSize().GetWidth());
-          const hasNativeWidths = nativeWidths.every((width) => width > 0);
+          const nativeWidths = boxes.map(
+            /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
+              box.GetFrameSize().GetWidth(),
+          );
+          const hasNativeWidths = nativeWidths.every(
+            /** Computes the width result. @param width - Width. @returns The computed result. */ (
+              width,
+            ) => width > 0,
+          );
           const tableSize = tableFormat.GetFrameSize();
           const tableWidth = tableSize.GetWidth();
           // GetTablePageSize supplies SwWriteTable's target width; its base is
@@ -325,7 +334,7 @@ export class RtfExport {
     return new TextEncoder().encode(output);
   }
 
-  /** Emits the first native page descriptor as global paper and first-section controls. */
+  /** Emits the first native page descriptor as global paper and first-section controls.  @param document - Document. @param firstBlock - First Block. @returns The string result. */
   private WriteInitialPageDescription(
     document: SwDoc,
     firstBlock: SwTextNode | SwTableNode | undefined,
@@ -350,7 +359,7 @@ export class RtfExport {
     return output;
   }
 
-  /** Mirrors OutPageDescription for the currently represented physical page fields. */
+  /** Mirrors OutPageDescription for the currently represented physical page fields.  @param page - Page. @param titlePage - Title Page. @returns The string result. */
   private WriteSectionPageDescription(page: SwPageDesc, titlePage = true): string {
     const follow = page.GetFollow();
     const value = titlePage ? follow.GetValue() : page.GetValue();
@@ -365,14 +374,14 @@ export class RtfExport {
     return output;
   }
 
-  /** Projects the represented physical tests in IsPlausableSingleWordSection. */
+  /** Projects the represented physical tests in IsPlausableSingleWordSection.  @param page - Page. @returns The boolean result. */
   private IsSingleWordSectionPageChain(page: SwPageDesc): boolean {
     const follow = page.GetFollow();
     if (follow === page || follow.GetFollow() !== follow) return false;
     return this.IsPlausibleSingleWordSection(page, follow);
   }
 
-  /** Projects the physical fields tested by the pinned section plausibility helper. */
+  /** Projects the physical fields tested by the pinned section plausibility helper.  @param page - Page. @param follow - Follow. @returns The boolean result. */
   private IsPlausibleSingleWordSection(page: SwPageDesc, follow: SwPageDesc): boolean {
     const first = page.GetValue(),
       next = follow.GetValue();
@@ -386,7 +395,7 @@ export class RtfExport {
     );
   }
 
-  /** Emits section properties through the shared later-page path. */
+  /** Emits section properties through the shared later-page path.  @param page - Page. @param restart - Restart. @returns The { output: string; currentPage: SwPageDesc } result. */
   private WriteLaterSection(
     page: SwPageDesc,
     restart?: number,
@@ -401,7 +410,7 @@ export class RtfExport {
     return { output, currentPage };
   }
 
-  /** Splits a native text node only for a real follow-style section transition. */
+  /** Splits a native text node only for a real follow-style section transition.  @param document - Document. @param paragraph - Paragraph. @param currentPage - Current Page. @param previousPageDesc - Previous Page Desc. @returns The { output: string; currentPage: SwPageDesc } result. */
   private WriteTextNode(
     document: SwDoc,
     paragraph: SwTextNode,
@@ -413,11 +422,28 @@ export class RtfExport {
         document
           .GetIDocumentMarkAccess()
           .GetSoftPageBreaks()
-          .filter((position) => position.GetNode() === paragraph)
-          .map((position) => position.GetContentIndex())
-          .filter((offset) => offset > 0 && offset < paragraph.GetText().length),
+          .filter(
+            /** Computes the position result. @param position - Position. @returns The computed result. */ (
+              position,
+            ) => position.GetNode() === paragraph,
+          )
+          .map(
+            /** Computes the position result. @param position - Position. @returns The computed result. */ (
+              position,
+            ) => position.GetContentIndex(),
+          )
+          .filter(
+            /** Computes the offset result. @param offset - Offset. @returns The computed result. */ (
+              offset,
+            ) => offset > 0 && offset < paragraph.GetText().length,
+          ),
       ),
-    ].sort((a, b) => a - b);
+    ].sort(
+      /** Computes the a result. @param a - A. @param b - B. @returns The computed result. */ (
+        a,
+        b,
+      ) => a - b,
+    );
     const follow = currentPage.GetFollow();
     if (
       positions.length === 0 ||
@@ -440,7 +466,7 @@ export class RtfExport {
     return { output, currentPage };
   }
 
-  /** Reads the item set selected by upstream GetSwAttrSet for the initial page. */
+  /** Reads the item set selected by upstream GetSwAttrSet for the initial page.  @param block - Block. @returns The SwFormatPageDesc | undefined result. */
   private GetPageDescriptionItem(block: SwTextNode | SwTableNode): SwFormatPageDesc | undefined {
     const set =
       block instanceof SwTableNode
@@ -449,7 +475,7 @@ export class RtfExport {
     return set.Get(RES_PAGEDESC) as SwFormatPageDesc;
   }
 
-  /** Reads only a block's authored item, as OutputSectionBreaks receives GetpSwAttrSet. */
+  /** Reads only a block's authored item, as OutputSectionBreaks receives GetpSwAttrSet.  @param block - Block. @returns The SwFormatPageDesc | undefined result. */
   private GetDirectPageDescriptionItem(
     block: SwTextNode | SwTableNode,
   ): SwFormatPageDesc | undefined {
@@ -460,7 +486,7 @@ export class RtfExport {
     return set?.GetItemIfSet(RES_PAGEDESC, false) as SwFormatPageDesc | undefined;
   }
 
-  /** Resolves the first layout descriptor through the represented document page table. */
+  /** Resolves the first layout descriptor through the represented document page table.  @param document - Document. @param block - Block. @returns The SwPageDesc result. */
   private ResolvePageDescription(
     document: SwDoc,
     block: SwTextNode | SwTableNode | undefined,
@@ -472,7 +498,7 @@ export class RtfExport {
     );
   }
 
-  /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body. */
+  /** Serializes one paragraph's represented properties and text runs. @param paragraph - Native paragraph. @returns RTF body.  @param start - Start. @param end - End. */
   private WriteParagraph(
     paragraph: SwTextNode,
     start = 0,
@@ -500,18 +526,24 @@ export class RtfExport {
       .GetDoc()
       .GetIDocumentMarkAccess()
       .GetBookmarks()
-      .filter((mark) => {
-        if (mark.GetMarkPos().GetNode() !== paragraph) return false;
-        const offset = mark.GetMarkPos().GetContentIndex();
-        return (
-          offset >= start &&
-          (offset < end || (offset === end && end === paragraph.GetText().length))
-        );
-      });
+      .filter(
+        /** Computes the mark result. @param mark - Mark. @returns The computed result. */ (
+          mark,
+        ) => {
+          if (mark.GetMarkPos().GetNode() !== paragraph) return false;
+          const offset = mark.GetMarkPos().GetContentIndex();
+          return (
+            offset >= start &&
+            (offset < end || (offset === end && end === paragraph.GetText().length))
+          );
+        },
+      );
     let offset = 0;
     let markIndex = 0;
     let activeLink: WriterHyperlink | undefined;
-    const writeRun = (run: WriterTextRun): void => {
+    const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
+      run: WriterTextRun,
+    ): void => {
       if (run.text.length === 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
         if (activeLink !== undefined) output += "}}";
@@ -545,12 +577,12 @@ export class RtfExport {
     return output;
   }
 
-  /** Emits one Writer point mark at its source text offset. */
+  /** Emits one Writer point mark at its source text offset.  @param name - Name. @returns The string result. */
   private WriteBookmark(name: string): string {
     return `{\\*\\bkmkstart ${escapeRtf(name)}}{\\*\\bkmkend ${escapeRtf(name)}}`;
   }
 
-  /** Begins one hyperlink field around its complete native text-hint range. */
+  /** Begins one hyperlink field around its complete native text-hint range.  @param hyperlink - Hyperlink. @returns The string result. */
   private StartURL(hyperlink: WriterHyperlink): string {
     const url = escapeRtf(hyperlink.url.replaceAll("\\", "\\\\"));
     const target =
@@ -558,14 +590,14 @@ export class RtfExport {
     return `{\\field{\\*\\fldinst HYPERLINK "${url}"${target} }{\\fldrslt `;
   }
 
-  /** Emits one native text run without crossing a bookmark position. */
+  /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
   private WriteRun(run: WriterTextRun): string {
     if (run.text.length === 0) return "";
     const controls = this.attributeOutput.WriteCharacter(run.attributes);
     return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
 
-  /** Emits one native cell edge using the source RTF border style and width mapping. */
+  /** Emits one native cell edge using the source RTF border style and width mapping.  @param control - Control. @param line - Line. @returns The string result. */
   private WriteCellBorder(control: string, line: SvxBorderLine | undefined): string {
     if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
     const style = line.GetBorderLineStyle();
@@ -596,19 +628,23 @@ export class RtfExport {
   }
 }
 
-/** Converts the source Color channels to the existing RTF color-table key. */
+/** Converts the source Color channels to the existing RTF color-table key.  @param line - Line. @returns The string result. */
 function borderColor(line: SvxBorderLine): string {
   return rtfColorKey(line.GetColor());
 }
 
-/** Uses source RGB channels as the RTF table key; alpha has no RTF color-table field. */
+/** Uses source RGB channels as the RTF table key; alpha has no RTF color-table field.  @param color - Color. @returns The string result. */
 function rtfColorKey(color: Readonly<Color>): string {
   return `#${[color.GetRed(), color.GetGreen(), color.GetBlue()]
-    .map((channel) => channel.toString(16).padStart(2, "0"))
+    .map(
+      /** Computes the channel result. @param channel - Channel. @returns The computed result. */ (
+        channel,
+      ) => channel.toString(16).padStart(2, "0"),
+    )
     .join("")}`;
 }
 
-/** Maps native cell-line styles exactly as OutTBLBorderLine. */
+/** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
 function rtfBorderStyle(style: BorderLineStyle, width: number): string {
   switch (style) {
     case BorderLineStyle.SOLID:
@@ -665,7 +701,7 @@ function escapeRtf(value: string): string {
   return result;
 }
 
-/** Maps native numbering types to RTF levelnfc, retaining the source Arabic fallback. */
+/** Maps native numbering types to RTF levelnfc, retaining the source Arabic fallback.  @param type - Type. @returns The number result. */
 function toRtfNfc(type: SvxNumType): number {
   switch (type) {
     case SvxNumType.SVX_NUM_ROMAN_UPPER:

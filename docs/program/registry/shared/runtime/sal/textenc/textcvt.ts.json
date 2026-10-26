@@ -23,7 +23,7 @@
         "apps/office/src/sal/rtl/ustring-convert.test.ts",
         "vendor/libreoffice-reference/sal/textenc/textcvt.cxx"
       ],
-      "justification": "Pinned SAL missing-converter fallback retains byte-to-U+00xx output and native error/capacity flags. The full converter lifecycle and Unicode-to-text reverse path are outside the current RTF import path. Compiled upstream differential remains unverified. The default missing-converter fallback is ported for CSV; original flag, capacity and converter-factory contracts remain pending.",
+      "justification": "Both pinned sal/textenc/textcvt.cxx fallback procedures preserve the original buffer, source span, output capacity, flags, status and consumed-counter contracts. Writer and Calc consume the same original signatures; no convenience overload is added. Focused tests cover unsigned byte widening, low-byte truncation, both early error masks, destination exhaustion, explicit spans and empty input. Full rtl converter lifecycle and compiled upstream differential remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplDummyToUnicode",

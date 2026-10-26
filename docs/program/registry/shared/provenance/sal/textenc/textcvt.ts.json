@@ -15,12 +15,10 @@
       "ImplUnicodeToDummy"
     ],
     "preservedResponsibilities": [
-      "Pinned SAL fallback for missing text-to-Unicode converters: byte-to-U+00xx output, early undefined-error flags, and destination capacity/consumption semantics.",
-      "For the default OString/OUString conversion flags, a missing converter copies each source byte to UTF-16 or truncates each UTF-16 unit to its low byte without throwing."
+      "Both original missing-converter fallbacks preserve native buffer, explicit source span, output capacity, conversion flags, status-cell and consumed-counter contracts. Byte-to-UTF16 conversion zero-extends unsigned bytes; reverse conversion retains each UTF16 unit low byte. Early undefined-error paths preserve prior status bits and leave consumed counters untouched."
     ],
     "omittedResponsibilities": [
-      "The Unicode-to-text dummy conversion and the full rtl converter lifecycle are outside the current Writer RTF import path.",
-      "Flag-specific error branches, destination-capacity/status cells, converter factories and all multibyte/contextual converter procedures remain unported."
+      "Full rtl converter factory, lifecycle and context dispatch remain outside this fallback owner. Compiled upstream differential verification remains pending."
     ],
     "evidence": {
       "local": [
@@ -35,6 +33,10 @@
         {
           "path": "apps/office/src/sal/textenc/textcvt.ts",
           "marker": "ImplUnicodeToDummy"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.test.ts",
+          "marker": "retains reverse early-error status"
         }
       ],
       "upstream": [

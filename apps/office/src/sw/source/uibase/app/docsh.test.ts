@@ -1,15 +1,15 @@
 /** @fileoverview Verifies Writer document-shell lifecycle and persistence failures. */
 import { describe, expect, it, vi } from "vitest";
+import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import type { DefaultFontDevice } from "../../core/doc/default-font";
 import { createWriterDocument, SwDoc } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
-import type { DefaultFontDevice } from "../../core/doc/default-font";
-import { RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
-import { SvxFontItem } from "../../../../editeng/source/items/textitem";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 import {
-  createOdtFilterDocument,
   createInlineOdtFilterService,
+  createOdtFilterDocument,
   type OdtFilterService,
 } from "../../filter/xml/odt-filter-service";
 import { SwDocShell } from "./docsh";
@@ -33,8 +33,14 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
       source: { kind: "external" as const, reference: {} },
     };
     try {
-      expect(() => shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium)).toThrow();
-      expect(() => shell.OpenMarkdown(new Uint8Array(), metadata, medium)).toThrow();
+      expect(
+        /** Checks opens Markdown atomically through the native reader. @returns Test completion or assertion result. */ () =>
+          shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium),
+      ).toThrow();
+      expect(
+        /** Checks opens Markdown atomically through the native reader. @returns Test completion or assertion result. */ () =>
+          shell.OpenMarkdown(new Uint8Array(), metadata, medium),
+      ).toThrow();
       expect(shell.GetDoc()).toBe(original);
       const loaded = shell.OpenMarkdown(new TextEncoder().encode("# Imported"), metadata, medium);
       expect(loaded.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
@@ -46,7 +52,7 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
       shell.Close();
     }
   });
-  it("passes a URL-backed Markdown medium to native hyperlink resolution", () => {
+  it("passes a URL-backed Markdown medium to native hyperlink resolution", /** Checks passes a URL-backed Markdown medium to native hyperlink resolution. @returns Test completion or assertion result. */ () => {
     const shell = makeShell();
     try {
       const document = shell.OpenMarkdown(
@@ -78,8 +84,9 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
       source: { kind: "external" as const, reference: {} },
     };
     try {
-      expect(() =>
-        shell.OpenRtf(new TextEncoder().encode("{\\rtf1 broken"), metadata, medium),
+      expect(
+        /** Checks opens valid RTF atomically and preserves the old graph on malformed input. @returns Test completion or assertion result. */ () =>
+          shell.OpenRtf(new TextEncoder().encode("{\\rtf1 broken"), metadata, medium),
       ).toThrow();
       expect(shell.GetDoc()).toBe(original);
       const loaded = shell.OpenRtf(

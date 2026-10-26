@@ -10,7 +10,7 @@ interface SeparatorStats {
   distinctCounts: number;
 }
 
-/** Source OUString::startsWithIgnoreAsciiCase for the fixed sep= prefix. */
+/** Source OUString::startsWithIgnoreAsciiCase for the fixed sep= prefix.  @param line - Line. @param quoted - Quoted. @returns The boolean result. */
 function startsWithSepHeader(line: string, quoted: boolean): boolean {
   const prefix = quoted ? '"sep=' : "sep=";
   for (let index = 0; index < prefix.length; index++) {
@@ -21,7 +21,7 @@ function startsWithSepHeader(line: string, quoted: boolean): boolean {
   return true;
 }
 
-/** The source's line-count and count-variance selection, including sep= and quoted text. */
+/** The source's line-count and count-variance selection, including sep= and quoted text.  @param stream - Stream. @param encoding - Encoding. @param delimiter - Delimiter. @returns The string result. */
 export function DetectCsvSeparators(
   stream: SvStream,
   encoding: rtl_TextEncoding,
@@ -71,7 +71,13 @@ export function DetectCsvSeparators(
       if (!current) stats.set(character, { lines: 1, distinctCounts: 1 });
       else {
         current.lines++;
-        if (!previousLines.some((lineCounts) => lineCounts.get(character) === count))
+        if (
+          !previousLines.some(
+            /** Computes the line Counts result. @param lineCounts - Line Counts. @returns The computed result. */ (
+              lineCounts,
+            ) => lineCounts.get(character) === count,
+          )
+        )
           current.distinctCounts++;
       }
       maxLinesWithChar = Math.max(maxLinesWithChar, stats.get(character)?.lines ?? 0);

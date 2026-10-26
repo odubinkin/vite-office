@@ -1,38 +1,38 @@
 /** @fileoverview ScDocumentImport block-position writes and post-import formula/text-attribute initialization. */
-import type { ScDocument } from "../../../inc/document";
-import { ValidTab, type ScAddress } from "../../../inc/address";
-import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
+import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
+import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
 import type { Grammar } from "../../../../formula/inc/grammar";
-import { ScFormulaCell } from "../../../inc/formulacell";
+import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { ValidTab, type ScAddress } from "../../../inc/address";
+import { CellTextAttr } from "../../../inc/celltextattr";
 import type { ScColumn } from "../../../inc/column";
+import type { ScDocument } from "../../../inc/document";
+import { ScFormulaCell } from "../../../inc/formulacell";
+import { StartListeningContext } from "../../../inc/listenercontext";
 import {
-  TableColumnBlockPositionSet,
   CellTextAttrStoreType,
+  TableColumnBlockPositionSet,
   celltextattr_block,
   celltextattr_element_callbacks,
+  edittext_element_callbacks,
+  element_type_empty,
+  element_type_formula,
+  element_type_numeric,
   formula_block,
   formula_element_callbacks,
   string_element_callbacks,
-  element_type_empty,
-  element_type_numeric,
-  element_type_formula,
-  edittext_element_callbacks,
   type ColumnBlockPosition,
 } from "../../../inc/mtvelements";
-import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
-import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
-import { CellTextAttr } from "../../../inc/celltextattr";
-import { StartListeningContext } from "../../../inc/listenercontext";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
-import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import type { EditTextObject } from "../../../../editeng/inc/editobj";
 
 /** Original represented ScDocumentImportImpl cache and listening state. */
 class ScDocumentImportImpl {
   readonly listenContext: StartListeningContext;
   readonly blockPositions: TableColumnBlockPositionSet[] = [];
   defaultScriptNumeric: SvtScriptType = SvtScriptType.UNKNOWN;
-  /** Binds the actual import document. @param document - Document. */
+  /** Binds the actual import document. @param document - Document.  @returns Constructed instance. */
   constructor(readonly document: ScDocument) {
     this.listenContext = new StartListeningContext(document);
   }

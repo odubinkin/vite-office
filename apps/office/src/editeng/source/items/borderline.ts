@@ -10,7 +10,7 @@ export function roundBorderMetric(value: number, scale: number): number {
   return product < 0 ? -Math.floor(-product + 0.5) : Math.floor(product + 0.5);
 }
 
-/** Converts native twip width to the Word/RTF line-width contract from editeng borderline.cxx. */
+/** Converts native twip width to the Word/RTF line-width contract from editeng borderline.cxx.  @param style - Style. @param width - Width. @returns The number result. */
 export function ConvertBorderWidthToWord(style: BorderLineStyle, width: number): number {
   if (width === 0) return 0;
   switch (style) {
@@ -45,7 +45,7 @@ export function ConvertBorderWidthToWord(style: BorderLineStyle, width: number):
   }
 }
 
-/** Reconstructs a native twip width from Word/RTF border width and line style. */
+/** Reconstructs a native twip width from Word/RTF border width and line style.  @param style - Style. @param wordWidth - Word Width. @param wordLineStyle - Word Line Style. @returns The number result. */
 export function ConvertBorderWidthFromWord(
   style: BorderLineStyle,
   wordWidth: number,

@@ -1,7 +1,5 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
-import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
-import { TransColToIco } from "../../../../filter/source/msfilter/util";
-import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   DFLT_ESC_AUTO_SUB,
   DFLT_ESC_AUTO_SUPER,
@@ -9,46 +7,48 @@ import {
   DFLT_ESC_SUB,
   DFLT_ESC_SUPER,
 } from "../../../../editeng/inc/escapementitem";
-import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import type { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
-import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
   SvxAdjust,
   SvxInterLineSpaceRule,
   SvxLineSpaceRule,
 } from "../../../../editeng/inc/svxenum";
+import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
 import { LATIN } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import type { SwAttrSet } from "../../core/attr/swatrset";
-import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
-import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import {
-  SvxFirstLineIndentItem,
-  SvxRightMarginItem,
-  SvxTextLeftMarginItem,
-} from "../../../../editeng/inc/lrspitem";
+import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   RES_BREAK,
+  RES_KEEP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
   RES_PARATR_ADJUST,
-  RES_UL_SPACE,
-  RES_KEEP,
-  RES_PARATR_SPLIT,
-  RES_PARATR_WIDOWS,
-  RES_PARATR_TABSTOP,
   RES_PARATR_LINESPACING,
+  RES_PARATR_SPLIT,
+  RES_PARATR_TABSTOP,
+  RES_PARATR_WIDOWS,
+  RES_UL_SPACE,
 } from "../../../inc/hintids";
+import type { SwAttrSet } from "../../core/attr/swatrset";
+import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
+import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput {
-  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup. */
+  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup.  @returns Constructed instance. */
   public constructor(
     private readonly fontIndex: (family: string) => number,
     private readonly colorIndex: (color: string) => number,
@@ -83,7 +83,7 @@ export class RtfAttributeOutput {
     );
   }
 
-  /** Emits effective paragraph values for one named Writer style definition. */
+  /** Emits effective paragraph values for one named Writer style definition.  @param style - Style. @returns The string result. */
   public WriteStyleParagraphProperties(style: SwTextFormatColl): string {
     const items = style.GetAttrSet();
     return this.WriteParagraphValues(
@@ -105,7 +105,7 @@ export class RtfAttributeOutput {
     );
   }
 
-  /** Emits adjustment and margins shared by paragraph and stylesheet paths. */
+  /** Emits adjustment and margins shared by paragraph and stylesheet paths.  @param adjust - Adjust. @param left - Left. @param right - Right. @param firstLine - First Line. @param spacing - Spacing. @param keep - Keep. @param split - Split. @param widows - Widows. @param tabs - Tabs. @param tabOffset - Tab Offset. @param breakValue - Break Value. @param styleDefinition - Style Definition. @param lineSpacing - Line Spacing. @returns The string result. */
   private WriteParagraphValues(
     adjust: SvxAdjustItem,
     left: number,
@@ -164,7 +164,7 @@ export class RtfAttributeOutput {
     return output;
   }
 
-  /** Converts the native line rule through the shared Word formula and RTF sl/slmult controls. */
+  /** Converts the native line rule through the shared Word formula and RTF sl/slmult controls.  @param item - Item. @param set - Set. @param script - Script. @returns The string result. */
   private WriteLineSpacing(item: SvxLineSpacingItem, set: SwAttrSet, script: number): string {
     let space = 240;
     let multi = 0;

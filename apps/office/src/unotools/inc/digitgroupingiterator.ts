@@ -11,7 +11,7 @@ export class DigitGroupingIterator {
   private group = 0;
   private digits = 3;
   private nextPos = 0;
-  /** Copies the original grouping sequence as the C++ value member does. @param groupings - Borrowed grouping values. */
+  /** Copies the original grouping sequence as the C++ value member does. @param groupings - Borrowed grouping values.  @returns Constructed instance. */
   constructor(groupings: Sequence<[number]>) {
     this.groupings = new Integers(groupings);
     this.reset();

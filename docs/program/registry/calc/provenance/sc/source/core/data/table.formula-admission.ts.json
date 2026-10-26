@@ -1,0 +1,205 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/table2.cxx",
+    "localSymbols": [
+      "SetFormulaCell",
+      "GetErrCode",
+      "GetFormulaCell",
+      "SetFormula",
+      "SetAllFormulasDirty"
+    ],
+    "upstreamSymbols": [
+      "ScTable::SetValue",
+      "ScTable::GetValue",
+      "ScTable::SetRawString",
+      "ScTable::GetCellType",
+      "ScTable::CopyFromClip",
+      "ScTable::SetDirtyFromClip",
+      "ScTable::BroadcastBroadcasters",
+      "ScTable::AddCondFormatData",
+      "ScTable::RemoveCondFormatData",
+      "ScTable::UndoToTable",
+      "ScTable::ApplyFlags",
+      "ScTable::RemoveFlags",
+      "ScTable::ApplyPatternIfNumberformatIncompatible"
+    ],
+    "preservedResponsibilities": [
+      "Source decomposition of sc/source/core/data/table.ts: SetFormulaCell. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+    ],
+    "omittedResponsibilities": [
+      "This fragment does not certify full upstream parity or compiled differential behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+          "marker": "SetFormulaCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+          "marker": "GetErrCode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+          "marker": "GetFormulaCell"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+          "marker": "SetFormula"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+          "marker": "SetAllFormulasDirty"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::SetName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::SetValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/mtvelements.hxx",
+          "marker": "CellStoreTraits"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+          "marker": "ClampToAllocatedColumns"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::MergeSelectionPattern"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::GetFirstDataPos"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx",
+          "marker": "ScDocument::GetBreakIterator"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetDataArea"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/address.hxx",
+          "marker": "INITIALCOLCOUNT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::FetchColumn"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
+          "marker": "ScTable::RegroupFormulaCells"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::DeleteBroadcasters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::SetFormulaCell"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+          "marker": "DeleteBeforeCopyFromClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::CopyFromClip"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "InitUndoSelected"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "DeleteEmptyBroadcasters"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::GetCondFormList"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/conditio.cxx",
+          "marker": "ScConditionalFormatList::UpdateReference"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::AddCondFormatData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::RemoveCondFormatData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::UndoToTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table5.cxx",
+          "marker": "ScTable::HasRowManualBreak"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table1.cxx",
+          "marker": "ScTable::SetStreamValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::InvalidatePageBreaks"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+          "marker": "IsStreamValid() const"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table7.cxx",
+          "marker": "ScTable::IsMerged"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::ApplyAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::HasBlockMatrixFragment"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::IsBlockEditable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/table.hxx",
+          "marker": "IsColValid"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::ApplyFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::RemoveFlags"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::ApplyPatternIfNumberformatIncompatible"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

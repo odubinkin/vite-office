@@ -1,13 +1,14 @@
 /** @fileoverview Checks ordinary paragraph style reset, exact hint preservation, native repeated history and ODT export in real desktop/mobile UI. */
-import { pickWriterStyle } from "./writer-style-box";
 import { expect, test, type Locator } from "@playwright/test";
-import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
-import { createDocument } from "../src/sfx2/source/doc/objsh";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import { SvxFirstLineIndentItem } from "../src/editeng/source/items/frmitems";
+import { createDocument } from "../src/sfx2/source/doc/objsh";
+import { RES_MARGIN_FIRSTLINE } from "../src/sw/inc/hintids";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
-import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { readOdtDocument } from "../src/sw/source/filter/xml/swxml";
+import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
+import { pickWriterStyle } from "./writer-style-box";
 
 /** Requires a real native ODT fixture owner. @param value - Optional value. @returns Present value. */
 function required<T>(value: T | undefined): T {
@@ -22,15 +23,15 @@ function resetOdt(): Uint8Array {
   before.SetText("BeforeResetNeighbor");
   const a = doc.MakeTextFormatColl("Reset style A", doc.GetDfltTextFormatColl(), "ResetA"),
     b = doc.MakeTextFormatColl("Reset style B", doc.GetDfltTextFormatColl(), "ResetB");
-  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
-  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), 92));
+  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), RES_MARGIN_FIRSTLINE));
+  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), RES_MARGIN_FIRSTLINE));
   const whole = doc.GetNodes().MakeTextNode("WholeResetProof"),
     empty = doc.GetNodes().MakeTextNode(""),
     partial = doc.GetNodes().MakeTextNode("PartialResetProof"),
     link = doc.GetNodes().MakeTextNode("LinkResetProof");
   for (const node of [whole, empty, partial, link]) {
     node.ChgFormatColl(a);
-    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+    node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
   }
   whole.ToggleTextRangeFormat(0, whole.Len(), "bold");
   partial.ToggleTextRangeFormat(2, 7, "bold");

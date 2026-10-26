@@ -1,45 +1,14 @@
 /** @fileoverview Bounded ScDocShell lifecycle,ODS filter and shared Sfx history ownership. Browser primary media use existing Sfx acknowledgement/generation contracts;native drawing/formatting services remain unported. */
-import type { XmlPackage } from "../../../../svl/source/misc/storage";
-import {
-  createInlineOdsFilterService,
-  type OdsFilterService,
-} from "../../filter/xml/ods-filter-service";
-import { ScDocFunc } from "./docfunc";
-import {
-  SfxObjectShell,
-  createDocument,
-  type SfxObjectShellState,
-} from "../../../../sfx2/source/doc/objsh";
-import {
-  acquireSfxMedium,
-  type SfxMedium,
-  type SfxMediumInput,
-  type SfxMediumOperation,
-  type SfxMediumOperationState,
-} from "../../../../sfx2/source/doc/docfile";
-import { SfxUndoManager } from "../../../../svl/source/undo/undo";
-import { SfxListener } from "../../../../svl/source/notify/lstner";
-import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
-import { CellType, ScGlobal } from "../../../inc/global";
-import { ScCellFormat } from "../../core/tool/cellform";
-import { FormulaError } from "../../../../formula/inc/errorcodes";
-import { ScHorizontalCellIterator } from "../../core/data/dociter";
-import { ScImportExport } from "./impex";
-import { ScAsciiOptions } from "../dbgui/asciiopt";
-import { ScImportOptions } from "../dbgui/imoptdlg";
-import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
-import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
 import { SvxHorJustifyItem } from "../../../../editeng/inc/justifyitem";
+import { SvxCellHorJustify } from "../../../../editeng/inc/svxenum";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_DONTKNOW,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
 } from "../../../../sal/inc/rtl/textenc";
-import { SvStream } from "../../../../tools/source/stream/stream";
 import { OStringToOUString, OUStringToOString } from "../../../../sal/rtl/ustring-convert";
 import {
   rtl_getTextEncodingInfo,
@@ -47,8 +16,38 @@ import {
   RTL_TEXTENCODING_INFO_CONTEXT,
   type rtl_TextEncodingInfo,
 } from "../../../../sal/textenc/tencinfo";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { writeOdsDocument, ODS_MIMETYPE, type OdsImportOptions } from "../../filter/xml/xmlwrap";
+import {
+  acquireSfxMedium,
+  type SfxMedium,
+  type SfxMediumInput,
+  type SfxMediumOperation,
+  type SfxMediumOperationState,
+} from "../../../../sfx2/source/doc/docfile";
+import {
+  createDocument,
+  SfxObjectShell,
+  type SfxObjectShellState,
+} from "../../../../sfx2/source/doc/objsh";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
+import type { XmlPackage } from "../../../../svl/source/misc/storage";
+import { SfxListener } from "../../../../svl/source/notify/lstner";
+import { SfxUndoManager } from "../../../../svl/source/undo/undo";
+import { SvStream } from "../../../../tools/source/stream/stream";
+import { ScAddress } from "../../../inc/address";
+import { ScDocument } from "../../../inc/document";
+import { CellType, ScGlobal } from "../../../inc/global";
+import { ATTR_HOR_JUSTIFY } from "../../../inc/scitems";
+import { ScHorizontalCellIterator } from "../../core/data/dociter";
+import { ScCellFormat } from "../../core/tool/cellform";
+import {
+  createInlineOdsFilterService,
+  type OdsFilterService,
+} from "../../filter/xml/ods-filter-service";
+import { ODS_MIMETYPE, writeOdsDocument, type OdsImportOptions } from "../../filter/xml/xmlwrap";
+import { ScAsciiOptions } from "../dbgui/asciiopt";
+import { ScImportOptions } from "../dbgui/imoptdlg";
+import { ScDocFunc } from "./docfunc";
+import { ScImportExport } from "./impex";
 /** Confirmed write belongs to the generation captured before persistence begins. */
 export interface ScPrimarySaveEvidence {
   readonly generation: number;
@@ -249,7 +248,8 @@ export class ScDocShell extends SfxObjectShell {
         if (!converter.ImportStream(stream)) throw new Error("CSV import failed.");
         if (medium.name) {
           // INetURLObject::getBase scans the last segment up to ';' and ignores its leading dot.
-          const segmentEnd = medium.name.indexOf(";") < 0 ? medium.name.length : medium.name.indexOf(";");
+          const segmentEnd =
+            medium.name.indexOf(";") < 0 ? medium.name.length : medium.name.indexOf(";");
           let baseEnd = segmentEnd;
           for (let index = 1; index < segmentEnd; index++) {
             if (medium.name[index] === ".") baseEnd = index;
@@ -308,11 +308,15 @@ export class ScDocShell extends SfxObjectShell {
         ? filterOptions
         : new ScImportOptions(filterOptions || undefined);
     const stream = new SvStream(new Uint8Array(), options.eCharSet);
-    const write = (value: string | Uint8Array): void => {
+    const write = /** Implements write. @param value - Value. @returns Nothing. */ (
+      value: string | Uint8Array,
+    ): void => {
       if (typeof value === "string") stream.WriteUnicodeOrByteText(value, options.eCharSet);
       else stream.WriteBytes(value);
     };
-    const writeChar = (value: string): void => {
+    const writeChar = /** Implements write Char. @param value - Value. @returns Nothing. */ (
+      value: string,
+    ): void => {
       stream.WriteUniOrByteChar(value.charCodeAt(0));
     };
     if (options.eCharSet === RTL_TEXTENCODING_UNICODE) stream.StartWritingUnicodeText();
@@ -339,111 +343,128 @@ export class ScDocShell extends SfxObjectShell {
         : "",
       decodedQuote = contextOrNotAscii ? OStringToOUString(encodedQuote, options.eCharSet) : "";
     /** Formats a numeric/text scalar through the current native number formatter. @param cell - Actual cell. @param col - Column. @param row - Row. @returns Shown content and text-format flag. */
-    const shown = (cell: ReturnType<ScDocument["GetRefCellValue"]>, col: number, row: number) => {
-      const context = this.document.GetNonThreadedContext();
-      const format =
-        this.document.GetPattern(new ScAddress(col, row, tab))?.GetNumberFormat(context) ?? 0;
-      const color: [null] = [null];
-      const output = ScCellFormat.GetString(cell, format, color, context, this.document);
-      try {
-        return { value: text(output), isString: context.NFIsTextFormat(format) };
-      } finally {
-        output.dispose();
-      }
-    };
+    const shown =
+      /** Implements shown. @param cell - Cell. @param col - Col. @param row - Row. @returns The computed result. */ (
+        cell: ReturnType<ScDocument["GetRefCellValue"]>,
+        col: number,
+        row: number,
+      ) => {
+        const context = this.document.GetNonThreadedContext();
+        const format =
+          this.document.GetPattern(new ScAddress(col, row, tab))?.GetNumberFormat(context) ?? 0;
+        const color: [null] = [null];
+        const output = ScCellFormat.GetString(cell, format, color, context, this.document);
+        try {
+          return { value: text(output), isString: context.NFIsTextFormat(format) };
+        } finally {
+          output.dispose();
+        }
+      };
     /** Original numeric CSV path uses ScCellFormat::GetInputString with the cell's format. @param cell - Actual cell. @param col - Column. @param row - Row. @returns Input-line text. */
-    const inputString = (
-      cell: ReturnType<ScDocument["GetRefCellValue"]>,
-      col: number,
-      row: number,
-    ) => {
-      const context = this.document.GetNonThreadedContext(),
-        format =
-          this.document.GetPattern(new ScAddress(col, row, tab))?.GetNumberFormat(context) ?? 0,
-        output = ScCellFormat.GetInputString(cell, format, context, this.document);
-      try {
-        return text(output);
-      } finally {
-        output.dispose();
-      }
-    };
+    const inputString =
+      /** Implements input String. @param cell - Cell. @param col - Col. @param row - Row. @returns The computed result. */ (
+        cell: ReturnType<ScDocument["GetRefCellValue"]>,
+        col: number,
+        row: number,
+      ) => {
+        const context = this.document.GetNonThreadedContext(),
+          format =
+            this.document.GetPattern(new ScAddress(col, row, tab))?.GetNumberFormat(context) ?? 0,
+          output = ScCellFormat.GetInputString(cell, format, context, this.document);
+        try {
+          return text(output);
+        } finally {
+          output.dispose();
+        }
+      };
     /** Native Xcl-like width conversion and alignment for fixed-width text. @param value - Cell text. @param isString - Text type. @param col - Sheet column. @param row - Sheet row. @returns Padded field. */
-    const fixedWidth = (value: string, isString: boolean, col: number, row: number): string => {
-      let width = this.document.GetColWidth(col, tab);
-      width *= 1328 / 25;
-      width += 90;
-      width *= 1 / 23;
-      width /= 256;
-      width = Math.trunc(width);
-      if (value.length > width) value = (isString ? value : "###").slice(0, width);
-      if (value.length === width) return value;
-      let align = (
-        this.document.GetPattern(new ScAddress(col, row, tab))?.GetItem(ATTR_HOR_JUSTIFY) as
-          SvxHorJustifyItem | undefined
-      )?.GetValue();
-      if (!isString && (align === undefined || align === SvxCellHorJustify.Standard))
-        align = SvxCellHorJustify.Right;
-      const padding = width - value.length;
-      if (align === SvxCellHorJustify.Right) return " ".repeat(padding) + value;
-      if (align === SvxCellHorJustify.Center) {
-        const left = Math.trunc(padding / 2);
-        return " ".repeat(left) + value + " ".repeat(padding - left);
-      }
-      return value + " ".repeat(padding);
-    };
+    const fixedWidth =
+      /** Implements fixed Width. @param value - Value. @param isString - Is String. @param col - Col. @param row - Row. @returns The string result. */ (
+        value: string,
+        isString: boolean,
+        col: number,
+        row: number,
+      ): string => {
+        let width = this.document.GetColWidth(col, tab);
+        width *= 1328 / 25;
+        width += 90;
+        width *= 1 / 23;
+        width /= 256;
+        width = Math.trunc(width);
+        if (value.length > width) value = (isString ? value : "###").slice(0, width);
+        if (value.length === width) return value;
+        let align = (
+          this.document.GetPattern(new ScAddress(col, row, tab))?.GetItem(ATTR_HOR_JUSTIFY) as
+            SvxHorJustifyItem | undefined
+        )?.GetValue();
+        if (!isString && (align === undefined || align === SvxCellHorJustify.Standard))
+          align = SvxCellHorJustify.Right;
+        const padding = width - value.length;
+        if (align === SvxCellHorJustify.Right) return " ".repeat(padding) + value;
+        if (align === SvxCellHorJustify.Center) {
+          const left = Math.trunc(padding / 2);
+          return " ".repeat(left) + value + " ".repeat(padding - left);
+        }
+        return value + " ".repeat(padding);
+      };
     /** Source Unicode, contextual-byte and ordinary-byte text-delimiter branches. @param value - Unicode cell text. @param stringCell - Source bString state. @param forceQuotes - Source bForceQuotes state. @returns Nothing. */
-    const writeField = (value: string, stringCell: boolean, forceQuotes: boolean): void => {
-      let isString = stringCell || forceQuotes;
-      if (!isString && quote && value) {
-        isString =
-          value[0] === quote || value[0] === " " || value.endsWith(" ") || value.includes(quote);
-        if (!isString && separator) isString = value.includes(separator);
-      }
-      if (!isString || !quote) {
-        write(value);
-        return;
-      }
-      if (options.eCharSet === RTL_TEXTENCODING_UNICODE) {
-        const { position, needQuotes } = getTextSepPos(
-          value,
-          quote,
-          separator || "\0",
-          options.bQuoteAllText,
-        );
-        const escaped = position >= 0 ? value.replaceAll(quote, quote + quote) : value;
-        if (needQuotes || forceQuotes) writeChar(quote);
-        write(escaped);
-        if (needQuotes || forceQuotes) writeChar(quote);
-      } else if (contextOrNotAscii) {
-        const decoded = OStringToOUString(
-          OUStringToOString(value, options.eCharSet),
-          options.eCharSet,
-        );
-        const { position, needQuotes } = getTextSepPos(
-          decoded,
-          decodedQuote,
-          decodedSeparator,
-          options.bQuoteAllText,
-        );
-        const escaped =
-          position >= 0 ? decoded.replaceAll(decodedQuote, decodedQuote + decodedQuote) : decoded;
-        if (needQuotes || forceQuotes) writeChar(quote);
-        write(escaped);
-        if (needQuotes || forceQuotes) writeChar(quote);
-      } else {
-        const encoded = OUStringToOString(value, options.eCharSet);
-        const { position, needQuotes } = getTextSepPos(
-          encoded,
-          encodedQuote,
-          encodedSeparator,
-          options.bQuoteAllText,
-        );
-        const escaped = position >= 0 ? doubleEncodedDelimiter(encoded, encodedQuote) : encoded;
-        if (needQuotes || forceQuotes) write(encodedQuote);
-        write(escaped);
-        if (needQuotes || forceQuotes) write(encodedQuote);
-      }
-    };
+    const writeField =
+      /** Implements write Field. @param value - Value. @param stringCell - String Cell. @param forceQuotes - Force Quotes. @returns Nothing. */ (
+        value: string,
+        stringCell: boolean,
+        forceQuotes: boolean,
+      ): void => {
+        let isString = stringCell || forceQuotes;
+        if (!isString && quote && value) {
+          isString =
+            value[0] === quote || value[0] === " " || value.endsWith(" ") || value.includes(quote);
+          if (!isString && separator) isString = value.includes(separator);
+        }
+        if (!isString || !quote) {
+          write(value);
+          return;
+        }
+        if (options.eCharSet === RTL_TEXTENCODING_UNICODE) {
+          const { position, needQuotes } = getTextSepPos(
+            value,
+            quote,
+            separator || "\0",
+            options.bQuoteAllText,
+          );
+          const escaped = position >= 0 ? value.replaceAll(quote, quote + quote) : value;
+          if (needQuotes || forceQuotes) writeChar(quote);
+          write(escaped);
+          if (needQuotes || forceQuotes) writeChar(quote);
+        } else if (contextOrNotAscii) {
+          const decoded = OStringToOUString(
+            OUStringToOString(value, options.eCharSet),
+            options.eCharSet,
+          );
+          const { position, needQuotes } = getTextSepPos(
+            decoded,
+            decodedQuote,
+            decodedSeparator,
+            options.bQuoteAllText,
+          );
+          const escaped =
+            position >= 0 ? decoded.replaceAll(decodedQuote, decodedQuote + decodedQuote) : decoded;
+          if (needQuotes || forceQuotes) writeChar(quote);
+          write(escaped);
+          if (needQuotes || forceQuotes) writeChar(quote);
+        } else {
+          const encoded = OUStringToOString(value, options.eCharSet);
+          const { position, needQuotes } = getTextSepPos(
+            encoded,
+            encodedQuote,
+            encodedSeparator,
+            options.bQuoteAllText,
+          );
+          const escaped = position >= 0 ? doubleEncodedDelimiter(encoded, encodedQuote) : encoded;
+          if (needQuotes || forceQuotes) write(encodedQuote);
+          write(escaped);
+          if (needQuotes || forceQuotes) write(encodedQuote);
+        }
+      };
     if (tab < 0 || tab >= this.document.GetTableCount())
       throw new RangeError("CSV sheet is unavailable.");
     const endCol: [number] = [0],
@@ -493,10 +514,13 @@ export class ScDocShell extends SfxObjectShell {
     let nextCol = 0,
       nextRow = startRow;
     /** Writes one source empty-column slot; the last slot is supplied by the cell or row terminator. @param emptyCol - Column. @returns Nothing. */
-    const writeEmptyColumn = (emptyCol: number): void => {
-      if (options.bFixedWidth) write(fixedWidth("", true, emptyCol, row[0]));
-      else if (separator) writeChar(separator);
-    };
+    const writeEmptyColumn =
+      /** Implements write Empty Column. @param emptyCol - Empty Col. @returns Nothing. */ (
+        emptyCol: number,
+      ): void => {
+        if (options.bFixedWidth) write(fixedWidth("", true, emptyCol, row[0]));
+        else if (separator) writeChar(separator);
+      };
     for (let cell = iterator.GetNext(col, row); cell; cell = iterator.GetNext(col, row)) {
       if (nextRow < row[0]) {
         for (let emptyCol = nextCol; emptyCol < endCol[0]; emptyCol++) writeEmptyColumn(emptyCol);

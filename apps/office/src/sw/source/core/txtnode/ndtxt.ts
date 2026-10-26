@@ -1,108 +1,95 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
-import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
 import {
-  SvxIndentValue,
   SvxFirstLineIndentItem,
+  SvxIndentValue,
   SvxRightMarginItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
+import { type SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
-  RES_PARATR_ADJUST,
-  RES_MARGIN_RIGHT,
   RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_ISCOUNTED,
-  RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
   RES_PARATR_OUTLINELEVEL,
 } from "../../../inc/hintids";
-import { SwList, WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../doc/list";
+import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
+import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
+import { SwContentIndexUpdateMode, type SwContentIndex } from "../bastyp/index";
+import type { SwPosition } from "../crsr/pam";
+import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
 import { SwTextFormatColl, type SwFormatColl, type WriterParagraphStyle } from "../doc/fmtcol";
+import { SwList, WRITER_MAX_LIST_LEVEL, type WriterParagraphListKind } from "../doc/list";
+import { getWriterNumFormatKind, SwNumRule } from "../doc/number";
+import { SwContentNode, type SwStartNode } from "../docnode/node";
+import type { SwNodes } from "../docnode/nodes";
+import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
+import { resolveSwTextFirstLineIndent } from "../text/itrcrsr";
+import type { WriterHyperlink } from "./fmtatr2";
 import {
-  HandleSetAttrAtTextNode,
   HandleResetAttrAtTextNode,
+  HandleSetAttrAtTextNode,
   IsOutlineAtTextNode,
 } from "./ndtxt-attribute-handlers";
+import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
 import {
   HandleModifyAtTextNodeFormatChange,
   PrepareSplitTextNodeFormat,
 } from "./ndtxt-format-change";
-import { SwNodeNum } from "../SwNumberTree/SwNodeNum";
-import type { tNumberVector } from "../../../inc/SwNumberTreeTypes";
-import type { DocumentListItemsManager } from "../doc/DocumentListItemsManager";
-import { SwContentNode, type SwStartNode } from "../docnode/node";
-import type { SwNodes } from "../docnode/nodes";
-import type { SwPosition } from "../crsr/pam";
-import { SwContentIndexUpdateMode, type SwContentIndex } from "../bastyp/index";
-import type { WriterHyperlink } from "./fmtatr2";
-import { GetTextAttrMode, SetAttrMode } from "../../../inc/swtypes";
-import { GetTextAttrAt, type RangedTextAttribute } from "./ndtxt-attribute-query";
-
-import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
 import {
-  resolveSwListLevelIndents,
+  type SwTextFragment,
+  type WriterCharacterFormat,
+  type WriterParagraphAlignment,
+} from "./ndtxt.attributes";
+
+import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
+import { SwNumRuleItem, type ListLevelIndents } from "../para/paratr";
+import type { SwFormatINetFormat } from "./fmtatr2";
+import { SwpHints } from "./ndhints";
+import {
+  AppendTextNodeHints,
+  AssertTextNodeRange,
+  CopyTextNodeHints,
+  CreateTextNodeColorFragment,
+  CreateTextNodeFontFamilyFragment,
+  CreateTextNodeFontSizeFragment,
+  CreateTextNodeFragment,
+  CreateTextNodeHyperlinkFragment,
+  CreateTextNodeToggledFragment,
+  getSvxAdjust,
+  GetTextNodeCharacterItems,
+  getWriterParagraphAlignment,
+  InsertTextNodeHints,
+  MoveTextAttrToAttrSet,
+  ReplaceTextNodeHints,
+  SplitTextNodeEndHints,
+} from "./ndtxt-hints";
+import {
+  CaptureSwTextNodeListItems,
   GetSwTextNodeListLabel,
   GetSwTextNodeNumString,
   HasSwTextNodeVisibleNumbering,
-  CaptureSwTextNodeListItems,
-  resolveSwLeftMarginWithNum,
   resolveSwLeftMarginForTabCalculation,
+  resolveSwLeftMarginWithNum,
+  resolveSwListLevelIndents,
 } from "./ndtxt-list-indent";
-import { SwpHints } from "./ndhints";
-import {
-  ReplaceTextNodeHints,
-  CopyTextNodeHints,
-  CreateTextNodeFragment,
-  InsertTextNodeHints,
-  GetTextNodeCharacterItems,
-  CreateTextNodeToggledFragment,
-  CreateTextNodeHyperlinkFragment,
-  AppendTextNodeHints,
-  SplitTextNodeEndHints,
-  MoveTextAttrToAttrSet,
-  AssertTextNodeRange,
-  getSvxAdjust,
-  getWriterParagraphAlignment,
-  CreateTextNodeFontFamilyFragment,
-  CreateTextNodeFontSizeFragment,
-  CreateTextNodeColorFragment,
-} from "./ndtxt-hints";
 import * as thints from "./thints";
 import type { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
-import type { SwFormatINetFormat } from "./fmtatr2";
-import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
 export { copyWriterTextRangeRuns, projectWriterTextRuns } from "./ndtxt-hints";
-
-/** Names the bounded direct character attributes currently supported by the browser Writer. */
-export const WRITER_CHARACTER_FORMATS = ["bold", "italic", "underline"] as const;
-
-/** Identifies one supported direct Writer character attribute. */
-export type WriterCharacterFormat = (typeof WRITER_CHARACTER_FORMATS)[number];
-
-/** Native Writer text payload retained by model mutations and undo. */
-export interface SwTextFragment {
-  readonly text: string;
-  readonly hints: SwpHints;
-}
-
-/** Enumerates the bounded paragraph alignments represented by RES_PARATR_ADJUST. */
-export const WRITER_PARAGRAPH_ALIGNMENTS = ["left", "center", "right", "justify"] as const;
-
-/** Identifies one supported horizontal paragraph alignment. */
-export type WriterParagraphAlignment = (typeof WRITER_PARAGRAPH_ALIGNMENTS)[number];
 
 /**
  * Owns one Writer paragraph's canonical text, paragraph items, format collection, and range hints.
@@ -996,7 +983,13 @@ export class SwTextNode extends SwContentNode {
   }
 }
 
-/** Checks a paragraph adjustment item read from storage or UI. @param value - Unknown runtime value. @returns True for a supported alignment. */
-export function isWriterParagraphAlignment(value: unknown): value is WriterParagraphAlignment {
-  return WRITER_PARAGRAPH_ALIGNMENTS.includes(value as WriterParagraphAlignment);
-}
+export {
+  isWriterParagraphAlignment,
+  WRITER_CHARACTER_FORMATS,
+  WRITER_PARAGRAPH_ALIGNMENTS,
+} from "./ndtxt.attributes";
+export type {
+  SwTextFragment,
+  WriterCharacterFormat,
+  WriterParagraphAlignment,
+} from "./ndtxt.attributes";

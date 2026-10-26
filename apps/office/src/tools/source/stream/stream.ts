@@ -1,11 +1,11 @@
 /** @fileoverview Consumed in-memory SvStream text-reader operations from tools/source/stream/stream.cxx. */
-import { OStringToOUString, OUStringToOString } from "../../../sal/rtl/ustring-convert";
 import {
   RTL_TEXTENCODING_DONTKNOW,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
   type rtl_TextEncoding,
 } from "../../../sal/inc/rtl/textenc";
+import { OStringToOUString, OUStringToOString } from "../../../sal/rtl/ustring-convert";
 
 /** Source stream encoding, byte position and line-reading contract used by Calc's text filter. */
 export class SvStream {
@@ -15,18 +15,18 @@ export class SvStream {
   private written = new Uint8Array();
   private writtenLength = 0;
   private hasWritten = false;
-  /** Borrows the immutable input bytes and starts at position zero. @param bytes - Source content. @param encoding - Initial stream encoding. */
+  /** Borrows the immutable input bytes and starts at position zero. @param bytes - Source content. @param encoding - Initial stream encoding.  @returns Constructed instance. */
   constructor(
     private readonly bytes: Uint8Array,
     private encoding: rtl_TextEncoding,
   ) {}
 
-  /** Original stream encoding state read by CSV separator detection. */
+  /** Original stream encoding state read by CSV separator detection.  @returns The rtl_TextEncoding result. */
   GetStreamEncoding(): rtl_TextEncoding {
     return this.encoding;
   }
 
-  /** Original stream encoding assignment after the source's BOM probe. */
+  /** Original stream encoding assignment after the source's BOM probe.  @param encoding - Encoding. @returns Nothing. */
   SetStreamEncoding(encoding: rtl_TextEncoding): void {
     this.encoding = encoding;
   }
@@ -170,7 +170,7 @@ export class SvStream {
     return OStringToOUString(this.bytes.subarray(start, end), this.encoding);
   }
 
-  /** Native ReadUniStringLine's 256-unit buffer, including its original swap/compaction order after embedded NULs. @returns Decoded line. */
+  /** Native ReadUniStringLine's 256-unit buffer, including its original swap/compaction order after embedded NULs. @returns Decoded line.  @param maxCodepointsToRead - Max Codepoints To Read. */
   private ReadUniStringLine(maxCodepointsToRead: number): string {
     const oldPosition = this.position;
     const output: number[] = [];

@@ -106,7 +106,7 @@ it("retains optional concrete factory restoration beside default-only entries", 
   );
 });
 
-it("owns and resets a user default for bounded registered items", () => {
+it("owns and resets a user default for bounded registered items", /** Checks owns and resets a user default for bounded registered items. @returns Test completion or assertion result. */ () => {
   const pool = new SfxItemPool();
   pool.RegisterDefaultItem(new SfxStringItem(1, "original"));
   const caller = new SfxStringItem(1, "override");

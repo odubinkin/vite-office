@@ -38,9 +38,17 @@ export function readMarkdownTableAlignment(
   source: string,
 ): readonly WriterParagraphAlignment[] | undefined {
   const cells = splitMarkdownTableRow(source);
-  if (cells.length === 0 || cells.some((cell) => !/^:?-+:?$/u.test(cell))) return undefined;
-  return cells.map((cell) =>
-    cell.startsWith(":") && cell.endsWith(":") ? "center" : cell.endsWith(":") ? "right" : "left",
+  if (
+    cells.length === 0 ||
+    cells.some(
+      /** Computes the cell result. @param cell - Cell. @returns The computed result. */ (cell) =>
+        !/^:?-+:?$/u.test(cell),
+    )
+  )
+    return undefined;
+  return cells.map(
+    /** Computes the cell result. @param cell - Cell. @returns The computed result. */ (cell) =>
+      cell.startsWith(":") && cell.endsWith(":") ? "center" : cell.endsWith(":") ? "right" : "left",
   );
 }
 
@@ -50,5 +58,10 @@ export function readMarkdownTableRow(
   alignments: readonly WriterParagraphAlignment[],
 ): readonly MarkdownCell[] {
   const values = splitMarkdownTableRow(source);
-  return alignments.map((alignment, index) => ({ text: values[index] ?? "", alignment }));
+  return alignments.map(
+    /** Computes the alignment result. @param alignment - Alignment. @param index - Index. @returns The computed result. */ (
+      alignment,
+      index,
+    ) => ({ text: values[index] ?? "", alignment }),
+  );
 }

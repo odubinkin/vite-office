@@ -89,11 +89,11 @@
       "docs": [
         {
           "path": "docs/program/writer-upstream-suspected-issues.md",
-          "marker": "WRITER093"
+          "marker": "WRITER120"
         },
         {
           "path": "docs/program/calc-upstream-suspected-issues.md",
-          "marker": "CALC-285"
+          "marker": "CALC-300"
         }
       ]
     },

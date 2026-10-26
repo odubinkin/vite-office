@@ -1,49 +1,59 @@
 /** @fileoverview ScTable scalar/local-reference,cell-attribute and standard row-height operations over lazy contiguous columns. Device layout and full sheet services remain unported. */
+import { SetAllFormulasDirty as dirtyFormulas } from "./table.formula-admission";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import type { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
+import { FormulaError } from "../../../../formula/inc/errorcodes";
+import type { Grammar } from "../../../../formula/inc/grammar";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import type { SfxHint } from "../../../../svl/inc/hint";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
+import { INITIALCOLCOUNT, ScAddress } from "../../../inc/address";
+import type { ScLineFlags, ScMergePatternState } from "../../../inc/attarray";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import { ScColumn, ScColumnData } from "../../../inc/column";
+import {
+  ScBitMaskCompressedArray,
+  ScCompressedArray,
+  type ScCompressedArrayRangeData,
+} from "../../../inc/compressedarray";
 import { ScConditionalFormatList } from "../../../inc/conditio";
+import type { ScDocument } from "../../../inc/document";
+import { FilterData } from "../../../inc/FilterData";
+import type { ScFormulaCell } from "../../../inc/formulacell";
+import {
+  CellType,
+  CRFlags,
+  HasAttrFlags,
+  InsertDeleteFlags,
+  ScGlobal,
+  STD_COL_WIDTH,
+} from "../../../inc/global";
+import type { EndListeningContext, StartListeningContext } from "../../../inc/listenercontext";
+import type { ScMarkData } from "../../../inc/markdata";
+import { ScMultiSelIter } from "../../../inc/markmulti";
+import type { ColumnBlockPosition } from "../../../inc/mtvelements";
+import type { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
+import type { ScItemPoolCache } from "../../../inc/poolcach";
+import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import type { RowHeightContext } from "../../../inc/rowheightcontext";
+import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
+import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
+import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
+import {
+  SetFormulaCell as adoptFormulaCell,
+  GetFormulaCell as GetFormulaCellFragment,
+  GetErrCode as getFormulaError,
+  SetFormula as SetFormulaFragment,
+} from "./table.formula-admission";
+import { SetOptimalHeightsToRows, SetStreamValid, UpdateReference } from "./table1";
 import * as table2 from "./table2";
 import * as table5 from "./table5";
 import * as table7 from "./table7";
-import { ConvertToGroupListening } from "../../../inc/types";
-import { HasAttrFlags } from "../../../inc/global";
-import type { ScItemPoolCache } from "../../../inc/poolcach";
-import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import type { ScLineFlags } from "../../../inc/attarray";
-import type { SvxBoxItem, SvxBoxInfoItem } from "../../../../editeng/source/items/frmitems";
-import { ScMultiSelIter } from "../../../inc/markmulti";
-import { ScRefCellValue } from "../../../inc/cellvalue";
-import type { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import type { SvtListener } from "../../../../svl/source/notify/listener";
-import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
-import type { SfxHint } from "../../../../svl/inc/hint";
-import type { Grammar } from "../../../../formula/inc/grammar";
-import { FormulaError } from "../../../../formula/inc/errorcodes";
-import type { ScFormulaCell } from "../../../inc/formulacell";
-import type { EditTextObject } from "../../../../editeng/inc/editobj";
-import { ScAddress, INITIALCOLCOUNT } from "../../../inc/address";
-import { ScColumn, ScColumnData } from "../../../inc/column";
-import { CellType, InsertDeleteFlags } from "../../../inc/global";
-import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { SharedString, type SharedStringConstReference } from "../../../../svl/inc/sharedstring";
-import type { CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
-import type { ScDocument } from "../../../inc/document";
-import type { ScMergePatternState } from "../../../inc/attarray";
-import type { ColumnBlockPosition } from "../../../inc/mtvelements";
-import type { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
-import type { ScMarkData } from "../../../inc/markdata";
-import { ScFlatUInt16RowSegments, type ScFlatUInt16RowRangeData } from "../../../inc/segmenttree";
-import {
-  ScCompressedArray,
-  ScBitMaskCompressedArray,
-  type ScCompressedArrayRangeData,
-} from "../../../inc/compressedarray";
-import { CRFlags, ScGlobal, STD_COL_WIDTH } from "../../../inc/global";
-import { ATTR_FONT_HEIGHT } from "../../../inc/scitems";
-import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import type { RowHeightContext } from "../../../inc/rowheightcontext";
-import { lcl_GetAttribHeight, supportsStandardRowHeight } from "./column2";
-import { FilterData } from "../../../inc/FilterData";
-import { UpdateReference, SetOptimalHeightsToRows, SetStreamValid } from "./table1";
 /** Original ColumnDataApply callable contract. */
 type ColumnDataApply = (column: ScColumnData, first: number, last: number) => void;
 /** Sheet owner for the supported scalar document operations. */
@@ -927,41 +937,23 @@ export class ScTable {
   }
   /** Marks native default-context formula state without per-cell calculation. @param context - Default dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
-    if (context.mbClearTabDeletedFlag)
-      throw new Error("Deleted-sheet flag clearing is not implemented");
-    const old = this.rDocument.GetAutoCalc();
-    this.rDocument.SetAutoCalc(false);
-    try {
-      for (const col of this.aCol) col.SetAllFormulasDirty(context);
-    } finally {
-      this.rDocument.SetAutoCalc(old);
-    }
+    return dirtyFormulas.call(this, context);
   }
   /** Writes a formula at valid coordinates through the actual column. @param col - Column. @param row - Row. @param source - Formula. @param grammar - ODFF grammar. @returns Nothing. */
   SetFormula(col: number, row: number, source: OUStringConstReference, grammar: Grammar): void {
-    if (this.rDocument.ValidColRow(col, row))
-      this.CreateColumnIfNotExists(col).SetFormula(row, source, grammar);
+    return SetFormulaFragment.call(this, col, row, source, grammar);
   }
   /** Adopts compiled formula content through the actual column. @param col - Column. @param row - Row. @param cell - Matching compiled owner. @returns Adopted cell or null. */
   SetFormulaCell(col: number, row: number, cell: ScFormulaCell): ScFormulaCell | null {
-    if (!this.rDocument.ValidColRow(col, row)) {
-      cell.Dispose();
-      return null;
-    }
-    return this.CreateColumnIfNotExists(col).SetFormulaCell(row, cell, ConvertToGroupListening);
+    return adoptFormulaCell.call(this, col, row, cell);
   }
   /** Borrows a formula cell without allocating storage. @param col - Column. @param row - Row. @returns Cell or null. */
   GetFormulaCell(col: number, row: number): ScFormulaCell | null {
-    return this.rDocument.ValidColRow(col, row) && col < this.aCol.length
-      ? (this.aCol[col] as ScColumn).GetFormulaCell(row)
-      : null;
+    return GetFormulaCellFragment.call(this, col, row);
   }
   /** Reads the native formula error with empty default. @param position - Address. @returns Error. */
   GetErrCode(position: ScAddress): FormulaError {
-    return this.rDocument.ValidColRow(position.Col(), position.Row()) &&
-      position.Col() < this.aCol.length
-      ? (this.aCol[position.Col()] as ScColumn).GetErrCode(position.Row())
-      : FormulaError.NONE;
+    return getFormulaError.call(this, position);
   }
   /** Writes numeric content only at valid coordinates. @param col - Column. @param row - Row. @param value - Number. @returns Nothing. */
   SetValue(col: number, row: number, value: number): void {

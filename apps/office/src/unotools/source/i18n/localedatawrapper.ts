@@ -1,30 +1,30 @@
 /** @fileoverview Source LocaleDataWrapper measurement,numeric/date and loaded-Locale field projections over actual locale resources;no complete wrapper service is fabricated. */
+import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import {
-  getLocaleMeasurementSystem,
+  getAllInstalledLocaleNames,
+  getLocaleCurrencies,
+  getLocaleDateAcceptancePatterns,
+  getLocaleDateSeparator,
   getLocaleDecimalSeparator,
   getLocaleDecimalSeparatorAlternate,
-  getLocaleThousandSeparator,
-  getLocaleDateSeparator,
+  getLocaleFalseWord,
+  getLocaleFormatElements,
   getLocaleLanguageCountryInfo,
+  getLocaleLongDateSeparators,
+  getLocaleMeasurementSystem,
+  getLocaleThousandSeparator,
   getLocaleTime100SecSeparator,
-  getLocaleTimeSeparator,
   getLocaleTimeAM,
   getLocaleTimePM,
+  getLocaleTimeSeparator,
   getLocaleTrueWord,
-  getLocaleFalseWord,
-  getLocaleDateAcceptancePatterns,
-  getLocaleFormatElements,
-  getLocaleCurrencies,
-  getAllInstalledLocaleNames,
-  getLocaleLongDateSeparators,
   type LocaleCurrency,
 } from "../../../i18npool/source/localedata/localedata";
-import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
-import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { OUString } from "../../../sal/inc/rtl/ustring";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 export type { LocaleCurrency } from "../../../i18npool/source/localedata/localedata";
 const Integers = Sequence.specialize<[number]>("sal_Int32", 4);
 /** Original loadDigitGrouping country selection over the loaded LC_INFO country field. @param locale - Current locale. @returns Owned native grouping sequence. */
@@ -32,7 +32,14 @@ function loadDigitGrouping(locale: LocaleConstReference): Sequence<[number]> {
   const country = getLocaleLanguageCountryInfo(locale).Country.toUpperCase();
   const widths = country === "IN" || country === "BT" ? [3, 2, 0] : [3, 0, 0];
   return new Integers(
-    new Map(widths.map((width, index) => [index * 4, [width] as [number]])),
+    new Map(
+      widths.map(
+        /** Computes the width result. @param width - Width. @param index - Index. @returns The computed result. */ (
+          width,
+          index,
+        ) => [index * 4, [width] as [number]],
+      ),
+    ),
     widths.length,
   );
 }
@@ -65,8 +72,18 @@ interface CurrencyFormatPositions {
   symbol: number;
 }
 /** Original currency-code scan stops at an unbracketed section separator, observing escaped quotes and symbol blanks. @param code - Source format code. @param start - Full-code start offset. @param currencySymbol - Loaded default currency symbol. @returns Source positions. */
-function scanCurrFormatImpl(code: string, start: number, currencySymbol: string): CurrencyFormatPositions {
-  const result: CurrencyFormatPositions = { sign: -1, parenthesis: -1, number: -1, blank: -1, symbol: -1 };
+function scanCurrFormatImpl(
+  code: string,
+  start: number,
+  currencySymbol: string,
+): CurrencyFormatPositions {
+  const result: CurrencyFormatPositions = {
+    sign: -1,
+    parenthesis: -1,
+    number: -1,
+    blank: -1,
+    symbol: -1,
+  };
   let section = 0,
     quote = false;
   for (let p = start; p < code.length; p++) {
@@ -95,7 +112,13 @@ function scanCurrFormatImpl(code: string, start: number, currencySymbol: string)
       case "]":
         if (section) {
           section--;
-          if (!section && result.blank === -1 && result.symbol !== -1 && p < code.length - 1 && code[p + 1] === " ")
+          if (
+            !section &&
+            result.blank === -1 &&
+            result.symbol !== -1 &&
+            p < code.length - 1 &&
+            code[p + 1] === " "
+          )
             result.blank = p + 1;
         }
         break;
@@ -122,7 +145,10 @@ function scanCurrFormatImpl(code: string, start: number, currencySymbol: string)
 }
 /** Original loadCurrencyFormats medium/default selection and 0..15 symbol/sign placement classification. @param locale - Current native locale. @param symbol - Loaded default currency symbol. @returns Positive/negative layout indices. */
 function loadCurrencyFormats(locale: LocaleConstReference, symbol: string): [number, number] {
-  const formats = getLocaleFormatElements(locale).filter((row) => row.formatUsage === "CURRENCY");
+  const formats = getLocaleFormatElements(locale).filter(
+    /** Computes the row result. @param row - Row. @returns The computed result. */ (row) =>
+      row.formatUsage === "CURRENCY",
+  );
   if (!formats.length) return [0, 0];
   let defaultIndex = -1,
     negativeIndex = -1,
@@ -143,11 +169,20 @@ function loadCurrencyFormats(locale: LocaleConstReference, symbol: string): [num
       if (negativeIndex === -1 && format.formatCode.includes(";")) negativeIndex = index;
     }
   }
-  const positiveCode = (formats[defaultIndex >= 0 ? defaultIndex : negativeIndex >= 0 ? negativeIndex : 0] as (typeof formats)[number]).formatCode,
+  const positiveCode = (
+      formats[
+        defaultIndex >= 0 ? defaultIndex : negativeIndex >= 0 ? negativeIndex : 0
+      ] as (typeof formats)[number]
+    ).formatCode,
     positive = scanCurrFormatImpl(positiveCode, 0, symbol),
-    positiveFormat = positive.blank === -1
-      ? positive.symbol < positive.number ? 0 : 1
-      : positive.symbol < positive.number ? 2 : 3;
+    positiveFormat =
+      positive.blank === -1
+        ? positive.symbol < positive.number
+          ? 0
+          : 1
+        : positive.symbol < positive.number
+          ? 2
+          : 3;
   if (negativeIndex < 0) return [positiveFormat, 0];
   const negativeCode = (formats[negativeIndex] as (typeof formats)[number]).formatCode,
     negative = scanCurrFormatImpl(negativeCode, negativeCode.indexOf(";") + 1, symbol),
@@ -176,7 +211,9 @@ function loadCurrencyFormats(locale: LocaleConstReference, symbol: string): [num
 }
 /** Source scanDateOrderImpl, including localized legacy date letters and equal missing-field positions. @param code - Native format code. @returns Long ordering. */
 function scanDateOrderImpl(code: string): LongDateOrder {
-  const find = (char: string): number => {
+  const find = /** Implements find. @param char - Char. @returns The number result. */ (
+    char: string,
+  ): number => {
     const position = code.indexOf(char);
     return position < 0 ? Number.POSITIVE_INFINITY : position;
   };
@@ -229,7 +266,10 @@ function getDateOrderFromLongDateOrder(order: LongDateOrder): DateOrder {
 }
 /** Original loadDateOrders over the mapper's source-ordered DATE format sequence. @param locale - Prepared locale. @returns Short and long date orders. */
 function loadDateOrders(locale: LocaleConstReference): [DateOrder, LongDateOrder] {
-  const formats = getLocaleFormatElements(locale).filter((row) => row.formatUsage === "DATE");
+  const formats = getLocaleFormatElements(locale).filter(
+    /** Computes the row result. @param row - Row. @returns The computed result. */ (row) =>
+      row.formatUsage === "DATE",
+  );
   if (!formats.length) return [DateOrder.DMY, LongDateOrder.DMY];
   let edit = -1,
     defaultFormat = -1,
@@ -341,7 +381,7 @@ export class LocaleDataWrapper {
   private currPositiveFormat: number;
   private currNegativeFormat: number;
   private readonly grouping: Sequence<[number]>;
-  /** Loads the source LC_CTYPE numeric fields for the prepared locale. @param locale - Borrowed locale. */
+  /** Loads the source LC_CTYPE numeric fields for the prepared locale. @param locale - Borrowed locale.  @returns Constructed instance. */
   constructor(locale: LocaleConstReference) {
     this.myLocale = new Locale(locale);
     this.dateAcceptancePatterns = getLocaleDateAcceptancePatterns(locale).map(unicode);
@@ -360,11 +400,19 @@ export class LocaleDataWrapper {
     this.longDateDaySep = unicode(longDate.day);
     this.longDateMonthSep = unicode(longDate.month);
     const currencies = getLocaleCurrencies(locale),
-      currency = currencies.find((item) => item.default) ?? currencies[0];
+      currency =
+        currencies.find(
+          /** Computes the item result. @param item - Item. @returns The computed result. */ (
+            item,
+          ) => item.default,
+        ) ?? currencies[0];
     this.currSymbol = unicode(currency?.symbol ?? "ShellsAndPebbles");
     this.currBankSymbol = unicode(currency?.bankSymbol ?? "ShellsAndPebbles");
     this.currDigits = currency?.decimalPlaces ?? 2;
-    [this.currPositiveFormat, this.currNegativeFormat] = loadCurrencyFormats(locale, currency?.symbol ?? "ShellsAndPebbles");
+    [this.currPositiveFormat, this.currNegativeFormat] = loadCurrencyFormats(
+      locale,
+      currency?.symbol ?? "ShellsAndPebbles",
+    );
     this.grouping = loadDigitGrouping(locale);
   }
   /** Borrows the source decimal separator. @returns Decimal separator. */
@@ -412,11 +460,17 @@ export class LocaleDataWrapper {
     return this.currSymbol;
   }
   /** Original borrowed long-date day-of-week separator. @returns Current locale separator. */
-  getLongDateDayOfWeekSep(): OUString { return this.longDateDayOfWeekSep; }
+  getLongDateDayOfWeekSep(): OUString {
+    return this.longDateDayOfWeekSep;
+  }
   /** Original borrowed long-date day separator. @returns Current locale separator. */
-  getLongDateDaySep(): OUString { return this.longDateDaySep; }
+  getLongDateDaySep(): OUString {
+    return this.longDateDaySep;
+  }
   /** Original borrowed long-date month separator. @returns Current locale separator. */
-  getLongDateMonthSep(): OUString { return this.longDateMonthSep; }
+  getLongDateMonthSep(): OUString {
+    return this.longDateMonthSep;
+  }
   /** Original getAllCurrencies delegation for this wrapper's current locale. @returns Independent Currency2 rows. */
   getAllCurrencies(): LocaleCurrency[] {
     return getLocaleCurrencies(this.myLocale);
@@ -457,20 +511,34 @@ export class LocaleDataWrapper {
   changeLocale(locale: LocaleConstReference): void {
     this.myLocale.assign(locale);
     const longDate = getLocaleLongDateSeparators(locale);
-    const dayOfWeek = unicode(longDate.dayOfWeek), day = unicode(longDate.day), month = unicode(longDate.month);
+    const dayOfWeek = unicode(longDate.dayOfWeek),
+      day = unicode(longDate.day),
+      month = unicode(longDate.month);
     try {
       this.longDateDayOfWeekSep.assign(dayOfWeek);
       this.longDateDaySep.assign(day);
       this.longDateMonthSep.assign(month);
-    } finally { month.dispose(); day.dispose(); dayOfWeek.dispose(); }
+    } finally {
+      month.dispose();
+      day.dispose();
+      dayOfWeek.dispose();
+    }
     const patterns = getLocaleDateAcceptancePatterns(locale).map(unicode);
     for (const pattern of this.dateAcceptancePatterns) pattern.dispose();
     this.dateAcceptancePatterns.splice(0, this.dateAcceptancePatterns.length, ...patterns);
     [this.dateOrder, this.longDateOrder] = loadDateOrders(locale);
     const currencies = getLocaleCurrencies(locale),
-      currency = currencies.find((item) => item.default) ?? currencies[0];
+      currency =
+        currencies.find(
+          /** Computes the item result. @param item - Item. @returns The computed result. */ (
+            item,
+          ) => item.default,
+        ) ?? currencies[0];
     this.currDigits = currency?.decimalPlaces ?? 2;
-    [this.currPositiveFormat, this.currNegativeFormat] = loadCurrencyFormats(locale, currency?.symbol ?? "ShellsAndPebbles");
+    [this.currPositiveFormat, this.currNegativeFormat] = loadCurrencyFormats(
+      locale,
+      currency?.symbol ?? "ShellsAndPebbles",
+    );
     const decimal = getNumDecimalSep(locale),
       alternate = getNumDecimalSepAlt(locale),
       thousand = getNumThousandSep(locale),

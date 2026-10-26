@@ -1,10 +1,13 @@
 /** @fileoverview Calc CSV filter options from sc/source/ui/dbgui/asciiopt.cxx and asciiopt.hxx. */
-import { ScGlobal } from "../../../inc/global";
-import { RTL_TEXTENCODING_UTF8, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
+import {
+  RTL_TEXTENCODING_DONTKNOW,
+  RTL_TEXTENCODING_UTF8,
+  type rtl_TextEncoding,
+} from "../../../../sal/inc/rtl/textenc";
 import { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
 import type { SvStream } from "../../../../tools/source/stream/stream";
-import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { ScGlobal } from "../../../inc/global";
 
 /** Native column import formats used by the text filter. */
 export const SC_COL_STANDARD = 0;
@@ -33,7 +36,7 @@ export class ScAsciiOptions {
   mvColStart: number[] = [];
   mvColFormat: number[] = [];
 
-  /** Original implicit copy construction owns independent column metadata. @param source - Existing options to copy. */
+  /** Original implicit copy construction owns independent column metadata. @param source - Existing options to copy.  @returns Constructed instance. */
   constructor(source?: ScAsciiOptions) {
     if (!source) return;
     Object.assign(this, source);
@@ -92,7 +95,12 @@ export class ScAsciiOptions {
       field = units.join("/") + (this.bMergeFieldSeps ? "/MRG" : "");
     }
     const columns = this.mvColStart
-      .map((start, i) => `${start}/${this.mvColFormat[i] ?? 0}`)
+      .map(
+        /** Checks /. @param start - Start. @param i - I. @returns The computed result. */ (
+          start,
+          i,
+        ) => `${start}/${this.mvColFormat[i] ?? 0}`,
+      )
       .join("/");
     return [
       field,
@@ -131,6 +139,13 @@ export class ScAsciiOptions {
   static GetWeightedFieldSep(fieldSeps: string, decodeNumbers: boolean): string {
     const value = decodeNumbers ? ScAsciiOptions.DecodeSeps(fieldSeps) : fieldSeps;
     if (value.length <= 1) return value;
-    return [",", "\t", ";", " "].find((sep) => value.includes(sep)) ?? value[0] ?? "";
+    return (
+      [",", "\t", ";", " "].find(
+        /** Computes the sep result. @param sep - Sep. @returns The computed result. */ (sep) =>
+          value.includes(sep),
+      ) ??
+      value[0] ??
+      ""
+    );
   }
 }

@@ -27,7 +27,7 @@
           "marker": "round trips"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
           "marker": "round trips native decoration"
         },
         {
@@ -35,27 +35,27 @@
           "marker": "exports native relative tab stops"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
           "marker": "exports source-escaped hyperlink URLs"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
           "marker": "keeps one native RTF hyperlink field"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.layout.test.ts",
           "marker": "writes initial native page geometry"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.layout.test.ts",
           "marker": "writes a native RTF page section and restart"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.layout.test.ts",
           "marker": "keeps distinct follow-page geometry"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.layout.test.ts",
           "marker": "splits a text node at a soft page boundary"
         },
         {

@@ -1,11 +1,11 @@
 /** @fileoverview First real document/sheet/column scalar editing integration,without a second grid model. */
 import { expect, it } from "vitest";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress, SC_TAB_APPEND, MAXCOL, MAXROW } from "../../../inc/address";
-import { CellType } from "../../../inc/global";
-import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { ScColumn } from "../../../inc/column";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { MAXCOL, MAXROW, SC_TAB_APPEND, ScAddress } from "../../../inc/address";
+import { ScColumn } from "../../../inc/column";
+import { ScDocument } from "../../../inc/document";
+import { CellType } from "../../../inc/global";
 
 it("creates sheets and edits real numeric/string column blocks through the public document", /** Exercises replacements,clear,empty text and shared-string copy isolation. @returns Nothing. */ () => {
   const doc = new ScDocument(),
@@ -78,7 +78,7 @@ it("keeps sheet positions,names and native invalid-coordinate defaults", /** Cle
   expect(doc.GetCellType(new ScAddress(0, 0, 0))).toBe(CellType.CELLTYPE_EDIT);
 });
 
-it("renames a sheet with source external-name and case-insensitive duplicate rules", () => {
+it("renames a sheet with source external-name and case-insensitive duplicate rules", /** Checks renames a sheet with source external-name and case-insensitive duplicate rules. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   expect(doc.InsertTab(0, unicode("First"))).toBe(true);
   expect(doc.InsertTab(1, unicode("Data"))).toBe(true);

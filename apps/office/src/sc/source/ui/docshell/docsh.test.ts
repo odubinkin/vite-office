@@ -1,26 +1,26 @@
 /** @fileoverview Atomic Calc ODS shell replacement,confirmed save generations and real undo boundaries. */
 import { expect, it, vi } from "vitest";
-import { ScXMLImportWrapper } from "../../filter/xml/xmlwrap";
-import { CalcViewController } from "../../../browser/controller/calc-view-controller";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
-import { ScDocShell } from "./docsh";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { ScImportOptions } from "../dbgui/imoptdlg";
 import {
   RTL_TEXTENCODING_ASCII_US,
-  RTL_TEXTENCODING_MS_1252,
   RTL_TEXTENCODING_MS_1251,
+  RTL_TEXTENCODING_MS_1252,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
 } from "../../../../sal/inc/rtl/textenc";
 import { createDocument } from "../../../../sfx2/source/doc/objsh";
+import { CalcViewController } from "../../../browser/controller/calc-view-controller";
+import { ScAddress } from "../../../inc/address";
+import { ScDocument } from "../../../inc/document";
+import { ScXMLImportWrapper } from "../../filter/xml/xmlwrap";
+import { ScImportOptions } from "../dbgui/imoptdlg";
+import { ScDocShell } from "./docsh";
 /** Builds valid replacement state. @param title - Title. @returns State. */
 function state(title = "Opened") {
   return createDocument({ id: crypto.randomUUID(), suiteId: "calc", title });
 }
 
-it("opens CSV through the text filter and exports the canonical cells without adopting the export medium", async () => {
+it("opens CSV through the text filter and exports the canonical cells without adopting the export medium", /** Checks opens CSV through the text filter and exports the canonical cells without adopting the export medium. @returns Test completion or assertion result. */ async () => {
   const shell = new ScDocShell();
   const bytes = new TextEncoder().encode('Name,Amount,Formula\n"A, B",42,=B2*2\n');
   await shell.Open(bytes, state("Imported CSV"), {
@@ -44,7 +44,7 @@ it("opens CSV through the text filter and exports the canonical cells without ad
   expect(shell.GetMedium()).toBe(medium);
   shell.Close();
 });
-it("passes CSV DETECT options through the source shell separator scanner", async () => {
+it("passes CSV DETECT options through the source shell separator scanner", /** Checks passes CSV DETECT options through the source shell separator scanner. @returns Test completion or assertion result. */ async () => {
   const shell = new ScDocShell();
   const bytes = new TextEncoder().encode('"A,B";42\n"C,D";43\n');
   try {
@@ -64,7 +64,7 @@ it("passes CSV DETECT options through the source shell separator scanner", async
     shell.Close();
   }
 });
-it("rewinds the detected source stream before importing a BOM-prefixed CSV", async () => {
+it("rewinds the detected source stream before importing a BOM-prefixed CSV", /** Checks rewinds the detected source stream before importing a BOM-prefixed CSV. @returns Test completion or assertion result. */ async () => {
   const shell = new ScDocShell();
   const bytes = new TextEncoder().encode("\uFEFFsep=;\nA;42\n");
   try {
@@ -85,7 +85,7 @@ it("rewinds the detected source stream before importing a BOM-prefixed CSV", asy
     shell.Close();
   }
 });
-it("writes source fixed-width fields using Calc column widths and standard numeric alignment", () => {
+it("writes source fixed-width fields using Calc column widths and standard numeric alignment", /** Checks writes source fixed-width fields using Calc column widths and standard numeric alignment. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument();
   const table = doc.FetchTable(0);
@@ -100,33 +100,74 @@ it("writes source fixed-width fields using Calc column widths and standard numer
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("hi      42\n");
   shell.Close();
 });
-it("uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors", () => {
+it("uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors", /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell(),
     document = shell.GetDocument();
   expect(document.InsertTab(1, unicode("Data"))).toBe(true);
   document.SetTextCell(new ScAddress(0, 0, 0), unicode("First"));
   document.SetTextCell(new ScAddress(0, 0, 1), unicode("Second"));
   const options = new ScImportOptions(),
-    decode = (bytes: Uint8Array) => new TextDecoder().decode(bytes);
-  expect(shell.ConvertToCsv(undefined, 1).map((stream) => decode(stream.bytes))).toEqual([
-    "Second\n",
-  ]);
-  expect(shell.ConvertToCsv("", 1).map((stream) => decode(stream.bytes))).toEqual(["Second\n"]);
+    decode =
+      /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param bytes - Bytes. @returns Test completion or assertion result. */ (
+        bytes: Uint8Array,
+      ) => new TextDecoder().decode(bytes);
+  expect(
+    shell
+      .ConvertToCsv(undefined, 1)
+      .map(
+        /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param stream - Stream. @returns Test completion or assertion result. */ (
+          stream,
+        ) => decode(stream.bytes),
+      ),
+  ).toEqual(["Second\n"]);
+  expect(
+    shell
+      .ConvertToCsv("", 1)
+      .map(
+        /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param stream - Stream. @returns Test completion or assertion result. */ (
+          stream,
+        ) => decode(stream.bytes),
+      ),
+  ).toEqual(["Second\n"]);
   options.nSheetToExport = -1;
   const all = shell.ConvertToCsv(options.BuildString(), 1);
-  expect(all.map((stream) => stream.sheetName)).toEqual(["Sheet1", "Data"]);
-  expect(all.map((stream) => decode(stream.bytes))).toEqual(["First\n", "Second\n"]);
+  expect(
+    all.map(
+      /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param stream - Stream. @returns Test completion or assertion result. */ (
+        stream,
+      ) => stream.sheetName,
+    ),
+  ).toEqual(["Sheet1", "Data"]);
+  expect(
+    all.map(
+      /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param stream - Stream. @returns Test completion or assertion result. */ (
+        stream,
+      ) => decode(stream.bytes),
+    ),
+  ).toEqual(["First\n", "Second\n"]);
   options.nSheetToExport = 1;
   expect(
-    shell.ConvertToCsv(options.BuildString(), 1).map((stream) => decode(stream.bytes)),
+    shell
+      .ConvertToCsv(options.BuildString(), 1)
+      .map(
+        /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @param stream - Stream. @returns Test completion or assertion result. */ (
+          stream,
+        ) => decode(stream.bytes),
+      ),
   ).toEqual(["First\n"]);
   options.nSheetToExport = 3;
-  expect(() => shell.ConvertToCsv(options.BuildString(), 1)).toThrow(RangeError);
+  expect(
+    /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @returns Test completion or assertion result. */ () =>
+      shell.ConvertToCsv(options.BuildString(), 1),
+  ).toThrow(RangeError);
   options.nSheetToExport = -23;
-  expect(() => shell.ConvertToCsv(options.BuildString(), 1)).toThrow(RangeError);
+  expect(
+    /** Checks uses ConvertTo CSV's zero, all-sheet, one-based and invalid sheet selectors. @returns Test completion or assertion result. */ () =>
+      shell.ConvertToCsv(options.BuildString(), 1),
+  ).toThrow(RangeError);
   shell.Close();
 });
-it("follows upstream empty fixed-width column bounds across sparse rows", () => {
+it("follows upstream empty fixed-width column bounds across sparse rows", /** Checks follows upstream empty fixed-width column bounds across sparse rows. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   const doc = shell.GetDocument(),
     table = doc.FetchTable(0);
@@ -142,14 +183,14 @@ it("follows upstream empty fixed-width column bounds across sparse rows", () => 
   );
   shell.Close();
 });
-it("writes only the source row terminator for an empty fixed-width sheet", () => {
+it("writes only the source row terminator for an empty fixed-width sheet", /** Checks writes only the source row terminator for an empty fixed-width sheet. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   const options = new ScImportOptions();
   options.bFixedWidth = true;
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("\n");
   shell.Close();
 });
-it("exports numeric cells through the source input-line formatter independently of display precision", () => {
+it("exports numeric cells through the source input-line formatter independently of display precision", /** Checks exports numeric cells through the source input-line formatter independently of display precision. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetValue(new ScAddress(), 1.2345);
   shell.GetDocument().GetFormatTable().ChangeStandardPrec(0);
@@ -160,7 +201,7 @@ it("exports numeric cells through the source input-line formatter independently 
   expect(shell.GetDocument().GetFormatTable().GetStandardPrec()).toBe(0);
   shell.Close();
 });
-it("ignores trailing CSV filter tokens beyond the upstream fourteen-token contract", () => {
+it("ignores trailing CSV filter tokens beyond the upstream fourteen-token contract", /** Checks ignores trailing CSV filter tokens beyond the upstream fourteen-token contract. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("A,B"));
   const options = new ScImportOptions();
@@ -169,7 +210,7 @@ it("ignores trailing CSV filter tokens beyond the upstream fourteen-token contra
   expect(shell.AsciiSave(`${source},unknown`)).toEqual(shell.AsciiSave(source));
   shell.Close();
 });
-it("uses the stream charset for Unicode BOM and limits the IncludeBOM option to UTF-8", () => {
+it("uses the stream charset for Unicode BOM and limits the IncludeBOM option to UTF-8", /** Checks uses the stream charset for Unicode BOM and limits the IncludeBOM option to UTF-8. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("A"));
   const options = new ScImportOptions();
@@ -181,7 +222,7 @@ it("uses the stream charset for Unicode BOM and limits the IncludeBOM option to 
   expect([...shell.AsciiSave(options.BuildString())]).toEqual([0xef, 0xbb, 0xbf, 0x41, 0x0a]);
   shell.Close();
 });
-it("converts ANSI CSV text through the original MS-1252 byte table", () => {
+it("converts ANSI CSV text through the original MS-1252 byte table", /** Checks converts ANSI CSV text through the original MS-1252 byte table. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("Café €"));
   const options = new ScImportOptions();
@@ -192,7 +233,7 @@ it("converts ANSI CSV text through the original MS-1252 byte table", () => {
   ]);
   shell.Close();
 });
-it("uses the original MS-1251 converter when the filter string selects that encoding", () => {
+it("uses the original MS-1251 converter when the filter string selects that encoding", /** Checks uses the original MS-1251 converter when the filter string selects that encoding. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("Привет"));
   const options = new ScImportOptions();
@@ -202,7 +243,7 @@ it("uses the original MS-1251 converter when the filter string selects that enco
   ]);
   shell.Close();
 });
-it("escapes a delimiter produced by source character replacement after ASCII encoding", () => {
+it("escapes a delimiter produced by source character replacement after ASCII encoding", /** Checks escapes a delimiter produced by source character replacement after ASCII encoding. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("“"));
   const options = new ScImportOptions();
@@ -210,7 +251,7 @@ it("escapes a delimiter produced by source character replacement after ASCII enc
   expect([...shell.AsciiSave(options.BuildString())]).toEqual([0x22, 0x22, 0x22, 0x22, 0x0a]);
   shell.Close();
 });
-it("doubles the complete encoded UTF-8 text delimiter before writing CSV bytes", () => {
+it("doubles the complete encoded UTF-8 text delimiter before writing CSV bytes", /** Checks doubles the complete encoded UTF-8 text delimiter before writing CSV bytes. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("Café"));
   const options = new ScImportOptions();
@@ -220,7 +261,7 @@ it("doubles the complete encoded UTF-8 text delimiter before writing CSV bytes",
   ]);
   shell.Close();
 });
-it("forces ASCII double quotes around a top-left sep directive even with another text delimiter", () => {
+it("forces ASCII double quotes around a top-left sep directive even with another text delimiter", /** Checks forces ASCII double quotes around a top-left sep directive even with another text delimiter. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
   const options = new ScImportOptions();
@@ -228,7 +269,7 @@ it("forces ASCII double quotes around a top-left sep directive even with another
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe('"sep=,"\n');
   shell.Close();
 });
-it("treats zero text and field separator codes as disabled in the native export branches", () => {
+it("treats zero text and field separator codes as disabled in the native export branches", /** Checks treats zero text and field separator codes as disabled in the native export branches. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell(),
     document = shell.GetDocument(),
     options = new ScImportOptions();
@@ -244,7 +285,7 @@ it("treats zero text and field separator codes as disabled in the native export 
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("AB\n");
   shell.Close();
 });
-it("does not rewrite a sep directive when the native field separator code is zero", () => {
+it("does not rewrite a sep directive when the native field separator code is zero", /** Checks does not rewrite a sep directive when the native field separator code is zero. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell(),
     options = new ScImportOptions();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
@@ -252,7 +293,7 @@ it("does not rewrite a sep directive when the native field separator code is zer
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("sep=;\n");
   shell.Close();
 });
-it("writes the sep directive without quotes when the native text separator code is zero", () => {
+it("writes the sep directive without quotes when the native text separator code is zero", /** Checks writes the sep directive without quotes when the native text separator code is zero. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell(),
     options = new ScImportOptions();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("sep=;"));
@@ -260,7 +301,7 @@ it("writes the sep directive without quotes when the native text separator code 
   expect(new TextDecoder().decode(shell.AsciiSave(options.BuildString()))).toBe("sep=,\n");
   shell.Close();
 });
-it("follows SAL's missing-converter byte fallback without an export-option error", () => {
+it("follows SAL's missing-converter byte fallback without an export-option error", /** Checks follows SAL's missing-converter byte fallback without an export-option error. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("€"));
   const options = new ScImportOptions();
@@ -268,7 +309,7 @@ it("follows SAL's missing-converter byte fallback without an export-option error
   expect([...shell.AsciiSave(options.BuildString())]).toEqual([0xac, 0x0a]);
   shell.Close();
 });
-it("exports with surplus filter tokens using the native recognized positions", () => {
+it("exports with surplus filter tokens using the native recognized positions", /** Checks exports with surplus filter tokens using the native recognized positions. @returns Test completion or assertion result. */ () => {
   const shell = new ScDocShell();
   shell.GetDocument().SetTextCell(new ScAddress(), unicode("A"));
   const options = new ScImportOptions();

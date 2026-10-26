@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T07:09:39.391Z"
+doc_updated_at: "2026-10-26T07:37:27.601Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -56,6 +56,18 @@ sections:
     - Observation: SSH pushes from writer and calc failed with Permission denied (publickey); main HTTPS fetch succeeded.
       Impact: SSH publication is unavailable in the current environment.
       Resolution: Use the same GitHub repository through its existing main HTTPS URL as a per-command transport override; do not change remotes or credentials.
+
+    - Observation: Full npm run verify stopped at format:check: 30 incoming Calc files need formatting. Initial focused shared suite passed 15 tests. User requested upstream-exact reconciliation of dummy conversion APIs.
+      Impact: Formatting prevents later gates from running; a convenience overload had no upstream counterpart.
+      Resolution: Format the incoming files; restore both original buffer/size/flags/counter fallback signatures from pinned sal/textenc/textcvt.cxx, adapt Calc callers and add six native boundary regression tests. Focused fallback suite passes 11 tests.
+
+    - Observation: Pinned upstream sal/textenc/textcvt.cxx lines 32-105 has two buffer-based functions and no string-returning overload. User explicitly requested source-exact reconciliation.
+      Impact: Keeping a convenience overload would invent a non-upstream contract and lose reverse error/capacity behavior.
+      Resolution: Retained exact native argument contracts in both directions, adapted Calc at OString/OUString boundary, and added six regression tests. Native source comparisons and all 11 focused fallback/caller tests pass. Historical task evidence remains unchanged; duplicate incoming/main issue identifiers are disambiguated in current ledgers and current references.
+
+    - Observation: User explicitly approved consolidating all file-size and JSDoc fixes in main before reverse synchronization. Initial full gates found 7 files at or above 1000 lines and missing documentation in 96 files.
+      Impact: Incoming development branches cannot independently satisfy repository-wide verification until integration repairs are shared.
+      Resolution: Decompose the scanner, RTF parser/tests, Calc facade declarations and text-node vocabulary; keep one native class instance and its state, use the existing out-of-class fragment pattern, register source provenance and preserve conservative unverified parity status. Add missing declaration documentation; retain all strict gates.
 id_source: "generated"
 ---
 ## Summary
@@ -92,3 +104,15 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: SSH pushes from writer and calc failed with Permission denied (publickey); main HTTPS fetch succeeded.
   Impact: SSH publication is unavailable in the current environment.
   Resolution: Use the same GitHub repository through its existing main HTTPS URL as a per-command transport override; do not change remotes or credentials.
+
+- Observation: Full npm run verify stopped at format:check: 30 incoming Calc files need formatting. Initial focused shared suite passed 15 tests. User requested upstream-exact reconciliation of dummy conversion APIs.
+  Impact: Formatting prevents later gates from running; a convenience overload had no upstream counterpart.
+  Resolution: Format the incoming files; restore both original buffer/size/flags/counter fallback signatures from pinned sal/textenc/textcvt.cxx, adapt Calc callers and add six native boundary regression tests. Focused fallback suite passes 11 tests.
+
+- Observation: Pinned upstream sal/textenc/textcvt.cxx lines 32-105 has two buffer-based functions and no string-returning overload. User explicitly requested source-exact reconciliation.
+  Impact: Keeping a convenience overload would invent a non-upstream contract and lose reverse error/capacity behavior.
+  Resolution: Retained exact native argument contracts in both directions, adapted Calc at OString/OUString boundary, and added six regression tests. Native source comparisons and all 11 focused fallback/caller tests pass. Historical task evidence remains unchanged; duplicate incoming/main issue identifiers are disambiguated in current ledgers and current references.
+
+- Observation: User explicitly approved consolidating all file-size and JSDoc fixes in main before reverse synchronization. Initial full gates found 7 files at or above 1000 lines and missing documentation in 96 files.
+  Impact: Incoming development branches cannot independently satisfy repository-wide verification until integration repairs are shared.
+  Resolution: Decompose the scanner, RTF parser/tests, Calc facade declarations and text-node vocabulary; keep one native class instance and its state, use the existing out-of-class fragment pattern, register source provenance and preserve conservative unverified parity status. Add missing declaration documentation; retain all strict gates.

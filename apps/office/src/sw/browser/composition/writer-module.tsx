@@ -7,10 +7,10 @@
 
 import { useEffect, useState } from "react";
 
-import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
+import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
 import { BrowserSfxDispatcher } from "../../../framework/browser/dispatch/browser-dispatcher";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import type { OfficeModuleFactory } from "../../../framework/browser/app/modulemanager";
+import { SfxViewFrame } from "../../../sfx2/source/view/viewfrm";
 import { copyRichText, readRichClipboard } from "../../../vcl/browser/browser-clipboard";
 import {
   createBrowserDocumentExportPort,
@@ -21,29 +21,29 @@ import {
   createBrowserDefaultFontDevice,
   createDefaultFontLocale,
 } from "../../../vcl/browser/default-font-device";
+import {
+  createInlineOdtFilterService,
+  type OdtFilterService,
+} from "../../source/filter/xml/odt-filter-service";
+import { SwDocShell } from "../../source/uibase/app/docsh";
+import { SwModule } from "../../source/uibase/app/swmodule";
+import { SwView } from "../../source/uibase/uiview/view";
+import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
+import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
+import { WriterWorkbench } from "../presentation/writer-view";
+import { WriterViewStore } from "../presentation/writer-view-projection";
 import { WriterLayoutPreferenceStore } from "../storage/writer-layout-preferences-store";
 import { IndexedDbWriterOdtStore } from "../storage/writer-odt-store";
 import { WriterAutosaveController } from "../workflows/writer-autosave";
 import { WriterFileDialogController } from "../workflows/writer-file-dialog-controller";
 import {
-  createInlineOdtFilterService,
-  type OdtFilterService,
-} from "../../source/filter/xml/odt-filter-service";
-import { createBrowserOdtFilterService } from "../filter/xml/odt-worker-client";
-import { WriterWorkbench } from "../presentation/writer-view";
-import { WriterViewStore } from "../presentation/writer-view-projection";
-import {
   WriterWorkflowCommandShell,
   type WriterSessionServices,
 } from "../workflows/writer-workflows";
-import { SwModule } from "../../source/uibase/app/swmodule";
-import { SwView } from "../../source/uibase/uiview/view";
-import { createWriterWorkbenchDocument } from "../../source/uibase/uiview/viewfunc";
-import { SwDocShell } from "../../source/uibase/app/docsh";
 
 import {
-  getWriterDefaultFontType,
   getWriterDefaultFontLanguage,
+  getWriterDefaultFontType,
 } from "../../source/core/doc/default-font";
 
 /** Prepares original text/heading/fixed role families before constructing browser documents. @param document - Host. @param language - Canonical host locale. @returns Preparation completion. */
@@ -129,7 +129,7 @@ export function createWriterDocumentSession(
             locale.dispose();
           }
         },
-        /** Binds AttrSetToLineHeight to the browser's physical font metrics. */
+        /** Binds AttrSetToLineHeight to the browser's physical font metrics.  @param family - Family. @param heightTwips - Height Twips. @returns The computed result. */
         measureTextHeight(family, heightTwips) {
           const context = globalThis.document.createElement("canvas").getContext("2d");
           if (context === null) throw new Error("Writer output device is unavailable.");

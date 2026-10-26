@@ -3,10 +3,9 @@
  */
 
 import { describe, expect, it } from "vitest";
-import { createWriterDocument } from "../doc/doc";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { createWriterDocument } from "../doc/doc";
 
-import { projectWriterTextRuns } from "./ndtxt";
 import {
   createWriterTextFragment,
   createWriterTextRuns,
@@ -16,6 +15,7 @@ import {
   normalizeWriterTextRuns,
   splitWriterTextRuns,
 } from "../../filter/basflt/writer-transfer";
+import { projectWriterTextRuns } from "./ndtxt";
 
 /** Creates a compact default direct-format text run. @param text - Non-empty visible text run body. @returns Default-attribute Writer text run. */
 function defaultRun(text: string) {
@@ -87,7 +87,7 @@ describe("Writer text nodes" /** Groups immutable direct character-format run be
     ).toThrow("outside");
   });
 
-  it("retains native strikeout and escapement through text transfer and split", () => {
+  it("retains native strikeout and escapement through text transfer and split", /** Checks retains native strikeout and escapement through text transfer and split. @returns Test completion or assertion result. */ () => {
     const decorated = {
       bold: false,
       italic: false,
@@ -101,7 +101,11 @@ describe("Writer text nodes" /** Groups immutable direct character-format run be
     ]);
     expect(runs).toHaveLength(2);
     expect(
-      splitWriterTextRuns(runs, 1).suffix.map((run) => run.attributes.escapement?.offset),
+      splitWriterTextRuns(runs, 1).suffix.map(
+        /** Checks retains native strikeout and escapement through text transfer and split. @param run - Run. @returns Test completion or assertion result. */ (
+          run,
+        ) => run.attributes.escapement?.offset,
+      ),
     ).toEqual([33, -8]);
     expect(
       normalizeWriterCharacterAttributes({
@@ -116,9 +120,13 @@ describe("Writer text nodes" /** Groups immutable direct character-format run be
       const fragment = createWriterTextFragment(node, runs);
       node.SetText(fragment.text);
       node.SetTextHints(fragment.hints);
-      expect(projectWriterTextRuns(node).map((run) => run.attributes.escapement?.offset)).toEqual([
-        33, -8,
-      ]);
+      expect(
+        projectWriterTextRuns(node).map(
+          /** Checks retains native strikeout and escapement through text transfer and split. @param run - Run. @returns Test completion or assertion result. */ (
+            run,
+          ) => run.attributes.escapement?.offset,
+        ),
+      ).toEqual([33, -8]);
     } finally {
       document.Dispose();
     }

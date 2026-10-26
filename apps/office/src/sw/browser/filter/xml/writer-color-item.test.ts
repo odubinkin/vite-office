@@ -1,20 +1,20 @@
 /** @fileoverview Genuine Writer character-color values,slot default and lossless worker transfer boundaries. */
 import { expect, it } from "vitest";
-import { SwDoc } from "../../../source/core/doc/doc";
-import {
-  createWriterTextColorItem,
-  writerTextColorValue,
-  createWriterHighlightItem,
-  writerHighlightColorValue,
-} from "../../../source/core/attr/swatrset";
-import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
-import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
-import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { ThemeColorUsage } from "../../../../docmodel/inc/theme/ThemeColorType";
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { Color } from "../../../../tools/inc/color";
-import { encodeSfxPoolItem, decodeSfxPoolItem } from "./item-codec";
+import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
+import {
+  createWriterHighlightItem,
+  createWriterTextColorItem,
+  writerHighlightColorValue,
+  writerTextColorValue,
+} from "../../../source/core/attr/swatrset";
+import { SwDoc } from "../../../source/core/doc/doc";
+import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
 it("uses the native black pool default and preserves opaque,automatic and transparency worker values", /** Uses actual pool factory and browser codec,including legacy input records. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     pool = doc.GetAttrPool();
@@ -44,7 +44,7 @@ it("uses the native black pool default and preserves opaque,automatic and transp
         createWriterTextColorItem(invalid),
     ).toThrow("invalid");
 });
-it("keeps native highlight brushes and complete color words across worker snapshots", () => {
+it("keeps native highlight brushes and complete color words across worker snapshots", /** Checks keeps native highlight brushes and complete color words across worker snapshots. @returns Test completion or assertion result. */ () => {
   const doc = new SwDoc(),
     pool = doc.GetAttrPool();
   expect(pool.GetUserOrPoolDefaultItem(RES_CHRATR_HIGHLIGHT)).toBeInstanceOf(SvxBrushItem);

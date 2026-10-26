@@ -2,7 +2,7 @@
 import * as cvt from "../inc/rtl/textcvt.h";
 import { handleUndefinedUnicodeToTextChar } from "./handleundefinedunicodetotextchar.hxx";
 
-/** Maps control bytes directly and all other symbol bytes into Unicode private use. */
+/** Maps control bytes directly and all other symbol bytes into Unicode private use.  @param _data - Data. @param _context - Context. @param source - Source. @param sourceBytes - Source Bytes. @param destination - Destination. @param destinationChars - Destination Chars. @param _flags - Flags. @param info - Info. @param sourceConverted - Source Converted. @returns The number result. */
 export function ImplSymbolToUnicode(
   _data: unknown,
   _context: unknown,
@@ -30,7 +30,7 @@ export function ImplSymbolToUnicode(
   return destinationOffset;
 }
 
-/** Reverses private-use symbol units and the source's accepted low-byte aliases. */
+/** Reverses private-use symbol units and the source's accepted low-byte aliases.  @param _data - Data. @param _context - Context. @param source - Source. @param sourceChars - Source Chars. @param destination - Destination. @param destinationBytes - Destination Bytes. @param flags - Flags. @param info - Info. @param sourceConverted - Source Converted. @returns The number result. */
 export function ImplUnicodeToSymbol(
   _data: unknown,
   _context: unknown,

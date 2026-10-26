@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "document-model",
+    "capabilityIds": [
+      "CAP-0111",
+      "CAP-0123",
+      "CAP-0124",
+      "CAP-0126",
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/ndtxt.attributes.ts",
+        "apps/office/src/sw/source/core/txtnode/ndtxt.ts"
+      ],
+      "justification": "Source decomposition of sw/source/core/txtnode/ndtxt.ts: WRITER_CHARACTER_FORMATS, WriterCharacterFormat, SwTextFragment, WRITER_PARAGRAPH_ALIGNMENTS, WriterParagraphAlignment, isWriterParagraphAlignment. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WRITER_CHARACTER_FORMATS",
+        "WriterCharacterFormat",
+        "SwTextFragment",
+        "WRITER_PARAGRAPH_ALIGNMENTS",
+        "WriterParagraphAlignment",
+        "isWriterParagraphAlignment"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/ndtxt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode",
+        "SwNodes::MakeTextNode",
+        "SwTextNode::SwTextNode",
+        "sw::TextNodeNotificationSuppressor",
+        "SwTextNode::MoveTextAttr_To_AttrSet",
+        "SwTextNode::MakeNewTextNode",
+        "CopyDirectListLevel",
+        "SwTextNode::GetNumString",
+        "SwTextNode::HasVisibleNumberingOrBullet",
+        "SwTextNode::GetLeftMarginWithNum",
+        "SwTextNode::GetLeftMarginForTabCalculation",
+        "SwTextNode::ReplaceText"
+      ]
+    }
+  }
+}

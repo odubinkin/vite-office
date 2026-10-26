@@ -1,14 +1,14 @@
 /** @fileoverview Verifies native Writer Markdown output and represented round trips. */
 import { expect, it } from "vitest";
+import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
+import { FontWeight } from "../../../../tools/inc/fontenum";
+import { RES_CHRATR_CJK_WEIGHT, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
+import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { createWriterDocument } from "../../core/doc/doc";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import { createWriterTextFragment } from "../basflt/writer-transfer";
-import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
-import { FontWeight } from "../../../../tools/inc/fontenum";
-import { RES_CHRATR_CJK_WEIGHT, RES_CHRATR_WEIGHT } from "../../../inc/hintids";
-import { createWriterTextColorItem } from "../../core/attr/swatrset";
 import { MarkdownReader } from "./swmd";
 import { SwMDWriter } from "./wrtmd";
 
@@ -29,11 +29,11 @@ it("round trips headings, list items and ordinary escaped text", /** Checks nati
     expect(markdown).toContain("One \\*literal\\*");
     imported = new MarkdownReader().Read(new TextEncoder().encode(markdown));
     expect(
-      imported.paragraphs.map((node) => [
-        node.GetParagraphStyle(),
-        node.GetText(),
-        node.GetListKind(),
-      ]),
+      imported.paragraphs.map(
+        /** Checks round trips headings, list items and ordinary escaped text. @param node - Node. @returns Test completion or assertion result. */ (
+          node,
+        ) => [node.GetParagraphStyle(), node.GetText(), node.GetListKind()],
+      ),
     ).toEqual([
       ["heading-2", "Heading", "none"],
       ["default", "One *literal*", "numbered"],
@@ -45,7 +45,7 @@ it("round trips headings, list items and ordinary escaped text", /** Checks nati
   }
 });
 
-it("exports a named style through its closest built-in heading ancestor", () => {
+it("exports a named style through its closest built-in heading ancestor", /** Checks exports a named style through its closest built-in heading ancestor. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing body paragraph.");
@@ -67,7 +67,7 @@ it("exports a named style through its closest built-in heading ancestor", () => 
   }
 });
 
-it("keeps source block-quote-before-heading marker order", () => {
+it("keeps source block-quote-before-heading marker order", /** Checks keeps source block-quote-before-heading marker order. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing body paragraph.");
@@ -107,7 +107,7 @@ it("writes a Markdown table from actual Writer rows", /** Checks table writer an
   }
 });
 
-it("keeps the source paragraph separator inside one native Markdown code fence", () => {
+it("keeps the source paragraph separator inside one native Markdown code fence", /** Checks keeps the source paragraph separator inside one native Markdown code fence. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];
   if (first === undefined) throw new Error("Missing paragraph.");
@@ -124,7 +124,7 @@ it("keeps the source paragraph separator inside one native Markdown code fence",
   }
 });
 
-it("preserves the pinned unmatched fence after an empty leading code paragraph", () => {
+it("preserves the pinned unmatched fence after an empty leading code paragraph", /** Checks preserves the pinned unmatched fence after an empty leading code paragraph. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];
   if (first === undefined) throw new Error("Missing body paragraph.");
@@ -140,7 +140,7 @@ it("preserves the pinned unmatched fence after an empty leading code paragraph",
   }
 });
 
-it("writes source paragraph spacing around empty paragraphs and adjacent list items", () => {
+it("writes source paragraph spacing around empty paragraphs and adjacent list items", /** Checks writes source paragraph spacing around empty paragraphs and adjacent list items. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const first = source.paragraphs[0];
   if (first === undefined) throw new Error("Missing body paragraph.");
@@ -160,7 +160,7 @@ it("writes source paragraph spacing around empty paragraphs and adjacent list it
   }
 });
 
-it("writes a source table separator even at the beginning of the body", () => {
+it("writes a source table separator even at the beginning of the body", /** Checks writes a source table separator even at the beginning of the body. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const initial = source.paragraphs[0];
   if (initial === undefined) throw new Error("Missing body paragraph.");
@@ -176,7 +176,7 @@ it("writes a source table separator even at the beginning of the body", () => {
   }
 });
 
-it("keeps one upstream Markdown hyperlink across differently formatted text runs", () => {
+it("keeps one upstream Markdown hyperlink across differently formatted text runs", /** Checks keeps one upstream Markdown hyperlink across differently formatted text runs. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -203,7 +203,7 @@ it("keeps one upstream Markdown hyperlink across differently formatted text runs
   }
 });
 
-it("keeps Markdown emphasis open across runs split only by unsupported color", () => {
+it("keeps Markdown emphasis open across runs split only by unsupported color", /** Checks keeps Markdown emphasis open across runs split only by unsupported color. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -226,7 +226,7 @@ it("keeps Markdown emphasis open across runs split only by unsupported color", (
   }
 });
 
-it("serializes the style item set when a paragraph has no direct item set", () => {
+it("serializes the style item set when a paragraph has no direct item set", /** Checks serializes the style item set when a paragraph has no direct item set. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -243,7 +243,7 @@ it("serializes the style item set when a paragraph has no direct item set", () =
   }
 });
 
-it("preserves the source non-unknown weight test for a direct normal weight item", () => {
+it("preserves the source non-unknown weight test for a direct normal weight item", /** Checks preserves the source non-unknown weight test for a direct normal weight item. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -256,7 +256,7 @@ it("preserves the source non-unknown weight test for a direct normal weight item
   }
 });
 
-it("ignores CJK-only weight in the pinned Markdown character-item switch", () => {
+it("ignores CJK-only weight in the pinned Markdown character-item switch", /** Checks ignores CJK-only weight in the pinned Markdown character-item switch. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -269,7 +269,7 @@ it("ignores CJK-only weight in the pinned Markdown character-item switch", () =>
   }
 });
 
-it("writes imported native Markdown code spans through the preformatted font item", () => {
+it("writes imported native Markdown code spans through the preformatted font item", /** Checks writes imported native Markdown code spans through the preformatted font item. @returns Test completion or assertion result. */ () => {
   const document = new MarkdownReader().Read(new TextEncoder().encode("Before `code` after"));
   try {
     expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(document))).toBe(
@@ -280,7 +280,7 @@ it("writes imported native Markdown code spans through the preformatted font ite
   }
 });
 
-it("preserves upstream delimiter ordering when bold starts with a hyperlink", () => {
+it("preserves upstream delimiter ordering when bold starts with a hyperlink", /** Checks preserves upstream delimiter ordering when bold starts with a hyperlink. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const paragraph = source.paragraphs[0];
   if (paragraph === undefined) throw new Error("Missing paragraph.");
@@ -307,7 +307,7 @@ it("preserves upstream delimiter ordering when bold starts with a hyperlink", ()
   }
 });
 
-it("uses native numbering labels and parent-prefix width for nested Markdown items", () => {
+it("uses native numbering labels and parent-prefix width for nested Markdown items", /** Checks uses native numbering labels and parent-prefix width for nested Markdown items. @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   const parent = source.paragraphs[0];
   if (parent === undefined) throw new Error("Missing paragraph.");

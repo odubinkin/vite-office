@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.modes.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/inc/document.hxx",
+    "localSymbols": [
+      "ScDocumentMode",
+      "HardRecalcState"
+    ],
+    "upstreamSymbols": [
+      "ScDocumentMode",
+      "HardRecalcState"
+    ],
+    "preservedResponsibilities": [
+      "Source decomposition of sc/source/core/data/document.ts: ScDocumentMode, HardRecalcState. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+    ],
+    "omittedResponsibilities": [
+      "This fragment does not certify full upstream parity or compiled differential behavior."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.modes.ts",
+          "marker": "ScDocumentMode"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/document.modes.ts",
+          "marker": "HardRecalcState"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/document.hxx",
+          "marker": "ScDocumentMode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/document.hxx",
+          "marker": "HardRecalcState"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.modes.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

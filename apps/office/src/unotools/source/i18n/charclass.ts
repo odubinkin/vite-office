@@ -1,12 +1,12 @@
 /** @fileoverview Original CharClass uppercase field query over prepared Locale state, using actual shared classification/mapping owners. This is not a fake CharClass or UNO provider. */
-import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import {
   getCharacterType,
   KCharacterType,
   toUpper,
 } from "../../../i18npool/source/characterclassification/cclass_unicode";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 
 /** Original whole-string overload after projecting its existing getMyLocale state. @param rStr - Actual input. @param locale - Prepared original state. @returns Actual mapped value. */
@@ -45,7 +45,7 @@ export class CharClass {
     }
     return true;
   }
-  /** Owns the prepared Locale projection of the source LanguageTag. @param locale - Initial locale. */
+  /** Owns the prepared Locale projection of the source LanguageTag. @param locale - Initial locale.  @returns Constructed instance. */
   constructor(locale: LocaleConstReference) {
     this.locale = new Locale(locale);
   }

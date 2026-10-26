@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts"
+      ],
+      "justification": "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, RtfCellBorder, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, fromRtfBorderStyle, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RtfParagraphState",
+        "RtfState",
+        "RtfParagraph",
+        "RtfRun",
+        "RtfBlock",
+        "RtfSectionPage",
+        "RtfTableRow",
+        "RtfCellBorder",
+        "DEFAULT_CHARACTER",
+        "RTF_UNDERLINE_STYLES",
+        "hasRtfUnderlineControl",
+        "DEFAULT_PARAGRAPH",
+        "SKIPPED_DESTINATIONS",
+        "STYLE_PROPERTY_CONTROLS",
+        "CHARACTER_PROPERTY_CONTROLS",
+        "createRtfTabStops",
+        "createRtfLineSpacing",
+        "equalCharacter",
+        "resolveRtfRunAttributes",
+        "equalControls",
+        "getRtfFieldCommandParts",
+        "parseRtfHyperlinkInstruction",
+        "fromRtfNfc",
+        "fromRtfBorderStyle",
+        "RtfDocumentImplContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::resolveSubstream"
+      ]
+    }
+  }
+}

@@ -8,18 +8,18 @@ import path from "node:path";
 
 import { describe, expect, it, vi } from "vitest";
 
-import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
-import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
 import { ZipFile } from "../../apps/office/src/package/source/zipapi/ZipFile";
+import { SfxRequest } from "../../apps/office/src/sfx2/source/control/request";
+import { createDocument } from "../../apps/office/src/sfx2/source/doc/objsh";
+import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
 import type { SwDoc } from "../../apps/office/src/sw/source/core/doc/doc";
 import { projectWriterParagraphList } from "../../apps/office/src/sw/source/core/doc/list";
+import { projectSwTextPrintBounds } from "../../apps/office/src/sw/source/core/layout/newfrm";
 import { projectWriterTextRuns } from "../../apps/office/src/sw/source/core/txtnode/ndtxt";
 import { readOdtDocument } from "../../apps/office/src/sw/source/filter/xml/swxml";
 import { writeOdtDocument } from "../../apps/office/src/sw/source/filter/xml/wrtxml";
 import { SwDocShell } from "../../apps/office/src/sw/source/uibase/app/docsh";
 import { SwWrtShell } from "../../apps/office/src/sw/source/uibase/wrtsh/wrtsh1";
-import { SwPosition } from "../../apps/office/src/sw/source/core/crsr/pam";
-import { projectSwTextPrintBounds } from "../../apps/office/src/sw/source/core/layout/newfrm";
 import { WRITER_COMMAND_IDS } from "../../apps/office/src/sw/uiconfig/swriter/menubar/menubar-commands";
 
 const fixtureRoot = path.resolve("apps/office/src/sw/qa/extras/odfimport/data");
@@ -84,9 +84,10 @@ function normalizeWriterSemantics(document: SwDoc): readonly object[] {
 describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createSwDoc assertions in upstream odffeatures.cxx with local semantic assertions. @returns Nothing. */, () => {
   for (const fixture of [
     // The shared token table also recognizes the single fo:wrap-option in each styles.xml.
+    // Incoming main recognizes the two style:letter-kerning attributes in each styles.xml.
     // Token recognition does not claim complete Writer table-cell wrapping support.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 69 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 81 },
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 67 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 79 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -125,6 +126,7 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
               "style:font-size-asian",
               "style:font-size-complex",
               "fo:wrap-option",
+              "style:letter-kerning",
             ].includes(diagnostic.name),
         ),
       ).toBe(false);

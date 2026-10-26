@@ -1,14 +1,14 @@
 /** @fileoverview Native LocaleNode date acceptance order, edit-format generation and ref delegation. */
 import { expect, it } from "vitest";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   DateOrder,
-  LongDateOrder,
   LocaleDataWrapper,
+  LongDateOrder,
 } from "../../../unotools/source/i18n/localedatawrapper";
-import { getLocaleDateAcceptancePatterns } from "./localedata";
 import catalog from "./data/date-acceptance-patterns.json";
+import { getLocaleDateAcceptancePatterns } from "./localedata";
 
 /** Constructs an owned original Locale. @param language - Language. @param country - Country. @returns Native value. */
 function locale(language: string, country: string): Locale {
@@ -24,7 +24,7 @@ function locale(language: string, country: string): Locale {
   }
 }
 
-it("keeps the original registered locale set and explicit-before-generated pattern order", () => {
+it("keeps the original registered locale set and explicit-before-generated pattern order", /** Checks keeps the original registered locale set and explicit-before-generated pattern order. @returns Test completion or assertion result. */ () => {
   expect(Object.keys(catalog)).toHaveLength(284);
   const us = locale("en", "US"),
     gb = locale("en", "GB"),
@@ -40,7 +40,7 @@ it("keeps the original registered locale set and explicit-before-generated patte
   }
 });
 
-it("returns the wrapper-owned pattern sequence and refreshes it after a locale change", () => {
+it("returns the wrapper-owned pattern sequence and refreshes it after a locale change", /** Checks returns the wrapper-owned pattern sequence and refreshes it after a locale change. @returns Test completion or assertion result. */ () => {
   const us = locale("en", "US"),
     german = locale("de", "DE"),
     wrapper = new LocaleDataWrapper(us);
@@ -59,7 +59,7 @@ it("returns the wrapper-owned pattern sequence and refreshes it after a locale c
   }
 });
 
-it("derives source edit and long date orders from the ordered DATE format sequence", () => {
+it("derives source edit and long date orders from the ordered DATE format sequence", /** Checks derives source edit and long date orders from the ordered DATE format sequence. @returns Test completion or assertion result. */ () => {
   for (const [language, country, short, long] of [
     ["en", "US", DateOrder.MDY, LongDateOrder.MDY],
     ["en", "GB", DateOrder.DMY, LongDateOrder.DMY],

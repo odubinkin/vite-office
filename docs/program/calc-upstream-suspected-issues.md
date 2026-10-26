@@ -3957,43 +3957,43 @@ Pinned `sc/source/ui/view/viewutil.cxx:257` sets the range end to `LastNonFilter
 
 Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected marks,then resolves the cursor's merged rectangle. If that rectangle contains a filtered row,the later branch replaces MULTI with SIMPLE_FILTERED. The actual marks stay disconnected. Preserve this ordering and resulting fill/paste admission rather than retaining MULTI artificially.
 
-### CALC-285 — OOXML content-type helper searches extension defaults before full-part overrides
+### CALC-300 — OOXML content-type helper searches extension defaults before full-part overrides
 
 - Source: pinned `comphelper/source/xml/ofopxmlhelper.cxx`, `OFOPXMLHelper::GetContentTypeByName`.
 - Observation: the helper searches the extension key in Overrides and Defaults before searching the full part key. Given default `xml = application/xml` and override `/xl/workbook.xml = document-main`, it returns `application/xml`. This is surprising relative to OPC override precedence. The separate `ZipPackage::parseContentType` applies defaults then overrides; no incorrect desktop document result or reachable consumer defect is established here.
 - Preservation: retain exact search order, case-sensitive matching and first duplicate. `apps/office/src/comphelper/source/xml/ofopxmlhelper.test.ts` pins this result. Main-part selection uses the native office-document relationship path rather than changing this helper to infer a format from an extension. Shared finding also appears in the other application's issue ledger.
 
-### CALC-286 — shared fast serializer preserves assumed existing x-escape prefixes
+### CALC-301 — shared fast serializer preserves assumed existing x-escape prefixes
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::write`.
 - Observation: `_x005F_xHHHH_` is treated as already escaped and emitted unchanged; `_x0020_` is deliberately left unchanged too. The original code assumes an earlier failure to unescape such values. A literal input with that spelling can consequently change when a consumer decodes it as an OOXML basic string. Spreadsheet reachability and desktop impact remain unverified.
 - Preservation: retain the original predicates and adjacent-pattern suppression in the shared DOCX/XLSX export serializer. Tests verify emitted bytes; no broader desktop defect is claimed.
 
-### CALC-287 — sorted fast-serializer marks can omit initial unknown-token output
+### CALC-302 — sorted fast-serializer marks can omit initial unknown-token output
 
 - Source: pinned `sax/source/tools/fastserializer.hxx`, `ForSort`; `fastserializer.cxx`, `setCurrentElement`, `append` and `sort`.
 - Observation: output initially belongs to bucket zero. A token absent from the supplied order does not change the current bucket, and sorting emits only listed buckets. Initial output can therefore disappear, later unknown elements remain with the preceding recognized element, and duplicate order entries duplicate output. Reachability from supported Calc exports and desktop impact remain unverified.
 - Preservation: retain native zero initialization, sticky bucket selection, supplied-order iteration and sorted PREPEND-to-APPEND behavior. Shared tests assert emitted bytes without adding an unknown bucket or normalizing the order.
 
-### CALC-288 — shared SAX cache forwards a sequence backed by its reused buffer
+### CALC-303 — shared SAX cache forwards a sequence backed by its reused buffer
 
 - Source: pinned `sax/source/tools/CachedOutputStream.hxx`, `flush`/`writeBytes`; `include/com/sun/star/uno/Sequence.hxx`, `toUnoSequence`.
 - Observation: flush forwards a UNO reinterpretation of its cache sequence and then reuses raw storage on later writes. A native output stream retaining a Sequence copy could observe subsequent mutations, including length changes. Copy-on-write/retention behavior and a user-visible Calc defect remain unverified; this is a source-level suspicion.
 - Preservation: retain original buffer reuse and flush sequencing. The host stream binding consumes borrowed byte views synchronously, and the actual ZIP stream copies immediately. Native allocator, ABI and retained-sequence semantics are not simulated or certified.
 
-### CALC-289 — initial fast-serializer mark failure can retain an inconsistent empty flag
+### CALC-304 — initial fast-serializer mark failure can retain an inconsistent empty flag
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `mark`, `mergeTopMarks` and element starts.
 - Observation: mark pushes before a fallible cache destination switch and sets its independent empty flag afterwards. A flush failure can therefore leave a nonempty stack with an empty flag. Merge follows the flag and returns; starts bypass mark-element flushing, while the end invariant is no longer satisfied. Supported Calc export reachability and desktop impact remain unverified.
 - Preservation: retain flag defaults, update order and release-build guard. Shared tests use a genuinely closed ZIP stream; no stack rollback or flag normalization is added.
 
-### CALC-290 — full-list VML attribute prefix bypasses all XML escaping
+### CALC-305 — full-list VML attribute prefix bypasses all XML escaping
 
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::writeFastAttributeList`.
 - Observation: the prefix exception for `#_x0000_t` or `_x0000_t` disables the entire escape path, including quotes and ampersands, rather than only OOXML x-escaping. A matching value containing XML punctuation can therefore produce malformed attribute syntax. Desktop reachability is unverified. Native duplicate attributes are also emitted in release builds; their check is debug-only.
 - Preservation: retain prefix checks and raw emission, duplicate ordering and the independent queued token/value vector. Exact byte tests cover both prefixes and ordinary escaped attributes without introducing a sanitizer.
 
-### CALC-291 — configured font lower_bound does not select a shorter prefix entry
+### CALC-306 — configured font lower_bound does not select a shorter prefix entry
 
 - Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
 - Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.

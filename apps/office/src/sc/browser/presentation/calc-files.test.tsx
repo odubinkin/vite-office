@@ -1,21 +1,21 @@
 /** @fileoverview Actual Calc file/menu/dialog integration over shared browser UI,IndexedDB and ODS owners. */
-import { ScInputMode } from "../../inc/global";
-import { afterEach, expect, it, vi } from "vitest";
 import { act, cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { IDBFactory } from "fake-indexeddb";
+import { afterEach, expect, it, vi } from "vitest";
 import { IndexedDbDocumentStore } from "../../../framework/browser/storage/document-store";
-import { createCalcSession } from "../composition/calc-module";
-import { CalcWorkbench } from "./calc-workbench";
-import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
-import { CalcViewController } from "../controller/calc-view-controller";
-import { CalcFileDialog } from "./CalcFileDialog";
-import { ScAddress } from "../../inc/address";
-import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
-import { ScDocShell } from "../../source/ui/docshell/docsh";
-import { ScImportOptions } from "../../source/ui/dbgui/imoptdlg";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
 import type { DocumentExportRequest } from "../../../svl/source/misc/storage";
+import { ScAddress } from "../../inc/address";
+import { ScInputMode } from "../../inc/global";
+import { readOdsDocument } from "../../source/filter/xml/xmlwrap";
+import { ScImportOptions } from "../../source/ui/dbgui/imoptdlg";
+import { ScDocShell } from "../../source/ui/docshell/docsh";
+import { getCalcCommandResource } from "../../uiconfig/scalc/menubar/menubar";
+import { createCalcSession } from "../composition/calc-module";
+import { CalcViewController } from "../controller/calc-view-controller";
+import { CalcFileWorkflows } from "../workflows/calc-file-workflows";
+import { CalcWorkbench } from "./calc-workbench";
+import { CalcFileDialog } from "./CalcFileDialog";
 
 afterEach(
   /** Releases rendered controls and restores browser mocks. @returns Nothing. */ () => {
@@ -38,7 +38,7 @@ function ods(): Uint8Array {
   return bytes;
 }
 
-it("imports CSV from the file dialog and downloads the active sheet through the text filter", async () => {
+it("imports CSV from the file dialog and downloads the active sheet through the text filter", /** Checks imports CSV from the file dialog and downloads the active sheet through the text filter. @returns Test completion or assertion result. */ async () => {
   const db = store(),
     c = new CalcViewController();
   let exported: DocumentExportRequest | undefined;
@@ -79,7 +79,7 @@ it("imports CSV from the file dialog and downloads the active sheet through the 
   expect(new TextDecoder().decode(exported.data as Uint8Array)).toBe('Name,Value\n"A, B",42\n');
   c.Close();
 });
-it("routes the native all-sheet CSV selector to separate browser downloads", async () => {
+it("routes the native all-sheet CSV selector to separate browser downloads", /** Checks routes the native all-sheet CSV selector to separate browser downloads. @returns Test completion or assertion result. */ async () => {
   const controller = new CalcViewController(),
     document = controller.shell.GetDocument(),
     downloads: DocumentExportRequest[] = [];
@@ -87,21 +87,30 @@ it("routes the native all-sheet CSV selector to separate browser downloads", asy
   document.SetTextCell(new ScAddress(0, 0, 0), unicode("First"));
   document.SetTextCell(new ScAddress(0, 0, 1), unicode("Second"));
   const workflows = new CalcFileWorkflows(controller, undefined, undefined, {
-    export: (request) => {
-      downloads.push(request);
-    },
+    export:
+      /** Checks routes the native all-sheet CSV selector to separate browser downloads. @param request - Request. @returns Test completion or assertion result. */ (
+        request,
+      ) => {
+        downloads.push(request);
+      },
   });
   const options = new ScImportOptions();
   options.nSheetToExport = -1;
   await workflows.DownloadCsv(options.BuildString());
-  expect(downloads.map(({ name }) => name)).toEqual([
-    "Untitled Calc Document-Sheet1.csv",
-    "Untitled Calc Document-Data.csv",
-  ]);
-  expect(downloads.map(({ data }) => new TextDecoder().decode(data as Uint8Array))).toEqual([
-    "First\n",
-    "Second\n",
-  ]);
+  expect(
+    downloads.map(
+      /** Checks routes the native all-sheet CSV selector to separate browser downloads. @param input1 - Input1. @returns Test completion or assertion result. */ ({
+        name,
+      }) => name,
+    ),
+  ).toEqual(["Untitled Calc Document-Sheet1.csv", "Untitled Calc Document-Data.csv"]);
+  expect(
+    downloads.map(
+      /** Checks routes the native all-sheet CSV selector to separate browser downloads. @param input1 - Input1. @returns Test completion or assertion result. */ ({
+        data,
+      }) => new TextDecoder().decode(data as Uint8Array),
+    ),
+  ).toEqual(["First\n", "Second\n"]);
   controller.Close();
 });
 /** Reads one actual committed primary record. @param db - Store. @returns Record. */

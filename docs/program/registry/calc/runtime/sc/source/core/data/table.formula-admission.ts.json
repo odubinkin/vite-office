@@ -1,0 +1,61 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "scalar-document-editing",
+    "capabilityIds": [
+      "CAP-c8989bcd-7438-4fd9-bfdf-fdfd61a8255a",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d",
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678",
+      "CAP-1a4bce88-d9a6-4687-9133-f7ea69c5e9af",
+      "CAP-52bb76b0-ff2d-4a8c-86df-79f033c21d86",
+      "CAP-1c4b358a-d58f-4cb3-bd8a-a4aac3aa3bf5",
+      "CAP-8596b1f1-c99f-43bc-8d26-44ec9d84c05e",
+      "CAP-d7aef795-0709-4ea9-9f92-079142960ada",
+      "CAP-b0983657-1a03-4cca-8982-119820de587b",
+      "CAP-ef411d57-b025-407e-a0b7-fce8342cdeda",
+      "CAP-211b5dc6-a580-4baf-a71e-d3af2e1c746f",
+      "CAP-d9e3bd7a-f47f-4958-81a7-e7ef31935bf3"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/table.formula-admission.ts",
+        "apps/office/src/sc/source/core/data/table.ts"
+      ],
+      "justification": "Source decomposition of sc/source/core/data/table.ts: SetFormulaCell. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetFormulaCell",
+        "GetErrCode",
+        "GetFormulaCell",
+        "SetFormula",
+        "SetAllFormulasDirty"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/table2.cxx",
+      "upstreamSymbols": [
+        "ScTable::SetValue",
+        "ScTable::GetValue",
+        "ScTable::SetRawString",
+        "ScTable::GetCellType",
+        "ScTable::CopyFromClip",
+        "ScTable::SetDirtyFromClip",
+        "ScTable::BroadcastBroadcasters",
+        "ScTable::AddCondFormatData",
+        "ScTable::RemoveCondFormatData",
+        "ScTable::UndoToTable",
+        "ScTable::ApplyFlags",
+        "ScTable::RemoveFlags",
+        "ScTable::ApplyPatternIfNumberformatIncompatible"
+      ]
+    }
+  }
+}

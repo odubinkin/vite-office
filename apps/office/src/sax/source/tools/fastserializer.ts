@@ -1,7 +1,7 @@
 /** @fileoverview Native FastSaxSerializer UTF8 escaping, token emission and mark/sort owners from fastserializer.cxx; JS byte arrays bind original value sequences and GC erases physical reference counts. */
-import { FastAttributeList } from "./fastattribs";
 import { MergeMarks } from "../../inc/fshelper";
-import { CachedOutputStream, type OutputStream, type ForMergeBase } from "./CachedOutputStream";
+import { CachedOutputStream, type ForMergeBase, type OutputStream } from "./CachedOutputStream";
+import { FastAttributeList } from "./fastattribs";
 /** Native token-handler dependency is supplied by the actual caller in place of component-service construction. */
 export interface FastTokenHandler {
   getUTF8Identifier(token: number): Uint8Array;
@@ -136,7 +136,7 @@ const entities = new Map([
 export class FastSaxSerializer {
   private readonly maCachedOutputStream: CachedOutputStream;
   private readonly maMarkStack: ForMerge[] = [];
-  /** Native independent flag: fallible mark setup can leave it inconsistent with the stack; preserve WRITER111/CALC-289. */
+  /** Native independent flag: fallible mark setup can leave it inconsistent with the stack; preserve WRITER138/CALC-304. */
   private mbMarkStackEmpty = true;
   private readonly maTokenValues: TokenValue[] = [];
   private mbXescape = true;

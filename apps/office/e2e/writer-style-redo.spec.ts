@@ -1,13 +1,14 @@
 /** @fileoverview Verifies native style/reset history asymmetry, expanded redo selection, typing and ODT export at desktop/mobile widths. */
-import { pickWriterStyle } from "./writer-style-box";
 import { expect, test } from "@playwright/test";
-import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import fs from "node:fs/promises";
-import { createDocument } from "../src/sfx2/source/doc/objsh";
+import { SvxIndentValue } from "../src/editeng/inc/lrspitem";
 import { SvxFirstLineIndentItem } from "../src/editeng/source/items/frmitems";
+import { createDocument } from "../src/sfx2/source/doc/objsh";
+import { RES_MARGIN_FIRSTLINE } from "../src/sw/inc/hintids";
 import { SwDoc } from "../src/sw/source/core/doc/doc";
-import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
 import { readOdtDocument } from "../src/sw/source/filter/xml/swxml";
+import { writeOdtDocument } from "../src/sw/source/filter/xml/wrtxml";
+import { pickWriterStyle } from "./writer-style-box";
 
 /** Builds native styles and real partial hint data without browser model injection. @returns Native ODT bytes. */
 function historyOdt(): Uint8Array {
@@ -17,11 +18,11 @@ function historyOdt(): Uint8Array {
   before.SetText("BeforeHistoryNeighbor");
   const a = doc.MakeTextFormatColl("History style A", doc.GetDfltTextFormatColl(), "HistoryA"),
     b = doc.MakeTextFormatColl("History style B", doc.GetDfltTextFormatColl(), "HistoryB");
-  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), 92));
-  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), 92));
+  a.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(240), RES_MARGIN_FIRSTLINE));
+  b.SetFormatAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(360), RES_MARGIN_FIRSTLINE));
   const node = doc.GetNodes().MakeTextNode("StyleRedo Bold Link Tail");
   node.ChgFormatColl(a);
-  node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), 92));
+  node.SetAttr(new SvxFirstLineIndentItem(SvxIndentValue.twips(720), RES_MARGIN_FIRSTLINE));
   node.ToggleTextRangeFormat(10, 14, "bold");
   node.SetHyperlink(15, 19, {
     url: "https://example.test/redo-history",

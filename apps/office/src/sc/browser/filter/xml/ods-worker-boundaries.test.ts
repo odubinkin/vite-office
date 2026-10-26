@@ -1,17 +1,17 @@
 /** @fileoverview Actual Calc worker protocol success, failure, timeout and stale-callback boundaries. */
 import { afterEach, expect, it, vi } from "vitest";
-import { DEFAULT_FAST_XML_LIMITS } from "../../../../sax/source/fastparser/fastparser";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { DEFAULT_ZIP_FILE_LIMITS } from "../../../../package/source/zipapi/ZipFile";
+import { DEFAULT_FAST_XML_LIMITS } from "../../../../sax/source/fastparser/fastparser";
+import { ScAddress } from "../../../inc/address";
+import { ScDocument } from "../../../inc/document";
+import { CellType } from "../../../inc/global";
+import { createInlineOdsFilterService } from "../../../source/filter/xml/ods-filter-service";
+import { writeOdsXml } from "../../../source/filter/xml/xmlwrap";
+import { createCalcSession } from "../../composition/calc-module";
+import { decodeCalcDocument, encodeCalcDocument } from "./calc-document-codec";
 import { OdsWorkerClient } from "./ods-worker-client";
 import { processOdsWorkerRequest, type OdsWorkerRequest } from "./ods-worker-runtime";
-import { encodeCalcDocument, decodeCalcDocument } from "./calc-document-codec";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
-import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { CellType } from "../../../inc/global";
-import { writeOdsXml } from "../../../source/filter/xml/xmlwrap";
-import { createInlineOdsFilterService } from "../../../source/filter/xml/ods-filter-service";
-import { createCalcSession } from "../../composition/calc-module";
 /** Controllable transport with actual terminal envelopes. */
 class Transport {
   onmessage: Worker["onmessage"] = null;
@@ -49,7 +49,7 @@ function model(): ScDocument {
   doc.SetValue(new ScAddress(), 7);
   return doc;
 }
-it("transfers edit-text cells through the browser worker document record", () => {
+it("transfers edit-text cells through the browser worker document record", /** Checks transfers edit-text cells through the browser worker document record. @returns Test completion or assertion result. */ () => {
   const doc = model(),
     pos = new ScAddress(1, 0, 0);
   doc.SetTextCell(pos, unicode("first\nsecond"));

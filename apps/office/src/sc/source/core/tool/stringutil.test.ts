@@ -1,9 +1,9 @@
 /** @fileoverview Original testCSV numeric detection cases plus Unicode scanner boundaries against real RTL conversion. */
 import { expect, it } from "vitest";
+import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScSetStringParam, ScStringUtil } from "../../../inc/stringutil";
 import { SingleCellListening } from "../../../inc/types";
-import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-it("retains ScSetStringParam defaults and the source text/numeric policy switches", () => {
+it("retains ScSetStringParam defaults and the source text/numeric policy switches", /** Checks retains ScSetStringParam defaults and the source text/numeric policy switches. @returns Test completion or assertion result. */ () => {
   const param = new ScSetStringParam();
   expect(param.mpNumFormatter).toBeNull();
   expect(param.mbDetectNumberFormat).toBe(true);
@@ -25,7 +25,7 @@ it("retains ScSetStringParam defaults and the source text/numeric policy switche
   expect(param.meSetTextNumFormat).toBe(ScSetStringParam.Never);
   expect(param.mbCheckLinkFormula).toBe(true);
 });
-it("detects either native multiline separator without treating other control characters as breaks", () => {
+it("detects either native multiline separator without treating other control characters as breaks", /** Checks detects either native multiline separator without treating other control characters as breaks. @returns Test completion or assertion result. */ () => {
   for (const [value, multiline] of [
     ["A\rB", true],
     ["A\nB", true],

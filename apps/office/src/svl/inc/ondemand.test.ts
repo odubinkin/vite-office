@@ -1,6 +1,6 @@
 /** @fileoverview Native OnDemandCharClass matching and alternating replacement. */
 import { expect, it } from "vitest";
-import { unicode, text } from "../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../udkapi/com/sun/star/lang/Locale";
 import { OnDemandCharClass } from "./ondemand";
 
@@ -9,7 +9,7 @@ function locale(language: string, country: string): Locale {
   return new Locale(unicode(language), unicode(country), unicode(""));
 }
 
-it("reuses either matching classifier and replaces the opposite slot on a third locale", () => {
+it("reuses either matching classifier and replaces the opposite slot on a third locale", /** Checks reuses either matching classifier and replaces the opposite slot on a third locale. @returns Test completion or assertion result. */ () => {
   const en = locale("en", "US"),
     de = locale("de", "DE"),
     tr = locale("tr", "TR"),

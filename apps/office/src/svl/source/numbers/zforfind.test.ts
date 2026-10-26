@@ -1,17 +1,17 @@
 /** @fileoverview Pinned source input-fragment division, including capacity and grouping boundaries. */
 import { expect, it } from "vitest";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
-import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
-import { SvNumFormatType, SvNumInputOptions } from "../../inc/zforlist";
 import { DateOrder, LongDateOrder } from "../../../unotools/source/i18n/localedatawrapper";
-import { ImpSvNumFor, SvNumberformat } from "./zformat";
-import { NfSymbolType } from "../../inc/nfsymbol";
 import { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import { NfSymbolType } from "../../inc/nfsymbol";
+import { SvNumFormatType, SvNumInputOptions } from "../../inc/zforlist";
 import { TransformInput } from "./zforfind";
+import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
+import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
-it("follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate", () => {
+it("follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate", /** Checks follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     nativeNumber = new NativeNumberWrapper(),
     japanese = new SvNFLanguageData(mapper, 0x0411),
@@ -27,18 +27,23 @@ it("follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate
     expect(text(foreign)).toBe("１２３");
     expect(text(ascii)).toBe("123");
   } finally {
-    ascii.dispose(); foreign.dispose(); local.dispose(); english.dispose(); japanese.dispose(); mapper.dispose();
+    ascii.dispose();
+    foreign.dispose();
+    local.dispose();
+    english.dispose();
+    japanese.dispose();
+    mapper.dispose();
   }
 });
 
-it("uses source GetTimeRef duration, clock and leap-second boundaries", () => {
+it("uses source GetTimeRef duration, clock and leap-second boundaries", /** Checks uses source GetTimeRef duration, clock and leap-second boundaries. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       GetTimeRef(out: [number], first: number, count: number, options: number): boolean;
     },
     state = language.pStringScanner.fields;
-  /** Assigns numeric fragments to the native scanner's existing slots. */
+  /** Assigns numeric fragments to the native scanner's existing slots.  @param parts - Parts. @param options - Options. @returns The [boolean, number] result. */
   function check(parts: string[], options: number = SvNumInputOptions.NONE): [boolean, number] {
     state.nDecPos = 0;
     state.nAmPm = 0;
@@ -61,17 +66,25 @@ it("uses source GetTimeRef duration, clock and leap-second boundaries", () => {
     const out: [number] = [0];
     expect(scanner.GetTimeRef(out, 0, 2, SvNumInputOptions.NONE)).toBe(true);
     expect(out[0]).toBe((13 * 3600 + 30 * 60) / 86400);
-  } finally { language.dispose(); mapper.dispose(); }
+  } finally {
+    language.dispose();
+    mapper.dispose();
+  }
 });
 
-it("matches source literal tokens across subformats, then the remaining input suffix", () => {
+it("matches source literal tokens across subformats, then the remaining input suffix", /** Checks matches source literal tokens across subformats, then the remaining input suffix. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     code = unicode("General"),
     format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]),
     sections = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor,
     scanner = language.pStringScanner as unknown as {
-      ScanStringNumFor(input: OUString, position: number, token: number, suppress: boolean): boolean;
+      ScanStringNumFor(
+        input: OUString,
+        position: number,
+        token: number,
+        suppress: boolean,
+      ): boolean;
     },
     input = unicode("1AbC");
   const negative = sections[1] as ImpSvNumFor;
@@ -85,11 +98,16 @@ it("matches source literal tokens across subformats, then the remaining input su
     expect(language.pStringScanner.fields.nStringScanNumFor).toBe(1);
     expect(language.pStringScanner.fields.nStringScanSign).toBe(-1);
   } finally {
-    literal.dispose(); input.dispose(); format.dispose(); code.dispose(); language.dispose(); mapper.dispose();
+    literal.dispose();
+    input.dispose();
+    format.dispose();
+    code.dispose();
+    language.dispose();
+    mapper.dispose();
   }
 });
 
-it("classifies source start fragments through sign, decimal, currency and month owners", () => {
+it("classifies source start fragments through sign, decimal, currency and month owners", /** Checks classifies source start fragments through sign, decimal, currency and month owners. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -103,19 +121,30 @@ it("classifies source start fragments through sign, decimal, currency and month 
       scanner.Reset();
       const accepted = scanner.ScanStartString(input);
       const state = language.pStringScanner.fields;
-      return { accepted, sign: state.nSign, decimal: state.nDecPos,
-        type: state.eScannedType, month: state.nMonth };
-    } finally { input.dispose(); }
+      return {
+        accepted,
+        sign: state.nSign,
+        decimal: state.nDecPos,
+        type: state.eScannedType,
+        month: state.nMonth,
+      };
+    } finally {
+      input.dispose();
+    }
   }
   try {
     expect(scan("-")).toMatchObject({ accepted: true, sign: -1 });
     expect(scan(".")).toMatchObject({ accepted: true, decimal: 1 });
     expect(scan("$")).toMatchObject({ accepted: true, type: SvNumFormatType.CURRENCY });
     expect(scan("JAN ")).toMatchObject({ accepted: true, type: SvNumFormatType.DATE, month: -1 });
-  } finally { language.dispose(); mapper.dispose(); SvNumberFormatter.resetTheCurrencyTable(); }
+  } finally {
+    language.dispose();
+    mapper.dispose();
+    SvNumberFormatter.resetTheCurrencyTable();
+  }
 });
 
-it("classifies source end fragments through percent, currency, decimal and format fallback", () => {
+it("classifies source end fragments through percent, currency, decimal and format fallback", /** Checks classifies source end fragments through percent, currency, decimal and format fallback. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -127,19 +156,26 @@ it("classifies source end fragments through percent, currency, decimal and forma
     const input = unicode(value);
     try {
       scanner.Reset();
-      const accepted = scanner.ScanEndString(input), state = language.pStringScanner.fields;
+      const accepted = scanner.ScanEndString(input),
+        state = language.pStringScanner.fields;
       return { accepted, decimal: state.nDecPos, type: state.eScannedType };
-    } finally { input.dispose(); }
+    } finally {
+      input.dispose();
+    }
   }
   try {
     expect(scan("%")).toMatchObject({ accepted: true, type: SvNumFormatType.PERCENT });
     expect(scan("$")).toMatchObject({ accepted: true, type: SvNumFormatType.CURRENCY });
     expect(scan(".")).toMatchObject({ accepted: true, decimal: 3 });
     expect(scan("XYZ")).toMatchObject({ accepted: false });
-  } finally { language.dispose(); mapper.dispose(); SvNumberFormatter.resetTheCurrencyTable(); }
+  } finally {
+    language.dispose();
+    mapper.dispose();
+    SvNumberFormatter.resetTheCurrencyTable();
+  }
 });
 
-it("classifies source middle fragments through decimal, exponent and time separators", () => {
+it("classifies source middle fragments through decimal, exponent and time separators", /** Checks classifies source middle fragments through decimal, exponent and time separators. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -151,19 +187,25 @@ it("classifies source middle fragments through decimal, exponent and time separa
     const input = unicode(value);
     try {
       scanner.Reset();
-      const accepted = scanner.ScanMidString(input, 1, 1), state = language.pStringScanner.fields;
+      const accepted = scanner.ScanMidString(input, 1, 1),
+        state = language.pStringScanner.fields;
       return { accepted, decimal: state.nDecPos, type: state.eScannedType, time: state.nTimePos };
-    } finally { input.dispose(); }
+    } finally {
+      input.dispose();
+    }
   }
   try {
     expect(scan(".")).toMatchObject({ accepted: true, decimal: 2 });
     expect(scan("E")).toMatchObject({ accepted: true, type: SvNumFormatType.SCIENTIFIC });
     expect(scan(":")).toMatchObject({ accepted: true, type: SvNumFormatType.TIME, time: 2 });
     expect(scan("XYZ")).toMatchObject({ accepted: false });
-  } finally { language.dispose(); mapper.dispose(); }
+  } finally {
+    language.dispose();
+    mapper.dispose();
+  }
 });
 
-it("dispatches source fragment counts and reconciles final input types", () => {
+it("dispatches source fragment counts and reconciles final input types", /** Checks dispatches source fragment counts and reconciles final input types. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -175,7 +217,9 @@ it("dispatches source fragment counts and reconciles final input types", () => {
     try {
       const accepted = scanner.IsNumberFormatMain(input, null);
       return { accepted, type: language.pStringScanner.fields.eScannedType };
-    } finally { input.dispose(); }
+    } finally {
+      input.dispose();
+    }
   }
   try {
     expect(classify("123")).toEqual({ accepted: true, type: SvNumFormatType.NUMBER });
@@ -184,7 +228,10 @@ it("dispatches source fragment counts and reconciles final input types", () => {
     expect(classify("TRUE")).toEqual({ accepted: true, type: SvNumFormatType.LOGICAL });
     expect(classify("TEXT").accepted).toBe(false);
     expect(classify("1\0A").accepted).toBe(false);
-  } finally { language.dispose(); mapper.dispose(); }
+  } finally {
+    language.dispose();
+    mapper.dispose();
+  }
 });
 
 /** Runs source-private division against the real current-language owner. @param source - Input. @returns Scanner fragments and counters. */
@@ -213,7 +260,7 @@ function divide(source: string) {
   }
 }
 
-it("alternates contiguous ASCII digits and other UTF-16 characters", () => {
+it("alternates contiguous ASCII digits and other UTF-16 characters", /** Checks alternates contiguous ASCII digits and other UTF-16 characters. @returns Test completion or assertion result. */ () => {
   expect(divide("A12.٣45B")).toEqual({
     count: 5,
     numericCount: 2,
@@ -223,11 +270,15 @@ it("alternates contiguous ASCII digits and other UTF-16 characters", () => {
   });
 });
 
-it("matches the source currency-table symbol and invalidates its cache after a locale switch", () => {
+it("matches the source currency-table symbol and invalidates its cache after a locale switch", /** Checks matches the source currency-table symbol and invalidates its cache after a locale switch. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
-    scanner = language.pStringScanner as unknown as { GetCurrency(value: OUString, position: [number]): boolean };
-  const dollar = unicode("$42"), euro = unicode("€42"), other = unicode("X42");
+    scanner = language.pStringScanner as unknown as {
+      GetCurrency(value: OUString, position: [number]): boolean;
+    };
+  const dollar = unicode("$42"),
+    euro = unicode("€42"),
+    other = unicode("X42");
   try {
     const first: [number] = [0];
     expect(scanner.GetCurrency(dollar, first)).toBe(true);
@@ -240,12 +291,16 @@ it("matches the source currency-table symbol and invalidates its cache after a l
     expect(scanner.GetCurrency(euro, second)).toBe(true);
     expect(second[0]).toBe(1);
   } finally {
-    other.dispose(); euro.dispose(); dollar.dispose(); language.dispose(); mapper.dispose();
+    other.dispose();
+    euro.dispose();
+    dollar.dispose();
+    language.dispose();
+    mapper.dispose();
     SvNumberFormatter.resetTheCurrencyTable();
   }
 });
 
-it("collapses only complete three-digit locale groups near the twenty-fragment limit", () => {
+it("collapses only complete three-digit locale groups near the twenty-fragment limit", /** Checks collapses only complete three-digit locale groups near the twenty-fragment limit. @returns Test completion or assertion result. */ () => {
   const prefix = "1x".repeat(7);
   const grouped = divide(prefix + "123.456.789");
   expect(grouped.count).toBe(15);
@@ -258,7 +313,7 @@ it("collapses only complete three-digit locale groups near the twenty-fragment l
   expect(partial.fragments.slice(14)).toEqual(["123", ".", "45"]);
 });
 
-it("preserves upstream embedded-NUL capacity behavior", () => {
+it("preserves upstream embedded-NUL capacity behavior", /** Checks preserves upstream embedded-NUL capacity behavior. @returns Test completion or assertion result. */ () => {
   const result = divide("1\0A");
   expect(result.count).toBe(20);
   expect(result.numericCount).toBe(1);
@@ -266,7 +321,7 @@ it("preserves upstream embedded-NUL capacity behavior", () => {
   expect(result.fragments.slice(1)).toEqual(Array(19).fill(""));
 });
 
-it("uses source ISO and named-month fragment shapes before date-format acceptance", () => {
+it("uses source ISO and named-month fragment shapes before date-format acceptance", /** Checks uses source ISO and named-month fragment shapes before date-format acceptance. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -309,7 +364,7 @@ it("uses source ISO and named-month fragment shapes before date-format acceptanc
   }
 });
 
-it("uses source day and year fragment bounds and two-digit-year expansion", () => {
+it("uses source day and year fragment bounds and two-digit-year expansion", /** Checks uses source day and year fragment bounds and two-digit-year expansion. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -353,7 +408,7 @@ it("uses source day and year fragment bounds and two-digit-year expansion", () =
   }
 });
 
-it("uses calendar month bounds and the source invalid-month sentinel", () => {
+it("uses calendar month bounds and the source invalid-month sentinel", /** Checks uses calendar month bounds and the source invalid-month sentinel. @returns Test completion or assertion result. */ () => {
   const language = new SvNFLanguageData(new NumberFormatCodeMapper(), 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
@@ -378,14 +433,18 @@ it("uses calendar month bounds and the source invalid-month sentinel", () => {
   }
 });
 
-it("selects the source long-date order for a middle month", () => {
+it("selects the source long-date order for a middle month", /** Checks selects the source long-date order for a middle month. @returns Test completion or assertion result. */ () => {
   /** Runs the source fragment scanner and long-order selection. @param languageId - Locale language. @param source - Date input. @param dateOrder - Evaluated short order. @returns Native long date order. */
   function order(languageId: number, source: string, dateOrder: DateOrder): LongDateOrder {
     const language = new SvNFLanguageData(new NumberFormatCodeMapper(), languageId),
       scanner = language.pStringScanner as unknown as {
         Reset(): void;
         NumberStringDivision(value: OUString): void;
-        GetMiddleMonthLongDateOrder(formatTurn: boolean, locale: ReturnType<SvNFLanguageData["GetLocaleData"]>, dateOrder: DateOrder): LongDateOrder;
+        GetMiddleMonthLongDateOrder(
+          formatTurn: boolean,
+          locale: ReturnType<SvNFLanguageData["GetLocaleData"]>,
+          dateOrder: DateOrder,
+        ): LongDateOrder;
       },
       input = unicode(source);
     try {
@@ -403,7 +462,7 @@ it("selects the source long-date order for a middle month", () => {
   expect(order(0x0407, "00 JAN 12", DateOrder.YMD)).toBe(LongDateOrder.YMD);
 });
 
-it("marks only substantive source format-string matches as returned", () => {
+it("marks only substantive source format-string matches as returned", /** Checks marks only substantive source format-string matches as returned. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as { MatchedReturn(): boolean },
@@ -419,7 +478,7 @@ it("marks only substantive source format-string matches as returned", () => {
   }
 });
 
-it("matches source calendar month and weekday names with original alternate ordering", () => {
+it("matches source calendar month and weekday names with original alternate ordering", /** Checks matches source calendar month and weekday names with original alternate ordering. @returns Test completion or assertion result. */ () => {
   /** Queries one source name and mutable cursor. @param languageId - Locale language ID. @param source - Already uppercase scan input. @param kind - Month or weekday. @returns Signed calendar index and consumed length. */
   function scan(languageId: number, source: string, kind: "month" | "day") {
     const mapper = new NumberFormatCodeMapper(),
@@ -450,7 +509,7 @@ it("matches source calendar month and weekday names with original alternate orde
   expect(scan(0x0407, "JÄNNER 1", "month")).toEqual({ result: 1, position: 6 });
 });
 
-it("matches generated locale date patterns in source order and rejects implausible numeric parts", () => {
+it("matches generated locale date patterns in source order and rejects implausible numeric parts", /** Checks matches generated locale date patterns in source order and rejects implausible numeric parts. @returns Test completion or assertion result. */ () => {
   /** Runs the source fragment division followed by the cached pattern matcher. @param languageId - Locale. @param source - Input. @returns Native match state. */
   function match(languageId: number, source: string) {
     const mapper = new NumberFormatCodeMapper(),
@@ -510,7 +569,7 @@ it("matches generated locale date patterns in source order and rejects implausib
   expect(match(0x0409, "2024-12-31").iso).toBe(true);
 });
 
-it("converts native time parts while preserving strict duration, AM/PM, fractional and leap-second rules", () => {
+it("converts native time parts while preserving strict duration, AM/PM, fractional and leap-second rules", /** Checks converts native time parts while preserving strict duration, AM/PM, fractional and leap-second rules. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -560,7 +619,7 @@ it("converts native time parts while preserving strict duration, AM/PM, fraction
   }
 });
 
-it("recognizes whole localized logical words through the source format-scanner cache", () => {
+it("recognizes whole localized logical words through the source format-scanner cache", /** Checks recognizes whole localized logical words through the source format-scanner cache. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0407),
     scanner = language.pStringScanner as unknown as { GetLogical(value: OUString): number };
@@ -608,7 +667,7 @@ it("recognizes whole localized logical words through the source format-scanner c
   }
 });
 
-it("uses source date-word boundaries and the three native blank characters", () => {
+it("uses source date-word boundaries and the three native blank characters", /** Checks uses source date-word boundaries and the three native blank characters. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper();
   const language = new SvNFLanguageData(mapper, 0x0407);
   const scanner = language.pStringScanner as unknown as {
@@ -623,14 +682,13 @@ it("uses source date-word boundaries and the three native blank characters", () 
   const prefix = unicode("AB");
   const input = unicode("AB-X");
   try {
-    expect(cases.map((value) => scanner.StringContainsWord(word, value, 0))).toEqual([
-      true,
-      true,
-      false,
-      false,
-      true,
-      true,
-    ]);
+    expect(
+      cases.map(
+        /** Checks uses source date-word boundaries and the three native blank characters. @param value - Value. @returns Test completion or assertion result. */ (
+          value,
+        ) => scanner.StringContainsWord(word, value, 0),
+      ),
+    ).toEqual([true, true, false, false, true, true]);
     const blankPosition: [number] = [0];
     expect(scanner.SkipBlanks(blankInput, blankPosition)).toBe(true);
     expect(blankPosition[0]).toBe(3);
@@ -650,7 +708,7 @@ it("uses source date-word boundaries and the three native blank characters", () 
   }
 });
 
-it("consumes the source locale decimal separator without treating grouping as decimal", () => {
+it("consumes the source locale decimal separator without treating grouping as decimal", /** Checks consumes the source locale decimal separator without treating grouping as decimal. @returns Test completion or assertion result. */ () => {
   for (const [languageId, separator, grouping] of [
     [0x0407, ",", "."],
     [0x0409, ".", ","],
@@ -676,7 +734,7 @@ it("consumes the source locale decimal separator without treating grouping as de
   }
 });
 
-it("retains the source distinction between leading and exponent signs", () => {
+it("retains the source distinction between leading and exponent signs", /** Checks retains the source distinction between leading and exponent signs. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -709,7 +767,7 @@ it("retains the source distinction between leading and exponent signs", () => {
   }
 });
 
-it("advances source numeric fragment counters only on numeric slots", () => {
+it("advances source numeric fragment counters only on numeric slots", /** Checks advances source numeric fragment counters only on numeric slots. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
@@ -736,7 +794,7 @@ it("advances source numeric fragment counters only on numeric slots", () => {
   }
 });
 
-it("accepts only source grouping widths and the merged near-capacity slot", () => {
+it("accepts only source grouping widths and the merged near-capacity slot", /** Checks accepts only source grouping widths and the merged near-capacity slot. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x0407),
     scanner = language.pStringScanner as unknown as {
@@ -778,7 +836,7 @@ it("accepts only source grouping widths and the merged near-capacity slot", () =
   }
 });
 
-it("retains both source group widths for the Indian digit-grouping sequence", () => {
+it("retains both source group widths for the Indian digit-grouping sequence", /** Checks retains both source group widths for the Indian digit-grouping sequence. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     language = new SvNFLanguageData(mapper, 0x4009),
     scanner = language.pStringScanner as unknown as {
@@ -810,7 +868,7 @@ it("retains both source group widths for the Indian digit-grouping sequence", ()
   }
 });
 
-it("uses generated locale AM/PM and fractional-second fields during input scanning", () => {
+it("uses generated locale AM/PM and fractional-second fields during input scanning", /** Checks uses generated locale AM/PM and fractional-second fields during input scanning. @returns Test completion or assertion result. */ () => {
   for (const [languageId, amText, pmText, fractional, other] of [
     [0x0409, "AM", "PM", ".", ","],
     [0x0407, "VORM.", "NACHM.", ",", "."],

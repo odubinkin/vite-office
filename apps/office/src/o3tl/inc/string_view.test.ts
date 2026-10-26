@@ -3,17 +3,21 @@ import { createHash } from "node:crypto";
 import { gunzipSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
 import fixture from "../../cppu/source/typelib/native-type-primitives-cases.json";
-import { implIsWhitespace, toInt32 } from "./string_view";
-import { DivMod, implGetDigit } from "../../sal/rtl/strtmpl";
+import { RTL_STR_MAX_RADIX, RTL_STR_MIN_RADIX } from "../../sal/inc/rtl/string.h";
 import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";
-import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../../sal/inc/rtl/string.h";
-import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
+import { SAL_MAX_INT32, SAL_MIN_INT32 } from "../../sal/inc/types";
+import { DivMod, implGetDigit } from "../../sal/rtl/strtmpl";
+import { implIsWhitespace, toInt32 } from "./string_view";
 
 describe("original bounded signed integer conversion", /** Groups the actual shared native dependency observations. @returns Nothing. */ () => {
-  it("adapts JavaScript UTF-16 strings to the same bounded source view", () => {
+  it("adapts JavaScript UTF-16 strings to the same bounded source view", /** Checks adapts JavaScript UTF-16 strings to the same bounded source view. @returns Test completion or assertion result. */ () => {
     for (const token of ["2x", "-7suffix", "2147483648", "4294967296", "😀12", "  +19!"]) {
-      const units = Uint16Array.from({ length: token.length }, (_, index) =>
-        token.charCodeAt(index),
+      const units = Uint16Array.from(
+        { length: token.length },
+        /** Checks adapts JavaScript UTF-16 strings to the same bounded source view. @param _ - Unused callback argument. @param index - Index. @returns Test completion or assertion result. */ (
+          _,
+          index,
+        ) => token.charCodeAt(index),
       );
       expect(toInt32(token)).toBe(toInt32(units));
     }

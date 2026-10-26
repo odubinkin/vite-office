@@ -71,7 +71,7 @@ import {
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 
-/** Original rtl_getTextEncodingFromWindowsCodePage switch, including unknown fallback. */
+/** Original rtl_getTextEncodingFromWindowsCodePage switch, including unknown fallback.  @param codepage - Codepage. @returns The rtl_TextEncoding result. */
 export function rtl_getTextEncodingFromWindowsCodePage(codepage: number): rtl_TextEncoding {
   switch (codepage) {
     case 42:
@@ -224,7 +224,7 @@ export function rtl_getBestWindowsCharsetFromTextEncoding(encoding: rtl_TextEnco
 }
 
 /** @fileoverview rtl_getTextEncodingInfo over pinned metadata for the represented SAL converters. */
-import sourceInfo from "./native-text-encoding-info.json";
+import sourceInfo from "./native-text-encoding-info.json" with { type: "json" };
 
 /** Source rtl/tencinfo.h flag for stateful encodings. */
 export const RTL_TEXTENCODING_INFO_CONTEXT = 0x01;

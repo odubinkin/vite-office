@@ -1,23 +1,30 @@
 /** @fileoverview Implements the existing measure targets from pinned sax/source/tools/converter.cxx. */
 
+import { getDaysInMonth } from "../../../comphelper/source/misc/date";
 import { convertToHex } from "../../../o3tl/inc/numeric";
-import { rtl_ustr_toInt64_WithLength } from "../../../sal/inc/rtl/ustring.h";
+import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
 import {
   rtl_math_ConversionStatus,
   rtl_math_stringToDouble,
   rtl_math_uStringToDouble,
 } from "../../../sal/inc/rtl/math.h";
-import { getDaysInMonth } from "../../../comphelper/source/misc/date";
-import type { DateTime } from "../../../offapi/com/sun/star/util/DateTime";
+import { rtl_ustr_toInt64_WithLength } from "../../../sal/inc/rtl/ustring.h";
 
-/** Source o3tl::trim whitespace predicate for UTF-16 string views. */
+/** Source o3tl::trim whitespace predicate for UTF-16 string views.  @param code - Code. @returns The boolean result. */
 function dateWhitespace(code: number): boolean {
-  return (code > 0 && code <= 32) ||
-    (code >= 0x2000 && (code <= 0x200b || code >= 0x2028) && code <= 0x2029);
+  return (
+    (code > 0 && code <= 32) ||
+    (code >= 0x2000 && (code <= 0x200b || code >= 0x2028) && code <= 0x2029)
+  );
 }
 
-/** Source readUnsignedNumber and readDateTimeComponent, retaining the consumed cursor. */
-function dateComponent(input: string, cursor: [number], width: number, exact: boolean): number | null {
+/** Source readUnsignedNumber and readDateTimeComponent, retaining the consumed cursor.  @param input - Input. @param cursor - Cursor. @param width - Width. @param exact - Exact. @returns The number | null result. */
+function dateComponent(
+  input: string,
+  cursor: [number],
+  width: number,
+  exact: boolean,
+): number | null {
   const start = cursor[0];
   let value = 0;
   while (cursor[0] < input.length) {
@@ -31,7 +38,7 @@ function dateComponent(input: string, cursor: [number], width: number, exact: bo
   return value;
 }
 
-/** Original lcl_ConvertToUTC arithmetic, including its minute adjustment order. */
+/** Original lcl_ConvertToUTC arithmetic, including its minute adjustment order.  @param value - Value. @param offset - Offset. @returns Nothing. */
 function convertDateTimeToUTC(value: DateTime, offset: number): void {
   let offsetHours = Math.trunc(Math.abs(offset) / 60);
   const offsetMinutes = Math.abs(offset) % 60;
@@ -87,25 +94,32 @@ function convertDateTimeToUTC(value: DateTime, offset: number): void {
   }
 }
 
-/** Original strict sax::Converter date/date-time overload used as a CSV ISO precheck. */
+/** Original strict sax::Converter date/date-time overload used as a CSV ISO precheck.  @param output - Output. @param source - Source. @returns The boolean result. */
 function parseDateTime(output: DateTime, source: string): boolean {
-  let first = 0, last = source.length;
+  let first = 0,
+    last = source.length;
   while (first < last && dateWhitespace(source.charCodeAt(first))) first++;
   while (last > first && dateWhitespace(source.charCodeAt(last - 1))) last--;
-  const input = source.slice(first, last), cursor: [number] = [0];
+  const input = source.slice(first, last),
+    cursor: [number] = [0];
   const negative = input[0] === "-";
   if (negative) cursor[0]++;
   const year = dateComponent(input, cursor, 1, false);
-  if (year === null || year <= 0 || year > (negative ? 32768 : 32767) || input[cursor[0]] !== "-") return false;
+  if (year === null || year <= 0 || year > (negative ? 32768 : 32767) || input[cursor[0]] !== "-")
+    return false;
   cursor[0]++;
   const month = dateComponent(input, cursor, 2, true);
   if (month === null || month <= 0 || month > 12 || input[cursor[0]] !== "-") return false;
   cursor[0]++;
   const day = dateComponent(input, cursor, 2, true);
-  if (day === null || day <= 0 || day > getDaysInMonth(month, negative ? -year : year)) return false;
+  if (day === null || day <= 0 || day > getDaysInMonth(month, negative ? -year : year))
+    return false;
   const hasTime = input[cursor[0]] === "T" || input[cursor[0]] === "t";
   if (hasTime) cursor[0]++;
-  let hours = 0, minutes = 0, seconds = 0, nanoseconds = 0;
+  let hours = 0,
+    minutes = 0,
+    seconds = 0,
+    nanoseconds = 0;
   if (hasTime) {
     const hour = dateComponent(input, cursor, 2, true);
     if (hour === null || hour > 24 || input[cursor[0]] !== ":") return false;
@@ -115,7 +129,9 @@ function parseDateTime(output: DateTime, source: string): boolean {
     cursor[0]++;
     const second = dateComponent(input, cursor, 2, true);
     if (second === null || second >= 60) return false;
-    hours = hour; minutes = minute; seconds = second;
+    hours = hour;
+    minutes = minute;
+    seconds = second;
     if (input[cursor[0]] === "." || input[cursor[0]] === ",") {
       cursor[0]++;
       const start = cursor[0];
@@ -130,7 +146,10 @@ function parseDateTime(output: DateTime, source: string): boolean {
     }
     if (hours === 24 && (minutes !== 0 || seconds !== 0 || nanoseconds !== 0)) return false;
   }
-  let timezone = false, negativeOffset = false, offsetHours = 0, offsetMinutes = 0;
+  let timezone = false,
+    negativeOffset = false,
+    offsetHours = 0,
+    offsetMinutes = 0;
   if (cursor[0] < input.length) {
     const marker = input[cursor[0]];
     if (marker !== "+" && marker !== "-" && marker !== "Z" && marker !== "z") return false;
@@ -143,7 +162,8 @@ function parseDateTime(output: DateTime, source: string): boolean {
       cursor[0]++;
       const minute = dateComponent(input, cursor, 2, true);
       if (minute === null || minute >= 60 || (hour === 14 && minute !== 0)) return false;
-      offsetHours = hour; offsetMinutes = minute;
+      offsetHours = hour;
+      offsetMinutes = minute;
     }
   }
   if (cursor[0] !== input.length) return false;

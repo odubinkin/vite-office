@@ -1,15 +1,15 @@
 /** @fileoverview Actual ODS bytes/native document edit-save-reload and independent XML input. */
-import type { ScDocumentPool } from "../../core/data/docpool";
+import { assert, expect, it, vi } from "vitest";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { ScAddress } from "../../../inc/address";
+import { ScDocument } from "../../../inc/document";
 import type { ScPatternAttr } from "../../../inc/patattr";
 import type { ScTable } from "../../../inc/table";
-import { assert, expect, it, vi } from "vitest";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
+import type { ScDocumentPool } from "../../core/data/docpool";
 import { ScXMLImport } from "./xmlimprt";
-import { ZipFile } from "../../../../package/source/zipapi/ZipFile";
+import { readOdsDocument, writeOdsDocument } from "./xmlwrap";
 const grammar = FormulaGrammar.Grammar.GRAM_ODFF;
 it("opens exported actual document bytes,edits and reloads formula results and literal text", /** No alternate workbook model participates. @returns Completion. */ async () => {
   const doc = new ScDocument();
@@ -45,7 +45,7 @@ it("imports independent modern ODF XML with scoped formula namespace alias and s
   expect(doc.GetValue(new ScAddress(0, 2, 0))).toBe(4);
 });
 
-it("imports ODF paragraph boundaries into edit-text cells", () => {
+it("imports ODF paragraph boundaries into edit-text cells", /** Checks imports ODF paragraph boundaries into edit-text cells. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   new ScXMLImport(doc).importContent(
     `<office:document-content xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"><office:body><office:spreadsheet><table:table table:name="Data"><table:table-row><table:table-cell office:value-type="string"><text:p>first</text:p><text:p>second</text:p></table:table-cell></table:table-row></table:table></office:spreadsheet></office:body></office:document-content>`,

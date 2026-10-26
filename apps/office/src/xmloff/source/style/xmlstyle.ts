@@ -1,20 +1,19 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
-import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
+import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
+import { importOdfLength, SvXMLUnitConverter } from "../core/xmluconv";
+import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
 import type { OdfCharacterProperties, OdfParagraphAlignment } from "../text/txtparae";
 import type { OdfStyleDefinition, XMLParagraphImportProperties } from "../text/txtparai";
-import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
-import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
-import { SvXMLUnitConverter } from "../core/xmluconv";
-import { importOdfLength } from "../core/xmluconv";
-import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
-import { XMLTableStyleContext, type OdfTableStyle } from "../table/XMLTableImport";
+import { importTextCharacterProperties, textCharacterPropertyTokens } from "../text/txtprmap";
 import {
   XMLLineNumberingImportContext,
   type OdfLineNumberingConfiguration,
 } from "../text/XMLLineNumberingImportContext";
+import { XMLTextPropertySetContext } from "../text/XMLTextPropertySetContext";
+import { XMLNumberWithAutoForVoidPropHdl } from "./xmlbahdl";
+import { SvxXMLListStyleContext, type XMLListStyleImportTarget } from "./xmlnumi";
 const ignoredStyleDefinitions = new Set([
   XMLToken.STYLE_DEFAULT_PAGE_LAYOUT,
   XMLToken.TEXT_OUTLINE_STYLE,
@@ -458,8 +457,17 @@ function importParagraphProperties(
         ["borderLineWidthRight", XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT],
       ] as const
     )
-      .map(([key, token]) => [key, attributes.get(token)] as const)
-      .filter((entry) => entry[1] !== null),
+      .map(
+        /** Computes the [key, token] result. @param input1 - Input1. @returns The computed result. */ ([
+          key,
+          token,
+        ]) => [key, attributes.get(token)] as const,
+      )
+      .filter(
+        /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
+          entry,
+        ) => entry[1] !== null,
+      ),
   );
   const result: XMLParagraphImportProperties = {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),

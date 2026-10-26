@@ -10,6 +10,7 @@ export { isOriginalEscapementConstantImport } from "./module-boundaries/escapeme
 import { isOriginalCharacterValueImport } from "./module-boundaries/character-value-imports.mjs";
 export { isOriginalCharacterValueImport } from "./module-boundaries/character-value-imports.mjs";
 import { isSidebarPresentationImport } from "./module-boundaries/sidebar-imports.mjs";
+import { isOriginalInlineDateImport } from "./module-boundaries/inline-date-imports.mjs";
 const sourceRoot = path.resolve("apps/office/src");
 const moduleNames = [
   "comphelper",
@@ -812,7 +813,17 @@ for (const sourceFile of runtimeSources) {
           )
         : "",
     );
-    if (runtimeImports.has(imported.fileName) && !constantHeader)
+    const inlineDate = isOriginalInlineDateImport(
+      relativeSource.split(path.sep).join("/"),
+      relativeTarget.split(path.sep).join("/"),
+      sourceText,
+      relativeSource.split(path.sep).join("/") === "sax/source/tools/converter.ts" &&
+        relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "") ===
+          "comphelper/source/misc/date"
+        ? fs.readFileSync(path.resolve(sourceRoot, "comphelper/source/misc/date.ts"), "utf8")
+        : "",
+    );
+    if (runtimeImports.has(imported.fileName) && !constantHeader && !inlineDate)
       addGraphEdge(graph, sourceModule, targetModule);
     if (
       (sourceModule === "sal" && targetModule === "o3tl") ||

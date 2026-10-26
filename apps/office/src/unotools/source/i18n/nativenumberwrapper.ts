@@ -8,8 +8,12 @@ import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Loc
 export class NativeNumberWrapper {
   private readonly supplier = new NativeNumberSupplierService();
 
-  /** Returns the source supplier's native-to-ASCII result. */
-  getNativeNumberString(input: OUStringConstReference, locale: LocaleConstReference, mode: 0): OUString {
+  /** Returns the source supplier's native-to-ASCII result.  @param input - Input. @param locale - Locale. @param mode - Mode. @returns The OUString result. */
+  getNativeNumberString(
+    input: OUStringConstReference,
+    locale: LocaleConstReference,
+    mode: 0,
+  ): OUString {
     try {
       return this.supplier.getNativeNumberString(input, locale, mode);
     } catch (error) {

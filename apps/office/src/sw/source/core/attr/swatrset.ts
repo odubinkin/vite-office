@@ -1,55 +1,52 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
-import { RES_PROTECT } from "../../../inc/hintids";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
-import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
-import { Color, ColorTransparency, COL_AUTO, COL_TRANSPARENT } from "../../../../tools/inc/color";
-import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import {
-  SID_ATTR_TABSTOP,
-  SID_ATTR_LRSPACE,
-  SID_ATTR_CHAR_FONT,
-  SID_ATTR_CHAR_POSTURE,
-  SID_ATTR_CHAR_WEIGHT,
-  SID_ATTR_CHAR_WORDLINEMODE,
   SID_ATTR_CHAR_AUTOKERN,
-  SID_ATTR_CHAR_STRIKEOUT,
-  SID_ATTR_CHAR_UNDERLINE,
-  SID_ATTR_CHAR_FONTHEIGHT,
   SID_ATTR_CHAR_CJK_FONT,
   SID_ATTR_CHAR_CJK_FONTHEIGHT,
   SID_ATTR_CHAR_CJK_POSTURE,
   SID_ATTR_CHAR_CJK_WEIGHT,
+  SID_ATTR_CHAR_COLOR,
   SID_ATTR_CHAR_CTL_FONT,
   SID_ATTR_CHAR_CTL_FONTHEIGHT,
   SID_ATTR_CHAR_CTL_POSTURE,
   SID_ATTR_CHAR_CTL_WEIGHT,
+  SID_ATTR_CHAR_FONT,
+  SID_ATTR_CHAR_FONTHEIGHT,
+  SID_ATTR_CHAR_POSTURE,
+  SID_ATTR_CHAR_STRIKEOUT,
+  SID_ATTR_CHAR_UNDERLINE,
+  SID_ATTR_CHAR_WEIGHT,
+  SID_ATTR_CHAR_WORDLINEMODE,
+  SID_ATTR_LRSPACE,
+  SID_ATTR_TABSTOP,
 } from "../../../../editeng/inc/editids";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import { SvxInterLineSpaceRule, SvxLineSpaceRule } from "../../../../editeng/inc/svxenum";
 import { SvxWordLineModeItem } from "../../../../editeng/inc/wrlmitem";
-import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
-import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
-import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { COL_AUTO, COL_TRANSPARENT, Color, ColorTransparency } from "../../../../tools/inc/color";
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
-import { RES_CHRATR_CROSSEDOUT } from "../../../inc/hintids";
-import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_ESCAPEMENT, RES_PROTECT } from "../../../inc/hintids";
 
-import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { SvxTabStopItem, SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
-import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import {
-  SvxIndentValue,
   SvxFirstLineIndentItem,
+  SvxIndentValue,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import {
+  SvxBoxItem,
+  SvxLRSpaceItem,
+  SvxProtectItem,
   SvxRightMarginItem,
   SvxULSpaceItem,
-  SvxLRSpaceItem,
-  SvxBoxItem,
-  SvxProtectItem,
 } from "../../../../editeng/source/items/frmitems";
 import {
   FontLineStyle,
@@ -59,6 +56,9 @@ import {
   SvxUnderlineItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxItemPool } from "../../../../svl/source/items/itempool";
 import { SfxItemSet, type WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import {
@@ -66,64 +66,61 @@ import {
   IsInvalidItem,
   type SfxPoolItem,
 } from "../../../../svl/source/items/poolitem";
-import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
-import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { FontFamily, FontItalic, FontPitch, FontWeight } from "../../../../tools/inc/fontenum";
+import { SwFormatFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
+import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
-  RES_CHRATR_CJK_POSTURE,
+  RES_BOX,
   RES_BREAK,
-  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_AUTOKERN,
   RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CJK_POSTURE,
   RES_CHRATR_CJK_WEIGHT,
   RES_CHRATR_COLOR,
-  RES_CHRATR_CTL_POSTURE,
-  RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_CTL_POSTURE,
+  RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
-  RES_CHRATR_CTL_WEIGHT,
   RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_UNDERLINE,
   RES_CHRATR_WEIGHT,
   RES_CHRATR_WORDLINEMODE,
-  RES_CHRATR_AUTOKERN,
-  RES_PARATR_ADJUST,
-  RES_PARATR_SPLIT,
-  RES_PARATR_ORPHANS,
-  RES_PARATR_WIDOWS,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
+  RES_COLLAPSING_BORDERS,
+  RES_KEEP,
+  RES_LINENUMBER,
+  RES_LR_SPACE,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
   RES_MARGIN_TEXTLEFT,
-  RES_UL_SPACE,
-  RES_LR_SPACE,
+  RES_PARATR_ADJUST,
+  RES_PARATR_LINESPACING,
   RES_PARATR_LIST_ID,
-  RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_ISCOUNTED,
   RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_LEVEL,
   RES_PARATR_LIST_RESTARTVALUE,
   RES_PARATR_NUMRULE,
+  RES_PARATR_ORPHANS,
   RES_PARATR_OUTLINELEVEL,
-  RES_KEEP,
-  RES_LINENUMBER,
-  RES_BOX,
-  RES_COLLAPSING_BORDERS,
+  RES_PARATR_SPLIT,
+  RES_PARATR_TABSTOP,
+  RES_PARATR_WIDOWS,
+  RES_UL_SPACE,
 } from "../../../inc/hintids";
+import { SwTextGridItem } from "../../../inc/tgrditem";
+import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import type { SwDoc } from "../doc/doc";
 import { SwNumRuleItem, SwParaConnectBorderItem } from "../para/paratr";
-import { SwFormatPageDesc } from "./fmtpdsc";
-import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "../doc/default-font";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
-import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
-import { SwFormatFrameSize } from "../../../inc/fmtfsize";
-import { SwFormatLayoutSplit } from "../../../inc/fmtlsplt";
-import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
-import { SwTableBoxNumFormat, SwTableBoxFormula, SwTableBoxValue } from "./cellatr";
-import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
-import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-import { SwTextGridItem } from "../../../inc/tgrditem";
+import { SwTableBoxFormula, SwTableBoxNumFormat, SwTableBoxValue } from "./cellatr";
+import { SwFormatPageDesc } from "./fmtpdsc";
 /** Writer-owned item pool with defaults for the currently implemented WhichIds. */
 export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
@@ -808,7 +805,11 @@ export function writerColorFromPrimitive(value: unknown, automatic: "auto" | "tr
         blue = Number(rgba[3]);
       const alpha = Number(rgba[4]);
       if (
-        [red, green, blue].every((channel) => Number.isInteger(channel) && channel <= 255) &&
+        [red, green, blue].every(
+          /** Computes the channel result. @param channel - Channel. @returns The computed result. */ (
+            channel,
+          ) => Number.isInteger(channel) && channel <= 255,
+        ) &&
         alpha >= 0 &&
         alpha <= 1
       ) {

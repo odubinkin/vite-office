@@ -20,7 +20,7 @@
           "marker": "source builtin and reserved-name rules"
         },
         {
-          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "imports source builtin aliases"
         }
       ],

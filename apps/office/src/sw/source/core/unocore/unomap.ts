@@ -1,19 +1,19 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
-import { OUString } from "../../../../sal/inc/rtl/ustring";
-import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
-import { Property } from "../../../../udkapi/com/sun/star/beans/Property";
-import { SfxItemPropertySetInfo } from "../../../../svl/source/items/itemprop";
 import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
+import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import { SfxItemPropertySetInfo } from "../../../../svl/source/items/itemprop";
+import { Property } from "../../../../udkapi/com/sun/star/beans/Property";
 
+import * as M from "../../../../editeng/inc/memberids";
 import { cppu_detail_getUnoType_FontSlant as fontSlantType } from "../../../../offapi/com/sun/star/awt/FontSlant";
 import { cppu_detail_getUnoType_LineSpacing as lineSpacingType } from "../../../../offapi/com/sun/star/style/LineSpacing";
 import { cppu_detail_getUnoType_TabStop as tabStopType } from "../../../../offapi/com/sun/star/style/TabStop";
 import { cppu_detail_getUnoType_BorderLine2 as borderLineType } from "../../../../offapi/com/sun/star/table/BorderLine2";
 import * as H from "../../../inc/hintids";
-import * as M from "../../../../editeng/inc/memberids";
-import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 import { WID_DOC_DEFAULT_PAGE_MODE } from "../../../inc/unomap";
 import * as Grid from "../../../inc/unomid";
+import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../inc/unomid";
 /** Native item member transport already provided by the bounded core item. */
 export interface SwUnoPropertyEntry {
   readonly which: number;
@@ -163,7 +163,10 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["ParaLineNumberCount", { which: H.RES_LINENUMBER, member: 0, kind: "bool" }],
   ["ParaConnectBorder", { which: H.RES_PARATR_CONNECT_BORDER, member: 0, kind: "bool" }],
   ...(["Top", "Bottom", "Left", "Right"] as const).map(
-    (side, index) =>
+    /** Computes the side result. @param side - Side. @param index - Index. @returns The computed result. */ (
+      side,
+      index,
+    ) =>
       [
         `Para${side}Border`,
         { which: H.RES_BOX, member: ([3, 4, 1, 2][index] as number) | 0x80, kind: "border" },

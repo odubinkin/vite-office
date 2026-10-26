@@ -2,9 +2,16 @@
 import { expect, test } from "@playwright/test";
 import { readFile } from "node:fs/promises";
 
-test("imports CSV, saves the primary ODS copy and exports the active sheet", async ({ page }) => {
+test("imports CSV, saves the primary ODS copy and exports the active sheet", /** Checks imports CSV, saves the primary ODS copy and exports the active sheet. @param input1 - Input1. @returns Test completion or assertion result. */ async ({
+  page,
+}) => {
   const errors: string[] = [];
-  page.on("pageerror", (error) => errors.push(error.message));
+  page.on(
+    "pageerror",
+    /** Checks pageerror. @param error - Error. @returns Test completion or assertion result. */ (
+      error,
+    ) => errors.push(error.message),
+  );
   await page.goto("/calc");
   await page.getByRole("button", { name: "Open", exact: true }).click();
   await page.getByRole("tab", { name: "On computer" }).click();

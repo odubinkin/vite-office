@@ -35,14 +35,14 @@ it("decodes Unicode and skips the configured ANSI fallback width", /** Checks na
   });
 });
 
-it("leaves ANSI hex bytes for document-state decoding", () => {
+it("leaves ANSI hex bytes for document-state decoding", /** Checks leaves ANSI hex bytes for document-state decoding. @returns Test completion or assertion result. */ () => {
   expect(tokenize("{\\rtf1\\ansicpg1251\\'c6}")).toContainEqual({
     kind: "ansi-bytes",
     value: Uint8Array.of(0xc6),
   });
 });
 
-it("keeps control words while a Unicode fallback character remains pending", () => {
+it("keeps control words while a Unicode fallback character remains pending", /** Checks keeps control words while a Unicode fallback character remains pending. @returns Test completion or assertion result. */ () => {
   expect(tokenize(String.raw`{\rtf1 A\u233\par?B}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
@@ -54,36 +54,68 @@ it("keeps control words while a Unicode fallback character remains pending", () 
   ]);
 });
 
-it("restores the parent Unicode fallback count after an RTF group", () => {
+it("restores the parent Unicode fallback count after an RTF group", /** Checks restores the parent Unicode fallback count after an RTF group. @returns Test completion or assertion result. */ () => {
   const text = tokenize(String.raw`{\rtf1\uc2\u233{??}??X}`)
-    .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
-    .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
+    .filter(
+      /** Checks restores the parent Unicode fallback count after an RTF group. @param token - Token. @returns Test completion or assertion result. */ (
+        token,
+      ) => token.kind === "text" || token.kind === "ansi-bytes",
+    )
+    .map(
+      /** Checks restores the parent Unicode fallback count after an RTF group. @param token - Token. @returns Test completion or assertion result. */ (
+        token,
+      ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+    )
     .join("");
   expect(text).toBe("éX");
 });
 
-it("retains the pinned signed Unicode fallback width and bare uc default", () => {
+it("retains the pinned signed Unicode fallback width and bare uc default", /** Checks retains the pinned signed Unicode fallback width and bare uc default. @returns Test completion or assertion result. */ () => {
   expect(
     tokenize(String.raw`{\rtf1\uc-1\u233ABC}`)
-      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
-      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
+      .filter(
+        /** Checks é. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => token.kind === "text" || token.kind === "ansi-bytes",
+      )
+      .map(
+        /** Checks é. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+      )
       .join(""),
   ).toBe("é");
   expect(
     tokenize(String.raw`{\rtf1\uc0\uc\u233?X}`)
-      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
-      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
+      .filter(
+        /** Checks éX. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => token.kind === "text" || token.kind === "ansi-bytes",
+      )
+      .map(
+        /** Checks éX. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+      )
       .join(""),
   ).toBe("éX");
   expect(
     tokenize(String.raw`{\rtf1\u65536?X}`)
-      .filter((token) => token.kind === "text" || token.kind === "ansi-bytes")
-      .map((token) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)))
+      .filter(
+        /** Checks ?X. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => token.kind === "text" || token.kind === "ansi-bytes",
+      )
+      .map(
+        /** Checks ?X. @param token - Token. @returns Test completion or assertion result. */ (
+          token,
+        ) => (token.kind === "text" ? token.value : new TextDecoder().decode(token.value)),
+      )
       .join(""),
   ).toBe("?X");
 });
 
-it("keeps each escaped hex CR and LF for destination-aware paragraph dispatch", () => {
+it("keeps each escaped hex CR and LF for destination-aware paragraph dispatch", /** Checks keeps each escaped hex CR and LF for destination-aware paragraph dispatch. @returns Test completion or assertion result. */ () => {
   expect(tokenize(String.raw`{\rtf1 A\'0d\'0aB}`)).toEqual([
     { kind: "group-start" },
     { kind: "control", name: "rtf", parameter: 1 },
@@ -112,6 +144,10 @@ it.each(["text", "{\\rtf1", "{\\rtf1}", "{\\rtf1\\'zz}"])(
     source,
   ) => {
     if (source === "{\\rtf1}") expect(tokenize(source)).toHaveLength(3);
-    else expect(() => tokenize(source)).toThrow(RtfSyntaxError);
+    else
+      expect(
+        /** Checks rejects invalid syntax %s. @returns Test completion or assertion result. */ () =>
+          tokenize(source),
+      ).toThrow(RtfSyntaxError);
   },
 );

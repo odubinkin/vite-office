@@ -1,8 +1,8 @@
 /** @fileoverview Native wwFont FFN identity and wwFontHelper registration/vector owners. Font-table initialization/export association, binary/RTF output and DOCX embedding remain in their respective unported responsibilities. */
-import { FontMapExport, rtl_TextEncodingToWinCharset } from "./writerwordglue";
-import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
-import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { FontMapExport, rtl_TextEncodingToWinCharset } from "./writerwordglue";
 /** Native FFN identity and original font properties. */
 export class wwFont {
   readonly maWW8_FFN = new Uint8Array(6);
@@ -125,9 +125,9 @@ export class wwFontHelper {
 }
 
 /** @fileoverview Builds the represented paragraph-style slots of pinned MSWordStyles. */
+import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
 
 /** Word reserves slots 0-14 before document character and paragraph styles. */
 const WW8_RESERVED_SLOTS = 15;
@@ -197,17 +197,20 @@ export class MSWordStyles {
     const normal = this.styles[0];
     if (normal !== undefined) this.names.set(normal, "Normal");
     /** Applies source case-insensitive ASCII suffix allocation. @param name - Candidate name. @returns Unique Word name. */
-    const uniqueName = (name: string): string => {
-      const key = asciiLowerCase(name);
-      if (!used.has(key)) {
-        used.add(key);
-        return name;
-      }
-      let suffix = 1;
-      while (used.has(`${key}${suffix}`)) suffix++;
-      used.add(`${key}${suffix}`);
-      return `${name}${suffix}`;
-    };
+    const uniqueName =
+      /** Implements unique Name. @param name - Name. @returns The string result. */ (
+        name: string,
+      ): string => {
+        const key = asciiLowerCase(name);
+        if (!used.has(key)) {
+          used.add(key);
+          return name;
+        }
+        let suffix = 1;
+        while (used.has(`${key}${suffix}`)) suffix++;
+        used.add(`${key}${suffix}`);
+        return `${name}${suffix}`;
+      };
     // BuildWwNames gives built-in Word names priority over user names.
     for (const collection of this.styles) {
       if (collection === undefined || this.names.has(collection)) continue;

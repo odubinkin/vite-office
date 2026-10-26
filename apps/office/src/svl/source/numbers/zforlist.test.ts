@@ -1,15 +1,15 @@
 /** @fileoverview Native selection/default policies over actual generated compound values and shared UNO COW. */
 import { expect, it } from "vitest";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import {
   NumberFormatCode,
   cppu_detail_getUnoType_NumberFormatCode,
   type NumberFormatCodeAddress,
 } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { ImpGetFormatCodeIndex, ImpAdjustFormatCodeDefault } from "./zforlist";
-import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { ImpAdjustFormatCodeDefault, ImpGetFormatCodeIndex } from "./zforlist";
 /** Actual generated specialization. */
 const Codes = Sequence.specialize<NumberFormatCodeAddress>(
   cppu_detail_getUnoType_NumberFormatCode,
@@ -256,11 +256,11 @@ it("selects actual mapper General without replacing its compiled Sequence owner"
   }
 });
 
-import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
-import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
-import { SvNumberformat } from "./zformat";
-import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
 import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
+import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
+import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
+import { SvNumberformat } from "./zformat";
+import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
 /** Actual source-backed fields/owners used by native table operations;no service peer is fabricated. @returns Owned native values. */
 function tableValues() {
   const languageText = unicode("de"),
@@ -443,8 +443,8 @@ it("searches the exact start key in numeric order and stops at a different langu
   }
 });
 
-import { SvNFLanguageData } from "./zforlist";
 import { NfEvalDateFormat } from "../../inc/zforlist";
+import { SvNFLanguageData } from "./zforlist";
 
 it("owns native language/cache/scanner state and preserves scanner/precision on ChangeIntl", /** Actual service and resources populate the real owner;no fake language data or mapper is used. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
@@ -533,10 +533,10 @@ it("owns native language/cache/scanner state and preserves scanner/precision on 
   }
 });
 
-import { SvNumberFormatter, SvNFEngine } from "./zforlist";
 import { Color } from "../../../tools/inc/color";
+import { SvNFEngine, SvNumberFormatter } from "./zforlist";
 
-it("uses the source input-line precision and restores General display precision", () => {
+it("uses the source input-line precision and restores General display precision", /** Checks uses the source input-line precision and restores General display precision. @returns Test completion or assertion result. */ () => {
   const formatter = new SvNumberFormatter(0x0407),
     output = unicode(""),
     color: [Color | null] = [null];
@@ -558,7 +558,7 @@ it("uses the source input-line precision and restores General display precision"
   }
 });
 
-it("generates and dispatches the source Boolean and Text standard formats", () => {
+it("generates and dispatches the source Boolean and Text standard formats", /** Checks generates and dispatches the source Boolean and Text standard formats. @returns Test completion or assertion result. */ () => {
   const formatter = new SvNumberFormatter(0x0407),
     output = unicode(""),
     literal = unicode("CSV text"),

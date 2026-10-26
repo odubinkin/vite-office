@@ -1,14 +1,14 @@
 /** @fileoverview Consumed SvStream text-reader contracts used by Calc CSV import. */
 import { expect, it } from "vitest";
-import { SvStream } from "./stream";
 import {
   RTL_TEXTENCODING_DONTKNOW,
   RTL_TEXTENCODING_MS_1252,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
 } from "../../../sal/inc/rtl/textenc";
+import { SvStream } from "./stream";
 
-it("consumes only permitted BOMs and keeps a second BOM as input text", () => {
+it("consumes only permitted BOMs and keeps a second BOM as input text", /** Checks consumes only permitted BOMs and keeps a second BOM as input text. @returns Test completion or assertion result. */ () => {
   const bytes = new TextEncoder().encode("\uFEFF\uFEFFé\n");
   const stream = new SvStream(bytes, RTL_TEXTENCODING_DONTKNOW);
   stream.StartReadingUnicodeText(RTL_TEXTENCODING_DONTKNOW);
@@ -24,7 +24,7 @@ it("consumes only permitted BOMs and keeps a second BOM as input text", () => {
   expect(unchanged.ReadUniOrByteStringLine()).toBe("ï»¿ï»¿Ã©");
 });
 
-it("reads UTF-16 lines in BOM-selected byte order", () => {
+it("reads UTF-16 lines in BOM-selected byte order", /** Checks reads UTF-16 lines in BOM-selected byte order. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(
     new Uint8Array([0xfe, 0xff, 0, 65, 0, 10, 0, 13, 0, 66, 0, 13]),
     RTL_TEXTENCODING_UNICODE,
@@ -37,7 +37,7 @@ it("reads UTF-16 lines in BOM-selected byte order", () => {
   expect(stream.eof()).toBe(true);
 });
 
-it("preserves ReadUniStringLine's swapped-buffer behavior after a UTF-16BE NUL", () => {
+it("preserves ReadUniStringLine's swapped-buffer behavior after a UTF-16BE NUL", /** Checks preserves ReadUniStringLine's swapped-buffer behavior after a UTF-16BE NUL. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(
     new Uint8Array([0xfe, 0xff, 0, 65, 0, 0, 0, 10, 0, 13, 0, 66, 0, 13]),
     RTL_TEXTENCODING_UNICODE,
@@ -56,7 +56,7 @@ it("preserves ReadUniStringLine's swapped-buffer behavior after a UTF-16BE NUL",
   expect(littleEndian.ReadUniOrByteStringLine()).toBe("B");
 });
 
-it("treats both opposite newline pairs as one byte-stream terminator", () => {
+it("treats both opposite newline pairs as one byte-stream terminator", /** Checks treats both opposite newline pairs as one byte-stream terminator. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(new TextEncoder().encode("A\n\rB\r\nC\n"), RTL_TEXTENCODING_UTF8);
   expect(stream.ReadUniOrByteStringLine()).toBe("A");
   expect(stream.ReadUniOrByteStringLine()).toBe("B");
@@ -65,7 +65,7 @@ it("treats both opposite newline pairs as one byte-stream terminator", () => {
   expect(stream.eof()).toBe(true);
 });
 
-it("uses the native byte limit and advances one source byte beyond a truncated line", () => {
+it("uses the native byte limit and advances one source byte beyond a truncated line", /** Checks uses the native byte limit and advances one source byte beyond a truncated line. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(new TextEncoder().encode("ABCDE\nZ"), RTL_TEXTENCODING_UTF8);
   expect(stream.ReadUniOrByteStringLine(3)).toBe("ABC");
   expect(stream.Tell()).toBe(4);
@@ -73,7 +73,7 @@ it("uses the native byte limit and advances one source byte beyond a truncated l
   expect(stream.ReadUniOrByteStringLine(3)).toBe("Z");
 });
 
-it("uses the native UTF-16 unit limit and advances one unit beyond a truncated line", () => {
+it("uses the native UTF-16 unit limit and advances one unit beyond a truncated line", /** Checks uses the native UTF-16 unit limit and advances one unit beyond a truncated line. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(
     new Uint8Array([0xff, 0xfe, 65, 0, 66, 0, 67, 0, 68, 0, 10, 0, 90, 0]),
     RTL_TEXTENCODING_UNICODE,
@@ -85,7 +85,7 @@ it("uses the native UTF-16 unit limit and advances one unit beyond a truncated l
   expect(stream.ReadUniOrByteStringLine(2)).toBe("Z");
 });
 
-it("writes source Unicode-or-byte text, characters, and byte-order marks", () => {
+it("writes source Unicode-or-byte text, characters, and byte-order marks", /** Checks writes source Unicode-or-byte text, characters, and byte-order marks. @returns Test completion or assertion result. */ () => {
   const unicode = new SvStream(new Uint8Array(), RTL_TEXTENCODING_UNICODE);
   unicode.StartWritingUnicodeText();
   expect(unicode.WriteUnicodeOrByteText("A", RTL_TEXTENCODING_UNICODE, true)).toBe(true);

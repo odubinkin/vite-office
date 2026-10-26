@@ -1,13 +1,7 @@
 /** @fileoverview CSV stream conversion using actual Calc document cells. */
 import { assert, expect, it } from "vitest";
-import { ScDocument } from "../../../inc/document";
-import { ScAddress } from "../../../inc/address";
-import { CellType } from "../../../inc/global";
-import { ScAsciiOptions, SC_COL_SKIP, SC_COL_STANDARD, SC_COL_TEXT } from "../dbgui/asciiopt";
-import { ReadCsvLine, ScImportExport } from "./impex";
-import { SvStream } from "../../../../tools/source/stream/stream";
-import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { readOdsDocument, writeOdsDocument } from "../../filter/xml/xmlwrap";
+import { LANGUAGE_GERMAN } from "../../../../i18nlangtag/inc/lang";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_DONTKNOW,
   RTL_TEXTENCODING_MS_1251,
@@ -15,11 +9,19 @@ import {
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
 } from "../../../../sal/inc/rtl/textenc";
-import { LANGUAGE_GERMAN } from "../../../../i18nlangtag/inc/lang";
+import { SvStream } from "../../../../tools/source/stream/stream";
+import { ScAddress } from "../../../inc/address";
+import { ScDocument } from "../../../inc/document";
+import { CellType } from "../../../inc/global";
+import { readOdsDocument, writeOdsDocument } from "../../filter/xml/xmlwrap";
+import { SC_COL_SKIP, SC_COL_STANDARD, SC_COL_TEXT, ScAsciiOptions } from "../dbgui/asciiopt";
+import { ReadCsvLine, ScImportExport } from "./impex";
 
 it.each([",", "\t", ";", " "])(
   "retries ReadCsvLine with the detected %j separator before joining quoted lines",
-  (separator) => {
+  /** Checks retries ReadCsvLine with the detected %j separator before joining quoted lines. @param separator - Separator. @returns Test completion or assertion result. */ (
+    separator,
+  ) => {
     const stream = new SvStream(
       new TextEncoder().encode(`"a"${separator}"b\nc"\nnext\n`),
       RTL_TEXTENCODING_UTF8,
@@ -33,7 +35,7 @@ it.each([",", "\t", ";", " "])(
   },
 );
 
-it("prefers punctuation after a closing quote over a possible blank separator and ignores escaped quotes", () => {
+it("prefers punctuation after a closing quote over a possible blank separator and ignores escaped quotes", /** Checks prefers punctuation after a closing quote over a possible blank separator and ignores escaped quotes. @returns Test completion or assertion result. */ () => {
   const stream = new SvStream(new TextEncoder().encode('"a"",b" ;"c\nd"\n'), RTL_TEXTENCODING_UTF8);
   const separators: [string] = ["|"],
     detect: [number] = [0];
@@ -42,7 +44,7 @@ it("prefers punctuation after a closing quote over a possible blank separator an
   expect(detect[0]).toBe(59);
 });
 
-it("treats NUL after a quote as a field end before the higher-level embedded-NUL removal", () => {
+it("treats NUL after a quote as a field end before the higher-level embedded-NUL removal", /** Checks treats NUL after a quote as a field end before the higher-level embedded-NUL removal. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -52,7 +54,10 @@ it("treats NUL after a quote as a field end before the higher-level embedded-NUL
   expect(converter.ImportStream(new TextEncoder().encode('"a"\0,"b\nc"\n'))).toBe(true);
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("a");
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_EDIT);
-  const value = doc.GetRefCellValue(new ScAddress(1, 0, 0)).getEditText()?.GetText();
+  const value = doc
+    .GetRefCellValue(new ScAddress(1, 0, 0))
+    .getEditText()
+    ?.GetText();
   assert(value);
   try {
     expect(text(value)).toBe("b\nc");
@@ -63,7 +68,9 @@ it("treats NUL after a quote as a field end before the higher-level embedded-NUL
 
 it.each([1, 2])(
   "rewinds an open quoted field to its first physical line after the preview limit %i",
-  (limit) => {
+  /** Checks rewinds an open quoted field to its first physical line after the preview limit %i. @param limit - Limit. @returns Test completion or assertion result. */ (
+    limit,
+  ) => {
     const stream = new SvStream(
       new TextEncoder().encode('"a\nb\nc",2\nnext\n'),
       RTL_TEXTENCODING_UTF8,
@@ -76,7 +83,7 @@ it.each([1, 2])(
   },
 );
 
-it("advances the source ScanNextFieldFromString cursor through quotes, dirty suffixes and merged separators", () => {
+it("advances the source ScanNextFieldFromString cursor through quotes, dirty suffixes and merged separators", /** Checks advances the source ScanNextFieldFromString cursor through quotes, dirty suffixes and merged separators. @returns Test completion or assertion result. */ () => {
   const overflow: [boolean] = [false];
   expect(
     ScImportExport.ScanNextFieldFromString('  "a,b"  ,x', 0, '"', ",", false, true, overflow),
@@ -90,7 +97,7 @@ it("advances the source ScanNextFieldFromString cursor through quotes, dirty suf
   expect(overflow[0]).toBe(false);
 });
 
-it("applies lcl_appendLineData's limit across escaped quotes and dirty field suffixes", () => {
+it("applies lcl_appendLineData's limit across escaped quotes and dirty field suffixes", /** Checks applies lcl_appendLineData's limit across escaped quotes and dirty field suffixes. @returns Test completion or assertion result. */ () => {
   const overflow: [boolean] = [false];
   const escaped = ScImportExport.ScanNextFieldFromString(
     '"' + "x".repeat(65534) + '""",next',
@@ -116,7 +123,7 @@ it("applies lcl_appendLineData's limit across escaped quotes and dirty field suf
   expect(overflow[0]).toBe(true);
 });
 
-it("keeps SetExtOptions' copied separators and column metadata after caller mutation", () => {
+it("keeps SetExtOptions' copied separators and column metadata after caller mutation", /** Checks keeps SetExtOptions' copied separators and column metadata after caller mutation. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -133,7 +140,7 @@ it("keeps SetExtOptions' copied separators and column metadata after caller muta
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(8);
 });
 
-it("treats a zero text delimiter as disabled during CSV import", () => {
+it("treats a zero text delimiter as disabled during CSV import", /** Checks treats a zero text delimiter as disabled during CSV import. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -147,7 +154,7 @@ it("treats a zero text delimiter as disabled during CSV import", () => {
   expect(text(doc.GetSharedString(new ScAddress(2, 0, 0)).getString())).toBe("C");
 });
 
-it("imports quoted separators, doubled quotes, skipped columns, BOM and numeric fields", () => {
+it("imports quoted separators, doubled quotes, skipped columns, BOM and numeric fields", /** Checks imports quoted separators, doubled quotes, skipped columns, BOM and numeric fields. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -170,7 +177,7 @@ it("imports quoted separators, doubled quotes, skipped columns, BOM and numeric 
   expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe('a"b');
 });
 
-it("treats opposite CR/LF pairs as one physical line ending like SvStream", () => {
+it("treats opposite CR/LF pairs as one physical line ending like SvStream", /** Checks treats opposite CR/LF pairs as one physical line ending like SvStream. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -192,7 +199,7 @@ it("treats opposite CR/LF pairs as one physical line ending like SvStream", () =
   expect(doc.GetValue(new ScAddress(1, 2, 0))).toBe(3);
 });
 
-it("skips logical CSV records through ReadCsvLine before importing the start row", () => {
+it("skips logical CSV records through ReadCsvLine before importing the start row", /** Checks skips logical CSV records through ReadCsvLine before importing the start row. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -206,7 +213,7 @@ it("skips logical CSV records through ReadCsvLine before importing the start row
   expect(doc.GetCellType(new ScAddress(0, 1, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("consumes separator-column format records in source order", () => {
+it("consumes separator-column format records in source order", /** Checks consumes separator-column format records in source order. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -220,7 +227,7 @@ it("consumes separator-column format records in source order", () => {
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("retains ExtText2Doc's pass-start last column across rows with trailing empty fields", () => {
+it("retains ExtText2Doc's pass-start last column across rows with trailing empty fields", /** Checks retains ExtText2Doc's pass-start last column across rows with trailing empty fields. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   doc.SetTextCell(new ScAddress(1, 0, 0), unicode("first-row-old"));
@@ -234,7 +241,7 @@ it("retains ExtText2Doc's pass-start last column across rows with trailing empty
   expect(text(doc.GetSharedString(new ScAddress(1, 1, 0)).getString())).toBe("second-row-old");
 });
 
-it("does not extend the pass-start last column when a trailing source column is skipped", () => {
+it("does not extend the pass-start last column when a trailing source column is skipped", /** Checks does not extend the pass-start last column when a trailing source column is skipped. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   doc.SetTextCell(new ScAddress(1, 1, 0), unicode("old"));
@@ -248,7 +255,7 @@ it("does not extend the pass-start last column when a trailing source column is 
   expect(text(doc.GetSharedString(new ScAddress(1, 1, 0)).getString())).toBe("old");
 });
 
-it("reports separated-cell overflow after applying the source 65535-character limit", () => {
+it("reports separated-cell overflow after applying the source 65535-character limit", /** Checks reports separated-cell overflow after applying the source 65535-character limit. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -261,7 +268,7 @@ it("reports separated-cell overflow after applying the source 65535-character li
   expect(converter.IsOverflow()).toBe(true);
 });
 
-it("keeps the source fixed-width quoted-field boundary at 65536 characters", () => {
+it("keeps the source fixed-width quoted-field boundary at 65536 characters", /** Checks keeps the source fixed-width quoted-field boundary at 65536 characters. @returns Test completion or assertion result. */ () => {
   for (const [length, expected, overflow] of [
     [65536, 65536, false],
     [65537, 65535, true],
@@ -282,7 +289,7 @@ it("keeps the source fixed-width quoted-field boundary at 65536 characters", () 
   }
 });
 
-it("does not scan a skipped fixed-width field for cell overflow", () => {
+it("does not scan a skipped fixed-width field for cell overflow", /** Checks does not scan a skipped fixed-width field for cell overflow. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -296,7 +303,7 @@ it("does not scan a skipped fixed-width field for cell overflow", () => {
   expect(doc.GetCellType(new ScAddress())).toBe(CellType.CELLTYPE_NONE);
 });
 
-it("honors evaluate-formula and quoted-as-text options", () => {
+it("honors evaluate-formula and quoted-as-text options", /** Checks honors evaluate-formula and quoted-as-text options. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -310,7 +317,7 @@ it("honors evaluate-formula and quoted-as-text options", () => {
   expect(doc.GetCellType(new ScAddress(1, 0, 0))).toBe(CellType.CELLTYPE_STRING);
   expect(doc.GetValue(new ScAddress(2, 0, 0))).toBe(42);
 });
-it("keeps a lone equals sign as text and multiline formula-looking input as an edit cell", () => {
+it("keeps a lone equals sign as text and multiline formula-looking input as an edit cell", /** Checks keeps a lone equals sign as text and multiline formula-looking input as an edit cell. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -332,7 +339,7 @@ it("keeps a lone equals sign as text and multiline formula-looking input as an e
     content.dispose();
   }
 });
-it("imports a formula before the numeric cell it references through the document importer", () => {
+it("imports a formula before the numeric cell it references through the document importer", /** Checks imports a formula before the numeric cell it references through the document importer. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -344,7 +351,7 @@ it("imports a formula before the numeric cell it references through the document
   expect(doc.GetValue(new ScAddress(0, 0, 0))).toBe(42);
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(21);
 });
-it("decodes ANSI CSV through the original MS-1252 byte table", () => {
+it("decodes ANSI CSV through the original MS-1252 byte table", /** Checks decodes ANSI CSV through the original MS-1252 byte table. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -358,7 +365,7 @@ it("decodes ANSI CSV through the original MS-1252 byte table", () => {
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("Café");
   expect(text(doc.GetSharedString(new ScAddress(1, 0, 0)).getString())).toBe("€");
 });
-it("decodes the source MS-1251 descriptor from the native numeric filter token", () => {
+it("decodes the source MS-1251 descriptor from the native numeric filter token", /** Checks decodes the source MS-1251 descriptor from the native numeric filter token. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -370,7 +377,7 @@ it("decodes the source MS-1251 descriptor from the native numeric filter token",
   );
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("Привет");
 });
-it("recognizes both Unicode stream BOM byte orders before parsing cells", () => {
+it("recognizes both Unicode stream BOM byte orders before parsing cells", /** Checks recognizes both Unicode stream BOM byte orders before parsing cells. @returns Test completion or assertion result. */ () => {
   for (const bytes of [
     new Uint8Array([0xff, 0xfe, 0x41, 0, 0x2c, 0, 0x42, 0, 0x0a, 0]),
     new Uint8Array([0xfe, 0xff, 0, 0x41, 0, 0x2c, 0, 0x42, 0, 0x0a]),
@@ -389,7 +396,7 @@ it("recognizes both Unicode stream BOM byte orders before parsing cells", () => 
   }
 });
 
-it("uses StartReadingUnicodeText's BOM-selected encoding when the charset is unknown", () => {
+it("uses StartReadingUnicodeText's BOM-selected encoding when the charset is unknown", /** Checks uses StartReadingUnicodeText's BOM-selected encoding when the charset is unknown. @returns Test completion or assertion result. */ () => {
   for (const bytes of [
     new Uint8Array([0xef, 0xbb, 0xbf, 0xc3, 0xa9, 0x0a]),
     new Uint8Array([0xff, 0xfe, 0xe9, 0, 0x0a, 0]),
@@ -407,7 +414,7 @@ it("uses StartReadingUnicodeText's BOM-selected encoding when the charset is unk
   }
 });
 
-it("consumes only the first BOM and preserves a second U+FEFF as cell content", () => {
+it("consumes only the first BOM and preserves a second U+FEFF as cell content", /** Checks consumes only the first BOM and preserves a second U+FEFF as cell content. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -417,7 +424,7 @@ it("consumes only the first BOM and preserves a second U+FEFF as cell content", 
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("\uFEFFA");
 });
 
-it("retains ExtText2Doc's BOM flag when the same importer reads another stream", () => {
+it("retains ExtText2Doc's BOM flag when the same importer reads another stream", /** Checks retains ExtText2Doc's BOM flag when the same importer reads another stream. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const converter = new ScImportExport(doc);
@@ -430,7 +437,7 @@ it("retains ExtText2Doc's BOM flag when the same importer reads another stream",
   expect(text(doc.GetSharedString(new ScAddress()).getString())).toBe("B");
 });
 
-it("keeps quoted line breaks as native edit cells through CSV and ODS", async () => {
+it("keeps quoted line breaks as native edit cells through CSV and ODS", /** Checks keeps quoted line breaks as native edit cells through CSV and ODS. @returns Test completion or assertion result. */ async () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -451,7 +458,7 @@ it("keeps quoted line breaks as native edit cells through CSV and ODS", async ()
     value.dispose();
   }
 });
-it("removes one terminal LF from a quoted field as ExtText2Doc does", () => {
+it("removes one terminal LF from a quoted field as ExtText2Doc does", /** Checks removes one terminal LF from a quoted field as ExtText2Doc does. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -463,7 +470,7 @@ it("removes one terminal LF from a quoted field as ExtText2Doc does", () => {
   expect(doc.GetCellType(new ScAddress(0, 0, 0))).toBe(CellType.CELLTYPE_STRING);
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(2);
 });
-it("rewinds an unmatched opening quote to the first physical line as ReadCsvLine does", () => {
+it("rewinds an unmatched opening quote to the first physical line as ReadCsvLine does", /** Checks rewinds an unmatched opening quote to the first physical line as ReadCsvLine does. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -475,7 +482,7 @@ it("rewinds an unmatched opening quote to the first physical line as ReadCsvLine
   expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("next");
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(2);
 });
-it("keeps quoted spaces and tabs while trimming only unquoted ASCII blanks", () => {
+it("keeps quoted spaces and tabs while trimming only unquoted ASCII blanks", /** Checks keeps quoted spaces and tabs while trimming only unquoted ASCII blanks. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -490,7 +497,7 @@ it("keeps quoted spaces and tabs while trimming only unquoted ASCII blanks", () 
   expect(text(doc.GetSharedString(new ScAddress(1, 0, 0)).getString())).toBe("\tb\t");
   expect(text(doc.GetSharedString(new ScAddress(2, 0, 0)).getString())).toBe('"x"tail');
 });
-it("splits fixed-width CSV at ICU visual columns rather than UTF-16 offsets", () => {
+it("splits fixed-width CSV at ICU visual columns rather than UTF-16 offsets", /** Checks splits fixed-width CSV at ICU visual columns rather than UTF-16 offsets. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -511,7 +518,7 @@ it("splits fixed-width CSV at ICU visual columns rather than UTF-16 offsets", ()
   expect(cursor[0]).toBe(2);
 });
 
-it("retains a default-ignorable after the width boundary and strips fixed-field quotes", () => {
+it("retains a default-ignorable after the width boundary and strips fixed-field quotes", /** Checks retains a default-ignorable after the width boundary and strips fixed-field quotes. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -527,7 +534,7 @@ it("retains a default-ignorable after the width boundary and strips fixed-field 
   expect(text(doc.GetSharedString(new ScAddress(2, 0, 0)).getString())).toBe("x");
 });
 
-it("uses each fixed-width column's own format and skips its source field", () => {
+it("uses each fixed-width column's own format and skips its source field", /** Checks uses each fixed-width column's own format and skips its source field. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -542,7 +549,7 @@ it("uses each fixed-width column's own format and skips its source field", () =>
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(2);
 });
 
-it("keeps fixed-width physical lines separate even after an opening quote", () => {
+it("keeps fixed-width physical lines separate even after an opening quote", /** Checks keeps fixed-width physical lines separate even after an opening quote. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -556,7 +563,7 @@ it("keeps fixed-width physical lines separate even after an opening quote", () =
   expect(text(doc.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("B");
 });
 
-it("strips embedded NUL code units from the raw line before scanning fields", () => {
+it("strips embedded NUL code units from the raw line before scanning fields", /** Checks strips embedded NUL code units from the raw line before scanning fields. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();
@@ -568,7 +575,7 @@ it("strips embedded NUL code units from the raw line before scanning fields", ()
   expect(doc.GetValue(new ScAddress(1, 0, 0))).toBe(2);
 });
 
-it("uses the filter language's formatter separators for simple numbers", () => {
+it("uses the filter language's formatter separators for simple numbers", /** Checks uses the filter language's formatter separators for simple numbers. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const options = new ScAsciiOptions();

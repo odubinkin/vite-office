@@ -2,14 +2,14 @@
  * @fileoverview Reimplements the bounded ODF text paragraph export boundary from pinned LibreOffice `xmloff/source/text/txtparae.cxx`.
  */
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
-import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import { SvXMLUnitConverter } from "../core/xmluconv";
-import { exportTextCharacterProperties } from "./txtprmap";
-import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
+import type { OdfBoxProperties } from "../style/bordrhdl";
+import { XMLNumberWithAutoForVoidPropHdl } from "../style/xmlbahdl";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
-import type { OdfBoxProperties } from "../style/bordrhdl";
+import { exportTextCharacterProperties } from "./txtprmap";
+import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
 export type { OdfCharacterProperties } from "./txtparae.types";
@@ -743,15 +743,19 @@ export function exportParagraphAttributes(properties: OdfParagraphProperties): s
     ...(properties.joinBorder === undefined
       ? []
       : [`style:join-border="${properties.joinBorder}"`]),
-    ...(["Top", "Bottom", "Left", "Right"] as const).flatMap((side) => {
-      const suffix = side.toLowerCase();
-      const border = properties[`border${side}`];
-      const width = properties[`borderLineWidth${side}`];
-      return [
-        ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
-        ...(width === undefined ? [] : [`style:border-line-width-${suffix}="${escapeXml(width)}"`]),
-      ];
-    }),
+    ...(["Top", "Bottom", "Left", "Right"] as const).flatMap(
+      /** Computes the side result. @param side - Side. @returns The computed result. */ (side) => {
+        const suffix = side.toLowerCase();
+        const border = properties[`border${side}`];
+        const width = properties[`borderLineWidth${side}`];
+        return [
+          ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
+          ...(width === undefined
+            ? []
+            : [`style:border-line-width-${suffix}="${escapeXml(width)}"`]),
+        ];
+      },
+    ),
     ...(properties.firstLineIndent === undefined
       ? []
       : [`fo:text-indent="${exportOdfLength(properties.firstLineIndent)}"`]),

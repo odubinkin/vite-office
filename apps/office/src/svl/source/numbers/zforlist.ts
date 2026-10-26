@@ -1,49 +1,58 @@
 /** @fileoverview Original represented format-code,language,table,General formatter and engine owners over genuine UNO/SAL/Date values;remaining builtin/pattern/UNO-registry services stay explicit unported boundaries. */
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import {
-  NumberFormatCode,
+  LANGUAGE_DONTKNOW,
+  LANGUAGE_ENGLISH_US,
+  LANGUAGE_SYSTEM,
+} from "../../../i18nlangtag/inc/lang";
+import {
+  convertLanguageToLocale,
+  convertLocaleToLanguage,
+  getConfiguredSystemLanguage,
+  getRealLanguage,
+} from "../../../i18nlangtag/source/isolang/mslangid";
+import * as Type from "../../../offapi/com/sun/star/i18n/KNumberFormatType";
+import {
   cppu_detail_getUnoType_NumberFormatCode,
+  NumberFormatCode,
   type NumberFormatCodeAddress,
 } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
-import * as Type from "../../../offapi/com/sun/star/i18n/KNumberFormatType";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import {
-  NfIndexTableOffset as Offset,
-  NfEvalDateFormat,
-  SvNumFormatType,
-  SV_COUNTRY_LANGUAGE_OFFSET,
-  SV_MAX_COUNT_STANDARD_FORMATS,
-  NUMBERFORMAT_ENTRY_NOT_FOUND,
-} from "../../inc/zforlist";
-import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
 import type { Color } from "../../../tools/inc/color";
-import { LANGUAGE_DONTKNOW, LANGUAGE_ENGLISH_US, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
 import type { DateConstReference } from "../../../tools/source/datetime/tdate";
-import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
-import { ImpSvNumberInputScan } from "./zforfind";
-import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
-import { convertLanguageToLocale, convertLocaleToLanguage, getConfiguredSystemLanguage, getRealLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
+import { CharClass } from "../../../unotools/source/i18n/charclass";
 import {
   createNumberFormatCodeMapper,
+  getDateSep,
   getLoadedLocale,
   getNumDecimalSep,
   getNumDecimalSepAlt,
   getNumThousandSep,
-  getDateSep,
   LocaleDataWrapper,
 } from "../../../unotools/source/i18n/localedatawrapper";
-import { CharClass } from "../../../unotools/source/i18n/charclass";
-import { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
-import { OnDemandCharClass, OnDemandTransliterationWrapper } from "../../inc/ondemand";
 import type { TransliterationWrapper } from "../../../unotools/source/i18n/transliterationwrapper";
+import { OnDemandCharClass, OnDemandTransliterationWrapper } from "../../inc/ondemand";
+import {
+  NfEvalDateFormat,
+  NUMBERFORMAT_ENTRY_NOT_FOUND,
+  NfIndexTableOffset as Offset,
+  SV_COUNTRY_LANGUAGE_OFFSET,
+  SV_MAX_COUNT_STANDARD_FORMATS,
+  SvNumFormatType,
+} from "../../inc/zforlist";
+import { ImpSvNumberInputScan } from "./zforfind";
+import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
+import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
+import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
 
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { CURRENCY, FIXED_NUMBER } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
 import type { NumberFormatCodeConstReference } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
-import { FIXED_NUMBER, CURRENCY } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { LocaleCurrency } from "../../../unotools/source/i18n/localedatawrapper";
-import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 
 /** Original language/country currency value used by SvNumberFormatter's ordered currency tables. */
 export class NfCurrencyEntry {
@@ -53,37 +62,65 @@ export class NfCurrencyEntry {
   private readonly positiveFormat: number;
   private readonly negativeFormat: number;
   private readonly digits: number;
-  /** Initializes the source wrapper fallback or Currency2 row, preserving the row's own digits. @param first - Wrapper or currency row. @param second - Language or wrapper. @param third - Row language. */
+  /** Initializes the source wrapper fallback or Currency2 row, preserving the row's own digits. @param first - Wrapper or currency row. @param second - Language or wrapper. @param third - Row language.  @returns Constructed instance. */
   constructor(wrapper: LocaleDataWrapper, language: number);
-  constructor(currency: LocaleCurrency, wrapper: LocaleDataWrapper, language: number);
-  constructor(first: LocaleDataWrapper | LocaleCurrency, second: number | LocaleDataWrapper, third?: number) {
-    const wrapper = typeof second === "number" ? first as LocaleDataWrapper : second;
-    const currency = typeof second === "number" ? null : first as LocaleCurrency;
+  /** Computes the currency result. @param currency - Currency. @param wrapper - Wrapper. @param language - Language. @returns Constructed instance. */ constructor(
+    currency: LocaleCurrency,
+    wrapper: LocaleDataWrapper,
+    language: number,
+  );
+  /** Computes the first result. @param first - First. @param second - Second. @param third - Third. @returns Constructed instance. */ constructor(
+    first: LocaleDataWrapper | LocaleCurrency,
+    second: number | LocaleDataWrapper,
+    third?: number,
+  ) {
+    const wrapper = typeof second === "number" ? (first as LocaleDataWrapper) : second;
+    const currency = typeof second === "number" ? null : (first as LocaleCurrency);
     this.symbol = currency ? unicode(currency.symbol) : new OUString(wrapper.getCurrSymbol());
-    this.bankSymbol = currency ? unicode(currency.bankSymbol) : new OUString(wrapper.getCurrBankSymbol());
-    this.language = typeof second === "number" ? second : third as number;
+    this.bankSymbol = currency
+      ? unicode(currency.bankSymbol)
+      : new OUString(wrapper.getCurrBankSymbol());
+    this.language = typeof second === "number" ? second : (third as number);
     this.positiveFormat = wrapper.getCurrPositiveFormat();
     this.negativeFormat = wrapper.getCurrNegativeFormat();
     this.digits = currency ? currency.decimalPlaces : wrapper.getCurrDigits();
   }
   /** Source identity compares only the symbol, bank symbol and language. @param other - Currency entry. @returns Identity. */
   equals(other: NfCurrencyEntry): boolean {
-    return this.symbol.equals(other.symbol) && this.bankSymbol.equals(other.bankSymbol) && this.language === other.language;
+    return (
+      this.symbol.equals(other.symbol) &&
+      this.bankSymbol.equals(other.bankSymbol) &&
+      this.language === other.language
+    );
   }
   /** Original borrowed symbol. @returns Symbol. */
-  GetSymbol(): OUString { return this.symbol; }
+  GetSymbol(): OUString {
+    return this.symbol;
+  }
   /** Original borrowed bank symbol. @returns Bank symbol. */
-  GetBankSymbol(): OUString { return this.bankSymbol; }
+  GetBankSymbol(): OUString {
+    return this.bankSymbol;
+  }
   /** Original language. @returns Native language ID. */
-  GetLanguage(): number { return this.language; }
+  GetLanguage(): number {
+    return this.language;
+  }
   /** Original positive placement. @returns Format ID. */
-  GetPositiveFormat(): number { return this.positiveFormat; }
+  GetPositiveFormat(): number {
+    return this.positiveFormat;
+  }
   /** Original negative placement. @returns Format ID. */
-  GetNegativeFormat(): number { return this.negativeFormat; }
+  GetNegativeFormat(): number {
+    return this.negativeFormat;
+  }
   /** Original currency precision. @returns Digits. */
-  GetDigits(): number { return this.digits; }
+  GetDigits(): number {
+    return this.digits;
+  }
   /** Source system-currency list language adjustment. @param language - Native language ID. @returns Nothing. */
-  SetLanguage(language: number): void { this.language = language; }
+  SetLanguage(language: number): void {
+    this.language = language;
+  }
   /** Original [$symbol-language] or [$bank] syntax, quoting symbols containing hyphen or closing bracket. @param bank - Use ISO bank symbol. @param withoutExtension - Omit language suffix. @returns Owned code. */
   BuildSymbolString(bank: boolean, withoutExtension = false): OUString {
     let value = "[$";
@@ -91,13 +128,20 @@ export class NfCurrencyEntry {
     else {
       const symbol = text(this.symbol);
       value += symbol.includes("-") || symbol.includes("]") ? `"${symbol}"` : symbol;
-      if (!withoutExtension && this.language !== LANGUAGE_DONTKNOW && this.language !== LANGUAGE_SYSTEM)
+      if (
+        !withoutExtension &&
+        this.language !== LANGUAGE_DONTKNOW &&
+        this.language !== LANGUAGE_SYSTEM
+      )
         value += `-${(this.language & 0xffff).toString(16).toUpperCase()}`;
     }
     return unicode(value + "]");
   }
   /** Releases owned source string values. @returns Nothing. */
-  dispose(): void { this.symbol.dispose(); this.bankSymbol.dispose(); }
+  dispose(): void {
+    this.symbol.dispose();
+    this.bankSymbol.dispose();
+  }
 }
 
 /** Original process-wide source currency tables: ordinary entries start with SYSTEM, legacy-only entries are separate. */
@@ -275,7 +319,7 @@ export class SvNFLanguageData {
   GetCharClass(): CharClass {
     return this.fields.xCharClass.get();
   }
-  /** Source lazy current-language transliteration owner. */
+  /** Source lazy current-language transliteration owner.  @returns The TransliterationWrapper result. */
   GetTransliteration(): TransliterationWrapper {
     return this.fields.xTransliteration.get();
   }
@@ -530,9 +574,7 @@ export function generateStandardNumberFormat(
       [Offset.NF_BOOLEAN, SvNumFormatType.LOGICAL],
       [Offset.NF_TEXT, SvNumFormatType.TEXT],
     ] as const) {
-      const code = key === Offset.NF_TEXT
-        ? unicode("@")
-        : new OUString(scanner.GetBooleanString()),
+      const code = key === Offset.NF_TEXT ? unicode("@") : new OUString(scanner.GetBooleanString()),
         check: [number] = [0];
       try {
         const format = new SvNumberformat(code, scanner, check, language);
@@ -656,9 +698,14 @@ export class SvNumberFormatter {
     const systemLocale = convertLanguageToLocale(systemLanguage, false);
     try {
       const wrapper = new LocaleDataWrapper(systemLocale);
-      try { entries.push(new NfCurrencyEntry(wrapper, LANGUAGE_SYSTEM)); }
-      finally { wrapper.dispose(); }
-    } finally { systemLocale.dispose(); }
+      try {
+        entries.push(new NfCurrencyEntry(wrapper, LANGUAGE_SYSTEM));
+      } finally {
+        wrapper.dispose();
+      }
+    } finally {
+      systemLocale.dispose();
+    }
     const installed = LocaleDataWrapper.getInstalledLocaleNames();
     try {
       for (const locale of installed) {
@@ -666,10 +713,15 @@ export class SvNumberFormatter {
           wrapper = new LocaleDataWrapper(locale);
         try {
           const currencies = wrapper.getAllCurrencies(),
-            defaultIndex = currencies.findIndex((currency) => currency.default),
-            defaultEntry = defaultIndex >= 0
-              ? new NfCurrencyEntry(currencies[defaultIndex] as LocaleCurrency, wrapper, language)
-              : new NfCurrencyEntry(wrapper, language);
+            defaultIndex = currencies.findIndex(
+              /** Computes the currency result. @param currency - Currency. @returns The computed result. */ (
+                currency,
+              ) => currency.default,
+            ),
+            defaultEntry =
+              defaultIndex >= 0
+                ? new NfCurrencyEntry(currencies[defaultIndex] as LocaleCurrency, wrapper, language)
+                : new NfCurrencyEntry(wrapper, language);
           if (!matching && defaultEntry.GetLanguage() === systemLanguage) matching = entries.length;
           entries.push(defaultEntry);
           if (currencies.length > 1) {
@@ -679,18 +731,29 @@ export class SvNumberFormatter {
                 legacy.push(new NfCurrencyEntry(currency, wrapper, language));
               } else if (index !== defaultIndex) {
                 const entry = new NfCurrencyEntry(currency, wrapper, language);
-                if (entries.slice(1).some((previous) => previous.equals(entry))) {
+                if (
+                  entries
+                    .slice(1)
+                    .some(
+                      /** Computes the previous result. @param previous - Previous. @returns The computed result. */ (
+                        previous,
+                      ) => previous.equals(entry),
+                    )
+                ) {
                   entry.dispose();
                   continue;
                 }
                 // Empty ooSetupCurrency defaults to LANGUAGE_SYSTEM; only a configured override can select this arm.
-                if (!secondary && entry.GetLanguage() === LANGUAGE_SYSTEM) secondary = entries.length;
+                if (!secondary && entry.GetLanguage() === LANGUAGE_SYSTEM)
+                  secondary = entries.length;
                 if (!matching && entry.GetLanguage() === systemLanguage) matching = entries.length;
                 entries.push(entry);
               }
             }
           }
-        } finally { wrapper.dispose(); }
+        } finally {
+          wrapper.dispose();
+        }
       }
       legacyOnlyCurrencyTable = legacy;
       systemCurrencyPosition = secondary || matching;
@@ -711,25 +774,50 @@ export class SvNumberFormatter {
   /** Original system entry lookup is null when no installed locale matches. @returns Selected system entry or null. */
   static MatchSystemCurrency(): NfCurrencyEntry | null {
     const table = this.GetTheCurrencyTable();
-    return systemCurrencyPosition ? table[systemCurrencyPosition] as NfCurrencyEntry : null;
+    return systemCurrencyPosition ? (table[systemCurrencyPosition] as NfCurrencyEntry) : null;
   }
   /** Original language or bank-abbreviation currency lookup over the same ordered table. @param languageOrAbbrev - Native language or bank abbreviation. @param language - Language for bank lookup. @returns Currency entry. */
   static GetCurrencyEntry(language: number): NfCurrencyEntry;
-  static GetCurrencyEntry(abbrev: string, language: number): NfCurrencyEntry | null;
-  static GetCurrencyEntry(languageOrAbbrev: number | string, language?: number): NfCurrencyEntry | null {
+  /** Implements Get Currency Entry. @param abbrev - Abbrev. @param language - Language. @returns The NfCurrencyEntry | null result. */ static GetCurrencyEntry(
+    abbrev: string,
+    language: number,
+  ): NfCurrencyEntry | null;
+  /** Implements Get Currency Entry. @param languageOrAbbrev - Language Or Abbrev. @param language - Language. @returns The NfCurrencyEntry | null result. */ static GetCurrencyEntry(
+    languageOrAbbrev: number | string,
+    language?: number,
+  ): NfCurrencyEntry | null {
     const table = this.GetTheCurrencyTable();
     if (typeof languageOrAbbrev === "string") {
       const target = getRealLanguage(language as number);
-      return table.find((entry) => entry.GetLanguage() === target && text(entry.GetBankSymbol()) === languageOrAbbrev) ?? null;
+      return (
+        table.find(
+          /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
+            entry,
+          ) => entry.GetLanguage() === target && text(entry.GetBankSymbol()) === languageOrAbbrev,
+        ) ?? null
+      );
     }
-    if (languageOrAbbrev === LANGUAGE_SYSTEM) return this.MatchSystemCurrency() ?? table[0] as NfCurrencyEntry;
+    if (languageOrAbbrev === LANGUAGE_SYSTEM)
+      return this.MatchSystemCurrency() ?? (table[0] as NfCurrencyEntry);
     const target = getRealLanguage(languageOrAbbrev);
-    return table.find((entry) => entry.GetLanguage() === target) ?? table[0] as NfCurrencyEntry;
+    return (
+      table.find(
+        /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
+          entry,
+        ) => entry.GetLanguage() === target,
+      ) ?? (table[0] as NfCurrencyEntry)
+    );
   }
   /** Original separate legacy-only currency lookup by symbol and bank abbreviation. @param symbol - Display symbol. @param abbrev - Bank symbol. @returns Legacy entry or null. */
   static GetLegacyOnlyCurrencyEntry(symbol: string, abbrev: string): NfCurrencyEntry | null {
     this.GetTheCurrencyTable();
-    return legacyOnlyCurrencyTable.find((entry) => text(entry.GetSymbol()) === symbol && text(entry.GetBankSymbol()) === abbrev) ?? null;
+    return (
+      legacyOnlyCurrencyTable.find(
+        /** Computes the entry result. @param entry - Entry. @returns The computed result. */ (
+          entry,
+        ) => text(entry.GetSymbol()) === symbol && text(entry.GetBankSymbol()) === abbrev,
+      ) ?? null
+    );
   }
   /** Source static two-digit-year expansion at the configured century boundary. @param year - Input year. @param start - First year of the hundred-year window. @returns Expanded year. */
   static ExpandTwoDigitYear(year: number, start: number): number {

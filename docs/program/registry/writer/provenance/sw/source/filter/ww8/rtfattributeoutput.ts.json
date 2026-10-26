@@ -32,11 +32,11 @@
     "evidence": {
       "local": [
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
           "marker": "round trips native decoration"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
           "marker": "retains upstream default-height"
         },
         {
@@ -44,7 +44,7 @@
           "marker": "round trips native paragraph spacing"
         },
         {
-          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.layout.test.ts",
           "marker": "round trips %s native line spacing"
         },
         {

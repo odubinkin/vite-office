@@ -1,35 +1,36 @@
 /** @fileoverview Original table2.cxx default-content clipboard dispatch over real contiguous columns. */
-import { MatrixEdge } from "../../../inc/types";
-import { ScRange } from "../../../inc/address";
-import type { ScDocument } from "../../../inc/document";
-import type { ScMarkData } from "../../../inc/markdata";
-import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
-import {
-  ScConditionalFormatList,
-  ScConditionalFormat,
-  ScCondDateFormatEntry,
-} from "../../../inc/conditio";
-import { RefUpdateContext } from "../../../inc/refupdatecontext";
-import { UpdateRefMode, ScCloneFlags } from "../../../inc/global";
-import { DelayFormulaGroupingSwitch } from "../../../inc/scopetools";
-import { AutoCalcSwitch } from "../../../inc/scopetools";
-import type { CopyToDocContext } from "../../../inc/clipcontext";
-import { InsertDeleteFlags } from "../../../inc/global";
-import type { ColumnSpanSet } from "../../../inc/columnspanset";
+import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SfxHintId } from "../../../../svl/inc/hint";
-import type { ScTable } from "../../../inc/table";
-import type { ScColumn } from "../../../inc/column";
+import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { ScRange } from "../../../inc/address";
 import type { ScMF } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
+import type { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
+import type { ScColumn } from "../../../inc/column";
+import type { ColumnSpanSet } from "../../../inc/columnspanset";
+import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
+import {
+  ScCondDateFormatEntry,
+  ScConditionalFormat,
+  ScConditionalFormatList,
+} from "../../../inc/conditio";
+import type { ScDocument } from "../../../inc/document";
+import { InsertDeleteFlags, ScCloneFlags, UpdateRefMode } from "../../../inc/global";
+import type { ScMarkData } from "../../../inc/markdata";
 import type { ScPatternAttr } from "../../../inc/patattr";
+import { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ATTR_MERGE } from "../../../inc/scitems";
-import type { CopyFromClipContext } from "../../../inc/clipcontext";
-import type { EditTextObject } from "../../../../editeng/inc/editobj";
-import type { SharedStringConstReference } from "../../../../svl/inc/sharedstring";
+import { AutoCalcSwitch, DelayFormulaGroupingSwitch } from "../../../inc/scopetools";
+import type { ScTable } from "../../../inc/table";
+import { MatrixEdge } from "../../../inc/types";
 /** Returns the data-only extent consumed by the native text exporter. @param this - Table. @param endCol - Last column. @param endRow - Last row. @returns Whether data exists. */
 export function GetCellArea(this: ScTable, endCol: [number], endRow: [number]): boolean {
   this.GetLastDataPos(endCol, endRow);
-  return this["aCol"].some((column) => !column.IsEmptyData());
+  return this["aCol"].some(
+    /** Computes the column result. @param column - Column. @returns The computed result. */ (
+      column,
+    ) => !column.IsEmptyData(),
+  );
 }
 /** Stores an owned EditEngine cell object at a valid position. @param this - Table. @param col - Column. @param row - Row. @param value - Object. @returns Nothing. */
 export function SetEditText(this: ScTable, col: number, row: number, value: EditTextObject): void {

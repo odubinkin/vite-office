@@ -1,15 +1,14 @@
 /** @fileoverview Current single-byte data owners from sal/textenc/tables.cxx. */
-import type { ImplByteConvertData, ImplDBCSConvertData, ImplEUCJPConvertData } from "./tenchelp";
 import {
   RTL_TEXTENCODING_APPLE_CENTEURO,
+  RTL_TEXTENCODING_APPLE_CHINSIMP,
+  RTL_TEXTENCODING_APPLE_CHINTRAD,
   RTL_TEXTENCODING_APPLE_CROATIAN,
   RTL_TEXTENCODING_APPLE_CYRILLIC,
   RTL_TEXTENCODING_APPLE_GREEK,
   RTL_TEXTENCODING_APPLE_ICELAND,
   RTL_TEXTENCODING_APPLE_JAPANESE,
   RTL_TEXTENCODING_APPLE_KOREAN,
-  RTL_TEXTENCODING_APPLE_CHINSIMP,
-  RTL_TEXTENCODING_APPLE_CHINTRAD,
   RTL_TEXTENCODING_APPLE_ROMAN,
   RTL_TEXTENCODING_APPLE_ROMANIAN,
   RTL_TEXTENCODING_APPLE_TURKISH,
@@ -33,7 +32,11 @@ import {
   RTL_TEXTENCODING_IBM_865,
   RTL_TEXTENCODING_IBM_866,
   RTL_TEXTENCODING_IBM_869,
+  RTL_TEXTENCODING_ISCII_DEVANAGARI,
+  RTL_TEXTENCODING_ISO_2022_JP,
+  RTL_TEXTENCODING_ISO_2022_KR,
   RTL_TEXTENCODING_ISO_8859_1,
+  RTL_TEXTENCODING_ISO_8859_15,
   RTL_TEXTENCODING_ISO_8859_2,
   RTL_TEXTENCODING_ISO_8859_3,
   RTL_TEXTENCODING_ISO_8859_4,
@@ -42,18 +45,8 @@ import {
   RTL_TEXTENCODING_ISO_8859_7,
   RTL_TEXTENCODING_ISO_8859_8,
   RTL_TEXTENCODING_ISO_8859_9,
-  RTL_TEXTENCODING_ISO_8859_15,
-  RTL_TEXTENCODING_ISCII_DEVANAGARI,
-  RTL_TEXTENCODING_ISO_2022_JP,
-  RTL_TEXTENCODING_ISO_2022_KR,
   RTL_TEXTENCODING_KOI8_R,
   RTL_TEXTENCODING_KOI8_U,
-  RTL_TEXTENCODING_MS_874,
-  RTL_TEXTENCODING_MS_932,
-  RTL_TEXTENCODING_MS_936,
-  RTL_TEXTENCODING_MS_949,
-  RTL_TEXTENCODING_MS_950,
-  RTL_TEXTENCODING_MS_1361,
   RTL_TEXTENCODING_MS_1250,
   RTL_TEXTENCODING_MS_1251,
   RTL_TEXTENCODING_MS_1252,
@@ -63,31 +56,26 @@ import {
   RTL_TEXTENCODING_MS_1256,
   RTL_TEXTENCODING_MS_1257,
   RTL_TEXTENCODING_MS_1258,
+  RTL_TEXTENCODING_MS_1361,
+  RTL_TEXTENCODING_MS_874,
+  RTL_TEXTENCODING_MS_932,
+  RTL_TEXTENCODING_MS_936,
+  RTL_TEXTENCODING_MS_949,
+  RTL_TEXTENCODING_MS_950,
   RTL_TEXTENCODING_SYMBOL,
-  RTL_TEXTENCODING_UTF8,
   RTL_TEXTENCODING_UTF7,
+  RTL_TEXTENCODING_UTF8,
   type rtl_TextEncoding,
 } from "../inc/rtl/textenc";
 import {
-  aImplAPPLEICELANDByteCvtData,
-  aImplAPPLEROMANByteCvtData,
-  aImplIBM437ByteCvtData,
-  aImplIBM850ByteCvtData,
-  aImplIBM860ByteCvtData,
-  aImplIBM861ByteCvtData,
-  aImplIBM863ByteCvtData,
-  aImplIBM865ByteCvtData,
-  aImplISO885915ByteCvtData,
-} from "./tcvtlat1";
-import {
-  aImplIBM737ByteCvtData,
-  aImplIBM775ByteCvtData,
-  aImplIBM852ByteCvtData,
-  aImplIBM855ByteCvtData,
-  aImplIBM857ByteCvtData,
-  aImplIBM866ByteCvtData,
-  aImplIBM869ByteCvtData,
-} from "./tcvtest1.ibm";
+  aImplIBM862ByteCvtData,
+  aImplIBM864ByteCvtData,
+  aImplISO88596ByteCvtData,
+  aImplISO88598ByteCvtData,
+  aImplMS1255ByteCvtData,
+  aImplMS1256ByteCvtData,
+} from "./tcvtarb1";
+import { aImplMS1258ByteCvtData, aImplMS874ByteCvtData } from "./tcvteas1";
 import {
   aImplMS1250ByteCvtData,
   aImplMS1251ByteCvtData,
@@ -105,19 +93,14 @@ import {
   aImplAPPLEUKRAINIANByteCvtData,
 } from "./tcvtest1.apple";
 import {
-  aImplIBM862ByteCvtData,
-  aImplIBM864ByteCvtData,
-  aImplISO88596ByteCvtData,
-  aImplISO88598ByteCvtData,
-  aImplMS1255ByteCvtData,
-  aImplMS1256ByteCvtData,
-} from "./tcvtarb1";
-import { aImplMS874ByteCvtData, aImplMS1258ByteCvtData } from "./tcvteas1";
-import {
-  aImplISO88591ByteCvtData,
-  aImplMS1252ByteCvtData,
-  aImplUSASCIIByteCvtData,
-} from "./textenc";
+  aImplIBM737ByteCvtData,
+  aImplIBM775ByteCvtData,
+  aImplIBM852ByteCvtData,
+  aImplIBM855ByteCvtData,
+  aImplIBM857ByteCvtData,
+  aImplIBM866ByteCvtData,
+  aImplIBM869ByteCvtData,
+} from "./tcvtest1.ibm";
 import {
   aImplISO88592ByteCvtData,
   aImplISO88593ByteCvtData,
@@ -127,18 +110,35 @@ import {
   aImplISO88599ByteCvtData,
 } from "./tcvtest1.iso";
 import { aImplKOI8RByteCvtData, aImplKOI8UByteCvtData } from "./tcvtest1.koi";
-import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
 import { aImplAPPLEJAPANESEDBCSCvtData } from "./tcvtjp6.applejapanese";
 import { aImplEUCJPCvtData } from "./tcvtjp6.eucjp";
-import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
-import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
-import { aImplAPPLECHINSIMPDBCSCvtData } from "./tcvtscn6.applechinsimp";
-import { aImplKSC5601DBCSCvtData, aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
+import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
 import { aImplJOHABDBCSCvtData } from "./tcvtkr6.johab";
-import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
+import { aImplKSC5601DBCSCvtData, aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
+import {
+  aImplAPPLEICELANDByteCvtData,
+  aImplAPPLEROMANByteCvtData,
+  aImplIBM437ByteCvtData,
+  aImplIBM850ByteCvtData,
+  aImplIBM860ByteCvtData,
+  aImplIBM861ByteCvtData,
+  aImplIBM863ByteCvtData,
+  aImplIBM865ByteCvtData,
+  aImplISO885915ByteCvtData,
+} from "./tcvtlat1";
+import { aImplAPPLECHINSIMPDBCSCvtData } from "./tcvtscn6.applechinsimp";
+import { aImplGB2312DBCSCvtData } from "./tcvtscn6.gb2312";
+import { aImplMS936DBCSCvtData } from "./tcvtscn6.ms936";
 import { aImplAPPLECHINTRADDBCSCvtData } from "./tcvttcn6.applechintrad";
+import { aImplMS950DBCSCvtData } from "./tcvttcn6.ms950";
+import type { ImplByteConvertData, ImplDBCSConvertData, ImplEUCJPConvertData } from "./tenchelp";
+import {
+  aImplISO88591ByteCvtData,
+  aImplMS1252ByteCvtData,
+  aImplUSASCIIByteCvtData,
+} from "./textenc";
 
-/** Returns the existing single-byte converter data for the represented encoding. */
+/** Returns the existing single-byte converter data for the represented encoding.  @param encoding - Encoding. @returns The ImplByteConvertData | undefined result. */
 export function getSingleByteConvertData(
   encoding: rtl_TextEncoding,
 ): ImplByteConvertData | undefined {
@@ -242,7 +242,16 @@ export function getSingleByteConvertData(
   }
 }
 
-/** Preserves distinct Symbol, UTF-8, UTF-7, multibyte, and single-byte converter dispatch. */
+/** Preserves distinct Symbol, UTF-8, UTF-7, multibyte, and single-byte converter dispatch.  @param encoding - Encoding. @returns The | Readonly<{ kind: "symbol" }>
+  | Readonly<{ kind: "utf8" }>
+  | Readonly<{ kind: "utf7" }>
+  | Readonly<{ kind: "eucjp"; data: ImplEUCJPConvertData }>
+  | Readonly<{ kind: "iscii" }>
+  | Readonly<{ kind: "iso2022jp" }>
+  | Readonly<{ kind: "iso2022kr" }>
+  | Readonly<{ kind: "dbcs"; data: ImplDBCSConvertData }>
+  | Readonly<{ kind: "single-byte"; data: ImplByteConvertData }>
+  | undefined result. */
 export function getTextToUnicodeData(
   encoding: rtl_TextEncoding,
 ):
@@ -282,7 +291,7 @@ export function getTextToUnicodeData(
   return data === undefined ? undefined : { kind: "single-byte", data };
 }
 
-import descriptors from "./native-singlebyte-descriptors.json";
+import descriptors from "./native-singlebyte-descriptors.json" with { type: "json" };
 
 const originalDescriptors: Readonly<Record<string, ImplByteConvertData>> = descriptors;
 

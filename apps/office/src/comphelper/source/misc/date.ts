@@ -7,12 +7,16 @@ function short(value: number): number {
 export function yearToDays(year: number): number {
   year = short(year);
   if (year === 0) throw new Error("year != 0 assertion");
-  const value = (offset: number, target: number): number =>
-    offset +
-    target * 365 +
-    Math.trunc(target / 4) -
-    Math.trunc(target / 100) +
-    Math.trunc(target / 400);
+  const value =
+    /** Implements value. @param offset - Offset. @param target - Target. @returns The number result. */ (
+      offset: number,
+      target: number,
+    ): number =>
+      offset +
+      target * 365 +
+      Math.trunc(target / 4) -
+      Math.trunc(target / 100) +
+      Math.trunc(target / 400);
   return year < 0 ? value(-366, year + 1) : value(0, year - 1);
 }
 /** Original convertDateToDays adds source-order whole months to YearToDays without normalizing. @param day - Native uint16 day. @param month - Native uint16 month. @param year - Native signed16 year. @returns Day number from zero. */

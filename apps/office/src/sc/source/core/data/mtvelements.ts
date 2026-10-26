@@ -1,35 +1,33 @@
 /** @fileoverview Calc cell-store block event owner; counters describe logical blocks and do not manage object lifetime. */
+import type { EventValueOps } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/main.ts";
 import {
   get_block_type,
   type base_element_block,
 } from "../../../../external/mdds/include/mdds/multi_type_vector/types.ts";
-import type { EventValueOps } from "../../../../external/mdds/include/mdds/multi_type_vector/soa/main.ts";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScColumn } from "../../../inc/column";
+import type { ScDocument } from "../../../inc/document";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 import {
-  element_type_formula,
+  ColumnBlockPosition,
+  edittext_block,
   element_type_cellnote,
   element_type_edittext,
-  edittext_block,
-} from "../../../inc/mtvelements";
-import type { ScColumn } from "../../../inc/column";
-import {
-  numeric_block,
-  string_block,
-  formula_block,
+  element_type_formula,
   element_type_numeric,
   element_type_string,
+  formula_block,
+  numeric_block,
+  string_block,
   type CellStoreType,
 } from "../../../inc/mtvelements";
-import { ScRefCellValue } from "../../../inc/cellvalue";
-import type { ScFormulaCell } from "../../../inc/formulacell";
-import { ColumnBlockPosition } from "../../../inc/mtvelements";
-import type { ScDocument } from "../../../inc/document";
 import type { ScTable } from "../../../inc/table";
 
 /** Original one-sheet block-position cache used by ScDocumentImport. */
 export class TableColumnBlockPositionSet {
   private readonly table: ScTable;
   private readonly columns = new Map<number, ColumnBlockPosition>();
-  /** Resolves the native sheet once. @param document - Document. @param tab - Existing sheet. */
+  /** Resolves the native sheet once. @param document - Document. @param tab - Existing sheet.  @returns Constructed instance. */
   constructor(document: ScDocument, tab: number) {
     const table = document.FetchTable(tab);
     if (!table) throw new RangeError(`Passed table index ${tab} is invalid.`);

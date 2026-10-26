@@ -1,8 +1,8 @@
 /** @fileoverview Source OnDemandCharClass two-locale cache from include/svl/ondemand.hxx. */
-import { CharClass } from "../../unotools/source/i18n/charclass";
-import type { LocaleConstReference } from "../../udkapi/com/sun/star/lang/Locale";
 import { LANGUAGE_SYSTEM } from "../../i18nlangtag/inc/lang";
 import { TransliterationFlags } from "../../i18nutil/inc/transliteration";
+import type { LocaleConstReference } from "../../udkapi/com/sun/star/lang/Locale";
+import { CharClass } from "../../unotools/source/i18n/charclass";
 import { TransliterationWrapper } from "../../unotools/source/i18n/transliterationwrapper";
 
 /** Source lazy case-ignore transliteration owner for SvNumberFormatter language changes. */
@@ -14,7 +14,9 @@ export class OnDemandTransliterationWrapper {
   private initialized = false;
 
   /** Source initialization flag. @returns Whether init was called. */
-  isInitialized(): boolean { return this.initialized; }
+  isInitialized(): boolean {
+    return this.initialized;
+  }
 
   /** Initializes case-ignore mode and invalidates any existing wrapper. @param language - Initial source language. @returns Nothing. */
   init(language: number): void {

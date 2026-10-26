@@ -1,18 +1,18 @@
 /** @fileoverview Native import write/finalize lifecycle against actual Calc stores and formula listeners. */
 import { assert, expect, it } from "vitest";
+import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
+import { FormulaGrammar } from "../../../../formula/inc/grammar";
+import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { MapUnit } from "../../../../tools/inc/mapunit";
+import { ScAddress } from "../../../inc/address";
 import { ScDocument } from "../../../inc/document";
 import { ScDocumentImport } from "../../../inc/documentimport";
-import { ScAddress } from "../../../inc/address";
-import { TableColumnBlockPositionSet } from "../../../inc/mtvelements";
 import { CellType } from "../../../inc/global";
 import { TEXTWIDTH_DIRTY } from "../../../inc/globalnames";
-import { SvtScriptType } from "../../../../svl/inc/languageoptions";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
-import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
-import { MapUnit } from "../../../../tools/inc/mapunit";
+import { TableColumnBlockPositionSet } from "../../../inc/mtvelements";
 
-it("transfers the actual edit object and initializes its metadata after import", () => {
+it("transfers the actual edit object and initializes its metadata after import", /** Checks transfers the actual edit object and initializes its metadata after import. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const importer = new ScDocumentImport(doc),
@@ -37,7 +37,7 @@ it("transfers the actual edit object and initializes its metadata after import",
   expect(doc.FetchTable(0)?.FetchColumn(0)?.GetCellTextAttr(0)?.mnTextWidth).toBe(TEXTWIDTH_DIRTY);
 });
 
-it("initializes sparse imported metadata only on finalize and preserves the configured numeric script", () => {
+it("initializes sparse imported metadata only on finalize and preserves the configured numeric script", /** Checks initializes sparse imported metadata only on finalize and preserves the configured numeric script. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const importer = new ScDocumentImport(doc);
@@ -64,7 +64,7 @@ it("initializes sparse imported metadata only on finalize and preserves the conf
   expect(text(doc.GetSharedString(new ScAddress(1, 5, 0)).getString())).toBe("literal");
 });
 
-it("defers formula listeners until finalize then groups relative formulas and reacts to later edits", () => {
+it("defers formula listeners until finalize then groups relative formulas and reacts to later edits", /** Checks defers formula listeners until finalize then groups relative formulas and reacts to later edits. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const importer = new ScDocumentImport(doc);
@@ -96,7 +96,7 @@ it("defers formula listeners until finalize then groups relative formulas and re
   expect(doc.GetValue(new ScAddress(1, 1, 0))).toBe(4);
 });
 
-it("keeps empty imported strings as string cells and ignores absent target sheets", () => {
+it("keeps empty imported strings as string cells and ignores absent target sheets", /** Checks keeps empty imported strings as string cells and ignores absent target sheets. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const importer = new ScDocumentImport(doc),
@@ -112,7 +112,7 @@ it("keeps empty imported strings as string cells and ignores absent target sheet
   expect(doc.GetTableCount()).toBe(1);
 });
 
-it("reuses one-sheet block positions until explicitly invalidated", () => {
+it("reuses one-sheet block positions until explicitly invalidated", /** Checks reuses one-sheet block positions until explicitly invalidated. @returns Test completion or assertion result. */ () => {
   const doc = new ScDocument();
   doc.InsertTab(0, unicode("Sheet1"));
   const positions = new TableColumnBlockPositionSet(doc, 0),
@@ -122,5 +122,8 @@ it("reuses one-sheet block positions until explicitly invalidated", () => {
   expect(first.miCellPos).toBeDefined();
   positions.invalidate();
   expect(positions.getBlockPosition(2)).not.toBe(first);
-  expect(() => new TableColumnBlockPositionSet(doc, 1)).toThrow("Passed table index 1 is invalid.");
+  expect(
+    /** Checks Passed table index 1 is invalid.. @returns Test completion or assertion result. */ () =>
+      new TableColumnBlockPositionSet(doc, 1),
+  ).toThrow("Passed table index 1 is invalid.");
 });

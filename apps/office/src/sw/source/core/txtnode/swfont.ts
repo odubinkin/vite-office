@@ -1,19 +1,19 @@
 /** @fileoverview Consumed horizontal SwSubFont::CalcEsc arithmetic from swfont.cxx; original font metrics are supplied by the platform device, not invented font services. */
 import { DFLT_ESC_AUTO_SUB, DFLT_ESC_AUTO_SUPER } from "../../../../editeng/inc/escapementitem";
-import type { SwAttrSet } from "../attr/swatrset";
 import { SvxFontHeightItem, SvxFontItem } from "../../../../editeng/source/items/textitem";
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import {
-  RES_CHRATR_FONT,
-  RES_CHRATR_FONTSIZE,
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
   RES_CHRATR_CTL_FONT,
   RES_CHRATR_CTL_FONTSIZE,
+  RES_CHRATR_FONT,
+  RES_CHRATR_FONTSIZE,
 } from "../../../inc/hintids";
+import type { SwAttrSet } from "../attr/swatrset";
 import type { DefaultFontDevice } from "../doc/default-font";
 
-/** Reads the actual script font through the default output device, as AttrSetToLineHeight does. */
+/** Reads the actual script font through the default output device, as AttrSetToLineHeight does.  @param set - Set. @param script - Script. @param device - Device. @returns The number result. */
 export function AttrSetToLineHeight(
   set: SwAttrSet,
   script: number,

@@ -6,7 +6,7 @@ import fixture from "./native-singlebyte-reverse-cases.json";
 import { Impl_getByteConvertData } from "./tables";
 import type { ImplByteConvertData } from "./tenchelp";
 
-it("keeps every runtime single-byte descriptor identical to the native capture", () => {
+it("keeps every runtime single-byte descriptor identical to the native capture", /** Checks keeps every runtime single-byte descriptor identical to the native capture. @returns Test completion or assertion result. */ () => {
   const capture = fixture.captures.descriptors;
   const source = gunzipSync(Buffer.from(capture.gzipBase64, "base64"));
   expect(source.length).toBe(capture.byteLength);

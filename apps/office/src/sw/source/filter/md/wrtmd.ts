@@ -1,36 +1,41 @@
 /** @fileoverview Writer Markdown output following sw/source/filter/md/wrtmd.cxx. */
-import { FontItalic, FontStrikeout, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import {
   SvxFontItem,
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../../editeng/source/items/textitem";
-import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { FontItalic, FontStrikeout, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   RES_CHRATR_CROSSEDOUT,
   RES_CHRATR_FONT,
   RES_CHRATR_POSTURE,
   RES_CHRATR_WEIGHT,
 } from "../../../inc/hintids";
+import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import type { SwFormat } from "../../core/attr/format";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import type { SwFormat } from "../../core/attr/format";
 import { SwTableNode } from "../../core/docnode/node";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { SwTextNode } from "../../core/txtnode/ndtxt";
 import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
-import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
-import { WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 
 const headingLevels = new Map(
-  WRITER_PARAGRAPH_STYLE_POOL.flatMap((style) => {
-    const match = /^heading-([1-6])$/u.exec(style.id);
-    return match === null ? [] : [[style.poolId, Number(match[1])] as const];
-  }),
+  WRITER_PARAGRAPH_STYLE_POOL.flatMap(
+    /** Computes the style result. @param style - Style. @returns The computed result. */ (
+      style,
+    ) => {
+      const match = /^heading-([1-6])$/u.exec(style.id);
+      return match === null ? [] : [[style.poolId, Number(match[1])] as const];
+    },
+  ),
 );
 const quotationPoolId = WRITER_PARAGRAPH_STYLE_POOL.find(
-  (style) => style.id === "quotations",
+  /** Computes the style result. @param style - Style. @returns The computed result. */ (style) =>
+    style.id === "quotations",
 )?.poolId;
 
 /** Serializes the current Writer body through the native Markdown writer boundary. */
@@ -74,7 +79,7 @@ export class SwMDWriter {
   }
 }
 
-/** Emits upstream-style heading, list, quote and fenced-code paragraph markers. @param node - Body paragraph. @returns Markdown block. */
+/** Emits upstream-style heading, list, quote and fenced-code paragraph markers. @param node - Body paragraph. @returns Markdown block.  @param listPrefixSizes - List Prefix Sizes. */
 function writeParagraph(node: SwTextNode, listPrefixSizes: Map<number, number>): string {
   const format = node.GetTextFormatColl();
   let headingLevel = 0;
@@ -175,7 +180,7 @@ function shouldOpen(before: number, after: number): boolean {
   return before !== after && before <= 0 && after > 0;
 }
 
-/** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown. */
+/** Emits direct native items and ranged hints using the source delimiter order. @param node - Native text owner. @returns Inline Markdown.  @param codeBlock - Code Block. */
 function writeRuns(node: SwTextNode, codeBlock = false): string {
   const source = node.GetText();
   if (source.length === 0) return "";
@@ -193,8 +198,17 @@ function writeRuns(node: SwTextNode, codeBlock = false): string {
       positions.add(hint.GetAnyEnd());
     }
   const sorted = [...positions]
-    .filter((position) => position >= 0 && position <= source.length)
-    .sort((a, b) => a - b);
+    .filter(
+      /** Computes the position result. @param position - Position. @returns The computed result. */ (
+        position,
+      ) => position >= 0 && position <= source.length,
+    )
+    .sort(
+      /** Computes the a result. @param a - A. @param b - B. @returns The computed result. */ (
+        a,
+        b,
+      ) => a - b,
+    );
   let previous = emptyFormattingStatus();
   let output = "";
   for (let index = 0; index < sorted.length; index++) {
@@ -236,18 +250,24 @@ function writeTable(table: SwTableNode): string {
   if (rows.length === 0) return "";
   const output: string[] = [];
   for (const [rowIndex, row] of rows.entries()) {
-    const cells = row.GetTabBoxes().map((box) =>
-      box
-        .GetParagraphs()
-        .map((node) => writeRuns(node))
-        .join(" "),
+    const cells = row.GetTabBoxes().map(
+      /** Computes the box result. @param box - Box. @returns The computed result. */ (box) =>
+        box
+          .GetParagraphs()
+          .map(
+            /** Checks  . @param node - Node. @returns The computed result. */ (node) =>
+              writeRuns(node),
+          )
+          .join(" "),
     );
     output.push(`| ${cells.join(" | ")} |`);
     if (rowIndex === 0) {
-      const delimiters = row.GetTabBoxes().map((box) => {
-        const alignment = box.GetParagraphs()[0]?.GetParagraphAlignment();
-        return alignment === "center" ? ":-:" : alignment === "right" ? "-:" : "-";
-      });
+      const delimiters = row.GetTabBoxes().map(
+        /** Computes the box result. @param box - Box. @returns The computed result. */ (box) => {
+          const alignment = box.GetParagraphs()[0]?.GetParagraphAlignment();
+          return alignment === "center" ? ":-:" : alignment === "right" ? "-:" : "-";
+        },
+      );
       output.push(`| ${delimiters.join(" | ")} |`);
     }
   }

@@ -3,14 +3,14 @@
  * `include/sfx2/objsh.hxx` and `sfx2/source/doc/objmisc.cxx`.
  */
 
-import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
-import { MapUnit } from "../../../tools/inc/mapunit";
-import { NamedColor } from "../../inc/namedcolor";
-import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
-import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
-import { DetectCsvSeparators } from "./objstor";
 import type { rtl_TextEncoding } from "../../../sal/inc/rtl/textenc";
+import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
+import { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
+import { MapUnit } from "../../../tools/inc/mapunit";
 import type { SvStream } from "../../../tools/source/stream/stream";
+import { NamedColor } from "../../inc/namedcolor";
+import { acquireSfxMedium, type SfxMedium, type SfxMediumInputOrInstance } from "./docfile";
+import { DetectCsvSeparators } from "./objstor";
 
 /** Identifies the externally observable lifecycle of a locally held document shell. */
 export type DocumentLifecycle = "closed" | "dirty" | "new" | "saved";
@@ -42,8 +42,12 @@ export interface CreateDocumentInput {
 
 /** Framework document shell owning identity, title, modified state, and the primary medium. */
 export class SfxObjectShell extends SfxBroadcaster {
-  /** Source objstor.cxx CSV separator selection from the stream's original position. */
-  static DetectCsvSeparators(stream: SvStream, encoding: rtl_TextEncoding, delimiter: string): string {
+  /** Source objstor.cxx CSV separator selection from the stream's original position.  @param stream - Stream. @param encoding - Encoding. @param delimiter - Delimiter. @returns The string result. */
+  static DetectCsvSeparators(
+    stream: SvStream,
+    encoding: rtl_TextEncoding,
+    delimiter: string,
+  ): string {
     return DetectCsvSeparators(stream, encoding, delimiter);
   }
   private readonly m_aRecentColors = new Map<number, NamedColor>();

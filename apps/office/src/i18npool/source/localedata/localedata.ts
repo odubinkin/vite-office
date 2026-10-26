@@ -1,31 +1,31 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
-import transliterations from "./data/transliterations.json" with { type: "json" };
-import languageCountryInfo from "./data/language-country-info.json" with { type: "json" };
-import dateSeparators from "./data/date-separators.json" with { type: "json" };
-import timeFields from "./data/time-fields.json" with { type: "json" };
-import reservedWords from "./data/reserved-words.json" with { type: "json" };
-import numberFormats from "./data/number-formats.json" with { type: "json" };
-import calendarItems from "./data/calendar-items.json" with { type: "json" };
-import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
-import currencies from "./data/currencies.json" with { type: "json" };
-import longDateSeparators from "./data/long-date-separators.json" with { type: "json" };
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
-import numeric from "./data/numeric-separators.json" with { type: "json" };
-import separators from "./data/decimal-separators.json" with { type: "json" };
-import measurements from "./data/measurement-systems.json" with { type: "json" };
 import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { OUString } from "../../../sal/inc/rtl/ustring";
+import {
+  decomposeCanonicalLanguageTag,
+  getFallbackStrings,
+} from "../../../i18nlangtag/source/languagetag/languagetag";
 import {
   cppu_detail_getUnoType_FormatElement,
   type FormatElementAddress,
 } from "../../../offapi/com/sun/star/i18n/FormatElement";
-import {
-  getFallbackStrings,
-  decomposeCanonicalLanguageTag,
-} from "../../../i18nlangtag/source/languagetag/languagetag";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import calendarItems from "./data/calendar-items.json" with { type: "json" };
+import currencies from "./data/currencies.json" with { type: "json" };
+import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
+import dateSeparators from "./data/date-separators.json" with { type: "json" };
+import separators from "./data/decimal-separators.json" with { type: "json" };
+import languageCountryInfo from "./data/language-country-info.json" with { type: "json" };
+import longDateSeparators from "./data/long-date-separators.json" with { type: "json" };
+import measurements from "./data/measurement-systems.json" with { type: "json" };
+import numberFormats from "./data/number-formats.json" with { type: "json" };
+import numeric from "./data/numeric-separators.json" with { type: "json" };
+import reservedWords from "./data/reserved-words.json" with { type: "json" };
+import timeFields from "./data/time-fields.json" with { type: "json" };
+import transliterations from "./data/transliterations.json" with { type: "json" };
 /** Original Sequence<OUString> value specialization. */
 const Strings = Sequence.specialize<ReturnType<OUString["getDataAddress"]>>("OUString", 8);
 /** Original compiled Sequence<FormatElement> specialization over the real generated compound type. */
@@ -57,7 +57,9 @@ const dateAcceptanceResources = new Map<string, readonly string[]>(
 /** Original source-ordered LC_CURRENCY rows after generated section references. */
 const currencyResources = new Map<string, readonly LocaleCurrency[]>(Object.entries(currencies));
 /** Native LC_CTYPE separators used in long-date input and format matching. */
-const longDateResources = new Map<string, LocaleLongDateSeparators>(Object.entries(longDateSeparators));
+const longDateResources = new Map<string, LocaleLongDateSeparators>(
+  Object.entries(longDateSeparators),
+);
 /** Original generated LocaleDataItem2 long-date separator fields. */
 export interface LocaleLongDateSeparators {
   readonly dayOfWeek: string;
@@ -176,10 +178,26 @@ export function getLocaleCalendarItems(locale: LocaleConstReference): LocaleCale
   const source = getLocaleDataField(locale, calendarResources);
   return {
     id: source.id,
-    months: source.months.map((item) => ({ ...item })),
-    genitiveMonths: source.genitiveMonths.map((item) => ({ ...item })),
-    partitiveMonths: source.partitiveMonths.map((item) => ({ ...item })),
-    days: source.days.map((item) => ({ ...item })),
+    months: source.months.map(
+      /** Computes the item result. @param item - Item. @returns The computed result. */ (
+        item,
+      ) => ({ ...item }),
+    ),
+    genitiveMonths: source.genitiveMonths.map(
+      /** Computes the item result. @param item - Item. @returns The computed result. */ (
+        item,
+      ) => ({ ...item }),
+    ),
+    partitiveMonths: source.partitiveMonths.map(
+      /** Computes the item result. @param item - Item. @returns The computed result. */ (
+        item,
+      ) => ({ ...item }),
+    ),
+    days: source.days.map(
+      /** Computes the item result. @param item - Item. @returns The computed result. */ (
+        item,
+      ) => ({ ...item }),
+    ),
   };
 }
 /** Original generated date acceptance patterns, including those derived from the edit format. @param locale - Requested locale. @returns Independent ordered pattern values. */
@@ -188,28 +206,36 @@ export function getLocaleDateAcceptancePatterns(locale: LocaleConstReference): s
 }
 /** Original getAllCurrencies source order and locale-service fallback, with independently owned value rows. @param locale - Requested locale. @returns Currency2 scalar rows. */
 export function getLocaleCurrencies(locale: LocaleConstReference): LocaleCurrency[] {
-  return getLocaleDataField(locale, currencyResources).map((row) => ({ ...row }));
+  return getLocaleDataField(locale, currencyResources).map(
+    /** Computes the row result. @param row - Row. @returns The computed result. */ (row) => ({
+      ...row,
+    }),
+  );
 }
 /** Original getLocaleItem2 long-date fields, resolved through the same locale service/ref chain. @param locale - Requested locale. @returns Independent scalar fields. */
-export function getLocaleLongDateSeparators(locale: LocaleConstReference): LocaleLongDateSeparators {
+export function getLocaleLongDateSeparators(
+  locale: LocaleConstReference,
+): LocaleLongDateSeparators {
   return { ...getLocaleDataField(locale, longDateResources) };
 }
 /** Original installed-locale enumeration follows aLibTable, not sorted LC_INFO keys. Every caller owns its returned Locale values. @returns Source-ordered installed locales. */
 export function getAllInstalledLocaleNames(): Locale[] {
-  return Object.keys(currencies).map((name) => {
-    const info = languageCountryResources.get(name);
-    if (!info) throw new Error(`Pinned locale identity is absent: ${name}`);
-    const language = unicode(info.Language),
-      country = unicode(info.Country),
-      variant = unicode(info.Variant);
-    try {
-      return new Locale(language, country, variant);
-    } finally {
-      variant.dispose();
-      country.dispose();
-      language.dispose();
-    }
-  });
+  return Object.keys(currencies).map(
+    /** Computes the name result. @param name - Name. @returns The computed result. */ (name) => {
+      const info = languageCountryResources.get(name);
+      if (!info) throw new Error(`Pinned locale identity is absent: ${name}`);
+      const language = unicode(info.Language),
+        country = unicode(info.Country),
+        variant = unicode(info.Variant);
+      try {
+        return new Locale(language, country, variant);
+      } finally {
+        variant.dispose();
+        country.dispose();
+        language.dispose();
+      }
+    },
+  );
 }
 /** Original date-separator field with the same locale/ref fallback. @param locale - Requested locale. @returns Source date separator. */
 export function getLocaleDateSeparator(locale: LocaleConstReference): string {

@@ -1,76 +1,65 @@
 /** @fileoverview Native document modes, consumed pooled resources and scalar/local-reference storage, attributes and formula tracking. Full construction, formatter and shell services remain unported. */
-import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
-import { ScViewOptions } from "../../../inc/viewopti";
-import * as documen3 from "./documen3";
-import * as documen2 from "./documen2";
-import type { ScChartListenerCollection } from "../../../inc/chartlis";
-import * as documen7 from "./documen7";
-import * as documen9 from "./documen9";
-import * as document10 from "./document10";
-import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
-import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
-import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
-import { GetStringScriptType as classifyString } from "./documen6";
-import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { HardRecalcState, ScDocumentMode } from "./document.modes";
+
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import {
-  SvxBoxItem,
-  SvxBoxInfoItem,
   SvxBoxItemLine as Edge,
   SvxBoxInfoItemLine as InnerEdge,
+  SvxBoxInfoItem,
+  SvxBoxItem,
   SvxBoxInfoItemValidFlags as Valid,
 } from "../../../../editeng/source/items/frmitems";
-import { ScRangeList } from "../../../inc/rangelst";
-import type { ScMarkData } from "../../../inc/markdata";
-import { ScClipParam } from "../../../inc/clipparam";
-import type { ScDocumentPool } from "./docpool";
-import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
-import type { ScPoolHelper } from "../inc/poolhelp";
-import type { ScStyleSheetPool } from "../../../inc/stlpool";
-import { CellAttributeHelper, ScPatternAttr, CellAttributeHolder } from "../../../inc/patattr";
-import { ScRefCellValue } from "../../../inc/cellvalue";
-import { ScHint } from "../../../inc/brdcst";
-import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
-import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
-import type { SvtListener } from "../../../../svl/source/notify/listener";
-import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
-import { ScSheetLimits } from "../../../inc/sheetlimits";
-import { ScInterpreterContext } from "../../../inc/interpretercontext";
-import type { ScColumn } from "../../../inc/column";
-import type { ScFormulaCell } from "../../../inc/formulacell";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
-import type { ScTable } from "../../../inc/table";
+import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
+import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
+import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreakIterator";
+import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
+import { SfxHint, SfxHintId } from "../../../../svl/inc/hint";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { SharedString } from "../../../../svl/inc/sharedstring";
+import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
+import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
+import type { SvtListener } from "../../../../svl/source/notify/listener";
+import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import {
-  ScAddress,
-  ScRange,
   MAXCOL,
   MAXROW,
   MAXROWCOUNT,
+  ScAddress,
+  ScRange,
   ValidCol,
   ValidRow,
   ValidTab,
 } from "../../../inc/address";
-import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
+import { ScHint } from "../../../inc/brdcst";
+import { ScRefCellValue } from "../../../inc/cellvalue";
+import type { ScChartListenerCollection } from "../../../inc/chartlis";
+import { ScClipParam } from "../../../inc/clipparam";
+import type { ScColumn } from "../../../inc/column";
+import { ScDocOptions, type ScDocOptionsConstReference } from "../../../inc/docoptio";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 import { CellType, InsertDeleteFlags, ScGlobal, type HasAttrFlags } from "../../../inc/global";
-import { OUString, type OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
-import { SharedString } from "../../../../svl/inc/sharedstring";
-import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
-import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
-import { text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
-/** Native document construction modes from document.hxx. */
-export enum ScDocumentMode {
-  SCDOCMODE_DOCUMENT = 0,
-  SCDOCMODE_CLIP = 1,
-  SCDOCMODE_UNDO = 2,
-  SCDOCMODE_FUNCTIONACCESS = 3,
-}
-/** Native dependency recalculation modes from document.hxx. */
-export enum HardRecalcState {
-  OFF,
-  TEMPORARY,
-  ETERNAL,
-}
+import { ScInterpreterContext } from "../../../inc/interpretercontext";
+import type { ScMarkData } from "../../../inc/markdata";
+import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
+import { ScRangeList } from "../../../inc/rangelst";
+import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
+import { ScSheetLimits } from "../../../inc/sheetlimits";
+import type { ScStyleSheetPool } from "../../../inc/stlpool";
+import type { ScTable } from "../../../inc/table";
+import { ScViewOptions } from "../../../inc/viewopti";
+import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
+import type { ScPoolHelper } from "../inc/poolhelp";
+import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
+import type { ScDocumentPool } from "./docpool";
+import * as documen2 from "./documen2";
+import * as documen3 from "./documen3";
+import { GetStringScriptType as classifyString } from "./documen6";
+import * as documen7 from "./documen7";
+import * as documen9 from "./documen9";
+import * as document10 from "./document10";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
   private mbStreamValidLocked = false;
@@ -587,7 +576,7 @@ export class ScDocument {
     return this.pSelectionAttr;
   }
   private mxPoolHelper: ScPoolHelper | null = null;
-  private mpCellAttributeHelper: CellAttributeHelper | null = null;
+  protected mpCellAttributeHelper: CellAttributeHelper | null = null;
   private readonly bIsClip: boolean;
   private readonly bIsUndo: boolean;
   private readonly bIsFunctionAccess: boolean;
@@ -651,7 +640,7 @@ export class ScDocument {
   private mbTrackFormulasPending = false;
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
-  private readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
+  protected readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   declare private mpCellStringPool: SharedStringPool;
   /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
   constructor(mode = ScDocumentMode.SCDOCMODE_DOCUMENT) {
@@ -965,16 +954,7 @@ export class ScDocument {
   }
   /** Original ScDocument::RenameTab name checks and stream invalidation over represented sheets. Chart and solver services are outside this core slice. @param tab - Existing sheet. @param name - New name. @param externalDocument - Composed external name flag. @returns Renamed. */
   RenameTab(tab: number, name: OUStringConstReference, externalDocument = false): boolean {
-    const table = this.FetchTable(tab);
-    if (!table || (!externalDocument && !ScDocument.ValidTabName(name))) return false;
-    for (let index = 0; index < this.maTabs.length; index++) {
-      const other = this.maTabs[index];
-      if (other && index !== tab && ScGlobal.GetTransliteration().isEqual(name, other.GetName()))
-        return false;
-    }
-    table.SetName(name);
-    for (const current of this.maTabs) current?.SetStreamValid(false);
-    return true;
+    return document10.RenameTab.call(this, tab, name, externalDocument);
   }
   /** Deletes a scalar/local-reference sheet,retaining native last-sheet protection and disposing its semantic subscriptions before index changes. Cross-sheet and other unported services remain unavailable. @param tab - Existing sheet index. @returns Whether deleted. */
   DeleteTab(tab: number): boolean {
@@ -1009,3 +989,5 @@ export class ScDocument {
     this.FetchTable(position.Tab())?.SetEmptyCell(position.Col(), position.Row());
   }
 }
+
+export { HardRecalcState, ScDocumentMode } from "./document.modes";

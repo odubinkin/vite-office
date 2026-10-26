@@ -1,12 +1,12 @@
 /** @fileoverview CalendarWrapper's source-backed default-calendar identity and name queries used by number input scanning. Calendar date arithmetic remains in the calendar service boundary. */
+import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   getLocaleCalendarItems,
   type LocaleCalendarItem,
   type LocaleCalendarItems,
 } from "../../../i18npool/source/localedata/localedata";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
+import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 
 /** The name fields of the source CalendarItem2 value returned by the calendar service. */
 export interface CalendarItem2Names {
@@ -16,10 +16,12 @@ export interface CalendarItem2Names {
 
 /** Converts source locale resources into independently owned calendar item values. @param items - Source calendar section. @returns Caller-owned names. */
 function calendarItems(items: readonly LocaleCalendarItem[]): CalendarItem2Names[] {
-  return items.map((item) => ({
-    FullName: unicode(item.full),
-    AbbrevName: unicode(item.abbreviated),
-  }));
+  return items.map(
+    /** Computes the item result. @param item - Item. @returns The computed result. */ (item) => ({
+      FullName: unicode(item.full),
+      AbbrevName: unicode(item.abbreviated),
+    }),
+  );
 }
 
 /** Original CalendarWrapper method boundary for the default calendar's names and counts. */

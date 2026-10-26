@@ -1,0 +1,469 @@
+/** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
+import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
+import {
+  SvxFirstLineIndentItem,
+  SvxIndentValue,
+  SvxRightMarginItem,
+  SvxTextLeftMarginItem,
+} from "../../../../editeng/inc/lrspitem";
+import { SvxAdjust } from "../../../../editeng/inc/svxenum";
+import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import {
+  ConvertBorderWidthFromWord,
+  SvxBorderLine,
+} from "../../../../editeng/source/items/borderline";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
+import { SfxInt16Item } from "../../../../svl/source/items/intitem";
+import { Color } from "../../../../tools/inc/color";
+import { SwFrameSize } from "../../../inc/fmtfsize";
+import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
+import {
+  RES_BREAK,
+  RES_KEEP,
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_RIGHT,
+  RES_MARGIN_TEXTLEFT,
+  RES_PARATR_ADJUST,
+  RES_PARATR_SPLIT,
+  RES_PARATR_TABSTOP,
+  RES_PARATR_WIDOWS,
+  RES_UL_SPACE,
+} from "../../../inc/hintids";
+import {
+  getWriterMaterializedParagraphStyleDefinition,
+  getWriterParagraphStyleId,
+} from "../../../inc/poolfmt";
+import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
+import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
+import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { applyWriterParagraphList } from "../../core/doc/list";
+import { SwNumFormat } from "../../core/doc/number";
+import { SwpHints } from "../../core/txtnode/ndhints";
+import type { SwTextNode } from "../../core/txtnode/ndtxt";
+import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
+import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
+import {
+  createSwFormatAutoFormat,
+  projectWriterCharacterAttributes,
+} from "../../core/txtnode/txatbase";
+import { StyleSheetTable } from "../dmapper/StyleSheetTable";
+import {
+  createRtfLineSpacing,
+  createRtfTabStops,
+  hasRtfUnderlineControl,
+  resolveRtfRunAttributes,
+  type RtfDocumentImplContext,
+  type RtfParagraph,
+  type RtfParagraphState,
+} from "./rtfdocumentimpl.context";
+import { RtfSyntaxError } from "./rtftokenizer";
+
+/** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result.  @param this - Original native owner shared by its implementation fragments. */
+export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwDoc {
+  if (!this["sawHeader"]) throw new RtfSyntaxError("RTF version control is missing.");
+  if (
+    this["runs"].length > 0 ||
+    (this["blocks"].length === 0 && this["tableRows"].length === 0) ||
+    !this["terminatedParagraph"] ||
+    (this["pendingPageBreak"] && this["tableRows"].length === 0)
+  )
+    this["CommitParagraph"]();
+  this["FlushTable"]();
+  const document = new SwDoc(options);
+  const defaultPage = { ...document.GetPageDesc().GetValue(), ...this["defaultSectionPage"] };
+  document.ChgPageDesc({ ...defaultPage, ...this["sectionPages"][0] });
+  // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
+  document.GetDocumentSettingManager().set("TABS_RELATIVE_TO_INDENT", false);
+  const defaultTabs = (
+    document.GetAttrPool().GetUserOrPoolDefaultItem(RES_PARATR_TABSTOP) as SvxTabStopItem
+  ).Clone();
+  if (defaultTabs.Count() > 0 && this["defaultTabStop"] > 0) {
+    const first = defaultTabs.At(0);
+    const replacement = new SvxTabStop(
+      this["defaultTabStop"],
+      first.GetAdjustment(),
+      first.GetDecimal(),
+      first.GetFill(),
+    );
+    defaultTabs.Remove(0);
+    defaultTabs.Insert(replacement);
+    document.GetAttrPool().SetUserDefaultItem(defaultTabs);
+  }
+  this["importedStyles"].clear();
+  this["importedStyles"].set(0, document.GetDfltTextFormatColl());
+  for (const [index, definition] of this["styles"]) {
+    const [name] = StyleSheetTable.ConvertStyleName(definition.name);
+    const id = getWriterParagraphStyleId(name);
+    let identity = id || name;
+    let suffix = 1;
+    while (document.FindTextFormatColl(identity) !== undefined)
+      identity = `${id || name}:${index}:${suffix++}`;
+    const collection =
+      document.FindTextFormatCollByName(name) ??
+      (getWriterMaterializedParagraphStyleDefinition(id)?.name === name
+        ? document.GetTextFormatColl(id)
+        : document.MakeTextFormatColl(name, document.GetTextFormatColl("default"), identity));
+    this["importedStyles"].set(index, collection);
+  }
+  for (const [index, definition] of this["styles"]) {
+    const collection = this["importedStyles"].get(index);
+    const parent = this["importedStyles"].get(definition.basedOnStyleIndex ?? -1);
+    if (collection === undefined) continue;
+    if (parent !== undefined && parent !== collection) collection.SetDerivedFrom(parent);
+    const next = this["importedStyles"].get(definition.nextStyleIndex ?? -1);
+    if (next !== undefined) collection.SetNextTextFormatColl(next);
+  }
+  const appliedStyles = new Set<number>();
+  for (const index of this["styles"].keys()) {
+    const ancestry: number[] = [];
+    const pending = new Set<number>();
+    let current: number | undefined = index;
+    while (current !== undefined && !appliedStyles.has(current) && !pending.has(current)) {
+      ancestry.push(current);
+      pending.add(current);
+      current = this["styles"].get(current)?.basedOnStyleIndex;
+    }
+    for (const slot of ancestry.reverse()) {
+      const definition = this["styles"].get(slot);
+      const collection = this["importedStyles"].get(slot);
+      if (definition !== undefined && collection !== undefined)
+        this["ApplyStyleDefinition"](collection, definition);
+      appliedStyles.add(slot);
+    }
+  }
+  let firstParagraph = true;
+  const sectionStyles = new Map<number, string>();
+  for (const block of this["blocks"]) {
+    let sectionStyle = sectionStyles.get(block.section);
+    const startsSection = block.section > 0 && sectionStyle === undefined;
+    if (block.section > 0 && sectionStyle === undefined) {
+      let number = block.section;
+      while (document.FindPageDesc(`Converted${number}`) !== undefined) number++;
+      sectionStyle = `Converted${number}`;
+      const page = document.MakePageDesc(sectionStyle);
+      document.ChgPageDesc(
+        { ...defaultPage, ...this["sectionPages"][block.section], name: sectionStyle },
+        sectionStyle,
+      );
+      sectionStyles.set(block.section, page.GetName());
+    }
+    if (block.kind === "paragraph") {
+      const node = firstParagraph ? document.paragraphs[0] : document.nodes.MakeTextNode();
+      if (node === undefined) throw new Error("Writer body has no text node.");
+      this["ApplyParagraph"](node, block.paragraph);
+      if (startsSection && sectionStyle !== undefined)
+        node.SetAttr(
+          new SwFormatPageDesc(
+            sectionStyle,
+            this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
+          ),
+        );
+      firstParagraph = false;
+    } else {
+      const table = firstParagraph
+        ? document.nodes.InsertTable(document.paragraphs[0] as SwTextNode, "RTF Table", {})
+        : document.nodes.MakeTableNode("RTF Table");
+      if (startsSection && sectionStyle !== undefined)
+        table
+          .GetFrameFormat()
+          .SetFormatAttr(
+            new SwFormatPageDesc(
+              sectionStyle,
+              this["sectionPageRestarts"].has(block.section) ? 1 : undefined,
+            ),
+          );
+      if (block.pageBreakBefore)
+        table.GetFrameFormat().SetFormatAttr(new SfxInt16Item(RES_BREAK, 4));
+      const firstRow = block.rows[0];
+      if (firstRow !== undefined) {
+        const format = table.GetFrameFormat();
+        const orient = format.GetHoriOrient().Clone();
+        orient.SetHoriOrient(
+          firstRow.alignment === "center"
+            ? HoriOrientation.CENTER
+            : firstRow.alignment === "right"
+              ? HoriOrientation.RIGHT
+              : firstRow.left !== 0
+                ? HoriOrientation.NONE
+                : HoriOrientation.LEFT,
+        );
+        format.SetFormatAttr(orient);
+        if (firstRow.left !== 0) {
+          const lr = format.GetLRSpace().Clone();
+          lr.SetLeft(SvxIndentValue.twips(firstRow.left));
+          format.SetFormatAttr(lr);
+        }
+        if (firstRow.defaultPaddings.size > 0) {
+          const item = format.GetBox().Clone();
+          for (const [edge, value] of firstRow.defaultPaddings) item.SetDistance(value, edge);
+          format.SetFormatAttr(item);
+        }
+      }
+      const rightEdge = block.rows.reduce(
+        /** Computes the maximum result. @param maximum - Maximum. @param row - Row. @returns The computed result. */ (
+          maximum,
+          row,
+        ) => Math.max(maximum, (row.boundaries.at(-1) ?? 0) - row.left),
+        0,
+      );
+      if (rightEdge > 0) {
+        const size = table.GetFrameFormat().GetFrameSize().Clone();
+        size.SetWidth(rightEdge);
+        table.GetFrameFormat().SetFormatAttr(size);
+      }
+      for (const row of block.rows) {
+        const line = document.nodes.AppendTableRow(table, row.cells.length);
+        if (row.height !== 0) {
+          const size = line.GetFrameFormat().GetFrameSize().Clone();
+          size.SetHeight(Math.abs(row.height));
+          size.SetHeightSizeType(row.height < 0 ? SwFrameSize.Fixed : SwFrameSize.Minimum);
+          line.GetFrameFormat().SetFormatAttr(size);
+        }
+        if (!row.split) line.GetFrameFormat().SetFormatAttr(new SwFormatRowSplit(false));
+        for (const [index, cell] of row.cells.entries()) {
+          const box = line.GetTabBoxes()[index];
+          if (box === undefined) throw new Error("RTF table cell is missing.");
+          const vertical = row.verticals[index];
+          if (vertical !== undefined) {
+            const item = box.GetVertOrient();
+            item.SetVertOrient(vertical);
+            box.ClaimFrameFormat().SetFormatAttr(item);
+          }
+          const borders = row.borders[index];
+          if (borders !== undefined && borders.size > 0) {
+            const item = box.GetBox();
+            for (const [edge, border] of borders) {
+              if (border.style === BorderLineStyle.NONE) {
+                item.SetLine(undefined, edge);
+                continue;
+              }
+              const color = this["colors"][border.colorIndex] ?? "#000000";
+              const wordWidth =
+                border.wordStyle === 2 && border.style !== BorderLineStyle.SOLID
+                  ? border.width * 2
+                  : border.width;
+              item.SetLine(
+                new SvxBorderLine(
+                  new Color(
+                    Number.parseInt(color.slice(1, 3), 16),
+                    Number.parseInt(color.slice(3, 5), 16),
+                    Number.parseInt(color.slice(5, 7), 16),
+                  ),
+                  ConvertBorderWidthFromWord(border.style, wordWidth, border.wordStyle),
+                  border.style,
+                ),
+                edge,
+              );
+            }
+            box.ClaimFrameFormat().SetFormatAttr(item);
+          }
+          const paddings = row.paddings[index];
+          if (row.defaultPaddings.size > 0 || (paddings !== undefined && paddings.size > 0)) {
+            const item = box.GetBox();
+            for (const [edge, value] of row.defaultPaddings) item.SetDistance(value, edge);
+            for (const [edge, value] of paddings ?? []) item.SetDistance(value, edge);
+            box.ClaimFrameFormat().SetFormatAttr(item);
+          }
+          const right = row.boundaries[index];
+          const left = index === 0 ? row.left : row.boundaries[index - 1];
+          if (right !== undefined && left !== undefined && right > left) {
+            const size = box.GetFrameSize();
+            size.SetWidth(right - left);
+            box.SetFrameSize(size);
+          }
+          for (const [paragraphIndex, paragraph] of cell.entries()) {
+            const node =
+              paragraphIndex === 0
+                ? box.GetParagraphs()[0]
+                : document.nodes.AppendTableCellParagraph(box);
+            if (node === undefined) throw new Error("RTF table paragraph is missing.");
+            this["ApplyParagraph"](node, paragraph);
+          }
+        }
+      }
+      let repeatedRows = 0;
+      for (const row of block.rows) {
+        if (!row.header) break;
+        if (repeatedRows === 10) {
+          repeatedRows = 0;
+          break;
+        }
+        repeatedRows++;
+      }
+      table.SetRowsToRepeat(repeatedRows);
+    }
+  }
+  return document;
+}
+
+/** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
+export function ApplyStyleDefinition(
+  this: RtfDocumentImplContext,
+  collection: SwTextFormatColl,
+  definition: {
+    character: WriterCharacterAttributes;
+    paragraph: RtfParagraphState;
+    controls: ReadonlySet<string>;
+    basedOnStyleIndex?: number;
+  },
+): void {
+  const controls = definition.controls;
+  const current = projectWriterCharacterAttributes(collection.GetAttrSet());
+  const target: WriterCharacterAttributes = {
+    ...current,
+    ...(controls.has("b") ? { bold: definition.character.bold } : {}),
+    ...(controls.has("i") ? { italic: definition.character.italic } : {}),
+    ...(hasRtfUnderlineControl(controls)
+      ? {
+          underline: definition.character.underline,
+          underlineStyle: definition.character.underlineStyle,
+          underlineWordMode: definition.character.underlineWordMode ?? current.underlineWordMode,
+        }
+      : {}),
+    ...(controls.has("ulc") ? { underlineColor: definition.character.underlineColor } : {}),
+    ...(controls.has("strike") || controls.has("striked")
+      ? { strikeout: definition.character.strikeout }
+      : {}),
+    ...(controls.has("super") || controls.has("sub") || controls.has("up") || controls.has("dn")
+      ? { escapement: definition.character.escapement }
+      : {}),
+    ...(controls.has("f") ? { fontFamily: definition.character.fontFamily } : {}),
+    ...(controls.has("fs") ? { fontSizeTwips: definition.character.fontSizeTwips } : {}),
+    ...(controls.has("cf") ? { color: definition.character.color } : {}),
+    ...(controls.has("highlight") ? { highlight: definition.character.highlight } : {}),
+  };
+  const items = createSwFormatAutoFormat(
+    collection.GetAttrSet().GetDoc().GetAttrPool(),
+    target,
+    current,
+  ).GetStyleHandle();
+  for (const item of items.entries()) collection.SetFormatAttr(item);
+  const paragraph = definition.paragraph;
+  if (
+    ["ql", "qc", "qr", "qj", "qd"].some(
+      /** Computes the name result. @param name - Name. @returns The computed result. */ (name) =>
+        controls.has(name),
+    )
+  ) {
+    const adjust = new SvxAdjustItem(getSvxAdjust(paragraph.alignment), RES_PARATR_ADJUST);
+    if (paragraph.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
+    collection.SetFormatAttr(adjust);
+  }
+  // createStyleProperties removes zero indents only when no basedOn exists.
+  const hasBase = definition.basedOnStyleIndex !== undefined;
+  if ((controls.has("li") || controls.has("lin")) && (hasBase || paragraph.left !== 0))
+    collection.SetFormatAttr(
+      new SvxTextLeftMarginItem(SvxIndentValue.twips(paragraph.left), RES_MARGIN_TEXTLEFT),
+    );
+  if ((controls.has("ri") || controls.has("rin")) && (hasBase || paragraph.right !== 0))
+    collection.SetFormatAttr(
+      new SvxRightMarginItem(SvxIndentValue.twips(paragraph.right), RES_MARGIN_RIGHT),
+    );
+  if ((controls.has("fi") || controls.has("li")) && (hasBase || paragraph.firstLine !== 0))
+    collection.SetFormatAttr(
+      new SvxFirstLineIndentItem(SvxIndentValue.twips(paragraph.firstLine), RES_MARGIN_FIRSTLINE),
+    );
+  if (controls.has("sb") || controls.has("sa") || controls.has("contextualspace")) {
+    const spacing = (collection.GetAttrSet().Get(RES_UL_SPACE) as SvxULSpaceItem).Clone();
+    if (controls.has("sb")) spacing.SetUpper(paragraph.before);
+    if (controls.has("sa")) spacing.SetLower(paragraph.after);
+    if (controls.has("contextualspace")) spacing.SetContextValue(paragraph.contextual);
+    collection.SetFormatAttr(spacing);
+  }
+  if (controls.has("keepn"))
+    collection.SetFormatAttr(new SfxBoolItem(RES_KEEP, paragraph.keepNext));
+  if (controls.has("keep"))
+    collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.keepTogether));
+  if (controls.has("widctlpar") || controls.has("nowidctlpar"))
+    collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.widowControl ? 2 : 0));
+  if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
+  if (controls.has("sl") || controls.has("slmult"))
+    collection.SetFormatAttr(createRtfLineSpacing(paragraph));
+}
+
+/** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
+export function ApplyParagraph(
+  this: RtfDocumentImplContext,
+  node: SwTextNode,
+  paragraph: RtfParagraph,
+): void {
+  const style =
+    paragraph.state.styleIndex === undefined
+      ? undefined
+      : this["importedStyles"].get(paragraph.state.styleIndex);
+  if (style !== undefined) node.ChgFormatColl(style);
+  const inherited = projectWriterCharacterAttributes(node.GetSwAttrSet());
+  const runs = paragraph.runs.map(
+    /** Computes the run result. @param run - Run. @returns The computed result. */ (run) => ({
+      text: run.text,
+      ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
+      attributes: resolveRtfRunAttributes(run, inherited),
+    }),
+  );
+  node.SetText(
+    runs
+      .map(
+        /** Computes the run result. @param run - Run. @returns The computed result. */ (run) =>
+          run.text,
+      )
+      .join(""),
+  );
+  const hints = new SwpHints(node.GetDoc().GetAttrPool());
+  hints.setTextRuns(runs, node.GetSwAttrSet());
+  node.SetTextHints(hints);
+  for (const mark of paragraph.marks)
+    node.GetDoc().GetIDocumentMarkAccess().MakeMark(node, mark.offset, mark.name);
+  if (paragraph.state.alignmentSet) {
+    const adjust = new SvxAdjustItem(getSvxAdjust(paragraph.state.alignment), RES_PARATR_ADJUST);
+    if (paragraph.state.distributeLastLine) adjust.SetLastBlock(SvxAdjust.Block);
+    node.SetAttr(adjust);
+  }
+  if (paragraph.state.leftSet) node.SetParagraphTextLeftMargin(paragraph.state.left);
+  if (paragraph.state.firstLineSet) node.SetParagraphFirstLineIndent(paragraph.state.firstLine);
+  if (paragraph.state.rightSet) node.SetParagraphRightMargin(paragraph.state.right);
+  if (paragraph.state.beforeSet || paragraph.state.afterSet || paragraph.state.contextualSet) {
+    const spacing = (node.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).Clone();
+    if (paragraph.state.beforeSet) spacing.SetUpper(paragraph.state.before);
+    if (paragraph.state.afterSet) spacing.SetLower(paragraph.state.after);
+    if (paragraph.state.contextualSet) spacing.SetContextValue(paragraph.state.contextual);
+    node.SetAttr(spacing);
+  }
+  if (paragraph.state.keepNextSet)
+    node.SetAttr(new SfxBoolItem(RES_KEEP, paragraph.state.keepNext));
+  if (paragraph.state.keepTogetherSet)
+    node.SetAttr(new SfxBoolItem(RES_PARATR_SPLIT, !paragraph.state.keepTogether));
+  if (paragraph.state.widowControlSet)
+    node.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, paragraph.state.widowControl ? 2 : 0));
+  if (paragraph.state.tabStopsSet) node.SetAttr(createRtfTabStops(paragraph.state.tabStops));
+  if (paragraph.state.pageBreakBeforeSet)
+    node.SetAttr(new SfxInt16Item(RES_BREAK, paragraph.state.pageBreakBefore ? 4 : 0));
+  if (paragraph.state.lineSpacingSet) node.SetAttr(createRtfLineSpacing(paragraph.state));
+  const override = paragraph.state.listOverride;
+  if (override !== undefined) {
+    const sourceList = this["listOverrides"].get(override),
+      format =
+        sourceList === undefined
+          ? undefined
+          : this["listFormats"].get(sourceList)?.[paragraph.state.listLevel];
+    if (format !== undefined) {
+      applyWriterParagraphList(node, {
+        kind: format.kind,
+        level: paragraph.state.listLevel,
+        listId: `RTF-list-${override}`,
+      });
+      const rule = node.GetNumRule();
+      if (rule !== undefined) {
+        const native = new SwNumFormat(rule.Get(paragraph.state.listLevel));
+        native.SetNumberingType(format.numberingType);
+        native.SetStart(format.start);
+        if (format.kind === "bullet" && format.bullet !== undefined)
+          native.SetBulletChar(format.bullet);
+        rule.Set(paragraph.state.listLevel, native);
+        node.GetDoc().GetDocumentListsManager().InvalidateAllLists();
+      }
+    }
+  }
+}

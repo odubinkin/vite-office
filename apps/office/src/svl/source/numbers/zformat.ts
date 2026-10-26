@@ -1,19 +1,19 @@
 /** @fileoverview Native General, Boolean and Text compiled standard formats and their output paths; other format families remain unported. */
-import type { Color } from "../../../tools/inc/color";
-import { SvNumFormatType } from "../../inc/zforlist";
-import { NfKeywordIndex } from "../../inc/nfkeytab";
-import { NfSymbolType } from "../../inc/nfsymbol";
-import type { ImpSvNumberformatScan } from "./zforscan";
-import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
-import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import { approxEqual, round } from "../../../sal/inc/rtl/math";
 import {
-  rtl_math_doubleToUString,
   rtl_math_StringFormat as Format,
   rtl_math_DecimalPlaces,
+  rtl_math_doubleToUString,
 } from "../../../sal/inc/rtl/math.h";
-import { approxEqual, round } from "../../../sal/inc/rtl/math";
-import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
+import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
+import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import type { Color } from "../../../tools/inc/color";
 import { DateOrder } from "../../../unotools/source/i18n/localedatawrapper";
+import { NfKeywordIndex } from "../../inc/nfkeytab";
+import { NfSymbolType } from "../../inc/nfsymbol";
+import { SvNumFormatType } from "../../inc/zforlist";
+import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
+import type { ImpSvNumberformatScan } from "./zforscan";
 
 /** Original zero output creates a real owned string. @returns Native zero string. */
 function zero(): OUString {
@@ -245,13 +245,20 @@ export class SvNumberformat {
   }
   /** Source condition test for whether the second subformat denotes negative values. @returns Real-negative status. */
   IsSecondSubformatRealNegative(): boolean {
-    return this.fLimit1 === 0 && this.fLimit2 === 0 &&
+    return (
+      this.fLimit1 === 0 &&
+      this.fLimit2 === 0 &&
       ((this.eOp1 === 6 && this.eOp2 === 0) ||
-       (this.eOp1 === 5 && this.eOp2 === 3) ||
-       (this.eOp1 === 0 && this.eOp2 === 0));
+        (this.eOp1 === 5 && this.eOp2 === 3) ||
+        (this.eOp1 === 0 && this.eOp2 === 0))
+    );
   }
   /** Source token lookup, including forward/backward literal or currency search. @param subformat - Native 0..3 section. @param position - Token offset or 0xffff for last. @param string - Search for a literal/currency token. @returns Borrowed token or null. */
-  GetNumForString(subformat: number, position: number, string = false): OUStringConstReference | null {
+  GetNumForString(
+    subformat: number,
+    position: number,
+    string = false,
+  ): OUStringConstReference | null {
     if (subformat > 3) return null;
     const section = this.NumFor[subformat] as ImpSvNumFor,
       count = section.GetCount();
@@ -260,17 +267,32 @@ export class SvNumberformat {
     if (position === 0xffff) {
       position = count - 1;
       if (string) {
-        while (position > 0 && info.nTypeArray[position] !== NfSymbolType.STRING &&
-          info.nTypeArray[position] !== NfSymbolType.CURRENCY) position--;
-        if (info.nTypeArray[position] !== NfSymbolType.STRING &&
-          info.nTypeArray[position] !== NfSymbolType.CURRENCY) return null;
+        while (
+          position > 0 &&
+          info.nTypeArray[position] !== NfSymbolType.STRING &&
+          info.nTypeArray[position] !== NfSymbolType.CURRENCY
+        )
+          position--;
+        if (
+          info.nTypeArray[position] !== NfSymbolType.STRING &&
+          info.nTypeArray[position] !== NfSymbolType.CURRENCY
+        )
+          return null;
       }
     } else if (position > count - 1) return null;
     else if (string) {
-      while (position < count && info.nTypeArray[position] !== NfSymbolType.STRING &&
-        info.nTypeArray[position] !== NfSymbolType.CURRENCY) position++;
-      if (position >= count || (info.nTypeArray[position] !== NfSymbolType.STRING &&
-        info.nTypeArray[position] !== NfSymbolType.CURRENCY)) return null;
+      while (
+        position < count &&
+        info.nTypeArray[position] !== NfSymbolType.STRING &&
+        info.nTypeArray[position] !== NfSymbolType.CURRENCY
+      )
+        position++;
+      if (
+        position >= count ||
+        (info.nTypeArray[position] !== NfSymbolType.STRING &&
+          info.nTypeArray[position] !== NfSymbolType.CURRENCY)
+      )
+        return null;
     }
     return info.sStrArray[position] as OUString;
   }
@@ -293,12 +315,18 @@ export class SvNumberformat {
     return count;
   }
   /** Source count check first admits the complete token count, then compares literal counts with modifiers ignored. @param subformat - Native section. @param allCount - Input fragment count. @param numberCount - Input numeric fragment count. @returns Count match. */
-  IsNumForStringElementCountEqual(subformat: number, allCount: number, numberCount: number): boolean {
+  IsNumForStringElementCountEqual(
+    subformat: number,
+    allCount: number,
+    numberCount: number,
+  ): boolean {
     if (subformat < 4) {
       const count = (this.NumFor[subformat] as ImpSvNumFor).GetCount();
       if (allCount === count) return true;
       if (allCount < count)
-        return this.ImpGetNumForStringElementCount(subformat) === ((allCount - numberCount) & 0xffff);
+        return (
+          this.ImpGetNumForStringElementCount(subformat) === ((allCount - numberCount) & 0xffff)
+        );
     }
     return false;
   }
@@ -529,7 +557,7 @@ export class SvNumberformat {
     decimal: number,
     scanner?: ImpSvNumberformatScan,
   ): boolean;
-  GetOutputString(
+  /** Implements Get Output String. @param value - Value. @param output - Output. @param color - Color. @param precisionOrStar - Precision Or Star. @param decimal - Decimal. @param scanner - Scanner. @returns The boolean | void result. */ GetOutputString(
     value: number | OUStringConstReference,
     output: OUString,
     color: [Color | null],
@@ -538,7 +566,11 @@ export class SvNumberformat {
     scanner?: ImpSvNumberformatScan,
   ): boolean | void {
     if (typeof value !== "number") {
-      const index = this.IsTextFormat() ? 0 : (this.NumFor[3] as ImpSvNumFor).GetCount() > 0 ? 3 : -1;
+      const index = this.IsTextFormat()
+        ? 0
+        : (this.NumFor[3] as ImpSvNumFor).GetCount() > 0
+          ? 3
+          : -1;
       if (index < 0) {
         color[0] = null;
         return;
@@ -551,26 +583,37 @@ export class SvNumberformat {
         if (info.eScannedType === SvNumFormatType.TEXT)
           for (let token = 0; token < section.GetCount(); token++) {
             const kind = info.nTypeArray[token];
-            if (kind === NfKeywordIndex.GENERAL || kind === NfSymbolType.DEL)
-              buffer.append(value);
+            if (kind === NfKeywordIndex.GENERAL || kind === NfSymbolType.DEL) buffer.append(value);
             else if (kind !== NfSymbolType.STAR && kind !== NfSymbolType.BLANK)
               buffer.append(info.sStrArray[token] as OUString);
           }
         const result = buffer.makeStringAndClear();
-        try { output.assign(result); }
-        finally { result.dispose(); }
-      } finally { buffer.dispose(); }
+        try {
+          output.assign(result);
+        } finally {
+          result.dispose();
+        }
+      } finally {
+        buffer.dispose();
+      }
       void precisionOrStar;
       return;
     }
     const precision = precisionOrStar as number;
     output.clear();
     color[0] = null;
-    if (this.eType === SvNumFormatType.LOGICAL && scanner && this.sFormatstring.equals(scanner.GetBooleanString())) {
+    if (
+      this.eType === SvNumFormatType.LOGICAL &&
+      scanner &&
+      this.sFormatstring.equals(scanner.GetBooleanString())
+    ) {
       output.assign(value ? scanner.GetTrueString() : scanner.GetFalseString());
       return false;
     }
-    if (this.eType !== SvNumFormatType.TEXT && (!this.bStandard || this.eType !== SvNumFormatType.NUMBER))
+    if (
+      this.eType !== SvNumFormatType.TEXT &&
+      (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
+    )
       throw new Error("SvNumberformat nonstandard output is not implemented");
     const result = formatStandardNumber(
       value,

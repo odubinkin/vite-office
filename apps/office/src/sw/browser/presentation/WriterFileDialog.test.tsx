@@ -208,7 +208,13 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
         expect(close).toHaveBeenCalledOnce(),
     );
     expect(documentShell.GetDoc().paragraphs[0]?.GetText()).toBe("Imported");
-    expect((await store.list()).map((record) => record.title)).toEqual(["Imported"]);
+    expect(
+      (await store.list()).map(
+        /** Checks imports RTF through the native shell and persists the browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+          record,
+        ) => record.title,
+      ),
+    ).toEqual(["Imported"]);
     documentShell.Close();
   });
 
@@ -263,7 +269,13 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
         expect(close).toHaveBeenCalledOnce(),
     );
     expect(documentShell.GetDoc().paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
-    expect((await store.list()).map((record) => record.title)).toEqual(["Imported"]);
+    expect(
+      (await store.list()).map(
+        /** Checks imports Markdown through the native shell and persists browser identity. @param record - Record. @returns Test completion or assertion result. */ (
+          record,
+        ) => record.title,
+      ),
+    ).toEqual(["Imported"]);
     documentShell.Close();
   });
 

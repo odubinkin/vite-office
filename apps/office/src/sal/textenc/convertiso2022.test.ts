@@ -44,7 +44,7 @@ function convert(
   return { units: [...destination.subarray(0, written)], info: info[0], consumed: consumed[0] };
 }
 
-it("decodes JIS Roman and JIS X 0208 using pinned state transitions", () => {
+it("decodes JIS Roman and JIS X 0208 using pinned state transitions", /** Checks decodes JIS Roman and JIS X 0208 using pinned state transitions. @returns Test completion or assertion result. */ () => {
   expect(
     convert(
       "jp",
@@ -57,7 +57,7 @@ it("decodes JIS Roman and JIS X 0208 using pinned state transitions", () => {
   });
 });
 
-it("decodes KS X 1001 between SO and SI after designator", () => {
+it("decodes KS X 1001 between SO and SI after designator", /** Checks decodes KS X 1001 between SO and SI after designator. @returns Test completion or assertion result. */ () => {
   expect(convert("kr", [0x41, 0x1b, 0x24, 0x29, 0x43, 0x0e, 0x30, 0x21, 0x0f, 0x5a])).toEqual({
     units: [0x41, 0xac00, 0x5a],
     info: 0,
@@ -65,7 +65,7 @@ it("decodes KS X 1001 between SO and SI after designator", () => {
   });
 });
 
-it("retains incomplete state without FLUSH and resets it on context reset", () => {
+it("retains incomplete state without FLUSH and resets it on context reset", /** Checks retains incomplete state without FLUSH and resets it on context reset. @returns Test completion or assertion result. */ () => {
   const jp = ImplCreateIso2022JpToUnicodeContext();
   const kr = ImplCreateIso2022KrToUnicodeContext();
   const info: [number] = [0];
@@ -137,7 +137,7 @@ it("retains incomplete state without FLUSH and resets it on context reset", () =
   expect(kr.m_eState).toBe(ImplIso2022KrToUnicodeState.ASCII);
 });
 
-it("uses the pinned invalid and destination-buffer status paths", () => {
+it("uses the pinned invalid and destination-buffer status paths", /** Checks uses the pinned invalid and destination-buffer status paths. @returns Test completion or assertion result. */ () => {
   expect(convert("jp", [0x1b, 0x24], cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH)).toEqual({
     units: [0xfffd],
     info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
