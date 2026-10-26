@@ -1,7 +1,18 @@
 /** @fileoverview Consumed native StyleSheetTable entry identity, built-in name conversion, lookup and typed document defaults; native apply/parse handlers extend the same owner. */
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
-import { PropertyMap, GrabBagType } from "./PropertyMap";
+import { Sequence } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import {
+  PropertyValue,
+  cppu_detail_getUnoType_PropertyValue,
+} from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { PropertyMap, StyleSheetPropertyMap, GrabBagType } from "./PropertyMap";
 import { PropertyIds as P } from "./PropertyIds";
+import { TblStyleType } from "./TblStylePrHandler";
+
+/** Existing generated PropertyValue sequence specialization; native struct stride is48. */
+const PropertyValues = Sequence.specialize<PropertyValue>(cppu_detail_getUnoType_PropertyValue, 48);
+const propertySequenceType = ["Sequence", cppu_detail_getUnoType_PropertyValue] as const;
 
 /** Original built-in style names copied without case normalization or locally assigned aliases. */
 const StyleNameMap = new Map<string, string>([
@@ -457,15 +468,208 @@ export enum StyleType {
 }
 /** Native consumed entry fields; names bind immutable UTF16 at the XML resource boundary. */
 export class StyleSheetEntry {
+  private readonly m_aInteropGrabBag: PropertyValue[] = [];
   m_sStyleIdentifierD = "";
   m_bIsDefaultStyle = false;
+  m_bAssignedAsChapterNumbering = false;
+  m_bInvalidHeight = false;
+  m_bHasUPE = false;
   m_nStyleTypeCode = StyleType.Unknown;
   m_sBaseStyleIdentifier = "";
   m_sNextStyleIdentifier = "";
   m_sLinkStyleIdentifier = "";
   m_sStyleName = "";
-  readonly m_pProperties = new PropertyMap();
+  readonly m_pProperties = new StyleSheetPropertyMap();
   m_sConvertedStyleName = "";
+  readonly m_aLatentStyles: PropertyValue[] = [];
+  readonly m_aLsdExceptions: PropertyValue[] = [];
+  m_bAutoRedefine = false;
+  readonly m_aStyleInteropProps: PropertyValue[] = [];
+  /** Original vector-to-sequence conversion copies generated values while retaining their native Any content. @returns Owned sequence. */
+  GetInteropGrabBagSeq(): InstanceType<typeof PropertyValues> {
+    return new PropertyValues(
+      {
+        /** Borrows a native vector element at its logical compound address. @param offset - Native byte offset. @returns Element. */
+        get: (offset) => this.m_aInteropGrabBag[offset / 48],
+      },
+      this.m_aInteropGrabBag.length,
+    );
+  }
+  /** Original style-ID wrapper around a copied property sequence. @returns Owned generated value. */
+  GetInteropGrabBag(): PropertyValue {
+    const result = new PropertyValue();
+    const units = Uint16Array.from(
+      this.m_sStyleIdentifierD.split(""),
+      /** Copies one immutable host UTF16 unit without normalization. @param unit - Unit. @returns Code. */ (
+        unit,
+      ) => unit.charCodeAt(0),
+    );
+    const name = new OUString(units, units.length),
+      sequence = this.GetInteropGrabBagSeq();
+    try {
+      result.Name = name;
+      result.Value.insert(sequence.getAddress(), propertySequenceType);
+      return result;
+    } finally {
+      name.dispose();
+      sequence.dispose();
+    }
+  }
+  /** Original vector push_back copies the generated value immediately. @param value - Borrowed source. @returns Nothing. */
+  AppendInteropGrabBag(value: PropertyValue): void {
+    this.m_aInteropGrabBag.push(new PropertyValue(value));
+  }
+  /** Original recursive parent merge keeps only the direct self-ID guard; no cycle repair or pooled-style fallback is introduced. @param table - Native import table or null. @returns Owned merged map. */
+  GetMergedInheritedProperties(table: StyleSheetTable | null): PropertyMap {
+    let result: PropertyMap | undefined;
+    if (
+      table &&
+      this.m_sBaseStyleIdentifier !== "" &&
+      this.m_sBaseStyleIdentifier !== this.m_sStyleIdentifierD
+    ) {
+      const parent = table.FindStyleSheetByISTD(this.m_sBaseStyleIdentifier);
+      if (parent) result = parent.GetMergedInheritedProperties(table);
+    }
+    result ??= new PropertyMap();
+    result.InsertProps(this.m_pProperties);
+    return result;
+  }
+  /** Native owned map/vector member destruction; shared imported map identities are not replaced with local reference counters. @returns Nothing. */
+  dispose(): void {
+    this.m_pProperties.dispose();
+    for (const values of [
+      this.m_aInteropGrabBag,
+      this.m_aLatentStyles,
+      this.m_aLsdExceptions,
+      this.m_aStyleInteropProps,
+    ]) {
+      for (const value of values) {
+        value.Name.dispose();
+        value.Value.dispose();
+      }
+      values.length = 0;
+    }
+  }
+}
+
+/** Original conditional table-style entry constructs a fresh base property owner and copies only the native selected fields. */
+export class TableStyleSheetEntry extends StyleSheetEntry {
+  private readonly m_aStyles = new Map<TblStyleType, PropertyMap>();
+  /** Original conversion constructor deliberately does not copy properties, converted name, interop vectors or auto-update/chapter flags. @param source - Original entry. @returns Entry. */
+  constructor(source: Readonly<StyleSheetEntry>) {
+    super();
+    this.m_bIsDefaultStyle = source.m_bIsDefaultStyle;
+    this.m_bInvalidHeight = source.m_bInvalidHeight;
+    this.m_bHasUPE = source.m_bHasUPE;
+    this.m_nStyleTypeCode = StyleType.Table;
+    this.m_sBaseStyleIdentifier = source.m_sBaseStyleIdentifier;
+    this.m_sNextStyleIdentifier = source.m_sNextStyleIdentifier;
+    this.m_sLinkStyleIdentifier = source.m_sLinkStyleIdentifier;
+    this.m_sStyleName = source.m_sStyleName;
+    this.m_sStyleIdentifierD = source.m_sStyleIdentifierD;
+  }
+  /** Original edge-style insertion can erase an inside border on the supplied map itself before retaining its identity. @param type - Native conditional type. @param properties - Original shared map. @returns Nothing. */
+  AddTblStylePr(type: TblStyleType, properties: PropertyMap): void {
+    const types = [
+        TblStyleType.FirstRow,
+        TblStyleType.LastRow,
+        TblStyleType.FirstCol,
+        TblStyleType.LastCol,
+      ],
+      borders = [P.PROP_BOTTOM_BORDER, P.PROP_TOP_BORDER, P.PROP_RIGHT_BORDER, P.PROP_LEFT_BORDER];
+    for (let index = 0; index < types.length; ++index) {
+      if (type === types[index]) {
+        const checked = properties.getProperty(borders[index] as P),
+          insideId = index < 2 ? P.META_PROP_HORIZONTAL_BORDER : P.META_PROP_VERTICAL_BORDER,
+          inside = properties.getProperty(insideId);
+        try {
+          if (checked && inside) properties.Erase(insideId);
+        } finally {
+          checked?.[1].dispose();
+          inside?.[1].dispose();
+        }
+        break;
+      }
+    }
+    this.m_aStyles.set(type, properties);
+  }
+  /** Original returned map merges conditional properties only, without silently adding base or inherited style properties. @param mask - Signed32 condition mask. @returns Owned result. */
+  GetProperties(mask: number): PropertyMap {
+    const result = new PropertyMap(),
+      local = this.GetLocalPropertiesFromMask(mask);
+    try {
+      result.InsertProps(local);
+      return result;
+    } finally {
+      local.dispose();
+    }
+  }
+  /** Original predicate resolves the same merged property set. @param mask - Conditions. @returns Whether any ordinary property remains. */
+  Has(mask: number): boolean {
+    const properties = this.GetProperties(mask);
+    try {
+      return properties.GetPropertyIds().length !== 0;
+    } finally {
+      properties.dispose();
+    }
+  }
+  /** Original right-to-left mask precedence; columns/bands precede rows and corner cells. @param mask - Condition bits. @returns Owned merged map. */
+  private GetLocalPropertiesFromMask(mask: number): PropertyMap {
+    const order: readonly (readonly [number, TblStyleType])[] = [
+      [0x010, TblStyleType.Band2Horz],
+      [0x020, TblStyleType.Band1Horz],
+      [0x040, TblStyleType.Band2Vert],
+      [0x080, TblStyleType.Band1Vert],
+      [0x100, TblStyleType.LastCol],
+      [0x200, TblStyleType.FirstCol],
+      [0x400, TblStyleType.LastRow],
+      [0x800, TblStyleType.FirstRow],
+      [0x001, TblStyleType.SWCell],
+      [0x002, TblStyleType.SECell],
+      [0x004, TblStyleType.NWCell],
+      [0x008, TblStyleType.NECell],
+    ];
+    const properties = new PropertyMap();
+    for (const [bit, type] of order) {
+      const added = this.m_aStyles.get(type);
+      if (mask & bit && added) mergeConditionalProperties(properties, added, type);
+    }
+    return properties;
+  }
+  /** Releases retained JS shared-map references; the supplied property owners keep their native filter lifetime. @returns Nothing. */
+  override dispose(): void {
+    this.m_aStyles.clear();
+    super.dispose();
+  }
+}
+/** Original lcl_mergeProps applies edge clearing before the ordinary overwrite merge; its column checks differ from AddTblStylePr. @param target - Result. @param added - Original conditional properties. @param type - Native conditional type. @returns Nothing. */
+function mergeConditionalProperties(
+  target: PropertyMap,
+  added: PropertyMap,
+  type: TblStyleType,
+): void {
+  const borders = [
+      P.PROP_BOTTOM_BORDER,
+      P.PROP_TOP_BORDER,
+      P.PROP_RIGHT_BORDER,
+      P.PROP_LEFT_BORDER,
+    ],
+    remove = [
+      type === TblStyleType.FirstRow,
+      type === TblStyleType.LastRow,
+      type === TblStyleType.LastCol,
+      type === TblStyleType.FirstCol,
+    ];
+  for (let index = 0; index < borders.length; ++index) {
+    const property = added.getProperty(borders[index] as P);
+    try {
+      if (property && remove[index])
+        target.Erase(index < 2 ? P.META_PROP_HORIZONTAL_BORDER : P.META_PROP_VERTICAL_BORDER);
+    } finally {
+      property?.[1].dispose();
+    }
+  }
+  target.InsertProps(added);
 }
 
 /** Native style identity/default-property owner shared with DomainMapper_Impl, without substituting Writer's pooled style defaults for absent imported properties. */
@@ -492,7 +696,7 @@ export class StyleSheetTable {
   /** Native entry completion admission and first-ID insertion, used by the parser's entry callback. @param entry - Completed native entry. @returns Nothing. */
   AppendEntry(entry: StyleSheetEntry): void {
     if (entry.m_sStyleName === "") {
-      entry.m_pProperties.dispose();
+      entry.dispose();
       return;
     }
     entry.m_sConvertedStyleName = StyleSheetTable.ConvertStyleName(entry.m_sStyleName)[0];
@@ -557,7 +761,7 @@ export class StyleSheetTable {
     ];
   }
   /** Releases filter-owned native maps. @returns Nothing. */ dispose(): void {
-    for (const entry of this.m_aStyleSheetEntries) entry.m_pProperties.dispose();
+    for (const entry of this.m_aStyleSheetEntries) entry.dispose();
     this.m_aStyleSheetEntries.length = 0;
     this.m_aStyleSheetEntriesMap.clear();
     this.m_pDefaultParaProps.dispose();

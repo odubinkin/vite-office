@@ -450,4 +450,5 @@ export const NS_ooxml = Object.freeze({
   LN_CT_DocDefaults_pPrDefault: 92984,
   LN_CT_DocDefaults_rPrDefault: 92985,
   LN_STYLESHEET: 93211,
+  LN_Value_doc_ST_DropCap_none: 91935,
 });

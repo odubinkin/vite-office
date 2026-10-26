@@ -1424,3 +1424,27 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx`, `OOXMLFastContextHandlerPropertyTable::lcl_endFastElement` and `OOXMLFastContextHandlerTable::lcl_endFastElement`.
 - Observation: Table sends a cloned table only when event forwarding is enabled and its resource ID is nonzero. PropertyTable instead clones its property set, appends it, and calls `Stream.table` unconditionally, including when forwarding is disabled or the ID is zero; its endAction runs afterwards. Effects on suppressed substreams/MCE and desktop producer reachability remain unverified. This may be intentional for settings/numbering, so no defect is asserted.
 - Preservation: retain both distinct callback contracts; do not add Table guards to PropertyTable. Real native context/resource objects test disabled forwarding, zero IDs, copied property sets, accumulated table snapshots and the ordinary Table guards. Native import orchestration and downstream mapper-table application remain incomplete.
+
+### WRITER146 — conditional table column borders use different insertion and merge checks
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `TableStyleSheetEntry::AddTblStylePr` and `lcl_mergeProps`.
+- Observation: insertion checks RIGHT for FirstCol and LEFT for LastCol before erasing an inside vertical border from the supplied map. Later merging clears the accumulated inside vertical border for LEFT on FirstCol and RIGHT on LastCol. Row border checks are consistent. This may reflect different conflict stages, but their effect differs for a column style containing only one edge; desktop table-layout intent/impact remain unverified.
+- Preservation: keep both original arrays and their order. Literal tests with actual typed BorderLine2 values retain the right-only FirstCol inside border during merge, clear it for a left-only FirstCol, and verify insertion mutates the supplied map.
+
+### WRITER147 — imported stylesheet property inheritance only guards a direct self-reference
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `StyleSheetEntry::GetMergedInheritedProperties`.
+- Observation: recursive lookup skips only an empty base ID and a base equal to the entry's own ID. A longer imported ID cycle has no visited-set or depth guard in this helper. Whether upstream callers exclude such cycles before reaching it remains unverified; no crashing native reproduction or document-impact claim is made.
+- Preservation: retain original recursion and direct-self/missing-parent behavior. Tests cover real acyclic table identities, ordered overrides, missing parents and direct self references. Do not insert a local cycle repair into this kernel helper.
+
+### WRITER148 — stylesheet outline setter accepts negative signed16 values beyond the unset sentinel
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.hxx`, `StyleSheetPropertyMap::SetOutlineLevel`.
+- Observation: WW_OUTLINE_MIN is zero, but the setter checks only the upper bound WW_OUTLINE_MAX (9). The normal unset value is -1; other negative signed16 values are retained as well. Native producer reachability and later UNO/application behavior for those values remain unverified.
+- Preservation: retain signed16 argument narrowing and the original upper-only check. Actual owner tests keep -2, reject 10 after 9, and retain the conversion of 65545 to signed16 value 9 without adding a lower clamp.
+
+### WRITER149 — conditional table-style header advertises parent properties that the method does not merge
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.hxx`, `TableStyleSheetEntry::GetProperties` comment, versus its body in `StyleSheetTable.cxx`.
+- Observation: the declaration describes properties corresponding to the mask plus parent styles. The implementation creates a plain PropertyMap and merges only GetLocalPropertiesFromMask; it performs no imported-parent lookup. Parent merging may be deliberately performed by callers, and the comment may be stale. No desktop rendering defect is asserted.
+- Preservation: retain the local-only body and separate GetMergedInheritedProperties helper. Literal tests keep conditional results independent of the entry's ordinary base properties and unmasked whole-table bucket; imported ancestor-property precedence is tested separately. Do not combine these stages solely to match the header comment.
