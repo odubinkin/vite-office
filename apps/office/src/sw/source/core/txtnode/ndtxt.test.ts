@@ -4,9 +4,11 @@
 
 import { describe, expect, it } from "vitest";
 import { createWriterDocument } from "../doc/doc";
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
 
 import { projectWriterTextRuns } from "./ndtxt";
 import {
+  createWriterTextFragment,
   createWriterTextRuns,
   DEFAULT_WRITER_CHARACTER_ATTRIBUTES,
   getWriterTextFromRuns,
@@ -83,6 +85,43 @@ describe("Writer text nodes" /** Groups immutable direct character-format run be
         splitWriterTextRuns(source, 5);
       },
     ).toThrow("outside");
+  });
+
+  it("retains native strikeout and escapement through text transfer and split", () => {
+    const decorated = {
+      bold: false,
+      italic: false,
+      underline: false,
+      strikeout: FontStrikeout.STRIKEOUT_DOUBLE,
+      escapement: { offset: 33, height: 58 },
+    };
+    const runs = normalizeWriterTextRuns([
+      { text: "AB", attributes: decorated },
+      { text: "CD", attributes: { ...decorated, escapement: { offset: -8, height: 58 } } },
+    ]);
+    expect(runs).toHaveLength(2);
+    expect(
+      splitWriterTextRuns(runs, 1).suffix.map((run) => run.attributes.escapement?.offset),
+    ).toEqual([33, -8]);
+    expect(
+      normalizeWriterCharacterAttributes({
+        strikeout: 2147483647,
+        escapement: { offset: 40000, height: 58 },
+      }),
+    ).toEqual(DEFAULT_WRITER_CHARACTER_ATTRIBUTES);
+    const document = createWriterDocument();
+    try {
+      const node = document.paragraphs[0];
+      if (node === undefined) throw new Error("Missing paragraph.");
+      const fragment = createWriterTextFragment(node, runs);
+      node.SetText(fragment.text);
+      node.SetTextHints(fragment.hints);
+      expect(projectWriterTextRuns(node).map((run) => run.attributes.escapement?.offset)).toEqual([
+        33, -8,
+      ]);
+    } finally {
+      document.Dispose();
+    }
   });
 
   it("toggles a selected range through native hints", /** Verifies direct formatting mutates canonical hints while runs remain a derived projection. @returns Nothing. */ function togglesNativeRange(): void {

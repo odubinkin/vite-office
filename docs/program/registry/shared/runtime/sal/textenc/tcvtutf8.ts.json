@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtutf8.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtutf8.ts#ImplConvertUtf8ToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/tcvtutf8.cxx#ImplConvertUtf8ToUnicode",
+        "apps/office/src/sal/textenc/tcvtutf8.test.ts#pinned signature"
+      ],
+      "justification": "Pinned SAL streaming UTF-8 to Unicode conversion, including BOM, malformed-sequence, context and FLUSH behavior. Broader SAL codec parity and compiled native differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplCreateUtf8ToUnicodeContext",
+        "ImplResetUtf8ToUnicodeContext",
+        "ImplConvertUtf8ToUnicode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtutf8.cxx",
+      "upstreamSymbols": [
+        "ImplCreateUtf8ToUnicodeContext",
+        "ImplResetUtf8ToUnicodeContext",
+        "ImplConvertUtf8ToUnicode"
+      ]
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvttcn6.ms950.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvttcn6.ms950.ts#aMS950UniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvttcn6.tab#aMS950UniLeadTab",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL MS-"
+      ],
+      "justification": "Pinned MS-950 lead, reverse-high, EUDC and complete DBCS converter aggregate. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aMS950UniLeadTab",
+        "aMS950DBCSHighTab",
+        "aImplMS950DBCSEUDCTab",
+        "aImplMS950DBCSCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvttcn6.tab",
+      "upstreamSymbols": [
+        "aMS950UniLeadTab",
+        "aMS950DBCSHighTab",
+        "aImplMS950DBCSEUDCTab",
+        "aImplMS950DBCSCvtData"
+      ]
+    }
+  }
+}

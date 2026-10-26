@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/convertiso2022kr.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/convertiso2022kr.ts#ImplConvertIso2022KrToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/convertiso2022kr.cxx#ImplConvertIso2022KrToUnicode",
+        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes KS X 1001"
+      ],
+      "justification": "Pinned ISO-2022-KR text-to-Unicode states, KS X 1001 table lookup, context, incomplete-input behavior and SAL bad-input actions. Reverse conversion is outside RTF import. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplConvertIso2022KrToUnicode",
+        "ImplCreateIso2022KrToUnicodeContext",
+        "ImplResetIso2022KrToUnicodeContext",
+        "ImplDestroyIso2022KrToUnicodeContext",
+        "ImplIso2022KrToUnicodeContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/convertiso2022kr.cxx",
+      "upstreamSymbols": [
+        "ImplConvertIso2022KrToUnicode",
+        "ImplCreateIso2022KrToUnicodeContext",
+        "ImplResetIso2022KrToUnicodeContext",
+        "ImplDestroyIso2022KrToUnicodeContext",
+        "ImplIso2022KrToUnicodeContext"
+      ]
+    }
+  }
+}

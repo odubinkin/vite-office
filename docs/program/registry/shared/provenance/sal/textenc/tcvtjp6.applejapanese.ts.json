@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp6.applejapanese.ts",
+    "upstreamPath": "sal/textenc/tcvtjp6.tab",
+    "localSymbols": [
+      "aAPPLEJAPANESEUniLeadTab",
+      "aAPPLEJAPANESEDBCSHighTab",
+      "aImplAPPLEJAPANESEDBCSCvtData"
+    ],
+    "upstreamSymbols": [
+      "aAPPLEJAPANESEUniLeadTab",
+      "aAPPLEJAPANESEDBCSHighTab",
+      "aImplAPPLEJAPANESEDBCSCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Apple Japanese lead, reverse-high and complete DBCS converter aggregate, including original pointer offsets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp6.applejapanese.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp6.tab source owner is split by Apple Japanese responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp6.applejapanese.ts",
+          "marker": "aAPPLEJAPANESEUniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp6.tab",
+          "marker": "aAPPLEJAPANESEUniLeadTab"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertisciidevangari.data.ts",
+    "upstreamPath": "sal/textenc/convertisciidevangari.cxx",
+    "localSymbols": [
+      "IsciiDevanagariMap"
+    ],
+    "upstreamSymbols": [
+      "IsciiDevanagariMap"
+    ],
+    "preservedResponsibilities": [
+      "Pinned 256-entry ISCII Devanagari byte-to-Unicode map, including undefined 0xFFFF entries."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-ISCII reverse conversion is not used by the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.data.ts",
+          "marker": "IsciiDevanagariMap"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.test.ts",
+          "marker": "maps pinned ISCII base, nukta and halant combinations"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertisciidevangari.cxx",
+          "marker": "IsciiDevanagariMap"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/convertisciidevangari.data.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned convertisciidevangari.cxx source owner is split into its exact 256-entry map and contextual converter while retaining all byte values."
+    }
+  }
+}

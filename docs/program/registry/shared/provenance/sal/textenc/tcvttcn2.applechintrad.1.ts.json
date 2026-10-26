@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvttcn2.applechintrad.1.ts",
+    "upstreamPath": "sal/textenc/tcvttcn2.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_APPLECHINTRAD_00",
+      "aImplUniToDBCSTab_APPLECHINTRAD_21",
+      "aImplUniToDBCSTab_APPLECHINTRAD_F8"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_APPLECHINTRAD_00",
+      "aImplUniToDBCSTab_APPLECHINTRAD_21",
+      "aImplUniToDBCSTab_APPLECHINTRAD_F8"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Apple Traditional Chinese source-owned reverse numeric tables and original pointer targets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvttcn2.applechintrad.1.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvttcn2.tab source owner is split by Apple Traditional Chinese responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvttcn2.applechintrad.1.ts",
+          "marker": "aImplUniToDBCSTab_APPLECHINTRAD_00"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvttcn2.tab",
+          "marker": "aImplUniToDBCSTab_APPLECHINTRAD_00"
+        }
+      ]
+    }
+  }
+}

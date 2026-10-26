@@ -157,6 +157,7 @@
         "WriterCharacterFormat",
         "WRITER_PARAGRAPH_ALIGNMENTS",
         "SwTextNode",
+        "SetParagraphFirstLineIndent",
         "isWriterParagraphAlignment",
         "ReplaceText",
         "GetSpaceLeft"

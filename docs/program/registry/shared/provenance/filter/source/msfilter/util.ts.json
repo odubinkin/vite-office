@@ -1,0 +1,20 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/filter/source/msfilter/util.ts",
+    "status": "mapped",
+    "upstreamPath": "filter/source/msfilter/util.cxx",
+    "localSymbols": ["TransColToIco"],
+    "upstreamSymbols": ["TransColToIco"],
+    "preservedResponsibilities": [
+      "Converts arbitrary and fixed Word highlight colors to the source 0–16 index using exact matches, then chromatic-scheme and RGB-error search."
+    ],
+    "omittedResponsibilities": ["Other MS filter utilities are outside the represented Writer text-filter slice."],
+    "evidence": {
+      "local": [{"path": "apps/office/src/filter/source/msfilter/util.test.ts", "marker": "uses upstream chromatic-scheme search"}],
+      "upstream": [{"path": "vendor/libreoffice-reference/filter/source/msfilter/util.cxx", "marker": "TransColToIco"}]
+    }
+  }
+}

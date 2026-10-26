@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvttcn1.ms950.2.ts",
+    "upstreamPath": "sal/textenc/tcvttcn1.tab",
+    "localSymbols": [
+      "aImplDBCSToUniTab_BIG5_A2",
+      "aImplDBCSToUniTab_BIG5_A5",
+      "aImplDBCSToUniTab_BIG5_A8",
+      "aImplDBCSToUniTab_BIG5_AB",
+      "aImplDBCSToUniTab_BIG5_AE",
+      "aImplDBCSToUniTab_BIG5_B1",
+      "aImplDBCSToUniTab_BIG5_B4",
+      "aImplDBCSToUniTab_BIG5_B7",
+      "aImplDBCSToUniTab_BIG5_BA",
+      "aImplDBCSToUniTab_BIG5_BD",
+      "aImplDBCSToUniTab_BIG5_C0",
+      "aImplDBCSToUniTab_BIG5_C3",
+      "aImplDBCSToUniTab_BIG5_C9",
+      "aImplDBCSToUniTab_BIG5_CC",
+      "aImplDBCSToUniTab_BIG5_CF",
+      "aImplDBCSToUniTab_BIG5_D2",
+      "aImplDBCSToUniTab_BIG5_D5",
+      "aImplDBCSToUniTab_BIG5_D8",
+      "aImplDBCSToUniTab_BIG5_DB",
+      "aImplDBCSToUniTab_BIG5_DE",
+      "aImplDBCSToUniTab_BIG5_E1",
+      "aImplDBCSToUniTab_BIG5_E4",
+      "aImplDBCSToUniTab_BIG5_E7",
+      "aImplDBCSToUniTab_BIG5_EA",
+      "aImplDBCSToUniTab_BIG5_ED",
+      "aImplDBCSToUniTab_BIG5_F0",
+      "aImplDBCSToUniTab_BIG5_F3",
+      "aImplDBCSToUniTab_BIG5_F6",
+      "aImplDBCSToUniTab_BIG5_F9"
+    ],
+    "upstreamSymbols": [
+      "aImplDBCSToUniTab_BIG5_A2",
+      "aImplDBCSToUniTab_BIG5_A5",
+      "aImplDBCSToUniTab_BIG5_A8",
+      "aImplDBCSToUniTab_BIG5_AB",
+      "aImplDBCSToUniTab_BIG5_AE",
+      "aImplDBCSToUniTab_BIG5_B1",
+      "aImplDBCSToUniTab_BIG5_B4",
+      "aImplDBCSToUniTab_BIG5_B7",
+      "aImplDBCSToUniTab_BIG5_BA",
+      "aImplDBCSToUniTab_BIG5_BD",
+      "aImplDBCSToUniTab_BIG5_C0",
+      "aImplDBCSToUniTab_BIG5_C3",
+      "aImplDBCSToUniTab_BIG5_C9",
+      "aImplDBCSToUniTab_BIG5_CC",
+      "aImplDBCSToUniTab_BIG5_CF",
+      "aImplDBCSToUniTab_BIG5_D2",
+      "aImplDBCSToUniTab_BIG5_D5",
+      "aImplDBCSToUniTab_BIG5_D8",
+      "aImplDBCSToUniTab_BIG5_DB",
+      "aImplDBCSToUniTab_BIG5_DE",
+      "aImplDBCSToUniTab_BIG5_E1",
+      "aImplDBCSToUniTab_BIG5_E4",
+      "aImplDBCSToUniTab_BIG5_E7",
+      "aImplDBCSToUniTab_BIG5_EA",
+      "aImplDBCSToUniTab_BIG5_ED",
+      "aImplDBCSToUniTab_BIG5_F0",
+      "aImplDBCSToUniTab_BIG5_F3",
+      "aImplDBCSToUniTab_BIG5_F6",
+      "aImplDBCSToUniTab_BIG5_F9"
+    ],
+    "preservedResponsibilities": [
+      "Pinned MS-950 source-owned forward numeric tables with every value and original pointer target preserved."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvttcn1.ms950.2.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvttcn1.tab source owner is split by MS-950 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvttcn1.ms950.2.ts",
+          "marker": "aImplDBCSToUniTab_BIG5_A2"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL MS-"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvttcn1.tab",
+          "marker": "aImplDBCSToUniTab_BIG5_A2"
+        }
+      ]
+    }
+  }
+}

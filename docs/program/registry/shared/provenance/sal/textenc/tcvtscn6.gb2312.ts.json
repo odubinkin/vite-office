@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts",
+    "upstreamPath": "sal/textenc/tcvtscn6.tab",
+    "localSymbols": [
+      "aGB2312UniLeadTab",
+      "aGB2312DBCSHighTab",
+      "aImplGB2312DBCSCvtData"
+    ],
+    "upstreamSymbols": [
+      "aGB2312UniLeadTab",
+      "aGB2312DBCSHighTab",
+      "aImplGB2312DBCSCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned GB2312 lead, reverse-high and DBCS aggregate with source pointer offsets preserved."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtscn6.tab source owner is split by GB2312 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtscn6.gb2312.ts",
+          "marker": "aGB2312UniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtscn6.tab",
+          "marker": "aGB2312UniLeadTab"
+        }
+      ]
+    }
+  }
+}

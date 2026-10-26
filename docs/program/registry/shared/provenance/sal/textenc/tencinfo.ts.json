@@ -7,16 +7,26 @@
     "status": "mapped",
     "upstreamPath": "sal/textenc/tencinfo.cxx",
     "localSymbols": [
-      "rtl_getBestWindowsCharsetFromTextEncoding"
+      "rtl_getBestWindowsCharsetFromTextEncoding",
+      "rtl_getTextEncodingFromWindowsCodePage"
     ],
     "upstreamSymbols": [
-      "rtl_getBestWindowsCharsetFromTextEncoding"
+      "rtl_getBestWindowsCharsetFromTextEncoding",
+      "rtl_getTextEncodingFromWindowsCodePage"
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sal/textenc/tencinfo.ts",
           "marker": "rtl_getBestWindowsCharsetFromTextEncoding"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tencinfo.ts",
+          "marker": "rtl_getTextEncodingFromWindowsCodePage"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
         }
       ],
       "upstream": [
@@ -35,14 +45,20 @@
         {
           "path": "vendor/libreoffice-reference/sal/textenc/tenchelp.hxx",
           "marker": "ImplTextEncodingData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx",
+          "marker": "rtl_getTextEncodingFromWindowsCodePage"
         }
       ]
     },
     "preservedResponsibilities": [
-      "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified."
+      "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified.",
+      "Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback."
     ],
     "omittedResponsibilities": [
-      "Full native framework/ABI and complete format orchestration are not certified; see admission."
+      "Full native framework/ABI and complete format orchestration are not certified; see admission.",
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
     ]
   }
 }

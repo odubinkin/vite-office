@@ -1238,3 +1238,165 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
 - Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.
 - Preservation: keep native lower_bound direction and both guards, with no predecessor/longest-prefix fallback. Tests over the shipped VCL data retain exact matching and the missed prefix behavior.
+
+### WRITER093 — ASCII numbering is suppressed for a one-paragraph document
+
+- Source: pinned `sw/source/filter/ascii/ascatr.cxx`, `OutASC_SwTextNode`, computes `bIsOneParagraph` solely from the original range endpoints and suppresses the list prefix when it is true. The complete document export range can also have endpoints in the same node.
+- Observation: exporting a document containing only one numbered paragraph omits its visible number, while adding a second paragraph causes the number to appear. The condition also serves clipboard selection, so whether full-document suppression was intended is unconfirmed.
+- Preservation: keep the upstream endpoint condition in `OutASC_SwTextNode`; `SwASCWriter.WriteDocument` passes the complete body block count. Native desktop behavior and the `SW_ASCII_COPY_NUMBERING` environment override remain unverified.
+
+### WRITER094 — Markdown table-cell pipes are not escaped by the writer
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutEscapedChars` and `OutMarkdown_SwTextNode`. The escape switch omits `|` and carries a TODO asking whether to escape it; table output uses the same escaping path.
+- Observation: a literal pipe in a table cell can be emitted as a column delimiter, so re-import may split or shift cells. This is a source-level inference; native desktop round-trip behavior is not independently confirmed.
+- Preservation: keep the upstream escape set in `SwMDWriter`, including the missing pipe escape. The Markdown reader recognizes escaped pipes in incoming files, but the export path does not silently correct the upstream behavior.
+
+### WRITER095 — RTF export omits nonstandard escapement at the default proportional height
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharEscapement`. When proportional height equals `DFLT_ESC_PROP` (58), the function enters the super/subscript branch and returns after testing only the standard super/sub offsets and their automatic markers.
+- Observation: an item with height 58 and another valid offset, such as 25, emits no position control. The same offset with a different supported height emits `\up` or `\dn`. This is a source-derived finding, not confirmed desktop behavior for a typical UI action.
+- Preservation: keep this branch in `RtfExport.WriteEscapement`; do not emit a custom position for the height-58 case. Focused tests distinguish this source behavior from the represented custom-height round trip.
+
+### WRITER096 — RTF list restart duplicates a rule but emits the original identifier
+
+- Source: pinned `sw/source/filter/ww8/ww8atr.cxx`, `AttributeOutputBase::ParaNumRule`, and `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::ParaNumRule_Impl`; `sw/source/filter/ww8/rtfexport.cxx`, `RtfExport::WriteNumbering`.
+- Observation: the shared paragraph exporter calls `DuplicateNumRule` when a Writer text node restarts its list, assigning the duplicate identifier to the `nNumId` argument. The RTF implementation accepts this argument but, after checking for zero or `USHRT_MAX`, writes `\\ls` using `GetNumberingId(*pRule) + 1` on the node's original rule instead. `WriteNumbering` has already emitted the list tables before body paragraphs are written. The explicit restart value therefore does not reach the RTF list reference from this path. This is a source-level inference, not a confirmed desktop round-trip observation.
+- Preservation: retain the original-rule `\\ls` selection in the current RTF exporter; do not add a restart override solely to improve a round trip. Keep the local capability audit explicit about this upstream behavior.
+
+### WRITER097 — RTF tab leaders are not symmetric across writer and reader
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::ParaTabStop`, emits `\\tlth` for a hyphen fill and `\\tleq` for an equals fill. Pinned `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` maps both `TLTH` and `TLUL` to the underscore leader and has no `TLEQ` case in the tab-leader switch.
+- Observation: exporting a tab with a hyphen or equals leader and importing the RTF through the source reader appears to change that leader to underscore or the default fill, respectively. This is a source-level inference, not a confirmed desktop round trip.
+- Preservation: retain the source writer controls and reader mapping in the current RTF path. Focused tests pin `\\tlth` import to underscore; do not silently reinterpret it as hyphen.
+
+### WRITER098 — RTF hyperlink export omits the hyperlink name
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::StartURL`, accepts `rName` but leaves it unused, while writing the URL and optional `\\t` target. Pinned `sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx` accepts the `\\o` field switch and assigns it to the hyperlink name.
+- Observation: exporting a Writer hyperlink with a name and importing the RTF through the source reader appears to lose that name, while an incoming RTF `\\o` name is retained. This is a source-level inference; native desktop round-trip behavior is not independently confirmed.
+- Preservation: keep the current RTF exporter limited to the source URL and target controls. The importer accepts `\\o` into the existing native hyperlink item; focused tests distinguish import support from the source export omission.
+
+### WRITER099 — standalone page-after RTF break has no emitted control
+
+- Source: pinned `sw/source/filter/ww8/ww8atr.cxx`, `AttributeOutputBase::FormatBreak`, calls `SectionBreak(msword::PageBreak, true)` for `SvxBreak::PageAfter` and direct `PageBoth` without passing section information. Pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::SectionBreak`, writes page-break section properties only when `pSectionInfo` is non-null. The method therefore writes nothing for that standalone call.
+- Observation: a direct page-after or page-both item without a separately prepared section appears to disappear in RTF output. This is a source-level inference, not a confirmed desktop round trip. Column breaks also produce no RTF control when the document has one column and the pinned `TREAT_SINGLE_COLUMN_BREAK_AS_PAGE_BREAK` default is false; that column branch is conditional by design.
+- Preservation: the current RTF exporter keeps the standalone page-after/page-both no-op and does not invent a `\\page` token. Focused tests pin all represented non-page-before break modes without section or column context; section transitions remain a separate open implementation area.
+
+### WRITER100 — RTF table-header export omits repeat-row metadata
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::TableDefinition`, emits row orientation, height, split, padding and cell properties but does not read `SwTable::GetRowsToRepeat` or write `\\trhdr`. Its WW8 and DOCX counterparts do read the repeat count. Pinned `sw/source/writerfilter/rtftok/rtfdispatchflag.cxx` maps incoming `TRHDR` to `tblHeader`; `DomainMapperTableManager.cxx` counts only the initial contiguous header rows and clears the count when an eleventh is marked.
+- Observation: an authored Writer table header appears to lose its repeat-row status on RTF export and re-import, although incoming RTF can restore the status. This is a source-level inference, not an independently confirmed desktop round trip.
+- Preservation: the current RTF exporter keeps the source omission. The RTF importer maps `\\trhdr` through the represented `SwTable::SetRowsToRepeat` contract, including the source ten-row workaround. Focused tests distinguish these directions.
+
+### WRITER101 — Markdown hyperlink and character delimiters can cross
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutFormattingChange`, closes code, strikeout, posture and weight before hyperlinks, then opens strikeout, posture and weight before hyperlinks. It retains active state across consecutive text chunks.
+- Observation: when a hyperlink and bold hint start together but bold ends before the link, the emitted sequence can be `**[Bold**Plain](url)`, with crossed delimiters. This is a source-level inference, not an independently confirmed desktop output or parsing result.
+- Preservation: the Markdown writer now follows the source transition order and holds the same link open across adjacent differently formatted runs. Focused tests pin the contiguous-link case and the crossed-delimiter case instead of rearranging markers for syntactic neatness.
+
+### WRITER102 — Markdown character output changes when direct paragraph items are allocated
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutMarkdown_SwTextNode`, iterates `rNode.GetSwAttrSet()` for paragraph formatting. Pinned `sw/inc/node.hxx`, `SwContentNode::GetSwAttrSet`, returns the paragraph style's item set when the node has no direct set, but returns only the direct set once one exists. The pinned `ApplyItem` weight branch treats every value except `WEIGHT_DONTKNOW`, including `WEIGHT_NORMAL`, as an opening bold contribution.
+- Observation: text inheriting a bold style can be emitted with `**` until an unrelated direct item such as color is assigned; then the inherited bold item is absent from the iterated set and its Markdown markers disappear. Conversely, a direct normal-weight item can produce bold markers. This is a source-level inference, not independently confirmed desktop output.
+- Preservation: the local Markdown writer now iterates the same selected native item set and ranged auto-format hints, including the source non-unknown weight rule. Focused tests pin both branches and the Western-script-only item switch.
+
+### WRITER103 — RTF page-number restart value appears to be discarded on import
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::SectionPageNumbering`, writes `\\pgnstartsN` and `\\pgnrestart` for a section restart. Pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` recognizes `pgnstarts` as a value token, but `rtfdispatchvalue.cxx` has no `PGNSTARTS` branch; `rtfdispatchflag.cxx` handles `PGNRESTART` by setting the section page-number start to 1.
+- Observation: an explicit restart at a value other than 1 appears to be imported as 1 through this tokenizer/dispatch path. This is a source-level inference, not an independently confirmed desktop round trip.
+- Preservation: retain the source section export controls. A later native import implementation must follow the pinned dispatcher rather than silently restoring the emitted numeric value to improve round trips.
+
+### WRITER104 — RTF soft-page split may omit a later node's section break
+
+- Source: pinned `sw/source/filter/ww8/wrtw8nds.cxx`, `MSWordExportBase::NeedTextNodeSplit` and `OutWW8_SwTextNode`, split a text node at soft page positions when its follow style needs another Word section, then call `RtfExport::PrepareNewPageDesc`. Pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::SectionBreaks`, stores the next text node's page descriptor as `m_pPrevPageDesc`; `RtfExport::PrepareNewPageDesc` suppresses `SectionBreak` when that descriptor's follow equals the requested page.
+- Observation: when a noninitial text node uses a first/follow style, the stored previous descriptor can already be that node's first style. Its soft split then creates two output paragraphs while the `\\sect` token is suppressed. This is a source-level control-flow inference, not a compiled desktop reproduction.
+- Preservation: the current RTF writer retains the split and the source suppression for that state. Focused tests distinguish the first text node from a later one without inventing a section to improve round trips.
+
+### WRITER105 — Markdown thematic-line export branch appears unreachable
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx` writes a paragraph only inside `if (!rNodeText.isEmpty())`; within that block, its `COLL_HTML_HR` case checks `if (rNodeText.isEmpty())` before writing `___`.
+- Observation: an empty horizontal-line paragraph imported by pinned `SwMarkdownParser::AddHR` cannot satisfy both conditions. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown writer retains the empty-paragraph behavior and does not synthesize `___` merely to improve the round trip.
+
+### WRITER106 — Markdown entity callbacks discard recognized source text
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::text_callback`, inserts `MD_TEXT_NORMAL` and `MD_TEXT_CODE` but has an empty branch for `MD_TEXT_ENTITY` and `MD_TEXT_NULLCHAR`.
+- Observation: a recognized entity such as `&amp;` contributes no text, while an unrecognized entity-like sequence remains normal text. This follows the callback switch; it is not an independently compiled desktop result.
+- Preservation: the local Markdown reader detects recognized HTML references and omits them, retaining unknown names and literal code-span content. Null-character callbacks are likewise omitted.
+
+### WRITER107 — Markdown nested list type can retain the earlier marker kind
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::StartNumberedBulletList`, changes a level format to ordered or bullet only when `GetNumFormat(nLevel) == nullptr`. A later list of the other type at the same level reuses the existing rule and skips that change. `StartNumberedBulletListItem` then assigns the same rule to the paragraph.
+- Observation: sibling nested lists of different Markdown marker types can display the first level's marker kind for both, until the outer list ends and a new rule is created. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown importer now shares one document-owned rule across nested lists and keeps the first format used at a level. A focused test covers the reused-level case.
+
+### WRITER108 — Negative RTF Unicode fallback width suppresses later text
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx` accepts signed 16-bit `\uc` values and assigns the value to `RTFParserState::m_nCharsToSkip` after `\u`. Pinned `rtfdocumentimpl.cxx`, `RTFDocumentImpl::resolveChars`, appends a character only when that counter equals zero and otherwise decrements it. The `uc` keyword has a bare default of one in `rtftokenizer.cxx`.
+- Observation: `\uc-1\u233ABC` appears to import the Unicode character and suppress all three subsequent literal characters, because the negative counter moves farther from zero. This is source-level inference, not a compiled desktop result.
+- Preservation: the local RTF tokenizer keeps the signed width, decrements it for fallback characters and retains the source bare-`uc` default. A focused test pins the negative case.
+
+### WRITER109 — IBM 850 reverse table aliases dotless i to the Euro byte
+
+- Source: pinned `sal/textenc/tcvtlat1.tab`, `aImplIBM850ToUniTab`, maps byte `0xD5` to `U+20AC` after the documented Euro-sign change. Its `aImplIBM850ToCharTabEx` still maps both `U+0131` (dotless i) and `U+20AC` to byte `0xD5`.
+- Observation: converting dotless i to IBM 850 and back appears to produce a Euro sign. This is a source-table inference, not an independently compiled desktop conversion result.
+- Preservation: the shared SAL table port retains both reverse entries and the forward Euro mapping exactly. Writer RTF import uses the forward table; no corrective alias is introduced.
+
+### WRITER110 — Markdown underline callback uses the strikeout item ID
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::enter_span_callback`, creates `SvxUnderlineItem(LINESTYLE_SINGLE, RES_CHRATR_CROSSEDOUT)` for `MD_SPAN_U`. Pinned `sw/inc/hintids.hxx` declares `RES_CHRATR_UNDERLINE` separately from `RES_CHRATR_CROSSEDOUT`.
+- Observation: if md4c emits an underline span, the item's type and Which ID appear inconsistent when `SetAttrs` passes it to `InsertPoolItem`. The configured `MD_DIALECT_GITHUB | MD_FLAG_WIKILINKS` may not emit this span; reachability and resulting desktop behavior remain unverified.
+- Preservation: retain the pinned item-ID choice if this callback is added to the current Markdown parser. Do not silently substitute `RES_CHRATR_UNDERLINE` without source differential evidence.
+
+### WRITER111 — Third DBCS EUDC trail range uses only the second range length
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplDBCSToUnicode`, computes the offset for a third EUDC trail range after reassigning `nTrailCount` to the second range length, rather than adding it to the first range length.
+- Observation: a three-range EUDC descriptor with unequal first and second range sizes would overlap or misplace Unicode points in its third range. The pinned `.tab` descriptors reviewed for this Writer RTF path declare at most two trail ranges, so this is a source-level conditional concern, not an observed failure in MS-932/936/949/950.
+- Preservation: the shared DBCS converter retains this calculation exactly. No corrective sum is applied without an upstream change.
+
+### WRITER112 — EUC-JP undefined-pair classification and source advancement
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplEUCJPToUnicode`, subtracts `JIS_EUC_LEAD_OFF` and `JIS_EUC_TRAIL_OFF` from a double-byte pair before testing those same variables against the offsets in the undefined-character branch. Its multibyte-undefined branch advances the source pointer before action handling, then the common output path advances it again; with `FLUSH`, it resets the pointer to the character start before the common advance.
+- Observation: an unmapped JIS double-byte pair whose original bytes are in range is classified as invalid after subtraction. An undefined SS2 pair can report a consumed-byte count different from its full byte width. These conclusions follow source control flow; compiled desktop behavior has not been compared.
+- Preservation: the local EUC-JP converter retains the branch order, classification and pointer updates exactly. Focused tests cover an invalid pair and the SS2 `FLUSH` path.
+
+### WRITER113 — ISCII lookahead reads beyond the supplied source span
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `IsciiDevanagariToUnicode::convert`, computes `nNext` under `nConverted < nSrcBytes + 1` and then reads `pSrcBuf[nConverted + 1]`. For the last byte of a nonempty buffer this condition is still true, so the read lies one byte beyond the supplied span.
+- Observation: the out-of-span value can affect whether a final byte combines with nukta. The actual allocation may contain an accessible extra byte, but the conversion contract does not provide it; compiled desktop behavior at that boundary remains unverified.
+- Preservation: the local converter retains the same lookahead condition and combination order. JavaScript's bounded source view supplies zero when the adjacent byte is absent, avoiding an out-of-bounds read while leaving the in-span source behavior unchanged.
+
+### WRITER114 — UTF-7 converter ignores saved streaming context
+
+- Source: pinned `sal/textenc/tcvtutf7.cxx`, `ImplUTF7ToUnicode`, comments out the branch that restores `mbShifted`, `mbFirst`, `mbWroteOne`, `mnBitBuffer` and `mnBufferBits` from its context, while still writing the resulting values to that context at return. The source marks the implementation unfinished.
+- Observation: a shifted Base64 sequence split across converter calls cannot resume from the preceding chunk even when the caller retains the native context. This is a source-level finding; compiled desktop behavior remains unverified.
+- Preservation: the local converter initializes conversion state on every call and still stores the final values in the context, matching the pinned source. The current RTF byte path supplies a complete byte run to one call.
+
+### WRITER115 — Apple Arabic and Hebrew code pages have no SAL converter
+
+- Source: pinned `sal/textenc/tencinfo.cxx`, `rtl_getTextEncodingFromWindowsCodePage`, maps Windows code pages 10004 and 10005 to `RTL_TEXTENCODING_APPLE_ARABIC` and `RTL_TEXTENCODING_APPLE_HEBREW`; pinned `sal/textenc/tables.cxx` records `nullptr` with `TODO!` for both entries. `sal/textenc/textcvt.cxx`, `rtl_convertTextToUnicode`, routes a missing converter to `ImplDummyToUnicode`.
+- Observation: RTF byte sequences marked with those code pages decode each byte as U+00xx rather than Arabic or Hebrew characters. The source explicitly marks the converter entries unfinished. Compiled desktop behavior remains unverified.
+- Preservation: the local RTF path dispatches missing converters to the same SAL dummy byte mapping and does not synthesize an Apple Arabic/Hebrew table.
+
+### WRITER116 — Empty leading Markdown code paragraph can leave an unmatched closing fence
+
+- Source: pinned `sw/source/filter/md/wrtmd.cxx`, `OutMarkdown_SwTextNode`, enters its fence logic only for nonempty text. For a nonempty preformatted paragraph, it decides whether to open the fence by checking the preceding node's pool style, even when that preceding node was empty and wrote no fence.
+- Observation: an empty preformatted paragraph followed by a nonempty one emits no opening fence, but the last nonempty paragraph still emits a closing fence. This is a source-level inference, not a compiled desktop reproduction.
+- Preservation: the local Markdown writer makes the same independent text and neighboring-style decisions. A focused test pins the resulting unmatched fence.
+
+### WRITER117 — Markdown automatic encoding detection is bypassed by the default reader option
+
+- Source: pinned `sw/source/filter/basflt/shellio.cxx`, `SwAsciiOptions::Reset`, initializes the charset to `osl_getThreadTextEncoding()`. Pinned `sw/source/filter/md/swmd.cxx`, `MarkdownReader::Read` passes that value to `SwMarkdownParser::CallParser`, which calls `SvStream::DetectEncoding()` only for `RTL_TEXTENCODING_DONTKNOW`. Pinned Unix thread initialization replaces an unknown locale encoding with US-ASCII; Windows uses the active code page.
+- Observation: ordinary Markdown opening does not reach BOM/ICU detection unless a caller explicitly supplies an unknown charset. This is a source-level inference, not a compiled desktop reproduction. A UTF-16 BOM alone does not override the default charset through this path.
+- Preservation: the browser Writer reader keeps its default UTF-8 byte path and does not unconditionally detect UTF-16 BOMs. The explicit unknown-charset branch is not yet represented locally.
+
+### WRITER118 — RTF underline color may arrive at export as black
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharUnderline`, emits `\\ulc` from `rUnderline.GetColor()` after each supported underline style. Its adjacent `NEEDSWORK` comment says that this value appears always black even when an ODT underline is, for example, green.
+- Observation: the source explicitly flags a possible loss before the color-table emission point. The earlier producer of `rUnderline` and compiled desktop behavior have not been traced, so this remains a suspected issue rather than a confirmed reproduction.
+- Preservation: the local RTF output takes the actual native `SvxUnderlineItem` color and writes its color-table index, following the cited emission logic. It does not force a correction or a black value based on the comment.
+
+### WRITER119 — Registered RTF hairline underline is ignored by the reader
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` registers `ulhair` as an RTF toggle, but `RTFDocumentImpl::dispatchToggle` has no `ULHAIR` case; it reaches the default `TODO handle toggle` branch and leaves the character underline unchanged.
+- Observation: a hairline-underline control does not reach the document's underline value. This follows the source dispatch table and default branch; compiled desktop behavior remains unverified.
+- Preservation: the local RTF reader likewise leaves `\\ulhair` without an underline-style item. A focused test pins the ignored control.

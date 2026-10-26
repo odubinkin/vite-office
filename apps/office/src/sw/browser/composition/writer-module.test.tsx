@@ -2,6 +2,8 @@
 
 import { render } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { SvxLineSpacingItem } from "../../../editeng/inc/lspcitem";
+import { RES_PARATR_LINESPACING } from "../../inc/hintids";
 
 import {
   createWriterBrowserSessionServices,
@@ -13,8 +15,37 @@ import {
 afterEach(
   /** Runs the test callback. @returns Test callback result. */ () => vi.unstubAllGlobals(),
 );
+afterEach(() => vi.restoreAllMocks());
 
 describe("Writer browser composition", /** Groups Writer browser composition. @returns Test callback result. */ () => {
+  it("uses browser font metrics when native RTF leading needs output-device height", () => {
+    const context = {
+      font: "",
+      measureText: vi.fn(() => ({
+        fontBoundingBoxAscent: 11,
+        fontBoundingBoxDescent: 5,
+      })),
+    };
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
+      context as unknown as CanvasRenderingContext2D,
+    );
+    const session = createWriterDocumentSession();
+    try {
+      const paragraph = session.docShell.GetDoc().paragraphs[0];
+      if (paragraph === undefined) throw new Error("Missing Writer paragraph.");
+      paragraph.SetText("Leading");
+      const spacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+      spacing.SetInterLineSpace(80);
+      paragraph.SetAttr(spacing);
+      expect(new TextDecoder().decode(session.docShell.SerializeRtf())).toContain(
+        "\\sl320\\slmult0",
+      );
+      expect(context.font).toContain("px");
+      expect(context.measureText).toHaveBeenCalledWith("Mg");
+    } finally {
+      session.Close();
+    }
+  });
   it("uses a stable locale fallback and closes a session only once", /** Checks uses a stable locale fallback and closes a session only once. @returns Test callback result. */ () => {
     vi.stubGlobal("navigator", undefined);
     const session = createWriterDocumentSession();

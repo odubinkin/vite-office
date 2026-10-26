@@ -1,7 +1,13 @@
 /** @fileoverview Verifies represented native line/box/info contracts with independent numeric expectations. */
 import { Color, ColorTransparency } from "../../../tools/inc/color";
 import { expect, it } from "vitest";
-import { SvxBorderLine, SvxBorderLineStyle, roundBorderMetric } from "./borderline";
+import {
+  ConvertBorderWidthFromWord,
+  ConvertBorderWidthToWord,
+  SvxBorderLine,
+  SvxBorderLineStyle,
+  roundBorderMetric,
+} from "./borderline";
 import {
   SvxBoxItem,
   SvxBoxItemLine,
@@ -196,6 +202,16 @@ it("owns native line state, replaces metric scale and preserves custom doubles",
   expect(roundBorderMetric(1, 0.5)).toBe(1);
   expect(new SvxBorderLine(new Color(0), 65535).GetScaledWidth()).toBe(65535);
 });
+it("uses source Word border-width conversions including double and hairline behavior", () => {
+  expect(ConvertBorderWidthToWord(SvxBorderLineStyle.SOLID, 30)).toBe(30);
+  expect(ConvertBorderWidthToWord(SvxBorderLineStyle.DOUBLE, 45)).toBe(15);
+  expect(ConvertBorderWidthToWord(SvxBorderLineStyle.THINTHICK_LARGEGAP, 60)).toBe(15);
+  expect(ConvertBorderWidthFromWord(SvxBorderLineStyle.SOLID, 0)).toBe(15);
+  expect(ConvertBorderWidthFromWord(SvxBorderLineStyle.SOLID, 15, 2)).toBe(30);
+  expect(ConvertBorderWidthFromWord(SvxBorderLineStyle.DOUBLE, 15)).toBe(45);
+  expect(ConvertBorderWidthFromWord(SvxBorderLineStyle.FINE_DASHED, 5)).toBe(20);
+});
+
 it("keeps four owned lines and signed distances with native negative-read and overflow policy", /** Checks independent public item contracts. @returns Nothing. */ () => {
   expect([
     SvxBoxItemLine.TOP,

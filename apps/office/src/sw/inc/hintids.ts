@@ -102,6 +102,9 @@ export const RES_PARATR_NUMRULE = 75 as const;
 /** Paragraph outline level, matching pinned RES_PARATR_BEGIN + 16. */
 export const RES_PARATR_OUTLINELEVEL = 82 as const;
 
+/** Whether adjacent paragraph borders connect, matching RES_PARATR_BEGIN + 15. */
+export const RES_PARATR_CONNECT_BORDER = 81 as const;
+
 /** Paragraph list identity, first item after regular paragraph attributes. */
 export const RES_PARATR_LIST_ID = 86 as const;
 

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtscn2.applechinsimp.1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtscn2.applechinsimp.1.ts#aImplUniToDBCSTab_APPLECHINSIMP_00",
+        "vendor/libreoffice-reference/sal/textenc/tcvtscn2.tab#aImplUniToDBCSTab_APPLECHINSIMP_00",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#uses pinned SAL EUC and Apple DBCS aggregates"
+      ],
+      "justification": "Pinned Apple Simplified Chinese source-owned reverse numeric tables and original pointer targets. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplUniToDBCSTab_APPLECHINSIMP_00",
+        "aImplUniToDBCSTab_APPLECHINSIMP_21",
+        "aImplUniToDBCSTab_APPLECHINSIMP_F8"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtscn2.tab",
+      "upstreamSymbols": [
+        "aImplUniToDBCSTab_APPLECHINSIMP_00",
+        "aImplUniToDBCSTab_APPLECHINSIMP_21",
+        "aImplUniToDBCSTab_APPLECHINSIMP_F8"
+      ]
+    }
+  }
+}

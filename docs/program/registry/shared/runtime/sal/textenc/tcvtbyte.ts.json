@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtbyte.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtbyte.ts#ImplSymbolToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx#ImplSymbolToUnicode"
+      ],
+      "justification": "Pinned Symbol font conversion is used by native RTF import; complete specialized converter parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplSymbolToUnicode",
+        "ImplUnicodeToSymbol"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtbyte.cxx",
+      "upstreamSymbols": [
+        "ImplSymbolToUnicode",
+        "ImplUnicodeToSymbol"
+      ]
+    }
+  }
+}

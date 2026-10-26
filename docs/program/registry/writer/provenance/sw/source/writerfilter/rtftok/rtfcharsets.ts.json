@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfcharsets.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfcharsets.cxx",
+    "localSymbols": [
+      "RTF_CHARSET_CODEPAGE",
+      "RTF_FONT_SUFFIX_CODEPAGE"
+    ],
+    "upstreamSymbols": [
+      "aRTFEncodings",
+      "aRTFFontNameSuffixes"
+    ],
+    "preservedResponsibilities": [
+      "Maps RTF font charset values and Word font-name suffix precedence to code pages before document-owned ANSI text decoding."
+    ],
+    "omittedResponsibilities": [
+      "Source font charset and name tables are represented; byte conversion belongs to the shared SAL converter boundary."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "Word font-name suffix precedence"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfcharsets.cxx",
+          "marker": "aRTFEncodings"
+        }
+      ]
+    }
+  }
+}

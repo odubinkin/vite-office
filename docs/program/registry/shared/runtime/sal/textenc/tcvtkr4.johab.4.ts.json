@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtkr4.johab.4.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtkr4.johab.4.ts#aImplDBCSToUniTab_JOHAB_F6",
+        "vendor/libreoffice-reference/sal/textenc/tcvtkr4.tab#aImplDBCSToUniTab_JOHAB_F6",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL MS-"
+      ],
+      "justification": "Pinned JOHAB source-owned forward numeric tables with every value and original pointer target preserved. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplDBCSToUniTab_JOHAB_F6",
+        "aImplDBCSToUniTab_JOHAB_F7",
+        "aImplDBCSToUniTab_JOHAB_F8",
+        "aImplDBCSToUniTab_JOHAB_F9"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtkr4.tab",
+      "upstreamSymbols": [
+        "aImplDBCSToUniTab_JOHAB_F6",
+        "aImplDBCSToUniTab_JOHAB_F7",
+        "aImplDBCSToUniTab_JOHAB_F8",
+        "aImplDBCSToUniTab_JOHAB_F9"
+      ]
+    }
+  }
+}

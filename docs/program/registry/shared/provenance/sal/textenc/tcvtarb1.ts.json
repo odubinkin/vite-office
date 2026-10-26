@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtarb1.ts",
+    "upstreamPath": "sal/textenc/tcvtarb1.tab",
+    "localSymbols": [
+      "aImplMS1255ByteCvtData",
+      "aImplMS1256ByteCvtData",
+      "aImplIBM862ByteCvtData",
+      "aImplIBM864ByteCvtData",
+      "aImplISO88596ByteCvtData",
+      "aImplISO88598ByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplMS1255ByteCvtData",
+      "aImplMS1256ByteCvtData",
+      "aImplIBM862ByteCvtData",
+      "aImplIBM864ByteCvtData",
+      "aImplISO88596ByteCvtData",
+      "aImplISO88598ByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates.",
+      "Pins IBM 862, 864 forward/reverse tables and byte-converter aggregates for native RTF decoding.",
+      "Pins ISO-8859-6 and ISO-8859-8 forward/reverse tables and byte-converter aggregates for native RTF decoding."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtarb1.ts",
+          "marker": "aImplMS1255ByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtarb1.tab",
+          "marker": "aImplMS1255ByteCvtData"
+        }
+      ]
+    }
+  }
+}

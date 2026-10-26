@@ -6,29 +6,40 @@
     "status": "mapped",
     "localPath": "apps/office/src/sw/source/core/txtnode/swfont.ts",
     "localSymbols": [
-      "getHorizontalEscapementOffset"
+      "getHorizontalEscapementOffset",
+      "AttrSetToLineHeight"
     ],
     "upstreamPath": "sw/source/core/txtnode/swfont.cxx",
     "upstreamSymbols": [
-      "SwSubFont::CalcEsc"
+      "SwSubFont::CalcEsc",
+      "AttrSetToLineHeight"
     ],
     "preservedResponsibilities": [
-      "TaskRXH8BN connects original Writer escapement Which6 and0/100 default through complete signed16 offset/unsigned8 height, registered value codec, native automatic-style inheritance and source sign-based superscript/subscript commands. Original explicit Bool slot requests select ON/OFF; INVALID complete item state emits false for both source bool slots. Sidebar pair and native menu/toolbar resources consume actual frame bindings. Body/cell/numbering projection supplies browser font metrics to the original horizontal SwSubFont CalcEsc arithmetic; native font cache/HarfBuzz/vertical/printer/layout services remain unverified. Original XMLEscapementPropHdl and Height share one text-position attribute, retain exact ASCII-space/empty-token and signed narrowing behavior, then actual item PutValue applies native range constraints. Complete browser codec preserves raw fields independently of narrower UNO import. No native service/provider is fabricated; existing classification/status/default and intentional save/open/recovery exceptions remain unchanged."
+      "TaskRXH8BN connects original Writer escapement Which6 and0/100 default through complete signed16 offset/unsigned8 height, registered value codec, native automatic-style inheritance and source sign-based superscript/subscript commands. Original explicit Bool slot requests select ON/OFF; INVALID complete item state emits false for both source bool slots. Sidebar pair and native menu/toolbar resources consume actual frame bindings. Body/cell/numbering projection supplies browser font metrics to the original horizontal SwSubFont CalcEsc arithmetic; native font cache/HarfBuzz/vertical/printer/layout services remain unverified. Original XMLEscapementPropHdl and Height share one text-position attribute, retain exact ASCII-space/empty-token and signed narrowing behavior, then actual item PutValue applies native range constraints. Complete browser codec preserves raw fields independently of narrower UNO import. No native service/provider is fabricated; existing classification/status/default and intentional save/open/recovery exceptions remain unchanged.",
+      "The RTF line-height helper selects the actual Western, CJK or CTL item family and height from SwAttrSet and requests a measurement from the injected output device, following the script selection and GetTextHeight responsibility of upstream AttrSetToLineHeight."
     ],
     "omittedResponsibilities": [
-      "Complete native services, transient binding ordering, full generic attribute/UNO graph, shaping/vertical/printer and pagination parity remain unverified. This source-sized conversion shard is not a native method naming/parity claim."
+      "Complete native services, transient binding ordering, full generic attribute/UNO graph, shaping/vertical/printer and pagination parity remain unverified. The browser device does not yet reproduce all SwFont attributes or native RenderContext metrics. This source-sized conversion shard is not a full native parity claim."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sw/source/core/txtnode/swfont.ts",
           "marker": "getHorizontalEscapementOffset"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/swfont.ts",
+          "marker": "AttrSetToLineHeight"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/swfont.cxx",
           "marker": "SwSubFont::CalcEsc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/swfont.cxx",
+          "marker": "AttrSetToLineHeight"
         }
       ]
     }

@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtest1.apple.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtest1.apple.ts#aImplAPPLECENTEUROByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplAPPLECENTEUROByteCvtData",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL Apple code page"
+      ],
+      "justification": "Seven pinned Apple single-byte forward/reverse tables and converter aggregates from tcvtest1.tab are selected for native RTF byte decoding. Broader SAL codec parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplAPPLECENTEUROByteCvtData",
+        "aImplAPPLECROATIANByteCvtData",
+        "aImplAPPLECYRILLICByteCvtData",
+        "aImplAPPLEGREEKByteCvtData",
+        "aImplAPPLEROMANIANByteCvtData",
+        "aImplAPPLETURKISHByteCvtData",
+        "aImplAPPLEUKRAINIANByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtest1.tab",
+      "upstreamSymbols": [
+        "aImplAPPLECENTEUROByteCvtData",
+        "aImplAPPLECROATIANByteCvtData",
+        "aImplAPPLECYRILLICByteCvtData",
+        "aImplAPPLEGREEKByteCvtData",
+        "aImplAPPLEROMANIANByteCvtData",
+        "aImplAPPLETURKISHByteCvtData",
+        "aImplAPPLEUKRAINIANByteCvtData"
+      ]
+    }
+  }
+}

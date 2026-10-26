@@ -17,17 +17,21 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sal/textenc/tencinfo.ts",
-        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx"
+        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx",
+        "apps/office/src/sal/textenc/tencinfo.ts#rtl_getTextEncodingFromWindowsCodePage",
+        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromWindowsCodePage"
       ],
-      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified.",
+      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified. Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback. Broader SAL codec parity remains unverified.",
       "knownViolations": [],
       "localSymbols": [
-        "rtl_getBestWindowsCharsetFromTextEncoding"
+        "rtl_getBestWindowsCharsetFromTextEncoding",
+        "rtl_getTextEncodingFromWindowsCodePage"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tencinfo.cxx",
       "upstreamSymbols": [
-        "rtl_getBestWindowsCharsetFromTextEncoding"
+        "rtl_getBestWindowsCharsetFromTextEncoding",
+        "rtl_getTextEncodingFromWindowsCodePage"
       ]
     }
   }

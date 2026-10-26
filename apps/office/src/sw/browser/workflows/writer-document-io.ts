@@ -22,7 +22,7 @@ export async function saveWriterOdtToPort(
   );
 }
 
-/** Exports canonical paragraph text through a browser download port. @param docShell - Active Writer shell. @param port - Browser download adapter. @param filename - Download filename. @returns Port completion. */
+/** Exports native Writer ASCII text through a browser download port. @param docShell - Active Writer shell. @param port - Browser download adapter. @param filename - Download filename. @returns Port completion. */
 export function exportWriterTextToPort(
   docShell: SwDocShell,
   port: DocumentExportPort,
@@ -35,18 +35,49 @@ export function exportWriterTextToPort(
       mediaType: "text/plain;charset=utf-8",
       name: filename,
     },
-    /** Serializes the live Writer graph as plain paragraph text. @param document - Canonical graph. @returns Port completion. */ (
-      document,
-    ) =>
+    /** Delivers the shell-owned native filter output. @returns Port completion. */ () =>
       port.export({
-        data: document.paragraphs
-          .map(
-            /** Selects canonical paragraph text. @param paragraph - Text node. @returns Plain text. */ (
-              paragraph,
-            ) => paragraph.GetText(),
-          )
-          .join("\n"),
+        data: docShell.SerializeText(),
         mediaType: "text/plain;charset=utf-8",
+        name: filename,
+      }),
+  );
+}
+
+/** Exports the native RTF filter stream through the browser port. @param docShell - Active shell. @param port - Browser adapter. @param filename - Download name. @returns Completion. */
+export function exportWriterRtfToPort(
+  docShell: SwDocShell,
+  port: DocumentExportPort,
+  filename: string,
+): Promise<void> {
+  return docShell.Export(
+    { filterId: "Rich Text Format", kind: "export", mediaType: "application/rtf", name: filename },
+    /** Delivers native RTF bytes after the shell captures its current model. @returns Port completion. */ () =>
+      port.export({
+        data: docShell.SerializeRtf(),
+        mediaType: "application/rtf",
+        name: filename,
+      }),
+  );
+}
+
+/** Exports native Markdown through the browser port. @param docShell - Active shell. @param port - Browser adapter. @param filename - Download name. @returns Completion. */
+export function exportWriterMarkdownToPort(
+  docShell: SwDocShell,
+  port: DocumentExportPort,
+  filename: string,
+): Promise<void> {
+  return docShell.Export(
+    {
+      filterId: "Markdown",
+      kind: "export",
+      mediaType: "text/markdown;charset=utf-8",
+      name: filename,
+    },
+    /** Delivers native Markdown bytes. @returns Port completion. */ () =>
+      port.export({
+        data: docShell.SerializeMarkdown(),
+        mediaType: "text/markdown;charset=utf-8",
         name: filename,
       }),
   );

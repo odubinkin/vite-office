@@ -14,7 +14,12 @@ import {
   openWriterText,
   saveWriterAsBrowserCopy,
 } from "../workflows/writer-odt-io";
-import { exportWriterTextToPort, saveWriterOdtToPort } from "../workflows/writer-document-io";
+import {
+  exportWriterMarkdownToPort,
+  exportWriterRtfToPort,
+  exportWriterTextToPort,
+  saveWriterOdtToPort,
+} from "../workflows/writer-document-io";
 /** Writer-specific semantic owners for the common dialog. */
 export interface WriterFileDialogProps {
   readonly autosave?: WriterAutosaveController;
@@ -47,14 +52,15 @@ export function WriterFileDialog({
       store={services.odtStore}
       modalAttributes={{ "data-writer-modal": "true" }}
       format={{
-        accept: ".odt,.txt,application/vnd.oasis.opendocument.text,text/plain",
-        importDescription: "ODT and TXT files are supported",
-        invalidFileMessage: "Choose an ODT or TXT file.",
+        accept:
+          ".odt,.txt,.rtf,.md,.markdown,application/vnd.oasis.opendocument.text,text/plain,application/rtf,text/markdown",
+        importDescription: "ODT, TXT, RTF and Markdown files are supported",
+        invalidFileMessage: "Choose an ODT, TXT, RTF or Markdown file.",
         documentLabel: "ODT document",
         accepts:
           /** Matches Writer's supported import extensions. @param file - Source. @returns Supported. */ (
             file,
-          ) => /\.(odt|txt)$/i.test(file.name),
+          ) => /\.(odt|txt|rtf|md|markdown)$/i.test(file.name),
         importedTitle: getImportedWriterTitle,
       }}
       openImportedFile={
@@ -64,6 +70,30 @@ export function WriterFileDialog({
           identity,
         ) => {
           if (/\.txt$/i.test(file.name)) openWriterText(docShell, bytes, file.name, identity);
+          else if (/\.rtf$/i.test(file.name))
+            docShell.OpenRtf(
+              bytes,
+              createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
+              {
+                kind: "input",
+                name: file.name,
+                filterId: "Rich Text Format",
+                mediaType: "application/rtf",
+                source: { kind: "external", reference: file },
+              },
+            );
+          else if (/\.(md|markdown)$/i.test(file.name))
+            docShell.OpenMarkdown(
+              bytes,
+              createDocument({ id: identity.id, suiteId: "writer", title: identity.title }),
+              {
+                kind: "input",
+                name: file.name,
+                filterId: "Markdown",
+                mediaType: "text/markdown;charset=utf-8",
+                source: { kind: "external", reference: file },
+              },
+            );
           else
             await docShell.Open(
               bytes,
@@ -114,6 +144,28 @@ export function WriterFileDialog({
               docShell,
               services.documentExport,
               services.createDownloadFilename(docShell.GetTitle(), ".txt"),
+            ),
+        },
+        {
+          label: "RTF",
+          description: "Rich Text Format",
+          appearance: "indigo",
+          download: /** Downloads native Writer RTF. @returns Completion. */ () =>
+            exportWriterRtfToPort(
+              docShell,
+              services.documentExport,
+              services.createDownloadFilename(docShell.GetTitle(), ".rtf"),
+            ),
+        },
+        {
+          label: "Markdown",
+          description: "Markdown text",
+          appearance: "indigo",
+          download: /** Downloads native Writer Markdown. @returns Completion. */ () =>
+            exportWriterMarkdownToPort(
+              docShell,
+              services.documentExport,
+              services.createDownloadFilename(docShell.GetTitle(), ".md"),
             ),
         },
       ]}

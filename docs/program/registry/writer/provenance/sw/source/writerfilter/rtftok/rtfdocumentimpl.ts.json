@@ -1,0 +1,150 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+    "localSymbols": [
+      "RtfDocumentImpl"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::resolveSubstream"
+    ],
+    "preservedResponsibilities": [
+      "Supplies the live current group/font code page to the RTF tokenizer, matching source listener ownership of Shift-JIS trailing bytes that look like control delimiters.",
+      "Routes Windows-874/1250–1258 and IBM 437/850 text bytes through pinned SAL code-page lookup and converter tables, including native undefined-byte replacement instead of browser decoder control-code mapping.",
+      "Routes RTF Symbol and Apple Roman bytes through their distinct pinned SAL converter and table owners, preserving private-use Symbol characters in the Writer text model.",
+      "Maps represented RTF group-scoped character and paragraph controls, including upper/lower/contextual spacing, sl/slmult line-spacing modes, keep/split/widow, page-before and deferred page/one-column controls with in-table suppression, absolute tab-stop positions and document default tab distance, first and subsequent section paper dimensions/margins/landscape through SwDoc page descriptors, source ConvertedN style names, first-block section references and source restart-at-one dispatch, and built-in/named stylesheet properties with run inheritance, point bookmarks, source-mapped list level numbering formats, starts and bullet glyphs, table alignment/left offset/cellx widths, row height/split and consecutive trhdr header rows with the source 10-row workaround, direct cell vertical alignment/border/padding controls, plus HYPERLINK field URL, target, name and fragment switches into canonical Writer nodes and items; listtext fallback groups are skipped.",
+      "Routes represented Apple Central European, Cyrillic, Greek and Icelandic RTF bytes through pinned SAL table owners.",
+      "Routes represented Apple Croatian, Romanian, Turkish and Ukrainian RTF bytes through pinned SAL table owners.",
+      "Routes thirteen additional IBM RTF code pages through pinned SAL byte-converter data.",
+      "RTF byte decoding selects pinned SAL ASCII, ISO-8859 and KOI8 aggregates via the shared text converter.",
+      "Decodes RTF UTF-8 code page 65001 through the native SAL converter instead of the browser decoder.",
+      "Uses OStringToOUString default conversion flags and FLUSH: undefined single bytes map to the pinned private-use range and incomplete UTF-8 is replaced.",
+      "Routes MS-932 RTF code page 932 bytes through the source-owned SAL DBCS converter, including EUDC and undefined-byte semantics.",
+      "Routes RTF code pages 936, 949 and 950 through source-owned SAL DBCS tables and EUDC semantics.",
+      "Dispatches RTF EUC-JP bytes through the source-owned ImplEUCJPToUnicode path.",
+      "Dispatches RTF ISCII Devanagari bytes through a fresh source-owned converter context.",
+      "Dispatches RTF code page 65000 bytes through the pinned SAL UTF-7 text-to-Unicode state machine.",
+      "Dispatches RTF code pages 50220/50225 through pinned SAL ISO-2022-JP/KR state machines and source-owned JIS/KS tables.",
+      "Uses the pinned SAL ImplDummyToUnicode fallback for RTF code pages without converter data, including Apple Arabic/Hebrew and unknown code pages; removes browser decoder lookup.",
+      "Maps pinned RTF underline toggles, flags and color-table values to native style, word-line and underline-color items, including direct and stylesheet inheritance.",
+      "Follows tokenizer FLAG control semantics for uld/ulw numeric parameters and leaves the registered but source-unhandled ulhair toggle without an underline item."
+    ],
+    "omittedResponsibilities": [
+      "The full upstream destination vocabulary, drawings, non-hyperlink field semantics, comments, full style properties, redlines, non-page sections and embedded objects remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "group-scoped bold"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports first-line indentation"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports paragraph spacing and keep controls"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports RTF absolute tab positions"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses upstream flag presence"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports RTF line rules"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports source HYPERLINK URL, target, name"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports RTF global paper and first-section geometry"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "materializes a later RTF page section"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports a one-column RTF"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "consecutive RTF header rows with the source limit"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports every pinned RTF underline value"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "inherits RTF underline color"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "retains the pinned RTF reader's unhandled ulhair toggle"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFDocumentImpl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "FieldContext::GetCommandParts"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "RTFKeyword::PAPERH"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "RTFKeyword::SECT"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchsymbol.cxx",
+          "marker": "RTFKeyword::PAGE"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper_Impl.cxx",
+          "marker": "GetUnusedPageStyleName"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapperTableManager.cxx",
+          "marker": "HEADER_ROW_LIMIT_FOR_MSO_WORKAROUND"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx",
+          "marker": "RTFDocumentImpl::dispatchToggle"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "RTFDocumentImpl::dispatchFlag"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "RTFDocumentImpl::dispatchValue"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "flags ignore any parameter by definition"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtftokenizer.cxx",
+          "marker": "\"ulhair\"_ostr"
+        }
+      ]
+    }
+  }
+}

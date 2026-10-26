@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "RtfAttributeOutput"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::OutputCharEscapement",
+      "RtfAttributeOutput::FormatFirstLineIndent",
+      "RtfAttributeOutput::FormatULSpace",
+      "RtfAttributeOutput::FormatKeep",
+      "RtfAttributeOutput::ParaSplit",
+      "RtfAttributeOutput::ParaWidows",
+      "RtfAttributeOutput::ParaTabStop",
+      "RtfAttributeOutput::PageBreakBefore",
+      "RtfAttributeOutput::ParaLineSpacing_Impl",
+      "RtfAttributeOutput::OutputCharCrossedOut"
+    ],
+    "preservedResponsibilities": [
+      "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
+      "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items.",
+      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco, including native brush colors projected with alpha."
+    ],
+    "omittedResponsibilities": [
+      "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native decoration"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "retains upstream default-height"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native paragraph spacing"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips %s native line spacing"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "writes native underline line styles with the pinned RTF controls"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "writes source highlight palette indices"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharEscapement"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/ww8atr.cxx",
+          "marker": "AttributeOutputBase::ParaLineSpacing"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharUnderlineAssoc"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharUnderline"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::OutputCharHighlight"
+        }
+      ]
+    }
+  }
+}

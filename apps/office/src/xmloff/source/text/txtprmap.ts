@@ -14,6 +14,11 @@ import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import { IllegalArgumentException } from "../../../cppu/inc/com/sun/star/lang/IllegalArgumentException";
 import { UnknownPropertyException } from "../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
+import {
+  BorderLine2,
+  cppu_detail_getUnoType_BorderLine2,
+} from "../../../offapi/com/sun/star/table/BorderLine2";
+import { XMLBorderHdl, XMLBorderWidthHdl } from "../style/bordrhdl";
 import { cppu_detail_getUnoType_FontSlant as slantType } from "../../../offapi/com/sun/star/awt/FontSlant";
 import type { FastAttributeList } from "../core/xmlimp";
 import { XMLToken as T } from "../core/xmltoken";
@@ -296,7 +301,8 @@ export function applyTextImportProperties(
       } finally {
         string.dispose();
       }
-    } else values.push(new Any([value], type));
+    } else if (type === cppu_detail_getUnoType_BorderLine2) values.push(new Any(value, type));
+    else values.push(new Any([value], type));
   }
   /** Converts parsed twips to original API MM100 with integer native rounding. @param value - Twips. @returns MM100. */
   function mm(value: number): number {
@@ -370,6 +376,18 @@ export function applyTextImportProperties(
     ] as const)
       if (paragraph[key] !== undefined) add(name, paragraph[key], "bool");
     if (paragraph.keepTogether !== undefined) add("ParaSplit", !paragraph.keepTogether, "bool");
+    if (paragraph.joinBorder !== undefined) add("ParaConnectBorder", paragraph.joinBorder, "bool");
+    for (const side of ["Top", "Bottom", "Left", "Right"] as const) {
+      const rawBorder = paragraph[`border${side}`];
+      const rawWidth = paragraph[`borderLineWidth${side}`];
+      if (rawBorder === undefined) continue;
+      const target = { value: new BorderLine2() };
+      if (!new XMLBorderHdl().importXML(rawBorder, target))
+        throw new Error(`Unsupported ODF paragraph border: ${rawBorder}`);
+      if (rawWidth !== undefined && !new XMLBorderWidthHdl().importXML(rawWidth, target))
+        throw new Error(`Unsupported ODF paragraph border widths: ${rawWidth}`);
+      add(`Para${side}Border`, target.value, cppu_detail_getUnoType_BorderLine2);
+    }
     for (const [key, name] of [
       ["orphans", "ParaOrphans"],
       ["widows", "ParaWidows"],

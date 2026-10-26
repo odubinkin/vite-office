@@ -21,17 +21,12 @@ import { presentWriterCommandError, presentWriterStatus } from "./writer-view";
 import type { WriterViewSnapshot } from "./writer-view-projection";
 import { WriterViewProjection } from "./writer-view-projection";
 import { createDocument } from "../../../sfx2/source/doc/objsh";
-import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { createWriterHighlightItem } from "../../source/core/attr/swatrset";
 import { createWriterDocument } from "../../source/core/doc/doc";
 import { SwDoc } from "../../source/core/doc/doc";
 import { projectWriterTextRuns } from "../../source/core/txtnode/ndtxt";
 import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
-import {
-  RES_CHRATR_HIGHLIGHT,
-  RES_PARATR_LINESPACING,
-  RES_PARATR_TABSTOP,
-  RES_BREAK,
-} from "../../inc/hintids";
+import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP, RES_BREAK } from "../../inc/hintids";
 import { createCentimetreWriterDocumentSession as createWriterDocumentSession } from "../../../test/writer-measurement-fixtures";
 import { readOdtDocument } from "../../source/filter/xml/swxml";
 import { writeOdtDocument } from "../../source/filter/xml/wrtxml";
@@ -490,7 +485,7 @@ describe("Writer browser presentation", /** Groups presentation tests. @returns 
     const document = createWriterDocument();
     const node = document.paragraphs[0]!;
     node.SetAttr(createWriterTextColorItem("#123456"));
-    node.SetAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "#fedcba"));
+    node.SetAttr(createWriterHighlightItem("#fedcba"));
     node.SetAttr(createTabs(RES_PARATR_TABSTOP, [new SvxTabStop(720), new SvxTabStop(1440)]));
     const cursor = new SwPaM(new SwPosition(node, 0));
     const projected = new WriterViewProjection().Project(

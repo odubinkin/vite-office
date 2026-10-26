@@ -129,6 +129,19 @@ export function createWriterDocumentSession(
             locale.dispose();
           }
         },
+        /** Binds AttrSetToLineHeight to the browser's physical font metrics. */
+        measureTextHeight(family, heightTwips) {
+          const context = globalThis.document.createElement("canvas").getContext("2d");
+          if (context === null) throw new Error("Writer output device is unavailable.");
+          context.font = `${heightTwips / 15}px ${JSON.stringify(family)}`;
+          const metrics = context.measureText("Mg");
+          const height =
+            metrics.fontBoundingBoxAscent + metrics.fontBoundingBoxDescent ||
+            metrics.actualBoundingBoxAscent + metrics.actualBoundingBoxDescent;
+          if (!Number.isFinite(height) || height <= 0)
+            throw new Error("Writer output device could not measure the font height.");
+          return Math.round(height * 15);
+        },
       },
       locale: globalThis.navigator?.language ?? "en-US",
     }),

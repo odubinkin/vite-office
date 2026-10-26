@@ -1,5 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
-import { writerTextColorValue } from "../../source/core/attr/swatrset";
+import { writerTextColorValue, writerHighlightColorValue } from "../../source/core/attr/swatrset";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../inc/hintids";
@@ -51,7 +51,7 @@ import {
   SvxPostureItem,
   SvxWeightItem,
 } from "../../../editeng/source/items/textitem";
-import { SfxStringItem } from "../../../svl/source/items/stritem";
+import { SvxBrushItem } from "../../../editeng/source/items/frmitems.brush";
 import { SfxBoolItem } from "../../../svl/source/items/cenumitm";
 import {
   RES_CHRATR_COLOR,
@@ -328,7 +328,9 @@ export class WriterViewProjection {
           (stop) => stop.positionPt,
         );
         const color = writerTextColorValue(node.GetAttr(RES_CHRATR_COLOR) as SvxColorItem);
-        const highlight = (node.GetAttr(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue();
+        const highlight = writerHighlightColorValue(
+          node.GetAttr(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
+        );
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
@@ -718,7 +720,11 @@ function projectTextPortions(node: SwTextNode): readonly WriterTextPortion[] {
             ? { color: writerTextColorValue(handler.ReadItem(RES_CHRATR_COLOR) as SvxColorItem) }
             : {}),
           ...(authored(RES_CHRATR_HIGHLIGHT)
-            ? { highlight: (handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue() }
+            ? {
+                highlight: writerHighlightColorValue(
+                  handler.ReadItem(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
+                ),
+              }
             : {}),
           ...(authored(RES_CHRATR_FONT)
             ? {

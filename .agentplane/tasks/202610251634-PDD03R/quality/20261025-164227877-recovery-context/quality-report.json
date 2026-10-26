@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "202610251634-PDD03R",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-25T16:42:27.877Z",
+  "verdict": "pass",
+  "summary": "Native Writer Markdown filter slice and UI routes satisfy approved scope and focused checks.",
+  "evaluated_sha": "6165a674f9e685fdb752864e4d2c91ecf5022a03",
+  "blueprint_digest": "537811c14a5eafaac02b2f0d71559307238d0f6a5e383edd58553987e53b724f",
+  "findings": [
+    "Markdown reader, callbacks, table parser and writer own represented model conversion; shell and existing dialog use those filters. Forty focused tests, typecheck, lint, formatting, provenance, registry and boundaries pass. Unrepresented upstream features and WRITER094 are documented."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610251634-PDD03R/README.md",
+    "apps/office/src/sw/source/filter/md/swmd.test.ts",
+    "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+    "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

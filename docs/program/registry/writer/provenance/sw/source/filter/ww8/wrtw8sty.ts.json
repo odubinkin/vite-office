@@ -9,32 +9,63 @@
     "localSymbols": [
       "wwFont",
       "wwFontHelper",
-      "wwFontLess"
+      "wwFontLess",
+      "MSWordStyles"
     ],
     "upstreamSymbols": [
       "wwFont::wwFont",
       "wwFontHelper::GetId",
-      "wwFontHelper::AsVector"
+      "wwFontHelper::AsVector",
+      "MSWordStyles::BuildStylesTable",
+      "MSWordStyles::GetSlot",
+      "MSWordStyles::BuildWwNames"
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
           "marker": "wwFont"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "round trips native RTF stylesheet parent and next links"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
+          "marker": "preserves Word builtin style names"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
           "marker": "wwFont::wwFont"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::BuildStylesTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::GetSlot"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "MSWordStyles::BuildWwNames"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/styles.cxx",
+          "marker": "GetEnglishNameFromSti"
         }
       ]
     },
     "preservedResponsibilities": [
-      "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending."
+      "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending.",
+      "Reserves the source fifteen Word style slots, assigns Standard to slot zero and materialized Heading 1-9 collections to slots 1-9, and assigns remaining document paragraph collections in source order with the source 4091-style limit.",
+      "Maps the represented built-in pool identities to their source Word style names, strips the source (WW) suffix for user styles and allocates unique ASCII-case-insensitive names with builtin names first."
     ],
     "omittedResponsibilities": [
-      "Full native framework/ABI and complete format orchestration are not certified; see admission."
+      "Full native framework/ABI and complete format orchestration are not certified; see admission.",
+      "The current Writer document API has no character-style collection table; numbering-style slots are disabled by the pinned RTF constructor's bListStyles=false default. Full desktop style metadata remains unverified."
     ]
   }
 }

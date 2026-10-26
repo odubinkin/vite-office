@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/converter.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/converter.ts#handleBadInputTextToUnicodeConversion",
+        "vendor/libreoffice-reference/sal/textenc/converter.cxx#handleBadInputTextToUnicodeConversion",
+        "apps/office/src/sal/textenc/tcvtutf8.test.ts#pinned signature"
+      ],
+      "justification": "Pinned SAL invalid/undefined byte actions, info bits, flag masks and destination accounting for the UTF-8 decoder. Broader SAL codec parity and compiled native differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BadInputConversionAction",
+        "handleBadInputTextToUnicodeConversion"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/converter.cxx",
+      "upstreamSymbols": [
+        "BadInputConversionAction",
+        "handleBadInputTextToUnicodeConversion"
+      ]
+    }
+  }
+}

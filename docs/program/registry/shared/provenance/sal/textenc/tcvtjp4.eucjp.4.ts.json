@@ -1,0 +1,67 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp4.eucjp.4.ts",
+    "upstreamPath": "sal/textenc/tcvtjp4.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_JIS0208_95",
+      "aImplUniToDBCSTab_JIS0208_96",
+      "aImplUniToDBCSTab_JIS0208_97",
+      "aImplUniToDBCSTab_JIS0208_98",
+      "aImplUniToDBCSTab_JIS0208_99",
+      "aImplUniToDBCSTab_JIS0208_9A",
+      "aImplUniToDBCSTab_JIS0208_9B",
+      "aImplUniToDBCSTab_JIS0208_9C",
+      "aImplUniToDBCSTab_JIS0208_9D",
+      "aImplUniToDBCSTab_JIS0208_9E",
+      "aImplUniToDBCSTab_JIS0208_9F",
+      "aImplUniToDBCSTab_JIS0208_FF"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_JIS0208_95",
+      "aImplUniToDBCSTab_JIS0208_96",
+      "aImplUniToDBCSTab_JIS0208_97",
+      "aImplUniToDBCSTab_JIS0208_98",
+      "aImplUniToDBCSTab_JIS0208_99",
+      "aImplUniToDBCSTab_JIS0208_9A",
+      "aImplUniToDBCSTab_JIS0208_9B",
+      "aImplUniToDBCSTab_JIS0208_9C",
+      "aImplUniToDBCSTab_JIS0208_9D",
+      "aImplUniToDBCSTab_JIS0208_9E",
+      "aImplUniToDBCSTab_JIS0208_9F",
+      "aImplUniToDBCSTab_JIS0208_FF"
+    ],
+    "preservedResponsibilities": [
+      "Pinned EUC-JP source-owned JIS reverse numeric tables and original pointer targets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp4.eucjp.4.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp4.tab source owner is split by EUC-JP responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp4.eucjp.4.ts",
+          "marker": "aImplUniToDBCSTab_JIS0208_95"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "decodes pinned EUC-JP ASCII"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp4.tab",
+          "marker": "aImplUniToDBCSTab_JIS0208_95"
+        }
+      ]
+    }
+  }
+}

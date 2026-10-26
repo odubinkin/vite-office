@@ -7,6 +7,9 @@ import { encodeWriterFrameItem, decodeWriterFrameItem } from "./writer-frame-ite
 import { encodePageDesc, decodePageDesc } from "./page-desc-codec";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import { COL_TRANSPARENT } from "../../../../tools/inc/color";
+import { ShadingPattern } from "../../../../offapi/com/sun/star/drawing/ShadingPattern";
 import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 
 import {
@@ -139,6 +142,20 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
     )
       throw new Error("Writer complex color transfer is not implemented.");
     return { which: item.Which(), value: item.GetValue().toUInt32() };
+  }
+  if (item instanceof SvxBrushItem) {
+    const complex = item.getComplexColor(),
+      empty = new ComplexColor();
+    empty.setFinalColor(item.GetColor());
+    if (
+      !complex.equals(empty) ||
+      complex.getThemeColorUsage() !== empty.getThemeColorUsage() ||
+      !item.GetFiltColor().equals(COL_TRANSPARENT) ||
+      item.GetShadingValue() !== ShadingPattern.CLEAR ||
+      item.getGraphicTransparency() !== 0
+    )
+      throw new Error("Writer complex highlight transfer is not implemented.");
+    return { which: item.Which(), value: item.GetColor().toUInt32() };
   }
   if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
   if (item instanceof SvxEscapementItem)

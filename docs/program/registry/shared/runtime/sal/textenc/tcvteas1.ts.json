@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvteas1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvteas1.ts#aImplMS1258ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvteas1.tab#aImplMS1258ByteCvtData"
+      ],
+      "justification": "Pinned Windows-874 and 1258 forward and reverse tables, including two-byte Windows-1258 reverse entries, and byte-converter aggregates. Broader SAL codec parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplMS874ByteCvtData",
+        "aImplMS1258ByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvteas1.tab",
+      "upstreamSymbols": [
+        "aImplMS874ByteCvtData",
+        "aImplMS1258ByteCvtData"
+      ]
+    }
+  }
+}

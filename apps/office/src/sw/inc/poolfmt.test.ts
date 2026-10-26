@@ -1,5 +1,9 @@
 /** @fileoverview Verifies the pinned built-in Writer paragraph-style pool. */
-import { writerTextColorValue } from "../source/core/attr/swatrset";
+import {
+  writerTextColorValue,
+  writerHighlightColorValue,
+  createWriterHighlightItem,
+} from "../source/core/attr/swatrset";
 import { SvxColorItem } from "../../editeng/inc/colritem";
 import { createWriterTextColorItem } from "../source/core/attr/swatrset";
 import { encodeSfxPoolItem } from "../browser/filter/xml/item-codec";
@@ -7,7 +11,7 @@ import { createTabs } from "../../../test/tab-item-fixtures";
 import { FontItalic, FontWeight } from "../../tools/inc/fontenum";
 import { describe, expect, it } from "vitest";
 import { SfxBoolItem } from "../../svl/source/items/cenumitm";
-import { SfxStringItem } from "../../svl/source/items/stritem";
+import { SvxBrushItem } from "../../editeng/source/items/frmitems.brush";
 import {
   encodeWriterOdfStyleName,
   getWriterOdfStyleName,
@@ -86,11 +90,11 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       );
       expect(collection.GetNextTextFormatColl().id).toBe(style.followId);
     }
-    expect(document.GetTextFormatColls()).toHaveLength(26);
+    expect(document.GetTextFormatColls()).toHaveLength(27);
     expect(document.GetTextFormatColl("table-contents").DerivedFrom()).toBe(
       document.GetDfltTextFormatColl(),
     );
-    expect(document.GetTextFormatColls()).toHaveLength(27);
+    expect(document.GetTextFormatColls()).toHaveLength(28);
     expect(document.GetTextFormatColl("heading-1").GetAssignedOutlineStyleLevel()).toBe(0);
     expect(document.GetTextFormatColl("heading-10").GetAssignedOutlineStyleLevel()).toBe(9);
     expect(
@@ -159,6 +163,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       "heading-10",
       "quotations",
       "preformatted-text",
+      "horizontal-line",
     ]);
     expect(
       WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.some(
@@ -287,6 +292,7 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       },
       quotations: { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 },
       "preformatted-text": { fontRole: "fixed", fontSizeTwips: 200, lowerTwips: 0 },
+      "horizontal-line": { fontSizeTwips: 120, lowerTwips: 283, lineNumber: false },
     } as const;
     expect(Object.keys(expected)).toEqual(
       WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.map(
@@ -350,7 +356,9 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
     expect((heading.Get(RES_KEEP) as SfxBoolItem).GetValue()).toBe(true);
     expect((caption.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
     expect(writerTextColorValue(comment.Get(RES_CHRATR_COLOR) as SvxColorItem)).toBe("auto");
-    expect((comment.Get(RES_CHRATR_HIGHLIGHT) as SfxStringItem).GetValue()).toBe("transparent");
+    expect(writerHighlightColorValue(comment.Get(RES_CHRATR_HIGHLIGHT) as SvxBrushItem)).toBe(
+      "transparent",
+    );
     const quotations = document.GetTextFormatColl("quotations").GetAttrSet();
     expect((quotations.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight()).toBe(567);
     expect(
@@ -363,8 +371,8 @@ describe("Writer paragraph-style pool", /** Registers pool tests. @returns Nothi
       createWriterTextColorItem("auto"),
     );
     expect(
-      document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: "transparent" }),
-    ).toEqual(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
+      document.GetAttrPool().CreateItem({ which: RES_CHRATR_HIGHLIGHT, value: 0xffffffff }),
+    ).toEqual(createWriterHighlightItem("transparent"));
     expect(
       document
         .GetAttrPool()

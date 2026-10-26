@@ -8,7 +8,8 @@
     "suite": "writer",
     "subsystem": "docx-import",
     "capabilityIds": [
-      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6",
+      "CAP-0121"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts#StyleSheetTable",
-        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::StyleSheetTable"
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::StyleSheetTable",
+        "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/StyleSheetTable.cxx#StyleSheetTable::ConvertStyleName"
       ],
-      "justification": "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established.",
+      "justification": "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending. Whole-module parity stays unverified and DOCX application/UI import/export is not yet established. The pinned style-name conversion table and value rules are ported; desktop style property application remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "StyleSheetTable",

@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtest1.ibm.ts",
+    "upstreamPath": "sal/textenc/tcvtest1.tab",
+    "localSymbols": [
+      "aImplIBM737ByteCvtData",
+      "aImplIBM775ByteCvtData",
+      "aImplIBM852ByteCvtData",
+      "aImplIBM855ByteCvtData",
+      "aImplIBM857ByteCvtData",
+      "aImplIBM866ByteCvtData",
+      "aImplIBM869ByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplIBM737ByteCvtData",
+      "aImplIBM775ByteCvtData",
+      "aImplIBM852ByteCvtData",
+      "aImplIBM855ByteCvtData",
+      "aImplIBM857ByteCvtData",
+      "aImplIBM866ByteCvtData",
+      "aImplIBM869ByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned IBM 737/775/852/855/857/866/869 forward/reverse tables and byte-converter aggregates from tcvtest1.tab."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtest1.ibm.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The seven source-owned IBM single-byte tables in tcvtest1.tab are split from its Windows and Apple tables to keep each TypeScript module below the repository file-size limit. All original byte tables and aggregates remain unchanged."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtest1.ibm.ts",
+          "marker": "aImplIBM737ByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL IBM code page"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab",
+          "marker": "aImplIBM737ByteCvtData"
+        }
+      ]
+    }
+  }
+}

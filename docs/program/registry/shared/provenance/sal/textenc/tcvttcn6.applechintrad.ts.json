@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvttcn6.applechintrad.ts",
+    "upstreamPath": "sal/textenc/tcvttcn6.tab",
+    "localSymbols": [
+      "aAPPLECHINTRADUniLeadTab",
+      "aAPPLECHINTRADDBCSHighTab",
+      "aImplAPPLECHINTRADDBCSCvtData"
+    ],
+    "upstreamSymbols": [
+      "aAPPLECHINTRADUniLeadTab",
+      "aAPPLECHINTRADDBCSHighTab",
+      "aImplAPPLECHINTRADDBCSCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Apple Traditional Chinese lead, reverse-high and complete DBCS converter aggregate, including original pointer offsets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvttcn6.applechintrad.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvttcn6.tab source owner is split by Apple Traditional Chinese responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvttcn6.applechintrad.ts",
+          "marker": "aAPPLECHINTRADUniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL EUC and Apple DBCS aggregates"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvttcn6.tab",
+          "marker": "aAPPLECHINTRADUniLeadTab"
+        }
+      ]
+    }
+  }
+}

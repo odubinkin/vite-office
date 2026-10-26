@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtest1.apple.ts",
+    "upstreamPath": "sal/textenc/tcvtest1.tab",
+    "localSymbols": [
+      "aImplAPPLECENTEUROByteCvtData",
+      "aImplAPPLECROATIANByteCvtData",
+      "aImplAPPLECYRILLICByteCvtData",
+      "aImplAPPLEGREEKByteCvtData",
+      "aImplAPPLEROMANIANByteCvtData",
+      "aImplAPPLETURKISHByteCvtData",
+      "aImplAPPLEUKRAINIANByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplAPPLECENTEUROByteCvtData",
+      "aImplAPPLECROATIANByteCvtData",
+      "aImplAPPLECYRILLICByteCvtData",
+      "aImplAPPLEGREEKByteCvtData",
+      "aImplAPPLEROMANIANByteCvtData",
+      "aImplAPPLETURKISHByteCvtData",
+      "aImplAPPLEUKRAINIANByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Apple Central European, Croatian, Cyrillic, Greek, Romanian, Turkish and Ukrainian forward/reverse tables and byte-converter aggregates from tcvtest1.tab."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtest1.apple.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The seven source-owned Apple single-byte tables in tcvtest1.tab are split from the Windows tables to keep each TypeScript module below the repository file-size limit. Both modules preserve original byte tables and converter aggregates without duplicating codec state."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtest1.apple.ts",
+          "marker": "aImplAPPLECENTEUROByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL Apple code page"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab",
+          "marker": "aImplAPPLECENTEUROByteCvtData"
+        }
+      ]
+    }
+  }
+}

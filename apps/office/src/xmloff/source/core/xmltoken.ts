@@ -263,6 +263,8 @@ export enum XMLToken {
   STYLE_TEXT_OVERLINE_MODE,
   STYLE_TEXT_LINE_THROUGH_MODE,
   STYLE_LETTER_KERNING,
+
+  STYLE_JOIN_BORDER,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
@@ -272,6 +274,7 @@ const entries: readonly (readonly [string, string, XMLToken])[] = [
   [ODF_NAMESPACES.style, "letter-kerning", XMLToken.STYLE_LETTER_KERNING],
   [ODF_NAMESPACES.fo, "text-shadow", XMLToken.FO_TEXT_SHADOW],
   [ODF_NAMESPACES.style, "font-relief", XMLToken.STYLE_FONT_RELIEF],
+  [ODF_NAMESPACES.style, "join-border", XMLToken.STYLE_JOIN_BORDER],
   [ODF_NAMESPACES.fo, "wrap-option", XMLToken.FO_WRAP_OPTION],
   [ODF_NAMESPACES.style, "diagonal-tl-br", XMLToken.STYLE_DIAGONAL_TL_BR],
   [ODF_NAMESPACES.style, "diagonal-tl-br-width", XMLToken.STYLE_DIAGONAL_TL_BR_WIDTH],

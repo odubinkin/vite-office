@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtutf7.ts",
+    "upstreamPath": "sal/textenc/tcvtutf7.cxx",
+    "localSymbols": [
+      "ImplUTF7ToUnicode",
+      "ImplUTF7CreateUTF7TextToUnicodeContext",
+      "ImplUTF7ResetTextToUnicodeContext",
+      "ImplUTF7DestroyTextToUnicodeContext",
+      "ImplUTF7ToUCContextData"
+    ],
+    "upstreamSymbols": [
+      "ImplUTF7ToUnicode",
+      "ImplUTF7CreateUTF7TextToUnicodeContext",
+      "ImplUTF7ResetTextToUnicodeContext",
+      "ImplUTF7DestroyTextToUnicodeContext",
+      "ImplUTF7ToUCContextData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned UTF-7 text-to-Unicode state machine, Base64 indices, invalid-input statuses and source context contract, including the disabled context restore in upstream."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-UTF-7 reverse conversion is not used by the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf7.ts",
+          "marker": "ImplUTF7ToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtutf7.test.ts",
+          "marker": "decodes direct bytes, shifted UTF-16 units and escaped plus"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtutf7.cxx",
+          "marker": "ImplUTF7ToUnicode"
+        }
+      ]
+    }
+  }
+}

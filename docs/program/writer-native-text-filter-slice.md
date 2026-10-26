@@ -1,0 +1,131 @@
+# Writer native text-filter slice audit
+
+Baseline: LibreOffice `libreoffice-26.8.0.2` at
+`9bc445578031fecf56086729d8e4940c77e14d65`. This tracks the **current
+portable Writer model**, not all desktop Writer features. `sw/source/filter/ascii`,
+`sw/source/filter/ww8`, `sw/source/writerfilter/rtftok` and `sw/source/filter/md`
+under `vendor/libreoffice-reference` are the source comparison points.
+
+| Current native model capability | TXT export | RTF import/export | Markdown import/export | Closure status |
+| --- | --- | --- | --- | --- |
+| Body paragraphs, Unicode, hard line breaks | `SwASCWriter` and `OutASC_SwTextNode` | `RtfTokenizer`, `RtfDocumentImpl`, `RtfExport`; hex CR/LF each dispatch a paragraph in body text, and Unicode fallback skips characters while preserving intervening control words and the parent group's fallback state. Signed `\uc` and its bare default follow source. Raw ANSI bytes reach the document parser, where group-scoped `\ansicpg`/`\cpg`, selected-font `\fcharset`, default-font `\plain`, and the pinned font-name suffix precedence select decoding. The live parser callback preserves Shift-JIS trailing backslashes and braces as encoded text. ASCII, ISO-8859-1–9/15, KOI8-R/U, IBM 437/737/775/850/852/855/857/860–866/869, Windows-874, Windows-1250–1258 and Apple Roman/Central European/Croatian/Cyrillic/Greek/Icelandic/Romanian/Turkish/Ukrainian use pinned SAL tables; MS-932/936/949/950, JOHAB/MS-1361, EUC-CN/KR and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese use pinned SAL DBCS lead/trail tables and each source aggregate’s EUDC setting; EUC-JP uses its separate pinned SAL JIS-0208/JIS-0212, SS2 and SS3 converter; ISO-2022-JP/KR code pages 50220/50225 use pinned SAL state machines and source-owned JIS/KS tables; ISCII Devanagari uses its pinned stateful map and nukta/halant combinations; UTF-7 code page 65000 uses the pinned SAL Base64-shift decoder, including its disabled context restore; UTF-8 code page 65001 uses the pinned SAL streaming decoder, including its default BOM and malformed-input behavior; OStringToOUString flags map undefined single bytes to U+F100–U+F1FF and flush incomplete UTF-8; missing SAL converters use the pinned byte-to-U+00xx dummy fallback, including Apple Arabic/Hebrew code pages 10004/10005 and unknown code pages; Symbol uses the pinned private-use converter | `SwMarkdownParser`, `SwMDWriter`; recognized HTML entities and null characters follow the pinned no-insertion callbacks, while unknown names and code text remain visible | Targeted coverage exists. **Open:** the full byte/code-page matrix and compiled upstream differential behavior remain unverified. Apple Arabic/Hebrew are explicitly unimplemented in pinned SAL (WRITER115). Pinned negative `\uc` can suppress later text (WRITER108), while Markdown entity callbacks discard recognized text (WRITER106). |
+| Text runs: weight, posture, underline, font, size, color, highlight, strikeout and escapement | Formatting is absent from plain text by format | Direct controls and native hints; shared transfer retains strikeout/escapement and source RTF underline line-style controls, `\\ulw` through `RES_CHRATR_WORDLINEMODE`, and `\\ulcN` through the native underline color and color table | Upstream Markdown maps emphasis, strikeout and code from the actual paragraph item set and ranged hints, with formatting state held across text positions; remaining formatting has no equivalent simple syntax | Source `GetSwAttrSet()` and weight-item decisions can make Markdown markup depend on direct-set allocation (WRITER102). RTF underline-color production has an upstream `NEEDSWORK` note (WRITER118), and its registered hairline toggle is unhandled (WRITER119); value-specific style inheritance and other character controls still require source comparison. |
+| Hyperlink text spans | Visible text only | One `HYPERLINK` field spans native character-run changes; URL backslashes follow the source double-escape rule, target frames use `\\t`, and import also accepts `\\l` fragments and `\\o` names | The writer keeps a link open across adjacent native text runs and follows upstream delimiter-transition order; reader resolves relative inline links against a supplied source URL, while a browser-local File without a source URL retains the link text | Source RTF export ignores the represented hyperlink name even though its importer accepts `\\o` (WRITER098). Upstream Markdown delimiter order can cross bold and hyperlink spans (WRITER101); URL normalization beyond standard absolute/relative/fragment cases still requires differential comparison. |
+| Built-in and named paragraph styles | Plain text has no style | Represented names and effective paragraph/character values pass through `\stylesheet` and `\sN`; matching source definitions create document-owned collections and direct run controls override style inheritance | Heading 1–6, quotation, preformatted and thematic-line styles. Export resolves heading levels through the document-owned style ancestry by built-in pool ID, so named descendants retain their nearest heading level. The thematic-line pool style has the pinned gray double bottom border, font height, spacing, line-number and border-connection items | Full style graph, follow relationships and all property families still require comparison. Pinned Markdown export cannot reach its empty thematic-line branch (WRITER105). |
+| Paragraph alignment and first/left/right indentation | Visual formatting omitted | Native paragraph controls and item setters | Table-cell alignment, heading/quote/code structural styles | RTF paragraph defaults and style-derived values require differential checks. |
+| Paragraph upper/lower and contextual spacing, line spacing, keep-with-next, split and widow controls | Visual formatting omitted | Native paragraph and stylesheet items map spacing, keep/split/widow controls and `SvxLineSpacingItem` through `\\sl`/`\\slmult`: fixed, minimum and proportional rules round-trip; leading adds the selected script font's measured height | No equivalent simple syntax | Pinned `AttributeOutputBase::ParaWidows` deliberately omits the separate orphan count because Word shares one widow/orphan control. The source Word/RTF leading representation imports as minimum height, losing the original leading rule. Browser font measurement uses Canvas; physical `RenderContext::GetTextHeight` equivalence and headless leading export remain unverified. |
+| Explicit tab stops and default tab distance | Literal tab characters | Native `SvxTabStopItem` positions, alignment and leaders map through `\\tx` with source-relative export offset and absolute imported positions; `\\deftab` maps through the document pool user default | No format-level tab-stop definitions | Pinned writer and reader differ for hyphen and equals leaders (WRITER097); source behavior retained. Further tab/default differential cases remain to verify. |
+| Lists, numbering rules, levels, restarts and counted state | Visible labels through native ASCII path | Kind/level/identity, source-mapped `levelnfc` type, per-level start/bullet and `listtext`; uncounted paragraphs omit list controls | Reader uses a document-owned rule across mixed nested list types, initializes the first format used at each level, fills unused levels on outer-list completion and marks list items counted; writer emits native labels and parent-prefix indentation | RTF paragraph restart value is not carried by the pinned upstream `ParaNumRule_Impl` path (WRITER096); some types share an `nfc` value. A later Markdown nested list with a different marker kind at an already-used level retains the first kind in pinned source (WRITER107). Further list semantics still require audit. |
+| Table rows/cells and multiple cell paragraphs | Tab-separated rows | Rows/cells, paragraph order, native cell widths via `cellx`, table alignment/left offset, default left-to-right row direction, row minimum/fixed height and no-split state in pinned `TableDefinition` order, direct cell vertical alignment, four-side cell border style/width/color, table default and per-cell padding. Incoming `\trhdr` maps the contiguous header-row prefix with the upstream 10-row limit. | GFM table rows; multiple cell paragraphs are flattened | **Open:** remaining represented table properties need RTF coverage; merge structure has no current core box-span owner; Markdown is format-limited. Pinned RTF export omits the represented header-row count even though import accepts `\trhdr` (WRITER100). Table background and cell direction lack registered Writer which IDs in this core, so shared `SvxBrushItem`/`SvxFrameDirectionItem` types alone do not place them in the current model slice. |
+| Bookmarks and soft page breaks | No structural text encoding | Point bookmarks map through `bkmkstart`/`bkmkend`. The RTF writer uses document-owned soft page positions to split a text node only when its follow page needs a distinct section, retaining character hints, hyperlinks and point marks at their source offsets. The pinned previous-page suppression can omit the section token for a later node (WRITER104). | No structural Markdown mapping | **Open:** compiled upstream differential behavior for the later-node suppression and deeper multi-page chains; table soft-break rows are outside the represented text-node path. |
+| Page descriptors and paragraph/page break items | No structural text encoding | The first page descriptor emits global paper dimensions, margins, landscape and first-section controls; import applies physical geometry through `SwDoc::ChgPageDesc`. Direct later paragraph/table page descriptors emit RTF sections, physical geometry and page-number restart, with source follow-page suppression. Later export combines a first/follow page chain only when its represented physical geometry matches, following `IsPlausableSingleWordSection`; otherwise it keeps the first page geometry. Later `\\sect`/`\\sectd` groups import physical geometry into document-owned `ConvertedN` page descriptors attached to the first block; global fields seed each reset. Direct page-before emits `\\pagebb`; incoming `\\page` and one-column `\\column` defer a `RES_BREAK` page-before item to the next paragraph or table, while an in-cell symbol is ignored | No structural Markdown mapping | **Open:** the pinned importer appears to discard the numeric `\\pgnstarts` value and map `\\pgnrestart` to 1 (WRITER103), preserved here. First-page/follow-page metadata beyond physical geometry, section types and page-style chains still need source comparison. Pinned RTF loses direct page-after/page-both without section metadata and column breaks in this one-column/default-setting model (WRITER099); no synthetic `\\page` is added on export. |
+
+The Markdown writer now follows pinned `OutMarkdown_SwTextNode` paragraph spacing:
+every nonempty body paragraph, including adjacent list items and code-block
+paragraphs, gets a preceding blank line after the first node; empty paragraphs
+write their own newline; tables write a leading separator even at the start of
+the body. The reader keeps one document-owned list across the single blank line
+emitted between loose list items. An empty leading preformatted paragraph can
+leave an unmatched closing fence under the pinned source conditions (WRITER116).
+
+Markdown byte import now rejects an empty stream before replacing the document,
+as pinned `SwMarkdownParser::CallParser` does. The pinned Markdown reader
+normally receives the thread text encoding from `SwAsciiOptions::Reset()`;
+only an explicitly unknown encoding enters `SvStream::DetectEncoding()`.
+The browser default remains UTF-8, and the nondefault encoding option, ICU
+detector and full byte-stream differential behavior remain open (WRITER117).
+
+The Markdown reader currently implements only selected md4c callback outcomes, including
+backslash and whitespace hard breaks, soft breaks, thematic-line blocks, recognized
+entity omission and null-character omission. The
+upstream build uses md4c 0.5.3 (`external/md4c`, `download.lst`); its parser
+source is not vendored here. Setext headings, indented code and multiline
+quotations were added to the local subset, but complete md4c syntax and
+callback parity are **not yet established**. Do not mark this slice complete
+from the existing round-trip tests alone.
+
+The registry check covers repository inventory, not behavioral parity of these
+filters. Closure requires explicit tests of each applicable row against the
+available native model and source decisions for unavoidable format loss.
+
+RTF highlight export now follows pinned
+`RtfAttributeOutput::OutputCharHighlight` and
+`msfilter::util::TransColToIco`: the fixed 16-color Word palette takes precedence
+over document-added colors, and nonpalette colors use the source chromatic-scheme
+and RGB-error search. A transparent highlight writes index zero; a direct
+automatic character color writes `\\cf0`. RTF import resolves the emitted
+palette index through the source-ordered color table, so nonpalette highlight
+colors are quantized on round trip by the format. The current Writer attribute
+pool now owns `RES_CHRATR_HIGHLIGHT` as the pinned `SvxBrushItem`, replacing the
+earlier string-item shortcut across ranges, paragraph styles, UNO, ODT and UI.
+The browser worker codec preserves the brush's complete packed color word.
+RTF has no alpha color-table field, so it writes the native RGB channels and
+uses the pinned palette conversion for a partially transparent highlight.
+
+RTF underline dispatch now follows pinned
+`sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx` and
+`rtfdispatchflag.cxx` for the represented style keywords, and
+`sw/source/filter/ww8/rtfattributeoutput.cxx` for style emission. The
+`RES_CHRATR_WORDLINEMODE` item carries `\ulw` through native text hints and
+paragraph styles. Focused cases cover every supported keyword, style ancestry,
+group restoration and export/import round trips. `\\ulcN` also follows the
+pinned source color-table index, including index 0 for the automatic color and
+the sixteen fixed Word palette entries before document colors;
+the existing browser item codec preserves the native underline color across
+worker snapshots. The source's `NEEDSWORK` observation about underline color
+remains unverified (WRITER118), as do the other RTF rows listed above.
+
+RTF table `\\cellx` boundaries now use the pinned
+`AttributeOutputBase::GetTablePageSize` / `SwWriteTable::GetAbsWidthRatio`
+contract: the denominator is the table frame width, not the sum of cell widths.
+An absolute-width table retains the authored cell boundaries; a full-width or
+percentage table scales them against the resolved page text width in the
+current document model. Focused tests cover both paths with a row whose cells
+do not sum to the table frame width. The desktop layout rectangle, HTML table
+layout branch and expanded nested/merged table graph are outside the current
+portable model; remaining represented table properties still need the matrix
+audit above.
+
+RTF paragraph margins now emit both physical `\\li`/`\\ri` and logical
+`\\lin`/`\\rin` controls as pinned `FormatTextLeftMargin` and
+`FormatRightMargin` do. The reader accepts either pair for the represented
+left/right margin items. Pinned `rtfdispatchvalue.cxx` also inserts a direct
+zero first-line indent on `\\li` only when no earlier direct `\\fi` exists;
+the local style and body paths retain that ordering. Source-level bidi
+resolution of distinct physical and logical values remains outside the
+current direction-less paragraph model.
+
+RTF paragraph adjustment now reads the native `SvxAdjustItem` rather than its
+four-value UI projection. The pinned `ParaAdjust` emits `\\qd` when block
+alignment also distributes the last line, and the pinned `rtfdispatchflag.cxx`
+maps incoming `\\qd` to OOXML distribute, which `DomainMapper` applies as
+block alignment plus block last-line adjustment. Body paragraphs and named
+stylesheet entries preserve that independent native last-line value; a direct
+`\\qj` replaces it with ordinary block alignment.
+
+RTF paragraph-style references now use the represented `MSWordStyles` table:
+fifteen reserved Word slots, Standard in slot zero, Heading 1–9 in slots 1–9,
+then all other materialized document collections in creation order, with the
+source 4091-style limit. The current core exposes Standard as its first
+collection and has no separate hidden root collection to skip. Export carries
+`\\sbasedon` and `\\snext`; import creates owners before resolving these links
+and applies base definitions before descendants, including forward references.
+The represented built-in Word names and source `(WW)` suffix removal and ASCII
+case-insensitive collision allocation are carried by `wrtw8sty.ts`. Standard's
+native settings survive through the Word name `Normal`.
+
+Pinned `createStyleProperties` ignores zero first/left/right indents in style
+definitions without `\\sbasedon`, but keeps the same explicit zero fields when
+a base is specified. The local reader preserves this direct-item distinction.
+The rest of `RTFSprms::cloneAndDeduplicate` and all style-property families
+remain open; the style row is not closed by these graph and name tests alone.
+
+The imported style-name path now uses the source
+`StyleSheetTable::ConvertStyleName` boundary, including its complete pinned
+437-key name map, recognition flag, case-sensitive input lookup, reserved
+Writer target names and repeated `(WW)` suffix behavior. Native owners are
+selected by the converted exact name; a slug match alone no longer converts
+case-distinct user names to built-ins. Tests cover legacy aliases such as
+`BodyText` and `Footnote Text`, a user `Standard` or `Text body`, and parent
+references between converted user names. The exporter's inverse builtin-name
+table remains within `MSWordStyles`, matching the source module boundary.

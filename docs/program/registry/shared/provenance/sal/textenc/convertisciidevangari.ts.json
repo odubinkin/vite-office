@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertisciidevangari.ts",
+    "upstreamPath": "sal/textenc/convertisciidevangari.cxx",
+    "localSymbols": [
+      "ImplConvertIsciiDevanagariToUnicode",
+      "ImplCreateIsciiDevanagariToUnicodeContext",
+      "ImplResetIsciiDevanagariToUnicodeContext",
+      "ImplDestroyIsciiDevanagariToUnicodeContext",
+      "IsciiDevanagariToUnicodeContext"
+    ],
+    "upstreamSymbols": [
+      "ImplConvertIsciiDevanagariToUnicode",
+      "ImplCreateIsciiDevanagariToUnicodeContext",
+      "ImplResetIsciiDevanagariToUnicodeContext",
+      "ImplDestroyIsciiDevanagariToUnicodeContext",
+      "IsciiDevanagariToUnicode"
+    ],
+    "preservedResponsibilities": [
+      "Pinned contextful ISCII Devanagari conversion, compound nukta/halant rules and bad-input actions. The reverse Unicode-to-ISCII converter is outside the RTF import path."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-ISCII reverse conversion is not used by the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.ts",
+          "marker": "ImplConvertIsciiDevanagariToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.test.ts",
+          "marker": "maps pinned ISCII base, nukta and halant combinations"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertisciidevangari.cxx",
+          "marker": "ImplConvertIsciiDevanagariToUnicode"
+        }
+      ]
+    }
+  }
+}

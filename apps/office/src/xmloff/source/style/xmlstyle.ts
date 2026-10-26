@@ -441,6 +441,26 @@ function importParagraphProperties(
     attributes.get(XMLToken.TEXT_NUMBER_LINES),
     "paragraph line-number participation",
   );
+  const joinBorder = importOptionalBoolean(
+    attributes.get(XMLToken.STYLE_JOIN_BORDER),
+    "paragraph border connection",
+  );
+  const borders = Object.fromEntries(
+    (
+      [
+        ["borderTop", XMLToken.FO_BORDER_TOP],
+        ["borderBottom", XMLToken.FO_BORDER_BOTTOM],
+        ["borderLeft", XMLToken.FO_BORDER_LEFT],
+        ["borderRight", XMLToken.FO_BORDER_RIGHT],
+        ["borderLineWidthTop", XMLToken.STYLE_BORDER_LINE_WIDTH_TOP],
+        ["borderLineWidthBottom", XMLToken.STYLE_BORDER_LINE_WIDTH_BOTTOM],
+        ["borderLineWidthLeft", XMLToken.STYLE_BORDER_LINE_WIDTH_LEFT],
+        ["borderLineWidthRight", XMLToken.STYLE_BORDER_LINE_WIDTH_RIGHT],
+      ] as const
+    )
+      .map(([key, token]) => [key, attributes.get(token)] as const)
+      .filter((entry) => entry[1] !== null),
+  );
   const result: XMLParagraphImportProperties = {
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(autoTextIndent === undefined ? {} : { autoTextIndent }),
@@ -461,6 +481,8 @@ function importParagraphProperties(
     ...(breakBefore === undefined ? {} : { breakBefore }),
     ...(breakAfter === undefined ? {} : { breakAfter }),
     ...(countLineNumbers === undefined ? {} : { countLineNumbers }),
+    ...(joinBorder === undefined ? {} : { joinBorder }),
+    ...borders,
   };
   return Object.keys(result).length === 0 ? undefined : result;
 }

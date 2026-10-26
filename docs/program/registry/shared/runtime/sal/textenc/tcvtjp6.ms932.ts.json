@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtjp6.ms932.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtjp6.ms932.ts#aMS932UniLeadTab",
+        "vendor/libreoffice-reference/sal/textenc/tcvtjp6.tab#aMS932UniLeadTab",
+        "apps/office/src/sal/textenc/tcvtmb.test.ts#maps MS-932 single bytes"
+      ],
+      "justification": "Pinned MS-932 lead, reverse-high, EUDC and complete converter aggregates. Full multibyte SAL codec parity and compiled upstream differential remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aMS932UniLeadTab",
+        "aMS932DBCSHighTab",
+        "aImplSJISDBCSEUDCTab",
+        "aImplMS932DBCSCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtjp6.tab",
+      "upstreamSymbols": [
+        "aMS932UniLeadTab",
+        "aMS932DBCSHighTab",
+        "aImplSJISDBCSEUDCTab",
+        "aImplMS932DBCSCvtData"
+      ]
+    }
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtest1.iso.ts",
+    "upstreamPath": "sal/textenc/tcvtest1.tab",
+    "localSymbols": [
+      "aImplISO88592ByteCvtData",
+      "aImplISO88593ByteCvtData",
+      "aImplISO88594ByteCvtData",
+      "aImplISO88595ByteCvtData",
+      "aImplISO88597ByteCvtData",
+      "aImplISO88599ByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplISO88592ByteCvtData",
+      "aImplISO88593ByteCvtData",
+      "aImplISO88594ByteCvtData",
+      "aImplISO88595ByteCvtData",
+      "aImplISO88597ByteCvtData",
+      "aImplISO88599ByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned six source-owned ISO-8859 tables, reverse tables and byte-converter aggregates from tcvtest1.tab."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtest1.iso.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The six source-owned ISO-8859 tables are split from the larger pinned tcvtest1.tab owner to keep TypeScript modules below the repository file-size limit while retaining the original data and aggregate contracts."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtest1.iso.ts",
+          "marker": "aImplISO88592ByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL ASCII, ISO-8859, and KOI8 code page"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab",
+          "marker": "aImplISO88592ByteCvtData"
+        }
+      ]
+    }
+  }
+}

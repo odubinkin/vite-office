@@ -1,3 +1,4 @@
+import { SwParaConnectBorderItem } from "../para/paratr";
 /** @fileoverview Consumed SwUnoCursorHelper property and CR insertion contracts from pinned unocrsrhelper.cxx; canonical nodes/items remain the only state. */
 import { StylePool } from "../../../../svl/source/items/stylepool";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
@@ -221,6 +222,8 @@ export function putItem(item: SfxPoolItem, entry: SwUnoPropertyEntry, value: Any
     if (!copy.PutValue(value, entry.member)) illegal("Invalid underline value");
     return copy;
   }
+  if (copy instanceof SwParaConnectBorderItem)
+    return new SwParaConnectBorderItem(scalar(value, "bool") as boolean);
   if (copy instanceof SfxBoolItem) {
     if (!copy.PutValue(value, entry.member)) illegal("Expected bool");
     return copy;

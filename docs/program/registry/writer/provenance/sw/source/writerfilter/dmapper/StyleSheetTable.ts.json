@@ -14,6 +14,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts",
           "marker": "StyleSheetTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.test.ts",
+          "marker": "source builtin and reserved-name rules"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "imports source builtin aliases"
         }
       ],
       "upstream": [
@@ -32,6 +40,10 @@
         {
           "path": "sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
           "marker": "StyleSheetTable::lcl_entry"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/StyleSheetTable.cxx",
+          "marker": "StyleSheetTable::ConvertStyleName"
         }
       ]
     },
@@ -48,11 +60,13 @@
       "StyleSheetTable::lcl_entry"
     ],
     "preservedResponsibilities": [
-      "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending."
+      "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending.",
+      "Preserves the complete pinned case-sensitive Word style-name map, recognized-builtin flag, reserved Writer target names and repeated (WW) suffix behavior."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",
-      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW."
+      "DOCX full model import/export, shell and UI integration remain in progress in V4DQJW.",
+      "The rest of the desktop document mapper style table, property conversion and document APIs are outside this value boundary."
     ]
   }
 }

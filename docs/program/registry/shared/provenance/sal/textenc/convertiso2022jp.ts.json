@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/convertiso2022jp.ts",
+    "upstreamPath": "sal/textenc/convertiso2022jp.cxx",
+    "localSymbols": [
+      "ImplConvertIso2022JpToUnicode",
+      "ImplCreateIso2022JpToUnicodeContext",
+      "ImplResetIso2022JpToUnicodeContext",
+      "ImplDestroyIso2022JpToUnicodeContext",
+      "ImplIso2022JpToUnicodeContext"
+    ],
+    "upstreamSymbols": [
+      "ImplConvertIso2022JpToUnicode",
+      "ImplCreateIso2022JpToUnicodeContext",
+      "ImplResetIso2022JpToUnicodeContext",
+      "ImplDestroyIso2022JpToUnicodeContext",
+      "ImplIso2022JpToUnicodeContext"
+    ],
+    "preservedResponsibilities": [
+      "Pinned ISO-2022-JP text-to-Unicode state transitions, JIS X 0208 lookup, streaming context and SAL bad-input handling for RTF code page 50220."
+    ],
+    "omittedResponsibilities": [
+      "Unicode-to-ISO-2022-JP reverse conversion is not used by the current Writer RTF import path."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022jp.ts",
+          "marker": "ImplConvertIso2022JpToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.test.ts",
+          "marker": "decodes JIS Roman"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022jp.cxx",
+          "marker": "ImplConvertIso2022JpToUnicode"
+        }
+      ]
+    }
+  }
+}

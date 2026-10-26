@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtarb1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtarb1.ts#aImplMS1255ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtarb1.tab#aImplMS1255ByteCvtData",
+        "apps/office/src/sal/textenc/tcvtarb1.ts#aImplIBM862ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtarb1.tab#aImplIBM862ByteCvtData"
+      ],
+      "justification": "Pinned Windows-1255/1256 forward and reverse tables and byte-converter aggregates. Broader SAL codec parity remains unverified. Adds pinned IBM 862, 864 byte-converter data for native RTF decoding. Also selects pinned ISO-8859-6 and ISO-8859-8 data.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplMS1255ByteCvtData",
+        "aImplMS1256ByteCvtData",
+        "aImplIBM862ByteCvtData",
+        "aImplIBM864ByteCvtData",
+        "aImplISO88596ByteCvtData",
+        "aImplISO88598ByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtarb1.tab",
+      "upstreamSymbols": [
+        "aImplMS1255ByteCvtData",
+        "aImplMS1256ByteCvtData",
+        "aImplIBM862ByteCvtData",
+        "aImplIBM864ByteCvtData",
+        "aImplISO88596ByteCvtData",
+        "aImplISO88598ByteCvtData"
+      ]
+    }
+  }
+}

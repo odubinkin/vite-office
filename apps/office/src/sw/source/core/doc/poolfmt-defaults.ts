@@ -2,7 +2,7 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
-import { createWriterTextColorItem } from "../attr/swatrset";
+import { createWriterTextColorItem, createWriterHighlightItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import { SvxTabStopItem, SvxTabStop } from "../../../../editeng/inc/tstpitem";
@@ -12,7 +12,14 @@ import {
   SvxFirstLineIndentItem,
   SvxTextLeftMarginItem,
 } from "../../../../editeng/inc/lrspitem";
-import { SvxRightMarginItem, SvxULSpaceItem } from "../../../../editeng/source/items/frmitems";
+import {
+  SvxBoxItem,
+  SvxBoxItemLine,
+  SvxRightMarginItem,
+  SvxULSpaceItem,
+} from "../../../../editeng/source/items/frmitems";
+import { SvxBorderLine, SvxBorderLineStyle } from "../../../../editeng/source/items/borderline";
+import { COL_GRAY } from "../../../../tools/inc/color";
 import {
   SvxFontHeightItem,
   SvxFontItem,
@@ -21,7 +28,6 @@ import {
 } from "../../../../editeng/source/items/textitem";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import {
   RES_CHRATR_CJK_FONT,
   RES_CHRATR_CJK_FONTSIZE,
@@ -31,7 +37,6 @@ import {
   RES_CHRATR_CTL_FONTSIZE,
   RES_CHRATR_CTL_POSTURE,
   RES_CHRATR_CTL_WEIGHT,
-  RES_CHRATR_HIGHLIGHT,
   RES_CHRATR_FONT,
   RES_CHRATR_FONTSIZE,
   RES_CHRATR_POSTURE,
@@ -47,9 +52,11 @@ import {
   RES_UL_SPACE,
   RES_KEEP,
   RES_LINENUMBER,
+  RES_BOX,
 } from "../../../inc/hintids";
 import { getDefaultFontSelection, getWriterDefaultFontLanguage } from "./default-font";
 import type { SwTextFormatColl } from "./fmtcol";
+import { SwParaConnectBorderItem } from "../para/paratr";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 /** Direct item values created by one upstream pool-style switch branch. */
@@ -181,6 +188,8 @@ export function getWriterParagraphStyleDefaults(
       return { firstLineTwips: 0, lowerTwips: 283, rightTwips: 567, textLeftTwips: 567 };
     case "preformatted-text":
       return { fontRole: "fixed", fontSizeTwips: 10 * 20, lowerTwips: 0 };
+    case "horizontal-line":
+      return { fontSizeTwips: 120, lowerTwips: HTML_PARSPACE_TWIPS, lineNumber: false };
     default:
       return {};
   }
@@ -192,6 +201,12 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.id,
     collection.GetAttrSet().GetDoc().GetDocumentSettingManager().get("HTML_MODE"),
   );
+  if (collection.id === "horizontal-line") {
+    const box = new SvxBoxItem(RES_BOX);
+    box.SetLine(new SvxBorderLine(COL_GRAY, 3, SvxBorderLineStyle.DOUBLE), SvxBoxItemLine.BOTTOM);
+    collection.SetFormatAttr(box);
+    collection.SetFormatAttr(new SwParaConnectBorderItem(false));
+  }
   if (defaults.adjust !== undefined)
     collection.SetFormatAttr(new SvxAdjustItem(defaults.adjust, RES_PARATR_ADJUST));
   if (defaults.firstLineTwips !== undefined)
@@ -238,7 +253,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
     collection.SetFormatAttr(new SfxInt16Item(RES_PARATR_WIDOWS, defaults.widows));
   if (defaults.autoColor !== undefined) collection.SetFormatAttr(createWriterTextColorItem("auto"));
   if (defaults.transparentHighlight !== undefined)
-    collection.SetFormatAttr(new SfxStringItem(RES_CHRATR_HIGHLIGHT, "transparent"));
+    collection.SetFormatAttr(createWriterHighlightItem("transparent"));
   for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
     if (defaults.bold !== undefined)
       collection.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, which));

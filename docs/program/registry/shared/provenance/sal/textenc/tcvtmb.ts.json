@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtmb.ts",
+    "upstreamPath": "sal/textenc/tcvtmb.cxx",
+    "localSymbols": [
+      "ImplDBCSToUnicode",
+      "ImplEUCJPToUnicode"
+    ],
+    "upstreamSymbols": [
+      "ImplDBCSToUnicode",
+      "ImplEUCJPToUnicode"
+    ],
+    "preservedResponsibilities": [
+      "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order.",
+      "Ports ImplEUCJPToUnicode including JIS-0208/JIS-0212, SS2, SS3 and source status/consumption ordering."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.ts",
+          "marker": "ImplDBCSToUnicode"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "maps MS-932 single bytes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtmb.cxx",
+          "marker": "ImplDBCSToUnicode"
+        }
+      ]
+    }
+  }
+}

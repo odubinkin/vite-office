@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "writer.internal.split-markdown-table-row",
+    "modulePath": "apps/office/src/sw/source/filter/md/mdtab.ts",
+    "symbol": "splitMarkdownTableRow",
+    "classification": "local-infrastructure",
+    "capabilityId": "CAP-0121",
+    "description": "Separates represented Markdown table cells while preserving escaped and code-span pipe text."
+  }
+}

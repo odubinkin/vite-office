@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtutf7.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtutf7.ts#ImplUTF7ToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/tcvtutf7.cxx#ImplUTF7ToUnicode",
+        "apps/office/src/sal/textenc/tcvtutf7.test.ts#decodes direct bytes, shifted UTF-16 units and escaped plus"
+      ],
+      "justification": "Pinned UTF-7 text-to-Unicode state machine, Base64 indices, bad-input status and context contract. Upstream disables context restoration; preserved and documented. Reverse conversion lies outside RTF import. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplUTF7ToUnicode",
+        "ImplUTF7CreateUTF7TextToUnicodeContext",
+        "ImplUTF7ResetTextToUnicodeContext",
+        "ImplUTF7DestroyTextToUnicodeContext",
+        "ImplUTF7ToUCContextData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtutf7.cxx",
+      "upstreamSymbols": [
+        "ImplUTF7ToUnicode",
+        "ImplUTF7CreateUTF7TextToUnicodeContext",
+        "ImplUTF7ResetTextToUnicodeContext",
+        "ImplUTF7DestroyTextToUnicodeContext",
+        "ImplUTF7ToUCContextData"
+      ]
+    }
+  }
+}

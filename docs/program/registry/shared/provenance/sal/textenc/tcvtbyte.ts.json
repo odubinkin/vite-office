@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtbyte.ts",
+    "upstreamPath": "sal/textenc/tcvtbyte.cxx",
+    "localSymbols": [
+      "ImplSymbolToUnicode",
+      "ImplUnicodeToSymbol"
+    ],
+    "upstreamSymbols": [
+      "ImplSymbolToUnicode",
+      "ImplUnicodeToSymbol"
+    ],
+    "preservedResponsibilities": [
+      "Maps Symbol control bytes directly and printable bytes to U+F000 private-use units; reverses private-use units and accepted low-byte aliases with the native undefined-character helper and buffer contract."
+    ],
+    "omittedResponsibilities": [
+      "Other specialized byte converters in tcvtbyte.cxx remain outside this module."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtbyte.test.ts",
+          "marker": "maps Symbol controls directly"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtbyte.cxx",
+          "marker": "ImplSymbolToUnicode"
+        }
+      ]
+    }
+  }
+}

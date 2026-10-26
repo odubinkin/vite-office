@@ -48,6 +48,57 @@ export interface ImplByteConvertData {
   /** Original reverse extension entry count. */
   readonly mnToCharExCount: number;
 }
+
+/** Original private-use range entry for a double-byte encoding. */
+export interface ImplDBCSEUDCData {
+  readonly mnLeadStart: number;
+  readonly mnLeadEnd: number;
+  readonly mnTrail1Start: number;
+  readonly mnTrail1End: number;
+  readonly mnTrail2Start: number;
+  readonly mnTrail2End: number;
+  readonly mnTrail3Start: number;
+  readonly mnTrail3End: number;
+  readonly mnTrailCount: number;
+  readonly mnTrailRangeCount: number;
+  readonly mnUniStart: number;
+  readonly mnUniEnd: number;
+}
+
+/** Original single-byte value or lead-byte trail mapping. */
+export interface ImplDBCSToUniLeadTab {
+  readonly mnUniChar: number;
+  readonly mnTrailStart: number;
+  readonly mnTrailEnd: number;
+  readonly mpToUniTrailTab: readonly number[] | null;
+}
+
+/** Original reverse high-byte mapping, retained by the aggregate. */
+export interface ImplUniToDBCSHighTab {
+  readonly mnLowStart: number;
+  readonly mnLowEnd: number;
+  readonly mpToUniTrailTab: readonly number[] | null;
+}
+
+/** Original complete double-byte converter data contract. */
+export interface ImplDBCSConvertData {
+  readonly mpToUniLeadTab: readonly ImplDBCSToUniLeadTab[];
+  readonly mpToDBCSHighTab: readonly ImplUniToDBCSHighTab[];
+  readonly mpEUDCTab: readonly ImplDBCSEUDCData[] | null;
+  readonly mnEUDCCount: number;
+  readonly mnLeadStart: number;
+  readonly mnLeadEnd: number;
+  readonly mnTrailStart: number;
+  readonly mnTrailEnd: number;
+}
+
+/** Original EUC-JP aggregate binding both JIS forward and reverse tables. */
+export interface ImplEUCJPConvertData {
+  readonly mpJIS0208ToUniLeadTab: readonly ImplDBCSToUniLeadTab[];
+  readonly mpJIS0212ToUniLeadTab: readonly ImplDBCSToUniLeadTab[];
+  readonly mpUniToJIS0208HighTab: readonly ImplUniToDBCSHighTab[];
+  readonly mpUniToJIS0212HighTab: readonly ImplUniToDBCSHighTab[];
+}
 /** Original undefined-byte mapping;the other mask values select the replacement character here. @param character - Native unsigned byte. @param flags - Original unsigned32 flags. @returns Native Unicode unit. */
 export function ImplGetUndefinedUnicodeChar(character: number, flags: number): number {
   return (flags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK) ===

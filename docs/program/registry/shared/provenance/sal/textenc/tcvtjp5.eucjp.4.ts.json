@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtjp5.eucjp.4.ts",
+    "upstreamPath": "sal/textenc/tcvtjp5.tab",
+    "localSymbols": [
+      "aImplUniToDBCSTab_JIS0212_9C",
+      "aImplUniToDBCSTab_JIS0212_9D",
+      "aImplUniToDBCSTab_JIS0212_9E",
+      "aImplUniToDBCSTab_JIS0212_9F"
+    ],
+    "upstreamSymbols": [
+      "aImplUniToDBCSTab_JIS0212_9C",
+      "aImplUniToDBCSTab_JIS0212_9D",
+      "aImplUniToDBCSTab_JIS0212_9E",
+      "aImplUniToDBCSTab_JIS0212_9F"
+    ],
+    "preservedResponsibilities": [
+      "Pinned EUC-JP source-owned JIS reverse numeric tables and original pointer targets."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and complete SAL conversion factories remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtjp5.eucjp.4.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtjp5.tab source owner is split by EUC-JP responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtjp5.eucjp.4.ts",
+          "marker": "aImplUniToDBCSTab_JIS0212_9C"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tcvtmb.test.ts",
+          "marker": "decodes pinned EUC-JP ASCII"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtjp5.tab",
+          "marker": "aImplUniToDBCSTab_JIS0212_9C"
+        }
+      ]
+    }
+  }
+}

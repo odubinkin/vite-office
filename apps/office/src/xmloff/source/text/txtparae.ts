@@ -9,6 +9,7 @@ import { XMLTextNumRuleInfo } from "./XMLTextNumRuleInfo";
 import { SvxXMLNumRuleExport, type XMLListLevelExport } from "../style/xmlnume";
 import { exportTableBlocks, type XMLTextExportBlock } from "../table/XMLTableExport";
 import type { FontFaceNameResolver, OdfCharacterProperties } from "./txtparae.types";
+import type { OdfBoxProperties } from "../style/bordrhdl";
 export { ODF_NAMESPACES } from "../core/xmltoken";
 
 export type { OdfCharacterProperties } from "./txtparae.types";
@@ -46,7 +47,8 @@ export interface OdfTabStop {
 }
 
 /** Direct paragraph properties represented by the bounded Writer model. */
-export interface OdfParagraphProperties {
+export interface OdfParagraphProperties extends OdfBoxProperties {
+  readonly joinBorder?: boolean;
   readonly countLineNumbers?: boolean;
   readonly contextualSpacing?: boolean;
   readonly firstLineIndent?: number;
@@ -738,6 +740,18 @@ function parseParagraphPropertiesKey(key: string): OdfParagraphProperties {
 /** Emits supported ODF paragraph-property attributes. @param properties - Direct properties. @returns Attributes. */
 export function exportParagraphAttributes(properties: OdfParagraphProperties): string[] {
   return [
+    ...(properties.joinBorder === undefined
+      ? []
+      : [`style:join-border="${properties.joinBorder}"`]),
+    ...(["Top", "Bottom", "Left", "Right"] as const).flatMap((side) => {
+      const suffix = side.toLowerCase();
+      const border = properties[`border${side}`];
+      const width = properties[`borderLineWidth${side}`];
+      return [
+        ...(border === undefined ? [] : [`fo:border-${suffix}="${escapeXml(border)}"`]),
+        ...(width === undefined ? [] : [`style:border-line-width-${suffix}="${escapeXml(width)}"`]),
+      ];
+    }),
     ...(properties.firstLineIndent === undefined
       ? []
       : [`fo:text-indent="${exportOdfLength(properties.firstLineIndent)}"`]),

@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 5
+revision: 6
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T07:08:45.003Z"
+doc_updated_at: "2026-10-26T07:09:39.391Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -50,7 +50,12 @@ sections:
     4. Run git status --short --untracked-files=all in all three repositories; preserve the pre-existing Calc task README and ignore .DS_Store at all depths.
   Verification: "Pending execution."
   Rollback Plan: "Preserve original commit hashes in task findings; use ordinary revert commits if rollback is needed. Do not reset, force-push, or delete existing work."
-  Findings: "Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked main artifact: .agentplane/tasks/202610251549-J0Z0KF/README.md. Calc contains untracked .DS_Store and output/.DS_Store. User explicitly authorized the complete synchronization workflow and ignoring .DS_Store."
+  Findings: |-
+    Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked main artifact: .agentplane/tasks/202610251549-J0Z0KF/README.md. Calc contains untracked .DS_Store and output/.DS_Store. User explicitly authorized the complete synchronization workflow and ignoring .DS_Store.
+
+    - Observation: SSH pushes from writer and calc failed with Permission denied (publickey); main HTTPS fetch succeeded.
+      Impact: SSH publication is unavailable in the current environment.
+      Resolution: Use the same GitHub repository through its existing main HTTPS URL as a per-command transport override; do not change remotes or credentials.
 id_source: "generated"
 ---
 ## Summary
@@ -83,3 +88,7 @@ Preserve original commit hashes in task findings; use ordinary revert commits if
 ## Findings
 
 Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked main artifact: .agentplane/tasks/202610251549-J0Z0KF/README.md. Calc contains untracked .DS_Store and output/.DS_Store. User explicitly authorized the complete synchronization workflow and ignoring .DS_Store.
+
+- Observation: SSH pushes from writer and calc failed with Permission denied (publickey); main HTTPS fetch succeeded.
+  Impact: SSH publication is unavailable in the current environment.
+  Resolution: Use the same GitHub repository through its existing main HTTPS URL as a per-command transport override; do not change remotes or credentials.

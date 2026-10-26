@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvtscn6.ms936.ts",
+    "upstreamPath": "sal/textenc/tcvtscn6.tab",
+    "localSymbols": [
+      "aMS936UniLeadTab",
+      "aMS936DBCSHighTab",
+      "aImplMS936DBCSEUDCTab",
+      "aImplMS936DBCSCvtData"
+    ],
+    "upstreamSymbols": [
+      "aMS936UniLeadTab",
+      "aMS936DBCSHighTab",
+      "aImplMS936DBCSEUDCTab",
+      "aImplMS936DBCSCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned MS-936 lead, reverse-high, EUDC and complete DBCS converter aggregate."
+    ],
+    "omittedResponsibilities": [
+      "Other source-owned encodings and full SAL factory behavior remain outside this module."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/textenc/tcvtscn6.ms936.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The pinned tcvtscn6.tab source owner is split by MS-936 responsibility and repository file-size limits; numeric entries and source pointer relationships are retained."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvtscn6.ms936.ts",
+          "marker": "aMS936UniLeadTab"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "decodes pinned SAL MS-"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvtscn6.tab",
+          "marker": "aMS936UniLeadTab"
+        }
+      ]
+    }
+  }
+}

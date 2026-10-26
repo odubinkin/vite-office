@@ -42,6 +42,10 @@
         {
           "marker": "lcl_SetHeadline",
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
+        },
+        {
+          "marker": "case SwPoolFormatId::COLL_HTML_HR",
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentStylePoolManager.cxx"
         }
       ]
     },
@@ -55,6 +59,7 @@
       "Native typedAny font-height transport/presentation and real fullDocPool/document/UI/ODS remain pending."
     ],
     "preservedResponsibilities": [
+      "Materializes the pinned COLL_HTML_HR pool branch with a gray double bottom border, disconnected paragraph borders, 120-twip script font size, HTML paragraph spacing and excluded line numbering.",
       "Applies exact supported twip sizes, paragraph spacing, alignment, indents, and synchronized Western/CJK/CTL defaults from the upstream pool-style switch.",
       "Iteration179 removes direct React grid/dialog table graph mutation. The inherited table editing shell groups the existing paragraph split and numeric SwUndoInsTable; native sections insert before body cursor and Redo reconstructs a new graph. SwDoc owns naming, FULL65535 reference geometry and represented flags/styles, preserving header styling independently of repetition. Actual core/mounted/Chromium acceptance covers collapsed direct-body0/middle/end and history. Single-inheritance source-unit split adds native table operations to existing numbering shell without forwarding. Browser border choices remain a bounded autoformat argument; native full frame/item formats, per-edge border objects, context font propagation, table split layout/ODT persistence, selection-to-table,nested tables,redlines,frames,Repeat and complete core/UI parity remain unverified. Prior267 semantic states/defaults/classifications/evidence and registered I/O/recovery exceptions preserved.",
       "CorrectionQJ0FFB: original SvxRightMarginItem now owns typed double/signed16 SvxIndentValue and independent unsigned16 proportion under lrspitem.hxx; default/value/copy, stable borrowed member, by-value setters, contextual/fixed/variable resolution, Clone/equality, metric scaling and represented UNO0/5/7/14 match pinned source. frmitems.ts exports the same native class without a wrapper; existing paragraph/style/ODF/shell TWIP callers author native measures explicitly. Existing browser scalar integer TWIP/default100 wire and numeric coercion/rejection remain at the boundary; newly unrepresented font/proportion/fractional states reject without flattening. Full rich right-margin graph transport, font-context UI projection, remaining left/first-line native ownership, hash/presentation/full UNO/VCL remain unverified. Historical metadata statuses/defaults/classifications and registered IO/recovery exceptions retained. Verification pending task202610101401-QJ0FFB; cadence2/10 after N337G1.",

@@ -40,7 +40,7 @@ export { getUniqueDocumentTitle as getUniqueWriterTitle } from "../../../framewo
 
 /** Derives the browser title represented by a supported imported filename. @param filename - Computer filename. @returns Extension-free title. */
 export function getImportedWriterTitle(filename: string): string {
-  return filename.replace(/\.(odt|txt)$/i, "") || "Imported document";
+  return filename.replace(/\.(odt|txt|rtf|md|markdown)$/i, "") || "Imported document";
 }
 
 /** Saves a dirty Writer model, or immediately persists a newly imported nonempty document. */

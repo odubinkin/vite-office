@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/convertiso2022jp.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/convertiso2022jp.ts#ImplConvertIso2022JpToUnicode",
+        "vendor/libreoffice-reference/sal/textenc/convertiso2022jp.cxx#ImplConvertIso2022JpToUnicode",
+        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes JIS Roman"
+      ],
+      "justification": "Pinned ISO-2022-JP text-to-Unicode states, JIS X 0208 table lookup, context, incomplete-input behavior and SAL bad-input actions. Reverse conversion is outside RTF import. Compiled upstream differential remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImplConvertIso2022JpToUnicode",
+        "ImplCreateIso2022JpToUnicodeContext",
+        "ImplResetIso2022JpToUnicodeContext",
+        "ImplDestroyIso2022JpToUnicodeContext",
+        "ImplIso2022JpToUnicodeContext"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/convertiso2022jp.cxx",
+      "upstreamSymbols": [
+        "ImplConvertIso2022JpToUnicode",
+        "ImplCreateIso2022JpToUnicodeContext",
+        "ImplResetIso2022JpToUnicodeContext",
+        "ImplDestroyIso2022JpToUnicodeContext",
+        "ImplIso2022JpToUnicodeContext"
+      ]
+    }
+  }
+}

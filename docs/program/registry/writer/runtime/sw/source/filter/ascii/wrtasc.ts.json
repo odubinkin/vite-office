@@ -20,7 +20,7 @@
         "vendor/libreoffice-reference/sw/source/filter/ascii/wrtasc.cxx#SwASCWriter::WriteStream",
         "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts#native clipboard breaks"
       ],
-      "justification": "Iteration187 removes synthetic ASCII selection DTOs, complete-list-item counting and invented marker fallback. Actual SwASCWriter iterates SwPaM/SwNodes and OutASC_SwTextNode uses native original-node span, start offsets, export-numbering flag, GetNumString, visibility, numbering margin/tab and default bullet configuration. One list plus ordinary paragraph and partial last paragraph labels now follow native selection behavior; same-node and later-start labels remain suppressed. Native numbering defaults and supported twip calculations are covered on actual core owners, mounted body/cell UI and Chromium copy/history. HTML ownership is retained. Full ASCII attributes/fields/redlines/copied table topology/rings/options, compatibility flag beyond native false default, desktop environment overrides and broad core/UI parity remain unverified; all prior states/defaults/classes/evidence/responsibilities and conscious save/open/recovery deviations are preserved.",
+      "justification": "SwASCWriter retains native SwPaM selection output and now serializes full body text and table rows through the Writer shell. Full-document output preserves original numbering and final line rules; WriteTable follows upstream tab-separated cells, intra-cell paragraph breaks and row terminators. Complete ASCII attributes/fields/redlines, clipboard table topology, rings/options, desktop environment overrides and broad core/UI parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "SwASCWriter"

@@ -1,4 +1,12 @@
 /** @fileoverview Original include/rtl/ustring.h C declaration boundary owned by the SAL library. */
+import * as cvt from "./textcvt.h";
+
+/** Original best-effort OString-to-OUString conversion flags. */
+export const OSTRING_TO_OUSTRING_CVTFLAGS =
+  cvt.RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE |
+  cvt.RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_DEFAULT |
+  cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_DEFAULT;
+
 export { rtl_ustr_reverseCompare_WithLength } from "../../rtl/ustring";
 export { rtl_ustr_asciil_reverseEquals_WithLength } from "../../rtl/ustring";
 

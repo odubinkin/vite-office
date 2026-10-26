@@ -20,6 +20,7 @@ const moduleNames = [
   "docmodel",
   "editeng",
   "external",
+  "filter",
   "formula",
   "framework",
   "i18nlangtag",
@@ -86,6 +87,8 @@ const allowedEdges = new Map([
     ]),
   ],
   ["external", new Set()],
+  // Native Library_msfilter uses Tools colors for the Word highlight palette.
+  ["filter", new Set(["tools"])],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
   ["formula", new Set(["offapi", "sal", "svl"])],
@@ -229,6 +232,8 @@ const allowedEdges = new Map([
       // Library_sw links docmodel; real SvxColorItem transfer retains complex-color state.
       "docmodel",
       "editeng",
+      // Native Library_sw links msfilter for RTF color index conversion.
+      "filter",
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
       "i18nutil",

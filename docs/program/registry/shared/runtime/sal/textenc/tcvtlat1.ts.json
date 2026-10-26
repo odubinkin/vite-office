@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtlat1.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtlat1.ts#aImplIBM437ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab#aImplIBM437ByteCvtData",
+        "apps/office/src/sal/textenc/tcvtlat1.ts#aImplAPPLEICELANDByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab#aImplAPPLEICELANDByteCvtData",
+        "apps/office/src/sal/textenc/tcvtlat1.ts#aImplIBM860ByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtlat1.tab#aImplIBM860ByteCvtData"
+      ],
+      "justification": "Pinned IBM 437/850 and Apple Roman tables and aggregates are mapped for native RTF decoding; full codec registry parity remains unverified. Adds pinned IBM 860, 861, 863, 865 byte-converter data for native RTF decoding. Also selects pinned ISO-8859-15 data.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplIBM437ByteCvtData",
+        "aImplIBM850ByteCvtData",
+        "aImplAPPLEROMANByteCvtData",
+        "aImplAPPLEICELANDByteCvtData",
+        "aImplIBM860ByteCvtData",
+        "aImplIBM861ByteCvtData",
+        "aImplIBM863ByteCvtData",
+        "aImplIBM865ByteCvtData",
+        "aImplISO885915ByteCvtData"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sal/textenc/tcvtlat1.tab",
+      "upstreamSymbols": [
+        "aImplIBM437ByteCvtData",
+        "aImplIBM850ByteCvtData",
+        "aImplAPPLEROMANByteCvtData",
+        "aImplAPPLEICELANDByteCvtData",
+        "aImplIBM860ByteCvtData",
+        "aImplIBM861ByteCvtData",
+        "aImplIBM863ByteCvtData",
+        "aImplIBM865ByteCvtData",
+        "aImplISO885915ByteCvtData"
+      ]
+    }
+  }
+}

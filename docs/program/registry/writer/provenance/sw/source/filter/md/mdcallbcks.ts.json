@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/md/mdcallbcks.ts",
+    "upstreamPath": "sw/source/filter/md/mdcallbcks.cxx",
+    "localSymbols": [
+      "parseMarkdownSpans"
+    ],
+    "upstreamSymbols": [
+      "SwMarkdownParser::enter_span_callback"
+    ],
+    "preservedResponsibilities": [
+      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs; preserves the pinned empty entity/null-character text callbacks by omitting recognized HTML references and null characters while retaining unrecognized text and literal code spans. Relative hyperlink targets resolve against a supplied document base URL while fragment-only targets remain unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "imports headings"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "resolves Markdown hyperlink callbacks"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "maps hard and soft line breaks"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "omits entity and null-character callbacks"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
+          "marker": "SwMarkdownParser::enter_span_callback"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
+          "marker": "MD_TEXT_BR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
+          "marker": "MD_TEXT_ENTITY"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tcvtest1.koi.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tcvtest1.koi.ts#aImplKOI8RByteCvtData",
+        "vendor/libreoffice-reference/sal/textenc/tcvtest1.tab#aImplKOI8RByteCvtData",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts#decodes pinned SAL ASCII, ISO-8859, and KOI8 code page"
+      ],
+      "justification": "Pinned two source-owned KOI8 tables, reverse tables and converter aggregates are selected for native RTF byte decoding. Broader SAL codec parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "aImplKOI8RByteCvtData",
+        "aImplKOI8UByteCvtData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tcvtest1.tab",
+      "upstreamSymbols": [
+        "aImplKOI8RByteCvtData",
+        "aImplKOI8UByteCvtData"
+      ]
+    }
+  }
+}

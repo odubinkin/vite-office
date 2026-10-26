@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tables.ts",
+    "upstreamPath": "sal/textenc/tables.cxx",
+    "localSymbols": [
+      "getSingleByteConvertData",
+      "getTextToUnicodeData"
+    ],
+    "upstreamSymbols": [
+      "sal_getFullTextEncodingData"
+    ],
+    "preservedResponsibilities": [
+      "Selects the represented SAL single-byte byte-converter data and the distinct Symbol converter by rtl_TextEncoding; the full native encoding-data registry remains outside this slice.",
+      "Selects represented Apple Central European, Cyrillic, Greek and Icelandic converter data by rtl_TextEncoding.",
+      "Selects the pinned Apple Croatian, Romanian, Turkish and Ukrainian converter data by rtl_TextEncoding.",
+      "Selects thirteen additional source-owned IBM single-byte converters by rtl_TextEncoding for RTF decoding.",
+      "Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding.",
+      "Selects the pinned UTF-8 converter path for the RTL_TEXTENCODING_UTF8 value used by Writer RTF import.",
+      "Selects the pinned MS-932 DBCS aggregate and distinct native converter path for Writer RTF import.",
+      "Selects pinned MS-936, MS-949 and MS-950 DBCS aggregates for native Writer RTF byte decoding.",
+      "Selects the pinned JOHAB/MS-1361 DBCS aggregate for native Writer RTF byte decoding.",
+      "Selects the pinned EUC-KR aggregate and source-equivalent Apple Korean MS-949 aggregate by rtl_TextEncoding.",
+      "Selects the pinned GB2312 DBCS aggregate for EUC-CN RTF bytes.",
+      "Selects the pinned Apple Japanese, Simplified Chinese and Traditional Chinese DBCS aggregates for Writer RTF bytes.",
+      "Selects the pinned EUC-JP converter aggregate and distinct native conversion path for Writer RTF bytes.",
+      "Selects the pinned ISCII Devanagari contextual converter for Writer RTF code page 57002.",
+      "Selects the pinned UTF-7 converter path for RTF code page 65000.",
+      "Selects pinned ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220 and 50225."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tables.ts",
+          "marker": "getSingleByteConvertData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tables.cxx",
+          "marker": "sal_getFullTextEncodingData"
+        }
+      ]
+    }
+  }
+}

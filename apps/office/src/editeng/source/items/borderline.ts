@@ -10,7 +10,80 @@ export function roundBorderMetric(value: number, scale: number): number {
   return product < 0 ? -Math.floor(-product + 0.5) : Math.floor(product + 0.5);
 }
 
-/** Primitive browser transport state; theme colors and Word conversion are unrepresented. */
+/** Converts native twip width to the Word/RTF line-width contract from editeng borderline.cxx. */
+export function ConvertBorderWidthToWord(style: BorderLineStyle, width: number): number {
+  if (width === 0) return 0;
+  switch (style) {
+    case BorderLineStyle.SOLID:
+    case BorderLineStyle.DOTTED:
+    case BorderLineStyle.DASHED:
+    case BorderLineStyle.FINE_DASHED:
+    case BorderLineStyle.DASH_DOT:
+    case BorderLineStyle.DASH_DOT_DOT:
+      return width;
+    case BorderLineStyle.DOUBLE:
+    case BorderLineStyle.DOUBLE_THIN:
+      return Math.max(1, width / 3);
+    case BorderLineStyle.THINTHICK_MEDIUMGAP:
+    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
+    case BorderLineStyle.EMBOSSED:
+    case BorderLineStyle.ENGRAVED:
+      return Math.max(1, width / 2);
+    case BorderLineStyle.THINTHICK_SMALLGAP:
+    case BorderLineStyle.THICKTHIN_SMALLGAP:
+      return Math.max(1, width - 30);
+    case BorderLineStyle.THINTHICK_LARGEGAP:
+    case BorderLineStyle.THICKTHIN_LARGEGAP:
+      return Math.max(1, width - 45);
+    case BorderLineStyle.OUTSET:
+    case BorderLineStyle.INSET:
+      return Math.max(1, (width - 15) / 2);
+    case BorderLineStyle.NONE:
+      return 0;
+    default:
+      return 0;
+  }
+}
+
+/** Reconstructs a native twip width from Word/RTF border width and line style. */
+export function ConvertBorderWidthFromWord(
+  style: BorderLineStyle,
+  wordWidth: number,
+  wordLineStyle = 0,
+): number {
+  const width = wordWidth === 0 ? 15 : wordWidth;
+  switch (style) {
+    case BorderLineStyle.SOLID:
+      return wordLineStyle === 2 ? width * 2 : wordLineStyle === 5 ? Math.max(width, 1) : width;
+    case BorderLineStyle.DOTTED:
+    case BorderLineStyle.DASHED:
+    case BorderLineStyle.DASH_DOT:
+    case BorderLineStyle.DASH_DOT_DOT:
+      return width;
+    case BorderLineStyle.FINE_DASHED:
+      return width > 0 && width < 20 ? 20 : width;
+    case BorderLineStyle.DOUBLE:
+      return width * 3;
+    case BorderLineStyle.THINTHICK_MEDIUMGAP:
+    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
+    case BorderLineStyle.EMBOSSED:
+    case BorderLineStyle.ENGRAVED:
+      return width * 2;
+    case BorderLineStyle.THINTHICK_SMALLGAP:
+    case BorderLineStyle.THICKTHIN_SMALLGAP:
+      return width + 30;
+    case BorderLineStyle.THINTHICK_LARGEGAP:
+    case BorderLineStyle.THICKTHIN_LARGEGAP:
+      return width + 45;
+    case BorderLineStyle.OUTSET:
+    case BorderLineStyle.INSET:
+      return width * 2 + 15;
+    default:
+      return 0;
+  }
+}
+
+/** Primitive browser transport state; theme colors remain unrepresented. */
 export interface BorderLineRecord {
   readonly color: number;
   readonly width: number;

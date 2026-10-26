@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sal/textenc/tcvteas1.ts",
+    "upstreamPath": "sal/textenc/tcvteas1.tab",
+    "localSymbols": [
+      "aImplMS874ByteCvtData",
+      "aImplMS1258ByteCvtData"
+    ],
+    "upstreamSymbols": [
+      "aImplMS874ByteCvtData",
+      "aImplMS1258ByteCvtData"
+    ],
+    "preservedResponsibilities": [
+      "Pinned Windows-874 and 1258 forward and reverse tables, including two-byte Windows-1258 reverse entries, and byte-converter aggregates."
+    ],
+    "omittedResponsibilities": [
+      "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tcvteas1.ts",
+          "marker": "aImplMS1258ByteCvtData"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.test.ts",
+          "marker": "uses pinned SAL tables for Windows-1250 through 1258 code pages"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tcvteas1.tab",
+          "marker": "aImplMS1258ByteCvtData"
+        }
+      ]
+    }
+  }
+}

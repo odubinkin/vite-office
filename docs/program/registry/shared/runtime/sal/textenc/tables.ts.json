@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tables.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "rtl-text-conversion",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/textenc/tables.ts#getSingleByteConvertData",
+        "vendor/libreoffice-reference/sal/textenc/tables.cxx#sal_getFullTextEncodingData"
+      ],
+      "justification": "Selects represented SAL single-byte data and the distinct Symbol converter by rtl_TextEncoding; the full native encoding-data registry remains outside this slice. Broader SAL codec parity remains unverified. Selects the represented Apple Central European, Cyrillic, Greek and Icelandic data. Selects the pinned Apple Croatian, Romanian, Turkish and Ukrainian converter data. Selects thirteen additional pinned IBM single-byte converters. Selects pinned ASCII, ISO-8859 and KOI8 single-byte converter aggregates by rtl_TextEncoding. Selects pinned UTF-8 converter handling for the represented RTF code page 65001. Selects the pinned MS-932 DBCS aggregate for Writer RTF import. Selects pinned MS-936, MS-949 and MS-950 DBCS aggregates for native RTF decoding. Includes the pinned JOHAB/MS-1361 aggregate. Includes the distinct EUC-KR KSC5601 aggregate and source-equivalent Apple Korean MS-949 selection. Includes the pinned GB2312 aggregate for EUC-CN. Includes the three pinned Apple East Asian DBCS aggregates. Selects the pinned EUC-JP converter aggregate and distinct native conversion path for Writer RTF bytes. Selects the pinned ISCII Devanagari contextual converter for Writer RTF code page 57002. Selects the pinned UTF-7 decoder for RTF code page 65000. Selects pinned ISO-2022-JP/KR decoders for RTF code pages 50220 and 50225.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getSingleByteConvertData",
+        "getTextToUnicodeData"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tables.cxx",
+      "upstreamSymbols": [
+        "sal_getFullTextEncodingData"
+      ]
+    }
+  }
+}

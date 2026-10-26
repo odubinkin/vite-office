@@ -1,0 +1,68 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/md/wrtmd.ts",
+    "upstreamPath": "sw/source/filter/md/wrtmd.cxx",
+    "localSymbols": [
+      "SwMDWriter"
+    ],
+    "upstreamSymbols": [
+      "SwMDWriter::WriteStream"
+    ],
+    "preservedResponsibilities": [
+      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source per-node paragraph and table separators, source numbering labels and parent-prefix indentation, source neighboring-style fence decisions for preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions."
+    ],
+    "omittedResponsibilities": [
+      "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "round trips"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "closest built-in heading ancestor"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "source paragraph spacing around empty paragraphs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "one upstream Markdown hyperlink across differently formatted text runs"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/wrtmd.test.ts",
+          "marker": "serializes the style item set when a paragraph has no direct item set"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "SwMDWriter::WriteStream"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "OutFormattingChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "GetAnyFormatColl"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx",
+          "marker": "Paragraphs separate by empty lines"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/node.hxx",
+          "marker": "SwContentNode::GetSwAttrSet() const"
+        }
+      ]
+    }
+  }
+}
