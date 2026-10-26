@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/beans/NamedValue.idl",
+    "localSymbols": [
+      "NamedValue",
+      "cppu_detail_getUnoType_NamedValue"
+    ],
+    "upstreamSymbols": [
+      "NamedValue",
+      "Name",
+      "Value"
+    ],
+    "preservedResponsibilities": [
+      "Original generated NamedValue default/copy/member construction, assignment, stable Unicode/Any members, field equality and reverse member destruction use actual shared owners. Normal static two-member struct binding reuses original typelib registration and member addresses; actual Any/Sequence transport owns copied values. No alternate compound/default/interface registry is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/misc/sequenceashashmap.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "udkapi/com/sun/star/beans/NamedValue.idl",
+          "marker": "NamedValue"
+        }
+      ]
+    }
+  }
+}

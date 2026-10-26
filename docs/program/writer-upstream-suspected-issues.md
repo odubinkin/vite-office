@@ -1523,3 +1523,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/dmapper/TableManager.cxx`, `CellData::IsValid`, and `sw/source/writerfilter/dmapper/TableData.hxx`.
 - Observation: validity requires a nonnull stored start and a getStart call that does not throw RuntimeException. The returned Reference is discarded without a null check, and the stored end/open state is not examined. A nonnull start whose getStart returns an empty Reference is therefore accepted, including a cell with an empty end. This may intentionally test range accessibility; native producer reachability and document impact remain unverified.
 - Preservation: retain the start-only check, temporary destruction and catch-only RuntimeException. Actual component caller tests retain empty result/end acceptance, disposed/runtime failure rejection and foreign exception propagation. Do not add an end check, returned-pointer check or catch-all repair.
+
+### WRITER162 — shared sequence-map overloads reset and merge differently
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator<< overloads.
+- Observation: typed NamedValue/PropertyValue sequences clear the map and accept empty names or VOID values. Sequence<Any> instead merges without clearing, skips VOID elements, rejects empty names/values and retains earlier writes if a later element throws. An outer Any accepts only the typed named/property sequences, not Sequence<Any>. These are explicit implementation differences; downstream intent and document impact remain unverified.
+- Preservation: keep all overload distinctions, exact IllegalArgumentException messages/position-1 and partial mutation. Actual Any/Sequence tests cover both reset and merge paths and every rejection; do not normalize them to a transactional replace operation.
+
+### WRITER163 — shared map extraction preserves reused PropertyValue metadata
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
+- Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
+- Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.

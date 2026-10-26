@@ -1,0 +1,91 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-34803de3-61a5-4ecb-b79c-457948e23768",
+    "capabilityId": "CAP-34803de3-61a5-4ecb-b79c-457948e23768",
+    "suite": "shared",
+    "subsystem": "uno-property-sequence",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain original sequence overload reset/merge differences, partial writes, actual generated fields and Any ownership.",
+      "Preserve reused PropertyValue Handle/State and actual typed Any/Sequence compound lifetime."
+    ],
+    "capability": "Original SequenceAsHashMap property/name sequence and Any ownership contracts",
+    "gaps": [
+      "Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "comphelper/source/misc/sequenceashashmap.cxx",
+          "marker": "SequenceAsHashMap::operator<<"
+        },
+        {
+          "path": "udkapi/com/sun/star/beans/NamedValue.idl",
+          "marker": "NamedValue"
+        },
+        {
+          "path": "include/comphelper/sequenceashashmap.hxx",
+          "marker": "OUStringAndHashCode"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/unowriter/unowriter.cxx",
+          "marker": "comphelper::SequenceAsHashMap aMap(rEvent)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/comphelper/sequenceashashmap.hxx",
+          "marker": "getUnpackedValueOrDefault"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/sequenceashashmap.ts",
+          "marker": "SequenceAsHashMap"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/NamedValue.ts",
+          "marker": "NamedValue"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/sequenceashashmap.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER162"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-302"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    },
+    "scopeLimitations": [
+      "Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false.",
+      "Referenced unowriter native QA is an unported downstream map consumer. Local tests are source-backed actual-owner cases, not native full QA or compiled differential evidence."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "named-property-sequence-map-ownership"
+  }
+}

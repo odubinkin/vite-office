@@ -4066,3 +4066,15 @@ Pinned `docmodel/source/uno/UnoComplexColor.cxx`, `UnoComplexColor::resolveColor
 ### CALC-301 — Shared SvRef self-move drops its reference
 
 Pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`, releases the old object, reads the source pointer and clears the source without a self-move guard. Moving a reference into itself therefore leaves it empty and releases that reference; a separate alias can keep the pointee alive. This may be a permitted moved-from contract rather than a bug, and no Calc document failure is asserted. Preserve the release/read/clear order and empty result. The shared original normal and ASan/UBSan caller traces retain the remaining alias and verify the self-moved pointer is null. See also WRITER160.
+
+### CALC-302 — shared sequence-map overloads reset and merge differently
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator<< overloads.
+- Observation: typed NamedValue/PropertyValue sequences clear the map and accept empty names or VOID values. Sequence<Any> instead merges without clearing, skips VOID elements, rejects empty names/values and retains earlier writes if a later element throws. An outer Any accepts only the typed named/property sequences, not Sequence<Any>. These are explicit implementation differences; downstream intent and document impact remain unverified.
+- Preservation: keep all overload distinctions, exact IllegalArgumentException messages/position-1 and partial mutation. Actual Any/Sequence tests cover both reset and merge paths and every rejection; do not normalize them to a transactional replace operation.
+
+### CALC-303 — shared map extraction preserves reused PropertyValue metadata
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
+- Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
+- Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
