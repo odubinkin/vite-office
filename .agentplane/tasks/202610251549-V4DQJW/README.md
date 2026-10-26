@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 37
+revision: 38
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T17:53:36.098Z"
+doc_updated_at: "2026-10-26T18:12:07.800Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -168,6 +168,10 @@ sections:
     - Observation: Replaced generic PropertyMap stand-ins in actual paragraph contexts and style entries with native ParagraphPropertyMap and StyleSheetPropertyMap. Added original ParagraphProperties frame/list/Unicode/live-range state, TablePropertyMap valid-value side channel, copied interop sequences, imported ancestor merging and conditional table-style masks/border logic. Owner checks:53 tests/6 files; entire3 modules S659/659 B230/230 F143/143 L614/614 at unchanged100. OOXML regressions104 tests/6 files pass. Exact21 source blobs and commands: evidence/native-style-property-owners-checkpoint.json.
       Impact: Real producer type boundaries/defaults now match the consumed native owner hierarchy rather than a generic map. All eight table-value slots, frame resets retaining names/list/ranges, style copy subset, duplicate interop values, mask precedence and native border asymmetry are preserved. WRITER146-149 document suspected upstream logic/contract issues without fixing them. Full stylesheet XML/application, import/export orchestration and UI admission remain incomplete; no parity/default/capability promotion.
       Resolution: Typecheck/build/static/lint/format/dependencies/docs/tree/provenance/registry/size/routing pass;1500 runtime modules and0 semantic violations,doctor0 errors/1 preexisting hook warning. Native enum alias-only lint annotations are source-backed and do not change configuration; no coverage mocks/exclusions/threshold reductions. Commit cohesive owner refactor and evidence, leave task/goal active, and continue real stylesheet callbacks/application. Preserve file/autosave/recovery policies; no merge/integrate or completion claim.
+
+    - Observation: Native table value receiver checkpoint implemented and validated. Original MeasureHandler, CellMarginHandler and LatentStyleHandler use actual RTL/UNO owners; source-generated style table/row/cell/latent contexts preserve native IDs, kinds and ordering. WRITER150/151 preserve raw-margin carryover and fixed LTR direction.
+      Impact: Moves real Strict/Transitional ZIP styles XML into native value receivers. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parse/application, DomainMapper.table and production DOCX/XLSX import/export UI remain incomplete; no task acceptance or parity promotion.
+      Resolution: Command/results/evidence/scope: evidence/native-table-value-handlers-checkpoint.json records new3-owner100 coverage (S207/B55/F22/L206),104 OOXML regressions,72 shared RTL regressions, tools/app typecheck, build/static, scoped lint/format, native generation, dependency/docs/size/tree/provenance/registry/routing/diff checks. Doctor retains only pre-existing hook-shim warning. Keep task DOING and goal active; continue native style application, export and UI without another approval or full-suite run at this checkpoint.
 id_source: "generated"
 ---
 ## Summary
@@ -312,3 +316,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Replaced generic PropertyMap stand-ins in actual paragraph contexts and style entries with native ParagraphPropertyMap and StyleSheetPropertyMap. Added original ParagraphProperties frame/list/Unicode/live-range state, TablePropertyMap valid-value side channel, copied interop sequences, imported ancestor merging and conditional table-style masks/border logic. Owner checks:53 tests/6 files; entire3 modules S659/659 B230/230 F143/143 L614/614 at unchanged100. OOXML regressions104 tests/6 files pass. Exact21 source blobs and commands: evidence/native-style-property-owners-checkpoint.json.
   Impact: Real producer type boundaries/defaults now match the consumed native owner hierarchy rather than a generic map. All eight table-value slots, frame resets retaining names/list/ranges, style copy subset, duplicate interop values, mask precedence and native border asymmetry are preserved. WRITER146-149 document suspected upstream logic/contract issues without fixing them. Full stylesheet XML/application, import/export orchestration and UI admission remain incomplete; no parity/default/capability promotion.
   Resolution: Typecheck/build/static/lint/format/dependencies/docs/tree/provenance/registry/size/routing pass;1500 runtime modules and0 semantic violations,doctor0 errors/1 preexisting hook warning. Native enum alias-only lint annotations are source-backed and do not change configuration; no coverage mocks/exclusions/threshold reductions. Commit cohesive owner refactor and evidence, leave task/goal active, and continue real stylesheet callbacks/application. Preserve file/autosave/recovery policies; no merge/integrate or completion claim.
+
+- Observation: Native table value receiver checkpoint implemented and validated. Original MeasureHandler, CellMarginHandler and LatentStyleHandler use actual RTL/UNO owners; source-generated style table/row/cell/latent contexts preserve native IDs, kinds and ordering. WRITER150/151 preserve raw-margin carryover and fixed LTR direction.
+  Impact: Moves real Strict/Transitional ZIP styles XML into native value receivers. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parse/application, DomainMapper.table and production DOCX/XLSX import/export UI remain incomplete; no task acceptance or parity promotion.
+  Resolution: Command/results/evidence/scope: evidence/native-table-value-handlers-checkpoint.json records new3-owner100 coverage (S207/B55/F22/L206),104 OOXML regressions,72 shared RTL regressions, tools/app typecheck, build/static, scoped lint/format, native generation, dependency/docs/size/tree/provenance/registry/routing/diff checks. Doctor retains only pre-existing hook-shim warning. Keep task DOING and goal active; continue native style application, export and UI without another approval or full-suite run at this checkpoint.
