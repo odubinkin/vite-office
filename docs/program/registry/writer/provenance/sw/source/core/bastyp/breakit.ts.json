@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/bastyp/breakit.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/breakit.ts",
+          "marker": "SwBreakIt"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/breakit.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/breakit.cxx",
+          "marker": "SwBreakIt::GetRealScriptOfText"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/bastyp/breakit.cxx",
+    "localSymbols": [
+      "SwBreakIt",
+      "GetWriterTextUnits",
+      "g_pBreakIt"
+    ],
+    "upstreamSymbols": [
+      "SwBreakIt::GetRealScriptOfText",
+      "SwBreakIt::GetAllScriptsOfText"
+    ],
+    "preservedResponsibilities": [
+      "Original real-script weak-run and next-mark selection, raw UTF16 end adjustment, native backward/forward script services and all-script masks. Application data language borrows the existing configured-language boundary; process lifetime binds through module initialization."
+    ],
+    "omittedResponsibilities": [
+      "Native UNO BreakIterator factory, LanguageTag locale/forbidden caches, word/grapheme services and native startup/shutdown ownership remain unported. This is not a complete SwBreakIt or Application settings certificate."
+    ]
+  }
+}

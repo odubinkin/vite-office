@@ -1602,3 +1602,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::SetAttr(const SfxItemSet&, ...)`, default CHARFMT branch and final insertion count.
 - Observation: setting the document default character style invokes RstTextAttr and DontExpandFormat without incrementing the insertion counter. With no other inserted items, the node method returns false although existing character styles were removed or split and a boundary flag may have changed. This concerns the node-level result; document-level modified and undo behavior requires independent owner verification. This is a source-level trace, not compiled native evidence.
 - Preservation: retain the insertion-only counter and the original reset/boundary calls; do not replace this result with a generic mutation flag.
+
+
+### WRITER174 — Real-script lookup at a supplementary character's end can select the application script
+
+- Source: pinned `sw/source/core/bastyp/breakit.cxx`, `SwBreakIt::GetRealScriptOfText`, initial end-of-text decrement; `i18npool/source/breakiterator/breakiteratorImpl.cxx`, `beginOfScript` and `endOfScript`.
+- Observation: end-of-text lookup subtracts one UTF16 unit. For a single supplementary CJK character this lands on its low surrogate, which has weak classification. The backward weak-run search can advance beyond that offset after meeting the preceding strong scalar; neither direction then recovers the CJK script, so the result falls back to the application language's script. At offset zero the same text is Asian. This is a source-level trace, not compiled native evidence.
+- Preservation: keep the original code-unit decrement, unnormalized input offsets and backward-run advancement. Do not replace them with codepoint-aware caret adjustment.

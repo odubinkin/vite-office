@@ -1,6 +1,18 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { LANGUAGE_DONTKNOW, LanguageType } from "../../../../i18nlangtag/inc/lang";
+import {
+  SID_ATTR_CHAR_LANGUAGE,
+  SID_ATTR_CHAR_CJK_LANGUAGE,
+  SID_ATTR_CHAR_CTL_LANGUAGE,
+} from "../../../../editeng/inc/editids";
+import {
+  RES_CHRATR_LANGUAGE,
+  RES_CHRATR_CJK_LANGUAGE,
+  RES_CHRATR_CTL_LANGUAGE,
+} from "../../../inc/hintids";
 import { SdrItemPool } from "../../../../svx/source/svdraw/svdattr";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -352,6 +364,17 @@ export class SwAttrPool extends SfxItemPool {
           item.SetProp(value.prop, value.propUnit);
           return item;
         },
+        slot,
+      );
+    for (const [which, slot] of [
+      [RES_CHRATR_LANGUAGE, SID_ATTR_CHAR_LANGUAGE],
+      [RES_CHRATR_CJK_LANGUAGE, SID_ATTR_CHAR_CJK_LANGUAGE],
+      [RES_CHRATR_CTL_LANGUAGE, SID_ATTR_CHAR_CTL_LANGUAGE],
+    ] as const)
+      this.RegisterDefaultItem(
+        new SvxLanguageItem(LANGUAGE_DONTKNOW, which),
+        /** Restores the native unsigned16 language at the existing cloneable item boundary. @param value - Language identity. @returns Concrete language item. */
+        (value) => new SvxLanguageItem(LanguageType(Number(value)), which),
         slot,
       );
     for (const [which, slot] of [

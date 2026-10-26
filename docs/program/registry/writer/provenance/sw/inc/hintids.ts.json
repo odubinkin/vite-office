@@ -152,6 +152,14 @@
         {
           "path": "apps/office/src/sw/source/core/doc/markdown-content-operations.test.ts",
           "marker": "retains a solid native paragraph background"
+        },
+        {
+          "path": "apps/office/src/sw/inc/hintids.ts",
+          "marker": "RES_CHRATR_NOHYPHEN"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -249,7 +257,8 @@
       "RES_CHRATR_AUTOKERN",
       "RES_CNTNT",
       "POOLATTR_END",
-      "isDrawingLayerAttribute"
+      "isDrawingLayerAttribute",
+      "RES_CHRATR_NOHYPHEN"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE, RES_CHRATR_WEIGHT and the bounded RES_CHRATR_BEGIN, RES_CHRATR_POSTURE, RES_CHRATR_UNDERLINE contract remain intentionally omitted.",
@@ -283,7 +292,8 @@
       "Native Markdown callback prerequisites: text-only AppendTextNode follows AppendNode/MakeNewTextNode successor semantics (same collection, copied direct items excluding breaks/outline rule, no text hints, reset list restart/counting). DontExpandFormat transfers paragraph character items at EOF and updates eligible unlocked end-boundary flags. RES_BACKGROUND=115 supplies the native solid paragraph/frame brush and existing Worker codec. Three focused model tests cover successors, no format leakage and brush transfer. This does not certify structural nontext append, paragraph-insert undo/redlines/layout history or full native document parity.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "Added native DrawingLayer fill range to represented text-node and paragraph-style ranges, as in core/bastyp/init.cxx; character-style/automatic character ranges remain unchanged.",
-      "The portable admitted Which ranges include only registered fill style/color/transparency/slide-background values; unported gradient/bitmap/hatch items are not admitted or fabricated as defaults. Native global fill endpoint constants remain unchanged."
+      "The portable admitted Which ranges include only registered fill style/color/transparency/slide-background values; unported gradient/bitmap/hatch items are not admitted or fabricated as defaults. Native global fill endpoint constants remain unchanged.",
+      "Registers the three genuine language Which IDs in current text-node, paragraph-style and automatic-style ranges. NOHYPHEN has its original declaration only; its concrete item remains unregistered."
     ],
     "status": "mapped",
     "upstreamPath": "sw/inc/hintids.hxx",

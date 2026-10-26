@@ -1,6 +1,7 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import { GetTextNodeLanguage } from "./thints-language";
 import { InsertTextNodeHint } from "./thints-insert";
 import {
   SetTextNodeAttributes,
@@ -158,6 +159,10 @@ export class SwTextNode extends SwContentNode {
     this.listGeometryWins = value;
   }
 
+  /** Original language query over text/ranged styles and paragraph defaults. @param begin - Native offset. @param length - Native length. @param script - Explicit script or zero. @param noneIfNoHyphenation - Original hyphenation policy. @returns Native language identity. */
+  public GetLang(begin: number, length = 0, script = 0, noneIfNoHyphenation = false): number {
+    return GetTextNodeLanguage(this, begin, length, script, noneIfNoHyphenation);
+  }
   /** Returns text length in UTF-16 code units, matching Writer content indices. @returns UTF-16 length. */
   public Len(): number {
     return this.mText.length;
