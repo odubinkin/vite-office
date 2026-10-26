@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 43
+revision: 44
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T19:55:06.697Z"
+doc_updated_at: "2026-10-26T20:27:06.741Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -192,6 +192,10 @@ sections:
     - Observation: Implemented complete original CellColorHandler Form/Paragraph/Character paths,38 lexical shading cases,37 brush weights,37 character pattern mappings, independent foreground/fill theme transforms, non-clearing interop and actual UnoComplexColor Any lifetime. Added normal FillStyle type binding and original CT_Shd generator admission. Preserved and documented WRITER157..159.
       Impact: Real Strict/Transitional committed ZIP style-cell XML now reaches the shading receiver through existing relationship streams, OOXMLDocument, SAX and native factory resources. Resource output does not yet imply table/style/model application. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper orchestration and complete DOCX/XLSX/UI workflows remain pending; no fake table manager/comment-state provider.
       Resolution: Pass:253 related tests/20 files, two executable owners S407/B169/F21/L404 all100, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, native generation check, dependencies/docs/size/tree/provenance/registry, doctor/routing/diff. Evidence:native-cell-color-checkpoint.json with18 source blobs. Corrected generated count assertion and typed test XTheme reference; thresholds unchanged. Full suite not due; no merge/publication/completion.
+
+    - Observation: Implemented original tools SvRefBase/SvRef/make_ref and actual PropertyMap inheritance/virtual last-release destruction. Full unchanged ref.hxx/ref.cxx normal and ASan/UBSan traces match pure replay, including raw-pointer prvalue move selection, destructor reentrancy, self move and live count boundary without private mutation or post-lifetime inspection. WRITER160/CALC-301 retain self-move behavior.
+      Impact: Actual native intrusive aliases now retain cached/stored UNO values for PropertyMap, TablePropertyMap, ParagraphPropertyMap and first/next SectionPropertyMap until the last release. This supplies the ownership prerequisite for real table data/manager modules; existing raw carriers, TablePropertiesHandler integration and full DOCX/XLSX model/export/UI acceptance remain incomplete.
+      Resolution: Pass:238 related tests/19 files; both owners S452/B142/F115/L421 all100. Native write/check:15 complete original sources,12 successful commands,33/72/34/11 complete normal-sanitized-replay observations, empty runtime stderr. Tools/app typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry and doctor/routing/diff pass. Evidence:native-property-map-ref-checkpoint.json with13 blobs. Resolved validation limits recorded; no leak/ABI/full-QA claim. Full suite not due; no merge/publication/completion.
 id_source: "generated"
 ---
 ## Summary
@@ -360,3 +364,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Implemented complete original CellColorHandler Form/Paragraph/Character paths,38 lexical shading cases,37 brush weights,37 character pattern mappings, independent foreground/fill theme transforms, non-clearing interop and actual UnoComplexColor Any lifetime. Added normal FillStyle type binding and original CT_Shd generator admission. Preserved and documented WRITER157..159.
   Impact: Real Strict/Transitional committed ZIP style-cell XML now reaches the shading receiver through existing relationship streams, OOXMLDocument, SAX and native factory resources. Resource output does not yet imply table/style/model application. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper orchestration and complete DOCX/XLSX/UI workflows remain pending; no fake table manager/comment-state provider.
   Resolution: Pass:253 related tests/20 files, two executable owners S407/B169/F21/L404 all100, tools/app typecheck, final production build/static smoke, scoped ESLint/Prettier, native generation check, dependencies/docs/size/tree/provenance/registry, doctor/routing/diff. Evidence:native-cell-color-checkpoint.json with18 source blobs. Corrected generated count assertion and typed test XTheme reference; thresholds unchanged. Full suite not due; no merge/publication/completion.
+
+- Observation: Implemented original tools SvRefBase/SvRef/make_ref and actual PropertyMap inheritance/virtual last-release destruction. Full unchanged ref.hxx/ref.cxx normal and ASan/UBSan traces match pure replay, including raw-pointer prvalue move selection, destructor reentrancy, self move and live count boundary without private mutation or post-lifetime inspection. WRITER160/CALC-301 retain self-move behavior.
+  Impact: Actual native intrusive aliases now retain cached/stored UNO values for PropertyMap, TablePropertyMap, ParagraphPropertyMap and first/next SectionPropertyMap until the last release. This supplies the ownership prerequisite for real table data/manager modules; existing raw carriers, TablePropertiesHandler integration and full DOCX/XLSX model/export/UI acceptance remain incomplete.
+  Resolution: Pass:238 related tests/19 files; both owners S452/B142/F115/L421 all100. Native write/check:15 complete original sources,12 successful commands,33/72/34/11 complete normal-sanitized-replay observations, empty runtime stderr. Tools/app typecheck, production build/static, scoped ESLint/Prettier, dependencies/docs/size/tree/provenance/registry and doctor/routing/diff pass. Evidence:native-property-map-ref-checkpoint.json with13 blobs. Resolved validation limits recorded; no leak/ABI/full-QA claim. Full suite not due; no merge/publication/completion.
