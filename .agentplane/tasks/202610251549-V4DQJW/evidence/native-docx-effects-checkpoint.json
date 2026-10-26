@@ -1,0 +1,112 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "partial checkpoint, task and goal remain active; no parity/default/UI admission promotion",
+  "scope": "Native shared two-line/text and character rotation/blink items and DOCX effects/collected East Asian run attributes",
+  "sourceBlobs": {
+    "apps/office/src/editeng/inc/blinkitem.ts": "0ad5ad7d7250e67a4c0dd5dfd6c02050db5ce815",
+    "apps/office/src/editeng/inc/charrotateitem.ts": "2526b4a20bab64ed782217bd14a77843bdce8230",
+    "apps/office/src/editeng/inc/memberids.ts": "c345757229c3c12e61c0041ac590edcfbb6402ab",
+    "apps/office/src/editeng/inc/twolinesitem.ts": "3c4820d37c1322b95606763b10209188375b5b58",
+    "apps/office/src/editeng/source/items/text-layout-items.test.ts": "6c62342d0d291a9b1119c43b5fe5d37c41076e7e",
+    "apps/office/src/editeng/source/items/textitem.layout.ts": "100e49d4d7c13cde86f3b17da096da529ac46a7a",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts": "3d9a4f440aa3b2f74f1fca9fb99b6e54d0b16447",
+    "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "39709e6fc34c3b45084eb04993cd82265cc337e5",
+    "apps/office/src/tools/inc/degree.ts": "db7d46ab9040bd3e9d5c9620b3b3f5a1e0b5fdc6",
+    "docs/program/registry/shared/provenance/editeng/inc/blinkitem.ts.json": "728a36ac3a7d24509ea00ecdb8775f8d8d3aec9f",
+    "docs/program/registry/shared/provenance/editeng/inc/charrotateitem.ts.json": "087c7aaba126e722ce7de9dafe453598defe2a7a",
+    "docs/program/registry/shared/provenance/editeng/inc/memberids.ts.json": "21fe060482c9d75add95940ab4696455cba8d4f3",
+    "docs/program/registry/shared/provenance/editeng/inc/twolinesitem.ts.json": "64ff43c93b0c05b3676ba16bfcc0940f33a73596",
+    "docs/program/registry/shared/provenance/editeng/source/items/textitem.layout.ts.json": "d908d6fa971cfae32986370ea05374266cc829c9",
+    "docs/program/registry/shared/provenance/tools/inc/degree.ts.json": "aa80f1af1b0881cdc19bff9462a0de338faec21f",
+    "docs/program/registry/shared/runtime/editeng/inc/blinkitem.ts.json": "c18976462690219b353f9a5b9e0501009ab94f26",
+    "docs/program/registry/shared/runtime/editeng/inc/charrotateitem.ts.json": "e00a02e021ecc4762d578d86b1e049455b63fc1c",
+    "docs/program/registry/shared/runtime/editeng/inc/memberids.ts.json": "cbfa207946c41de84f486e09226a63de3f3a2000",
+    "docs/program/registry/shared/runtime/editeng/inc/twolinesitem.ts.json": "f7351739f4262dc0714770e82c00d4db66bcf09b",
+    "docs/program/registry/shared/runtime/editeng/source/items/textitem.layout.ts.json": "422e8f4e42bc25e8903c60353b614ad913cfc666",
+    "docs/program/registry/shared/runtime/tools/inc/degree.ts.json": "cfa16046ac601c836825e779b5a4085d845da5ec",
+    "docs/program/registry/writer/provenance/sw/source/filter/ww8/docxattributeoutput.ts.json": "85cbf193de429f6bb71dc2397651f6da1f7ad64d",
+    "docs/program/registry/writer/runtime/sw/source/filter/ww8/docxattributeoutput.ts.json": "ab69d73b1c9e3b244e5765d2229efbb15d1af309",
+    "docs/program/writer-upstream-suspected-issues.md": "7747935d767f17b8eefb4fb68f53940ef8cf4bd7"
+  },
+  "checks": {
+    "writerFilters": {
+      "command": "npm run test:writer -- src/sw/source/filter/ww8/ --maxWorkers=2",
+      "result": "pass",
+      "tests": 168,
+      "files": 12
+    },
+    "sharedItems": {
+      "command": "npm run test:shared -- src/editeng/source/items/text-layout-items.test.ts src/editeng/source/items/native-text-spacing.test.ts src/editeng/source/items/font-effects.test.ts src/editeng/source/items/strikeout-emphasis.test.ts --maxWorkers=2",
+      "result": "pass",
+      "tests": 22,
+      "files": 4
+    },
+    "coverage": {
+      "command": "npm run test:coverage -- src/editeng/source/items/text-layout-items.test.ts src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts src/sw/source/filter/ww8/docxattributeoutput.test.ts src/sw/source/filter/ww8/docxexport.fonts.test.ts --coverage.include=src/editeng/source/items/textitem.layout.ts --coverage.include=src/sw/source/filter/ww8/docxattributeoutput.ts --coverage.reportsDirectory=coverage/docx-character-effects --maxWorkers=2",
+      "result": "fail",
+      "testsPassed": 53,
+      "files": 4,
+      "threshold": 100,
+      "statements": "342/342",
+      "branches": "188/189",
+      "functions": "71/71",
+      "lines": "308/308",
+      "perFile": {
+        "apps/office/src/editeng/source/items/textitem.layout.ts": {
+          "statements": {
+            "covered": 97,
+            "total": 97
+          },
+          "branches": {
+            "covered": 69,
+            "total": 69
+          },
+          "functions": {
+            "covered": 29,
+            "total": 29
+          }
+        },
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": {
+          "statements": {
+            "covered": 245,
+            "total": 245
+          },
+          "branches": {
+            "covered": 119,
+            "total": 120
+          },
+          "functions": {
+            "covered": 42,
+            "total": 42
+          }
+        }
+      },
+      "coverageSha256": "9d8dd97fdf15d20901aa78c8440c5d9cc5afcd154e48487886376ecb20932f23",
+      "remaining": "Existing RunText branch at317 when impl_WriteRunText is false and previous>=32. No new executable owner is uncovered; no source mocks/exclusions/threshold reductions. Full coverage acceptance remains unmet."
+    },
+    "typecheck": "pass: npm run typecheck; final npm run typecheck:tools and build tsc",
+    "build": "pass; existing chunk-size warning",
+    "static": "pass",
+    "eslint": "pass: all9 authored source/test paths",
+    "prettier": "pass: all matched intentional paths",
+    "dependencies": "pass:1495 sources/7555 imports/200 edges",
+    "docs": "pass:3494 authored files",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "provenance": "pass:1496 modules",
+    "registry": "pass:340 capabilities/1496 modules/34 invariants/3396 records/0 semantic violations",
+    "size": "pass",
+    "hintIds": "pass:76 native identities",
+    "routing": "pass",
+    "doctor": "0 errors/1 existing hook-shim warning",
+    "diff": "pass"
+  },
+  "nativeEvidence": "char-width-narrowing-probe.json verifies only signed16 template narrowing on current C++ compiler; no full native DOCX differential claim",
+  "suspectedUpstreamIssue": "WRITER144 preserved signed16 width narrowing",
+  "remaining": [
+    "Native core pool registrations and browser value transport for new layout items",
+    "Text-node/style/undo array ownership, SwFormatPageDesc identity and native GetTextDirection",
+    "Character colors/themes/underline/language and paragraph/style/iterator/export orchestration",
+    "DOCX import/production UI and Calc XLSX work remain incomplete"
+  ],
+  "regressions": "No changes to recovery, primary save/open UI policy or autosave settings. Initial added test incorrectly left a native serializer mark open; corrected the test lifecycle, without serializer changes."
+}

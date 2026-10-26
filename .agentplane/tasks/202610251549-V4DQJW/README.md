@@ -4,7 +4,7 @@ title: "Implement Writer DOCX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 34
+revision: 35
 origin:
   system: "manual"
 depends_on:
@@ -39,7 +39,7 @@ events:
     to: "DOING"
     note: "Start: Implement the approved Writer DOCX pipeline using native OOXML values, DomainMapper text/style/table APIs and DocxExport ownership, then connect existing shell and file UI with focused verification."
 doc_version: 3
-doc_updated_at: "2026-10-26T16:06:50.978Z"
+doc_updated_at: "2026-10-26T16:47:10.814Z"
 doc_updated_by: "CODER"
 description: "User-approved second cohesive task: preserve pinned WriterFilter OOXML/DomainMapper import and DocxExportFilter/DocxExport ownership while supporting the existing Writer core slice, including paragraphs, runs, pooled formatting, styles, lists, tables, links and page properties where implemented. Integrate asynchronous shell filter routing, existing Open and download UI, errors/cancellation and primary ODT persistence. Refactor old workarounds in touched paths, record suspected upstream issues, provenance and related tests. No recovery/autosave product changes, network or publication."
 sections:
@@ -156,6 +156,10 @@ sections:
     - Observation: Correction to the preceding checkpoint stop note: the latest user instruction continue resumes work after the earlier user-managed merge; do not reinstate the previous pause. Source commit8879316c3931 has all10 paths matching the evidence blobs.
       Impact: Goal and Writer task remain active. The earlier checkpoint wording about stopping for another merge was an incorrect carryover from the superseded pause.
       Resolution: Continue native text-node style registration and undo lifetime integration under the approved task. No merge/integrate is authorized or performed.
+
+    - Observation: Implemented native two-line UTF16 brackets, signed Degree10 getters over unsigned16 text/character rotation storage, independent fit, blink, and ten DOCX effect/layout hooks with actual run sort/reset/detach. Writer filter regression168 tests/12 files and shared item regression22 tests/4 files pass. Scoped coverage53 tests/4 files passes all assertions, but coverage gate FAIL remains S342/342 B188/189 F71/71 L308/308: old RunText branch317 only. New shared owner is S97/97 B69/69 F29/29. See evidence/native-docx-effects-checkpoint.json for exact commands and24 source blobs.
+      Impact: This advances actual Word serialization, without advertising complete DOCX or UI readiness. Native core default registration/transport for new items remains pending. Existing undo uses a retained snapshot map rather than genuine SwNodes and must be refactored together with style registration. WRITER144 documents preserved signed16 width narrowing; a compiled C++ expression probe supports this conversion only, not whole native export parity.
+      Resolution: Typecheck/build/static/lint/format/dependencies/docs/tree/provenance/registry/size/hintIds/routing checks pass; doctor has0 errors and1 existing hook warning. Preserve100 thresholds, the old source guard, all semantic/default statuses and deliberate file/autosave/recovery policies. Commit this cohesive source block and evidence; goal/task remain active and no merge/integrate or completion claim is made.
 id_source: "generated"
 ---
 ## Summary
@@ -288,3 +292,7 @@ Source routing confirms native filter IDs MS Word 2007 XML and Office Open XML T
 - Observation: Correction to the preceding checkpoint stop note: the latest user instruction continue resumes work after the earlier user-managed merge; do not reinstate the previous pause. Source commit8879316c3931 has all10 paths matching the evidence blobs.
   Impact: Goal and Writer task remain active. The earlier checkpoint wording about stopping for another merge was an incorrect carryover from the superseded pause.
   Resolution: Continue native text-node style registration and undo lifetime integration under the approved task. No merge/integrate is authorized or performed.
+
+- Observation: Implemented native two-line UTF16 brackets, signed Degree10 getters over unsigned16 text/character rotation storage, independent fit, blink, and ten DOCX effect/layout hooks with actual run sort/reset/detach. Writer filter regression168 tests/12 files and shared item regression22 tests/4 files pass. Scoped coverage53 tests/4 files passes all assertions, but coverage gate FAIL remains S342/342 B188/189 F71/71 L308/308: old RunText branch317 only. New shared owner is S97/97 B69/69 F29/29. See evidence/native-docx-effects-checkpoint.json for exact commands and24 source blobs.
+  Impact: This advances actual Word serialization, without advertising complete DOCX or UI readiness. Native core default registration/transport for new items remains pending. Existing undo uses a retained snapshot map rather than genuine SwNodes and must be refactored together with style registration. WRITER144 documents preserved signed16 width narrowing; a compiled C++ expression probe supports this conversion only, not whole native export parity.
+  Resolution: Typecheck/build/static/lint/format/dependencies/docs/tree/provenance/registry/size/hintIds/routing checks pass; doctor has0 errors and1 existing hook warning. Preserve100 thresholds, the old source guard, all semantic/default statuses and deliberate file/autosave/recovery policies. Commit this cohesive source block and evidence; goal/task remain active and no merge/integrate or completion claim is made.
