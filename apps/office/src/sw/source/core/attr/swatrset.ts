@@ -74,6 +74,7 @@ import { SwFormatHoriOrient, SwFormatVertOrient } from "../../../inc/fmtornt";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BOX,
+  RES_BACKGROUND,
   RES_BREAK,
   RES_CHRATR_AUTOKERN,
   RES_CHRATR_CJK_FONT,
@@ -402,6 +403,11 @@ export class SwAttrPool extends SfxItemPool {
       SID_ATTR_CHAR_COLOR,
     );
     this.RegisterDefaultItem(new SvxBrushItem(RES_CHRATR_HIGHLIGHT), createWriterHighlightItem);
+    this.RegisterDefaultItem(
+      new SvxBrushItem(RES_BACKGROUND),
+      /** Restores the represented solid paragraph/frame background. @param value - Persisted color. @returns Native brush. */
+      (value) => new SvxBrushItem(writerColorFromPrimitive(value, "transparent"), RES_BACKGROUND),
+    );
     this.RegisterDefaultItem(
       new SvxAdjustItem(SvxAdjust.ParaStart, RES_PARATR_ADJUST),
       /** Restores an adjustment item. @param value - Persisted enum value. @returns Concrete adjustment item. */

@@ -192,3 +192,22 @@ contain 1654 passing cases. ABI/configuration tests also cover unsupported ABI,
 configuration copying and userdata identity. Source quirks are retained as
 WRITER146–151. Writer callbacks and native document-owner integration remain
 open; parser differential evidence does not certify the Writer document model.
+
+Native HTML prerequisites for the Markdown reader now include the actual shared
+SvParser character-conversion/ring/state owner and the HTML token, option,
+entity, color, text/tag/raw, PRE/listing/XMP scanner/filter owners. They use native
+SAL descriptor/context dispatch and the existing memory stream. Source-only
+checks cover Unicode scalars, malformed streaming input, DBCS rollback, ring
+replay, saved state, tag options, raw comments and mode transitions; compiled
+lexer differential and Writer HTML/CSS document integration remain open.
+The internal HTML data supplied by Markdown is UTF-8; the memory-stream BOM probe
+is not a general external HTML/ICU encoding detector. Source quirks are recorded
+as WRITER152–156. The Writer callback integration is in progress and is not yet a
+completed filter checkpoint.
+
+The UTF-8 OStringToOUString path now uses the existing SAL converter and final
+FLUSH flag. Broken-sequence grouping differs from host TextDecoder for overlong,
+surrogate, out-of-range and five-byte sequences. Tests retain native grouping,
+BOM preservation and the actual written UTF-16 length. This closes the decoder
+shortcut used by Markdown callback text/attributes; it does not certify other
+string conversion branches or the remaining writer-format matrix rows.

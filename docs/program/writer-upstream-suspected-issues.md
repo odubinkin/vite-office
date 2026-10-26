@@ -1466,3 +1466,33 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_autolink_uri`.
 - Observation: The initial scheme-byte check uses ISASCII instead of an alphabetic predicate. Compiled native callbacks recognize forms such as <1a:x> as a URI autolink. This is dependency behavior, not a compiled native Writer model reproduction.
 - Preservation: Retain the source predicate and subsequent scheme checks; do not substitute URL validation.
+
+### WRITER152 — Native HTML control filtering truncates scalar input to UTF-16
+
+- Source: pinned `include/svl/lngmisc.hxx`, `linguistic::IsControlChar(sal_Unicode)`, returns only `cChar < ' '` and explicitly questions excluding DEL. `svtools/source/svhtml/parhtml.cxx` passes its UTF-32 `nNextCh` and numeric-entity `cChar` to that UTF-16 parameter.
+- Observation: DEL and C1 characters pass the predicate. Scalars such as U+10000 have a low UTF-16 word below space and therefore follow the control branch after argument conversion. This is a source-level trace; compiled Writer behavior remains unverified.
+- Preservation: keep the original predicate and the native 16-bit argument conversion in the shared scalar owner. Do not replace it with a Unicode control category predicate.
+
+### WRITER153 — Markdown quotation exit tests depth before decrement against zero
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::EndBlockQuote`, restores Text Body only when `m_nBlockQuoteDepth == 0`, then decrements the depth.
+- Observation: leaving the usual outer quote at depth one does not restore Text Body. Source paragraph append retains the quotation collection, so following ordinary paragraphs can retain it. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: keep the exact test/decrement order and paragraph collection inheritance; do not reset the style merely because a quote closes.
+
+### WRITER154 — Markdown ordered-list callbacks discard the source start detail
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `enter_block_callback`, calls `StartNumberedBulletList(type)` for ordered lists without forwarding `MD_BLOCK_OL_DETAIL::start`. `swmd.cxx` initializes the native format and start sentinel independently.
+- Observation: an ordered Markdown list beginning with a value other than one does not transfer that value through this callback. The md4c parser itself retains it correctly. This is a source-level Writer trace.
+- Preservation: retain the type-only callback and native format/start-sentinel decisions; do not compensate in the dependency parser or document adapter.
+
+### WRITER155 — Inline Markdown HTML remains buffered until a block HTML exit
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `text_callback`, appends all `MD_TEXT_HTML` text to `m_htmlData`; only `SwMarkdownParser::EndHtmlBlock` invokes `InsertHtmlData` and clears the buffer.
+- Observation: inline HTML callbacks have no immediate native HTMLReader invocation. A later raw HTML block exit can consume that earlier buffered markup as well. This is a source-level trace; compiled Writer behavior remains unverified.
+- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text.
+
+### WRITER156 — SvParser's explicit UCS2 setter does not select the UTF-16 read branch
+
+- Source: pinned `svtools/source/svrtf/svparser.cxx`, `SvParser::SetSrcEncoding`, accepts UCS2 in its outer condition but still resets the encoding to DONTKNOW when `rtl_createTextToUnicodeConverter` returns null. `sal/textenc/tables.cxx` has no UCS2 entry in its bounded descriptor table. The BOM-detection path in `GetNextChar` instead assigns UCS2 directly.
+- Observation: explicit encoding selection and BOM selection take different paths; the former can fall back to raw-byte reading while the latter reads UTF-16. This is a source-level trace, not a compiled desktop reproduction.
+- Preservation: keep the explicit setter's missing-converter fallback and the separate direct assignment during the source BOM probe.

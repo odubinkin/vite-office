@@ -115,3 +115,28 @@ export function HandleModifyAtTextNodeFormatChange(node: SwTextNode): void {
   }
   HandleApplyTextNodeFormatChange(node, rule, oldRule, ruleSet, true);
 }
+
+/** Native DontExpandFormat boundary flags, optionally moving paragraph character items into text attributes at EOF. @param node - Native text owner. @param index - Content boundary. @param flag - New expansion flag. @param formatToText - Whether to move paragraph items at EOF. @returns Whether any flag changed. */
+export function DontExpandFormat(
+  node: SwTextNode,
+  index: number,
+  flag = true,
+  formatToText = true,
+): boolean {
+  if (formatToText && index === node.Len()) node.FormatToTextAttr(node);
+  const hints = node.GetpSwpHints();
+  let changed = false;
+  if (hints !== undefined) {
+    for (let i = hints.GetLastPosSortedByEnd(index); i >= 0; i--) {
+      const hint = hints.GetSortedByEnd(i),
+        end = hint.End();
+      if (end === undefined) continue;
+      if (end !== index) break;
+      if (flag !== hint.DontExpand() && !hint.IsLockExpandFlag() && end > hint.GetStart()) {
+        hint.SetDontExpand(flag);
+        changed = true;
+      }
+    }
+  }
+  return changed;
+}

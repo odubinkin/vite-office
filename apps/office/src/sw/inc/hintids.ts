@@ -129,6 +129,9 @@ export const RES_VERT_ORIENT = 112 as const;
 /** Native horizontal frame orientation, RES_FRMATR_BEGIN +21. */
 export const RES_HORI_ORIENT = 113 as const;
 
+/** Native paragraph/frame brush, RES_FRMATR_BEGIN + 23. */
+export const RES_BACKGROUND = 115 as const;
+
 /** Native four-sided box item, RES_FRMATR_BEGIN + 24. */
 export const RES_BOX = 116 as const;
 /** Original page text grid, RES_FRMATR_BEGIN +33. */
@@ -200,7 +203,7 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_UL_SPACE, RES_UL_SPACE],
   [RES_PAGEDESC, RES_PAGEDESC],
   [RES_BREAK, RES_BREAK],
-  [RES_BOX, RES_BOX],
+  [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;
@@ -231,7 +234,7 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_UL_SPACE, RES_UL_SPACE],
   [RES_PAGEDESC, RES_PAGEDESC],
   [RES_BREAK, RES_BREAK],
-  [RES_BOX, RES_BOX],
+  [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
 ] as const;

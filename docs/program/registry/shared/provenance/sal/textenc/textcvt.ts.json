@@ -15,7 +15,8 @@
       "ImplUnicodeToDummy"
     ],
     "preservedResponsibilities": [
-      "Both original missing-converter fallbacks preserve native buffer, explicit source span, output capacity, conversion flags, status-cell and consumed-counter contracts. Byte-to-UTF16 conversion zero-extends unsigned bytes; reverse conversion retains each UTF16 unit low byte. Early undefined-error paths preserve prior status bits and leave consumed counters untouched."
+      "Both original missing-converter fallbacks preserve native buffer, explicit source span, output capacity, conversion flags, status-cell and consumed-counter contracts. Byte-to-UTF16 conversion zero-extends unsigned bytes; reverse conversion retains each UTF16 unit low byte. Early undefined-error paths preserve prior status bits and leave consumed counters untouched.",
+      "Native text-to-Unicode descriptor/context API now dispatches the existing source converters, retaining null handles, the pointer-one stateless sentinel, real UTF8/UTF7/ISCII/ISO-2022 contexts, reset behavior, native flag admission and missing-converter fallback. Four direct HTML/SvParser tests and one factory/streaming dispatch test exercise the new consumer. Context storage is released by GC; this is not native pointer/allocation ABI parity."
     ],
     "omittedResponsibilities": [
       "Full rtl converter factory, lifecycle and context dispatch remain outside this fallback owner. Compiled upstream differential verification remains pending."
@@ -37,6 +38,10 @@
         {
           "path": "apps/office/src/sal/textenc/textcvt.test.ts",
           "marker": "retains reverse early-error status"
+        },
+        {
+          "path": "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+          "marker": "reads UTF-8 scalars"
         }
       ],
       "upstream": [

@@ -155,3 +155,56 @@ it("resets status and consumed counts for empty spans in both directions", /** C
   expect(ImplUnicodeToDummy(new Uint16Array(), 0, new Uint8Array(), 0, 0, info, consumed)).toBe(0);
   expect([info[0], consumed[0]]).toEqual([0, 0]);
 });
+
+it("dispatches original contextual converters and retains the stateless and null handle contracts", /** Checks the actual public native factory/convert/reset interface. @returns Nothing. */ async () => {
+  const C = await import("./textcvt");
+  const E = await import("../inc/rtl/textenc");
+  const converter = C.rtl_createTextToUnicodeConverter(E.RTL_TEXTENCODING_UTF8),
+    context = C.rtl_createTextToUnicodeContext(converter);
+  expect(C.rtl_createTextToUnicodeConverter(E.RTL_TEXTENCODING_UTF8)).toBe(converter);
+  const output = new Uint16Array(2),
+    info: [number] = [0],
+    consumed: [number] = [0];
+  expect(
+    C.rtl_convertTextToUnicode(
+      converter,
+      context,
+      Uint8Array.of(0xf0, 0x9f),
+      2,
+      output,
+      2,
+      0,
+      info,
+      consumed,
+    ),
+  ).toBe(0);
+  expect(info[0]).toBe(cvt.RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL);
+  expect(
+    C.rtl_convertTextToUnicode(
+      converter,
+      context,
+      Uint8Array.of(0x98, 0x80),
+      2,
+      output,
+      2,
+      0,
+      info,
+      consumed,
+    ),
+  ).toBe(2);
+  expect([...output]).toEqual([0xd83d, 0xde00]);
+  C.rtl_resetTextToUnicodeContext(converter, context);
+  expect(
+    C.rtl_createTextToUnicodeContext(
+      C.rtl_createTextToUnicodeConverter(E.RTL_TEXTENCODING_MS_1251),
+    ),
+  ).toBe(1);
+  expect(C.rtl_createTextToUnicodeConverter(9999)).toBeNull();
+  expect(C.rtl_createTextToUnicodeContext(null)).toBeNull();
+  expect(
+    C.rtl_convertTextToUnicode(null, null, Uint8Array.of(0x80), 1, output, 2, 0, info, consumed),
+  ).toBe(1);
+  expect(output[0]).toBe(0x80);
+  C.rtl_destroyTextToUnicodeContext(converter, context);
+  C.rtl_destroyTextToUnicodeConverter(converter);
+});

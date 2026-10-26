@@ -6,25 +6,56 @@
     "localPath": "apps/office/src/tools/source/stream/stream.ts",
     "status": "mapped",
     "upstreamPath": "tools/source/stream/stream.cxx",
-    "localSymbols": ["SvStream"],
-    "upstreamSymbols": ["SvStream::StartReadingUnicodeText", "SvStream::ReadUniOrByteStringLine", "SvStream::StartWritingUnicodeText", "SvStream::WriteUnicodeOrByteText", "SvStream::WriteUniOrByteChar"],
+    "localSymbols": [
+      "SvStream"
+    ],
+    "upstreamSymbols": [
+      "SvStream::StartReadingUnicodeText",
+      "SvStream::ReadUniOrByteStringLine",
+      "SvStream::StartWritingUnicodeText",
+      "SvStream::WriteUnicodeOrByteText",
+      "SvStream::WriteUniOrByteChar"
+    ],
     "preservedResponsibilities": [
       "Calc CSV's consumed in-memory SvStream operations retain the original allowed-encoding BOM switch, byte position, byte versus Unicode physical-line decoding, source 0xFFFE default and explicit line limits (CALC-293), opposite CR/LF pair handling, Unicode NUL compaction, UTF-16BE swapped-buffer order after NUL (CALC-290) and EOF after an unsuccessful read.",
-      "Task AQF9AG adds source GetStreamEncoding and SetStreamEncoding state for CSV separator detection, plus the consumed UTF-16 BOM, encoded-text and single-character output calls used by AsciiSave. ICU-backed DetectEncoding remains unrepresented."
+      "Task AQF9AG adds source GetStreamEncoding and SetStreamEncoding state for CSV separator detection, plus the consumed UTF-16 BOM, encoded-text and single-character output calls used by AsciiSave. ICU-backed DetectEncoding remains unrepresented.",
+      "Adds native ReadChar, ReadUtf16, good and SeekRel operations consumed by SvParser, retaining signed byte references, current stream endianness, byte offsets and EOF only on unsuccessful read. The existing memory-stream binding has no device/pending I/O; generic native stream error/lifetime semantics are not claimed."
     ],
     "omittedResponsibilities": [
       "General file and buffer ownership, stream errors and other SvStream operations remain unported."
     ],
     "evidence": {
       "local": [
-        {"path": "apps/office/src/tools/source/stream/stream.ts", "marker": "StartReadingUnicodeText"},
-        {"path": "apps/office/src/tools/source/stream/stream.test.ts", "marker": "opposite newline pairs"},
-        {"path": "apps/office/src/tools/source/stream/stream.test.ts", "marker": "writes source Unicode-or-byte text"}
+        {
+          "path": "apps/office/src/tools/source/stream/stream.ts",
+          "marker": "StartReadingUnicodeText"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/stream.test.ts",
+          "marker": "opposite newline pairs"
+        },
+        {
+          "path": "apps/office/src/tools/source/stream/stream.test.ts",
+          "marker": "writes source Unicode-or-byte text"
+        },
+        {
+          "path": "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+          "marker": "reads UTF-8 scalars"
+        }
       ],
       "upstream": [
-        {"path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx", "marker": "SvStream::StartReadingUnicodeText"},
-        {"path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx", "marker": "SvStream::ReadUniOrByteStringLine"},
-        {"path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx", "marker": "SvStream::WriteUnicodeOrByteText"}
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "SvStream::StartReadingUnicodeText"
+        },
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "SvStream::ReadUniOrByteStringLine"
+        },
+        {
+          "path": "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+          "marker": "SvStream::WriteUnicodeOrByteText"
+        }
       ]
     }
   }

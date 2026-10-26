@@ -16,6 +16,14 @@ import {
   WRITER_TEXT_NODE_WHICH_RANGES,
   RES_CHRATR_BEGIN,
   RES_CHRATR_END,
+  RES_PAGEDESC,
+  RES_BREAK,
+  RES_KEEP,
+  RES_PARATR_SPLIT,
+  RES_PARATR_NUMRULE,
+  RES_PARATR_LIST_ISRESTART,
+  RES_PARATR_LIST_RESTARTVALUE,
+  RES_PARATR_LIST_LEVEL,
 } from "../../../inc/hintids";
 
 /** Applies every supported canonical content mutation through SwPosition and SwPaM. */
@@ -83,6 +91,41 @@ export class DocumentContentOperationsManager {
     const position = range instanceof SwPaM ? range.GetPoint() : range;
     const node = this.GetTextNode(position, "insertion");
     node.InsertText(text, position.GetContentIndex(), mode);
+    return true;
+  }
+
+  /** Appends an empty paragraph with the source AppendNode successor policy; import callers retain the same style and no text hints. @param position - Current text position, updated to the new paragraph. @returns Success. */
+  public AppendTextNode(position: SwPosition): boolean {
+    const source = this.GetTextNode(position, "paragraph append");
+    const next = new SwTextNode(
+      source.GetNodes(),
+      source.StartOfSectionNode(),
+      source.GetTextFormatColl(),
+    );
+    const direct = source.GetpSwAttrSet();
+    if (direct !== undefined) {
+      const copied = direct.Clone();
+      for (const which of [RES_PAGEDESC, RES_BREAK, RES_KEEP, RES_PARATR_SPLIT])
+        copied.ClearItem(which);
+      if (source.GetNumRule() !== undefined && source.IsOutline())
+        copied.ClearItem(RES_PARATR_NUMRULE);
+      next.SetAttr(copied);
+    }
+    source.GetNodes().insertTextNodeAfter(source, next);
+    for (const which of [
+      RES_PARATR_LIST_ISRESTART,
+      RES_PARATR_LIST_RESTARTVALUE,
+      RES_PARATR_LIST_ISCOUNTED,
+    ])
+      next.ResetAttr(which);
+    if (next.GetNumRule() === undefined) {
+      next.ResetAttr(RES_PARATR_LIST_ID);
+      next.ResetAttr(RES_PARATR_LIST_LEVEL);
+    }
+    if (!source.IsInList() && source.GetNumRule() !== undefined && source.GetListId() !== "")
+      source.AddToList();
+    position.Assign(next, 0);
+    this.document.NotifyModelChange({ kind: "document-modified", modified: true });
     return true;
   }
 

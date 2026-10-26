@@ -6,17 +6,38 @@
     "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",
     "status": "mapped",
     "upstreamPath": "include/rtl/ustring.hxx",
-    "localSymbols": ["OStringToOUString", "OUStringToOString"],
-    "upstreamSymbols": ["OStringToOUString", "OUStringToOString"],
+    "localSymbols": [
+      "OStringToOUString",
+      "OUStringToOString"
+    ],
+    "upstreamSymbols": [
+      "OStringToOUString",
+      "OUStringToOString"
+    ],
     "preservedResponsibilities": [
-      "CSV byte conversion uses the original single-byte descriptor conversion procedures and OString/OUString conversion flags for the authenticated ported registry; Unicode writes little-endian UTF-16 and UTF-8 uses browser byte primitives."
+      "CSV byte conversion uses the original single-byte descriptor conversion procedures and OString/OUString conversion flags for the authenticated ported registry; Unicode writes little-endian UTF-16 and UTF-8 uses browser byte primitives.",
+      "Native UTF-8 OStringToOUString now consumes the existing pinned SAL converter with the source final FLUSH flag instead of host TextDecoder. Preserves native grouping of broken, overlong, surrogate and five-byte sequences, BOM retention and output-length bounds. Seven new malformed/signature cases plus actual Markdown callback admission cover this path. Other pre-existing string conversion branches, including UTF-8 encoding, remain independently unverified."
     ],
     "omittedResponsibilities": [
       "Full SAL converter registry, contextual/multibyte converters, complete stream ownership and every original constructor/error contract remain unported. The original SAL dummy conversion now handles missing registry entries."
     ],
     "evidence": {
-      "local": [{"path": "apps/office/src/sal/rtl/ustring-convert.ts", "marker": "OUStringToOString"}],
-      "upstream": [{"path": "vendor/libreoffice-reference/include/rtl/ustring.hxx", "marker": "OUStringToOString"}]
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.ts",
+          "marker": "OUStringToOString"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.test.ts",
+          "marker": "uses native UTF-8 broken-sequence grouping"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
+          "marker": "OUStringToOString"
+        }
+      ]
     },
     "filenameDivergence": {
       "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",

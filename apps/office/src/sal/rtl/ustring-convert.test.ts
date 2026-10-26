@@ -1,6 +1,10 @@
 /** @fileoverview Original SAL byte conversion and missing-converter behavior used by Calc CSV. */
 import { expect, it } from "vitest";
-import { RTL_TEXTENCODING_MS_1251, RTL_TEXTENCODING_UNICODE } from "../inc/rtl/textenc";
+import {
+  RTL_TEXTENCODING_MS_1251,
+  RTL_TEXTENCODING_UNICODE,
+  RTL_TEXTENCODING_UTF8,
+} from "../inc/rtl/textenc";
 import { OStringToOUString, OUStringToOString } from "./ustring-convert";
 
 it("uses the original single-byte descriptor for a selected native encoding", /** Checks uses the original single-byte descriptor for a selected native encoding. @returns Test completion or assertion result. */ () => {
@@ -21,3 +25,21 @@ it("preserves the original SAL dummy conversion when no converter exists", /** C
   expect([...OUStringToOString("A€", missingEncoding)]).toEqual([0x41, 0xac]);
   expect(OStringToOUString(new Uint8Array([0x41, 0xac]), missingEncoding)).toBe("A¬");
 });
+
+it.each([
+  [[0xe0, 0x80, 0x80], "\ufffd"],
+  [[0xed, 0xa0, 0x80], "\ufffd"],
+  [[0xf4, 0x90, 0x80, 0x80], "\ufffd"],
+  [[0xf8, 0x88, 0x80, 0x80, 0x80], "\ufffd"],
+  [[0xc2, 0x41], "\ufffdA"],
+  [[0xe2, 0x82], "\ufffd"],
+  [[0xef, 0xbb, 0xbf, 0x41], "\ufeffA"],
+] as const)(
+  "uses native UTF-8 broken-sequence grouping and final flush for %s",
+  /** Checks the source converter rather than the host UTF-8 replacement grammar. @param input - Original bytes. @param expected - Native converted text. @returns Nothing. */ (
+    input,
+    expected,
+  ) => {
+    expect(OStringToOUString(Uint8Array.from(input), RTL_TEXTENCODING_UTF8)).toBe(expected);
+  },
+);

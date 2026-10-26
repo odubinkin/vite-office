@@ -190,6 +190,8 @@ const allowedEdges = new Map([
   [
     "svtools",
     new Set([
+      // parhtml.cxx includes svl/lngmisc.hxx; Library_svt.mk links svl.
+      "svl",
       "tools",
       "o3tl",
       "external",
@@ -223,6 +225,8 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // sw/Library_sw.mk links i18nlangtag; mdcallbcks.cxx consumes the application LanguageTag.
+      "i18nlangtag",
       // sw/Library_sw.mk links the pinned external md4c parser.
       "external",
       // Native sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx includes sax/tools/converter.hxx;

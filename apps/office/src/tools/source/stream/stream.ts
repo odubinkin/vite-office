@@ -139,6 +139,41 @@ export class SvStream {
     this.endOfFile = false;
   }
 
+  /** Native relative byte seek used by parser lookahead rollback. @param offset - Signed byte delta. @returns Nothing. */
+  SeekRel(offset: number): void {
+    this.Seek(this.position + offset);
+  }
+
+  /** Native in-memory read status; this binding has no device/pending errors. @returns Whether the preceding read succeeded. */
+  good(): boolean {
+    return !this.endOfFile;
+  }
+
+  /** Reads one native signed char and sets EOF only after an unsuccessful read. @param output - Original char reference. @returns This stream. */
+  ReadChar(output: [number]): SvStream {
+    const value = this.bytes[this.position];
+    if (value === undefined) {
+      this.endOfFile = true;
+      return this;
+    }
+    this.position++;
+    output[0] = (value << 24) >> 24;
+    return this;
+  }
+
+  /** Reads one UTF-16 unit using the stream's existing endian setting. @param output - Original unit reference. @returns This stream. */
+  ReadUtf16(output: [number]): SvStream {
+    const first: [number] = [0],
+      second: [number] = [0];
+    this.ReadChar(first);
+    this.ReadChar(second);
+    if (this.good())
+      output[0] = this.bigEndian
+        ? ((first[0] & 255) << 8) | (second[0] & 255)
+        : (first[0] & 255) | ((second[0] & 255) << 8);
+    return this;
+  }
+
   /** Native EOF flag becomes set after an unsuccessful read. @returns EOF. */
   eof(): boolean {
     return this.endOfFile;
