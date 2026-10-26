@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/writerwordglue.cxx",
+    "localSymbols": [
+      "FontMapExport",
+      "rtl_TextEncodingToWinCharset"
+    ],
+    "upstreamSymbols": [
+      "FontMapExport::FontMapExport",
+      "FindBestMSSubstituteFont",
+      "rtl_TextEncodingToWinCharset"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
+          "marker": "FontMapExport"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/writerwordglue.cxx",
+          "marker": "FontMapExport::FontMapExport"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported."
+    ],
+    "omittedResponsibilities": [
+      "Full native framework/ABI and complete format orchestration are not certified; see admission."
+    ]
+  }
+}

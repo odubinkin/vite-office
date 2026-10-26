@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/textenc/tencinfo.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-encoding",
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/textenc/tencinfo.ts",
+        "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx"
+      ],
+      "justification": "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "rtl_getBestWindowsCharsetFromTextEncoding"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sal/textenc/tencinfo.cxx",
+      "upstreamSymbols": [
+        "rtl_getBestWindowsCharsetFromTextEncoding"
+      ]
+    }
+  }
+}

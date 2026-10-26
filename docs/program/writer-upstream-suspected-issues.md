@@ -1232,3 +1232,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `RunText` and `impl_WriteRunText`.
 - Observation: delimiter flush calls omit the symbol-font argument; only the final flush receives it. A symbol run containing a tab therefore emits preceding characters as ordinary text and the final characters as symbols. Symbols are emitted per UTF16 code unit, including surrogate halves. The break-emission condition also retains a false branch that appears unreachable for immutable text: an empty segment follows a control character and thus satisfies `prevUnicode < 32`. Desktop impact remains unverified.
 - Preservation: retain exact argument propagation, UTF16 iteration, short-circuit condition and schema marks. Tests cover bytes without replacing the condition or excluding it from instrumentation. The scoped100 branch coverage gate remains open for that native branch.
+
+### WRITER114 — configured font lower_bound does not select a shorter prefix entry
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
+- Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.
+- Preservation: keep native lower_bound direction and both guards, with no predecessor/longest-prefix fallback. Tests over the shipped VCL data retain exact matching and the missed prefix behavior.

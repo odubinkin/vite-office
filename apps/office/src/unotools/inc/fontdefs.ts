@@ -32,3 +32,10 @@ export {
   AddTokenFontName,
   IsOpenSymbol,
 } from "../source/misc/fontdefs";
+
+/** Original substitution flag bits. */
+export enum SubsFontFlags {
+  ONLYONE = 1,
+  MS = 2,
+}
+export { GetSubsFontName } from "../source/misc/fontdefs";

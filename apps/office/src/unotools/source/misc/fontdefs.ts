@@ -1,4 +1,6 @@
-/** @fileoverview Original font token/search-name/script/symbol operations; configuration-driven substitution remains pending. */
+/** @fileoverview Original font token/search-name/script/symbol operations; shipped MS substitution configuration is consumed without a fake service. */
+import { FontSubstConfiguration } from "../config/fontcfg";
+import { SubsFontFlags } from "../../inc/fontdefs";
 import names from "./font-name-dictionary.json" with { type: "json" };
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 // Preserve all source initializer rows and sequential unique insertion, including CALC-144 conflicts.
@@ -138,4 +140,36 @@ export function AddTokenFontName(rName: OUString, rNewToken: Uint16Array): void 
 export function IsOpenSymbol(rFontName: Uint16Array): boolean {
   const first = asciiLower(GetNextFontToken(rFontName, { value: 0 }));
   return first === "starsymbol" || first === "opensymbol";
+}
+
+/** Native configured substitution lookup, including exact symbol special case and original raw-token exclusion. @param name - Logical UTF16 family list. @param flags - Original bitmask. @returns Owned substitution list. */
+export function GetSubsFontName(name: Uint16Array, flags: SubsFontFlags): OUString {
+  const result = new OUString();
+  const original = GetEnglishSearchFontName(GetNextFontToken(name, { value: 0 }));
+  let search = "";
+  try {
+    for (let index = 0; index < original.getLength(); ++index)
+      search += String.fromCharCode(original.getStr()[index] as number);
+  } finally {
+    original.dispose();
+  }
+  if (
+    flags === (SubsFontFlags.MS | SubsFontFlags.ONLYONE) &&
+    (search === "starsymbol" || search === "opensymbol")
+  )
+    return result;
+  if (flags & SubsFontFlags.MS) {
+    const attributes = FontSubstConfiguration.get().getSubstInfo(search);
+    if (attributes)
+      for (const replacement of attributes.MSSubstitutions) {
+        const units = new Uint16Array(replacement.length);
+        for (let index = 0; index < replacement.length; ++index)
+          units[index] = replacement.charCodeAt(index);
+        if (!ImplIsFontToken(name, units)) {
+          ImplAppendFontToken(result, units);
+          if (flags & SubsFontFlags.ONLYONE) break;
+        }
+      }
+  }
+  return result;
 }

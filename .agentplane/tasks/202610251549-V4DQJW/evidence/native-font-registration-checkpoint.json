@@ -8,8 +8,8 @@
     "apps/office/src/sal/textenc/tencinfo.ts": "697dd7f7c361dcf0ff42fae0428315ba34136646",
     "apps/office/src/sal/textenc/windows-charsets.json": "16fa6b94a56f764f4c6c5766c42e043f85847193",
     "apps/office/src/sw/source/filter/ww8/writerwordglue.ts": "d828a5c559fba26927b573b633afbcbcfc4f92b7",
-    "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts": "165bd5fd974738f2b4d37e5c1ddbab506faaf715",
-    "apps/office/src/sw/source/filter/ww8/native-font-registration.test.ts": "3be592f396fe7523000233364c704c6cb5210b15",
+    "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts": "85f65a47c86b313c3e79a50e36f2f5918547613a",
+    "apps/office/src/sw/source/filter/ww8/native-font-registration.test.ts": "83c2630b6ecf2cd271605287d80244789482b7d5",
     "apps/office/src/unotools/inc/fontdefs.ts": "bc9e39cd6ca02a7c4debf7ecf225fd013e79171f",
     "apps/office/src/unotools/source/config/fontcfg.ts": "ad74355c0e3016f29de3285eb4f586bef4f9702a",
     "apps/office/src/unotools/source/config/data/font-substitutions-ms.json": "8025d9de22e727572a457d01971b5c013452d614",
@@ -79,7 +79,8 @@
   "admission": [
     "FontSubstConfiguration Name/MS fields only, prevalidated shipped en provider binding; dynamic provider failures/other locales/other fields unported",
     "All-locale SAL metadata only; converter/loader interfaces not fabricated",
-    "wwFont and registration/vector methods only; font initialization/XML/embedding and exporter association unported"
+    "wwFont and registration/vector methods only; font initialization/XML/embedding and exporter association unported",
+    "Original AsVector pointer slots are null-initialized before indexed assignments; no ID normalization or overflow repair is introduced."
   ],
   "pending": [
     "prior RunText unchanged scoped100 branch gap254/255",

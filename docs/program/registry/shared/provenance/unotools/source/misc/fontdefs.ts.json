@@ -12,22 +12,26 @@
       "GetEnglishSearchFontName",
       "StripScriptFromName",
       "AddTokenFontName",
-      "IsOpenSymbol"
+      "IsOpenSymbol",
+      "GetSubsFontName"
     ],
     "upstreamSymbols": [
       "GetNextFontToken",
       "GetEnglishSearchFontName",
       "StripScriptFromName",
       "AddTokenFontName",
-      "IsOpenSymbol"
+      "IsOpenSymbol",
+      "GetSubsFontName"
     ],
     "preservedResponsibilities": [
       "Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization.",
       "Task164 extends existing shared fontdefs with complete GetEnglishSearchFontName, StripScriptFromName, AddTokenFontName and IsOpenSymbol; actual OUString/UTF16 views and original token parser are reused. All155 literal dictionary rows are retained (153 unique keys); sequential unique insertion retains first aliases for two conflicting Chinese keys, without claiming cross-standard-library duplicate-constructor selection proof. IPAex\u660e\u671d -> ipaexmimcho is intentionally preserved (CALC-143), conflicting duplicates recorded in CALC-144. Direct native testSingleElement expectations are ported unchanged. Native configuration-driven substitution, physical font collection/default-device selection and Calc document/UI/ODS remain pending. No Unicode case folding/ICU/buffer or native memory engine, compiler/probe or browser consumer migration.",
-      "CALC-145 preserves unreachable hyphenated dictionary keys rather than repairing source data. Complete UTF16-unit acceptance includes original one-unit wrong-encoding aliases \u6865 -> hei and \u6b61 -> kai."
+      "CALC-145 preserves unreachable hyphenated dictionary keys rather than repairing source data. Complete UTF16-unit acceptance includes original one-unit wrong-encoding aliases \u6865 -> hei and \u6b61 -> kai.",
+      "V4DQJW ports GetSubsFontName over the genuine existing UTF16 token/OUString owners and the admitted shipped VCL configuration. Preserve exact MS|ONLYONE symbol early return, ASCII-normalized first-token search, raw case-sensitive exclusion of existing family tokens, original semicolon append, per-result ONLYONE break and owned result lifetime. Native component-provider/user overrides and physical font matching remain unported."
     ],
     "omittedResponsibilities": [
-      "Configuration-driven GetSubsFontName and related font-configuration/substitution/default-device/physical collection services remain pending; conflicting native duplicate-key selection across standard library implementations is not proven."
+      "Configuration-driven GetSubsFontName and related font-configuration/substitution/default-device/physical collection services remain pending; conflicting native duplicate-key selection across standard library implementations is not proven.",
+      "New MS substitution admission is limited to shipped-resource Name/MS fields; native provider/other attributes and complete export orchestration remain unverified."
     ],
     "evidence": {
       "local": [
@@ -42,12 +46,20 @@
         {
           "path": "apps/office/src/unotools/source/misc/font-name-dictionary.json",
           "marker": "ipaexmimcho"
+        },
+        {
+          "path": "apps/office/src/unotools/source/misc/fontdefs.ts",
+          "marker": "GetSubsFontName"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/unotools/source/misc/fontdefs.cxx",
           "marker": "GetNextFontToken"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/misc/fontdefs.cxx",
+          "marker": "GetSubsFontName"
         }
       ]
     }

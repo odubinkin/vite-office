@@ -3992,3 +3992,9 @@ Pinned `sc/source/ui/view/viewdata.cxx:1142` assigns MULTI for disconnected mark
 - Source: pinned `sax/source/tools/fastserializer.cxx`, `FastSaxSerializer::writeFastAttributeList`.
 - Observation: the prefix exception for `#_x0000_t` or `_x0000_t` disables the entire escape path, including quotes and ampersands, rather than only OOXML x-escaping. A matching value containing XML punctuation can therefore produce malformed attribute syntax. Desktop reachability is unverified. Native duplicate attributes are also emitted in release builds; their check is debug-only.
 - Preservation: retain prefix checks and raw emission, duplicate ordering and the independent queued token/value vector. Exact byte tests cover both prefixes and ordinary escaped attributes without introducing a sanitizer.
+
+### CALC-291 — configured font lower_bound does not select a shorter prefix entry
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `StrictStringSort` and `FontSubstConfiguration::getSubstInfo`.
+- Observation: the source comment discusses matching a longer search name with a shorter configured prefix. Strict Unicode `lower_bound` already excludes such a shorter prefix because it sorts before the longer search. The subsequent length/prefix guards therefore admit exact names but do not implement that described prefix fallback. A search for `liberationsansblack` misses the configured `liberationsans` entry. Desktop font-export impact remains unverified.
+- Preservation: keep native lower_bound direction and both guards, with no predecessor/longest-prefix fallback. Tests over the shipped VCL data retain exact matching and the missed prefix behavior.

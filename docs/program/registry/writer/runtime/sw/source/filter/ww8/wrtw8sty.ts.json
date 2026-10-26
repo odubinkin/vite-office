@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "writerfilter-docx",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx"
+      ],
+      "justification": "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "wwFont",
+        "wwFontHelper",
+        "wwFontLess"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/wrtw8sty.cxx",
+      "upstreamSymbols": [
+        "wwFont::wwFont",
+        "wwFontHelper::GetId",
+        "wwFontHelper::AsVector"
+      ]
+    }
+  }
+}

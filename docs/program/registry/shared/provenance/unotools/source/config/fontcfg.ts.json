@@ -7,19 +7,23 @@
     "status": "mapped",
     "upstreamPath": "unotools/source/config/fontcfg.cxx",
     "localSymbols": [
-      "getConfiguredDefaultFont"
+      "getConfiguredDefaultFont",
+      "FontSubstConfiguration"
     ],
     "upstreamSymbols": [
       "DefaultFontConfiguration::getDefaultFont",
-      "DefaultFontConfiguration::tryLocale"
+      "DefaultFontConfiguration::tryLocale",
+      "FontSubstConfiguration::getSubstInfo"
     ],
     "preservedResponsibilities": [
       "Task163 ports all23 DefaultFontType IDs, all33 locales/256 configured DefaultFonts properties from pinned VCL.xcu, source exact/language/non-ISO/en lookup order and GetNextFontToken UTF16 borrowed-view/index behavior. getConfiguredDefaultFont is a field-specific resource binding on actual prepared Locale/OUString values, not a fabricated DefaultFontConfiguration/LanguageTag/UNO/OutputDevice service. Canonical-tag decomposition is shared with existing numeric locale data; native fallback algorithm is reused. Native system-locale parsing, configuration overrides/provider APIs, UI-font special fallback, physical font matching/substitution, font search-name normalization and other fontdefs operations remain pending. No C++ compilation/probe, new lifetime engine or UI localization.",
       "Task192 implements six complete native private responsibilities:handleVendorVariant,raw Locale convertToBcp47,convertLangToLocale,convertLocaleToBcp47,convertLangToBcp47 and getBcp47. Actual Locale/OUString field owners retain borrowed object identity under assignment;native Decision/initialized flags,system-origin bit and raw numeric IDs are preserved. The total raw converter handles the native diagnostic empty output without a fake backend or ignored branch. Actual configured-font prepared binding reuses the common raw converter while resource/fallback order stays. This explicit private conversion-state interface is not a fabricated complete LanguageTagImpl/public LanguageTag/parser/registry service. No new ICU/compiler/ownership engine;full class/synchronization/canonicalization/registry/font/defaults/pool/model/UI/ODS remain pending.",
-      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated."
+      "This same prerequisite adds original NumberFormat alignment,relative bullet size(min25 after unsigned16 conversion),stable owned Color,character-style and legal flag to defaults/copy/equality. Original GetDefaultFonts updates actual three-script items in order for LATIN_TEXT/en-US,CJK_TEXT/en-US,CTL_TEXT/ar-SA through existing genuine no-device VCL metadata. VCL now preserves the original UI-font fallback when a configured role is empty and NONE versus OnlyOne candidate selection;unknown roles retain source fallback rather than an invented exception. The original fixed language ID and GetDefaultFontFlags bits are represented. Actual configured-tag temporary ownership is released. No config provider,output device,renderer,thread service or generic numbering/UNO facade is fabricated.",
+      "V4DQJW adds the consumed Name/MSSubstitutions fields of native FontSubstConfiguration over all320 shipped VCL en entries. Preserve native fixed en constructor language, lazy read-once records, empty semicolon omission, strict UTF16 ordering, lower_bound and asymmetric prefix/length checks. The prevalidated bundled resource binds provider access; missing-provider/unknown-locale paths are not admitted, rather than simulated with fake UNO services. FontNameAttr substitution weight/width/type and dynamic provider/locale configuration are unported. Original default-font binding remains unchanged. No whole-class/default-device or native ABI parity certification."
     ],
     "omittedResponsibilities": [
-      "Configuration/LanguageTag/system/device/service and font normalization/substitution responsibilities outside the represented resource and token operations remain pending."
+      "Configuration/LanguageTag/system/device/service and font normalization/substitution responsibilities outside the represented resource and token operations remain pending.",
+      "New MS substitution admission is limited to shipped-resource Name/MS fields; native provider/other attributes and complete export orchestration remain unverified."
     ],
     "evidence": {
       "local": [
@@ -34,6 +38,14 @@
         {
           "path": "apps/office/src/i18nlangtag/source/languagetag/languagetag.conversion.test.ts",
           "marker": "reuses original configured candidates"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/fontcfg.ts",
+          "marker": "FontSubstConfiguration"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/data/font-substitutions-ms.json",
+          "marker": "liberationsans"
         }
       ],
       "upstream": [
@@ -48,6 +60,14 @@
         {
           "path": "vendor/libreoffice-reference/i18nlangtag/source/languagetag/languagetag.cxx",
           "marker": "LanguageTagImpl::convertToBcp47"
+        },
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/config/fontcfg.cxx",
+          "marker": "FontSubstConfiguration::getSubstInfo"
+        },
+        {
+          "path": "vendor/libreoffice-reference/officecfg/registry/data/org/openoffice/VCL.xcu",
+          "marker": "FontSubstitutions"
         }
       ]
     }

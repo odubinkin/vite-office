@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/textenc/tencinfo.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/textenc/tencinfo.cxx",
+    "localSymbols": [
+      "rtl_getBestWindowsCharsetFromTextEncoding"
+    ],
+    "upstreamSymbols": [
+      "rtl_getBestWindowsCharsetFromTextEncoding"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/textenc/tencinfo.ts",
+          "marker": "rtl_getBestWindowsCharsetFromTextEncoding"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tencinfo.cxx",
+          "marker": "rtl_getBestWindowsCharsetFromTextEncoding"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/textenc.cxx",
+          "marker": "ImplTextEncodingData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tables.cxx",
+          "marker": "ImplTextEncodingData"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/tenchelp.hxx",
+          "marker": "ImplTextEncodingData"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full native framework/ABI and complete format orchestration are not certified; see admission."
+    ]
+  }
+}
