@@ -295,33 +295,28 @@ it("matches original completed empty-base allocation without inventing call tabl
   c.finish();
 });
 // Exhaustive native fixture replay retains every assertion under full-suite coverage instrumentation.
-it(
-  "matches original inherited member construction for every65536 UTF16 unit" /** Replays a complete unchanged original native process mode. @returns Completed stream comparison. */,
-  async () => {
-    const c = await context("unicode");
-    for (let unit = 0; unit < 65536; unit++) {
-      const bn = new c.OUString(new Uint16Array([70, 46, unit, 88]), 4),
-        dn = c.name("factory.Unicode"),
-        own = c.members(bn, 2),
-        b = c.make(bn, [], own),
-        d = c.make(dn, [b.aBase.pWeakRef as R], []);
-      c.emit(unit);
-      c.observe(d);
-      c.emit(b.aBase.nRefCount, bn.pData.refCount, dn.pData.refCount);
-      c.refs(own);
-      c.destroy(d);
-      c.destroy(b);
-      c.emit(bn.pData.refCount, dn.pData.refCount);
-      c.refs(own);
-      c.release(own);
-      bn.dispose();
-      dn.dispose();
-    }
-    c.finish();
-  },
-  60000,
-  300_000,
-);
+it("matches original inherited member construction for every65536 UTF16 unit" /** Replays a complete unchanged original native process mode. @returns Completed stream comparison. */, async () => {
+  const c = await context("unicode");
+  for (let unit = 0; unit < 65536; unit++) {
+    const bn = new c.OUString(new Uint16Array([70, 46, unit, 88]), 4),
+      dn = c.name("factory.Unicode"),
+      own = c.members(bn, 2),
+      b = c.make(bn, [], own),
+      d = c.make(dn, [b.aBase.pWeakRef as R], []);
+    c.emit(unit);
+    c.observe(d);
+    c.emit(b.aBase.nRefCount, bn.pData.refCount, dn.pData.refCount);
+    c.refs(own);
+    c.destroy(d);
+    c.destroy(b);
+    c.emit(bn.pData.refCount, dn.pData.refCount);
+    c.refs(own);
+    c.release(own);
+    bn.dispose();
+    dn.dispose();
+  }
+  c.finish();
+}, 300_000);
 it("matches original missing or incomplete base early return and retained acquisitions" /** Replays a complete unchanged original native process mode. @returns Completed stream comparison. */, async () => {
   const c = await context("failure");
   for (const old of [false, true])

@@ -48,7 +48,9 @@ it("admits only native search and character classification value edges", /** Pre
       false,
     );
   }
-  expect(isForbiddenModuleEdge("unotools", "i18nutil")).toBe(true);
+  // Original transliterationwrapper.cxx includes i18nutil/transliteration.hxx.
+  expect(isForbiddenModuleEdge("unotools", "i18nutil")).toBe(false);
+  expect(isForbiddenModuleEdge("i18nutil", "unotools")).toBe(true);
   // Native number-format API owners use published offapi values and cppu Sequence.
   expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(false);
   expect(isForbiddenModuleEdge("i18npool", "cppu")).toBe(false);

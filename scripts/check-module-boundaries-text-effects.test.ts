@@ -18,5 +18,7 @@ it("admits only original shadow/constants value imports without permitting neigh
   // Original Library_xo links CPPU and consumes the generated UNO property/cursor interfaces.
   expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("xmloff", "udkapi")).toBe(false);
-  expect(isForbiddenModuleEdge("xmloff", "comphelper")).toBe(true);
+  // Original NamedBoolPropertyHdl consumes comphelper/extract.hxx; Library_xo links comphelper.
+  expect(isForbiddenModuleEdge("xmloff", "comphelper")).toBe(false);
+  expect(isForbiddenModuleEdge("comphelper", "xmloff")).toBe(true);
 });

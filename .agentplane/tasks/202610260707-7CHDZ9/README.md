@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T07:52:00.697Z"
+doc_updated_at: "2026-10-26T08:24:06.443Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -72,6 +72,10 @@ sections:
     - Observation: The initial application coverage run was superseded by the source decomposition and stopped with SIGINT (exit 130), after revealing one obsolete Calc formatter assertion and two exhaustive Unicode replay timeout failures.
       Impact: The old run discovered tests before the new split files existed and cannot certify the final source tree.
       Resolution: Replace the obsolete unsupported-format assertion with the source-supported numeric output check; preserve all 65536-unit and all-codepoint assertions with a bounded 300-second budget for exhaustive native replays under Istanbul. All 163 split RTF tests, all 10 Calc resource tests, strict JSDoc, file size, type and provenance checks pass. A fresh complete application coverage run is executing on the final tree.
+
+    - Observation: Resumed sequential verify passed format, lint, full typecheck, dependencies and Writer/Calc resources. Tooling identified two stale reverse-dependency expectations: unotools to i18nutil and xmloff to comphelper.
+      Impact: Both dependencies already exist in the merged implementations and are evidenced by upstream transliterationwrapper.cxx and NamedBoolPropertyHdl.cxx includes.
+      Resolution: Update only the obsolete test expectations, retaining reverse and neighboring-handler prohibitions. Bound tooling to two workers to avoid concurrent repeated whole-tree scans. Preserve coverage reports on failures without changing any 100-percent threshold. Correct the exhaustive-case timeout argument and use the actual first-line WhichId in style-reset assertions.
 id_source: "generated"
 ---
 ## Summary
@@ -124,3 +128,7 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: The initial application coverage run was superseded by the source decomposition and stopped with SIGINT (exit 130), after revealing one obsolete Calc formatter assertion and two exhaustive Unicode replay timeout failures.
   Impact: The old run discovered tests before the new split files existed and cannot certify the final source tree.
   Resolution: Replace the obsolete unsupported-format assertion with the source-supported numeric output check; preserve all 65536-unit and all-codepoint assertions with a bounded 300-second budget for exhaustive native replays under Istanbul. All 163 split RTF tests, all 10 Calc resource tests, strict JSDoc, file size, type and provenance checks pass. A fresh complete application coverage run is executing on the final tree.
+
+- Observation: Resumed sequential verify passed format, lint, full typecheck, dependencies and Writer/Calc resources. Tooling identified two stale reverse-dependency expectations: unotools to i18nutil and xmloff to comphelper.
+  Impact: Both dependencies already exist in the merged implementations and are evidenced by upstream transliterationwrapper.cxx and NamedBoolPropertyHdl.cxx includes.
+  Resolution: Update only the obsolete test expectations, retaining reverse and neighboring-handler prohibitions. Bound tooling to two workers to avoid concurrent repeated whole-tree scans. Preserve coverage reports on failures without changing any 100-percent threshold. Correct the exhaustive-case timeout argument and use the actual first-line WhichId in style-reset assertions.

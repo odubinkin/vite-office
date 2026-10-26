@@ -190,7 +190,7 @@ for (const width of [1280, 390])
       required(exportedPartial),
       required(exportedLink),
     ]) {
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(92, false)).toBeUndefined();
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_FIRSTLINE, false)).toBeUndefined();
       expect(node.GetParagraphFirstLineIndent()).toBe(360);
     }
     expect(

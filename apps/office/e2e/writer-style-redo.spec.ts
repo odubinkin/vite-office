@@ -137,7 +137,7 @@ for (const width of [1280, 390])
       expect(node.GetText()).toBe("StyleRedo Bold Link Tail");
       expect(node.GetTextFormatColl().GetName()).toBe("History style B");
       expect(node.GetParagraphFirstLineIndent()).toBe(360);
-      expect(node.GetpSwAttrSet()?.GetItemIfSet(92, false)).toBeUndefined();
+      expect(node.GetpSwAttrSet()?.GetItemIfSet(RES_MARGIN_FIRSTLINE, false)).toBeUndefined();
       expect(node.GetpSwpHints()).toBeUndefined();
       expect(
         loaded.document.paragraphs.map(

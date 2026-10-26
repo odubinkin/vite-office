@@ -71,6 +71,8 @@ export function createOfficeTestOptions(
             : "src/**/*.{ts,tsx}",
       ],
       provider: "istanbul",
+      // Preserve diagnostics for integration repairs while retaining every coverage threshold.
+      reportOnFailure: true,
       reporter: ["text", "json", "json-summary", "html"],
       reportsDirectory: `./coverage/${scope}`,
       thresholds: { branches: 100, functions: 100, lines: 100, statements: 100 },
