@@ -43,3 +43,12 @@ it.each([
     expect(OStringToOUString(Uint8Array.from(input), RTL_TEXTENCODING_UTF8)).toBe(expected);
   },
 );
+
+it("uses the native UTF-8 encoder including malformed UTF-16 grouping", /** Checks the string wrapper uses SAL conversion rather than host replacement characters. @returns Nothing. */ () => {
+  expect([...OUStringToOString("A😀é", RTL_TEXTENCODING_UTF8)]).toEqual([
+    65, 0xf0, 0x9f, 0x98, 0x80, 0xc3, 0xa9,
+  ]);
+  expect([...OUStringToOString("A\ud800B", RTL_TEXTENCODING_UTF8)]).toEqual([65, 63]);
+  expect([...OUStringToOString("A\ud800", RTL_TEXTENCODING_UTF8)]).toEqual([65]);
+  expect([...OUStringToOString("\udc00", RTL_TEXTENCODING_UTF8)]).toEqual([63]);
+});

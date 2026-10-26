@@ -248,3 +248,7 @@ existing signed32 default family. Source-only checks cover parser callbacks and
 quirks plus all UTF16 scalar hex classifications. WRITER160–165 preserve the
 observed source behaviors. Document CSS cascade/application and the HTML reader
 remain open; this syntax checkpoint is not compiled Writer parity evidence.
+
+### Native UTF-8 output boundary
+
+The shared SAL port now implements `ImplConvertUnicodeToUtf8` and its original context and bad-input helper. `OUStringToOString` uses the pinned UTF-8 allocation estimate, ASCII shortcut, FLUSH flag and destination-only retry condition. The existing TXT download workflow sends native encoded bytes instead of passing a string to browser Blob encoding; Markdown output also uses the same SAL wrapper. Valid Unicode, signature/capacity/context, Java UTF-8 and malformed-surrogate source contracts are covered, including the quirks recorded as WRITER166 and WRITER167. Compiled native differential, original per-fragment Writer stream writes and full filter graph closure remain unverified.

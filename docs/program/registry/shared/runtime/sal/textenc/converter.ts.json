@@ -20,17 +20,19 @@
         "vendor/libreoffice-reference/sal/textenc/converter.cxx#handleBadInputTextToUnicodeConversion",
         "apps/office/src/sal/textenc/tcvtutf8.test.ts#pinned signature"
       ],
-      "justification": "Pinned SAL invalid/undefined byte actions, info bits, flag masks and destination accounting for the UTF-8 decoder. Broader SAL codec parity and compiled native differential remain unverified.",
+      "justification": "Pinned SAL invalid/undefined conversion actions in both directions, flag overrides, replacement bytes, optional prefix ownership and exact destination accounting. Source-contract tests pass; compiled native differential remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "BadInputConversionAction",
-        "handleBadInputTextToUnicodeConversion"
+        "handleBadInputTextToUnicodeConversion",
+        "handleBadInputUnicodeToTextConversion"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/converter.cxx",
       "upstreamSymbols": [
         "BadInputConversionAction",
-        "handleBadInputTextToUnicodeConversion"
+        "handleBadInputTextToUnicodeConversion",
+        "handleBadInputUnicodeToTextConversion"
       ]
     }
   }

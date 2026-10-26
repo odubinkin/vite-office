@@ -1,5 +1,7 @@
 /** @fileoverview Browser download workflows for Writer exports. */
 
+import { OUStringToOString } from "../../../sal/rtl/ustring-convert";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 import type { DocumentExportPort } from "../../../svl/source/misc/storage";
 import { SwDocShell } from "../../source/uibase/app/docsh";
 
@@ -37,7 +39,7 @@ export function exportWriterTextToPort(
     },
     /** Delivers the shell-owned native filter output. @returns Port completion. */ () =>
       port.export({
-        data: docShell.SerializeText(),
+        data: OUStringToOString(docShell.SerializeText(), RTL_TEXTENCODING_UTF8),
         mediaType: "text/plain;charset=utf-8",
         name: filename,
       }),

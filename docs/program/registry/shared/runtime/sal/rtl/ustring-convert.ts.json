@@ -19,9 +19,10 @@
         "apps/office/src/sal/rtl/ustring-convert.ts",
         "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
         "vendor/libreoffice-reference/include/rtl/ustring.hxx",
-        "apps/office/src/sal/rtl/ustring-convert.test.ts#uses native UTF-8 broken-sequence grouping"
+        "apps/office/src/sal/rtl/ustring-convert.test.ts#uses native UTF-8 broken-sequence grouping",
+        "vendor/libreoffice-reference/sal/rtl/string.cxx#rtl_impl_convertUStringToString"
       ],
-      "justification": "Source conversion flags and ported single-byte descriptors are used by Calc CSV; the full converter registry and stream contracts remain pending. Native UTF-8 OStringToOUString now consumes the existing pinned SAL converter with the source final FLUSH flag instead of host TextDecoder. Preserves native grouping of broken, overlong, surrogate and five-byte sequences, BOM retention and output-length bounds. Seven new malformed/signature cases plus actual Markdown callback admission cover this path. Other pre-existing string conversion branches, including UTF-8 encoding, remain independently unverified.",
+      "justification": "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified.",
       "knownViolations": [],
       "localSymbols": [
         "OStringToOUString",

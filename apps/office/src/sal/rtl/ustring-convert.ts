@@ -1,4 +1,5 @@
 /** @fileoverview UTF-16/byte conversion for the text encodings whose original SAL converters are present. */
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../inc/rtl/character";
 import * as flags from "../inc/rtl/textcvt.h";
 import {
   RTL_TEXTENCODING_UNICODE,
@@ -8,7 +9,7 @@ import {
 import { convertCharToUnicode, convertUnicodeToChar } from "../textenc/convertsimple.hxx";
 import { Impl_getByteConvertData } from "../textenc/tables";
 import { ImplDummyToUnicode, ImplUnicodeToDummy } from "../textenc/textcvt";
-import { ImplConvertUtf8ToUnicode } from "../textenc/tcvtutf8";
+import { ImplConvertUtf8ToUnicode, ImplConvertUnicodeToUtf8 } from "../textenc/tcvtutf8";
 
 /** Performs the original OSTRING_TO_OUSTRING_CVTFLAGS conversion for available source descriptors, including the source missing-converter fallback. @param input - Source bytes. @param encoding - Native ID. @returns Decoded text. */
 export function OStringToOUString(input: Uint8Array, encoding: rtl_TextEncoding): string {
@@ -62,7 +63,6 @@ export function OStringToOUString(input: Uint8Array, encoding: rtl_TextEncoding)
 
 /** Performs the original OUSTRING_TO_OSTRING_CVTFLAGS conversion for available source descriptors, including the source missing-converter fallback. @param value - UTF-16 text. @param encoding - Native ID. @returns Encoded bytes. */
 export function OUStringToOString(value: string, encoding: rtl_TextEncoding): Uint8Array {
-  if (encoding === RTL_TEXTENCODING_UTF8) return new TextEncoder().encode(value);
   if (encoding === RTL_TEXTENCODING_UNICODE) {
     const result = new Uint8Array(value.length * 2);
     for (let i = 0; i < value.length; i++) {
@@ -75,13 +75,40 @@ export function OUStringToOString(value: string, encoding: rtl_TextEncoding): Ui
   const descriptor = Impl_getByteConvertData(encoding);
   const source = new Uint16Array(value.length);
   for (let i = 0; i < value.length; i++) source[i] = value.charCodeAt(i);
-  const destination = new Uint8Array(value.length * 8);
+  let destination = new Uint8Array(
+    encoding === RTL_TEXTENCODING_UTF8 ? rtl_ImplGetFastUTF8ByteLen(source) : value.length * 8,
+  );
+  if (encoding === RTL_TEXTENCODING_UTF8 && destination.length === source.length) {
+    destination.set(source);
+    return destination;
+  }
   const conversionFlags =
     flags.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_DEFAULT |
     flags.RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
     flags.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
     flags.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0 |
     flags.RTL_UNICODETOTEXT_FLAGS_FLUSH;
+  if (encoding === RTL_TEXTENCODING_UTF8) {
+    const info: [number] = [0],
+      consumed: [number] = [0];
+    for (;;) {
+      const written = ImplConvertUnicodeToUtf8(
+        null,
+        null,
+        source,
+        source.length,
+        destination,
+        destination.length,
+        conversionFlags,
+        info,
+        consumed,
+      );
+      if ((info[0] & flags.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) === 0)
+        return destination.slice(0, written);
+      const remaining = source.length - consumed[0];
+      destination = new Uint8Array(written + remaining * 4 + remaining + 4);
+    }
+  }
   const written = descriptor
     ? convertUnicodeToChar(
         descriptor,
@@ -104,4 +131,25 @@ export function OUStringToOString(value: string, encoding: rtl_TextEncoding): Ui
         [0],
       );
   return destination.slice(0, written);
+}
+
+/** Original exact UTF-8 allocation estimate, including unpaired UTF-16 units.
+ * @param source - Borrowed UTF-16 source.
+ * @returns Native byte-length estimate.
+ */
+function rtl_ImplGetFastUTF8ByteLen(source: Uint16Array): number {
+  let length = 0;
+  for (let i = 0; i < source.length; i++) {
+    const character = source[i] as number;
+    if (character < 0x80) length++;
+    else if (character < 0x800) length += 2;
+    else if (!isHighSurrogate(character)) length += 3;
+    else {
+      let scalar = character;
+      if (i + 1 < source.length && isLowSurrogate(source[i + 1] as number))
+        scalar = combineSurrogates(scalar, source[++i] as number);
+      length += scalar < 0x10000 ? 3 : scalar < 0x200000 ? 4 : scalar < 0x4000000 ? 5 : 6;
+    }
+  }
+  return length;
 }

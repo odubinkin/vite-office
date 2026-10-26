@@ -15,8 +15,7 @@
       "OUStringToOString"
     ],
     "preservedResponsibilities": [
-      "CSV byte conversion uses the original single-byte descriptor conversion procedures and OString/OUString conversion flags for the authenticated ported registry; Unicode writes little-endian UTF-16 and UTF-8 uses browser byte primitives.",
-      "Native UTF-8 OStringToOUString now consumes the existing pinned SAL converter with the source final FLUSH flag instead of host TextDecoder. Preserves native grouping of broken, overlong, surrogate and five-byte sequences, BOM retention and output-length bounds. Seven new malformed/signature cases plus actual Markdown callback admission cover this path. Other pre-existing string conversion branches, including UTF-8 encoding, remain independently unverified."
+      "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified."
     ],
     "omittedResponsibilities": [
       "Full SAL converter registry, contextual/multibyte converters, complete stream ownership and every original constructor/error contract remain unported. The original SAL dummy conversion now handles missing registry entries."
@@ -36,6 +35,10 @@
         {
           "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
           "marker": "OUStringToOString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
+          "marker": "rtl_impl_convertUStringToString"
         }
       ]
     },

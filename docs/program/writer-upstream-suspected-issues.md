@@ -1550,3 +1550,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Expression::GetColor` RGB branch.
 - Observation: after an integer-prefix check, any component containing a decimal point is multiplied by 255 and narrowed to an unsigned byte. This applies to RGB components as well as alpha. A negative fractional prefix between minus one and zero can bypass the initial negative check because its integer prefix is zero. This is a source-level trace.
 - Preservation: retain the original condition order, multiplication, integer truncation and byte narrowing; do not apply channel-specific normalization.
+
+### WRITER166 — UTF-8 encoding consumes a non-low unit after a pending high surrogate
+
+- Source: pinned `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` bad-input branch.
+- Observation: after a high surrogate, the next UTF-16 unit is consumed before checking that it is low. If it is not low, the replacement/ignore/error branch processes that consumed pair without retrying the second unit. With default flags, high-surrogate plus ASCII A emits one question mark and consumes both units. This is a source-contract trace, not compiled native evidence.
+- Preservation: retain the original pointer advancement, pending-state reset and bad-input actions. Do not substitute host Unicode replacement grouping.
+
+### WRITER167 — UTF-8 encoder FLUSH retains a trailing high surrogate and the string wrapper drops it
+
+- Source: pinned `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` final pending-surrogate branch; `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`.
+- Observation: with FLUSH set, a pending high surrogate reports SRCBUFFERTOSMALL and remains pending; without FLUSH it enters bad-input handling. The string wrapper sets FLUSH, uses a null context and retries only DESTBUFFERTOSMALL, so a trailing high surrogate produces no bytes. This is a source-level trace; compiled native reproduction remains unverified.
+- Preservation: retain the source flag polarity and wrapper retry condition independently.

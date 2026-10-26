@@ -1,8 +1,13 @@
 /** @fileoverview Source-contract checks for the SAL UTF-8 decoder. */
 import { expect, it } from "vitest";
+import { BadInputConversionAction, handleBadInputUnicodeToTextConversion } from "./converter";
 import * as cvt from "../inc/rtl/textcvt.h";
 import {
   ImplConvertUtf8ToUnicode,
+  ImplConvertUnicodeToUtf8,
+  ImplCreateUnicodeToUtf8Context,
+  ImplResetUnicodeToUtf8Context,
+  type ImplUnicodeToUtf8Context,
   ImplCreateUtf8ToUnicodeContext,
   ImplResetUtf8ToUnicodeContext,
 } from "./tcvtutf8";
@@ -188,4 +193,163 @@ it("retains native consumption at malformed-byte, flush and replacement-capacity
   expect(ImplConvertUtf8ToUnicode({}, null, Uint8Array.of(0), 1, output, 1, 0, info, [0])).toBe(1);
   expect(output[0]).toBe(0xfffd);
   expect(info[0]).toBe(cvt.RTL_TEXTTOUNICODE_INFO_INVALID);
+});
+
+/** Executes the source encoder with observable pointer/status/context outputs.
+ * @param input - UTF-16 units.
+ * @param flags - Source conversion flags.
+ * @param capacity - Byte capacity.
+ * @param context - Optional streaming context.
+ * @param java - Whether to select Java UTF-8.
+ * @returns Bytes, source consumption and status.
+ */
+function encode(
+  input: number[],
+  flags = 0,
+  capacity = 32,
+  context: ImplUnicodeToUtf8Context | null = null,
+  java = false,
+) {
+  const output = new Uint8Array(capacity),
+    info: [number] = [0],
+    consumed: [number] = [0];
+  const written = ImplConvertUnicodeToUtf8(
+    java ? true : null,
+    context,
+    Uint16Array.from(input),
+    input.length,
+    output,
+    capacity,
+    flags,
+    info,
+    consumed,
+  );
+  return { bytes: [...output.subarray(0, written)], info: info[0], consumed: consumed[0] };
+}
+it("encodes native UTF-8 scalar boundaries", /** Checks explicit bytes across every encoding width. @returns Nothing. */ () => {
+  expect(
+    encode([0, 0x7f, 0x80, 0x7ff, 0x800, 0xd7ff, 0xe000, 0xffff, 0xd800, 0xdc00, 0xdbff, 0xdfff]),
+  ).toEqual({
+    bytes: [
+      0, 0x7f, 0xc2, 0x80, 0xdf, 0xbf, 0xe0, 0xa0, 0x80, 0xed, 0x9f, 0xbf, 0xee, 0x80, 0x80, 0xef,
+      0xbf, 0xbf, 0xf0, 0x90, 0x80, 0x80, 0xf4, 0x8f, 0xbf, 0xbf,
+    ],
+    info: 0,
+    consumed: 12,
+  });
+});
+it("retains native signature state across output exhaustion and reset", /** Checks that an unwritten signature remains pending and a written signature occurs once. @returns Nothing. */ () => {
+  const context = ImplCreateUnicodeToUtf8Context(),
+    flags = cvt.RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE;
+  expect(encode([65], flags, 2, context)).toEqual({ bytes: [], info: 4, consumed: 0 });
+  expect(context.nHighSurrogate).toBe(0xffff);
+  expect(encode([65], flags, 3, context)).toEqual({
+    bytes: [0xef, 0xbb, 0xbf],
+    info: 4,
+    consumed: 0,
+  });
+  expect(encode([65], flags, 1, context)).toEqual({ bytes: [65], info: 0, consumed: 1 });
+  ImplResetUnicodeToUtf8Context(context);
+  expect(encode([], flags, 3, context).bytes).toEqual([0xef, 0xbb, 0xbf]);
+});
+it("keeps the source FLUSH polarity and rewinds only the current low surrogate", /** Checks the pending UTF-16 state rather than host replacement behavior. @returns Nothing. */ () => {
+  const context = ImplCreateUnicodeToUtf8Context(),
+    flush = cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH;
+  expect(encode([0xd83d], flush, 4, context)).toEqual({ bytes: [], info: 2, consumed: 1 });
+  expect(encode([0xde00], flush, 3, context)).toEqual({ bytes: [], info: 4, consumed: 0 });
+  expect(context.nHighSurrogate).toBe(0xd83d);
+  expect(encode([0xde00], flush, 4, context)).toEqual({
+    bytes: [0xf0, 0x9f, 0x98, 0x80],
+    info: 0,
+    consumed: 1,
+  });
+  expect(encode([0xd800], 0)).toEqual({ bytes: [63], info: 16, consumed: 1 });
+  expect(encode([0xd800], 0, 0)).toEqual({ bytes: [], info: 20, consumed: 1 });
+});
+it.each([
+  [cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT, [63], 16, 2],
+  [cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE, [], 16, 2],
+  [cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_0, [0], 16, 2],
+  [cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE, [95], 16, 2],
+  [cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR, [], 17, 2],
+])(
+  "preserves malformed-surrogate grouping with flags %s",
+  /** Checks the following non-low unit is consumed by the original bad-input branch. @param flags - Policy. @param bytes - Output. @param info - Status. @param consumed - Pointer. @returns Nothing. */ (
+    flags,
+    bytes,
+    info,
+    consumed,
+  ) => {
+    expect(encode([0xd800, 65], flags as number)).toEqual({ bytes, info, consumed });
+  },
+);
+it("encodes Java UTF-8 NUL and individual surrogate units", /** Checks the distinct Java variant bypasses scalar combining. @returns Nothing. */ () => {
+  expect(
+    encode([0, 0xd83d, 0xde00], cvt.RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE, 16, null, true),
+  ).toEqual({ bytes: [0xc0, 0x80, 0xed, 0xa0, 0xbd, 0xed, 0xb8, 0x80], info: 0, consumed: 3 });
+});
+
+it("applies native Unicode replacement prefixes and undefined-character flag overrides", /** Checks shared converter cases consumed by UTF-8 and future native encoders. @returns Nothing. */ () => {
+  const bytes = new Uint8Array(3),
+    offset: [number] = [0],
+    info: [number] = [0],
+    written: [boolean] = [true];
+  const call = (undefinedInput: boolean, scalar: number, flags: number, capacity: number) => {
+    offset[0] = 0;
+    info[0] = 0;
+    written[0] = true;
+    const action = handleBadInputUnicodeToTextConversion(
+      undefinedInput,
+      scalar,
+      flags,
+      bytes,
+      offset,
+      capacity,
+      info,
+      Uint8Array.of(27, 65),
+      2,
+      written,
+    );
+    return { action, bytes: [...bytes.subarray(0, offset[0])], info: info[0], written: written[0] };
+  };
+  expect(call(false, 0, 0, 2)).toEqual({
+    action: BadInputConversionAction.NO_OUTPUT,
+    bytes: [],
+    info: 16,
+    written: true,
+  });
+  expect(call(false, 0, cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_UNDERLINE, 3)).toEqual({
+    action: BadInputConversionAction.CONTINUE,
+    bytes: [27, 65, 95],
+    info: 16,
+    written: true,
+  });
+  expect(call(true, 0xe000, cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0, 3)).toEqual({
+    action: BadInputConversionAction.CONTINUE,
+    bytes: [27, 65, 0],
+    info: 8,
+    written: true,
+  });
+  expect(
+    call(
+      true,
+      0xe000,
+      cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_IGNORE | cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0,
+      0,
+    ),
+  ).toEqual({ action: BadInputConversionAction.CONTINUE, bytes: [], info: 8, written: false });
+  expect(
+    call(
+      true,
+      0,
+      cvt.RTL_UNICODETOTEXT_FLAGS_CONTROL_IGNORE | cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+      0,
+    ),
+  ).toEqual({ action: BadInputConversionAction.CONTINUE, bytes: [], info: 8, written: false });
+  expect(call(true, 65, cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR, 0)).toEqual({
+    action: BadInputConversionAction.STOP,
+    bytes: [],
+    info: 9,
+    written: true,
+  });
 });
