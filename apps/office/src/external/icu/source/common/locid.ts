@@ -1,4 +1,5 @@
-/** @fileoverview Consumed original ICU78.3 Locale constructors, ordinary init payload/getters, clone/copy, root/default ownership and strict forLanguageTag factory. Modern alias-resource canonicalization and likely-subtag APIs remain unported. */
+/** @fileoverview Consumed original ICU78.3 Locale constructors, ordinary init payload/getters, clone/copy, root/default ownership and strict forLanguageTag factory. Modern alias-resource canonicalization remains unported; source likely-subtag mutation APIs use the actual loclikely service. */
+import { ulocimp_addLikelySubtags, ulocimp_minimizeSubtags } from "./loclikely";
 import { ByteSinkUtil } from "./bytesinkutil";
 import type { ByteStringSink } from "./unicode/bytestream";
 import { ulocimp_getKeywordValue, uloc_getKeywordValue } from "./uloc.keywordvalue";
@@ -24,7 +25,9 @@ type Payload =
       variantBegin: number;
     };
 /** Native borrowed const reference surface for the currently ported methods. */
-export type LocaleConstReference = Readonly<Omit<Locale, "assign" | "setToBogus">>;
+export type LocaleConstReference = Readonly<
+  Omit<Locale, "assign" | "setToBogus" | "addLikelySubtags" | "minimizeSubtags">
+>;
 /** Original C-string prefix boundary. @param text - Counted storage/null. @returns Prefix/null. */
 function cstring(text: string | null): string | null {
   if (text === null) return null;
@@ -235,6 +238,55 @@ export class Locale {
     return this.payload.type === "bogus" || this.payload.variantBegin === 0
       ? ""
       : (cstring(this.getBaseName().slice(this.payload.variantBegin)) as string);
+  }
+  /** Original addLikelySubtags mutates only on success; only memory-allocation failure marks the existing owner bogus. @param status - Sticky status. @returns Nothing. */
+  addLikelySubtags(status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    let output = "";
+    ulocimp_addLikelySubtags(
+      this.getName(),
+      {
+        /** Owns original result CharString. @param bytes - Span. @returns Nothing. */ Append(
+          bytes: string,
+        ) {
+          output += bytes;
+        },
+      },
+      status,
+    );
+    if (U_FAILURE(status[0])) {
+      if (status[0] === UErrorCode.U_MEMORY_ALLOCATION_ERROR) this.setToBogus();
+      return;
+    }
+    this.init(output);
+    if (this.isBogus()) status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+  }
+  /** Original public default minimize favors region. @param status - Status. @returns Nothing. */
+  minimizeSubtags(status: [number]): void {
+    this.minimizeSubtagsFavorScript(false, status);
+  }
+  /** Original protected bool overload. TypeScript cannot give overloads different visibility, so the source protected signature has a separate protected spelling. @param favorScript - Source preference. @param status - Status. @returns Nothing. */
+  protected minimizeSubtagsFavorScript(favorScript: boolean, status: [number]): void {
+    if (U_FAILURE(status[0])) return;
+    let output = "";
+    ulocimp_minimizeSubtags(
+      this.getName(),
+      {
+        /** Owns original result CharString. @param bytes - Span. @returns Nothing. */ Append(
+          bytes: string,
+        ) {
+          output += bytes;
+        },
+      },
+      favorScript,
+      status,
+    );
+    if (U_FAILURE(status[0])) {
+      if (status[0] === UErrorCode.U_MEMORY_ALLOCATION_ERROR) this.setToBogus();
+      return;
+    }
+    this.init(output);
+    if (this.isBogus()) status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
   }
   /** Original C-buffer keyword getter has no separate bogus guard. @param name - C key/null. @param buffer - Writable output. @param capacity - Native capacity. @param status - Sticky status. @returns Result length. */
   getKeywordValue(

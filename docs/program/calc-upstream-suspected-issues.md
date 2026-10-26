@@ -4231,3 +4231,31 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: after successfully traversing the first half of a binary branch, the function updates the candidate through the reference argument but does not set its local haveUniqueValue flag. The next half can replace that candidate. An unchanged native BytesTrieBuilder fixture with one-byte keys 0..7 mapped to 11 and 8..15 mapped to 22 gives hasUniqueValue=true and candidate22 at the root, while direct reads still give both 11 and 22. Both original builder modes reproduce it.
 - Suspected issue: a successful unique-value query can report one value for a subtree containing different values. The recursive flag propagation appears incomplete.
 - Local behavior: retain the source control flow and output writes, including candidate changes on false returns. The native reader comparison and regression test cover the differing-subtree fixture; no corrective flag assignment is introduced.
+
+### CALC-333 — Likely comparison passes a region into a script lookup
+
+- Upstream: ICU78.3 `source/common/loclikelysubtags.cpp`, `LikelySubtags::compareLikely`, region-difference branch.
+- Observation: with equal language/script but different regions, the source calls getLikelyIndex(lsr.language, lsr.region). The second parameter is interpreted as a script. For zh-Hant-TW versus zh-Hant-CN, the unchanged native implementation returns cached bits4754 with the better-candidate bit clear, even though maximization of zh-Hant gives TW. Repeated comparison with those cached bits preserves the result.
+- Suspected issue: region is apparently supplied where the script subtag is needed, affecting which regional default is selected.
+- Local behavior: keep the region argument, source cache flags and exact result; no corrected script argument is substituted. Native and regression comparisons cover the case.
+
+### CALC-334 — Supplemental-region keyword selection accepts legacy punctuation in the suffix
+
+- Upstream: ICU78.3 `source/common/loclikely.cpp`, `GetRegionFromKey`; `uloc.cpp`, keyword-value lookup.
+- Observation: GetRegionFromKey assumes the keyword already fits the UTS35 type syntax, then checks only length3..6, two initial ASCII letters and their valid-region bitmap. The legacy keyword getter permits plus and slash, so en@rg=GB+ is accepted as region GB with success. The source does not verify a literal zzzz suffix for rg. A disallowed keyword byte such as exclamation instead propagates the original keyword error and suppresses inference.
+- Suspected issue: the syntax assumption is weaker than the legacy entry point actually guarantees. This may be intentional legacy permissiveness; the port must not add UTS35 suffix validation here.
+- Local behavior: preserve the source length/prefix/bitmap checks, punctuation acceptance, error propagation and rg/country/sd/likely priority. Covered by unchanged native region-wrapper cases.
+
+### CALC-335 — Four-letter language promotion does not reach the likely-subtag lookup
+
+- Upstream: ICU78.3 `source/common/loclikely.cpp`, `_uloc_addLikelySubtags`.
+- Observation: a parsed four-letter language with no script is moved into the local script string and the local language is cleared. Maximization then constructs a fresh Locale from the unchanged canonical localeID, rather than using those modified strings. The promotion therefore does not affect that lookup; its remaining observable role is the source rejection when a script was already supplied. Native wrapper comparisons cover abcd and abcd_Latn.
+- Suspected issue: bookkeeping appears to prepare a script-only input that is never used by the subsequent lookup.
+- Local behavior: preserve this control flow and the script-already-present error. Do not replace the Locale lookup with a reconstructed language/script tuple.
+
+### CALC-336 — First-letter likely trie cache is not initialized for absent branches
+
+- Upstream: ICU78.3 `source/common/loclikelysubtags.h`, trieFirstLetterStates; `loclikelysubtags.cpp`, constructor and first-letter lookup in maximize/getLikelyIndex.
+- Observation: the C++ array has no field initializer, and construction writes only entries whose root-letter traversal returns NO_VALUE. Later lookup tests an entry against zero for any lower-case initial letter with at least two input units. If a data package omits such a branch, that test can read an uninitialized uint64. The pinned complete langInfo has all26 letters with NO_VALUE branches, so this finding does not claim a reproduced failure on our pinned data.
+- Suspected issue: cache initialization relies on an unstated data-coverage invariant; a missing branch appears to leave indeterminate state rather than an explicit absent-state marker.
+- Local behavior: retain conditional cache assignment and leave unassigned logical slots unset, without adding a zero/default fallback. All26 pinned entries are assigned and exercised against unchanged native code; behavior for a source-uninitialized cache slot or arbitrary replacement data packages remains uncertified.

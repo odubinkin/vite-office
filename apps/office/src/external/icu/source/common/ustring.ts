@@ -1,4 +1,4 @@
-/** @fileoverview Original consumed ICU78.3 u_terminateChars/__TERMINATE_STRING contract from ustring.cpp; native pointer/readable-capacity preconditions remain in force. */
+/** @fileoverview Original consumed ICU78.3 u_terminateChars/__TERMINATE_STRING and ustr_hashCharsN contracts from ustring.cpp; native pointer/readable-capacity preconditions remain in force. */
 import { UErrorCode, U_SUCCESS } from "./unicode/utypes";
 /** Original termination helper does not perform public argument validation and returns the original length even on error. @param dest - Writable narrow pointer/null for non-writing cases. @param destCapacity - Native signed32 capacity. @param length - Native signed32 result length. @param status - Nullable sticky status. @returns Input length. */
 export function u_terminateChars(
@@ -20,4 +20,15 @@ export function u_terminateChars(
     else status[0] = UErrorCode.U_BUFFER_OVERFLOW_ERROR;
   }
   return length;
+}
+/** Original STRING_HASH uint8_t instantiation; length and data obey native readable-span preconditions. @param str - Narrow storage/null. @param length - Signed32 count. @returns Signed32 hash. */
+export function ustr_hashCharsN(str: string | null, length: number): number {
+  let hash = 0;
+  if (str !== null) {
+    length |= 0;
+    const inc = Math.trunc((length - 32) / 32) + 1;
+    for (let p = 0; p < length; p += inc)
+      hash = (Math.imul(hash, 37) + (str.charCodeAt(p) & 255)) | 0;
+  }
+  return hash;
 }

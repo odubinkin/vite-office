@@ -1,6 +1,7 @@
-/** @fileoverview ICU78.3 direct resource read contract for pinned zoneinfo64/keyTypeData. JSON projects immutable mapped resource storage and resolved alias boundaries; locale fallback, dynamic alias resolution, native allocation/lifetime and arbitrary packages remain unported. */
+/** @fileoverview ICU78.3 direct resource read contract for pinned zoneinfo64/keyTypeData/langInfo. JSON projects immutable mapped resource storage and resolved alias boundaries; locale fallback, dynamic alias resolution, native allocation/lifetime and arbitrary packages remain unported. */
 import zoneinfo64 from "../data/misc/zoneinfo64.json";
 import keyTypeData from "../data/misc/keyTypeData.json";
+import langInfo from "../data/misc/langInfo.json";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 
 export const UResType = {
@@ -43,13 +44,17 @@ export class UResourceBundle {
 /** Original direct-open consumed package/name overload, without locale fallback. @param packageName - Default ICU package. @param name - Pinned resource. @param status - Nullable sticky status. @returns Handle or null. */
 export function ures_openDirect(
   packageName: null,
-  name: "zoneinfo64" | "keyTypeData",
+  name: "zoneinfo64" | "keyTypeData" | "langInfo",
   status: Status,
 ): UResourceBundle | null {
   void packageName;
   if (status === null || U_FAILURE(status[0])) return null;
   return new UResourceBundle(
-    (name === "zoneinfo64" ? zoneinfo64.resource : keyTypeData.resource) as Resource,
+    (name === "zoneinfo64"
+      ? zoneinfo64.resource
+      : name === "keyTypeData"
+        ? keyTypeData.resource
+        : langInfo.resource) as Resource,
   );
 }
 /** Original scalar/table/array public size. @param bundle - Handle or null. @returns Size; scalar resources always have size one. */

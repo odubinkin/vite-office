@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/loclikely.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/loclikely.cpp",
+    "localSymbols": [
+      "ulocimp_addLikelySubtags",
+      "ulocimp_minimizeSubtags",
+      "ulocimp_getRegionForSupplementalData",
+      "RegionValidateMap"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_addLikelySubtags",
+      "ulocimp_minimizeSubtags",
+      "ulocimp_getRegionForSupplementalData",
+      "RegionValidateMap"
+    ],
+    "preservedResponsibilities": [
+      "Original C/internal add/minimize entry points use legacy canonicalization, source variant-length and asymmetric four-letter validation, Locale-based add versus counted minimize and actual checked sink/capacity/status handling. Original supplemental-region selection retains rg/country/sd/inference precedence, generated region bitmap, first-keyword null/error behavior and isolated inferred lookup status. Shared private transform keeps source branches and call order; no inferred grammar rules are added. Preserve permissive legacy suffix checks and dead local four-letter promotion (CALC-334/335). Modern alias canonicalization, layout/ABI and Calendar construction are separate unfinished responsibilities."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; native invalid pointer/allocation/ABI and complete Calendar/CSV integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.ts",
+          "marker": "ulocimp_addLikelySubtags"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/loclikely.cpp",
+          "marker": "ulocimp_addLikelySubtags"
+        }
+      ]
+    }
+  }
+}

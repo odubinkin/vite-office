@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresdata.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresdata.ts",
+        "apps/office/src/external/icu/source/common/loclikely.test.ts",
+        "scripts/icu-likelysubtags-native-probe.mjs",
+        "scripts/icu-locale-resource-native-probe.mjs"
+      ],
+      "justification": "Original consumed mutable ResourceDataValue holder, type and UTF16/binary/int-vector reads, table/array views and failed-getter default views. It shares mapped scalar-buffer identity and sticky-status/type/length behavior with existing uresbund primitives; original resource view writes call the concrete source setResource boundary. Dynamic aliases/fallback, physical packed-resource lifetimes/ABI and other ResourceDataValue convenience APIs remain unported. Native ResourceDataValue/pool probe passes67318 cases: every594 direct langInfo nodes with success/warning/failure, full scalar contents and failed table/array outputs, plus all65536 UTF16 units through original pool add/duplicate/invariant/freeze/get/orphan. Main service/C/Locale/region witness passes813182 cases over15909 locale IDs and all8310 original trie keys, with7527 decoded LSRs and6 paradigms. Conditional first-letter cache assignment is retained with all26 actual pinned slots assigned; source-uninitialized slots for arbitrary replacement packages remain uncertified (CALC-336).",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResourceDataValue",
+        "getArray",
+        "getTable"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresdata.cpp",
+      "upstreamSymbols": [
+        "ResourceDataValue::getString",
+        "ResourceDataValue::getArray",
+        "ResourceTable::findValue"
+      ]
+    }
+  }
+}

@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 BytesTrie reader from bytestrie.cpp and unicode/bytestrie.h. Borrowed Uint8Array storage and offsets represent native pointers; valid serialized data and source call preconditions are required. Builder, Iterator, native ownership/deallocation and invalid pointer arithmetic are outside this binding. */
+/** @fileoverview Original ICU78.3 BytesTrie reader from bytestrie.cpp and unicode/bytestrie.h. Borrowed byte storage and offsets represent native pointers; valid serialized data and source call preconditions are required. Builder, Iterator, native ownership/deallocation and invalid pointer arithmetic are outside this binding. */
 import type { ByteStringSink } from "./unicode/bytestream";
 import { UStringTrieResult as Result } from "./unicode/ustringtrie";
 const kMaxBranchLinearSubNodeLength = 5;
@@ -14,12 +14,18 @@ const kMinThreeByteDeltaLead = 0xf0;
 const kFourByteDeltaLead = 0xfe;
 const kState64RemainingShift = 59n;
 const kState64PosMask = (1n << kState64RemainingShift) - 1n;
+/** Typed mutable spans and immutable decoded mapped bytes both project native borrowed byte storage. */
+type SerializedBytes = Uint8Array | readonly number[];
 /** Module-private symbol models the original BytesTrie friendship without exposing State fields to callers. */
 const statePayload = Symbol("BytesTrie::State");
 /** Original nested State logical payload. Empty native State initializes only bytes; other projections remain unread until saved. */
 export class BytesTrieState {
   /** Private-to-module friend payload; native pointer identity and stopped state are retained. */
-  [statePayload]: { bytes: Uint8Array | null; pos: number | null; remainingMatchLength: number } = {
+  [statePayload]: {
+    bytes: SerializedBytes | null;
+    pos: number | null;
+    remainingMatchLength: number;
+  } = {
     bytes: null,
     pos: null,
     remainingMatchLength: -1,
@@ -29,11 +35,11 @@ export class BytesTrieState {
 export class BytesTrie {
   /** Original nested State owner. */
   static readonly State = BytesTrieState;
-  private readonly bytes_: Uint8Array | null;
+  private readonly bytes_: SerializedBytes | null;
   private pos_: number | null;
   private remainingMatchLength_: number;
   /** Original borrowed-array and shallow-copy constructors. @param input - Actual serialized storage or reader to copy. @returns Reader. */
-  constructor(input: Uint8Array | null | BytesTrie) {
+  constructor(input: SerializedBytes | null | BytesTrie) {
     if (input instanceof BytesTrie) {
       this.bytes_ = input.bytes_;
       this.pos_ = input.pos_;
@@ -46,7 +52,7 @@ export class BytesTrie {
   }
   /** Dereferences a source-valid byte pointer. @param pos - Offset. @returns Unsigned byte. */
   private at(pos: number): number {
-    return (this.bytes_ as Uint8Array)[pos] as number;
+    return (this.bytes_ as SerializedBytes)[pos] as number;
   }
   /** Original reset. @returns This owner. */
   reset(): this {
@@ -81,8 +87,11 @@ export class BytesTrie {
     if (
       this.bytes_ !== null &&
       state[statePayload].bytes !== null &&
-      this.bytes_.buffer === state[statePayload].bytes.buffer &&
-      this.bytes_.byteOffset === state[statePayload].bytes.byteOffset
+      (this.bytes_ === state[statePayload].bytes ||
+        (this.bytes_ instanceof Uint8Array &&
+          state[statePayload].bytes instanceof Uint8Array &&
+          this.bytes_.buffer === (state[statePayload].bytes as Uint8Array).buffer &&
+          this.bytes_.byteOffset === (state[statePayload].bytes as Uint8Array).byteOffset))
     ) {
       this.pos_ = state[statePayload].pos;
       this.remainingMatchLength_ = state[statePayload].remainingMatchLength;

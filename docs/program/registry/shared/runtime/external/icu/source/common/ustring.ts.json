@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/external/icu/source/common/ustring.ts",
         "apps/office/src/external/icu/source/common/bytesinkutil.test.ts",
-        "scripts/icu-bytesink-native-probe.mjs"
+        "scripts/icu-bytesink-native-probe.mjs",
+        "scripts/icu-likelysubtags-native-probe.mjs"
       ],
-      "justification": "Original consumed __TERMINATE_STRING/u_terminateChars preserves returned length, nullable status, incoming failures, negative-length no-op, native exact-fit warning, overflow error and clearing only U_STRING_NOT_TERMINATED_WARNING after successful NUL storage. The function does not add generic public argument validation. Mutable byte storage projects the native pointer with original readable/writable-capacity preconditions. Primitive native comparison covers termination and status/guard effects; other ustring APIs and native ABI/invalid pointers remain uncertified.",
+      "justification": "Original consumed __TERMINATE_STRING/u_terminateChars preserves returned length, nullable status, incoming failures, negative-length no-op, native exact-fit warning, overflow error and clearing only U_STRING_NOT_TERMINATED_WARNING after successful NUL storage. The function does not add generic public argument validation. Mutable byte storage projects the native pointer with original readable/writable-capacity preconditions. Primitive native comparison covers termination and status/guard effects; other ustring APIs and native ABI/invalid pointers remain uncertified. Adds actual ustr_hashCharsN STRING_HASH uint8 instantiation with sparse32-step sampling, unsigned32 math and signed32 result. Native LSR constructor/hash/move witness covers long/high-byte/count/C boundaries; no UnicodeString hash API is claimed.",
       "knownViolations": [],
       "localSymbols": [
         "u_terminateChars"

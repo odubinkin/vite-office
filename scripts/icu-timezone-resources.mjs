@@ -1,4 +1,4 @@
-/** @fileoverview Exports complete pinned ICU78.3 zoneinfo64 and keyTypeData resources through unchanged native APIs. Run after the existing AQF9AG ICU native build; --check compares deterministic resource bytes. */
+/** @fileoverview Exports complete pinned ICU78.3 zoneinfo64, keyTypeData and langInfo resources through unchanged native APIs. Run after the existing AQF9AG ICU native build; --check compares deterministic resource bytes. */
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -13,6 +13,7 @@ writeFileSync(
   String.raw`
 #include "unicode/ures.h"
 #include "unicode/putil.h"
+#include "unicode/uscript.h"
 #include "uresimp.h"
 #include <iostream>
 #include <iomanip>
@@ -40,7 +41,9 @@ void dump(UResourceBundle* r){UErrorCode s=U_ZERO_ERROR;auto t=ures_getType(r);s
 }
 int main(int argc,char**argv){if(argc!=2)return 1;u_setDataDirectory(argv[1]);UErrorCode s=U_ZERO_ERROR;
  Handle zone(ures_openDirect(nullptr,"zoneinfo64",&s),ures_close);check(s);std::cout<<"{\"zoneinfo64\":";dump(zone.get());
- Handle keys(ures_openDirect(nullptr,"keyTypeData",&s),ures_close);check(s);std::cout<<",\"keyTypeData\":";dump(keys.get());std::cout<<"}\n";
+ Handle keys(ures_openDirect(nullptr,"keyTypeData",&s),ures_close);check(s);std::cout<<",\"keyTypeData\":";dump(keys.get());
+ Handle lang(ures_openDirect(nullptr,"langInfo",&s),ures_close);check(s);std::cout<<",\"langInfo\":";dump(lang.get());
+ std::cout<<",\"scriptShortNames\":[";for(int i=0;i<USCRIPT_CODE_LIMIT;++i){if(i)std::cout<<',';const char* name=uscript_getShortName(UScriptCode(i));if(name)ascii(name);else std::cout<<"null";}std::cout<<"]}\n";
 }
 `,
 );
@@ -68,7 +71,7 @@ const resources = JSON.parse(
     .update(readFileSync(`${source}/data/in/icudt78l.dat`))
     .digest("hex");
 mkdirSync(output, { recursive: true });
-for (const name of ["zoneinfo64", "keyTypeData"]) {
+for (const name of ["zoneinfo64", "keyTypeData", "langInfo"]) {
   const artifact = {
       source: {
         icuVersion: "78.3",
@@ -88,3 +91,20 @@ for (const name of ["zoneinfo64", "keyTypeData"]) {
   } else writeFileSync(path, bytes);
   console.log(`${name}: ${Buffer.byteLength(bytes)} bytes; pinned data sha256 ${dataHash}`);
 }
+
+const scriptNamesPath = `${output}/scriptShortNames.json`;
+const scriptNamesBytes = await format(
+  JSON.stringify({
+    source: {
+      icuVersion: "78.3",
+      dataSha256: dataHash,
+      scope: "Complete UScriptCode short-name data projection from original property alias service",
+    },
+    value: resources.scriptShortNames,
+  }),
+  { ...(await resolveConfig(scriptNamesPath)), parser: "json" },
+);
+if (process.argv.includes("--check")) {
+  if (readFileSync(scriptNamesPath, "utf8") !== scriptNamesBytes)
+    throw Error(`Pinned script names differ: ${scriptNamesPath}`);
+} else writeFileSync(scriptNamesPath, scriptNamesBytes);

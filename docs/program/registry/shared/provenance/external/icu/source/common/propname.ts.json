@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/propname.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/propname.cpp",
+    "localSymbols": [
+      "uscript_getShortName"
+    ],
+    "upstreamSymbols": [
+      "uscript_getShortName",
+      "U_SHORT_PROPERTY_NAME"
+    ],
+    "preservedResponsibilities": [
+      "Original propname.cpp owner of uscript_getShortName. Full script-short-name property-alias result data is exported through the unchanged pinned native data/API, preserving all signed32 input conversion, valid code names and null for unknown codes. This immutable decoded property projection does not infer script names from enum spelling or Intl, and does not claim other property-name APIs or packed property alias lookup layout. Native comparisons cover the complete16-bit code range and signed32 boundary values."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; native invalid pointer/allocation/ABI and complete Calendar/CSV integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/propname.ts",
+          "marker": "uscript_getShortName"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/propname.cpp",
+          "marker": "uscript_getShortName"
+        }
+      ]
+    }
+  }
+}
