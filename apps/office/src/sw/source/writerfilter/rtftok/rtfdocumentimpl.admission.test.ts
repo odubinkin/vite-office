@@ -243,11 +243,12 @@ it.each([
 );
 
 it.each([
-  ["brdrhair", 1, 1],
-  ["brdrth", 300, 600],
+  ["brdrhair", 1, 2],
+  ["brdrth", 300, undefined],
+  ["brdrs\\brdrth", 300, 300],
 ] as const)(
   "imports native border %s with Word width %i",
-  /** Checks hairline and thick border controls through an actual table box. @param control - RTF border selector. @param width - Word width. @param expected - Native twip width. @returns Nothing. */ (
+  /** Checks source hairline quantization and the ignored thick flag through a table box. @param control - RTF border selector. @param width - Word width. @param expected - Native twip width or no line. @returns Nothing. */ (
     control,
     width,
     expected,

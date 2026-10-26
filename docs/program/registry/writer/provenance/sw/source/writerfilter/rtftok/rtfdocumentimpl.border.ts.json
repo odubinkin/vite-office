@@ -1,0 +1,62 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
+    "upstreamPath": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+    "localSymbols": [
+      "RtfCellBorder",
+      "RTF_BORDER_STYLES",
+      "createRtfBorder",
+      "dispatchRtfBorder",
+      "createRtfBorderLine",
+      "getRtfBorderDistance"
+    ],
+    "upstreamSymbols": [
+      "RTFDocumentImpl::dispatchValue"
+    ],
+    "preservedResponsibilities": [
+      "Maps represented RTF border style controls, eighth-point width admission, whole-point distances, BorderHandler defaults and native BorderLine2/Box conversion; unknown border flags do not change existing styles."
+    ],
+    "omittedResponsibilities": [
+      "Native frame shadows, arbitrary OOXML art borders and compiled-upstream differential behavior are outside this value fragment."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "source width and point-distance quantization"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts",
+          "marker": "source hairline quantization"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+          "marker": "case RTFKeyword::BRDRW"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::BRDRHAIR"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/BorderHandler.cxx",
+          "marker": "BorderHandler::BorderHandler"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/ConversionHelper.cxx",
+          "marker": "void MakeBorderLine"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
+      "rationale": "Focused RTF border-dispatch and native mapper metric fragment keeps grouped parser state on the original RtfDocumentImpl owner and preserves source conversion stages within the repository file-size boundary.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

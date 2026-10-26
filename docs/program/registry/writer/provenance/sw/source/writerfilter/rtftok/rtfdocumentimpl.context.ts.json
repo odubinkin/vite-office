@@ -14,7 +14,6 @@
       "RtfBlock",
       "RtfSectionPage",
       "RtfTableRow",
-      "RtfCellBorder",
       "DEFAULT_CHARACTER",
       "RTF_UNDERLINE_STYLES",
       "hasRtfUnderlineControl",
@@ -30,14 +29,13 @@
       "getRtfFieldCommandParts",
       "parseRtfHyperlinkInstruction",
       "fromRtfNfc",
-      "fromRtfBorderStyle",
       "RtfDocumentImplContext"
     ],
     "upstreamSymbols": [
       "RTFDocumentImpl::resolveSubstream"
     ],
     "preservedResponsibilities": [
-      "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, RtfCellBorder, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, fromRtfBorderStyle, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+      "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -71,10 +69,6 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
           "marker": "RtfTableRow"
-        },
-        {
-          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
-          "marker": "RtfCellBorder"
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
@@ -135,10 +129,6 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
           "marker": "fromRtfNfc"
-        },
-        {
-          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
-          "marker": "fromRtfBorderStyle"
         },
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",

@@ -1,13 +1,9 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import {
-  ConvertBorderWidthToWord,
-  type SvxBorderLine,
-} from "../../../../editeng/source/items/borderline";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
@@ -30,7 +26,7 @@ import {
   type Color,
 } from "../../../../tools/inc/color";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { RES_PAGEDESC, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import { RES_BOX, RES_PAGEDESC, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwDoc } from "../../core/doc/doc";
@@ -112,6 +108,7 @@ export class RtfExport {
           this.IndexColor(run.attributes.underlineColor);
       }
       const paragraph = node as SwTextNode;
+      this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
       const rule = paragraph.GetNumRule();
       if (rule !== undefined && !this.lists.has(rule.GetName())) {
         const levels = Array.from(
@@ -133,6 +130,7 @@ export class RtfExport {
       }
     }
     for (const { style } of this.styles.values()) {
+      this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
       if (attributes.fontFamily !== undefined) this.IndexFont(attributes.fontFamily);
       if (attributes.color !== undefined && attributes.color !== "auto")
@@ -145,16 +143,7 @@ export class RtfExport {
       for (const row of block.GetTable().GetTabLines())
         for (const cell of row.GetTabBoxes()) {
           const box = cell.GetFormat().box;
-          if (box === undefined) continue;
-          for (const edge of [
-            SvxBoxItemLine.TOP,
-            SvxBoxItemLine.LEFT,
-            SvxBoxItemLine.BOTTOM,
-            SvxBoxItemLine.RIGHT,
-          ]) {
-            const line = box.GetLine(edge);
-            if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
-          }
+          if (box !== undefined) this.IndexBoxColors(box);
         }
     }
     let output = "{\\rtf1\\ansi\\ansicpg1252\\deff0";
@@ -289,7 +278,7 @@ export class RtfExport {
                 [SvxBoxItemLine.BOTTOM, "clbrdrb"],
                 [SvxBoxItemLine.RIGHT, "clbrdrr"],
               ] as const)
-                output += this.WriteCellBorder(control, box.GetLine(edge));
+                output += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
             if (box !== undefined)
               for (const [edge, unitControl, valueControl] of [
                 [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
@@ -596,16 +585,17 @@ export class RtfExport {
     return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
   }
 
-  /** Emits one native cell edge using the source RTF border style and width mapping.  @param control - Control. @param line - Line. @returns The string result. */
-  private WriteCellBorder(control: string, line: SvxBorderLine | undefined): string {
-    if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
-    const style = line.GetBorderLineStyle();
-    const width = line.GetWidth();
-    const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
-    const size =
-      width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
-    // Native NONE and unknown styles have an empty width implementation and returned above.
-    return `\\${control}\\${rtfBorderStyle(style as Exclude<BorderLineStyle, BorderLineStyle.NONE>, width)}${size}\\brdrcf${this.IndexColor(borderColor(line))}`;
+  /** Registers every represented native border color before writing the table. @param box - Native border item. @returns Nothing. */
+  private IndexBoxColors(box: SvxBoxItem): void {
+    for (const edge of [
+      SvxBoxItemLine.TOP,
+      SvxBoxItemLine.LEFT,
+      SvxBoxItemLine.BOTTOM,
+      SvxBoxItemLine.RIGHT,
+    ]) {
+      const line = box.GetLine(edge);
+      if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
+    }
   }
 
   /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */
@@ -642,50 +632,6 @@ function rtfColorKey(color: Readonly<Color>): string {
       ) => channel.toString(16).padStart(2, "0"),
     )
     .join("")}`;
-}
-
-/** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
-function rtfBorderStyle(
-  style: Exclude<BorderLineStyle, BorderLineStyle.NONE>,
-  width: number,
-): string {
-  switch (style) {
-    case BorderLineStyle.SOLID:
-      return width === 1 ? "brdrhair" : "brdrs";
-    case BorderLineStyle.DOTTED:
-      return "brdrdot";
-    case BorderLineStyle.DASHED:
-      return "brdrdash";
-    case BorderLineStyle.DOUBLE:
-    case BorderLineStyle.DOUBLE_THIN:
-      return "brdrdb";
-    case BorderLineStyle.THINTHICK_SMALLGAP:
-      return "brdrtnthsg";
-    case BorderLineStyle.THINTHICK_MEDIUMGAP:
-      return "brdrtnthmg";
-    case BorderLineStyle.THINTHICK_LARGEGAP:
-      return "brdrtnthlg";
-    case BorderLineStyle.THICKTHIN_SMALLGAP:
-      return "brdrthtnsg";
-    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
-      return "brdrthtnmg";
-    case BorderLineStyle.THICKTHIN_LARGEGAP:
-      return "brdrthtnlg";
-    case BorderLineStyle.EMBOSSED:
-      return "brdremboss";
-    case BorderLineStyle.ENGRAVED:
-      return "brdrengrave";
-    case BorderLineStyle.OUTSET:
-      return "brdroutset";
-    case BorderLineStyle.INSET:
-      return "brdrinset";
-    case BorderLineStyle.FINE_DASHED:
-      return "brdrdashsm";
-    case BorderLineStyle.DASH_DOT:
-      return "brdrdashd";
-    case BorderLineStyle.DASH_DOT_DOT:
-      return "brdrdashdd";
-  }
 }
 
 /** Escapes text according to RTF's ASCII plus signed UTF-16 Unicode form. @param value - Source text. @returns RTF text. */

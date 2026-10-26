@@ -4,6 +4,7 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwStartNode } from "../../core/docnode/node";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -58,6 +59,7 @@ export class RtfDocumentImpl {
     }>
   >();
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
+  protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
   protected currentListLevels: {

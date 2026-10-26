@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts"
       ],
-      "justification": "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, RtfCellBorder, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, fromRtfBorderStyle, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
+      "justification": "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "RtfParagraphState",
@@ -29,7 +29,6 @@
         "RtfBlock",
         "RtfSectionPage",
         "RtfTableRow",
-        "RtfCellBorder",
         "DEFAULT_CHARACTER",
         "RTF_UNDERLINE_STYLES",
         "hasRtfUnderlineControl",
@@ -45,7 +44,6 @@
         "getRtfFieldCommandParts",
         "parseRtfHyperlinkInstruction",
         "fromRtfNfc",
-        "fromRtfBorderStyle",
         "RtfDocumentImplContext"
       ],
       "sourceResponsibility": "unverified",

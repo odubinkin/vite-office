@@ -19,6 +19,12 @@ import {
   SvxLineSpaceRule,
 } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import {
+  ConvertBorderWidthToWord,
+  type SvxBorderLine,
+} from "../../../../editeng/source/items/borderline";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
@@ -28,6 +34,7 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
   RES_BREAK,
+  RES_BOX,
   RES_KEEP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -57,50 +64,61 @@ export class RtfAttributeOutput {
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
     const text = paragraph.GetText();
-    return this.WriteParagraphValues(
-      paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
-      paragraph.GetParagraphTextLeftMargin(),
-      paragraph.GetParagraphRightMargin(),
-      (
-        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-      ).ResolveTextFirstLineOffset(),
-      paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
-      paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
-      paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
-      paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
-      paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
-      paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
-        ? paragraph.GetParagraphTextLeftMargin()
-        : 0,
-      (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
-      false,
-      this.WriteLineSpacing(
-        paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
-        paragraph.GetSwAttrSet(),
-        text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
-      ),
+    return (
+      this.WriteParagraphValues(
+        paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
+        paragraph.GetParagraphTextLeftMargin(),
+        paragraph.GetParagraphRightMargin(),
+        (
+          paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+        ).ResolveTextFirstLineOffset(),
+        paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
+        paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
+        paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
+        paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
+        paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+        paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+          ? paragraph.GetParagraphTextLeftMargin()
+          : 0,
+        (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
+        false,
+        this.WriteLineSpacing(
+          paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+          paragraph.GetSwAttrSet(),
+          text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
+        ),
+      ) +
+      this.WriteFormatBox(
+        paragraph.GetSwAttrSet().GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined,
+      )
     );
   }
 
   /** Emits effective paragraph values for one named Writer style definition.  @param style - Style. @returns The string result. */
   public WriteStyleParagraphProperties(style: SwTextFormatColl): string {
     const items = style.GetAttrSet();
-    return this.WriteParagraphValues(
-      items.Get(RES_PARATR_ADJUST) as SvxAdjustItem,
-      (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
-      (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
-      (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
-      items.Get(RES_UL_SPACE) as SvxULSpaceItem,
-      items.Get(RES_KEEP) as SfxBoolItem,
-      items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
-      items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
-      items.Get(RES_PARATR_TABSTOP) as SvxTabStopItem,
-      items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
-        ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
-        : 0,
-      (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
-      true,
-      this.WriteLineSpacing(items.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem, items, LATIN),
+    return (
+      this.WriteParagraphValues(
+        items.Get(RES_PARATR_ADJUST) as SvxAdjustItem,
+        (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+        (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
+        (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+        items.Get(RES_UL_SPACE) as SvxULSpaceItem,
+        items.Get(RES_KEEP) as SfxBoolItem,
+        items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
+        items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
+        items.Get(RES_PARATR_TABSTOP) as SvxTabStopItem,
+        items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+          ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
+          : 0,
+        (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
+        true,
+        this.WriteLineSpacing(
+          items.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+          items,
+          LATIN,
+        ),
+      ) + this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined)
     );
   }
 
@@ -189,6 +207,61 @@ export class RtfAttributeOutput {
     return `\\sl${(space << 16) >> 16}\\slmult${multi}`;
   }
 
+  /** Source OutTBLBorderLine shared by cell and paragraph border emission. @param control - Border selector. @param line - Native line. @returns RTF controls. */
+  public OutTBLBorderLine(control: string, line: SvxBorderLine | undefined): string {
+    if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
+    const style = line.GetBorderLineStyle();
+    const width = line.GetWidth();
+    const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
+    const size =
+      width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
+    const color = `#${(line.GetColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+    return `\\${control}\\${rtfBorderStyle(style as Exclude<BorderLineStyle, BorderLineStyle.NONE>, width)}${size}\\brdrcf${this.colorIndex(color)}`;
+  }
+
+  /** Source OutBorderLine adds distance only for an existing line. @param control - Border selector. @param line - Native line. @param distance - Native twips. @returns RTF controls. */
+  public OutBorderLine(control: string, line: SvxBorderLine | undefined, distance: number): string {
+    return (
+      this.OutTBLBorderLine(control, line) +
+      (line === undefined ? "" : `\\brsp${distance & 0xffff}`)
+    );
+  }
+
+  /** Mirrors FormatBox for paragraph/styled borders; frame shadows have no current Writer owner. @param box - Authored or inherited item. @returns RTF controls. */
+  private WriteFormatBox(box: SvxBoxItem | undefined): string {
+    if (box === undefined) return "";
+    const sides = [
+      SvxBoxItemLine.TOP,
+      SvxBoxItemLine.LEFT,
+      SvxBoxItemLine.BOTTOM,
+      SvxBoxItemLine.RIGHT,
+    ] as const;
+    const first = box.GetTop();
+    if (
+      first !== undefined &&
+      sides.every(
+        /** Checks the source uniform-box condition. @param edge - Native edge. @returns Whether line and distance equal the top edge. */
+        (edge) =>
+          box.GetLine(edge)?.equals(first) &&
+          box.GetDistance(edge) === box.GetDistance(SvxBoxItemLine.TOP),
+      )
+    )
+      return this.OutBorderLine("box", first, box.GetSmallestDistance());
+    return sides
+      .map(
+        /** Emits one source-ordered paragraph border. @param edge - Native edge. @param index - Source selector index. @returns RTF controls. */ (
+          edge,
+          index,
+        ) =>
+          this.OutBorderLine(
+            ["brdrt", "brdrl", "brdrb", "brdrr"][index] as string,
+            box.GetLine(edge),
+            box.GetDistance(edge),
+          ),
+      )
+      .join("");
+  }
+
   /** Emits represented direct character controls. @param attributes - Native run values. @returns RTF controls. */
   public WriteCharacter(attributes: WriterCharacterAttributes): string {
     let result = "";
@@ -260,5 +333,49 @@ export class RtfAttributeOutput {
     const fontHeight = fontSizeTwips ?? 240;
     const halfPoints = Math.round((fontHeight * Math.abs(effectiveOffset)) / 1000);
     return `{\\*\\updnprop${height * 100 + (automatic ? 1 : 0)}}\\${effectiveOffset > 0 ? "up" : "dn"}${halfPoints}`;
+  }
+}
+
+/** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
+function rtfBorderStyle(
+  style: Exclude<BorderLineStyle, BorderLineStyle.NONE>,
+  width: number,
+): string {
+  switch (style) {
+    case BorderLineStyle.SOLID:
+      return width === 1 ? "brdrhair" : "brdrs";
+    case BorderLineStyle.DOTTED:
+      return "brdrdot";
+    case BorderLineStyle.DASHED:
+      return "brdrdash";
+    case BorderLineStyle.DOUBLE:
+    case BorderLineStyle.DOUBLE_THIN:
+      return "brdrdb";
+    case BorderLineStyle.THINTHICK_SMALLGAP:
+      return "brdrtnthsg";
+    case BorderLineStyle.THINTHICK_MEDIUMGAP:
+      return "brdrtnthmg";
+    case BorderLineStyle.THINTHICK_LARGEGAP:
+      return "brdrtnthlg";
+    case BorderLineStyle.THICKTHIN_SMALLGAP:
+      return "brdrthtnsg";
+    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
+      return "brdrthtnmg";
+    case BorderLineStyle.THICKTHIN_LARGEGAP:
+      return "brdrthtnlg";
+    case BorderLineStyle.EMBOSSED:
+      return "brdremboss";
+    case BorderLineStyle.ENGRAVED:
+      return "brdrengrave";
+    case BorderLineStyle.OUTSET:
+      return "brdroutset";
+    case BorderLineStyle.INSET:
+      return "brdrinset";
+    case BorderLineStyle.FINE_DASHED:
+      return "brdrdashsm";
+    case BorderLineStyle.DASH_DOT:
+      return "brdrdashd";
+    case BorderLineStyle.DASH_DOT_DOT:
+      return "brdrdashdd";
   }
 }

@@ -4,7 +4,6 @@ import { SvxLineSpaceRule, SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
@@ -14,8 +13,11 @@ import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../../filter/basflt/writer-transfer";
 import type { RtfDocumentImpl } from "./rtfdocumentimpl";
+import { RTF_BORDER_STYLES, type RtfCellBorder } from "./rtfdocumentimpl.border";
+export type { RtfCellBorder } from "./rtfdocumentimpl.border";
 /** Paragraph properties represented by the current Writer model. */
 export interface RtfParagraphState {
+  borders?: ReadonlyMap<SvxBoxItemLine | "between", Readonly<RtfCellBorder>>;
   alignment: WriterParagraphAlignment;
   distributeLastLine: boolean;
   left: number;
@@ -76,6 +78,7 @@ export interface RtfState {
   currentCodepage: number;
   fontCodepage?: number;
   colorIndex: number;
+  paragraphBorder?: SvxBoxItemLine | "between" | "box";
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
@@ -123,13 +126,6 @@ export interface RtfTableRow {
   readonly borders: readonly ReadonlyMap<SvxBoxItemLine, RtfCellBorder>[];
   readonly paddings: readonly ReadonlyMap<SvxBoxItemLine, number>[];
   readonly defaultPaddings: ReadonlyMap<SvxBoxItemLine, number>;
-}
-/** One cell edge from RTF row definitions before native box materialization. */
-export interface RtfCellBorder {
-  style: BorderLineStyle;
-  width: number;
-  colorIndex: number;
-  wordStyle: number;
 }
 export const DEFAULT_CHARACTER: WriterCharacterAttributes = {
   bold: false,
@@ -206,6 +202,16 @@ export const SKIPPED_DESTINATIONS = new Set([
   "xmlnstbl",
 ]);
 export const STYLE_PROPERTY_CONTROLS = new Set([
+  "box",
+  "brdrt",
+  "brdrl",
+  "brdrb",
+  "brdrr",
+  "brdrbtw",
+  "brdrw",
+  "brdrcf",
+  "brsp",
+  ...Object.keys(RTF_BORDER_STYLES),
   "b",
   "i",
   "ul",
@@ -501,47 +507,6 @@ export function fromRtfNfc(value: number): SvxNumType {
       return SvxNumType.SVX_NUM_ARABIC_ZERO;
     default:
       return SvxNumType.SVX_NUM_ARABIC;
-  }
-}
-/** Resolves source RTF cell border keywords to native border styles.  @param name - Name. @returns The BorderLineStyle result. */
-export function fromRtfBorderStyle(name: string): BorderLineStyle {
-  switch (name) {
-    case "brdrdot":
-      return BorderLineStyle.DOTTED;
-    case "brdrdash":
-      return BorderLineStyle.DASHED;
-    case "brdrdb":
-      return BorderLineStyle.DOUBLE;
-    case "brdrtnthsg":
-      return BorderLineStyle.THINTHICK_SMALLGAP;
-    case "brdrtnthmg":
-      return BorderLineStyle.THINTHICK_MEDIUMGAP;
-    case "brdrtnthlg":
-      return BorderLineStyle.THINTHICK_LARGEGAP;
-    case "brdrthtnsg":
-      return BorderLineStyle.THICKTHIN_SMALLGAP;
-    case "brdrthtnmg":
-      return BorderLineStyle.THICKTHIN_MEDIUMGAP;
-    case "brdrthtnlg":
-      return BorderLineStyle.THICKTHIN_LARGEGAP;
-    case "brdremboss":
-      return BorderLineStyle.EMBOSSED;
-    case "brdrengrave":
-      return BorderLineStyle.ENGRAVED;
-    case "brdroutset":
-      return BorderLineStyle.OUTSET;
-    case "brdrinset":
-      return BorderLineStyle.INSET;
-    case "brdrdashsm":
-      return BorderLineStyle.FINE_DASHED;
-    case "brdrdashd":
-      return BorderLineStyle.DASH_DOT;
-    case "brdrdashdd":
-      return BorderLineStyle.DASH_DOT_DOT;
-    case "brdrnone":
-      return BorderLineStyle.NONE;
-    default:
-      return BorderLineStyle.SOLID;
   }
 }
 /** Original native owner used by its out-of-class implementation fragments; no state is copied. */

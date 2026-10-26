@@ -9,19 +9,16 @@ import {
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
-import {
-  ConvertBorderWidthFromWord,
-  SvxBorderLine,
-} from "../../../../editeng/source/items/borderline";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { Color } from "../../../../tools/inc/color";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_BREAK,
+  RES_BOX,
+  RES_PARATR_CONNECT_BORDER,
   RES_KEEP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -60,6 +57,35 @@ import {
   type RtfParagraphState,
 } from "./rtfdocumentimpl.context";
 import { RtfSyntaxError } from "./rtftokenizer";
+import { createRtfBorderLine, getRtfBorderDistance } from "./rtfdocumentimpl.border";
+
+/** Applies source border ordering and the prior-paragraph between-border adjustment. @param inherited - Effective native box. @param paragraph - Parsed paragraph. @param colors - RTF palette. @param previous - Prior paragraph in this native text section. @returns Authored box when an edge is written. */
+function paragraphBorderBox(
+  inherited: SvxBoxItem,
+  paragraph: RtfParagraphState,
+  colors: readonly string[],
+  previous?: SwTextNode,
+): SvxBoxItem | undefined {
+  let box: SvxBoxItem | undefined;
+  for (const [side, border] of paragraph.borders ?? []) {
+    let edge = side;
+    if (edge === "between") {
+      if (
+        previous === undefined ||
+        (previous.GetAttr(RES_PARATR_CONNECT_BORDER) as SfxBoolItem).GetValue()
+      )
+        continue;
+      const priorBox = (previous.GetAttr(RES_BOX) as SvxBoxItem).Clone();
+      priorBox.SetLine(undefined, SvxBoxItemLine.BOTTOM);
+      previous.SetAttr(priorBox);
+      edge = SvxBoxItemLine.TOP;
+    }
+    box ??= inherited.Clone();
+    box.SetLine(createRtfBorderLine(border, colors), edge);
+    box.SetDistance(getRtfBorderDistance(border), edge);
+  }
+  return box;
+}
 
 /** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result.  @param this - Original native owner shared by its implementation fragments. */
 export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwDoc {
@@ -236,29 +262,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
           const borders = row.borders[index];
           if (borders !== undefined && borders.size > 0) {
             const item = box.GetBox();
-            for (const [edge, border] of borders) {
-              if (border.style === BorderLineStyle.NONE) {
-                item.SetLine(undefined, edge);
-                continue;
-              }
-              const color = this["colors"][border.colorIndex] ?? "#000000";
-              const wordWidth =
-                border.wordStyle === 2 && border.style !== BorderLineStyle.SOLID
-                  ? border.width * 2
-                  : border.width;
-              item.SetLine(
-                new SvxBorderLine(
-                  new Color(
-                    Number.parseInt(color.slice(1, 3), 16),
-                    Number.parseInt(color.slice(3, 5), 16),
-                    Number.parseInt(color.slice(5, 7), 16),
-                  ),
-                  ConvertBorderWidthFromWord(border.style, wordWidth, border.wordStyle),
-                  border.style,
-                ),
-                edge,
-              );
-            }
+            for (const [edge, border] of borders)
+              item.SetLine(createRtfBorderLine(border, this["colors"]), edge);
             box.ClaimFrameFormat().SetFormatAttr(item);
           }
           const paddings = row.paddings[index];
@@ -382,6 +387,14 @@ export function ApplyStyleDefinition(
   if (controls.has("tx")) collection.SetFormatAttr(createRtfTabStops(paragraph.tabStops));
   if (controls.has("sl") || controls.has("slmult"))
     collection.SetFormatAttr(createRtfLineSpacing(paragraph));
+  const borders = paragraphBorderBox(
+    collection.GetAttrSet().Get(RES_BOX) as SvxBoxItem,
+    paragraph,
+    this["colors"],
+  );
+  if (borders !== undefined) collection.SetFormatAttr(borders);
+  if (paragraph.borders?.has("between"))
+    collection.SetFormatAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
 }
 
 /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
@@ -395,6 +408,17 @@ export function ApplyParagraph(
       ? undefined
       : this["importedStyles"].get(paragraph.state.styleIndex);
   if (style !== undefined) node.ChgFormatColl(style);
+  const section = node.StartOfSectionNode();
+  const borders = paragraphBorderBox(
+    node.GetAttr(RES_BOX) as SvxBoxItem,
+    paragraph.state,
+    this["colors"],
+    this["previousParagraphs"].get(section),
+  );
+  if (borders !== undefined) node.SetAttr(borders);
+  if (paragraph.state.borders?.has("between"))
+    node.SetAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
+  this["previousParagraphs"].set(section, node);
   const inherited = projectWriterCharacterAttributes(node.GetSwAttrSet());
   const runs = paragraph.runs.map(
     /** Computes the run result. @param run - Run. @returns The computed result. */ (run) => ({

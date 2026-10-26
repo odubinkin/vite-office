@@ -24,7 +24,8 @@
     "preservedResponsibilities": [
       "Emits represented native Writer paragraph and character item controls, including first-line indent, upper/lower/contextual spacing, four source line-spacing modes and measured script-font leading, keep/split/widow behavior, tab alignment/leader/position, page-break-before, strikeout and escapement.",
       "Emits the pinned underline style controls, word-only single underline and ulc color-table index from native underline items.",
-      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco, including native brush colors projected with alpha."
+      "Emits direct automatic character color as cf0 and highlight via the fixed Word palette and msfilter::util::TransColToIco, including native brush colors projected with alpha.",
+      "Owns shared source OutTBLBorderLine and OutBorderLine emission for cells and paragraph FormatBox, including uniform box form, explicit no-border overrides, native border styles, color indices, distances and the source thick-width flag."
     ],
     "omittedResponsibilities": [
       "Full upstream character, page, section, drawing and field attribute vocabularies remain unverified."
@@ -54,6 +55,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "writes source highlight palette indices"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.borders.test.ts",
+          "marker": "exports and imports native paragraph border style"
         }
       ],
       "upstream": [
@@ -76,6 +81,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
           "marker": "RtfAttributeOutput::OutputCharHighlight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::FormatBox"
         }
       ]
     }
