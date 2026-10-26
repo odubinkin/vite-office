@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/XParagraphAppend.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/text/XParagraphAppend.idl",
+    "localSymbols": [
+      "XParagraphAppend",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XParagraphAppend",
+      "finishParagraphInsert"
+    ],
+    "preservedResponsibilities": [
+      "Original complete paragraph/portion/content append and range-compare IDL signatures use genuine Reference<XTextRange/XTextContent>, Sequence<PropertyValue> and borrowed Unicode values. XTextAppend preserves all three ordered direct bases XText, XParagraphAppend and XTextPortionAppend; XTextContentAppend remains independent as upstream. Normal cppumaker static MI metadata, implicit root versus explicit parents, cache identity and deprecated getters reuse actual shared CPPU/typelib owners, with no inferred interface/type/default provider."
+    ],
+    "omittedResponsibilities": [
+      "These are actual SDK contracts and normal static type bindings, not concrete Writer text services or a fake component. Normal reflection remains incomplete as upstream normal generation specifies. Actual SwXText/SwXTextRange/SwXTextCursor raw-object boundaries still require migration to native UNO Reference/Sequence ownership and original concrete helper/class responsibilities. Physical C++ multiple-inheritance ABI, threads, comprehensive reflection and compiled native whole-module differential parity remain unverified. Real table managers/model application, full DOCX/XLSX import/export and existing desktop/mobile UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XParagraphAppend.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/text/XParagraphAppend.idl",
+          "marker": "finishParagraphInsert"
+        }
+      ]
+    }
+  }
+}

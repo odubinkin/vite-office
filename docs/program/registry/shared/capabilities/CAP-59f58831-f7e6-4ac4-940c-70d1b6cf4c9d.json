@@ -48,6 +48,26 @@
         {
           "path": "udkapi/com/sun/star/lang/EventObject.idl",
           "marker": "EventObject"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XParagraphAppend.idl",
+          "marker": "XParagraphAppend"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextPortionAppend.idl",
+          "marker": "XTextPortionAppend"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextContentAppend.idl",
+          "marker": "XTextContentAppend"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextRangeCompare.idl",
+          "marker": "XTextRangeCompare"
+        },
+        {
+          "path": "offapi/com/sun/star/text/XTextAppend.idl",
+          "marker": "XTextAppend"
         }
       ],
       "tests": [
@@ -96,6 +116,26 @@
         {
           "path": "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
           "marker": "EventObject"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XParagraphAppend.ts",
+          "marker": "XParagraphAppend"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextPortionAppend.ts",
+          "marker": "XTextPortionAppend"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextContentAppend.ts",
+          "marker": "XTextContentAppend"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextRangeCompare.ts",
+          "marker": "XTextRangeCompare"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XTextAppend.ts",
+          "marker": "XTextAppend"
         }
       ],
       "tests": [
@@ -122,7 +162,8 @@
     },
     "scopeLimitations": [
       "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
-      "Referenced native QA is an unported downstream consumer, not a claim of ported native QA or native TableData differential execution. Local source-backed tests use actual shared owners; native vector evidence covers only original SvRef destruction order."
+      "Referenced native QA is an unported downstream consumer, not a claim of ported native QA or native TableData differential execution. Local source-backed tests use actual shared owners; native vector evidence covers only original SvRef destruction order.",
+      "Original complete paragraph/portion/content append and range-compare IDL signatures use genuine Reference<XTextRange/XTextContent>, Sequence<PropertyValue> and borrowed Unicode values. XTextAppend preserves all three ordered direct bases XText, XParagraphAppend and XTextPortionAppend; XTextContentAppend remains independent as upstream. Normal cppumaker static MI metadata, implicit root versus explicit parents, cache identity and deprecated getters reuse actual shared CPPU/typelib owners, with no inferred interface/type/default provider. These are actual SDK contracts and normal static type bindings, not concrete Writer text services or a fake component. Normal reflection remains incomplete as upstream normal generation specifies. Actual SwXText/SwXTextRange/SwXTextCursor raw-object boundaries still require migration to native UNO Reference/Sequence ownership and original concrete helper/class responsibilities. Physical C++ multiple-inheritance ABI, threads, comprehensive reflection and compiled native whole-module differential parity remain unverified. Real table managers/model application, full DOCX/XLSX import/export and existing desktop/mobile UI workflows remain incomplete. Broad parity/default/verified flags stay false."
     ],
     "aspect": "model-operation",
     "atomicOperation": "text-component-sdk-compound-lifecycle"

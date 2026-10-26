@@ -1,6 +1,11 @@
 /** @fileoverview Original normal text/component interfaces retain actual direct bases; EventObject copies actual Reference member addresses through shared Any and Sequence without alternate interface providers. */
 import { expect, it } from "vitest";
 import { XTextRange, getCppuType as rangeType } from "./XTextRange";
+import { XParagraphAppend, getCppuType as paragraphAppendType } from "./XParagraphAppend";
+import { XTextPortionAppend, getCppuType as portionAppendType } from "./XTextPortionAppend";
+import { XTextContentAppend, getCppuType as contentAppendType } from "./XTextContentAppend";
+import { XTextAppend, getCppuType as appendType } from "./XTextAppend";
+import { XTextRangeCompare, getCppuType as compareType } from "./XTextRangeCompare";
 import { XSimpleText, getCppuType as simpleType } from "./XSimpleText";
 import { XText, getCppuType as textType } from "./XText";
 import { XTextCursor, getCppuType as cursorType } from "./XTextCursor";
@@ -32,6 +37,20 @@ import { OUString } from "../../../../../sal/inc/rtl/ustring";
 
 it.each([
   [XTextRange, rangeType, "XTextRange", "com.sun.star.uno.XInterface"],
+  [XParagraphAppend, paragraphAppendType, "XParagraphAppend", "com.sun.star.uno.XInterface"],
+  [XTextPortionAppend, portionAppendType, "XTextPortionAppend", "com.sun.star.uno.XInterface"],
+  [XTextContentAppend, contentAppendType, "XTextContentAppend", "com.sun.star.uno.XInterface"],
+  [XTextRangeCompare, compareType, "XTextRangeCompare", "com.sun.star.uno.XInterface"],
+  [
+    XTextAppend,
+    appendType,
+    "XTextAppend",
+    [
+      "com.sun.star.text.XText",
+      "com.sun.star.text.XParagraphAppend",
+      "com.sun.star.text.XTextPortionAppend",
+    ],
+  ],
   [XSimpleText, simpleType, "XSimpleText", "com.sun.star.text.XTextRange"],
   [XText, textType, "XText", "com.sun.star.text.XSimpleText"],
   [XTextCursor, cursorType, "XTextCursor", "com.sun.star.text.XTextRange"],
@@ -55,12 +74,21 @@ it.each([
     expect(Number(type.getTypeClass())).toBe(C.INTERFACE);
     type.getDescription(description);
     const iface = description[0] as unknown as I,
-      base = (iface.ppBaseTypes as I[])[0] as I,
-      value = new OUString(base.aBase.pTypeName);
+      parents = typeof parent === "string" ? [parent] : parent;
     try {
-      expect(iface.nBaseTypes).toBe(1);
+      expect(iface.nBaseTypes).toBe(parents.length);
       expect(iface.aBase.bComplete).toBe(false);
-      expect(String.fromCharCode(...value.getStr().subarray(0, value.getLength()))).toBe(parent);
+      for (let index = 0; index < parents.length; ++index) {
+        const base = (iface.ppBaseTypes as I[])[index] as I,
+          value = new OUString(base.aBase.pTypeName);
+        try {
+          expect(String.fromCharCode(...value.getStr().subarray(0, value.getLength()))).toBe(
+            parents[index],
+          );
+        } finally {
+          value.dispose();
+        }
+      }
       const ownName = type.getTypeName();
       try {
         const scope = name === "XComponent" || name === "XEventListener" ? "lang" : "text";
@@ -71,7 +99,6 @@ it.each([
         ownName.dispose();
       }
     } finally {
-      value.dispose();
       typelib_typedescription_release(description[0] as D);
     }
   },
