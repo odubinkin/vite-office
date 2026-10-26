@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.entries.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "UResourceDataEntry",
+      "init_entry",
+      "findFirstExisting",
+      "entryOpen",
+      "entryOpenDirect",
+      "entryIncrease",
+      "entryClose",
+      "ures_flushCache"
+    ],
+    "upstreamSymbols": [
+      "init_entry",
+      "findFirstExisting",
+      "entryOpen",
+      "entryOpenDirect",
+      "entryIncrease",
+      "entryClose",
+      "ures_flushCache"
+    ],
+    "preservedResponsibilities": [
+      "Original default-package cache entry owner and init_entry/pool/whole-bundle alias loading; missing-file findFirstExisting is separate from existing-parent %%Parent/%%ParentIsRoot/noFallback/simple-chop inheritance. entryOpen retains original156-byte name truncation, default-name prefix classification, warning and root/default selection. Direct open still constructs parent lines. Actual uint32 reference count wraps as source; cache keeps closed entries and flushes zero-ref entries repeatedly while releasing alias/pool references. Pinned U_USE_USRDATA=0; user override branches are not substituted. Native observations verify entry/parent names and all counts/flags across actual files, statuses, defaults, retain/release and flush. Source no_NO alias self-parent (CALC-339) is preserved without a guard; only its intermediate state is safely observed before witness restoration, not claimed as a successful full direct-open call. Native mutex/allocator/OOM/ABI and other packages remain uncertified.",
+      "Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.entries.ts",
+          "marker": "UResourceDataEntry"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+          "marker": "Original resource-cache"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "init_entry"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.entries.ts",
+      "rationale": "Original large source is split by immutable package storage, filename fallback and mutable cached-entry ownership while preserving source algorithms and one data owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

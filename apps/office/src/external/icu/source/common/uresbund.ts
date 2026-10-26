@@ -9,14 +9,15 @@ export const UResType = {
   URES_STRING: 0,
   URES_BINARY: 1,
   URES_TABLE: 2,
+  URES_ALIAS: 3,
   URES_INT: 7,
   URES_ARRAY: 8,
   URES_INT_VECTOR: 14,
 } as const;
 /** Immutable decoded public resource types, exported by the native APIs from the pinned data file. */
 export type Resource =
-  | { readonly type: 0; readonly value: string }
-  | { readonly type: 1 | 14; readonly storage: number; readonly value: readonly number[] }
+  | { readonly type: 0 | 3; readonly value: string }
+  | { readonly type: 1 | 14; readonly storage: number | string; readonly value: readonly number[] }
   | {
       readonly type: 2;
       readonly keys: readonly string[];
@@ -31,7 +32,7 @@ export type Resource =
     };
 /** Native nullable UErrorCode pointer. */
 type Status = [number] | null;
-const mappedBuffers = new Map<number, readonly number[]>();
+const mappedBuffers = new Map<number | string, readonly number[]>();
 /** Original reusable bundle handle; storage and keys borrow the immutable mapped resource. */
 export class UResourceBundle {
   fIndex = -1;

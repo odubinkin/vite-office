@@ -4259,3 +4259,24 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the C++ array has no field initializer, and construction writes only entries whose root-letter traversal returns NO_VALUE. Later lookup tests an entry against zero for any lower-case initial letter with at least two input units. If a data package omits such a branch, that test can read an uninitialized uint64. The pinned complete langInfo has all26 letters with NO_VALUE branches, so this finding does not claim a reproduced failure on our pinned data.
 - Suspected issue: cache initialization relies on an unstated data-coverage invariant; a missing branch appears to leave indeterminate state rather than an explicit absent-state marker.
 - Local behavior: retain conditional cache assignment and leave unassigned logical slots unset, without adding a zero/default fallback. All26 pinned entries are assigned and exercised against unchanged native code; behavior for a source-uninitialized cache slot or arbitrary replacement data packages remains uncertified.
+
+### CALC-337 — Resource parent hint uses a substring test for nb/nn
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `mayHaveParent`.
+- Observation: the source tests nonempty name and strstr("nb nn", name), rather than equality with nb or nn. Names such as n, b, a single space and b n therefore also return true. The unchanged native helper comparison verifies these cases.
+- Suspected issue: the parent hint recognizes substrings of its compact literal, which is wider than the named special locales described by the surrounding comment. This finding does not claim a public failure for those strings on the pinned locale package.
+- Local behavior: preserve the substring predicate exactly. Do not replace it with a set of two full locale names.
+
+### CALC-338 — Missing-file search classifies a default locale by prefix
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `findFirstExisting` and `entryOpen`.
+- Observation: isDefault is set by strncmp(name, defaultLocale, strlen(name))==0. With default en_US, missing request e is treated as already default and skips default-locale loading, reaching root. A missing non-prefix request zz instead loads en_US. Both produce the original USING_DEFAULT warning, but the actual selected bundle differs. Native cache/entry comparisons verify both cases.
+- Suspected issue: a partial language-name prefix can suppress the default-locale step. An equality or subtag-boundary check would change behavior.
+- Local behavior: retain prefix classification and the distinct selected entries, including original warning codes and cache/reference effects.
+
+### CALC-339 — Direct whole-bundle alias can establish a self-parent
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `entryOpenDirect`, `init_entry` and `loadParentsExceptRoot`; pinned no_NO resource %%ALIAS points to no.
+- Observation: with no cached parent line for target no, init_entry(no_NO) returns target no. Direct open still chops the original name no_NO to no. loadParentsExceptRoot then looks up no, receives that same target and sets its parent to itself. The unchanged native intermediate functions reproduce self-parent=true and reference count3. If the target's parent line was already built through a fallback open, this path is skipped instead.
+- Suspected issue: the final direct-open parent-reference walk would not advance out of that self-cycle. This is an inference from the original loop and the observed intermediate state; the witness deliberately does not invoke that nonterminating full call.
+- Local behavior: preserve alias-target return, original-name parent lookup and source loop. No cycle-breaking heuristic is added. The native/JS witnesses observe the same intermediate state, then restore only their test-owned parent field and release both temporary references before cleanup. Direct alias comparisons otherwise use the source's already-primed finite parent lines; the isolated full nonterminating call is not certified as a successful operation.

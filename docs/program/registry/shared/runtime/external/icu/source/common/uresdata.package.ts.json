@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresdata.package.ts",
+        "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+        "scripts/icu-resource-fallback-native-probe.mjs",
+        "scripts/icu-locale-resources.mjs"
+      ],
+      "justification": "Original res_load/res_unload logical default-package backend over every982 top-level .res file from the pinned native package, including raw resource aliases and noFallback/pool flags. Compact immutable graph preserves shared native node/string/buffer storage and exact table order; independent opaque data handles alias the same mapped root. Source res_load clears all fields before checking incoming failure; empty/null names use original udata illegal-argument error and missing files use file-access error. Existing alias-free zoneinfo64/langInfo scalar owners preserve shared buffer identities; keyTypeData is decoded raw because its earlier public export resolves four timezoneTypes aliases. Native full-content event checksums verify every raw root and status/reset/unload effects. Raw graph contains85761 strings,2066 buffers and204559 nodes. Physical packed offsets/mmap handles/allocator/ABI, named or non-top-level package paths, external filesystem resources and modified data are outside this consumed backend. Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResourceData",
+        "res_load",
+        "res_unload"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresdata.cpp",
+      "upstreamSymbols": [
+        "res_load",
+        "res_unload"
+      ]
+    }
+  }
+}

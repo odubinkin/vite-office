@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresdata.cpp",
+    "localSymbols": [
+      "ResourceData",
+      "res_load",
+      "res_unload"
+    ],
+    "upstreamSymbols": [
+      "res_load",
+      "res_unload"
+    ],
+    "preservedResponsibilities": [
+      "Original res_load/res_unload logical default-package backend over every982 top-level .res file from the pinned native package, including raw resource aliases and noFallback/pool flags. Compact immutable graph preserves shared native node/string/buffer storage and exact table order; independent opaque data handles alias the same mapped root. Source res_load clears all fields before checking incoming failure; empty/null names use original udata illegal-argument error and missing files use file-access error. Existing alias-free zoneinfo64/langInfo scalar owners preserve shared buffer identities; keyTypeData is decoded raw because its earlier public export resolves four timezoneTypes aliases. Native full-content event checksums verify every raw root and status/reset/unload effects. Raw graph contains85761 strings,2066 buffers and204559 nodes. Physical packed offsets/mmap handles/allocator/ABI, named or non-top-level package paths, external filesystem resources and modified data are outside this consumed backend.",
+      "Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+          "marker": "ResourceData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+          "marker": "Original resource-cache"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresdata.cpp",
+          "marker": "res_load"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+      "rationale": "Original large source is split by immutable package storage, filename fallback and mutable cached-entry ownership while preserving source algorithms and one data owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

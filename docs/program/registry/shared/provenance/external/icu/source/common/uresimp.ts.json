@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresimp.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresimp.h",
+    "localSymbols": [
+      "UResourceDataEntry",
+      "UResourceBundle"
+    ],
+    "upstreamSymbols": [
+      "UResourceDataEntry",
+      "UResourceBundle"
+    ],
+    "preservedResponsibilities": [
+      "Original internal header boundary reexports the one actual entry/cache owner and existing bundle owner; no duplicate state or native struct-layout equivalence is introduced. Full bundle resource-result initialization/alias and locale fallback dispatch remain unfinished work in the implementation owner."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresimp.ts",
+          "marker": "UResourceDataEntry"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+          "marker": "Original resource-cache"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresimp.h",
+          "marker": "UResourceDataEntry"
+        }
+      ]
+    }
+  }
+}

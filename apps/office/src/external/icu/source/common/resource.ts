@@ -11,6 +11,13 @@ export abstract class ResourceValue {
     const length: [number] = [0];
     return this.getString(length, status) ?? "";
   }
+  /** Original raw alias storage read, without resolving its target. @param length - UTF16 length output. @param status - Status. @returns Alias text/null. */
+  abstract getAliasString(length: [number], status: [number]): string | null;
+  /** Original counted alias UnicodeString wrapper. @param status - Status. @returns Text/empty. */
+  getAliasUnicodeString(status: [number]): string {
+    const length: [number] = [0];
+    return this.getAliasString(length, status) ?? "";
+  }
   /** Original binary storage read. @param length - Output bytes. @param status - Status. @returns Borrowed data/null. */
   abstract getBinary(length: [number], status: [number]): readonly number[] | null;
   /** Original integer-vector read. @param length - Output count. @param status - Status. @returns Borrowed data/null. */

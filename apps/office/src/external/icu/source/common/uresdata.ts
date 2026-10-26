@@ -28,6 +28,18 @@ export class ResourceDataValue extends ResourceValue {
   getString(length: [number], status: [number]): string | null {
     return ures_getString(this.bundle, length, status);
   }
+  /** Original raw alias getter preserves incoming failure and source mismatch length reset; it does not follow alias targets. @param length - Output units. @param status - Status. @returns Counted text/null. */
+  getAliasString(length: [number], status: [number]): string | null {
+    if (U_FAILURE(status[0])) return null;
+    const resource = this.bundle.resource;
+    if (resource?.type !== 3) {
+      length[0] = 0;
+      status[0] = UErrorCode.U_RESOURCE_TYPE_MISMATCH;
+      return null;
+    }
+    length[0] = resource.value.length;
+    return resource.value;
+  }
   /** Original binary view, sharing identity with public bundle reads. @param length - Length. @param status - Status. @returns Bytes/null. */
   getBinary(length: [number], status: [number]): readonly number[] | null {
     return ures_getBinary(this.bundle, length, status);
