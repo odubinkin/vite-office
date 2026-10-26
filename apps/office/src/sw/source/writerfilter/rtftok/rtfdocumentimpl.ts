@@ -85,7 +85,7 @@ import { OSTRING_TO_OUSTRING_CVTFLAGS } from "../../../../sal/inc/rtl/ustring.h"
 import { RTL_TEXTTOUNICODE_FLAGS_FLUSH } from "../../../../sal/inc/rtl/textcvt.h";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
-import { WORD_PARAGRAPH_STYLE_NAMES } from "../../filter/ww8/wrtw8sty";
+import { StyleSheetTable } from "../dmapper/StyleSheetTable";
 
 /** Paragraph properties represented by the current Writer model. */
 interface RtfParagraphState {
@@ -463,24 +463,17 @@ export class RtfDocumentImpl {
     this.importedStyles.clear();
     this.importedStyles.set(0, document.GetDfltTextFormatColl());
     for (const [index, definition] of this.styles) {
-      const { name } = definition;
-      const id =
-        name === "Default Paragraph Style" || name === "Standard" || name === "Normal"
-          ? "default"
-          : ([...WORD_PARAGRAPH_STYLE_NAMES].find(
-              /** Matches a canonical Word builtin name. @param entry - Native ID and Word name. @returns Exact name match. */ ([
-                ,
-                wordName,
-              ]) => wordName === name,
-            )?.[0] ?? getWriterParagraphStyleId(name));
+      const [name] = StyleSheetTable.ConvertStyleName(definition.name);
+      const id = getWriterParagraphStyleId(name);
       let identity = id || name;
       let suffix = 1;
       while (document.FindTextFormatColl(identity) !== undefined)
         identity = `${id || name}:${index}:${suffix++}`;
       const collection =
-        getWriterMaterializedParagraphStyleDefinition(id) === undefined
-          ? document.MakeTextFormatColl(name, document.GetTextFormatColl("default"), identity)
-          : document.GetTextFormatColl(id);
+        document.FindTextFormatCollByName(name) ??
+        (getWriterMaterializedParagraphStyleDefinition(id)?.name === name
+          ? document.GetTextFormatColl(id)
+          : document.MakeTextFormatColl(name, document.GetTextFormatColl("default"), identity));
       this.importedStyles.set(index, collection);
     }
     for (const [index, definition] of this.styles) {

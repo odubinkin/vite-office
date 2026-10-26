@@ -978,6 +978,29 @@ it("resolves forward stylesheet based-on and next references after all styles ex
   }
 });
 
+it("imports source builtin aliases while keeping reserved and case-distinct user styles independent", () => {
+  const document = read(
+    "{\\rtf1{\\stylesheet{\\s1 BodyText;}{\\s2 Footnote Text;}{\\s3 Standard;}{\\s4\\sbasedon3 Text body;}{\\s5 TEXT BODY;}}\\pard\\s1 Body\\par\\pard\\s2 Note\\par\\pard\\s4 User\\par\\pard\\s5 Case}",
+  );
+  try {
+    expect(document.paragraphs[0]?.GetTextFormatColl()).toBe(
+      document.GetTextFormatColl("text-body"),
+    );
+    expect(document.paragraphs[1]?.GetTextFormatColl()).toBe(
+      document.GetTextFormatColl("footnote"),
+    );
+    const user = document.paragraphs[2]?.GetTextFormatColl();
+    expect(user?.GetName()).toBe("Text body (WW)");
+    expect(user?.DerivedFrom()?.GetName()).toBe("Standard (WW)");
+    expect(document.paragraphs[3]?.GetTextFormatColl().GetName()).toBe("TEXT BODY");
+    expect(document.paragraphs[3]?.GetTextFormatColl()).not.toBe(
+      document.GetTextFormatColl("text-body"),
+    );
+  } finally {
+    document.Dispose();
+  }
+});
+
 it("ignores zero stylesheet indents only when based-on is absent", () => {
   const document = read(
     "{\\rtf1{\\stylesheet{\\s2\\li0\\ri0\\fi0 Root;}{\\s3\\sbasedon0\\li0\\ri0\\fi0 Derived;}}\\s2 Root\\par\\pard\\s3 Derived}",

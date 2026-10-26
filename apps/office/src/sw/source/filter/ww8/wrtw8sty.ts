@@ -11,7 +11,7 @@ const HEADLINE1 = getWriterParagraphStyleDefinition("heading-1")?.poolId;
 const HEADLINE9 = getWriterParagraphStyleDefinition("heading-9")?.poolId;
 
 /** Current pool subset of GetWWId plus ww::GetEnglishNameFromSti. */
-export const WORD_PARAGRAPH_STYLE_NAMES: ReadonlyMap<string, string> = new Map([
+const WORD_PARAGRAPH_STYLE_NAMES: ReadonlyMap<string, string> = new Map([
   ["default", "Normal"],
   ...Array.from(
     { length: 9 },

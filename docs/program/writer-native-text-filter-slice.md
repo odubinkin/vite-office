@@ -117,6 +117,15 @@ native settings survive through the Word name `Normal`.
 Pinned `createStyleProperties` ignores zero first/left/right indents in style
 definitions without `\\sbasedon`, but keeps the same explicit zero fields when
 a base is specified. The local reader preserves this direct-item distinction.
-The rest of `RTFSprms::cloneAndDeduplicate`, all style-property families and
-additional `StyleSheetTable::ConvertStyleName` input aliases remain open; the
-style row is not closed by these graph and name tests alone.
+The rest of `RTFSprms::cloneAndDeduplicate` and all style-property families
+remain open; the style row is not closed by these graph and name tests alone.
+
+The imported style-name path now uses the source
+`StyleSheetTable::ConvertStyleName` boundary, including its complete pinned
+437-key name map, recognition flag, case-sensitive input lookup, reserved
+Writer target names and repeated `(WW)` suffix behavior. Native owners are
+selected by the converted exact name; a slug match alone no longer converts
+case-distinct user names to built-ins. Tests cover legacy aliases such as
+`BodyText` and `Footnote Text`, a user `Standard` or `Text body`, and parent
+references between converted user names. The exporter's inverse builtin-name
+table remains within `MSWordStyles`, matching the source module boundary.
