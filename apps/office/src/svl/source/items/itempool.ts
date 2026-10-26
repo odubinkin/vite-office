@@ -197,15 +197,20 @@ export class SfxItemPool {
     return slot !== 0 ? slot : which;
   }
 
-  /** Registers a consumed native default and its original ItemInfo slot field independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Default item. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @returns Nothing. */
-  public RegisterDefaultItem(item: SfxPoolItem, factory?: SfxPoolItemFactory, slot = 0): void {
+  /** Registers a consumed native default and its original ItemInfo slot field independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Default item. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @param flags - Original ItemInfo flags. @returns Nothing. */
+  public RegisterDefaultItem(
+    item: SfxPoolItem,
+    factory?: SfxPoolItemFactory,
+    slot = 0,
+    flags = 0,
+  ): void {
     if (this.registeredItemInfos.has(item.Which()))
       throw new Error(`Duplicate pool default: ${item.Which()}`);
     if (slot !== 0 && this.mpSlotIDToWhichIDMap?.has(slot))
       throw new Error(`Duplicate pool slot: ${slot}`);
     this.registeredItemInfos.set(
       item.Which(),
-      new ItemInfoStatic(item.Which(), item.Clone(), slot, 0),
+      new ItemInfoStatic(item.Which(), item.Clone(), slot, flags),
     );
     if (factory !== undefined) this.factories.set(item.Which(), factory);
     if (slot !== 0) {

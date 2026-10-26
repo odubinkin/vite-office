@@ -92,7 +92,10 @@ describe("Writer ODT alignment validation", /** Registers alignment import check
       /** Executes the enclosing deterministic test or transformation callback. @returns Callback result. */
       () =>
         importWriterXml(
-          styles.replace("</style:style>", "<style:paragraph-properties/></style:style>"),
+          styles.replace(
+            /<style:paragraph-properties\b[^>]*(?:\/>|>[\s\S]*?<\/style:paragraph-properties>)/,
+            "<style:paragraph-properties/>",
+          ),
           baseContent,
           metadata(),
         ),

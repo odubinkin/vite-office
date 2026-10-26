@@ -70,6 +70,13 @@ export enum SwPoolFormatId {
   UNKNOWN = 65535,
 }
 
+/** Original user-format ID bits after removing group/non-collection markers. */
+export const POOL_IDUSER_FMT = 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
+/** Original native user-format predicate, including UNKNOWN and assigned user group IDs. @param id - Unsigned16 pool identity. @returns Whether user-defined. */
+export function IsPoolUserFormat(id: SwPoolFormatId): boolean {
+  return POOL_IDUSER_FMT === (id & 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID));
+}
+
 /** Built-in paragraph-style groups encoded in the upper pool-id bits. */
 export type WriterParagraphStyleGroup = "text" | "lists" | "extra" | "index" | "document" | "html";
 

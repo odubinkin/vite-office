@@ -1562,3 +1562,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` final pending-surrogate branch; `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`.
 - Observation: with FLUSH set, a pending high surrogate reports SRCBUFFERTOSMALL and remains pending; without FLUSH it enters bad-input handling. The string wrapper sets FLUSH, uses a null context and retries only DESTBUFFERTOSMALL, so a trailing high surrogate produces no bytes. This is a source-level trace; compiled native reproduction remains unverified.
 - Preservation: retain the source flag polarity and wrapper retry condition independently.
+
+
+### WRITER168 — Brush-to-fill clearing excludes the last fill attribute
+
+- Source: pinned `svx/source/unodraw/unobrushitemhelper.cxx`, `setSvxBrushItemAsFillAttributesToTargetSet`, iterates while `a < XATTR_FILL_LAST`; the fill range itself includes its final Which ID.
+- Observation: a pre-existing `XATTR_FILLUSESLIDEBACKGROUND` item remains after conversion because it is the inclusive range end. This is a source-level trace, not compiled Writer evidence.
+- Preservation: retain the original exclusive clearing bound. Do not clear or reset the final slide-background flag as a cleanup.
+
+### WRITER169 — Copying the default NameOrIndex sets a flag absent on its source
+
+- Source: pinned `svx/source/xoutdev/xattr.cxx`, `NameOrIndex` constructors.
+- Observation: the default constructor initializes Which zero and palette index minus one without `setNameOrIndex`; named, indexed and copy constructors call that setter. Copying or cloning the default item therefore changes this metadata flag. This is a source-level trace.
+- Preservation: keep the original per-constructor calls and the default false pool-item flag; do not normalize the source or its copy to the same flag.

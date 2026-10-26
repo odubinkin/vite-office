@@ -14,18 +14,24 @@
         {
           "marker": "SfxStringItem::Clone",
           "path": "vendor/libreoffice-reference/svl/source/items/stritem.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/stritem.hxx",
+          "marker": "SetValue"
         }
       ]
     },
     "localPath": "apps/office/src/svl/source/items/stritem.ts",
     "localSymbols": [
-      "SfxStringItem"
+      "SfxStringItem",
+      "SetValue"
     ],
     "omittedResponsibilities": [
       "Native pooling, UNO mutation and presentation paths outside the bounded SfxStringItem value contract remain unimplemented."
     ],
     "preservedResponsibilities": [
-      "Implements bounded SfxStringItem construction, value, equality and clone behavior at the pinned svl/source/items/stritem.cxx owner."
+      "Implements bounded SfxStringItem construction, value, equality and clone behavior at the pinned svl/source/items/stritem.cxx owner.",
+      "Added original string value setter consumed by actual NameOrIndex.SetName without detaching palette index."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/stritem.cxx",

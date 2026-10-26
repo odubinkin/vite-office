@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/xmloff/source/draw/fill-properties.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fill-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/xmloff/source/draw/fill-properties.ts",
+        "vendor/libreoffice-reference/xmloff/source/draw/sdpropls.cxx"
+      ],
+      "justification": "Consumed paragraph FillStyle map, SAX RGB and XMLNegPercentPropHdl conversions are split from large original shared owners; exact map order and percent bounds/inversion are retained. Full drawing style/property factory/service graph and bitmap/gradient/hatch values are not claimed; only represented enum values are mapped.",
+      "knownViolations": [],
+      "localSymbols": [
+        "importFillProperties",
+        "exportFillProperties"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "xmloff/source/draw/sdpropls.cxx",
+      "upstreamSymbols": [
+        "aXML_FillStyle_EnumMap"
+      ]
+    }
+  }
+}

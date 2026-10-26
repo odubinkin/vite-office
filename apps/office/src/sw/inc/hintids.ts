@@ -1,6 +1,12 @@
 /**
  * @fileoverview Declares the bounded Writer WhichIds used by the TypeScript core, matching pinned `sw/inc/hintids.hxx` numeric identities.
  */
+import {
+  XATTR_FILLSTYLE,
+  XATTR_FILLCOLOR,
+  XATTR_FILLTRANSPARENCE,
+  XATTR_FILLUSESLIDEBACKGROUND,
+} from "../../svx/inc/xdef";
 
 import { XATTR_END, XATTR_START } from "../../svx/inc/xdef";
 
@@ -209,6 +215,9 @@ export const WRITER_TEXT_NODE_WHICH_RANGES = [
   [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
+  [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
+  [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
+  [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
 ] as const;
 
 /** WhichIds supported by the current Writer paragraph-style attribute set. */
@@ -240,6 +249,9 @@ export const WRITER_TEXT_FORMAT_COLL_WHICH_RANGES = [
   [RES_BACKGROUND, RES_BOX],
   [RES_KEEP, RES_KEEP],
   [RES_LINENUMBER, RES_LINENUMBER],
+  [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
+  [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
+  [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
 ] as const;
 
 /** WhichIds stored inside the bounded SwFormatAutoFormat item set. */

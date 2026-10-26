@@ -1,4 +1,5 @@
 /** @fileoverview Implements streaming ODF style and numbering contexts from xmloff. */
+import { importFillProperties } from "../draw/fill-properties";
 import { Any } from "../../../cppu/inc/com/sun/star/uno/Any";
 import { FastAttributeList, SvXMLIgnoreContext, SvXMLImportContext } from "../core/xmlimp";
 import { XMLToken } from "../core/xmltoken";
@@ -470,6 +471,7 @@ function importParagraphProperties(
       ),
   );
   const result: XMLParagraphImportProperties = {
+    ...importFillProperties(attributes),
     ...(firstLineIndent === undefined ? {} : { firstLineIndent }),
     ...(autoTextIndent === undefined ? {} : { autoTextIndent }),
     ...(pageNumber === null || pageNumber === undefined ? {} : { pageNumber }),

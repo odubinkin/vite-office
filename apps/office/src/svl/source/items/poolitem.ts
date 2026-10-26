@@ -35,6 +35,15 @@ export abstract class SfxPoolItem {
   }
 
   private shareable = true;
+  private m_bNameOrIndex = false;
+  /** Original drawing palette-item classification. @returns Source flag. */
+  public isNameOrIndex(): boolean {
+    return this.m_bNameOrIndex;
+  }
+  /** Original protected palette classification assignment. @returns Nothing. */
+  protected setNameOrIndex(): void {
+    this.m_bNameOrIndex = true;
+  }
   private m_bIsSetItem = false;
   private m_bStaticDefault = false;
   private m_bDynamicDefault = false;

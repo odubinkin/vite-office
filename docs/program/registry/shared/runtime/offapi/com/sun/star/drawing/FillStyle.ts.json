@@ -19,10 +19,11 @@
         "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts#FillStyle",
         "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts#@fileoverview"
       ],
-      "justification": "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed.",
+      "justification": "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed. Added original normal cppumaker enum-width sentinel and static FillStyle type getter used by actual typed Any insertion/extraction. Full generated SDK metadata is not claimed.",
       "knownViolations": [],
       "localSymbols": [
-        "FillStyle"
+        "FillStyle",
+        "cppu_detail_getUnoType_FillStyle"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "offapi/com/sun/star/drawing/FillStyle.idl",

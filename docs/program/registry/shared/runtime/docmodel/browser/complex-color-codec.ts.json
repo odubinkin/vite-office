@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/docmodel/browser/complex-color-codec.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-value-transfer",
+    "capabilityIds": [
+      "CAP-ac5762ac-bc03-420d-9c26-d4581abbe2fa"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/docmodel/browser/complex-color-codec.ts"
+      ],
+      "justification": "Browser-only complete ComplexColor Worker record preserves discriminator, raw double components, system-last color, independent theme/usage fields, ordered transformations and final color. A read-only layout view accesses only the actual maLastColor field missing from the native getter surface; decode reconstructs an actual native owner through existing setters without adding core persistence APIs.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeComplexColor",
+        "decodeComplexColor"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

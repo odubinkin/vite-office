@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-fill.ts",
+    "upstreamPath": "sw/source/filter/xml/xmlexp.cxx",
+    "localSymbols": [
+      "getFillProperties",
+      "XML_FILL_WHICH_IDS"
+    ],
+    "upstreamSymbols": [
+      "SwXMLExport"
+    ],
+    "preservedResponsibilities": [
+      "Responsibility split of consumed Writer XML paragraph fill projection: only actual direct typed items are exported, preserving native parent inheritance and RGB alpha removal."
+    ],
+    "omittedResponsibilities": [
+      "Full native property-service/export graph is unported. Writer paragraph map has no slide-background property; complex-color XML is not claimed here."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/xml/xmlexp-fill.ts",
+          "marker": "getFillProperties"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/xml/xmlexp.cxx",
+          "marker": "SwXMLExport"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/xml/xmlexp-fill.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Responsibility split of consumed Writer XML paragraph fill projection: only actual direct typed items are exported, preserving native parent inheritance and RGB alpha removal."
+    }
+  }
+}

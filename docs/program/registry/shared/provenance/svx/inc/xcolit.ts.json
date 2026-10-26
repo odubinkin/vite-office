@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xcolit.ts",
+    "upstreamPath": "include/svx/xcolit.hxx",
+    "localSymbols": [
+      "XColorItem"
+    ],
+    "upstreamSymbols": [
+      "XColorItem"
+    ],
+    "preservedResponsibilities": [
+      "Native drawing-color constructors/copy, actual resolved and complex-color value ownership, indexed-value getter precondition, detaching resolved-color assignment and equality.",
+      "S3HW1E ports native RGB Any query/put, CONVERT_TWIPS masking, typed extraction failure and index detachment. Complex-color UNO service remains unrepresented."
+    ],
+    "omittedResponsibilities": [
+      "Native complex-color UNO service, presentation, dumps and palette providers remain unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xcolit.ts",
+          "marker": "XColorItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xcolit.hxx",
+          "marker": "XColorItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "XColorItem::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "XColorItem::QueryValue"
+        }
+      ]
+    }
+  }
+}

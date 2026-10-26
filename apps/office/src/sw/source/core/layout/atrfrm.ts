@@ -1,4 +1,10 @@
 /** @fileoverview Represents table frame-format identity from pinned atrfrm.cxx; fly frames and the full frame attribute collection remain unverified. */
+import {
+  XATTR_FILLSTYLE,
+  XATTR_FILLCOLOR,
+  XATTR_FILLTRANSPARENCE,
+  XATTR_FILLUSESLIDEBACKGROUND,
+} from "../../../../svx/inc/xdef";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import type { WhichRangesContainer } from "../../../../svl/source/items/itemset";
@@ -21,7 +27,12 @@ export class SwFrameFormat extends SwFormat {
   public constructor(
     pool: SwAttrPool,
     name: string,
-    ranges: WhichRangesContainer = [[RES_FRM_SIZE, RES_COLLAPSING_BORDERS]],
+    ranges: WhichRangesContainer = [
+      [RES_FRM_SIZE, RES_COLLAPSING_BORDERS],
+      [XATTR_FILLSTYLE, XATTR_FILLCOLOR],
+      [XATTR_FILLTRANSPARENCE, XATTR_FILLTRANSPARENCE],
+      [XATTR_FILLUSESLIDEBACKGROUND, XATTR_FILLUSESLIDEBACKGROUND],
+    ],
     derivedFrom?: SwFrameFormat,
   ) {
     super(pool, name, ranges, derivedFrom);

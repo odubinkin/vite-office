@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/inc/xflclit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fill-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/inc/xflclit.ts",
+        "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+        "vendor/libreoffice-reference/include/svx/xflclit.hxx"
+      ],
+      "justification": "Native fill-color default Which0, explicit named/indexed Which1015 construction, independent copy and source default factory. Native Any/presentation/dump APIs remain outside this constructor/value family. S3HW1E ports native RGB/theme-index/luminance Any dispatch, last-match queries, typed failures and remove-then-append transforms retaining unrelated fields. Complex-color UNO service/presentation/dumps remain unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XFillColorItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svx/xflclit.hxx",
+      "upstreamSymbols": [
+        "XFillColorItem"
+      ]
+    }
+  }
+}

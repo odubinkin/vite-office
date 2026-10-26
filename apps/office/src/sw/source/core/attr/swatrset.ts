@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements bounded SwAttrPool and SwAttrSet behavior from pinned `sw/source/core/attr/swatrset.cxx`.
  */
+import { SdrItemPool } from "../../../../svx/source/svdraw/svdattr";
 import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
@@ -127,6 +128,7 @@ export class SwAttrPool extends SfxItemPool {
   /** Creates and registers Writer's bounded paragraph defaults. @param document - Owning Writer document. @returns Nothing. */
   public constructor(private readonly document: SwDoc) {
     super();
+    new SdrItemPool(this);
     this.RegisterDefaultItem(
       new SwTextGridItem(),
       /** Restores every actual native grid field at the existing pool persistence boundary. @param value - Complete snapshot. @returns Item. */ (
@@ -239,7 +241,7 @@ export class SwAttrPool extends SfxItemPool {
       /** Restores native adjacent-border merging. @param value - Stored boolean. @returns Owned item. */
       (value) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
     );
-    this.RegisterDefaultItem(new SwFormatINetFormat());
+    this.RegisterDefaultItem(new SwFormatINetFormat("", ""));
     this.RegisterDefaultItem(new SwFormatCharFormat());
     this.RegisterDefaultItem(
       new SwParaConnectBorderItem(),

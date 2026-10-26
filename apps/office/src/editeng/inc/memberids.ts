@@ -175,3 +175,12 @@ export const MID_SCALE_WIDTH_MIN = 8;
 export const MID_SCALE_WIDTH_MAX = 9;
 /** Original paragraph adjustment selector. */
 export const MID_PARAGRAPH_COMPOSER = 10;
+
+/** Original drawing-color theme palette index member. */
+export const MID_COLOR_THEME_INDEX = 4;
+/** Original drawing-color luminance modulation member. */
+export const MID_COLOR_LUM_MOD = 6;
+/** Original drawing-color luminance offset member. */
+export const MID_COLOR_LUM_OFF = 7;
+/** Original drawing-color complex interface member; actual provider is a separate service. */
+export const MID_COMPLEX_COLOR = 8;

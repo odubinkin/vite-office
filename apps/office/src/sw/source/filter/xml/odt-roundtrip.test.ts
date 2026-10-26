@@ -900,8 +900,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ],
       [
         styles.replace(
-          "</style:style>",
-          '<style:paragraph-properties fo:text-align="match-parent"/></style:style>',
+          /<style:paragraph-properties\b[^>]*(?:\/>|>[\s\S]*?<\/style:paragraph-properties>)/,
+          '<style:paragraph-properties fo:text-align="match-parent"/>',
         ),
         "paragraph alignment",
       ],

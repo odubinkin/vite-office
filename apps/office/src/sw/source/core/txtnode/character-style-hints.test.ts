@@ -175,8 +175,10 @@ it("keeps native character name disambiguation and copies actual foreign style g
     expect(copied.IsNesting()).toBe(false);
     const defaultLink = destination.GetAttrPool().GetUserOrPoolDefaultItem(RES_TXTATR_INETFMT);
     assert(defaultLink instanceof SwFormatINetFormat);
-    expect(defaultLink.GetINetFormatId()).toBe(P.ZERO);
-    expect(defaultLink.GetVisitedFormatId()).toBe(P.ZERO);
+    expect(defaultLink.GetINetFormatId()).toBe(P.CHR_INET_NORMAL);
+    expect(defaultLink.GetVisitedFormatId()).toBe(P.CHR_INET_VISIT);
+    expect(SwFormatINetFormat.CreateDefault().GetINetFormatId()).toBe(P.ZERO);
+    expect(SwFormatINetFormat.CreateDefault().GetVisitedFormatId()).toBe(P.ZERO);
   } finally {
     destination.Dispose();
     source.Dispose();

@@ -210,6 +210,8 @@ const allowedEdges = new Map([
   [
     "svx",
     new Set([
+      // Native xcolit.hxx owns docmodel ComplexColor; Library_svxcore links docmodel.
+      "docmodel",
       "i18nlangtag",
       "cppu",
       "editeng",

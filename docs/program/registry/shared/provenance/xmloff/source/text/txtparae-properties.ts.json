@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/text/txtparae-properties.ts",
+    "upstreamPath": "xmloff/source/text/txtparae.cxx",
+    "localSymbols": [
+      "paragraphPropertiesKey",
+      "parseParagraphPropertiesKey"
+    ],
+    "upstreamSymbols": [
+      "XMLTextParagraphExport"
+    ],
+    "preservedResponsibilities": [
+      "Responsibility split of existing portable automatic paragraph-style identity encoding consumed by XMLTextParagraphExport. Fields retain old ordering and append direct drawing fill values. The string key is a local representation, not a native ABI."
+    ],
+    "omittedResponsibilities": [
+      "Full native auto-style pool/service graph is not claimed by this key projection."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/text/txtparae-properties.ts",
+          "marker": "paragraphPropertiesKey"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtparae.cxx",
+          "marker": "XMLTextParagraphExport"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/text/txtparae-properties.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Responsibility split of existing portable automatic paragraph-style identity encoding consumed by XMLTextParagraphExport. Fields retain old ordering and append direct drawing fill values. The string key is a local representation, not a native ABI."
+    }
+  }
+}

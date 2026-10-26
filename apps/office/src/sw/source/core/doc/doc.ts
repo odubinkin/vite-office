@@ -13,6 +13,8 @@ import { SwCharFormat } from "../../../inc/charfmt";
 import { SwGrfFormatColl } from "../../../inc/fmtcol";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
 import type { SwFormat } from "../attr/format";
@@ -257,6 +259,9 @@ export class SwDoc {
     this.pageDescs = [createDefaultWriterPageDescriptor(this.locale, this)];
     this.styleAccess = createStyleManager();
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
+    // Native docnew.cxx overrides the root formats, preserving SdrItemPool's SOLID default.
+    this.GetDfltTextFormatColl().SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
+    this.defaultFrameFormat.SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
     this.listsManager = new DocumentListsManager(this.stateManager);
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager(this);

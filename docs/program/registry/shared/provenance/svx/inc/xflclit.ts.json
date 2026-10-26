@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xflclit.ts",
+    "upstreamPath": "include/svx/xflclit.hxx",
+    "localSymbols": [
+      "XFillColorItem"
+    ],
+    "upstreamSymbols": [
+      "XFillColorItem"
+    ],
+    "preservedResponsibilities": [
+      "Native fill-color default Which0, explicit named/indexed Which1015 construction, independent copy and source default factory.",
+      "S3HW1E ports native RGB/theme-index/luminance Any dispatch, last-match queries, typed failures and remove-then-append transforms retaining unrelated fields. Complex-color UNO service/presentation/dumps remain unrepresented."
+    ],
+    "omittedResponsibilities": [
+      "Native complex-color UNO service, presentation and dumps remain unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xflclit.ts",
+          "marker": "XFillColorItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xflclit.hxx",
+          "marker": "XFillColorItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "XFillColorItem::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "XFillColorItem::PutValue"
+        }
+      ]
+    }
+  }
+}
