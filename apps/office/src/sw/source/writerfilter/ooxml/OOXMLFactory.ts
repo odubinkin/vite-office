@@ -10,6 +10,8 @@ import {
   OOXMLFastContextHandler,
   OOXMLFastContextHandlerStream,
   OOXMLFastContextHandlerProperties,
+  OOXMLFastContextHandlerTable,
+  OOXMLFastContextHandlerPropertyTable,
   OOXMLFastContextHandlerValue,
 } from "./OOXMLFastContextHandler";
 
@@ -112,6 +114,12 @@ export class OOXMLFactory {
         break;
       case ResourceType.Properties:
         context = new OOXMLFastContextHandlerProperties(parent);
+        break;
+      case ResourceType.Table:
+        context = new OOXMLFastContextHandlerTable(parent);
+        break;
+      case ResourceType.PropertyTable:
+        context = new OOXMLFastContextHandlerPropertyTable(parent);
         break;
       case ResourceType.Value:
         context = new OOXMLFastContextHandlerValue(parent);

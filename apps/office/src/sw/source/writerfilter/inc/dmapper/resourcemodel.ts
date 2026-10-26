@@ -34,6 +34,8 @@ export interface Table {
 /** Consumed native Stream delivery surface for parser state and break handlers; other stream callbacks remain with their owning contexts. */
 export interface Stream {
   props(properties: Reference<Properties>): void;
+  /** Original resource-table callback; distinct from document table row/cell groups. */
+  table(id: Id, table: Reference<Table>): void;
   text(data: Uint8Array, length: number): void;
   /** Native grouping callbacks consumed by fast text contexts. */
   startSectionGroup(): void;

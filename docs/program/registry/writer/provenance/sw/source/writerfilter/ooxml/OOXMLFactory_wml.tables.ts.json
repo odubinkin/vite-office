@@ -18,6 +18,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts",
           "marker": "regenerates every consumed table through unchanged pinned native generators"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -62,7 +66,8 @@
     ],
     "preservedResponsibilities": [
       "Generated records for24 consumed complex definitions plus referenced list definitions use unchanged original namespaces.py, modelpreprocess.py, factoryinc.py, resourceids.py, generate-tokens.py and factoryimpl_ns.py helpers. Records retain original native numeric definition/resource IDs and exact lexical constant bindings; omitted definitions never renumber the slice. Current counts:33 define/name bindings including start,59 attributes,231 element entries,253 resource mappings,82 list values,25 action records. Stream-action metadata is not yet a complete context-dispatch implementation.",
-      "Consumed native stream-action records now feed actual fast contexts; unconsumed document/style/table/section/resource owners remain pending."
+      "Consumed native stream-action records now feed actual fast contexts; unconsumed document/style/table/section/resource owners remain pending.",
+      "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

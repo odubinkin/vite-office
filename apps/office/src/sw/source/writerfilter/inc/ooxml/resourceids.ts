@@ -447,4 +447,7 @@ export const NS_ooxml = Object.freeze({
   LN_CT_Style_styleId: 93208,
   LN_CT_Style_default: 93209,
   LN_CT_Style_customStyle: 93210,
+  LN_CT_DocDefaults_pPrDefault: 92984,
+  LN_CT_DocDefaults_rPrDefault: 92985,
+  LN_STYLESHEET: 93211,
 });

@@ -1,11 +1,16 @@
-/** @fileoverview Native text/property/value fast contexts, inherited xml:space, MCE choices and source-ordered group callbacks; unconsumed drawing/table/note contexts remain separate owners. */
+/** @fileoverview Native text/property/value/resource-table contexts, inherited xml:space, MCE choices and source-ordered callbacks; drawings, document tables and notes remain separate owners. */
 import type { Id, Stream } from "../inc/dmapper/resourcemodel";
 import type { OOXMLDocument } from "../inc/ooxml/OOXMLDocument";
 import { OOXMLFactory, type FastAttribute } from "./OOXMLFactory";
 import { nativeToken } from "./OOXMLFactory_wml";
 import { XML_TOKEN_COUNT } from "../../../../oox/source/token/tokenmap";
 import { OOXMLParserState } from "./OOXMLParserState";
-import { OOXMLPropertySet, OOXMLPropertyType as T, OOXMLValue as V } from "./OOXMLPropertySet";
+import {
+  OOXMLPropertySet,
+  OOXMLPropertyType as T,
+  OOXMLValue as V,
+  OOXMLTable,
+} from "./OOXMLPropertySet";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 
@@ -401,7 +406,7 @@ export class OOXMLFastContextHandlerStream extends OOXMLFastContextHandler {
 
 /** Native properties context resolves directly only when its parent is a stream resource. */
 export class OOXMLFastContextHandlerProperties extends OOXMLFastContextHandler {
-  private mpPropertySet = new OOXMLPropertySet();
+  protected mpPropertySet = new OOXMLPropertySet();
   private readonly mbResolve: boolean;
   /** Original parent-resource resolution choice. @param parent - Parent. @returns Context. */ constructor(
     parent: OOXMLFastContextHandler,
@@ -437,6 +442,61 @@ export class OOXMLFastContextHandlerProperties extends OOXMLFastContextHandler {
     if (this.mbResolve) {
       if (this.isForwardEvents()) this.stream().props(this.mpPropertySet);
     } else this.sendPropertiesToParent();
+  }
+}
+
+/** Original property-table context delivers a cloned property set as one accumulating resource-table entry. */
+export class OOXMLFastContextHandlerPropertyTable extends OOXMLFastContextHandlerProperties {
+  private readonly mTable: OOXMLTable;
+  /** Original constructor keeps the properties context's parent-resource resolution state. @param parent - Native parent context. @returns Context. */
+  constructor(parent: OOXMLFastContextHandler) {
+    super(parent);
+    this.mTable = new OOXMLTable();
+  }
+  /** Original property clone, table clone and unconditional callback precede end actions; no forwarding or nonzero-ID guard is added. @param element - Unused closing token. @returns Nothing. */
+  protected override lcl_endFastElement(element: number): void {
+    void element;
+    const value = V.createPropertySet(this.mpPropertySet.clone());
+    this.mTable.add(value);
+    const table = this.mTable.clone();
+    this.stream().table(this.mId, table);
+    this.endAction();
+  }
+}
+
+/** Original resource-table context collects completed children in source order and forwards a copied value table. */
+export class OOXMLFastContextHandlerTable extends OOXMLFastContextHandler {
+  private readonly mTable: OOXMLTable;
+  private mCurrentChild: OOXMLFastContextHandler | null;
+  /** Original constructor shares its parent's parser state. @param parent - Native parent context. @returns Context. */
+  constructor(parent: OOXMLFastContextHandler) {
+    super(parent);
+    this.mTable = new OOXMLTable();
+    this.mCurrentChild = null;
+  }
+  /** Original table resource controls child property nesting. @returns Resource kind. */
+  override getResource(): ResourceEnum_t {
+    return ResourceEnum_t.TABLE;
+  }
+  /** Original previous-child collection precedes creating and retaining the next child. @param element - Fast element token. @returns Native child or null. */
+  override createFastChildContext(element: number): OOXMLFastContextHandler | null {
+    this.addCurrentChild();
+    this.mCurrentChild = super.createFastChildContext(element);
+    return this.mCurrentChild;
+  }
+  /** Original final child collection and clone occur before forwarding guards; the current child is deliberately retained. @param element - Unused end token. @returns Nothing. */
+  protected override lcl_endFastElement(element: number): void {
+    void element;
+    this.addCurrentChild();
+    const table = this.mTable.clone();
+    if (this.isForwardEvents() && this.mId !== 0) this.stream().table(this.mId, table);
+  }
+  /** Original dynamic-context/value guards skip empty children and retain non-property values' positions. @returns Nothing. */
+  private addCurrentChild(): void {
+    if (this.mCurrentChild instanceof OOXMLFastContextHandler) {
+      const value = this.mCurrentChild.getValue();
+      if (value.hasValue()) this.mTable.add(value);
+    }
   }
 }
 

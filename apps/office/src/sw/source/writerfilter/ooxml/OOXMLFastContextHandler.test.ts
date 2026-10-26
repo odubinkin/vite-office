@@ -20,7 +20,7 @@ import {
   OOXMLValue as V,
 } from "./OOXMLPropertySet";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
-import type { Stream, Reference, Properties } from "../inc/dmapper/resourcemodel";
+import type { Stream, Reference, Properties, Table } from "../inc/dmapper/resourcemodel";
 import { unicode, text } from "../../core/unocore/unocrsrhelper";
 import { createWriterDocument } from "../../core/doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -44,6 +44,11 @@ function define(name: string): number {
 class Receiver implements Stream {
   readonly events: string[] = [];
   readonly sets: Reference<Properties>[] = [];
+  readonly tables: [number, Reference<Table>][] = [];
+  /** Records native resource-table delivery without conflating it with document table geometry. @param id - Native resource ID. @param table - Original table snapshot. @returns Nothing. */
+  table(id: number, table: Reference<Table>): void {
+    this.tables.push([id, table]);
+  }
   /** Section start. @returns Nothing. */ startSectionGroup(): void {
     this.events.push("section+");
   }
