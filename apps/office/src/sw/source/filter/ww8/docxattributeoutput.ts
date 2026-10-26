@@ -1,4 +1,6 @@
-/** @fileoverview Native DocxAttributeOutput untracked text/run-property emission. The consumed serializer binding is explicit: full DocxExport association, redlines, fields, drawings and paragraph orchestration are not yet admitted. */
+/** @fileoverview Native DocxAttributeOutput untracked text/run-property emission. The actual DocxExport owns this attribute output; redlines, fields, drawings, font embedding and paragraph orchestration are not yet admitted. */
+import type { DocxExport } from "./docxexport";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { FastSerializerHelper, FSNS, MergeMarks } from "../../../../sax/inc/fshelper";
 import { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
@@ -116,8 +118,101 @@ export class DocxAttributeOutput {
   private m_oFontSize: number | undefined;
   private m_bCharPostureWritten = false;
   private m_sRawText = "";
-  /** Explicit consumed serializer binding until the native exporter association is ported. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
-  constructor(private readonly m_pSerializer: FastSerializerHelper) {}
+  /** Consumed native constructor binds the real exporter and serializer. DrawingML/base/table-style owners remain unported. @param m_rExport - Actual exporter. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
+  constructor(
+    private readonly m_rExport: DocxExport,
+    private m_pSerializer: FastSerializerHelper,
+  ) {}
+  /** Original exporter getter. @returns Actual exporter. */
+  GetExport(): DocxExport {
+    return this.m_rExport;
+  }
+  /** Original serializer getter. @returns Actual serializer. */
+  GetSerializer(): FastSerializerHelper {
+    return this.m_pSerializer;
+  }
+  /** Original serializer switch for the admitted output owner; table-style forwarding remains pending its native owner. @param serializer - Actual target. @returns Nothing. */
+  SetSerializer(serializer: FastSerializerHelper): void {
+    this.m_pSerializer = serializer;
+  }
+  /** Native font registration precedes empty-name and duplicate guards. @param font - Actual shared font item. @returns Nothing. */
+  CharFont(font: SvxFontItem): void {
+    this.GetExport().GetId(font);
+    const name = font.GetFamilyName();
+    if (!name) return;
+    if (
+      this.m_pFontsAttrList &&
+      (this.m_pFontsAttrList.hasAttribute(FSNS(w, token("ascii"))) ||
+        this.m_pFontsAttrList.hasAttribute(FSNS(w, token("hAnsi"))))
+    )
+      return;
+    this.m_pFontsAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pFontsAttrList.addNS(w, token("ascii"), name);
+    this.m_pFontsAttrList.addNS(w, token("hAnsi"), name);
+  }
+  /** Original font element open. @param name - Native family name. @returns Nothing. */
+  StartFont(name: string): void {
+    this.m_pSerializer.startElementNS(w, token("font"), FSNS(w, token("name")), name);
+  }
+  /** Original font element close. @returns Nothing. */
+  EndFont(): void {
+    this.m_pSerializer.endElementNS(w, token("font"));
+  }
+  /** Original alternate name. @param name - Native alternate. @returns Nothing. */
+  FontAlternateName(name: string): void {
+    this.m_pSerializer.singleElementNS(w, token("altName"), val, name);
+  }
+  /** Original lowercase two-digit charset output. @param charset - Native byte. @returns Nothing. */
+  FontCharset(charset: number): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("charset"),
+      val,
+      (charset & 255).toString(16).padStart(2, "0"),
+    );
+  }
+  /** Original family switch. @param family - Native enum. @returns Nothing. */
+  FontFamilyType(family: FontFamily): void {
+    let name: string;
+    switch (family) {
+      case FontFamily.FAMILY_ROMAN:
+        name = "roman";
+        break;
+      case FontFamily.FAMILY_SWISS:
+        name = "swiss";
+        break;
+      case FontFamily.FAMILY_MODERN:
+        name = "modern";
+        break;
+      case FontFamily.FAMILY_SCRIPT:
+        name = "script";
+        break;
+      case FontFamily.FAMILY_DECORATIVE:
+        name = "decorative";
+        break;
+      default:
+        name = "auto";
+        break;
+    }
+    this.m_pSerializer.singleElementNS(w, token("family"), val, name);
+  }
+  /** Original pitch switch. @param pitch - Native enum. @returns Nothing. */
+  FontPitchType(pitch: FontPitch): void {
+    let name: string;
+    switch (pitch) {
+      case FontPitch.PITCH_VARIABLE:
+        name = "variable";
+        break;
+      case FontPitch.PITCH_FIXED:
+        name = "fixed";
+        break;
+      default:
+        name = "default";
+        break;
+    }
+    this.m_pSerializer.singleElementNS(w, token("pitch"), val, name);
+  }
+
   /** Native deferred run marks for untracked text without fields/SDTs. @param redline - Only native null is admitted. @param position - Original position. @param singleEmptyRun - Original flag. @returns Nothing. */
   StartRun(redline: null, position: number, singleEmptyRun = false): void {
     void redline;

@@ -13,7 +13,7 @@
     "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts": "e21b0e701b2208ea0e11a4b77dc625ec77d7f8a8",
     "apps/office/src/sw/source/filter/ww8/docxattributeoutput.test.ts": "53a2317c715df90e88c635cfcf308900614bf7b5",
     "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts": "d661010c615a6f37bc00c7d05d9dabccfff66cec",
-    "tsconfig.tools.json": "f84aba479ef7f3fb69dfa5b90429cf0ead31dcd8"
+    "tsconfig.tools.json": "505d72c3a93589e479d2a41fd4545ec46e59eb6f"
   },
   "coverage": {
     "total": {

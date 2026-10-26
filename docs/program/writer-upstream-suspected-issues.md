@@ -1400,3 +1400,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` registers `ulhair` as an RTF toggle, but `RTFDocumentImpl::dispatchToggle` has no `ULHAIR` case; it reaches the default `TODO handle toggle` branch and leaves the character underline unchanged.
 - Observation: a hairline-underline control does not reach the document's underline value. This follows the source dispatch table and default branch; compiled desktop behavior remains unverified.
 - Preservation: the local RTF reader likewise leaves `\\ulhair` without an underline-style item. A focused test pins the ignored control.
+
+### WRITER142 — run font attributes retain the family list while fontTable uses its first token
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `CharFont`; `writerwordglue.cxx`, `FontMapExport`; `wrtw8sty.cxx`, `wwFont::WriteDocx`.
+- Observation: CharFont writes the original GetFamilyName value into w:ascii/w:hAnsi, but font registration tokenizes that value and the font table uses the first family token. For `Liberation Sans;Fallback`, run attributes retain the complete list while fontTable contains `Liberation Sans`. Consumer lookup behavior and desktop impact remain unverified.
+- Preservation: keep original values and registration-before-guards order. A real ZIP font-part test pins the mismatch without normalizing the run attribute or dropping fonts registered by later duplicate-attribute calls.

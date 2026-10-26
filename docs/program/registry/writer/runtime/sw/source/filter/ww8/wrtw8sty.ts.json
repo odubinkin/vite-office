@@ -22,13 +22,14 @@
         "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts#MSWordStyles",
         "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx#MSWordStyles::BuildStylesTable"
       ],
-      "justification": "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending. The current paragraph-style graph uses pinned reserved Word slots and source collection order; full style vocabulary remains unverified.",
+      "justification": "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending. The current paragraph-style graph uses pinned reserved Word slots and source collection order; full style vocabulary remains unverified. V4DQJW connects wwFont.WriteDocx and wwFontHelper.WriteFontTable to actual DocxAttributeOutput. Preserve empty-family omission, alternate-name admission, charset/family/pitch element order and ID-ordered font traversal. Only native font metadata is admitted for the current kernel without embedding; EmbedFont/doc-setting/native font-access responsibilities are unported and not replaced by dummy services. Existing shared RTF MSWordStyles behavior is unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "wwFont",
         "wwFontHelper",
         "wwFontLess",
-        "MSWordStyles"
+        "MSWordStyles",
+        "WriteDocx"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/wrtw8sty.cxx",
@@ -37,7 +38,8 @@
         "wwFontHelper::GetId",
         "wwFontHelper::AsVector",
         "MSWordStyles::BuildStylesTable",
-        "MSWordStyles::GetSlot"
+        "MSWordStyles::GetSlot",
+        "wwFont::WriteDocx"
       ]
     }
   }

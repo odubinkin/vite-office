@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/token/relationship.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/token/relationship.ts",
+        "vendor/libreoffice-reference/oox/source/token/relationship.cxx"
+      ],
+      "justification": "Complete native Relationship enum order and relationship.inc URI map, preserving empty fallback for unknown/count values. UTF16 immutable URI values bind to host strings; native frozen container and diagnostic logger are not simulated.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Relationship",
+        "getRelationship"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/token/relationship.cxx",
+      "upstreamSymbols": [
+        "getRelationship"
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Ports consumed XmlFilterBase XML-fragment import, cached relationship ownership, output fragment MIME and relation export; ZIP and SAX adaptation remains below this boundary. */
+import { StaticNamespaceMap } from "../token/namespacemap";
 import { FastSerializerHelper } from "../../../sax/inc/fshelper";
 import { FastTokenHandler } from "./fasttokenhandler";
 import type { SaxesTagNS } from "saxes";
@@ -38,6 +39,10 @@ export class XmlFilterBase {
     protected readonly storage: ZipStorage,
     private readonly options: FastXmlParseOptions = {},
   ) {}
+  /** Original export query always uses the transitional namespace map and returns empty when absent. @param namespace - Native generated namespace identity. @returns Namespace URI or empty. */
+  getNamespaceURL(namespace: number): string {
+    return StaticNamespaceMap().maTransitionalNamespaceMap.get(namespace) ?? "";
+  }
   /** Borrows an exact input fragment without imposing ODF requirements. @param path - Fragment path. @returns Bytes or null. */
   openInputStream(path: string): Promise<Uint8Array | null> {
     return this.storage.openInputStream(path);
@@ -121,7 +126,7 @@ export class XmlFilterBase {
   /** Adds a root relationship with the native global counter. @param type - Type. @param target - Target. @returns ID. */
   addRelation(type: string, target: string): string;
   /** Adds a part-local relationship with its native stream counter. @param stream - Owning stream. @param type - Type. @param target - Target. @param external - External mode. @returns ID. */
-  addRelation(stream: ZipFragmentStream, type: string, target: string, external: boolean): string;
+  addRelation(stream: ZipFragmentStream, type: string, target: string, external?: boolean): string;
   /** Implements original root/stream relation ownership and IURI target conversion. @param first - Stream or type. @param second - Type or target. @param target - Part target. @param external - External mode. @returns ID. */
   addRelation(
     first: string | ZipFragmentStream,
