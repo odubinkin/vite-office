@@ -15,10 +15,11 @@
       "OUStringToOString"
     ],
     "preservedResponsibilities": [
-      "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified."
+      "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified.",
+      "OUStringToOString now delegates to actual rtl_uString2String ownership/conversion instead of a duplicated single-byte/UTF8-only shortcut. Returned bytes are copied from the logical native byte string before releasing its owner. All represented multibyte/contextual reverse owners are reachable through the factory; native ISCII null-context mismatch remains preserved rather than concealed. Existing little-endian UTF16 adapter is retained. OStringToOUString still awaits the native forward string-wrapper owner; complete SAL registry and value-class ABI remain unverified."
     ],
     "omittedResponsibilities": [
-      "Full SAL converter registry, contextual/multibyte converters, complete stream ownership and every original constructor/error contract remain unported. The original SAL dummy conversion now handles missing registry entries."
+      "Native forward string-wrapper owner, complete SAL registry/value-class ABI and full stream/format orchestration remain unverified. The existing UTF16LE application adapter is a separate boundary."
     ],
     "evidence": {
       "local": [
@@ -29,6 +30,10 @@
         {
           "path": "apps/office/src/sal/rtl/ustring-convert.test.ts",
           "marker": "uses native UTF-8 broken-sequence grouping"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
         }
       ],
       "upstream": [
@@ -39,6 +44,14 @@
         {
           "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
           "marker": "rtl_impl_convertUStringToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
+          "marker": "rtl_impl_convertUStringToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/string.h",
+          "marker": "OUSTRING_TO_OSTRING_CVTFLAGS"
         }
       ]
     },

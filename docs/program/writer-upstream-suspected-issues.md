@@ -1634,7 +1634,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 ### WRITER178 — RTF CanEncode uses text-to-Unicode flags for Unicode-to-text conversion
 
 - Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `CanEncode`; `include/rtl/textcvt.h` flag definitions.
-- Observation: UNDEFINED_ERROR has the same value in both flag families, but TEXTTOUNICODE INVALID_ERROR is 0x0100, which is UNICODETOTEXT UNDEFINED_REPLACE rather than UNICODETOTEXT INVALID_ERROR (0x0010). The RTF predicate therefore requests undefined-character replacement and does not request the apparent invalid-input error action. This is a source-level flag trace; the complete font-name predicate is not yet integrated or compiled in this slice.
+- Observation: UNDEFINED_ERROR has the same value in both flag families, but TEXTTOUNICODE INVALID_ERROR is 0x0100, which is UNICODETOTEXT UNDEFINED_REPLACE rather than UNICODETOTEXT INVALID_ERROR (0x0010). The RTF predicate therefore requests undefined-character replacement and does not request the apparent invalid-input error action. The current CanEncode/RTF charset owner retains these literal flags and uses the real checked SAL byte-string wrapper. This is a source-level flag trace with separate core SAL conversion evidence; full Writer/OUString/OString predicate compilation and font-table integration remain unverified.
 - Preservation: retain the original flag values when connecting the native font-name conversion path. Do not replace them with the similarly named flags from the opposite family.
 
 
@@ -1670,3 +1670,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtjp6.tab`, `aImplJISX0201Tab`, contains 0x5A at offset 4 of the U+FF61..U+FF9F range, between 0xA4 and 0xA6. Its byte-converter descriptor supplies this range and no extra Unicode-to-byte mapping table.
 - Observation: the original data maps U+FF65 to byte 5A; yen U+00A5 and overline U+203E have no mapping and follow the undefined-input policy. This is source table/algorithm evidence; the generic JIS factory is not independently compiled by the ISO-2022 witness.
 - Preservation: retain the captured original table and missing aliases. Do not replace 0x5A with 0xA5 or add familiar JIS Roman mappings to make a conventional encoder result.
+
+
+### WRITER184 — Checked Unicode-to-byte conversion tests ERROR before retrying a small destination
+
+- Source: pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, returns false for checked conversions on INFO_ERROR before its DESTBUFFERTOSMALL retry. Pinned `sal/textenc/convertsimple.cxx`, `convertUnicodeToChar`, sets ERROR together with DESTBUFFERTOSMALL when a mapped two-byte result does not fit. Encoding metadata may estimate one byte per unit while allowing two.
+- Observation: a checked conversion can reject an encodable single unit because the initial estimate is too small. For the MS1258 U+1EAF two-byte mapping, the source metadata estimates one byte, so the native control flow returns false instead of growing the buffer; unchecked conversion retries. This combined case is a source/control-flow trace plus local test; the isolated compiled string-wrapper witness covers the four core encodings, not MS1258.
+- Preservation: retain the original estimate and ERROR-before-DESTBUFFERTOSMALL order. Do not retry checked failures first or redefine CanEncode as a direct mapping-membership check.

@@ -18,16 +18,15 @@
       "evidence": [
         "apps/office/src/sal/rtl/strimp.hxx.ts#SAL_STRING_INTERN_FLAG",
         "apps/office/src/sal/rtl/ustring-ownership.test.ts#matches every complete native identity, counter, buffer, allocator event and hash-table slot",
-        "vendor/libreoffice-reference/sal/rtl/strimp.hxx#SAL_STRING_INTERN_FLAG"
+        "vendor/libreoffice-reference/sal/rtl/strimp.hxx#SAL_STRING_INTERN_FLAG",
+        "apps/office/src/sal/rtl/string-convert.test.ts",
+        "apps/office/src/sal/rtl/string-convert.native.json",
+        "scripts/rtl-string-convert-native-probe.mjs",
+        "apps/office/src/sal/rtl/strimp.flags.ts"
       ],
-      "justification": "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
+      "justification": "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair. Original private allocation declarations now expose both byte and Unicode specializations. Flag queries accept the shared original refCount prefix. The existing UTF16 raw allocator carrier is explicitly reinterpreted by the byte template, as the source static_cast; original allocator slot identity is retained. Full raw pointer ABI is not certified. Runtime localSymbols list declarations owned by this file; C-function and flag reexports are evidenced at their actual implementation/declaration owners. Compile-time flag bindings are reexported from the dependency-free strimp.flags.ts fragment so original C implementation exports do not introduce an initialization dependency for static byte/Unicode empty values. Runtime local declarations are allocator pointer types; reexport implementations retain their own source owners.",
       "knownViolations": [],
       "localSymbols": [
-        "SAL_STRING_INTERN_FLAG",
-        "SAL_STRING_IS_INTERN",
-        "SAL_STRING_IS_STATIC",
-        "SAL_STRING_REFCOUNT",
-        "SAL_STRING_STATIC_FLAG",
         "rtl_allocateStringFn",
         "rtl_freeStringFn"
       ],
@@ -42,7 +41,9 @@
         "rtl_allocateStringFn",
         "rtl_freeStringFn",
         "rtl_allocateString",
-        "rtl_freeString"
+        "rtl_freeString",
+        "rtl_string_ImplAlloc",
+        "rtl_uString_ImplAlloc"
       ]
     }
   }

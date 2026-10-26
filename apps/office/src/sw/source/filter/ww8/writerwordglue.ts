@@ -66,3 +66,67 @@ export function rtl_TextEncodingToWinCharset(encoding: rtl_TextEncoding): number
   }
   return result;
 }
+
+import {
+  rtl_getTextEncodingFromWindowsCharset,
+  rtl_isOctetTextEncoding,
+} from "../../../../sal/textenc/tencinfo";
+import {
+  RTL_TEXTENCODING_MS_932,
+  RTL_TEXTENCODING_MS_936,
+  RTL_TEXTENCODING_MS_950,
+  RTL_TEXTENCODING_MS_949,
+} from "../../../../sal/inc/rtl/textenc";
+import {
+  RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR,
+  RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+} from "../../../../sal/inc/rtl/textcvt.h";
+import type { rtl_StringSlot } from "../../../../sal/inc/rtl/string.h";
+import {
+  rtl_convertUStringToString,
+  rtl_string_new,
+  rtl_string_release,
+} from "../../../../sal/rtl/string";
+
+/** Original private font-name predicate uses the source's text-to-Unicode flag values for reverse conversion. @param value - Logical Unicode string. @param encoding - Native encoding. @returns Checked native conversion result. */
+function CanEncode(value: string, encoding: rtl_TextEncoding): boolean {
+  const target: rtl_StringSlot = [null];
+  rtl_string_new(target);
+  try {
+    return rtl_convertUStringToString(
+      target,
+      units(value),
+      value.length,
+      encoding,
+      RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_ERROR | RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+    );
+  } finally {
+    if (target[0] !== null) rtl_string_release(target[0]);
+  }
+}
+
+/** Original RTF font charset choice checks both names, then the exact ordered CJK fallbacks. @param fontName - Native primary name. @param alternateName - Native alternate name. @param encoding - Font encoding. @returns Windows charset byte. */
+export function rtl_TextEncodingToWinCharsetRTF(
+  fontName: string,
+  alternateName: string,
+  encoding: rtl_TextEncoding,
+): number {
+  encoding &= 0xffff;
+  let result = rtl_getBestWindowsCharsetFromTextEncoding(encoding);
+  const candidate = rtl_getTextEncodingFromWindowsCharset(result);
+  if (
+    !rtl_isOctetTextEncoding(candidate) ||
+    !(CanEncode(fontName, candidate) && CanEncode(alternateName, candidate))
+  ) {
+    const fallbacks = [
+      [RTL_TEXTENCODING_MS_932, 0x80],
+      [RTL_TEXTENCODING_MS_936, 0x86],
+      [RTL_TEXTENCODING_MS_950, 0x88],
+      [RTL_TEXTENCODING_MS_949, 0x81],
+    ] as const;
+    for (const [fallback, charset] of fallbacks)
+      if (CanEncode(fontName, fallback) && CanEncode(alternateName, fallback)) return charset;
+    result = 0x01;
+  }
+  return result;
+}

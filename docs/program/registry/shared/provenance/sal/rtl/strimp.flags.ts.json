@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/strimp.flags.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/strimp.hxx",
+    "localSymbols": [
+      "SAL_STRING_INTERN_FLAG",
+      "SAL_STRING_STATIC_FLAG",
+      "SAL_STRING_REFCOUNT",
+      "SAL_STRING_IS_INTERN",
+      "SAL_STRING_IS_STATIC"
+    ],
+    "upstreamSymbols": [
+      "SAL_STRING_INTERN_FLAG",
+      "SAL_STRING_STATIC_FLAG",
+      "SAL_STRING_REFCOUNT",
+      "SAL_STRING_IS_INTERN",
+      "SAL_STRING_IS_STATIC"
+    ],
+    "preservedResponsibilities": [
+      "Original compile-time string flag constants and mask macros are bound in a dependency-free header fragment so C implementation reexports cannot change static-empty initialization order. Source values and bitwise signedness are unchanged; byte specialization and original Unicode ownership tests exercise the shared macros. Native pointer/thread ABI remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Native raw pointer/thread/atomic ABI and the rest of the private header are owned separately."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/strimp.flags.ts",
+          "marker": "SAL_STRING_STATIC_FLAG"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/strimp.hxx",
+          "marker": "SAL_STRING_STATIC_FLAG"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sal/rtl/strimp.flags.ts",
+      "stackNecessity": "module-resolution",
+      "rationale": "The original compile-time strimp.hxx flag macros form a dependency-free ESM fragment so reexported C implementation owners cannot run before static-empty flag constants are initialized. The private declaration header still reexports the same bindings, and writable allocation globals retain their separate strimp.cxx owner."
+    }
+  }
+}

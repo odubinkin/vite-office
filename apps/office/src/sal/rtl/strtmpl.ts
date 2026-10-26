@@ -1,13 +1,14 @@
-/** @fileoverview Original SAL UTF16 CompareNormal and reverseCompare_WithLengths used by shared string equality. */
+/** @fileoverview Original SAL shared byte/Unicode ownership templates and represented Unicode/string algorithms. */
 import { isAsciiLowerCase, toAsciiUpperCase } from "../inc/rtl/character";
+import type { rtl_String, rtl_StringSlot } from "../inc/rtl/string.h";
 import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
 import {
   SAL_STRING_INTERN_FLAG,
   SAL_STRING_STATIC_FLAG,
   SAL_STRING_IS_INTERN,
   SAL_STRING_IS_STATIC,
-  rtl_stringAllocation,
-} from "./strimp.hxx";
+} from "./strimp.flags";
+import { rtl_stringAllocation } from "./strimp.hxx";
 import { internRelease } from "./ustring";
 import { implIsWhitespace } from "../../o3tl/inc/string_view";
 import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../inc/rtl/string.h";
@@ -152,32 +153,48 @@ export function hashCode_WithLength(pStr: Uint16Array | null, nLen: number): num
   }
   return h | 0;
 }
-/** Original Unicode specialization of Alloc. @param nLen - Native signed32 allocation length. @returns Allocated data or original allocator failure. */
-export function Alloc(nLen: number): rtl_uString | null {
+/** Original Unicode Alloc specialization. @param nLen - Signed32 allocation length. @returns Original allocation or failure. */
+export function Alloc(nLen: number): rtl_uString | null;
+/** Original byte Alloc specialization; the type witness binds the C++ template argument. @param nLen - Signed32 allocation length. @param characterType - Byte specialization witness. @returns Original allocation or failure. */
+export function Alloc(nLen: number, characterType: typeof Uint8Array): rtl_String | null;
+/** Original common template allocation and character-width binding. @param nLen - Signed32 allocation length. @param characterType - Runtime template specialization. @returns Concrete owned data or allocation failure. */
+export function Alloc(
+  nLen: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
+): rtl_uString | rtl_String | null {
   nLen |= 0;
   if (nLen < 0) throw new Error("assert(value >= 0)");
-  // On the verified64-bit source target every UInt32 nLen fits (SIZE_MAX-10)/2, so the original overflow guard is identically true.
-  const pData = rtl_stringAllocation.rtl_allocateString(10 + nLen * 2);
-  if (pData !== null) {
-    pData.refCount = 1;
-    pData.length = nLen;
-    pData.buffer[nLen] = 0;
+  const width = characterType.BYTES_PER_ELEMENT;
+  // On the verified64-bit target every UInt32 nLen passes the original SIZE_MAX guard.
+  const pData = rtl_stringAllocation.rtl_allocateString(8 + width + nLen * width);
+  if (pData === null) return null;
+  if (characterType.BYTES_PER_ELEMENT === 1) {
+    // This is the source static_cast<rtl_String*> of the same raw allocator result.
+    const byteData = pData as unknown as rtl_String;
+    byteData.buffer = new Uint8Array(pData.buffer.buffer, pData.buffer.byteOffset, nLen + 1);
+    byteData.refCount = 1;
+    byteData.length = nLen;
+    byteData.buffer[nLen] = 0;
+    return byteData;
   }
+  pData.refCount = 1;
+  pData.length = nLen;
+  pData.buffer[nLen] = 0;
   return pData;
 }
 /** Original acquire specialized to realm-local synchronous signed32 storage. @param pThis - Live data. @returns Nothing. */
-export function acquire(pThis: rtl_uString): void {
+export function acquire(pThis: rtl_uString | rtl_String): void {
   if (!SAL_STRING_IS_STATIC(pThis)) pThis.refCount = (pThis.refCount + 1) | 0;
 }
 /** Original release including actual intern removal dependency. @param pThis - Live owned reference. @returns Nothing. */
-export function release(pThis: rtl_uString): void {
+export function release(pThis: rtl_uString | rtl_String): void {
   if (SAL_STRING_IS_STATIC(pThis)) return;
-  if (SAL_STRING_IS_INTERN(pThis)) {
-    internRelease(pThis);
+  if (pThis.buffer.BYTES_PER_ELEMENT === 2 && SAL_STRING_IS_INTERN(pThis)) {
+    internRelease(pThis as rtl_uString);
     return;
   }
   pThis.refCount = (pThis.refCount - 1) | 0;
-  if (pThis.refCount === 0) rtl_stringAllocation.rtl_freeString(pThis);
+  if (pThis.refCount === 0) rtl_stringAllocation.rtl_freeString(pThis as rtl_uString);
 }
 /** Original Unicode EmptyStringImpl specialization; C empty identity is distinct from future C++ OUString literal empty. */
 export const EmptyStringImpl: { data: rtl_uString } = {
@@ -187,21 +204,47 @@ export const EmptyStringImpl: { data: rtl_uString } = {
     buffer: new Uint16Array([0]),
   },
 };
-/** Original empty reset, releasing the old destination before binding the static data. @param ppThis - Caller pointer slot. @returns Nothing. */
-export function new_(ppThis: rtl_uStringSlot | null): void {
+/** Original EmptyStringImpl<rtl_String> specialization; byte strings have no intern flag. */
+export const EmptyByteStringImpl: { data: rtl_String } = {
+  data: { refCount: SAL_STRING_STATIC_FLAG | 1, length: 0, buffer: Uint8Array.of(0) },
+};
+/** Original Unicode empty reset. @param ppThis - Destination slot. @returns Nothing. */
+export function new_(ppThis: rtl_uStringSlot | null): void;
+/** Original byte empty reset. @param ppThis - Destination slot. @param characterType - Template witness. @returns Nothing. */
+export function new_(ppThis: rtl_StringSlot | null, characterType: typeof Uint8Array): void;
+/** Releases old ownership before binding the source static empty specialization. @param ppThis - Destination slot. @param characterType - Template witness. @returns Nothing. */
+export function new_(
+  ppThis: rtl_uStringSlot | rtl_StringSlot | null,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
+): void {
   if (ppThis === null) throw new Error("assert(ppThis)");
   if (ppThis[0] !== null) release(ppThis[0]);
-  ppThis[0] = EmptyStringImpl.data;
+  ppThis[0] =
+    characterType.BYTES_PER_ELEMENT === 1 ? EmptyByteStringImpl.data : EmptyStringImpl.data;
 }
-/** Original reserve operation produces logical empty data with allocated capacity. @param ppThis - Destination slot. @param nLen - Signed32 requested capacity. @returns Nothing. */
-export function new_WithLength(ppThis: rtl_uStringSlot | null, nLen: number): void {
+/** Original Unicode reserve. @param ppThis - Destination. @param nLen - Capacity. @returns Nothing. */
+export function new_WithLength(ppThis: rtl_uStringSlot | null, nLen: number): void;
+/** Original byte reserve. @param ppThis - Destination. @param nLen - Capacity. @param characterType - Template witness. @returns Nothing. */
+export function new_WithLength(
+  ppThis: rtl_StringSlot | null,
+  nLen: number,
+  characterType: typeof Uint8Array,
+): void;
+/** Native reserve creates logical empty data with the requested allocation. @param ppThis - Destination. @param nLen - Capacity. @param characterType - Template witness. @returns Nothing. */
+export function new_WithLength(
+  ppThis: rtl_uStringSlot | rtl_StringSlot | null,
+  nLen: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
+): void {
   nLen |= 0;
   if (ppThis === null) throw new Error("assert(ppThis)");
   if (nLen < 0) throw new Error("assert(nLen >= 0)");
-  if (nLen <= 0) new_(ppThis);
-  else {
+  if (nLen <= 0) {
+    if (characterType.BYTES_PER_ELEMENT === 1) new_(ppThis as rtl_StringSlot, Uint8Array);
+    else new_(ppThis as rtl_uStringSlot);
+  } else {
     if (ppThis[0] !== null) release(ppThis[0]);
-    ppThis[0] = Alloc(nLen);
+    ppThis[0] = characterType.BYTES_PER_ELEMENT === 1 ? Alloc(nLen, Uint8Array) : Alloc(nLen);
     if (ppThis[0] === null) throw new Error("assert(*ppThis != nullptr)");
     ppThis[0].length = 0;
     ppThis[0].buffer[0] = 0;

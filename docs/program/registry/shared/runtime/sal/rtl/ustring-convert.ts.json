@@ -20,9 +20,12 @@
         "apps/office/src/sc/source/ui/docshell/docsh.test.ts",
         "vendor/libreoffice-reference/include/rtl/ustring.hxx",
         "apps/office/src/sal/rtl/ustring-convert.test.ts#uses native UTF-8 broken-sequence grouping",
-        "vendor/libreoffice-reference/sal/rtl/string.cxx#rtl_impl_convertUStringToString"
+        "vendor/libreoffice-reference/sal/rtl/string.cxx#rtl_impl_convertUStringToString",
+        "apps/office/src/sal/rtl/string-convert.test.ts",
+        "apps/office/src/sal/rtl/string-convert.native.json",
+        "scripts/rtl-string-convert-native-probe.mjs"
       ],
-      "justification": "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified.",
+      "justification": "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified. OUStringToOString now delegates to actual rtl_uString2String ownership/conversion instead of a duplicated single-byte/UTF8-only shortcut. Returned bytes are copied from the logical native byte string before releasing its owner. All represented multibyte/contextual reverse owners are reachable through the factory; native ISCII null-context mismatch remains preserved rather than concealed. Existing little-endian UTF16 adapter is retained. OStringToOUString still awaits the native forward string-wrapper owner; complete SAL registry and value-class ABI remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "OStringToOUString",
