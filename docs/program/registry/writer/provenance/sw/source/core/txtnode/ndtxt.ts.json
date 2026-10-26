@@ -312,6 +312,10 @@
         {
           "path": "apps/office/src/sw/source/core/edit/native-character-shell.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-ranged-attribute-history.test.ts",
+          "marker": "source"
         }
       ],
       "upstream": [
@@ -514,6 +518,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
           "marker": "SwTextNode::GetLeftMarginForTabCalculation"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/ndtxt.hxx",
+          "marker": "TryDeleteSwpHints"
         }
       ]
     },
@@ -572,7 +580,8 @@
       "LeafV6W22V corrects the explicit formatted-fragment adapter to issue Default index insertion mode, preserving ordinary insertion/bookmark exclusions for ODT and existing rich-fragment callers. Native string ReplaceText alone retains its source Replace mode/bookmark boundary exception. This removes the old adapter misuse exposed by real ODT/browser regressions; persisted marker positions, imported text and conscious I/O deviations remain unchanged. Native string replacement/history and explicit fragment adaptation remain distinct; no generic full parity or expanded mark claim.",
       "The legacy complete-text construction setter likewise uses Default for positive index updates, preserving its preexisting bookmark-before boundary behavior; only the actual native ReplaceText branches issue Replace. No new generic setter parity claim.",
       "TaskN700C9 follow-up replaces display-stack state aggregation by consumed native GetParaAttr/GetPaMAttr ring/node traversal: default versus SET/INVALID, source partial-hint adjacency and collapsed DontExpand boundaries, original10000 limits and label skip. Complete-node edits use native direct character values with selective hint reset, registered SwRegHistory old/reset deltas and unchanged action preservation. Empty selected table cells and explicit marked zero-width attributes participate; zero-attribute Undo removes only the changed original family and retains adjacent values. Ordinary browser caret typing continues to use the existing native-item pending owner; full BreakIterator word/URL-expansion, general GetParaAttr character-style/merged/graphic/OLE services and complete document InsertItemSet history remain unverified. No status/default/classification promotion.",
-      "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged."
+      "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
+      "S3HW1E: Original DeleteAttributes and TryDeleteSwpHints entrypoints are connected for registered ranged families. Existing fragment/full-text net content-index updates were split by responsibility without changing their timing or modes."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

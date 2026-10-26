@@ -2,6 +2,7 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
+import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
@@ -59,6 +60,23 @@ type RangedTextAttr = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | Sw
 /** Stores directly formatted text portions in three native ordered maps. */
 export class SwpHints {
   private m_pTextNode: SwTextNode | undefined;
+  private m_pHistory: SwRegHistory | undefined;
+  /** Original single borrowed history receiver; registration replaces the prior receiver. @param history - Native recorder or absent. @returns Nothing. */
+  public Register(history: SwRegHistory | undefined): void {
+    this.m_pHistory = history;
+  }
+  /** Original registration reset. @returns Nothing. */
+  public DeRegister(): void {
+    this.Register(undefined);
+  }
+  /** Original borrowed recorder query. @returns Native recorder or absent. */
+  public GetHistory(): SwRegHistory | undefined {
+    return this.m_pHistory;
+  }
+  /** Original explicit old/new capture, called only at native mutation sites. @param hint - Actual attribute. @param isNew - Whether record its reset instead of its old value. @returns Nothing. */
+  public NoteInHistory(hint: RangedTextAttr, isNew = false): void {
+    this.m_pHistory?.AddHint(hint, isNew);
+  }
 
   /** Binds the portable map at a native node insertion boundary. @param node - Owning node or detached container. @returns Nothing. */
   public BindToTextNode(node: SwTextNode | undefined): void {
@@ -244,6 +262,7 @@ export class SwpHints {
   /** Releases an actual attribute from the three owned maps. @param position - Native start-map offset. @returns Nothing. */
   public DeleteAtPos(position: number): void {
     const hint = this.Get(position);
+    this.NoteInHistory(hint);
     this.hintsByStart = this.hintsByStart.filter(
       /** Keeps the other actual attributes. @param entry - Map attribute. @returns Whether retained. */ (
         entry,

@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
         "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
       ],
-      "justification": "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed.",
+      "justification": "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed. S3HW1E: Original MergePortions records deleted second portions and old/new endpoint changes. Format-ignore flag changes record old/new entries only when the source condition changes the flag.",
       "knownViolations": [],
       "localSymbols": [
         "MergeTextHintPortions"

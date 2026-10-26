@@ -1,4 +1,5 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { SwContentIndexUpdateMode } from "../bastyp/index";
 import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -313,4 +314,25 @@ export function GetTextNodeRangeFormatState(
   AssertTextNodeRange(node, start, end);
   const hints = node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool());
   return hints.getCharacterFormatState(node.Len(), start, end, format, node.GetSwAttrSet());
+}
+
+/** Updates registered content indices after the existing fragment/full-text replacement paths have changed text. @param node - Actual node. @param start - Replacement start. @param removed - Old extent. @param inserted - New extent. @returns Nothing. */
+export function UpdateTextNodeReplacementIndices(
+  node: SwTextNode,
+  start: number,
+  removed: number,
+  inserted: number,
+): void {
+  if (removed > inserted)
+    node.UpdateContentIndices(
+      start + inserted,
+      removed - inserted,
+      SwContentIndexUpdateMode.Negative,
+    );
+  else if (inserted > removed)
+    node.UpdateContentIndices(
+      start + removed,
+      inserted - removed,
+      SwContentIndexUpdateMode.Default,
+    );
 }

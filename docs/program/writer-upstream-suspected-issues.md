@@ -1575,3 +1575,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `svx/source/xoutdev/xattr.cxx`, `NameOrIndex` constructors.
 - Observation: the default constructor initializes Which zero and palette index minus one without `setNameOrIndex`; named, indexed and copy constructors call that setter. Copying or cloning the default item therefore changes this metadata flag. This is a source-level trace.
 - Preservation: keep the original per-constructor calls and the default false pool-item flag; do not normalize the source or its copy to the same flag.
+
+
+### WRITER170 — Exact text-attribute deletion skips the next shifted same-span hint
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::DeleteAttributes`; its preceding FIXME says that sort numbers for character formats are not respected.
+- Observation: after deleting an exact family/start/end match, the forward loop increments its index without compensating for the shifted array. With three same-span character-style hints, the first and third are deleted and the second remains. This is a source-level trace, not compiled Writer evidence.
+- Preservation: retain the exact forward traversal and family/range matching. Do not delete all equal-span character styles in one call or repair sort-number handling. Native new-attribute reset history continues to use this original owner.

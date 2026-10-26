@@ -1,5 +1,5 @@
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
-import type { SwFormatCharFormat } from "../txtnode/fmtatr2";
+import { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
 import type { SwModelHint } from "../../../inc/hints";
@@ -169,7 +169,10 @@ export class SwHistorySetText extends SwHistoryHint {
     private readonly m_nNodeIndex: number,
   ) {
     super(HISTORY_HINT.HSTRY_SETTXTHNT);
-    this.m_pAttr = hint.format.Clone();
+    this.m_pAttr =
+      hint.format instanceof SwFormatCharFormat
+        ? new SwFormatCharFormat(hint.format.GetCharFormat())
+        : hint.format.Clone();
     this.m_nStart = hint.GetStart();
     this.m_nEnd = hint.GetAnyEnd();
     this.m_bFormatIgnoreStart = hint.IsFormatIgnoreStart();
@@ -178,6 +181,10 @@ export class SwHistorySetText extends SwHistoryHint {
   /** Inserts a fresh attribute with native constructor defaults and retained format-ignore flags. @param doc - Actual graph. @param tmp - Native temporary policy;this entry restores identically in either mode. @returns Nothing. */
   public override SetInDoc(doc: SwDoc, tmp: boolean): void {
     void tmp;
+    if (this.m_pAttr instanceof SwFormatCharFormat) {
+      const format = this.m_pAttr.GetCharFormat();
+      if (format === undefined || !doc.GetCharFormats().includes(format)) return;
+    }
     const node = doc.GetNodes().at(this.m_nNodeIndex);
     if (!(node instanceof SwTextNode)) return;
     const attr = node.InsertItem(
@@ -191,6 +198,29 @@ export class SwHistorySetText extends SwHistoryHint {
     if (this.m_bFormatIgnoreEnd) attr.SetFormatIgnoreEnd(true);
   }
 }
+/** Original reset history retains family and exact coordinates, never the inserted item. */
+export class SwHistoryResetText extends SwHistoryHint {
+  /** Records native reset identity. @param m_nAttr - Original Which. @param m_nStart - Exact start. @param m_nEnd - Exact end. @param m_nNodeIndex - Original node slot. @returns Entry. */
+  public constructor(
+    private readonly m_nAttr: number,
+    private readonly m_nStart: number,
+    private readonly m_nEnd: number,
+    private readonly m_nNodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_RESETTXTHNT);
+  }
+  /** Original Which query used by insertion-history invariants. @returns Family. */
+  public GetWhich(): number {
+    return this.m_nAttr;
+  }
+  /** Removes exact registered attributes through the actual text-node owner. @param doc - Destination graph. @param tmp - Temporary policy; reset entries restore identically. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    void tmp;
+    const node = doc.GetNodes().at(this.m_nNodeIndex);
+    if (node instanceof SwTextNode) node.DeleteAttributes(this.m_nAttr, this.m_nStart, this.m_nEnd);
+  }
+}
+
 /** Native SwHistoryBookmark payload for the existing collapsed ordinary bookmark model. Expanded/typed marks and unrepresented metadata remain unsupported. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
@@ -282,14 +312,17 @@ export class SwHistory {
     if (entry === undefined) throw new Error("Missing Writer history entry.");
     return entry;
   }
-  /** Captures the implemented old-ranged-attribute variant. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - New-attribute reset history is not yet implemented. @returns Nothing. */
+  /** Captures old values or original new-attribute reset entries. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - Whether record the new family/range reset. @returns Nothing. */
   public AddTextAttr(
     hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
     nodeIndex: number,
     newAttr: boolean,
   ): void {
-    if (newAttr) throw new Error("Writer new-attribute reset history is not implemented.");
-    this.m_SwpHstry.push(new SwHistorySetText(hint, nodeIndex));
+    this.m_SwpHstry.push(
+      newAttr
+        ? new SwHistoryResetText(hint.Which(), hint.GetStart(), hint.GetAnyEnd(), nodeIndex)
+        : new SwHistorySetText(hint, nodeIndex),
+    );
   }
 
   /** Copies explicit registered old format values in native item order. @param set - Direct node set. @param nodeIndex - Original index. @returns Nothing. */
@@ -369,6 +402,13 @@ export class SwRegHistory extends SwClient {
             : undefined;
       if (set !== undefined) for (const item of set.entries()) this.m_WhichIdSet.add(item.Which());
     }
+  }
+  /** Original ranged-attribute history forwarding uses the registered native node slot. @param hint - Actual old or new attribute. @param isNew - Whether record its exact reset. @returns Nothing. */
+  public AddHint(
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    isNew: boolean,
+  ): void {
+    this.m_pHistory?.AddTextAttr(hint, this.m_nNodeIndex, isNew);
   }
   /** Records original old deltas only while a distinct new delta exists. @param source - Original emitting modify. @param hint - Borrowed source hint. @returns Nothing. */
   protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {

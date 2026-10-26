@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { SetAttrMode } from "../../../inc/swtypes";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwDoc } from "../doc/doc";
-import { SwHistory, SwHistorySetText, HISTORY_HINT } from "./rolbck";
+import { SwHistory, SwHistorySetText, SwHistoryResetText, HISTORY_HINT } from "./rolbck";
 import { SwUndoDelete } from "./undel";
 import { SwFormatINetFormat } from "../txtnode/fmtatr2";
 import { SwTextINetFormat } from "../txtnode/txtatr2";
@@ -379,10 +379,9 @@ describe("native delete attribute history", /** Registers history and actual she
     expect(
       /** Reads an absent entry. @returns Entry that never exists. */ () => history.at(0),
     ).toThrow("Missing Writer history");
-    expect(
-      /** Requests an unimplemented history variant. @returns Nothing. */ () =>
-        history.AddTextAttr(owner.attr, owner.node.GetIndex(), true),
-    ).toThrow("not implemented");
+    history.AddTextAttr(owner.attr, owner.node.GetIndex(), true);
+    expect(history.at(0)).toBeInstanceOf(SwHistoryResetText);
+    expect((history.at(0) as SwHistoryResetText).GetWhich()).toBe(owner.attr.Which());
     expect(
       /** Requests ordinary InsertItem without portions port. @returns Attribute that is not implemented. */ () =>
         requireInsertedHint(owner.node.InsertItem(owner.item, 2, 4)),

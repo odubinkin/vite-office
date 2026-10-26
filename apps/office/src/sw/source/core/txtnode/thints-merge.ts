@@ -68,13 +68,27 @@ export function MergeTextHintPortions(hints: SwpHints): boolean {
       }
       portions.delete(nextKey++);
       for (const hint of first) {
+        hints.NoteInHistory(hint);
         hint.SetEnd(end);
+        hints.NoteInHistory(hint, true);
         changed = true;
       }
       if (changed) hints.SortIfNeedBe();
     } else {
-      for (const hint of first) hint.SetFormatIgnoreEnd(result === "layout");
-      for (const hint of second) hint.SetFormatIgnoreStart(result === "layout");
+      for (const hint of first) {
+        if (hint.IsFormatIgnoreEnd() !== (result === "layout")) {
+          hints.NoteInHistory(hint);
+          hint.SetFormatIgnoreEnd(result === "layout");
+          hints.NoteInHistory(hint, true);
+        }
+      }
+      for (const hint of second) {
+        if (hint.IsFormatIgnoreStart() !== (result === "layout")) {
+          hints.NoteInHistory(hint);
+          hint.SetFormatIgnoreStart(result === "layout");
+          hints.NoteInHistory(hint, true);
+        }
+      }
       firstKey = nextKey++;
     }
   }

@@ -17,7 +17,7 @@ type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatCharFormat | SwFormatINet
 function portioned(hint: Hint): boolean {
   return hint.format instanceof SwFormatAutoFormat || hint.format instanceof SwFormatCharFormat;
 }
-/** Removes the actual hint identity through all native maps. Existing shell/history owners retain their snapshots. @param hints - Actual maps. @param hint - Actual owned attribute. @returns Nothing. */
+/** Removes the actual hint identity through all native maps. The actual registered history receives the native old-item entry. @param hints - Actual maps. @param hint - Actual owned attribute. @returns Nothing. */
 function remove(hints: SwpHints, hint: Hint): void {
   hints.DeleteAtPos(hints.entries().indexOf(hint));
 }
@@ -49,15 +49,22 @@ export function BuildTextHintPortions(
       const last = other.GetEnd();
       if (first < start && start < last) {
         pending.push(split(node, other, first, start));
+        hints.NoteInHistory(other);
         other.SetStart(start);
+        hints.NoteInHistory(other, true);
         first = start;
       }
       if (first < end && end < last) {
         pending.push(split(node, other, first, end));
+        hints.NoteInHistory(other);
         other.SetStart(end);
+        hints.NoteInHistory(other, true);
       }
     }
-    for (const hint of pending) hints.Insert(hint);
+    for (const hint of pending) {
+      hints.Insert(hint);
+      hints.NoteInHistory(hint, true);
+    }
   }
   const bounds = new Set([start, end]);
   if (!empty)
@@ -100,7 +107,11 @@ export function BuildTextHintPortions(
           for (const item of other.format.GetStyleHandle().entries())
             if (!CharFormat.IsItemIncluded(item.Which(), incoming)) set.Put(item);
           remove(hints, other);
-          if (set.Count()) hints.Insert(MakeTextAttr(node.GetDoc(), set, first, last));
+          if (set.Count()) {
+            const created = MakeTextAttr(node.GetDoc(), set, first, last);
+            hints.Insert(created);
+            hints.NoteInHistory(created, true);
+          }
         }
       }
       if (first === start && last === end && count === 0) result = incoming;
@@ -163,7 +174,10 @@ export function BuildTextHintPortions(
         else if (style !== undefined) result = MakeTextAttr(node.GetDoc(), style, first, last);
       }
     }
-    if (result !== undefined) hints.Insert(result);
+    if (result !== undefined) {
+      hints.Insert(result);
+      hints.NoteInHistory(result, true);
+    }
     if (empty) break;
   }
 }

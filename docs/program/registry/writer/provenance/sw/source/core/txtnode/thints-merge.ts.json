@@ -10,9 +10,17 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
           "marker": "MergeTextHintPortions"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-ranged-attribute-history.test.ts",
+          "marker": "source"
         }
       ],
       "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwpHints::MergePortions"
+        },
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
           "marker": "SwpHints::MergePortions"
@@ -28,7 +36,8 @@
       "lcl_Compare_Attributes"
     ],
     "preservedResponsibilities": [
-      "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed."
+      "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed.",
+      "S3HW1E: Original MergePortions records deleted second portions and old/new endpoint changes. Format-ignore flag changes record old/new entries only when the source condition changes the flag."
     ],
     "omittedResponsibilities": [
       "Full compiled Writer model/UNO/layout parity, unregistered fields and external document loading remain unverified."

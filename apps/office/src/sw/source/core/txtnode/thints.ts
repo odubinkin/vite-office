@@ -1,4 +1,5 @@
 /** @fileoverview Ports MakeTextAttr construction and represented GetParaAttr character queries for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
+import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 import { MergeTextHintPortions } from "./thints-merge";
 import { BuildTextHintPortions, CheckCharacterHintSortNumber } from "./thints-portions";
 import { CharFormat } from "../text/atrstck";
@@ -88,6 +89,7 @@ export function InsertTextNodeItem(
   } else {
     if (hint instanceof SwTextCharFormat) CheckCharacterHintSortNumber(hints, hint);
     hints.Insert(hint);
+    hints.NoteInHistory(hint, true);
   }
   node.GetDoc().NotifyModelChange({
     kind: "attribute-set-changed",
@@ -260,4 +262,29 @@ export function GetTextNodeParaAttr(
   format.Differentiate(result);
   result.PutSet(format);
   return result.Count() !== 0;
+}
+
+/** Original DeleteAttributes loop for the represented ranged families, including its forward-index behavior after deletion. @param node - Actual node. @param which - Exact family. @param start - Exact start. @param end - Exact end. @returns Nothing. */
+export function DeleteTextNodeAttributes(
+  node: SwTextNode,
+  which: number,
+  start: number,
+  end: number,
+): void {
+  const hints = node.GetpSwpHints();
+  if (hints === undefined) return;
+  for (let index = 0; index < hints.Count(); ++index) {
+    const hint = hints.Get(index);
+    if (start < hint.GetStart()) break;
+    if (start === hint.GetStart() && which === hint.Which()) {
+      if (hint.HasDummyChar() || hint.HasContent())
+        throw new Error("Writer structured DeleteAttributes is not implemented.");
+      if (hint.GetEnd() === end) {
+        const update = new SwUpdateAttr(start, end, which);
+        hints.DeleteAtPos(index);
+        node.CallSwClientNotify(new UpdateAttrHint(undefined, update));
+      }
+    }
+  }
+  node.TryDeleteSwpHints();
 }

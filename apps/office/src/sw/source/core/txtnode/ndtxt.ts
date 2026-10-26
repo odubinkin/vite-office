@@ -2,6 +2,7 @@
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
 import type { SwFormatCharFormat } from "./fmtatr2";
+import { UpdateTextNodeReplacementIndices } from "./ndtxt-hints";
 import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
 import type { UpdateAttrHint } from "../../../inc/hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -187,6 +188,15 @@ export class SwTextNode extends SwContentNode {
     mode = SetAttrMode.DEFAULT,
   ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
+  }
+
+  /** Deletes represented same-family attributes with exact start/end, retaining the native forward-loop behavior. @param which - Native family. @param start - Exact start. @param end - Exact end. @returns Nothing. */
+  public DeleteAttributes(which: number, start: number, end: number): void {
+    thints.DeleteTextNodeAttributes(this, which, start, end);
+  }
+  /** Releases an empty native map when CanBeDeleted allows it. @returns Nothing. */
+  public TryDeleteSwpHints(): void {
+    if (this.pSwpHints?.CanBeDeleted()) this.pSwpHints = undefined;
   }
 
   /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
@@ -746,19 +756,7 @@ export class SwTextNode extends SwContentNode {
           );
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
-    if (removedLength > replacementText.length) {
-      this.UpdateContentIndices(
-        start + replacementText.length,
-        removedLength - replacementText.length,
-        SwContentIndexUpdateMode.Negative,
-      );
-    } else if (replacementText.length > removedLength) {
-      this.UpdateContentIndices(
-        start + removedLength,
-        replacementText.length - removedLength,
-        SwContentIndexUpdateMode.Default,
-      );
-    }
+    UpdateTextNodeReplacementIndices(this, start, removedLength, replacementText.length);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -771,18 +769,7 @@ export class SwTextNode extends SwContentNode {
     const previousLength = previousText.length;
     this.mText = text;
     this.pSwpHints = undefined;
-    if (previousLength > text.length)
-      this.UpdateContentIndices(
-        text.length,
-        previousLength - text.length,
-        SwContentIndexUpdateMode.Negative,
-      );
-    else if (text.length > previousLength)
-      this.UpdateContentIndices(
-        previousLength,
-        text.length - previousLength,
-        SwContentIndexUpdateMode.Default,
-      );
+    UpdateTextNodeReplacementIndices(this, 0, previousLength, text.length);
     if (previousText !== text)
       this.GetDoc().NotifyModelChange({
         kind: "node-content-changed",
