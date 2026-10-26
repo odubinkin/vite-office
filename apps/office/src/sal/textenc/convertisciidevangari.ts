@@ -63,7 +63,8 @@ export function ImplConvertIsciiDevanagariToUnicode(
       break;
     }
     const input = (source[converted] as number) & 0xff;
-    const next = converted < sourceBytes + 1 ? (source[converted + 1] ?? 0) & 0xff : 0;
+    // The loop already guarantees converted < sourceBytes; retain the native lookahead and zero sentinel.
+    const next = (source[converted + 1] ?? 0) & 0xff;
     let character = 0;
     let normal = true;
     let double = false;
@@ -143,16 +144,13 @@ export function ImplConvertIsciiDevanagariToUnicode(
         info,
       );
       destinationOffset = pointer[0];
-      if (action === BadInputConversionAction.CONTINUE) {
-        currentStart = converted;
-        continue;
-      }
       if (action === BadInputConversionAction.STOP) {
         if ((flags & cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH) !== 0) converted = currentStart;
         break;
       }
-      info[0] |= cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
-      break;
+      // The loop checked capacity before this call, so the shared handler cannot return NO_OUTPUT.
+      currentStart = converted;
+      continue;
     }
     destination[destinationOffset++] = character;
     context.m_cPrevChar = normal ? input : 0;

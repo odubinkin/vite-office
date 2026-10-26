@@ -106,9 +106,12 @@ export function ImplConvertIso2022JpToUnicode(
       case ImplIso2022JpToUnicodeState.JIS_0208_2:
         if (character >= 0x21 && character <= 0x7e) {
           const lead = aJIS0208UniLeadTab[row];
+          // Every admitted trail range has a complete pinned table, as in the native pointer lookup.
           const mapped =
             lead && character >= lead.mnTrailStart && character <= lead.mnTrailEnd
-              ? (lead.mpToUniTrailTab?.[character - lead.mnTrailStart] ?? 0)
+              ? ((lead.mpToUniTrailTab as readonly number[])[
+                  character - lead.mnTrailStart
+                ] as number)
               : 0;
           if (mapped !== 0) {
             unit = mapped;

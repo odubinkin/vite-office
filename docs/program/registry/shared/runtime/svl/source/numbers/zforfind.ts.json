@@ -31,8 +31,6 @@
       "knownViolations": [],
       "localSymbols": [
         "ImpSvNumberInputScan",
-        "TransformInput",
-        "SV_MAX_COUNT_INPUT_STRINGS",
         "GetTimeRef",
         "GetLogical",
         "ImplGetDay",

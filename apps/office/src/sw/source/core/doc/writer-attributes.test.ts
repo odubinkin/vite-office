@@ -478,7 +478,10 @@ describe("Writer attribute ownership" /** Groups SwAttrPool, SwAttrSet, and form
       ]),
     );
     expect(projectWriterTextRuns(node)).toEqual([
-      { attributes: { bold: false, italic: false, underline: false }, text: "a" },
+      {
+        attributes: { bold: false, italic: false, underline: false, underlineStyle: 0 },
+        text: "a",
+      },
       { attributes: { bold: true, italic: true, underline: true }, text: "b" },
     ]);
     const format = node.GetpSwpHints()?.Get(0).format;

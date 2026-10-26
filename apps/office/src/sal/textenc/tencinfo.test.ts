@@ -57,3 +57,24 @@ it("retains the native missing-encoding and short-structure return order", /** C
   expect(rtl_getTextEncodingInfo(1, tiny)).toBe(false);
   expect(tiny.MinimumCharSize).toBe(0);
 });
+
+it("writes only fields present in the caller's native structure", /** Checks the ABI field boundaries for known and missing encodings. @returns Nothing. */ () => {
+  for (const encoding of [1, 9999]) {
+    const minimum = info(5),
+      maximum = info(6);
+    expect(rtl_getTextEncodingInfo(encoding, minimum)).toBe(true);
+    expect(minimum).toMatchObject({
+      MinimumCharSize: 1,
+      MaximumCharSize: 0,
+      AverageCharSize: 0,
+      Flags: -1,
+    });
+    expect(rtl_getTextEncodingInfo(encoding, maximum)).toBe(true);
+    expect(maximum).toMatchObject({
+      MinimumCharSize: 1,
+      MaximumCharSize: 1,
+      AverageCharSize: 0,
+      Flags: -1,
+    });
+  }
+});

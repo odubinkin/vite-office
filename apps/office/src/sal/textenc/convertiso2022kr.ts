@@ -98,9 +98,10 @@ export function ImplConvertIso2022KrToUnicode(
         if (character >= 0x21 && character <= 0x7e) {
           const lead = aKSC5601UniLeadTab[row];
           const trail = character + 0x80;
+          // Every admitted trail range has a complete pinned table, as in the native pointer lookup.
           const mapped =
             lead && trail >= lead.mnTrailStart && trail <= lead.mnTrailEnd
-              ? (lead.mpToUniTrailTab?.[trail - lead.mnTrailStart] ?? 0)
+              ? ((lead.mpToUniTrailTab as readonly number[])[trail - lead.mnTrailStart] as number)
               : 0;
           if (mapped !== 0) unit = mapped;
           else badInput = true;

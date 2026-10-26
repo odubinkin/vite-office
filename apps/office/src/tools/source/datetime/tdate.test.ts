@@ -18,9 +18,13 @@ it("counts source Gregorian days through the BCE boundary and Calc null date", /
   expect(yearToDays(-1)).toBe(-366);
   expect(yearToDays(1)).toBe(0);
   expect(yearToDays(2)).toBe(365);
+  expect(
+    /** Enforces the native civil-year precondition. @returns No day count. */ () => yearToDays(0),
+  ).toThrow("year != 0 assertion");
   expect(convertDateToDays(1, 1, -32768)).toBe(-11968265);
   expect(convertDateToDays(31, 12, 32767)).toBe(11967900);
   expect(convertDateToDays(30, 12, 1899)).toBe(693594);
+  expect(convertDateToDaysNormalizing(30, 12, 1899)).toBe(693594);
   expect(convertDateToDaysNormalizing(31, 2, 2024)).toBe(convertDateToDays(2, 3, 2024));
   const source = new Date(31, 2, 2024);
   expect(source.GetAsNormalizedDays()).toBe(convertDateToDays(2, 3, 2024));
@@ -48,6 +52,19 @@ it("counts source Gregorian days through the BCE boundary and Calc null date", /
   expect(incremented.GetDate()).toBe(18991230);
   incremented.AddDays(0);
   expect(incremented.GetDate()).toBe(18991230);
+});
+
+it("round-trips month ends across Gregorian century and BCE boundaries", /** Checks civil dates independently of the search estimate used to recover their year. @returns Nothing. */ () => {
+  for (const year of [
+    -401, -400, -101, -100, -5, -4, -2, -1, 1, 4, 99, 100, 399, 400, 1899, 1900, 1999, 2000, 2024,
+  ]) {
+    for (let month = 1; month <= 12; month++) {
+      const last = getDaysInMonth(month, year);
+      for (const day of [1, last]) {
+        expect(convertDaysToDate(convertDateToDays(day, month, year))).toEqual([day, month, year]);
+      }
+    }
+  }
 });
 
 it("retains packed value/copy/member assignment and constructor width/precondition contracts", /** Raw construction is not eager normalization or a host Date conversion. @returns Nothing. */ () => {

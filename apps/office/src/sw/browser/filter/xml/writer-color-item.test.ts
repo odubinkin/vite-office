@@ -6,7 +6,14 @@ import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SID_ATTR_CHAR_COLOR } from "../../../../editeng/inc/editids";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { Color } from "../../../../tools/inc/color";
-import { RES_CHRATR_COLOR, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
+import {
+  RES_CHRATR_COLOR,
+  RES_CHRATR_HIGHLIGHT,
+  RES_PARATR_CONNECT_BORDER,
+} from "../../../inc/hintids";
+import { SwParaConnectBorderItem } from "../../../source/core/para/paratr";
+import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
+import { MID_SHADING_VALUE } from "../../../../editeng/inc/memberids";
 import {
   createWriterHighlightItem,
   createWriterTextColorItem,
@@ -43,6 +50,59 @@ it("uses the native black pool default and preserves opaque,automatic and transp
       /** Sends an invalid transport value. @returns No valid item. */ () =>
         createWriterTextColorItem(invalid),
     ).toThrow("invalid");
+});
+
+it("rejects highlight metadata that a scalar color snapshot cannot preserve", /** Checks actual native brush values before worker transport. @returns Nothing. */ () => {
+  const complex = createWriterHighlightItem("#123456");
+  const rgb = new ComplexColor();
+  rgb.setRGB(0x123456);
+  complex.setComplexColor(rgb);
+  expect(
+    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
+      encodeSfxPoolItem(complex),
+  ).toThrow("complex highlight transfer");
+  const usage = createWriterHighlightItem("#123456");
+  const theme = new ComplexColor();
+  theme.setThemeColorUsage(ThemeColorUsage.Text);
+  usage.setComplexColor(theme);
+  expect(
+    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
+      encodeSfxPoolItem(usage),
+  ).toThrow("complex highlight transfer");
+  const filter = createWriterHighlightItem("#123456");
+  filter.SetFiltColor(new Color(0xabcdef));
+  expect(
+    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
+      encodeSfxPoolItem(filter),
+  ).toThrow("complex highlight transfer");
+  const graphic = createWriterHighlightItem("#123456");
+  graphic.setGraphicTransparency(50);
+  expect(
+    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
+      encodeSfxPoolItem(graphic),
+  ).toThrow("complex highlight transfer");
+  const shading = createWriterHighlightItem("#123456");
+  expect(shading.PutValue(new Any([1], "sal_Int32"), MID_SHADING_VALUE)).toBe(true);
+  expect(
+    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
+      encodeSfxPoolItem(shading),
+  ).toThrow("complex highlight transfer");
+});
+
+it("restores the native paragraph border-connection item from worker snapshots", /** Checks the merged pool factory keeps its concrete item type and boolean value. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    for (const value of [false, true]) {
+      const item = decodeSfxPoolItem(doc.GetAttrPool(), {
+        which: RES_PARATR_CONNECT_BORDER,
+        value,
+      });
+      expect(item).toBeInstanceOf(SwParaConnectBorderItem);
+      expect((item as SwParaConnectBorderItem).GetValue()).toBe(value);
+    }
+  } finally {
+    doc.Dispose();
+  }
 });
 it("keeps native highlight brushes and complete color words across worker snapshots", /** Checks keeps native highlight brushes and complete color words across worker snapshots. @returns Test completion or assertion result. */ () => {
   const doc = new SwDoc(),

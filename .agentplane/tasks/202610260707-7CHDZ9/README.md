@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize main"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute the explicitly user-approved three-repository integration, full verification and branch synchronization, including the requested .DS_Store ignore rule."
 doc_version: 3
-doc_updated_at: "2026-10-26T08:24:06.443Z"
+doc_updated_at: "2026-10-26T10:15:36.630Z"
 doc_updated_by: "CODER"
 description: "Execute the user-approved push, merge, full verification, remediation, and reverse synchronization across vite-office, vite-office-writer, and vite-office-calc without rewriting history or losing existing work."
 sections:
@@ -76,6 +76,14 @@ sections:
     - Observation: Resumed sequential verify passed format, lint, full typecheck, dependencies and Writer/Calc resources. Tooling identified two stale reverse-dependency expectations: unotools to i18nutil and xmloff to comphelper.
       Impact: Both dependencies already exist in the merged implementations and are evidenced by upstream transliterationwrapper.cxx and NamedBoolPropertyHdl.cxx includes.
       Resolution: Update only the obsolete test expectations, retaining reverse and neighboring-handler prohibitions. Bound tooling to two workers to avoid concurrent repeated whole-tree scans. Preserve coverage reports on failures without changing any 100-percent threshold. Correct the exhaustive-case timeout argument and use the actual first-line WhichId in style-reset assertions.
+
+    - Observation: The complete application run finished with 1413/1415 files passing and 20233/20239 cases passing. All six failures were obsolete Writer highlight/run fixtures. Strict coverage reported lines 98.84 percent and branches 97.03 percent across 79 incomplete modules.
+      Impact: Main cannot be published or synchronized back until all required checks and the existing 100-percent coverage gates pass.
+      Resolution: Repaired native highlight fixture construction and explicit underline defaults; the two affected files passed 20 focused cases. Added passing source-contract checks: 46 RTF serialized controls, 7 multibyte conversion cases, 11 ABI/calendar/string boundary cases, 4 scanner classification/state cases, 2 pattern-order cases and 5 CSV export cases. Corrected relocated declaration ownership in the runtime inventory. Retained the full original coverage baseline in the ignored task temporary directory. Additional concurrent diagnostic coverage runs were stopped after resource-related inventory timeouts; rerun these sequentially after the full browser suite. No thresholds, test cases or native parity claims were weakened.
+
+    - Observation: The full browser run completed with 536/537 passing; the only failure was the Calc 1280px column-width scenario hitting its 30-second whole-test budget. The unchanged scenario passed alone in 15.9 seconds. Inventory tooling coverage passed all 124 cases and all four 100-percent gates.
+      Impact: No application behavior mismatch was identified by the browser failure; whole-application coverage remains the outstanding integration gate.
+      Resolution: Added actual serialized RTF write/read cases, native scanner classification/state/date-order cases, sparse and rich-text CSV exports, pool worker transfer cases and SAL error/ABI tests. The focused regression set passed 135 cases across 17 files before the latest extensions; the extended RTF set passed 47 cases. Four encoding production modules now pass all four 100-percent gates with 39 cases: ISCII, ISO-2022-JP, ISO-2022-KR and DBCS/EUC-JP. Removed only unreachable ISCII control paths and replaced impossible fallback reads against pinned ISO tables with native indexed access, protected by complete admitted-row table invariants. No threshold reduction or ignore pragma was added. Full-project publication remains pending the remaining uncovered modules.
 id_source: "generated"
 ---
 ## Summary
@@ -132,3 +140,11 @@ Initial main d5422fe9e; writer 3b9f37d04; calc bf3442be7. Existing untracked mai
 - Observation: Resumed sequential verify passed format, lint, full typecheck, dependencies and Writer/Calc resources. Tooling identified two stale reverse-dependency expectations: unotools to i18nutil and xmloff to comphelper.
   Impact: Both dependencies already exist in the merged implementations and are evidenced by upstream transliterationwrapper.cxx and NamedBoolPropertyHdl.cxx includes.
   Resolution: Update only the obsolete test expectations, retaining reverse and neighboring-handler prohibitions. Bound tooling to two workers to avoid concurrent repeated whole-tree scans. Preserve coverage reports on failures without changing any 100-percent threshold. Correct the exhaustive-case timeout argument and use the actual first-line WhichId in style-reset assertions.
+
+- Observation: The complete application run finished with 1413/1415 files passing and 20233/20239 cases passing. All six failures were obsolete Writer highlight/run fixtures. Strict coverage reported lines 98.84 percent and branches 97.03 percent across 79 incomplete modules.
+  Impact: Main cannot be published or synchronized back until all required checks and the existing 100-percent coverage gates pass.
+  Resolution: Repaired native highlight fixture construction and explicit underline defaults; the two affected files passed 20 focused cases. Added passing source-contract checks: 46 RTF serialized controls, 7 multibyte conversion cases, 11 ABI/calendar/string boundary cases, 4 scanner classification/state cases, 2 pattern-order cases and 5 CSV export cases. Corrected relocated declaration ownership in the runtime inventory. Retained the full original coverage baseline in the ignored task temporary directory. Additional concurrent diagnostic coverage runs were stopped after resource-related inventory timeouts; rerun these sequentially after the full browser suite. No thresholds, test cases or native parity claims were weakened.
+
+- Observation: The full browser run completed with 536/537 passing; the only failure was the Calc 1280px column-width scenario hitting its 30-second whole-test budget. The unchanged scenario passed alone in 15.9 seconds. Inventory tooling coverage passed all 124 cases and all four 100-percent gates.
+  Impact: No application behavior mismatch was identified by the browser failure; whole-application coverage remains the outstanding integration gate.
+  Resolution: Added actual serialized RTF write/read cases, native scanner classification/state/date-order cases, sparse and rich-text CSV exports, pool worker transfer cases and SAL error/ABI tests. The focused regression set passed 135 cases across 17 files before the latest extensions; the extended RTF set passed 47 cases. Four encoding production modules now pass all four 100-percent gates with 39 cases: ISCII, ISO-2022-JP, ISO-2022-KR and DBCS/EUC-JP. Removed only unreachable ISCII control paths and replaced impossible fallback reads against pinned ISO tables with native indexed access, protected by complete admitted-row table invariants. No threshold reduction or ignore pragma was added. Full-project publication remains pending the remaining uncovered modules.

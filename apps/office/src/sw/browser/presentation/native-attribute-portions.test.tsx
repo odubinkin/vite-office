@@ -1,5 +1,8 @@
 /** @fileoverview Checks real native item stacks reach shared body/cell DOM without the filter TextRuns formatter. */
-import { createWriterTextColorItem } from "../../source/core/attr/swatrset";
+import {
+  createWriterTextColorItem,
+  createWriterHighlightItem,
+} from "../../source/core/attr/swatrset";
 import { act, cleanup, render, screen } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { createWriterDocumentSession } from "../composition/writer-module";
@@ -13,7 +16,6 @@ import { SwFormatINetFormat } from "../../source/core/txtnode/fmtatr2";
 import { SwpHints } from "../../source/core/txtnode/ndhints";
 import { SwPosition, SwPaM } from "../../source/core/crsr/pam";
 import { SfxItemSet } from "../../../svl/source/items/itemset";
-import { SfxStringItem } from "../../../svl/source/items/stritem";
 import {
   SvxFontItem,
   SvxFontHeightItem,
@@ -78,7 +80,7 @@ for (const cell of [false, true])
               new SvxPostureItem(2, 11),
               new SvxUnderlineItem(1, 14),
               createWriterTextColorItem("#123456"),
-              new SfxStringItem(42, "#abcdef"),
+              createWriterHighlightItem("#abcdef"),
               new SvxFontHeightItem(320, 100, 8),
               new SvxFontItem(
                 getFontFamilyFromGeneric(generic ? "modern" : undefined),
@@ -199,7 +201,7 @@ it("native display retains inherited items and explicit normal resets in a clipp
           new SvxWeightItem(5, 15),
           new SvxPostureItem(0, 11),
           createWriterTextColorItem("auto"),
-          new SfxStringItem(42, "transparent"),
+          createWriterHighlightItem("transparent"),
         ),
         2,
         4,

@@ -1,15 +1,19 @@
 /** @fileoverview Focused pinned ISO-2022-JP and ISO-2022-KR decoding cases. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
+import { aJIS0208UniLeadTab } from "./tcvtjp6.eucjp";
+import { aKSC5601UniLeadTab } from "./tcvtkr6.ms949";
 import * as cvt from "../inc/rtl/textcvt.h";
 import {
   ImplConvertIso2022JpToUnicode,
   ImplCreateIso2022JpToUnicodeContext,
+  ImplDestroyIso2022JpToUnicodeContext,
   ImplIso2022JpToUnicodeState,
   ImplResetIso2022JpToUnicodeContext,
 } from "./convertiso2022jp";
 import {
   ImplConvertIso2022KrToUnicode,
   ImplCreateIso2022KrToUnicodeContext,
+  ImplDestroyIso2022KrToUnicodeContext,
   ImplIso2022KrToUnicodeState,
   ImplResetIso2022KrToUnicodeContext,
 } from "./convertiso2022kr";
@@ -55,6 +59,131 @@ it("decodes JIS Roman and JIS X 0208 using pinned state transitions", /** Checks
     info: 0,
     consumed: 15,
   });
+});
+
+it("rejects malformed designators and invalid bytes in each active native state", /** Checks each state through actual wire input rather than injecting replacement parsers. @returns Nothing. */ () => {
+  for (const [kind, sequences] of [
+    [
+      "jp",
+      [
+        [0x1b, 0x41],
+        [0x1b, 0x28, 0x41],
+        [0x1b, 0x24, 0x41],
+        [0x1b, 0x28, 0x4a, 0x80],
+        [0x1b, 0x24, 0x42, 0x20],
+        [0x1b, 0x24, 0x42, 0x21, 0x20],
+      ],
+    ],
+    [
+      "kr",
+      [
+        [0x1b, 0x41],
+        [0x1b, 0x24, 0x41],
+        [0x1b, 0x24, 0x29, 0x41],
+        [0x0e, 0x20],
+        [0x0e, 0x21, 0x20],
+      ],
+    ],
+  ] as const) {
+    for (const source of sequences) {
+      expect(convert(kind, source)).toEqual({
+        units: [0xfffd],
+        info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
+        consumed: source.length,
+      });
+      expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE)).toEqual({
+        units: [],
+        info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
+        consumed: source.length,
+      });
+      expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR)).toEqual({
+        units: [],
+        info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+        consumed: source.length,
+      });
+      expect(
+        convert(
+          kind,
+          source,
+          cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR | cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH,
+        ),
+      ).toEqual({
+        units: [],
+        info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+        consumed: 0,
+      });
+    }
+  }
+});
+
+it("uses the native flush policy for unfinished designators and pending second bytes", /** Checks EOF replacement, ignore, rewind and output-capacity status independently. @returns Nothing. */ () => {
+  for (const [kind, source] of [
+    ["jp", [0x1b]],
+    ["jp", [0x1b, 0x28]],
+    ["jp", [0x1b, 0x24]],
+    ["jp", [0x1b, 0x24, 0x42, 0x24]],
+    ["kr", [0x1b]],
+    ["kr", [0x1b, 0x24]],
+    ["kr", [0x1b, 0x24, 0x29]],
+    ["kr", [0x0e, 0x30]],
+  ] as const) {
+    expect(convert(kind, source)).toEqual({
+      units: [],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_SRCBUFFERTOOSMALL,
+      consumed: source.length,
+    });
+    expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH)).toEqual({
+      units: [0xfffd],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID,
+      consumed: source.length,
+    });
+    expect(
+      convert(
+        kind,
+        source,
+        cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH | cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_IGNORE,
+      ),
+    ).toEqual({ units: [], info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID, consumed: source.length });
+    expect(
+      convert(
+        kind,
+        source,
+        cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH | cvt.RTL_TEXTTOUNICODE_FLAGS_INVALID_ERROR,
+      ),
+    ).toEqual({
+      units: [],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+      consumed: 0,
+    });
+    expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH, 0)).toEqual({
+      units: [],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+      consumed: source.length,
+    });
+  }
+});
+
+it("retains designated Roman ASCII and the original at-sign JIS-0208 selector", /** Checks both legacy and ordinary source selectors. @returns Nothing. */ () => {
+  expect(convert("jp", [0x1b, 0x28, 0x4a, 0x41])).toEqual({ units: [0x41], info: 0, consumed: 4 });
+  expect(convert("jp", [0x1b, 0x24, 0x40, 0x24, 0x22])).toEqual({
+    units: [0x3042],
+    info: 0,
+    consumed: 5,
+  });
+  expect(convert("jp", [0x80], 0, 0)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+    consumed: 0,
+  });
+  expect(convert("kr", [0x80], 0, 0)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_INVALID | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+    consumed: 0,
+  });
+  ImplResetIso2022JpToUnicodeContext(null);
+  ImplResetIso2022KrToUnicodeContext(null);
+  ImplDestroyIso2022JpToUnicodeContext(ImplCreateIso2022JpToUnicodeContext());
+  ImplDestroyIso2022KrToUnicodeContext(ImplCreateIso2022KrToUnicodeContext());
 });
 
 it("decodes KS X 1001 between SO and SI after designator", /** Checks decodes KS X 1001 between SO and SI after designator. @returns Test completion or assertion result. */ () => {
@@ -149,6 +278,56 @@ it("uses the pinned invalid and destination-buffer status paths", /** Checks use
     consumed: 1,
   });
   expect(convert("jp", [0x41], 0, 0)).toEqual({
+    units: [],
+    info: cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
+    consumed: 0,
+  });
+});
+
+it("distinguishes valid but unmapped double-byte characters from malformed input", /** Checks native MBUNDEFINED policy after entering each designated character set. @returns Nothing. */ () => {
+  for (const [kind, source] of [
+    ["jp", [0x1b, 0x24, 0x42, 0x22, 0x2f]],
+    ["jp", [0x1b, 0x24, 0x42, 0x7e, 0x7e]],
+    ["kr", [0x0e, 0x7e, 0x7e]],
+  ] as const) {
+    expect(convert(kind, source)).toEqual({
+      units: [0xfffd],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_MBUNDEFINED,
+      consumed: source.length,
+    });
+    expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_IGNORE)).toEqual({
+      units: [],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_MBUNDEFINED,
+      consumed: source.length,
+    });
+    expect(convert(kind, source, cvt.RTL_TEXTTOUNICODE_FLAGS_MBUNDEFINED_ERROR)).toEqual({
+      units: [],
+      info: cvt.RTL_TEXTTOUNICODE_INFO_MBUNDEFINED | cvt.RTL_TEXTTOUNICODE_INFO_ERROR,
+      consumed: source.length,
+    });
+  }
+});
+
+it("retains complete frozen source tables for every declared JIS and KSC trail range", /** Checks the native pointer invariant behind each indexed mapping. @returns Nothing. */ () => {
+  for (const [table, firstRow, lastRow] of [
+    [aJIS0208UniLeadTab, 0x21, 0x7e],
+    [aKSC5601UniLeadTab, 0xa1, 0xfe],
+  ] as const) {
+    expect(Object.isFrozen(table)).toBe(true);
+    for (let row = firstRow; row <= lastRow; row++) {
+      const lead = table[row];
+      assert(lead);
+      if (lead.mnTrailStart > lead.mnTrailEnd) continue;
+      assert(lead.mpToUniTrailTab);
+      expect(lead.mpToUniTrailTab.length).toBeGreaterThanOrEqual(
+        lead.mnTrailEnd - lead.mnTrailStart + 1,
+      );
+      for (let trail = lead.mnTrailStart; trail <= lead.mnTrailEnd; trail++) {
+        expect(Number.isInteger(lead.mpToUniTrailTab[trail - lead.mnTrailStart])).toBe(true);
+      }
+    }
+  }
+  expect(convert("kr", [0x41], 0, 0)).toEqual({
     units: [],
     info: cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL,
     consumed: 0,

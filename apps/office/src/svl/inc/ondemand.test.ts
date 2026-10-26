@@ -23,6 +23,9 @@ it("reuses either matching classifier and replaces the opposite slot on a third 
     expect(second).not.toBe(first);
     cache.changeLocale(en);
     expect(cache.get()).toBe(first);
+    cache.changeLocale(de);
+    expect(cache.get()).toBe(second);
+    cache.changeLocale(en);
     cache.changeLocale(tr);
     const replacement = cache.get();
     expect(replacement).not.toBe(second);
@@ -31,6 +34,8 @@ it("reuses either matching classifier and replaces the opposite slot on a third 
     upper.dispose();
     cache.changeLocale(en);
     expect(cache.get()).toBe(first);
+    cache.changeLocale(tr);
+    expect(cache.get()).toBe(replacement);
   } finally {
     input.dispose();
     cache.dispose();
