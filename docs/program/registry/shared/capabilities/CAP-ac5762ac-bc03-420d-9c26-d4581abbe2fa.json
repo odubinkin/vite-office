@@ -18,8 +18,7 @@
     },
     "capability": "Shared native complex-color state and ownership",
     "gaps": [
-      "Native transform application and actual color items/pool remain pending.",
-      "Native UNO wrapper and full document/UI/ODS parity are not certified."
+      "Native transformation application, complete color item/pool/model and DOCX/XLSX/UI paths remain incomplete; component physical ABI and native differential/full QA parity unverified."
     ],
     "local": {
       "implementation": [
@@ -34,6 +33,14 @@
         {
           "path": "apps/office/src/docmodel/inc/theme/ThemeColorType.ts",
           "marker": "ThemeColorUsage"
+        },
+        {
+          "path": "apps/office/src/docmodel/source/uno/UnoComplexColor.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/docmodel/inc/uno/UnoComplexColor.ts",
+          "marker": "@fileoverview"
         }
       ],
       "tests": [
@@ -52,12 +59,24 @@
         {
           "path": "apps/office/src/sc/source/core/data/color-defaults.test.ts",
           "marker": "actual complex value copies"
+        },
+        {
+          "path": "apps/office/src/docmodel/source/uno/UnoComplexColor.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
         {
           "path": "docs/program/calc-core.md",
           "marker": "Shared complex-color value ownership for Calc attributes (task130)"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER156"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-300"
         }
       ]
     },
@@ -78,6 +97,14 @@
         {
           "path": "docmodel/source/color/ComplexColor.cxx",
           "marker": "ComplexColor::operator=="
+        },
+        {
+          "path": "docmodel/source/uno/UnoComplexColor.cxx",
+          "marker": "UnoComplexColor"
+        },
+        {
+          "path": "include/docmodel/uno/UnoComplexColor.hxx",
+          "marker": "UnoComplexColor"
         }
       ],
       "tests": [
@@ -96,7 +123,8 @@
     "aspect": "model-operation",
     "atomicOperation": "shared-complex-color-value",
     "scopeLimitations": [
-      "Task130 provides real shared docmodel ComplexColor state needed by native SvxColorItem and border attributes. Original representation/system/theme enums, scalar and raw component states, actual Color last/final ownership, default/copy/assignment/conditional assignment, theme usage, value-return and RGB-only output-reference forms, copied ordered transformation vectors, transparency scan, equality and original hash field sequence are implemented. The native implicit constructor/assignment and source value bodies are co-located in their header owner as a TS language adaptation, without a second declaration or prototype patch. Existing shared Tools Color and o3tl are reused; ordinary JS arrays/values model vector copies, with no allocator/refcount/library reconstruction. Browser32 logical scalar hashes use the existing explicit integer identity binding; component APIs admit native signed32 inputs or Color bytes, so states are integral. Native std::hash<double>/size_t ABI bit patterns are not reproduced or certified. Native equality omits usage and final color, hash includes final and omits theme index; CALC-113 retains and documents this potential inconsistency. All effect table cells and original theme-effect construction are preserved. getIndexForLuminance consumes only normalized HSL luminance, computed with the exact native extrema/order using ordinary Math.min/Math.max; no unused BColor/geometry hierarchy is reconstructed. Native transformation application remains absent until real Tools tint/luminance prerequisites, with no identity fallback. Native UNO complex-color wrapper, SvxColorItem, true DocPool/document/UI/same-model ODS are still pending; this is real value ownership, not a fake empty theme/config peer or full QA claim. Existing browser I/O/recovery deviations remain; no C++/memory/ABI experiment and no full regression before actual minimum UI/ODS readiness."
+      "Task130 provides real shared docmodel ComplexColor state needed by native SvxColorItem and border attributes. Original representation/system/theme enums, scalar and raw component states, actual Color last/final ownership, default/copy/assignment/conditional assignment, theme usage, value-return and RGB-only output-reference forms, copied ordered transformation vectors, transparency scan, equality and original hash field sequence are implemented. The native implicit constructor/assignment and source value bodies are co-located in their header owner as a TS language adaptation, without a second declaration or prototype patch. Existing shared Tools Color and o3tl are reused; ordinary JS arrays/values model vector copies, with no allocator/refcount/library reconstruction. Browser32 logical scalar hashes use the existing explicit integer identity binding; component APIs admit native signed32 inputs or Color bytes, so states are integral. Native std::hash<double>/size_t ABI bit patterns are not reproduced or certified. Native equality omits usage and final color, hash includes final and omits theme index; CALC-113 retains and documents this potential inconsistency. All effect table cells and original theme-effect construction are preserved. getIndexForLuminance consumes only normalized HSL luminance, computed with the exact native extrema/order using ordinary Math.min/Math.max; no unused BColor/geometry hierarchy is reconstructed. Native transformation application remains absent until real Tools tint/luminance prerequisites, with no identity fallback. Native UNO complex-color wrapper, SvxColorItem, true DocPool/document/UI/same-model ODS are still pending; this is real value ownership, not a fake empty theme/config peer or full QA claim. Existing browser I/O/recovery deviations remain; no C++/memory/ABI experiment and no full regression before actual minimum UI/ODS readiness.",
+      "V4DQJW now implements real non-aggregating WeakImplHelper/class-data/XTypeProvider and UnoComplexColor ownership. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete."
     ],
     "implemented": true,
     "contractParity": false,

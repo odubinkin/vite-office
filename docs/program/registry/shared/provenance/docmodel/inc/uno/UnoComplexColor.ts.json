@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/docmodel/inc/uno/UnoComplexColor.ts",
+    "status": "mapped",
+    "upstreamPath": "include/docmodel/uno/UnoComplexColor.hxx",
+    "localSymbols": [
+      "UnoComplexColor",
+      "createXComplexColor",
+      "getFromXComplexColor"
+    ],
+    "upstreamSymbols": [
+      "UnoComplexColor",
+      "createXComplexColor",
+      "getFromXComplexColor"
+    ],
+    "preservedResponsibilities": [
+      "Original component header/factory declaration boundary reexports the single source-owned implementation; no duplicate component or changed factory contract. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/docmodel/inc/uno/UnoComplexColor.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/docmodel/source/uno/UnoComplexColor.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "include/docmodel/uno/UnoComplexColor.hxx",
+          "marker": "UnoComplexColor"
+        }
+      ]
+    }
+  }
+}

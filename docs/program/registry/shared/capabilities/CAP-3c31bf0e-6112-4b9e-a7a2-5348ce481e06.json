@@ -14,7 +14,7 @@
     ],
     "capability": "Original weak reference listener helper and typed wrapper lifecycle",
     "gaps": [
-      "OWeakAggObject and generic native exception bridge remain unported; native exception allocation/context-refcount traces, physical ABI/compiler/allocator/thread/shutdown and complete consumer QA unverified."
+      "Native aggregate/component/inheritance helper families, physical ABI/layout, generic native exception bridge, native differential capture, full reflection and complete document/UI filter workflows remain unverified."
     ],
     "upstream": {
       "implementation": [
@@ -29,6 +29,22 @@
         {
           "path": "include/cppuhelper/weak.hxx",
           "marker": "OWeakObject"
+        },
+        {
+          "path": "include/cppuhelper/implbase_ex.hxx",
+          "marker": "type_entry"
+        },
+        {
+          "path": "cppuhelper/source/implbase_ex.cxx",
+          "marker": "getTypeEntries"
+        },
+        {
+          "path": "include/cppuhelper/implbase.hxx",
+          "marker": "WeakImplHelper"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XTypeProvider.idl",
+          "marker": "XTypeProvider"
         }
       ],
       "tests": [
@@ -57,6 +73,22 @@
         {
           "path": "apps/office/src/cppuhelper/inc/weak.ts",
           "marker": "acquire"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/implbase_ex.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/implbase_ex.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/inc/implbase.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XTypeProvider.ts",
+          "marker": "@fileoverview"
         }
       ],
       "tests": [
@@ -71,6 +103,10 @@
         {
           "path": "apps/office/src/cppuhelper/source/native-weak-object.test.ts",
           "marker": "rejects resurrection"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/native-implbase.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -91,7 +127,8 @@
     },
     "scopeLimitations": [
       "Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task.",
-      "V4DQJW extends the same original weak.cxx owner with non-aggregating OWeakObject and internal OWeakConnectionPoint: zero-starting actual OSL count, lazy independently acquired adapter, guard increment/rollback against resurrection, reverse pointer search then actual root identity comparison, detached ordered listener snapshot, disposed-listener handling, last RuntimeException selection, weak invalidation before virtual destruction and dummy copy/assignment. Actual Reference, queryInterface, XWeak/XAdapter/XReference, Any and exception owners are reused. Synchronous browser execution replaces mutex scope; caught UNO exception values are retained directly rather than copied through the absent native C++/binary exception bridge. This preserves dynamic JS exception fields and selection, but does not certify native exception allocation/context-refcount traces, binary ABI, threads or shutdown. Ten added real-owner tests plus six existing complete native weak-helper replays cover both changed executable owners at unchanged scoped100. No new native OWeakObject capture or generic bridge parity is claimed. OWeakAggObject, WeakImplHelper, UnoComplexColor, CellColorHandler and full DOCX/XLSX model/UI workflows remain incomplete; broad parity flags stay unverified."
+      "V4DQJW extends the same original weak.cxx owner with non-aggregating OWeakObject and internal OWeakConnectionPoint: zero-starting actual OSL count, lazy independently acquired adapter, guard increment/rollback against resurrection, reverse pointer search then actual root identity comparison, detached ordered listener snapshot, disposed-listener handling, last RuntimeException selection, weak invalidation before virtual destruction and dummy copy/assignment. Actual Reference, queryInterface, XWeak/XAdapter/XReference, Any and exception owners are reused. Synchronous browser execution replaces mutex scope; caught UNO exception values are retained directly rather than copied through the absent native C++/binary exception bridge. This preserves dynamic JS exception fields and selection, but does not certify native exception allocation/context-refcount traces, binary ABI, threads or shutdown. Ten added real-owner tests plus six existing complete native weak-helper replays cover both changed executable owners at unchanged scoped100. No new native OWeakObject capture or generic bridge parity is claimed. OWeakAggObject, WeakImplHelper, UnoComplexColor, CellColorHandler and full DOCX/XLSX model/UI workflows remain incomplete; broad parity flags stay unverified.",
+      "V4DQJW now implements real non-aggregating WeakImplHelper/class-data/XTypeProvider and UnoComplexColor ownership. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete."
     ],
     "aspect": "model-operation",
     "atomicOperation": "weak-reference-listener-helper-lifecycle"
