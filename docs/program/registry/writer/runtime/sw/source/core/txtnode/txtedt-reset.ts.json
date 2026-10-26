@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+        "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx"
+      ],
+      "justification": "Original five-case ranged reset geometry, deferred removals/insertion, selective pooled automatic-style reduction, history, exact-range selector precedence and native notifications. Exact branch retains original missing changed flag. Input fields, dummy/content-bearing attributes and reference/TOX/meta owners are outside the registered current model.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResetTextNodeAttributes",
+        "GetTextResetStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/txtedt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::RstTextAttr",
+        "lcl_HaveCommonAttributes"
+      ]
+    }
+  }
+}

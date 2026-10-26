@@ -1589,3 +1589,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::TryInsertNesting`, asymmetric `isNestedAny` and pass-four recursive insertion.
 - Observation: an empty new INET strictly inside an existing INET is initially inserted. Re-inserting the old right-hand fragment then treats that empty attribute as overwritten and destroys it. The original URL remains as two adjacent fragments; InsertHint returns success while InsertItem returns no surviving incoming pointer. Empty insertions at the old boundaries take a different path. This is a source-level trace, not compiled native evidence.
 - Preservation: retain insertion-before-repair order, the asymmetric boundary predicate and the original recursion. Do not force an empty incoming hyperlink to survive or merge the two original fragments.
+
+
+### WRITER172 — Exact range reset bypasses selectors and omits final change notifications
+
+- Source: pinned `sw/source/core/txtnode/txtedt.cxx`, `SwTextNode::RstTextAttr`, `bExactRange` branch and final `bChanged` test.
+- Observation: exact matching is evaluated independently of `nWhich` and `pSet`. Among the represented ranged families, it deletes exact-span AUTOFMT hints while retaining INET and CHARFMT hints. The branch never sets `bChanged`, so final range/style notifications and MergePortions are skipped even after deletion. This is a source-level trace, not compiled native evidence.
+- Preservation: retain the branch precedence, deletion/history owner and missing final notifications; do not infer change from the deletion list.
+
+### WRITER173 — Default character-style range reset can return false after changing hints
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::SetAttr(const SfxItemSet&, ...)`, default CHARFMT branch and final insertion count.
+- Observation: setting the document default character style invokes RstTextAttr and DontExpandFormat without incrementing the insertion counter. With no other inserted items, the node method returns false although existing character styles were removed or split and a boundary flag may have changed. This concerns the node-level result; document-level modified and undo behavior requires independent owner verification. This is a source-level trace, not compiled native evidence.
+- Preservation: retain the insertion-only counter and the original reset/boundary calls; do not replace this result with a generic mutation flag.

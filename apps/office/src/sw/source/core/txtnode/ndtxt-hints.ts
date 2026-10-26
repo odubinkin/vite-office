@@ -340,3 +340,27 @@ export function UpdateTextNodeReplacementIndices(
       SwContentIndexUpdateMode.Default,
     );
 }
+
+/** Prepares existing fragment replacement hints at the same source-owned split without changing text or content-index timing. @param node - Actual node. @param start - Range start. @param end - Range end. @param replacement - Native fragment. @param transfer - Whether move actual hint identities. @returns Prepared map. */
+export function PrepareTextNodeReplacementHints(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  replacement: SwTextFragment,
+  transfer: boolean,
+): SwpHints {
+  const existing = node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  return !transfer &&
+    replacement.hints.Count() === 0 &&
+    end > start &&
+    replacement.text.length === 0
+    ? existing.EraseText(node.Len(), start, end - start)
+    : existing.replaceRange(
+        node.Len(),
+        start,
+        end,
+        replacement.hints,
+        replacement.text.length,
+        transfer,
+      );
+}

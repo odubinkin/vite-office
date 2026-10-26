@@ -1,4 +1,5 @@
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
+import type { TextAttributeOutput } from "../txtnode/thints-setattr";
 import { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
@@ -402,6 +403,22 @@ export class SwRegHistory extends SwClient {
             : undefined;
       if (set !== undefined) for (const item of set.entries()) this.m_WhichIdSet.add(item.Which());
     }
+  }
+  /** Original scoped range insertion records direct and ranged native mutations through this registered node. @param set - Original set. @param start - Native start. @param end - Native end. @param mode - Original flags. @param output - Optional first text-attribute pointer. @returns Native setter result. */
+  public InsertItems(
+    set: SfxItemSet,
+    start: number,
+    end: number,
+    mode: SetAttrMode,
+    output?: TextAttributeOutput,
+  ): boolean {
+    if (!set.Count()) return false;
+    const node = this.GetRegisteredIn();
+    if (!(node instanceof SwTextNode)) return false;
+    if (this.m_pHistory !== undefined) node.GetOrCreateSwpHints().Register(this);
+    const inserted = node.SetAttr(set, start, end, mode, output);
+    if (this.m_pHistory !== undefined) node.GetpSwpHints()?.DeRegister();
+    return inserted;
   }
   /** Original ranged-attribute history forwarding uses the registered native node slot. @param hint - Actual old or new attribute. @param isNew - Whether record its exact reset. @returns Nothing. */
   public AddHint(

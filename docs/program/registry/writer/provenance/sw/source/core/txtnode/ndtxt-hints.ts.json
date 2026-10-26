@@ -56,6 +56,14 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
           "marker": "Source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+          "marker": "PrepareTextNodeReplacementHints"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -114,7 +122,8 @@
       "getWriterParagraphAlignment",
       "CreateTextNodeFontFamilyFragment",
       "CreateTextNodeFontSizeFragment",
-      "CreateTextNodeColorFragment"
+      "CreateTextNodeColorFragment",
+      "PrepareTextNodeReplacementHints"
     ],
     "omittedResponsibilities": [
       "Full native style registration,visited/client/listener/refcount/destruction,all families and insertion modes remain unverified. Portable map binding is a friend-boundary adapter."
@@ -131,7 +140,8 @@
       "TaskN700C9 now reuses original GetParaAttr for caret pending-item capture, including zero-width attributes and DontExpand boundaries, instead of previous-character sampling. Selective full-node RstTextAttr now mutates actual original maps and retains unrelated actual hint owners; independent history values share the same single-item deletion rule. Full-node attributes use direct setters/registered old-reset history; marked zero attributes preserve independent adjacent items. Complete generic InsertItemSet/BreakIterator word/URL/character-style/merged history remains unverified; current-source tests do not promote prior statuses/defaults.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "S3HW1E: Existing full-text/fragment replacement content-index updates are shared at this responsibility split, preserving actual node ownership, exact offsets, Negative/Default modes and prior mutation ordering. This helper is a local representation of the existing bounded replacement path, not a new native service.",
-      "S3HW1E releases the actual composed native INET client base when browser whole-map replacement discards that attribute; retained actual owners are excluded. No native URL-history provider or visit state is synthesized."
+      "S3HW1E releases the actual composed native INET client base when browser whole-map replacement discards that attribute; retained actual owners are excluded. No native URL-history provider or visit state is synthesized.",
+      "Existing fragment-replacement hint preparation is split from text/index mutation without changing ordering or ownership."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

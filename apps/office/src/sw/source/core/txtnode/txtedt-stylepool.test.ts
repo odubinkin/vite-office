@@ -77,7 +77,7 @@ describe("pooled selective automatic hint reconstruction", /** Groups actual res
         dontMoveAttr: false,
       });
       expect(access).toHaveBeenCalledTimes(2);
-      expect(notify).toHaveBeenCalledTimes(1);
+      expect(notify).toHaveBeenCalledTimes(2);
       expect(originalHandle.Count()).toBe(2);
       expect(originalHandle.Get(15).QueryValue()).toBe(8);
       const retained = undo.GetText(retainedId).hints;

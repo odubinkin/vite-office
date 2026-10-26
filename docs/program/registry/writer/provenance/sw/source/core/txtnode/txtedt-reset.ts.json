@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+          "marker": "ResetTextNodeAttributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx",
+          "marker": "SwTextNode::RstTextAttr"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/txtedt.cxx",
+    "localSymbols": [
+      "ResetTextNodeAttributes",
+      "GetTextResetStyle"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::RstTextAttr",
+      "lcl_HaveCommonAttributes"
+    ],
+    "preservedResponsibilities": [
+      "Original five-case ranged reset geometry, deferred removals/insertion, selective pooled automatic-style reduction, history, exact-range selector precedence and native notifications. Exact branch retains original missing changed flag."
+    ],
+    "omittedResponsibilities": [
+      "Input fields, dummy/content-bearing attributes and reference/TOX/meta owners are outside the registered current model."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original five-case ranged reset geometry, deferred removals/insertion, selective pooled automatic-style reduction, history, exact-range selector precedence and native notifications. Exact branch retains original missing changed flag."
+    }
+  }
+}

@@ -216,3 +216,30 @@ export function NotifyTextNodeNumRuleChanged(node: SwTextNode): void {
     ...(index === undefined ? {} : { nodeIndex: index }),
   });
 }
+
+/** Restores the existing captured portable list subset in its original reset-then-set order. @param node - Actual node. @param items - Captured direct items. @returns Nothing. */
+export function SetSwTextNodeListItems(node: SwTextNode, items: SfxItemSet): void {
+  for (const which of [
+    RES_PARATR_NUMRULE,
+    RES_PARATR_LIST_ID,
+    RES_PARATR_LIST_LEVEL,
+    RES_PARATR_LIST_ISRESTART,
+    RES_PARATR_LIST_RESTARTVALUE,
+    RES_PARATR_LIST_ISCOUNTED,
+  ])
+    node.ResetAttr(which);
+  node.SetAttr(items);
+}
+
+/** Updates the native outline level after collection assignment. @param node - Actual text node. @param collection - Assigned collection. @param setListLevel - Original assignment policy. @returns Nothing. */
+export function UpdateSwTextNodeOutlineLevel(
+  node: SwTextNode,
+  collection: SwTextFormatColl,
+  setListLevel: boolean,
+): void {
+  const level = collection.IsAssignedToListLevelOfOutlineStyle()
+    ? collection.GetAssignedOutlineStyleLevel()
+    : 10;
+  if (level !== 10 && level !== -1 && setListLevel) node.SetAttrListLevel(level);
+  node.GetNodes().UpdateOutlineNode(node);
+}
