@@ -126,7 +126,7 @@ it("owns and resets a user default for bounded registered items", /** Checks own
   expect(pool.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("original");
 });
 
-it("retains supplied native static metadata across sparse owners and copies without cloning its default", () => {
+it("retains supplied native static metadata across sparse owners and copies without cloning its default", /** Verifies retains supplied native static metadata across sparse owners and copies without cloning its default. @returns Nothing. */ () => {
   const value = new SfxStringItem(7, "global"),
     info = new ItemInfoStatic(7, value, 321, 0),
     clone = vi.spyOn(value, "Clone"),

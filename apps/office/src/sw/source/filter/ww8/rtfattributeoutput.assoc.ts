@@ -81,9 +81,18 @@ export class RtfAssociatedProperties {
   }
   /** Original MoveProperties association stage. Formatting buffers are drained by the outer item owner; this method only borrows them. @param items - Actual local formatting, with its native parent for ancillary word mode. @param mode - Original mode. @returns Associated controls in source order. */
   MoveProperties(items: SfxItemSet, mode: GetCharacterPropertiesMode): string {
-    const getWestern = (assoc: boolean): string => this.group(items, western, assoc),
-      getCJK = (assoc: boolean): string => this.group(items, cjk, assoc),
-      getCTL = (assoc: boolean): string => this.group(items, ctl, assoc);
+    const getWestern =
+        /** Evaluates the rtfattributeoutput.assoc callback. @param assoc - assoc value. @returns Callback result. */ (
+          assoc: boolean,
+        ): string => this.group(items, western, assoc),
+      getCJK =
+        /** Evaluates the rtfattributeoutput.assoc callback. @param assoc - assoc value. @returns Callback result. */ (
+          assoc: boolean,
+        ): string => this.group(items, cjk, assoc),
+      getCTL =
+        /** Evaluates the rtfattributeoutput.assoc callback. @param assoc - assoc value. @returns Callback result. */ (
+          assoc: boolean,
+        ): string => this.group(items, ctl, assoc);
     let result = "";
     if (mode === GetCharacterPropertiesMode.StyleDefinition) {
       const complex = getCTL(true);

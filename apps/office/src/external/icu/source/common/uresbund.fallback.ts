@@ -1,6 +1,6 @@
 /** @fileoverview Original ICU78.3 uresbund.cpp filename-fallback helpers and generated localefallback_data.h tables. These helpers deliberately differ from inheritance of an existing bundle; no Intl/likely-subtag substitute or extra locale grammar is used. */
 import type { ByteStringSink } from "./unicode/bytestream";
-import tables from "./localefallback_data.json";
+import tables from "./localefallback_data.json" with { type: "json" };
 import { CheckedArrayByteSink } from "./unicode/bytestream";
 import { ulocimp_getSubtags } from "./uloc.subtags";
 /** Original source open modes. */

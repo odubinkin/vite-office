@@ -27,20 +27,26 @@ function convert(encoding: number, units: readonly number[], flags: number, chec
     live = new Map<object, { id: number; bytes: number }>();
   const events: number[][] = [];
   let next = 1;
-  rtl_stringAllocation.rtl_allocateString = (bytes) => {
-    const data = original.rtl_allocateString(bytes);
-    if (data === null) throw new Error("Unexpected native allocation failure");
-    live.set(data, { id: next++, bytes });
-    events.push([0, live.get(data)?.id as number, bytes]);
-    return data;
-  };
-  rtl_stringAllocation.rtl_freeString = (data) => {
-    const entry = live.get(data);
-    if (!entry) throw new Error("Unowned native free");
-    events.push([1, entry.id, entry.bytes]);
-    live.delete(data);
-    original.rtl_freeString(data);
-  };
+  rtl_stringAllocation.rtl_allocateString =
+    /** Evaluates the string-convert.test callback. @param bytes - bytes value. @returns Callback result. */ (
+      bytes,
+    ) => {
+      const data = original.rtl_allocateString(bytes);
+      if (data === null) throw new Error("Unexpected native allocation failure");
+      live.set(data, { id: next++, bytes });
+      events.push([0, live.get(data)?.id as number, bytes]);
+      return data;
+    };
+  rtl_stringAllocation.rtl_freeString =
+    /** Evaluates the string-convert.test callback. @param data - data value. @returns Nothing. */ (
+      data,
+    ) => {
+      const entry = live.get(data);
+      if (!entry) throw new Error("Unowned native free");
+      events.push([1, entry.id, entry.bytes]);
+      live.delete(data);
+      original.rtl_freeString(data);
+    };
   try {
     const old = rtl_string_alloc(1);
     if (old === null) throw new Error("Unexpected native allocation failure");
@@ -80,7 +86,11 @@ function mix(hash: number, value: number): number {
 
 it.each(native.digests)(
   "matches original core BMP wrapper and ownership observations for $encoding, checked=$checked",
-  ({ encoding, checked, hash }) => {
+  /** Verifies matches original core BMP wrapper and ownership observations for $encoding, checked=$checked. @param value0 - encoding, checked, hash value. @returns Nothing. */ ({
+    encoding,
+    checked,
+    hash,
+  }) => {
     let digest = 2166136261;
     for (let unit = 0; unit < 65536; unit++) {
       const result = convert(encoding, [unit], OUSTRING_TO_OSTRING_CVTFLAGS, Boolean(checked));
@@ -100,7 +110,7 @@ it.each(native.digests)(
   },
 );
 
-it("matches original mixed vectors, flags, target identity and complete allocator/free order", () => {
+it("matches original mixed vectors, flags, target identity and complete allocator/free order", /** Verifies matches original mixed vectors, flags, target identity and complete allocator/free order. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const { encoding, input, flags, checked, ...expected } = entry;
     expect(
@@ -110,7 +120,7 @@ it("matches original mixed vectors, flags, target identity and complete allocato
   }
 });
 
-it("preserves checked failure before retry for an encodable two-byte MS1258 mapping", () => {
+it("preserves checked failure before retry for an encodable two-byte MS1258 mapping", /** Verifies preserves checked failure before retry for an encodable two-byte MS1258 mapping. @returns Nothing. */ () => {
   const target: rtl_StringSlot = [rtl_string_alloc(1)],
     old = target[0];
   if (old === null) throw new Error("Allocation failure");
@@ -137,13 +147,13 @@ it("preserves checked failure before retry for an encodable two-byte MS1258 mapp
   if (target[0]) rtl_string_release(target[0]);
 });
 
-it("connects actual multibyte conversion to the existing OUString byte adapter", () => {
+it("connects actual multibyte conversion to the existing OUString byte adapter", /** Verifies connects actual multibyte conversion to the existing OUString byte adapter. @returns Nothing. */ () => {
   expect([...OUStringToOString("漢", RTL_TEXTENCODING_MS_932)]).toEqual([0x8a, 0xbf]);
   expect([...OUStringToOString("漢", RTL_TEXTENCODING_EUC_JP)]).toEqual([0xb4, 0xc1]);
   expect([...OUStringToOString("ắ", RTL_TEXTENCODING_MS_1258)]).toEqual([0xe3, 0xec]);
 });
 
-it("retains static byte-empty identity, reserve capacity and UTF8 fast-path flag bypass", () => {
+it("retains static byte-empty identity, reserve capacity and UTF8 fast-path flag bypass", /** Verifies retains static byte-empty identity, reserve capacity and UTF8 fast-path flag bypass. @returns Nothing. */ () => {
   const first: rtl_StringSlot = [null],
     second: rtl_StringSlot = [null];
   rtl_string_new(first);
@@ -170,7 +180,7 @@ it("retains static byte-empty identity, reserve capacity and UTF8 fast-path flag
 
 import { runInNewContext } from "node:vm";
 import { Alloc, new_, new_WithLength, release } from "./strtmpl";
-it("binds the original byte template width across constructor realms", () => {
+it("binds the original byte template width across constructor realms", /** Verifies binds the original byte template width across constructor realms. @returns Nothing. */ () => {
   const foreign = runInNewContext("Uint8Array") as typeof Uint8Array;
   expect(foreign).not.toBe(Uint8Array);
   const data = Alloc(3, foreign);
@@ -187,7 +197,7 @@ it("binds the original byte template width across constructor realms", () => {
   if (slot[0]) release(slot[0]);
 });
 
-it("initializes native empty flags when the private C header is the import root", async () => {
+it("initializes native empty flags when the private C header is the import root", /** Verifies initializes native empty flags when the private C header is the import root. @returns Completion. */ async () => {
   vi.resetModules();
   const declarations = await import("./strimp.hxx");
   const byte = await import("./string");

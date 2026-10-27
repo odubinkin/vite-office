@@ -73,12 +73,17 @@ const flags = [
     /^#define\s+(RTL_(?:TEXTTOUNICODE|UNICODETOTEXT)_[A-Z0-9_]+)\s+([^\n\\]+)$/gm,
   ),
 ]
-  .map((m) => `#define ${m[1]} ${m[2]}`)
+  .map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) =>
+      `#define ${m[1]} ${m[2]}`,
+  )
   .join("\n");
-const handles = [...flagHeader.matchAll(/^typedef void\* rtl_\w+;/gm)].map((m) => m[0]).join("\n");
+const handles = [...flagHeader.matchAll(/^typedef void\* rtl_\w+;/gm)]
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
+  .join("\n");
 const character = source("include/rtl/character.hxx");
 const charConstants = [...character.matchAll(/^sal_uInt32 const surrogates\w+ = 0x[\dA-F]+;$/gm)]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const charFunctions = [
   "isUnicodeCodePoint",
@@ -91,11 +96,13 @@ const charFunctions = [
   "splitSurrogates",
   "isUnicodeScalarValue",
 ]
-  .map((name) => {
-    const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\(`));
-    if (!m) throw Error(name);
-    return definition(character, m[0]);
-  })
+  .map(
+    /** Applies map to name. @param name - name value. @returns Callback result. */ (name) => {
+      const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\(`));
+      if (!m) throw Error(name);
+      return definition(character, m[0]);
+    },
+  )
   .join("\n");
 const safeint = definition(
   source("include/o3tl/safeint.hxx"),
@@ -111,13 +118,15 @@ const infoStruct = infoHeader.match(
   /typedef struct _rtl_TextEncodingInfo[\s\S]*?\} rtl_TextEncodingInfo;/,
 )?.[0];
 const infoFlags = [...infoHeader.matchAll(/^#define RTL_TEXTENCODING_INFO_.*$/gm)]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const tencinfo = source("sal/textenc/tencinfo.cxx");
 const byteHeader = source("include/rtl/string.h");
 const byteStruct = byteHeader.match(/typedef struct _rtl_String[\s\S]*?\} rtl_String;/)?.[0];
 const strimp = source("sal/rtl/strimp.hxx");
-const strFlags = [...strimp.matchAll(/^#define SAL_STRING_.*$/gm)].map((m) => m[0]).join("\n");
+const strFlags = [...strimp.matchAll(/^#define SAL_STRING_.*$/gm)]
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
+  .join("\n");
 const allocatorTypes = strimp.match(
   /typedef void \*\(SAL_CALL \* rtl_allocateStringFn\)\(size_t size\);[\s\S]*?typedef void {2}\(\*rtl_freeStringFn\)\(void \*\);/,
 )?.[0];
@@ -126,13 +135,13 @@ const allocatorSource = source("sal/rtl/strimp.cxx");
 const allocatorGlobals = [
   ...allocatorSource.matchAll(/^rtl_(?:allocate|free)StringFn rtl_\w+ = (?:malloc|free);$/gm),
 ]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const interlock = source("include/osl/interlck.h");
 const atomics = [
   ...interlock.matchAll(/^#\s+define osl_atomic_(?:increment|decrement)\(p\)\s+__sync[^\n]+$/gm),
 ]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const template = source("sal/rtl/strtmpl.hxx");
 const templateFunctions = [
@@ -143,7 +152,11 @@ const templateFunctions = [
   "template <typename rtl_tString> void new_WithLength",
   "template <typename C> void Copy(",
 ]
-  .map((marker) => definition(template, marker))
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(template, marker),
+  )
   .join("\n");
 const empty = template.match(
   /template <>\s*inline rtl_String EmptyStringImpl<rtl_String>::data = \{[\s\S]*?\};/,
@@ -157,7 +170,11 @@ const byteWrappers = [
   "rtl_String* SAL_CALL rtl_string_alloc(",
   "void SAL_CALL rtl_string_new_WithLength(",
 ]
-  .map((marker) => definition(nativeString, marker))
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(nativeString, marker),
+  )
   .join("\n");
 const wrapperFunctions = [
   "static int rtl_ImplGetFastUTF8ByteLen(",
@@ -165,7 +182,11 @@ const wrapperFunctions = [
   "void SAL_CALL rtl_uString2String(",
   "sal_Bool SAL_CALL rtl_convertUStringToString(",
 ]
-  .map((marker) => definition(nativeString, marker))
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(nativeString, marker),
+  )
   .join("\n");
 const registry = source("sal/textenc/textenc.cxx"),
   core = registry.slice(registry.indexOf("#define NOTABUNI_START"));
@@ -260,8 +281,8 @@ static Result convert(unsigned encoding,std::vector<sal_Unicode> const& input,un
 static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4;++i){hash^=(value>>(8*i))&255;hash*=16777619u;}return hash;}
 int main(){rtl_allocateString=observeAllocate;rtl_freeString=observeFree;std::cout<<"{\"digests\":[";bool comma=false;
 for(unsigned encoding:{1u,11u,12u,76u})for(bool checked:{false,true}){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){auto r=convert(encoding,{sal_Unicode(unit)},0x566,checked);for(unsigned value:{unit,unsigned(r.ok),unsigned(r.same),unsigned(r.ref),unsigned(r.length),r.id})hash=mix(hash,value);for(unsigned b:r.bytes)hash=mix(hash,b);for(auto const& e:r.events){hash=mix(hash,e.kind);hash=mix(hash,e.id);hash=mix(hash,e.bytes);}}if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"checked\":"<<checked<<",\"hash\":"<<hash<<"}";}
-std::cout<<"],\"cases\":[";comma=false;std::vector<std::vector<sal_Unicode>> inputs={${inputs.map((a) => `{${a.join(",")}}`).join(",")}};
-for(unsigned encoding:{1u,11u,12u,76u})for(unsigned input=0;input<inputs.size();++input)for(unsigned flags:{${combinations.map((f) => `${f}u`).join(",")}})for(bool checked:{false,true}){auto r=convert(encoding,inputs[input],flags,checked);if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"input\":"<<input<<",\"flags\":"<<flags<<",\"checked\":"<<checked<<",\"ok\":"<<r.ok<<",\"same\":"<<r.same<<",\"ref\":"<<r.ref<<",\"length\":"<<r.length<<",\"id\":"<<r.id<<",\"bytes\":[";for(unsigned i=0;i<r.bytes.size();++i){if(i)std::cout<<',';std::cout<<r.bytes[i];}std::cout<<"],\"events\":[";for(unsigned i=0;i<r.events.size();++i){if(i)std::cout<<',';auto e=r.events[i];std::cout<<'['<<e.kind<<','<<e.id<<','<<e.bytes<<']';}std::cout<<"]}";}std::cout<<"]}\n";}
+std::cout<<"],\"cases\":[";comma=false;std::vector<std::vector<sal_Unicode>> inputs={${inputs.map(/** Applies map to a. @param a - a value. @returns Callback result. */ (a) => `{${a.join(",")}}`).join(",")}};
+for(unsigned encoding:{1u,11u,12u,76u})for(unsigned input=0;input<inputs.size();++input)for(unsigned flags:{${combinations.map(/** Applies map to f. @param f - f value. @returns Callback result. */ (f) => `${f}u`).join(",")}})for(bool checked:{false,true}){auto r=convert(encoding,inputs[input],flags,checked);if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"input\":"<<input<<",\"flags\":"<<flags<<",\"checked\":"<<checked<<",\"ok\":"<<r.ok<<",\"same\":"<<r.same<<",\"ref\":"<<r.ref<<",\"length\":"<<r.length<<",\"id\":"<<r.id<<",\"bytes\":[";for(unsigned i=0;i<r.bytes.size();++i){if(i)std::cout<<',';std::cout<<r.bytes[i];}std::cout<<"],\"events\":[";for(unsigned i=0;i<r.events.size();++i){if(i)std::cout<<',';auto e=r.events[i];std::cout<<'['<<e.kind<<','<<e.id<<','<<e.bytes<<']';}std::cout<<"]}";}std::cout<<"]}\n";}
 `;
 /** Runs the original reverse-wrapper probe when invoked directly. @returns Nothing. */
 export function runReverseProbe() {

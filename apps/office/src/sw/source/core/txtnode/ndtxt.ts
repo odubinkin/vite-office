@@ -807,7 +807,7 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
-  /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @returns Whether any state was collected. */
+  /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @param fromCharacterFormat - Include character-format attributes. @returns Whether any state was collected. */
   public GetParaAttr(
     set: SfxItemSet,
     start: number,

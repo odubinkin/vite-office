@@ -22,33 +22,55 @@ class Owned extends SfxInt16Item {
     return other instanceof Owned && other.GetValue() === this.GetValue();
   }
 }
-it("matches all native used/cache/non-shareable/ignorable/named-parent snapshots", () => {
+it("matches all native used/cache/non-shareable/ignorable/named-parent snapshots", /** Verifies matches all native used/cache/non-shareable/ignorable/named-parent snapshots. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     ids = new WeakMap<SfxItemSet, number>();
   const results: { label: string; ids: number[] }[] = [];
-  const input = (pairs: [number, number][], parent?: SfxItemSet): SfxItemSet => {
-    const set = new SfxItemSet(pool, [[1, 30]], parent);
-    for (const [which, value] of pairs) set.Put(new SfxInt16Item(which, value));
-    return set;
-  };
-  const add = (styles: StylePool, set: SfxItemSet, id: number, name?: string): SfxItemSet => {
-    const handle = styles.insertItemSet(set, name);
-    if (!ids.has(handle)) ids.set(handle, id);
-    return handle;
-  };
-  const snapshot = (label: string, styles: StylePool, cache = false): void => {
-    let values: SfxItemSet[];
-    if (cache) {
-      const map = new Map<string, SfxItemSet>();
-      styles.populateCacheMap(map);
-      values = [...map.values()];
-    } else {
-      values = [];
-      styles.getAllStyles(values);
-    }
-    results.push({ label, ids: values.map((value) => ids.get(value) as number) });
-    for (const value of values) releaseStyleHandle(value);
-  };
+  const input =
+    /** Verifies matches all native used/cache/non-shareable/ignorable/named-parent snapshots. @param pairs - pairs value. @param parent - parent value. @returns Callback result. */ (
+      pairs: [number, number][],
+      parent?: SfxItemSet,
+    ): SfxItemSet => {
+      const set = new SfxItemSet(pool, [[1, 30]], parent);
+      for (const [which, value] of pairs) set.Put(new SfxInt16Item(which, value));
+      return set;
+    };
+  const add =
+    /** Verifies matches all native used/cache/non-shareable/ignorable/named-parent snapshots. @param styles - styles value. @param set - set value. @param id - id value. @param name - name value. @returns Callback result. */ (
+      styles: StylePool,
+      set: SfxItemSet,
+      id: number,
+      name?: string,
+    ): SfxItemSet => {
+      const handle = styles.insertItemSet(set, name);
+      if (!ids.has(handle)) ids.set(handle, id);
+      return handle;
+    };
+  const snapshot =
+    /** Verifies matches all native used/cache/non-shareable/ignorable/named-parent snapshots. @param label - label value. @param styles - styles value. @param cache - cache value. @returns Nothing. */ (
+      label: string,
+      styles: StylePool,
+      cache = false,
+    ): void => {
+      let values: SfxItemSet[];
+      if (cache) {
+        const map = new Map<string, SfxItemSet>();
+        styles.populateCacheMap(map);
+        values = [...map.values()];
+      } else {
+        values = [];
+        styles.getAllStyles(values);
+      }
+      results.push({
+        label,
+        ids: values.map(
+          /** Verifies matches all native used/cache/non-shareable/ignorable/named-parent snapshots. @param value - value value. @returns Callback result. */ (
+            value,
+          ) => ids.get(value) as number,
+        ),
+      });
+      for (const value of values) releaseStyleHandle(value);
+    };
   {
     const styles = new StylePool(),
       a = add(styles, input([[11, 7]]), 1);

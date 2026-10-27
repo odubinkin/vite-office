@@ -46,9 +46,19 @@ function mix(hash: number, value: number): number {
   return hash;
 }
 
-it.each(native.digests.map((hash, capacity) => ({ hash, capacity })))(
+it.each(
+  native.digests.map(
+    /** Verifies matches native bytes, status, consumption and context for all BMP units at capacity $capacity. @param hash - hash value. @param capacity - capacity value. @returns Callback result. */ (
+      hash,
+      capacity,
+    ) => ({ hash, capacity }),
+  ),
+)(
   "matches native bytes, status, consumption and context for all BMP units at capacity $capacity",
-  ({ hash, capacity }) => {
+  /** Verifies matches native bytes, status, consumption and context for all BMP units at capacity $capacity. @param value0 - hash, capacity value. @returns Nothing. */ ({
+    hash,
+    capacity,
+  }) => {
     let digest = 2166136261;
     for (let unit = 0; unit < 65536; unit++) {
       const result = convert([unit], capacity);
@@ -66,7 +76,7 @@ it.each(native.digests.map((hash, capacity) => ({ hash, capacity })))(
   },
 );
 
-it("matches native mixed-unit vectors and ignored conversion flags", () => {
+it("matches native mixed-unit vectors and ignored conversion flags", /** Verifies matches native mixed-unit vectors and ignored conversion flags. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const { input, capacity, flags, ...result } = entry;
     expect(
@@ -76,7 +86,7 @@ it("matches native mixed-unit vectors and ignored conversion flags", () => {
   }
 });
 
-it("retains native shift-table control characters and partial plus writes", () => {
+it("retains native shift-table control characters and partial plus writes", /** Verifies retains native shift-table control characters and partial plus writes. @returns Nothing. */ () => {
   expect(convert([0x0c, 0x0d], 12).bytes).toEqual([0x0c, 0x2b, 0x41, 0x41, 0x30, 0x2d]);
   expect(convert([0x2b], 1)).toMatchObject({
     bytes: [0x2b],
@@ -90,7 +100,7 @@ it("retains native shift-table control characters and partial plus writes", () =
   });
 });
 
-it("resets reverse context and accepts the source null-context contract", () => {
+it("resets reverse context and accepts the source null-context contract", /** Verifies resets reverse context and accepts the source null-context contract. @returns Nothing. */ () => {
   const context = ImplUTF7CreateUnicodeToTextContext();
   context.mbShifted = true;
   context.mnBitBuffer = 123;

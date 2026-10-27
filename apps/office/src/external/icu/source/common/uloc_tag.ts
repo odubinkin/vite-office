@@ -1,5 +1,5 @@
 /** @fileoverview Original ICU78.3 ULanguageTag parser from uloc_tag.cpp. Owned narrow-byte buffer and nullable offsets project the actual internal pointers; linked-list order, partial acceptance and parsed-length checkpoints are retained. Locale keyword conversion is implemented separately. */
-import replacements from "../data/misc/uloc_tag.json";
+import replacements from "../data/misc/uloc_tag.json" with { type: "json" };
 import { U_FAILURE } from "./unicode/utypes";
 const LANG = 1,
   EXTL = 2,

@@ -142,7 +142,10 @@ export function md_is_closing_code_fence(
   return { matched: off >= ctx.size || ISNEWLINE_(ctx.text[off] as number), end: off };
 }
 const enc = new TextEncoder();
-const t1 = ["pre", "script", "style", "textarea"].map((value) => enc.encode(value));
+const t1 = ["pre", "script", "style", "textarea"].map(
+  /** Applies map to value. @param value - value value. @returns Callback result. */ (value) =>
+    enc.encode(value),
+);
 const tags6 = [
   "address",
   "article",
@@ -206,7 +209,10 @@ const tags6 = [
   "tr",
   "track",
   "ul",
-].map((value) => enc.encode(value));
+].map(
+  /** Applies map to value. @param value - value value. @returns Callback result. */ (value) =>
+    enc.encode(value),
+);
 /** Recognizes the source seven raw HTML block types, including its ASCII type-four branch. @param ctx - Context. @param beg - Opening angle. @returns Native HTML type or zero. */
 export function md_is_html_block_start_condition(ctx: MD_BLOCK_SCAN_CONTEXT, beg: number): number {
   const text = ctx.text;

@@ -49,12 +49,16 @@ it("builds native shared boundaries and style order, and merges complete replace
     expect(
       hints
         .entries()
-        .map((h) => [
-          h.start,
-          h.end,
-          h.format.QueryValue(),
-          h instanceof SwTextCharFormat ? h.GetSortNumber() : -1,
-        ]),
+        .map(
+          /** Verifies builds native shared boundaries and style order, and merges complete replacement portions. @param h - h value. @returns Callback result. */ (
+            h,
+          ) => [
+            h.start,
+            h.end,
+            h.format.QueryValue(),
+            h instanceof SwTextCharFormat ? h.GetSortNumber() : -1,
+          ],
+        ),
     ).toEqual([
       [0, 2, "Strong Emphasis", 0],
       [2, 4, "Strong Emphasis", 0],
@@ -76,9 +80,19 @@ it("builds native shared boundaries and style order, and merges complete replace
     range.GetMark().Assign(node, 0);
     range.GetPoint().Assign(node, 6);
     doc.InsertPoolItem(range, new SwFormatCharFormat(strong), SetAttrMode.DONTREPLACE);
-    const middle = hints.entries().filter((hint) => hint.start === 2 && hint.end === 4);
+    const middle = hints
+      .entries()
+      .filter(
+        /** Verifies builds native shared boundaries and style order, and merges complete replacement portions. @param hint - hint value. @returns Callback result. */ (
+          hint,
+        ) => hint.start === 2 && hint.end === 4,
+      );
     expect(
-      middle.map((hint) => (hint instanceof SwTextCharFormat ? hint.GetSortNumber() : -1)),
+      middle.map(
+        /** Verifies builds native shared boundaries and style order, and merges complete replacement portions. @param hint - hint value. @returns Callback result. */ (
+          hint,
+        ) => (hint instanceof SwTextCharFormat ? hint.GetSortNumber() : -1),
+      ),
     ).toEqual([1, 1]);
     expect(node.InsertItem(new SwFormatCharFormat(strong), 0, 6)).toBeUndefined();
     expect(hints.Count()).toBe(1);
@@ -106,9 +120,14 @@ it("forwards original range updates and retains actual style identity through cl
   hint.SetPriorityAttr(true);
   node.SetTextHints(new SwpHints(doc.GetAttrPool(), [hint]));
   const updates: UpdateAttrHint[] = [];
-  const observer = new SwClient((_source, event) => {
-    if (event.kind === "update-attr") updates.push(event);
-  });
+  const observer = new SwClient(
+    /** Verifies forwards original range updates and retains actual style identity through clones and Worker reconstruction. @param _source - _source value. @param event - event value. @returns Nothing. */ (
+      _source,
+      event,
+    ) => {
+      if (event.kind === "update-attr") updates.push(event);
+    },
+  );
   observer.RegisterToModify(node);
   try {
     const clone = item.Clone();
@@ -184,7 +203,7 @@ it("keeps native character name disambiguation and copies actual foreign style g
     source.Dispose();
   }
 });
-it("owns native update value fields independently of the caller vector", () => {
+it("owns native update value fields independently of the caller vector", /** Verifies owns native update value fields independently of the caller vector. @returns Nothing. */ () => {
   const fields = [1, 65537];
   const value = new SwUpdateAttr(2, 5, 65537, fields);
   fields[0] = 9;
@@ -215,7 +234,11 @@ it("keeps a direct value equal to the paragraph when a character style would oth
       node
         .GetpSwpHints()
         ?.entries()
-        .some((hint) => hint.format instanceof SwFormatAutoFormat),
+        .some(
+          /** Verifies keeps a direct value equal to the paragraph when a character style would otherwise override it. @param hint - hint value. @returns Callback result. */ (
+            hint,
+          ) => hint.format instanceof SwFormatAutoFormat,
+        ),
     ).toBe(true);
     doc.InsertPoolItem(range, new SwFormatCharFormat(strong));
     expect(node.GetTextRangeFormatState(1, 3, "bold")).toBe("on");
@@ -223,7 +246,11 @@ it("keeps a direct value equal to the paragraph when a character style would oth
       node
         .GetpSwpHints()
         ?.entries()
-        .some((hint) => hint.format instanceof SwFormatAutoFormat),
+        .some(
+          /** Verifies keeps a direct value equal to the paragraph when a character style would otherwise override it. @param hint - hint value. @returns Callback result. */ (
+            hint,
+          ) => hint.format instanceof SwFormatAutoFormat,
+        ),
     ).toBe(false);
     const onlyItems = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
     node.GetParaAttr(onlyItems, 2, 2, true, false);

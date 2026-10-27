@@ -9,6 +9,8 @@ import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
 import { Color } from "../../../../tools/inc/color";
 import {
   RES_CHRATR_COLOR,
+  RES_CHRATR_ESCAPEMENT,
+  RES_PARATR_LINESPACING,
   RES_CHRATR_HIGHLIGHT,
   RES_PARATR_CONNECT_BORDER,
 } from "../../../inc/hintids";
@@ -21,6 +23,8 @@ import {
   writerHighlightColorValue,
   writerTextColorValue,
 } from "../../../source/core/attr/swatrset";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
 import { SwDoc } from "../../../source/core/doc/doc";
 import { decodeSfxPoolItem, encodeSfxPoolItem } from "./item-codec";
 it("uses the native black pool default and preserves opaque,automatic and transparency worker values", /** Uses actual pool factory and browser codec,including legacy input records. @returns Nothing. */ () => {
@@ -144,6 +148,80 @@ it("preserves complex metadata independently of native source equality", /** Inc
       expect(encodeSfxPoolItem(restored)).toEqual(record);
     }
   } finally {
+    doc.Dispose();
+  }
+});
+
+it("rejects malformed structured color and brush snapshots before replacing pool defaults", /** Checks untrusted Worker records, numeric bounds and native Which ownership. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    pool = doc.GetAttrPool(),
+    original = pool.GetPoolDefaultItem(RES_CHRATR_COLOR),
+    complex = encodeComplexColor(new ComplexColor()),
+    color = { kind: "svx-color", color: 0, complex },
+    brush = { kind: "svx-brush", color: 0, complex, shading: 0, graphicTransparency: 0 };
+  try {
+    for (const invalid of ["0", 0.5, -1, 0x100000000, NaN, Infinity])
+      expect(
+        /** Rejects a non-uint32 packed color. @returns No item. */ () =>
+          decodeSfxPoolItem(pool, { which: RES_CHRATR_COLOR, value: { ...color, color: invalid } }),
+      ).toThrow("Native color record is invalid");
+    expect(
+      /** Rejects a color record using a boolean Which identity. @returns No item. */ () =>
+        decodeSfxPoolItem(pool, { which: RES_PARATR_CONNECT_BORDER, value: color }),
+    ).toThrow("Native color Which is invalid");
+    expect(
+      /** Rejects a brush record using the color-only Which identity. @returns No item. */ () =>
+        decodeSfxPoolItem(pool, { which: RES_CHRATR_COLOR, value: brush }),
+    ).toThrow("Native brush record is invalid");
+    for (const shading of ["0", 0.5, -2147483649, 2147483648])
+      expect(
+        /** Rejects a shading value outside signed32. @returns No item. */ () =>
+          decodeSfxPoolItem(pool, { which: RES_CHRATR_HIGHLIGHT, value: { ...brush, shading } }),
+      ).toThrow("Native brush record is invalid");
+    for (const graphicTransparency of ["0", 0.5, -129, 128])
+      expect(
+        /** Rejects a graphic-transparency value outside signed8. @returns No item. */ () =>
+          decodeSfxPoolItem(pool, {
+            which: RES_CHRATR_HIGHLIGHT,
+            value: { ...brush, graphicTransparency },
+          }),
+      ).toThrow("Native brush record is invalid");
+    expect(pool.GetPoolDefaultItem(RES_CHRATR_COLOR)).toBe(original);
+    expect((original as SvxColorItem).GetValue().toUInt32()).toBe(0);
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("roundtrips native escapement fields through the generic Worker item envelope", /** Verifies the registered concrete item retains both explicit values. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    item = new SvxEscapementItem(33, 58, RES_CHRATR_ESCAPEMENT);
+  try {
+    const snapshot = encodeSfxPoolItem(item);
+    expect(snapshot).toEqual({ which: RES_CHRATR_ESCAPEMENT, value: { offset: 33, height: 58 } });
+    const restored = decodeSfxPoolItem(doc.GetAttrPool(), structuredClone(snapshot));
+    expect(restored).toBeInstanceOf(SvxEscapementItem);
+    expect(restored.equals(item)).toBe(true);
+    restored.Dispose();
+  } finally {
+    item.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("roundtrips native line spacing through the generic Worker item envelope", /** Preserves the concrete paragraph item and its physical height rather than flattening its UNO projection. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    item = new SvxLineSpacingItem(360, RES_PARATR_LINESPACING);
+  try {
+    const snapshot = encodeSfxPoolItem(item);
+    expect(snapshot.value).toMatchObject({ nLineHeight: 360, nPropLineSpace: 100 });
+    const restored = decodeSfxPoolItem(doc.GetAttrPool(), structuredClone(snapshot));
+    expect(restored).toBeInstanceOf(SvxLineSpacingItem);
+    expect(restored.equals(item)).toBe(true);
+    expect(encodeSfxPoolItem(restored)).toEqual(snapshot);
+    restored.Dispose();
+  } finally {
+    item.Dispose();
     doc.Dispose();
   }
 });

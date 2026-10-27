@@ -53,7 +53,13 @@ export class SvStream {
 
   /** Original std::string_view write uses raw bytes and its logical length, including embedded NUL. The existing byte-string binding carries bytes as code units. @param value - Byte string view. @returns This stream. */
   WriteOString(value: string): SvStream {
-    this.WriteBytes(Uint8Array.from(value, (unit) => unit.charCodeAt(0) & 0xff));
+    this.WriteBytes(
+      Uint8Array.from(
+        value,
+        /** Applies from to unit. @param unit - unit value. @returns Callback result. */ (unit) =>
+          unit.charCodeAt(0) & 0xff,
+      ),
+    );
     return this;
   }
 

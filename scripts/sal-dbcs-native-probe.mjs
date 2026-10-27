@@ -21,12 +21,15 @@ const definitions = [];
 const aggregates = new Map();
 let macros = "";
 for (const file of readdirSync(root + "sal/textenc")
-  .filter((name) => /^tcvt(?:jp|kr|scn|tcn)[1-6]\.tab$/.test(name))
+  .filter(
+    /** Applies filter to name. @param name - name value. @returns Callback result. */ (name) =>
+      /^tcvt(?:jp|kr|scn|tcn)[1-6]\.tab$/.test(name),
+  )
   .sort()) {
   const text = source("sal/textenc/" + file);
   macros +=
     [...text.matchAll(/^#define\s+(?:DBCS_EUDC_\w+|GBKOFF)\s+[^\n]+$/gm)]
-      .map((m) => m[0])
+      .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
       .join("\n") + "\n";
   for (const match of text.matchAll(
     /ImplTextEncodingData\s+const\s+(\w+)\s*=\s*\{\s*\{\s*&(\w+),\s*ImplDBCSToUnicode,/g,
@@ -43,7 +46,10 @@ const flags = [
     /^#define\s+(RTL_(?:TEXTTOUNICODE|UNICODETOTEXT)_[A-Z0-9_]+)\s+([^\n\\]+)$/gm,
   ),
 ]
-  .map((m) => `#define ${m[1]} ${m[2]}`)
+  .map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) =>
+      `#define ${m[1]} ${m[2]}`,
+  )
   .join("\n");
 const undefinedOwner = source("sal/textenc/handleundefinedunicodetotextchar.cxx").replace(
   /^#include.*$/gm,
@@ -53,12 +59,17 @@ const converters = source("sal/textenc/tcvtmb.cxx").replace(/^#include.*$/gm, ""
 const constants = source("include/rtl/textenc.h");
 const ids = new Map(
   [...constants.matchAll(/#define\s+(RTL_TEXTENCODING_\w+)\s+\(RTL_TEXTENC_CAST\(\s*(\d+)/g)].map(
-    (m) => [m[1], Number(m[2])],
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [
+      m[1],
+      Number(m[2]),
+    ],
   ),
 );
 const dispatcher = source("sal/textenc/tables.cxx");
 const nativeFactory = new Map(
-  [...dispatcher.matchAll(/&(\w+),\s*\/\*\s*(\w+)\s*\*\//g)].map((m) => [m[2], m[1]]),
+  [...dispatcher.matchAll(/&(\w+),\s*\/\*\s*(\w+)\s*\*\//g)].map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [m[2], m[1]],
+  ),
 );
 // These are the currently represented DBCS descriptors. IDs and data pointers come only from original source, not the port's dispatcher.
 const names = [
@@ -74,11 +85,20 @@ const names = [
   "EUC_KR",
   "MS_1361",
 ];
-const bindings = names.map((name) => [
-  ids.get("RTL_TEXTENCODING_" + name),
-  aggregates.get(nativeFactory.get(name)),
-]);
-if (bindings.some(([id, data]) => id === undefined || data === undefined))
+const bindings = names.map(
+  /** Applies map to name. @param name - name value. @returns Callback result. */ (name) => [
+    ids.get("RTL_TEXTENCODING_" + name),
+    aggregates.get(nativeFactory.get(name)),
+  ],
+);
+if (
+  bindings.some(
+    /** Applies some to [id, data]. @param value0 - id, data value. @returns Callback result. */ ([
+      id,
+      data,
+    ]) => id === undefined || data === undefined,
+  )
+)
   throw new Error("Original descriptor factory binding changed; review the native probe route.");
 const driver = String.raw`
 #include <cstdint>
@@ -104,9 +124,9 @@ bool ImplIsZeroWidth(sal_Unicode){std::abort();} bool ImplIsControlOrFormat(sal_
 inline sal_Unicode ImplGetUndefinedUnicodeChar(unsigned char c,sal_uInt32 flags){return (flags & RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MASK)==RTL_TEXTTOUNICODE_FLAGS_UNDEFINED_MAPTOPRIVATE ? RTL_TEXTCVT_BYTE_PRIVATE_START+c : RTL_TEXTENC_UNICODE_REPLACEMENT_CHARACTER;}
 ${macros}
 extern sal_uInt16 const aImplDoubleByteIdentifierTab[1];
-${definitions.map((d) => `extern ${d.type} const ${d.name}${d.array ? "[]" : ""};`).join("\n")}
+${definitions.map(/** Applies map to d. @param d - d value. @returns Callback result. */ (d) => `extern ${d.type} const ${d.name}${d.array ? "[]" : ""};`).join("\n")}
 sal_uInt16 const aImplDoubleByteIdentifierTab[1]={0};
-${definitions.map((d) => d.text).join("\n")}
+${definitions.map(/** Applies map to d. @param d - d value. @returns Callback result. */ (d) => d.text).join("\n")}
 ${undefinedOwner}
 ${converters}
 static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4;++i){hash^=(value>>(8*i))&255;hash*=16777619u;}return hash;}
@@ -116,8 +136,14 @@ static bool unsafeEntry(ImplUniToDBCSHighTab const& entry,unsigned low){
   static const std::map<sal_uInt16 const*,std::size_t> spans={
     {aImplDoubleByteIdentifierTab,1},
     ${definitions
-      .filter((d) => d.type === "sal_uInt16" && d.array)
-      .map((d) => `{${d.name},SAL_N_ELEMENTS(${d.name})}`)
+      .filter(
+        /** Applies filter to d. @param d - d value. @returns Callback result. */ (d) =>
+          d.type === "sal_uInt16" && d.array,
+      )
+      .map(
+        /** Applies map to d. @param d - d value. @returns Callback result. */ (d) =>
+          `{${d.name},SAL_N_ELEMENTS(${d.name})}`,
+      )
       .join(",\n")}
   };
   auto found=spans.find(entry.mpToUniTrailTab);if(found==spans.end())std::abort();
@@ -133,7 +159,7 @@ static bool unsafeEuc(unsigned unit){
 }
 int main(int argc,char**argv){
   struct Binding {int encoding; ImplDBCSConvertData const* data;};
-  Binding bindings[]={${bindings.map(([id, name]) => `{${id},&${name}}`).join(",")}};
+  Binding bindings[]={${bindings.map(/** Applies map to [id, name]. @param value0 - id, name value. @returns Callback result. */ ([id, name]) => `{${id},&${name}}`).join(",")}};
   if(argc>1){int encoding=std::atoi(argv[1]);void const* data=nullptr;for(auto const& b:bindings)if(b.encoding==encoding)data=b.data;if(encoding==69)data=&aImplEUCJPCvtData;if(!data)return 2;for(unsigned c=0;c<65536;++c){if(encoding==69?unsafeEuc(c):unsafeDbcs(static_cast<ImplDBCSConvertData const*>(data),c)){std::cout<<c<<",-1,0,0\n";continue;}sal_Unicode input=sal_Unicode(c);char out[16]{};sal_uInt32 info=0;sal_Size used=0;auto n=encoding==69?ImplUnicodeToEUCJP(data,nullptr,&input,1,out,4,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,&info,&used):ImplUnicodeToDBCS(data,nullptr,&input,1,out,4,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,&info,&used);std::cout<<c<<','<<n<<','<<info<<','<<used;for(sal_Size i=0;i<n;++i)std::cout<<','<<unsigned(static_cast<unsigned char>(out[i]));std::cout<<'\n';}return 0;}
   std::cout << "{\"plainCharSigned\":" << (char(-1)<0 ? "true" : "false") << ",\"digests\":[";
   bool comma=false;

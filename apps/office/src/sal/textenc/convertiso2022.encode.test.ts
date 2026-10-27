@@ -73,7 +73,7 @@ function mix(hash: number, value: number): number {
   return hash;
 }
 
-it("independently classifies original table ranges exceeding their physical arrays", () => {
+it("independently classifies original table ranges exceeding their physical arrays", /** Verifies independently classifies original table ranges exceeding their physical arrays. @returns Nothing. */ () => {
   for (const [codec, table] of [aJIS0208DBCSHighTab, aKSC5601DBCSHighTab].entries()) {
     const undefinedUnits: number[] = [];
     for (let unit = 128; unit < 65536; unit++) {
@@ -92,7 +92,12 @@ it("independently classifies original table ranges exceeding their physical arra
 
 it.each(native.digests)(
   "matches original BMP outputs for codec $codec, capacity $capacity, flags $flags",
-  ({ codec, capacity, flags, hash }) => {
+  /** Verifies matches original BMP outputs for codec $codec, capacity $capacity, flags $flags. @param value0 - codec, capacity, flags, hash value. @returns Nothing. */ ({
+    codec,
+    capacity,
+    flags,
+    hash,
+  }) => {
     const undefinedUnits = new Set(native.undefinedUnits[codec]);
     let digest = 2166136261;
     for (let unit = 0; unit < 65536; unit++) {
@@ -112,7 +117,7 @@ it.each(native.digests)(
   },
 );
 
-it("matches original mixed, null-context and saved-state vectors", () => {
+it("matches original mixed, null-context and saved-state vectors", /** Verifies matches original mixed, null-context and saved-state vectors. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const { codec, input, seed, capacity, flags, ...result } = entry;
     expect(
@@ -128,7 +133,7 @@ it("matches original mixed, null-context and saved-state vectors", () => {
   }
 });
 
-it("preserves partial designations without consuming the pending character", () => {
+it("preserves partial designations without consuming the pending character", /** Verifies preserves partial designations without consuming the pending character. @returns Nothing. */ () => {
   expect(convert(0, [0x65e5], 3)).toEqual({
     written: 3,
     bytes: [0x1b, 0x24, 0x42],
@@ -151,7 +156,7 @@ it("preserves partial designations without consuming the pending character", () 
   ]);
 });
 
-it("keeps original reverse reset and null optional output contracts", () => {
+it("keeps original reverse reset and null optional output contracts", /** Verifies keeps original reverse reset and null optional output contracts. @returns Nothing. */ () => {
   const j = jp.ImplCreateUnicodeToIso2022JpContext(),
     k = kr.ImplCreateUnicodeToIso2022KrContext();
   j.m_nHighSurrogate = k.m_nHighSurrogate = 0xd800;

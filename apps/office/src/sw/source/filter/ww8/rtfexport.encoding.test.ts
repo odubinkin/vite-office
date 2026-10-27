@@ -12,11 +12,13 @@ import { RtfExport } from "./rtfexport";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { SwWW8AttrIter } from "./wrtw8nds";
 
-it("uses original font charset state only for non-associated font controls", () => {
+it("uses original font charset state only for non-associated font controls", /** Verifies uses original font charset state only for non-associated font controls. @returns Nothing. */ () => {
   const exporter = new RtfExport();
   const output = new RtfAttributeOutput(
-    () => 7,
-    () => 0,
+    /** Verifies uses original font charset state only for non-associated font controls. @returns Callback result. */ () =>
+      7,
+    /** Verifies uses original font charset state only for non-associated font controls. @returns Callback result. */ () =>
+      0,
     exporter,
   );
   const font = new SvxFontItem(
@@ -47,14 +49,14 @@ it("uses original font charset state only for non-associated font controls", () 
   output.OutputCharFontAssoc(unknown, false);
   expect(exporter.GetCurrentEncoding()).toBe(exporter.GetDefaultEncoding());
 });
-it("retains native snippet replacements on the original UTF16 slice", () => {
+it("retains native snippet replacements on the original UTF16 slice", /** Verifies retains native snippet replacements on the original UTF16 slice. @returns Nothing. */ () => {
   const owner = new SwWW8AttrIter();
   expect(owner.GetSnippet("xA\nB\u2011C\u00adD\u0001\u0000y", 1, 9)).toBe(
     "A\vB\u001eC\u001fD\u0000",
   );
   expect(owner.GetSnippet("A\n", 0, 0)).toBe("");
 });
-it("exports represented text through native snippet and byte fallback emission", () => {
+it("exports represented text through native snippet and byte fallback emission", /** Verifies exports represented text through native snippet and byte fallback emission. @returns Nothing. */ () => {
   const document = createWriterDocument();
   try {
     const node = document.paragraphs[0];
@@ -67,12 +69,15 @@ it("exports represented text through native snippet and byte fallback emission",
   }
 });
 
-it("writes complete native font groups with legacy names, alternate names and encoding reset", () => {
+it("writes complete native font groups with legacy names, alternate names and encoding reset", /** Verifies writes complete native font groups with legacy names, alternate names and encoding reset. @returns Nothing. */ () => {
   const exporter = new RtfExport();
   const fonts = new wwFontHelper();
   const output = new RtfAttributeOutput(
-    (font) => fonts.GetId(font),
-    () => 0,
+    /** Verifies writes complete native font groups with legacy names, alternate names and encoding reset. @param font - font value. @returns Callback result. */ (
+      font,
+    ) => fonts.GetId(font),
+    /** Verifies writes complete native font groups with legacy names, alternate names and encoding reset. @returns Callback result. */ () =>
+      0,
     exporter,
   );
   const font = new wwFont(
@@ -88,7 +93,7 @@ it("writes complete native font groups with legacy names, alternate names and en
   );
   expect(exporter.GetCurrentEncoding()).toBe(exporter.GetDefaultEncoding());
 });
-it("preserves distinct native FFN identities for equal family names in the real export table", () => {
+it("preserves distinct native FFN identities for equal family names in the real export table", /** Verifies preserves distinct native FFN identities for equal family names in the real export table. @returns Nothing. */ () => {
   const document = createWriterDocument();
   try {
     const node = document.paragraphs[0];
@@ -122,7 +127,7 @@ it("preserves distinct native FFN identities for equal family names in the real 
   }
 });
 
-it("retains original numbering-level first-code-unit emission for non-BMP and zero bullets", () => {
+it("retains original numbering-level first-code-unit emission for non-BMP and zero bullets", /** Verifies retains original numbering-level first-code-unit emission for non-BMP and zero bullets. @returns Nothing. */ () => {
   for (const [bullet, control] of [
     [0x1f600, "\\u-10179 ?"],
     [0, "\\u0 ?"],

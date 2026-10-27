@@ -120,99 +120,151 @@ export class SwAttrPool extends SfxItemPool {
     super();
     new SdrItemPool(this);
     /** Attaches represented package entries and their existing browser restore factories; unrepresented native classes are not fabricated. @param which - Native WhichId. @param factory - Snapshot restoration. @returns Nothing. */
-    const register = (which: number, factory?: SfxPoolItemFactory): void => {
-      this.RegisterDefaultItem(
-        rInfoPackage.getItemInfo(which - WriterWhich.RES_CHRATR_BEGIN, this),
-        factory,
-      );
-    };
-    register(WriterWhich.RES_TEXTGRID, (value) => {
-      if (!Array.isArray(value) || value.length !== 11)
-        throw new Error("SwTextGridItem snapshot is invalid.");
-      for (const index of [0, 1, 2, 3, 4, 8])
-        if (typeof value[index] !== "number" || !Number.isInteger(value[index]))
-          throw new Error("SwTextGridItem scalar is invalid.");
-      for (const index of [5, 6, 7, 9, 10])
-        if (typeof value[index] !== "boolean") throw new Error("SwTextGridItem flag is invalid.");
-      if (
-        value[0] < -2147483648 ||
-        value[0] > 2147483647 ||
-        value[1] < -32768 ||
-        value[1] > 32767 ||
-        value[4] < -2147483648 ||
-        value[4] > 2147483647 ||
-        [2, 3, 8].some(
-          /** Checks original unsigned16 fields. @param index - Field. @returns Invalid. */ (
-            index,
-          ) => value[index] < 0 || value[index] > 65535,
+    const register =
+      /** Evaluates the swatrset callback. @param which - which value. @param factory - factory value. @returns Nothing. */ (
+        which: number,
+        factory?: SfxPoolItemFactory,
+      ): void => {
+        this.RegisterDefaultItem(
+          rInfoPackage.getItemInfo(which - WriterWhich.RES_CHRATR_BEGIN, this),
+          factory,
+        );
+      };
+    register(
+      WriterWhich.RES_TEXTGRID,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        if (!Array.isArray(value) || value.length !== 11)
+          throw new Error("SwTextGridItem snapshot is invalid.");
+        for (const index of [0, 1, 2, 3, 4, 8])
+          if (typeof value[index] !== "number" || !Number.isInteger(value[index]))
+            throw new Error("SwTextGridItem scalar is invalid.");
+        for (const index of [5, 6, 7, 9, 10])
+          if (typeof value[index] !== "boolean") throw new Error("SwTextGridItem flag is invalid.");
+        if (
+          value[0] < -2147483648 ||
+          value[0] > 2147483647 ||
+          value[1] < -32768 ||
+          value[1] > 32767 ||
+          value[4] < -2147483648 ||
+          value[4] > 2147483647 ||
+          [2, 3, 8].some(
+            /** Checks original unsigned16 fields. @param index - Field. @returns Invalid. */ (
+              index,
+            ) => value[index] < 0 || value[index] > 65535,
+          )
         )
-      )
-        throw new Error("SwTextGridItem width is invalid.");
-      const item = new SwTextGridItem();
-      item.SetColor(new Color(ColorTransparency, value[0] >>> 0, "ColorTransparencyTag"));
-      item.SetLines(value[1]);
-      item.SetBaseHeight(value[2]);
-      item.SetRubyHeight(value[3]);
-      item.SetGridType(value[4]);
-      item.SetRubyTextBelow(value[5]);
-      item.SetPrintGrid(value[6]);
-      item.SetDisplayGrid(value[7]);
-      item.SetBaseWidth(value[8]);
-      item.SetSnapToChars(value[9]);
-      item.SetSquaredMode(value[10]);
-      return item;
-    });
-    register(RES_CHRATR_ESCAPEMENT, (value) => {
-      if (
-        typeof value !== "object" ||
-        Array.isArray(value) ||
-        !("offset" in value) ||
-        !("height" in value) ||
-        typeof value.offset !== "number" ||
-        typeof value.height !== "number"
-      )
-        throw new Error("Invalid escapement item state.");
-      return new SvxEscapementItem(value.offset, value.height, RES_CHRATR_ESCAPEMENT);
-    });
-    register(RES_PROTECT, (value) => {
-      const item = new SvxProtectItem(RES_PROTECT);
-      if (!Array.isArray(value)) throw new Error("Stored Writer protection is invalid.");
-      item.SetContentProtect(Boolean(value[0]));
-      item.SetSizeProtect(Boolean(value[1]));
-      item.SetPosProtect(Boolean(value[2]));
-      return item;
-    });
+          throw new Error("SwTextGridItem width is invalid.");
+        const item = new SwTextGridItem();
+        item.SetColor(new Color(ColorTransparency, value[0] >>> 0, "ColorTransparencyTag"));
+        item.SetLines(value[1]);
+        item.SetBaseHeight(value[2]);
+        item.SetRubyHeight(value[3]);
+        item.SetGridType(value[4]);
+        item.SetRubyTextBelow(value[5]);
+        item.SetPrintGrid(value[6]);
+        item.SetDisplayGrid(value[7]);
+        item.SetBaseWidth(value[8]);
+        item.SetSnapToChars(value[9]);
+        item.SetSquaredMode(value[10]);
+        return item;
+      },
+    );
+    register(
+      RES_CHRATR_ESCAPEMENT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        if (
+          typeof value !== "object" ||
+          Array.isArray(value) ||
+          !("offset" in value) ||
+          !("height" in value) ||
+          typeof value.offset !== "number" ||
+          typeof value.height !== "number"
+        )
+          throw new Error("Invalid escapement item state.");
+        return new SvxEscapementItem(value.offset, value.height, RES_CHRATR_ESCAPEMENT);
+      },
+    );
+    register(
+      RES_PROTECT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const item = new SvxProtectItem(RES_PROTECT);
+        if (!Array.isArray(value)) throw new Error("Stored Writer protection is invalid.");
+        item.SetContentProtect(Boolean(value[0]));
+        item.SetSizeProtect(Boolean(value[1]));
+        item.SetPosProtect(Boolean(value[2]));
+        return item;
+      },
+    );
     register(
       WriterWhich.RES_BOXATR_FORMAT,
-      (value) => new SwTableBoxNumFormat(Number(value) >>> 0),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwTableBoxNumFormat(Number(value) >>> 0),
     );
-    register(WriterWhich.RES_BOXATR_FORMULA, (value) => new SwTableBoxFormula(String(value)));
-    register(WriterWhich.RES_BOXATR_VALUE, (value) => new SwTableBoxValue(Number(value)));
+    register(
+      WriterWhich.RES_BOXATR_FORMULA,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwTableBoxFormula(String(value)),
+    );
+    register(
+      WriterWhich.RES_BOXATR_VALUE,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwTableBoxValue(Number(value)),
+    );
     register(RES_LR_SPACE, undefined);
     register(WriterWhich.RES_FRM_SIZE);
     register(WriterWhich.RES_VERT_ORIENT);
     register(WriterWhich.RES_HORI_ORIENT);
-    register(WriterWhich.RES_LAYOUT_SPLIT, (value) => new SwFormatLayoutSplit(Boolean(value)));
-    register(WriterWhich.RES_ROW_SPLIT, (value) => new SwFormatRowSplit(Boolean(value)));
-    register(RES_BOX, (value) => {
-      const item = new SvxBoxItem(RES_BOX);
-      if (!item.PutValue(value)) throw new Error("Stored Writer box is invalid.");
-      return item;
-    });
+    register(
+      WriterWhich.RES_LAYOUT_SPLIT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwFormatLayoutSplit(Boolean(value)),
+    );
+    register(
+      WriterWhich.RES_ROW_SPLIT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwFormatRowSplit(Boolean(value)),
+    );
+    register(
+      RES_BOX,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const item = new SvxBoxItem(RES_BOX);
+        if (!item.PutValue(value)) throw new Error("Stored Writer box is invalid.");
+        return item;
+      },
+    );
     register(
       RES_COLLAPSING_BORDERS,
-      (value) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxBoolItem(RES_COLLAPSING_BORDERS, Boolean(value)),
     );
     register(WriterWhich.RES_TXTATR_INETFMT);
     register(WriterWhich.RES_TXTATR_CHARFMT);
     register(
       WriterWhich.RES_PARATR_CONNECT_BORDER,
-      (value) => new SwParaConnectBorderItem(Boolean(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SwParaConnectBorderItem(Boolean(value)),
     );
     const device = document.GetDefaultFontDevice();
     register(
       RES_PARATR_OUTLINELEVEL,
-      (value) => new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, Number(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, Number(value)),
     );
     const locale = document.GetLocale();
     const defaults = new Map([
@@ -235,41 +287,46 @@ export class SwAttrPool extends SfxItemPool {
       ],
     ]);
     for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
-      register(which, (value) => {
-        if (typeof value === "string")
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => {
+          if (typeof value === "string")
+            return new SvxFontItem(
+              FontFamily.FAMILY_DONTKNOW,
+              value,
+              "",
+              FontPitch.PITCH_DONTKNOW,
+              RTL_TEXTENCODING_DONTKNOW,
+              which,
+            );
+          if (
+            typeof value !== "object" ||
+            value === null ||
+            Array.isArray(value) ||
+            !("familyName" in value) ||
+            typeof value.familyName !== "string" ||
+            !("styleName" in value) ||
+            typeof value.styleName !== "string" ||
+            !("family" in value) ||
+            typeof value.family !== "number" ||
+            !("pitch" in value) ||
+            typeof value.pitch !== "number" ||
+            !("charSet" in value) ||
+            typeof value.charSet !== "number"
+          )
+            throw new Error("Invalid font item state.");
           return new SvxFontItem(
-            FontFamily.FAMILY_DONTKNOW,
-            value,
-            "",
-            FontPitch.PITCH_DONTKNOW,
-            RTL_TEXTENCODING_DONTKNOW,
+            value.family,
+            value.familyName,
+            value.styleName,
+            value.pitch,
+            value.charSet,
             which,
           );
-        if (
-          typeof value !== "object" ||
-          value === null ||
-          Array.isArray(value) ||
-          !("familyName" in value) ||
-          typeof value.familyName !== "string" ||
-          !("styleName" in value) ||
-          typeof value.styleName !== "string" ||
-          !("family" in value) ||
-          typeof value.family !== "number" ||
-          !("pitch" in value) ||
-          typeof value.pitch !== "number" ||
-          !("charSet" in value) ||
-          typeof value.charSet !== "number"
-        )
-          throw new Error("Invalid font item state.");
-        return new SvxFontItem(
-          value.family,
-          value.familyName,
-          value.styleName,
-          value.pitch,
-          value.charSet,
-          which,
-        );
-      });
+        },
+      );
       this.SetUserDefaultItem(
         new SvxFontItem(
           FontFamily.FAMILY_DONTKNOW,
@@ -282,223 +339,324 @@ export class SwAttrPool extends SfxItemPool {
       );
     }
     for (const which of [RES_CHRATR_FONTSIZE, RES_CHRATR_CJK_FONTSIZE, RES_CHRATR_CTL_FONTSIZE])
-      register(which, (value) => {
-        if (
-          typeof value !== "object" ||
-          Array.isArray(value) ||
-          !("height" in value) ||
-          !("prop" in value) ||
-          !("propUnit" in value) ||
-          typeof value.height !== "number" ||
-          typeof value.prop !== "number" ||
-          typeof value.propUnit !== "number"
-        )
-          throw new Error("Invalid font-height item state.");
-        const item = new SvxFontHeightItem(value.height, 100, which);
-        item.SetProp(value.prop, value.propUnit);
-        return item;
-      });
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => {
+          if (
+            typeof value !== "object" ||
+            Array.isArray(value) ||
+            !("height" in value) ||
+            !("prop" in value) ||
+            !("propUnit" in value) ||
+            typeof value.height !== "number" ||
+            typeof value.prop !== "number" ||
+            typeof value.propUnit !== "number"
+          )
+            throw new Error("Invalid font-height item state.");
+          const item = new SvxFontHeightItem(value.height, 100, which);
+          item.SetProp(value.prop, value.propUnit);
+          return item;
+        },
+      );
     for (const which of [RES_CHRATR_LANGUAGE, RES_CHRATR_CJK_LANGUAGE, RES_CHRATR_CTL_LANGUAGE])
-      register(which, (value) => new SvxLanguageItem(LanguageType(Number(value)), which));
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => new SvxLanguageItem(LanguageType(Number(value)), which),
+      );
     for (const which of [RES_CHRATR_POSTURE, RES_CHRATR_CJK_POSTURE, RES_CHRATR_CTL_POSTURE])
-      register(which, (value) => new SvxPostureItem(Number(value) as FontItalic, which));
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => new SvxPostureItem(Number(value) as FontItalic, which),
+      );
     for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
-      register(which, (value) => new SvxWeightItem(Number(value) as FontWeight, which));
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => new SvxWeightItem(Number(value) as FontWeight, which),
+      );
     register(
       RES_CHRATR_WORDLINEMODE,
-      (value) => new SvxWordLineModeItem(Boolean(value), RES_CHRATR_WORDLINEMODE),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SvxWordLineModeItem(Boolean(value), RES_CHRATR_WORDLINEMODE),
     );
     register(
       RES_CHRATR_AUTOKERN,
-      (value) => new SvxAutoKernItem(Boolean(value), RES_CHRATR_AUTOKERN),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SvxAutoKernItem(Boolean(value), RES_CHRATR_AUTOKERN),
     );
     register(
       RES_CHRATR_CROSSEDOUT,
-      (value) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SvxCrossedOutItem(Number(value) as FontStrikeout, RES_CHRATR_CROSSEDOUT),
     );
     register(
       RES_CHRATR_UNDERLINE,
-      (value) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SvxUnderlineItem(Number(value) as FontLineStyle, RES_CHRATR_UNDERLINE),
     );
     register(RES_CHRATR_COLOR, createWriterTextColorItem);
     register(RES_CHRATR_HIGHLIGHT, createWriterHighlightItem);
     register(
       RES_BACKGROUND,
-      (value) => new SvxBrushItem(writerColorFromPrimitive(value, "transparent"), RES_BACKGROUND),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SvxBrushItem(writerColorFromPrimitive(value, "transparent"), RES_BACKGROUND),
     );
-    register(RES_PARATR_ADJUST, function restoreAdjust(value): SvxAdjustItem {
-      if (typeof value === "number")
-        return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
-      if (typeof value !== "object" || value === null || Array.isArray(value))
-        throw new Error("SvxAdjustItem value is invalid.");
-      const record = value as Record<string, unknown>;
-      if (
-        !Number.isInteger(record.adjust) ||
-        !Number.isInteger(record.lastLine) ||
-        typeof record.expandSingle !== "boolean" ||
-        typeof record.paragraphComposer !== "boolean" ||
-        !Number.isInteger(record.wordSpacing) ||
-        !Number.isInteger(record.wordSpacingMinimum) ||
-        !Number.isInteger(record.wordSpacingMaximum) ||
-        !Number.isInteger(record.letterSpacingMinimum) ||
-        !Number.isInteger(record.letterSpacingMaximum) ||
-        !Number.isInteger(record.scaleWidthMinimum) ||
-        !Number.isInteger(record.scaleWidthMaximum)
-      )
-        throw new Error("SvxAdjustItem value is invalid.");
-      const item = new SvxAdjustItem(record.adjust as SvxAdjust, RES_PARATR_ADJUST);
-      item.SetLastBlock(record.lastLine as SvxAdjust);
-      item.SetOneWord(record.expandSingle ? SvxAdjust.Block : SvxAdjust.Left);
-      item.SetParagraphComposer(record.paragraphComposer);
-      item.SetPropWordSpacing(record.wordSpacing as number);
-      item.SetPropWordSpacingMinimum(record.wordSpacingMinimum as number);
-      item.SetPropWordSpacingMaximum(record.wordSpacingMaximum as number);
-      item.SetPropLetterSpacingMinimum(record.letterSpacingMinimum as number);
-      item.SetPropLetterSpacingMaximum(record.letterSpacingMaximum as number);
-      item.SetPropScaleWidthMinimum(record.scaleWidthMinimum as number);
-      item.SetPropScaleWidthMaximum(record.scaleWidthMaximum as number);
-      return item;
-    });
-    register(RES_PARATR_TABSTOP, (value) => {
-      if (typeof value !== "object" || value === null || Array.isArray(value))
-        throw new Error("SvxTabStopItem value is invalid.");
-      const record = value as Record<string, unknown>;
-      if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
-        throw new Error("SvxTabStopItem value is invalid.");
-      const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
-      item.SetDefaultDistance(record.defaultDistance as number);
-      for (const entry of record.stops) {
-        if (typeof entry !== "object" || entry === null || Array.isArray(entry))
-          throw new Error("SvxTabStopItem tab value is invalid.");
-        const tab = entry as Record<string, unknown>;
-        if (
-          typeof tab.position !== "number" ||
-          typeof tab.adjustment !== "number" ||
-          typeof tab.decimal !== "string" ||
-          typeof tab.fill !== "string"
-        )
-          throw new Error("SvxTabStopItem tab value is invalid.");
-        const stop = new SvxTabStop(
-          tab.position,
-          tab.adjustment as SvxTabAdjust,
-          tab.decimal,
-          tab.fill,
-        );
-        // Stored state can contain a nul written after construction; restore the field,
-        // rather than reapplying the constructor's system-decimal resolution.
-        stop.GetDecimal(true)[0] = tab.decimal;
-        item.Insert(stop);
-      }
-      return item;
-    });
-    register(RES_MARGIN_TEXTLEFT, (value) => {
-      const margin = Number(value);
-      if (!Number.isInteger(margin)) throw new Error("SvxTextLeftMarginItem value is invalid.");
-      return new SvxTextLeftMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_TEXTLEFT);
-    });
-    register(RES_MARGIN_FIRSTLINE, (value) => {
-      const twips = Number(Array.isArray(value) ? value[0] : value);
-      if (!Number.isInteger(twips)) throw new Error("SvxFirstLineIndentItem value is invalid.");
-      const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(twips), RES_MARGIN_FIRSTLINE);
-      item.SetAutoFirst(Array.isArray(value) && value[1] === 1);
-      return item;
-    });
-    register(RES_MARGIN_RIGHT, (value) => {
-      const twips = Number(value);
-      if (!Number.isInteger(twips)) throw new Error("SvxRightMarginItem value is invalid.");
-      return new SvxRightMarginItem(SvxIndentValue.twips(twips), RES_MARGIN_RIGHT);
-    });
-    register(RES_UL_SPACE, (value) => {
-      if (!Array.isArray(value)) throw new Error("SvxULSpaceItem value is invalid.");
-      const upper = Number(value[0]),
-        lower = Number(value[1]);
-      if (
-        ![upper, lower].every(
-          /** Preserves prior tuple numeric coercion and integer/nonnegative admission at the browser boundary. @param field - Spacing field. @returns Whether admitted. */
-          (field) => Number.isInteger(field) && field >= 0,
-        )
-      )
-        throw new Error("SvxULSpaceItem value is invalid.");
-      const item = new SvxULSpaceItem(upper, lower, RES_UL_SPACE);
-      item.SetContextValue(value[2] === 1);
-      for (const index of [3, 4]) {
-        const field = value[index];
-        if (
-          field !== undefined &&
-          (typeof field !== "number" || !Number.isInteger(field) || field < 0 || field > 65535)
-        )
-          throw new Error("SvxULSpaceItem proportion is invalid.");
-      }
-      if (value[3] !== undefined) item.SetPropUpper(value[3] as number);
-      if (value[4] !== undefined) item.SetPropLower(value[4] as number);
-      return item;
-    });
-    register(RES_PARATR_LINESPACING, (value) => {
-      const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
-      if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+    register(
+      RES_PARATR_ADJUST,
+      /** Implements restoreAdjust for swatrset. @param value - value value. @returns Callback result. */ function restoreAdjust(
+        value,
+      ): SvxAdjustItem {
+        if (typeof value === "number")
+          return new SvxAdjustItem(value as SvxAdjust, RES_PARATR_ADJUST);
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxAdjustItem value is invalid.");
         const record = value as Record<string, unknown>;
-        for (const name of [
-          "nInterLineSpace",
-          "nLineHeight",
-          "nPropLineSpace",
-          "eLineSpaceRule",
-          "eInterLineSpaceRule",
-        ]) {
-          if (typeof record[name] !== "number" || !Number.isInteger(record[name]))
-            throw new Error("Stored Writer line-spacing field is invalid.");
-        }
-        item.SetInterLineSpace(record.nInterLineSpace as number);
-        item.SetLineHeight(record.nLineHeight as number);
-        item.SetPropLineSpace(record.nPropLineSpace as number);
-        item.SetLineSpaceRule(record.eLineSpaceRule as SvxLineSpaceRule);
-        item.SetInterLineSpaceRule(record.eInterLineSpaceRule as SvxInterLineSpaceRule);
-      } else {
-        const mode = Array.isArray(value) ? value[0] : 0;
-        const amount = Number(Array.isArray(value) ? value[1] : value);
         if (
-          !Number.isInteger(amount) ||
-          amount < 0 ||
-          amount > 65535 ||
-          ![0, 1, 2, 3].includes(Number(mode))
+          !Number.isInteger(record.adjust) ||
+          !Number.isInteger(record.lastLine) ||
+          typeof record.expandSingle !== "boolean" ||
+          typeof record.paragraphComposer !== "boolean" ||
+          !Number.isInteger(record.wordSpacing) ||
+          !Number.isInteger(record.wordSpacingMinimum) ||
+          !Number.isInteger(record.wordSpacingMaximum) ||
+          !Number.isInteger(record.letterSpacingMinimum) ||
+          !Number.isInteger(record.letterSpacingMaximum) ||
+          !Number.isInteger(record.scaleWidthMinimum) ||
+          !Number.isInteger(record.scaleWidthMaximum)
         )
-          throw new Error("Stored Writer line-spacing mode or value is invalid.");
-        if (mode === 0) item.SetPropLineSpace(amount);
-        else if (mode === 3) item.SetInterLineSpace(amount);
-        else {
-          item.SetLineHeight(amount);
-          if (mode === 1) item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+          throw new Error("SvxAdjustItem value is invalid.");
+        const item = new SvxAdjustItem(record.adjust as SvxAdjust, RES_PARATR_ADJUST);
+        item.SetLastBlock(record.lastLine as SvxAdjust);
+        item.SetOneWord(record.expandSingle ? SvxAdjust.Block : SvxAdjust.Left);
+        item.SetParagraphComposer(record.paragraphComposer);
+        item.SetPropWordSpacing(record.wordSpacing as number);
+        item.SetPropWordSpacingMinimum(record.wordSpacingMinimum as number);
+        item.SetPropWordSpacingMaximum(record.wordSpacingMaximum as number);
+        item.SetPropLetterSpacingMinimum(record.letterSpacingMinimum as number);
+        item.SetPropLetterSpacingMaximum(record.letterSpacingMaximum as number);
+        item.SetPropScaleWidthMinimum(record.scaleWidthMinimum as number);
+        item.SetPropScaleWidthMaximum(record.scaleWidthMaximum as number);
+        return item;
+      },
+    );
+    register(
+      RES_PARATR_TABSTOP,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        if (typeof value !== "object" || value === null || Array.isArray(value))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const record = value as Record<string, unknown>;
+        if (!Array.isArray(record.stops) || !Number.isInteger(record.defaultDistance))
+          throw new Error("SvxTabStopItem value is invalid.");
+        const item = new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP);
+        item.SetDefaultDistance(record.defaultDistance as number);
+        for (const entry of record.stops) {
+          if (typeof entry !== "object" || entry === null || Array.isArray(entry))
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const tab = entry as Record<string, unknown>;
+          if (
+            typeof tab.position !== "number" ||
+            typeof tab.adjustment !== "number" ||
+            typeof tab.decimal !== "string" ||
+            typeof tab.fill !== "string"
+          )
+            throw new Error("SvxTabStopItem tab value is invalid.");
+          const stop = new SvxTabStop(
+            tab.position,
+            tab.adjustment as SvxTabAdjust,
+            tab.decimal,
+            tab.fill,
+          );
+          // Stored state can contain a nul written after construction; restore the field,
+          // rather than reapplying the constructor's system-decimal resolution.
+          stop.GetDecimal(true)[0] = tab.decimal;
+          item.Insert(stop);
         }
-      }
-      return item;
-    });
+        return item;
+      },
+    );
+    register(
+      RES_MARGIN_TEXTLEFT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const margin = Number(value);
+        if (!Number.isInteger(margin)) throw new Error("SvxTextLeftMarginItem value is invalid.");
+        return new SvxTextLeftMarginItem(SvxIndentValue.twips(margin), RES_MARGIN_TEXTLEFT);
+      },
+    );
+    register(
+      RES_MARGIN_FIRSTLINE,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const twips = Number(Array.isArray(value) ? value[0] : value);
+        if (!Number.isInteger(twips)) throw new Error("SvxFirstLineIndentItem value is invalid.");
+        const item = new SvxFirstLineIndentItem(SvxIndentValue.twips(twips), RES_MARGIN_FIRSTLINE);
+        item.SetAutoFirst(Array.isArray(value) && value[1] === 1);
+        return item;
+      },
+    );
+    register(
+      RES_MARGIN_RIGHT,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const twips = Number(value);
+        if (!Number.isInteger(twips)) throw new Error("SvxRightMarginItem value is invalid.");
+        return new SvxRightMarginItem(SvxIndentValue.twips(twips), RES_MARGIN_RIGHT);
+      },
+    );
+    register(
+      RES_UL_SPACE,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        if (!Array.isArray(value)) throw new Error("SvxULSpaceItem value is invalid.");
+        const upper = Number(value[0]),
+          lower = Number(value[1]);
+        if (
+          ![upper, lower].every(
+            /** Preserves prior tuple numeric coercion and integer/nonnegative admission at the browser boundary. @param field - Spacing field. @returns Whether admitted. */
+            (field) => Number.isInteger(field) && field >= 0,
+          )
+        )
+          throw new Error("SvxULSpaceItem value is invalid.");
+        const item = new SvxULSpaceItem(upper, lower, RES_UL_SPACE);
+        item.SetContextValue(value[2] === 1);
+        for (const index of [3, 4]) {
+          const field = value[index];
+          if (
+            field !== undefined &&
+            (typeof field !== "number" || !Number.isInteger(field) || field < 0 || field > 65535)
+          )
+            throw new Error("SvxULSpaceItem proportion is invalid.");
+        }
+        if (value[3] !== undefined) item.SetPropUpper(value[3] as number);
+        if (value[4] !== undefined) item.SetPropLower(value[4] as number);
+        return item;
+      },
+    );
+    register(
+      RES_PARATR_LINESPACING,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => {
+        const item = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+        if (typeof value === "object" && value !== null && !Array.isArray(value)) {
+          const record = value as Record<string, unknown>;
+          for (const name of [
+            "nInterLineSpace",
+            "nLineHeight",
+            "nPropLineSpace",
+            "eLineSpaceRule",
+            "eInterLineSpaceRule",
+          ]) {
+            if (typeof record[name] !== "number" || !Number.isInteger(record[name]))
+              throw new Error("Stored Writer line-spacing field is invalid.");
+          }
+          item.SetInterLineSpace(record.nInterLineSpace as number);
+          item.SetLineHeight(record.nLineHeight as number);
+          item.SetPropLineSpace(record.nPropLineSpace as number);
+          item.SetLineSpaceRule(record.eLineSpaceRule as SvxLineSpaceRule);
+          item.SetInterLineSpaceRule(record.eInterLineSpaceRule as SvxInterLineSpaceRule);
+        } else {
+          const mode = Array.isArray(value) ? value[0] : 0;
+          const amount = Number(Array.isArray(value) ? value[1] : value);
+          if (
+            !Number.isInteger(amount) ||
+            amount < 0 ||
+            amount > 65535 ||
+            ![0, 1, 2, 3].includes(Number(mode))
+          )
+            throw new Error("Stored Writer line-spacing mode or value is invalid.");
+          if (mode === 0) item.SetPropLineSpace(amount);
+          else if (mode === 3) item.SetInterLineSpace(amount);
+          else {
+            item.SetLineHeight(amount);
+            if (mode === 1) item.SetLineSpaceRule(SvxLineSpaceRule.Fix);
+          }
+        }
+        return item;
+      },
+    );
     for (const which of [RES_PARATR_SPLIT, RES_KEEP, RES_LINENUMBER])
-      register(which, (value) => new SfxBoolItem(which, Boolean(value)));
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => new SfxBoolItem(which, Boolean(value)),
+      );
     for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]) {
-      register(which, (value) => new SfxInt16Item(which, Number(value)));
+      register(
+        which,
+        /** Applies register to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => new SfxInt16Item(which, Number(value)),
+      );
       this.SetUserDefaultItem(new SfxInt16Item(which, 2));
     }
-    register(RES_BREAK, (value) => new SfxInt16Item(RES_BREAK, Number(value)));
+    register(
+      RES_BREAK,
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxInt16Item(RES_BREAK, Number(value)),
+    );
     register(WriterWhich.RES_PAGEDESC);
-    register(WriterWhich.RES_PARATR_NUMRULE, function restoreNumRule(value): SwNumRuleItem {
-      return new SwNumRuleItem(String(value));
-    });
-    register(RES_PARATR_LIST_ID, function restoreListId(value): SfxStringItem {
-      return new SfxStringItem(RES_PARATR_LIST_ID, String(value));
-    });
-    register(RES_PARATR_LIST_LEVEL, function restoreListLevel(value): SfxInt16Item {
-      return new SfxInt16Item(RES_PARATR_LIST_LEVEL, Number(value));
-    });
+    register(
+      WriterWhich.RES_PARATR_NUMRULE,
+      /** Implements restoreNumRule for swatrset. @param value - value value. @returns Callback result. */ function restoreNumRule(
+        value,
+      ): SwNumRuleItem {
+        return new SwNumRuleItem(String(value));
+      },
+    );
+    register(
+      RES_PARATR_LIST_ID,
+      /** Implements restoreListId for swatrset. @param value - value value. @returns Callback result. */ function restoreListId(
+        value,
+      ): SfxStringItem {
+        return new SfxStringItem(RES_PARATR_LIST_ID, String(value));
+      },
+    );
+    register(
+      RES_PARATR_LIST_LEVEL,
+      /** Implements restoreListLevel for swatrset. @param value - value value. @returns Callback result. */ function restoreListLevel(
+        value,
+      ): SfxInt16Item {
+        return new SfxInt16Item(RES_PARATR_LIST_LEVEL, Number(value));
+      },
+    );
     register(
       RES_PARATR_LIST_ISRESTART,
-      (value) => new SfxBoolItem(RES_PARATR_LIST_ISRESTART, Boolean(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxBoolItem(RES_PARATR_LIST_ISRESTART, Boolean(value)),
     );
     register(
       RES_PARATR_LIST_RESTARTVALUE,
-      (value) => new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, Number(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, Number(value)),
     );
     register(
       RES_PARATR_LIST_ISCOUNTED,
-      (value) => new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, Boolean(value)),
+      /** Applies register to value. @param value - value value. @returns Callback result. */ (
+        value,
+      ) => new SfxBoolItem(RES_PARATR_LIST_ISCOUNTED, Boolean(value)),
     );
   }
 

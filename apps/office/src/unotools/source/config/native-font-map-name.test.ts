@@ -4,7 +4,7 @@ import native from "./font-map-name.native.json";
 import { FontSubstConfiguration, ImplFontAttrs } from "../../inc/fontcfg";
 import { FontWeight, FontWidth } from "../../../tools/inc/fontenum";
 
-it("matches native ordered stripping, exceptions, inout enums and unsigned type bits", () => {
+it("matches native ordered stripping, exceptions, inout enums and unsigned type bits", /** Verifies matches native ordered stripping, exceptions, inout enums and unsigned type bits. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const shortName: [string] = ["previous"],
       familyName: [string] = ["previous"],
@@ -21,11 +21,19 @@ it("matches native ordered stripping, exceptions, inout enums and unsigned type 
     );
     expect(
       {
-        shortName: Array.from({ length: shortName[0].length }, (_, i) =>
-          shortName[0].charCodeAt(i),
+        shortName: Array.from(
+          { length: shortName[0].length },
+          /** Verifies matches native ordered stripping, exceptions, inout enums and unsigned type bits. @param _ - _ value. @param i - i value. @returns Callback result. */ (
+            _,
+            i,
+          ) => shortName[0].charCodeAt(i),
         ),
-        familyName: Array.from({ length: familyName[0].length }, (_, i) =>
-          familyName[0].charCodeAt(i),
+        familyName: Array.from(
+          { length: familyName[0].length },
+          /** Verifies matches native ordered stripping, exceptions, inout enums and unsigned type bits. @param _ - _ value. @param i - i value. @returns Callback result. */ (
+            _,
+            i,
+          ) => familyName[0].charCodeAt(i),
         ),
         resultWeight: weight[0],
         resultWidth: width[0],
@@ -41,7 +49,7 @@ it("matches native ordered stripping, exceptions, inout enums and unsigned type 
     });
   }
 });
-it("loads all original configured attribute fields without applying them as font-name heuristics", () => {
+it("loads all original configured attribute fields without applying them as font-name heuristics", /** Verifies loads all original configured attribute fields without applying them as font-name heuristics. @returns Nothing. */ () => {
   const record = FontSubstConfiguration.get().getSubstInfo("LIBERATIONSANS");
   expect(record).toMatchObject({
     Name: "liberationsans",

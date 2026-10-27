@@ -29,12 +29,15 @@ class Observed extends SfxPoolItem {
     this.destroy();
   }
 }
-it("copies an already held shareable holder reference and destroys it only at the last release", () => {
+it("copies an already held shareable holder reference and destroys it only at the last release", /** Verifies copies an already held shareable holder reference and destroys it only at the last release. @returns Nothing. */ () => {
   const pool = new SfxItemPool();
   let destroyed = 0;
-  const source = new Observed(7, () => {
-      destroyed++;
-    }),
+  const source = new Observed(
+      7,
+      /** Verifies copies an already held shareable holder reference and destroys it only at the last release. @returns Nothing. */ () => {
+        destroyed++;
+      },
+    ),
     first = new SfxPoolItemHolder(pool, source),
     second = new SfxPoolItemHolder(first);
   expect(source.GetRefCount()).toBe(0);
@@ -46,15 +49,24 @@ it("copies an already held shareable holder reference and destroys it only at th
   second.Dispose();
   expect(destroyed).toBe(1);
 });
-it("cleans the old holder before acquiring the new holder as in the original assignment", () => {
+it("cleans the old holder before acquiring the new holder as in the original assignment", /** Verifies cleans the old holder before acquiring the new holder as in the original assignment. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     order: number[] = [];
-  const target = new SfxPoolItemHolder(pool, new Observed(2, () => {}));
+  const target = new SfxPoolItemHolder(
+    pool,
+    new Observed(
+      2,
+      /** Verifies cleans the old holder before acquiring the new holder as in the original assignment. @returns Nothing. */ () => {},
+    ),
+  );
   const value = new SfxPoolItemHolder(
     pool,
-    new Observed(1, () => {
-      order.push(target.getItem()?.GetRefCount() as number);
-    }),
+    new Observed(
+      1,
+      /** Verifies cleans the old holder before acquiring the new holder as in the original assignment. @returns Nothing. */ () => {
+        order.push(target.getItem()?.GetRefCount() as number);
+      },
+    ),
   );
   value.assign(target);
   expect(order).toEqual([1]);
@@ -62,14 +74,20 @@ it("cleans the old holder before acquiring the new holder as in the original ass
   value.Dispose();
   target.Dispose();
 });
-it("keeps the old map entry visible during native replacement and sentinel cleanup", () => {
+it("keeps the old map entry visible during native replacement and sentinel cleanup", /** Verifies keeps the old map entry visible during native replacement and sentinel cleanup. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     set = new SfxItemSet(pool, [[10, 10]]),
     seen: unknown[] = [];
-  const item = (value: number): Observed =>
-    new Observed(value, () => {
-      seen.push(set.GetItemIfSet(10, false)?.QueryValue());
-    });
+  const item =
+    /** Verifies keeps the old map entry visible during native replacement and sentinel cleanup. @param value - value value. @returns Callback result. */ (
+      value: number,
+    ): Observed =>
+      new Observed(
+        value,
+        /** Verifies keeps the old map entry visible during native replacement and sentinel cleanup. @returns Nothing. */ () => {
+          seen.push(set.GetItemIfSet(10, false)?.QueryValue());
+        },
+      );
   set.Put(item(7));
   set.Put(item(8));
   set.InvalidateItem(10);

@@ -8,7 +8,11 @@ const nodeStart = source.indexOf("namespace {"),
   nodeEnd = source.indexOf("/**\n * This static method");
 const poolStart = source.indexOf("class StylePoolImpl\n{"),
   poolEnd = source.indexOf("// Ctor, Dtor and redirected methods");
-if ([nodeStart, nodeEnd, poolStart, poolEnd].some((n) => n < 0))
+if (
+  [nodeStart, nodeEnd, poolStart, poolEnd].some(
+    /** Applies some to n. @param n - n value. @returns Callback result. */ (n) => n < 0,
+  )
+)
   throw Error("Missing original StylePool source markers");
 const target = "output/playwright/stylepool-native";
 const driver = String.raw`

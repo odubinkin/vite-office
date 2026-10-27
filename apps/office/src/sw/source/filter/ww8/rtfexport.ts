@@ -631,20 +631,39 @@ export class RtfExport {
       boundaries.add(Math.min(text.length, hint.end));
     }
     const iterator = new SwAttrIter(paragraph);
-    const ordered = [...boundaries].sort((left, right) => left - right);
+    const ordered = [...boundaries].sort(
+      /** Applies sort to left, right. @param left - left value. @param right - right value. @returns Callback result. */ (
+        left,
+        right,
+      ) => left - right,
+    );
     const runs: (WriterTextRun & { items: SfxItemSet })[] = [];
     for (let index = 0; index + 1 < ordered.length; index++) {
       const start = ordered[index] as number;
       const end = ordered[index + 1] as number;
       const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       items.SetParent(paragraph.GetSwAttrSet());
-      const active = hints.filter((hint) => hint.start <= start && end <= hint.end);
+      const active = hints.filter(
+        /** Applies filter to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
+          hint.start <= start && end <= hint.end,
+      );
       iterator.Seek(start);
       for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
         for (let which: number = first; which <= last; ++which)
-          if (active.some((hint) => CharFormat.IsItemIncluded(which, hint)))
+          if (
+            active.some(
+              /** Applies some to hint. @param hint - hint value. @returns Callback result. */ (
+                hint,
+              ) => CharFormat.IsItemIncluded(which, hint),
+            )
+          )
             items.Put(iterator.GetAttrHandler().ReadItem(which));
-      const inet = [...active].reverse().find((hint) => hint.format instanceof SwFormatINetFormat);
+      const inet = [...active]
+        .reverse()
+        .find(
+          /** Applies find to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
+            hint.format instanceof SwFormatINetFormat,
+        );
       runs.push({
         text: text.slice(start, end),
         items,

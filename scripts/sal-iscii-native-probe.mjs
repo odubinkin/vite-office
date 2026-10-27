@@ -21,13 +21,16 @@ const flags = [
     /^#define\s+(RTL_(?:TEXTTOUNICODE|UNICODETOTEXT)_[A-Z0-9_]+)\s+([^\n\\]+)$/gm,
   ),
 ]
-  .map((m) => `#define ${m[1]} ${m[2]}`)
+  .map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) =>
+      `#define ${m[1]} ${m[2]}`,
+  )
   .join("\n");
 const character = source("include/rtl/character.hxx");
 const characterConstants = [
   ...character.matchAll(/^sal_uInt32 const surrogates\w+ = 0x[\dA-F]+;$/gm),
 ]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const characterFunctions = [
   "isUnicodeCodePoint",
@@ -37,11 +40,13 @@ const characterFunctions = [
   "combineSurrogates",
   "isUnicodeScalarValue",
 ]
-  .map((name) => {
-    const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\([^}]+?\\}`));
-    if (!m) throw new Error(`Missing original character helper ${name}`);
-    return m[0];
-  })
+  .map(
+    /** Applies map to name. @param name - name value. @returns Callback result. */ (name) => {
+      const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\([^}]+?\\}`));
+      if (!m) throw new Error(`Missing original character helper ${name}`);
+      return m[0];
+    },
+  )
   .join("\n");
 const types = source("include/sal/types.h");
 const cast = types.match(
@@ -76,15 +81,26 @@ const originalFlags = new Map(
     ...source("include/rtl/textcvt.h").matchAll(
       /^#define\s+(RTL_UNICODETOTEXT_FLAGS_\w+)\s+\(\(sal_uInt32\)(0x[\dA-Fa-f]+)\)/gm,
     ),
-  ].map((m) => [m[1].slice("RTL_UNICODETOTEXT_FLAGS_".length), Number(m[2])]),
+  ].map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [
+      m[1].slice("RTL_UNICODETOTEXT_FLAGS_".length),
+      Number(m[2]),
+    ],
+  ),
 );
 /** Resolves original named flags without guessing numeric values. @param names - Source flag suffixes. @returns Combined original flag value. */
 function flag(...names) {
-  return names.reduce((value, name) => {
-    const next = originalFlags.get(name);
-    if (next === undefined) throw new Error(`Missing flag ${name}`);
-    return value | next;
-  }, 0);
+  return names.reduce(
+    /** Applies reduce to value, name. @param value - value value. @param name - name value. @returns Callback result. */ (
+      value,
+      name,
+    ) => {
+      const next = originalFlags.get(name);
+      if (next === undefined) throw new Error(`Missing flag ${name}`);
+      return value | next;
+    },
+    0,
+  );
 }
 const nativeFlags = [
   0,
@@ -126,10 +142,10 @@ ${converters}
 ${iscii}
 static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4;++i){hash^=(value>>(8*i))&255;hash*=16777619u;}return hash;}
 int main(){std::cout<<"{\"digests\":[";bool comma=false;
-for(unsigned flags: {${nativeFlags.map((f) => `${f}u`).join(",")}})for(unsigned capacity=0;capacity<=3;++capacity){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){sal_Unicode input=sal_Unicode(unit);char out[16]{};UnicodeToIsciiDevanagari context;sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplConvertUnicodeToIsciiDevanagari(nullptr,&context,&input,1,out,capacity,flags,&info,&consumed);for(unsigned v:{unit,unsigned(n),info,unsigned(consumed),unsigned(context.m_cPrevChar),unsigned(context.m_cHighSurrogate)})hash=mix(hash,v);for(sal_Size i=0;i<n;++i)hash=mix(hash,static_cast<unsigned char>(out[i]));}if(comma)std::cout<<',';comma=true;std::cout<<"{\"flags\":"<<flags<<",\"capacity\":"<<capacity<<",\"hash\":"<<hash<<"}";}
-std::vector<std::vector<sal_Unicode>> inputs={${inputs.map((units) => `{${units.join(",")}}`).join(",")}};unsigned seeds[][2]={${seeds.map((seed) => `{${seed.join(",")}}`).join(",")}};
+for(unsigned flags: {${nativeFlags.map(/** Applies map to f. @param f - f value. @returns Callback result. */ (f) => `${f}u`).join(",")}})for(unsigned capacity=0;capacity<=3;++capacity){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){sal_Unicode input=sal_Unicode(unit);char out[16]{};UnicodeToIsciiDevanagari context;sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplConvertUnicodeToIsciiDevanagari(nullptr,&context,&input,1,out,capacity,flags,&info,&consumed);for(unsigned v:{unit,unsigned(n),info,unsigned(consumed),unsigned(context.m_cPrevChar),unsigned(context.m_cHighSurrogate)})hash=mix(hash,v);for(sal_Size i=0;i<n;++i)hash=mix(hash,static_cast<unsigned char>(out[i]));}if(comma)std::cout<<',';comma=true;std::cout<<"{\"flags\":"<<flags<<",\"capacity\":"<<capacity<<",\"hash\":"<<hash<<"}";}
+std::vector<std::vector<sal_Unicode>> inputs={${inputs.map(/** Applies map to units. @param units - units value. @returns Callback result. */ (units) => `{${units.join(",")}}`).join(",")}};unsigned seeds[][2]={${seeds.map(/** Applies map to seed. @param seed - seed value. @returns Callback result. */ (seed) => `{${seed.join(",")}}`).join(",")}};
 std::cout<<"],\"cases\":[";comma=false;
-for(unsigned index=0;index<inputs.size();++index)for(unsigned seed=0;seed<3;++seed)for(unsigned capacity: {0u,1u,2u,3u,16u})for(unsigned flags: {${nativeFlags.map((f) => `${f}u`).join(",")}}){auto const& input=inputs[index];char out[32]{};UnicodeToIsciiDevanagari context;context.m_cPrevChar=seeds[seed][0];context.m_cHighSurrogate=seeds[seed][1];sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplConvertUnicodeToIsciiDevanagari(nullptr,&context,input.data(),input.size(),out,capacity,flags,&info,&consumed);if(comma)std::cout<<',';comma=true;std::cout<<"{\"input\":"<<index<<",\"seed\":"<<seed<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"written\":"<<n<<",\"info\":"<<info<<",\"consumed\":"<<consumed<<",\"context\":["<<unsigned(context.m_cPrevChar)<<','<<unsigned(context.m_cHighSurrogate)<<"],\"bytes\":[";for(sal_Size i=0;i<n;++i){if(i)std::cout<<',';std::cout<<unsigned(static_cast<unsigned char>(out[i]));}std::cout<<"]}";}std::cout<<"]}\n";}
+for(unsigned index=0;index<inputs.size();++index)for(unsigned seed=0;seed<3;++seed)for(unsigned capacity: {0u,1u,2u,3u,16u})for(unsigned flags: {${nativeFlags.map(/** Applies map to f. @param f - f value. @returns Callback result. */ (f) => `${f}u`).join(",")}}){auto const& input=inputs[index];char out[32]{};UnicodeToIsciiDevanagari context;context.m_cPrevChar=seeds[seed][0];context.m_cHighSurrogate=seeds[seed][1];sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplConvertUnicodeToIsciiDevanagari(nullptr,&context,input.data(),input.size(),out,capacity,flags,&info,&consumed);if(comma)std::cout<<',';comma=true;std::cout<<"{\"input\":"<<index<<",\"seed\":"<<seed<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"written\":"<<n<<",\"info\":"<<info<<",\"consumed\":"<<consumed<<",\"context\":["<<unsigned(context.m_cPrevChar)<<','<<unsigned(context.m_cHighSurrogate)<<"],\"bytes\":[";for(sal_Size i=0;i<n;++i){if(i)std::cout<<',';std::cout<<unsigned(static_cast<unsigned char>(out[i]));}std::cout<<"]}";}std::cout<<"]}\n";}
 `;
 mkdirSync(target, { recursive: true });
 writeFileSync(`${target}/probe.cxx`, driver);

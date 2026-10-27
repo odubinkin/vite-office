@@ -294,24 +294,35 @@ it("applies native Unicode replacement prefixes and undefined-character flag ove
     offset: [number] = [0],
     info: [number] = [0],
     written: [boolean] = [true];
-  const call = (undefinedInput: boolean, scalar: number, flags: number, capacity: number) => {
-    offset[0] = 0;
-    info[0] = 0;
-    written[0] = true;
-    const action = handleBadInputUnicodeToTextConversion(
-      undefinedInput,
-      scalar,
-      flags,
-      bytes,
-      offset,
-      capacity,
-      info,
-      Uint8Array.of(27, 65),
-      2,
-      written,
-    );
-    return { action, bytes: [...bytes.subarray(0, offset[0])], info: info[0], written: written[0] };
-  };
+  const call =
+    /** Verifies applies native Unicode replacement prefixes and undefined-character flag overrides. @param undefinedInput - undefinedInput value. @param scalar - scalar value. @param flags - flags value. @param capacity - capacity value. @returns Callback result. */ (
+      undefinedInput: boolean,
+      scalar: number,
+      flags: number,
+      capacity: number,
+    ) => {
+      offset[0] = 0;
+      info[0] = 0;
+      written[0] = true;
+      const action = handleBadInputUnicodeToTextConversion(
+        undefinedInput,
+        scalar,
+        flags,
+        bytes,
+        offset,
+        capacity,
+        info,
+        Uint8Array.of(27, 65),
+        2,
+        written,
+      );
+      return {
+        action,
+        bytes: [...bytes.subarray(0, offset[0])],
+        info: info[0],
+        written: written[0],
+      };
+    };
   expect(call(false, 0, 0, 2)).toEqual({
     action: BadInputConversionAction.NO_OUTPUT,
     bytes: [],

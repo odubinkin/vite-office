@@ -1,6 +1,6 @@
 /** @fileoverview Pinned htmlkywd.cxx token/option/entity/color tables and exact lookup predicates. */
 import { HtmlTokenId, HtmlOptionId } from "../../inc/htmltokn";
-import data from "./htmlkywd-data.json";
+import data from "./htmlkywd-data.json" with { type: "json" };
 /** Source UTF-16 lower_bound lookup. @param table - Native sorted entries. @param name - Exact key. @param missing - Native missing sentinel. @returns Numeric value. */
 function search(
   table: readonly (readonly (string | number)[])[],

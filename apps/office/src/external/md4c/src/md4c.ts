@@ -42,7 +42,10 @@ export function md_parse<U>(
     marks: [],
     n_marks: 0,
     mark_char_map: new Uint8Array(256),
-    opener_stacks: Array.from({ length: 16 }, () => ({ top: -1 })),
+    opener_stacks: Array.from(
+      { length: 16 },
+      /** Applies from to . @returns Callback result. */ () => ({ top: -1 }),
+    ),
     ptr_stack: { top: -1 },
     n_table_cell_boundaries: 0,
     table_cell_boundaries_head: -1,

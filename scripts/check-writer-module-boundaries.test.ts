@@ -11,7 +11,7 @@ it("admits the native Writer UNO helper dependency and rejects its reverse", /**
   expect(isForbiddenModuleEdge("cppuhelper", "sw")).toBe(true);
 });
 
-it("classifies the pinned md4c parser as a native external mechanism", () => {
+it("classifies the pinned md4c parser as a native external mechanism", /** Verifies classifies the pinned md4c parser as a native external mechanism. @returns Nothing. */ () => {
   expect(getRuntimeOwnershipLayer("external/md4c/src/md4c.attribute.ts")).toBe(
     "upstream-mechanism",
   );
@@ -24,7 +24,7 @@ it("classifies the pinned md4c parser as a native external mechanism", () => {
   ).toBeDefined();
 });
 
-it("admits only the native Writer default-bullet VCL value owner", () => {
+it("admits only the native Writer default-bullet VCL value owner", /** Verifies admits only the native Writer default-bullet VCL value owner. @returns Nothing. */ () => {
   expect(
     isForbiddenDomainVclImport("sw/source/core/doc/number-bullet.ts", "vcl/source/font/font.ts"),
   ).toBe(false);
@@ -39,7 +39,7 @@ it("admits only the native Writer default-bullet VCL value owner", () => {
   );
 });
 
-it("admits only source-proven global default package reads across the native module boundary", () => {
+it("admits only source-proven global default package reads across the native module boundary", /** Verifies admits only source-proven global default package reads across the native module boundary. @returns Nothing. */ () => {
   for (const source of ["sw/source/core/doc/doc.ts", "sw/source/core/attr/hints.ts"])
     expect(
       getRuntimeOwnershipViolation(

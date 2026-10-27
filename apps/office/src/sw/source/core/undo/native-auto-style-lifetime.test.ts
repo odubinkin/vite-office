@@ -32,15 +32,23 @@ function fontSet(doc: SwDoc, name = "Undo Font"): SfxItemSet {
 /** Reads the source font collector, including used automatic styles. @param doc - Actual document. @returns Font names. */
 function names(doc: SwDoc): string[] {
   const result: string[] = [];
-  doc.ForEachCharacterFontItem(RES_CHRATR_FONT, false, (font) => {
-    result.push(font.GetFamilyName());
-    return true;
-  });
+  doc.ForEachCharacterFontItem(
+    RES_CHRATR_FONT,
+    false,
+    /** Applies ForEachCharacterFontItem to font. @param font - font value. @returns Callback result. */ (
+      font,
+    ) => {
+      result.push(font.GetFamilyName());
+      return true;
+    },
+  );
   return result;
 }
 it.each(["dispose", "rollback", "temporary"])(
   "releases native history-held styles through %s",
-  (mode) => {
+  /** Verifies releases native history-held styles through %s. @param mode - mode value. @returns Nothing. */ (
+    mode,
+  ) => {
     const doc = new SwDoc(),
       history = new SwHistory();
     try {
@@ -73,7 +81,7 @@ it.each(["dispose", "rollback", "temporary"])(
     }
   },
 );
-it("moves unique history entries without keeping a reference in the source history", () => {
+it("moves unique history entries without keeping a reference in the source history", /** Verifies moves unique history entries without keeping a reference in the source history. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     source = new SwHistory(),
     target = new SwHistory();
@@ -98,35 +106,48 @@ it("moves unique history entries without keeping a reference in the source histo
     doc.Dispose();
   }
 });
-it.each([false, true])("clears insertion history after real redo and grouping=%s", (group) => {
-  const doc = new SwDoc();
-  try {
-    const node = doc.paragraphs[0];
-    assert(node);
-    const items = fontSet(doc),
-      state = createWriterCollapsedCursorState(node, 0, items);
-    const context: SwUndoRedoContext = { GetDoc: () => doc, RestoreCursor: () => {} };
-    const first = createWriterInsertTextAction(node, 0, "A", items, "word", state, state);
-    first.RedoWithContext(context);
-    doc.GetUndoManager().AddUndoAction(first, true);
-    if (group) {
-      const second = createWriterInsertTextAction(node, 1, "B", items, "word", state, state);
-      second.RedoWithContext(context);
-      doc.GetUndoManager().AddUndoAction(second, true);
+it.each([false, true])(
+  "clears insertion history after real redo and grouping=%s",
+  /** Verifies clears insertion history after real redo and grouping=%s. @param group - group value. @returns Nothing. */ (
+    group,
+  ) => {
+    const doc = new SwDoc();
+    try {
+      const node = doc.paragraphs[0];
+      assert(node);
+      const items = fontSet(doc),
+        state = createWriterCollapsedCursorState(node, 0, items);
+      const context: SwUndoRedoContext = {
+        GetDoc:
+          /** Verifies clears insertion history after real redo and grouping=%s. @returns Callback result. */ () =>
+            doc,
+        RestoreCursor:
+          /** Verifies clears insertion history after real redo and grouping=%s. @returns Nothing. */ () => {},
+      };
+      const first = createWriterInsertTextAction(node, 0, "A", items, "word", state, state);
+      first.RedoWithContext(context);
+      doc.GetUndoManager().AddUndoAction(first, true);
+      if (group) {
+        const second = createWriterInsertTextAction(node, 1, "B", items, "word", state, state);
+        second.RedoWithContext(context);
+        doc.GetUndoManager().AddUndoAction(second, true);
+      }
+      node.ClearSwpHintsArr(true);
+      expect(names(doc)).toEqual(["Undo Font"]);
+      doc.GetUndoManager().DelAllUndoObj();
+      expect(names(doc)).toEqual([]);
+      state.pendingCharacterItems.Dispose();
+      items.Dispose();
+    } finally {
+      doc.Dispose();
     }
-    node.ClearSwpHintsArr(true);
-    expect(names(doc)).toEqual(["Undo Font"]);
-    doc.GetUndoManager().DelAllUndoObj();
-    expect(names(doc)).toEqual([]);
-    state.pendingCharacterItems.Dispose();
-    items.Dispose();
-  } finally {
-    doc.Dispose();
-  }
-});
+  },
+);
 it.each([false, true])(
   "destroys retained undo-node resources only when disconnected, restored=%s",
-  (restored) => {
+  /** Verifies destroys retained undo-node resources only when disconnected, restored=%s. @param restored - restored value. @returns Nothing. */ (
+    restored,
+  ) => {
     const doc = new SwDoc();
     try {
       const first = doc.paragraphs[0];
@@ -147,7 +168,7 @@ it.each([false, true])(
     }
   },
 );
-it("does not leave temporary owners behind after slice, shift, concatenate and replacement", () => {
+it("does not leave temporary owners behind after slice, shift, concatenate and replacement", /** Verifies does not leave temporary owners behind after slice, shift, concatenate and replacement. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     const node = doc.paragraphs[0];
@@ -171,7 +192,7 @@ it("does not leave temporary owners behind after slice, shift, concatenate and r
   }
 });
 
-it("releases styles retained by real selected shell formatting and undo", () => {
+it("releases styles retained by real selected shell formatting and undo", /** Verifies releases styles retained by real selected shell formatting and undo. @returns Nothing. */ () => {
   const session = createWriterDocumentSession();
   try {
     const shell = session.view.GetWrtShell(),
@@ -198,7 +219,7 @@ it("releases styles retained by real selected shell formatting and undo", () => 
     session.Close();
   }
 });
-it("releases reduced automatic styles after a selective native attribute reset", () => {
+it("releases reduced automatic styles after a selective native attribute reset", /** Verifies releases reduced automatic styles after a selective native attribute reset. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     const node = doc.paragraphs[0];

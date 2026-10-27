@@ -7,9 +7,7 @@
   "cases": [
     {
       "label": "shared-used",
-      "ids": [
-        1
-      ]
+      "ids": [1]
     },
     {
       "label": "shared-unused",
@@ -17,33 +15,23 @@
     },
     {
       "label": "cache-includes-unused",
-      "ids": [
-        1
-      ]
+      "ids": [1]
     },
     {
       "label": "nonshareable-newest-used",
-      "ids": [
-        13
-      ]
+      "ids": [13]
     },
     {
       "label": "nonshareable-previous-used",
-      "ids": [
-        12
-      ]
+      "ids": [12]
     },
     {
       "label": "nonshareable-first-used",
-      "ids": [
-        11
-      ]
+      "ids": [11]
     },
     {
       "label": "cache-one-used-representative",
-      "ids": [
-        11
-      ]
+      "ids": [11]
     },
     {
       "label": "nonshareable-all-unused",
@@ -51,42 +39,27 @@
     },
     {
       "label": "cache-last-unused-representative",
-      "ids": [
-        13
-      ]
+      "ids": [13]
     },
     {
       "label": "ignorable-first-used",
-      "ids": [
-        21
-      ]
+      "ids": [21]
     },
     {
       "label": "ignorable-next-used",
-      "ids": [
-        22
-      ]
+      "ids": [22]
     },
     {
       "label": "root-only-ignorable-omitted",
-      "ids": [
-        22
-      ]
+      "ids": [22]
     },
     {
       "label": "cache-contains-ignorable-paths",
-      "ids": [
-        21,
-        22,
-        23
-      ]
+      "ids": [21, 22, 23]
     },
     {
       "label": "named-parent-order",
-      "ids": [
-        32,
-        31
-      ]
+      "ids": [32, 31]
     }
   ]
 }

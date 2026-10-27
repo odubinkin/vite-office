@@ -1,4 +1,4 @@
-/** @fileoverview Native automatic-character StylePool/cache ownership from pinned swstylemanager.cxx; the paragraph pool remains outside the represented slice. */
+/** @fileoverview Native automatic-style family routing and StylePool/cache ownership from pinned swstylemanager.cxx. */
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   StylePool,
@@ -45,7 +45,7 @@ class SwStyleManager implements IStyleAccess {
   constructor(ignorableParagraphItems?: SfxItemSet) {
     this.autoParaPool = new StylePool(ignorableParagraphItems);
   }
-  /** Original insertion through the represented native character pool. @param set - Concrete items. @param family - Character family. @param parentName - Optional native parent name. @returns Owned shared pointee. */
+  /** Original insertion through the native family pool. @param set - Concrete items. @param family - Automatic-style family. @param parentName - Optional native parent name. @returns Owned shared pointee. */
   getAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily, parentName?: string): SfxItemSet {
     if (family === SwAutoStyleFamily.AUTO_STYLE_PARA && !(set instanceof SwAttrSet))
       throw new Error("assert paragraph automatic style requires SwAttrSet");
@@ -53,14 +53,14 @@ class SwStyleManager implements IStyleAccess {
       family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool;
     return pool.insertItemSet(set, parentName);
   }
-  /** Original insert/cache/return sequence. @param set - Concrete items. @param family - Character family. @returns Owned shared pointee. */
+  /** Original insert/cache/return sequence. @param set - Concrete items. @param family - Automatic-style family. @returns Owned shared pointee. */
   cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily): SfxItemSet {
     const style = this.getAutomaticStyle(set, family);
     const cache = family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.charCache : this.paraCache;
     cache.addStyleName(style);
     return style;
   }
-  /** Original uncached-name fallback populates the complete pool without replacing its representative-selection policy. @param name - Opaque identity. @param family - Character family. @returns Owned shared pointee or empty. */
+  /** Original uncached-name fallback populates the complete pool without replacing its representative-selection policy. @param name - Opaque identity. @param family - Automatic-style family. @returns Owned shared pointee or empty. */
   getByName(name: string, family: SwAutoStyleFamily): SfxItemSet | undefined {
     const pool =
         family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool,
@@ -80,7 +80,7 @@ class SwStyleManager implements IStyleAccess {
     }
     return style;
   }
-  /** Original used-style delegation. @param output - Owning shared-pointer vector. @param family - Character family. @returns Nothing. */
+  /** Original used-style delegation. @param output - Owning shared-pointer vector. @param family - Automatic-style family. @returns Nothing. */
   getAllStyles(output: SfxItemSet[], family: SwAutoStyleFamily): void {
     const pool =
       family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool;

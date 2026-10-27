@@ -6,7 +6,11 @@ import { SwAutoStyleFamily as F } from "../../../inc/istyleaccess";
 import { SwAttrSet } from "../attr/swatrset";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
-import { StylePool } from "../../../../svl/source/items/stylepool";
+import {
+  StylePool,
+  releaseStyleHandle,
+  styleHandleUseCount,
+} from "../../../../svl/source/items/stylepool";
 import {
   RES_PARATR_LIST_BEGIN,
   RES_PARATR_LIST_END,
@@ -92,4 +96,33 @@ it("retains generic paragraph subtype assertions and the shared non-character ca
   const uncachedManager = createStyleManager(),
     uncached = uncachedManager.getAutomaticStyle(generic, F.AUTO_STYLE_NOTXT);
   expect(uncachedManager.getByName(StylePool.nameOf(uncached), F.AUTO_STYLE_RUBY)).toBe(uncached);
+});
+
+it("enumerates both family pools and releases their cache ownership independently", /** Merged family routing retains the Writer shared-pointer contract for both pools. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    access = createStyleManager(),
+    input = new SwAttrSet(doc.GetAttrPool(), [[RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1]]);
+  input.Put(new SfxInt16Item(RES_PARATR_LIST_LEVEL, 6));
+  const char = access.cacheAutomaticStyle(input, F.AUTO_STYLE_CHAR),
+    para = access.cacheAutomaticStyle(input, F.AUTO_STYLE_PARA),
+    characters: SfxItemSet[] = [],
+    paragraphs: SfxItemSet[] = [];
+  expect(styleHandleUseCount(char)).toBe(3);
+  expect(styleHandleUseCount(para)).toBe(3);
+  access.getAllStyles(characters, F.AUTO_STYLE_CHAR);
+  access.getAllStyles(paragraphs, F.AUTO_STYLE_NOTXT);
+  expect(characters).toEqual([char]);
+  expect(paragraphs).toEqual([para]);
+  access.clearCaches();
+  expect(styleHandleUseCount(char)).toBe(3);
+  expect(styleHandleUseCount(para)).toBe(3);
+  releaseStyleHandle(characters[0] as SfxItemSet);
+  releaseStyleHandle(paragraphs[0] as SfxItemSet);
+  access.Dispose();
+  expect(styleHandleUseCount(char)).toBe(1);
+  expect(styleHandleUseCount(para)).toBe(1);
+  expect(para.Get(RES_PARATR_LIST_LEVEL).QueryValue()).toBe(6);
+  releaseStyleHandle(char);
+  releaseStyleHandle(para);
+  input.Dispose();
 });

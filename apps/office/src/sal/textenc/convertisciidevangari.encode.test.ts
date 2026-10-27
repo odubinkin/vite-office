@@ -52,7 +52,11 @@ function mix(hash: number, value: number): number {
 
 it.each(native.digests)(
   "matches native BMP conversion at capacity $capacity, flags $flags",
-  ({ capacity, flags, hash }) => {
+  /** Verifies matches native BMP conversion at capacity $capacity, flags $flags. @param value0 - capacity, flags, hash value. @returns Nothing. */ ({
+    capacity,
+    flags,
+    hash,
+  }) => {
     let digest = 2166136261;
     for (let unit = 0; unit < 65536; unit++) {
       const result = convert([unit], capacity, flags);
@@ -70,7 +74,7 @@ it.each(native.digests)(
   },
 );
 
-it("matches native multicharacter and saved-context vectors", () => {
+it("matches native multicharacter and saved-context vectors", /** Verifies matches native multicharacter and saved-context vectors. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const { input, seed, capacity, flags, ...result } = entry;
     expect(
@@ -80,7 +84,7 @@ it("matches native multicharacter and saved-context vectors", () => {
   }
 });
 
-it("preserves native pending-surrogate FLUSH behavior and source accounting", () => {
+it("preserves native pending-surrogate FLUSH behavior and source accounting", /** Verifies preserves native pending-surrogate FLUSH behavior and source accounting. @returns Nothing. */ () => {
   expect(convert([0xd800], 2, flags.RTL_UNICODETOTEXT_FLAGS_FLUSH)).toEqual({
     written: 0,
     bytes: [],
@@ -108,7 +112,7 @@ it("preserves native pending-surrogate FLUSH behavior and source accounting", ()
   });
 });
 
-it("resets the original reverse context and accepts null output pointers", () => {
+it("resets the original reverse context and accepts null output pointers", /** Verifies resets the original reverse context and accepts null output pointers. @returns Nothing. */ () => {
   const context = ImplCreateUnicodeToIsciiDevanagariContext();
   context.m_cPrevChar = 0x94d;
   context.m_cHighSurrogate = 0xd800;

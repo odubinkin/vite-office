@@ -1,6 +1,6 @@
 /** @fileoverview Original ICU78.3 uloc.cpp legacy subtag parser over explicit narrow-byte string views and optional append sinks. No Locale normalization, BCP47 conversion, default locale or calendar service is substituted here. */
 import { asByteSink } from "./bytestream";
-import data from "../data/misc/uloc.json";
+import data from "../data/misc/uloc.json" with { type: "json" };
 import { UErrorCode, U_FAILURE } from "./unicode/utypes";
 /** Original consumed append-only projection of the shared ByteSink contract. */
 export type { ByteStringSink as LocaleByteSink } from "./unicode/bytestream";

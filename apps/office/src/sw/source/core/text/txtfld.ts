@@ -58,8 +58,11 @@ export function resolveSwNumberPortionFont(
   const font = (style?.GetItemIfSet(RES_CHRATR_FONT) ??
     node.GetAttr(RES_CHRATR_FONT)) as SvxFontItem;
   /** Native SetDiffFnt overlays explicit character-style items after paragraph resets. @param which - Native WhichId. @param resetItem - Optional reset value. @returns Effective item. */
-  const effective = (which: number, resetItem?: ReturnType<SwTextNode["GetAttr"]>) =>
-    style?.GetItemIfSet(which) ?? resetItem ?? node.GetAttr(which);
+  const effective =
+    /** Evaluates the txtfld callback. @param which - which value. @param resetItem - resetItem value. @returns Callback result. */ (
+      which: number,
+      resetItem?: ReturnType<SwTextNode["GetAttr"]>,
+    ) => style?.GetItemIfSet(which) ?? resetItem ?? node.GetAttr(which);
   const bulletFont = bullet ? format.GetBulletFont() : undefined;
   const generic = bulletFont === undefined ? getFontFamilyGeneric(font.GetFamily()) : undefined;
   return Object.freeze({

@@ -2,7 +2,7 @@
  * @fileoverview Declares the complete built-in Writer paragraph-style pool from the pinned
  * LibreOffice `sw/inc/poolfmt.hxx` and `SwStyleNameMapper.cxx` tables.
  */
-import characterPool from "./charpool-data.json";
+import characterPool from "./charpool-data.json" with { type: "json" };
 
 /** Original non-paragraph format marker. */
 export const POOLGRP_NOCOLLID = 1 << 10;

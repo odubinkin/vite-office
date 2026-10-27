@@ -21,7 +21,7 @@ import { SwDocShell } from "./docsh";
 }
 
 describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ () => {
-  it("opens Markdown atomically through the native reader", /** Checks invalid UTF-8 does not replace the current model. @returns Nothing. */ () => {
+  it("opens Markdown atomically through the native reader", /** Keeps rejected empty input atomic while retaining native replacement decoding for invalid UTF-8. @returns Nothing. */ () => {
     const shell = makeShell();
     const original = shell.GetDoc();
     const metadata = createDocument({ id: "markdown", suiteId: "writer", title: "Markdown" });
@@ -34,14 +34,19 @@ describe("SwDocShell", /** Groups SwDocShell. @returns Test callback result. */ 
     };
     try {
       expect(
-        /** Checks opens Markdown atomically through the native reader. @returns Test completion or assertion result. */ () =>
-          shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium),
-      ).toThrow();
-      expect(
-        /** Checks opens Markdown atomically through the native reader. @returns Test completion or assertion result. */ () =>
+        /** Rejects an empty candidate before replacing the current document. @returns No model. */ () =>
           shell.OpenMarkdown(new Uint8Array(), metadata, medium),
-      ).toThrow();
+      ).toThrow("Invalid Markdown byte stream.");
       expect(shell.GetDoc()).toBe(original);
+      // Native md4c receives raw bytes; SAL callback conversion replaces invalid UTF-8.
+      const decoded = shell.OpenMarkdown(new Uint8Array([0xff]), metadata, medium);
+      expect(decoded.paragraphs[0]?.GetText()).toBe("\ufffd");
+      expect(shell.GetDoc()).toBe(decoded);
+      expect(
+        /** Preserves the installed replacement-decoded document on a subsequent read error. @returns No model. */ () =>
+          shell.OpenMarkdown(new Uint8Array(), metadata, medium),
+      ).toThrow("Invalid Markdown byte stream.");
+      expect(shell.GetDoc()).toBe(decoded);
       const loaded = shell.OpenMarkdown(new TextEncoder().encode("# Imported"), metadata, medium);
       expect(loaded.paragraphs[0]?.GetParagraphStyle()).toBe("heading-1");
       expect(shell.GetMedium().GetLastOperation()).toMatchObject({

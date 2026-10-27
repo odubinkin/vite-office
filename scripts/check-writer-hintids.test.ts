@@ -7,7 +7,7 @@ import { createUpstreamInvariantManifest } from "./libreoffice-inventory/upstrea
 it("matches every consumed identity against the current pinned header", /** Includes native range boundaries rather than only selected hand-written IDs. @returns Completion. */ async () => {
   const header = await readFile("vendor/libreoffice-reference/sw/inc/hintids.hxx", "utf8"),
     local = await readFile("apps/office/src/sw/inc/hintids.ts", "utf8");
-  expect(checkWriterHintIds(header, local)).toBe(76);
+  expect(checkWriterHintIds(header, local)).toBe(79);
   expect(
     /** The former grid identity is wrong for this pinned baseline. @returns Never. */ () =>
       checkWriterHintIds(header, local.replace("RES_TEXTGRID = 125", "RES_TEXTGRID = 122")),

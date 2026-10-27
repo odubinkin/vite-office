@@ -21,13 +21,16 @@ const flags = [
     /^#define\s+(RTL_(?:TEXTTOUNICODE|UNICODETOTEXT)_[A-Z0-9_]+)\s+([^\n\\]+)$/gm,
   ),
 ]
-  .map((m) => `#define ${m[1]} ${m[2]}`)
+  .map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) =>
+      `#define ${m[1]} ${m[2]}`,
+  )
   .join("\n");
 const character = source("include/rtl/character.hxx");
 const characterConstants = [
   ...character.matchAll(/^sal_uInt32 const surrogates\w+ = 0x[\dA-F]+;$/gm),
 ]
-  .map((m) => m[0])
+  .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
   .join("\n");
 const characterFunctions = [
   "isUnicodeCodePoint",
@@ -37,11 +40,13 @@ const characterFunctions = [
   "combineSurrogates",
   "isUnicodeScalarValue",
 ]
-  .map((name) => {
-    const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\([^}]+?\\}`));
-    if (!m) throw new Error(`Missing original character helper ${name}`);
-    return m[0];
-  })
+  .map(
+    /** Applies map to name. @param name - name value. @returns Callback result. */ (name) => {
+      const m = character.match(new RegExp(`inline SAL_CONSTEXPR [^\\n]+ ${name}\\([^}]+?\\}`));
+      if (!m) throw new Error(`Missing original character helper ${name}`);
+      return m[0];
+    },
+  )
   .join("\n");
 const types = source("include/sal/types.h");
 const cast = types.match(
@@ -63,11 +68,16 @@ const structs = header.slice(
 const definitions = [];
 let macros = "";
 for (const file of readdirSync(root + "sal/textenc")
-  .filter((name) => /^tcvt(?:jp|kr)[1-6]\.tab$/.test(name))
+  .filter(
+    /** Applies filter to name. @param name - name value. @returns Callback result. */ (name) =>
+      /^tcvt(?:jp|kr)[1-6]\.tab$/.test(name),
+  )
   .sort()) {
   const text = source("sal/textenc/" + file);
   macros +=
-    [...text.matchAll(/^#define\s+DBCS_EUDC_\w+\s+[^\n]+$/gm)].map((m) => m[0]).join("\n") + "\n";
+    [...text.matchAll(/^#define\s+DBCS_EUDC_\w+\s+[^\n]+$/gm)]
+      .map(/** Applies map to m. @param m - m value. @returns Callback result. */ (m) => m[0])
+      .join("\n") + "\n";
   for (const m of text.matchAll(
     /^(sal_uInt16|ImplDBCSEUDCData|ImplDBCSToUniLeadTab|ImplUniToDBCSHighTab|ImplDBCSConvertData|ImplEUCJPConvertData)\s+const\s+(\w+)(\[[^\]]*\])?\s*=\s*\{[\s\S]*?\};/gm,
   ))
@@ -135,24 +145,30 @@ ${converters}
 ${structs}
 ${macros}
 extern sal_uInt16 const aImplDoubleByteIdentifierTab[1];
-${definitions.map((d) => `extern ${d.type} const ${d.name}${d.array ? "[]" : ""};`).join("\n")}
+${definitions.map(/** Applies map to d. @param d - d value. @returns Callback result. */ (d) => `extern ${d.type} const ${d.name}${d.array ? "[]" : ""};`).join("\n")}
 ${dummy}
-${definitions.map((d) => d.text).join("\n")}
+${definitions.map(/** Applies map to d. @param d - d value. @returns Callback result. */ (d) => d.text).join("\n")}
 ${owners}
 ${aggregates}
 static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4;++i){hash^=(value>>(8*i))&255;hash*=16777619u;}return hash;}
 static bool unsafe(int codec,unsigned unit){if(unit<128)return false;auto const& e=(codec==0?aJIS0208DBCSHighTab:aKSC5601DBCSHighTab)[unit>>8];unsigned low=unit&255;if(low<e.mnLowStart || low>e.mnLowEnd)return false;
 static const std::map<sal_uInt16 const*,std::size_t> spans={{aImplDoubleByteIdentifierTab,1},${definitions
-  .filter((d) => d.type === "sal_uInt16" && d.array)
-  .map((d) => `{${d.name},SAL_N_ELEMENTS(${d.name})}`)
+  .filter(
+    /** Applies filter to d. @param d - d value. @returns Callback result. */ (d) =>
+      d.type === "sal_uInt16" && d.array,
+  )
+  .map(
+    /** Applies map to d. @param d - d value. @returns Callback result. */ (d) =>
+      `{${d.name},SAL_N_ELEMENTS(${d.name})}`,
+  )
   .join(
     ",",
   )}};auto found=spans.find(e.mpToUniTrailTab);if(found==spans.end())std::abort();return low-e.mnLowStart>=found->second;}
 struct Result {sal_Size n,consumed;sal_uInt32 info;int high,state;std::vector<unsigned> bytes;};
 static Result convert(int codec,std::vector<sal_Unicode> const& input,unsigned capacity,unsigned flags,int high=0,int state=0){char out[512]{};Result r{};ImplUnicodeToIso2022JpContext jp{sal_Unicode(high),bool(state)};ImplUnicodeToIso2022KrContext kr{sal_Unicode(high),ImplUnicodeToIso2022KrSet(state)};void* context=high<0?nullptr:codec==0?static_cast<void*>(&jp):static_cast<void*>(&kr);r.n=codec==0?ImplConvertUnicodeToIso2022Jp(&aImplIso2022JpConvertData,context,input.data(),input.size(),out,capacity,flags,&r.info,&r.consumed):ImplConvertUnicodeToIso2022Kr(&aImplIso2022KrConvertData,context,input.data(),input.size(),out,capacity,flags,&r.info,&r.consumed);r.high=high<0?-1:codec==0?jp.m_nHighSurrogate:kr.m_nHighSurrogate;r.state=high<0?-1:codec==0?jp.m_b0208:kr.m_eSet;for(sal_Size i=0;i<r.n;++i)r.bytes.push_back(static_cast<unsigned char>(out[i]));return r;}
 int main(){std::cout<<"{\"undefinedUnits\":[";for(int codec=0;codec<2;++codec){if(codec)std::cout<<',';std::cout<<'[';bool comma=false;for(unsigned unit=0;unit<65536;++unit)if(unsafe(codec,unit)){if(comma)std::cout<<',';comma=true;std::cout<<unit;}std::cout<<']';}
-std::cout<<"],\"digests\":[";bool comma=false;for(int codec=0;codec<2;++codec)for(unsigned flags:{0u,RTL_UNICODETOTEXT_FLAGS_FLUSH,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE|RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE})for(unsigned capacity:{${capacities.map((c) => `${c}u`).join(",")}}){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){if(unsafe(codec,unit))continue;auto r=convert(codec,{sal_Unicode(unit)},capacity,flags);for(unsigned value:{unit,unsigned(r.n),r.info,unsigned(r.consumed),unsigned(r.high),unsigned(r.state)})hash=mix(hash,value);for(unsigned b:r.bytes)hash=mix(hash,b);}if(comma)std::cout<<',';comma=true;std::cout<<"{\"codec\":"<<codec<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"hash\":"<<hash<<"}";}
-std::vector<std::vector<sal_Unicode>> inputs={${inputs.map((a) => `{${a.join(",")}}`).join(",")}};int seeds[][2]={${seeds.map((a) => `{${a.join(",")}}`).join(",")}};
+std::cout<<"],\"digests\":[";bool comma=false;for(int codec=0;codec<2;++codec)for(unsigned flags:{0u,RTL_UNICODETOTEXT_FLAGS_FLUSH,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_IGNORE|RTL_UNICODETOTEXT_FLAGS_INVALID_IGNORE})for(unsigned capacity:{${capacities.map(/** Applies map to c. @param c - c value. @returns Callback result. */ (c) => `${c}u`).join(",")}}){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){if(unsafe(codec,unit))continue;auto r=convert(codec,{sal_Unicode(unit)},capacity,flags);for(unsigned value:{unit,unsigned(r.n),r.info,unsigned(r.consumed),unsigned(r.high),unsigned(r.state)})hash=mix(hash,value);for(unsigned b:r.bytes)hash=mix(hash,b);}if(comma)std::cout<<',';comma=true;std::cout<<"{\"codec\":"<<codec<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"hash\":"<<hash<<"}";}
+std::vector<std::vector<sal_Unicode>> inputs={${inputs.map(/** Applies map to a. @param a - a value. @returns Callback result. */ (a) => `{${a.join(",")}}`).join(",")}};int seeds[][2]={${seeds.map(/** Applies map to a. @param a - a value. @returns Callback result. */ (a) => `{${a.join(",")}}`).join(",")}};
 std::cout<<"],\"cases\":[";comma=false;for(int codec=0;codec<2;++codec)for(unsigned index=0;index<inputs.size();++index)for(unsigned seed=0;seed<5;++seed){if(codec==0 && seed==2)continue;for(unsigned capacity:{0u,1u,3u,4u,5u,8u,64u})for(unsigned flags:{0u,RTL_UNICODETOTEXT_FLAGS_FLUSH,RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR|RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR}){auto r=convert(codec,inputs[index],capacity,flags,seeds[seed][0],seeds[seed][1]);if(comma)std::cout<<',';comma=true;std::cout<<"{\"codec\":"<<codec<<",\"input\":"<<index<<",\"seed\":"<<seed<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"written\":"<<r.n<<",\"info\":"<<r.info<<",\"consumed\":"<<r.consumed<<",\"context\":["<<r.high<<','<<r.state<<"],\"bytes\":[";for(unsigned i=0;i<r.bytes.size();++i){if(i)std::cout<<',';std::cout<<r.bytes[i];}std::cout<<"]}";}}std::cout<<"]}\n";}
 `;
 mkdirSync(target, { recursive: true });
@@ -181,7 +197,9 @@ writeFileSync(
 console.log(
   JSON.stringify({
     digests: result.digests.length,
-    undefinedUnits: result.undefinedUnits.map((a) => a.length),
+    undefinedUnits: result.undefinedUnits.map(
+      /** Applies map to a. @param a - a value. @returns Callback result. */ (a) => a.length,
+    ),
     vectors: result.cases.length,
     sanitized: true,
   }),

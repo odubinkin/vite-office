@@ -358,7 +358,12 @@ function decodeNativeColorItem(
   pool: SfxItemPool,
   snapshot: SfxPoolItemSnapshot,
 ): SfxPoolItem | null {
-  if (typeof snapshot.value !== "object" || Array.isArray(snapshot.value)) return null;
+  if (
+    snapshot.value === null ||
+    typeof snapshot.value !== "object" ||
+    Array.isArray(snapshot.value)
+  )
+    return null;
   const value = snapshot.value as Record<string, unknown>;
   if (value.kind !== "svx-color" && value.kind !== "svx-brush") return null;
   if (
@@ -390,8 +395,7 @@ function decodeNativeColorItem(
   const item = new SvxBrushItem(color, complex, snapshot.which);
   const shading = new Any([value.shading], "sal_Int32");
   try {
-    if (!item.PutValue(shading, MID_SHADING_VALUE))
-      throw new Error("Native brush shading record is invalid.");
+    item.PutValue(shading, MID_SHADING_VALUE);
   } finally {
     shading.dispose();
   }

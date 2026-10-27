@@ -4,7 +4,12 @@ import fixture from "./native-primitives.json";
 import * as scan from "./md4c.block.scan";
 it.each(fixture.blockScans)(
   "matches compiled $operation scanning and output state: $text",
-  ({ operation, text, argument, result }) => {
+  /** Verifies matches compiled $operation scanning and output state: $text. @param value0 - operation, text, argument, result value. @returns Nothing. */ ({
+    operation,
+    text,
+    argument,
+    result,
+  }) => {
     const input = new TextEncoder().encode(text);
     const ctx: scan.MD_BLOCK_SCAN_CONTEXT = {
       text: input,

@@ -53,7 +53,7 @@ export function getConfiguredDefaultFont(
 
 import { ImplFontAttrs, type FontNameAttr } from "../../inc/fontcfg";
 import { FontWeight, FontWidth } from "../../../tools/inc/fontenum";
-import mapData from "./data/font-name-map.json";
+import mapData from "./data/font-name-map.json" with { type: "json" };
 export type { FontNameAttr } from "../../inc/fontcfg";
 /** Actual shipped font field map, standing at the existing configuration-provider boundary. */
 type FontConfigurationFields = Readonly<Record<string, string>>;
@@ -109,7 +109,12 @@ export class FontSubstConfiguration {
   }
   /** Original reverse enum-name search with unknown fallback and ASCII-only case folding. @param font - Shipped source field map. @param field - Original property name. @returns Weight. */
   private static getSubstWeight(font: FontConfigurationFields, field: string): FontWeight {
-    const value = (font[field] ?? "").replace(/[A-Z]/g, (character) => character.toLowerCase());
+    const value = (font[field] ?? "").replace(
+      /[A-Z]/g,
+      /** Applies replace to character. @param character - character value. @returns Callback result. */ (
+        character,
+      ) => character.toLowerCase(),
+    );
     for (let index = mapData.weightNames.length - 1; index >= 0 && value; --index) {
       const [name, weight] = mapData.weightNames[index] as [string, number];
       if (value === name) return weight;
@@ -118,7 +123,12 @@ export class FontSubstConfiguration {
   }
   /** Original reverse width-name search and unknown fallback. @param font - Shipped source field map. @param field - Original property name. @returns Width. */
   private static getSubstWidth(font: FontConfigurationFields, field: string): FontWidth {
-    const value = (font[field] ?? "").replace(/[A-Z]/g, (character) => character.toLowerCase());
+    const value = (font[field] ?? "").replace(
+      /[A-Z]/g,
+      /** Applies replace to character. @param character - character value. @returns Callback result. */ (
+        character,
+      ) => character.toLowerCase(),
+    );
     for (let index = mapData.widthNames.length - 1; index >= 0 && value; --index) {
       const [name, width] = mapData.widthNames[index] as [string, number];
       if (value === name) return width;
@@ -129,7 +139,12 @@ export class FontSubstConfiguration {
   private static getSubstType(font: FontConfigurationFields, field: string): ImplFontAttrs {
     let result = 0;
     for (const token of (font[field] ?? "").split(",")) {
-      const key = token.replace(/[A-Z]/g, (character) => character.toLowerCase());
+      const key = token.replace(
+        /[A-Z]/g,
+        /** Applies replace to character. @param character - character value. @returns Callback result. */ (
+          character,
+        ) => character.toLowerCase(),
+      );
       const index = mapData.typeNames.indexOf(key);
       if (index !== -1) result = (result | (1 << index)) >>> 0;
     }

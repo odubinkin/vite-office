@@ -1,5 +1,5 @@
 /** @fileoverview Native wwFont FFN identity and wwFontHelper registration/vector owners. Font-table initialization/export association, binary output and DOCX embedding remain in their respective unported responsibilities. */
-import { DocxAttributeOutput } from "./docxattributeoutput";
+import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
@@ -146,7 +146,7 @@ export class wwFontHelper {
   /** Original font-table writer visits the ID-indexed vector. @param output - Actual RTF attribute sink. @returns Nothing. */
   WriteFontTable(output: RtfAttributeOutput | DocxAttributeOutput): void {
     for (const font of this.AsVector()) {
-      if (output instanceof DocxAttributeOutput) (font as wwFont).WriteDocx(output);
+      if ("GetSerializer" in output) (font as wwFont).WriteDocx(output);
       else (font as wwFont).WriteRtf(output);
     }
   }

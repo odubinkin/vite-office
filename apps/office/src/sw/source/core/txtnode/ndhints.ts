@@ -701,9 +701,15 @@ export class SwpHints {
     this.assignOwned(copies, true);
   }
 
-  /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @returns Nothing. */
+  /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @param disposePrevious - Release replaced owned hints. @returns Nothing. */
   private assignOwned(hints: readonly RangedTextAttr[], disposePrevious = false): void {
-    const old = disposePrevious ? this.hintsByStart.filter((hint) => !hints.includes(hint)) : [];
+    const old = disposePrevious
+      ? this.hintsByStart.filter(
+          /** Applies filter to hint. @param hint - hint value. @returns Callback result. */ (
+            hint,
+          ) => !hints.includes(hint),
+        )
+      : [];
     this.hintsByStart = NormalizeOwnedTextHints(hints);
     for (const hint of old) DestroyTextNodeAttribute(hint);
   }
