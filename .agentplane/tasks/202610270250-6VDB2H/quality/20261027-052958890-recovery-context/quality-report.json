@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "202610270250-6VDB2H",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-27T05:29:58.890Z",
+  "verdict": "pass",
+  "summary": "Integration implementation and current scenarios validated under explicit user-approved residual coverage exception.",
+  "evaluated_sha": "519464c3f5634e056db16abf3bbbfe1da98b7793",
+  "blueprint_digest": "37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c",
+  "findings": [
+    "Native functionality and source structure retained; actual UnicodeString host allocation failure now maps to native bogus state.",
+    "Residual coverage is accepted by direct user instruction; no100-percent claim or threshold change."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610270250-6VDB2H/README.md",
+    ".agentplane/tasks/202610270250-6VDB2H/evidence/verification-summary.json",
+    "output/playwright/6VDB2H/close-new-tests.log",
+    "output/playwright/6VDB2H/close-typecheck-final.log"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": [
+    "Remaining application coverage gaps are documented and accepted for this integration."
+  ]
+}

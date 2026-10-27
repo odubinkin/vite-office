@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize all checkouts"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 28
+revision: 30
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,30 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-27T03:59:42.627Z"
+  state: "ok"
+  updated_at: "2026-10-27T05:29:58.439Z"
   updated_by: "CODER"
-  note: "Full checks executed; functional failures fixed and retested. Full strict Istanbul gate remains below 100 percent in 216 modules. Current-source item codec has 100-percent coverage after 326 passing tests. All 537 browser tests, 130 inventory tests with full coverage and 159 tooling tests pass. Main publication and reverse merges require coverage completion or explicit user-approved acceptance change."
-  attempts: 1
+  note: "All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish."
+  attempts: 0
+quality_review:
+  state: "pass"
+  updated_at: "2026-10-27T05:29:58.890Z"
+  updated_by: "EVALUATOR"
+  note: "Integration implementation and current scenarios validated under explicit user-approved residual coverage exception."
+  evaluated_sha: "519464c3f5634e056db16abf3bbbfe1da98b7793"
+  blueprint_digest: "37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c"
+  evidence_refs:
+    - ".agentplane/tasks/202610270250-6VDB2H/README.md"
+    - ".agentplane/tasks/202610270250-6VDB2H/quality/20261027-052958890-recovery-context/quality-report.json"
+    - ".agentplane/tasks/202610270250-6VDB2H/quality/20261027-052958890-recovery-context/evaluator-prompt.md"
+    - ".agentplane/tasks/202610270250-6VDB2H/quality/20261027-052958890-recovery-context/evaluator-opinion.md"
+    - ".agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json"
+    - ".agentplane/tasks/202610270250-6VDB2H/evidence/verification-summary.json"
+    - "output/playwright/6VDB2H/close-new-tests.log"
+    - "output/playwright/6VDB2H/close-typecheck-final.log"
+  findings:
+    - "Native functionality and source structure retained; actual UnicodeString host allocation failure now maps to native bogus state."
+    - "Residual coverage is accepted by direct user instruction; no100-percent claim or threshold change."
 commit: null
 comments:
   -
@@ -61,8 +80,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-27T05:29:58.439Z"
+    author: "CODER"
+    state: "ok"
+    note: "All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish."
 doc_version: 3
-doc_updated_at: "2026-10-27T05:29:27.292Z"
+doc_updated_at: "2026-10-27T05:29:58.497Z"
 doc_updated_by: "CODER"
 description: "User-approved integration: commit current Writer work, push Writer and Calc, merge both into main, resolve conflicts, run full project verification and repair regressions, push main, then merge main back and push both development branches. Preserve local generated artifacts and finish on original branch names."
 sections:
@@ -76,6 +101,39 @@ sections:
     Current checks:68 new/changed test files and1,931 tests PASS; the final typed-helper retest adds nine passing tests in two files. Affected Writer scope:23 files,157 tests PASS; ICU i18n:26 files,326 tests PASS. Full tools/application TypeScript, scoped ESLint, formatting,JSDoc,provenance,boundaries,file-size and policy routing pass. Doctor is OK with its pre-existing hook warning. Production/static build and Writer/Calc browser smoke passed.
 
     Application coverage remains below the configured100-percent gate. Exact conservative current-source metrics and gaps are recorded in evidence/coverage-summary-at-closure.json and coverage-gaps-at-closure.json. The user explicitly approved finishing without100-percent coverage and instructed using new/affected tests instead of repeating full suites. Coverage thresholds and ignores are unchanged. Publication and branch synchronization follow the verification record.
+
+    <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-27T05:29:58.439Z — VERIFY — ok
+
+    By: CODER
+
+    Note: All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T05:29:27.292Z, excerpt_hash=sha256:2d26fcbfe34fec734c192c2f92ef3a4312f41ddc1c73705274be6f89c62c0c4d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
+    - old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+    - current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610270250-6VDB2H
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    <!-- END VERIFICATION RESULTS -->
   Rollback Plan: "Preserve existing histories and local generated files. Use ordinary revert commits for published integration if required; no force pushes, resets or deletion of user work."
   Findings: |-
     Integration commits: Writer snapshot 1d696773a; Writer merge 66d54ddec; Calc merge 86118a161. Initial SSH pushes failed; per-command HTTPS pushurl succeeded without changing configuration. Writer merge had 34 conflicts; combined StylePool ownership/iteration with all four family routes and preserved DOCX/RTF font output. Calc had two additive documentation/comment conflicts. Added shared-pointer family regression. Corrected tooling identity count (79) and native sw-to-i18nlangtag dependency expectations. Added missing JSDoc to incoming source and probe callbacks. Added Node JSON import attributes, and kept DocxAttributeOutput type-only in the shared font helper to avoid loading Vite raw token assets during Playwright discovery. Updated ODT warning and inventory aggregate expectations for added fill tokens and three new capabilities. Split the four-scope inventory acceptance into independent cases to preserve the 60-second bound. CSV test now exercises actual supported ISO-2022-JP contextual conversion and explicitly rejects the native JIS X 0201 null reverse callback. Full suites are pending; thresholds unchanged. Preserved pre-existing untracked main task README and Calc native build artifacts.
@@ -136,6 +194,39 @@ Earlier full checks: the initial application run executed24,126 tests and expose
 Current checks:68 new/changed test files and1,931 tests PASS; the final typed-helper retest adds nine passing tests in two files. Affected Writer scope:23 files,157 tests PASS; ICU i18n:26 files,326 tests PASS. Full tools/application TypeScript, scoped ESLint, formatting,JSDoc,provenance,boundaries,file-size and policy routing pass. Doctor is OK with its pre-existing hook warning. Production/static build and Writer/Calc browser smoke passed.
 
 Application coverage remains below the configured100-percent gate. Exact conservative current-source metrics and gaps are recorded in evidence/coverage-summary-at-closure.json and coverage-gaps-at-closure.json. The user explicitly approved finishing without100-percent coverage and instructed using new/affected tests instead of repeating full suites. Coverage thresholds and ignores are unchanged. Publication and branch synchronization follow the verification record.
+
+<!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-27T05:29:58.439Z — VERIFY — ok
+
+By: CODER
+
+Note: All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T05:29:27.292Z, excerpt_hash=sha256:2d26fcbfe34fec734c192c2f92ef3a4312f41ddc1c73705274be6f89c62c0c4d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
+- old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+- current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610270250-6VDB2H
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+<!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
 
