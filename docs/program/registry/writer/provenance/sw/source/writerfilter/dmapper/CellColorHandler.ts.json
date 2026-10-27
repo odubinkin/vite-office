@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/CellColorHandler.ts",
+    "upstreamPath": "sw/source/writerfilter/dmapper/CellColorHandler.cxx",
+    "localSymbols": [
+      "CellColorHandler",
+      "OutputFormat",
+      "lcl_ConvertShd"
+    ],
+    "upstreamSymbols": [
+      "CellColorHandler",
+      "lcl_ConvertShd"
+    ],
+    "preservedResponsibilities": [
+      "Original complete CellColorHandler attribute/modifier callbacks,38 lexical shading cases,37 Word brush weights,37 character pattern mappings, integer per-channel blend, distinct Form/Paragraph/Character insertion and non-clearing generated interop sequences. Independent foreground/fill themes preserve tint-before-shade and signed16 narrowing. Actual TablePropertyMap/Any/PropertyValue/Sequence, shared Tools Color and real UnoComplexColor/Reference owners are reused; no replacement theme/component or inferred default provider. Preserve sticky automatic-fill state, paragraph-nil character fallthrough and theme-only ComplexColor with default final color (WRITER157..159). Strict/Transitional committed ZIP style-cell XML passes actual relationship selection, OOXMLDocument/SAX/native-generated CT_Shd factory resources and receiver callbacks. Resource delivery is not document model insertion. Full TablePropertiesHandler/TblStylePrHandler, DomainMapper/style application, document orchestration, DOCX/XLSX export and existing desktop/mobile UI workflows remain incomplete. Physical ABI/native threads and compiled differential/full QA parity remain unverified; no capability/default/parity promotion. The single handler source retains the original single handler and its literal switch responsibilities under the unchanged1000-line limit, avoiding a filename-only split."
+    ],
+    "omittedResponsibilities": [
+      "Native logging/debug diagnostics, physical component ABI/threading, full native filter/model/style application/export and production UI workflows remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/CellColorHandler.ts",
+          "marker": "CellColorHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-cell-color.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "pct25"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "sw/source/writerfilter/dmapper/CellColorHandler.cxx",
+          "marker": "CellColorHandler::getProperties"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/CellColorHandler.hxx",
+          "marker": "enum OutputFormat"
+        }
+      ]
+    }
+  }
+}

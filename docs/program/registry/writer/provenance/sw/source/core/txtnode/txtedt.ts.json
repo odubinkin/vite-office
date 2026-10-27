@@ -72,6 +72,18 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/txtedt-stylepool.test.ts",
           "marker": "merges selectively reset adjacent styles on initial formatting and redo while undo restores both handles"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/txtedt.ts",
+          "marker": "ResetTextHintItem"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -122,7 +134,9 @@
       "Iteration111 corrects the old copied-flag claim for selective automatic hint replacement: native RstTextAttr/MakeTextAttr with NOHINTADJUST creates a fresh hint at the same range, using false constructor defaults for the three registered expansion/start-expansion/movement flags. Existing no-common/exact retained hints and unrelated internet hints keep original flags; independent real-model and frame Ctrl StyleApply/history tests cover all eight flag combinations and three undo/redo cycles. Only six obsolete flag assertion literals in two prior test files change; all other previous tests are unchanged. Complete native other flags, style-access interning, notification/range/hint/field/mark/layout/redline and UI contracts remain unverified; no status/default/exception promotion or registered I/O/recovery change.",
       "Iteration114 restores the registered MakeTextAttr owner for item-set insertion, character WhichId wrapping, same-pool automatic/internet item copies and foreign automatic-style Clone(true,destinationPool) conversion. Selective reset now interns a nonempty remaining set and constructs a fresh hint through MakeTextAttr, reusing native document-owned handles so equivalent adjacent remnants merge. Internet items are non-shareable. Snapshot decoding uses the same factory while retaining browser item records. Independent real-owner factory/reset/retained-undo/adjacent-range tests cover these bounded contracts. Two earlier synthetic sentinel replacement assumptions are corrected to the existing concrete-pool excluded-domain guard; valid concrete flag fixtures preserve core fresh defaults and actual Ctrl deletion/undo/redo. No-common raw state handling remains independently tested. This supersedes older positive sentinel-pooling and missing selective handle-routing claims only in the registered operation. Sentinel style insertion, native unordered iteration/collisions, paragraph/ignorable/cache/name/usage/lifetime/null constructor/UNO name QueryValue, other hint types and actual cross-document SwpHints copy ingestion remain unverified. Whole-module/model/filter/UI parity stays unverified; all existing statuses/defaults/exceptions and registered I/O/recovery deviations unchanged.",
       "TaskN700C9 now reuses original GetParaAttr for caret pending-item capture, including zero-width attributes and DontExpand boundaries, instead of previous-character sampling. Selective full-node RstTextAttr now mutates actual original maps and retains unrelated actual hint owners; independent history values share the same single-item deletion rule. Full-node attributes use direct setters/registered old-reset history; marked zero attributes preserve independent adjacent items. Complete generic InsertItemSet/BreakIterator word/URL/character-style/merged history remains unverified; current-source tests do not promote prior statuses/defaults.",
-      "Checkpoint YQHS8E restores the missing native RstTextAttr postphase: after changed nonempty selective reset, call the actual SwpHints::MergePortions before notification. Equal adjacent pooled styles merge through original handle equality; real SwUndoAttr initial execution/Undo/Redo and independent history snapshot cases verify represented ownership. No new style registry, formatter, snapshot architecture or broad semantic/default/classification promotion is claimed."
+      "Checkpoint YQHS8E restores the missing native RstTextAttr postphase: after changed nonempty selective reset, call the actual SwpHints::MergePortions before notification. Equal adjacent pooled styles merge through original handle equality; real SwUndoAttr initial execution/Undo/Redo and independent history snapshot cases verify represented ownership. No new style registry, formatter, snapshot architecture or broad semantic/default/classification promotion is claimed.",
+      "Whole-paragraph reset now invokes the complete native range owner. Independent history snapshots share its original selector and pooled style-reduction helper.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/txtedt.cxx",

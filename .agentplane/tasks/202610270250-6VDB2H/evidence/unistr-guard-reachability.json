@@ -1,0 +1,13 @@
+{
+  "module": "apps/office/src/external/icu/source/common/unistr.ts",
+  "methods": [
+    "append",
+    "concat"
+  ],
+  "nativeGuard": "this.length() + other.length() > 2147483647",
+  "engineMaximumReadableStringCodeUnits": 536870888,
+  "largestTwoInputSum": 1073741776,
+  "guardReachableForLegitimateStringOwners": false,
+  "reason": "Both owners store actual JavaScript strings. Their length queries therefore cannot exceed the V8 readable string limit. Overriding the native nonvirtual length method or modifying private value fields would not model a legal source input.",
+  "nodeVersion": "v24.13.1"
+}

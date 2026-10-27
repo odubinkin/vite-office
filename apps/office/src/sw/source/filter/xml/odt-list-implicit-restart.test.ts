@@ -96,7 +96,7 @@ function state(doc: SwDoc) {
       direct: node.HasAttrListRestartValue() ? node.GetAttrListRestartValue() : undefined,
       start: node.GetActualListStartValue(),
       identity:
-        node.GetListId() === doc.GetNumRuleTable()[0]?.GetDefaultListId()
+        node.GetListId() === doc.GetNumRuleTable().slice(1)[0]?.GetDefaultListId()
           ? "Restart"
           : node.GetListId(),
       rule: node.GetNumRule() ? "Restart" : undefined,
@@ -362,7 +362,7 @@ it("exports native implicit restart positions and direct starts through genuine 
           );
         }
         expect(state(doc)).toEqual(expected(test.before));
-        const rule = doc.GetNumRuleTable()[0] as SwNumRule;
+        const rule = doc.GetNumRuleTable().slice(1)[0] as SwNumRule;
         const copied = createWriterDocument();
         copied.GetDocumentListsManager().AddNumRule(rule.clone());
         doc.paragraphs.forEach(
@@ -376,12 +376,12 @@ it("exports native implicit restart positions and direct starts through genuine 
             target.SetListItems(node.CaptureListItems());
           },
         );
-        expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
+        expect(copied.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected(test.before));
         const record = encodeWriterDocument(doc);
         expect(record.swModelVersion).toBe(17);
         const worker = decodeWriterDocument(record);
-        expect(worker.GetNumRuleTable()[0]).not.toBe(rule);
+        expect(worker.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
         expect(state(worker)).toEqual(expected(test.before));
         const bytes = writeOdtDocument(doc, { title: "Restart" });
         const xml =

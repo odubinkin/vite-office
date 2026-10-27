@@ -1,0 +1,92 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-fcc6ceaf-fc9c-441c-8624-a74483fbf27e",
+    "capabilityId": "CAP-fcc6ceaf-fc9c-441c-8624-a74483fbf27e",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain original floating table positioning defaults, exact declared properties and overlap omission.",
+      "Use actual SequenceAsHashMap/Any/Sequence/BorderLine2 and SvRef/Unicode owners; preserve six-field equality and unrepaired invalid-anchor locals."
+    ],
+    "capability": "Original floating-table position receiver and typed frame property output",
+    "gaps": [
+      "Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TablePositionHandler.cxx",
+          "marker": "TablePositionHandler::getTablePosition"
+        },
+        {
+          "path": "sw/source/writerfilter/dmapper/TablePositionHandler.hxx",
+          "marker": "m_aVertAnchor"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+          "marker": "testN775899"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TablePositionHandler.hxx",
+          "marker": "Compute the UNO properties"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts",
+          "marker": "TablePositionHandler"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts",
+          "marker": "matches every consumed ID"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER164"
+        },
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER165"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false."
+    },
+    "scopeLimitations": [
+      "Unknown anchors leave native relation locals uninitialized. Host definite-assignment syntax deliberately introduces no repair value. The invalid-anchor diagnostic traverses that host branch but inspects/asserts only independent initialized output; it does not certify native indeterminate values, native undefined behavior, bytes or ABI. Other tests cover all initialized anchor/spec values and declared widths. Host unordered storage iteration/buckets, native threads/allocator/exception-failure traces and whole-module native differential parity remain unverified. DomainMapperTableManager/TableManager/DomainMapperTableHandler model application and full DOCX/XLSX file/UI workflows remain incomplete. Broad parity/default/verified flags stay false.",
+      "Native testN775899 is an unported floating-table downstream QA reference, not a claim of imported Writer frame graph or native/UI test parity.",
+      "Native factoryCreateElementMap lookup data is emitted as its own generated-data responsibility, preserving exact355 original rows, one OOXMLFactory_wml owner/API and static tables.elements re-export. Attribute/resource/action lookup data remains in the context table module; getListValue lexical data remains separate. The unchanged pinned generators/model additionally admit CT_TblPPr:53defines/107attributes/355elements/428resources/315lists/41actions. Actual Strict/Transitional committed ZIP relationship selection, OOXMLDocument and SAX deliver all ten position attributes through the original nested Properties reference into TablePositionHandler. Actual SequenceAsHashMap/UNO results retain original orientation relations, coordinates and signed limited-twip margins after handler destruction. This is parser resource delivery, not document/frame insertion. Whole DOCX/XLSX model/import/export and production desktop/mobile UI acceptance remain incomplete. Real table managers, DomainMapperTableHandler and table/style application remain pending. Native physical ABI/thread/allocation and whole-module compiled differential/full QA parity remain unverified; no broad capability/parity/default-status promotion."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "floating-table-position-properties"
+  }
+}

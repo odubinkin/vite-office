@@ -13,7 +13,8 @@
       "SwMDWriter::WriteStream"
     ],
     "preservedResponsibilities": [
-      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source per-node paragraph and table separators, source numbering labels and parent-prefix indentation, source neighboring-style fence decisions for preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions."
+      "Writes represented Writer body content and native paragraph item sets and ranged text hints as Markdown, including heading resolution through built-in pool IDs in the style ancestry, source per-node paragraph and table separators, source numbering labels and parent-prefix indentation, source neighboring-style fence decisions for preformatted paragraphs, the source non-unknown weight rule, and source-ordered formatting and hyperlink transitions across text positions.",
+      "Final UTF-8 byte conversion uses the native SAL OUStringToOString wrapper rather than host TextEncoder. Stream write-fragment boundaries and complete Writer export graph parity remain unverified."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."

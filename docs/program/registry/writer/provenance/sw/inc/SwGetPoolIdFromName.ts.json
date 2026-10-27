@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/inc/SwGetPoolIdFromName.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/inc/SwGetPoolIdFromName.ts",
+          "marker": "SwGetPoolIdFromName"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/SwGetPoolIdFromName.hxx",
+          "marker": "SwGetPoolIdFromName"
+        }
+      ]
+    },
+    "upstreamPath": "sw/inc/SwGetPoolIdFromName.hxx",
+    "localSymbols": [
+      "SwGetPoolIdFromName"
+    ],
+    "upstreamSymbols": [
+      "SwGetPoolIdFromName",
+      "ChrFmt"
+    ],
+    "preservedResponsibilities": [
+      "Original complete style-name family discriminants."
+    ],
+    "omittedResponsibilities": [
+      "Full compiled Writer model/UNO/layout parity, unregistered fields and external document loading remain unverified."
+    ]
+  }
+}

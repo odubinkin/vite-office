@@ -7,7 +7,8 @@
     "localPath": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
     "upstreamPath": "sw/source/filter/ww8/rtfexport.cxx",
     "localSymbols": [
-      "RtfExport"
+      "RtfExport",
+      "IndexCharacterFonts"
     ],
     "upstreamSymbols": [
       "RtfExport::ExportDocument_Impl",
@@ -15,7 +16,11 @@
     ],
     "preservedResponsibilities": [
       "Writes represented Writer body text, character decoration/position, source-escaped hyperlink URL fields spanning character-run changes with optional target frame but source-omitted hyperlink name, point bookmarks, paragraph alignment/indentation and native default tab distance, initial physical page properties and direct later paragraph/table page-style section transitions with page-number restart, follow-page suppression and source physical-geometry plausibility for first/follow page chains; splits text at document-owned soft page positions only when a distinct follow section is needed while retaining hints, hyperlinks and bookmarks, paragraph style references, table alignment/left offset/cell boundaries, row height/split and direct cell vertical orientation/border/padding controls derived from native items, plus list definitions including source-mapped level numbering formats, starts, bullet glyphs and paragraph listtext as RTF; uncounted paragraphs omit list controls.",
-      "Builds the source sixteen-color Word palette before represented document colors and preserves native underline-color indices in the RTF color table."
+      "Builds the source sixteen-color Word palette before represented document colors and preserves native underline-color indices in the RTF color table.",
+      "Visits native character-hint boundaries without UI coalescing and passes effective SfxItemSet values into RTF attribute emission; invisible auto-kerning differences retain their native run boundaries, hyperlinks and point bookmarks.",
+      "RTF run collection now borrows actual SwAttrIter/CharFormat item stacks for named and automatic hints. Every represented script font is registered before the font table is serialized; style and run property modes are distinguished. The source RTLAndCJKState consumer is exposed, but complete native MSWord script/bidi production, full font identity/encoding and parser language mapping remain unverified.",
+      "Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString.",
+      "The name-only Map font table is replaced by wwFontHelper with native FFN identity, preserving different metadata for equal family names. The actual export stream is used for native font-table methods and final byte writes; TextEncoder no longer owns RTF byte output. Source InitFontTable seed/order/default and automatic-style usage enumeration remain pending."
     ],
     "omittedResponsibilities": [
       "Full page-style chain/section geometry semantics, later-section import, frames, pictures, non-hyperlink fields, headers/footers, drawings and full style-property export paths remain unverified."
@@ -65,6 +70,18 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
           "marker": "exports a colored paragraph underline item"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.native-character.test.ts",
+          "marker": "retains adjacent native hints"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
+          "marker": "IndexCharacterFonts"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -119,6 +136,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfexport.cxx",
           "marker": "RtfExport::OutColorTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx",
+          "marker": "SwWW8AttrIter::OutAttr"
         }
       ]
     }

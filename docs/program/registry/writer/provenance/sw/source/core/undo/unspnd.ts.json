@@ -12,6 +12,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-split-history.test.ts",
           "marker": "native table cell Enter restores original ranged history and leaves adjacent cells intact"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -46,7 +50,8 @@
     ],
     "preservedResponsibilities": [
       "Implements the bounded SwUndoSplitNode action from pinned LibreOffice unspnd.cxx.",
-      "Iteration155 restores native represented SwUndoSplitNode conditional whole-node ranged SwHistory capture, empty history discard, Undo full represented ranged reset and forward TmpRollback(doc,0,false), Redo SetTmpEnd(Count) and destructor history release. History records native items/coordinates/format-ignore flags and restores constructor expansion defaults. Existing source-owned SwHistory and txtedt reset responsibility reused; no blanket direct paragraph/list snapshot because native split action does not promise that restoration. Existing provisional redo identity bridge now uses actual fresh core collection/direct items/native hint maps and existing node replacement, removing two CaptureTextFragment snapshots and obsolete full hint-equality comparison; ownership/text mismatch guards preserved. Native metadata/flags may change through reconstruction legitimately. Portable retained identities remain necessary for existing pointer-based undo actions, not full native fresh-node parity or a conscious exception. All250 module states/defaults/classifications/exceptions/prior evidence preserved, additive only. Full physical split/CutImpl/paragraph item/heading list history/table/redline/RSID/field/Repeat and broad native/UI parity remain unverified; conscious IO/recovery deviations preserved."
+      "Iteration155 restores native represented SwUndoSplitNode conditional whole-node ranged SwHistory capture, empty history discard, Undo full represented ranged reset and forward TmpRollback(doc,0,false), Redo SetTmpEnd(Count) and destructor history release. History records native items/coordinates/format-ignore flags and restores constructor expansion defaults. Existing source-owned SwHistory and txtedt reset responsibility reused; no blanket direct paragraph/list snapshot because native split action does not promise that restoration. Existing provisional redo identity bridge now uses actual fresh core collection/direct items/native hint maps and existing node replacement, removing two CaptureTextFragment snapshots and obsolete full hint-equality comparison; ownership/text mismatch guards preserved. Native metadata/flags may change through reconstruction legitimately. Portable retained identities remain necessary for existing pointer-based undo actions, not full native fresh-node parity or a conscious exception. All250 module states/defaults/classifications/exceptions/prior evidence preserved, additive only. Full physical split/CutImpl/paragraph item/heading list history/table/redline/RSID/field/Repeat and broad native/UI parity remain unverified; conscious IO/recovery deviations preserved.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/undo/unspnd.cxx",

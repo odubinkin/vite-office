@@ -3,6 +3,7 @@
 import { SwFrameFormat } from "./atrfrm";
 import type { SwDoc } from "../doc/doc";
 import { BroadcastingModify } from "../../../inc/calbck";
+import type { SwFindNearestNode } from "../../../inc/hints";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
 import { PaperInfo } from "../../../../i18nutil/inc/paper";
@@ -42,6 +43,13 @@ export enum UseOnPage {
 
 /** Native page descriptor owns four independent frame formats in the document pool. */
 export class SwPageDesc extends BroadcastingModify {
+  /** Queries all four original page-format owners in native order, stopping on the first false result. @param info - Borrowed nearest-node query. @returns Whether traversal may continue. */
+  public override GetInfo(info: SwFindNearestNode): boolean {
+    if (!this.m_Master.GetInfo(info)) return false;
+    if (!this.m_Left.GetInfo(info)) return false;
+    if (!this.m_FirstMaster.GetInfo(info)) return false;
+    return this.m_FirstLeft.GetInfo(info);
+  }
   private readonly m_Master: SwFrameFormat;
   private readonly m_Left: SwFrameFormat;
   private readonly m_FirstMaster: SwFrameFormat;

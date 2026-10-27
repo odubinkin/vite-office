@@ -1,7 +1,7 @@
 /** @fileoverview Verifies represented native Number/Bullet font construction without upstream execution. */
 import { createWriterTextColorItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { applyWriterParagraphList } from "../doc/list";
 import { createWriterNumFormat, SvxNumType } from "../doc/number";
@@ -145,6 +145,47 @@ it("number font compatibility setting roundtrips and older graph records use the
     ).toThrow("Stored Writer document setting is invalid: DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT");
   } finally {
     for (const copy of copies) copy.Dispose();
+    doc.Dispose();
+  }
+});
+
+it("applies actual numbering character style after paragraph resets and before the explicit bullet face", /** Checks original SetDiffFnt order through Worker transport. @returns Nothing. */ () => {
+  const doc = new SwDoc();
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    node.SetText("List");
+    applyWriterParagraphList(node, { kind: "bullet", level: 0, ruleName: "Styled" });
+    const style = doc.MakeCharFormat("Label", doc.GetDfltCharFormat());
+    style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    style.SetFormatAttr(new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE));
+    style.SetFormatAttr(new SvxUnderlineItem(FontLineStyle.LINESTYLE_DOUBLE, RES_CHRATR_UNDERLINE));
+    style.SetFormatAttr(new SvxFontHeightItem(420, 100, RES_CHRATR_FONTSIZE));
+    style.SetFormatAttr(createWriterTextColorItem("#ff0000"));
+    const format = createWriterNumFormat("bullet");
+    format.SetCharFormat(style);
+    const rule = node.GetNumRule();
+    assert(rule);
+    rule.Set(0, format);
+    const font = resolveSwNumberPortionFont(node);
+    assert(font);
+    expect(font).toMatchObject({
+      familyName: "OpenSymbol",
+      weight: FontWeight.WEIGHT_BOLD,
+      posture: FontItalic.ITALIC_NORMAL,
+      underline: FontLineStyle.LINESTYLE_DOUBLE,
+      heightTwips: 420,
+      color: "#ff0000",
+    });
+    const copy = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)));
+    try {
+      const copiedNode = copy.paragraphs[0];
+      assert(copiedNode);
+      expect(resolveSwNumberPortionFont(copiedNode)).toEqual(font);
+    } finally {
+      copy.Dispose();
+    }
+  } finally {
     doc.Dispose();
   }
 });

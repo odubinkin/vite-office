@@ -32,5 +32,7 @@ it("keeps general library edges restricted", /** Exact original header/value wit
   expect(isForbiddenModuleEdge("cui", "i18nutil")).toBe(true);
   expect(isForbiddenModuleEdge("cui", "o3tl")).toBe(true);
   expect(isForbiddenModuleEdge("svx", "i18nutil")).toBe(true);
-  expect(isForbiddenModuleEdge("sw", "i18nlangtag")).toBe(true);
+  // Native Markdown callbacks consume LanguageTag through Library_sw.
+  expect(isForbiddenModuleEdge("sw", "i18nlangtag")).toBe(false);
+  expect(isForbiddenModuleEdge("cui", "i18nlangtag")).toBe(true);
 });

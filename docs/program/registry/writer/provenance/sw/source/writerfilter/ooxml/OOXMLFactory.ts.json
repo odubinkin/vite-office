@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts",
           "marker": "OOXMLFactory"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -59,7 +63,8 @@
     ],
     "preservedResponsibilities": [
       "Native schema-ordered attributes, exact ResourceType declaration order/AttributeInfo fields, actual numeric namespace/fast-token/definition identities, first attribute lookup and typed OOXMLValue conversion. Unknown list values remain empty, Integer reuses exact o3tl signed prefix/overflow rules, and negative zero-mode twips become0. Generated attribute actions execute in their native namespace owner. Context creation and generic start/characters/end dispatch remain pending; the complete OOXMLFactory interface is not claimed.",
-      "Native generated context construction and helper assignment order, token-count recursion guard, start/end/character action dispatch. Missing context definitions/resource owners/cross-namespace factories fail explicitly at the incomplete implementation boundary, not as a claimed native behavior replacement. Full document import and UI acceptance remain pending."
+      "Native generated context construction and helper assignment order, token-count recursion guard, start/end/character action dispatch. Missing context definitions/resource owners/cross-namespace factories fail explicitly at the incomplete implementation boundary, not as a claimed native behavior replacement. Full document import and UI acceptance remain pending.",
+      "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion."
     ],
     "omittedResponsibilities": [
       "Unconsumed native interfaces, component services, C++ ABI and native memory/thread/performance contracts remain outside this consumed binding.",

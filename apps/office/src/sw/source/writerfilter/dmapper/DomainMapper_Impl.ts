@@ -5,7 +5,7 @@ import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import type { SwXText } from "../../core/unocore/unotext";
 import type { OUStringConstReference } from "../../../../sal/inc/rtl/ustring";
 import { SwXParagraph } from "../../core/unocore/unoparagraph";
-import { PropertyMap, SectionPropertyMap } from "./PropertyMap";
+import { PropertyMap, SectionPropertyMap, ParagraphPropertyMap } from "./PropertyMap";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { text } from "../../core/unocore/unocrsrhelper";
@@ -76,7 +76,9 @@ export class DomainMapper_Impl {
     const properties =
       type === ContextType.CONTEXT_SECTION
         ? new SectionPropertyMap(this.m_bIsFirstSection)
-        : new PropertyMap();
+        : type === ContextType.CONTEXT_PARAGRAPH
+          ? new ParagraphPropertyMap()
+          : new PropertyMap();
     if (type === ContextType.CONTEXT_SECTION) this.m_bIsFirstSection = false;
     this.contexts.push({ type, properties, owned: true });
     return properties;

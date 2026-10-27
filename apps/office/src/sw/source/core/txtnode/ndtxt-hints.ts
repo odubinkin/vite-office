@@ -1,4 +1,7 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { DestroyTextNodeAttribute } from "./thints-insert";
+import { SwContentIndexUpdateMode } from "../bastyp/index";
+import { SwTextINetFormat } from "./txtatr2";
 import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SwInsertFlags } from "../../../inc/IDocumentContentOperations";
@@ -64,6 +67,7 @@ export function MoveTextAttrToAttrSet(node: SwTextNode): void {
       )
     ) {
       hints.DeleteAtPos(index);
+      DestroyTextNodeAttribute(hint);
       index--;
     }
   }
@@ -81,10 +85,15 @@ export function AppendTextNodeHints(
       node.InsertItem(hint.format, offset, offset, SetAttrMode.IS_COPY);
     return node.GetpSwpHints() ?? new SwpHints(pool);
   }
-  return new SwpHints(pool, [
-    ...(node.GetpSwpHints()?.entries() ?? []),
-    ...(source.GetpSwpHints()?.shifted(offset).entries() ?? []),
-  ]);
+  const trailing = source.GetpSwpHints()?.shifted(offset);
+  try {
+    return new SwpHints(pool, [
+      ...(node.GetpSwpHints()?.entries() ?? []),
+      ...(trailing?.entries() ?? []),
+    ]);
+  } finally {
+    trailing?.Dispose();
+  }
 }
 
 /** Rebinds replacement maps before releasing old node backlinks. @param node - Owner. @param previous - Old map. @param next - New map. @returns New owned map, including allocated empty maps. */
@@ -94,8 +103,12 @@ export function ReplaceTextNodeHints(
   next: SwpHints | undefined,
 ): SwpHints | undefined {
   if (previous === next) return next;
+  const retained = new Set(next?.entries() ?? []);
+  for (const hint of previous?.entries() ?? [])
+    if (!retained.has(hint) && hint instanceof SwTextINetFormat) hint.EndListeningAll();
   next?.BindToTextNode(node);
   previous?.BindToTextNode(undefined);
+  previous?.Dispose();
   return next;
 }
 
@@ -131,7 +144,11 @@ export function copyWriterTextRangeRuns(
   end: number,
 ): readonly WriterTextRunLike[] {
   const fragment = node.CaptureTextFragment(start, end);
-  return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
+  try {
+    return fragment.hints.toTextRuns(fragment.text, node.GetSwAttrSet());
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Projects a complete node without storing run state in SwTextNode. @param node - Canonical node. @returns Derived runs. */
@@ -184,16 +201,20 @@ export function CreateTextNodeToggledFragment(
   format: WriterCharacterFormat,
 ): SwTextFragment {
   const fragment = node.CaptureTextFragment(start, end);
-  return {
-    text: fragment.text,
-    hints: fragment.hints.toggleCharacterFormat(
-      fragment.text.length,
-      0,
-      fragment.text.length,
-      format,
-      node.GetSwAttrSet(),
-    ),
-  };
+  try {
+    return {
+      text: fragment.text,
+      hints: fragment.hints.toggleCharacterFormat(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        format,
+        node.GetSwAttrSet(),
+      ),
+    };
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Creates a native fragment with replacement hyperlink metadata. @param node - Native owner. @param start - Inclusive source offset. @param end - Exclusive source offset. @param hyperlink - Replacement hyperlink or undefined. @returns Native formatted fragment. */
@@ -204,10 +225,14 @@ export function CreateTextNodeHyperlinkFragment(
   hyperlink: WriterHyperlink | undefined,
 ): SwTextFragment {
   const fragment = node.CaptureTextFragment(start, end);
-  return {
-    text: fragment.text,
-    hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
-  };
+  try {
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setHyperlink(fragment.text.length, 0, fragment.text.length, hyperlink),
+    };
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Converts a UI alignment to Writer's paragraph adjustment enum. @param alignment - Browser alignment. @returns SvxAdjust value. */
@@ -249,16 +274,20 @@ export function CreateTextNodeFontFamilyFragment(
   family: string | SvxFontItem,
 ): SwTextFragment {
   const fragment = node.CaptureTextFragment(start, end);
-  return {
-    text: fragment.text,
-    hints: fragment.hints.setFontFamily(
-      fragment.text.length,
-      0,
-      fragment.text.length,
-      family,
-      node.GetSwAttrSet(),
-    ),
-  };
+  try {
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setFontFamily(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        family,
+        node.GetSwAttrSet(),
+      ),
+    };
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Creates an immutable character fragment from the existing node without exposing private fields. @param node - Native node. @param start - Inclusive source offset. @param end - Exclusive source offset. @param fontSizeTwips - Requested formatting value. @returns Native formatted fragment. */
@@ -269,16 +298,20 @@ export function CreateTextNodeFontSizeFragment(
   fontSizeTwips: number,
 ): SwTextFragment {
   const fragment = node.CaptureTextFragment(start, end);
-  return {
-    text: fragment.text,
-    hints: fragment.hints.setFontSize(
-      fragment.text.length,
-      0,
-      fragment.text.length,
-      fontSizeTwips,
-      node.GetSwAttrSet(),
-    ),
-  };
+  try {
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setFontSize(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        fontSizeTwips,
+        node.GetSwAttrSet(),
+      ),
+    };
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Creates an immutable character fragment from the existing node without exposing private fields. @param node - Native node. @param start - Inclusive source offset. @param end - Exclusive source offset. @param property - Requested formatting value. @param value - Requested color. @returns Native formatted fragment. */
@@ -290,15 +323,76 @@ export function CreateTextNodeColorFragment(
   value: string,
 ): SwTextFragment {
   const fragment = node.CaptureTextFragment(start, end);
-  return {
-    text: fragment.text,
-    hints: fragment.hints.setCharacterColor(
-      fragment.text.length,
-      0,
-      fragment.text.length,
-      property,
-      value,
-      node.GetSwAttrSet(),
-    ),
-  };
+  try {
+    return {
+      text: fragment.text,
+      hints: fragment.hints.setCharacterColor(
+        fragment.text.length,
+        0,
+        fragment.text.length,
+        property,
+        value,
+        node.GetSwAttrSet(),
+      ),
+    };
+  } finally {
+    fragment.hints.Dispose();
+  }
+}
+
+/** Reads the existing direct-format control state from actual native hints at this source-owned split. @param node - Actual paragraph. @param start - Inclusive range. @param end - Exclusive range. @param format - Queried property. @returns Existing immutable UI state. */
+export function GetTextNodeRangeFormatState(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  format: WriterCharacterFormat,
+): "mixed" | "off" | "on" {
+  AssertTextNodeRange(node, start, end);
+  const hints = node.GetpSwpHints()?.clone() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  return hints.getCharacterFormatState(node.Len(), start, end, format, node.GetSwAttrSet());
+}
+
+/** Updates registered content indices after the existing fragment/full-text replacement paths have changed text. @param node - Actual node. @param start - Replacement start. @param removed - Old extent. @param inserted - New extent. @returns Nothing. */
+export function UpdateTextNodeReplacementIndices(
+  node: SwTextNode,
+  start: number,
+  removed: number,
+  inserted: number,
+): void {
+  if (removed > inserted)
+    node.UpdateContentIndices(
+      start + inserted,
+      removed - inserted,
+      SwContentIndexUpdateMode.Negative,
+    );
+  else if (inserted > removed)
+    node.UpdateContentIndices(
+      start + removed,
+      inserted - removed,
+      SwContentIndexUpdateMode.Default,
+    );
+}
+
+/** Prepares existing fragment replacement hints at the same source-owned split without changing text or content-index timing. @param node - Actual node. @param start - Range start. @param end - Range end. @param replacement - Native fragment. @param transfer - Whether move actual hint identities. @returns Prepared map. */
+export function PrepareTextNodeReplacementHints(
+  node: SwTextNode,
+  start: number,
+  end: number,
+  replacement: SwTextFragment,
+  transfer: boolean,
+): SwpHints {
+  const existing = node.GetpSwpHints() ?? new SwpHints(node.GetDoc().GetAttrPool());
+  return !transfer &&
+    replacement.hints.Count() === 0 &&
+    end > start &&
+    replacement.text.length === 0
+    ? existing.EraseText(node.Len(), start, end - start)
+    : existing.replaceRange(
+        node.Len(),
+        start,
+        end,
+        replacement.hints,
+        replacement.text.length,
+        transfer,
+      );
 }

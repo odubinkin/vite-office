@@ -24,6 +24,7 @@ export type rtl_uString = _rtl_uString;
 /** One concrete caller-owned pointer slot adapts rtl_uString** without changing data identity or ownership. */
 export type rtl_uStringSlot = [rtl_uString | null];
 export {
+  rtl_ustr_toInt32,
   rtl_ustr_toInt64,
   rtl_ustr_toInt64_WithLength,
   rtl_ustr_indexOfChar_WithLength,
@@ -49,6 +50,8 @@ export {
   rtl_uString_newFromStr_WithLength,
   rtl_uString_newFromString,
   rtl_uString_release,
+  rtl_string2UString,
+  rtl_convertStringToUString,
   rtl_uString_iterateCodePoints,
 } from "../../rtl/ustring";
 

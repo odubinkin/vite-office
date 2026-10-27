@@ -31,7 +31,9 @@ export class SwUndoSplitNode extends SwUndo {
 
   /** Releases native ranged attribute history when the action is discarded. @returns Nothing. */
   public override Dispose(): void {
+    this.m_pHistory?.Dispose();
     this.m_pHistory = undefined;
+    super.Dispose();
   }
 
   /** Joins the split trailing node back into the leading node. @param context - Active Writer context. @returns Nothing. */

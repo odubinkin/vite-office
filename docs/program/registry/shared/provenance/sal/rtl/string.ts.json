@@ -9,15 +9,36 @@
     "localSymbols": [
       "rtl_str_toInt64",
       "rtl_str_toInt64_WithLength",
-      "rtl_str_toUInt64"
+      "rtl_str_toUInt64",
+      "rtl_string_ImplAlloc",
+      "rtl_string_alloc",
+      "rtl_string_acquire",
+      "rtl_string_release",
+      "rtl_string_new",
+      "rtl_string_new_WithLength",
+      "rtl_ImplGetFastUTF8ByteLen",
+      "rtl_impl_convertUStringToString",
+      "rtl_uString2String",
+      "rtl_convertUStringToString"
     ],
     "upstreamSymbols": [
       "rtl_str_toInt64",
       "rtl_str_toInt64_WithLength",
-      "rtl_str_toUInt64"
+      "rtl_str_toUInt64",
+      "rtl_string_ImplAlloc",
+      "rtl_string_alloc",
+      "rtl_string_acquire",
+      "rtl_string_release",
+      "rtl_string_new",
+      "rtl_string_new_WithLength",
+      "rtl_ImplGetFastUTF8ByteLen",
+      "rtl_impl_convertUStringToString",
+      "rtl_uString2String",
+      "rtl_convertUStringToString"
     ],
     "preservedResponsibilities": [
-      "Original byte C signed64 terminated/bounded and unsigned64 terminated entry points reuse the same actual strtmpl integral algorithm with explicit byte/signedness specialization. Preserve minus rejection for unsigned, overflow-to-zero, source whitespace/digit/prefix rules and terminated versus bounded views. No OString/value/type/default provider or alternate JS parser. Full SAL byte library, compiled native corpus/ABI and invalid-storage lifetime remain unverified."
+      "Original byte C signed64 terminated/bounded and unsigned64 terminated entry points reuse the same actual strtmpl integral algorithm with explicit byte/signedness specialization. Preserve minus rejection for unsigned, overflow-to-zero, source whitespace/digit/prefix rules and terminated versus bounded views. No OString/value/type/default provider or alternate JS parser. Full SAL byte library, compiled native corpus/ABI and invalid-storage lifetime remain unverified.",
+      "Original byte ownership wrappers and exact checked/unchecked UTF16-to-byte common algorithm: empty and UTF8 ASCII fast paths, source metadata allocation estimate, FLUSH, null conversion context, error-before-retry order, native retry sizing, shrink threshold, target release/replace order and static-empty normalization. Isolated original C++ with actual core factory/converters/classification/malloc/atomic dependencies under ASan/UBSan agrees on 524288 core BMP cases and 720 vectors, including allocator sizes, data identity, refcounts and free order. The full registry service traps outside the four exercised core branches. Complete SAL ABI and nonfatal logging are not certified."
     ],
     "omittedResponsibilities": [
       "Complete compiled native library/service, ABI/lifetime/logging and application/UI parity remain unverified."
@@ -31,12 +52,28 @@
         {
           "path": "apps/office/src/sal/rtl/byte-integer.test.ts",
           "marker": "preserves signed byte prefix"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [
         {
           "path": "sal/rtl/string.cxx",
           "marker": "rtl_str_toInt64"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
+          "marker": "rtl_impl_convertUStringToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/string.h",
+          "marker": "OUSTRING_TO_OSTRING_CVTFLAGS"
         }
       ]
     }

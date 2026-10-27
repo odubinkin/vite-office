@@ -53,27 +53,16 @@ export abstract class SwEditShell extends SwAttributeEditShell {
     for (const range of ranges) {
       const original =
         range.start === range.end
-          ? {
-              text: "",
-              hints: new SwpHints(
-                this.GetDoc().GetAttrPool(),
-                (range.node.GetpSwpHints()?.entries() ?? [])
-                  .filter(
-                    /** Captures only actual zero-length owner attributes. @param hint - Original hint. @returns Whether exactly collapsed. */
-                    (hint) => hint.GetStart() === range.start && hint.GetEnd() === range.end,
-                  )
-                  .map(
-                    /** Rebases the complete zero attribute payload. @param hint - Original attribute. @returns Independent owner. */
-                    (hint) => {
-                      const copy = hint.clone();
-                      copy.SetStart(0);
-                      copy.SetEnd(0);
-                      return copy;
-                    },
-                  ),
-              ),
-            }
+          ? { text: "", hints: new SwpHints(this.GetDoc().GetAttrPool()) }
           : range.node.CaptureTextFragment(range.start, range.end);
+      if (range.start === range.end)
+        for (const hint of range.node.GetpSwpHints()?.entries() ?? []) {
+          if (hint.GetStart() !== range.start || hint.GetEnd() !== range.end) continue;
+          const copy = hint.clone();
+          copy.SetStart(0);
+          copy.SetEnd(0);
+          original.hints.Insert(copy);
+        }
       const collapsed = new SfxItemSet(this.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
       if (range.start === range.end) {
         for (const hint of original.hints.entries())
@@ -85,13 +74,7 @@ export abstract class SwEditShell extends SwAttributeEditShell {
         text: original.text,
         hints:
           range.start === range.end
-            ? new SwpHints(this.GetDoc().GetAttrPool(), [
-                ...original.hints.entries().filter(
-                  /** Preserves unrelated original zero-length hint families. @param hint - Original hint. @returns Whether separate from automatic character values. */
-                  (hint) => !(hint.format instanceof SwFormatAutoFormat),
-                ),
-                MakeTextAttr(this.GetDoc(), collapsed, 0, 0),
-              ])
+            ? new SwpHints(this.GetDoc().GetAttrPool())
             : setCharacterItems(
                 original.hints,
                 this.GetDoc().GetAttrPool(),
@@ -102,29 +85,40 @@ export abstract class SwEditShell extends SwAttributeEditShell {
                 range.node.GetSwAttrSet(),
               ),
       };
-      actions.push(
-        new SwUndoAttr(
-          range.node,
-          range.start,
-          original,
-          replacement,
-          before,
-          this.CaptureCursorState(),
-          range.start === 0 &&
-            range.end === range.node.Len() &&
-            !(
-              range.node
-                .GetpSwpHints()
-                ?.entries()
-                .some(
-                  /** Native full-node SetAttr uses hints when an actual character format is present. @param hint - Original hint. @returns Native flag. */
-                  (hint) => hint.IsCharFormatAttr(),
-                ) ?? false
-            )
-            ? items
-            : undefined,
-        ),
-      );
+      if (range.start === range.end) {
+        for (const hint of original.hints.entries())
+          if (!(hint.format instanceof SwFormatAutoFormat)) replacement.hints.Insert(hint.clone());
+        replacement.hints.Insert(MakeTextAttr(this.GetDoc(), collapsed, 0, 0));
+      }
+      try {
+        actions.push(
+          new SwUndoAttr(
+            range.node,
+            range.start,
+            original,
+            replacement,
+            before,
+            this.CaptureCursorState(),
+            range.start === 0 &&
+              range.end === range.node.Len() &&
+              !(
+                range.node
+                  .GetpSwpHints()
+                  ?.entries()
+                  .some(
+                    /** Native full-node SetAttr uses hints when an actual character format is present. @param hint - Original hint. @returns Native flag. */
+                    (hint) => hint.IsCharFormatAttr(),
+                  ) ?? false
+              )
+              ? items
+              : undefined,
+          ),
+        );
+      } finally {
+        original.hints.Dispose();
+        replacement.hints.Dispose();
+        collapsed.Dispose();
+      }
     }
     if (actions.length === 0) return false;
     if (actions.length === 1) {

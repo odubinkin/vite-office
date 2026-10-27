@@ -10,6 +10,28 @@ export interface SwMetricView {
 }
 /** Native text/web preference separation and module-wide ruler updates. */
 export class SwModule {
+  private m_xItemInfoPackageSwAttributes: ItemInfoPackage | undefined;
+  /** Original explicit initialization; its nonfatal already-present diagnostic does not change replacement semantics. @returns Nothing. */
+  InitItemInfoPackageSwAttributes(): void {
+    const next = createItemInfoPackageSwAttributes(),
+      previous = this.m_xItemInfoPackageSwAttributes;
+    this.m_xItemInfoPackageSwAttributes = next;
+    previous?.Dispose();
+  }
+  /** Original getter requires application initialization to have completed. @returns Shared package. */
+  getItemInfoPackageSwAttributes(): ItemInfoPackage {
+    if (!this.m_xItemInfoPackageSwAttributes)
+      throw new Error(
+        "assert(InitItemInfoPackageSwAttributes should have been called before this)",
+      );
+    return this.m_xItemInfoPackageSwAttributes;
+  }
+  /** Original application shutdown drops the package owner before member destruction. @returns Nothing. */
+  RemoveItemInfoPackageSwAttributes(): void {
+    const previous = this.m_xItemInfoPackageSwAttributes;
+    this.m_xItemInfoPackageSwAttributes = undefined;
+    previous?.Dispose();
+  }
   private static instance: SwModule | undefined;
   private m_pUsrPref: SwMasterUsrPref | undefined;
   private m_pWebUsrPref: SwMasterUsrPref | undefined;
@@ -21,7 +43,12 @@ export class SwModule {
   ) {}
   /** Original application-global module lookup;no native memory/refcount behavior is introduced. @returns Module metric owner. */
   static get(): SwModule {
-    return (this.instance ??= new SwModule());
+    if (!this.instance) {
+      // Existing browser singleton creation is the application bootstrap binding for swdll.cxx.
+      this.instance = new SwModule();
+      this.instance.InitItemInfoPackageSwAttributes();
+    }
+    return this.instance;
   }
   /** Original lazy text/web preference selection. @param web - WriterWeb selection. @returns Actual preferences. */
   GetUsrPref(web: boolean): SwMasterUsrPref {
@@ -64,3 +91,6 @@ export class SwModule {
       }
   }
 }
+
+import type { ItemInfoPackage } from "../../../../svl/source/items/itempool";
+import { createItemInfoPackageSwAttributes } from "../../core/bastyp/init";

@@ -22,6 +22,14 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.test.ts",
           "marker": "imports source builtin aliases"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -51,17 +59,24 @@
     "localSymbols": [
       "StyleSheetTable",
       "StyleSheetEntry",
-      "StyleType"
+      "StyleType",
+      "TableStyleSheetEntry",
+      "mergeConditionalProperties"
     ],
     "upstreamSymbols": [
       "StyleSheetTable::StyleSheetTable",
       "StyleSheetTable::ConvertStyleName",
       "StyleSheetTable::FindStyleSheetByISTD",
-      "StyleSheetTable::lcl_entry"
+      "StyleSheetTable::lcl_entry",
+      "StyleSheetEntry::GetMergedInheritedProperties",
+      "StyleSheetEntry::AppendInteropGrabBag",
+      "TableStyleSheetEntry::GetLocalPropertiesFromMask",
+      "lcl_mergeProps"
     ],
     "preservedResponsibilities": [
       "Original typed constructor DocDefaults (three 10pt heights and disabled auto-kerning), full exact 439-pair Word style name table/reserved-name suffix logic, first-ID/ordered converted-name lookup and consumed entry completion admission. AppendEntry/SetCurrentEntry bind consumed portions of original entry resolution; full resource callbacks, StyleSheetPropertyMap list/frame fields, table style entries and apply-to-model remain pending.",
-      "Preserves the complete pinned case-sensitive Word style-name map, recognized-builtin flag, reserved Writer target names and repeated (WW) suffix behavior."
+      "Preserves the complete pinned case-sensitive Word style-name map, recognized-builtin flag, reserved Writer target names and repeated (WW) suffix behavior.",
+      "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

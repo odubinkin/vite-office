@@ -23,6 +23,20 @@ export class BreakIteratorImpl {
       ? WEAK
       : this.getScriptClass(iterateCodePoints(text, [nPos], 0));
   }
+  /** Original backward script run; unlike endOfScript, weak characters are not absorbed into a strong run. @param text - Native UTF16 view. @param start - Native position. @param script - Expected script. @returns Original run start or minus one. */
+  beginOfScript(text: Uint16Array, start: number, script: number): number {
+    if (start < 0 || start >= text.length) return -1;
+    const position: [number] = [start];
+    if (script !== this.getScriptClass(iterateCodePoints(text, position, 0))) return -1;
+    if (position[0] === 0) return 0;
+    while (position[0] > 0) {
+      const ch = iterateCodePoints(text, position, -1);
+      if (script !== this.getScriptClass(ch)) break;
+      if (position[0] === 0) return 0;
+    }
+    iterateCodePoints(text, position, 1);
+    return position[0];
+  }
   /** Original end-of-script includes trailing weak characters and stops at another strong script. @param text - Logical UTF16. @param nStartPos - Code-unit position. @param scriptType - Expected initial class. @returns End offset or minus one. */
   endOfScript(text: Uint16Array, nStartPos: number, scriptType: number): number {
     if (nStartPos < 0 || nStartPos >= text.length) return -1;

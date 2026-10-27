@@ -131,33 +131,42 @@ describe("WriterFileDialog", /** Registers file dialog interaction tests. @retur
     documentShell.Close();
   });
 
-  it("exports TXT through a format card", /** Checks visible format labels and download payload. @returns Completion. */ async () => {
-    const documentShell = shell();
-    documentShell.GetDoc().paragraphs[0]?.SetText("Plain body");
-    const exported = vi.fn();
-    const close = vi.fn();
-    render(
-      <WriterFileDialog
-        docShell={documentShell}
-        kind="export"
-        onClose={close}
-        services={services(undefined, exported)}
-      />,
-    );
-    expect(screen.getByRole("button", { name: "Download ODT" })).toHaveTextContent("ODT");
-    expect(screen.getByRole("button", { name: "Download TXT" })).toHaveTextContent("TXT");
-    fireEvent.click(screen.getByRole("button", { name: "Download TXT" }));
-    await waitFor(
-      /** Waits for the browser export. @returns Nothing. */ () =>
-        expect(exported).toHaveBeenCalledWith({
-          data: "Plain body\n",
-          mediaType: "text/plain;charset=utf-8",
-          name: "Draft.txt",
-        }),
-    );
-    expect(close).toHaveBeenCalledTimes(1);
-    documentShell.Close();
-  });
+  it.each([
+    { text: "Plain body", bytes: [80, 108, 97, 105, 110, 32, 98, 111, 100, 121, 10] },
+    { text: "A😀\ud800BC", bytes: [65, 0xf0, 0x9f, 0x98, 0x80, 63, 67, 10] },
+  ])(
+    "exports TXT through a format card with native byte conversion: $text",
+    /** Checks visible format labels and native download bytes. @param input - Text and source-contract byte expectation. @returns Completion. */ async ({
+      text,
+      bytes,
+    }) => {
+      const documentShell = shell();
+      documentShell.GetDoc().paragraphs[0]?.SetText(text);
+      const exported = vi.fn();
+      const close = vi.fn();
+      render(
+        <WriterFileDialog
+          docShell={documentShell}
+          kind="export"
+          onClose={close}
+          services={services(undefined, exported)}
+        />,
+      );
+      expect(screen.getByRole("button", { name: "Download ODT" })).toHaveTextContent("ODT");
+      expect(screen.getByRole("button", { name: "Download TXT" })).toHaveTextContent("TXT");
+      fireEvent.click(screen.getByRole("button", { name: "Download TXT" }));
+      await waitFor(
+        /** Waits for the browser export. @returns Nothing. */ () =>
+          expect(exported).toHaveBeenCalledWith({
+            data: Uint8Array.from(bytes),
+            mediaType: "text/plain;charset=utf-8",
+            name: "Draft.txt",
+          }),
+      );
+      expect(close).toHaveBeenCalledTimes(1);
+      documentShell.Close();
+    },
+  );
 
   it("exports native RTF bytes through the existing format dialog", /** Checks the shell-owned RTF output reaches the browser port. @returns Completion. */ async () => {
     const documentShell = shell();

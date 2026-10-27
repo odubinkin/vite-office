@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/doc/poolfmt-char.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/poolfmt-char.ts",
+        "apps/office/src/sw/source/core/doc/character-pool.test.ts"
+      ],
+      "justification": "Character pool default switch for all represented item families; rotation, case mapping and ruby emphasis families remain outside the current kernel.",
+      "knownViolations": [],
+      "localSymbols": [
+        "applyWriterCharacterStyleDefaults"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/core/doc/DocumentStylePoolManager.cxx",
+      "upstreamSymbols": [
+        "DocumentStylePoolManager::GetFormatFromPool"
+      ]
+    }
+  }
+}

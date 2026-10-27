@@ -10,12 +10,16 @@
       "rtl_getBestWindowsCharsetFromTextEncoding",
       "rtl_getTextEncodingFromWindowsCodePage",
       "rtl_getTextEncodingInfo",
-      "rtl_TextEncodingInfo"
+      "rtl_TextEncodingInfo",
+      "rtl_getTextEncodingFromWindowsCharset",
+      "rtl_isOctetTextEncoding"
     ],
     "upstreamSymbols": [
       "rtl_getBestWindowsCharsetFromTextEncoding",
       "rtl_getTextEncodingFromWindowsCodePage",
-      "rtl_getTextEncodingInfo"
+      "rtl_getTextEncodingInfo",
+      "rtl_getTextEncodingFromWindowsCharset",
+      "rtl_isOctetTextEncoding"
     ],
     "evidence": {
       "local": [
@@ -38,6 +42,14 @@
         {
           "path": "apps/office/src/sal/textenc/tencinfo.test.ts",
           "marker": "covers all represented"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/native-text-encoding-info.sources.json",
+          "marker": "sourceHashes"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tencinfo.ts",
+          "marker": "rtl_getTextEncodingFromWindowsCharset"
         }
       ],
       "upstream": [
@@ -72,14 +84,14 @@
       ]
     },
     "preservedResponsibilities": [
-      "Native best-Windows-charset query over all88 metadata records with full locales enabled. The pinned97slot table plus five core dispatches are extracted and independently checkable; original absent-data default1 and unsigned16 input binding are retained. Only the consumed metadata field is bound; no fake converter/data lookup service or native shared-library loader is constructed. Locale-disabled builds and other tencinfo/converter metadata remain unverified.",
+      "Native best-Windows-charset query over all 88 full-locale metadata records preserves the original absent-data default 1 and unsigned16 binding without constructing a fake converter service or shared-library loader.",
       "Complete pinned Windows code-page to rtl_TextEncoding switch and unknown fallback.",
-      "The source size-gated field writes and unknown-encoding fallback use min/max/average character sizes and flags captured from pinned ImplTextEncodingData for all 55 represented single-byte converters plus UTF-8. The CONTEXT/ASCII choice used by Calc CSV export therefore follows the native metadata rather than a guessed encoding category."
+      "Full pinned WITH_LOCALE_ALL metadata now binds all 88 original encoding records, including multibyte/contextual min/max/average sizes and flags, independently extracted from original factory and descriptor aggregates by scripts/sal-text-encoding-metadata.mjs. Original Windows charset switch and octet-encoding range/SYSTEM exclusion are preserved with unsigned byte/uint16 inputs. Metadata presence does not admit unported converter services."
     ],
     "omittedResponsibilities": [
       "Full native framework/ABI and complete format orchestration are not certified; see admission.",
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice.",
-      "Metadata for unrepresented multi-byte/contextual converters and unrelated tencinfo queries remains outside this runtime slice."
+      "Unrelated tencinfo queries, locale-disabled metadata profiles and full generic conversion services remain unverified."
     ]
   }
 }

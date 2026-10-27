@@ -242,7 +242,7 @@ it("applies the last common alias to the shared named numbering style", /** Pres
     content,
     createDocument({ id: "aliases", suiteId: "writer", title: "Aliases" }),
   ).document;
-  expect(doc.GetNumRuleTable()).toHaveLength(1);
+  expect(doc.GetNumRuleTable().slice(1)).toHaveLength(1);
   expect(doc.FindNumRulePtr("Shared")?.Get(0).GetNumberingType()).toBe(4);
   doc.Dispose();
 });

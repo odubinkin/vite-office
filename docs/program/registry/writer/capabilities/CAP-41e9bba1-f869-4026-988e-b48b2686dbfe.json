@@ -1,0 +1,107 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-41e9bba1-f869-4026-988e-b48b2686dbfe",
+    "capabilityId": "CAP-41e9bba1-f869-4026-988e-b48b2686dbfe",
+    "suite": "writer",
+    "subsystem": "automatic-styles",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Retain exactly two pools/caches and original CHAR/RUBY/PARA/NOTXT routing and numeric values.",
+      "Use actual SwAttrSet/StylePool clones and paragraph-list ignorable range while retaining generic subtype guards and shared-pool collision behavior."
+    ],
+    "capability": "Original automatic-style family pools, name caches and paragraph ignorable insertion",
+    "gaps": [
+      "Native shared_ptr use_count-aware traversal, skip-unused/skip-ignorable iterator output, source parent-name/typed overloads and getAllStyles API remain unported. Cache fallback continues through the existing bounded retained-handle enumeration, so native full cache/usage/lifetime parity is not claimed. Shared raw handle lifetime/name/ordering, physical ABI/thread/native assert process and whole-module compiled differential/full QA parity remain unverified. AttrSetHandleHelper GetNewAutoStyle/SetModifyAtAttr, native paragraph AppendNode/MakeNewTextNode/layout/undo and concrete UNO Reference/Sequence boundary migration remain pending. Full DOCX/XLSX import/export/model/UI workflows remain incomplete; broad flags stay unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/core/doc/swstylemanager.cxx",
+          "marker": "SwStyleManager::getAutomaticStyle"
+        },
+        {
+          "path": "svl/source/items/stylepool.cxx",
+          "marker": "StylePoolImpl::insertItemSet"
+        },
+        {
+          "path": "sw/source/core/doc/docnew.cxx",
+          "marker": "aIgnorableParagraphItems"
+        },
+        {
+          "path": "sw/inc/istyleaccess.hxx",
+          "marker": "AUTO_STYLE_RUBY"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/odfexport/odfexport.cxx",
+          "marker": "getAutoStyles(u\"ParagraphStyles\"_ustr)"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/inc/istyleaccess.hxx",
+          "marker": "clearCaches"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/svl/source/items/stylepool.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/inc/istyleaccess.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/swstylemanager.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/doc.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-automatic-style-families.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/stylepool.test.ts",
+          "marker": "partitions ignorable range items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/automatic-style-handles.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER166"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Native shared_ptr use_count-aware traversal, skip-unused/skip-ignorable iterator output, source parent-name/typed overloads and getAllStyles API remain unported. Cache fallback continues through the existing bounded retained-handle enumeration, so native full cache/usage/lifetime parity is not claimed. Shared raw handle lifetime/name/ordering, physical ABI/thread/native assert process and whole-module compiled differential/full QA parity remain unverified. AttrSetHandleHelper GetNewAutoStyle/SetModifyAtAttr, native paragraph AppendNode/MakeNewTextNode/layout/undo and concrete UNO Reference/Sequence boundary migration remain pending. Full DOCX/XLSX import/export/model/UI workflows remain incomplete; broad flags stay unverified."
+    },
+    "scopeLimitations": [
+      "Native shared_ptr use_count-aware traversal, skip-unused/skip-ignorable iterator output, source parent-name/typed overloads and getAllStyles API remain unported. Cache fallback continues through the existing bounded retained-handle enumeration, so native full cache/usage/lifetime parity is not claimed. Shared raw handle lifetime/name/ordering, physical ABI/thread/native assert process and whole-module compiled differential/full QA parity remain unverified. AttrSetHandleHelper GetNewAutoStyle/SetModifyAtAttr, native paragraph AppendNode/MakeNewTextNode/layout/undo and concrete UNO Reference/Sequence boundary migration remain pending. Full DOCX/XLSX import/export/model/UI workflows remain incomplete; broad flags stay unverified.",
+      "The native QA reference is an unported downstream style consumer, not a claim of native paragraph-auto-style suite or compiled differential execution. Local tests are source-backed actual-owner cases."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "automatic-style-family-pool-routing"
+  }
+}

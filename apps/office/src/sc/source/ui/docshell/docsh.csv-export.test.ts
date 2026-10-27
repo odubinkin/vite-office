@@ -8,6 +8,7 @@ import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_JIS_X_0201,
+  RTL_TEXTENCODING_ISO_2022_JP,
 } from "../../../../sal/inc/rtl/textenc";
 import { ScAddress } from "../../../inc/address";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
@@ -74,12 +75,12 @@ it("exports actual multi-paragraph edit cells and releases their owned text on r
   }
 });
 
-it("quotes UTF-16 and non-ASCII-compatible encodings before writing their stream", /** Checks native Unicode and contextual conversion branches. @returns Nothing. */ () => {
+it("quotes UTF-16 and contextual encodings before writing their stream", /** Checks native Unicode and contextual conversion branches. @returns Nothing. */ () => {
   const shell = new ScDocShell();
   try {
     const doc = shell.GetDocument();
     doc.SetTextCell(new ScAddress(), unicode('A"B,C'));
-    for (const encoding of [RTL_TEXTENCODING_UNICODE, RTL_TEXTENCODING_JIS_X_0201]) {
+    for (const encoding of [RTL_TEXTENCODING_UNICODE, RTL_TEXTENCODING_ISO_2022_JP]) {
       const options = new ScImportOptions();
       options.SetTextEncoding(encoding);
       const bytes = shell.AsciiSave(options.BuildString());
@@ -98,6 +99,13 @@ it("quotes UTF-16 and non-ASCII-compatible encodings before writing their stream
       ).toBe('"plain"\n');
       doc.SetTextCell(new ScAddress(), unicode('A"B,C'));
     }
+    // Native JIS X 0201 has no text-to-Unicode callback for CSV delimiter roundtrips.
+    const unavailable = new ScImportOptions();
+    unavailable.SetTextEncoding(RTL_TEXTENCODING_JIS_X_0201);
+    expect(
+      /** Preserves the original missing-converter rejection. @returns No CSV stream. */ () =>
+        shell.AsciiSave(unavailable.BuildString()),
+    ).toThrow("Native text-to-Unicode callback is null.");
   } finally {
     shell.Close();
   }

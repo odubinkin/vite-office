@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "local-infrastructure",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+          "marker": "encodeTextHint"
+        }
+      ]
+    },
+    "localPath": "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+    "rationale": "Existing browser hint graph envelopes now preserve actual character-style references, sort number and mutable native flags; automatic/internet records retain their prior representation. Native pool item QueryValue/UNO remain independent from this browser graph.",
+    "responsibilities": [
+      "Existing browser hint graph envelopes now preserve actual character-style references, sort number and mutable native flags; automatic/internet records retain their prior representation. Native pool item QueryValue/UNO remain independent from this browser graph."
+    ],
+    "stackDivergence": {
+      "kind": "local-infrastructure",
+      "rationale": "Dedicated Worker structured-clone encoding is a browser execution boundary and is not part of the native SfxPoolItem value contract."
+    },
+    "status": "local-only",
+    "preservedResponsibilities": [
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
+    ],
+    "localSymbols": [
+      "encodeTextHint",
+      "decodeTextHint"
+    ]
+  }
+}

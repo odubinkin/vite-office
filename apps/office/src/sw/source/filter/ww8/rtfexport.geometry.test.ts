@@ -119,9 +119,10 @@ it.each([
             ) => node instanceof SwTableNode,
           );
         assert(restored instanceof SwTableNode);
+        // Pinned import rounds hairline to two twips and ignores BRDRTH (WRITER120).
         expect(
           restored.GetTable().GetTabLines()[0]?.GetTabBoxes()[0]?.GetBox().GetTop()?.GetWidth(),
-        ).toBe(borderWidth);
+        ).toBe(borderWidth === 1 ? 2 : borderWidth / 2);
       } finally {
         imported.Dispose();
       }

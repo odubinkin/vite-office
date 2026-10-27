@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/dmapper/MeasureHandler.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-style-property-values",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/MeasureHandler.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-table-value-handlers.test.ts"
+      ],
+      "justification": "Original measure/unit defaults, MIN row-height mode, string-only height parsing through the actual signed32 OUString/SAL owner, exact-only sticky height, limited dxa/legacy-unit3 conversion and ordered actual PropertyValue interop sequences. Percentage/nil/auto converted width remains zero. XML reaches this receiver through generated style table-property contexts. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "MeasureHandler"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/dmapper/MeasureHandler.cxx",
+      "upstreamSymbols": [
+        "MeasureHandler",
+        "lcl_attribute",
+        "getMeasureValue"
+      ]
+    }
+  }
+}

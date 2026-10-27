@@ -1,0 +1,61 @@
+{
+  "pin": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "configurations": {
+    "types": "/*\n\n   Alignments and sizes of types.\n\n*/\n\n#ifndef CONFIG_TYPESIZES_H\n#define CONFIG_TYPESIZES_H\n\n#define SAL_TYPES_ALIGNMENT2 2\n#define SAL_TYPES_ALIGNMENT4 4\n#define SAL_TYPES_ALIGNMENT8 8\n#define SAL_TYPES_SIZEOFSHORT __SIZEOF_SHORT__\n#define SAL_TYPES_SIZEOFINT __SIZEOF_INT__\n#define SAL_TYPES_SIZEOFLONG __SIZEOF_LONG__\n#define SAL_TYPES_SIZEOFLONGLONG __SIZEOF_LONG_LONG__\n#define SAL_TYPES_SIZEOFPOINTER __SIZEOF_POINTER__\n\n#endif\n",
+    "global": "/*\nGlobal configuration file.\n\nOnly for settings that apply to every source file and are unlikely to change often,\nsuch as whether a certain C++11 feature is available.\n\nDo NOT use for settings local to some code or for settings that can change often.\nAny change in this header will cause a rebuild of almost everything.\n\n*/\n\n#ifndef CONFIG_GLOBAL_H\n#define CONFIG_GLOBAL_H\n\n#define HAVE_GCC_BUILTIN_ATOMIC 1\n#define HAVE_GCC_WSFINAE_INCOMPLETE 0\n#define HAVE_SYSLOG_H 0\n\n// Compiler supports C++20 <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p1073r3.html>\n// \"Immediate functions\":\n#define HAVE_CPP_CONSTEVAL 1\n\n// Compiler supports all of C++2a <https://wg21.link/P0202R3> \"Add Constexpr Modifiers to Functions\n// in <algorithm> and <utility> Headers\", <https://wg21.link/P1004R2> \"Making std::vector\n// constexpr\", and <https://wg21.link/P1143R2> \"Adding the constinit keyword\":\n#define HAVE_CPP_CONSTINIT_SORTED_VECTOR 0\n\n// Compiler supports C++20 <compare> std::strong_order:\n#define HAVE_CPP_STRONG_ORDER 0\n\n/* \"CWG motion 23: P1825R0 'Merged wording for P0527R1 and P1155R3' (DR)\" in\n   <https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/n4829.html> \"N4829 Editors' Report --\n   Programming Languages -- C++\" marks\n   <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2019/p1155r3.html> \"More implicit moves\" as a\n   DR.  Some versions of GCC already implemented it prior to the fix for\n   <https://gcc.gnu.org/bugzilla/show_bug.cgi?id=87150> \"move ctor wrongly chosen in return stmt\n   (derived vs. base)\"; MSVC++ 14.24 started to implement it, see <https://\n   developercommunity.visualstudio.com/content/problem/852827/\n   msvc-1424-started-to-chose-move-ctor-in-return-der.html> \"MSVC++ 14.24 started to choose move ctor\n   in return derived vs. base\".  At least Clang 9, which does not implement it, emits\n   -Werror,-Wreturn-std-move when it therefore considers a std::move to be missing.  On the other\n   hand, at least some versions of GCC would emit -Werror=redundant-move in places where such a\n   std::move would be added unconditionally, see c00948d9bd35dfb15a331c2163f32e9ee24644fd \"Silence\n   bogus -Werror=redundant-move (GCC 9)\". */\n#define HAVE_P1155R3 0\n\n// Whether the OS provides a usable dynamic loading API\n#define HAVE_DLAPI 0\n\n// Whether the OS uses the common UNIX dynamic loading API calls, like dlopen, dlsym, dladdr etc.\n// Use HAVE_DLAPI instead. Should not be used outside of sal/osl/unx/module.cxx!\n#define HAVE_UNIX_DLAPI 0\n\n#endif\n"
+  },
+  "driverHash": "843a3c233581016061e9e549ba77b822fbbe0144d66c503e1c22f6cdd9f2f1fe",
+  "sourceHashes": {
+    "config_host/config_typesizes.h.in": "f009364809b5bd8df424d65539173d6152cb41443c10db1e3673b6f09af39e2e",
+    "config_host/config_global.h.in": "6a710a13ae1c2052a29e64ca740e34b9083a6cd19b1e3564d368351a20714da0",
+    "tools/source/ref/ref.cxx": "625ed2f8a999bf74dbee04c3ea6b4575a82e18bee696d727047ef3439ff090e9",
+    "include/tools/ref.hxx": "10df0ec3caab9081c8eeda9174d1ba27928be1ae6253eaaca6e161a0c5160678",
+    "include/sal/config.h": "e3a00b54777758fc51ada0db2b08e4ac33e593d5dae6c61bb9bfe68c02924ea0",
+    "include/tools/toolsdllapi.h": "99626fe63ff701731507696789d05abf93cc69642a6f7c31dd1152a8c76e3403",
+    "include/sal/types.h": "fa5c543603b8dece9bde68a517e63c43a7f849a56395d2b3e5c020fe58c83ad0",
+    "include/sal/macros.h": "0328636b34ca3bfc1a1076ae5fe7c0b1906fdb4c5a557ac3407dd0aa8ee3507f",
+    "include/sal/typesizes.h": "e92bf95476d4d566417bd8e3bc0d07fb445c609a3bb3d2018811a4119c6bcbb5",
+    "include/tools/weakbase.hxx": "66f2b75259db0503a349993c8cfc50547f97ddcb323afc03a842ff0c72902d97",
+    "include/tools/weakbase.h": "e12884566a24e733c4f940801ee1594a2a280d4a2efe0b7557e15dfe1a0ecfc8",
+    "include/rtl/ref.hxx": "2e693184766b15166cabb2fc987266395037fee1107f2c8eccbc824fd35fd0c3",
+    "include/com/sun/star/uno/Reference.h": "4a6366b06b7b34e83630a3e7b985bbfa5edc1b13e256e79f92edb219fc8ebed0",
+    "include/rtl/alloc.h": "d24f9e760745a829cab25e4c7d230b4a4108ba482e30e58db15a95355239c25e",
+    "include/sal/saldllapi.h": "2e72622ffef928de1061a95c4ba559b9f8cf08f91d626e96cf95a5869ffa9130"
+  },
+  "captures": {
+    "lifecycle": {
+      "observations": [
+        10, 1, 0, 20, 0, 21, 1, 22, 3, 1, 1, 1, 1, 1, 1, 0, 23, 3, 24, 2, 25, 1, 90, 1, 1073741824,
+        0, 26, 0, 27, 0, 0, 0, 1
+      ],
+      "digest": "71445dc18308981154ddb3ee28a94bdf5021a26fc639e0660b489393a7769f45"
+    },
+    "assignments": {
+      "observations": [
+        10, 2, 0, 10, 3, 0, 90, 2, 1073741824, 1, 30, 3, 1, 0, 31, 2, 32, 1, 0, 33, 1, 10, 4, 0, 90,
+        3, 1073741824, 1, 34, 1, 90, 4, 1073741824, 1, 35, 0, 10, 5, 0, 36, 1, 90, 5, 1073741824, 1,
+        10, 6, 0, 10, 7, 0, 90, 6, 1073741824, 0, 37, 7, 2, 90, 7, 1073741824, 0, 10, 8, 0, 38, 0,
+        1, 90, 8, 1073741824, 0
+      ],
+      "digest": "cb8905726b159a7aa112fa5d7ffec76e9c0229577f9ba8b3ff559e302b7c50a8"
+    },
+    "base": {
+      "observations": [
+        10, 9, 0, 10, 109, 0, 42, 0, 43, 1, 0, 44, 0, 90, 109, 0, 0, 10, 10, 0, 40, 1, 41, 0, 45, 1,
+        90, 10, 0, 0, 90, 9, 1073741824, 0
+      ],
+      "digest": "b582040efc5fd796154ae89e608657b3ee97116056ec471e64adf792203b9785"
+    },
+    "boundary": {
+      "observations": [10, 11, 0, 50, 1073741824, 51, 0, 90, 11, 0, 0],
+      "digest": "59a7d6262661fcb822f698315e8d07766c8fe700bce8aa30228924292c91e488"
+    },
+    "vector": {
+      "observations": [
+        10, 12, 0, 10, 13, 0, 60, 1, 1, 90, 13, 1073741824, 0, 90, 12, 1073741824, 0
+      ],
+      "digest": "41b2921066e20c32b95539277a089f3b0e17b5c9477a2846d26c0d80aa37094b"
+    }
+  },
+  "scope": "Complete original SvRefBase/SvRef/make_ref valid ownership streams and live count boundary, normal and ASan/UBSan. LeakSanitizer is unsupported on this platform and disabled; no leak-detection claim. Full unchanged ref.cxx also contains unrelated WeakBase destructor, naturally dead-stripped; compatibility frame wrappers/native allocation/thread/ABI and invalid/post-lifetime behavior are not certified."
+}

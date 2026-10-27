@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+        "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/txtedt.cxx",
+        "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts"
+      ],
+      "justification": "Original five-case ranged reset geometry, deferred removals/insertion, selective pooled automatic-style reduction, history, exact-range selector precedence and native notifications. Exact branch retains original missing changed flag. Input fields, dummy/content-bearing attributes and reference/TOX/meta owners are outside the registered current model. Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResetTextNodeAttributes",
+        "GetTextResetStyle"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/txtedt.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::RstTextAttr",
+        "lcl_HaveCommonAttributes"
+      ]
+    }
+  }
+}

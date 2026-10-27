@@ -1,4 +1,16 @@
 /** @fileoverview Internal canonical Writer graph codec used behind boundary-specific envelopes. */
+import {
+  encodeTextHint,
+  decodeTextHint,
+  type WriterTextHintRecord,
+} from "./writer-text-hint-codec";
+import {
+  encodeCharacterStyles,
+  restoreCharacterStyles,
+  decodeCharacterStyleReference,
+  type WriterCharacterStyleRecord,
+} from "./writer-character-style-codec";
+import { encodeNumberFormat, type WriterNumberFormatRecord } from "./writer-number-format-codec";
 import { upgradeWriterWhichIds } from "./writer-which-id-migration";
 import { runCooperatively, runSynchronously } from "../../../../framework/browser/io/cooperative";
 import {
@@ -14,19 +26,8 @@ import { SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { SvxBorderLine, type BorderLineRecord } from "../../../../editeng/source/items/borderline";
 import { importBoxProperties } from "../../../source/filter/xml/xmlimpit";
 
-import {
-  SvxNumType,
-  createWriterNumFormat,
-  getWriterNumFormatBullet,
-  getWriterNumFormatKind,
-  SwNumRule,
-  SwNumRuleType,
-} from "../../../source/core/doc/number";
-import {
-  encodeFontMetadata,
-  restoreFontMetadata,
-  type FontMetadataRecord,
-} from "../../../../vcl/browser/font-metadata-codec";
+import { createWriterNumFormat, SwNumRule, SwNumRuleType } from "../../../source/core/doc/number";
+import { restoreFontMetadata } from "../../../../vcl/browser/font-metadata-codec";
 import { Font } from "../../../../vcl/source/font/font";
 import type { SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -56,54 +57,18 @@ import {
   type WriterParagraphStyle,
 } from "../../../source/core/doc/fmtcol";
 import type { WriterParagraphStyleGroup } from "../../../inc/poolfmt";
-import type { WriterParagraphListKind } from "../../../source/core/doc/list";
 import {
   RES_PARATR_OUTLINELEVEL,
   RES_BOX,
-  WRITER_CHARACTER_WHICH_RANGES,
   WRITER_TEXT_NODE_WHICH_RANGES,
 } from "../../../inc/hintids";
 import { SwpHints } from "../../../source/core/txtnode/ndhints";
-import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
-import { MakeTextAttr } from "../../../source/core/txtnode/thints";
 import type { WriterPageDescriptorValue } from "../../../source/core/layout/pagedesc";
 import {
   getDefaultDocumentSettings,
   type DocumentSettingId,
 } from "../../../source/core/doc/DocumentSettingManager";
-import {
-  decodeSfxItemSet,
-  decodeSfxPoolItem,
-  encodeSfxItemSet,
-  decodeSwFormatINetFormatRecord,
-  encodeSwFormatINetFormatRecord,
-  type WriterInternetFormatRecord,
-} from "./item-codec";
-
-/** Primitive graph record for one numbering level. */
-interface WriterNumberFormatRecord {
-  readonly bulletFont: string;
-  readonly bulletFontPresent?: boolean;
-  readonly bulletFontMetadata?: FontMetadataRecord;
-  readonly bulletGlyph?: number;
-  readonly showSymbol?: boolean;
-  readonly numberingType?: "arabic" | "char-special" | "none";
-  readonly bulletChar?: string;
-  readonly firstLineIndent: number;
-  readonly indentAt: number;
-  readonly includeUpperLevels: number;
-  readonly kind: Exclude<WriterParagraphListKind, "none">;
-  readonly labelFollowedBy: "listtab" | "nothing" | "space";
-  readonly listTabPosition: number;
-  readonly positionAndSpaceMode: "label-alignment" | "label-width-and-position";
-  readonly absLSpace?: number;
-  readonly firstLineOffset?: number;
-  readonly charTextDistance?: number;
-  readonly listFormat?: string;
-  readonly prefix: string;
-  readonly start: number;
-  readonly suffix: string;
-}
+import { decodeSfxItemSet, decodeSfxPoolItem, encodeSfxItemSet } from "./item-codec";
 
 /** Native scalar rule state transported independently of copy-constructor policy. */
 interface WriterNumberRuleScalarState {
@@ -337,20 +302,6 @@ function decodeBoxItem(value: WriterBoxFormatRecord): SvxBoxItem | undefined {
 }
 
 /** Canonical ranged Writer attribute record; browser run projections never cross a boundary. */
-type WriterTextHintRecord =
-  | Readonly<{
-      end: number;
-      items: readonly SfxPoolItemSnapshot[];
-      kind: "auto-format";
-      start: number;
-    }>
-  | Readonly<{
-      end: number;
-      hyperlink: WriterInternetFormatRecord;
-      kind: "hyperlink";
-      start: number;
-    }>;
-
 /** Internal graph record. Paragraph identity is array order, never a stored UI key. */
 export interface WriterDocumentRecord {
   readonly bodyOrder?: readonly ("text" | "table")[];
@@ -361,6 +312,9 @@ export interface WriterDocumentRecord {
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
+  /** Actual document outline pointer expressed as an index; legacy graphs have no precreated outline owner. */
+  readonly outlineRuleIndex?: number;
+  readonly characterFormats?: readonly WriterCharacterStyleRecord[];
   readonly pageDescriptors: readonly Readonly<{
     followName: string;
     value: WriterPageDescriptorValue;
@@ -421,6 +375,8 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     documentSettings: document.GetDocumentSettingManager().GetValues(),
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
+    characterFormats: encodeCharacterStyles(document),
+    outlineRuleIndex: document.GetNumRuleTable().indexOf(document.GetOutlineNumRule()),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
@@ -449,39 +405,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
             _,
             level,
           ) => {
-            const format = rule.Get(level);
-            const font = format.GetBulletFont();
-            return {
-              ...format.GetPositionProperties(),
-              bulletFont: font?.GetFamilyName() ?? "",
-              ...(font === undefined
-                ? {}
-                : {
-                    bulletFontMetadata: encodeFontMetadata(font),
-                  }),
-              numberingType:
-                format.GetNumberingType() === SvxNumType.SVX_NUM_NUMBER_NONE
-                  ? "none"
-                  : format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL
-                    ? "char-special"
-                    : "arabic",
-              bulletFontPresent: format.GetBulletFont() !== undefined,
-              bulletGlyph: format.GetBulletChar(),
-              showSymbol: format.IsShowSymbol(),
-              bulletChar:
-                format.GetBulletChar() <= 0x10ffff ? getWriterNumFormatBullet(format) : "",
-              firstLineIndent: format.GetFirstLineIndent(),
-              indentAt: format.GetIndentAt(),
-              includeUpperLevels: format.GetIncludeUpperLevels(),
-              ...(format.HasListFormat() ? { listFormat: format.GetListFormat() } : {}),
-              kind: getWriterNumFormatKind(format),
-              labelFollowedBy: format.GetLabelFollowedBy(),
-              listTabPosition: format.GetListtabPos(),
-              positionAndSpaceMode: format.GetPositionAndSpaceMode(),
-              prefix: format.GetPrefix(),
-              start: format.GetStart(),
-              suffix: format.GetSuffix(),
-            };
+            return encodeNumberFormat(document, rule.Get(level));
           },
         ),
         listId: rule.GetDefaultListId(),
@@ -572,20 +496,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
         .map(
           /** Encodes one canonical ranged text attribute. @param hint - Writer hint. @returns Primitive hint record. */ (
             hint,
-          ): WriterTextHintRecord =>
-            hint.format instanceof SwFormatAutoFormat
-              ? {
-                  end: hint.end,
-                  items: encodeSfxItemSet(hint.format.GetStyleHandle()),
-                  kind: "auto-format",
-                  start: hint.start,
-                }
-              : {
-                  end: hint.end,
-                  hyperlink: encodeSwFormatINetFormatRecord(hint.format),
-                  kind: "hyperlink",
-                  start: hint.start,
-                },
+          ): WriterTextHintRecord => encodeTextHint(document, hint),
         ) ?? [],
     text: node.GetText(),
   };
@@ -669,6 +580,7 @@ export function* decodeWriterDocumentSteps(
       settings.DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT =
         getDefaultDocumentSettings().DO_NOT_RESET_PARA_ATTRS_FOR_NUM_FONT;
     document.GetDocumentSettingManager().SetValues(settings);
+    restoreCharacterStyles(document, record.characterFormats);
     if (record.textFormatCollections[0]?.id !== "default")
       throw new Error("Stored Writer style is invalid.");
     for (const style of record.textFormatCollections) {
@@ -677,36 +589,14 @@ export function* decodeWriterDocumentSteps(
       if (!isWriterParagraphStyle(style.id))
         document.MakeTextFormatColl(style.name, undefined, style.id);
     }
-    for (const style of record.textFormatCollections) {
-      const collection = document.GetTextFormatColl(style.id);
-      const factoryOutlineLevel = collection.GetAttrOutlineLevel();
-      const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
-      if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
-        throw new Error("Stored Writer outline assignment is invalid.");
-      if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
-      else if (style.outlineAssignment === true && !factoryAssignment)
-        collection.AssignToListLevelOfOutlineStyle(0);
-      collection.SetFormatName(style.name);
-      collection.ResetAllFormatAttr();
-      decodeSfxItemSet(collection.GetAttrSet(), style.items);
-      if (
-        style.outlineAssignment === undefined &&
-        factoryAssignment &&
-        !style.items.some(
-          /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
-          (item) => item.which === RES_PARATR_OUTLINELEVEL,
-        )
-      )
-        collection.SetAttrOutlineLevel(factoryOutlineLevel);
-    }
-    for (const style of record.textFormatCollections) {
-      const collection = document.GetTextFormatColl(style.id);
-      collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
-      collection.SetDerivedFrom(
-        style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
-      );
-    }
-    for (const rule of record.numRules) {
+    if (
+      record.outlineRuleIndex !== undefined &&
+      (!Number.isInteger(record.outlineRuleIndex) ||
+        record.outlineRuleIndex < 0 ||
+        record.outlineRuleIndex >= record.numRules.length)
+    )
+      throw new Error("Stored Writer outline owner index is invalid.");
+    for (const [ruleIndex, rule] of record.numRules.entries()) {
       if (
         rule.ruleType !== undefined &&
         rule.ruleType !== SwNumRuleType.NUM_RULE &&
@@ -766,6 +656,7 @@ export function* decodeWriterDocumentSteps(
           start: format.start,
           suffix: format.suffix,
         });
+        decoded.SetCharFormat(decodeCharacterStyleReference(document, format.characterStyle));
         if (format.bulletGlyph !== undefined) decoded.SetBulletChar(format.bulletGlyph);
         if (format.showSymbol !== undefined) decoded.SetShowSymbol(format.showSymbol);
         if (format.bulletFontPresent === true) {
@@ -777,7 +668,11 @@ export function* decodeWriterDocumentSteps(
         if (rule.ownedLevels === undefined || rule.ownedLevels[level])
           restoredRule.Set(level, decoded);
       }
-      const owner = document.AddNumRule(restoredRule);
+      const owner =
+        ruleIndex === record.outlineRuleIndex
+          ? document.GetOutlineNumRule().Assign(restoredRule)
+          : document.AddNumRule(restoredRule);
+      if (owner === document.GetOutlineNumRule()) owner.SetDefaultListId(rule.listId);
       const scalar = rule.scalarState;
       if (scalar !== undefined) {
         if (
@@ -809,6 +704,44 @@ export function* decodeWriterDocumentSteps(
         owner.SetPoolHelpId(scalar.poolHelpId);
         owner.SetPoolHlpFileId(scalar.poolHlpFileId);
       }
+    }
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      const factoryOutlineLevel = collection.GetAttrOutlineLevel();
+      const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
+      if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
+        throw new Error("Stored Writer outline assignment is invalid.");
+      if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
+      else if (style.outlineAssignment === true && !factoryAssignment)
+        collection.AssignToListLevelOfOutlineStyle(0);
+      collection.SetFormatName(style.name);
+      if (!Number.isInteger(style.poolId) || style.poolId < 0 || style.poolId > 65535)
+        throw new Error("Stored Writer paragraph style pool identity is invalid.");
+      collection.SetPoolFormatId(style.poolId);
+      collection.ResetAllFormatAttr();
+      const attributes = collection.GetAttrSet().Clone(false);
+      try {
+        decodeSfxItemSet(attributes, style.items);
+        collection.SetFormatAttrSet(attributes);
+      } finally {
+        attributes.Dispose();
+      }
+      if (
+        style.outlineAssignment === undefined &&
+        factoryAssignment &&
+        !style.items.some(
+          /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
+          (item) => item.which === RES_PARATR_OUTLINELEVEL,
+        )
+      )
+        collection.SetAttrOutlineLevel(factoryOutlineLevel);
+    }
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
+      collection.SetDerivedFrom(
+        style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
+      );
     }
     if (record.textNodes.length === 0)
       throw new Error("Stored Writer document has no body text node.");
@@ -904,16 +837,7 @@ export function* decodeWriterDocumentSteps(
     /** Restores one canonical text attribute. @param hint - Primitive hint record. @returns Writer hint. */ (
       hint,
     ) => {
-      if (hint.kind === "hyperlink")
-        return MakeTextAttr(
-          document,
-          decodeSwFormatINetFormatRecord(hint.hyperlink),
-          hint.start,
-          hint.end,
-        );
-      const items = new SfxItemSet(document.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
-      decodeSfxItemSet(items, hint.items);
-      return MakeTextAttr(document, items, hint.start, hint.end);
+      return decodeTextHint(document, hint);
     },
   );
   const position = new SwPosition(node, 0, "redline");

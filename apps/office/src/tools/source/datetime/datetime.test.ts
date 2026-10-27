@@ -57,3 +57,40 @@ it("normalizes large signed Time differences into the source day and Time compon
   expect(negativeStart.GetDays()).toBe(2);
   expect(negativeStart.GetTime().GetHour()).toBe(2);
 });
+
+it("constructs empty, time-only and UNO values and forwards each clock mutation", /** Exercises public constructor families and borrowed Time forwarding. @returns Nothing. */ () => {
+  expect(new DateTime(DateTime.EMPTY).GetDate()).toBe(0);
+  const clock = new Time(4, 5, 6, 7n),
+    value = new DateTime(clock);
+  expect(value.GetDate()).toBe(0);
+  expect(value.GetTime()).toBe(clock.GetTime());
+  clock.SetMin(40);
+  expect(value.GetMin()).toBe(5);
+  const uno = Object.assign(new UNODateTime(), {
+    Year: 2024,
+    Month: 2,
+    Day: 29,
+    Hours: 12,
+    Minutes: 3,
+    Seconds: 4,
+    NanoSeconds: 5,
+  });
+  const imported = new DateTime(uno);
+  expect(imported.GetUNODateTime()).toEqual(uno);
+  imported.SetMin(64);
+  imported.SetSec(65);
+  imported.SetNanoSec(1000000008);
+  expect([imported.GetMin(), imported.GetSec(), imported.GetNanoSec()]).toEqual([4, 5, 8]);
+  imported.SetTime(new Time(6, 0).GetTime());
+  expect(imported.GetTimeInDays()).toBe(0.25);
+});
+
+it("reconciles signed short and multi-day Time duration operands", /** Checks direct Time subtraction and negative normalized day components. @returns Nothing. */ () => {
+  expect(new Duration(new Time(1, 0), new Time(2, 30)).GetInDays()).toBe(1.5 / 24);
+  const minusFifty = Time.fromEncodedTime(-new Time(50, 0).GetTime());
+  const duration = new Duration(new Time(1, 0), minusFifty);
+  expect(duration.GetInDays()).toBe(-51 / 24);
+  expect(duration.GetDays()).toBe(-2);
+  expect(duration.GetTime().GetNSFromTime()).toBe(-3n * Time.nanoSecPerHour);
+  expect(new Time(1000000, 0).GetHour()).toBe(65535);
+});

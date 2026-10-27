@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/md4c/src/md4c.link.ts",
+    "upstreamPath": "vendor/md4c-reference/src/md4c.c",
+    "localSymbols": [
+      "md_is_link_label",
+      "md_is_link_destination",
+      "md_is_link_title"
+    ],
+    "upstreamSymbols": [
+      "md_is_link_label",
+      "md_is_link_destination",
+      "md_is_link_title"
+    ],
+    "preservedResponsibilities": [
+      "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity."
+    ],
+    "omittedResponsibilities": [
+      "Native allocation failures and C pointer ABI are not emulated. Writer callback integration remains pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.link.ts",
+          "marker": "md_is_link_label"
+        },
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.primitives.test.ts",
+          "marker": "matches compiled md4c classification"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/md4c-reference/src/md4c.c",
+          "marker": "md_is_link_label"
+        },
+        {
+          "path": "vendor/libreoffice-reference/download.lst",
+          "marker": "MD4C_SHA256SUM"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/md4c/src/md4c.link.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Retains md4c.c function groups and md4c.h callback contracts as bounded TypeScript responsibility files under the native external library owner."
+    }
+  }
+}

@@ -25,6 +25,10 @@ export abstract class SfxSetItem extends SfxPoolItem {
   public GetItemSet(): SfxItemSet {
     return this.maSet;
   }
+  /** Native contained-set destructor. @returns Nothing. */
+  public override Dispose(): void {
+    this.maSet.Dispose();
+  }
   /** Original concrete-type equality delegates to nested operator==, comparing pool and parent identities. Which itself does not participate. @param other - Candidate item. @returns Native payload equality. */
   public equals(other: SfxPoolItem): boolean {
     return (

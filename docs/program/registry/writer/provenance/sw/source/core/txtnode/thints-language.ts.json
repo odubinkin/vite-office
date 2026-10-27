@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+          "marker": "GetTextNodeLanguage"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::GetLang"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "localSymbols": [
+      "GetTextNodeLanguage"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::GetLang"
+    ],
+    "preservedResponsibilities": [
+      "Original language overlap and point-boundary policy, partial-first/full-later precedence, three-script Which selection and paragraph/application fallback. The absent no-hyphen owner returns LANGUAGE_DONTKNOW through its original independent query."
+    ],
+    "omittedResponsibilities": [
+      "Native INET GetCharFormat/visited URL style resolution and no-hyphen item producer are not registered; no synthetic style or hyphenation provider is introduced. Native Application settings use the established configured-language boundary."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native thints.cxx file owns range language selection alongside hint insertion and queries. This responsibility split retains GetLang traversal, overlap and boundary precedence while keeping the text node below the authored-file size gate and borrowing the actual native pool/style owners."
+    }
+  }
+}

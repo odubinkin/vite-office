@@ -1,0 +1,1143 @@
+[
+  {
+    "name": "RES_CHRATR_CASEMAP",
+    "which": 1,
+    "slot": 10019,
+    "flags": 0,
+    "itemExpression": "new SvxCaseMapItem( SvxCaseMap::NotMapped, RES_CHRATR_CASEMAP)"
+  },
+  {
+    "name": "RES_CHRATR_CHARSETCOLOR",
+    "which": 2,
+    "slot": 10877,
+    "flags": 0,
+    "itemExpression": "new SvxColorItem(RES_CHRATR_CHARSETCOLOR)"
+  },
+  {
+    "name": "RES_CHRATR_COLOR",
+    "which": 3,
+    "slot": 10017,
+    "flags": 0,
+    "itemExpression": "new SvxColorItem(RES_CHRATR_COLOR)"
+  },
+  {
+    "name": "RES_CHRATR_CONTOUR",
+    "which": 4,
+    "slot": 10012,
+    "flags": 0,
+    "itemExpression": "new SvxContourItem( false, RES_CHRATR_CONTOUR )"
+  },
+  {
+    "name": "RES_CHRATR_CROSSEDOUT",
+    "which": 5,
+    "slot": 10013,
+    "flags": 0,
+    "itemExpression": "new SvxCrossedOutItem( STRIKEOUT_NONE, RES_CHRATR_CROSSEDOUT )"
+  },
+  {
+    "name": "RES_CHRATR_ESCAPEMENT",
+    "which": 6,
+    "slot": 10021,
+    "flags": 0,
+    "itemExpression": "new SvxEscapementItem( RES_CHRATR_ESCAPEMENT )"
+  },
+  {
+    "name": "RES_CHRATR_FONT",
+    "which": 7,
+    "slot": 10007,
+    "flags": 0,
+    "itemExpression": "nullptr"
+  },
+  {
+    "name": "RES_CHRATR_FONTSIZE",
+    "which": 8,
+    "slot": 10015,
+    "flags": 0,
+    "itemExpression": "new SvxFontHeightItem( 240, 100, RES_CHRATR_FONTSIZE )"
+  },
+  {
+    "name": "RES_CHRATR_KERNING",
+    "which": 9,
+    "slot": 10018,
+    "flags": 0,
+    "itemExpression": "new SvxKerningItem( 0, RES_CHRATR_KERNING )"
+  },
+  {
+    "name": "RES_CHRATR_LANGUAGE",
+    "which": 10,
+    "slot": 10020,
+    "flags": 0,
+    "itemExpression": "new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_LANGUAGE )"
+  },
+  {
+    "name": "RES_CHRATR_POSTURE",
+    "which": 11,
+    "slot": 10008,
+    "flags": 0,
+    "itemExpression": "new SvxPostureItem( ITALIC_NONE, RES_CHRATR_POSTURE )"
+  },
+  {
+    "name": "RES_CHRATR_UNUSED1",
+    "which": 12,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxVoidItem( RES_CHRATR_UNUSED1 )"
+  },
+  {
+    "name": "RES_CHRATR_SHADOWED",
+    "which": 13,
+    "slot": 10010,
+    "flags": 0,
+    "itemExpression": "new SvxShadowedItem( false, RES_CHRATR_SHADOWED )"
+  },
+  {
+    "name": "RES_CHRATR_UNDERLINE",
+    "which": 14,
+    "slot": 10014,
+    "flags": 0,
+    "itemExpression": "new SvxUnderlineItem( LINESTYLE_NONE, RES_CHRATR_UNDERLINE )"
+  },
+  {
+    "name": "RES_CHRATR_WEIGHT",
+    "which": 15,
+    "slot": 10009,
+    "flags": 0,
+    "itemExpression": "new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_WEIGHT )"
+  },
+  {
+    "name": "RES_CHRATR_WORDLINEMODE",
+    "which": 16,
+    "slot": 10011,
+    "flags": 0,
+    "itemExpression": "new SvxWordLineModeItem( false, RES_CHRATR_WORDLINEMODE )"
+  },
+  {
+    "name": "RES_CHRATR_AUTOKERN",
+    "which": 17,
+    "slot": 10067,
+    "flags": 0,
+    "itemExpression": "new SvxAutoKernItem( false, RES_CHRATR_AUTOKERN )"
+  },
+  {
+    "name": "RES_CHRATR_BLINK",
+    "which": 18,
+    "slot": 10406,
+    "flags": 0,
+    "itemExpression": "new SvxBlinkItem( false, RES_CHRATR_BLINK )"
+  },
+  {
+    "name": "RES_CHRATR_NOHYPHEN",
+    "which": 19,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxNoHyphenItem( false, RES_CHRATR_NOHYPHEN )"
+  },
+  {
+    "name": "RES_CHRATR_UNUSED2",
+    "which": 20,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxVoidItem( RES_CHRATR_UNUSED2 )"
+  },
+  {
+    "name": "RES_CHRATR_BACKGROUND",
+    "which": 21,
+    "slot": 10591,
+    "flags": 0,
+    "itemExpression": "new SvxBrushItem( RES_CHRATR_BACKGROUND )"
+  },
+  {
+    "name": "RES_CHRATR_CJK_FONT",
+    "which": 22,
+    "slot": 10887,
+    "flags": 0,
+    "itemExpression": "nullptr"
+  },
+  {
+    "name": "RES_CHRATR_CJK_FONTSIZE",
+    "which": 23,
+    "slot": 10888,
+    "flags": 0,
+    "itemExpression": "new SvxFontHeightItem( 240, 100, RES_CHRATR_CJK_FONTSIZE )"
+  },
+  {
+    "name": "RES_CHRATR_CJK_LANGUAGE",
+    "which": 24,
+    "slot": 10889,
+    "flags": 0,
+    "itemExpression": "new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CJK_LANGUAGE)"
+  },
+  {
+    "name": "RES_CHRATR_CJK_POSTURE",
+    "which": 25,
+    "slot": 10890,
+    "flags": 0,
+    "itemExpression": "new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CJK_POSTURE )"
+  },
+  {
+    "name": "RES_CHRATR_CJK_WEIGHT",
+    "which": 26,
+    "slot": 10891,
+    "flags": 0,
+    "itemExpression": "new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CJK_WEIGHT )"
+  },
+  {
+    "name": "RES_CHRATR_CTL_FONT",
+    "which": 27,
+    "slot": 10892,
+    "flags": 0,
+    "itemExpression": "nullptr"
+  },
+  {
+    "name": "RES_CHRATR_CTL_FONTSIZE",
+    "which": 28,
+    "slot": 10893,
+    "flags": 0,
+    "itemExpression": "new SvxFontHeightItem( 240, 100, RES_CHRATR_CTL_FONTSIZE )"
+  },
+  {
+    "name": "RES_CHRATR_CTL_LANGUAGE",
+    "which": 29,
+    "slot": 10894,
+    "flags": 0,
+    "itemExpression": "new SvxLanguageItem(LANGUAGE_DONTKNOW, RES_CHRATR_CTL_LANGUAGE)"
+  },
+  {
+    "name": "RES_CHRATR_CTL_POSTURE",
+    "which": 30,
+    "slot": 10895,
+    "flags": 0,
+    "itemExpression": "new SvxPostureItem(ITALIC_NONE, RES_CHRATR_CTL_POSTURE )"
+  },
+  {
+    "name": "RES_CHRATR_CTL_WEIGHT",
+    "which": 31,
+    "slot": 10896,
+    "flags": 0,
+    "itemExpression": "new SvxWeightItem( WEIGHT_NORMAL, RES_CHRATR_CTL_WEIGHT )"
+  },
+  {
+    "name": "RES_CHRATR_ROTATE",
+    "which": 32,
+    "slot": 10910,
+    "flags": 0,
+    "itemExpression": "new SvxCharRotateItem( 0_deg10, false, RES_CHRATR_ROTATE )"
+  },
+  {
+    "name": "RES_CHRATR_EMPHASIS_MARK",
+    "which": 33,
+    "slot": 10899,
+    "flags": 0,
+    "itemExpression": "new SvxEmphasisMarkItem( FontEmphasisMark::NONE, RES_CHRATR_EMPHASIS_MARK )"
+  },
+  {
+    "name": "RES_CHRATR_TWO_LINES",
+    "which": 34,
+    "slot": 10897,
+    "flags": 0,
+    "itemExpression": "new SvxTwoLinesItem( false, 0, 0, RES_CHRATR_TWO_LINES )"
+  },
+  {
+    "name": "RES_CHRATR_SCALEW",
+    "which": 35,
+    "slot": 10911,
+    "flags": 0,
+    "itemExpression": "new SvxCharScaleWidthItem( 100, RES_CHRATR_SCALEW )"
+  },
+  {
+    "name": "RES_CHRATR_RELIEF",
+    "which": 36,
+    "slot": 10920,
+    "flags": 0,
+    "itemExpression": "new SvxCharReliefItem( FontRelief::NONE, RES_CHRATR_RELIEF )"
+  },
+  {
+    "name": "RES_CHRATR_HIDDEN",
+    "which": 37,
+    "slot": 10989,
+    "flags": 0,
+    "itemExpression": "new SvxCharHiddenItem( false, RES_CHRATR_HIDDEN )"
+  },
+  {
+    "name": "RES_CHRATR_OVERLINE",
+    "which": 38,
+    "slot": 11568,
+    "flags": 0,
+    "itemExpression": "new SvxOverlineItem( LINESTYLE_NONE, RES_CHRATR_OVERLINE )"
+  },
+  {
+    "name": "RES_CHRATR_RSID",
+    "which": 39,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxRsidItem( 0, RES_CHRATR_RSID )"
+  },
+  {
+    "name": "RES_CHRATR_BOX",
+    "which": 40,
+    "slot": 11576,
+    "flags": 0,
+    "itemExpression": "new SvxBoxItem( RES_CHRATR_BOX )"
+  },
+  {
+    "name": "RES_CHRATR_SHADOW",
+    "which": 41,
+    "slot": 11577,
+    "flags": 0,
+    "itemExpression": "new SvxShadowItem( RES_CHRATR_SHADOW )"
+  },
+  {
+    "name": "RES_CHRATR_HIGHLIGHT",
+    "which": 42,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxBrushItem( RES_CHRATR_HIGHLIGHT )"
+  },
+  {
+    "name": "RES_CHRATR_GRABBAG",
+    "which": 43,
+    "slot": 11142,
+    "flags": 0,
+    "itemExpression": "new SfxGrabBagItem( RES_CHRATR_GRABBAG )"
+  },
+  {
+    "name": "RES_CHRATR_BIDIRTL",
+    "which": 44,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxInt16Item( RES_CHRATR_BIDIRTL, sal_Int16(-1) )"
+  },
+  {
+    "name": "RES_CHRATR_UNUSED3",
+    "which": 45,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxVoidItem( RES_CHRATR_UNUSED3 )"
+  },
+  {
+    "name": "RES_CHRATR_SCRIPT_HINT",
+    "which": 46,
+    "slot": 10016,
+    "flags": 0,
+    "itemExpression": "new SvxScriptHintItem( RES_CHRATR_SCRIPT_HINT )"
+  },
+  {
+    "name": "RES_CHRATR_OPTICAL_SIZING",
+    "which": 47,
+    "slot": 11581,
+    "flags": 0,
+    "itemExpression": "new SvxOpticalSizingItem( false, RES_CHRATR_OPTICAL_SIZING )"
+  },
+  {
+    "name": "RES_CHRATR_FONT_VARIATIONS",
+    "which": 48,
+    "slot": 11582,
+    "flags": 0,
+    "itemExpression": "new SvxFontVariationsItem( RES_CHRATR_FONT_VARIATIONS )"
+  },
+  {
+    "name": "RES_TXTATR_REFMARK",
+    "which": 49,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatRefMark( SwMarkName() )"
+  },
+  {
+    "name": "RES_TXTATR_TOXMARK",
+    "which": 50,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "createSwTOXMarkForItemInfoPackage()"
+  },
+  {
+    "name": "RES_TXTATR_META",
+    "which": 51,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "SwFormatMeta::CreatePoolDefault(RES_TXTATR_META)"
+  },
+  {
+    "name": "RES_TXTATR_METAFIELD",
+    "which": 52,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "SwFormatMeta::CreatePoolDefault(RES_TXTATR_METAFIELD)"
+  },
+  {
+    "name": "RES_TXTATR_AUTOFMT",
+    "which": 53,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatAutoFormat"
+  },
+  {
+    "name": "RES_TXTATR_INETFMT",
+    "which": 54,
+    "slot": 21029,
+    "flags": 0,
+    "itemExpression": "nullptr"
+  },
+  {
+    "name": "RES_TXTATR_CHARFMT",
+    "which": 55,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatCharFormat( nullptr )"
+  },
+  {
+    "name": "RES_TXTATR_CJK_RUBY",
+    "which": 56,
+    "slot": 10898,
+    "flags": 0,
+    "itemExpression": "new SwFormatRuby( OUString() )"
+  },
+  {
+    "name": "RES_TXTATR_UNKNOWN_CONTAINER",
+    "which": 57,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvXMLAttrContainerItem( RES_TXTATR_UNKNOWN_CONTAINER )"
+  },
+  {
+    "name": "RES_TXTATR_INPUTFIELD",
+    "which": 58,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "createSwFormatFieldForItemInfoPackage( RES_TXTATR_INPUTFIELD )"
+  },
+  {
+    "name": "RES_TXTATR_CONTENTCONTROL",
+    "which": 59,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatContentControl( RES_TXTATR_CONTENTCONTROL )"
+  },
+  {
+    "name": "RES_TXTATR_FIELD",
+    "which": 60,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "createSwFormatFieldForItemInfoPackage( RES_TXTATR_FIELD )"
+  },
+  {
+    "name": "RES_TXTATR_FLYCNT",
+    "which": 61,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFlyCnt( nullptr )"
+  },
+  {
+    "name": "RES_TXTATR_FTN",
+    "which": 62,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFootnote"
+  },
+  {
+    "name": "RES_TXTATR_ANNOTATION",
+    "which": 63,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "createSwFormatFieldForItemInfoPackage( RES_TXTATR_ANNOTATION )"
+  },
+  {
+    "name": "RES_TXTATR_LINEBREAK",
+    "which": 64,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatLineBreak(SwLineBreakClear::NONE)"
+  },
+  {
+    "name": "RES_TXTATR_DUMMY1",
+    "which": 65,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem( RES_TXTATR_DUMMY1 )"
+  },
+  {
+    "name": "RES_PARATR_LINESPACING",
+    "which": 66,
+    "slot": 10033,
+    "flags": 0,
+    "itemExpression": "new SvxLineSpacingItem( LINE_SPACE_DEFAULT_HEIGHT, RES_PARATR_LINESPACING )"
+  },
+  {
+    "name": "RES_PARATR_ADJUST",
+    "which": 67,
+    "slot": 10027,
+    "flags": 0,
+    "itemExpression": "new SvxAdjustItem( SvxAdjust::ParaStart, RES_PARATR_ADJUST )"
+  },
+  {
+    "name": "RES_PARATR_SPLIT",
+    "which": 68,
+    "slot": 10039,
+    "flags": 0,
+    "itemExpression": "new SvxFormatSplitItem( true, RES_PARATR_SPLIT )"
+  },
+  {
+    "name": "RES_PARATR_ORPHANS",
+    "which": 69,
+    "slot": 10040,
+    "flags": 0,
+    "itemExpression": "new SvxOrphansItem( 0, RES_PARATR_ORPHANS )"
+  },
+  {
+    "name": "RES_PARATR_WIDOWS",
+    "which": 70,
+    "slot": 10041,
+    "flags": 0,
+    "itemExpression": "new SvxWidowsItem( 0, RES_PARATR_WIDOWS )"
+  },
+  {
+    "name": "RES_PARATR_TABSTOP",
+    "which": 71,
+    "slot": 10002,
+    "flags": 0,
+    "itemExpression": "new SvxTabStopItem( 1, SVX_TAB_DEFDIST, SvxTabAdjust::Default, RES_PARATR_TABSTOP )"
+  },
+  {
+    "name": "RES_PARATR_HYPHENZONE",
+    "which": 72,
+    "slot": 10038,
+    "flags": 0,
+    "itemExpression": "nullptr"
+  },
+  {
+    "name": "RES_PARATR_DROP",
+    "which": 73,
+    "slot": 20454,
+    "flags": 0,
+    "itemExpression": "new SwFormatDrop"
+  },
+  {
+    "name": "RES_PARATR_REGISTER",
+    "which": 74,
+    "slot": 10413,
+    "flags": 0,
+    "itemExpression": "new SwRegisterItem( false )"
+  },
+  {
+    "name": "RES_PARATR_NUMRULE",
+    "which": 75,
+    "slot": 10587,
+    "flags": 0,
+    "itemExpression": "new SwNumRuleItem( UIName() )"
+  },
+  {
+    "name": "RES_PARATR_SCRIPTSPACE",
+    "which": 76,
+    "slot": 10901,
+    "flags": 0,
+    "itemExpression": "new SvxScriptSpaceItem( true, RES_PARATR_SCRIPTSPACE )"
+  },
+  {
+    "name": "RES_PARATR_HANGINGPUNCTUATION",
+    "which": 77,
+    "slot": 10902,
+    "flags": 0,
+    "itemExpression": "new SvxHangingPunctuationItem( true, RES_PARATR_HANGINGPUNCTUATION )"
+  },
+  {
+    "name": "RES_PARATR_FORBIDDEN_RULES",
+    "which": 78,
+    "slot": 10903,
+    "flags": 0,
+    "itemExpression": "new SvxForbiddenRuleItem( true, RES_PARATR_FORBIDDEN_RULES )"
+  },
+  {
+    "name": "RES_PARATR_VERTALIGN",
+    "which": 79,
+    "slot": 10925,
+    "flags": 0,
+    "itemExpression": "new SvxParaVertAlignItem( SvxParaVertAlignItem::Align::Automatic, RES_PARATR_VERTALIGN )"
+  },
+  {
+    "name": "RES_PARATR_SNAPTOGRID",
+    "which": 80,
+    "slot": 10945,
+    "flags": 0,
+    "itemExpression": "new SvxParaGridItem( true, RES_PARATR_SNAPTOGRID )"
+  },
+  {
+    "name": "RES_PARATR_CONNECT_BORDER",
+    "which": 81,
+    "slot": 10990,
+    "flags": 0,
+    "itemExpression": "new SwParaConnectBorderItem"
+  },
+  {
+    "name": "RES_PARATR_OUTLINELEVEL",
+    "which": 82,
+    "slot": 11573,
+    "flags": 0,
+    "itemExpression": "new SfxUInt16Item( RES_PARATR_OUTLINELEVEL, 0 )"
+  },
+  {
+    "name": "RES_PARATR_AUTOFRAMEDIR",
+    "which": 83,
+    "slot": 10946,
+    "flags": 0,
+    "itemExpression": "new SvxAutoFrameDirectionItem( true, RES_PARATR_AUTOFRAMEDIR )"
+  },
+  {
+    "name": "RES_PARATR_RSID",
+    "which": 84,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxRsidItem( 0, RES_PARATR_RSID )"
+  },
+  {
+    "name": "RES_PARATR_GRABBAG",
+    "which": 85,
+    "slot": 11578,
+    "flags": 0,
+    "itemExpression": "new SfxGrabBagItem( RES_PARATR_GRABBAG )"
+  },
+  {
+    "name": "RES_PARATR_LIST_ID",
+    "which": 86,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxStringItem( RES_PARATR_LIST_ID, OUString() )"
+  },
+  {
+    "name": "RES_PARATR_LIST_LEVEL",
+    "which": 87,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxInt16Item( RES_PARATR_LIST_LEVEL, 0 )"
+  },
+  {
+    "name": "RES_PARATR_LIST_ISRESTART",
+    "which": 88,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem( RES_PARATR_LIST_ISRESTART, false )"
+  },
+  {
+    "name": "RES_PARATR_LIST_RESTARTVALUE",
+    "which": 89,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxInt16Item( RES_PARATR_LIST_RESTARTVALUE, 1 )"
+  },
+  {
+    "name": "RES_PARATR_LIST_ISCOUNTED",
+    "which": 90,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem( RES_PARATR_LIST_ISCOUNTED, true )"
+  },
+  {
+    "name": "RES_PARATR_LIST_AUTOFMT",
+    "which": 91,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatAutoFormat(RES_PARATR_LIST_AUTOFMT)"
+  },
+  {
+    "name": "RES_FILL_ORDER",
+    "which": 92,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFillOrder"
+  },
+  {
+    "name": "RES_FRM_SIZE",
+    "which": 93,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFrameSize"
+  },
+  {
+    "name": "RES_PAPER_BIN",
+    "which": 94,
+    "slot": 10054,
+    "flags": 0,
+    "itemExpression": "new SvxPaperBinItem( RES_PAPER_BIN )"
+  },
+  {
+    "name": "RES_MARGIN_FIRSTLINE",
+    "which": 95,
+    "slot": 10046,
+    "flags": 0,
+    "itemExpression": "new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE)"
+  },
+  {
+    "name": "RES_MARGIN_TEXTLEFT",
+    "which": 96,
+    "slot": 10044,
+    "flags": 0,
+    "itemExpression": "new SvxTextLeftMarginItem(RES_MARGIN_TEXTLEFT)"
+  },
+  {
+    "name": "RES_MARGIN_RIGHT",
+    "which": 97,
+    "slot": 10045,
+    "flags": 0,
+    "itemExpression": "new SvxRightMarginItem(RES_MARGIN_RIGHT)"
+  },
+  {
+    "name": "RES_MARGIN_LEFT",
+    "which": 98,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxLeftMarginItem(RES_MARGIN_LEFT)"
+  },
+  {
+    "name": "RES_MARGIN_GUTTER",
+    "which": 99,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxGutterLeftMarginItem(RES_MARGIN_GUTTER)"
+  },
+  {
+    "name": "RES_MARGIN_GUTTER_RIGHT",
+    "which": 100,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxGutterRightMarginItem(RES_MARGIN_GUTTER_RIGHT)"
+  },
+  {
+    "name": "RES_LR_SPACE",
+    "which": 101,
+    "slot": 10048,
+    "flags": 0,
+    "itemExpression": "new SvxLRSpaceItem( RES_LR_SPACE )"
+  },
+  {
+    "name": "RES_UL_SPACE",
+    "which": 102,
+    "slot": 10049,
+    "flags": 0,
+    "itemExpression": "new SvxULSpaceItem( RES_UL_SPACE )"
+  },
+  {
+    "name": "RES_PAGEDESC",
+    "which": 103,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatPageDesc"
+  },
+  {
+    "name": "RES_BREAK",
+    "which": 104,
+    "slot": 10037,
+    "flags": 0,
+    "itemExpression": "new SvxFormatBreakItem( SvxBreak::NONE, RES_BREAK)"
+  },
+  {
+    "name": "RES_CNTNT",
+    "which": 105,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatContent"
+  },
+  {
+    "name": "RES_HEADER",
+    "which": 106,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatHeader"
+  },
+  {
+    "name": "RES_FOOTER",
+    "which": 107,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFooter"
+  },
+  {
+    "name": "RES_PRINT",
+    "which": 108,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvxPrintItem( RES_PRINT )"
+  },
+  {
+    "name": "RES_OPAQUE",
+    "which": 109,
+    "slot": 21301,
+    "flags": 0,
+    "itemExpression": "new SvxOpaqueItem( RES_OPAQUE )"
+  },
+  {
+    "name": "RES_PROTECT",
+    "which": 110,
+    "slot": 21302,
+    "flags": 0,
+    "itemExpression": "new SvxProtectItem( RES_PROTECT )"
+  },
+  {
+    "name": "RES_SURROUND",
+    "which": 111,
+    "slot": 21303,
+    "flags": 0,
+    "itemExpression": "new SwFormatSurround"
+  },
+  {
+    "name": "RES_VERT_ORIENT",
+    "which": 112,
+    "slot": 21304,
+    "flags": 0,
+    "itemExpression": "new SwFormatVertOrient"
+  },
+  {
+    "name": "RES_HORI_ORIENT",
+    "which": 113,
+    "slot": 21305,
+    "flags": 0,
+    "itemExpression": "new SwFormatHoriOrient"
+  },
+  {
+    "name": "RES_ANCHOR",
+    "which": 114,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatAnchor"
+  },
+  {
+    "name": "RES_BACKGROUND",
+    "which": 115,
+    "slot": 10001,
+    "flags": 0,
+    "itemExpression": "new SvxBrushItem( RES_BACKGROUND )"
+  },
+  {
+    "name": "RES_BOX",
+    "which": 116,
+    "slot": 10024,
+    "flags": 0,
+    "itemExpression": "new SvxBoxItem( RES_BOX )"
+  },
+  {
+    "name": "RES_SHADOW",
+    "which": 117,
+    "slot": 10025,
+    "flags": 0,
+    "itemExpression": "new SvxShadowItem( RES_SHADOW )"
+  },
+  {
+    "name": "RES_FRMMACRO",
+    "which": 118,
+    "slot": 5934,
+    "flags": 0,
+    "itemExpression": "new SvxMacroItem( RES_FRMMACRO )"
+  },
+  {
+    "name": "RES_COL",
+    "which": 119,
+    "slot": 21831,
+    "flags": 0,
+    "itemExpression": "new SwFormatCol"
+  },
+  {
+    "name": "RES_KEEP",
+    "which": 120,
+    "slot": 10066,
+    "flags": 0,
+    "itemExpression": "new SvxFormatKeepItem( false, RES_KEEP )"
+  },
+  {
+    "name": "RES_URL",
+    "which": 121,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatURL()"
+  },
+  {
+    "name": "RES_EDIT_IN_READONLY",
+    "which": 122,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatEditInReadonly"
+  },
+  {
+    "name": "RES_LAYOUT_SPLIT",
+    "which": 123,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatLayoutSplit"
+  },
+  {
+    "name": "RES_CHAIN",
+    "which": 124,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatChain"
+  },
+  {
+    "name": "RES_TEXTGRID",
+    "which": 125,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwTextGridItem"
+  },
+  {
+    "name": "RES_LINENUMBER",
+    "which": 126,
+    "slot": 21744,
+    "flags": 0,
+    "itemExpression": "new SwFormatLineNumber"
+  },
+  {
+    "name": "RES_FTN_AT_TXTEND",
+    "which": 127,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFootnoteAtTextEnd"
+  },
+  {
+    "name": "RES_END_AT_TXTEND",
+    "which": 128,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatEndAtTextEnd"
+  },
+  {
+    "name": "RES_COLUMNBALANCE",
+    "which": 129,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatNoBalancedColumns"
+  },
+  {
+    "name": "RES_FRAMEDIR",
+    "which": 130,
+    "slot": 10944,
+    "flags": 0,
+    "itemExpression": "new SvxFrameDirectionItem( SvxFrameDirection::Environment, RES_FRAMEDIR )"
+  },
+  {
+    "name": "RES_HEADER_FOOTER_EAT_SPACING",
+    "which": 131,
+    "slot": 10953,
+    "flags": 0,
+    "itemExpression": "new SwHeaderAndFooterEatSpacingItem"
+  },
+  {
+    "name": "RES_ROW_SPLIT",
+    "which": 132,
+    "slot": 21753,
+    "flags": 0,
+    "itemExpression": "new SwFormatRowSplit"
+  },
+  {
+    "name": "RES_FLY_SPLIT",
+    "which": 133,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatFlySplit"
+  },
+  {
+    "name": "RES_FOLLOW_TEXT_FLOW",
+    "which": 134,
+    "slot": 10991,
+    "flags": 0,
+    "itemExpression": "new SwFormatFollowTextFlow(false)"
+  },
+  {
+    "name": "RES_COLLAPSING_BORDERS",
+    "which": 135,
+    "slot": 11011,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem( RES_COLLAPSING_BORDERS, false )"
+  },
+  {
+    "name": "RES_WRAP_INFLUENCE_ON_OBJPOS",
+    "which": 136,
+    "slot": 11012,
+    "flags": 0,
+    "itemExpression": "new SwFormatWrapInfluenceOnObjPos( text::WrapInfluenceOnPosition::ONCE_CONCURRENT )"
+  },
+  {
+    "name": "RES_AUTO_STYLE",
+    "which": 137,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatAutoFormat( RES_AUTO_STYLE )"
+  },
+  {
+    "name": "RES_FRMATR_STYLE_NAME",
+    "which": 138,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxStringItem( RES_FRMATR_STYLE_NAME, OUString())"
+  },
+  {
+    "name": "RES_FRMATR_CONDITIONAL_STYLE_NAME",
+    "which": 139,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxStringItem( RES_FRMATR_CONDITIONAL_STYLE_NAME, OUString() )"
+  },
+  {
+    "name": "RES_FRMATR_GRABBAG",
+    "which": 140,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxGrabBagItem(RES_FRMATR_GRABBAG)"
+  },
+  {
+    "name": "RES_TEXT_VERT_ADJUST",
+    "which": 141,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SdrTextVertAdjustItem(SDRTEXTVERTADJUST_TOP,RES_TEXT_VERT_ADJUST)"
+  },
+  {
+    "name": "RES_BACKGROUND_FULL_SIZE",
+    "which": 142,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem(RES_BACKGROUND_FULL_SIZE, true)"
+  },
+  {
+    "name": "RES_RTL_GUTTER",
+    "which": 143,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem(RES_RTL_GUTTER, false)"
+  },
+  {
+    "name": "RES_DECORATIVE",
+    "which": 144,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem(RES_DECORATIVE, false)"
+  },
+  {
+    "name": "RES_WRAP_TEXT_AT_FLY_START",
+    "which": 145,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwFormatWrapTextAtFlyStart"
+  },
+  {
+    "name": "RES_GRFATR_MIRRORGRF",
+    "which": 146,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwMirrorGrf"
+  },
+  {
+    "name": "RES_GRFATR_CROPGRF",
+    "which": 147,
+    "slot": 10883,
+    "flags": 0,
+    "itemExpression": "new SwCropGrf"
+  },
+  {
+    "name": "RES_GRFATR_ROTATION",
+    "which": 148,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwRotationGrf"
+  },
+  {
+    "name": "RES_GRFATR_LUMINANCE",
+    "which": 149,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwLuminanceGrf"
+  },
+  {
+    "name": "RES_GRFATR_CONTRAST",
+    "which": 150,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwContrastGrf"
+  },
+  {
+    "name": "RES_GRFATR_CHANNELR",
+    "which": 151,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwChannelRGrf"
+  },
+  {
+    "name": "RES_GRFATR_CHANNELG",
+    "which": 152,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwChannelGGrf"
+  },
+  {
+    "name": "RES_GRFATR_CHANNELB",
+    "which": 153,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwChannelBGrf"
+  },
+  {
+    "name": "RES_GRFATR_GAMMA",
+    "which": 154,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwGammaGrf"
+  },
+  {
+    "name": "RES_GRFATR_INVERT",
+    "which": 155,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwInvertGrf"
+  },
+  {
+    "name": "RES_GRFATR_TRANSPARENCY",
+    "which": 156,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwTransparencyGrf"
+  },
+  {
+    "name": "RES_GRFATR_DRAWMODE",
+    "which": 157,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwDrawModeGrf"
+  },
+  {
+    "name": "RES_GRFATR_VISIBLE",
+    "which": 158,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem(RES_GRFATR_VISIBLE, true)"
+  },
+  {
+    "name": "RES_GRFATR_DUMMY5",
+    "which": 159,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SfxBoolItem( RES_GRFATR_DUMMY5 )"
+  },
+  {
+    "name": "RES_BOXATR_FORMAT",
+    "which": 160,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwTableBoxNumFormat"
+  },
+  {
+    "name": "RES_BOXATR_FORMULA",
+    "which": 161,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwTableBoxFormula( OUString() )"
+  },
+  {
+    "name": "RES_BOXATR_VALUE",
+    "which": 162,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SwTableBoxValue"
+  },
+  {
+    "name": "RES_UNKNOWNATR_CONTAINER",
+    "which": 163,
+    "slot": 0,
+    "flags": 0,
+    "itemExpression": "new SvXMLAttrContainerItem( RES_UNKNOWNATR_CONTAINER )"
+  }
+]

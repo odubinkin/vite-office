@@ -1,7 +1,7 @@
 /** @fileoverview Immutable functional CLDR data from liblangtag lt-xml.c loading/merge responsibilities.
  * Copyright (C) 2011–2015 Akira TAGOH. SPDX-License-Identifier: MPL-2.0
  */
-import data from "../data/cldr-parsing.json";
+import data from "../data/cldr-parsing.json" with { type: "json" };
 
 /** Native BCP47 document positions from lt_xml_cldr_t. */
 export type CldrBcp47Group = 1 | 2 | 3 | 4 | 5 | 6 | 7;

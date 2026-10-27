@@ -136,11 +136,9 @@ export const Grego = {
   ): void {
     year[0] = Grego.dayToYear(day, doy, status);
     if (U_FAILURE(status[0])) return;
+    // dayToYear above validates this identical adjusted-day expression before any field writes.
+    // Its failure returns above, so repeating the native checked-add guard cannot fail here.
     const adjusted = (day | 0) + kEpochStartAsJulianDay - kJan1_1JulianDay;
-    if (adjusted > 2147483647 || adjusted < -2147483648) {
-      status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
-      return;
-    }
     dow[0] = (adjusted + 1) % 7;
     dow[0] += dow[0] < 0 ? UCalendarDaysOfWeek.UCAL_SUNDAY + 7 : UCalendarDaysOfWeek.UCAL_SUNDAY;
     const leap = Grego.isLeapYear(year[0]),

@@ -1,4 +1,5 @@
 /** @fileoverview Checks native empty AUTO/INET ownership with literal erasure and default-insertion cases, without upstream execution. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import { SwpHints } from "./ndhints";
@@ -28,7 +29,7 @@ function required<T>(value: T | undefined): T {
 }
 /** Builds meaningful attributes with explicitly unlocked independent flags. @param doc - Pool owner. @param family - Native Which. @param mask - Flag bits. @param start - Range start. @param end - Range end. @returns Detached attribute. */
 function attribute(doc: SwDoc, family: number, mask: number, start: number, end: number) {
-  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>;
+  let hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
   if (family === 54) {
     const item = new SwFormatINetFormat("url", "target");
     item.SetName("name");

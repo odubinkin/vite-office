@@ -1,4 +1,19 @@
 /** @fileoverview RTF paragraph and character item emission following sw/source/filter/ww8/rtfattributeoutput.cxx. */
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import type { wwFont } from "./wrtw8sty";
+import { RES_CHRATR_FONT } from "../../../inc/hintids";
+import type { RtfExport } from "./rtfexport";
+import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
+import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
+import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
+import { FontMapExport, rtl_TextEncodingToWinCharsetRTF } from "./writerwordglue";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { RtfAssociatedProperties, GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
+export { GetCharacterPropertiesMode } from "./rtfattributeoutput.assoc";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import {
   DFLT_ESC_AUTO_SUB,
@@ -19,6 +34,12 @@ import {
   SvxLineSpaceRule,
 } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
+import {
+  ConvertBorderWidthToWord,
+  type SvxBorderLine,
+} from "../../../../editeng/source/items/borderline";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
 import { TransColToIco } from "../../../../filter/source/msfilter/util";
 import { GetScriptClass } from "../../../../i18nutil/source/utility/scriptclass";
@@ -27,7 +48,11 @@ import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import {
+  RES_CHRATR_AUTOKERN,
+  WRITER_CHARACTER_WHICH_RANGES,
+  RES_CHRATR_UNDERLINE,
   RES_BREAK,
+  RES_BOX,
   RES_KEEP,
   RES_MARGIN_FIRSTLINE,
   RES_MARGIN_RIGHT,
@@ -44,63 +69,172 @@ import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { AttrSetToLineHeight } from "../../core/txtnode/swfont";
+import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
 export class RtfAttributeOutput {
-  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup.  @returns Constructed instance. */
+  private readonly associated: RtfAssociatedProperties;
+  /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup. @param exporter - Original document encoding owner.  @returns Constructed instance. */
   public constructor(
-    private readonly fontIndex: (family: string) => number,
+    private readonly fontIndex: (font: SvxFontItem | wwFont) => number,
     private readonly colorIndex: (color: string) => number,
-  ) {}
+    private readonly exporter: Pick<
+      RtfExport,
+      "GetCurrentEncoding" | "SetCurrentEncoding" | "GetDefaultEncoding" | "Strm"
+    >,
+  ) {
+    this.associated = new RtfAssociatedProperties(
+      /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
+      (font, assoc) => this.OutputCharFontAssoc(font, assoc),
+    );
+  }
+
+  /** Original non-associated font output changes the document encoding; associated output only emits its slot. @param font - Native font item. @param assoc - Original association flag. @returns RTF controls. */
+  public OutputCharFontAssoc(font: SvxFontItem, assoc: boolean): string {
+    const result = `\\${assoc ? "af" : "f"}${this.fontIndex(font)}`;
+    if (assoc) return result;
+    const mapped = new FontMapExport(font.GetFamilyName());
+    const charset = rtl_TextEncodingToWinCharsetRTF(
+      mapped.msPrimary,
+      mapped.msSecondary,
+      font.GetCharSet(),
+    );
+    this.exporter.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(charset));
+    if (this.exporter.GetCurrentEncoding() === RTL_TEXTENCODING_DONTKNOW)
+      this.exporter.SetCurrentEncoding(this.exporter.GetDefaultEncoding());
+    return result;
+  }
+
+  /** Original font name is hex-encoded without Unicode fallback. @param name - Mapped family name. @returns Nothing. */
+  public StartFont(name: string): void {
+    this.exporter.Strm().WriteOString(OutString(name, this.exporter.GetCurrentEncoding(), false));
+  }
+  /** Original font terminator restores default encoding. @returns Nothing. */
+  public EndFont(): void {
+    this.exporter.Strm().WriteOString(";}");
+    this.exporter.SetCurrentEncoding(this.exporter.GetDefaultEncoding());
+  }
+  /** Original optional alternate family group uses the current font encoding without Unicode. @param name - Mapped alternate name. @returns Nothing. */
+  public FontAlternateName(name: string): void {
+    this.exporter
+      .Strm()
+      .WriteOString("{\\*\\falt ")
+      .WriteOString(OutString(name, this.exporter.GetCurrentEncoding(), false))
+      .WriteChar("}");
+  }
+  /** Original byte charset control also changes the export encoding without the run-font fallback. @param charset - Windows charset byte. @returns Nothing. */
+  public FontCharset(charset: number): void {
+    charset &= 0xff;
+    this.exporter.Strm().WriteOString("\\fcharset").WriteNumberAsString(charset).WriteChar(" ");
+    this.exporter.SetCurrentEncoding(rtl_getTextEncodingFromWindowsCharset(charset));
+  }
+  /** Original family group uses the complete FFN font identity. @param family - Native family enum. @param font - Actual registered font. @returns Nothing. */
+  public FontFamilyType(family: FontFamily, font: wwFont): void {
+    let keyword = "\\fnil";
+    switch (family) {
+      case FontFamily.FAMILY_ROMAN:
+        keyword = "\\froman";
+        break;
+      case FontFamily.FAMILY_SWISS:
+        keyword = "\\fswiss";
+        break;
+      case FontFamily.FAMILY_MODERN:
+        keyword = "\\fmodern";
+        break;
+      case FontFamily.FAMILY_SCRIPT:
+        keyword = "\\fscript";
+        break;
+      case FontFamily.FAMILY_DECORATIVE:
+        keyword = "\\fdecor";
+        break;
+    }
+    this.exporter
+      .Strm()
+      .WriteOString("{\\f")
+      .WriteNumberAsString(this.fontIndex(font))
+      .WriteOString(keyword);
+  }
+  /** Original pitch control maps fixed/variable/other to 1/2/0. @param pitch - Native font pitch. @returns Nothing. */
+  public FontPitchType(pitch: FontPitch): void {
+    this.exporter
+      .Strm()
+      .WriteOString("\\fprq")
+      .WriteNumberAsString(
+        pitch === FontPitch.PITCH_FIXED ? 1 : pitch === FontPitch.PITCH_VARIABLE ? 2 : 0,
+      );
+  }
+
+  /** Original RawText serializes through the native RTF utility. @param text - Logical UTF16 view. @param encoding - Native destination encoding. @returns Encoded run fragment in the string-buffer binding. */
+  public RawText(text: string, encoding: rtl_TextEncoding): string {
+    return OutString(text, encoding);
+  }
+
+  /** Original RunText uses current export encoding and deliberately ignores the supplied character encoding and symbol font. @param text - Logical run text. @param encoding - Ignored source parameter. @param symbolFont - Ignored source parameter. @returns Encoded run fragment. */
+  public RunText(text: string, encoding: rtl_TextEncoding, symbolFont: string): string {
+    void encoding;
+    void symbolFont;
+    return this.RawText(text, this.exporter.GetCurrentEncoding());
+  }
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
     const text = paragraph.GetText();
-    return this.WriteParagraphValues(
-      paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
-      paragraph.GetParagraphTextLeftMargin(),
-      paragraph.GetParagraphRightMargin(),
-      (
-        paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-      ).ResolveTextFirstLineOffset(),
-      paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
-      paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
-      paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
-      paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
-      paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
-      paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
-        ? paragraph.GetParagraphTextLeftMargin()
-        : 0,
-      (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
-      false,
-      this.WriteLineSpacing(
-        paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
-        paragraph.GetSwAttrSet(),
-        text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
-      ),
+    return (
+      this.WriteParagraphValues(
+        paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
+        paragraph.GetParagraphTextLeftMargin(),
+        paragraph.GetParagraphRightMargin(),
+        (
+          paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
+        ).ResolveTextFirstLineOffset(),
+        paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
+        paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
+        paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
+        paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
+        paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
+        paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+          ? paragraph.GetParagraphTextLeftMargin()
+          : 0,
+        (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
+        false,
+        this.WriteLineSpacing(
+          paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+          paragraph.GetSwAttrSet(),
+          text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
+        ),
+      ) +
+      this.WriteFormatBox(
+        paragraph.GetSwAttrSet().GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined,
+      )
     );
   }
 
   /** Emits effective paragraph values for one named Writer style definition.  @param style - Style. @returns The string result. */
   public WriteStyleParagraphProperties(style: SwTextFormatColl): string {
     const items = style.GetAttrSet();
-    return this.WriteParagraphValues(
-      items.Get(RES_PARATR_ADJUST) as SvxAdjustItem,
-      (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
-      (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
-      (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
-      items.Get(RES_UL_SPACE) as SvxULSpaceItem,
-      items.Get(RES_KEEP) as SfxBoolItem,
-      items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
-      items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
-      items.Get(RES_PARATR_TABSTOP) as SvxTabStopItem,
-      items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
-        ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
-        : 0,
-      (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
-      true,
-      this.WriteLineSpacing(items.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem, items, LATIN),
+    return (
+      this.WriteParagraphValues(
+        items.Get(RES_PARATR_ADJUST) as SvxAdjustItem,
+        (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft(),
+        (items.Get(RES_MARGIN_RIGHT) as SvxRightMarginItem).ResolveRight(),
+        (items.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+        items.Get(RES_UL_SPACE) as SvxULSpaceItem,
+        items.Get(RES_KEEP) as SfxBoolItem,
+        items.Get(RES_PARATR_SPLIT) as SfxBoolItem,
+        items.Get(RES_PARATR_WIDOWS) as SfxInt16Item,
+        items.Get(RES_PARATR_TABSTOP) as SvxTabStopItem,
+        items.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+          ? (items.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem).ResolveTextLeft()
+          : 0,
+        (items.Get(RES_BREAK) as SfxInt16Item).GetValue(),
+        true,
+        this.WriteLineSpacing(
+          items.Get(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
+          items,
+          LATIN,
+        ),
+      ) + this.WriteFormatBox(items.GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined)
     );
   }
 
@@ -189,14 +323,130 @@ export class RtfAttributeOutput {
     return `\\sl${(space << 16) >> 16}\\slmult${multi}`;
   }
 
-  /** Emits represented direct character controls. @param attributes - Native run values. @returns RTF controls. */
-  public WriteCharacter(attributes: WriterCharacterAttributes): string {
+  /** Source OutTBLBorderLine shared by cell and paragraph border emission. @param control - Border selector. @param line - Native line. @returns RTF controls. */
+  public OutTBLBorderLine(control: string, line: SvxBorderLine | undefined): string {
+    if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
+    const style = line.GetBorderLineStyle();
+    const width = line.GetWidth();
+    const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
+    const size =
+      width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
+    const color = `#${(line.GetColor().toUInt32() & 0xffffff).toString(16).padStart(6, "0")}`;
+    return `\\${control}\\${rtfBorderStyle(style as Exclude<BorderLineStyle, BorderLineStyle.NONE>, width)}${size}\\brdrcf${this.colorIndex(color)}`;
+  }
+
+  /** Source OutBorderLine adds distance only for an existing line. @param control - Border selector. @param line - Native line. @param distance - Native twips. @returns RTF controls. */
+  public OutBorderLine(control: string, line: SvxBorderLine | undefined, distance: number): string {
+    return (
+      this.OutTBLBorderLine(control, line) +
+      (line === undefined ? "" : `\\brsp${distance & 0xffff}`)
+    );
+  }
+
+  /** Mirrors FormatBox for paragraph/styled borders; frame shadows have no current Writer owner. @param box - Authored or inherited item. @returns RTF controls. */
+  private WriteFormatBox(box: SvxBoxItem | undefined): string {
+    if (box === undefined) return "";
+    const sides = [
+      SvxBoxItemLine.TOP,
+      SvxBoxItemLine.LEFT,
+      SvxBoxItemLine.BOTTOM,
+      SvxBoxItemLine.RIGHT,
+    ] as const;
+    const first = box.GetTop();
+    if (
+      first !== undefined &&
+      sides.every(
+        /** Checks the source uniform-box condition. @param edge - Native edge. @returns Whether line and distance equal the top edge. */
+        (edge) =>
+          box.GetLine(edge)?.equals(first) &&
+          box.GetDistance(edge) === box.GetDistance(SvxBoxItemLine.TOP),
+      )
+    )
+      return this.OutBorderLine("box", first, box.GetSmallestDistance());
+    return sides
+      .map(
+        /** Emits one source-ordered paragraph border. @param edge - Native edge. @param index - Source selector index. @returns RTF controls. */ (
+          edge,
+          index,
+        ) =>
+          this.OutBorderLine(
+            ["brdrt", "brdrl", "brdrb", "brdrr"][index] as string,
+            box.GetLine(edge),
+            box.GetDistance(edge),
+          ),
+      )
+      .join("");
+  }
+
+  /** Emits represented direct character controls. @param attributes - Native run values. @param fontAttributes - Include projected font properties for legacy callers. @returns RTF controls. */
+  public WriteCharacter(attributes: WriterCharacterAttributes, fontAttributes = true): string {
     let result = "";
-    if (attributes.bold) result += "\\b";
-    if (attributes.italic) result += "\\i";
-    const underlineStyle =
-      attributes.underlineStyle ??
-      (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE);
+    if (fontAttributes && attributes.bold) result += "\\b";
+    if (fontAttributes && attributes.italic) result += "\\i";
+    if (attributes.underline || attributes.underlineStyle !== undefined)
+      result += this.WriteUnderlineValue(
+        attributes.underlineStyle ??
+          (attributes.underline ? FontLineStyle.LINESTYLE_SINGLE : FontLineStyle.LINESTYLE_NONE),
+        attributes.underlineWordMode ?? false,
+        attributes.underlineColor,
+        false,
+      );
+    if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
+    else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
+    else if (attributes.strikeout !== undefined) result += "\\strike";
+    if (fontAttributes && attributes.fontFamily !== undefined)
+      result += `\\f${this.fontIndex(new SvxFontItem(FontFamily.FAMILY_DONTKNOW, attributes.fontFamily, "", FontPitch.PITCH_DONTKNOW, RTL_TEXTENCODING_DONTKNOW, RES_CHRATR_FONT))}`;
+    if (fontAttributes && attributes.fontSizeTwips !== undefined)
+      result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
+    if (attributes.escapement !== undefined)
+      result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
+    if (attributes.color !== undefined)
+      result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
+    if (attributes.highlight !== undefined)
+      result += `\\highlight${TransColToIco(writerColorFromPrimitive(attributes.highlight, "transparent"))}`;
+    return result;
+  }
+
+  /** Original native run-state producer. @param isRTL - Bidi direction. @param script - Original script. @returns Nothing. */
+  public RTLAndCJKState(isRTL: boolean, script: number): void {
+    this.associated.RTLAndCJKState(isRTL, script);
+  }
+
+  /** Collects actual inherited character items before source associated-group emission; the borrowed caller set is never cleared. @param items - Effective native items. @param mode - Original mode, style by default for existing style writers. @returns Source RTF controls. */
+  public WriteNativeCharacter(
+    items: SfxItemSet,
+    mode = GetCharacterPropertiesMode.StyleDefinition,
+  ): string {
+    const local = new SfxItemSet(items.GetPool(), WRITER_CHARACTER_WHICH_RANGES);
+    for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+      for (let which: number = first; which <= last; ++which) {
+        const item = items.GetItemIfSet(which, true);
+        if (item !== undefined) local.Put(item);
+      }
+    const projected = projectWriterCharacterAttributes(local);
+    const general = { ...projected, underline: false };
+    Reflect.deleteProperty(general, "underlineStyle");
+    let result = this.WriteCharacter(general, false);
+    const underline = local.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+    if (underline instanceof SvxUnderlineItem)
+      result += this.WriteUnderlineValue(
+        underline.GetLineStyle(),
+        projected.underlineWordMode ?? false,
+        projected.underlineColor,
+        true,
+      );
+    const kern = local.GetItemIfSet(RES_CHRATR_AUTOKERN, false) as SvxAutoKernItem | undefined;
+    if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
+    return result + this.associated.MoveProperties(local, mode);
+  }
+
+  /** Source non-associated underline selection: four basic styles defer their keyword to associated groups but retain the shared color. @param underlineStyle - Actual line style. @param wordMode - Ancillary native word mode. @param color - Existing color-table value binding. @param deferBasic - Whether associated groups emit basic keywords. @returns Native underline/color controls. */
+  private WriteUnderlineValue(
+    underlineStyle: FontLineStyle,
+    wordMode: boolean,
+    color: string | undefined,
+    deferBasic: boolean,
+  ): string {
     const underlineControl: Partial<Record<FontLineStyle, string>> = {
       [FontLineStyle.LINESTYLE_SINGLE]: "ul",
       [FontLineStyle.LINESTYLE_DOUBLE]: "uldb",
@@ -217,28 +467,19 @@ export class RtfAttributeOutput {
       [FontLineStyle.LINESTYLE_DOUBLEWAVE]: "ululdbwave",
     };
     const underline =
-      underlineStyle === FontLineStyle.LINESTYLE_SINGLE && attributes.underlineWordMode
+      underlineStyle === FontLineStyle.LINESTYLE_SINGLE && wordMode
         ? "ulw"
         : underlineControl[underlineStyle];
-    if (
-      underline !== undefined &&
-      (attributes.underline || attributes.underlineStyle !== undefined)
-    )
-      result += `\\${underline}\\ulc${attributes.underlineColor === undefined || attributes.underlineColor === "auto" ? 0 : this.colorIndex(attributes.underlineColor)}`;
-    if (attributes.strikeout === FontStrikeout.STRIKEOUT_NONE) result += "\\strike0";
-    else if (attributes.strikeout === FontStrikeout.STRIKEOUT_DOUBLE) result += "\\striked1";
-    else if (attributes.strikeout !== undefined) result += "\\strike";
-    if (attributes.fontFamily !== undefined)
-      result += `\\f${this.fontIndex(attributes.fontFamily)}`;
-    if (attributes.fontSizeTwips !== undefined)
-      result += `\\fs${Math.round(attributes.fontSizeTwips / 10)}`;
-    if (attributes.escapement !== undefined)
-      result += this.WriteEscapement(attributes.escapement, attributes.fontSizeTwips);
-    if (attributes.color !== undefined)
-      result += `\\cf${attributes.color === "auto" ? 0 : this.colorIndex(attributes.color)}`;
-    if (attributes.highlight !== undefined)
-      result += `\\highlight${TransColToIco(writerColorFromPrimitive(attributes.highlight, "transparent"))}`;
-    return result;
+    if (underline === undefined) return "";
+    const basic =
+      underlineStyle === FontLineStyle.LINESTYLE_SINGLE ||
+      underlineStyle === FontLineStyle.LINESTYLE_DOUBLE ||
+      underlineStyle === FontLineStyle.LINESTYLE_NONE ||
+      underlineStyle === FontLineStyle.LINESTYLE_DOTTED;
+    return (
+      (deferBasic && basic ? "" : "\\" + underline) +
+      `\\ulc${color === undefined || color === "auto" ? 0 : this.colorIndex(color)}`
+    );
   }
 
   /** Emits source super/subscript or proportional up/down controls. @param value - Admitted escapement value. @param fontSizeTwips - Font height or native default. @returns RTF controls. */
@@ -260,5 +501,49 @@ export class RtfAttributeOutput {
     const fontHeight = fontSizeTwips ?? 240;
     const halfPoints = Math.round((fontHeight * Math.abs(effectiveOffset)) / 1000);
     return `{\\*\\updnprop${height * 100 + (automatic ? 1 : 0)}}\\${effectiveOffset > 0 ? "up" : "dn"}${halfPoints}`;
+  }
+}
+
+/** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
+function rtfBorderStyle(
+  style: Exclude<BorderLineStyle, BorderLineStyle.NONE>,
+  width: number,
+): string {
+  switch (style) {
+    case BorderLineStyle.SOLID:
+      return width === 1 ? "brdrhair" : "brdrs";
+    case BorderLineStyle.DOTTED:
+      return "brdrdot";
+    case BorderLineStyle.DASHED:
+      return "brdrdash";
+    case BorderLineStyle.DOUBLE:
+    case BorderLineStyle.DOUBLE_THIN:
+      return "brdrdb";
+    case BorderLineStyle.THINTHICK_SMALLGAP:
+      return "brdrtnthsg";
+    case BorderLineStyle.THINTHICK_MEDIUMGAP:
+      return "brdrtnthmg";
+    case BorderLineStyle.THINTHICK_LARGEGAP:
+      return "brdrtnthlg";
+    case BorderLineStyle.THICKTHIN_SMALLGAP:
+      return "brdrthtnsg";
+    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
+      return "brdrthtnmg";
+    case BorderLineStyle.THICKTHIN_LARGEGAP:
+      return "brdrthtnlg";
+    case BorderLineStyle.EMBOSSED:
+      return "brdremboss";
+    case BorderLineStyle.ENGRAVED:
+      return "brdrengrave";
+    case BorderLineStyle.OUTSET:
+      return "brdroutset";
+    case BorderLineStyle.INSET:
+      return "brdrinset";
+    case BorderLineStyle.FINE_DASHED:
+      return "brdrdashsm";
+    case BorderLineStyle.DASH_DOT:
+      return "brdrdashd";
+    case BorderLineStyle.DASH_DOT_DOT:
+      return "brdrdashdd";
   }
 }

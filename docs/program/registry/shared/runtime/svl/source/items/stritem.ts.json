@@ -21,12 +21,14 @@
         "vendor/libreoffice-reference/include/svl/stritem.hxx#SfxStringItem",
         "apps/office/src/svl/source/items/itemset.test.ts#validates, clones, compares, and serializes string and integer items",
         "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::QueryValue",
-        "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::operator =="
+        "vendor/libreoffice-reference/svl/source/items/stritem.cxx#SfxStringItem::operator ==",
+        "vendor/libreoffice-reference/include/svl/stritem.hxx#SetValue"
       ],
-      "justification": "The implemented string item constructor default, GetValue, QueryValue, Clone and equality match the pinned SfxStringItem source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted.",
+      "justification": "The implemented string item constructor default, GetValue, QueryValue, Clone and equality match the pinned SfxStringItem source and header. Native mutation, presentation and pooling methods outside this implemented subset are omitted. Added original string value setter consumed by actual NameOrIndex.SetName without detaching palette index.",
       "knownViolations": [],
       "localSymbols": [
-        "SfxStringItem"
+        "SfxStringItem",
+        "SetValue"
       ],
       "sourceResponsibility": "aligned",
       "upstreamFile": "svl/source/items/stritem.cxx",

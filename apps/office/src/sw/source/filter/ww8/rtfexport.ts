@@ -1,13 +1,17 @@
 /** @fileoverview Writer RTF document serialization following sw/source/filter/ww8/rtfexport.cxx. */
+import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
+import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
+import { rtl_TextEncodingToWinCharset } from "./writerwordglue";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { CharFormat } from "../../core/text/atrstck";
+import { SwAttrIter } from "../../core/text/itratr";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import {
-  ConvertBorderWidthToWord,
-  type SvxBorderLine,
-} from "../../../../editeng/source/items/borderline";
-import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
+import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
+import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
@@ -30,7 +34,12 @@ import {
   type Color,
 } from "../../../../tools/inc/color";
 import { SwFrameSize } from "../../../inc/fmtfsize";
-import { RES_PAGEDESC, RES_PARATR_TABSTOP } from "../../../inc/hintids";
+import {
+  RES_BOX,
+  RES_PAGEDESC,
+  RES_PARATR_TABSTOP,
+  WRITER_CHARACTER_WHICH_RANGES,
+} from "../../../inc/hintids";
 import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwDoc } from "../../core/doc/doc";
@@ -40,11 +49,14 @@ import { SwTableNode } from "../../core/docnode/node";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
-import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
 import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterTextRun } from "../basflt/writer-transfer";
-import { RtfAttributeOutput } from "./rtfattributeoutput";
-import { MSWordStyles } from "./wrtw8sty";
+import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
+import { SvStream } from "../../../../tools/source/stream/stream";
+import { SwWW8AttrIter } from "./wrtw8nds";
+import { MSWordStyles, wwFontHelper, type wwFont } from "./wrtw8sty";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
 const RTF_DEFAULT_COLORS = [
@@ -74,8 +86,9 @@ export class RtfExport {
     ) => this.IndexFont(family),
     /** Computes the color result. @param color - Color. @returns The computed result. */ (color) =>
       this.IndexColor(color),
+    this,
   );
-  private readonly fonts = new Map<string, number>();
+  private fonts = new wwFontHelper();
   private readonly colors = new Map<string, number>();
   private readonly lists = new Map<
     string,
@@ -91,9 +104,35 @@ export class RtfExport {
   >();
   private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
 
+  private readonly m_eDefaultEncoding = rtl_getTextEncodingFromWindowsCharset(
+    rtl_TextEncodingToWinCharset(RTL_TEXTENCODING_ASCII_US),
+  );
+  private m_eCurrentEncoding = this.m_eDefaultEncoding;
+  private stream = new SvStream(new Uint8Array(), this.m_eDefaultEncoding);
+
+  /** Original export stream getter. @returns Actual memory stream. */
+  public Strm(): SvStream {
+    return this.stream;
+  }
+
+  /** Original default encoding getter. @returns Native default encoding. */
+  public GetDefaultEncoding(): rtl_TextEncoding {
+    return this.m_eDefaultEncoding;
+  }
+  /** Original current encoding getter. @returns Native current encoding. */
+  public GetCurrentEncoding(): rtl_TextEncoding {
+    return this.m_eCurrentEncoding;
+  }
+  /** Original current encoding setter. @param encoding - Native encoding ID. @returns Nothing. */
+  public SetCurrentEncoding(encoding: rtl_TextEncoding): void {
+    this.m_eCurrentEncoding = encoding & 0xffff;
+  }
+
   /** Exports a complete Writer document. @param document - Native model. @returns RTF bytes. */
   public ExportDocument(document: SwDoc): Uint8Array {
-    this.fonts.clear();
+    this.SetCurrentEncoding(this.GetDefaultEncoding());
+    this.fonts = new wwFontHelper();
+    this.stream = new SvStream(new Uint8Array(), this.GetDefaultEncoding());
     this.colors.clear();
     for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
     this.lists.clear();
@@ -104,14 +143,15 @@ export class RtfExport {
     const blocks = document.GetNodes().getBodyContent();
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
-      for (const run of projectWriterTextRuns(node as SwTextNode)) {
-        if (run.attributes.fontFamily !== undefined) this.IndexFont(run.attributes.fontFamily);
+      for (const run of this.GetTextRuns(node as SwTextNode)) {
+        this.IndexCharacterFonts(run.items);
         if (run.attributes.color !== undefined && run.attributes.color !== "auto")
           this.IndexColor(run.attributes.color);
         if (run.attributes.underlineColor !== undefined && run.attributes.underlineColor !== "auto")
           this.IndexColor(run.attributes.underlineColor);
       }
       const paragraph = node as SwTextNode;
+      this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
       const rule = paragraph.GetNumRule();
       if (rule !== undefined && !this.lists.has(rule.GetName())) {
         const levels = Array.from(
@@ -133,8 +173,9 @@ export class RtfExport {
       }
     }
     for (const { style } of this.styles.values()) {
+      this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
-      if (attributes.fontFamily !== undefined) this.IndexFont(attributes.fontFamily);
+      this.IndexCharacterFonts(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
@@ -145,24 +186,14 @@ export class RtfExport {
       for (const row of block.GetTable().GetTabLines())
         for (const cell of row.GetTabBoxes()) {
           const box = cell.GetFormat().box;
-          if (box === undefined) continue;
-          for (const edge of [
-            SvxBoxItemLine.TOP,
-            SvxBoxItemLine.LEFT,
-            SvxBoxItemLine.BOTTOM,
-            SvxBoxItemLine.RIGHT,
-          ]) {
-            const line = box.GetLine(edge);
-            if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
-          }
+          if (box !== undefined) this.IndexBoxColors(box);
         }
     }
-    let output = "{\\rtf1\\ansi\\ansicpg1252\\deff0";
-    if (this.fonts.size > 0) {
-      output += "{\\fonttbl";
-      for (const [family, index] of this.fonts) output += `{\\f${index} ${escapeRtf(family)};}`;
-      output += "}";
-    }
+    this.Strm().WriteOString("{\\rtf1\\ansi\\ansicpg1252\\deff0");
+    this.Strm().WriteOString("{\\fonttbl");
+    this.fonts.WriteFontTable(this.attributeOutput);
+    this.Strm().WriteChar("}");
+    let output = "";
     // The fixed Word highlight palette is registered at the beginning of every export.
     output += "{\\colortbl;";
     for (const color of this.colors.keys()) {
@@ -175,13 +206,11 @@ export class RtfExport {
     output += "{\\stylesheet";
     for (const { index, style } of this.styles.values()) {
       const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
-        character = this.attributeOutput.WriteCharacter(
-          projectWriterCharacterAttributes(style.GetAttrSet()),
-        );
+        character = this.attributeOutput.WriteNativeCharacter(style.GetAttrSet());
       const parent = style.DerivedFrom();
       const base = parent instanceof SwTextFormatColl ? styleTable.GetSlot(parent) : 0x0fff;
       const next = styleTable.GetSlot(style.GetNextTextFormatColl());
-      output += `{\\s${index}${base === 0x0fff ? "" : `\\sbasedon${base}`}\\snext${next}${paragraph}${character} ${escapeRtf(styleTable.GetWWName(style))};}`;
+      output += `{\\s${index}${base === 0x0fff ? "" : `\\sbasedon${base}`}\\snext${next}${paragraph}${character} ${OutString(styleTable.GetWWName(style), this.GetCurrentEncoding())};}`;
     }
     output += "}";
     if (this.lists.size > 0) {
@@ -191,7 +220,7 @@ export class RtfExport {
         for (const level of list.levels)
           output +=
             level.kind === "bullet"
-              ? `{\\listlevel\\levelnfc23\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'01${escapeRtf(String.fromCodePoint(level.bullet || 0x2022))};}{\\levelnumbers;}}`
+              ? `{\\listlevel\\levelnfc23\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'01\\u${(String.fromCodePoint(level.bullet).charCodeAt(0) << 16) >> 16} ?;}{\\levelnumbers;}}`
               : `{\\listlevel\\levelnfc${toRtfNfc(level.numberingType)}\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}`;
         output += `{\\listname ;}\\listid${list.id}}`;
       }
@@ -289,7 +318,7 @@ export class RtfExport {
                 [SvxBoxItemLine.BOTTOM, "clbrdrb"],
                 [SvxBoxItemLine.RIGHT, "clbrdrr"],
               ] as const)
-                output += this.WriteCellBorder(control, box.GetLine(edge));
+                output += this.attributeOutput.OutTBLBorderLine(control, box.GetLine(edge));
             if (box !== undefined)
               for (const [edge, unitControl, valueControl] of [
                 [SvxBoxItemLine.TOP, "clpadfl", "clpadl"],
@@ -330,7 +359,8 @@ export class RtfExport {
       }
     }
     output += "}";
-    return new TextEncoder().encode(output);
+    this.Strm().WriteOString(output);
+    return this.Strm().GetData();
   }
 
   /** Emits the first native page descriptor as global paper and first-section controls.  @param document - Document. @param firstBlock - First Block. @returns The string result. */
@@ -516,7 +546,7 @@ export class RtfExport {
           getWriterNumFormatKind(format) === "bullet"
             ? String.fromCodePoint(format.GetBulletChar())
             : paragraph.GetNumString();
-        output += `{\\listtext\\pard\\plain ${escapeRtf(label)}\\tab}`;
+        output += `{\\listtext\\pard\\plain ${OutString(label, this.GetDefaultEncoding())}\\tab}`;
         output += `\\ilvl${Math.min(level, 8)}\\ls${list.id}`;
       }
     }
@@ -541,7 +571,7 @@ export class RtfExport {
     let markIndex = 0;
     let activeLink: WriterHyperlink | undefined;
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
-      run: WriterTextRun,
+      run: WriterTextRun & { items: SfxItemSet },
     ): void => {
       if (run.text.length === 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
@@ -551,7 +581,7 @@ export class RtfExport {
       }
       output += this.WriteRun(run);
     };
-    for (const run of projectWriterTextRuns(paragraph)) {
+    for (const run of this.GetTextRuns(paragraph)) {
       const runStart = offset;
       offset += run.text.length;
       const sliceStart = Math.max(start, runStart);
@@ -578,43 +608,118 @@ export class RtfExport {
 
   /** Emits one Writer point mark at its source text offset.  @param name - Name. @returns The string result. */
   private WriteBookmark(name: string): string {
-    return `{\\*\\bkmkstart ${escapeRtf(name)}}{\\*\\bkmkend ${escapeRtf(name)}}`;
+    return `{\\*\\bkmkstart ${OutString(name, this.GetDefaultEncoding())}}{\\*\\bkmkend ${OutString(name, this.GetDefaultEncoding())}}`;
   }
 
   /** Begins one hyperlink field around its complete native text-hint range.  @param hyperlink - Hyperlink. @returns The string result. */
   private StartURL(hyperlink: WriterHyperlink): string {
-    const url = escapeRtf(hyperlink.url.replaceAll("\\", "\\\\"));
+    const url = OutString(hyperlink.url.replaceAll("\\", "\\\\"), this.GetCurrentEncoding());
     const target =
-      hyperlink.targetFrame === undefined ? "" : ` \\\\t "${escapeRtf(hyperlink.targetFrame)}"`;
+      hyperlink.targetFrame === undefined
+        ? ""
+        : ` \\\\t "${OutString(hyperlink.targetFrame, this.GetCurrentEncoding())}"`;
     return `{\\field{\\*\\fldinst HYPERLINK "${url}"${target} }{\\fldrslt `;
   }
 
+  /** Visits native hint boundaries before any UI run coalescing. @param paragraph - Native text owner. @returns Effective item runs. */
+  private GetTextRuns(paragraph: SwTextNode): readonly (WriterTextRun & { items: SfxItemSet })[] {
+    const text = paragraph.GetText();
+    const hints = paragraph.GetpSwpHints()?.entries() ?? [];
+    const boundaries = new Set([0, text.length]);
+    for (const hint of hints) {
+      boundaries.add(Math.min(text.length, hint.start));
+      boundaries.add(Math.min(text.length, hint.end));
+    }
+    const iterator = new SwAttrIter(paragraph);
+    const ordered = [...boundaries].sort(
+      /** Applies sort to left, right. @param left - left value. @param right - right value. @returns Callback result. */ (
+        left,
+        right,
+      ) => left - right,
+    );
+    const runs: (WriterTextRun & { items: SfxItemSet })[] = [];
+    for (let index = 0; index + 1 < ordered.length; index++) {
+      const start = ordered[index] as number;
+      const end = ordered[index + 1] as number;
+      const items = new SfxItemSet(paragraph.GetDoc().GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+      items.SetParent(paragraph.GetSwAttrSet());
+      const active = hints.filter(
+        /** Applies filter to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
+          hint.start <= start && end <= hint.end,
+      );
+      iterator.Seek(start);
+      for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+        for (let which: number = first; which <= last; ++which)
+          if (
+            active.some(
+              /** Applies some to hint. @param hint - hint value. @returns Callback result. */ (
+                hint,
+              ) => CharFormat.IsItemIncluded(which, hint),
+            )
+          )
+            items.Put(iterator.GetAttrHandler().ReadItem(which));
+      const inet = [...active]
+        .reverse()
+        .find(
+          /** Applies find to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
+            hint.format instanceof SwFormatINetFormat,
+        );
+      runs.push({
+        text: text.slice(start, end),
+        items,
+        attributes: projectWriterCharacterAttributes(items, items.GetParent()),
+        ...(inet?.format instanceof SwFormatINetFormat
+          ? { hyperlink: inet.format.GetHyperlink() }
+          : {}),
+      });
+    }
+    return runs;
+  }
+
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
-  private WriteRun(run: WriterTextRun): string {
+  private WriteRun(run: WriterTextRun & { items: SfxItemSet }): string {
     // The paragraph writer admits only nonempty slices before calling this private method.
-    const controls = this.attributeOutput.WriteCharacter(run.attributes);
-    return "{" + controls + (controls.length === 0 ? "" : " ") + escapeRtf(run.text) + "}";
+    const controls = this.attributeOutput.WriteNativeCharacter(
+      run.items,
+      GetCharacterPropertiesMode.ForRun,
+    );
+    return (
+      "{" +
+      controls +
+      (controls.length === 0 ? "" : " ") +
+      this.attributeOutput.RunText(
+        new SwWW8AttrIter().GetSnippet(run.text, 0, run.text.length),
+        this.GetCurrentEncoding(),
+        "",
+      ) +
+      "}"
+    );
   }
 
-  /** Emits one native cell edge using the source RTF border style and width mapping.  @param control - Control. @param line - Line. @returns The string result. */
-  private WriteCellBorder(control: string, line: SvxBorderLine | undefined): string {
-    if (line === undefined || line.isEmpty()) return `\\${control}\\brdrnone`;
-    const style = line.GetBorderLineStyle();
-    const width = line.GetWidth();
-    const converted = Math.trunc(ConvertBorderWidthToWord(style, width));
-    const size =
-      width <= 255 ? `\\brdrw${converted}` : `\\brdrth\\brdrw${Math.trunc(converted / 2)}`;
-    // Native NONE and unknown styles have an empty width implementation and returned above.
-    return `\\${control}\\${rtfBorderStyle(style as Exclude<BorderLineStyle, BorderLineStyle.NONE>, width)}${size}\\brdrcf${this.IndexColor(borderColor(line))}`;
+  /** Registers every represented native border color before writing the table. @param box - Native border item. @returns Nothing. */
+  private IndexBoxColors(box: SvxBoxItem): void {
+    for (const edge of [
+      SvxBoxItemLine.TOP,
+      SvxBoxItemLine.LEFT,
+      SvxBoxItemLine.BOTTOM,
+      SvxBoxItemLine.RIGHT,
+    ]) {
+      const line = box.GetLine(edge);
+      if (line !== undefined && !line.isEmpty()) this.IndexColor(borderColor(line));
+    }
   }
 
-  /** Assigns a stable RTF font index. @param family - Family name. @returns Index. */
-  private IndexFont(family: string): number {
-    const existing = this.fonts.get(family);
-    if (existing !== undefined) return existing;
-    const index = this.fonts.size;
-    this.fonts.set(family, index);
-    return index;
+  /** Registers all represented script-font values before the font table is serialized. @param items - Actual effective character owner. @returns Nothing. */
+  private IndexCharacterFonts(items: SfxItemSet): void {
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+      const item = items.GetItemIfSet(which, true);
+      if (item instanceof SvxFontItem) this.IndexFont(item);
+    }
+  }
+
+  /** Registers the actual source font value, preserving FFN identity and metadata. @param font - Native font or font item. @returns Font ID. */
+  private IndexFont(font: SvxFontItem | wwFont): number {
+    return this.fonts.GetId(font);
   }
 
   /** Assigns a stable one-based RTF color index. @param color - CSS RGB color. @returns Index. */
@@ -642,64 +747,6 @@ function rtfColorKey(color: Readonly<Color>): string {
       ) => channel.toString(16).padStart(2, "0"),
     )
     .join("")}`;
-}
-
-/** Maps native cell-line styles exactly as OutTBLBorderLine.  @param style - Style. @param width - Width. @returns The string result. */
-function rtfBorderStyle(
-  style: Exclude<BorderLineStyle, BorderLineStyle.NONE>,
-  width: number,
-): string {
-  switch (style) {
-    case BorderLineStyle.SOLID:
-      return width === 1 ? "brdrhair" : "brdrs";
-    case BorderLineStyle.DOTTED:
-      return "brdrdot";
-    case BorderLineStyle.DASHED:
-      return "brdrdash";
-    case BorderLineStyle.DOUBLE:
-    case BorderLineStyle.DOUBLE_THIN:
-      return "brdrdb";
-    case BorderLineStyle.THINTHICK_SMALLGAP:
-      return "brdrtnthsg";
-    case BorderLineStyle.THINTHICK_MEDIUMGAP:
-      return "brdrtnthmg";
-    case BorderLineStyle.THINTHICK_LARGEGAP:
-      return "brdrtnthlg";
-    case BorderLineStyle.THICKTHIN_SMALLGAP:
-      return "brdrthtnsg";
-    case BorderLineStyle.THICKTHIN_MEDIUMGAP:
-      return "brdrthtnmg";
-    case BorderLineStyle.THICKTHIN_LARGEGAP:
-      return "brdrthtnlg";
-    case BorderLineStyle.EMBOSSED:
-      return "brdremboss";
-    case BorderLineStyle.ENGRAVED:
-      return "brdrengrave";
-    case BorderLineStyle.OUTSET:
-      return "brdroutset";
-    case BorderLineStyle.INSET:
-      return "brdrinset";
-    case BorderLineStyle.FINE_DASHED:
-      return "brdrdashsm";
-    case BorderLineStyle.DASH_DOT:
-      return "brdrdashd";
-    case BorderLineStyle.DASH_DOT_DOT:
-      return "brdrdashdd";
-  }
-}
-
-/** Escapes text according to RTF's ASCII plus signed UTF-16 Unicode form. @param value - Source text. @returns RTF text. */
-function escapeRtf(value: string): string {
-  let result = "";
-  for (let index = 0; index < value.length; index++) {
-    const code = value.charCodeAt(index);
-    if (code === 0x5c || code === 0x7b || code === 0x7d) result += "\\" + value[index];
-    else if (code === 0x0a) result += "\\line ";
-    else if (code === 0x09) result += "\\tab ";
-    else if (code >= 0x20 && code <= 0x7e) result += value[index];
-    else result += `\\u${code > 0x7fff ? code - 0x10000 : code}?`;
-  }
-  return result;
 }
 
 /** Maps native numbering types to RTF levelnfc, retaining the source Arabic fallback.  @param type - Type. @returns The number result. */

@@ -1,0 +1,158 @@
+[
+  {
+    "report": "apps/office/coverage/6VDB2H-item-codec-verified/coverage-final.json",
+    "replace": [
+      "apps/office/src/sw/browser/filter/xml/item-codec.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-singlebyte-tables/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-icu-buffer-sort/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-icu-values/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-html-edges-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-html-options-text/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-integration/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-likely-data/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-walltime/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-locales-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-bytestrie-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-datetime/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-converter-context/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-resource-bundle-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-olson-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-writer-markdown-css/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-common-values/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-native-tag-keytype/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-bytesinkutil-fixed/coverage-final.json",
+    "replace": [
+      "apps/office/src/external/icu/source/common/bytesinkutil.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-writer-edges-final/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-common-values-final/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-number-result-counts/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-allocation-current/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-i18n-complete/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-sal-conversion-current/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-converter-context-final/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-fill-boundaries-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-digitgroup-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-locale-wrapper-boundaries/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-common-resource-guards/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-fullfold-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calc-boundaries/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-string-current-verified/coverage-final.json",
+    "replace": [
+      "apps/office/src/sal/rtl/string.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-unistr-allocation-final/coverage-final.json",
+    "replace": [
+      "apps/office/src/external/icu/source/common/unistr.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-export-options-verified/coverage-final.json",
+    "replace": [
+      "apps/office/src/sc/source/ui/dbgui/imoptdlg.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-fonts-close/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-keytype-complete/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-locale-values-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-locale-admission/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-i18n-final-current/coverage-final.json",
+    "replace": [
+      "apps/office/src/external/icu/source/i18n/calendar.ts",
+      "apps/office/src/external/icu/source/i18n/gregocal.ts",
+      "apps/office/src/external/icu/source/i18n/gregoimp.ts",
+      "apps/office/src/external/icu/source/i18n/simpletz.ts",
+      "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+      "apps/office/src/external/icu/source/i18n/timezone.default.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-writer-current-final/coverage-final.json",
+    "replace": [
+      "apps/office/src/sw/source/filter/md/swmd.ts",
+      "apps/office/src/sw/source/filter/html/parcss1.ts",
+      "apps/office/src/sw/source/core/crsr/pam.ts",
+      "apps/office/src/sw/source/core/doc/doc.ts",
+      "apps/office/src/sw/source/core/txtnode/ndhints.ts"
+    ]
+  }
+]

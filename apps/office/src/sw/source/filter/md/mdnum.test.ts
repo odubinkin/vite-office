@@ -1,31 +1,25 @@
-/** @fileoverview Markdown numbering completion starts from the first explicit native level. */
-import { assert, expect, it } from "vitest";
-import { SvxNumType } from "../../../../editeng/inc/svxenum";
-import { createWriterDocument } from "../../core/doc/doc";
+/** @fileoverview Verifies the native Markdown rule/depth/start state owner. */
+import { expect, it } from "vitest";
+import { SwNumRule } from "../../core/doc/number";
 import { SwMdNumRuleInfo } from "./mdnum";
-
-it("fills following levels while leaving earlier uninitialized levels untouched", /** Checks direct list callback state when an outer list starts beyond level zero. @returns Nothing. */ () => {
-  const doc = createWriterDocument();
-  const rules = new SwMdNumRuleInfo();
-  try {
-    rules.Finish();
-    const node = doc.paragraphs[0];
-    assert(node);
-    rules.Apply(node, { kind: "bullet", level: 2, id: "Nested callback" });
-    const rule = node.GetNumRule();
-    assert(rule);
-    expect(rule.GetNumFormat(0)).toBeUndefined();
-    expect(rule.GetNumFormat(1)).toBeUndefined();
-    rules.Finish();
-    expect(rule.GetNumFormat(0)).toBeUndefined();
-    expect(rule.GetNumFormat(1)).toBeUndefined();
-    for (let level = 2; level < 10; level++) {
-      const format = rule.GetNumFormat(level);
-      assert(format);
-      expect(format.GetNumberingType()).toBe(SvxNumType.SVX_NUM_CHAR_SPECIAL);
-      expect(format.GetBulletChar()).toBe(0x2022);
-    }
-  } finally {
-    doc.Dispose();
-  }
+it("retains source depth independently from the maximum list level and resets pending starts", /** Exercises the unsigned depth, sentinel and current-rule contracts. @returns Nothing. */ () => {
+  const info = new SwMdNumRuleInfo(),
+    rule = new SwNumRule("Markdown", "label-width-and-position");
+  expect(info.GetNumRule()).toBeUndefined();
+  expect(info.GetLevel()).toBe(0);
+  info.IncDepth();
+  expect(info.GetLevel()).toBe(0);
+  info.SetNumRule(rule);
+  for (let i = 1; i < 12; i++) info.IncDepth();
+  expect(info.GetDepth()).toBe(12);
+  expect(info.GetLevel()).toBe(9);
+  info.SetNodeStartValue(9, 3);
+  expect(info.GetNodeStartValue(9)).toBe(3);
+  info.SetNodeStartValue(9);
+  expect(info.GetNodeStartValue(9)).toBe(65535);
+  info.Clear();
+  info.DecDepth();
+  expect(info.GetDepth()).toBe(0);
+  expect(info.GetNumRule()).toBeUndefined();
+  for (let level = 0; level < 10; level++) expect(info.GetNodeStartValue(level)).toBe(65535);
 });

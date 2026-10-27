@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/source/implbase_ex.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/source/implbase_ex.ts",
+        "apps/office/src/cppuhelper/source/native-implbase.test.ts",
+        "cppuhelper/source/implbase_ex.cxx"
+      ],
+      "justification": "Original reverse class-data initialization, direct pointer/name comparison, real typelib deep lookup with root exclusion/one-base tail loop/persistent8-byte offsets, native error strings, qualified OWeakObject root/fallback and reverse Type-field assignment followed by XWeak. Actual mutable sequence Type fields use the existing C Type assignment body, with construction unwinding on failure. Native debug diagnostics are not promoted into production errors. Actual shared Type/Any/Reference/Sequence/typelib/OSL owners are reused. TypeScript structural interface casts retain a single object identity; explicit low-level pointer-adjustment callbacks represent compiler casts only. Original LP64 recursive base-offset increments are retained for concrete facet callers; physical C++ object layout/ABI is not certified. Synchronous execution replaces native mutex/barrier syntax. No alternative UNO type registry, runtime inferred interface provider, allocator, fake component or generic exception bridge is introduced. Native aggregation/component/inheritance helper families outside WeakImplHelper and full native reflection remain unported. Six focused cases use actual typelib records and component references; whole-module/native compiled differential parity remains unverified. CellColorHandler, complete DOCX/XLSX model/export and desktop/mobile file UI paths remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "literal",
+        "fail",
+        "checkInterface",
+        "isXInterface",
+        "td_equals",
+        "getTypeEntries",
+        "reference",
+        "recursivelyFindType",
+        "queryDeepNoXInterface",
+        "WeakImplHelper_query",
+        "WeakImplHelper_getTypes"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "cppuhelper/source/implbase_ex.cxx",
+      "upstreamSymbols": [
+        "getTypeEntries",
+        "recursivelyFindType",
+        "queryDeepNoXInterface",
+        "WeakImplHelper_query",
+        "WeakImplHelper_getTypes"
+      ]
+    }
+  }
+}

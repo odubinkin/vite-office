@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/comphelper/source/misc/sequenceashashmap.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-property-sequence",
+    "capabilityIds": [
+      "CAP-34803de3-61a5-4ecb-b79c-457948e23768"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/comphelper/source/misc/sequenceashashmap.ts",
+        "apps/office/src/comphelper/source/misc/sequenceashashmap.test.ts",
+        "comphelper/source/misc/sequenceashashmap.cxx"
+      ],
+      "justification": "Original default/copy and Any/typed-sequence constructors, caller-declared erased sequence overloads, VOID reset, typed-sequence clear, Any-sequence merge/VOID omission, exact IllegalArgumentException messages and earlier successful writes on failure are retained. Map values use actual Any ownership/equality and generated NamedValue/PropertyValue compounds. Output reallocates and assigns only Name/Value, preserving reused PropertyValue Handle/State. Native lookup copies, create-if-missing, subset match, update, key erase, size/empty/clear and signed32 unpack/default specialization retain source contracts. Original cached-hash/equality/hash functors use actual Unicode. Raw compound field assignment uses existing actual C RTL/UNO owners, without fake value/type/default providers. Host Map binds the original unspecified unordered lookup/iteration contract using exact UTF16 names, with real owned key strings/cached hashes and Any members. Native bucket layout/reserve/iteration order, allocation-failure traces, threading and physical ABI are unverified. Native end/erase(iterator), implicit map copy assignment and unconsumed getUnpackedValueOrDefault template specializations are not ported. JSON/reflection conversion in the original source is a separate header-owned API and remains unported. No native compiled SequenceAsHashMap differential capture or ported downstream QA is claimed. TablePositionHandler/TableManager/DomainMapperTableManager, full DOCX/XLSX model/export and production UI workflows remain incomplete. Broad parity/default/verified flags stay false.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SequenceAsHashMap",
+        "OUStringAndHashCode",
+        "OUStringAndHashCodeEqual",
+        "OUStringAndHashCodeHash"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "comphelper/source/misc/sequenceashashmap.cxx",
+      "upstreamSymbols": [
+        "SequenceAsHashMap::operator<<",
+        "SequenceAsHashMap::operator>>",
+        "SequenceAsHashMap::match",
+        "SequenceAsHashMap::update"
+      ]
+    }
+  }
+}

@@ -15,7 +15,18 @@
       "RTL_STR_MAX_VALUEOFDOUBLE",
       "rtl_str_toInt64",
       "rtl_str_toInt64_WithLength",
-      "rtl_str_toUInt64"
+      "rtl_str_toUInt64",
+      "_rtl_String",
+      "rtl_String",
+      "rtl_StringSlot",
+      "rtl_string_acquire",
+      "rtl_string_release",
+      "rtl_string_new",
+      "rtl_string_new_WithLength",
+      "rtl_string_alloc",
+      "rtl_uString2String",
+      "rtl_convertUStringToString",
+      "OUSTRING_TO_OSTRING_CVTFLAGS"
     ],
     "upstreamSymbols": [
       "RTL_STR_MAX_RADIX",
@@ -26,14 +37,26 @@
       "RTL_STR_MAX_VALUEOFDOUBLE",
       "rtl_str_toInt64",
       "rtl_str_toInt64_WithLength",
-      "rtl_str_toUInt64"
+      "rtl_str_toUInt64",
+      "_rtl_String",
+      "rtl_String",
+      "_rtl_String",
+      "rtl_string_acquire",
+      "rtl_string_release",
+      "rtl_string_new",
+      "rtl_string_new_WithLength",
+      "rtl_string_alloc",
+      "rtl_uString2String",
+      "rtl_convertUStringToString",
+      "OUSTRING_TO_OSTRING_CVTFLAGS"
     ],
     "preservedResponsibilities": [
       "Original signed64 known-length SAL toInt and UTF16 o3tl::toInt32 retain exact original whitespace/sign/digit/first-invalid-stop/overflow-to-zero and default radix10. BigInt preserves original unsigned accumulation and signed64 limits; signed32 narrowing occurs only after the original range-to-zero guard. The original internal whitespace classifier remains in o3tl, the generic algorithm/signed64 specialization and internal sign/digit/DivMod owners remain in SAL, and real C/header/radix/SAL signed32 macro boundaries are shared once. Genuine whole original SAL/CPPU translation units and unchanged strtmpl/o3tl headers observe complete constants, quotient/remainder/positive guard, every65536 UTF16 whitespace/digit predicate for every2..36 radix, selected scalar contexts, all prefixes of full radix/boundary/control/sign inputs and default10 values. Complete normal/ASan/UBSan byte streams and nine original checked fatal assertions must agree. Original mutual SAL/o3tl inline-header directions are retained; no app/browser dependencies or duplicated whitespace owner. Checked C assertions map to Error, distinct from UNO exceptions. This specialization does not certify terminated/byte/unsigned/template overloads, original NDEBUG invalid-radix fallback, arbitrary out-of-contract JS numbers or storage, native ABI/thread lifetime, full original QA or unfinished getByName/UNO/case-service consumers. Broad capability parity/default/verification flags stay false.",
       "Original SAL integral UTF16 formatting shares actual strtmpl.hxx valueOfInt, ustring.cxx signed32/signed64/unsigned64 C wrappers and original string.h/ustring.h macro boundaries. Native JS Number/BigInt.toString(radix) is selected only after complete comparison with120031 genuine original observations (48492536 bytes SHA25686bad3fa6dc25f7f9fb7dcf877adf89bac036acfa2d9a828458b816aa4764a17). Preserve lowercase digits, negative signs, exact signed widths and unsigned64 bits, original null-before-radix checked guards, terminating zero and all untouched initialized buffer sentinels. The native caller uses96-unit sufficient buffers, all signed16 decimal inputs, all35 valid radices, signed32/signed64/unsigned64 power boundaries and deterministic wide inputs, with full unchanged346-source dependencies under normal and ASan/UBSan. Nine checked native fatal assertions remain separate diagnostics and map to Error; no defined post-abort result is claimed. Preserve original33/65/65 capacity macros despite CALC044: negative minima in base2 need34/66 units including zero. Macro-sized buffers, StringNumber/OUString::number/concat, original NDEBUG invalid-radix fallback, malformed JS arguments/storage, physical ABI and full consumer/upstream QA remain unverified. This closes a required original interface-factory derived-name formatting dependency, not the full interface/default-exception/case-service/document/UI path. No extra formatting library, lossy64-bit Number conversion or source-method replacement.",
       "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending.",
       "TaskCMHQFZ adds original double output macro25 and its native Unicode-header alias for OUStringBuffer double/G17 insertion. Existing integer/float macros and C implementations remain unchanged;native actual header buffer output and declared25value are checked without broad parity promotion.",
-      "WZ8225 exposes original rtl_str_toInt64, rtl_str_toInt64_WithLength and rtl_str_toUInt64 from the actual byte C owner, alongside unchanged macro values. No OString or other absent byte library responsibility is supplied."
+      "WZ8225 exposes original rtl_str_toInt64, rtl_str_toInt64_WithLength and rtl_str_toUInt64 from the actual byte C owner, alongside unchanged macro values. No OString or other absent byte library responsibility is supplied.",
+      "Original byte-string data/refcount/length/terminated-buffer and pointer-slot declarations, public byte ownership functions, checked/unchecked conversion C declarations and exact OUSTRING_TO_OSTRING_CVTFLAGS macro. Byte ownership/core conversion results are compared to the isolated native witness; complete public header and binary ABI remain unverified."
     ],
     "omittedResponsibilities": [
       "Other original header algorithms/template overloads and full original QA remain unverified."
@@ -63,6 +86,10 @@
         {
           "path": "apps/office/src/sal/rtl/byte-integer.test.ts",
           "marker": "preserves signed byte prefix"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
         }
       ],
       "upstream": [

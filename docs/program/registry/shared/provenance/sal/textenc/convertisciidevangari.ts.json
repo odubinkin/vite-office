@@ -11,20 +11,31 @@
       "ImplCreateIsciiDevanagariToUnicodeContext",
       "ImplResetIsciiDevanagariToUnicodeContext",
       "ImplDestroyIsciiDevanagariToUnicodeContext",
-      "IsciiDevanagariToUnicodeContext"
+      "IsciiDevanagariToUnicodeContext",
+      "ImplConvertUnicodeToIsciiDevanagari",
+      "ImplCreateUnicodeToIsciiDevanagariContext",
+      "ImplResetUnicodeToIsciiDevanagariContext",
+      "ImplDestroyUnicodeToIsciiDevanagariContext",
+      "UnicodeToIsciiDevanagariContext"
     ],
     "upstreamSymbols": [
       "ImplConvertIsciiDevanagariToUnicode",
       "ImplCreateIsciiDevanagariToUnicodeContext",
       "ImplResetIsciiDevanagariToUnicodeContext",
       "ImplDestroyIsciiDevanagariToUnicodeContext",
-      "IsciiDevanagariToUnicode"
+      "IsciiDevanagariToUnicode",
+      "ImplConvertUnicodeToIsciiDevanagari",
+      "ImplCreateUnicodeToIsciiDevanagariContext",
+      "ImplResetUnicodeToIsciiDevanagariContext",
+      "ImplDestroyUnicodeToIsciiDevanagariContext",
+      "UnicodeToIsciiDevanagari"
     ],
     "preservedResponsibilities": [
-      "Pinned contextful ISCII Devanagari conversion, compound nukta/halant rules and bad-input actions. The reverse Unicode-to-ISCII converter is outside the RTF import path."
+      "Pinned contextful ISCII Devanagari conversion, compound nukta/halant rules and bad-input actions.",
+      "Original reverse UnicodeToIsciiDevanagari state, ordered source ranges, halant/joiner and nukta pairs, surrogate bookkeeping, optional result pointers and original FLUSH condition. Compiled unchanged converter with original bad-input/classification and extracted original character/integer/range dependencies under ASan/UBSan agrees on 2097152 BMP/flag/capacity cases and 1080 saved-context vectors. Non-null contexts only; this does not certify full SAL ABI or generic string integration."
     ],
     "omittedResponsibilities": [
-      "Unicode-to-ISCII reverse conversion is not used by the current Writer RTF import path."
+      "Full SAL converter factory and checked string-wrapper integration remain unimplemented; the native witness covers the documented isolated reverse algorithms."
     ],
     "evidence": {
       "local": [
@@ -35,12 +46,28 @@
         {
           "path": "apps/office/src/sal/textenc/convertisciidevangari.test.ts",
           "marker": "maps pinned ISCII base, nukta and halant combinations"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.ts",
+          "marker": "ImplConvertUnicodeToIsciiDevanagari"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts",
+          "marker": "matches native"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertisciidevangari.encode.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/convertisciidevangari.cxx",
           "marker": "ImplConvertIsciiDevanagariToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertisciidevangari.cxx",
+          "marker": "ImplConvertUnicodeToIsciiDevanagari"
         }
       ]
     }

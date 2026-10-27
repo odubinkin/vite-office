@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
+          "marker": "MoveProperties"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/rtfattributeoutput.cxx",
+          "marker": "RtfAttributeOutput::MoveProperties"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/ww8/rtfattributeoutput.cxx",
+    "localSymbols": [
+      "GetCharacterPropertiesMode",
+      "RtfAssociatedProperties"
+    ],
+    "upstreamSymbols": [
+      "RtfAttributeOutput::MoveProperties",
+      "RtfAttributeOutput::OutputCharAssocFormattingItem",
+      "RtfAttributeOutput::RTLAndCJKState"
+    ],
+    "preservedResponsibilities": [
+      "Original associated-character stage of MoveProperties: shallow fixed Western/CJK/CTL traversal, associated versus normal keywords, CJK langfe exception, exact native posture/weight/height reduction, independent bidi/script flags, one-shot run-state reset and StyleDefinition state preservation. The outer writer collects its borrowed effective character items into a temporary native set and releases it after emission.",
+      "Native non-associated OutputCharFontAssoc updates the actual RtfExport current encoding through FontMapExport and checked font charset selection, with original unknown-to-default fallback; associated font output leaves encoding unchanged. Native RunText ignores its supplied charset and delegates RawText/OutString using current export encoding. RTF text uses represented GetSnippet substitutions; style names and hyperlink values use OutString.",
+      "The font sink receives the original complete font item and association flag and delegates actual OutputCharFontAssoc emission."
+    ],
+    "omittedResponsibilities": [
+      "Full MSWord run script/bidi production, complete general-formatting buffers, complete font table identity, paragraph-marker properties and RTF language/associated-format import remain unverified or unported. Complete wwFontHelper initialization and native document/style usage enumeration remain incomplete."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "The native rtfattributeoutput.cxx owner combines stream/table/general-property emission with associated-character group ordering and three mutable run flags. This responsibility split preserves the complete association stage and state defaults while the existing attribute-output owner retains its font/color table sinks and general emission."
+    }
+  }
+}

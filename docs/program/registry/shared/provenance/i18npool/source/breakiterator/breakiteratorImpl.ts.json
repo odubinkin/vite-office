@@ -7,15 +7,18 @@
     "localPath": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.ts",
     "upstreamPath": "vendor/libreoffice-reference/i18npool/source/breakiterator/breakiteratorImpl.cxx",
     "localSymbols": [
-      "BreakIteratorImpl"
+      "BreakIteratorImpl",
+      "beginOfScript"
     ],
     "upstreamSymbols": [
       "getScriptClass",
       "getScriptType",
-      "endOfScript"
+      "endOfScript",
+      "beginOfScript"
     ],
     "preservedResponsibilities": [
-      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted."
+      "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "Original beginOfScript performs exact-class backward UTF16 traversal without absorbing weak characters and retains source low-surrogate offset behavior."
     ],
     "omittedResponsibilities": [
       "Full native formatted-cell script cache,UNO/service factory graph,device metrics and rich/wrapped/rotated/merged layout remain unported.",
@@ -29,6 +32,14 @@
         {
           "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.ts",
           "marker": "BreakIteratorImpl"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.ts",
+          "marker": "beginOfScript"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/breakiterator/breakiteratorImpl.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

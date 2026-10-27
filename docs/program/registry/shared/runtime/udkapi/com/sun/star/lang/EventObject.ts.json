@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts",
+        "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+        "udkapi/com/sun/star/lang/EventObject.idl"
+      ],
+      "justification": "Original generated default/copy/member constructors, assignment, stable Source Reference, equality and destruction use actual shared Reference/Any/Sequence compound ownership. The compiler address adapter aliases the sole original pointer field without acquiring/releasing or supplying a second pointer/type/default provider. Real Any/Sequence copies retain the component until all owners are destroyed. Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "EventObject",
+        "cppu_detail_getUnoType_EventObject"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/lang/EventObject.idl",
+      "upstreamSymbols": [
+        "EventObject",
+        "Source"
+      ]
+    }
+  }
+}

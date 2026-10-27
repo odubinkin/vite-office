@@ -1,0 +1,33 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/editeng/inc/twolinesitem.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "text-layout-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/editeng/inc/twolinesitem.ts",
+        "apps/office/src/editeng/source/items/text-layout-items.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts"
+      ],
+      "justification": "Task202610251549-V4DQJW ports native two-line UTF16 brackets, unsigned16 text/character rotation and independent fit flag, typed Any query/put and native bool blink. DOCX adds caps, outline/shadow, blink, exact emphasis combinations, native width narrowing/clamp, relief and collected East Asian rotation/combine/bracket priorities; actual serializers retain native run sorting, reset and detach lifecycle. Native localized GetPresentation/XML diagnostics, item-manager/lifetime, complete pool default registration, browser item transport, general LanguageTag/color/underline/theme and paragraph/style/iterator orchestration remain unported or unverified. No complete DOCX export, UI route or module/capability/default parity is certified.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/editeng/twolinesitem.hxx",
+      "upstreamSymbols": [
+        "SvxTwoLinesItem"
+      ]
+    }
+  }
+}

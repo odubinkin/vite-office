@@ -18,19 +18,28 @@
       "evidence": [
         "apps/office/src/sal/textenc/tcvtmb.ts#ImplDBCSToUnicode",
         "vendor/libreoffice-reference/sal/textenc/tcvtmb.cxx#ImplDBCSToUnicode",
-        "apps/office/src/sal/textenc/tcvtmb.test.ts#maps MS-932 single bytes"
+        "apps/office/src/sal/textenc/tcvtmb.test.ts#maps MS-932 single bytes",
+        "apps/office/src/sal/textenc/tcvtmb.ts#ImplUnicodeToDBCS",
+        "apps/office/src/sal/textenc/tcvtmb.ts#ImplUnicodeToEUCJP",
+        "apps/office/src/sal/textenc/tcvtmb.encode.test.ts",
+        "apps/office/src/sal/textenc/tcvtmb.encode.native.json",
+        "scripts/sal-dbcs-native-probe.mjs"
       ],
-      "justification": "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order. Full multibyte SAL codec parity and compiled upstream differential remain unverified. Ports ImplEUCJPToUnicode including JIS-0208/JIS-0212, SS2, SS3 and source status/consumption ordering.",
+      "justification": "Pinned DBCS lead/trail and EUDC decoding with original error, FLUSH and consumed-byte order. Full multibyte SAL codec/factory parity remains unverified; scoped compiled evidence is described below. Ports ImplEUCJPToUnicode including JIS-0208/JIS-0212, SS2, SS3 and source status/consumption ordering. Ports complete original ImplUnicodeToDBCS and ImplUnicodeToEUCJP entrypoints, preserving reverse table ownership, restricted-range/EUDC/private precedence, signed-char narrowing profile, source empty replacement branches, exact byte capacities and shared undefined/surrogate pointer updates. A constrained compiled witness uses unchanged original converter bodies, original table initializers and original encoding factory bindings. All 786432 BMP descriptor/unit pairs are audited: 786163 defined cases match output/status/consumption digests; 269 original out-of-array reads are classified without executing C++ undefined behavior. Eleven DBCS descriptors, two-plane EUC-JP and canonical forward/reverse exception counts are covered. Source flags outside that witness remain supported through existing tested shared owners; this is not a full SAL/LibreOffice service certificate.",
       "knownViolations": [],
       "localSymbols": [
         "ImplDBCSToUnicode",
-        "ImplEUCJPToUnicode"
+        "ImplEUCJPToUnicode",
+        "ImplUnicodeToDBCS",
+        "ImplUnicodeToEUCJP"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtmb.cxx",
       "upstreamSymbols": [
         "ImplDBCSToUnicode",
-        "ImplEUCJPToUnicode"
+        "ImplEUCJPToUnicode",
+        "ImplUnicodeToDBCS",
+        "ImplUnicodeToEUCJP"
       ]
     }
   }

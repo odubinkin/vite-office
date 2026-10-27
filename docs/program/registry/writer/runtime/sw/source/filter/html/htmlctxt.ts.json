@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmlctxt.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmlctxt.ts",
+        "apps/office/src/sw/source/filter/html/htmlctxt.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlctxt.cxx"
+      ],
+      "justification": "Native represented HTML context constructors/defaults, borrowed attribute deque, pool-style/default-style selection, class text, changed-margin/spacing out parameters, uint16/signed-short narrowing, restart/visibility/append flags and actual saved numbering-rule identity. Source-contract tests only; complete Writer/compiled native parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HTMLAttrContext",
+        "SwHTMLAppendMode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmlctxt.cxx",
+      "upstreamSymbols": [
+        "HTMLAttrContext"
+      ]
+    }
+  }
+}

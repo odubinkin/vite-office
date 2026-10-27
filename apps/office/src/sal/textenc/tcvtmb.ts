@@ -1,4 +1,6 @@
-/** @fileoverview Original double-byte text-to-Unicode routine from sal/textenc/tcvtmb.cxx. */
+/** @fileoverview Original DBCS and EUC-JP conversion routines in both directions from sal/textenc/tcvtmb.cxx. */
+import { handleUndefinedUnicodeToTextChar } from "./handleundefinedunicodetotextchar.hxx";
+import { RTL_TEXTCVT_BYTE_PRIVATE_START, RTL_TEXTCVT_BYTE_PRIVATE_END } from "./tenchelp";
 import * as cvt from "../inc/rtl/textcvt.h";
 import type { ImplDBCSConvertData, ImplEUCJPConvertData } from "./tenchelp";
 import { ImplGetUndefinedUnicodeChar } from "./tenchelp";
@@ -278,4 +280,179 @@ export function ImplEUCJPToUnicode(
   }
   sourceConverted[0] = sourceOffset;
   return destinationOffset;
+}
+
+/** Original table-driven reverse DBCS converter, including source EUDC/private precedence and exact consumed/output offsets. @param data - Actual native aggregate. @param _context - Unused native context. @param source - UTF16 view. @param sourceChars - Native length. @param destination - Borrowed byte output. @param destinationBytes - Logical output capacity. @param flags - Native flags. @param info - Native status. @param sourceConverted - Consumed UTF16 units. @returns Written bytes. */
+export function ImplUnicodeToDBCS(
+  data: ImplDBCSConvertData,
+  _context: unknown,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array | Int8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number],
+  sourceConverted: [number],
+): number {
+  const src: [number] = [0],
+    dst: [number] = [0];
+  const checkRange = data.mnLeadStart !== 0 || data.mnLeadEnd !== 0xff;
+  info[0] = 0;
+  while (src[0] < sourceChars) {
+    const c = source[src[0]] as number,
+      low = c & 255,
+      high = data.mpToDBCSHighTab[c >>> 8];
+    if (high === undefined) throw new Error("Original DBCS high table is incomplete.");
+    let converted = 0;
+    if (low >= high.mnLowStart && low <= high.mnLowEnd) {
+      if (high.mpToUniTrailTab === null)
+        throw new Error("Original DBCS high entry requires its reverse table.");
+      converted = high.mpToUniTrailTab[low - high.mnLowStart] as number;
+      if (
+        checkRange &&
+        converted > 127 &&
+        (converted >>> 8 < data.mnLeadStart ||
+          converted >>> 8 > data.mnLeadEnd ||
+          (converted & 255) < data.mnTrailStart ||
+          (converted & 255) > data.mnTrailEnd)
+      )
+        converted = 0;
+    }
+    if (converted === 0 && c !== 0) {
+      for (let index = 0; index < data.mnEUDCCount; ++index) {
+        const range = data.mpEUDCTab?.[index];
+        if (range === undefined) throw new Error("Original DBCS EUDC table is incomplete.");
+        if (c < range.mnUniStart || c > range.mnUniEnd) continue;
+        const offset = c - range.mnUniStart,
+          lead = Math.trunc(offset / range.mnTrailRangeCount);
+        let trail = offset % range.mnTrailRangeCount;
+        converted = ((range.mnLeadStart + lead) << 8) & 0xffff;
+        let size = range.mnTrail1End - range.mnTrail1Start + 1;
+        if (trail < size) {
+          converted |= range.mnTrail1Start + trail;
+          break;
+        }
+        trail -= size;
+        size = range.mnTrail2End - range.mnTrail2Start + 1;
+        if (trail < size) {
+          converted |= range.mnTrail2Start + trail;
+          break;
+        }
+        trail -= size;
+        converted |= range.mnTrail3Start + trail;
+        break;
+      }
+      // Original source assigns through plain signed char before unsigned16 cConv.
+      if (
+        c >= RTL_TEXTCVT_BYTE_PRIVATE_START &&
+        c <= RTL_TEXTCVT_BYTE_PRIVATE_END &&
+        flags & cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0
+      )
+        converted = ((low << 24) >> 24) & 0xffff;
+    }
+    if (converted === 0 && c !== 0) {
+      // The two replacement-flag branches in the original DBCS owner are deliberately empty.
+      if (
+        handleUndefinedUnicodeToTextChar(
+          source,
+          src,
+          sourceChars,
+          destination,
+          dst,
+          destinationBytes,
+          flags,
+          info,
+        )
+      )
+        continue;
+      break;
+    }
+    if (!(converted & 0xff00)) {
+      if (dst[0] === destinationBytes) {
+        info[0] |= cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        break;
+      }
+      destination[dst[0]++] = converted & 255;
+    } else {
+      if (dst[0] + 1 >= destinationBytes) {
+        info[0] |= cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        break;
+      }
+      destination[dst[0]++] = converted >>> 8;
+      destination[dst[0]++] = converted & 255;
+    }
+    ++src[0];
+  }
+  sourceConverted[0] = src[0];
+  return dst[0];
+}
+
+/** Original EUC-JP reverse converter retains ASCII/SS2/JIS0208/JIS0212 priority and source bad-input policy. @param data - Actual EUC-JP aggregate. @param _context - Unused native context. @param source - UTF16 view. @param sourceChars - Native length. @param destination - Borrowed output. @param destinationBytes - Native capacity. @param flags - Native flags. @param info - Status cell. @param sourceConverted - Consumed UTF16 units. @returns Written bytes. */
+export function ImplUnicodeToEUCJP(
+  data: ImplEUCJPConvertData,
+  _context: unknown,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array | Int8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number],
+  sourceConverted: [number],
+): number {
+  const src: [number] = [0],
+    dst: [number] = [0];
+  info[0] = 0;
+  while (src[0] < sourceChars) {
+    const c = source[src[0]] as number;
+    let converted: number;
+    if (c <= 127) converted = c;
+    else if (c >= 0xff61 && c <= 0xff9f) converted = 0x8ea1 + c - 0xff61;
+    else {
+      const low = c & 255,
+        high = c >>> 8,
+        first = data.mpUniToJIS0208HighTab[high];
+      if (first === undefined) throw new Error("Original JIS0208 high table is incomplete.");
+      converted =
+        low >= first.mnLowStart && low <= first.mnLowEnd
+          ? (first.mpToUniTrailTab?.[low - first.mnLowStart] as number)
+          : 0;
+      if (converted) converted |= 0x8080;
+      else {
+        const second = data.mpUniToJIS0212HighTab[high];
+        if (second === undefined) throw new Error("Original JIS0212 high table is incomplete.");
+        if (low >= second.mnLowStart && low <= second.mnLowEnd) {
+          converted = second.mpToUniTrailTab?.[low - second.mnLowStart] as number;
+          if (converted) converted |= 0x8f8080;
+        }
+        if (!converted) {
+          // Original replacement branches are empty; the common native undefined owner decides.
+          if (
+            handleUndefinedUnicodeToTextChar(
+              source,
+              src,
+              sourceChars,
+              destination,
+              dst,
+              destinationBytes,
+              flags,
+              info,
+            )
+          )
+            continue;
+          break;
+        }
+      }
+    }
+    const count = !(converted & 0xffff00) ? 1 : !(converted & 0xff0000) ? 2 : 3;
+    if (count === 1 ? dst[0] === destinationBytes : dst[0] + count - 1 >= destinationBytes) {
+      info[0] |= cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      break;
+    }
+    if (count === 3) destination[dst[0]++] = converted >>> 16;
+    if (count >= 2) destination[dst[0]++] = (converted >>> 8) & 255;
+    destination[dst[0]++] = converted & 255;
+    ++src[0];
+  }
+  sourceConverted[0] = src[0];
+  return dst[0];
 }

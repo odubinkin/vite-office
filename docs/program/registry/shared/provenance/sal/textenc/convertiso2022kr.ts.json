@@ -11,20 +11,33 @@
       "ImplCreateIso2022KrToUnicodeContext",
       "ImplResetIso2022KrToUnicodeContext",
       "ImplDestroyIso2022KrToUnicodeContext",
-      "ImplIso2022KrToUnicodeContext"
+      "ImplIso2022KrToUnicodeContext",
+      "ImplConvertUnicodeToIso2022Kr",
+      "ImplCreateUnicodeToIso2022KrContext",
+      "ImplResetUnicodeToIso2022KrContext",
+      "ImplDestroyUnicodeToIso2022KrContext",
+      "ImplUnicodeToIso2022KrContext",
+      "ImplUnicodeToIso2022KrSet"
     ],
     "upstreamSymbols": [
       "ImplConvertIso2022KrToUnicode",
       "ImplCreateIso2022KrToUnicodeContext",
       "ImplResetIso2022KrToUnicodeContext",
       "ImplDestroyIso2022KrToUnicodeContext",
-      "ImplIso2022KrToUnicodeContext"
+      "ImplIso2022KrToUnicodeContext",
+      "ImplConvertUnicodeToIso2022Kr",
+      "ImplCreateUnicodeToIso2022KrContext",
+      "ImplResetUnicodeToIso2022KrContext",
+      "ImplDestroyUnicodeToIso2022KrContext",
+      "ImplUnicodeToIso2022KrContext",
+      "ImplUnicodeToIso2022KrSet"
     ],
     "preservedResponsibilities": [
-      "Pinned ISO-2022-KR text-to-Unicode state transitions, KS X 1001 lookup, streaming context and SAL bad-input handling for RTF code page 50225."
+      "Pinned ISO-2022-KR text-to-Unicode state transitions, KS X 1001 lookup, streaming context and SAL bad-input handling for RTF code page 50225.",
+      "Original reverse ISO-2022-KR mapping, streaming state, partial designation/shift writes, original error replacement prefix, surrogate bookkeeping and final FLUSH conditions. An isolated unchanged-source ASan/UBSan witness verifies bytes, status, consumed units and final context against actual JIS/KS tables and original shared helpers; known out-of-array source reads are classified before execution. Full SAL ABI and string-wrapper/Writer integration remain unverified."
     ],
     "omittedResponsibilities": [
-      "Unicode-to-ISO-2022-KR reverse conversion is not used by the current Writer RTF import path."
+      "Full SAL ABI and complete format orchestration remain unverified; byte certification excludes original undefined table reads."
     ],
     "evidence": {
       "local": [
@@ -35,12 +48,28 @@
         {
           "path": "apps/office/src/sal/textenc/convertiso2022.test.ts",
           "marker": "decodes KS X 1001"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022kr.ts",
+          "marker": "ImplConvertUnicodeToIso2022Kr"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.encode.test.ts",
+          "marker": "matches original BMP outputs"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/convertiso2022.encode.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022kr.cxx",
           "marker": "ImplConvertIso2022KrToUnicode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/convertiso2022kr.cxx",
+          "marker": "ImplConvertUnicodeToIso2022Kr"
         }
       ]
     }

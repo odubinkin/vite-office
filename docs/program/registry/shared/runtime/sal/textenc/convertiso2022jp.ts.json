@@ -18,16 +18,24 @@
       "evidence": [
         "apps/office/src/sal/textenc/convertiso2022jp.ts#ImplConvertIso2022JpToUnicode",
         "vendor/libreoffice-reference/sal/textenc/convertiso2022jp.cxx#ImplConvertIso2022JpToUnicode",
-        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes JIS Roman"
+        "apps/office/src/sal/textenc/convertiso2022.test.ts#decodes JIS Roman",
+        "apps/office/src/sal/textenc/convertiso2022.encode.test.ts",
+        "apps/office/src/sal/textenc/convertiso2022.encode.native.json",
+        "scripts/sal-iso2022-native-probe.mjs"
       ],
-      "justification": "Pinned ISO-2022-JP text-to-Unicode states, JIS X 0208 table lookup, context, incomplete-input behavior and SAL bad-input actions. Reverse conversion is outside RTF import. Compiled upstream differential remains unverified.",
+      "justification": "Pinned original forward state machine remains preserved. Original reverse ISO-2022-JP mapping, streaming state, partial designation/shift writes, original error replacement prefix, surrogate bookkeeping and final FLUSH conditions. An isolated unchanged-source ASan/UBSan witness verifies bytes, status, consumed units and final context against actual JIS/KS tables and original shared helpers; known out-of-array source reads are classified before execution. Full SAL ABI and string-wrapper/Writer integration remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplConvertIso2022JpToUnicode",
         "ImplCreateIso2022JpToUnicodeContext",
         "ImplResetIso2022JpToUnicodeContext",
         "ImplDestroyIso2022JpToUnicodeContext",
-        "ImplIso2022JpToUnicodeContext"
+        "ImplIso2022JpToUnicodeContext",
+        "ImplConvertUnicodeToIso2022Jp",
+        "ImplCreateUnicodeToIso2022JpContext",
+        "ImplResetUnicodeToIso2022JpContext",
+        "ImplDestroyUnicodeToIso2022JpContext",
+        "ImplUnicodeToIso2022JpContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/convertiso2022jp.cxx",
@@ -36,7 +44,12 @@
         "ImplCreateIso2022JpToUnicodeContext",
         "ImplResetIso2022JpToUnicodeContext",
         "ImplDestroyIso2022JpToUnicodeContext",
-        "ImplIso2022JpToUnicodeContext"
+        "ImplIso2022JpToUnicodeContext",
+        "ImplConvertUnicodeToIso2022Jp",
+        "ImplCreateUnicodeToIso2022JpContext",
+        "ImplResetUnicodeToIso2022JpContext",
+        "ImplDestroyUnicodeToIso2022JpContext",
+        "ImplUnicodeToIso2022JpContext"
       ]
     }
   }

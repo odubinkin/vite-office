@@ -94,3 +94,9 @@ it("clears only the original termination warning and leaves negative lengths alo
   u_terminateChars(out, 4, -1, s);
   expect(s[0]).toBe(-124);
 });
+
+it("exposes a frozen nonconstructable static namespace", /** The native deleted constructor has no legal instance representation. @returns Nothing. */ () => {
+  expect(Object.isFrozen(ByteSinkUtil)).toBe(true);
+  expect(Object.keys(ByteSinkUtil)).toEqual(["viaByteSinkToTerminatedChars"]);
+  expect(typeof ByteSinkUtil).toBe("object");
+});

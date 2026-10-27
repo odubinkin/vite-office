@@ -1,4 +1,5 @@
 /** @fileoverview Consumed native text character property map and handler transport from txtprmap.cxx; no browser boolean formatting model or substitute UNO provider. */
+import { cppu_detail_getUnoType_FillStyle } from "../../../offapi/com/sun/star/drawing/FillStyle";
 import { PropertyValue } from "../../../udkapi/com/sun/star/beans/PropertyValue";
 import { PropertyState } from "../../../udkapi/com/sun/star/beans/PropertyState";
 
@@ -309,6 +310,11 @@ export function applyTextImportProperties(
     return Number(convertTwipToMm100(BigInt(value)));
   }
   try {
+    if (paragraph.fillStyle !== undefined)
+      add("FillStyle", paragraph.fillStyle, cppu_detail_getUnoType_FillStyle);
+    if (paragraph.fillColor !== undefined) add("FillColor", paragraph.fillColor, "sal_Int32");
+    if (paragraph.fillTransparency !== undefined)
+      add("FillTransparence", paragraph.fillTransparency, "sal_Int16");
     for (const suffix of ["", "Asian", "Complex"] as const) {
       const family = character[`fontFamily${suffix}`];
       if (family !== undefined) {

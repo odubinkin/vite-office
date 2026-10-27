@@ -77,8 +77,9 @@ it("round trips headings, list items and ordinary escaped text", /** Checks nati
       ),
     ).toEqual([
       ["heading-2", "Heading", "none"],
-      ["default", "One *literal*", "numbered"],
-      ["default", "Two", "numbered"],
+      ["text-body", "One *literal*", "numbered"],
+      ["text-body", "Two", "numbered"],
+      ["text-body", "", "none"],
     ]);
   } finally {
     imported?.Dispose();
@@ -314,7 +315,7 @@ it("writes imported native Markdown code spans through the preformatted font ite
   const document = new MarkdownReader().Read(new TextEncoder().encode("Before `code` after"));
   try {
     expect(new TextDecoder().decode(new SwMDWriter().WriteDocument(document))).toBe(
-      "Before `code` after\n",
+      "Before `code` after\n\n",
     );
   } finally {
     document.Dispose();

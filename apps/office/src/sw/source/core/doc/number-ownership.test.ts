@@ -255,7 +255,7 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
   }
   const record = encodeWriterDocument(document);
   const copy = decodeWriterDocument(record);
-  for (const rule of copy.GetNumRuleTable()) {
+  for (const rule of copy.GetNumRuleTable().slice(1)) {
     expect(rule.GetNumFormat(0)).toBeUndefined();
     expect(rule.GetNumFormat(4)).toBeDefined();
     expect(rule.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_NUMBER_NONE);
@@ -269,7 +269,7 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
     delete (rule as { defaultPositionAndSpaceMode?: string }).defaultPositionAndSpaceMode;
     for (const format of rule.formats) delete (format as { numberingType?: string }).numberingType;
   }
-  for (const rule of decodeWriterDocument(legacy).GetNumRuleTable()) {
+  for (const rule of decodeWriterDocument(legacy).GetNumRuleTable().slice(1)) {
     expect(rule.GetNumFormat(0)).toBeDefined();
     expect(rule.Get(0).GetNumberingType()).toBe(SvxNumType.SVX_NUM_ARABIC);
   }
@@ -281,14 +281,14 @@ it("retains sparse ownership and default selectors in Worker graph v16 with lega
     { ruleType: 2 },
   ]) {
     const malformed = structuredClone(record);
-    Object.assign(malformed.numRules[0] as object, mutation);
+    Object.assign(malformed.numRules[1] as object, mutation);
     expect(
       /** Rejects malformed ownership metadata. @returns Document. */ () =>
         decodeWriterDocument(malformed),
     ).toThrow("invalid");
   }
   const malformed = structuredClone(record);
-  Object.assign(malformed.numRules[0]?.formats[0] as object, { numberingType: "invalid" });
+  Object.assign(malformed.numRules[1]?.formats[0] as object, { numberingType: "invalid" });
   expect(
     /** Rejects malformed format type metadata. @returns Document. */ () =>
       decodeWriterDocument(malformed),

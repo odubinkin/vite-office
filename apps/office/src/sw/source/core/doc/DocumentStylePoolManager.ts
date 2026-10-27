@@ -5,14 +5,64 @@ import type { SwAttrPool } from "../attr/swatrset";
 import { createWriterTextFormatColl, SwTextFormatColl, type WriterParagraphStyle } from "./fmtcol";
 import { applyWriterParagraphStyleDefaults } from "./poolfmt-defaults";
 
+import { SwCharFormat } from "../../../inc/charfmt";
+import {
+  WRITER_CHARACTER_STYLE_POOL,
+  POOLGRP_CHARFMT,
+  COLL_GET_RANGE_BITS,
+  POOLGRP_NOCOLLID,
+} from "../../../inc/poolfmt";
+import { applyWriterCharacterStyleDefaults } from "./poolfmt-char";
+
 /** Owns document paragraph-style collections and their parent/follow graph. */
 export class DocumentStylePoolManager {
+  private readonly characters: SwCharFormat[] = [];
   private readonly collections: SwTextFormatColl[] = [];
   private readonly collectionsById = new Map<string, SwTextFormatColl>();
 
   /** Creates the manager and materializes Writer's default collection. @param attrPool - Document pool. @returns Nothing. */
   public constructor(private readonly attrPool: SwAttrPool) {
     this.GetTextFormatColl("default");
+  }
+
+  /** Returns the original stable character table, including its default format. @returns Native character owners. */
+  public GetCharFormats(): readonly SwCharFormat[] {
+    if (this.characters.length === 0)
+      this.characters.push(this.attrPool.GetDoc().GetDfltCharFormat());
+    return this.characters;
+  }
+  /** Constructs one named character format and registers its actual parent. The document API owns modified/undo publication. @param name - UI name. @param parent - Native parent. @returns Owned character style. */
+  public MakeCharFormat(name: string, parent: SwCharFormat | undefined): SwCharFormat {
+    this.GetCharFormats();
+    const format = new SwCharFormat(this.attrPool, name, parent);
+    format.SetAuto(false);
+    this.characters.push(format);
+    return format;
+  }
+  /** Source GetFormatFromPool character branch preserves invalid in-family IDs while using the first UI name, and returns null outside the family. @param id - Original pool identity. @returns Existing/new character format or undefined. */
+  public GetCharFormatFromPool(id: number): SwCharFormat | undefined {
+    id &= 0xffff;
+    if ((id & (COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID)) !== POOLGRP_CHARFMT) return undefined;
+    const existing = this.GetCharFormats().find(
+      /** Locates the native pool identity independently of its name. @param format - Owner. @returns Match. */ (
+        format,
+      ) => format.GetPoolFormatId() === id,
+    );
+    if (existing !== undefined) return existing;
+    const definition =
+      WRITER_CHARACTER_STYLE_POOL.find(
+        /** Looks up the original normal or HTML range. @param entry - Native metadata. @returns Match. */ (
+          entry,
+        ) => entry.poolId === id,
+      ) ?? WRITER_CHARACTER_STYLE_POOL[0];
+    if (definition === undefined) throw new Error("Writer character pool has no default entry.");
+    const format = this.MakeCharFormat(
+      definition.uiName,
+      this.attrPool.GetDoc().GetDfltCharFormat(),
+    );
+    format.SetPoolFormatId(id);
+    applyWriterCharacterStyleDefaults(format);
+    return format;
   }
 
   /** Returns the default paragraph collection. @returns Default collection. */

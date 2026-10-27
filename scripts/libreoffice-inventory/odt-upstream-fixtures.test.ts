@@ -85,9 +85,10 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
   for (const fixture of [
     // The shared token table also recognizes the single fo:wrap-option in each styles.xml.
     // Incoming main recognizes the two style:letter-kerning attributes in each styles.xml.
+    // Writer drawing-fill tokens also recognize draw:fill, draw:fill-color and draw:opacity.
     // Token recognition does not claim complete Writer table-cell wrapping support.
-    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 67 },
-    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 79 },
+    { file: "sw/qa/extras/uiwriter/data/collapsed_bookmark.odt", name: "test", warnings: 66 },
+    { file: "sw/qa/extras/odfimport/data/tdf94882.odt", name: undefined, warnings: 77 },
   ] as const)
     it(`preserves inline positions from ${fixture.file}` /** Checks pinned bookmark/soft-break positions through Writer ODT export and reimport. @returns Completion. */, async () => {
       const diagnostics: { name: string }[] = [];
@@ -127,6 +128,9 @@ describe("pinned LibreOffice ODT feature fixtures" /** Mirrors the three createS
               "style:font-size-complex",
               "fo:wrap-option",
               "style:letter-kerning",
+              "draw:fill",
+              "draw:fill-color",
+              "draw:opacity",
             ].includes(diagnostic.name),
         ),
       ).toBe(false);

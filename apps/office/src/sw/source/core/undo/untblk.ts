@@ -82,6 +82,8 @@ export abstract class SwUndoInserts extends SwUndo {
   /** Drops disconnected content when the reader action leaves history. @returns Nothing. */
   public override Dispose(): void {
     this.content.Dispose(this.doc);
+    this.history.Dispose();
+    super.Dispose();
   }
 
   /** Resolves current numeric indices, moves insertion out and restores original history. @param context - Native document context. @returns Nothing. */

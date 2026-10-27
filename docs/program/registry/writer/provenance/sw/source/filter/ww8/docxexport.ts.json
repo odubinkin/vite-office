@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/docxexport.cxx",
+    "localSymbols": [
+      "DocxExport"
+    ],
+    "upstreamSymbols": [
+      "DocxExport::DocxExport",
+      "DocxExport::WriteFonts",
+      "DocxExport::MainXmlNamespaces"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+          "marker": "DocxExport"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/docxexport.cxx",
+          "marker": "DocxExport::DocxExport"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Actual DocxExport extends the admitted MSWordExportBase, owns its real attribute output/document serializer and retains original root relationship and four document media types. WriteFonts routes the actual ID-ordered font helper through a real fontTable.xml serializer, original namespaces/MIME/relationship and serializer restoration; disposal binds the native document-helper destructor. Complete MainXmlNamespaces preserves native13 prefix order and MC Ignorable value. The actual XmlFilterBase/SwPaM bind consumed native filter/cursor base interfaces; full DocxExportFilter, property/drawing/context initialization, main-text/style/section/numbering orchestration and font embedding remain unported. This is a part-level export owner, not an advertised working DOCX application export."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly admitted native responsibilities are ported; framework/ABI/full application export are not certified."
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/task/XStatusIndicator.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "task-progress-contract",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/task/XStatusIndicator.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts"
+      ],
+      "justification": "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XStatusIndicator"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/task/XStatusIndicator.idl",
+      "upstreamSymbols": [
+        "XStatusIndicator"
+      ]
+    }
+  }
+}

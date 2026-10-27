@@ -4059,6 +4059,25 @@ Pinned `sc/source/core/data/documentimport.cxx` explains in `unshareDoomedCell` 
 
 Pinned `sc/source/core/data/mtvelements.cxx`, `TableColumnBlockPositionSet::getBlockPosition`, inserts a default `ColumnBlockPosition` into its map before calling `ScTable::InitColumnBlockPosition`. If initialization fails, the first call returns null but leaves that entry in the map; the next call for the same column returns its uninitialized position. `ScDocumentImportImpl` validates its column domain before reaching this cache, so ordinary import avoids this case. Preserve the insertion/initialization order and explicit invalidation contract rather than erasing a failed entry automatically.
 
+### CALC-300 — Complex-color resolution ignores the supplied theme
+
+Pinned `docmodel/source/uno/UnoComplexColor.cxx`, `UnoComplexColor::resolveColor`, explicitly ignores the XTheme argument exposed by `offapi/com/sun/star/util/XComplexColor.idl` and returns the stored final color, including transparency, as signed32. A different supplied theme cannot recompute a theme-indexed color through that method. This may be intentional cached-color behavior; no Calc document/UI defect is claimed. Preserve the unused parameter and final-color return rather than adding palette lookup or applying transformations. The shared actual component test supplies a nonnull concrete theme whose virtual methods detect unexpected lookup and checks that the component retains its copied final color after the source value changes. See also WRITER156.
+
+### CALC-301 — Shared SvRef self-move drops its reference
+
+Pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`, releases the old object, reads the source pointer and clears the source without a self-move guard. Moving a reference into itself therefore leaves it empty and releases that reference; a separate alias can keep the pointee alive. This may be a permitted moved-from contract rather than a bug, and no Calc document failure is asserted. Preserve the release/read/clear order and empty result. The shared original normal and ASan/UBSan caller traces retain the remaining alias and verify the self-moved pointer is null. See also WRITER160.
+
+### CALC-302 — shared sequence-map overloads reset and merge differently
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator<< overloads.
+- Observation: typed NamedValue/PropertyValue sequences clear the map and accept empty names or VOID values. Sequence<Any> instead merges without clearing, skips VOID elements, rejects empty names/values and retains earlier writes if a later element throws. An outer Any accepts only the typed named/property sequences, not Sequence<Any>. These are explicit implementation differences; downstream intent and document impact remain unverified.
+- Preservation: keep all overload distinctions, exact IllegalArgumentException messages/position-1 and partial mutation. Actual Any/Sequence tests cover both reset and merge paths and every rejection; do not normalize them to a transactional replace operation.
+
+### CALC-303 — shared map extraction preserves reused PropertyValue metadata
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
+- Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
+- Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
 ### CALC-300 — Scientific input range failure returns before applying its leading sign
 
 Pinned `svl/source/numbers/zforfind.cxx`, `ImpSvNumberInputScan::IsNumberFormat`, handles RTL scientific-conversion `OutOfRange` by immediately returning success with type Text and either positive `DBL_MAX` or positive zero, depending on the exponent sign. The later `nStringScanSign` and `nSign` application is skipped. Consequently the output value for `-1E9999` is positive `DBL_MAX`, and `-1E-9999` yields positive zero. The retained Text type may make the numeric output irrelevant to many callers, but the sign differs from the ordinary conversion path. Preserve the early return, unchanged scanned-category/sign state and output values; the local numeric-result tests exercise the actual scanner and RTL converter. This result fragment is not yet the public formatter or CSV auto-input path.

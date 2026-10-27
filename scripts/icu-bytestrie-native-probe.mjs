@@ -6,7 +6,7 @@ import { createHash } from "node:crypto";
 import { BytesTrie } from "../apps/office/src/external/icu/source/common/unicode/bytestrie.ts";
 import { USTRINGTRIE_HAS_VALUE } from "../apps/office/src/external/icu/source/common/unicode/ustringtrie.ts";
 const source = resolve("vendor/icu-reference/source"),
-  build = resolve("output/native/AQF9AG-icu-grego");
+  build = resolve(process.env.VITE_OFFICE_ICU_BUILD_DIR ?? "output/native/AQF9AG-icu-grego");
 writeFileSync(
   `${build}/bytestrie-witness.cc`,
   String.raw`
@@ -317,5 +317,25 @@ const report = {
   scope:
     "Unchanged original reader/libraries, both original builder modes, complete actual langInfo likely keys/prefixes, all compact value widths and manually serialized valid branch fixtures for all5 delta widths; byte/string/C overloads, full signed-byte boundary, copy, saved pointer/uint64 state, unique-value outputs including failure and next-byte enumeration. Iterator/builder port, source-invalid buffers/pointers, getValue without value, stopped uint64 pointer subtraction, physical ownership/ABI and Calendar/CSV completion remain uncertified.",
 };
+const fixtureOutput = process.env.VITE_OFFICE_NATIVE_FIXTURES;
+if (fixtureOutput !== undefined)
+  writeFileSync(
+    fixtureOutput,
+    JSON.stringify({
+      sources: report.sources,
+      scope: report.scope,
+      fixtures: fixtures.map(
+        /** Owns the unchanged native serialized bytes for portable replay. @param bytes - Native storage or absent slot. @returns Serializable bytes or null. */ (
+          bytes,
+        ) => (bytes ? [...bytes] : null),
+      ),
+      queries: input,
+      expected: native.map(
+        /** Removes only native output framing whitespace. @param row - Native observation. @returns Exact observation fields. */ (
+          row,
+        ) => row.trim(),
+      ),
+    }) + "\n",
+  );
 writeFileSync(`${build}/bytestrie-comparison.json`, JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify(report, null, 2));

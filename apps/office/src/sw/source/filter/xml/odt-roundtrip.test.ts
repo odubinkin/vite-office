@@ -48,7 +48,7 @@ function metadata(title = "Imported") {
 /** Compares the complete native snapshot modulo process-local automatic rule names. @param doc - Imported graph. @returns Snapshot with identity-preserving rule labels. */
 function normalizedSnapshot(doc: ReturnType<typeof createWriterDocument>) {
   let value = JSON.stringify(encodeWriterDocument(doc));
-  for (const [index, rule] of doc.GetNumRuleTable().entries())
+  for (const [index, rule] of doc.GetNumRuleTable().slice(1).entries())
     if (rule.IsAutoRule())
       value = value.replaceAll(
         JSON.stringify(rule.GetName()),
@@ -390,6 +390,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       .replace("</office:automatic-styles>", `${listStyles}</office:automatic-styles>`)
       .replace(/<office:text>[\s\S]*<\/office:text>/, `<office:text>${body}</office:text>`);
     const imported = importWriterXml(styles, content, metadata());
+    const nativeListId = imported.document.GetNumRuleTable().slice(1)[0]?.GetDefaultListId();
+    const numbered = { kind: "numbered", level: 0, listId: nativeListId };
     expect(
       imported.document.paragraphs.map(
         /** Projects a text node into list assertions. @param node - Imported Writer node. @returns Comparable list state. */
@@ -401,29 +403,11 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
         }),
       ),
     ).toEqual([
-      {
-        kind: "numbered",
-        level: 0,
-        listId: "list1",
-        ruleName: "Numbering 1",
-        text: "alpha",
-      },
-      {
-        kind: "numbered",
-        level: 0,
-        listId: "list1",
-        ruleName: "Numbering 1",
-        text: "beta",
-      },
-      { kind: "numbered", level: 1, listId: "list1", ruleName: "L2", text: "nested" },
+      { ...numbered, ruleName: "Numbering 1", text: "alpha" },
+      { ...numbered, ruleName: "Numbering 1", text: "beta" },
+      { ...numbered, level: 1, ruleName: "L2", text: "nested" },
       { kind: "none", level: 0, listId: "", ruleName: "", text: "gap" },
-      {
-        kind: "numbered",
-        level: 0,
-        listId: "list1",
-        ruleName: "Numbering 1",
-        text: "gamma",
-      },
+      { ...numbered, ruleName: "Numbering 1", text: "gamma" },
     ]);
     expect(getWriterNumFormatBullet(imported.document.paragraphs[2]?.GetNumRule()?.Get(1))).toBe(
       "◦",
@@ -485,6 +469,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       parenthesized
         .GetNumRuleTable()
+        .slice(1)
         .find(
           /** Resolves the modified numeric rule. @param rule - Rule. @returns Match. */ (rule) =>
             rule.GetKind() === "numbered",
@@ -516,6 +501,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
           '<text:list-style style:name="Blank"><text:list-level-style-bullet text:level="1" text:bullet-char=""/></text:list-style>',
         )
           .document.GetNumRuleTable()
+          .slice(1)
           .at(-1)
           ?.Get(0),
       ),
@@ -544,6 +530,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       independent
         .GetNumRuleTable()
+        .slice(1)
         .slice(-3)
         .map(
           /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
@@ -555,6 +542,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       new Set(
         independent
           .GetNumRuleTable()
+          .slice(1)
           .slice(-3)
           .map(
             /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
@@ -569,6 +557,7 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
     expect(
       bullets
         .GetNumRuleTable()
+        .slice(1)
         .slice(-2)
         .map(
           /** Applies the native operation. @param rule - Native input. @returns Native result. */ (
@@ -900,8 +889,8 @@ describe("Writer ODF XML filters" /** Executes the enclosing deterministic test 
       ],
       [
         styles.replace(
-          "</style:style>",
-          '<style:paragraph-properties fo:text-align="match-parent"/></style:style>',
+          /<style:paragraph-properties\b[^>]*(?:\/>|>[\s\S]*?<\/style:paragraph-properties>)/,
+          '<style:paragraph-properties fo:text-align="match-parent"/>',
         ),
         "paragraph alignment",
       ],

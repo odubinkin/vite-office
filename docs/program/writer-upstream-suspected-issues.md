@@ -1320,8 +1320,8 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 ### WRITER106 — Markdown entity callbacks discard recognized source text
 
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `SwMarkdownParser::text_callback`, inserts `MD_TEXT_NORMAL` and `MD_TEXT_CODE` but has an empty branch for `MD_TEXT_ENTITY` and `MD_TEXT_NULLCHAR`.
-- Observation: a recognized entity such as `&amp;` contributes no text, while an unrecognized entity-like sequence remains normal text. This follows the callback switch; it is not an independently compiled desktop result.
-- Preservation: the local Markdown reader detects recognized HTML references and omits them, retaining unknown names and literal code-span content. Null-character callbacks are likewise omitted.
+- Observation: syntactic entities such as `&amp;` and unknown `&madeup;` contribute no text. Pinned md4c 0.5.3 recognizes ASCII named-entity syntax without an HTML entity dictionary; malformed sequences remain normal text. A compiled md4c helper fixture confirms recognition; the Writer callback switch supplies omission. This is not a compiled desktop result.
+- Preservation: the local Markdown reader uses the source md4c entity recognizer and omits every syntactic entity, including unknown names, while retaining escaped text and literal code-span content. Null-character callbacks are likewise omitted. The earlier HTML-dictionary approximation was removed after the pinned dependency became available.
 
 ### WRITER107 — Markdown nested list type can retain the earlier marker kind
 
@@ -1370,6 +1370,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/tcvtutf7.cxx`, `ImplUTF7ToUnicode`, comments out the branch that restores `mbShifted`, `mbFirst`, `mbWroteOne`, `mnBitBuffer` and `mnBufferBits` from its context, while still writing the resulting values to that context at return. The source marks the implementation unfinished.
 - Observation: a shifted Base64 sequence split across converter calls cannot resume from the preceding chunk even when the caller retains the native context. This is a source-level finding; compiled desktop behavior remains unverified.
 - Preservation: the local converter initializes conversion state on every call and still stores the final values in the context, matching the pinned source. The current RTF byte path supplies a complete byte run to one call.
+- Reverse evidence: `ImplUnicodeToUTF7` likewise disables restoration of `mbShifted`, `mnBitBuffer`, and `mnBufferBits`, stores the final fields and ignores its flags argument. The port preserves this. The isolated unchanged-source ASan/UBSan witness confirms reverse outputs and saved state for 589824 BMP/capacity cases and 240 mixed vectors with a deliberately nonzero incoming context; full desktop behavior is not certified.
 
 ### WRITER115 — Apple Arabic and Hebrew code pages have no SAL converter
 
@@ -1400,3 +1401,505 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` registers `ulhair` as an RTF toggle, but `RTFDocumentImpl::dispatchToggle` has no `ULHAIR` case; it reaches the default `TODO handle toggle` branch and leaves the character underline unchanged.
 - Observation: a hairline-underline control does not reach the document's underline value. This follows the source dispatch table and default branch; compiled desktop behavior remains unverified.
 - Preservation: the local RTF reader likewise leaves `\\ulhair` without an underline-style item. A focused test pins the ignored control.
+
+### WRITER142 — run font attributes retain the family list while fontTable uses its first token
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `CharFont`; `writerwordglue.cxx`, `FontMapExport`; `wrtw8sty.cxx`, `wwFont::WriteDocx`.
+- Observation: CharFont writes the original GetFamilyName value into w:ascii/w:hAnsi, but font registration tokenizes that value and the font table uses the first family token. For `Liberation Sans;Fallback`, run attributes retain the complete list while fontTable contains `Liberation Sans`. Consumer lookup behavior and desktop impact remain unverified.
+- Preservation: keep original values and registration-before-guards order. A real ZIP font-part test pins the mismatch without normalizing the run attribute or dropping fonts registered by later duplicate-attribute calls.
+
+### WRITER143 — pseudo character runs retain the initial script font charset
+
+- Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `sw::util::GetPseudoCharRuns`.
+- Observation: the function selects and extends a font charset from the first script before it builds the script boundaries. Every emitted CharRunEntry receives that same charset even when later runs use another script with a different paragraph font charset. Empty text uses Latin. Effects on encoding-dependent Word filters remain unverified; DOCX RunText ignores its charset parameter.
+- Preservation: keep first-script font lookup and charset reuse, with no per-script refresh or guessed UTF8 replacement. Real three-script node tests retain this behavior for Latin-, CJK- and CTL-first text. The negative-script-end and missing-table guards are also kept despite remaining uncovered with the concrete successful backend.
+
+### WRITER144 — DOCX character width narrows to signed16 before clamping
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `DocxAttributeOutput::CharScaleWidth`; unsigned storage is `SvxCharScaleWidthItem`.
+- Observation: the explicit `std::min<sal_Int16>` template parameter converts the unsigned width before the advertised OOXML range clamp. On the current native compiler, stored values 32768 and 65535 therefore become negative and export as 1 rather than 600. The real short Any width contract can store 65535 from -1, so this is more than an arbitrary widened JavaScript input. Desktop producer reachability and document impact remain unverified.
+- Preservation: perform original signed16 narrowing before min/max; do not widen to a JavaScript unsigned clamp. Literal real-item DOCX tests pin 0/1/100/600/601/32767/32768/65535. The task evidence char-width-narrowing-probe.json records a compiled C++ template-conversion check only; it does not claim a compiled native DOCX export or whole-module parity.
+
+### WRITER145 — property-table delivery bypasses resource-table forwarding guards
+
+- Source: pinned `sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx`, `OOXMLFastContextHandlerPropertyTable::lcl_endFastElement` and `OOXMLFastContextHandlerTable::lcl_endFastElement`.
+- Observation: Table sends a cloned table only when event forwarding is enabled and its resource ID is nonzero. PropertyTable instead clones its property set, appends it, and calls `Stream.table` unconditionally, including when forwarding is disabled or the ID is zero; its endAction runs afterwards. Effects on suppressed substreams/MCE and desktop producer reachability remain unverified. This may be intentional for settings/numbering, so no defect is asserted.
+- Preservation: retain both distinct callback contracts; do not add Table guards to PropertyTable. Real native context/resource objects test disabled forwarding, zero IDs, copied property sets, accumulated table snapshots and the ordinary Table guards. Native import orchestration and downstream mapper-table application remain incomplete.
+
+### WRITER146 — conditional table column borders use different insertion and merge checks
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `TableStyleSheetEntry::AddTblStylePr` and `lcl_mergeProps`.
+- Observation: insertion checks RIGHT for FirstCol and LEFT for LastCol before erasing an inside vertical border from the supplied map. Later merging clears the accumulated inside vertical border for LEFT on FirstCol and RIGHT on LastCol. Row border checks are consistent. This may reflect different conflict stages, but their effect differs for a column style containing only one edge; desktop table-layout intent/impact remain unverified.
+- Preservation: keep both original arrays and their order. Literal tests with actual typed BorderLine2 values retain the right-only FirstCol inside border during merge, clear it for a left-only FirstCol, and verify insertion mutates the supplied map.
+
+### WRITER147 — imported stylesheet property inheritance only guards a direct self-reference
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `StyleSheetEntry::GetMergedInheritedProperties`.
+- Observation: recursive lookup skips only an empty base ID and a base equal to the entry's own ID. A longer imported ID cycle has no visited-set or depth guard in this helper. Whether upstream callers exclude such cycles before reaching it remains unverified; no crashing native reproduction or document-impact claim is made.
+- Preservation: retain original recursion and direct-self/missing-parent behavior. Tests cover real acyclic table identities, ordered overrides, missing parents and direct self references. Do not insert a local cycle repair into this kernel helper.
+
+### WRITER148 — stylesheet outline setter accepts negative signed16 values beyond the unset sentinel
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.hxx`, `StyleSheetPropertyMap::SetOutlineLevel`.
+- Observation: WW_OUTLINE_MIN is zero, but the setter checks only the upper bound WW_OUTLINE_MAX (9). The normal unset value is -1; other negative signed16 values are retained as well. Native producer reachability and later UNO/application behavior for those values remain unverified.
+- Preservation: retain signed16 argument narrowing and the original upper-only check. Actual owner tests keep -2, reject 10 after 9, and retain the conversion of 65545 to signed16 value 9 without adding a lower clamp.
+
+### WRITER149 — conditional table-style header advertises parent properties that the method does not merge
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.hxx`, `TableStyleSheetEntry::GetProperties` comment, versus its body in `StyleSheetTable.cxx`.
+- Observation: the declaration describes properties corresponding to the mask plus parent styles. The implementation creates a plain PropertyMap and merges only GetLocalPropertiesFromMask; it performs no imported-parent lookup. Parent merging may be deliberately performed by callers, and the comment may be stale. No desktop rendering defect is asserted.
+- Preservation: retain the local-only body and separate GetMergedInheritedProperties helper. Literal tests keep conditional results independent of the entry's ordinary base properties and unmasked whole-table bucket; imported ancestor-property precedence is tested separately. Do not combine these stages solely to match the header comment.
+
+
+### WRITER150 — cell-margin raw metadata outlives the converted temporary
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `lcl_attribute` and `createGrabBag`.
+- Observation: after each modifier only m_nValue resets to zero. m_nWidth and m_nType persist, so an empty following edge is marked valid with converted zero while its interop entry can retain the preceding edge's nonzero raw width and unit. A non-dxa unit only warns; the width still undergoes the absolute twip conversion. Missing-width input and non-dxa units may be excluded by conforming producers; native document/layout impact remains unverified.
+- Preservation: keep all three independent fields and the exact resolution/reset order. Real nested resource tests retain raw width1440 in an empty next edge while its applied margin is0, and retain conversion of a pct-typed width. Do not synthesize missing attributes or clear the raw fields locally.
+
+### WRITER151 — cell-margin start/end mapping keeps a hardcoded LTR direction
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `const bool rtl = false; // TODO`.
+- Observation: start/end map to left/right without consulting the document/table direction. Upstream explicitly leaves direction detection as a TODO; whether later table import stages compensate remains unverified. No native RTL rendering reproduction is claimed.
+- Preservation: retain the effective native LTR mapping and all twelve table/cell edge aliases. Tests cover exact source spelling in interop values, last-write overwrite and independent edge validity. Do not introduce a local text-direction guess into this handler.
+
+
+### WRITER152 — cell-border theme color is constructed without insertion into the property map
+
+- Source: pinned `sw/source/writerfilter/dmapper/TDefTableHandler.cxx`, `TDefTableHandler::fillCellProperties`.
+- Observation: the helper creates a local ComplexColor, assigns the last retained theme type, and appends tint/shade transformations, but never inserts or returns that value. Only the six first border-line values are inserted into the supplied map. The interop grab bag can preserve the theme lexeme separately. Later import stages may compensate, so native document/rendering impact remains unverified.
+- Preservation: retain the local construction and its lack of output; do not silently add complex-color properties. Tests keep six actual BorderLine2 map properties with theme/tint/shade input and verify the separate interop data. The standalone BorderHandler::getComplexColor continues returning its actual native value through its distinct contract.
+
+### WRITER153 — table-border parameters carry over across sibling edges
+
+- Source: pinned `sw/source/writerfilter/dmapper/BorderHandler.cxx`, `BorderHandler::lcl_sprm`, compared with `TDefTableHandler::localResolve`.
+- Observation: the table-border handler neither resets current width/type/color before resolving a new side nor requires nested properties before materializing a supported side. A later side missing attributes can inherit the preceding side's parameters; a null-property side is still marked filled. The cell-border handler instead resets width/type/color and ignores null-property children. Whether valid producers exercise missing/default attributes in a way that causes visible differences remains unverified.
+- Preservation: retain the distinct table and cell algorithms. Actual native resource tests keep table width/color carryover and null-reference materialization, cell per-child resets and first-vector-element precedence. Strict/Transitional ZIP tests retain independently specified table/cell borders. Do not unify the two handlers or insert local per-side defaults into BorderHandler.
+
+
+### WRITER154 — track-change dates retain local clock fields and an unknown timezone
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, and `TrackChangesHandler::getRedlineProperties`.
+- Observation: the helper explicitly describes an MS Office compatibility workaround: it separates the time at uppercase Z, parses integer clock fields, and leaves DateTime.IsUTC at its default false. Numeric timezone offsets and fractional seconds are not applied. A lexical Z therefore does not set IsUTC, and +02:30 does not shift 10:42:05. This is documented native compatibility behavior; downstream metadata/display intent remains unverified, and no defect is asserted.
+- Preservation: retain the original signed32 getToken overload, prefix integer conversion and generated field assignments. Tests keep identical local clock fields for Z/positive/negative offsets, zero nanoseconds and false IsUTC; committed Strict/Transitional ZIP TrackChange attributes reach the actual receiver before clearProps. Do not route this helper through the generic SAX ISO parser or a browser Date conversion.
+
+### WRITER155 — the optional signed year in the date comment is split as a delimiter
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, whose format comment includes an optional leading minus.
+- Observation: the implementation unconditionally reads the first year token using '-' as a delimiter. For -2024-01-02 it therefore assigns Year0, Month2024 and Day1; there is no special leading-sign path or calendar validation. The public DateTime IDL has a signed year, but this helper also narrows the parsed year through unsigned16 before assignment. Native producer reachability and document impact for BCE/large years remain unverified.
+- Preservation: keep the exact token split and original unsigned16 assignments, followed by the DateTime field's declared signed16 year width. Literal owner tests retain the negative-year result and the signed narrowing of year32768; no local calendar repair is introduced.
+
+### WRITER156 — complex-color resolution ignores the supplied theme
+
+- Source: pinned `docmodel/source/uno/UnoComplexColor.cxx`, `UnoComplexColor::resolveColor`, and `offapi/com/sun/star/util/XComplexColor.idl`.
+- Observation: the interface accepts an XTheme when resolving a color, but the concrete component explicitly ignores that argument and returns its previously stored final color, including transparency. Changing the supplied theme therefore cannot recompute a theme-indexed color through this method. This may be intentional cached-color behavior; native document/UI impact and the intended resolution contract remain unverified.
+- Preservation: retain the unused argument and signed32 final-color conversion. The actual component test supplies a nonnull theme whose virtual methods detect any lookup, changes the original source value after construction, and retains the copied final color. Do not add theme lookup or transformation application to this method.
+
+### WRITER157 — explicit shading fill leaves automatic-fill state sticky
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::lcl_attribute` and `getProperties`.
+- Observation: an explicit fill sets m_bAutoFillColor false, but a later auto fill only converts the raw fill to white and does not restore that flag. Reusing the receiver for explicit fill followed by auto therefore produces opaque white and paragraph FillStyle SOLID; a fresh receiver with auto produces the automatic sentinel and FillStyle NONE. Normal producer duplication/reuse and visible document impact remain unverified.
+- Preservation: retain the one-way flag assignment and independent fill-specified state. Actual resource tests retain both fresh-auto and explicit-then-auto results; do not reset the flag when parsing auto.
+
+### WRITER158 — paragraph nil shading falls through to character properties
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::getProperties`.
+- Observation: the paragraph branch excludes the nil token, but the following branch treats every non-Form mode as character output. Paragraph mode with nil and a specified fill therefore emits CharBackColor, and emits CharBackgroundComplexColor when a fill theme is present, instead of paragraph fill properties. Whether later native consumers discard or compensate for this output remains unverified.
+- Preservation: keep the exact branch structure and conditions. The owner test retains a paragraph nil witness with CharBackColor and no FillColor; do not replace the fallthrough with an early return or paragraph-specific clearing policy.
+
+### WRITER159 — shading complex colors retain a default final color beside a computed scalar
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `getComplexColor`, `getFillComplexColor` and `getProperties`; `docmodel/source/uno/UnoComplexColor.cxx`, `resolveColor`.
+- Observation: the handler computes a scalar brush color, while its independent ComplexColor builders set only theme identity and transformations. They do not copy that scalar or raw RGB into final color. The created UNO component can therefore resolve to default black alongside a nonblack FillColor or CharBackColor. Paragraph output creates a component even for an Unused color; character output creates one only for a themed fill. Whether downstream color-item application intentionally fills the cached final color is unverified; no native rendering defect is claimed.
+- Preservation: retain the separate scalar and theme-only values, insertion conditions and unchanged component resolver. Real Any/Reference tests check the copied theme/transforms, scalar background and zero final color independently; do not initialize final color locally or add palette resolution.
+
+### WRITER160 — SvRef self-move drops its reference
+
+- Source: pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`; native PropertyMap inherits SvRefBase and uses this pointer owner.
+- Observation: move assignment releases the existing object, reads the source pointer and then clears the source, with no self-move guard. When source and destination are the same SvRef, the result is empty and its reference is released. A separate alias can keep the pointee alive. This may be an allowed moved-from contract rather than a defect; no Writer document failure is claimed.
+- Preservation: retain the exact release/read/clear order and empty self-move result. Complete original normal and ASan/UBSan caller traces retain a surviving alias while the self-moved reference becomes empty. Do not replace the implementation with a self-move no-op or swap policy.
+
+### WRITER161 — cell validity ignores the end and the returned start pointer
+
+- Source: pinned `sw/source/writerfilter/dmapper/TableManager.cxx`, `CellData::IsValid`, and `sw/source/writerfilter/dmapper/TableData.hxx`.
+- Observation: validity requires a nonnull stored start and a getStart call that does not throw RuntimeException. The returned Reference is discarded without a null check, and the stored end/open state is not examined. A nonnull start whose getStart returns an empty Reference is therefore accepted, including a cell with an empty end. This may intentionally test range accessibility; native producer reachability and document impact remain unverified.
+- Preservation: retain the start-only check, temporary destruction and catch-only RuntimeException. Actual component caller tests retain empty result/end acceptance, disposed/runtime failure rejection and foreign exception propagation. Do not add an end check, returned-pointer check or catch-all repair.
+
+### WRITER162 — shared sequence-map overloads reset and merge differently
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator<< overloads.
+- Observation: typed NamedValue/PropertyValue sequences clear the map and accept empty names or VOID values. Sequence<Any> instead merges without clearing, skips VOID elements, rejects empty names/values and retains earlier writes if a later element throws. An outer Any accepts only the typed named/property sequences, not Sequence<Any>. These are explicit implementation differences; downstream intent and document impact remain unverified.
+- Preservation: keep all overload distinctions, exact IllegalArgumentException messages/position-1 and partial mutation. Actual Any/Sequence tests cover both reset and merge paths and every rejection; do not normalize them to a transactional replace operation.
+
+### WRITER163 — shared map extraction preserves reused PropertyValue metadata
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
+- Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
+- Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
+
+### WRITER164 — unknown floating-table anchors leave orientation relations uninitialized
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, getTablePosition.
+- Observation: horizontal and vertical relation locals have no initializer. Only margin/page/text assign a value before insertion into the frame property map. A different anchor therefore reads an indeterminate native short. Normal schema/producer reachability and document impact remain unverified; no native value or repeatable invalid-input result is claimed.
+- Preservation: retain the three exact branches with no repair default. Host locals remain uninitialized rather than defaulting to FRAME/PAGE_FRAME. Valid-input tests check all three source relations. A separate host diagnostic covers the unknown-anchor branches and checks only independent initialized properties; it never inspects or asserts the relation payload and does not certify native undefined behavior or ABI.
+
+### WRITER165 — floating-table position equality ignores wrapping distances and overlap
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, operator==.
+- Observation: comparison includes the two anchors, two spec strings and x/y coordinates, but omits four distances from surrounding text and the table-overlap ID. Equal handlers can therefore return different margin or AllowOverlap properties. Whether downstream table grouping intentionally ignores these differences remains unverified; no native document defect is claimed.
+- Preservation: retain the six-field comparison and original short circuit. Public attribute tests vary every compared field, then show that differing margins/overlap leave equality true while actual output properties differ. Do not add those fields to equality.
+
+### WRITER166 — non-character automatic-style families share a tree without a set-subtype discriminator
+
+- Source: pinned `sw/source/core/doc/swstylemanager.cxx`, generic getAutomaticStyle/getByName, and `svl/source/items/stylepool.cxx`, StylePoolImpl::insertItemSet.
+- Observation: RUBY/PARA/NOTXT select one paragraph pool, whose tree is keyed by parent identity and concrete items, with no SfxItemSet subtype key. A generic non-character set inserted first can therefore supply the retained leaf for equal later SwAttrSet input. The generic PARA overload asserts only its input; later getByName for PARA asserts that a found handle is SwAttrSet. Native application reachability and compiled differential behavior remain unverified; no document defect is claimed.
+- Preservation: retain shared family routing and the exact tree key; do not add a pool-identity/subtype discriminator or silently convert the retained set. Source-backed public-owner tests retain the original generic leaf for equal Writer input and preserve the later paragraph subtype assertion. The separate native typed-overload behavior and native assert process/ABI are not certified by these tests.
+### WRITER120 — Wide RTF borders lose the exporter's thick-width flag on import
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `OutTBLBorderLine`, emits `\\brdrth` and halves the converted width when the native line exceeds 255 twips. The pinned tokenizer registers `brdrth` as a flag, while `rtfdispatchflag.cxx` has no `BRDRTH` case. The flag therefore does not double the border width on import.
+- Observation: the source path writes a 300-twip solid border as `\\brdrs\\brdrth\\brdrw150`, which the reader passes onward as 150 twips. A bare `\\brdrth` does not establish a line style. This is a source-level trace; compiled desktop reproduction remains unverified.
+- Preservation: both local paragraph and cell borders retain the ignored flag. Tests pin the reduced round-trip width and the absence of a line for a bare thick flag. No compensating width multiplier is added to the importer.
+
+### WRITER142 — Positive paragraph-style position substitutes automatic superscript
+
+- Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_position`, defers ordinary run positions and negative paragraph-style positions. Other nonzero stylesheet positions instead insert `DFLT_ESC_AUTO_SUPER` or `DFLT_ESC_AUTO_SUB` with `DFLT_ESC_PROP`; the source explicitly says `DON'T FIXME` and describes the missing final-font-size calculation.
+- Observation: a positive paragraph-style position does not retain its numeric half-point offset, while a negative paragraph-style position follows the deferred calculation. This asymmetric branch is source-derived; compiled desktop differential behavior remains unverified.
+- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import remains outside this completed block.
+
+### WRITER143 — md4c tag recognizer accepts a slash in a closing tag
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_tag`, sets attribute state to -1 for closing tags but tests `attr_state <= 2` for both `>` and `/>`.
+- Observation: the compiled native helper accepts `</a/>` even though its comment permits the optional slash only on an opening tag. This is a dependency-level scanner finding, not a native Writer rendering result.
+- Preservation: the TypeScript tag automaton retains the numeric state comparisons and the compiled fixture pins this accepted form; no HTML normalization is inserted.
+
+### WRITER144 — md4c HTML declaration detection uses ASCII instead of uppercase letters
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_block_start_condition`, comments that HTML type four begins with `<!` followed by an uppercase letter, but tests `ISASCII(off+1)`.
+- Observation: compiled native helpers select type four for `<!lowercase>` and `<![CDATA[x]]>`. The latter reaches this branch before the type-five CDATA test, so it uses the generic `>` closer instead of the CDATA-specific branch. Full native Writer HTML import has not been reproduced.
+- Preservation: retain this ASCII test and branch order. The block scanner and complete block-queue differential fixtures pin this behavior.
+
+### WRITER145 — md4c raw pre/script/style/textarea blocks accept name prefixes
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_html_block_start_condition`, checks each type-one tag name by case-insensitive prefix without a following delimiter test.
+- Observation: the compiled scanner classifies `<prefix>` as a type-one `pre` block, which can continue until `</pre>` or EOF. This is a native dependency grammar result, not proof of native Writer rendering.
+- Preservation: keep the prefix test and source closers; do not replace it with a host HTML tokenizer or an exact-tag check.
+
+### WRITER146 — md4c wiki delimiter disabling has a reversed interval
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_resolve_links`.
+- Observation: The wiki-label branch calls md_disable_marks with delim_index + 1 as the first index and delim_index as the end. Its half-open loop performs no iterations. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep the original bounds and mark resolution; the native callback corpus covers wiki labels.
+
+### WRITER147 — md4c nested autolink suppression retests the first nested mark
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_resolve_links`.
+- Observation: Both nested-boundary loops test first_nested->ch, including the loop moving last_nested. This can retain a different right boundary than a last_nested test would. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Retain the first-mark condition in both loops; native callback fixtures cover nested spans and links.
+
+### WRITER148 — md4c NULL replacement retains the NULL in the following verbatim chunk
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_text_with_null_replacement`.
+- Observation: After the NULL callback, off advances but the source pointer does not. A following CODE or HTML chunk can include the same NULL byte. Compiled callback fixtures reproduce this sequence. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Preserve both the NULL callback and following raw chunk; do not insert a host replacement character in the parser.
+
+### WRITER149 — md4c empty table intervals shift later cells left
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_process_table_row`.
+- Observation: Zero-width pipe intervals are skipped; subsequent nonempty cells are emitted first and missing cells are appended at the end. Compiled callbacks preserve this cell order. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep interval skipping and trailing cell completion, including their order.
+
+### WRITER150 — md4c collapsed tab marks have no space-emission branch
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_collect_marks and md_process_inlines`.
+- Observation: The whitespace-collapse option records the actual tab byte, but inline emission handles the space-byte mark. A tab can consequently disappear rather than emit a space. LibreOffice does not enable this option. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Keep the source flag-specific behavior; option fixtures compare compiled callbacks.
+
+### WRITER151 — md4c URI scheme recognition accepts an ASCII digit first
+
+- Source: pinned md4c 0.5.3 `src/md4c.c`, `md_is_autolink_uri`.
+- Observation: The initial scheme-byte check uses ISASCII instead of an alphabetic predicate. Compiled native callbacks recognize forms such as <1a:x> as a URI autolink. This is dependency behavior, not a compiled native Writer model reproduction.
+- Preservation: Retain the source predicate and subsequent scheme checks; do not substitute URL validation.
+
+### WRITER152 — Native HTML control filtering truncates scalar input to UTF-16
+
+- Source: pinned `include/svl/lngmisc.hxx`, `linguistic::IsControlChar(sal_Unicode)`, returns only `cChar < ' '` and explicitly questions excluding DEL. `svtools/source/svhtml/parhtml.cxx` passes its UTF-32 `nNextCh` and numeric-entity `cChar` to that UTF-16 parameter.
+- Observation: DEL and C1 characters pass the predicate. Scalars such as U+10000 have a low UTF-16 word below space and therefore follow the control branch after argument conversion. This is a source-level trace; compiled Writer behavior remains unverified.
+- Preservation: keep the original predicate and the native 16-bit argument conversion in the shared scalar owner. Do not replace it with a Unicode control category predicate.
+
+### WRITER153 — Markdown quotation exit tests depth before decrement against zero
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::EndBlockQuote`, restores Text Body only when `m_nBlockQuoteDepth == 0`, then decrements the depth.
+- Observation: leaving the usual outer quote at depth one does not restore Text Body. Source paragraph append retains the quotation collection, so following ordinary paragraphs can retain it. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: keep the exact test/decrement order and paragraph collection inheritance; do not reset the style merely because a quote closes.
+
+### WRITER154 — Markdown ordered-list callbacks discard the source start detail
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `enter_block_callback`, calls `StartNumberedBulletList(type)` for ordered lists without forwarding `MD_BLOCK_OL_DETAIL::start`. `swmd.cxx` initializes the native format and start sentinel independently.
+- Observation: an ordered Markdown list beginning with a value other than one does not transfer that value through this callback. The md4c parser itself retains it correctly. This is a source-level Writer trace.
+- Preservation: retain the type-only callback and native format/start-sentinel decisions; do not compensate in the dependency parser or document adapter.
+
+### WRITER155 — Inline Markdown HTML remains buffered until a block HTML exit
+
+- Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `text_callback`, appends all `MD_TEXT_HTML` text to `m_htmlData`; only `SwMarkdownParser::EndHtmlBlock` invokes `InsertHtmlData` and clears the buffer.
+- Observation: inline HTML callbacks have no immediate native HTMLReader invocation. A later raw HTML block exit can consume that earlier buffered markup as well. This is a source-level trace; compiled Writer behavior remains unverified.
+- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text.
+
+### WRITER156 — SvParser's explicit UCS2 setter does not select the UTF-16 read branch
+
+- Source: pinned `svtools/source/svrtf/svparser.cxx`, `SvParser::SetSrcEncoding`, accepts UCS2 in its outer condition but still resets the encoding to DONTKNOW when `rtl_createTextToUnicodeConverter` returns null. `sal/textenc/tables.cxx` has no UCS2 entry in its bounded descriptor table. The BOM-detection path in `GetNextChar` instead assigns UCS2 directly.
+- Observation: explicit encoding selection and BOM selection take different paths; the former can fall back to raw-byte reading while the latter reads UTF-16. This is a source-level trace, not a compiled desktop reproduction.
+- Preservation: keep the explicit setter's missing-converter fallback and the separate direct assignment during the source BOM probe.
+
+### WRITER157 — Invalid in-family character pool IDs retain their original identity
+
+- Source: pinned `sw/source/core/doc/DocumentStylePoolManager.cxx`, `GetFormatFromPool`, character-format branch.
+- Observation: the invalid-ID comment says to return the first format, but the code only substitutes its UI resource name. It still searches and creates using the original invalid pool ID. Repeated invalid IDs can therefore produce distinct owners sharing the first character format's UI name. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: retain the original invalid ID and name fallback independently; do not normalize the ID or deduplicate formats by name.
+
+### WRITER158 — Unbound character-format items return before clearing a dying style
+
+- Source: pinned `sw/source/core/txtnode/fmtatr2.cxx`, `SwFormatCharFormat::Notify`.
+- Observation: the method immediately returns when no text attribute is bound. Its later `SwObjectDying` branch clears the character-format pointer only after forwarding to the bound text attribute. An unbound copied item therefore does not take that clearing branch. This is a source-level lifetime concern; no claim is made about dereferencing an expired native pointer.
+- Preservation: retain the early return and the bound-item forwarding/clear order. JS collection handles object lifetime; no native address/refcount model or unsafe native dereference is emulated.
+
+### WRITER159 — Character-style replacement can duplicate native sort numbers
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::BuildPortions`, named character-format branch.
+- Observation: under `DONTREPLACE`, replacing an already present style removes the equal style, counts surviving distinct styles and assigns that count as the new sort number. It does not renumber survivors or choose their maximum plus one. A portion initially containing style orders zero and one can therefore end with two order-one styles. Native comparators subsequently use pointer identity for a remaining tie. This is a source-level trace, not a compiled Writer reproduction.
+- Preservation: keep the count-based assignment and surviving sort numbers. Do not repair them by renumbering. Native address tie-breaking is not claimed by the portable JS graph; no synthetic pointer allocator is introduced.
+
+### WRITER160 — CSS1 six-hex recognition is independent of grammatical context
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Parser::GetNextToken`, numeric and identifier branches.
+- Observation: six hexadecimal characters become `CSS1_HEXCOLOR` even when the grammar expects an identifier. A selector such as `.abcdef` cannot take the normal class branch; subsequent tokens can be interpreted as a new selector during recovery. This is a source-level trace, not compiled Writer evidence.
+- Preservation: keep the context-independent lexer priority and the original selector recovery/callback order.
+
+### WRITER161 — Empty CSS strings enter the scanner's unconditional first append
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, quoted `CSS1Parser::GetNextToken` branch.
+- Observation: after reading the opening quote, the scanner uses a do-while loop. An immediately closing quote is appended as content, and later input can be consumed until another matching quote or EOF. An opening quote followed directly by EOF appends the UTF16 EOF sentinel. This is source-level behavior.
+- Preservation: retain the do-while and EOF branches; do not replace them with a CSS string tokenizer or special-case empty strings.
+
+### WRITER162 — Eight-hex CSS color conversion omits leading zeroes before right padding
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, hash scanner and `CSS1Expression::GetColor`.
+- Observation: the scanner blends eight-digit RGBA over white and converts the RGB integer to an unpadded hexadecimal string. GetColor subsequently reads six positions and supplies zeroes at missing positions on the right. For example, the source trace for `#0000ffff` becomes the token `ff` and then RGB `ff0000`. This is a source trace, not a compiled desktop reproduction.
+- Preservation: retain the unpadded integer conversion and the original right-padding loop independently.
+
+### WRITER163 — CSS URL extraction strips single quotes despite its double-quote comment
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Expression::GetURL`.
+- Observation: the comment mentions double quotes, but the implemented three stripping passes remove spaces, single quotes and spaces. Double quotes remain in the returned URL text. URL resolution after this helper is not certified by this observation.
+- Preservation: keep the exact stripping characters and pass order.
+
+### WRITER164 — Skipped CSS declarations can retain a numeric value for a later identifier
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `ParseStyleOption`, `ParseDeclaration` and scanner numeric fields.
+- Observation: malformed-property recovery advances tokens without clearing `m_nValue`. A skipped numeric declaration can therefore leave its scalar value on a later identifier expression, until normal term construction resets it. The source trace for `font-weight:bold; -vendor-x:1px; color:blue` gives the blue identifier a numeric field of one. This concerns callback fields, not a claim about visible final color.
+- Preservation: retain numeric-field reset only at the original initialization and expression-construction points.
+
+### WRITER165 — Fractional CSS RGB components use the alpha-like multiplication branch
+
+- Source: pinned `sw/source/filter/html/parcss1.cxx`, `CSS1Expression::GetColor` RGB branch.
+- Observation: after an integer-prefix check, any component containing a decimal point is multiplied by 255 and narrowed to an unsigned byte. This applies to RGB components as well as alpha. A negative fractional prefix between minus one and zero can bypass the initial negative check because its integer prefix is zero. This is a source-level trace.
+- Preservation: retain the original condition order, multiplication, integer truncation and byte narrowing; do not apply channel-specific normalization.
+
+### WRITER166 — UTF-8 encoding consumes a non-low unit after a pending high surrogate
+
+- Source: pinned `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` bad-input branch.
+- Observation: after a high surrogate, the next UTF-16 unit is consumed before checking that it is low. If it is not low, the replacement/ignore/error branch processes that consumed pair without retrying the second unit. With default flags, high-surrogate plus ASCII A emits one question mark and consumes both units. This is a source-contract trace, not compiled native evidence.
+- Preservation: retain the original pointer advancement, pending-state reset and bad-input actions. Do not substitute host Unicode replacement grouping.
+
+### WRITER167 — UTF-8 encoder FLUSH retains a trailing high surrogate and the string wrapper drops it
+
+- Source: pinned `sal/textenc/tcvtutf8.cxx`, `ImplConvertUnicodeToUtf8` final pending-surrogate branch; `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`.
+- Observation: with FLUSH set, a pending high surrogate reports SRCBUFFERTOSMALL and remains pending; without FLUSH it enters bad-input handling. The string wrapper sets FLUSH, uses a null context and retries only DESTBUFFERTOSMALL, so a trailing high surrogate produces no bytes. This is a source-level trace; compiled native reproduction remains unverified.
+- Preservation: retain the source flag polarity and wrapper retry condition independently.
+
+
+### WRITER168 — Brush-to-fill clearing excludes the last fill attribute
+
+- Source: pinned `svx/source/unodraw/unobrushitemhelper.cxx`, `setSvxBrushItemAsFillAttributesToTargetSet`, iterates while `a < XATTR_FILL_LAST`; the fill range itself includes its final Which ID.
+- Observation: a pre-existing `XATTR_FILLUSESLIDEBACKGROUND` item remains after conversion because it is the inclusive range end. This is a source-level trace, not compiled Writer evidence.
+- Preservation: retain the original exclusive clearing bound. Do not clear or reset the final slide-background flag as a cleanup.
+
+### WRITER169 — Copying the default NameOrIndex sets a flag absent on its source
+
+- Source: pinned `svx/source/xoutdev/xattr.cxx`, `NameOrIndex` constructors.
+- Observation: the default constructor initializes Which zero and palette index minus one without `setNameOrIndex`; named, indexed and copy constructors call that setter. Copying or cloning the default item therefore changes this metadata flag. This is a source-level trace.
+- Preservation: keep the original per-constructor calls and the default false pool-item flag; do not normalize the source or its copy to the same flag.
+
+
+### WRITER170 — Exact text-attribute deletion skips the next shifted same-span hint
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::DeleteAttributes`; its preceding FIXME says that sort numbers for character formats are not respected.
+- Observation: after deleting an exact family/start/end match, the forward loop increments its index without compensating for the shifted array. With three same-span character-style hints, the first and third are deleted and the second remains. This is a source-level trace, not compiled Writer evidence.
+- Preservation: retain the exact forward traversal and family/range matching. Do not delete all equal-span character styles in one call or repair sort-number handling. Native new-attribute reset history continues to use this original owner.
+
+
+### WRITER171 — An empty hyperlink inside another hyperlink is removed by recursive repair
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwpHints::TryInsertNesting`, asymmetric `isNestedAny` and pass-four recursive insertion.
+- Observation: an empty new INET strictly inside an existing INET is initially inserted. Re-inserting the old right-hand fragment then treats that empty attribute as overwritten and destroys it. The original URL remains as two adjacent fragments; InsertHint returns success while InsertItem returns no surviving incoming pointer. Empty insertions at the old boundaries take a different path. This is a source-level trace, not compiled native evidence.
+- Preservation: retain insertion-before-repair order, the asymmetric boundary predicate and the original recursion. Do not force an empty incoming hyperlink to survive or merge the two original fragments.
+
+
+### WRITER172 — Exact range reset bypasses selectors and omits final change notifications
+
+- Source: pinned `sw/source/core/txtnode/txtedt.cxx`, `SwTextNode::RstTextAttr`, `bExactRange` branch and final `bChanged` test.
+- Observation: exact matching is evaluated independently of `nWhich` and `pSet`. Among the represented ranged families, it deletes exact-span AUTOFMT hints while retaining INET and CHARFMT hints. The branch never sets `bChanged`, so final range/style notifications and MergePortions are skipped even after deletion. This is a source-level trace, not compiled native evidence.
+- Preservation: retain the branch precedence, deletion/history owner and missing final notifications; do not infer change from the deletion list.
+
+### WRITER173 — Default character-style range reset can return false after changing hints
+
+- Source: pinned `sw/source/core/txtnode/thints.cxx`, `SwTextNode::SetAttr(const SfxItemSet&, ...)`, default CHARFMT branch and final insertion count.
+- Observation: setting the document default character style invokes RstTextAttr and DontExpandFormat without incrementing the insertion counter. With no other inserted items, the node method returns false although existing character styles were removed or split and a boundary flag may have changed. This concerns the node-level result; document-level modified and undo behavior requires independent owner verification. This is a source-level trace, not compiled native evidence.
+- Preservation: retain the insertion-only counter and the original reset/boundary calls; do not replace this result with a generic mutation flag.
+
+
+### WRITER174 — Real-script lookup at a supplementary character's end can select the application script
+
+- Source: pinned `sw/source/core/bastyp/breakit.cxx`, `SwBreakIt::GetRealScriptOfText`, initial end-of-text decrement; `i18npool/source/breakiterator/breakiteratorImpl.cxx`, `beginOfScript` and `endOfScript`.
+- Observation: end-of-text lookup subtracts one UTF16 unit. For a single supplementary CJK character this lands on its low surrogate, which has weak classification. The backward weak-run search can advance beyond that offset after meeting the preceding strong scalar; neither direction then recovers the CJK script, so the result falls back to the application language's script. At offset zero the same text is Asian. This is a source-level trace, not compiled native evidence.
+- Preservation: keep the original code-unit decrement, unnormalized input offsets and backward-run advancement. Do not replace them with codepoint-aware caret adjustment.
+
+
+### WRITER175 — Non-RTL COMPLEX character properties select the Western normal-keyword group
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::MoveProperties`, non-RTL run switch; the COMPLEX case carries the source question about using CTL.
+- Observation: with an explicit COMPLEX script and false bidi RTL flag, CTL values are emitted as associated properties before the normal Western group. The COMPLEX branch shares the LATIN/default path instead of the RTL path that emits normal CTL keywords last. This is a source-level trace, not compiled native or rendering evidence.
+- Preservation: retain the independent bidi/script state and the original COMPLEX switch branch. Do not infer the RTL flag merely from script or make CTL the normal-keyword group for every complex run.
+
+
+### WRITER176 — Reverse DBCS/JIS table ranges can exceed their actual arrays
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplUnicodeToDBCS` and `ImplUnicodeToEUCJP`; original high-table entries and arrays in `tcvtkr2/5/6.tab`, `tcvttcn2/6.tab`, `tcvtscn4/6.tab` and `tcvtjp3/5/6.tab`.
+- Observation: some inclusive high-table limits exceed the actual pointed-to array length. For example KSC5601 high page 0x77 advertises low bytes 0x01 through 0xFB while its array ends at low 0xF3; BIG5 page 0x8B advertises through 0xFF while its array ends at 0x9F. The unchanged converter dereferences those offsets without a physical array bound check. The compiled source audit classifies 269 affected descriptor/unit pairs among 786432 BMP cases across the represented eleven DBCS descriptors plus EUC-JP. These reads are C++ undefined behavior; observed neighboring-array bytes are not a portable native result.
+- Preservation: retain the original arrays, inclusive limits and lookup decisions. Do not pad tables, clamp limits or synthesize mappings. The native witness audits and records these cases before executing converter bodies; byte digests cover the 786163 defined cases. The existing JS array/bitwise binding has no certified corresponding native byte value for undefined reads.
+
+### WRITER177 — DBCS private-byte conversion passes through a signed plain char
+
+- Source: pinned `sal/textenc/tcvtmb.cxx`, `ImplUnicodeToDBCS` private-byte assignment and following zero check.
+- Observation: with PRIVATE_MAPTO0, the assignment narrows the low byte through plain char before storing it in unsigned16 cConv. In the explicit signed-char profile, U+F180 becomes cConv 0xFF80 and emits two bytes FF 80; U+F1FF emits FF FF. Low byte zero re-enters the shared undefined handler, as the preceding source FIXME describes. The compiled unchanged source confirms this profile; other plain-char ABI profiles are not certified.
+- Preservation: retain the original assignment and zero recheck. Keep signedness explicit in the native witness and the current logical byte binding instead of silently emitting one unsigned byte for every private character.
+
+### WRITER178 — RTF CanEncode uses text-to-Unicode flags for Unicode-to-text conversion
+
+- Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `CanEncode`; `include/rtl/textcvt.h` flag definitions.
+- Observation: UNDEFINED_ERROR has the same value in both flag families, but TEXTTOUNICODE INVALID_ERROR is 0x0100, which is UNICODETOTEXT UNDEFINED_REPLACE rather than UNICODETOTEXT INVALID_ERROR (0x0010). The RTF predicate therefore requests undefined-character replacement and does not request the apparent invalid-input error action. The current CanEncode/RTF charset owner retains these literal flags and uses the real checked SAL byte-string wrapper. This is a source-level flag trace with separate core SAL conversion evidence; full Writer/OUString/OString predicate compilation and font-table integration remain unverified.
+- Preservation: retain the original flag values when connecting the native font-name conversion path. Do not replace them with the similarly named flags from the opposite family.
+
+
+### WRITER179 — UTF-7 directly emits form feed but shifts carriage return
+
+- Source: pinned `sal/textenc/tcvtutf7.cxx`, `aImplMustShiftTab` and `ImplUnicodeToUTF7`. The table marks 0x0C as direct, with a comment naming it CR, while 0x0D is marked for Base64 shifting.
+- Observation: the unchanged compiled source emits U+000C as byte 0C and U+000D as `+AA0-`. The source table differs from its own control-character comment. The isolated ASan/UBSan native witness confirms the output.
+- Preservation: retain the original 128-entry table. Do not swap 0x0C/0x0D or normalize line endings inside the converter.
+
+### WRITER180 — ISCII reverse conversion retains a trailing high surrogate when FLUSH is set
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `UnicodeToIsciiDevanagari::convert`, final pending-surrogate branch.
+- Observation: when a high surrogate remains and neither ERROR nor DESTBUFFERTOSMALL is set, the source sets SRCBUFFERTOSMALL if FLUSH is present and leaves the surrogate in the context. Without FLUSH it invokes the invalid-input helper, which may replace the surrogate and clear state. The isolated unchanged-source ASan/UBSan witness confirms these branches, status, output and source counts.
+- Preservation: retain the source condition and state transitions. Do not reverse the FLUSH test to follow another codec's streaming behavior.
+- Additional evidence: the original ISO-2022-JP/KR reverse owners use the same final pending-high-surrogate FLUSH condition as ISCII. The isolated ASan/UBSan ISO witness verifies these branches and final shift/designation state for mixed and saved-context vectors. The port retains the condition and any separate final shift reset.
+
+
+### WRITER181 — ISCII context requirements differ from the generic string wrapper's null context
+
+- Source: pinned `sal/textenc/convertisciidevangari.cxx`, `ImplConvertUnicodeToIsciiDevanagari`, casts its context and unconditionally calls its member function; that function reads `m_cHighSurrogate`. Pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, calls `rtl_convertUnicodeToText` with a null context. The ISCII descriptor in `convertisciidevangari.tab` supplies this context-dependent reverse callback.
+- Observation: the generic string-wrapper route provides no ISCII context despite the converter's unconditional object access. This is a source-level contract finding; null-object execution is undefined and is excluded from the native witness. Direct reverse-call tests use the actual context constructor and reset contract.
+- Preservation: keep the converter's context ownership requirement. Do not manufacture a context inside its callback or silently substitute another encoding to conceal the source contract mismatch.
+- Forward evidence: `rtl_string2UString_status` in pinned `sal/rtl/ustring.cxx` likewise calls its converter with nullptr. `ImplConvertIsciiDevanagariToUnicode` unconditionally calls `pCtx->convert`, whose loop reads `m_cPrevChar`. RTF `checkUnicode` uses this OStringToOUString route. The former local RTF-only context construction was removed; the null-context callback binding raises TypeError, while native null-object execution remains undefined and excluded from sanitized witnesses.
+
+
+### WRITER182 — JIS X 0201 exposes an encoding descriptor with a null forward callback
+
+- Source: pinned `sal/textenc/tcvtjp6.tab`, `aImplJISX0201TextEncodingData`, sets the text-to-Unicode function pointer to nullptr while retaining `convertUnicodeToChar` as its reverse function. `rtl_createTextToUnicodeConverter` in `sal/textenc/textcvt.cxx` returns that descriptor, and `rtl_convertTextToUnicode` unconditionally invokes the descriptor's forward callback.
+- Observation: an existing encoding descriptor does not guarantee a callable forward converter. Invoking the null callback is undefined native execution, not the missing-descriptor dummy path. This is a source-level contract finding; no null callback is executed by the native witnesses.
+- Preservation: retain descriptor identity, reverse conversion, stateless context and explicit null forward callback. The JavaScript callback binding raises a TypeError at invocation instead of supplying a decoder or routing to the missing-descriptor fallback; this does not claim a portable C++ undefined-execution outcome.
+
+### WRITER183 — JIS X 0201 maps U+FF65 to ASCII Z and lacks yen/overline mappings
+
+- Source: pinned `sal/textenc/tcvtjp6.tab`, `aImplJISX0201Tab`, contains 0x5A at offset 4 of the U+FF61..U+FF9F range, between 0xA4 and 0xA6. Its byte-converter descriptor supplies this range and no extra Unicode-to-byte mapping table.
+- Observation: the original data maps U+FF65 to byte 5A; yen U+00A5 and overline U+203E have no mapping and follow the undefined-input policy. This is source table/algorithm evidence; the generic JIS factory is not independently compiled by the ISO-2022 witness.
+- Preservation: retain the captured original table and missing aliases. Do not replace 0x5A with 0xA5 or add familiar JIS Roman mappings to make a conventional encoder result.
+
+
+### WRITER184 — Checked Unicode-to-byte conversion tests ERROR before retrying a small destination
+
+- Source: pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, returns false for checked conversions on INFO_ERROR before its DESTBUFFERTOSMALL retry. Pinned `sal/textenc/convertsimple.cxx`, `convertUnicodeToChar`, sets ERROR together with DESTBUFFERTOSMALL when a mapped two-byte result does not fit. Encoding metadata may estimate one byte per unit while allowing two.
+- Observation: a checked conversion can reject an encodable single unit because the initial estimate is too small. For the MS1258 U+1EAF two-byte mapping, the source metadata estimates one byte, so the native control flow returns false instead of growing the buffer; unchecked conversion retries. This combined case is a source/control-flow trace plus local test; the isolated compiled string-wrapper witness covers the four core encodings, not MS1258.
+- Preservation: retain the original estimate and ERROR-before-DESTBUFFERTOSMALL order. Do not retry checked failures first or redefine CanEncode as a direct mapping-membership check.
+
+### WRITER185 — RTF numbering-level text emits only the first UTF16 unit of a bullet
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::NumberingLevel`, takes `rNumberingString[0]` for CHAR_SPECIAL/BITMAP and writes its signed16 value followed by a space and question mark. `wrtw8num.cxx`, `GetNumberingLevelBulletStringAndFont`, creates that string from the UCS4 bullet value.
+- Observation: a supplementary bullet is represented as a surrogate pair in the numbering string, but the level-text writer emits only its high surrogate. This is a source-level trace, not a compiled full Writer differential. A zero bullet is likewise emitted as U+0000; the exporter must not replace it with an invented default bullet.
+- Preservation: retain first-unit indexing and the exact signed Unicode control with its space and fallback. Normal run text still emits all UTF16 units through OutString; do not reuse that different behavior for numbering-level text.
+
+### WRITER186 — Used-style iteration omits a style whose whole path is ignorable
+
+- Source: pinned `svl/source/items/stylepool.cxx`, `Iterator::getNext` and `Node::nextItemSet`. A newly selected root is tested for its own item set, then traversal skips ignorable children. The ignorable-child representative check is performed only after obtaining a subsequent node.
+- Observation: a used style whose entire path consists of ignorable items is omitted by `getAllStyles`; an ordinary non-ignorable prefix makes its used ignorable tail visible. The unchanged compiled Node/Iterator/StylePoolImpl witness confirms this with real standard shared pointers under ASan/UBSan. Item/set/iterator values in that witness are explicit probe carriers, not a full native SfxItemSet/Writer ABI.
+- Preservation: retain the root transition and child-skip order. Do not add a special root-tail representative to make iteration appear exhaustive.
+
+### WRITER187 — Complete style-name cache population selects one non-shareable representative per node
+
+- Source: pinned `svl/source/items/stylepool.cxx`, `Node::getUsedOrLastAddedItemSet`, `Iterator::getNext` and `StylePool::populateCacheMap`.
+- Observation: even with unused/ignorable filtering disabled, iteration returns one shared set for each populated node: the newest externally used non-shareable copy, or the last-added copy if all are unused. Cache population consequently cannot recover every older non-shareable pointee name from the pool. The unchanged compiled Node/Iterator/StylePoolImpl witness confirms representative selection and usage transitions with real shared ownership; the full UNO cache-service graph is not compiled by that witness.
+- Preservation: keep representative selection and one-node/one-result iteration. Do not flatten all retained non-shareable handles into the name cache or font collection.
+
+
+### WRITER188 — Forward string conversion can leave a released old pointer in its target after allocation failure
+
+- Source: pinned `sal/rtl/ustring.cxx`, `rtl_string2UString_status`, releases `*ppThis` before allocating the general converter temporary. On temporary allocation failure it records ERROR/DESTBUFFERTOOSMALL and returns without assigning the target slot. The ASCII retry can likewise retain its released temporary pointer until successful replacement.
+- Observation: the target slot can still alias the old allocation although its owned reference was already consumed. With a sole former owner this is a dangling native pointer; with an independently retained reference it aliases that other owner's string. This is source control-flow evidence plus a local failure-injection test; the sanitized native witness covers successful allocations and does not dereference this failure state.
+- Preservation: retain the original release order, failure status and target-slot alias. Do not make forward checked conversion preserve ownership like the reverse checked wrapper. Access to freed data remains outside the native contract.
+
+
+### WRITER189 — Font map-name digit removal never updates its output family
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `FontSubstConfiguration::getMapName`, constructs an OUStringBuffer from `rFamilyName`, removes ASCII digits in that buffer, and returns without assigning the buffer back to `rFamilyName`.
+- Observation: the family-name output retains those digits despite the final removal loop. Preserve the returned value and do not silently apply the discarded edits. The unchanged compiled function is exercised with numeric names by the map-name witness; string storage is an explicit carrier rather than a full SAL ABI claim.
+- Preservation: the port retains the unchanged family output after ordered attribute removal. Digit normalization is not added to this owner.
+
+### WRITER190 — Font equality and hashing omit the stored width classification
+
+- Source: pinned `vcl/source/font/font.cxx`, `ImplFont::EqualIgnoreColor` and `ImplFont::GetHashValueIgnoreColor`, compare/hash weight, italic, family and pitch but never `meWidthType`. The one-shot `mbConfigLookup` flag is also outside value equality.
+- Observation: two otherwise equal Font values can have different stored width classifications and still compare equal. This is source-level value-contract evidence, not a compiled full VCL ABI certificate.
+- Preservation: expose width getters/setters and configuration lookup while leaving width and the lookup flag out of Font equality. Do not infer a new comparison field from the newly represented metadata.
+
+
+### WRITER191 — Font family-name assignment does not invalidate completed configuration lookup
+
+- Source: pinned `vcl/source/font/font.cxx`, `ImplFont::AskConfig`, sets `mbConfigLookup` before any lookup and returns immediately on subsequent calls. `Font::SetFamilyName` delegates to `ImplFont::SetFamilyName` in `vcl/inc/impfont.hxx`, which changes only `maFamilyName`; the flag is copied by the ImplFont copy constructor.
+- Observation: a font queried under an unrecognized name can remain unresolved after its family name is changed to a configured family. Copy-on-write does not reset the copied flag. This is source control-flow evidence and a local value test, not a complete compiled VCL witness.
+- Preservation: keep the one-shot flag and the setter's lack of invalidation. A new Font created with the configured name can resolve independently.
+
+
+### WRITER192 — The Baekmuk special case tests a different second UTF16 unit
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `ImplKillLeading`, labels its Korean special case Baekmuk but tests the units U+BC31, U+BC35. The usual `백묵` sequence is U+BC31, U+BB35, so it does not enter this branch.
+- Observation: the unchanged compiled helper retains the usual Korean prefix, while it strips the source's literal U+BC31/U+BC35 sequence. The port's initial word-based transcription was caught by this differential witness and replaced with the exact source numeric predicates.
+- Preservation: keep U+BC35 in the predicate. Do not correct the second unit or replace it with the usual family spelling.
+
+
+### WRITER193 — AskConfig classifies SCRIPT family from Italic rather than Script flags
+
+- Source: pinned `vcl/source/font/font.cxx`, both family-selection sequences in `ImplFont::AskConfig` test `ImplFontAttrs::Italic` to assign `FAMILY_SCRIPT`. They do not test `ImplFontAttrs::Script`, Handwriting or BrushScript. The `getMapName` table in `unotools/source/config/fontcfg.cxx` assigns Script/BrushScript for the `script` word and Italic for `italic`/`oblique`.
+- Observation: an otherwise unclassified name containing `script` can remain FAMILY_DONTKNOW while a name containing `italic` becomes FAMILY_SCRIPT. This is a source-level branch trace and local value test, not an independently compiled full AskConfig witness.
+- Preservation: keep the exact flag and priority order in configured and heuristic branches. Do not substitute the generic Script bit.
+
+
+### WRITER194 — ResetAllFormatAttr leaves a numbering rule's paragraph-style client registered
+
+- Source: pinned `sw/source/core/doc/fmtcol.cxx`, `SwTextFormatColl::SetFormatAttr` and `ResetFormatAttr`, explicitly remove a direct numbering client's registration. `SwTextFormatColl::ResetAllFormatAttr` instead calls `SwFormatColl::ResetAllFormatAttr`; the inherited implementation in `sw/source/core/attr/format.cxx` clears `m_aSet` directly and does not call the virtual single/range reset. The numbering-related notification branch only checks outline assignment and does not unregister that client.
+- Observation: clearing all attributes can leave `SwNumRule::GetParagraphStyleListSize()` nonzero after the style no longer has a direct numbering item, so the numbering overload of `SwDoc::IsUsed` still reports use. This is source control-flow evidence and a local owner test; a complete native Writer execution is not claimed.
+- Preservation: keep the explicit registration boundaries of the source single-item/set/range operations. Do not add cleanup to the inherited reset-all path while porting used-numbering-table prerequisites.
+
+
+### WRITER195 — Duplicate numbering-rule names replace the lookup while retaining the previous default list
+
+- Source: pinned `sw/source/core/doc/docnum.cxx`, `SwDoc::AddNumRule`, appends the transferred rule to the table and assigns `maNumRuleMap[pRule->GetName()]` without rejecting an existing name. `DocumentListsManager::createListForListStyle` in its corresponding `.cxx` returns after a nonfatal diagnostic when the style already has a default list.
+- Observation: both rule objects remain in table order; name lookup resolves the newly appended rule while the existing default-list mapping still refers to its previous list. A fresh duplicate can retain an empty DefaultListId. This is a source control-flow trace and an actual local owner test, not a complete compiled Writer witness.
+- Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.

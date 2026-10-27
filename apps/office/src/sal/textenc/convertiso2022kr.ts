@@ -1,7 +1,13 @@
-/** @fileoverview ISO-2022-KR text-to-Unicode converter from sal/textenc/convertiso2022kr.cxx. */
+/** @fileoverview ISO-2022-KR converters from sal/textenc/convertiso2022kr.cxx. */
 import * as cvt from "../inc/rtl/textcvt.h";
-import { BadInputConversionAction, handleBadInputTextToUnicodeConversion } from "./converter";
+import {
+  BadInputConversionAction,
+  handleBadInputTextToUnicodeConversion,
+  handleBadInputUnicodeToTextConversion,
+} from "./converter";
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../inc/rtl/character";
 import { aKSC5601UniLeadTab } from "./tcvtkr6.ms949";
+import { aKSC5601DBCSHighTab } from "./tcvtkr6.ms949";
 
 /** Source state order determines whether an incomplete sequence needs handling. */
 export enum ImplIso2022KrToUnicodeState {
@@ -207,4 +213,223 @@ export function ImplConvertIso2022KrToUnicode(
   }
   sourceConverted[0] = converted;
   return output;
+}
+
+/** Original reverse designation/shift state order. */
+export enum ImplUnicodeToIso2022KrSet {
+  NONE,
+  ASCII,
+  KSC_1001,
+}
+/** Original pending surrogate and designation/shift state. */
+export interface ImplUnicodeToIso2022KrContext {
+  m_nHighSurrogate: number;
+  m_eSet: ImplUnicodeToIso2022KrSet;
+}
+/** Creates original reverse state. @returns Fresh state. */
+export function ImplCreateUnicodeToIso2022KrContext(): ImplUnicodeToIso2022KrContext {
+  return { m_nHighSurrogate: 0, m_eSet: ImplUnicodeToIso2022KrSet.NONE };
+}
+/** Resets original reverse state. @param context - Optional state. @returns Nothing. */
+export function ImplResetUnicodeToIso2022KrContext(
+  context: ImplUnicodeToIso2022KrContext | null,
+): void {
+  if (context !== null) {
+    context.m_nHighSurrogate = 0;
+    context.m_eSet = ImplUnicodeToIso2022KrSet.NONE;
+  }
+}
+/** Releases reverse state through JavaScript ownership. @param context - Optional state. @returns Nothing. */
+export function ImplDestroyUnicodeToIso2022KrContext(
+  context: ImplUnicodeToIso2022KrContext | null,
+): void {
+  void context;
+}
+
+/** Original reverse KS state machine with initial designation, partial shifts, error prefix and final flush.
+ * @param _data - Source KS aggregate bound by this module.
+ * @param context - Optional streaming state.
+ * @param source - UTF-16 units.
+ * @param sourceChars - Input size.
+ * @param destination - Output bytes.
+ * @param destinationBytes - Capacity.
+ * @param flags - Native flags.
+ * @param info - Optional status pointer.
+ * @param sourceConverted - Optional consumed pointer.
+ * @returns Bytes written.
+ */
+export function ImplConvertUnicodeToIso2022Kr(
+  _data: unknown,
+  context: ImplUnicodeToIso2022KrContext | null,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number] | null,
+  sourceConverted: [number] | null,
+): number {
+  let high = context?.m_nHighSurrogate ?? 0;
+  let set = context?.m_eSet ?? ImplUnicodeToIso2022KrSet.NONE;
+  const status: [number] = [0],
+    output: [number] = [0],
+    written: [boolean] = [false];
+  const asciiPrefix = Uint8Array.of(0x0f);
+  let converted = 0;
+  if (set === ImplUnicodeToIso2022KrSet.NONE) {
+    if (destinationBytes - output[0] >= 4) {
+      destination[output[0]++] = 0x1b;
+      destination[output[0]++] = 0x24;
+      destination[output[0]++] = 0x29;
+      destination[output[0]++] = 0x43;
+      set = ImplUnicodeToIso2022KrSet.ASCII;
+    } else status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+  }
+  if ((status[0] & cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) === 0)
+    for (; converted < sourceChars; converted++) {
+      let character = source[converted] as number;
+      let undefinedInput = true,
+        bad = false,
+        noOutput = false;
+      if (high === 0) {
+        if (isHighSurrogate(character)) {
+          high = character;
+          continue;
+        } else if (isLowSurrogate(character)) {
+          undefinedInput = false;
+          bad = true;
+        }
+      } else if (isLowSurrogate(character)) character = combineSurrogates(high, character);
+      else {
+        undefinedInput = false;
+        bad = true;
+      }
+      if (!bad) {
+        if (character === 0x0a || character === 0x0d) {
+          if (set === ImplUnicodeToIso2022KrSet.KSC_1001) {
+            if (output[0] !== destinationBytes) {
+              destination[output[0]++] = 0x0f;
+              set = ImplUnicodeToIso2022KrSet.ASCII;
+            } else noOutput = true;
+          }
+          if (!noOutput) {
+            if (output[0] !== destinationBytes) destination[output[0]++] = character;
+            else noOutput = true;
+          }
+        } else if (character === 0x0e || character === 0x0f || character === 0x1b) bad = true;
+        else if (character < 0x80) {
+          if (set === ImplUnicodeToIso2022KrSet.KSC_1001) {
+            if (output[0] !== destinationBytes) {
+              destination[output[0]++] = 0x0f;
+              set = ImplUnicodeToIso2022KrSet.ASCII;
+            } else noOutput = true;
+          }
+          if (!noOutput) {
+            if (output[0] !== destinationBytes) destination[output[0]++] = character;
+            else noOutput = true;
+          }
+        } else {
+          let bytes = 0;
+          const page = character >>> 8;
+          if (page < 0x100) {
+            const low = character & 0xff,
+              entry = aKSC5601DBCSHighTab[page] as (typeof aKSC5601DBCSHighTab)[number];
+            if (low >= entry.mnLowStart && low <= entry.mnLowEnd)
+              bytes = (entry.mpToUniTrailTab as readonly number[])[
+                low - entry.mnLowStart
+              ] as number;
+          }
+          if (bytes !== 0) {
+            if (set === ImplUnicodeToIso2022KrSet.ASCII) {
+              if (output[0] !== destinationBytes) {
+                destination[output[0]++] = 0x0e;
+                set = ImplUnicodeToIso2022KrSet.KSC_1001;
+              } else noOutput = true;
+            }
+            if (!noOutput) {
+              if (destinationBytes - output[0] >= 2) {
+                destination[output[0]++] = (bytes >>> 8) & 0x7f;
+                destination[output[0]++] = bytes & 0x7f;
+              } else noOutput = true;
+            }
+          } else bad = true;
+        }
+      }
+      if (noOutput) {
+        status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        break;
+      }
+      if (bad) {
+        const action = handleBadInputUnicodeToTextConversion(
+          undefinedInput,
+          character,
+          flags,
+          destination,
+          output,
+          destinationBytes,
+          status,
+          asciiPrefix,
+          set === ImplUnicodeToIso2022KrSet.ASCII ? 0 : 1,
+          written,
+        );
+        if (action === BadInputConversionAction.NO_OUTPUT)
+          status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        else high = 0;
+        if (action === BadInputConversionAction.CONTINUE) {
+          if (written[0]) set = ImplUnicodeToIso2022KrSet.ASCII;
+          continue;
+        }
+        break;
+      }
+      high = 0;
+    }
+  if (
+    (status[0] &
+      (cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) ===
+    0
+  ) {
+    let flush = true;
+    if (high !== 0) {
+      if ((flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0)
+        status[0] |= cvt.RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
+      else {
+        const action = handleBadInputUnicodeToTextConversion(
+          false,
+          0,
+          flags,
+          destination,
+          output,
+          destinationBytes,
+          status,
+          asciiPrefix,
+          set === ImplUnicodeToIso2022KrSet.ASCII ? 0 : 1,
+          written,
+        );
+        if (action === BadInputConversionAction.STOP) {
+          high = 0;
+          flush = false;
+        } else if (action === BadInputConversionAction.CONTINUE) {
+          if (written[0]) set = ImplUnicodeToIso2022KrSet.ASCII;
+          high = 0;
+        } else status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      }
+    }
+    if (
+      flush &&
+      set === ImplUnicodeToIso2022KrSet.KSC_1001 &&
+      (flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0
+    ) {
+      if (output[0] !== destinationBytes) {
+        destination[output[0]++] = 0x0f;
+        set = ImplUnicodeToIso2022KrSet.ASCII;
+      } else status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+    }
+  }
+  if (context !== null) {
+    context.m_nHighSurrogate = high;
+    context.m_eSet = set;
+  }
+  if (info !== null) info[0] = status[0];
+  if (sourceConverted !== null) sourceConverted[0] = converted;
+  return output[0];
 }

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xfltrit.ts",
+    "upstreamPath": "include/svx/xfltrit.hxx",
+    "localSymbols": [
+      "XFillTransparenceItem"
+    ],
+    "upstreamSymbols": [
+      "XFillTransparenceItem"
+    ],
+    "preservedResponsibilities": [
+      "Native unsigned16 transparency value, default zero, constructor/property debug-domain assertion, copy/clone/hash and exact unsigned16 Any query with legacy signed32 narrowing fallback."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation/dumps, out-of-assert-domain release behavior and compiled native hash ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xfltrit.ts",
+          "marker": "XFillTransparenceItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xfltrit.hxx",
+          "marker": "XFillTransparenceItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr2.cxx",
+          "marker": "XFillTransparenceItem::"
+        }
+      ]
+    }
+  }
+}

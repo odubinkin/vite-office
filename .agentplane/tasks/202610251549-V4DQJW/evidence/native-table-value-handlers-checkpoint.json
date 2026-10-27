@@ -1,0 +1,139 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original native table-width/height, cell-margin and latent-style value receivers plus original XML factory context definitions. No complete model import/export or UI admission claim.",
+  "sourceBlobs": {
+    "apps/office/src/sal/inc/rtl/ustring.h.ts": "c39323bb5203329db880a2804dd01aa6fcfad1d6",
+    "apps/office/src/sal/inc/rtl/ustring.ts": "e5c11a2339138aba7d35e93c5e42e6f871754d90",
+    "apps/office/src/sal/rtl/native-terminated-int64.test.ts": "679e640eaceddd21d0871a7da51628c01892c442",
+    "apps/office/src/sal/rtl/strtmpl.ts": "2ce785278b796a67f54abc25f10a50c31a3d0286",
+    "apps/office/src/sal/rtl/ustring.ts": "9d3b514fed9c0e768c368648a7a628de586775e1",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "5893d3a0a7f7e0abf141b5c77c22e0e3648babfe",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "3850fe4c8da39e00b827bcd39cfab09346bca7ef",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "94a4466e4514ecaf246e6d2a8e22b15006457ae9",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "0a4b7f33e07270607c50b113a47ff94f72a4a8be",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.h.ts.json": "ebeaa0ccd626db493cd7f589c14315353c21365a",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json": "a9f0ca544df00e41ba7c4f759d226437d8ac8f96",
+    "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json": "d37ab0280ed6cf630699fb3be18f769c18ea82ce",
+    "docs/program/registry/shared/provenance/sal/rtl/ustring.ts.json": "f3b736d9a6b48f16b5800b183344e37cf45b1661",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.h.ts.json": "84063554457513609f69c6966d920d159e15e44b",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json": "a1c87560400a76e35d7dba6f5fb7a8e111e8c0a9",
+    "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json": "121ee45d601c4a3878f464252b0fdecd309c99fe",
+    "docs/program/registry/shared/runtime/sal/rtl/ustring.ts.json": "87f9d67941aa7143fc320486938200583abbf0c3",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "1a9c6c5cac2859552ba364e2f427d65c2c2a38f3",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "50ab3237289d5a20379713130b2b1ce8ad80e724",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "2b241f076d5dfc07ca11d343af50c2b9eb4b4296",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "a8df98f98765a5cdbd787861e8f3c4e2b669e9c5",
+    "docs/program/writer-upstream-suspected-issues.md": "22bccf519c70a3c29a8b0729d36182f8fad8827e",
+    "scripts/writer-ooxml/generate-factory.py": "a7120fad6cc279951a3a99b264c03b2f9f996118",
+    "apps/office/src/offapi/com/sun/star/text/SizeType.ts": "a1d5691cc85fb84d18b20b12a48bd1d78ab9d205",
+    "apps/office/src/sw/source/writerfilter/dmapper/CellMarginHandler.ts": "568a80eed880c82efbd160ae7cab1c275ff37ddb",
+    "apps/office/src/sw/source/writerfilter/dmapper/LatentStyleHandler.ts": "2c757c421ab24d630af92c43df50d85ed4b50601",
+    "apps/office/src/sw/source/writerfilter/dmapper/MeasureHandler.ts": "4dec991ec93165b8862f2affb8a808cd268f1a64",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-table-value-handlers.test.ts": "2f582f00bc1ee2038e9d45ed88bae046fc5d1bad",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/SizeType.ts.json": "de1a1bd0ae6d1f92aaca5443cc37ab61fe21b230",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/SizeType.ts.json": "938313e0e42ceefbca40e3c6b10322f632b87818",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/CellMarginHandler.ts.json": "45d6bca839a1f1bdaaa12bcc4973fee1ff787675",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/LatentStyleHandler.ts.json": "11f0fbd277d3ae4e746716ba731c08e2a90b2f7f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/MeasureHandler.ts.json": "e45e482d0e3791eb3e430d82b9a789df2aa16f4a",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/CellMarginHandler.ts.json": "a6d44ba435988872590d896c1d2ce343bed79aaf",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/LatentStyleHandler.ts.json": "7f4c453b6638b04b2a9d235e24e45d46eca60655",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/MeasureHandler.ts.json": "af9ef76f2f9669d8f10dd5b7d330425557fd8f8e"
+  },
+  "checks": {
+    "newOwnerCoverage": {
+      "command": "npm run test:coverage -- src/sw/source/writerfilter/dmapper/native-table-value-handlers.test.ts --coverage.include=src/sw/source/writerfilter/dmapper/MeasureHandler.ts --coverage.include=src/sw/source/writerfilter/dmapper/CellMarginHandler.ts --coverage.include=src/sw/source/writerfilter/dmapper/LatentStyleHandler.ts --coverage.reportsDirectory=coverage/native-table-value-handlers --maxWorkers=2",
+      "result": "pass:6 tests/1 file; statements207/207 branches55/55 functions22/22 lines206/206 all100",
+      "perFile": {
+        "sw/source/writerfilter/dmapper/CellMarginHandler.ts": {
+          "s": {
+            "covered": 103,
+            "total": 103
+          },
+          "b": {
+            "covered": 24,
+            "total": 24
+          },
+          "f": {
+            "covered": 8,
+            "total": 8
+          }
+        },
+        "sw/source/writerfilter/dmapper/LatentStyleHandler.ts": {
+          "s": {
+            "covered": 30,
+            "total": 30
+          },
+          "b": {
+            "covered": 7,
+            "total": 7
+          },
+          "f": {
+            "covered": 4,
+            "total": 4
+          }
+        },
+        "sw/source/writerfilter/dmapper/MeasureHandler.ts": {
+          "s": {
+            "covered": 74,
+            "total": 74
+          },
+          "b": {
+            "covered": 24,
+            "total": 24
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          }
+        }
+      },
+      "coverageSha256": "265767b77c45d0cb4d29666708c611f5ca8c93899649bee06596dc4f764bd7b4"
+    },
+    "sharedRTL": {
+      "command": "npm run test:shared -- src/sal/rtl/ --maxWorkers=2",
+      "result": "pass:72 tests/20 files; includes actual signed32/signed64 and unsigned64 conversion regressions"
+    },
+    "ooxmlRegression": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/ --maxWorkers=2",
+      "result": "pass:104 tests/6 files; actual Strict/Transitional ZIP styles resolve to real handlers"
+    },
+    "typecheck": "pass:tools+app",
+    "build": "pass; existing large-chunk warning",
+    "static": "pass",
+    "eslint": "pass:13 scoped authored source/test files",
+    "prettier": "pass:35 matched intentional paths; Python has no configured Prettier parser and is validated through execution/generator check",
+    "nativeGeneration": "pass:unchanged pinned native generator outputs; namespaces1 defines44 attributes75 elements337 resources378 lists86 actions25",
+    "dependencies": "pass:1503 sources/7583 relative imports/200 allowed edges",
+    "jsdoc": "pass:3506 authored files",
+    "sourceProvenance": "pass:1504 modules",
+    "registry": "pass:340 capabilities/1504 modules/34 invariants/3412 records/0 semantic violations",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "size": "pass; strtmpl503 and source-generated factory983 lines stay in original native owners, below1000 hard gate; no filename-only split",
+    "doctor": "0 errors/1 pre-existing hook-shim warning",
+    "routing": "pass",
+    "diff": "pass"
+  },
+  "resolvedFailures": [
+    "Initial tests supplied incorrect C++ string/sequence address forms; production and test bindings now use actual generated PropertyValue structs, initialized compound sequence storage, Unicode/ASCII pointer constructors and Any extraction contracts. No fake provider introduced.",
+    "Registry local-symbol list mistakenly advertised a C header re-export as a locally declared implementation; removed only that symbol claim. Actual C wrapper remains owned in sal/rtl/ustring.ts.",
+    "Two vector-get callbacks lacked JSDoc; documented native byte-address binding. Python is not a Prettier-supported file in this repository; all supported intentional paths pass.",
+    "An exploratory CT_TrPr admission was rejected by native generation because propagateRowProperties is unported. Final admission uses the actual CT_TrPrBase definition already referenced by CT_Style, not a substituted/no-op action."
+  ],
+  "suspectedUpstreamIssues": [
+    "WRITER150",
+    "WRITER151"
+  ],
+  "boundaries": [
+    "No vendor modification, network, outside-repository access, subagents, UI/recovery/autosave changes, policy changes or parity-status promotion.",
+    "No full suite due under approved Verify Steps. No browser DOCX/XLSX acceptance claimed; production UI routing is still incomplete.",
+    "New table/latent handlers and native XML resources are prerequisite implementations. Full TblStylePrHandler, TablePropertiesHandler, StyleSheetTable callbacks/application and DomainMapper.table remain pending.",
+    "Shared signed32 additions are verified by actual C/OUString boundary cases across all admitted radices2..36 and existing72-case RTL regression; whole shared-module scoped100 coverage is not claimed."
+  ],
+  "remaining": [
+    "Implement actual native TblStylePrHandler/TablePropertiesHandler dependencies and StyleSheetTable parse/application through DomainMapper.",
+    "Complete section/list/table/document model orchestration, native text-direction/export traversal and full DOCX export/reopen.",
+    "Connect and verify real desktop/mobile DOCX/XLSX UI workflows with cancel/stale-result/failure and persistence invariants.",
+    "Continue Calc task after the Writer path, preserving concurrent CSV/RTF/TXT/Markdown integration."
+  ]
+}

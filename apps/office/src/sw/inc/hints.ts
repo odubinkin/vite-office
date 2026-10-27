@@ -7,6 +7,30 @@ import type { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwFormat } from "../source/core/attr/format";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
 import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
+import type { SwNode } from "../source/core/docnode/node";
+
+/** Original nearest preceding body-node query from hints.hxx and hints.cxx; borrows live node identities. */
+export class SwFindNearestNode {
+  private m_pFound: SwNode | undefined;
+  /** Borrows the original search boundary. @param m_pNode - Target node. @returns Nothing. */
+  public constructor(private readonly m_pNode: SwNode) {}
+  /** Applies the original same-array, strictly preceding and after-extras guards in source order. @param node - Candidate node. @returns Nothing. */
+  public CheckNode(node: SwNode): void {
+    if (this.m_pNode.GetNodes() === node.GetNodes()) {
+      const index = node.GetIndex();
+      if (
+        index < this.m_pNode.GetIndex() &&
+        (!this.m_pFound || index > this.m_pFound.GetIndex()) &&
+        index > node.GetNodes().GetEndOfExtras().GetIndex()
+      )
+        this.m_pFound = node;
+    }
+  }
+  /** Returns the retained original candidate. @returns Nearest accepted node or absent. */
+  public GetFoundNode(): SwNode | undefined {
+    return this.m_pFound;
+  }
+}
 
 /** Native Writer death notification borrows the original dying modify. */
 export class ObjectDyingHint implements BrowserNotificationPayload {
@@ -69,6 +93,7 @@ export class TableHeadingChange implements BrowserNotificationPayload {
 }
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | UpdateAttrHint
   | LegacyModifyHint
   | ModifyChangedHint
   | ObjectDyingHint
@@ -169,5 +194,48 @@ export class AttrSetChangeHint implements BrowserNotificationPayload {
   public constructor(
     public readonly m_pOld: SwAttrSetChg | undefined,
     public readonly m_pNew: SwAttrSetChg | undefined,
+  ) {}
+}
+
+/** Native range-update value, separate from the pool item hierarchy. */
+export class SwUpdateAttr {
+  private readonly start: number;
+  private readonly end: number;
+  private readonly which: number;
+  private readonly fmtAttrs: readonly number[];
+  /** Retains logical signed32 positions, unsigned16 Which and owned changed-family list. @param start - Inclusive range. @param end - Exclusive range. @param which - Changed family. @param fmtAttrs - Explicit automatic-format families. @returns Value. */
+  constructor(start: number, end: number, which: number, fmtAttrs: readonly number[] = []) {
+    this.start = start | 0;
+    this.end = end | 0;
+    this.which = which & 0xffff;
+    this.fmtAttrs = fmtAttrs.map(
+      /** Copies native vector values by value. @param value - Family. @returns Unsigned16 value. */
+      (value) => value & 0xffff,
+    );
+  }
+  /** Returns the inclusive range start. @returns Position. */
+  getStart(): number {
+    return this.start;
+  }
+  /** Returns the exclusive range end. @returns Position. */
+  getEnd(): number {
+    return this.end;
+  }
+  /** Returns the original family. @returns WhichId. */
+  getWhichAttr(): number {
+    return this.which;
+  }
+  /** Returns the owned changed-family values. @returns Native collection. */
+  getFmtAttrs(): readonly number[] {
+    return this.fmtAttrs;
+  }
+}
+/** Native old/new borrowed range update. */
+export class UpdateAttrHint {
+  readonly kind = "update-attr";
+  /** Borrows original range values for synchronous notification. @param m_pOld - Old value. @param m_pNew - New value. @returns Hint. */
+  constructor(
+    readonly m_pOld: SwUpdateAttr | undefined,
+    readonly m_pNew: SwUpdateAttr | undefined,
   ) {}
 }

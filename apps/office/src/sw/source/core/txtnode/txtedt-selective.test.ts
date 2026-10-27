@@ -211,7 +211,9 @@ describe("native selective text hint reset", /** Tests registered native decisio
       if (range !== "whole") {
         expect(f.node.GetpSwpHints()).toBe(owned);
         expect(notify).not.toHaveBeenCalled();
-      } else expect(notify).toHaveBeenCalledTimes(1);
+      }
+      // Native exact-range deletion never sets bChanged, so no final range/format update is sent.
+      expect(notify).not.toHaveBeenCalled();
     },
   );
   it("keeps direct state markers through initial Ctrl style and repeated native history cycles", /** Checks actual frame command and paired undo owners. @returns Nothing. */ () => {

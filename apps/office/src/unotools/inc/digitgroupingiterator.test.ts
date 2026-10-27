@@ -105,3 +105,19 @@ it("loads the native India/Bhutan grouping exception from LC_INFO country", /** 
     }
   }
 });
+
+it("saturates grouping positions at the native signed32 boundary without allocating digit storage", /** Exercises the actual numeric grouping sequence rather than a gigantic formatted string. @returns Nothing. */ () => {
+  const values = groups([0x7fffffff, 1, 0]),
+    iterator = new DigitGroupingIterator(values);
+  try {
+    expect(iterator.getPos()).toBe(0x7fffffff);
+    expect(iterator.advance().get()).toBe(1);
+    expect(iterator.getPos()).toBe(0x7fffffff);
+    iterator.advance();
+    iterator.advance();
+    expect(iterator.getPos()).toBe(0x7fffffff);
+  } finally {
+    iterator.dispose();
+    values.dispose();
+  }
+});

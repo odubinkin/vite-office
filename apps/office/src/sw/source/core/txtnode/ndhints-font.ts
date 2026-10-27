@@ -25,8 +25,14 @@ import {
   RES_CHRATR_UNDERLINE,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SwpHints } from "./ndhints";
-import { SwFormatAutoFormat } from "./txatbase";
+import { CharFormat, SwAttrHandler, type SwAttributeHint } from "../text/atrstck";
+import {
+  SwFormatAutoFormat,
+  projectWriterCharacterAttributes,
+  type WriterCharacterAttributes,
+} from "./txatbase";
 import { assertTextRange, clipHintOutsideRange } from "./ndhints-range";
 import {
   createWriterTextColorItem,
@@ -144,7 +150,46 @@ export function setCharacterItems(
       if (!keepDirect && item.equals(inherited.Get(which))) items.ClearItem(which);
       else items.Put(item);
     }
-    if (items.Count() > 0) retained.push(MakeTextAttr(pool.GetDoc(), items, first, last));
+    try {
+      if (items.Count() > 0) retained.push(MakeTextAttr(pool.GetDoc(), items, first, last));
+    } finally {
+      items.Dispose();
+    }
   }
-  return new SwpHints(pool, retained);
+  try {
+    return new SwpHints(pool, retained);
+  } finally {
+    for (const hint of retained) DestroyTextNodeAttribute(hint);
+  }
+}
+
+/** Projects actual active native item stacks only at the existing immutable run/control boundary; the document retains named style references. @param pool - Actual Writer pool. @param hints - Native start-ordered attributes. @param position - Character position. @param inherited - Effective paragraph attributes. @returns Existing browser projection. */
+export function projectCharacterHintAttributes(
+  pool: SwAttrPool,
+  hints: readonly SwAttributeHint[],
+  position: number,
+  inherited: SfxItemSet,
+): WriterCharacterAttributes {
+  const handler = new SwAttrHandler();
+  handler.Init(inherited);
+  for (const hint of hints)
+    if (hint.start <= position && position < hint.end) handler.PushAndChg(hint);
+  const effective = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
+  for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+    for (let which = first; which <= last; which++)
+      if (
+        hints.some(
+          /** Projects only explicitly active hint items; inherited defaults retain the existing optional boundary fields. @param hint - Actual owner. @returns Explicit membership. */
+          (hint) =>
+            hint.start <= position &&
+            position < hint.end &&
+            CharFormat.GetItem(hint, which) !== undefined,
+        )
+      )
+        effective.Put(handler.ReadItem(which));
+  try {
+    return projectWriterCharacterAttributes(effective, inherited);
+  } finally {
+    effective.Dispose();
+  }
 }

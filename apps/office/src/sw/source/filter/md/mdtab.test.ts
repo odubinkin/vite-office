@@ -1,23 +1,14 @@
-/** @fileoverview Markdown table tokenization preserves escaped pipes and code-span delimiters. */
+/** @fileoverview Verifies native Markdown table cursor ownership; grammar belongs to md4c. */
 import { expect, it } from "vitest";
-import { readMarkdownTableAlignment, readMarkdownTableRow, splitMarkdownTableRow } from "./mdtab";
-
-it("splits only pipes outside escapes and matching backtick spans", /** Checks single and multi-backtick spans with unmatched interior fences. @returns Nothing. */ () => {
-  expect(splitMarkdownTableRow(String.raw`| A\|B | C |`)).toEqual(["A|B", "C"]);
-  expect(splitMarkdownTableRow("| `A|B` | C |")).toEqual(["`A|B`", "C"]);
-  expect(splitMarkdownTableRow("| ``A`|B`` | C |")).toEqual(["``A`|B``", "C"]);
-  expect(splitMarkdownTableRow("A||C")).toEqual(["A", "", "C"]);
-});
-
-it("rejects malformed alignment rows and preserves the header column count", /** Checks centered, right and left alignment together with short and oversized rows. @returns Nothing. */ () => {
-  expect(readMarkdownTableAlignment(":---: | ---: | :---")).toEqual(["center", "right", "left"]);
-  expect(readMarkdownTableAlignment("--- | invalid")).toBeUndefined();
-  expect(readMarkdownTableAlignment("")).toBeUndefined();
-  expect(readMarkdownTableRow("| A |", ["left", "right"])).toEqual([
-    { text: "A", alignment: "left" },
-    { text: "", alignment: "right" },
-  ]);
-  expect(readMarkdownTableRow("| A | B | C |", ["center"])).toEqual([
-    { text: "A", alignment: "center" },
-  ]);
+import { MDTable } from "./mdtab";
+it("advances rows and restarts each row before column zero", /** Pins source -1 counters and row transition. @returns Nothing. */ () => {
+  const state = new MDTable();
+  expect(state.GetCurRow()).toBe(-1);
+  expect(state.GetCurCol()).toBe(-1);
+  state.IncCurRow();
+  state.IncCurCol();
+  expect([state.GetCurRow(), state.GetCurCol()]).toEqual([0, 0]);
+  state.IncCurCol();
+  state.IncCurRow();
+  expect([state.GetCurRow(), state.GetCurCol()]).toEqual([1, -1]);
 });

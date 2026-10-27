@@ -2,6 +2,7 @@
  * @fileoverview Reimplements bounded SwFormat attribute ownership and derivation from pinned `sw/source/core/attr/format.cxx`.
  */
 
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 import { SwModify, BroadcastingModify, ClientNotifyAttrChg } from "../../../inc/calbck";
 import type { SfxItemSet, WhichRangesContainer } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
@@ -21,6 +22,7 @@ import { RES_LR_SPACE, RES_HORI_ORIENT, RES_UL_SPACE, RES_PAGEDESC } from "../..
 export class SwFormat extends BroadcastingModify {
   private readonly attributeSet: SwAttrSet;
   private autoFormat = true;
+  private poolFormatId = SwPoolFormatId.UNKNOWN;
   private formatInDTOR = false;
 
   /** Creates a Writer format and connects its attribute set to the derived-from parent. @param pool - Owning Writer pool. @param formatName - UI format name. @param ranges - Accepted WhichId ranges. @param derivedFrom - Optional parent format. @returns Nothing. */
@@ -38,6 +40,15 @@ export class SwFormat extends BroadcastingModify {
       this.RegisterToModify(derivedFrom);
       this.attributeSet.SetParent(derivedFrom.GetAttrSet());
     }
+  }
+
+  /** Reads the native common-format pool identity, initially UNKNOWN. @returns Identity. */
+  public GetPoolFormatId(): SwPoolFormatId {
+    return this.poolFormatId;
+  }
+  /** Stores the native unsigned16 pool identity without broadcasting. @param id - Native identity. @returns Nothing. */
+  public SetPoolFormatId(id: number): void {
+    this.poolFormatId = (id & 0xffff) as SwPoolFormatId;
   }
 
   /** Original document lookup belongs to every native format, through its actual attribute pool. @returns Document. */

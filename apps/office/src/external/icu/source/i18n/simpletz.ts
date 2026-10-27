@@ -52,8 +52,8 @@ export class SimpleTimeZone extends BasicTimeZone {
   private startYear!: number;
   private rawOffset!: number;
   private useDaylight!: boolean;
-  private startMode!: number;
-  private endMode!: number;
+  private startMode!: EMode;
+  private endMode!: EMode;
   private dstSavings!: number;
   protected initialRule: InitialTimeZoneRule | null = null;
   protected firstTransition: TimeZoneTransition | null = null;
@@ -216,18 +216,18 @@ export class SimpleTimeZone extends BasicTimeZone {
         "startDayOfWeek",
         "startTime",
         "startTimeMode",
-        "startMode",
         "endMonth",
         "endDay",
         "endDayOfWeek",
         "endTime",
         "endTimeMode",
-        "endMode",
         "startYear",
         "dstSavings",
       ] as const)
         this[key] = source[key];
       this.useDaylight = source.useDaylight;
+      this.startMode = source.startMode;
+      this.endMode = source.endMode;
       this.clearTransitionRules();
     }
     return this;

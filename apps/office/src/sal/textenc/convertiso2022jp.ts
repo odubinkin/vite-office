@@ -1,7 +1,13 @@
-/** @fileoverview ISO-2022-JP text-to-Unicode converter from sal/textenc/convertiso2022jp.cxx. */
+/** @fileoverview ISO-2022-JP converters from sal/textenc/convertiso2022jp.cxx. */
 import * as cvt from "../inc/rtl/textcvt.h";
-import { BadInputConversionAction, handleBadInputTextToUnicodeConversion } from "./converter";
+import {
+  BadInputConversionAction,
+  handleBadInputTextToUnicodeConversion,
+  handleBadInputUnicodeToTextConversion,
+} from "./converter";
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../inc/rtl/character";
 import { aJIS0208UniLeadTab } from "./tcvtjp6.eucjp";
+import { aJIS0208DBCSHighTab } from "./tcvtjp6.eucjp";
 
 /** Source state order determines whether an incomplete sequence needs handling. */
 export enum ImplIso2022JpToUnicodeState {
@@ -220,4 +226,212 @@ export function ImplConvertIso2022JpToUnicode(
   }
   sourceConverted[0] = converted;
   return output;
+}
+
+/** Original reverse ISO-2022-JP pending surrogate and JIS designation state. */
+export interface ImplUnicodeToIso2022JpContext {
+  m_nHighSurrogate: number;
+  m_b0208: boolean;
+}
+/** Creates original reverse state. @returns Fresh state. */
+export function ImplCreateUnicodeToIso2022JpContext(): ImplUnicodeToIso2022JpContext {
+  return { m_nHighSurrogate: 0, m_b0208: false };
+}
+/** Resets original reverse state. @param context - Optional state. @returns Nothing. */
+export function ImplResetUnicodeToIso2022JpContext(
+  context: ImplUnicodeToIso2022JpContext | null,
+): void {
+  if (context !== null) {
+    context.m_nHighSurrogate = 0;
+    context.m_b0208 = false;
+  }
+}
+/** Releases reverse state through JavaScript ownership. @param context - Optional state. @returns Nothing. */
+export function ImplDestroyUnicodeToIso2022JpContext(
+  context: ImplUnicodeToIso2022JpContext | null,
+): void {
+  void context;
+}
+
+/** Original reverse JIS state machine with source mapping, partial escapes, error prefixes and final flush.
+ * @param _data - Source JIS aggregate bound by this module.
+ * @param context - Optional streaming state.
+ * @param source - UTF-16 units.
+ * @param sourceChars - Input size.
+ * @param destination - Output bytes.
+ * @param destinationBytes - Capacity.
+ * @param flags - Native flags.
+ * @param info - Optional status pointer.
+ * @param sourceConverted - Optional consumed pointer.
+ * @returns Bytes written.
+ */
+export function ImplConvertUnicodeToIso2022Jp(
+  _data: unknown,
+  context: ImplUnicodeToIso2022JpContext | null,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number] | null,
+  sourceConverted: [number] | null,
+): number {
+  let high = context?.m_nHighSurrogate ?? 0;
+  let jis = context?.m_b0208 ?? false;
+  const status: [number] = [0],
+    output: [number] = [0],
+    written: [boolean] = [false];
+  const asciiPrefix = Uint8Array.of(0x1b, 0x28, 0x42);
+  let converted = 0;
+  for (; converted < sourceChars; converted++) {
+    let character = source[converted] as number;
+    let undefinedInput = true,
+      bad = false,
+      noOutput = false;
+    if (high === 0) {
+      if (isHighSurrogate(character)) {
+        high = character;
+        continue;
+      } else if (isLowSurrogate(character)) {
+        undefinedInput = false;
+        bad = true;
+      }
+    } else if (isLowSurrogate(character)) character = combineSurrogates(high, character);
+    else {
+      undefinedInput = false;
+      bad = true;
+    }
+    if (!bad) {
+      if (character === 0x0a || character === 0x0d) {
+        if (jis) {
+          if (destinationBytes - output[0] >= 3) {
+            destination.set(asciiPrefix, output[0]);
+            output[0] += 3;
+            jis = false;
+          } else noOutput = true;
+        }
+        if (!noOutput) {
+          if (output[0] !== destinationBytes) destination[output[0]++] = character;
+          else noOutput = true;
+        }
+      } else if (character === 0x1b) bad = true;
+      else if (character < 0x80) {
+        if (jis) {
+          if (destinationBytes - output[0] >= 3) {
+            destination.set(asciiPrefix, output[0]);
+            output[0] += 3;
+            jis = false;
+          } else noOutput = true;
+        }
+        if (!noOutput) {
+          if (output[0] !== destinationBytes) destination[output[0]++] = character;
+          else noOutput = true;
+        }
+      } else {
+        let bytes = 0;
+        const page = character >>> 8;
+        if (page < 0x100) {
+          const low = character & 0xff,
+            entry = aJIS0208DBCSHighTab[page] as (typeof aJIS0208DBCSHighTab)[number];
+          if (low >= entry.mnLowStart && low <= entry.mnLowEnd) {
+            bytes = (entry.mpToUniTrailTab as readonly number[])[low - entry.mnLowStart] as number;
+            if (bytes === 0) {
+              // These corrections occur only inside the native table's advertised range.
+              if (character === 0xa5) bytes = 0x216f;
+              else if (character === 0xaf) bytes = 0x2131;
+            }
+          }
+        }
+        if (bytes !== 0) {
+          if (!jis) {
+            if (destinationBytes - output[0] >= 3) {
+              destination[output[0]++] = 0x1b;
+              destination[output[0]++] = 0x24;
+              destination[output[0]++] = 0x42;
+              jis = true;
+            } else noOutput = true;
+          }
+          if (!noOutput) {
+            if (destinationBytes - output[0] >= 2) {
+              destination[output[0]++] = bytes >>> 8;
+              destination[output[0]++] = bytes & 0xff;
+            } else noOutput = true;
+          }
+        } else bad = true;
+      }
+    }
+    if (noOutput) {
+      status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      break;
+    }
+    if (bad) {
+      const action = handleBadInputUnicodeToTextConversion(
+        undefinedInput,
+        character,
+        flags,
+        destination,
+        output,
+        destinationBytes,
+        status,
+        asciiPrefix,
+        jis ? 3 : 0,
+        written,
+      );
+      if (action === BadInputConversionAction.NO_OUTPUT)
+        status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      else high = 0;
+      if (action === BadInputConversionAction.CONTINUE) {
+        if (written[0]) jis = false;
+        continue;
+      }
+      break;
+    }
+    high = 0;
+  }
+  if (
+    (status[0] &
+      (cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) ===
+    0
+  ) {
+    let flush = true;
+    if (high !== 0) {
+      if ((flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0)
+        status[0] |= cvt.RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
+      else {
+        const action = handleBadInputUnicodeToTextConversion(
+          false,
+          0,
+          flags,
+          destination,
+          output,
+          destinationBytes,
+          status,
+          asciiPrefix,
+          jis ? 3 : 0,
+          written,
+        );
+        if (action === BadInputConversionAction.STOP) {
+          high = 0;
+          flush = false;
+        } else if (action === BadInputConversionAction.CONTINUE) {
+          if (written[0]) jis = false;
+          high = 0;
+        } else status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      }
+    }
+    if (flush && jis && (flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0) {
+      if (destinationBytes - output[0] >= 3) {
+        destination.set(asciiPrefix, output[0]);
+        output[0] += 3;
+        jis = false;
+      } else status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+    }
+  }
+  if (context !== null) {
+    context.m_nHighSurrogate = high;
+    context.m_b0208 = jis;
+  }
+  if (info !== null) info[0] = status[0];
+  if (sourceConverted !== null) sourceConverted[0] = converted;
+  return output[0];
 }

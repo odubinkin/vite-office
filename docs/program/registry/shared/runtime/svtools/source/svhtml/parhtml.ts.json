@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svtools/source/svhtml/parhtml.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "html-parser",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svtools/source/svhtml/parhtml.ts",
+        "apps/office/src/svtools/source/svhtml/parhtml.test.ts",
+        "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+        "scripts/generate-html-parser-tables.py"
+      ],
+      "justification": "Native HTML import foundation for Markdown raw HTML: pinned token/option/entity/color tables, mutable option scanners, text/entity/quote/whitespace automaton, raw script/style/comment scanner, paired-token/tag/EOF scanner, PRE/listing/XMP filters, and shared SvParser incremental character conversion, ring replay and saved state. Uses existing SAL converter functions and the native descriptor/context public API; no browser DOM grammar. Source-only tests currently pass; compiled upstream lexer differential and Writer HTMLReader integration remain pending. The memory stream has no asynchronous device, redline/layout or native allocation lifetime. Its BOM-only probe covers the internal UTF-8 HTML data supplied by Markdown; a general external HTML/ICU encoding detector is not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "HTMLParser"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svtools/source/svhtml/parhtml.cxx",
+      "upstreamSymbols": [
+        "HTMLParser::GetNextToken_"
+      ]
+    }
+  }
+}

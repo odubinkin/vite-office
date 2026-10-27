@@ -100,7 +100,7 @@ it("preserves independent ListFormat state in owned clones and Worker transfer",
   const snapshot = encodeWriterDocument(document);
   expect(snapshot.swModelVersion).toBe(17);
   const restored = decodeWriterDocument(snapshot);
-  const copy = (restored.GetNumRuleTable()[0] as SwNumRule).Get(0);
+  const copy = (restored.GetNumRuleTable().slice(1)[0] as SwNumRule).Get(0);
   expect(copy.GetMarkerProperties()).toEqual(format.GetMarkerProperties());
   expect((restored.paragraphs[0] as SwTextNode).GetListLabel()).toBe("§(1/1)");
   const cloned = rule.clone();
@@ -114,7 +114,7 @@ it("preserves independent ListFormat state in owned clones and Worker transfer",
   expect(copy.GetListFormat()).toBe("§(%1%/%1%)");
   const malformed = structuredClone(snapshot);
   Object.assign(
-    (malformed.numRules[0] as (typeof malformed.numRules)[number]).formats[0] as object,
+    (malformed.numRules[1] as (typeof malformed.numRules)[number]).formats[0] as object,
     { listFormat: 1 },
   );
   expect(

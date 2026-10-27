@@ -110,7 +110,7 @@ it("reopens old literal page, paragraph, style, list and cell identities through
     const value = pending.pop();
     if (value && typeof value === "object")
       for (const [key, child] of Object.entries(value))
-        if (key === "which" && typeof child === "number" && child >= 64) {
+        if (key === "which" && typeof child === "number" && child >= 64 && child <= 163) {
           expect(old.has(child as number)).toBe(true);
           (value as Record<string, unknown>)[key] = old.get(child as number);
         } else pending.push(child);

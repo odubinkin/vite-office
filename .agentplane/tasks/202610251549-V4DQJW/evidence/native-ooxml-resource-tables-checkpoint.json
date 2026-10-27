@@ -1,0 +1,128 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "partial checkpoint; task/goal active; no parity or UI readiness claim",
+  "scope": "Native OOXML resource-table/property-table contexts, generated EG_RPrBase admission and actual document note/target/progress fields",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/task/XStatusIndicator.ts": "ec012fb69214a2a4bc4d66e8db2c9324356a1bc8",
+    "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts": "e62c86c6700e4beb9ad10d282bac53c9c1f81e9a",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "498e9e397682c3685130d3ca57b9a7ea73d0a0c4",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts": "84ed21013ee343a9f5a7bd434d8d432b520e5e37",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "8dd3cedef2e8d6dff935a7e4801ec1fb68f31c89",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts": "3d2a2fc2116ddbffec34526ac9cb205155e4f8b2",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "45b16fb311fd1ae8c24baeb2f03686799e3388c9",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts": "3561a7fbfc4aaa1a0f46c773cbf053cece796812",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": "76886b3fe7cd60c1b64e2164be48c6fdfcfefcca",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "2194d3f029f399616163e1de11ff82be4e30255c",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/task/XStatusIndicator.ts.json": "514a13cb7c00b3af514967c51ad4ce5f62b0f3a8",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/task/XStatusIndicator.ts.json": "3c1c7412adfdde8b07cb763bb259bc64dfba964a",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/dmapper/resourcemodel.ts.json": "575cd37c64e8be1a536a1fad2b5e6edbe02f847b",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "ebdfff15bd7d9743b7ee7855a62defb0cc32ce65",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json": "79def3cbeab6515e804031bbbdd4d3723665cd5d",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory.ts.json": "9a97dcf6dd22f4c60cea378f720cc4e10369c4db",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "a54d2333666ba93ffe5c370d4615cb6fb682eeaa",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "5ad57ab271a5d0feff88d07c7172176ab936e938",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/dmapper/resourcemodel.ts.json": "b60441965b5acaaef90f7ffa349325c8840f2e52",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "5fcb0ea62342833dc2d7ca45de5385150775f9f5",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts.json": "43fd9db404e882be4f962a50e68f22159da16a24",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory.ts.json": "84089f02466c4fe5bcc6c4b0fcd51a393884fdef",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "726b38f7a8896c4d5b4200394be6ba91a4fa066e",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "8c6a6a362fc7336141db77a945bf3c4e68a121c3",
+    "docs/program/writer-upstream-suspected-issues.md": "74fc4bc18908b9ce6b65b7b9ba9d1e7d20597f34",
+    "scripts/writer-ooxml/generate-factory.py": "4be37698c03839da2e491a3ba2cb614ae6a89f01"
+  },
+  "checks": {
+    "ooxml": {
+      "command": "npm run test:coverage -- src/sw/source/writerfilter/ooxml/ --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts --coverage.reportsDirectory=coverage/native-ooxml-resource-tables --maxWorkers=2",
+      "assertions": "pass:104 tests/6 files",
+      "gate": "fail:unchanged100 threshold",
+      "statements": "378/381",
+      "branches": "178/183",
+      "functions": "99/99",
+      "lines": "340/342",
+      "perFile": {
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts": {
+          "statements": {
+            "covered": 13,
+            "total": 16
+          },
+          "branches": {
+            "covered": 2,
+            "total": 7
+          },
+          "functions": {
+            "covered": 6,
+            "total": 6
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.ts": {
+          "statements": {
+            "covered": 98,
+            "total": 98
+          },
+          "branches": {
+            "covered": 41,
+            "total": 41
+          },
+          "functions": {
+            "covered": 13,
+            "total": 13
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": {
+          "statements": {
+            "covered": 267,
+            "total": 267
+          },
+          "branches": {
+            "covered": 135,
+            "total": 135
+          },
+          "functions": {
+            "covered": 80,
+            "total": 80
+          }
+        }
+      },
+      "coverageSha256": "37e53fe3fe256d38f9ff95e37f36babbfff6ef31c3ee95524acc3b95ea42ba14",
+      "gap": "OOXMLDocument progress positive-end branch cannot be reached before native resolve/model-statistics initialization is implemented. Guards retained; no invented statistic setters, source mocks, exclusions or threshold reductions."
+    },
+    "dmapper": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/dmapper/ --maxWorkers=2",
+      "result": "pass:41 tests/4 files"
+    },
+    "generator": "pass: unchanged pinned owners regenerate59 attributes/282 elements/304 resources/82 lists/25 actions; no numeric renumbering or handwritten generated-table aliases",
+    "typecheck": "pass:tools+app",
+    "build": "pass; existing chunk-size warning",
+    "staticBuild": "pass",
+    "eslint": "pass:9 scoped source/test paths",
+    "prettier": "pass:matched intentional TS/JSON/Markdown paths; Python native generation is checked separately",
+    "dependencies": "pass:1497 sources/7559 relative imports/200 edges",
+    "sourceProvenance": "pass:1498 runtime modules",
+    "registry": "pass:340 capabilities/1498 modules/34 invariants/3400 records/0 semantic violations",
+    "jsdoc": "pass:3497 authored files",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "fileSize": "pass",
+    "routing": "pass",
+    "doctor": "0 errors/1 existing hook-shim warning",
+    "diff": "pass"
+  },
+  "evidence": [
+    "Real ZIP commit/reopen and relationship-selected styles part",
+    "Strict and Transitional SAX namespaces with actual OOXMLDocument note owner",
+    "Ordered document defaults and paragraph/character style resources, inherited EG_RPrBase properties and native MCE choice/fallback",
+    "Native Table guards and retained child/table-vector snapshots",
+    "PropertyTable unconditional callback and independently cloned property sets; WRITER145 preserves this source difference"
+  ],
+  "resolvedFailures": [
+    "Initial table test incorrectly supplied null document to native parser-state note callback; implemented actual native document field owner instead of bypassing the pointer precondition.",
+    "Real style parsing exposed omitted EG_RPrBase factory definition; admitted it through unchanged native generators and added native stylesheet/default resource IDs.",
+    "Kept native owned table initialization in explicit constructors while satisfying lint; added actual setValue IDL evidence rather than basename-only provenance."
+  ],
+  "remaining": [
+    "OOXMLDocument full resolve, shape/DOM/substream/statistics orchestration",
+    "DomainMapper table delivery, stylesheet application and section/table/list/setting managers",
+    "Writer export main-text traversal and style/page ownership prerequisites",
+    "DOCX production UI admission and Calc XLSX task"
+  ],
+  "boundaries": "Preserve primary save/open UI, recovery and autosave differences; no merge/integrate, native corpus mutation, whole-goal completion or verification pass."
+}

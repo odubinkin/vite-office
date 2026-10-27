@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/wrtww8.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/wrtww8.cxx",
+    "localSymbols": [
+      "MSWordExportBase"
+    ],
+    "upstreamSymbols": [
+      "MSWordExportBase::MSWordExportBase"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/wrtww8.ts",
+          "marker": "MSWordExportBase"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtww8.cxx",
+          "marker": "MSWordExportBase::MSWordExportBase"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtww8.hxx",
+          "marker": "GetId"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Native common Word exporter owns the actual SwDoc, current/original SwPaM and font helper. Preserve consumed range node indices and original GetId item-return/value-void overloads. Actual SwPaM binds only the consumed base of native SwUnoCursor; cursor overrides/reference-count framework, complete export fields, traversal/default-font initialization and original base responsibilities are not yet admitted. No generic exporter callback or document DTO replaces this owner."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly admitted native responsibilities are ported; framework/ABI/full application export are not certified."
+    ]
+  }
+}

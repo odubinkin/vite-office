@@ -40,7 +40,7 @@ it("preserves all represented metadata through numbering copies and Worker recor
   rule.Set(1, new SwNumFormat());
   document.AddNumRule(rule);
   const record = structuredClone(encodeWriterDocument(document));
-  expect(record.numRules[0]?.formats[0]?.bulletFontMetadata).toEqual({
+  expect(record.numRules[1]?.formats[0]?.bulletFontMetadata).toEqual({
     styleName: "Symbol Regular",
     family: FontFamily.FAMILY_DECORATIVE,
     pitch: FontPitch.PITCH_FIXED,
@@ -60,7 +60,7 @@ it("preserves all represented metadata through numbering copies and Worker recor
     relief: 0,
     emphasisMark: 0,
   });
-  const restored = decodeWriterDocument(record).GetNumRuleTable()[0] as SwNumRule;
+  const restored = decodeWriterDocument(record).GetNumRuleTable().slice(1)[0] as SwNumRule;
   expect(
     restored
       .Get(0)
@@ -69,8 +69,12 @@ it("preserves all represented metadata through numbering copies and Worker recor
   ).toBe(true);
   expect(restored.Get(1).GetBulletFont()).toBeUndefined();
   const legacy = structuredClone(record);
-  delete (legacy.numRules[0]?.formats[0] as { bulletFontMetadata?: unknown }).bulletFontMetadata;
-  const oldFont = decodeWriterDocument(legacy).GetNumRuleTable()[0]?.Get(0).GetBulletFont();
+  delete (legacy.numRules[1]?.formats[0] as { bulletFontMetadata?: unknown }).bulletFontMetadata;
+  const oldFont = decodeWriterDocument(legacy)
+    .GetNumRuleTable()
+    .slice(1)[0]
+    ?.Get(0)
+    .GetBulletFont();
   expect(oldFont?.GetFamilyName()).toBe("OpenSymbol");
   expect([
     oldFont?.GetStyleName(),
@@ -89,13 +93,13 @@ it("preserves all represented metadata through numbering copies and Worker recor
     { styleName: "", family: 1, pitch: 1, charSet: 65536 },
   ]) {
     const malformed = structuredClone(record);
-    Object.assign(malformed.numRules[0]?.formats[0] as object, { bulletFontMetadata: metadata });
+    Object.assign(malformed.numRules[1]?.formats[0] as object, { bulletFontMetadata: metadata });
     expect(
       /** Decodes malformed metadata. @returns Document. */ () => decodeWriterDocument(malformed),
     ).toThrow("font metadata");
   }
   const absent = structuredClone(record);
-  Object.assign(absent.numRules[0]?.formats[0] as object, { bulletFontPresent: false });
+  Object.assign(absent.numRules[1]?.formats[0] as object, { bulletFontPresent: false });
   expect(
     /** Rejects metadata without an owned font. @returns Document. */ () =>
       decodeWriterDocument(absent),
@@ -126,7 +130,8 @@ it("preserves every represented Font value through real numbering and structured
   rule.Set(0, format);
   doc.AddNumRule(rule);
   const restored = decodeWriterDocument(structuredClone(encodeWriterDocument(doc)))
-    .GetNumRuleTable()[0]
+    .GetNumRuleTable()
+    .slice(1)[0]
     ?.Get(0)
     .GetBulletFont();
   expect(restored?.Equals(font)).toBe(true);

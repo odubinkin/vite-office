@@ -44,6 +44,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-append-paragraph.test.ts",
           "marker": "APPEND_PARAGRAPH"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/markdown-content-operations.test.ts",
+          "marker": "retains a solid native paragraph background"
         }
       ],
       "upstream": [
@@ -98,7 +102,8 @@
       "Leaf4586BY adds the native normal marked same-node string ReplaceRange contract alongside the explicit old formatted-fragment adapter. Record unins SwUndoReplace before mutation, suppress nested undo, call actual ReplaceText or native insertion at paragraph end, reconstruct the backward replacement range, SetEnd from actual insertion extent and emit the explicit source modified signal even for identical/empty marked success. Regex/structured/dummy/redline and adjacent-node joining replacement remain unported and reject explicitly.",
       "Replacement rejects documents containing bookmarks before opening a search undo list or mutating text: native DelContentIndex/SwHistoryBookmark history is not ported. The normal no-bookmark profile is implemented; this boundary remains parent work, not native bookmark parity.",
       "LeafV6W22V supersedes checkpoint4586BY bookmark rejection: actual native replacement-undo construction now saves/deletes represented ordinary collapsed bookmarks and owns their history. No-recording replacement omits that constructor exactly as source and keeps live marks; the document API does not unconditionally delete bookmarks. Unsupported regex/structured/cross-node responsibilities remain explicit. WRITER-016 source behavior is preserved; no I/O or broad parity status promotion.",
-      "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged."
+      "Task SWRD7X follows native XMLParaContext::endFastElement APPEND_PARAGRAPH and XMLTextImportHelper::DeleteParagraph preferred paragraph-component deletion, rather than split/join cleanup that loses empty-cell character items. Actual cursor enumeration, SwXParagraph XComponent deletion and the bounded single-paragraph DelFullPara owner retain paragraph identity and direct formatting. Explicit host Release only releases borrowed API result positions. Tests cover cursor/mark identity, exhaustion, repeated disposal, last-paragraph refusal, populated/empty superscript cell ODT roundtrip and the original no-component deletion fallback. Broader enumeration, redline, fieldmark, undo, event-listener and document-disposal contracts remain outside this bounded integration repair; prior semantic statuses are unchanged.",
+      "Native Markdown callback prerequisites: text-only AppendTextNode follows AppendNode/MakeNewTextNode successor semantics (same collection, copied direct items excluding breaks/outline rule, no text hints, reset list restart/counting). DontExpandFormat transfers paragraph character items at EOF and updates eligible unlocked end-boundary flags. RES_BACKGROUND=115 supplies the native solid paragraph/frame brush and existing Worker codec. Three focused model tests cover successors, no format leakage and brush transfer. This does not certify structural nontext append, paragraph-insert undo/redlines/layout history or full native document parity."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/DocumentContentOperationsManager.cxx",

@@ -1,15 +1,20 @@
 /** @fileoverview Ports MakeTextAttr construction and represented GetParaAttr character queries for the registered ranged hint types from pinned sw/source/core/txtnode/thints.cxx. */
+import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
+import { MergeTextHintPortions } from "./thints-merge";
+import { InsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
+import { CharFormat } from "../text/atrstck";
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints } from "./ndhints";
 import { assertTextRange } from "./ndhints-range";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
-import { RES_CHRATR_BEGIN, RES_CHRATR_END } from "../../../inc/hintids";
+import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_TXTATR_END } from "../../../inc/hintids";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
 import type { SwDoc } from "../doc/doc";
-import { SwFormatINetFormat } from "./fmtatr2";
-import { SwTextINetFormat } from "./txtatr2";
+import { SwFormatCharFormat, SwFormatINetFormat } from "./fmtatr2";
+import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "./txatbase";
 
 /** Builds a fresh ranged attribute, interning set/character inputs and converting foreign automatic handles into the destination pool. @param doc - Destination document. @param attr - Document-pool concrete set or supported pool item. @param start - Inclusive offset. @param end - Exclusive offset. @returns Fresh automatic or internet hint with native constructor flags. */
@@ -18,10 +23,16 @@ export function MakeTextAttr(
   attr: SfxItemSet | SfxPoolItem,
   start: number,
   end: number,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   if (attr instanceof SfxItemSet) {
     const handle = doc.GetIStyleAccess().getAutomaticStyle(attr, SwAutoStyleFamily.AUTO_STYLE_CHAR);
-    return MakeTextAttr(doc, new SwFormatAutoFormat(handle), start, end);
+    const format = new SwFormatAutoFormat(handle);
+    try {
+      return MakeTextAttr(doc, format, start, end);
+    } finally {
+      format.Dispose();
+      releaseStyleHandle(handle);
+    }
   }
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END) {
     const set = new SfxItemSet(doc.GetAttrPool(), [[RES_CHRATR_BEGIN, RES_CHRATR_END]]);
@@ -30,75 +41,48 @@ export function MakeTextAttr(
   }
   if (attr instanceof SwFormatAutoFormat && attr.GetStyleHandle().GetPool() !== doc.GetAttrPool())
     return MakeTextAttr(doc, attr.GetStyleHandle().Clone(true, doc.GetAttrPool()), start, end);
+  if (attr instanceof SwFormatCharFormat) {
+    const style = attr.GetCharFormat();
+    const copied =
+      style !== undefined && style.GetDoc() !== doc
+        ? new SwFormatCharFormat(doc.CopyCharFormat(style))
+        : attr.Clone();
+    return new SwTextCharFormat(copied, start, end);
+  }
   if (attr instanceof SwFormatINetFormat) return new SwTextINetFormat(attr.Clone(), start, end);
   if (attr instanceof SwFormatAutoFormat) return new SwTextAttrEnd(attr.Clone(), start, end);
   throw new Error("MakeTextAttr hint type is not implemented.");
 }
 
-/** Owns undo insertion and the zero-length CopyAttr path, merging equal-boundary automatic items. @param node - Destination. @param attr - Native item. @param start - Inclusive offset. @param end - Exclusive offset. @param mode - NOHINTADJUST or zero-length IS_COPY. @returns Fresh actual attribute. */
+/** Owns represented native insertion, portion construction and undo insertion, returning no pointer when the original is split or merged away. @param node - Destination. @param attr - Native item. @param start - Inclusive offset. @param end - Exclusive offset. @param mode - Native insertion flags. @returns Original surviving owner or undefined. */
 export function InsertTextNodeItem(
   node: SwTextNode,
   attr: SfxPoolItem,
   start: number,
   end: number,
   mode: SetAttrMode,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
-  assertTextRange(node.Len(), start, end);
-  const copyEmpty =
-    !(mode & SetAttrMode.NOHINTADJUST) && (mode & SetAttrMode.IS_COPY) !== 0 && start === end;
-  if (!(mode & SetAttrMode.NOHINTADJUST) && !copyEmpty)
-    throw new Error("Writer InsertItem without NOHINTADJUST is not implemented.");
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END)
     throw new Error("Writer InsertItem requires a text-attribute item.");
-  let hint = MakeTextAttr(node.GetDoc(), attr, start, end);
-  const hints = node.GetOrCreateSwpHints();
-  if (copyEmpty) {
-    for (const previous of hints.entries()) {
-      if (previous.start !== start || previous.end !== end || previous.Which() !== hint.Which())
-        continue;
-      if (previous.format instanceof SwFormatAutoFormat) {
-        const merged = previous.format.GetStyleHandle().Clone();
-        merged.PutSet((hint.format as SwFormatAutoFormat).GetStyleHandle());
-        hint = MakeTextAttr(node.GetDoc(), merged, start, end);
-      }
-      hints.DeleteAtPos(hints.entries().indexOf(previous));
-    }
-  }
-  hints.Insert(hint);
-  node.GetDoc().NotifyModelChange({
-    kind: "attribute-set-changed",
-    nodeIndex: node.GetNodes().indexOfOrUndefined(node),
-  });
-  return hint;
+  const hint = MakeTextAttr(node.GetDoc(), attr, start, end);
+  const success = InsertTextNodeHint(node, hint, mode);
+  return success && node.GetpSwpHints()?.entries().includes(hint) ? hint : undefined;
 }
 
 /** Implements ClearSwpHintsArr for the two currently supported ranged families. @param node - Actual owner. @param deleteFields - Native field policy;unsupported field hints are absent. @returns Nothing. */
 export function ClearTextNodeHints(node: SwTextNode, deleteFields: boolean): void {
   void deleteFields;
   const map = node.GetpSwpHints();
-  while (map !== undefined && map.Count() > 0) map.DeleteAtPos(0);
+  while (map !== undefined && map.Count() > 0) {
+    const hint = map.Get(0);
+    map.DeleteAtPos(0);
+    DestroyTextNodeAttribute(hint);
+  }
 }
 
-/** Merges adjacent equal registered AUTO portions, retaining the first actual owner;INET and zero extents are excluded as native MergePortions does. @param hints - Actual maps. @returns Whether any second portion was removed. */
+/** Merges complete matching character/automatic portions, retaining original first owners and source format-ignore boundaries; INET and zero extents are excluded. @param hints - Actual maps. @returns Whether any second portion was removed. */
 export function MergeTextNodePortions(hints: SwpHints): boolean {
-  let previous: SwTextAttrEnd<SwFormatAutoFormat> | undefined;
-  let merged = false;
-  for (const hint of hints.entries()) {
-    if (!(hint.format instanceof SwFormatAutoFormat) || hint.start === hint.end) continue;
-    hint.SetFormatIgnoreStart(false);
-    hint.SetFormatIgnoreEnd(false);
-    if (
-      previous !== undefined &&
-      previous.end === hint.start &&
-      previous.format.equals(hint.format)
-    ) {
-      hints.DeleteAtPos(hints.entries().indexOf(hint));
-      previous.SetEnd(hint.end);
-      merged = true;
-    } else previous = hint as SwTextAttrEnd<SwFormatAutoFormat>;
-  }
-  hints.SortIfNeedBe();
-  return merged;
+  return MergeTextHintPortions(hints);
 }
 
 /** Converts direct character items over existing automatic-style spans and gaps,with existing ranged items taking precedence. @param node - Actual text node. @param items - Converted direct items. @returns Nothing. */
@@ -126,6 +110,7 @@ export function ConvertTextNodeItemsToHints(node: SwTextNode, items: SfxItemSet)
       if (converted.Count() === 0) continue;
       converted.PutSet(old);
       hints.DeleteAtPos(hints.entries().indexOf(span.hint));
+      DestroyTextNodeAttribute(span.hint);
     }
     hints.Insert(MakeTextAttr(node.GetDoc(), converted, span.start, span.end));
   }
@@ -171,43 +156,67 @@ export function FormatTextNodeToTextAttr(node: SwTextNode, target: SwTextNode): 
   ConvertTextNodeItemsToHints(target, main);
 }
 
-/** Consumes GetParaAttr's native automatic-character branch, including original partial-hint accumulation and collapsed DontExpand boundaries. Character styles, merged/redline and non-character requests remain outside this represented branch. @param node - Original text owner. @param result - Empty caller-owned character set. @param start - Inclusive content position. @param end - Exclusive content position. @param onlyText - Ignore inherited node/style values. @returns Whether any native state was collected. */
+/** Consumes GetParaAttr's represented automatic/character branches, including original raw-style partial-hint accumulation, optional named-style expansion and collapsed DontExpand boundaries. Merged/redline and other unregistered families remain outside this profile. @param node - Original text owner. @param result - Empty caller-owned character set. @param start - Inclusive content position. @param end - Exclusive content position. @param onlyText - Ignore inherited node/style values. @param fromCharacterFormat - Expand named character style items. @returns Whether any native state was collected. */
 export function GetTextNodeParaAttr(
   node: SwTextNode,
   result: SfxItemSet,
   start: number,
   end: number,
   onlyText: boolean,
+  fromCharacterFormat = true,
 ): boolean {
   assertTextRange(node.Len(), start, end);
   const format = new SfxItemSet(result.GetPool(), result.GetRanges());
   if (!onlyText) format.Set(node.GetSwAttrSet());
+  /** Consumes lcl_MergeAttr_ExpandChrFormat's supported families, then the original direct item. @param target - Query result. @param item - Actual attribute. @returns Nothing. */
+  const merge =
+    /** Evaluates the thints callback. @param target - target value. @param item - item value. @returns Nothing. */ (
+      target: SfxItemSet,
+      item: SfxPoolItem,
+    ): void => {
+      if (
+        (fromCharacterFormat || item instanceof SwFormatAutoFormat) &&
+        (item instanceof SwFormatAutoFormat ||
+          item instanceof SwFormatCharFormat ||
+          item instanceof SwFormatINetFormat)
+      ) {
+        const set = CharFormat.GetItemSet(item);
+        if (set !== undefined)
+          for (let which = RES_CHRATR_BEGIN; which < RES_CHRATR_END; which++) {
+            const value = set.GetItemIfSet(which, true);
+            if (value !== undefined) target.Put(value);
+          }
+      }
+      target.Put(item);
+    };
   const previous = new Map<number, { item: SfxPoolItem; end: number } | null>();
   for (const hint of node.GetpSwpHints()?.entries() ?? []) {
     const first = hint.GetStart(),
       last = hint.GetAnyEnd();
     if (first > end) break;
-    if (!(hint.format instanceof SwFormatAutoFormat)) continue;
-    const items = hint.format.GetStyleHandle();
+    const items =
+      hint.format instanceof SwFormatAutoFormat
+        ? hint.format.GetStyleHandle().entries()
+        : [hint.format];
     if (start === end) {
       if (
         (first < start && (hint.DontExpand() ? start < last : start <= last)) ||
         (start === first && (first === last || start === 0))
       )
-        result.PutSet(items);
+        merge(result, hint.format);
       continue;
     }
     let partial = false;
     if (first <= start) {
       if (last <= start) continue;
-      if (end <= last) format.PutSet(items);
+      if (end <= last) merge(format, hint.format);
       else partial = true;
     } else if (first < end) partial = true;
     if (!partial) continue;
-    for (const item of items.entries()) {
+    for (const item of items) {
       const which = item.Which(),
         old = previous.get(which);
-      if (which < RES_CHRATR_BEGIN || which >= RES_CHRATR_END) continue;
+      if (which < RES_CHRATR_BEGIN || which >= RES_TXTATR_END) continue;
       if (old === undefined) {
         if (onlyText || !item.equals(format.Get(which))) {
           if (first > start) {
@@ -227,10 +236,36 @@ export function GetTextNodeParaAttr(
   for (const [which, value] of previous) {
     if (value === null) continue;
     if (end <= value.end) {
-      if (!value.item.equals(format.Get(which))) result.Put(value.item);
+      if (!value.item.equals(format.Get(which))) merge(result, value.item);
     } else result.InvalidateItem(which);
   }
   format.Differentiate(result);
   result.PutSet(format);
   return result.Count() !== 0;
+}
+
+/** Original DeleteAttributes loop for the represented ranged families, including its forward-index behavior after deletion. @param node - Actual node. @param which - Exact family. @param start - Exact start. @param end - Exact end. @returns Nothing. */
+export function DeleteTextNodeAttributes(
+  node: SwTextNode,
+  which: number,
+  start: number,
+  end: number,
+): void {
+  const hints = node.GetpSwpHints();
+  if (hints === undefined) return;
+  for (let index = 0; index < hints.Count(); ++index) {
+    const hint = hints.Get(index);
+    if (start < hint.GetStart()) break;
+    if (start === hint.GetStart() && which === hint.Which()) {
+      if (hint.HasDummyChar() || hint.HasContent())
+        throw new Error("Writer structured DeleteAttributes is not implemented.");
+      if (hint.GetEnd() === end) {
+        const update = new SwUpdateAttr(start, end, which);
+        hints.DeleteAtPos(index);
+        DestroyTextNodeAttribute(hint);
+        node.CallSwClientNotify(new UpdateAttrHint(undefined, update));
+      }
+    }
+  }
+  node.TryDeleteSwpHints();
 }

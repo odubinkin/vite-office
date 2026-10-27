@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/rtl/strimp.flags.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "rtl-ustring",
+    "capabilityIds": [
+      "CAP-034020c1-ac77-41ea-9133-58d073df32bf"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sal/rtl/strimp.flags.ts",
+        "vendor/libreoffice-reference/sal/rtl/strimp.hxx",
+        "apps/office/src/sal/rtl/string-convert.test.ts"
+      ],
+      "justification": "Original compile-time string flag constants and mask macros are bound in a dependency-free header fragment so C implementation reexports cannot change static-empty initialization order. Source values and bitwise signedness are unchanged; byte specialization and original Unicode ownership tests exercise the shared macros. Native pointer/thread ABI remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SAL_STRING_INTERN_FLAG",
+        "SAL_STRING_STATIC_FLAG",
+        "SAL_STRING_REFCOUNT",
+        "SAL_STRING_IS_INTERN",
+        "SAL_STRING_IS_STATIC"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sal/rtl/strimp.hxx",
+      "upstreamSymbols": [
+        "SAL_STRING_INTERN_FLAG",
+        "SAL_STRING_STATIC_FLAG",
+        "SAL_STRING_REFCOUNT",
+        "SAL_STRING_IS_INTERN",
+        "SAL_STRING_IS_STATIC"
+      ]
+    }
+  }
+}

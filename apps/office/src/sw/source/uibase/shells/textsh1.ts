@@ -223,17 +223,17 @@ export class SwTextShell extends SwBaseShell {
       return false;
     }
     const actions = selected.map(
-      /** Creates one reversible fragment replacement per selected paragraph. @param range - Selected range. @returns Undo action. */ (
-        range,
-      ) =>
-        new SwUndoAttr(
-          range.node,
-          range.start,
-          range.node.CaptureTextFragment(range.start, range.end),
-          range.node.CreateToggledTextFragment(range.start, range.end, format),
-          before,
-          before,
-        ),
+      /** Copies local formatting fragments into undo and releases their temporary owners. @param range - Selected range. @returns Undo action. */
+      (range) => {
+        const original = range.node.CaptureTextFragment(range.start, range.end),
+          replacement = range.node.CreateToggledTextFragment(range.start, range.end, format);
+        try {
+          return new SwUndoAttr(range.node, range.start, original, replacement, before, before);
+        } finally {
+          original.hints.Dispose();
+          replacement.hints.Dispose();
+        }
+      },
     );
     if (actions.length === 1) return this.target.ApplyAction(actions[0] as SwUndoAttr);
     const action = new SfxListUndoAction<SwUndoRedoContext>("Character Formatting");
@@ -244,14 +244,12 @@ export class SwTextShell extends SwBaseShell {
   public GetHyperlinkAtCursor(): WriterHyperlink | undefined {
     return getWriterHyperlinkAtCursor(this.target.GetDoc(), this.target.GetCursor());
   }
-
   /** Tests represented native HasSelection without treating an equal mark as selected; fly selection remains unrepresented. @returns Whether table mode or actual point/mark selection exists. */
   private HasHyperlinkSelection(): boolean {
     if (this.target.IsTableMode()) return true;
     const cursor = this.target.GetCursor();
     return cursor.HasMark() && cursor.GetPoint().compare(cursor.GetMark()) !== 0;
   }
-
   /** Implements represented SID_EDIT_HYPERLINK state: current SET or an unselected original nonempty Default-mode hint. @returns Whether edit is enabled. */
   public CanEditHyperlink(): boolean {
     if (
@@ -270,7 +268,6 @@ export class SwTextShell extends SwBaseShell {
           : undefined;
     return hint !== undefined && (hint.GetAttr() as SwFormatINetFormat).GetValue().length > 0;
   }
-
   /** Implements SID_EDIT_HYPERLINK beginning fallback before dialog: select the original native hint with the persistent point at its end and mark at its start. Full core overlap/readonly/fly movement is unrepresented. @returns Whether execution may proceed. */
   public PrepareEditHyperlink(): boolean {
     if (this.HasHyperlinkSelection() || this.GetHyperlinkAtCursor() !== undefined) return true;
@@ -291,12 +288,10 @@ export class SwTextShell extends SwBaseShell {
     this.target.NotifySelectionChanged();
     return true;
   }
-
   /** Returns document bookmarks in position order. @returns Names. */
   public GetBookmarkNames(): readonly string[] {
     return this.target.GetDoc().GetIDocumentMarkAccess().GetBookmarkNames();
   }
-
   /** Returns the collapsed mark exactly at the caret. @returns Name, when present. */
   public GetBookmarkAtCursor(): string | undefined {
     return this.target
@@ -305,7 +300,6 @@ export class SwTextShell extends SwBaseShell {
       .FindMarkAtPosition(this.target.GetCursor().GetPoint())
       ?.GetName();
   }
-
   /** Applies one bookmark dialog choice to canonical marks and cursor. @param result - Accepted operation. @returns Whether model or cursor changed. */
   public ApplyBookmarkOperation(result: WriterBookmarkDialogResult): boolean {
     const marks = this.target.GetDoc().GetIDocumentMarkAccess();
@@ -320,14 +314,12 @@ export class SwTextShell extends SwBaseShell {
     marks.MakeMark(point.GetNode() as SwTextNode, point.GetContentIndex(), result.name);
     return true;
   }
-
   /** Inserts a hard page boundary through Writer paragraph structure. @returns Whether inserted. */
   public InsertHardPageBreak(): boolean {
     const point = this.target.GetCursor().GetPoint();
     if (point.GetContentIndex() > 0 && !this.target.SplitNode()) return false;
     return this.SetParagraphItem(new SfxInt16Item(RES_BREAK, 4));
   }
-
   /** Applies or removes a hyperlink through the text shell. @param hyperlink - Link metadata. @param text - Optional inserted text. @param range - Optional resolved range. @returns Whether changed. */
   public SetHyperlink(
     hyperlink: WriterHyperlink | undefined,
@@ -349,7 +341,6 @@ export class SwTextShell extends SwBaseShell {
     );
     return action === undefined ? false : this.target.ApplyAction(action);
   }
-
   /** Tests native selected Remove admission including INVALID mixed item state; collapsed Default/word fallback remains pending. @returns Whether the represented command is enabled. */
   public CanRemoveHyperlink(): boolean {
     const state = getWriterINetFormatStateAtCursor(
@@ -358,7 +349,6 @@ export class SwTextShell extends SwBaseShell {
     ).GetItemState(RES_TXTATR_INETFMT, false);
     return state >= SfxItemState.SET || state === SfxItemState.INVALID;
   }
-
   /** Resets internet attributes in original marked native ranges as one history operation. Full native SwUndoResetAttr/SwHistory and unmarked-ring word selection remain unverified. @returns Whether attributes changed. */
   public RemoveHyperlink(): boolean {
     if (!this.HasHyperlinkSelection()) return this.SetHyperlink(undefined);
@@ -367,10 +357,15 @@ export class SwTextShell extends SwBaseShell {
     for (const range of getWriterSelectedTextRanges(this.target.GetCursor()) ?? []) {
       const original = range.node.CaptureTextFragment(range.start, range.end),
         replacement = range.node.CreateHyperlinkTextFragment(range.start, range.end, undefined);
-      if (!original.hints.equals(replacement.hints))
-        actions.push(
-          new SwUndoAttr(range.node, range.start, original, replacement, before, before),
-        );
+      try {
+        if (!original.hints.equals(replacement.hints))
+          actions.push(
+            new SwUndoAttr(range.node, range.start, original, replacement, before, before),
+          );
+      } finally {
+        original.hints.Dispose();
+        replacement.hints.Dispose();
+      }
     }
     if (actions.length === 0) return false;
     let action: SfxUndoAction<SwUndoRedoContext> = actions[0] as SwUndoAttr;
@@ -503,16 +498,21 @@ export class SwTextShell extends SwBaseShell {
           property,
           value,
         );
-        return original.hints.equals(replacement.hints)
-          ? undefined
-          : new SwUndoAttr(
-              range.node,
-              range.start,
-              original,
-              replacement,
-              before,
-              this.target.CaptureCursorState(),
-            );
+        try {
+          return original.hints.equals(replacement.hints)
+            ? undefined
+            : new SwUndoAttr(
+                range.node,
+                range.start,
+                original,
+                replacement,
+                before,
+                this.target.CaptureCursorState(),
+              );
+        } finally {
+          original.hints.Dispose();
+          replacement.hints.Dispose();
+        }
       },
     );
   }

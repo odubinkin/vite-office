@@ -1,0 +1,55 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+          "marker": "TryInsertInternetNesting"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+          "marker": "Source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwpHints::TryInsertNesting"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "MakeTextAttrNesting"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/ndhints.hxx",
+          "marker": "MAX_HINTS"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "localSymbols": [
+      "TryInsertInternetNesting",
+      "MAX_HINTS"
+    ],
+    "upstreamSymbols": [
+      "SwpHints::TryInsertNesting",
+      "MakeTextAttrNesting"
+    ],
+    "preservedResponsibilities": [
+      "Original INET/INET four-pass nesting retains the asymmetric empty predicate, SPLIT_OTHER policy, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
+    ],
+    "omittedResponsibilities": [
+      "Ruby/meta/content-control/input-field/fieldmark owners are not represented by the current kernel. No stand-in hints or fieldmark breaks are synthesized; the mapped mechanism covers every registered actual nesting family. MAX_HINTS retains the source 64-bit size_t profile, beyond reachable JS-array counts."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original INET/INET four-pass nesting retains the asymmetric empty predicate, SPLIT_OTHER policy, old owner truncation, insertion before recursive overwrite repair, source size_t capacity inequalities, fresh fragment normal-style initialization and explicit old/new history. Empty interior insertion can be destroyed by its recursive repair exactly as in source."
+    }
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts"
+      ],
+      "justification": "Native factoryCreateElementMap lookup data is emitted as its own generated-data responsibility, preserving exact355 original rows, one OOXMLFactory_wml owner/API and static tables.elements re-export. Attribute/resource/action lookup data remains in the context table module; getListValue lexical data remains separate. The unchanged pinned generators/model additionally admit CT_TblPPr:53defines/107attributes/355elements/428resources/315lists/41actions. Actual Strict/Transitional committed ZIP relationship selection, OOXMLDocument and SAX deliver all ten position attributes through the original nested Properties reference into TablePositionHandler. Actual SequenceAsHashMap/UNO results retain original orientation relations, coordinates and signed limited-twip margins after handler destruction. This is parser resource delivery, not document/frame insertion. Whole DOCX/XLSX model/import/export and production desktop/mobile UI acceptance remain incomplete. Real table managers, DomainMapperTableHandler and table/style application remain pending. Native physical ABI/thread/allocation and whole-module compiled differential/full QA parity remain unverified; no broad capability/parity/default-status promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "elements"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/writerfilter/ooxml/factoryimpl_ns.py",
+      "upstreamSymbols": [
+        "factoryCreateElementMap",
+        "factoryCreateElementMapInner"
+      ]
+    }
+  }
+}

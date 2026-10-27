@@ -1,4 +1,6 @@
-/** @fileoverview Native DocxAttributeOutput untracked text/run-property emission. The consumed serializer binding is explicit: full DocxExport association, redlines, fields, drawings and paragraph orchestration are not yet admitted. */
+/** @fileoverview Native DocxAttributeOutput untracked text/run-property emission. The actual DocxExport owns this attribute output; redlines, fields, drawings, font embedding and paragraph orchestration are not yet admitted. */
+import type { DocxExport } from "./docxexport";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { FastSerializerHelper, FSNS, MergeMarks } from "../../../../sax/inc/fshelper";
 import { FastAttributeList } from "../../../../sax/source/tools/fastattribs";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
@@ -8,6 +10,19 @@ import type { SvxPostureItem, SvxWeightItem } from "../../../../editeng/source/i
 import type { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import type { SvxKerningItem } from "../../../../editeng/inc/kernitem";
 import type { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import type { SvxContourItem } from "../../../../editeng/inc/contouritem";
+import type { SvxShadowedItem } from "../../../../editeng/inc/shdditem";
+import type { SvxCaseMapItem } from "../../../../editeng/inc/cmapitem";
+import type { SvxCharReliefItem } from "../../../../editeng/inc/charreliefitem";
+import type { SvxEmphasisMarkItem } from "../../../../editeng/inc/emphasismarkitem";
+import type { SvxCharScaleWidthItem } from "../../../../editeng/inc/charscaleitem";
+import type { SvxCharRotateItem } from "../../../../editeng/inc/charrotateitem";
+import type { SvxTwoLinesItem } from "../../../../editeng/inc/twolinesitem";
+import type { SvxBlinkItem } from "../../../../editeng/inc/blinkitem";
+import type { SfxPoolItem } from "../../../../svl/inc/poolitem";
+import { SvxCaseMap } from "../../../../editeng/inc/svxenum";
+import { FontRelief } from "../../../../vcl/inc/fntstyle";
+import { FontEmphasisMark } from "../../../../tools/inc/fontenum";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { LINE_BREAK } from "../../../../offapi/com/sun/star/text/ControlCharacter";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
@@ -113,11 +128,105 @@ export function impl_WriteRunText(
 /** Native owner for the admitted untracked text and collected character properties. */
 export class DocxAttributeOutput {
   private m_pFontsAttrList: FastAttributeList | null = null;
+  private m_pEastAsianLayoutAttrList: FastAttributeList | null = null;
   private m_oFontSize: number | undefined;
   private m_bCharPostureWritten = false;
   private m_sRawText = "";
-  /** Explicit consumed serializer binding until the native exporter association is ported. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
-  constructor(private readonly m_pSerializer: FastSerializerHelper) {}
+  /** Consumed native constructor binds the real exporter and serializer. DrawingML/base/table-style owners remain unported. @param m_rExport - Actual exporter. @param m_pSerializer - Actual fragment serializer. @returns Attribute output. */
+  constructor(
+    private readonly m_rExport: DocxExport,
+    private m_pSerializer: FastSerializerHelper,
+  ) {}
+  /** Original exporter getter. @returns Actual exporter. */
+  GetExport(): DocxExport {
+    return this.m_rExport;
+  }
+  /** Original serializer getter. @returns Actual serializer. */
+  GetSerializer(): FastSerializerHelper {
+    return this.m_pSerializer;
+  }
+  /** Original serializer switch for the admitted output owner; table-style forwarding remains pending its native owner. @param serializer - Actual target. @returns Nothing. */
+  SetSerializer(serializer: FastSerializerHelper): void {
+    this.m_pSerializer = serializer;
+  }
+  /** Native font registration precedes empty-name and duplicate guards. @param font - Actual shared font item. @returns Nothing. */
+  CharFont(font: SvxFontItem): void {
+    this.GetExport().GetId(font);
+    const name = font.GetFamilyName();
+    if (!name) return;
+    if (
+      this.m_pFontsAttrList &&
+      (this.m_pFontsAttrList.hasAttribute(FSNS(w, token("ascii"))) ||
+        this.m_pFontsAttrList.hasAttribute(FSNS(w, token("hAnsi"))))
+    )
+      return;
+    this.m_pFontsAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pFontsAttrList.addNS(w, token("ascii"), name);
+    this.m_pFontsAttrList.addNS(w, token("hAnsi"), name);
+  }
+  /** Original font element open. @param name - Native family name. @returns Nothing. */
+  StartFont(name: string): void {
+    this.m_pSerializer.startElementNS(w, token("font"), FSNS(w, token("name")), name);
+  }
+  /** Original font element close. @returns Nothing. */
+  EndFont(): void {
+    this.m_pSerializer.endElementNS(w, token("font"));
+  }
+  /** Original alternate name. @param name - Native alternate. @returns Nothing. */
+  FontAlternateName(name: string): void {
+    this.m_pSerializer.singleElementNS(w, token("altName"), val, name);
+  }
+  /** Original lowercase two-digit charset output. @param charset - Native byte. @returns Nothing. */
+  FontCharset(charset: number): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("charset"),
+      val,
+      (charset & 255).toString(16).padStart(2, "0"),
+    );
+  }
+  /** Original family switch. @param family - Native enum. @returns Nothing. */
+  FontFamilyType(family: FontFamily): void {
+    let name: string;
+    switch (family) {
+      case FontFamily.FAMILY_ROMAN:
+        name = "roman";
+        break;
+      case FontFamily.FAMILY_SWISS:
+        name = "swiss";
+        break;
+      case FontFamily.FAMILY_MODERN:
+        name = "modern";
+        break;
+      case FontFamily.FAMILY_SCRIPT:
+        name = "script";
+        break;
+      case FontFamily.FAMILY_DECORATIVE:
+        name = "decorative";
+        break;
+      default:
+        name = "auto";
+        break;
+    }
+    this.m_pSerializer.singleElementNS(w, token("family"), val, name);
+  }
+  /** Original pitch switch. @param pitch - Native enum. @returns Nothing. */
+  FontPitchType(pitch: FontPitch): void {
+    let name: string;
+    switch (pitch) {
+      case FontPitch.PITCH_VARIABLE:
+        name = "variable";
+        break;
+      case FontPitch.PITCH_FIXED:
+        name = "fixed";
+        break;
+      default:
+        name = "default";
+        break;
+    }
+    this.m_pSerializer.singleElementNS(w, token("pitch"), val, name);
+  }
+
   /** Native deferred run marks for untracked text without fields/SDTs. @param redline - Only native null is admitted. @param position - Original position. @param singleEmptyRun - Original flag. @returns Nothing. */
   StartRun(redline: null, position: number, singleEmptyRun = false): void {
     void redline;
@@ -136,11 +245,12 @@ export class DocxAttributeOutput {
   /** Original per-run resets and schema order. @returns Nothing. */
   InitCollectedRunProperties(): void {
     this.m_pFontsAttrList = null;
+    this.m_pEastAsianLayoutAttrList = null;
     this.m_oFontSize = undefined;
     this.m_bCharPostureWritten = false;
     this.m_pSerializer.mark(11, runOrder);
   }
-  /** Original collected fonts detach and optional font height, including zero. @returns Nothing. */
+  /** Original collected font/height and East Asian layout flush with detach/reset ownership; color/language remain unported. @returns Nothing. */
   WriteCollectedRunProperties(): void {
     if (this.m_pFontsAttrList) {
       const fonts = this.m_pFontsAttrList;
@@ -150,6 +260,11 @@ export class DocxAttributeOutput {
     if (this.m_oFontSize !== undefined) {
       this.m_pSerializer.singleElementNS(w, token("sz"), val, String(this.m_oFontSize));
       this.m_oFontSize = undefined;
+    }
+    if (this.m_pEastAsianLayoutAttrList) {
+      const layout = this.m_pEastAsianLayoutAttrList;
+      this.m_pEastAsianLayoutAttrList = null;
+      this.m_pSerializer.singleElementNS(w, token("eastAsianLayout"), layout);
     }
   }
   /** Native untracked-property completion prepends properties before pending text. @returns Nothing. */
@@ -313,6 +428,96 @@ export class DocxAttributeOutput {
       default:
         this.m_pSerializer.singleElementNS(w, token("strike"));
         break;
+    }
+  }
+  /** Original caps/smallCaps mapping; unsupported modes explicitly clear both Word flags. @param item - Actual case item. @returns Nothing. */
+  CharCaseMap(item: SvxCaseMapItem): void {
+    switch (item.GetValue()) {
+      case SvxCaseMap.SmallCaps:
+        this.m_pSerializer.singleElementNS(w, token("smallCaps"));
+        break;
+      case SvxCaseMap.Uppercase:
+        this.m_pSerializer.singleElementNS(w, token("caps"));
+        break;
+      default:
+        this.m_pSerializer.singleElementNS(w, token("smallCaps"), val, "false");
+        this.m_pSerializer.singleElementNS(w, token("caps"), val, "false");
+    }
+  }
+  /** Original outline flag and explicit false spelling. @param item - Actual contour item. @returns Nothing. */
+  CharContour(item: SvxContourItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("outline"));
+    else this.m_pSerializer.singleElementNS(w, token("outline"), val, "false");
+  }
+  /** Original shadow flag and explicit false spelling. @param item - Actual shadowed item. @returns Nothing. */
+  CharShadow(item: SvxShadowedItem): void {
+    if (item.GetValue()) this.m_pSerializer.singleElementNS(w, token("shadow"));
+    else this.m_pSerializer.singleElementNS(w, token("shadow"), val, "false");
+  }
+  /** Original blink flag selects Word background animation or none. @param item - Actual blink item. @returns Nothing. */
+  CharAnimatedText(item: SvxBlinkItem): void {
+    this.m_pSerializer.singleElementNS(
+      w,
+      token("effect"),
+      val,
+      item.GetValue() ? "blinkBackground" : "none",
+    );
+  }
+  /** Original bidi item hook intentionally emits no XML. @param item - Unused item. @returns Nothing. */
+  CharBidiRTL(item: SfxPoolItem): void {
+    void item;
+  }
+  /** Original nonzero rotation contributes collected vertical flags without selecting a rotation angle. @param item - Actual rotation item. @returns Nothing. */
+  CharRotate(item: SvxCharRotateItem): void {
+    if (!item.GetValue()) return;
+    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("vert"), "true");
+    if (item.IsFitToLine()) this.m_pEastAsianLayoutAttrList.addNS(w, token("vertCompress"), "true");
+  }
+  /** Original exact emphasis flag combinations, with all remaining values mapped to none. @param item - Actual emphasis item. @returns Nothing. */
+  CharEmphasisMark(item: SvxEmphasisMarkItem): void {
+    const value = item.GetEmphasisMark(),
+      m = FontEmphasisMark;
+    let emphasis: string;
+    if (value === (m.Dot | m.PosAbove)) emphasis = "dot";
+    else if (value === (m.Accent | m.PosAbove)) emphasis = "comma";
+    else if (value === (m.Circle | m.PosAbove)) emphasis = "circle";
+    else if (value === (m.Dot | m.PosBelow)) emphasis = "underDot";
+    else emphasis = "none";
+    this.m_pSerializer.singleElementNS(w, token("em"), val, emphasis);
+  }
+  /** Original two-line enable and bracket priority; disabled input does not clear previously collected flags. @param item - Actual two-line item. @returns Nothing. */
+  CharTwoLines(item: SvxTwoLinesItem): void {
+    if (!item.GetValue()) return;
+    this.m_pEastAsianLayoutAttrList ??= FastSerializerHelper.createAttrList();
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("combine"), "true");
+    const start = item.GetStartBracket(),
+      end = item.GetEndBracket();
+    if (!start && !end) return;
+    let bracket: string;
+    if (start === 123 || end === 125) bracket = "curly";
+    else if (start === 60 || end === 62) bracket = "angle";
+    else if (start === 91 || end === 93) bracket = "square";
+    else bracket = "round";
+    this.m_pEastAsianLayoutAttrList.addNS(w, token("combineBrackets"), bracket);
+  }
+  /** Original explicit signed16 min/max template arguments precede OOXML width clamping. @param item - Actual unsigned16 width item. @returns Nothing. */
+  CharScaleWidth(item: SvxCharScaleWidthItem): void {
+    const width = Math.max(1, Math.min((item.GetValue() << 16) >> 16, 600));
+    this.m_pSerializer.singleElementNS(w, token("w"), val, String(width));
+  }
+  /** Original embossed/engraved mapping, with all remaining values explicitly clearing both flags. @param item - Actual relief item. @returns Nothing. */
+  CharRelief(item: SvxCharReliefItem): void {
+    switch (item.GetValue()) {
+      case FontRelief.Embossed:
+        this.m_pSerializer.singleElementNS(w, token("emboss"));
+        break;
+      case FontRelief.Engraved:
+        this.m_pSerializer.singleElementNS(w, token("imprint"));
+        break;
+      default:
+        this.m_pSerializer.singleElementNS(w, token("emboss"), val, "false");
+        this.m_pSerializer.singleElementNS(w, token("imprint"), val, "false");
     }
   }
 }

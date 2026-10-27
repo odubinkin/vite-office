@@ -1,6 +1,8 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import { acquireStyleHandle, releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import type { SwFormatCharFormat } from "./fmtatr2";
 import {
   writerTextColorValue,
   writerHighlightColorValue,
@@ -46,6 +48,7 @@ import {
   RES_CHRATR_WEIGHT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
+  RES_TXTATR_CHARFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwAttrPool } from "../attr/swatrset";
@@ -93,8 +96,12 @@ export function createWriterCharacterItemSet(
 ): SfxItemSet {
   const set = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
   const format = createSwFormatAutoFormat(pool, attributes);
-  set.PutSet(format.GetStyleHandle());
-  return set;
+  try {
+    set.PutSet(format.GetStyleHandle());
+    return set;
+  } finally {
+    format.Dispose();
+  }
 }
 
 /** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
@@ -106,7 +113,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
     super(which);
     if (which !== RES_TXTATR_AUTOFMT) throw new Error("SwFormatAutoFormat WhichId is invalid.");
     this.setNonShareable();
-    this.styleHandle = styleHandle;
+    this.styleHandle = acquireStyleHandle(styleHandle);
   }
 
   /** Returns the shared style handle. @returns Referenced item set. */
@@ -116,7 +123,14 @@ export class SwFormatAutoFormat extends SfxPoolItem {
 
   /** Assigns the shared handle without cloning its contents. @param styleHandle - New style reference. @returns Nothing. */
   public SetStyleHandle(styleHandle: SfxItemSet): void {
-    this.styleHandle = styleHandle;
+    const copy = acquireStyleHandle(styleHandle);
+    releaseStyleHandle(this.styleHandle);
+    this.styleHandle = copy;
+  }
+
+  /** Releases the actual shared handle in the native virtual item destructor. @returns Nothing. */
+  public override Dispose(): void {
+    releaseStyleHandle(this.styleHandle);
   }
 
   /** Creates an independent item sharing the same style handle. @returns Cloned item. */
@@ -150,7 +164,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
 
 /** Native text attribute base with a start position and an optional end. */
 export class SwTextAttr<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > {
   private m_nStart: number;
   private m_bDontExpand = false;
@@ -180,8 +194,10 @@ export class SwTextAttr<
     return this.format;
   }
   /** Returns the native family. @returns WhichId. */
-  public Which(): typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT {
-    return this.GetAttr().Which() as typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT;
+  public Which():
+    typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT {
+    return this.GetAttr().Which() as
+      typeof RES_TXTATR_AUTOFMT | typeof RES_TXTATR_INETFMT | typeof RES_TXTATR_CHARFMT;
   }
   /** Returns the start. @returns UTF-16 offset. */
   public GetStart(): number {
@@ -356,7 +372,7 @@ export class SwTextAttr<
 
 /** Native ranged text attribute with end-change notifications. */
 export class SwTextAttrEnd<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > extends SwTextAttr<TFormat> {
   protected m_nEnd: number;
   /** Initializes a ranged item. @param format - Owned item. @param start - Start offset. @param end - End offset. @returns Nothing. */
@@ -404,7 +420,7 @@ export class SwTextAttrEnd<
 
 /** Native range whose constructor prohibits expansion and marks nesting. */
 export class SwTextAttrNesting<
-  TFormat extends SwFormatAutoFormat | SwFormatINetFormat = SwFormatAutoFormat,
+  TFormat extends SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat = SwFormatAutoFormat,
 > extends SwTextAttrEnd<TFormat> {
   /** Initializes native nesting defaults. @param format - Owned item. @param start - Start. @param end - End. @returns Nothing. */
   protected constructor(format: TFormat, start: number, end: number) {
@@ -505,9 +521,16 @@ export function createSwFormatAutoFormat(
       underline.SetColor(new Color(Number.parseInt(attributes.underlineColor.slice(1), 16)));
     items.Put(underline);
   }
-  return new SwFormatAutoFormat(
-    pool.GetDoc().GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
-  );
+  const handle = pool
+    .GetDoc()
+    .GetIStyleAccess()
+    .getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+  try {
+    return new SwFormatAutoFormat(handle);
+  } finally {
+    releaseStyleHandle(handle);
+    items.Dispose();
+  }
 }
 
 /** Projects supported effective character items to the browser command shape. @param items - Direct character item set. @param inherited - Optional inherited style set. @returns Effective boolean properties. */

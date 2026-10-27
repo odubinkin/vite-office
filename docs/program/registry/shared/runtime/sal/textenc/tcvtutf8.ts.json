@@ -20,19 +20,25 @@
         "vendor/libreoffice-reference/sal/textenc/tcvtutf8.cxx#ImplConvertUtf8ToUnicode",
         "apps/office/src/sal/textenc/tcvtutf8.test.ts#pinned signature"
       ],
-      "justification": "Pinned SAL streaming UTF-8 to Unicode conversion, including BOM, malformed-sequence, context and FLUSH behavior. Broader SAL codec parity and compiled native differential remain unverified.",
+      "justification": "Pinned SAL UTF-8 conversion in both directions, including signature state, malformed-sequence grouping, pending-surrogate/FLUSH polarity, byte capacities and consumed-unit outputs. Source-contract tests pass; compiled native differential remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplCreateUtf8ToUnicodeContext",
         "ImplResetUtf8ToUnicodeContext",
-        "ImplConvertUtf8ToUnicode"
+        "ImplConvertUtf8ToUnicode",
+        "ImplCreateUnicodeToUtf8Context",
+        "ImplResetUnicodeToUtf8Context",
+        "ImplConvertUnicodeToUtf8"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtutf8.cxx",
       "upstreamSymbols": [
         "ImplCreateUtf8ToUnicodeContext",
         "ImplResetUtf8ToUnicodeContext",
-        "ImplConvertUtf8ToUnicode"
+        "ImplConvertUtf8ToUnicode",
+        "ImplCreateUnicodeToUtf8Context",
+        "ImplResetUnicodeToUtf8Context",
+        "ImplConvertUnicodeToUtf8"
       ]
     }
   }

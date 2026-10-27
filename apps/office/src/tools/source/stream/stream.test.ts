@@ -109,3 +109,10 @@ it("writes source Unicode-or-byte text, characters, and byte-order marks", /** C
   bigEndian.WriteUniOrByteChar(65);
   expect([...bigEndian.GetData()]).toEqual([0xfe, 0xff, 0, 65]);
 });
+
+it("writes raw string views including NUL and high bytes without Unicode recoding", /** Verifies writes raw string views including NUL and high bytes without Unicode recoding. @returns Nothing. */ () => {
+  const stream = new SvStream(new Uint8Array(), RTL_TEXTENCODING_UTF8);
+  expect(stream.WriteOString("A\0\xff\xe9")).toBe(stream);
+  expect(stream.WriteChar(0x180).WriteChar("}").WriteNumberAsString(-32768)).toBe(stream);
+  expect([...stream.GetData()]).toEqual([65, 0, 255, 233, 128, 125, 45, 51, 50, 55, 54, 56]);
+});

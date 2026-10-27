@@ -20,3 +20,14 @@ export function GetWhichOfScript(which: number, script: number): number {
   }
   return which;
 }
+
+import { SwModule } from "../../uibase/app/swmodule";
+import { RES_CHRATR_BEGIN } from "../../../inc/hintids";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+/** Original GetDfltAttr borrows the module-global package default, independently of any document/user override. @param which - Represented native WhichId. @returns Global pool default; unrepresented native classes have no fabricated value. */
+export function GetDfltAttr(which: number): SfxPoolItem | null {
+  return SwModule.get()
+    .getItemInfoPackageSwAttributes()
+    .getExistingItemInfo(which - RES_CHRATR_BEGIN)
+    .getItem();
+}

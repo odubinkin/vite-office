@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/doc/poolfmt.ts",
+    "localSymbols": [
+      "IsUsed"
+    ],
+    "upstreamPath": "sw/source/core/doc/poolfmt.cxx",
+    "upstreamSymbols": [
+      "SwDoc::IsUsed"
+    ],
+    "preservedResponsibilities": [
+      "S3HW1E used-numbering prerequisites: native SwNumRule paragraph-style clients retain identity and duplicate suppression; copies start empty while assignment/reset retain recipient clients. SwTextFormatColl single-item/set/range changes transfer only explicit nonempty numbering references through the actual document. SwDoc.IsUsed gains the source numbering predicate for text clients, paragraph styles, redline use and matching nonempty default list, alongside the existing represented paragraph dependent-node traversal. Owner tests cover inherited/unresolved rules, locked changes, reset ranges and default-list override. Source ResetAllFormatAttr bypasses registration removal (WRITER194); this behavior is retained. No full native Writer ABI or whole-filter parity is claimed. Native persistent outline-rule ownership, used-numbering-table export orchestration and InitFontTable remain separate unfinished obligations."
+    ],
+    "omittedResponsibilities": [
+      "Other poolfmt.cxx responsibilities and complete native broadcasting/ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/poolfmt.ts",
+          "marker": "IsUsed"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/poolfmt.cxx",
+          "marker": "SwDoc::IsUsed"
+        }
+      ]
+    }
+  }
+}

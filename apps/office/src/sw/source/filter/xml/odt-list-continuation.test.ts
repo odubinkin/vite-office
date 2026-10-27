@@ -101,7 +101,7 @@ async function input(
 }
 /** Normalizes opaque native automatic names while preserving identity and continuation equivalence. @param value - Native identity. @param doc - Document defining its rule owners. @returns Fixture declaration identity. */
 function identity(value: string | undefined, doc: SwDoc): string | undefined {
-  for (const [index, rule] of doc.GetNumRuleTable().entries())
+  for (const [index, rule] of doc.GetNumRuleTable().slice(1).entries())
     if ((rule.IsAutoRule() && value === rule.GetName()) || value === rule.GetDefaultListId())
       return ["Counters", "Other"][index];
   return value;
@@ -452,7 +452,7 @@ it("imports native root continuation and default IDs through common and automati
           expect(state(doc), `${test.name}/${common}/${bullet}`).toEqual(expected(test.before));
           const copied = createWriterDocument();
           for (const [index, name] of ["Counters", "Other"].entries()) {
-            const rule = doc.GetNumRuleTable()[index];
+            const rule = doc.GetNumRuleTable().slice(1)[index];
             if (rule === undefined) throw new Error("Missing declared rule");
             expect(identity(rule.GetDefaultListId(), doc)).toBe(name);
             copied.GetDocumentListsManager().AddNumRule(rule.clone());
@@ -484,11 +484,11 @@ it("imports native root continuation and default IDs through common and automati
           const record = encodeWriterDocument(doc);
           expect(record.swModelVersion).toBe(17);
           const worker = decodeWriterDocument(record);
-          expect(worker.GetNumRuleTable()[0]).not.toBe(doc.GetNumRuleTable()[0]);
+          expect(worker.GetNumRuleTable().slice(1)[0]).not.toBe(doc.GetNumRuleTable().slice(1)[0]);
           expect(state(worker)).toEqual(expected(test.before));
           const bytes = writeOdtDocument(doc, { title: "Continuation" });
           let xml = await new ZipFile(bytes).readTextEntry("content.xml");
-          for (const rule of doc.GetNumRuleTable())
+          for (const rule of doc.GetNumRuleTable().slice(1))
             xml = xml
               .replaceAll(
                 `"${rule.GetDefaultListId()}-`,

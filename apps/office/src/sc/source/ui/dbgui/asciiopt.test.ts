@@ -204,3 +204,23 @@ it("parses numeric filter tokens through source o3tl::toInt32 semantics", /** Ch
     new ScImportOptions("44,34,UTF-8,1,,0,false,true,true,false,false,4294967296").nSheetToExport,
   ).toBe(0);
 });
+
+it("keeps system encoding token while selecting UTF8 fallback for an unknown numeric charset", /** Verifies the native persistent charset token and effective encoding remain distinct. @returns Nothing. */ () => {
+  const options = new ScImportOptions();
+  options.SetTextEncoding(RTL_TEXTENCODING_DONTKNOW);
+  expect(options.eCharSet).toBe(RTL_TEXTENCODING_UTF8);
+  expect(options.aStrFont).toBe("SYSTEM");
+});
+
+it("serializes fixed-width, absent separators and the all-sheets export sentinel", /** Exercises valid native token families that have distinct persistence shapes. @returns Nothing. */ () => {
+  const options = new ScImportOptions("FIX,0,UTF-8,1,,,false,true,true,false,false,-1,true,false");
+  expect(options.nSheetToExport).toBe(-1);
+  expect(options.BuildString().split(",")[0]).toBe("FIX");
+  options.bFixedWidth = false;
+  options.nFieldSepCode = "";
+  options.nTextSepCode = "";
+  expect(options.BuildString().split(",").slice(0, 2)).toEqual(["0", "0"]);
+  options.SetTextEncoding(RTL_TEXTENCODING_MS_1252);
+  expect(options.eCharSet).toBe(RTL_TEXTENCODING_MS_1252);
+  expect(options.aStrFont).toBe("ANSI");
+});

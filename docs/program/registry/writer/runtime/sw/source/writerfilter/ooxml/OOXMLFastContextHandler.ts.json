@@ -18,16 +18,20 @@
       "evidence": [
         "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts#OOXMLFastContextHandler",
         "vendor/libreoffice-reference/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx#OOXMLFastContextHandler::startFastElement",
-        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts#applies schema property/value contexts to a real SwDoc"
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts#applies schema property/value contexts to a real SwDoc",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts"
       ],
-      "justification": "Native shared parser state, base copy/child constructor distinction, source-ordered actions, grouping/CR/progress, exact inherited xml:space, MCE alternate state/Requires spellings, native property/value handoff and absent-value defaults. Host strings carry immutable UTF16 until actual OOXMLValue/UNO handoff. The native nonvirtual section close clears section state; its repeated negative guard is redundant on defined forwarding paths and omitted without coverage exclusions. Unconsumed math/drawing/table/note/service owners are not implemented. Whole DOCX application import/export/UI acceptance and full native semantic parity remain pending.",
+      "justification": "Native shared parser state, base copy/child constructor distinction, source-ordered actions, grouping/CR/progress, exact inherited xml:space, MCE alternate state/Requires spellings, native property/value handoff and absent-value defaults. Host strings carry immutable UTF16 until actual OOXMLValue/UNO handoff. The native nonvirtual section close clears section state; its repeated negative guard is redundant on defined forwarding paths and omitted without coverage exclusions. Unconsumed math/drawing/table/note/service owners are not implemented. Whole DOCX application import/export/UI acceptance and full native semantic parity remain pending. Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion. Task202610251549-V4DQJW: Original clearProps replaces through the actual virtual setPropertySet hook. Existing base setter remains inert; Properties contexts retain already delivered old references and replace current storage. Native generated TrackChange actions send before clear, including independent forwarding behavior. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion.",
       "knownViolations": [],
       "localSymbols": [
         "OOXMLFastContextHandler",
         "OOXMLFastContextHandlerStream",
         "OOXMLFastContextHandlerProperties",
         "OOXMLFastContextHandlerValue",
-        "ResourceEnum_t"
+        "ResourceEnum_t",
+        "OOXMLFastContextHandlerTable",
+        "OOXMLFastContextHandlerPropertyTable",
+        "clearProps"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx",
@@ -37,7 +41,9 @@
         "OOXMLFastContextHandler::createUnknownChildContext",
         "OOXMLFastContextHandler::text",
         "OOXMLFastContextHandlerProperties::lcl_endFastElement",
-        "OOXMLFastContextHandlerValue::lcl_endFastElement"
+        "OOXMLFastContextHandlerValue::lcl_endFastElement",
+        "OOXMLFastContextHandlerTable::addCurrentChild",
+        "OOXMLFastContextHandlerPropertyTable::lcl_endFastElement"
       ]
     }
   }

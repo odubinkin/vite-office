@@ -8,7 +8,8 @@
     "suite": "shared",
     "subsystem": "font-style-dropdown-preview",
     "capabilityIds": [
-      "CAP-0109"
+      "CAP-0109",
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,12 +18,14 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts#FillStyle",
-        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts#@fileoverview"
+        "apps/office/src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts#@fileoverview",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-cell-color.test.ts"
       ],
-      "justification": "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed.",
+      "justification": "Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed. V4DQJW adds the original cppumaker normal FillStyle enum type binding and generated MAKE_FIXED_SIZE sentinel. Normal cached typelib_static_enum_type_init uses defaultNONE0 and the actual Type cell view; Any properties now retain ENUM identity rather than an untyped long. Comprehensive reflection remains unimplemented, not replaced. Existing style-preview identities/behavior remain unchanged; new CellColorHandler tests measure the added executable getter at scoped100 alongside the actual handler. Original five drawing FillStyle enum identities consumed by native style preview background decisions. No generated UNO enum-reflection or wire-type parity is claimed. Added original normal cppumaker enum-width sentinel and static FillStyle type getter used by actual typed Any insertion/extraction. Full generated SDK metadata is not claimed.",
       "knownViolations": [],
       "localSymbols": [
-        "FillStyle"
+        "FillStyle",
+        "cppu_detail_getUnoType_FillStyle"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "offapi/com/sun/star/drawing/FillStyle.idl",

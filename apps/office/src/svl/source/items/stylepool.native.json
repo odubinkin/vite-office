@@ -1,0 +1,65 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourcePath": "vendor/libreoffice-reference/svl/source/items/stylepool.cxx",
+  "sourceHash": "01425093bb895db6bd7c226ccc2c64af1c09dbafd420f21fbb3b54269690236d",
+  "driverHash": "a6ea865e8545a8a9329dd715a16ed6b6ea1fdf1715816d6d545320139348b060",
+  "scope": "Unchanged original Node/Iterator/StylePoolImpl insertion and iterator-factory bodies with real std::shared_ptr ownership and standard containers; SfxPoolItem/SfxItemSet/SfxItemIter are explicit ordered integer-value probe carriers, OUString is a UTF16 comparison carrier. No full SfxItemSet/Writer/SAL ABI or global item-cache certification. Nonfatal source diagnostics omitted; ASan/UBSan enabled.",
+  "cases": [
+    {
+      "label": "shared-used",
+      "ids": [1]
+    },
+    {
+      "label": "shared-unused",
+      "ids": []
+    },
+    {
+      "label": "cache-includes-unused",
+      "ids": [1]
+    },
+    {
+      "label": "nonshareable-newest-used",
+      "ids": [13]
+    },
+    {
+      "label": "nonshareable-previous-used",
+      "ids": [12]
+    },
+    {
+      "label": "nonshareable-first-used",
+      "ids": [11]
+    },
+    {
+      "label": "cache-one-used-representative",
+      "ids": [11]
+    },
+    {
+      "label": "nonshareable-all-unused",
+      "ids": []
+    },
+    {
+      "label": "cache-last-unused-representative",
+      "ids": [13]
+    },
+    {
+      "label": "ignorable-first-used",
+      "ids": [21]
+    },
+    {
+      "label": "ignorable-next-used",
+      "ids": [22]
+    },
+    {
+      "label": "root-only-ignorable-omitted",
+      "ids": [22]
+    },
+    {
+      "label": "cache-contains-ignorable-paths",
+      "ids": [21, 22, 23]
+    },
+    {
+      "label": "named-parent-order",
+      "ids": [32, 31]
+    }
+  ]
+}

@@ -1,6 +1,18 @@
 /**
  * @fileoverview Implements canonical Writer text nodes at the pinned LibreOffice `sw/source/core/txtnode/ndtxt.cxx` ownership boundary.
  */
+import { GetTextNodeLanguage } from "./thints-language";
+import { InsertTextNodeHint } from "./thints-insert";
+import {
+  SetTextNodeAttributes,
+  DontExpandTextNodeFormat,
+  type TextAttributeOutput,
+} from "./thints-setattr";
+import { ResetTextNodeAttributes } from "./txtedt-reset";
+import type { SwFormatCharFormat } from "./fmtatr2";
+import { PrepareTextNodeReplacementHints, UpdateTextNodeReplacementIndices } from "./ndtxt-hints";
+import { TriggerTextNodeUpdate } from "./ndtxt-format-change";
+import type { UpdateAttrHint } from "../../../inc/hints";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
@@ -72,6 +84,7 @@ import {
   CreateTextNodeToggledFragment,
   getSvxAdjust,
   GetTextNodeCharacterItems,
+  GetTextNodeRangeFormatState,
   getWriterParagraphAlignment,
   InsertTextNodeHints,
   MoveTextAttrToAttrSet,
@@ -80,6 +93,9 @@ import {
 } from "./ndtxt-hints";
 import {
   CaptureSwTextNodeListItems,
+  UpdateSwTextNodeOutlineLevel,
+  SetSwTextNodeListItems,
+  NotifyTextNodeNumRuleChanged,
   GetSwTextNodeListLabel,
   GetSwTextNodeNumString,
   HasSwTextNodeVisibleNumbering,
@@ -143,6 +159,10 @@ export class SwTextNode extends SwContentNode {
     this.listGeometryWins = value;
   }
 
+  /** Original language query over text/ranged styles and paragraph defaults. @param begin - Native offset. @param length - Native length. @param script - Explicit script or zero. @param noneIfNoHyphenation - Original hyphenation policy. @returns Native language identity. */
+  public GetLang(begin: number, length = 0, script = 0, noneIfNoHyphenation = false): number {
+    return GetTextNodeLanguage(this, begin, length, script, noneIfNoHyphenation);
+  }
   /** Returns text length in UTF-16 code units, matching Writer content indices. @returns UTF-16 length. */
   public Len(): number {
     return this.mText.length;
@@ -169,14 +189,52 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
-  /** Inserts a supported native item through the undo NOHINTADJUST path. @param attr - Ranged item. @param start - Start offset. @param end - End offset. @param mode - Native insertion flags. @returns Fresh actual owned attribute. */
+  /** Publishes the native generic range update to original node clients and the existing document projection, then refreshes outline membership outside destruction. @param hint - Borrowed native range hint. @returns Nothing. */
+  public TriggerNodeUpdate(hint: UpdateAttrHint): void {
+    TriggerTextNodeUpdate(this, hint);
+  }
+
+  /** Inserts a supported native item through the undo NOHINTADJUST path. @param attr - Ranged item. @param start - Start offset. @param end - End offset. @param mode - Native insertion flags. @returns Original surviving attribute or undefined after native portion replacement. */
   public InsertItem(
     attr: SfxPoolItem,
     start: number,
     end: number,
     mode = SetAttrMode.DEFAULT,
-  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+  ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> | undefined {
     return thints.InsertTextNodeItem(this, attr, start, end, mode);
+  }
+
+  /** Original ownership-transfer insertion for represented native ranged families. @param hint - Actual detached attribute. @param mode - Native insertion flags. @returns Success independent of identity retention after merging. */
+  public InsertHint(
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    mode = SetAttrMode.DEFAULT,
+  ): boolean {
+    return InsertTextNodeHint(this, hint, mode);
+  }
+
+  /** Deletes represented same-family attributes with exact start/end, retaining the native forward-loop behavior. @param which - Native family. @param start - Exact start. @param end - Exact end. @returns Nothing. */
+  public DeleteAttributes(which: number, start: number, end: number): void {
+    thints.DeleteTextNodeAttributes(this, which, start, end);
+  }
+  /** Releases an empty native map when CanBeDeleted allows it. @returns Nothing. */
+  public TryDeleteSwpHints(): void {
+    if (this.pSwpHints?.CanBeDeleted()) this.pSwpHints = undefined;
+  }
+
+  /** Original registered-family range reset. @param start - Native start. @param length - Native length. @param which - Optional Which. @param set - Optional deletion set. @param includeMarks - Original mark policy. @param exact - Exact-range policy. @returns Nothing. */
+  public RstTextAttr(
+    start: number,
+    length: number,
+    which = 0,
+    set?: SfxItemSet,
+    includeMarks = false,
+    exact = false,
+  ): void {
+    ResetTextNodeAttributes(this, start, length, which, set, includeMarks, exact);
+  }
+  /** Original expansion-boundary formatting policy. @param offset - Native boundary. @param flag - Desired flag. @param convert - Convert paragraph formatting first. @returns Whether changed. */
+  public DontExpandFormat(offset: number, flag = true, convert = true): boolean {
+    return DontExpandTextNodeFormat(this, offset, flag, convert);
   }
 
   /** Clears implemented text attributes while retaining the allocated map. @param deleteFields - Native field policy;no field hints are currently implemented. @returns Nothing. */
@@ -249,21 +307,8 @@ export class SwTextNode extends SwContentNode {
       super.ChgFormatColl(collection);
       if (!this.mbInSetOrResetAttr) HandleModifyAtTextNodeFormatChange(this);
     }
-    if (this.GetNodes().IsDocNodes()) this.ChgTextCollUpdateNum(previous, collection, setListLevel);
+    if (this.GetNodes().IsDocNodes()) UpdateSwTextNodeOutlineLevel(this, collection, setListLevel);
     return previous;
-  }
-
-  /** Applies the existing collection assignment in the bounded outline slice. @param _oldCollection - Former collection retained at the native helper contract. @param collection - New paragraph collection. @param setListLevel - Whether to set the level. @returns Nothing. */
-  private ChgTextCollUpdateNum(
-    _oldCollection: SwTextFormatColl,
-    collection: SwTextFormatColl,
-    setListLevel: boolean,
-  ): void {
-    const level = collection.IsAssignedToListLevelOfOutlineStyle()
-      ? collection.GetAssignedOutlineStyleLevel()
-      : 10;
-    if (level !== 10 && level !== -1 && setListLevel) this.SetAttrListLevel(level);
-    this.GetNodes().UpdateOutlineNode(this);
   }
 
   /** Reads the pooled paragraph outline attribute without inline-frame resolution. @returns Outline level. */
@@ -381,8 +426,19 @@ export class SwTextNode extends SwContentNode {
     else this.SetAttr(new SwNumRuleItem(ruleName));
   }
 
-  /** Applies direct items through the native pre/post lifecycle. @param itemOrSet - Direct item or batch. @returns Whether raw items changed. */
-  public override SetAttr(itemOrSet: SfxPoolItem | SfxItemSet): boolean {
+  /** Applies direct items or the native ranged item-set insertion. @param itemOrSet - Direct item or batch. @param start - Optional range start. @param end - Optional range end. @param mode - Native insertion flags. @param output - Optional first created text attribute. @returns Native direct-set or insertion result. */
+  public override SetAttr(
+    itemOrSet: SfxPoolItem | SfxItemSet,
+    start?: number,
+    end?: number,
+    mode = SetAttrMode.DEFAULT,
+    output?: TextAttributeOutput,
+  ): boolean {
+    if (start !== undefined) {
+      if (!(itemOrSet instanceof SfxItemSet) || end === undefined)
+        throw new Error("Writer ranged SetAttr requires an item set and both endpoints.");
+      return SetTextNodeAttributes(this, itemOrSet, start, end, mode, output);
+    }
     const old = this.mbInSetOrResetAttr;
     this.mbInSetOrResetAttr = true;
     let handler: HandleSetAttrAtTextNode;
@@ -450,17 +506,9 @@ export class SwTextNode extends SwContentNode {
   }
   /** Rebinds numbering clients and emits the existing model invalidation adapter. @returns Nothing. */
   public NumRuleChgd(): void {
-    if (this.IsInList()) {
-      const rule = this.GetNumRule();
-      if (rule !== undefined && rule !== this.mpNodeNum?.GetNumRule())
-        this.mpNodeNum?.ChangeNumRule(rule);
-    }
-    const index = this.GetNodes().indexOfOrUndefined(this);
-    this.GetDoc().NotifyModelChange({
-      kind: "numbering-changed",
-      ...(index === undefined ? {} : { nodeIndex: index }),
-    });
+    NotifyTextNodeNumRuleChanged(this);
   }
+
   /** Reads outline membership independent of rule name. @returns Outline state for connected normal-document paragraphs. */
   public IsOutline(): boolean {
     return IsOutlineAtTextNode(this);
@@ -590,16 +638,7 @@ export class SwTextNode extends SwContentNode {
 
   /** Replaces the canonical numbering/list item subset captured by Writer undo. @param items - Direct list items. @returns Nothing. */
   public SetListItems(items: SfxItemSet): void {
-    for (const which of [
-      RES_PARATR_NUMRULE,
-      RES_PARATR_LIST_ID,
-      RES_PARATR_LIST_LEVEL,
-      RES_PARATR_LIST_ISRESTART,
-      RES_PARATR_LIST_RESTARTVALUE,
-      RES_PARATR_LIST_ISCOUNTED,
-    ])
-      this.ResetAttr(which);
-    this.SetAttr(items);
+    SetSwTextNodeListItems(this, items);
   }
 
   /** Captures direct numbering/list items for exact undo/redo. @returns Independent item set. */
@@ -727,36 +766,10 @@ export class SwTextNode extends SwContentNode {
     AssertTextNodeRange(this, start, end);
     const replacementText = replacement.text;
     const removedLength = end - start;
-    const existing = this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
-    const hints =
-      !transferHints &&
-      replacement.hints.Count() === 0 &&
-      removedLength > 0 &&
-      replacementText.length === 0
-        ? existing.EraseText(this.mText.length, start, removedLength)
-        : existing.replaceRange(
-            this.mText.length,
-            start,
-            end,
-            replacement.hints,
-            replacementText.length,
-            transferHints,
-          );
+    const hints = PrepareTextNodeReplacementHints(this, start, end, replacement, transferHints);
     this.mText = `${this.mText.slice(0, start)}${replacementText}${this.mText.slice(end)}`;
     this.pSwpHints = hints.CanBeDeleted() ? undefined : hints;
-    if (removedLength > replacementText.length) {
-      this.UpdateContentIndices(
-        start + replacementText.length,
-        removedLength - replacementText.length,
-        SwContentIndexUpdateMode.Negative,
-      );
-    } else if (replacementText.length > removedLength) {
-      this.UpdateContentIndices(
-        start + removedLength,
-        replacementText.length - removedLength,
-        SwContentIndexUpdateMode.Default,
-      );
-    }
+    UpdateTextNodeReplacementIndices(this, start, removedLength, replacementText.length);
     this.GetDoc().NotifyModelChange({
       kind: "node-content-changed",
       nodeIndex: this.GetNodes().indexOfOrUndefined(this),
@@ -769,18 +782,7 @@ export class SwTextNode extends SwContentNode {
     const previousLength = previousText.length;
     this.mText = text;
     this.pSwpHints = undefined;
-    if (previousLength > text.length)
-      this.UpdateContentIndices(
-        text.length,
-        previousLength - text.length,
-        SwContentIndexUpdateMode.Negative,
-      );
-    else if (text.length > previousLength)
-      this.UpdateContentIndices(
-        previousLength,
-        text.length - previousLength,
-        SwContentIndexUpdateMode.Default,
-      );
+    UpdateTextNodeReplacementIndices(this, 0, previousLength, text.length);
     if (previousText !== text)
       this.GetDoc().NotifyModelChange({
         kind: "node-content-changed",
@@ -805,9 +807,15 @@ export class SwTextNode extends SwContentNode {
     });
   }
 
-  /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @returns Whether any state was collected. */
-  public GetParaAttr(set: SfxItemSet, start: number, end: number, onlyText = false): boolean {
-    return thints.GetTextNodeParaAttr(this, set, start, end, onlyText);
+  /** Collects represented automatic character state using native GetParaAttr boundaries. @param set - Empty caller-owned character set. @param start - Inclusive position. @param end - Exclusive position. @param onlyText - Ignore paragraph/style items. @param fromCharacterFormat - Include character-format attributes. @returns Whether any state was collected. */
+  public GetParaAttr(
+    set: SfxItemSet,
+    start: number,
+    end: number,
+    onlyText = false,
+    fromCharacterFormat = true,
+  ): boolean {
+    return thints.GetTextNodeParaAttr(this, set, start, end, onlyText, fromCharacterFormat);
   }
   /** Reads direct attributes inherited by a collapsed caret. @param offset - UTF-16 caret offset. @returns Effective direct attributes. */
   public GetCharacterItemsAt(offset: number): SfxItemSet {
@@ -820,14 +828,7 @@ export class SwTextNode extends SwContentNode {
     end: number,
     format: WriterCharacterFormat,
   ): "mixed" | "off" | "on" {
-    AssertTextNodeRange(this, start, end);
-    return this.GetTextHints().getCharacterFormatState(
-      this.mText.length,
-      start,
-      end,
-      format,
-      this.GetSwAttrSet(),
-    );
+    return GetTextNodeRangeFormatState(this, start, end, format);
   }
 
   /** Reads the hyperlink inherited by a caret. @param offset - UTF-16 caret offset. @returns Hyperlink metadata or undefined. */
@@ -909,7 +910,7 @@ export class SwTextNode extends SwContentNode {
     if (direct !== undefined) clone.SetAttr(direct);
     clone.SetText(this.mText);
     if (this.pSwpHints !== undefined)
-      clone.SetTextHints(this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool()));
+      clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
     clone.SetListGeometryWins(this.listGeometryWins);
     clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
       this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
@@ -977,9 +978,9 @@ export class SwTextNode extends SwContentNode {
     return CreateTextNodeHyperlinkFragment(this, start, end, hyperlink);
   }
 
-  /** Returns an independent native hint container, including the empty case. @returns Independent hints. */
+  /** Borrows the source map for snapshot-producing operations, including an empty map when absent. @returns Source hints. */
   private GetTextHints(): SwpHints {
-    return this.pSwpHints?.clone() ?? new SwpHints(this.GetDoc().GetAttrPool());
+    return this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
   }
 }
 

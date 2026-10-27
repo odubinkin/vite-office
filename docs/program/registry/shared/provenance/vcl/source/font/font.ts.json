@@ -20,6 +20,14 @@
         {
           "path": "apps/office/src/vcl/source/font/native-font-metadata.test.ts",
           "marker": "retains weight and italic through native assignment"
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/native-font-map-name.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-config.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -56,7 +64,8 @@
     "localPath": "apps/office/src/vcl/source/font/font.ts",
     "localSymbols": [
       "Font",
-      "ConstFont"
+      "ConstFont",
+      "FamilyFromAttributes"
     ],
     "omittedResponsibilities": [
       "Native other rendering/size/language/color attributes, full Font equality, configuration AskConfig and default-device resolution remain unimplemented. Stored metadata and its complete independent copy/equality are covered by task162; native lifetime/ABI machinery is not reproduced."
@@ -68,7 +77,8 @@
       "Task182 corrects the prior identity-only interpretation of Font IsSameInstance. Native Font stores cow_wrapper<ImplFont>;both Font operator== and IsSameInstance use its operator==,which returns shared-object identity OR ImplFont value equality. The existing represented Font Equals therefore supplies the correct observable value predicate for independent equal handles,without porting C++ ownership machinery. All stored state,copy/update guards and other Font methods retain emitted runtime tokens. Tests now require true for independent equal metadata/paint/alignment/geometry/transparency values and false for differences. Earlier task162/181 identity wording and the one equal-value identity expectation were incorrect;this correction supersedes that interpretation without rewriting historical source evidence. Physical COW/refcount/cache/weak/lifetime mechanisms remain erased under JS GC. Full unrepresented Font attributes/config/device/rendering and Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad parity promotion.",
       "TaskNF91KY adds original Font copy assignment by sharing existing immutable mpImplFont state while preserving the recipient Font member identity. Later mutations retain independent value behavior;no COW lifetime manager is fabricated. Actual SvxBulletItem SetFont consumes this original assignment operation.",
       "Task6764KT adds source stored Font weight and italic with original WEIGHT_DONTKNOW/ITALIC_NONE defaults, const no-config getters, guarded setters, copy/assignment and represented EqualIgnoreColor participation. Browser metadata records transport both values as an optional complete pair so pre-face records restore actual native defaults; malformed groups fail before mutation. Actual Writer numbering and structured-clone document transport retain nondefault values. MaybeAskConfig, physical face selection and popup/style drawing remain pending; no broad parity promotion or native lifetime machinery.",
-      "Task6764KT represents original Font outline/shadow,underline/overline,strikeout,relief and emphasis fields with exact ImplFont false/NONE defaults,guarded assignment,immutable native-value copies and represented EqualIgnoreColor comparison. No C++ object lifetime or allocator behavior is emulated. Unrepresented Font language/configuration,device matching and full decoration rendering remain pending."
+      "Task6764KT represents original Font outline/shadow,underline/overline,strikeout,relief and emphasis fields with exact ImplFont false/NONE defaults,guarded assignment,immutable native-value copies and represented EqualIgnoreColor comparison. No C++ object lifetime or allocator behavior is emulated. Unrepresented Font language/configuration,device matching and full decoration rendering remain pending.",
+      "RTF font-table prerequisite: complete FontNameAttr shipped fields and native getMapName ordered leading/trailing/exception, first weight/width and all type heuristics now feed Font::GetFamilyTypeMaybeAskConfig/GetPitchMaybeAskConfig. AskConfig preserves normalized/full then shortened lookup, configured-type then heuristic family precedence, fixed-pitch admission, unknown-only heuristic weight/width, copied one-shot lookup flag and source const versus nonconst getter behavior. Font width and config flag remain excluded from equality. Source resources are extracted from pinned VCL.xcu; component configuration-provider/runtime override and physical renderer services remain unported. Compiled unchanged getMapName/helpers/tables over explicit UTF16 carriers match 4095 input/inout cases under ASan/UBSan; no full SAL, AskConfig or VCL ABI claim. WRITER189-192 preserve source anomalies. No module/filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "vcl/source/font/font.cxx",

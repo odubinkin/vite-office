@@ -1,13 +1,23 @@
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { SwNumRule } from "../doc/number";
+import { goNext, goPrevious } from "./nodes.navigation";
+import type { SwNodeIndex, SwPosition } from "../crsr/pam";
 import { TextToTableNodes } from "./ndtbl";
 import { SwClient, SwIterator } from "../../../inc/calbck";
 
 import { SwRowFrame, SwCellFrame, SwTabFrame } from "../layout/tabfrm";
 import { SwOutlineNodes } from "./ndnum";
 import type { SwDoc } from "../doc/doc";
-import { SwEndNode, SwStartNode, SwTableBoxStartNode, SwTableNode, type SwNode } from "./node";
+import {
+  type SwContentNode,
+  SwEndNode,
+  SwStartNode,
+  SwTableBoxStartNode,
+  SwTableNode,
+  type SwNode,
+} from "./node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import {
   SwTable,
@@ -50,6 +60,21 @@ export class SwNodes {
     this.endOfContent = this.createFixedSection(root);
   }
 
+  /** Original next-content lookup and index/position assignment. @param index - Actual node index or position. @returns Next content owner or undefined. */
+  public static GoNext(index: SwNodeIndex | SwPosition): SwContentNode | undefined {
+    const node = goNext("nNode" in index ? index.nNode : index);
+    if (node !== undefined) index.Assign(node);
+    return node;
+  }
+  /** Original previous-content lookup; crossing a global section is explicit. @param index - Actual node index or position. @param canCrossBoundary - Native opt-in used by search-region construction. @returns Previous content owner or undefined. */
+  public static GoPrevious(
+    index: SwNodeIndex | SwPosition,
+    canCrossBoundary = false,
+  ): SwContentNode | undefined {
+    const node = goPrevious("nNode" in index ? index.nNode : index, canCrossBoundary);
+    if (node !== undefined) index.Assign(node);
+    return node;
+  }
   /** Returns the document that owns this node array. @returns Owning document. */
   public GetDoc(): SwDoc {
     return this.document;
@@ -570,7 +595,7 @@ export class SwNodes {
   public copyContentFrom(source: SwNodes): void {
     for (const rule of source.GetDoc().GetNumRuleTable())
       if (this.document.FindNumRulePtr(rule.GetName()) === undefined)
-        this.document.AddNumRule(rule);
+        this.document.AddNumRule(new SwNumRule(rule));
     source.getTextNodes().forEach(
       /** Clones one source text node before the content end sentinel. @param node - Source body node. @returns Nothing. */
       (node): void => {

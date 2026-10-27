@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xfillit0.ts",
+    "upstreamPath": "include/svx/xfillit0.hxx",
+    "localSymbols": [
+      "XFillStyleItem"
+    ],
+    "upstreamSymbols": [
+      "XFillStyleItem"
+    ],
+    "preservedResponsibilities": [
+      "Native SOLID default, typed FillStyle Any query, enum extraction and signed32 Basic fallback without added enum-range validation, copy and clone."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation/dumps and compiled native differential remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xfillit0.ts",
+          "marker": "XFillStyleItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xfillit0.hxx",
+          "marker": "XFillStyleItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "XFillStyleItem::"
+        }
+      ]
+    }
+  }
+}

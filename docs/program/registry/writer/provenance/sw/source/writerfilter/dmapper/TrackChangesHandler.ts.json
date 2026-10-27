@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TrackChangesHandler.ts",
+    "localSymbols": [
+      "TrackChangesHandler"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/TrackChangesHandler.cxx",
+    "upstreamSymbols": [
+      "TrackChangesHandler",
+      "lcl_attribute",
+      "getRedlineProperties"
+    ],
+    "preservedResponsibilities": [
+      "Original RedlineParams owner, signed32 constructor token and low16-bit selection, Unicode author/date replacement, ignored markup ID, inert modifier callback and actual three-property PropertyValue sequence. RedlineDateTime is a real normal generated DateTime value via the original Word-compatible parser; no generic ISO/browser Date substitution. Real committed Strict/Transitional TrackChange range XML verifies resource attributes and send-before-clear delivery, without claiming table model insertion."
+    ],
+    "omittedResponsibilities": [
+      "Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TrackChangesHandler.ts",
+          "marker": "TrackChangesHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-track-changes.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TrackChangesHandler.cxx",
+          "marker": "getRedlineProperties"
+        }
+      ]
+    }
+  }
+}

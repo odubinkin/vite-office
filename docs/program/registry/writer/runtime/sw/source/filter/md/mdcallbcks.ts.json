@@ -19,10 +19,14 @@
         "apps/office/src/sw/source/filter/md/mdcallbcks.ts#parseMarkdownSpans",
         "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx#SwMarkdownParser::enter_span_callback"
       ],
-      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified.",
+      "justification": "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open.",
       "knownViolations": [],
       "localSymbols": [
-        "parseMarkdownSpans"
+        "enter_block_callback",
+        "leave_block_callback",
+        "enter_span_callback",
+        "leave_span_callback",
+        "text_callback"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/md/mdcallbcks.cxx",

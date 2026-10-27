@@ -7,13 +7,17 @@
     "localPath": "apps/office/src/sw/source/filter/md/mdcallbcks.ts",
     "upstreamPath": "sw/source/filter/md/mdcallbcks.cxx",
     "localSymbols": [
-      "parseMarkdownSpans"
+      "enter_block_callback",
+      "leave_block_callback",
+      "enter_span_callback",
+      "leave_span_callback",
+      "text_callback"
     ],
     "upstreamSymbols": [
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Maps represented emphasis, code, hyperlink and strikeout span callbacks plus backslash/whitespace hard breaks and soft breaks into Writer text runs; preserves the pinned empty entity/null-character text callbacks by omitting recognized HTML references and null characters while retaining unrecognized text and literal code spans. Relative hyperlink targets resolve against a supplied document base URL while fragment-only targets remain unchanged."
+      "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -21,20 +25,8 @@
     "evidence": {
       "local": [
         {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "imports headings"
-        },
-        {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "resolves Markdown hyperlink callbacks"
-        },
-        {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "maps hard and soft line breaks"
-        },
-        {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "omits entity and null-character callbacks"
+          "path": "apps/office/src/sw/source/filter/md/mdcallbcks.ts",
+          "marker": "enter_block_callback"
         }
       ],
       "upstream": [
@@ -49,6 +41,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx",
           "marker": "MD_TEXT_ENTITY"
+        },
+        {
+          "path": "vendor/md4c-reference/src/md4c.c",
+          "marker": "md_is_entity_str"
         }
       ]
     }

@@ -1,5 +1,5 @@
 /** @fileoverview Original ICU78.3 uloc.cpp name/base-name/legacy-canonical normalization over actual source subtag, keyword and language-tag conversion modules. */
-import tables from "../data/misc/uloc.json";
+import tables from "../data/misc/uloc.json" with { type: "json" };
 import { _getVariant, ulocimp_getSubtags, type LocaleByteSink } from "./uloc.subtags";
 import { ulocimp_getKeywords } from "./uloc.keywords";
 import { ulocimp_forLanguageTag } from "./uloc_tag.convert";

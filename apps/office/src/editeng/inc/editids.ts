@@ -70,3 +70,8 @@ export const SID_ATTR_CHAR_OVERLINE = 11568 as const;
 
 /** Native character color slot from editids.hrc. */
 export const SID_ATTR_CHAR_COLOR = 10017 as const;
+
+/** Native language slots from editids.hrc, SID_SVX_START +20/+889/+894. */
+export const SID_ATTR_CHAR_LANGUAGE = 10020 as const;
+export const SID_ATTR_CHAR_CJK_LANGUAGE = 10889 as const;
+export const SID_ATTR_CHAR_CTL_LANGUAGE = 10894 as const;

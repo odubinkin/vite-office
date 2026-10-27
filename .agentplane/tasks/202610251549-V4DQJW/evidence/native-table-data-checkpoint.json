@@ -1,0 +1,284 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original CellData/RowData/TableData ownership and complete required text/component SDK declarations with real EventObject compound ownership. No table manager, concrete Writer range or complete format/UI acceptance is substituted.",
+  "sourceBlobs": {
+    "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts": "b15d8bdf414c4bfa9355b19065feb432b0d8e5ec",
+    "apps/office/src/tools/inc/native-ref-cases.json": "0b9a48a60095c1f527a3c18887d43c097a652a5e",
+    "apps/office/src/tools/inc/ref.test.ts": "193cc74187cb88706221afd502ac8888f3dbc5b6",
+    "docs/program/registry/shared/capabilities/CAP-1ec57a37-87d6-416f-9f0c-816e86ab65c4.json": "1927ffa618635f26576d686247255edea3d05942",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Reference.ts.json": "9532737aa5cdd6698c7ebec7cd2327e76019e3a2",
+    "docs/program/registry/shared/provenance/tools/inc/ref.ts.json": "fb660dc3944fc7b712c0bdb243255ec832bddcca",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Reference.ts.json": "3c70fce6e7ab26ad9662371838117b3917c83100",
+    "docs/program/registry/shared/runtime/tools/inc/ref.ts.json": "1499947f6187e2174a3f00bf594cbd6558117937",
+    "docs/program/writer-upstream-suspected-issues.md": "a1831cd3fee18f96122824315a28da3e5da7ec99",
+    "scripts/tools-ref-native-probe.mjs": "ce9de20dde52e0ff6b2447cc459c187d01158f41",
+    "apps/office/src/offapi/com/sun/star/text/XSimpleText.ts": "fbb2661f15997c4825a8aab62d9bce96cf67b1f9",
+    "apps/office/src/offapi/com/sun/star/text/XText.ts": "bd055ab667c2ae6b9f9c3c5c603c398e3a9fe3de",
+    "apps/office/src/offapi/com/sun/star/text/XTextContent.ts": "a3e77234455b930ae26a479591a9f33a4fe044fc",
+    "apps/office/src/offapi/com/sun/star/text/XTextCursor.ts": "728f4a46ff2a2bf40f398a52913d8722dfcb77d3",
+    "apps/office/src/offapi/com/sun/star/text/XTextRange.ts": "47ee97e052a9659b5d2d9a043e524b73c2cb7095",
+    "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts": "daceb7829d1c2fd2c3d1c56d91f44ab68daf682c",
+    "apps/office/src/sw/source/writerfilter/dmapper/TableData.ts": "77d1b347f0ac3e01e43647f550b5711a358983ed",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-table-data.test.ts": "44125f981d49a784dfd04dbad9c3131a8198fa57",
+    "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts": "fd79f9edd388859056483d82043c9dad0fc5a97a",
+    "apps/office/src/udkapi/com/sun/star/lang/XComponent.ts": "4b50feae3069b33f78d58fbf5a4b15bb9d700c96",
+    "apps/office/src/udkapi/com/sun/star/lang/XEventListener.ts": "55a99b0c6edeeb432502d6d1ec596a3bf422a715",
+    "docs/program/registry/shared/capabilities/CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d.json": "f6511667660f85a58a590ca21f6d670754bb8852",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XSimpleText.ts.json": "e7c6a340e54a686e20ad125ea9ddedbeae05769f",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XText.ts.json": "f4bdfd24f5de1e5064e7f9a626607a8dd1e5a345",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextContent.ts.json": "91d6246aa698aba96c364eea601fa12cb28a506c",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextCursor.ts.json": "808737313826eaaacdf88ec633620129653f843b",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/XTextRange.ts.json": "3c97827ebd038683626591e6245ee0621100bca4",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/EventObject.ts.json": "6424fb9a2aa2bb38443d5d992657159589e63af0",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XComponent.ts.json": "960b6c90c850af0e953647d487fe1425097cc65e",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XEventListener.ts.json": "61d5831116a1b0ec1f11c0614674c23913a8cc8b",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XSimpleText.ts.json": "7ebe063e948e1580d468b1bca5ae029114c58dc2",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XText.ts.json": "e2c6ed764c59ba8cc130e3c47121ca6c829bbae0",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextContent.ts.json": "2774709b349687cbbb2836dca7d270731c74ff06",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextCursor.ts.json": "c2511f5203b51b5024f664e66eeef34cd5b62c90",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/XTextRange.ts.json": "6fe4656118ee2124b3aadddb8db3d0d69f3fc73b",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/EventObject.ts.json": "249788c1000c0d3f62bd66def9099c8f9d4ee4f4",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XComponent.ts.json": "e7c80ec3346ddf46abdee7be4ea6ceccff77a600",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XEventListener.ts.json": "78e1ea5236978d71ee0eeb21d1b8dea09fa57730",
+    "docs/program/registry/writer/capabilities/CAP-6492284a-276f-4021-b111-403fbecdda95.json": "40141c8a34a4ecf7d1dcfea9cab7b457f52c9d80",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TableData.ts.json": "a3ec14645d57d29a854f7820047ef1a31c156bd5",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TableData.ts.json": "489e4065c167e028699667b041d38585223b3333"
+  },
+  "checks": {
+    "tableAndSdkCoverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/sw/source/writerfilter/dmapper/native-table-data.test.ts src/cppu/inc/com/sun/star/uno/ --coverage.include=src/sw/source/writerfilter/dmapper/TableData.ts --coverage.include=src/udkapi/com/sun/star/lang/EventObject.ts --coverage.include=src/udkapi/com/sun/star/lang/XComponent.ts --coverage.include=src/udkapi/com/sun/star/lang/XEventListener.ts --coverage.include=src/offapi/com/sun/star/text/XTextRange.ts --coverage.include=src/offapi/com/sun/star/text/XSimpleText.ts --coverage.include=src/offapi/com/sun/star/text/XText.ts --coverage.include=src/offapi/com/sun/star/text/XTextCursor.ts --coverage.include=src/offapi/com/sun/star/text/XTextContent.ts --coverage.include=src/cppu/inc/com/sun/star/uno/Reference.ts --coverage.reportsDirectory=coverage/native-table-data --maxWorkers=2",
+      "result": "pass:50 tests/12 files; unchanged scoped100 S314/B116/F105/L295; ten executable owners",
+      "perFile": {
+        "apps/office/src/cppu/inc/com/sun/star/uno/Reference.ts": {
+          "s": {
+            "covered": 122,
+            "total": 122
+          },
+          "f": {
+            "covered": 26,
+            "total": 26
+          },
+          "b": {
+            "covered": 66,
+            "total": 66
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XSimpleText.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XText.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextContent.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextCursor.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/text/XTextRange.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/TableData.ts": {
+          "s": {
+            "covered": 113,
+            "total": 113
+          },
+          "f": {
+            "covered": 49,
+            "total": 49
+          },
+          "b": {
+            "covered": 30,
+            "total": 30
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/EventObject.ts": {
+          "s": {
+            "covered": 16,
+            "total": 16
+          },
+          "f": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 6,
+            "total": 6
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XComponent.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XEventListener.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        }
+      }
+    },
+    "intrusiveReferenceCoverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/tools/inc/ref.test.ts src/sw/source/writerfilter/dmapper/native-property-map-ref.test.ts --coverage.include=src/tools/inc/ref.ts --coverage.reportsDirectory=coverage/native-table-ref --maxWorkers=2",
+      "result": "pass:12 tests/2 files; unchanged scoped100 S66/B36/F21/L54",
+      "perFile": {
+        "apps/office/src/tools/inc/ref.ts": {
+          "s": {
+            "covered": 66,
+            "total": 66
+          },
+          "f": {
+            "covered": 21,
+            "total": 21
+          },
+          "b": {
+            "covered": 36,
+            "total": 36
+          }
+        }
+      }
+    },
+    "writerRegressions": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ src/cppuhelper/source/native-implbase.test.ts --maxWorkers=2",
+      "result": "pass:237 tests/19 files"
+    },
+    "native": {
+      "command": "node scripts/tools-ref-native-probe.mjs --write; node scripts/tools-ref-native-probe.mjs --check",
+      "result": "pass:complete original ref.hxx/ref.cxx normal and ASan/UBSan; original four captures unchanged; fifth vector stream17observations",
+      "sourceCount": 15,
+      "commands": 14,
+      "allExitCodes": 0,
+      "allSignals": null,
+      "captures": {
+        "lifecycle": {
+          "observations": 33,
+          "digest": "71445dc18308981154ddb3ee28a94bdf5021a26fc639e0660b489393a7769f45"
+        },
+        "assignments": {
+          "observations": 72,
+          "digest": "cb8905726b159a7aa112fa5d7ffec76e9c0229577f9ba8b3ff559e302b7c50a8"
+        },
+        "base": {
+          "observations": 34,
+          "digest": "b582040efc5fd796154ae89e608657b3ee97116056ec471e64adf792203b9785"
+        },
+        "boundary": {
+          "observations": 11,
+          "digest": "59a7d6262661fcb822f698315e8d07766c8fe700bce8aa30228924292c91e488"
+        },
+        "vector": {
+          "observations": 17,
+          "digest": "41b2921066e20c32b95539277a089f3b0e17b5c9477a2846d26c0d80aa37094b"
+        }
+      },
+      "leakSanitizer": "unsupported on macOS host and disabled; no leak-detection claim"
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production build, relative resources and no-backend smoke)",
+    "eslint": "pass:all changed source/test/probe files, max-warnings0; final edited tests rechecked",
+    "prettier": "pass:15 authored source/test/probe/capture paths; docs/program is intentionally ignored by existing configuration",
+    "dependencies": "pass:1525 runtime sources/7755 relative imports/205 allowed edges; no edge added",
+    "jsdoc": "pass:3540 authored source files",
+    "size": "pass:3544 authored files, unchanged <1000-line hard limit",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "provenance": "pass:1526 modules/1321 mapped/178 browser adaptations/27 local infrastructure",
+    "registry": {
+      "moduleCount": 1526,
+      "capabilityCount": 343,
+      "invariantCount": 34,
+      "globalRecordCount": 3459
+    },
+    "resources": "pass:Writer resource test2/1, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "doctor": "pass:0errors; pre-existing managed hook shim readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "preservedFindings": [
+    "WRITER161:CellData::IsValid ignores stored end and getStart returned pointer; catches only RuntimeException."
+  ],
+  "resolvedValidationFindings": [
+    "Initial SDK provenance named only the interface, failing the existing non-basename evidence guard. Added original declared method symbols to runtime/provenance records; guard unchanged and final check passes."
+  ],
+  "limitations": [
+    "Original TableData header and out-of-line IsValid body are source-backed, not a complete compiled native TableData differential capture. Native vector witness certifies only original SvRef container destruction order on the selected native configuration.",
+    "Concrete test RangeCaller supplies complete controlled virtual outcomes over the actual WeakImplHelper/XTextRange/Reference/exception owners. It is a test caller, not a library range/document/type/default provider.",
+    "Normal generated interface metadata remains incomplete as upstream normal bindings require. Physical ABI, native exception-copy allocation, thread and invalid borrowed-pointer behavior remain unverified.",
+    "Actual TableManager/DomainMapperTableManager, table handler/model application, full Writer DOCX and Calc XLSX import/export and production desktop/mobile UI acceptance remain incomplete. No UI path changed in this block.",
+    "Full suite not due under approved ten-task cadence; prior unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local prerequisite checkpoint only; no merge/publication, completion or broad parity/default-status promotion."
+}

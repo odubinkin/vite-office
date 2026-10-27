@@ -3,18 +3,11 @@ from pathlib import Path
 import json
 import re
 import sys
-import xml.etree.ElementTree as ET
+import runpy
 
 base = Path('vendor/libreoffice-reference')
-name = '{http://openoffice.org/2001/registry}name'
-root = ET.parse(base / 'officecfg/registry/data/org/openoffice/VCL.xcu').getroot()
-node = next(n for n in root.findall('node') if n.get(name) == 'FontSubstitutions')
-substitutions = {}
-for locale in node.findall('node'):
-    fonts = substitutions[locale.get(name)] = {}
-    for font in locale.findall('node'):
-        prop = next((p for p in font.findall('prop') if p.get(name) == 'SubstFontsMS'), None)
-        fonts[font.get(name)] = '' if prop is None else prop.findtext('value', '')
+# Keep the established extraction entry point while the complete VCL field/map extraction owns its resources.
+substitutions = runpy.run_path('scripts/extract-font-config-map.py')['records']
 
 textenc = base / 'sal/textenc'
 lines, stack, accept = [], [], True
@@ -67,8 +60,7 @@ for index, symbol in [(11, 'aImplUSASCIITextEncodingData'), (1, 'aImplMS1252Text
 header = (base / 'include/rtl/textenc.h').read_text()
 for label, index in [('ASCII_US', 11), ('MS_1252', 1), ('UTF8', 76), ('JAVA_UTF8', 90), ('ISO_8859_1', 12)]:
     assert re.search(r'#define\s+RTL_TEXTENCODING_' + label + r'\s+\(RTL_TEXTENC_CAST\(\s*' + str(index) + r'\s*\)\)', header)
-for path, data in [('apps/office/src/unotools/source/config/data/font-substitutions-ms.json', substitutions),
-                   ('apps/office/src/sal/textenc/windows-charsets.json', charsets)]:
+for path, data in [('apps/office/src/sal/textenc/windows-charsets.json', charsets)]:
     value = json.dumps(data, ensure_ascii=False, indent=2) + '\n'
     if '--check' in sys.argv:
         assert json.loads(Path(path).read_text()) == json.loads(value), path

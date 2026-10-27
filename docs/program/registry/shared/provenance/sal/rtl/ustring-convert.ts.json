@@ -6,17 +6,63 @@
     "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",
     "status": "mapped",
     "upstreamPath": "include/rtl/ustring.hxx",
-    "localSymbols": ["OStringToOUString", "OUStringToOString"],
-    "upstreamSymbols": ["OStringToOUString", "OUStringToOString"],
+    "localSymbols": [
+      "OStringToOUString",
+      "OUStringToOString"
+    ],
+    "upstreamSymbols": [
+      "OStringToOUString",
+      "OUStringToOString"
+    ],
     "preservedResponsibilities": [
-      "CSV byte conversion uses the original single-byte descriptor conversion procedures and OString/OUString conversion flags for the authenticated ported registry; Unicode writes little-endian UTF-16 and UTF-8 uses browser byte primitives."
+      "Pinned available single-byte conversion descriptors and string conversion flags, native UTF-8 conversion in both directions, exact UTF-8 allocation estimate/ASCII fast path/retry loop and source final FLUSH. UTF-16 and broader registry/constructor contracts remain independently unverified.",
+      "OUStringToOString now delegates to actual rtl_uString2String ownership/conversion instead of a duplicated single-byte/UTF8-only shortcut. Returned bytes are copied from the logical native byte string before releasing its owner. All represented multibyte/contextual reverse owners are reachable through the factory; native ISCII null-context mismatch remains preserved rather than concealed. Existing little-endian UTF16 adapter is retained. OStringToOUString still awaits the native forward string-wrapper owner; complete SAL registry and value-class ABI remain unverified.",
+      "Forward SAL string-wrapper checkpoint ports rtl_string2UString_status, its UTF8 estimate, checked/unchecked C wrappers, early old-target release, ASCII fast path/retry, FLUSH/null-context dispatch, +8-unit retries, shrink fallback and partial checked output. OStringToOUString now delegates to this native owner for octet encodings; the existing explicit UTF16 byte bridge remains a bounded application adaptation. A compiled unchanged native witness observes 524288 core byte-pair calls and 720 mixed/flag cases with allocator identities/sizes/free order under ASan/UBSan. Full registry/ABI and allocation failures are not certified by that witness. WRITER188 records original allocation-failure aliasing; WRITER181 records forward ISCII null-context mismatch. No whole SAL/filter parity promotion."
     ],
     "omittedResponsibilities": [
-      "Full SAL converter registry, contextual/multibyte converters, complete stream ownership and every original constructor/error contract remain unported. The original SAL dummy conversion now handles missing registry entries."
+      "Native forward string-wrapper owner, complete SAL registry/value-class ABI and full stream/format orchestration remain unverified. The existing UTF16LE application adapter is a separate boundary."
     ],
     "evidence": {
-      "local": [{"path": "apps/office/src/sal/rtl/ustring-convert.ts", "marker": "OUStringToOString"}],
-      "upstream": [{"path": "vendor/libreoffice-reference/include/rtl/ustring.hxx", "marker": "OUStringToOString"}]
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.ts",
+          "marker": "OUStringToOString"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.test.ts",
+          "marker": "uses native UTF-8 broken-sequence grouping"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.native.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.native.json",
+          "marker": "baselineCommit"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/ustring.hxx",
+          "marker": "OUStringToOString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
+          "marker": "rtl_impl_convertUStringToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/string.cxx",
+          "marker": "rtl_impl_convertUStringToString"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/string.h",
+          "marker": "OUSTRING_TO_OSTRING_CVTFLAGS"
+        }
+      ]
     },
     "filenameDivergence": {
       "localPath": "apps/office/src/sal/rtl/ustring-convert.ts",

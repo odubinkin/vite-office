@@ -131,8 +131,10 @@ export class SwUndoDelete extends SwUndo {
     for (const id of this.m_aUndoNodeIds.splice(0)) undoNodes.Release(id);
     this.m_aSelectedNodes = undefined;
     this.m_aEndStr = undefined;
+    this.m_pHistory?.Dispose();
     this.m_pHistory = undefined;
     this.m_aSttStr = "";
+    super.Dispose();
   }
 
   /** Restores removed text and hints. @param context - Active Writer context. @returns Nothing. */
@@ -233,6 +235,8 @@ export class SwUndoJoinParagraphs extends SwUndo {
   /** Releases the disconnected paragraph when history drops this action. @returns Nothing. */
   public override Dispose(): void {
     this.undoNodes.Release(this.removedNodeId);
+    this.m_pHistory.Dispose();
+    super.Dispose();
   }
 
   /** Splits the leading node and restores the exact removed node items and hints. @param context - Active Writer context. @returns Nothing. */

@@ -57,12 +57,14 @@ const allowedEdges = new Map([
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
-  ["cppuhelper", new Set(["cppu", "sal"])],
+  // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
+  ["cppuhelper", new Set(["cppu", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
-  ["docmodel", new Set(["tools", "o3tl"])],
+  // Original UnoComplexColor.hxx includes cppuhelper/implbase and offapi XComplexColor;
+  // Library_docmodel links cppuhelper/cppu for actual component references.
+  ["docmodel", new Set(["tools", "o3tl", "cppu", "cppuhelper", "offapi"])],
   // Original xmlcnitm.hxx includes xmloff/xmlcnimp.hxx; Library_editeng links xo.
   [
     "editeng",
@@ -89,7 +91,9 @@ const allowedEdges = new Map([
   ],
   ["external", new Set()],
   // Native Library_msfilter uses Tools colors for the Word highlight palette.
-  ["filter", new Set(["tools"])],
+  // Native msfilter util.cxx returns rtl::OUString color values (Library_msfilter links sal).
+  // Native Library_msfilter uses Tools colors and SAL rtl strings/converters in rtfutil.cxx.
+  ["filter", new Set(["tools", "sal"])],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
   // Original include/formula/grammar.hxx includes the shared FormulaLanguage.hpp IDL owner.
   ["formula", new Set(["offapi", "sal", "svl"])],
@@ -190,6 +194,8 @@ const allowedEdges = new Map([
   [
     "svtools",
     new Set([
+      // parhtml.cxx includes svl/lngmisc.hxx; Library_svt.mk links svl.
+      "svl",
       "tools",
       "o3tl",
       "external",
@@ -208,6 +214,8 @@ const allowedEdges = new Map([
   [
     "svx",
     new Set([
+      // Native xcolit.hxx owns docmodel ComplexColor; Library_svxcore links docmodel.
+      "docmodel",
       "i18nlangtag",
       "cppu",
       "editeng",
@@ -223,6 +231,12 @@ const allowedEdges = new Map([
   [
     "sw",
     new Set([
+      // sw/Library_sw.mk links i18npool; breakit.hxx exposes the actual script-query producer.
+      "i18npool",
+      // sw/Library_sw.mk links i18nlangtag; mdcallbcks.cxx consumes the application LanguageTag.
+      "i18nlangtag",
+      // sw/Library_sw.mk links the pinned external md4c parser.
+      "external",
       // Native sw/source/writerfilter/ooxml/OOXMLPropertySet.cxx includes sax/tools/converter.hxx;
       // sw/Library_sw.mk links sax for these original OOXML lexical conversions.
       "sax",
@@ -246,6 +260,11 @@ const allowedEdges = new Map([
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
       "i18nutil",
+      // Native sw/Library_sw.mk links i18npool and ICU (icui18n/icuuc).
+      // writerwordglue.cxx::GetPseudoCharRuns calls the concrete break service and unicode/ubidi.h;
+      // actual existing script queries/default-mode levels bind those dependencies without fake services.
+      "i18npool",
+      "external",
       "o3tl",
       "offapi",
       "package",
@@ -291,6 +310,7 @@ const allowedEdges = new Map([
   // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
   // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
   // Original transliterationwrapper.cxx includes i18nutil flags and generated i18n Transliteration API.
+  // Original unotools/fontcfg.hxx includes tools/fontenum.hxx for configured weight/width values.
   // CalendarWrapper owns a native DateTime epoch; Library_utl links tl.
   [
     "unotools",
@@ -321,6 +341,9 @@ export function isForbiddenDomainVclImport(relativeSource, relativeTarget) {
   const source = relativeSource.split(path.sep).join("/"),
     target = relativeTarget.split(path.sep).join("/").replace(/\.ts$/u, "");
   if (!source.includes("/source/core/") || !target.startsWith("vcl/")) return false;
+  // Native number.cxx SwDefBulletConfig owns a vcl::Font value, without a device/browser adapter.
+  if (source === "sw/source/core/doc/number-bullet.ts" && target === "vcl/source/font/font")
+    return false;
   // chartlis.hxx/cxx consume native Idle,TaskPriority and Application queued-input admission.
   // These kernel contracts use an explicitly bound platform;they never import browser adapters.
   if (
@@ -390,6 +413,7 @@ export function getRuntimeOwnershipLayer(relativePath) {
     return "upstream-mechanism";
   if (portablePath.startsWith("external/mdds/include/")) return "upstream-mechanism";
   if (portablePath.startsWith("external/harfbuzz/src/")) return "upstream-mechanism";
+  if (portablePath.startsWith("external/md4c/src/")) return "upstream-mechanism";
   if (
     portablePath.startsWith("sal/rtl/") ||
     portablePath.startsWith("sal/inc/rtl/") ||
@@ -422,8 +446,16 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
   const targetLayer = getRuntimeOwnershipLayer(targetPath);
   if (targetLayer === "browser")
     return `${sourceLayer} must receive browser adapters through an injected contract`;
+  // Original docnew.cxx injects SwModule's attribute package into SwAttrPool;
+  // hints.cxx's GetDfltAttr reads that same module-global package directly.
+  const portableSourcePath = sourcePath.split(path.sep).join("/");
+  const writerDefaultModuleRead =
+    (portableSourcePath === "sw/source/core/doc/doc.ts" ||
+      portableSourcePath === "sw/source/core/attr/hints.ts") &&
+    portableTargetPath === "sw/source/uibase/app/swmodule";
   if (
     sourceLayer === "writer-core" &&
+    !writerDefaultModuleRead &&
     (targetLayer === "writer-filter" ||
       targetLayer === "writer-uibase" ||
       targetLayer === "writer-model-api")

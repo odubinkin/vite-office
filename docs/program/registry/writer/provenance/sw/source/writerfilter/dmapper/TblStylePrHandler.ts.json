@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts",
+    "localSymbols": [
+      "TblStyleType"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/TblStylePrHandler.hxx",
+    "upstreamSymbols": [
+      "TblStyleType",
+      "Band1Horz"
+    ],
+    "preservedResponsibilities": [
+      "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Only the original enum declaration is implemented here; full TblStylePrHandler XML handling, runtime WrapTextMode UNO type binding and native component services remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts",
+          "marker": "TblStyleType"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/TblStylePrHandler.hxx",
+          "marker": "Band1Horz"
+        }
+      ]
+    }
+  }
+}

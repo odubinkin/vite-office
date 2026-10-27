@@ -1,0 +1,15 @@
+{
+  "scope": "C++ signed16 template argument conversion only, not a native DOCX binary or parity test",
+  "upstream": "sw/source/filter/ww8/docxattributeoutput.cxx#DocxAttributeOutput::CharScaleWidth",
+  "expression": "std::max<sal_Int16>(1,std::min<sal_Int16>(rScaleWidth.GetValue(),600))",
+  "result": [
+    "0:1",
+    "1:1",
+    "100:100",
+    "600:600",
+    "601:600",
+    "32767:600",
+    "32768:1",
+    "65535:1"
+  ]
+}

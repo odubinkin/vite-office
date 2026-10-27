@@ -1,4 +1,6 @@
 /** @fileoverview Consumed Writer cursor/paragraph/style property entries from pinned unomap.cxx/unomap1.cxx; unrepresented properties are not advertised. */
+import { cppu_detail_getUnoType_FillStyle as fillStyleType } from "../../../../offapi/com/sun/star/drawing/FillStyle";
+import { XATTR_FILLSTYLE, XATTR_FILLCOLOR, XATTR_FILLTRANSPARENCE } from "../../../../svx/inc/xdef";
 import { UnoType, type UnoTypeArgument } from "../../../../cppu/inc/unotype";
 import { cppu_detail_getUnoType_BreakType as breakType } from "../../../../offapi/com/sun/star/style/BreakType";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
@@ -187,6 +189,9 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["CharAutoKerning", { which: H.RES_CHRATR_AUTOKERN, member: 0, kind: "bool" }],
   ["CharEscapement", { which: H.RES_CHRATR_ESCAPEMENT, member: 0, kind: "any" }],
   ["CharEscapementHeight", { which: H.RES_CHRATR_ESCAPEMENT, member: 1, kind: "any" }],
+  ["FillStyle", { which: XATTR_FILLSTYLE, member: 0, kind: "any" }],
+  ["FillColor", { which: XATTR_FILLCOLOR, member: 0, kind: "any" }],
+  ["FillTransparence", { which: XATTR_FILLTRANSPARENCE, member: 0, kind: "any" }],
   ["CharColor", { which: H.RES_CHRATR_COLOR, member: 0, kind: "color" }],
   ["CharHighlight", { which: H.RES_CHRATR_HIGHLIGHT, member: 0, kind: "color" }],
   ["ParaAdjust", { which: H.RES_PARATR_ADJUST, member: 0, kind: "any" }],
@@ -221,50 +226,56 @@ export function createPropertySetInfo(
   const properties: Property[] = [];
   for (const [name, entry] of includeItems ? SwUnoPropertyMap : []) {
     const argument: UnoTypeArgument =
-      entry.kind === "break"
-        ? breakType
-        : entry.kind === "border"
-          ? borderLineType
-          : entry.kind === "pagedesc"
-            ? entry.member === MID_PAGEDESC_PAGEDESCNAME
-              ? "OUString"
-              : "sal_Int16"
-            : entry.kind === "string"
-              ? "OUString"
-              : entry.kind === "font"
-                ? entry.member < 3
-                  ? "OUString"
-                  : "sal_Int16"
-                : entry.kind === "bool"
-                  ? "bool"
-                  : entry.kind === "byte"
-                    ? "sal_Int8"
-                    : entry.kind === "short"
-                      ? "sal_Int16"
-                      : entry.kind === "hyperlink" || entry.kind === "autostyle"
+      name === "FillStyle"
+        ? fillStyleType
+        : name === "FillColor"
+          ? "sal_Int32"
+          : name === "FillTransparence"
+            ? "sal_Int16"
+            : entry.kind === "break"
+              ? breakType
+              : entry.kind === "border"
+                ? borderLineType
+                : entry.kind === "pagedesc"
+                  ? entry.member === MID_PAGEDESC_PAGEDESCNAME
+                    ? "OUString"
+                    : "sal_Int16"
+                  : entry.kind === "string"
+                    ? "OUString"
+                    : entry.kind === "font"
+                      ? entry.member < 3
                         ? "OUString"
-                        : entry.kind === "color" || entry.kind === "long"
-                          ? "sal_Int32"
-                          : name.includes("Posture")
-                            ? fontSlantType
-                            : name === "ParaLineSpacing"
-                              ? lineSpacingType
-                              : name === "ParaTabStops"
-                                ? ["Sequence", tabStopType]
-                                : name === "CharUnderlineColor"
-                                  ? "sal_Int32"
-                                  : name === "CharUnderlineHasColor"
-                                    ? "bool"
-                                    : name === "CharStrikeout" ||
-                                        name === "CharEscapement" ||
-                                        name === "ParaAdjust" ||
-                                        name === "ParaLastLineAdjust"
-                                      ? "sal_Int16"
-                                      : name === "CharEscapementHeight"
-                                        ? "sal_Int8"
-                                        : name === "ParaExpandSingleWord"
+                        : "sal_Int16"
+                      : entry.kind === "bool"
+                        ? "bool"
+                        : entry.kind === "byte"
+                          ? "sal_Int8"
+                          : entry.kind === "short"
+                            ? "sal_Int16"
+                            : entry.kind === "hyperlink" || entry.kind === "autostyle"
+                              ? "OUString"
+                              : entry.kind === "color" || entry.kind === "long"
+                                ? "sal_Int32"
+                                : name.includes("Posture")
+                                  ? fontSlantType
+                                  : name === "ParaLineSpacing"
+                                    ? lineSpacingType
+                                    : name === "ParaTabStops"
+                                      ? ["Sequence", tabStopType]
+                                      : name === "CharUnderlineColor"
+                                        ? "sal_Int32"
+                                        : name === "CharUnderlineHasColor"
                                           ? "bool"
-                                          : "float";
+                                          : name === "CharStrikeout" ||
+                                              name === "CharEscapement" ||
+                                              name === "ParaAdjust" ||
+                                              name === "ParaLastLineAdjust"
+                                            ? "sal_Int16"
+                                            : name === "CharEscapementHeight"
+                                              ? "sal_Int8"
+                                              : name === "ParaExpandSingleWord"
+                                                ? "bool"
+                                                : "float";
     const key = unicode(name);
     properties.push(new Property(key, entry.which, UnoType.get(argument), 1));
     key.dispose();

@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/svx/browser/fill-item-codec.ts",
+    "rationale": "Browser-only fill-item records preserve concrete native item classes, raw full enum, transparency/bool state and named/indexed resolved/complex color ownership. Indexed colors use a read-only view of their actual private resolved payload because the native getter requires non-indexed state; no palette resolution or source mutation is synthesized.",
+    "responsibilities": [
+      "Browser-only fill-item records preserve concrete native item classes, raw full enum, transparency/bool state and named/indexed resolved/complex color ownership. Indexed colors use a read-only view of their actual private resolved payload because the native getter requires non-indexed state; no palette resolution or source mutation is synthesized."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing browser Worker graph requires structured-cloneable records instead of native in-process object references."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/browser/fill-item-codec.ts",
+          "marker": "encodeFillItem"
+        }
+      ]
+    }
+  }
+}

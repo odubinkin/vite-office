@@ -18,16 +18,25 @@
       "evidence": [
         "apps/office/src/sal/textenc/convertisciidevangari.ts#ImplConvertIsciiDevanagariToUnicode",
         "vendor/libreoffice-reference/sal/textenc/convertisciidevangari.cxx#ImplConvertIsciiDevanagariToUnicode",
-        "apps/office/src/sal/textenc/convertisciidevangari.test.ts#maps pinned ISCII base, nukta and halant combinations"
+        "apps/office/src/sal/textenc/convertisciidevangari.test.ts#maps pinned ISCII base, nukta and halant combinations",
+        "apps/office/src/sal/textenc/convertisciidevangari.ts#ImplConvertUnicodeToIsciiDevanagari",
+        "apps/office/src/sal/textenc/convertisciidevangari.encode.test.ts",
+        "apps/office/src/sal/textenc/convertisciidevangari.encode.native.json",
+        "scripts/sal-iscii-native-probe.mjs"
       ],
-      "justification": "Pinned contextful ISCII Devanagari conversion, compound nukta/halant rules and bad-input actions. The reverse Unicode-to-ISCII converter is outside the RTF import path. Compiled upstream differential remains unverified.",
+      "justification": "Pinned original forward converter and documented source context behavior remain preserved. Original reverse UnicodeToIsciiDevanagari state, ordered source ranges, halant/joiner and nukta pairs, surrogate bookkeeping, optional result pointers and original FLUSH condition. Compiled unchanged converter with original bad-input/classification and extracted original character/integer/range dependencies under ASan/UBSan agrees on 2097152 BMP/flag/capacity cases and 1080 saved-context vectors. Non-null contexts only; this does not certify full SAL ABI or generic string integration. Forward compiled differential and full format orchestration remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplConvertIsciiDevanagariToUnicode",
         "ImplCreateIsciiDevanagariToUnicodeContext",
         "ImplResetIsciiDevanagariToUnicodeContext",
         "ImplDestroyIsciiDevanagariToUnicodeContext",
-        "IsciiDevanagariToUnicodeContext"
+        "IsciiDevanagariToUnicodeContext",
+        "ImplConvertUnicodeToIsciiDevanagari",
+        "ImplCreateUnicodeToIsciiDevanagariContext",
+        "ImplResetUnicodeToIsciiDevanagariContext",
+        "ImplDestroyUnicodeToIsciiDevanagariContext",
+        "UnicodeToIsciiDevanagariContext"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/convertisciidevangari.cxx",
@@ -36,7 +45,12 @@
         "ImplCreateIsciiDevanagariToUnicodeContext",
         "ImplResetIsciiDevanagariToUnicodeContext",
         "ImplDestroyIsciiDevanagariToUnicodeContext",
-        "IsciiDevanagariToUnicode"
+        "IsciiDevanagariToUnicode",
+        "ImplConvertUnicodeToIsciiDevanagari",
+        "ImplCreateUnicodeToIsciiDevanagariContext",
+        "ImplResetUnicodeToIsciiDevanagariContext",
+        "ImplDestroyUnicodeToIsciiDevanagariContext",
+        "UnicodeToIsciiDevanagari"
       ]
     }
   }

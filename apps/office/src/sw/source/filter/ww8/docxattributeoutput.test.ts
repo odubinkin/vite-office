@@ -1,6 +1,11 @@
 /** @fileoverview Native DOCX run output over actual shared character items and ZIP fragment stream. */
+import { DocxExport } from "./docxexport";
+import { SwDoc } from "../../core/doc/doc";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";
+import { XmlFilterBase } from "../../../../oox/source/core/xmlfilterbase";
+import { ZipStorage } from "../../../../oox/source/helper/zipstorage";
 import { expect, it } from "vitest";
-import { DocxAttributeOutput, impl_WriteRunText } from "./docxattributeoutput";
+import { impl_WriteRunText } from "./docxattributeoutput";
 import { FastSerializerHelper } from "../../../../sax/inc/fshelper";
 import { FastTokenHandler } from "../../../../oox/source/core/fasttokenhandler";
 import { getTokenFromUtf8 as token } from "../../../../oox/source/token/tokenmap";
@@ -25,11 +30,28 @@ import {
 function setup() {
   const stream = new ZipFragmentStream("word/document.xml", "application/xml"),
     helper = new FastSerializerHelper(stream, false, new FastTokenHandler());
-  return { stream, helper, output: new DocxAttributeOutput(helper) };
+  const doc = new SwDoc(),
+    position = new SwPosition(doc.GetNodes().GetEndOfContent()),
+    range = new SwPaM(position);
+  const exporter = new DocxExport(
+    new XmlFilterBase(new ZipStorage()),
+    doc,
+    range,
+    range,
+    false,
+    false,
+  );
+  const output = exporter.DocxAttrOutput();
+  output.SetSerializer(helper);
+  return { stream, helper, output, exporter, range, position, doc };
 }
 /** Complete the actual serializer and decode output. @param owners - Actual owners. @returns XML fragment. */
 function finish(owners: ReturnType<typeof setup>): string {
   owners.helper.endDocument();
+  owners.exporter.dispose();
+  owners.range.Dispose();
+  owners.position.Dispose();
+  owners.doc.Dispose();
   return new TextDecoder().decode(owners.stream.getBytes());
 }
 it("splits controls and whitespace with native UTF16 symbol handling and final-segment font asymmetry", /** Native source behavior over actual owners. @returns Nothing. */ () => {

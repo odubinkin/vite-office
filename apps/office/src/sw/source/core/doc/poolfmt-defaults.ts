@@ -2,6 +2,7 @@
  * @fileoverview Source-derived paragraph-style defaults from pinned LibreOffice
  * `sw/source/core/doc/DocumentStylePoolManager.cxx`.
  */
+import type { SwFormat } from "../attr/format";
 import { createWriterTextColorItem, createWriterHighlightItem } from "../attr/swatrset";
 import { FontItalic, FontWeight } from "../../../../tools/inc/fontenum";
 import { SvxAdjust, SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
@@ -267,7 +268,7 @@ export function applyWriterParagraphStyleDefaults(collection: SwTextFormatColl):
 }
 
 /** Resolves requested Writer font roles separately for all script slots. @param collection - Target style. @param role - Upstream font role. @returns Nothing. */
-function applyScriptFonts(collection: SwTextFormatColl, role: "fixed" | "heading" | "text"): void {
+export function applyScriptFonts(collection: SwFormat, role: "fixed" | "heading" | "text"): void {
   const document = collection.GetAttrSet().GetDoc();
   const requests = [
     [RES_CHRATR_FONT, "western"],

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/source/unodraw/unobrushitemhelper.ts",
+    "upstreamPath": "svx/source/unodraw/unobrushitemhelper.cxx",
+    "localSymbols": [
+      "setSvxBrushItemAsFillAttributesToTargetSet"
+    ],
+    "upstreamSymbols": [
+      "setSvxBrushItemAsFillAttributesToTargetSet"
+    ],
+    "preservedResponsibilities": [
+      "Native GPOS_NONE conversion for every brush constructor represented by the kernel: original exclusive clear bound, NONE/SOLID branches, RGB rescue, complex-color finalization/copy and rounded 254-domain transparency mapping."
+    ],
+    "omittedResponsibilities": [
+      "Graphics/bitmap positioning and reverse fill conversion remain outside this non-graphic brush family; compiled native document-level differential remains unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.ts",
+          "marker": "setSvxBrushItemAsFillAttributesToTargetSet"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svx/source/unodraw/unobrushitemhelper.cxx",
+          "marker": "setSvxBrushItemAsFillAttributesToTargetSet"
+        }
+      ]
+    }
+  }
+}

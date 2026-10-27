@@ -36,12 +36,11 @@ it("native empty append merges copied automatic items without retaining duplicat
     underline: false,
   });
   sourceItems.ClearItem(RES_CHRATR_POSTURE);
-  const old = first.InsertItem(new SwFormatAutoFormat(targetItems), 0, 0, SetAttrMode.NOHINTADJUST);
-  const copied = source.InsertItem(
-    new SwFormatAutoFormat(sourceItems),
-    0,
-    0,
-    SetAttrMode.NOHINTADJUST,
+  const old = requireInsertedHint(
+    first.InsertItem(new SwFormatAutoFormat(targetItems), 0, 0, SetAttrMode.NOHINTADJUST),
+  );
+  const copied = requireInsertedHint(
+    source.InsertItem(new SwFormatAutoFormat(sourceItems), 0, 0, SetAttrMode.NOHINTADJUST),
   );
   first.AppendTextNode(source);
   const hints = required(first.GetpSwpHints());
@@ -58,23 +57,29 @@ it("native empty append overwrites equal empty internet hints and preserves unre
     first = required(doc.paragraphs[0]),
     source = doc.nodes.MakeTextNode();
   first.SetText("Body");
-  const original = first.InsertItem(
-    new SwFormatINetFormat({ url: "https://example.test/old" }),
-    4,
-    4,
-    SetAttrMode.NOHINTADJUST,
+  const original = requireInsertedHint(
+    first.InsertItem(
+      new SwFormatINetFormat({ url: "https://example.test/old" }),
+      4,
+      4,
+      SetAttrMode.NOHINTADJUST,
+    ),
   );
-  const unrelated = first.InsertItem(
-    new SwFormatINetFormat({ url: "https://example.test/keep" }),
-    0,
-    0,
-    SetAttrMode.NOHINTADJUST,
+  const unrelated = requireInsertedHint(
+    first.InsertItem(
+      new SwFormatINetFormat({ url: "https://example.test/keep" }),
+      0,
+      0,
+      SetAttrMode.NOHINTADJUST,
+    ),
   );
-  source.InsertItem(
-    new SwFormatINetFormat({ url: "https://example.test/new" }),
-    0,
-    0,
-    SetAttrMode.NOHINTADJUST,
+  requireInsertedHint(
+    source.InsertItem(
+      new SwFormatINetFormat({ url: "https://example.test/new" }),
+      0,
+      0,
+      SetAttrMode.NOHINTADJUST,
+    ),
   );
   first.AppendTextNode(source);
   const hints = required(first.GetpSwpHints());
@@ -95,51 +100,60 @@ it("native hint append retains unformatted empty and nonempty sources without in
   expect(first.GetText()).toBe("Text");
   expect(first.GetpSwpHints()).toBeUndefined();
 });
-it("native item copy retains the explicit unsupported nonempty guard and undo insertion priority", /** Keeps unported nonempty adjustment explicit and NOHINTADJUST unchanged. @returns Nothing. */ () => {
+it("native internet copy, default and NOHINTADJUST insertion retain nesting precedence", /** Source IsNesting precedes the NOHINTADJUST branch and replaces coincident empty internet hints. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     node = required(doc.paragraphs[0]),
     item = new SwFormatINetFormat({ url: "https://example.test/copy" });
   node.SetText("Text");
-  expect(
-    /** Rejects unported nonempty copy before mutation. @returns Unsupported insertion. */ () =>
-      node.InsertItem(item, 0, 1, SetAttrMode.IS_COPY),
-  ).toThrow("without NOHINTADJUST");
-  expect(
-    /** Rejects unported default adjustment before mutation. @returns Unsupported insertion. */ () =>
-      node.InsertItem(item, 0, 0, SetAttrMode.DEFAULT),
-  ).toThrow("without NOHINTADJUST");
-  node.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY);
-  node.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY);
-  expect(node.GetpSwpHints()?.Count()).toBe(2);
+  const copied = requireInsertedHint(node.InsertItem(item, 0, 1, SetAttrMode.IS_COPY));
+  expect(copied.GetStart()).toBe(0);
+  expect(copied.GetEnd()).toBe(1);
+  expect((copied.GetAttr() as SwFormatINetFormat).GetValue()).toBe("https://example.test/copy");
+  const empty = requireInsertedHint(node.InsertItem(item, 0, 0, SetAttrMode.DEFAULT));
+  expect(empty.GetStart()).toBe(0);
+  expect(empty.GetEnd()).toBe(0);
+  const undoNode = doc.nodes.MakeTextNode("Undo");
+  requireInsertedHint(
+    undoNode.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY),
+  );
+  requireInsertedHint(
+    undoNode.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY),
+  );
+  expect(undoNode.GetpSwpHints()?.Count()).toBe(1);
 });
+
 it("native nonempty append preserves independently formatted text on both sides", /** Protects the existing nonempty join profile while separating empty CopyAttr ownership. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     first = required(doc.paragraphs[0]),
     source = doc.nodes.MakeTextNode("Right");
   first.SetText("Left");
-  first.InsertItem(
-    new SwFormatAutoFormat(
-      createWriterCharacterItemSet(doc.GetAttrPool(), {
-        bold: true,
-        italic: false,
-        underline: false,
-      }),
+  requireInsertedHint(
+    first.InsertItem(
+      new SwFormatAutoFormat(
+        createWriterCharacterItemSet(doc.GetAttrPool(), {
+          bold: true,
+          italic: false,
+          underline: false,
+        }),
+      ),
+      0,
+      4,
+      SetAttrMode.NOHINTADJUST,
     ),
-    0,
-    4,
-    SetAttrMode.NOHINTADJUST,
   );
-  source.InsertItem(
-    new SwFormatAutoFormat(
-      createWriterCharacterItemSet(doc.GetAttrPool(), {
-        bold: false,
-        italic: true,
-        underline: false,
-      }),
+  requireInsertedHint(
+    source.InsertItem(
+      new SwFormatAutoFormat(
+        createWriterCharacterItemSet(doc.GetAttrPool(), {
+          bold: false,
+          italic: true,
+          underline: false,
+        }),
+      ),
+      0,
+      5,
+      SetAttrMode.NOHINTADJUST,
     ),
-    0,
-    5,
-    SetAttrMode.NOHINTADJUST,
   );
   first.AppendTextNode(source);
   expect(first.GetText()).toBe("LeftRight");
@@ -187,17 +201,19 @@ function fixture(extras = true, lists = true) {
       doc.EnsureNumRule("Numbering", "numbered");
       node.SetNumRule("Numbering");
     }
-    node.InsertItem(
-      new SwFormatAutoFormat(
-        createWriterCharacterItemSet(doc.GetAttrPool(), {
-          bold: true,
-          italic: false,
-          underline: false,
-        }),
+    requireInsertedHint(
+      node.InsertItem(
+        new SwFormatAutoFormat(
+          createWriterCharacterItemSet(doc.GetAttrPool(), {
+            bold: true,
+            italic: false,
+            underline: false,
+          }),
+        ),
+        0,
+        5,
+        SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
       ),
-      0,
-      5,
-      SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
     );
     if (extras) {
       const tail = doc.nodes.AppendTableCellParagraph(required(boxes[i]));
@@ -208,17 +224,19 @@ function fixture(extras = true, lists = true) {
         tail.SetListId("tail-" + i);
         tail.SetNumRule("Numbering");
       }
-      tail.InsertItem(
-        new SwFormatAutoFormat(
-          createWriterCharacterItemSet(doc.GetAttrPool(), {
-            bold: false,
-            italic: true,
-            underline: false,
-          }),
+      requireInsertedHint(
+        tail.InsertItem(
+          new SwFormatAutoFormat(
+            createWriterCharacterItemSet(doc.GetAttrPool(), {
+              bold: false,
+              italic: true,
+              underline: false,
+            }),
+          ),
+          0,
+          2,
+          SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
         ),
-        0,
-        2,
-        SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
       );
       tails.set(i, tail);
     }
@@ -541,3 +559,10 @@ it("native selected cell deletion serializes surviving table structure and resum
   ).toEqual(["Cell0"]);
   f.shell.Close();
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

@@ -78,22 +78,7 @@ describe("parity mapping CLI" /**
    * @returns A promise resolving after the report is captured and inspected.
    */, async function runsProductionValidation(): Promise<void> {
     let output = "";
-    const evidence = createMarkerEvidenceFixture(
-      JSON.parse(await readUtf8File("docs/program/parity/writer-command-slice.json")),
-    );
-    const runtimeDeclaration = JSON.parse(
-      await readUtf8File("docs/program/parity/runtime-inventory.json"),
-    );
-    expect(runtimeDeclaration.placeholderSuites).not.toContain("calc");
-    /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
-    async function readOwnedEvidence(file: string): Promise<string> {
-      if (file.startsWith("fixture-upstream/")) {
-        const text = evidence.get(file.slice("fixture-upstream/".length));
-        if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
-        return text;
-      }
-      return readUtf8File(file);
-    }
+    const { runtimeDeclaration, readOwnedEvidence } = await ownedEvidence();
     await runParityMappingCli(
       validArguments,
       readOwnedEvidence,
@@ -115,11 +100,11 @@ describe("parity mapping CLI" /**
       defaultParityCount: 43,
       differentialParityCount: 43,
       exceptionCount: 2,
-      gapCount: 14,
-      implementedCount: 47,
+      gapCount: 17,
+      implementedCount: 50,
       ownershipParityCount: 43,
       parityReady: false,
-      recordCount: 50,
+      recordCount: 53,
       runtime: {
         commandCount: 62,
         placeholderSuiteCount: runtimeDeclaration.placeholderSuites.length,
@@ -127,10 +112,10 @@ describe("parity mapping CLI" /**
         semanticViolationCount: 0,
       },
       schemaVersion: 6,
-      scopeLimitationCount: 82,
+      scopeLimitationCount: 90,
       serializationParityCount: 43,
       unclassifiedDivergenceCount: 0,
-      unresolvedParityCount: 4,
+      unresolvedParityCount: 7,
       verifiedCount: 43,
     });
     expect(JSON.parse(output).runtime.modules).toContainEqual(
@@ -140,6 +125,10 @@ describe("parity mapping CLI" /**
         capabilityIds: expect.arrayContaining(["CAP-80646669-70d5-4641-9fe5-29b1639adab9"]),
       }),
     );
+  }, 30_000);
+
+  it("rejects unknown global operation capabilities before emitting output", /** Exercises missing global registry evidence independently of successful report composition. @returns Completion after rejection. */ async () => {
+    const { runtimeDeclaration, readOwnedEvidence } = await ownedEvidence();
     const firstOperation = runtimeDeclaration.internalOperations[0];
     expect(firstOperation).toBeDefined();
     await expect(
@@ -157,6 +146,10 @@ describe("parity mapping CLI" /**
     ).rejects.toThrow(
       `${firstOperation.id} references unknown capability ${firstOperation.capabilityId}.`,
     );
+  }, 30_000);
+
+  it("rejects unknown module capabilities after admitting operation and UI capabilities", /** Keeps runtime module linkage validation independent of operation linkage. @returns Completion after rejection. */ async () => {
+    const { runtimeDeclaration, readOwnedEvidence } = await ownedEvidence();
     await expect(
       runParityMappingCli(
         validArguments,
@@ -210,6 +203,27 @@ describe("parity mapping CLI" /**
     expect(umbrella).toHaveProperty("verification");
   });
 });
+
+/** Creates independent upstream-marker and local-runtime evidence for one CLI acceptance case. @returns Runtime declaration and evidence reader. */
+async function ownedEvidence() {
+  const evidence = createMarkerEvidenceFixture(
+    JSON.parse(await readUtf8File("docs/program/parity/writer-command-slice.json")),
+  );
+  const runtimeDeclaration = JSON.parse(
+    await readUtf8File("docs/program/parity/runtime-inventory.json"),
+  );
+  expect(runtimeDeclaration.placeholderSuites).not.toContain("calc");
+  /** Reads local project files and supplies owned upstream marker text. @param file - Requested evidence path. @returns Local source or synthetic marker contents. */
+  async function readOwnedEvidence(file: string): Promise<string> {
+    if (file.startsWith("fixture-upstream/")) {
+      const text = evidence.get(file.slice("fixture-upstream/".length));
+      if (text === undefined) throw new Error(`Undeclared fixture evidence: ${file}`);
+      return text;
+    }
+    return readUtf8File(file);
+  }
+  return { runtimeDeclaration, readOwnedEvidence };
+}
 
 /**
  * Expects an invalid CLI argument sequence to throw a strict usage error.

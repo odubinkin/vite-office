@@ -2,6 +2,7 @@
 
 /** ODF namespace URIs understood by the bounded Writer filter. */
 export const ODF_NAMESPACES = {
+  draw: "urn:oasis:names:tc:opendocument:xmlns:drawing:1.0",
   of: "urn:oasis:names:tc:opendocument:xmlns:of:1.2",
   dc: "http://purl.org/dc/elements/1.1/",
   fo: "urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0",
@@ -265,9 +266,15 @@ export enum XMLToken {
   STYLE_LETTER_KERNING,
 
   STYLE_JOIN_BORDER,
+  DRAW_FILL,
+  DRAW_FILL_COLOR,
+  DRAW_OPACITY,
 }
 
 const entries: readonly (readonly [string, string, XMLToken])[] = [
+  [ODF_NAMESPACES.draw, "fill", XMLToken.DRAW_FILL],
+  [ODF_NAMESPACES.draw, "fill-color", XMLToken.DRAW_FILL_COLOR],
+  [ODF_NAMESPACES.draw, "opacity", XMLToken.DRAW_OPACITY],
   [ODF_NAMESPACES.style, "text-underline-mode", XMLToken.STYLE_TEXT_UNDERLINE_MODE],
   [ODF_NAMESPACES.style, "text-overline-mode", XMLToken.STYLE_TEXT_OVERLINE_MODE],
   [ODF_NAMESPACES.style, "text-line-through-mode", XMLToken.STYLE_TEXT_LINE_THROUGH_MODE],

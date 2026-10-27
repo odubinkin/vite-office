@@ -162,28 +162,28 @@ export class GregorianCalendar extends Calendar {
   /** Source newest-year-field resolution, with ERA conversion and native invalid-era error. @param status - ICU status. @returns Extended year. */
   protected handleGetExtendedYear(status: [number]): number {
     if (U_FAILURE(status[0])) return 0;
-    switch (this.newerField(this.newerField(F.UCAL_EXTENDED_YEAR, F.UCAL_YEAR), F.UCAL_YEAR_WOY)) {
-      case F.UCAL_EXTENDED_YEAR:
-        return this.internalGet(F.UCAL_EXTENDED_YEAR, 1970);
-      case F.UCAL_YEAR: {
-        const era = this.internalGet(F.UCAL_ERA, 1);
-        if (era === 0) return 1 - this.internalGet(F.UCAL_YEAR, 1);
-        if (era === 1) return this.internalGet(F.UCAL_YEAR, 1970);
-        status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
-        return 0;
-      }
-      case F.UCAL_YEAR_WOY: {
-        const year = this.handleGetExtendedYearFromWeekFields(
-          this.internalGet(F.UCAL_YEAR_WOY),
-          this.internalGet(F.UCAL_WEEK_OF_YEAR),
-          status,
-        );
-        return U_FAILURE(status[0]) ? 0 : year;
-      }
-      default:
-        return 1970;
+    // newerField returns one of its two arguments, so this nested selection has exactly
+    // EXTENDED_YEAR, YEAR and YEAR_WOY as its domain; the native default arm is unreachable.
+    const field = this.newerField(
+      this.newerField(F.UCAL_EXTENDED_YEAR, F.UCAL_YEAR),
+      F.UCAL_YEAR_WOY,
+    );
+    if (field === F.UCAL_EXTENDED_YEAR) return this.internalGet(F.UCAL_EXTENDED_YEAR, 1970);
+    if (field === F.UCAL_YEAR) {
+      const era = this.internalGet(F.UCAL_ERA, 1);
+      if (era === 0) return 1 - this.internalGet(F.UCAL_YEAR, 1);
+      if (era === 1) return this.internalGet(F.UCAL_YEAR, 1970);
+      status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+      return 0;
     }
+    const year = this.handleGetExtendedYearFromWeekFields(
+      this.internalGet(F.UCAL_YEAR_WOY),
+      this.internalGet(F.UCAL_WEEK_OF_YEAR),
+      status,
+    );
+    return U_FAILURE(status[0]) ? 0 : year;
   }
+
   /** Original Gregorian week-year era conversion before the base week resolver. @param yearWoy - Week year. @param woy - Week ordinal. @param status - ICU status. @returns Extended year. */
   protected override handleGetExtendedYearFromWeekFields(
     yearWoy: number,

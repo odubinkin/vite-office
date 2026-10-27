@@ -4,7 +4,7 @@
     "lib": ["ES2022"],
     "noEmit": true,
     "allowImportingTsExtensions": true,
-    "types": ["node", "vitest/globals"]
+    "types": ["node", "vitest/globals", "vite/client"]
   },
   "include": [
     "scripts/generate-writer-ui-resources.ts",

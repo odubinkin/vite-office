@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xit.ts",
+    "upstreamPath": "include/svx/xit.hxx",
+    "localSymbols": [
+      "NameOrIndex"
+    ],
+    "upstreamSymbols": [
+      "NameOrIndex"
+    ],
+    "preservedResponsibilities": [
+      "Native default/name/index/copy constructors, palette classification, name assignment, detachment, clone and value equality. Native default construction leaves the palette classification false while copy construction sets it true."
+    ],
+    "omittedResponsibilities": [
+      "Palette name uniqueness/service resolution, native presentation/dumps and complete SfxStringItem Any transport remain outside this consumed value family."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xit.ts",
+          "marker": "NameOrIndex"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xit.hxx",
+          "marker": "NameOrIndex"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr.cxx",
+          "marker": "NameOrIndex::"
+        }
+      ]
+    }
+  }
+}

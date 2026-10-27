@@ -1,0 +1,1297 @@
+[
+  {
+    "path": "src/external/icu/source/i18n/calendar.ts",
+    "lines": 33,
+    "statements": 61,
+    "branches": 59,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.scan-numeric.ts",
+    "lines": 24,
+    "statements": 38,
+    "branches": 69,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/calendar.time.ts",
+    "lines": 23,
+    "statements": 32,
+    "branches": 27,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.alias.ts",
+    "lines": 21,
+    "statements": 25,
+    "branches": 32,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.entries.ts",
+    "lines": 17,
+    "statements": 32,
+    "branches": 32,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.scan-date.ts",
+    "lines": 12,
+    "statements": 15,
+    "branches": 33,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uloc_tag.convert.ts",
+    "lines": 12,
+    "statements": 17,
+    "branches": 22,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/olsontz.transitions.ts",
+    "lines": 12,
+    "statements": 21,
+    "branches": 22,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.scan-value.ts",
+    "lines": 12,
+    "statements": 18,
+    "branches": 21,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.ts",
+    "lines": 11,
+    "statements": 16,
+    "branches": 18,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/gregocal.ts",
+    "lines": 10,
+    "statements": 15,
+    "branches": 20,
+    "functions": 4
+  },
+  {
+    "path": "src/external/icu/source/i18n/olsontz.ts",
+    "lines": 9,
+    "statements": 19,
+    "branches": 32,
+    "functions": 1
+  },
+  {
+    "path": "src/external/icu/source/i18n/calendar.weekend.ts",
+    "lines": 9,
+    "statements": 10,
+    "branches": 16,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-insert.ts",
+    "lines": 9,
+    "statements": 11,
+    "branches": 11,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.lookup.ts",
+    "lines": 9,
+    "statements": 9,
+    "branches": 10,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/number.ts",
+    "lines": 9,
+    "statements": 15,
+    "branches": 5,
+    "functions": 1
+  },
+  {
+    "path": "src/external/icu/source/common/uloc.subtags.ts",
+    "lines": 8,
+    "statements": 13,
+    "branches": 15,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/timezone.custom.ts",
+    "lines": 8,
+    "statements": 14,
+    "branches": 15,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/crsr/pam.ts",
+    "lines": 8,
+    "statements": 10,
+    "branches": 10,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/html/swhtml.attr.ts",
+    "lines": 7,
+    "statements": 13,
+    "branches": 25,
+    "functions": 1
+  },
+  {
+    "path": "src/external/icu/source/common/loclikelysubtags.data.ts",
+    "lines": 7,
+    "statements": 15,
+    "branches": 15,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uloc.normalize.ts",
+    "lines": 7,
+    "statements": 11,
+    "branches": 14,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uloc_tag.ts",
+    "lines": 7,
+    "statements": 8,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-portions.ts",
+    "lines": 6,
+    "statements": 7,
+    "branches": 15,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/olsontz.offset.ts",
+    "lines": 6,
+    "statements": 7,
+    "branches": 9,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/loclikely.ts",
+    "lines": 6,
+    "statements": 11,
+    "branches": 8,
+    "functions": 2
+  },
+  {
+    "path": "src/external/icu/source/common/resource.ts",
+    "lines": 6,
+    "statements": 6,
+    "branches": 4,
+    "functions": 1
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-setattr.ts",
+    "lines": 5,
+    "statements": 12,
+    "branches": 13,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/ndhints.ts",
+    "lines": 5,
+    "statements": 9,
+    "branches": 9,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/txtatr2.ts",
+    "lines": 5,
+    "statements": 8,
+    "branches": 9,
+    "functions": 1
+  },
+  {
+    "path": "src/sal/textenc/convertiso2022jp.ts",
+    "lines": 5,
+    "statements": 5,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/inc/xfltrit.ts",
+    "lines": 5,
+    "statements": 9,
+    "branches": 4,
+    "functions": 2
+  },
+  {
+    "path": "src/sw/source/core/txtnode/fmtatr2.ts",
+    "lines": 5,
+    "statements": 5,
+    "branches": 3,
+    "functions": 2
+  },
+  {
+    "path": "src/sw/source/writerfilter/rtftok/rtfdocumentimpl.dispatch.ts",
+    "lines": 4,
+    "statements": 4,
+    "branches": 17,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-language.ts",
+    "lines": 4,
+    "statements": 7,
+    "branches": 10,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/gregoimp.ts",
+    "lines": 4,
+    "statements": 6,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.ref.ts",
+    "lines": 4,
+    "statements": 7,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/docnode/nodes.navigation.ts",
+    "lines": 4,
+    "statements": 7,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/attr/swatrset.ts",
+    "lines": 4,
+    "statements": 4,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresdata.package.ts",
+    "lines": 4,
+    "statements": 6,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/textenc/convertiso2022kr.ts",
+    "lines": 4,
+    "statements": 4,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/ui/docshell/docsh.ts",
+    "lines": 3,
+    "statements": 9,
+    "branches": 25,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/loclikelysubtags.ts",
+    "lines": 3,
+    "statements": 16,
+    "branches": 21,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/items/stylepool.ts",
+    "lines": 3,
+    "statements": 5,
+    "branches": 16,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/simpletz.ts",
+    "lines": 3,
+    "statements": 11,
+    "branches": 15,
+    "functions": 3
+  },
+  {
+    "path": "src/external/icu/source/common/ucase.ts",
+    "lines": 3,
+    "statements": 7,
+    "branches": 14,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/docfmt.ts",
+    "lines": 3,
+    "statements": 4,
+    "branches": 13,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/zonemeta.ts",
+    "lines": 3,
+    "statements": 5,
+    "branches": 9,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.mark.link.ts",
+    "lines": 3,
+    "statements": 7,
+    "branches": 8,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/browser/filter/xml/writer-character-style-codec.ts",
+    "lines": 3,
+    "statements": 6,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.fallback.ts",
+    "lines": 3,
+    "statements": 5,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.block.line.ts",
+    "lines": 3,
+    "statements": 4,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+    "lines": 3,
+    "statements": 4,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/svtools/source/svhtml/parhtml.ts",
+    "lines": 2,
+    "statements": 4,
+    "branches": 13,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/ustrcase.ts",
+    "lines": 2,
+    "statements": 6,
+    "branches": 9,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zformat.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 8,
+    "functions": 0
+  },
+  {
+    "path": "src/svtools/source/svhtml/parhtml.text.ts",
+    "lines": 2,
+    "statements": 5,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresdata.ts",
+    "lines": 2,
+    "statements": 5,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/textenc/tcvtmb.ts",
+    "lines": 2,
+    "statements": 6,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/undo/unattr.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/simpletz.transitions.ts",
+    "lines": 2,
+    "statements": 6,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/browser/fill-item-codec.ts",
+    "lines": 2,
+    "statements": 5,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.lifecycle.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.inline.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.link.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-nesting.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.render.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sax/source/tools/converter.ts",
+    "lines": 2,
+    "statements": 4,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints-merge.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/unistr.ts",
+    "lines": 2,
+    "statements": 3,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/browser/filter/xml/writer-document-codec.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/items/globalpool.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/doc.ts",
+    "lines": 2,
+    "statements": 2,
+    "branches": 1,
+    "functions": 1
+  },
+  {
+    "path": "src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts",
+    "lines": 1,
+    "statements": 2,
+    "branches": 24,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.block.scan.ts",
+    "lines": 1,
+    "statements": 4,
+    "branches": 8,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/md/swmd.ts",
+    "lines": 1,
+    "statements": 3,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/doc.items.ts",
+    "lines": 1,
+    "statements": 3,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.autolink.ts",
+    "lines": 1,
+    "statements": 3,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/i18npool/source/nativenumber/nativenumbersupplier.ts",
+    "lines": 1,
+    "statements": 4,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/calendar.locale.ts",
+    "lines": 1,
+    "statements": 2,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/items/itempool.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 3,
+    "functions": 1
+  },
+  {
+    "path": "src/sw/browser/composition/writer-module.tsx",
+    "lines": 1,
+    "statements": 2,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/thints.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/locid.default.ts",
+    "lines": 1,
+    "statements": 2,
+    "branches": 2,
+    "functions": 1
+  },
+  {
+    "path": "src/external/md4c/src/md4c.scan.ts",
+    "lines": 1,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/inc/xfillit0.ts",
+    "lines": 1,
+    "statements": 3,
+    "branches": 2,
+    "functions": 1
+  },
+  {
+    "path": "src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/ndtxt.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/xml/xmlexp-fill.ts",
+    "lines": 1,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/md/mdcallbcks.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/uibase/app/docst.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 1,
+    "functions": 1
+  },
+  {
+    "path": "src/filter/source/msfilter/util.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 0,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/inc/xit.ts",
+    "lines": 1,
+    "statements": 1,
+    "branches": 0,
+    "functions": 1
+  },
+  {
+    "path": "src/external/icu/source/common/uloc_keytype.ts",
+    "lines": 0,
+    "statements": 17,
+    "branches": 20,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/html/parcss1.ts",
+    "lines": 0,
+    "statements": 7,
+    "branches": 18,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/ui/docshell/impex.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 13,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.scan-start.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 13,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/locid.ts",
+    "lines": 0,
+    "statements": 8,
+    "branches": 11,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/ui/dbgui/imoptdlg.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/inc/xcolit.ts",
+    "lines": 0,
+    "statements": 5,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/undo/rolbck.ts",
+    "lines": 0,
+    "statements": 3,
+    "branches": 7,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uchar.ts",
+    "lines": 0,
+    "statements": 3,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/rtfexport.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 6,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresdata.path.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/timezone.resources.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.html.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/svtools/source/svhtml/parhtml.raw.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/svx/inc/xflclit.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/txtedt-reset.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/source/i18n/calendarwrapper.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 5,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uresbund.path.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.autolink.scan.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/md/wrtmd.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/writerwordglue.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 4,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/timezone.create.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.mark.analyze.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.mark.collect.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/rtl/string.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforlist.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/number-bullet.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/docnode/nodes.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/html/parcss1.h.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/tools/source/stream/stream.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 3,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/charstrmap.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uniquecharstr.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/calendar.ctor.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/timezone.default.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.block.build.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.mark.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/filter/source/msfilter/rtfutil.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/textenc/tcvtutf8.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/tool/interpretercontext.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.context.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforscan.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/svtools/source/svrtf/svparser.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/SwStyleNameMapper.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/ndtxt-format-change.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/swfont.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/uibase/app/docsh.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/source/i18n/charclass.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/source/i18n/localedatawrapper.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/source/i18n/transliterationwrapper.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/vcl/source/font/font.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 2,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/browser/putil-locale.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/browser/putil-tz.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uloc.keywords.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/util_props.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/i18n/tztrans.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.codespan.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/md4c/src/md4c.context.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/i18npool/source/localedata/localedata.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/rtl/strtmpl.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sal/textenc/textcvt.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/browser/filter/xml/calc-document-codec.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/data/column3.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/data/document10.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/data/documentimport.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/data/mtvelements.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/core/data/table2.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sc/source/filter/xml/xmlexprt.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/svl/source/numbers/zforfind.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/svtools/source/svhtml/parhtml.options.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/bastyp/breakit.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/bastyp/init.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/DocumentListsManager.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/doc/DocumentStylePoolManager.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/docnode/ndtbl.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/edit/edatmisc.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/text/atrstck.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/txtnode/txatbase.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/core/undo/docundo.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ascii/wrtasc.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/md/mdtab.ts",
+    "lines": 0,
+    "statements": 1,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/docxattributeoutput.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/rtfattributeoutput.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/ww8/wrtw8sty.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/sw/source/filter/xml/xmlexp.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/inc/digitgroupingiterator.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/unotools/source/config/fontcfg.ts",
+    "lines": 0,
+    "statements": 0,
+    "branches": 1,
+    "functions": 0
+  },
+  {
+    "path": "src/external/icu/source/common/uloc.keywordvalue.ts",
+    "lines": 0,
+    "statements": 2,
+    "branches": 0,
+    "functions": 0
+  }
+]

@@ -1,5 +1,5 @@
 /** @fileoverview Pinned ICU78.3 res_load/res_unload logical default-package storage from uresdata.cpp. Native decoded raw resource graph preserves every top-level .res file, aliases, native table order, shared buffers and nofallback/pool metadata. Packed offsets, file handles, arbitrary external packages and allocator/ABI remain uncertified. */
-import raw from "../data/in/icudt78l.resources.json";
+import raw from "../data/in/icudt78l.resources.json" with { type: "json" };
 import type { Resource } from "./uresbund";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 /** Actual immutable decoded package graph. Tuple indexes are a host projection of shared native resource storage, not substitute locale results. */

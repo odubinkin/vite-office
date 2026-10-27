@@ -9,18 +9,24 @@
     "localSymbols": [
       "ImplCreateUtf8ToUnicodeContext",
       "ImplResetUtf8ToUnicodeContext",
-      "ImplConvertUtf8ToUnicode"
+      "ImplConvertUtf8ToUnicode",
+      "ImplCreateUnicodeToUtf8Context",
+      "ImplResetUnicodeToUtf8Context",
+      "ImplConvertUnicodeToUtf8"
     ],
     "upstreamSymbols": [
       "ImplCreateUtf8ToUnicodeContext",
       "ImplResetUtf8ToUnicodeContext",
-      "ImplConvertUtf8ToUnicode"
+      "ImplConvertUtf8ToUnicode",
+      "ImplCreateUnicodeToUtf8Context",
+      "ImplResetUnicodeToUtf8Context",
+      "ImplConvertUnicodeToUtf8"
     ],
     "preservedResponsibilities": [
-      "Pinned SAL streaming UTF-8 to Unicode conversion, including BOM, malformed-sequence, context and FLUSH behavior."
+      "Pinned SAL UTF-8 conversion in both directions, including signature state, malformed-sequence grouping, pending-surrogate/FLUSH polarity, byte capacities and consumed-unit outputs."
     ],
     "omittedResponsibilities": [
-      "Reverse Unicode-to-UTF-8 conversion and broader SAL factory behavior remain outside this import-focused module."
+      "Native memory deallocation is handled by JavaScript garbage collection; broader SAL converter factory parity remains unverified."
     ],
     "evidence": {
       "local": [

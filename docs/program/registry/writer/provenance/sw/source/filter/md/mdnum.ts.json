@@ -13,7 +13,7 @@
       "SwMdNumRuleInfo"
     ],
     "preservedResponsibilities": [
-      "Owns one document numbering rule across mixed nested Markdown list types, initializes the first type at each level and fills untouched levels after the list closes."
+      "Native numbering state now retains only the current rule, unsigned depth and ten pending-start sentinels from mdnum.hxx. Document mutations and format completion belong to the SwMarkdownParser callbacks. Complete numbering metadata and task controls remain pending."
     ],
     "omittedResponsibilities": [
       "The complete md4c list callback stack, task-list content controls and all native list-format fields remain unverified."
@@ -21,8 +21,8 @@
     "evidence": {
       "local": [
         {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "shares one native rule across mixed nested list callbacks"
+          "path": "apps/office/src/sw/source/filter/md/mdnum.ts",
+          "marker": "SwMdNumRuleInfo"
         }
       ],
       "upstream": [

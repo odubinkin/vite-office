@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/inc/xcolit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fill-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/inc/xcolit.ts",
+        "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+        "vendor/libreoffice-reference/include/svx/xcolit.hxx"
+      ],
+      "justification": "Native drawing-color constructors/copy, actual resolved and complex-color value ownership, indexed-value getter precondition, detaching resolved-color assignment and equality. Native Any property transport, dumps and palette-provider resolution remain unported; no fake provider or complex-color UNO component is introduced. S3HW1E ports native RGB Any query/put, CONVERT_TWIPS masking, typed extraction failure and index detachment. Complex-color UNO service remains unrepresented.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XColorItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svx/xcolit.hxx",
+      "upstreamSymbols": [
+        "XColorItem"
+      ]
+    }
+  }
+}

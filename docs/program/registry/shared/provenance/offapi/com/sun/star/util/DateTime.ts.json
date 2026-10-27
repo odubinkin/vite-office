@@ -6,13 +6,41 @@
     "localPath": "apps/office/src/offapi/com/sun/star/util/DateTime.ts",
     "status": "mapped",
     "upstreamPath": "offapi/com/sun/star/util/DateTime.idl",
-    "localSymbols": ["DateTime"],
-    "upstreamSymbols": ["DateTime", "NanoSeconds", "Seconds", "Minutes", "Hours", "Day", "Month", "Year", "IsUTC"],
-    "preservedResponsibilities": ["Published scalar field names and zero/false defaults consumed by sax::Converter::parseDateTime."],
-    "omittedResponsibilities": ["Generated UNO type description and Any/Sequence bindings are outside the consumed CSV date precheck."],
+    "localSymbols": [
+      "DateTime",
+      "cppu_detail_getUnoType_DateTime"
+    ],
+    "upstreamSymbols": [
+      "DateTime",
+      "NanoSeconds",
+      "Seconds",
+      "Minutes",
+      "Hours",
+      "Day",
+      "Month",
+      "Year",
+      "IsUTC"
+    ],
+    "preservedResponsibilities": [
+      "Published scalar field names and zero/false defaults consumed by sax::Converter::parseDateTime.",
+      "Task202610251549-V4DQJW: Original normal DateTime struct binding now owns native signed/unsigned scalar member cells, generated value/copy/assignment/equality operations and real static CPPU metadata. Actual Any and Sequence<DateTime> transport uses original member order, declared widths and defaults. Existing SAX date conversion remains separate and passes related regressions. Native table model redline creation, full TablePropertiesHandler/TblStylePrHandler and stylesheet application, document orchestration, complete DOCX/XLSX file and desktop/mobile UI workflows remain incomplete. Native component/ABI and whole-module parity remain unverified; no capability/default-status promotion."
+    ],
+    "omittedResponsibilities": [
+      "Native physical C++ ABI, debug/compiler-only declarations and unconsumed generated header operations remain unverified; normal static metadata and actual scalar compound transport are now implemented."
+    ],
     "evidence": {
-      "local": [{"path": "apps/office/src/offapi/com/sun/star/util/DateTime.ts", "marker": "class DateTime"}],
-      "upstream": [{"path": "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl", "marker": "published struct DateTime"}]
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/util/DateTime.ts",
+          "marker": "class DateTime"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/util/DateTime.idl",
+          "marker": "published struct DateTime"
+        }
+      ]
     }
   }
 }

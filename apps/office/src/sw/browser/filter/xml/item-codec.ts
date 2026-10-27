@@ -2,6 +2,12 @@
  * @fileoverview Worker transfer codec for the bounded SfxPoolItem graph.
  * Core items expose values and equality only; JSON type discrimination lives here.
  */
+import { encodeFillItem, decodeFillItem } from "../../../../svx/browser/fill-item-codec";
+import {
+  encodeComplexColor,
+  decodeComplexColor,
+} from "../../../../docmodel/browser/complex-color-codec";
+import { Color, ColorTransparency } from "../../../../tools/inc/color";
 import { SwFormatPageDesc } from "../../../source/core/attr/fmtpdsc";
 import { encodeWriterFrameItem, decodeWriterFrameItem } from "./writer-frame-item-codec";
 import { encodePageDesc, decodePageDesc } from "./page-desc-codec";
@@ -18,7 +24,7 @@ import {
 } from "../../../../editeng/browser/text-line-item-codec";
 import { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
-import { MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
+import { MID_SHADING_VALUE, MID_EXPAND_SINGLE } from "../../../../editeng/inc/memberids";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
 import { Any2Bool } from "../../../../svl/inc/poolitem";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
@@ -126,6 +132,8 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot;
 
 /** Encodes one pooled item without adding persistence methods to the model class. @param item - Core item. @returns JSON record. */
 export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
+  const fill = encodeFillItem(item);
+  if (fill !== null) return fill;
   const frame = encodeWriterFrameItem(item);
   if (frame !== null) return frame;
   if (item instanceof SwFormatPageDesc) return encodePageDesc(item);
@@ -140,21 +148,38 @@ export function encodeSfxPoolItem(item: SfxPoolItem): SfxPoolItemSnapshot {
       complex.getThemeColorUsage() !== empty.getThemeColorUsage() ||
       !complex.getFinalColor().equals(empty.getFinalColor())
     )
-      throw new Error("Writer complex color transfer is not implemented.");
+      return {
+        which: item.Which(),
+        value: {
+          kind: "svx-color",
+          color: item.GetValue().toUInt32(),
+          complex: encodeComplexColor(complex),
+        },
+      };
     return { which: item.Which(), value: item.GetValue().toUInt32() };
   }
   if (item instanceof SvxBrushItem) {
     const complex = item.getComplexColor(),
       empty = new ComplexColor();
     empty.setFinalColor(item.GetColor());
+    if (!item.GetFiltColor().equals(COL_TRANSPARENT))
+      throw new Error("Writer graphic filter color transfer is not implemented.");
     if (
       !complex.equals(empty) ||
       complex.getThemeColorUsage() !== empty.getThemeColorUsage() ||
-      !item.GetFiltColor().equals(COL_TRANSPARENT) ||
       item.GetShadingValue() !== ShadingPattern.CLEAR ||
       item.getGraphicTransparency() !== 0
     )
-      throw new Error("Writer complex highlight transfer is not implemented.");
+      return {
+        which: item.Which(),
+        value: {
+          kind: "svx-brush",
+          color: item.GetColor().toUInt32(),
+          complex: encodeComplexColor(complex),
+          shading: item.GetShadingValue(),
+          graphicTransparency: item.getGraphicTransparency(),
+        },
+      };
     return { which: item.Which(), value: item.GetColor().toUInt32() };
   }
   if (item instanceof SvxUnderlineItem) return encodeTextLineItem(item);
@@ -232,6 +257,10 @@ export function encodeSfxItemSet(set: SfxItemSet): readonly SfxPoolItemSnapshot[
 
 /** Restores one item via the document pool's registered concrete factory. @param pool - Destination pool. @param snapshot - Current-schema record. @returns Core item. */
 export function decodeSfxPoolItem(pool: SfxItemPool, snapshot: SfxPoolItemSnapshot): SfxPoolItem {
+  const fill = decodeFillItem(snapshot);
+  if (fill !== null) return fill;
+  const color = decodeNativeColorItem(pool, snapshot);
+  if (color !== null) return color;
   const frame = decodeWriterFrameItem(snapshot);
   if (frame !== null) return frame;
   return (
@@ -322,4 +351,54 @@ function encodeAdjustment(item: SvxAdjustItem): AdjustItemValue {
     scaleWidthMinimum: item.GetPropScaleWidthMinimum(),
     scaleWidthMaximum: item.GetPropScaleWidthMaximum(),
   };
+}
+
+/** Restores full native color/brush values while retaining the existing scalar records. @param pool - Actual destination pool. @param snapshot - Untrusted record. @returns Actual item or null for other records. */
+function decodeNativeColorItem(
+  pool: SfxItemPool,
+  snapshot: SfxPoolItemSnapshot,
+): SfxPoolItem | null {
+  if (
+    snapshot.value === null ||
+    typeof snapshot.value !== "object" ||
+    Array.isArray(snapshot.value)
+  )
+    return null;
+  const value = snapshot.value as Record<string, unknown>;
+  if (value.kind !== "svx-color" && value.kind !== "svx-brush") return null;
+  if (
+    typeof value.color !== "number" ||
+    !Number.isInteger(value.color) ||
+    value.color < 0 ||
+    value.color > 0xffffffff
+  )
+    throw new Error("Native color record is invalid.");
+  const color = new Color(ColorTransparency, value.color, "ColorTransparencyTag"),
+    complex = decodeComplexColor(value.complex),
+    original = pool.GetPoolDefaultItem(snapshot.which);
+  if (value.kind === "svx-color") {
+    if (!(original instanceof SvxColorItem)) throw new Error("Native color Which is invalid.");
+    return new SvxColorItem(color, complex, snapshot.which);
+  }
+  if (
+    !(original instanceof SvxBrushItem) ||
+    typeof value.shading !== "number" ||
+    !Number.isInteger(value.shading) ||
+    value.shading < -2147483648 ||
+    value.shading > 2147483647 ||
+    typeof value.graphicTransparency !== "number" ||
+    !Number.isInteger(value.graphicTransparency) ||
+    value.graphicTransparency < -128 ||
+    value.graphicTransparency > 127
+  )
+    throw new Error("Native brush record is invalid.");
+  const item = new SvxBrushItem(color, complex, snapshot.which);
+  const shading = new Any([value.shading], "sal_Int32");
+  try {
+    item.PutValue(shading, MID_SHADING_VALUE);
+  } finally {
+    shading.dispose();
+  }
+  item.setGraphicTransparency(value.graphicTransparency);
+  return item;
 }

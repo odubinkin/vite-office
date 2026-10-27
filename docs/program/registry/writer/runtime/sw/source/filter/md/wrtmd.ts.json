@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/filter/md/wrtmd.ts#SwMDWriter",
         "vendor/libreoffice-reference/sw/source/filter/md/wrtmd.cxx#SwMDWriter::WriteStream"
       ],
-      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified.",
+      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified. Final UTF-8 byte conversion uses the native SAL OUStringToOString wrapper rather than host TextEncoder. Stream write-fragment boundaries and complete Writer export graph parity remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "SwMDWriter"
