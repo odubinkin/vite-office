@@ -134,17 +134,17 @@ it("preserves native marker ownership through Worker v16 and legacy records", /*
   }
   document.AddNumRule(rule);
   const record = encodeWriterDocument(document),
-    restored = decodeWriterDocument(record).GetNumRuleTable()[0] as SwNumRule;
+    restored = decodeWriterDocument(record).GetNumRuleTable().slice(1)[0] as SwNumRule;
   for (let level = 0; level < 4; level++)
     expect(state(restored.Get(level))).toEqual(state(rule.Get(level)));
   const legacy = structuredClone(record);
-  for (const format of legacy.numRules[0]?.formats ?? []) {
+  for (const format of legacy.numRules[1]?.formats ?? []) {
     delete (format as { bulletGlyph?: number }).bulletGlyph;
     delete (format as { bulletFontPresent?: boolean }).bulletFontPresent;
     delete (format as { bulletFontMetadata?: unknown }).bulletFontMetadata;
     delete (format as { showSymbol?: boolean }).showSymbol;
   }
-  const migrated = decodeWriterDocument(legacy).GetNumRuleTable()[0] as SwNumRule;
+  const migrated = decodeWriterDocument(legacy).GetNumRuleTable().slice(1)[0] as SwNumRule;
   expect(migrated.Get(1).GetBulletFont()).toBeUndefined();
   expect(migrated.Get(2).GetBulletFont()?.GetFamilyName()).toBe("OpenSymbol");
   expect(migrated.Get(0).IsShowSymbol()).toBe(true);
@@ -156,7 +156,7 @@ it("preserves native marker ownership through Worker v16 and legacy records", /*
     { bulletGlyph: 4294967296 },
   ]) {
     const malformed = structuredClone(record);
-    Object.assign(malformed.numRules[0]?.formats[0] as object, mutation);
+    Object.assign(malformed.numRules[1]?.formats[0] as object, mutation);
     expect(
       /** Rejects malformed native marker metadata. @returns Document. */ () =>
         decodeWriterDocument(malformed),

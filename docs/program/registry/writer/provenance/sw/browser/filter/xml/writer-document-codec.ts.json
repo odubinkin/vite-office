@@ -160,6 +160,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-bookmark-replace-history.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-owner.test.ts",
+          "marker": "creates the persistent outline rule"
         }
       ],
       "upstream": [
@@ -194,6 +198,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/shells/tabsh.cxx",
           "marker": "RES_COLLAPSING_BORDERS"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+          "marker": "mpOutlineRule = new SwNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "void SwDoc::AddNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
+          "marker": "void DocumentListsManager::createListForListStyle"
         }
       ]
     },
@@ -232,7 +248,8 @@
     "status": "local-only",
     "preservedResponsibilities": [
       "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged.",
-      "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged."
+      "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
+      "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged."
     ]
   },
   "legacyOrder": 93

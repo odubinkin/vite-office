@@ -1744,3 +1744,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/doc/fmtcol.cxx`, `SwTextFormatColl::SetFormatAttr` and `ResetFormatAttr`, explicitly remove a direct numbering client's registration. `SwTextFormatColl::ResetAllFormatAttr` instead calls `SwFormatColl::ResetAllFormatAttr`; the inherited implementation in `sw/source/core/attr/format.cxx` clears `m_aSet` directly and does not call the virtual single/range reset. The numbering-related notification branch only checks outline assignment and does not unregister that client.
 - Observation: clearing all attributes can leave `SwNumRule::GetParagraphStyleListSize()` nonzero after the style no longer has a direct numbering item, so the numbering overload of `SwDoc::IsUsed` still reports use. This is source control-flow evidence and a local owner test; a complete native Writer execution is not claimed.
 - Preservation: keep the explicit registration boundaries of the source single-item/set/range operations. Do not add cleanup to the inherited reset-all path while porting used-numbering-table prerequisites.
+
+
+### WRITER195 — Duplicate numbering-rule names replace the lookup while retaining the previous default list
+
+- Source: pinned `sw/source/core/doc/docnum.cxx`, `SwDoc::AddNumRule`, appends the transferred rule to the table and assigns `maNumRuleMap[pRule->GetName()]` without rejecting an existing name. `DocumentListsManager::createListForListStyle` in its corresponding `.cxx` returns after a nonfatal diagnostic when the style already has a default list.
+- Observation: both rule objects remain in table order; name lookup resolves the newly appended rule while the existing default-list mapping still refers to its previous list. A fresh duplicate can retain an empty DefaultListId. This is a source control-flow trace and an actual local owner test, not a complete compiled Writer witness.
+- Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.

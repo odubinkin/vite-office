@@ -201,7 +201,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = source.GetNumRuleTable()[0]?.Get(0);
+    const format = source.GetNumRuleTable().slice(1)[0]?.Get(0);
     expect(format?.GetFirstLineIndent()).toBe(-360);
     expect(format?.GetIndentAt()).toBe(1152);
     expect(format?.GetListtabPos()).toBe(1152);
@@ -209,7 +209,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
     const exported = exportContentXml(source);
     expect(exported).toContain("style:list-level-label-alignment");
     const roundTripped = importWriterXml(styles(""), exported, metadata).document;
-    expect(roundTripped.GetNumRuleTable()[0]?.Get(0).GetIndentAt()).toBe(1152);
+    expect(roundTripped.GetNumRuleTable().slice(1)[0]?.Get(0).GetIndentAt()).toBe(1152);
   });
 
   it("retains legacy list spacing independently from modern alignment", /** Verifies bounded legacy positioning import. @returns Nothing. */ () => {
@@ -223,7 +223,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const format = document.GetNumRuleTable()[0]?.Get(0);
+    const format = document.GetNumRuleTable().slice(1)[0]?.Get(0);
     expect(format?.GetPositionAndSpaceMode()).toBe("label-width-and-position");
     expect(format?.GetAbsLSpace()).toBe(720);
     expect(format?.GetFirstLineOffset()).toBe(-288);
@@ -250,7 +250,7 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       ),
       metadata,
     ).document;
-    const rule = source.GetNumRuleTable()[0]!;
+    const rule = source.GetNumRuleTable().slice(1)[0]!;
     expect(rule.Get(0).GetLabelFollowedBy()).toBe("space");
     expect(rule.Get(1).GetLabelFollowedBy()).toBe("nothing");
     expect(rule.Get(2).GetListtabPos()).toBe(1296);
@@ -268,7 +268,8 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       content(invalidList, "<text:p>Item</text:p>"),
       metadata,
     )
-      .document.GetNumRuleTable()[0]
+      .document.GetNumRuleTable()
+      .slice(1)[0]
       ?.Get(0);
     expect(unknownFollow?.GetLabelFollowedBy()).toBe("listtab");
     expect(unknownFollow?.GetFirstLineIndent()).toBe(0);
@@ -356,14 +357,15 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
       expect(
         doc
           .GetNumRuleTable()
+          .slice(1)
           .map(
             /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
               rule,
             ) => rule.IsAutoRule(),
           ),
       ).toEqual([false, true]);
-      expect(doc.GetNumRuleTable()[0]?.Get(0).GetPositionProperties()).not.toEqual(
-        doc.GetNumRuleTable()[1]?.Get(0).GetPositionProperties(),
+      expect(doc.GetNumRuleTable().slice(1)[0]?.Get(0).GetPositionProperties()).not.toEqual(
+        doc.GetNumRuleTable().slice(1)[1]?.Get(0).GetPositionProperties(),
       );
       doc.Dispose();
     }
@@ -398,18 +400,19 @@ describe("Writer ODT layout parity", /** Groups ODT layout regressions. @returns
         ),
         metadata,
       ).document;
-      expect(doc.GetNumRuleTable()).toHaveLength(2);
+      expect(doc.GetNumRuleTable().slice(1)).toHaveLength(2);
       expect(
         doc
           .GetNumRuleTable()
+          .slice(1)
           .every(
             /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
               rule,
             ) => rule.IsAutoRule(),
           ),
       ).toBe(true);
-      expect(doc.GetNumRuleTable()[0]?.Get(0).GetPositionProperties()).not.toEqual(
-        doc.GetNumRuleTable()[1]?.Get(0).GetPositionProperties(),
+      expect(doc.GetNumRuleTable().slice(1)[0]?.Get(0).GetPositionProperties()).not.toEqual(
+        doc.GetNumRuleTable().slice(1)[1]?.Get(0).GetPositionProperties(),
       );
       doc.Dispose();
     }

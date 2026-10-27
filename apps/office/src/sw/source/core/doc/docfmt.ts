@@ -54,7 +54,7 @@ import type { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import type { SwNumRuleItem } from "../para/paratr";
 import type { SwFormatPageDesc } from "../attr/fmtpdsc";
 import { SwTextFormatColl, isWriterParagraphStyle } from "./fmtcol";
-import type { SwNumRule } from "./number";
+import { SwNumRule } from "./number";
 import type { SwDoc } from "./doc";
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwPaM } from "../crsr/pam";
@@ -290,7 +290,7 @@ export function CopyTextColl(document: SwDoc, source: SwTextFormatColl): SwTextF
       : source.GetAttrSet().GetDoc().FindNumRulePtr(ruleName);
   if (rule !== undefined && !rule.IsAutoRule() && source.GetAttrSet().GetDoc() !== document) {
     const destinationRule = document.FindNumRulePtr(rule.GetName());
-    if (destinationRule === undefined) document.AddNumRule(rule);
+    if (destinationRule === undefined) document.AddNumRule(new SwNumRule(rule));
     else destinationRule.Invalidate();
   }
   return copied;

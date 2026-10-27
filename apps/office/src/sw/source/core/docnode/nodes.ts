@@ -1,3 +1,4 @@
+import { SwNumRule } from "../doc/number";
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
@@ -594,7 +595,7 @@ export class SwNodes {
   public copyContentFrom(source: SwNodes): void {
     for (const rule of source.GetDoc().GetNumRuleTable())
       if (this.document.FindNumRulePtr(rule.GetName()) === undefined)
-        this.document.AddNumRule(rule);
+        this.document.AddNumRule(new SwNumRule(rule));
     source.getTextNodes().forEach(
       /** Clones one source text node before the content end sentinel. @param node - Source body node. @returns Nothing. */
       (node): void => {

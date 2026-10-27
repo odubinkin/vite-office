@@ -261,7 +261,7 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
         }),
       );
       expect(state(imported.document)).toEqual(expected);
-      const rule = imported.document.GetNumRuleTable()[0] as SwNumRule;
+      const rule = imported.document.GetNumRuleTable().slice(1)[0] as SwNumRule;
       const copied = createWriterDocument();
       copied.GetDocumentListsManager().AddNumRule(rule.clone());
       imported.document.paragraphs.forEach(
@@ -274,7 +274,7 @@ it("round-trips native headers and unnumbered item continuations", /** Verifies 
         },
       );
       expect(state(copied)).toEqual(expected);
-      expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
+      expect(copied.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
       const record = encodeWriterDocument(imported.document);
       expect(record.swModelVersion).toBe(17);
       const transferred = decodeWriterDocument(record);

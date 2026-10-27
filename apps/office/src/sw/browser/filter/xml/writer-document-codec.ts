@@ -312,6 +312,8 @@ export interface WriterDocumentRecord {
   readonly lineNumberInfo?: SwLineNumberInfoValue;
   readonly locale: string;
   readonly numRules: readonly WriterNumberRuleRecord[];
+  /** Actual document outline pointer expressed as an index; legacy graphs have no precreated outline owner. */
+  readonly outlineRuleIndex?: number;
   readonly characterFormats?: readonly WriterCharacterStyleRecord[];
   readonly pageDescriptors: readonly Readonly<{
     followName: string;
@@ -374,6 +376,7 @@ export function* encodeWriterDocumentSteps(document: SwDoc): Generator<void, Wri
     lineNumberInfo: document.GetLineNumberInfo().QueryValue(),
     locale: document.GetLocale(),
     characterFormats: encodeCharacterStyles(document),
+    outlineRuleIndex: document.GetNumRuleTable().indexOf(document.GetOutlineNumRule()),
     numRules: document.GetNumRuleTable().map(
       /** Encodes one document rule. @param rule - Model rule. @returns Primitive rule record. */ (
         rule,
@@ -586,39 +589,14 @@ export function* decodeWriterDocumentSteps(
       if (!isWriterParagraphStyle(style.id))
         document.MakeTextFormatColl(style.name, undefined, style.id);
     }
-    for (const style of record.textFormatCollections) {
-      const collection = document.GetTextFormatColl(style.id);
-      const factoryOutlineLevel = collection.GetAttrOutlineLevel();
-      const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
-      if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
-        throw new Error("Stored Writer outline assignment is invalid.");
-      if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
-      else if (style.outlineAssignment === true && !factoryAssignment)
-        collection.AssignToListLevelOfOutlineStyle(0);
-      collection.SetFormatName(style.name);
-      if (!Number.isInteger(style.poolId) || style.poolId < 0 || style.poolId > 65535)
-        throw new Error("Stored Writer paragraph style pool identity is invalid.");
-      collection.SetPoolFormatId(style.poolId);
-      collection.ResetAllFormatAttr();
-      decodeSfxItemSet(collection.GetAttrSet(), style.items);
-      if (
-        style.outlineAssignment === undefined &&
-        factoryAssignment &&
-        !style.items.some(
-          /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
-          (item) => item.which === RES_PARATR_OUTLINELEVEL,
-        )
-      )
-        collection.SetAttrOutlineLevel(factoryOutlineLevel);
-    }
-    for (const style of record.textFormatCollections) {
-      const collection = document.GetTextFormatColl(style.id);
-      collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
-      collection.SetDerivedFrom(
-        style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
-      );
-    }
-    for (const rule of record.numRules) {
+    if (
+      record.outlineRuleIndex !== undefined &&
+      (!Number.isInteger(record.outlineRuleIndex) ||
+        record.outlineRuleIndex < 0 ||
+        record.outlineRuleIndex >= record.numRules.length)
+    )
+      throw new Error("Stored Writer outline owner index is invalid.");
+    for (const [ruleIndex, rule] of record.numRules.entries()) {
       if (
         rule.ruleType !== undefined &&
         rule.ruleType !== SwNumRuleType.NUM_RULE &&
@@ -690,7 +668,11 @@ export function* decodeWriterDocumentSteps(
         if (rule.ownedLevels === undefined || rule.ownedLevels[level])
           restoredRule.Set(level, decoded);
       }
-      const owner = document.AddNumRule(restoredRule);
+      const owner =
+        ruleIndex === record.outlineRuleIndex
+          ? document.GetOutlineNumRule().Assign(restoredRule)
+          : document.AddNumRule(restoredRule);
+      if (owner === document.GetOutlineNumRule()) owner.SetDefaultListId(rule.listId);
       const scalar = rule.scalarState;
       if (scalar !== undefined) {
         if (
@@ -722,6 +704,44 @@ export function* decodeWriterDocumentSteps(
         owner.SetPoolHelpId(scalar.poolHelpId);
         owner.SetPoolHlpFileId(scalar.poolHlpFileId);
       }
+    }
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      const factoryOutlineLevel = collection.GetAttrOutlineLevel();
+      const factoryAssignment = collection.IsAssignedToListLevelOfOutlineStyle();
+      if (style.outlineAssignment !== undefined && typeof style.outlineAssignment !== "boolean")
+        throw new Error("Stored Writer outline assignment is invalid.");
+      if (style.outlineAssignment === false) collection.DeleteAssignmentToListLevelOfOutlineStyle();
+      else if (style.outlineAssignment === true && !factoryAssignment)
+        collection.AssignToListLevelOfOutlineStyle(0);
+      collection.SetFormatName(style.name);
+      if (!Number.isInteger(style.poolId) || style.poolId < 0 || style.poolId > 65535)
+        throw new Error("Stored Writer paragraph style pool identity is invalid.");
+      collection.SetPoolFormatId(style.poolId);
+      collection.ResetAllFormatAttr();
+      const attributes = collection.GetAttrSet().Clone(false);
+      try {
+        decodeSfxItemSet(attributes, style.items);
+        collection.SetFormatAttrSet(attributes);
+      } finally {
+        attributes.Dispose();
+      }
+      if (
+        style.outlineAssignment === undefined &&
+        factoryAssignment &&
+        !style.items.some(
+          /** Detects the source-owned outline item already retained by the legacy graph. @param item - Stored item. @returns Whether outline. */
+          (item) => item.which === RES_PARATR_OUTLINELEVEL,
+        )
+      )
+        collection.SetAttrOutlineLevel(factoryOutlineLevel);
+    }
+    for (const style of record.textFormatCollections) {
+      const collection = document.GetTextFormatColl(style.id);
+      collection.SetNextTextFormatColl(document.GetTextFormatColl(style.followId));
+      collection.SetDerivedFrom(
+        style.parentId === undefined ? undefined : document.GetTextFormatColl(style.parentId),
+      );
     }
     if (record.textNodes.length === 0)
       throw new Error("Stored Writer document has no body text node.");

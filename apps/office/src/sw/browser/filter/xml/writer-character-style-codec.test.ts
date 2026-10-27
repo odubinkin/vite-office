@@ -32,7 +32,7 @@ it("transfers duplicate names, exact pool IDs, explicit defaults and the same nu
       expect(encodeWriterDocument(copy)).toEqual(record);
       const styles = copy.GetCharFormats();
       const [, restoredParent, restoredFirst, restoredSecond] = styles;
-      const restoredRule = copy.GetNumRuleTable()[0];
+      const restoredRule = copy.GetNumRuleTable().slice(1)[0];
       assert(restoredParent && restoredFirst && restoredSecond && restoredRule);
       expect(styles).toHaveLength(4);
       expect(restoredFirst.GetName()).toBe(restoredSecond.GetName());

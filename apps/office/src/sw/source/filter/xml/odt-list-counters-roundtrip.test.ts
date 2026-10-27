@@ -147,7 +147,7 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
       expect(result.document.GetAttrPool().GetUserOrPoolDefaultItem(89).QueryValue()).toBe(1);
       for (const node of result.document.paragraphs)
         if (!node.HasAttrListRestartValue()) expect(node.GetAttr(89).QueryValue()).toBe(1);
-      const rule = result.document.GetNumRuleTable()[0] as SwNumRule;
+      const rule = result.document.GetNumRuleTable().slice(1)[0] as SwNumRule;
       const copied = createWriterDocument();
       copied.GetDocumentListsManager().AddNumRule(rule.clone());
       result.document.paragraphs.forEach(
@@ -159,7 +159,7 @@ it("round-trips zero starts and restarts through native list trees", /** Verifie
           ).SetListItems(node.CaptureListItems()),
       );
       expect(state(copied)).toEqual(expected);
-      expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
+      expect(copied.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
       const transferred = decodeWriterDocument(encodeWriterDocument(result.document));
       expect(state(transferred)).toEqual(expected);
       expect(transferred.GetAttrPool().GetUserOrPoolDefaultItem(89).QueryValue()).toBe(1);

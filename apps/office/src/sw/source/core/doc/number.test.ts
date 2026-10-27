@@ -193,7 +193,7 @@ describe("Writer numbering markers" /** Groups deterministic list marker calcula
     expect(first?.GetNumRuleName()).toBe(nested.GetNumRuleName());
     expect(nested.GetNumRuleName()).toBe(second.GetNumRuleName());
     expect(first?.GetListId()).toBe(second.GetListId());
-    expect(document.GetNumRuleTable()).toHaveLength(1);
+    expect(document.GetNumRuleTable().slice(1)).toHaveLength(1);
     const manager = document.GetDocumentListsManager();
     const ruleName = first?.GetNumRuleName() as string;
     expect(manager.GetListForListStyle(ruleName).GetListId()).toBe(first?.GetListId());

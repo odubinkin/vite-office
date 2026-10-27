@@ -16,29 +16,30 @@ export class DocumentListsManager {
   private nextNumRuleId = 1;
   private readonly lists = new Map<string, SwList>();
   private readonly listStyleLists = new Map<string, SwList>();
-  private readonly numRules = new Map<string, SwNumRule>();
+  private readonly numRules: SwNumRule[] = [];
+  private readonly numRuleMap = new Map<string, SwNumRule>();
 
   /** Creates the list manager. @param stateManager - Document mutation publisher. @returns Nothing. */
   public constructor(private readonly stateManager: DocumentStateManager) {}
 
-  /** Adds a cloned document-owned numbering rule. @param rule - Source rule. @returns Stored rule. */
+  /** Retains the actual transferred rule in native table order and updates the name index; the browser return value borrows that owner. @param rule - Transferred native owner. @returns Stored identity. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
-    if (this.numRules.has(rule.GetName()))
-      throw new Error(`Duplicate SwNumRule: ${rule.GetName()}`);
-    const stored = rule.clone();
-    this.numRules.set(stored.GetName(), stored);
-    this.stateManager.NotifyModelChange({ kind: "numbering-changed", ruleName: stored.GetName() });
-    return stored;
+    if (this.numRules.length >= 65534) throw new Error("SwDoc::AddNumRule: table full.");
+    this.numRules.push(rule);
+    this.numRuleMap.set(rule.GetName(), rule);
+    this.CreateListForListStyle(rule.GetName());
+    this.stateManager.NotifyModelChange({ kind: "numbering-changed", ruleName: rule.GetName() });
+    return rule;
   }
 
   /** Finds a rule by its Writer name. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
-    return this.numRules.get(name);
+    return this.numRuleMap.get(name);
   }
 
   /** Returns the document rule table. @returns Rules in insertion order. */
   public GetNumRuleTable(): readonly SwNumRule[] {
-    return [...this.numRules.values()];
+    return this.numRules;
   }
 
   /** Creates or returns a document-owned list for a numbering rule. @param ruleName - Default list-style name. @param listId - Optional persistent identity. @returns List. */
@@ -58,14 +59,23 @@ export class DocumentListsManager {
     return this.lists.get(listId);
   }
 
-  /** Returns the stable default list associated with a style, creating it on demand. @param ruleName - Numbering rule. @returns List. */
-  public GetListForListStyle(ruleName: string): SwList {
-    const existing = this.listStyleLists.get(ruleName);
-    if (existing !== undefined) return existing;
+  /** Source createListForListStyle owns default-list creation, resolves an already used ID to a fresh identity, and leaves existing style mappings untouched. @param ruleName - Original rule name. @returns Nothing. */
+  public CreateListForListStyle(ruleName: string): void {
+    if (ruleName.length === 0 || this.listStyleLists.has(ruleName)) return;
     const rule = this.FindNumRulePtr(ruleName);
-    if (rule === undefined) throw new Error(`Unknown SwNumRule: ${ruleName}`);
-    const list = this.CreateList(ruleName, rule.GetDefaultListId());
+    if (rule === undefined) return;
+    const id =
+      this.GetListByName(rule.GetDefaultListId()) === undefined ? rule.GetDefaultListId() : "";
+    const list = this.CreateList(ruleName, id);
     this.listStyleLists.set(ruleName, list);
+    rule.SetDefaultListId(list.GetListId());
+  }
+
+  /** Existing browser access materializes the native default list when required, then borrows its stable owner. @param ruleName - Numbering rule. @returns Default list. */
+  public GetListForListStyle(ruleName: string): SwList {
+    this.CreateListForListStyle(ruleName);
+    const list = this.listStyleLists.get(ruleName);
+    if (list === undefined) throw new Error(`Unknown SwNumRule: ${ruleName}`);
     return list;
   }
 
@@ -86,7 +96,7 @@ export class DocumentListsManager {
   public CreateAutomaticNumRule(kind: "bullet" | "numbered"): SwNumRule {
     let name: string;
     do name = `List ${this.nextNumRuleId++}`;
-    while (this.numRules.has(name));
+    while (this.numRuleMap.has(name));
     const listId = this.CreateUniqueListId();
     return this.AddNumRule(createWriterNumRule(name, kind, listId, true));
   }

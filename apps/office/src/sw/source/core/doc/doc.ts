@@ -82,7 +82,7 @@ import {
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import type { SwNumRule } from "./number";
+import { SwNumRule, SwNumRuleType } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
 import { moveLeftMargin, InsertPoolItem, CopyCharFormat } from "./docfmt";
@@ -236,6 +236,7 @@ export class SwDoc {
   private readonly contentOperationsManager: DocumentContentOperationsManager;
   private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
+  private readonly mpOutlineRule: SwNumRule;
   private readonly listItemsManager = new DocumentListItemsManager();
   private readonly settingManager = new DocumentSettingManager();
   private readonly stateManager = new DocumentStateManager();
@@ -265,6 +266,10 @@ export class SwDoc {
     this.GetDfltTextFormatColl().SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
     this.defaultFrameFormat.SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
     this.listsManager = new DocumentListsManager(this.stateManager);
+    this.mpOutlineRule = this.AddNumRule(
+      new SwNumRule(SwNumRule.GetOutlineRuleName(), "label-alignment", SwNumRuleType.OUTLINE_RULE),
+    );
+    this.mpOutlineRule.SetCountPhantoms(!this.GetDocumentSettingManager().get("OLD_NUMBERING"));
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager(this);
     this.markAccess = new DocumentMarkAccess(this);
@@ -564,12 +569,13 @@ export class SwDoc {
     return GetUniqueNumRuleName(this);
   }
 
-  /** Stores an independent native numbering rule. @param rule - Source rule. @returns Document-owned rule. */
+  /** Returns the actual document-owned outline rule created during docnew initialization. @returns Borrowed outline owner. */
+  public GetOutlineNumRule(): SwNumRule {
+    return this.mpOutlineRule;
+  }
+  /** Transfers a native numbering rule into document ownership without implicit cloning. @param rule - Transferred owner. @returns Borrowed stored identity. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
-    const stored = this.listsManager.AddNumRule(rule);
-    const list = this.listsManager.GetListForListStyle(stored.GetName());
-    if (!stored.GetDefaultListId()) stored.SetDefaultListId(list.GetListId());
-    return stored;
+    return this.listsManager.AddNumRule(rule);
   }
   /** Finds a numbering rule. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
@@ -640,7 +646,7 @@ export class SwDoc {
         let stored = this.FindNumRulePtr(rule.GetName());
         const created = stored === undefined;
         if (stored === undefined) {
-          stored = this.listsManager.AddNumRule(rule);
+          stored = this.AddNumRule(new SwNumRule(rule));
           if (stored.GetDefaultListId().length === 0)
             stored.SetDefaultListId(
               this.listsManager.GetListForListStyle(stored.GetName()).GetListId(),

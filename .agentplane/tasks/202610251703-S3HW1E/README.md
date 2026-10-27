@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 103
+revision: 104
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-27T02:16:17.868Z"
+doc_updated_at: "2026-10-27T02:34:03.767Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -343,6 +343,28 @@ sections:
     Validation: 9032/9032 Writer tests in 202 suites passed for core/doc, core/txtnode, core/undo and filter/ww8; report output/playwright/writer-global-defaults/numbering-usage-tests.json. App typecheck passed. Scoped ESLint, Prettier and git diff --check passed. Module boundaries passed (1559 runtime sources,8060 imports,204 allowed edges). Source provenance passed (1560 runtime modules,1350 mapped); Writer registry semanticViolationCount=0. File-size gate passed. Full suite was not run: only related modules were selected.
 
     Check remediation: test fixture initially referenced a nonexistent manager accessor and was corrected to actual SwDoc.MakeTextFormatColl; ESLint non-null assertion was replaced with a required-owner assertion. Provenance caught adding IsUsed to the aggregate doc.cxx primary symbol list and an inline namespace helper's qualified textual marker: IsUsed is now owned by the actual new poolfmt mapping, and fmtcol helper evidence uses its exact source declaration. No provenance validators or boundaries were weakened. Existing Markdown WIP remains excluded from this commit.
+
+    ### Persistent outline owner and numbering transfer checkpoint before the requested merge pause
+
+    User requested stopping after the current block for a manual merge. Completed this block only; native InitFontTable/MSWordExportBase font orchestration is the next unfinished frontier. The full task remains DOING, and the goal is paused after the checkpoint commit at the user's request, not marked complete.
+
+    SwDoc creates its persistent original Outline rule during docnew initialization: actual OUTLINE_RULE identity, represented shipped ODF>=1.2 label-alignment defaults and CountPhantoms from OLD_NUMBERING. Its original GetOutlineNumRule borrows that owner. AddNumRule no longer clones or rejects duplicate names: transferred identities remain in table order, the name index points to the last added rule, and the native createListForListStyle path retains an existing style mapping or creates a fresh default list, resolving occupied IDs. WRITER195 documents the source duplicate-name/default-list mismatch. This core still stores the document rule table in its existing per-document list service; deterministic generated IDs, full native services/structural ownership and abort-vs-exception exhaustion remain unverified. No full-contract or full-format promotion.
+
+    Cross-document node/style copying and SetNumRule creation now explicitly invoke native rule copies. Worker records carry an optional outlineRuleIndex expressing the actual pointer separately from names and rule types; loading restores that owner once, migrates legacy graphs without that pointer index, constructs rule owners before paragraph attributes and uses native SetFormatAttrSet to register direct paragraph-style clients. New owner tests cover default identity/NONE levels, transfer/collision/duplicate behavior, independent copies, Worker style clients, legacy migration and invalid owner indices. Existing tests now enumerate authored rules after the precreated outline, and explicitly configure numbered outline fixture levels where the native attribute/TXT witnesses require them. Generated list identity checks use actual default-list bindings instead of a hard-coded first generated ID.
+
+    Command: npm run test:writer -- src/sw/source/core/doc src/sw/source/core/docnode src/sw/source/core/txtnode src/sw/source/core/undo src/sw/source/filter/xml src/sw/source/filter/ww8 src/sw/browser/filter/xml src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-final-tests.json
+    Result: 9561/9562 passed; sole remaining failure was a stale test literal expecting list1 after native outline initialization consumed it. Scope: related core, Worker, ODT, RTF export and existing Markdown WIP consumers. Earlier narrower runs exposed old slot-zero/clone expectations; these were corrected to source ownership/table contracts. The native direct-attribute witness was preserved unchanged; only its actual TS fixture explicitly configures the same outline levels/default ID as the witness.
+
+    Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-text-consumers.json
+    Result: 208/209 passed; sole remaining failure was an old TXT fixture assuming the new default outline has numbered rather than source NONE levels.
+
+    Command: npm run test:writer -- src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/xml/odt-roundtrip.test.ts --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-final-fix-tests.json
+    Result: pass,43/43. Both remaining fixture failures are fixed; TXT now asserts the native empty outline default, explicitly installs a numeric format and checks its subsequent empty-format suppression. ODT expectations share the actual rule's opaque default-list identity. No runtime behavior was weakened to satisfy old fixtures. Other final-run tests remain valid because only these test fixtures changed afterward. Full suite was not run.
+
+    Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Prettier; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:file-size; git diff --check.
+    Result: pass. Evidence: module graph1559 sources/8061 imports/204 edges; provenance1560 runtime modules/1350 mapped; Writer registry semanticViolationCount0. The file-size gate caught expansion of odt-roundtrip.test.ts to1000+ lines; its repeated expected list fields now use a shared explicit expected value, and the gate passes. No validator was weakened.
+
+    Pre-existing Markdown source/tests and associated registry/operation WIP remain deliberately uncommitted. They were not edited in this block and are not included in the merge checkpoint. The live tests are terminal; no background goal work should continue during the user's merge pause. Full current-core TXT/RTF/Markdown closure, upstream parity certification, native font-table orchestration and the previously recorded HTML/CSS/history/default gaps remain unfinished.
 id_source: "generated"
 ---
 ## Summary
@@ -664,3 +686,25 @@ Seven actual-owner tests cover registration, copy/assignment/reset, direct versu
 Validation: 9032/9032 Writer tests in 202 suites passed for core/doc, core/txtnode, core/undo and filter/ww8; report output/playwright/writer-global-defaults/numbering-usage-tests.json. App typecheck passed. Scoped ESLint, Prettier and git diff --check passed. Module boundaries passed (1559 runtime sources,8060 imports,204 allowed edges). Source provenance passed (1560 runtime modules,1350 mapped); Writer registry semanticViolationCount=0. File-size gate passed. Full suite was not run: only related modules were selected.
 
 Check remediation: test fixture initially referenced a nonexistent manager accessor and was corrected to actual SwDoc.MakeTextFormatColl; ESLint non-null assertion was replaced with a required-owner assertion. Provenance caught adding IsUsed to the aggregate doc.cxx primary symbol list and an inline namespace helper's qualified textual marker: IsUsed is now owned by the actual new poolfmt mapping, and fmtcol helper evidence uses its exact source declaration. No provenance validators or boundaries were weakened. Existing Markdown WIP remains excluded from this commit.
+
+### Persistent outline owner and numbering transfer checkpoint before the requested merge pause
+
+User requested stopping after the current block for a manual merge. Completed this block only; native InitFontTable/MSWordExportBase font orchestration is the next unfinished frontier. The full task remains DOING, and the goal is paused after the checkpoint commit at the user's request, not marked complete.
+
+SwDoc creates its persistent original Outline rule during docnew initialization: actual OUTLINE_RULE identity, represented shipped ODF>=1.2 label-alignment defaults and CountPhantoms from OLD_NUMBERING. Its original GetOutlineNumRule borrows that owner. AddNumRule no longer clones or rejects duplicate names: transferred identities remain in table order, the name index points to the last added rule, and the native createListForListStyle path retains an existing style mapping or creates a fresh default list, resolving occupied IDs. WRITER195 documents the source duplicate-name/default-list mismatch. This core still stores the document rule table in its existing per-document list service; deterministic generated IDs, full native services/structural ownership and abort-vs-exception exhaustion remain unverified. No full-contract or full-format promotion.
+
+Cross-document node/style copying and SetNumRule creation now explicitly invoke native rule copies. Worker records carry an optional outlineRuleIndex expressing the actual pointer separately from names and rule types; loading restores that owner once, migrates legacy graphs without that pointer index, constructs rule owners before paragraph attributes and uses native SetFormatAttrSet to register direct paragraph-style clients. New owner tests cover default identity/NONE levels, transfer/collision/duplicate behavior, independent copies, Worker style clients, legacy migration and invalid owner indices. Existing tests now enumerate authored rules after the precreated outline, and explicitly configure numbered outline fixture levels where the native attribute/TXT witnesses require them. Generated list identity checks use actual default-list bindings instead of a hard-coded first generated ID.
+
+Command: npm run test:writer -- src/sw/source/core/doc src/sw/source/core/docnode src/sw/source/core/txtnode src/sw/source/core/undo src/sw/source/filter/xml src/sw/source/filter/ww8 src/sw/browser/filter/xml src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-final-tests.json
+Result: 9561/9562 passed; sole remaining failure was a stale test literal expecting list1 after native outline initialization consumed it. Scope: related core, Worker, ODT, RTF export and existing Markdown WIP consumers. Earlier narrower runs exposed old slot-zero/clone expectations; these were corrected to source ownership/table contracts. The native direct-attribute witness was preserved unchanged; only its actual TS fixture explicitly configures the same outline levels/default ID as the witness.
+
+Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-text-consumers.json
+Result: 208/209 passed; sole remaining failure was an old TXT fixture assuming the new default outline has numbered rather than source NONE levels.
+
+Command: npm run test:writer -- src/sw/source/core/doc/writer-attributes.test.ts src/sw/source/filter/ascii/native-ascii-range.test.ts src/sw/source/filter/xml/odt-roundtrip.test.ts --reporter=json --outputFile=../../output/playwright/writer-global-defaults/outline-final-fix-tests.json
+Result: pass,43/43. Both remaining fixture failures are fixed; TXT now asserts the native empty outline default, explicitly installs a numeric format and checks its subsequent empty-format suppression. ODT expectations share the actual rule's opaque default-list identity. No runtime behavior was weakened to satisfy old fixtures. Other final-run tests remain valid because only these test fixtures changed afterward. Full suite was not run.
+
+Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Prettier; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:file-size; git diff --check.
+Result: pass. Evidence: module graph1559 sources/8061 imports/204 edges; provenance1560 runtime modules/1350 mapped; Writer registry semanticViolationCount0. The file-size gate caught expansion of odt-roundtrip.test.ts to1000+ lines; its repeated expected list fields now use a shared explicit expected value, and the gate passes. No validator was weakened.
+
+Pre-existing Markdown source/tests and associated registry/operation WIP remain deliberately uncommitted. They were not edited in this block and are not included in the merge checkpoint. The live tests are terminal; no background goal work should continue during the user's merge pause. Full current-core TXT/RTF/Markdown closure, upstream parity certification, native font-table orchestration and the previously recorded HTML/CSS/history/default gaps remain unfinished.
