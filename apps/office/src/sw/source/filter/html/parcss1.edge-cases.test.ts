@@ -178,3 +178,30 @@ it("retains invalid RGB sentinels and expression replacement ownership", /** Ver
   expect(new CSS1Expression(T.HEXCOLOR, "z00", 0).GetColor(color)).toBe(true);
   expect(new CSS1Expression(T.NUMBER, "2", 2).GetColor(color)).toBe(false);
 });
+
+it("handles unsupported at-keywords and failed declaration values before subsequent valid properties", /** Verifies parser recovery consumes actual malformed input. @returns Nothing. */ () => {
+  expect(new Probe().sheet("@; % p{color:red}")).toContainEqual({
+    property: "color",
+    terms: [[T.IDENT, "red", 0, 0]],
+  });
+  expect(new Probe().option("color:red;broken; height:2px")).toEqual([
+    { property: "color", terms: [[T.IDENT, "red", 0, 0]] },
+    { property: "height", terms: [[T.PIXLENGTH, "2", 2, 0]] },
+  ]);
+  expect(new Probe().sheet("p{color:red;broken; height:2px")).toContainEqual({
+    property: "height",
+    terms: [[T.PIXLENGTH, "2", 2, 0]],
+  });
+  for (const rule of ['@x "a\'b";', String.raw`@x "a\\b";`])
+    expect(new Probe().sheet(rule + "p{color:red}")).toContainEqual({
+      property: "color",
+      terms: [[T.IDENT, "red", 0, 0]],
+    });
+});
+it("clamps integral RGB channels and consumes the distinct RGBA prefix", /** Verifies actual native color bounds. @returns Nothing. */ () => {
+  const color = new Color();
+  expect(new CSS1Expression(T.RGB, "rgba(-1,999,3,0.5)", 0).GetColor(color)).toBe(true);
+  expect([color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha()]).toEqual([
+    0, 255, 3, 127,
+  ]);
+});

@@ -766,7 +766,7 @@ export class SwpHints {
       const end = ordered[index + 1] as number;
       /* istanbul ignore next -- Unique sorted hint boundaries always increase. */
       if (end <= start) continue;
-      const inet = this.findFamilyHint(RES_TXTATR_INETFMT, start, end);
+      const inet = GetTextAttrAt(this, start, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
       runs.push({
         attributes: projectCharacterHintAttributes(this.pool, this.hintsByStart, start, inherited),
         ...(inet?.format instanceof SwFormatINetFormat
@@ -797,7 +797,7 @@ export class SwpHints {
       throw new Error("Writer hyperlink caret is outside the text node.");
     if (text.length === 0) return undefined;
     const characterOffset = offset === 0 ? 0 : offset - 1;
-    const hint = this.findFamilyHint(RES_TXTATR_INETFMT, characterOffset, characterOffset + 1);
+    const hint = GetTextAttrAt(this, characterOffset, RES_TXTATR_INETFMT, GetTextAttrMode.Default);
     return hint?.format instanceof SwFormatINetFormat ? hint.format.GetHyperlink() : undefined;
   }
 
@@ -869,18 +869,6 @@ export class SwpHints {
         };
       },
     );
-  }
-
-  /** Finds a covering hint using the native Which/start map. @param which - Existing supported family. @param start - Inclusive character boundary. @param end - Exclusive character boundary. @returns Covering actual attribute or undefined. */
-  private findFamilyHint(which: number, start: number, end: number): RangedTextAttr | undefined {
-    if (which === RES_TXTATR_INETFMT)
-      return GetTextAttrAt(this, start, which, GetTextAttrMode.Default);
-    for (let index = this.GetFirstPosSortedByWhichAndStart(which); index < this.Count(); index++) {
-      const hint = this.GetSortedByWhichAndStart(index);
-      if (hint.Which() !== which || hint.start > start) break;
-      if (end <= hint.end) return hint;
-    }
-    return undefined;
   }
 }
 

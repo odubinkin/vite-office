@@ -79,3 +79,12 @@ it("preserves explicit family/pitch and the source omission of width from equali
   expect(copy.GetWidthType()).toBe(D.WIDTH_ULTRA_EXPANDED);
   expect(copy.Equals(font)).toBe(true);
 });
+
+it("resolves unknown width without replacing an explicitly selected family", /** Exercises the width-triggered first lookup and configured record precedence. @returns Nothing. */ () => {
+  const font = new Font();
+  font.SetFamilyName("Courier New");
+  font.SetFamily(F.FAMILY_DECORATIVE);
+  font.GetWidthTypeMaybeAskConfig();
+  expect(font.GetPitch()).toBe(P.PITCH_FIXED);
+  expect(font.GetFamilyType()).toBe(F.FAMILY_DECORATIVE);
+});

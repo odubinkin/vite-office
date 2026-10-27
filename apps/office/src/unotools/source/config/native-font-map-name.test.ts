@@ -64,3 +64,13 @@ it("loads all original configured attribute fields without applying them as font
   });
   expect(record?.Substitutions.slice(0, 3)).toEqual(["albanyamt", "albany", "arial"]);
 });
+
+it("strips the pinned Baekmuk scalar prefix without requiring an intervening ASCII space", /** Checks the no-space Korean prefix variant against the original scalar name rule. @returns Nothing. */ () => {
+  const shortName: [string] = [""],
+    family: [string] = [""],
+    weight: [FontWeight] = [FontWeight.WEIGHT_DONTKNOW],
+    width: [FontWidth] = [FontWidth.WIDTH_DONTKNOW],
+    type: [ImplFontAttrs] = [ImplFontAttrs.None];
+  FontSubstConfiguration.getMapName("\uBC31\uBC35굴림", shortName, family, weight, width, type);
+  expect(shortName[0]).toBe("굴림");
+});

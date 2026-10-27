@@ -88,3 +88,69 @@ it("constructs browser ports without a storage host and reopens one lazy factory
   expect(second.getByRole("region", { name: "Writer workspace" })).toBeInTheDocument();
   second.unmount();
 });
+
+it.each([
+  [null, "Writer output device is unavailable."],
+  [
+    { actualBoundingBoxAscent: 0, actualBoundingBoxDescent: 0 },
+    "Writer output device could not measure the font height.",
+  ],
+  [
+    { actualBoundingBoxAscent: Infinity, actualBoundingBoxDescent: 0 },
+    "Writer output device could not measure the font height.",
+  ],
+] as const)(
+  "rejects unavailable or invalid physical font metrics %s",
+  /** Verifies real host-failure boundaries during native RTF leading. @param metrics - Host metrics or no device. @param message - Diagnostic. @returns Nothing. */ (
+    metrics,
+    message,
+  ) => {
+    const context =
+      metrics === null
+        ? null
+        : {
+            font: "",
+            measureText:
+              /** Returns the host's incomplete metric payload. @returns Physical metrics. */ () =>
+                metrics,
+          };
+    vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue(
+      context as unknown as CanvasRenderingContext2D | null,
+    );
+    const session = createWriterDocumentSession();
+    try {
+      const paragraph = session.docShell.GetDoc().paragraphs[0];
+      if (!paragraph) throw new Error("Missing Writer paragraph");
+      const spacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+      spacing.SetInterLineSpace(80);
+      paragraph.SetAttr(spacing);
+      expect(
+        /** Serializes through the real output device binding. @returns Bytes. */ () =>
+          session.docShell.SerializeRtf(),
+      ).toThrow(message);
+    } finally {
+      session.Close();
+    }
+  },
+);
+it("falls back to actual glyph bounds when the browser omits font bounding boxes", /** Verifies metric API fallback rather than fabricated physical height. @returns Nothing. */ () => {
+  vi.spyOn(HTMLCanvasElement.prototype, "getContext").mockReturnValue({
+    font: "",
+    measureText:
+      /** Supplies actual glyph metrics from a browser without font bounding fields. @returns Measured bounds. */ () => ({
+        actualBoundingBoxAscent: 9,
+        actualBoundingBoxDescent: 3,
+      }),
+  } as unknown as CanvasRenderingContext2D);
+  const session = createWriterDocumentSession();
+  try {
+    const paragraph = session.docShell.GetDoc().paragraphs[0];
+    if (!paragraph) throw new Error("Missing Writer paragraph");
+    const spacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
+    spacing.SetInterLineSpace(80);
+    paragraph.SetAttr(spacing);
+    expect(new TextDecoder().decode(session.docShell.SerializeRtf())).toContain("\\sl260\\slmult0");
+  } finally {
+    session.Close();
+  }
+});

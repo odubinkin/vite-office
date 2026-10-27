@@ -1,4 +1,11 @@
-/** @fileoverview Consumed ICU78.3 UnicodeString UTF-16 value constructors, copying, equality and scalar queries for timezone identity. Native allocation/buffer/alias/ABI APIs remain unported. */
+/** @fileoverview Consumed ICU78.3 UnicodeString UTF-16 value constructors, copying, equality and scalar queries for timezone identity. Host string allocation rejection maps to the consumed native bogus-state contract; native allocation/buffer/alias/ABI APIs remain unported. */
+/** Internal storage admission preserves the native signed32 addition boundary independently of any host allocation limit. @param requestedLength - Nonnegative requested UTF16 capacity, before allocating storage. @returns Nothing on admission; throws on signed32 overflow for the owning operation to convert to bogus state. */
+export function checkUnicodeStringLength(requestedLength: number): void {
+  if (requestedLength > 2147483647)
+    throw new RangeError("UnicodeString length exceeds signed32 storage");
+}
+
+/** Consumed UnicodeString value owner; JavaScript strings provide its actual readable UTF16 storage. */
 export class UnicodeString {
   private value = "";
   private bogus = false;
@@ -92,18 +99,19 @@ export class UnicodeString {
   /** Original whole-value append: a bogus/empty source contributes no code units, and a bogus receiver stays unchanged. @param other - Appended value. @returns This owner. */
   append(other: UnicodeString): this {
     if (!this.bogus && other.length() !== 0) {
-      if (this.length() + other.length() > 2147483647) this.setToBogus();
-      else this.value += other.value;
+      try {
+        checkUnicodeStringLength(this.length() + other.length());
+        this.value += other.value;
+      } catch {
+        // Native doAppend/cloneArrayIfNeeded also discards the value when growth cannot allocate.
+        this.setToBogus();
+      }
     }
     return this;
   }
   /** Original operator+ constructs an empty result and appends both values; bogus zero-length operands do not propagate their flags. @param other - Right operand. @returns Independent result. */
   concat(other: UnicodeString): UnicodeString {
-    const result = new UnicodeString();
-    if (this.length() + other.length() > 2147483647) {
-      result.setToBogus();
-      return result;
-    }
-    return result.append(this).append(other);
+    // Each append owns the same checked growth/failure boundary as the original concatenation.
+    return new UnicodeString().append(this).append(other);
   }
 }

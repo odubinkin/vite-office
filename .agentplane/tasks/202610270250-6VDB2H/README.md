@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize all checkouts"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -62,49 +62,20 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-27T05:03:14.518Z"
+doc_updated_at: "2026-10-27T05:29:27.292Z"
 doc_updated_by: "CODER"
 description: "User-approved integration: commit current Writer work, push Writer and Calc, merge both into main, resolve conflicts, run full project verification and repair regressions, push main, then merge main back and push both development branches. Preserve local generated artifacts and finish on original branch names."
 sections:
   Summary: "Integrate all current Writer and Calc development into main and synchronize all three user-authorized checkouts."
   Scope: "Three checkouts: vite-office main, vite-office-writer writer, vite-office-calc calc. Include existing uncommitted Writer Markdown code/tests/registry changes; preserve generated local Calc output and unrelated pending task README. Repair integration failures and add regression tests when needed. User explicitly authorized network pushes and cross-checkout access."
   Plan: "Execute the user-approved nine-step integration and synchronization with complete npm verification, regression fixes as needed, no history rewriting, preserve local artifacts, and finish on main/writer/calc respectively."
-  Verify Steps: "Run npm run verify (format, lint, tools/application typecheck, boundaries, Writer/Calc resources, tooling tests, application coverage, inventory coverage, browser E2E, static build, docs, file sizes, source tree, Writer hint IDs, provenance, invariant/parity registries). Run ap doctor and node .agentplane/policy/check-routing.mjs. Run git diff --check. Confirm main contains both original branch tips; writer/calc contain final main; local branches equal origin refs after push; inspect full git status in all three checkouts. Preserve pre-existing generated output."
+  Verify Steps: "Use the completed full npm run verify component runs and recorded repairs. Per explicit user instruction, do not repeat full application or537-test browser suites: run all newly added/changed tests, current-source affected-owner scopes, formatting/lint/typecheck and source/policy checks. User explicitly accepts residual application coverage below100%; preserve configured thresholds and record exact failure metrics rather than bypassing or claiming a pass. Inventory coverage remains100%. Confirm current production/static build and affected Writer/Calc browser smoke. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Publish main, fetch main into Writer/Calc, merge back and push both branches; confirm local=origin, final main ancestry and matching tracked trees, correct main/writer/calc checkouts and preserved pre-existing untracked artifacts."
   Verification: |-
-    Full application run: 1544 files, 24126 tests; 1542 files and 24124 tests passed, two failures found and corrected afterward. The obsolete Markdown fatal UTF-8 expectation is replaced by native replacement decoding plus atomic empty-stream rejection; all 18 shell cases pass. The native-color decoder null-value regression is fixed; 12 related files and 143 cases pass. Full Istanbul gate FAILED: lines 98.33 percent (94005/95600), statements 97.89 percent (103371/105595), branches 96.34 percent (63358/65761), functions 99.22 percent (16735/16866). Coverage gaps affect 216 modules; see evidence/coverage-gaps.json. This is a broad test-completion scope across ICU, HTML/Markdown, SAL encodings and other owners. Thresholds unchanged and no skips approved. Inventory: 38 files, 130 tests and strict 100 percent all four coverage metrics passed. Tooling: 34 files, 159 tests passed. All 537 Chromium E2E passed; rebuilt current-source Writer/Calc smoke also passed (2 tests). Production/static builds, formatting, ESLint, TypeScript, JSDoc, module boundaries, resources, source tree, hint identities, provenance, registry gates, doctor and policy routing passed. Current-source color-codec supplemental coverage is being completed. main publication and reverse branch synchronization are intentionally pending the strict coverage gate or explicit user acceptance of the coverage gap.
+    Earlier full checks: the initial application run executed24,126 tests and exposed two regressions; both were fixed and retested. All537 browser E2E,159 tooling tests and130 inventory tests passed; inventory coverage is100 percent.
 
-    <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-27T03:59:42.627Z — VERIFY — needs_rework
+    Current checks:68 new/changed test files and1,931 tests PASS; the final typed-helper retest adds nine passing tests in two files. Affected Writer scope:23 files,157 tests PASS; ICU i18n:26 files,326 tests PASS. Full tools/application TypeScript, scoped ESLint, formatting,JSDoc,provenance,boundaries,file-size and policy routing pass. Doctor is OK with its pre-existing hook warning. Production/static build and Writer/Calc browser smoke passed.
 
-    By: CODER
-
-    Note: Full checks executed; functional failures fixed and retested. Full strict Istanbul gate remains below 100 percent in 216 modules. Current-source item codec has 100-percent coverage after 326 passing tests. All 537 browser tests, 130 inventory tests with full coverage and 159 tooling tests pass. Main publication and reverse merges require coverage completion or explicit user-approved acceptance change.
-    Attempts: 1
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T03:59:04.369Z, excerpt_hash=sha256:0e5613a7d9c890a508d19c2a5742f89e6d04518cd8a68673e4eefffbafc3b658
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
-    - old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
-    - current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane commit 202610270250-6VDB2H -m 🧩 6VDB2H task: persist canonical task artifacts --allow-tasks
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: true
-    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-    - risks: none
-
-    <!-- END VERIFICATION RESULTS -->
+    Application coverage remains below the configured100-percent gate. Exact conservative current-source metrics and gaps are recorded in evidence/coverage-summary-at-closure.json and coverage-gaps-at-closure.json. The user explicitly approved finishing without100-percent coverage and instructed using new/affected tests instead of repeating full suites. Coverage thresholds and ignores are unchanged. Publication and branch synchronization follow the verification record.
   Rollback Plan: "Preserve existing histories and local generated files. Use ordinary revert commits for published integration if required; no force pushes, resets or deletion of user work."
   Findings: |-
     Integration commits: Writer snapshot 1d696773a; Writer merge 66d54ddec; Calc merge 86118a161. Initial SSH pushes failed; per-command HTTPS pushurl succeeded without changing configuration. Writer merge had 34 conflicts; combined StylePool ownership/iteration with all four family routes and preserved DOCX/RTF font output. Calc had two additive documentation/comment conflicts. Added shared-pointer family regression. Corrected tooling identity count (79) and native sw-to-i18nlangtag dependency expectations. Added missing JSDoc to incoming source and probe callbacks. Added Node JSON import attributes, and kept DocxAttributeOutput type-only in the shared font helper to avoid loading Vite raw token assets during Playwright discovery. Updated ODT warning and inventory aggregate expectations for added fill tokens and three new capabilities. Split the four-scope inventory acceptance into independent cases to preserve the 60-second bound. CSV test now exercises actual supported ISO-2022-JP contextual conversion and explicitly rejects the native JIS X 0201 null reverse callback. Full suites are pending; thresholds unchanged. Preserved pre-existing untracked main task README and Calc native build artifacts.
@@ -128,6 +99,18 @@ sections:
     - Observation: Source-backed supplemental tests now close more than one thousand missing statements and branches without lowering coverage thresholds. Portable minimized cases preserve independently compiled ICU and md4c observations; the complete BytesTrie scope and tools date/time scope reach 100 percent.
       Impact: A fresh full application assertion run is in progress. Current combined coverage is recorded separately from the original failing run. Remaining gaps include ordinary untested paths as well as proven source-invariant and host-limit guards; they are not all declared unreachable.
       Resolution: Keep native defensive checks and strict configuration intact. Document the remaining gap precisely. Publication requires either completing the strict gate or the requested explicit user exception; no exception has yet been received.
+
+    - Observation: Explicit user approval received to use three subagents for Writer/HTML/Markdown, ICU i18n, and ICU locales/resources. Their final targeted reports pass every assertion. Supplemental test/data changes are committed locally; full application assertion retest is still running.
+      Impact: Combined current-source coverage is 99.50 percent lines, 99.19 percent statements, 99.85 percent functions and 98.07 percent branches. The strict threshold remains 100 percent, so the remaining coverage exception is a distinct decision from the approved delegation.
+      Resolution: Preserve native defensive code and evidence of both reachable test backlog and proven unreachable cases. Await the explicit coverage-criteria decision before main publication and reverse merges.
+
+    - Observation: User explicitly declined the proposed residual-coverage exception and instructed continuation to 100 percent, using the maximum possible V8 string rather than a 2GB string.
+      Impact: All four strict coverage thresholds remain mandatory. The partial-coverage publication exception is not authorized. Focused native source-owner checks continue while necessary runtime boundary repairs are made; the interim full assertion retest is superseded and the final full gate must run against stable completed sources.
+      Resolution: Continue all approved implementation and verification locally. Test actual V8 maximum and host allocation failure, preserve native failure semantics, and remove only mathematically proven redundant conditions with source-call-graph evidence. Publish main and reverse-merge only after the strict gate passes.
+
+    - Observation: User explicitly approved closing without reaching100-percent coverage, requested finishing only scenarios already in progress, and confirmed previously completed full checks suffice with new/affected tests before closure.
+      Impact: Residual coverage is accepted for this integration. No threshold or coverage-ignore configuration is changed. Repeating the full application and browser suites is not required; all new/affected assertions and current-source type/lint checks must pass.
+      Resolution: Finish only current scenarios, record exact residual coverage and earlier full-run evidence, then publish main and synchronize Writer/Calc branches. Do not expand test scope further.
 id_source: "generated"
 ---
 ## Summary
@@ -144,44 +127,15 @@ Execute the user-approved nine-step integration and synchronization with complet
 
 ## Verify Steps
 
-Run npm run verify (format, lint, tools/application typecheck, boundaries, Writer/Calc resources, tooling tests, application coverage, inventory coverage, browser E2E, static build, docs, file sizes, source tree, Writer hint IDs, provenance, invariant/parity registries). Run ap doctor and node .agentplane/policy/check-routing.mjs. Run git diff --check. Confirm main contains both original branch tips; writer/calc contain final main; local branches equal origin refs after push; inspect full git status in all three checkouts. Preserve pre-existing generated output.
+Use the completed full npm run verify component runs and recorded repairs. Per explicit user instruction, do not repeat full application or537-test browser suites: run all newly added/changed tests, current-source affected-owner scopes, formatting/lint/typecheck and source/policy checks. User explicitly accepts residual application coverage below100%; preserve configured thresholds and record exact failure metrics rather than bypassing or claiming a pass. Inventory coverage remains100%. Confirm current production/static build and affected Writer/Calc browser smoke. Run ap doctor, node .agentplane/policy/check-routing.mjs and git diff --check. Publish main, fetch main into Writer/Calc, merge back and push both branches; confirm local=origin, final main ancestry and matching tracked trees, correct main/writer/calc checkouts and preserved pre-existing untracked artifacts.
 
 ## Verification
 
-Full application run: 1544 files, 24126 tests; 1542 files and 24124 tests passed, two failures found and corrected afterward. The obsolete Markdown fatal UTF-8 expectation is replaced by native replacement decoding plus atomic empty-stream rejection; all 18 shell cases pass. The native-color decoder null-value regression is fixed; 12 related files and 143 cases pass. Full Istanbul gate FAILED: lines 98.33 percent (94005/95600), statements 97.89 percent (103371/105595), branches 96.34 percent (63358/65761), functions 99.22 percent (16735/16866). Coverage gaps affect 216 modules; see evidence/coverage-gaps.json. This is a broad test-completion scope across ICU, HTML/Markdown, SAL encodings and other owners. Thresholds unchanged and no skips approved. Inventory: 38 files, 130 tests and strict 100 percent all four coverage metrics passed. Tooling: 34 files, 159 tests passed. All 537 Chromium E2E passed; rebuilt current-source Writer/Calc smoke also passed (2 tests). Production/static builds, formatting, ESLint, TypeScript, JSDoc, module boundaries, resources, source tree, hint identities, provenance, registry gates, doctor and policy routing passed. Current-source color-codec supplemental coverage is being completed. main publication and reverse branch synchronization are intentionally pending the strict coverage gate or explicit user acceptance of the coverage gap.
+Earlier full checks: the initial application run executed24,126 tests and exposed two regressions; both were fixed and retested. All537 browser E2E,159 tooling tests and130 inventory tests passed; inventory coverage is100 percent.
 
-<!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-27T03:59:42.627Z — VERIFY — needs_rework
+Current checks:68 new/changed test files and1,931 tests PASS; the final typed-helper retest adds nine passing tests in two files. Affected Writer scope:23 files,157 tests PASS; ICU i18n:26 files,326 tests PASS. Full tools/application TypeScript, scoped ESLint, formatting,JSDoc,provenance,boundaries,file-size and policy routing pass. Doctor is OK with its pre-existing hook warning. Production/static build and Writer/Calc browser smoke passed.
 
-By: CODER
-
-Note: Full checks executed; functional failures fixed and retested. Full strict Istanbul gate remains below 100 percent in 216 modules. Current-source item codec has 100-percent coverage after 326 passing tests. All 537 browser tests, 130 inventory tests with full coverage and 159 tooling tests pass. Main publication and reverse merges require coverage completion or explicit user-approved acceptance change.
-Attempts: 1
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T03:59:04.369Z, excerpt_hash=sha256:0e5613a7d9c890a508d19c2a5742f89e6d04518cd8a68673e4eefffbafc3b658
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
-- old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
-- current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane commit 202610270250-6VDB2H -m 🧩 6VDB2H task: persist canonical task artifacts --allow-tasks
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: true
-- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
-- risks: none
-
-<!-- END VERIFICATION RESULTS -->
+Application coverage remains below the configured100-percent gate. Exact conservative current-source metrics and gaps are recorded in evidence/coverage-summary-at-closure.json and coverage-gaps-at-closure.json. The user explicitly approved finishing without100-percent coverage and instructed using new/affected tests instead of repeating full suites. Coverage thresholds and ignores are unchanged. Publication and branch synchronization follow the verification record.
 
 ## Rollback Plan
 
@@ -210,3 +164,15 @@ Integration commits: Writer snapshot 1d696773a; Writer merge 66d54ddec; Calc mer
 - Observation: Source-backed supplemental tests now close more than one thousand missing statements and branches without lowering coverage thresholds. Portable minimized cases preserve independently compiled ICU and md4c observations; the complete BytesTrie scope and tools date/time scope reach 100 percent.
   Impact: A fresh full application assertion run is in progress. Current combined coverage is recorded separately from the original failing run. Remaining gaps include ordinary untested paths as well as proven source-invariant and host-limit guards; they are not all declared unreachable.
   Resolution: Keep native defensive checks and strict configuration intact. Document the remaining gap precisely. Publication requires either completing the strict gate or the requested explicit user exception; no exception has yet been received.
+
+- Observation: Explicit user approval received to use three subagents for Writer/HTML/Markdown, ICU i18n, and ICU locales/resources. Their final targeted reports pass every assertion. Supplemental test/data changes are committed locally; full application assertion retest is still running.
+  Impact: Combined current-source coverage is 99.50 percent lines, 99.19 percent statements, 99.85 percent functions and 98.07 percent branches. The strict threshold remains 100 percent, so the remaining coverage exception is a distinct decision from the approved delegation.
+  Resolution: Preserve native defensive code and evidence of both reachable test backlog and proven unreachable cases. Await the explicit coverage-criteria decision before main publication and reverse merges.
+
+- Observation: User explicitly declined the proposed residual-coverage exception and instructed continuation to 100 percent, using the maximum possible V8 string rather than a 2GB string.
+  Impact: All four strict coverage thresholds remain mandatory. The partial-coverage publication exception is not authorized. Focused native source-owner checks continue while necessary runtime boundary repairs are made; the interim full assertion retest is superseded and the final full gate must run against stable completed sources.
+  Resolution: Continue all approved implementation and verification locally. Test actual V8 maximum and host allocation failure, preserve native failure semantics, and remove only mathematically proven redundant conditions with source-call-graph evidence. Publish main and reverse-merge only after the strict gate passes.
+
+- Observation: User explicitly approved closing without reaching100-percent coverage, requested finishing only scenarios already in progress, and confirmed previously completed full checks suffice with new/affected tests before closure.
+  Impact: Residual coverage is accepted for this integration. No threshold or coverage-ignore configuration is changed. Repeating the full application and browser suites is not required; all new/affected assertions and current-source type/lint checks must pass.
+  Resolution: Finish only current scenarios, record exact residual coverage and earlier full-run evidence, then publish main and synchronize Writer/Calc branches. Do not expand test scope further.

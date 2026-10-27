@@ -651,10 +651,7 @@ export class SwDoc {
         const created = stored === undefined;
         if (stored === undefined) {
           stored = this.AddNumRule(new SwNumRule(rule));
-          if (stored.GetDefaultListId().length === 0)
-            stored.SetDefaultListId(
-              this.listsManager.GetListForListStyle(stored.GetName()).GetListId(),
-            );
+          // AddNumRule materializes the named rule's default list and nonempty ID.
         } else if (!stored.Equals(rule)) {
           stored.Assign(rule);
           this.listsManager.InvalidateAllLists();

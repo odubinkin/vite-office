@@ -137,10 +137,8 @@ export abstract class Calendar {
       // Original LocalPointer(adoptZone,status) reports null before the explicit argument check below.
       if (zone === null && !U_FAILURE(status[0])) status[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
       if (U_FAILURE(status[0])) return;
-      if (zone === null) {
-        status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
-        return;
-      }
+      // The native explicit-null check is already discharged by LocalPointer failure above.
+      // Every null zone sets/retains failure and returns before ownership is adopted.
       Calendar.prototype.clear.call(this);
       this.fZone = zone;
       setWeekData.call(this, locale, null, status);

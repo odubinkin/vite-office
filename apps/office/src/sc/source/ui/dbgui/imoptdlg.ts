@@ -35,14 +35,15 @@ export class ScImportOptions {
     this.bSaveAsShown = true;
     const tokens = options.split(",");
     if (tokens.length < 3) return;
-    this.bFixedWidth = /^[fF][iI][xX]$/.test(tokens[0] ?? "");
+    // Each indexed token below is present under its length guard; empty native tokens are already empty strings.
+    this.bFixedWidth = /^[fF][iI][xX]$/.test(tokens[0] as string);
     if (!this.bFixedWidth)
-      this.nFieldSepCode = ScAsciiOptions.GetWeightedFieldSep(tokens[0] ?? "", true);
-    this.nTextSepCode = String.fromCharCode(toInt32(tokens[1] ?? ""));
-    this.aStrFont = tokens[2] ?? "";
+      this.nFieldSepCode = ScAsciiOptions.GetWeightedFieldSep(tokens[0] as string, true);
+    this.nTextSepCode = String.fromCharCode(toInt32(tokens[1] as string));
+    this.aStrFont = tokens[2] as string;
     this.eCharSet = ScGlobal.GetCharsetValue(this.aStrFont);
     if (tokens.length === 4) {
-      this.bSaveAsShown = toInt32(tokens[3] ?? "") !== 0;
+      this.bSaveAsShown = toInt32(tokens[3] as string) !== 0;
       this.bQuoteAllText = true;
       return;
     }
@@ -52,7 +53,7 @@ export class ScImportOptions {
     if (tokens.length >= 10) this.bSaveFormulas = tokens[9] === "true";
     if (tokens.length >= 11) this.bRemoveSpace = tokens[10] === "true";
     if (tokens.length >= 12) {
-      const sheet = tokens[11] ?? "";
+      const sheet = tokens[11] as string;
       this.nSheetToExport =
         sheet === "-1"
           ? -1

@@ -101,5 +101,94 @@
     "calc": "pushed b7243fe91",
     "main": "not pushed; coverage approval pending",
     "reverseMerges": "not performed; main publication pending"
+  },
+  "postRegressionCoverage": {
+    "method": "Conservative standard Istanbul union of earlier full suite and current source-owner scopes. Changed owners replace old maps entirely; earlier observations of unchanged functions in those owners are not transplanted. This is not a fresh full-suite coverage invocation.",
+    "metrics": {
+      "lines": {
+        "total": 95563,
+        "covered": 95000,
+        "skipped": 0,
+        "pct": 99.41
+      },
+      "statements": {
+        "total": 105545,
+        "covered": 104702,
+        "skipped": 0,
+        "pct": 99.2
+      },
+      "functions": {
+        "total": 16865,
+        "covered": 16770,
+        "skipped": 0,
+        "pct": 99.43
+      },
+      "branches": {
+        "total": 65689,
+        "covered": 64553,
+        "skipped": 0,
+        "pct": 98.27
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "modulesWithGaps": 142,
+    "status": "below configured100-percent gate; explicitly accepted by user for this integration"
+  },
+  "assertionRetest": {
+    "command": "npx vitest run <68 newly added/changed test files>",
+    "status": "pass",
+    "files": 68,
+    "tests": 1931,
+    "evidence": "output/playwright/6VDB2H/close-new-tests.log"
+  },
+  "currentBuild": {
+    "command": "npm run test:static",
+    "status": "pass",
+    "evidence": "Static build smoke passed: relative assets, 3 JavaScript bundles, no backend endpoints."
+  },
+  "currentTypecheck": {
+    "command": "npm run typecheck",
+    "status": "pass",
+    "evidence": "output/playwright/6VDB2H/close-typecheck-final.log"
+  },
+  "coverageDecision": {
+    "status": "accepted by user",
+    "instruction": "Finish scenarios already in progress and close without reaching100-percent coverage.",
+    "thresholdsChanged": false,
+    "fullSuiteRepeat": "User explicitly requested only new/affected checks; completed full runs retained."
+  },
+  "lastTypedHelperRetest": {
+    "files": 2,
+    "tests": 9,
+    "status": "pass",
+    "evidence": "output/playwright/6VDB2H/close-last-tests.log"
+  },
+  "currentI18n": {
+    "files": 26,
+    "tests": 326,
+    "status": "pass"
+  },
+  "currentWriter": {
+    "files": 23,
+    "tests": 157,
+    "status": "pass"
+  },
+  "currentChecks": {
+    "newAndChangedTests": "pass",
+    "lastHelperRetest": "pass",
+    "format": "pass",
+    "eslint": "pass",
+    "jsdoc": "pass",
+    "moduleBoundaries": "pass",
+    "sourceProvenance": "pass",
+    "fileSize": "pass",
+    "routing": "pass",
+    "doctor": "OK with existing hook warning",
+    "typecheck": "pass"
   }
 }

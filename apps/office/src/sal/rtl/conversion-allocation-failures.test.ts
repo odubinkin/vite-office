@@ -114,3 +114,33 @@ it("shrinks a successful multibyte conversion to its actual owned byte length", 
   if (target[0])
     rtl_stringAllocation.rtl_freeString(target[0] as unknown as NonNullable<rtl_uStringSlot[0]>);
 });
+
+it.each([
+  [
+    [0xd800, 0xdc00],
+    [0xf0, 0x90, 0x80, 0x80],
+  ],
+  [
+    [0xdbff, 0xdfff],
+    [0xf4, 0x8f, 0xbf, 0xbf],
+  ],
+] as const)(
+  "encodes the UTF16 supplementary range endpoint %j",
+  /** Checks real minimum/maximum surrogate-pair scalars around the specialized UTF8 sizing boundary. @param input - UTF16 pair. @param expected - Unicode-standard UTF8 bytes. @returns Nothing. */ (
+    input,
+    expected,
+  ) => {
+    const target: rtl_StringSlot = [null],
+      units = Uint16Array.from(input);
+    try {
+      rtl_uString2String(target, units, units.length, 76, 0);
+      expect(target[0]?.length).toBe(4);
+      expect(Array.from(target[0]?.buffer.subarray(0, 4) ?? [])).toEqual(expected);
+    } finally {
+      if (target[0])
+        rtl_stringAllocation.rtl_freeString(
+          target[0] as unknown as NonNullable<rtl_uStringSlot[0]>,
+        );
+    }
+  },
+);

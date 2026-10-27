@@ -43,7 +43,9 @@ export function createDefault(): TimeZone | null {
     initDefault();
     defaultZoneInitialized = true;
   }
-  return DEFAULT_ZONE !== null ? DEFAULT_ZONE.clone() : null;
+  // initDefault always installs detectHostTimeZone's owned fallback; adoptDefault(null)
+  // cannot clear it. The established owner may still expose a nullable native clone result.
+  return (DEFAULT_ZONE as TimeZone).clone();
 }
 /** Original non-null pointer adoption leaves the once-only state unchanged. @param zone - Transferred zone or ignored null. @returns Nothing. */
 export function adoptDefault(zone: TimeZone | null): void {

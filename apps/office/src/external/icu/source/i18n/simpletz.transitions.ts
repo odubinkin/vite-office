@@ -1,6 +1,6 @@
 /** @fileoverview Original SimpleTimeZone lazy transition-rule construction/query fragments, using the actual single owner. Native allocation and mutex/ABI contracts remain outside the browser value projection. */
 import { UnicodeString } from "../common/unistr";
-import { U_FAILURE, UErrorCode } from "../common/unicode/utypes";
+import { U_FAILURE } from "../common/unicode/utypes";
 import { DateTimeRule, TimeRuleType } from "./dtrule";
 import {
   AnnualTimeZoneRule,
@@ -18,13 +18,15 @@ export function initTransitionRules(this: SimpleTimeZone, status: [number]): voi
   const id = new UnicodeString();
   this.getID(id);
   if (this["useDaylight"]) {
-    let dateRule: DateTimeRule;
+    let dateRule!: DateTimeRule;
     const startType =
       this["startTimeMode"] === 1
         ? TimeRuleType.STANDARD_TIME
         : this["startTimeMode"] === 2
           ? TimeRuleType.UTC_TIME
           : TimeRuleType.WALL_TIME;
+    // Private modes are initialized to DOM and only assigned the four EMode values by
+    // decode/copy; even failed decodes retain one of these modes. This switch is exhaustive.
     switch (this["startMode"]) {
       case 1:
         dateRule = new DateTimeRule(
@@ -63,9 +65,6 @@ export function initTransitionRules(this: SimpleTimeZone, status: [number]): voi
           startType,
         );
         break;
-      default:
-        status[0] = UErrorCode.U_INVALID_STATE_ERROR;
-        return;
     }
     const dst = (this["dstRule"] = new AnnualTimeZoneRule(
       id.concat(new UnicodeString("(DST)")),
