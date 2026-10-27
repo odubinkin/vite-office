@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+        "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+        "scripts/icu-resource-fallback-native-probe.mjs",
+        "scripts/icu-locale-resources.mjs"
+      ],
+      "justification": "Original requested-file fallback utilities retain generated default-script/parent tables and pair-wise binary lookup, source literal Latn default, original requested script, variant/parser and open-mode rules, chopLocale and exact mayHaveParent substring predicate. These helpers are separate from existing-bundle inheritance. Native witness compiles the entire unchanged uresbund.cpp and exports original localefallback_data.h arrays, then tests all generated strings, all raw package names, original-script variants, NUL and all256 narrow bytes. CALC-337/338 preserve substring/prefix behavior. Logical C-string names are the projection; unconsumed trailing caller bytes, native allocation/OOM/debug/ABI are not claimed. Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json.",
+      "knownViolations": [],
+      "localSymbols": [
+        "chopLocale",
+        "hasVariant",
+        "performFallbackLookup",
+        "getDefaultScript",
+        "getParentLocaleID",
+        "mayHaveParent"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresbund.cpp",
+      "upstreamSymbols": [
+        "chopLocale",
+        "hasVariant",
+        "performFallbackLookup",
+        "getDefaultScript",
+        "getParentLocaleID",
+        "mayHaveParent"
+      ]
+    }
+  }
+}

@@ -22,13 +22,15 @@
       "SetTextCell",
       "DeleteSelection",
       "ApplySelectionPattern",
-      "CopyToDocument"
+      "CopyToDocument",
+      "StartAllListeners"
     ],
     "upstreamSymbols": [
       "ScDocument::Broadcast",
       "ScDocument::TrackFormulas",
       "ScDocument::EndListeningFormulaCells",
-      "ScDocument::BroadcastCells"
+      "ScDocument::BroadcastCells",
+      "ScDocument::StartAllListeners"
     ],
     "preservedResponsibilities": [
       "Task76 in progress: original clipboard ResetClip/InitClipPtrs and SharePooledResources retain genuine pool/string/attribute helper identities,source option values and sparse selected-sheet indexes. Clear releases actual formula and attribute owners before sheet removal. Native column4 CloneFormulaCell creates shared code once per shareable span,bulk-inserts actual typed storage and joins boundaries. Default CONTENTS CopyFromClipContext retains native cursor caches,cell values,metadata and deferred listening spans;single-cell column replication handles represented values,strings,empty and grouped formulas. Original temporary/inserting document guards suppress premature subscriptions and broadcasts. No browser fill loop,formula-text reparse,alternate workbook or simulated physical refcount is introduced. Document-level paste/reference completion,real paste undo and EnterBlock/UI acceptance are still pending;this progress record does not certify task76 or full native parity.",
@@ -44,7 +46,8 @@
       "Task76 scopes now use the actual original AutoCalcSwitch owner:unconditionally capture/query/set on the same document,and restore the saved policy through SetAutoCalc at scope exit. Original selected document deletion and table broadcaster delivery share this owner instead of separate manual policy captures. Nested documents,manual calculation,exceptional exit and compiled destination dependencies are exercised without another evaluator/workbook. Full document CopyToDocument/UndoToDocument,paste/history and final74 acceptance remain incomplete.",
       "The unchanged existing document.cxx ApplySelectionPattern body is partitioned here on the same ScDocument instance to preserve the authored file-size limit without another state owner.",
       "Original document.cxx CopyToDocument orders a value-copy range,copies an empty destination document name,creates actual AutoCalcSwitch/ScBulkBroadcast/DelayDeletingBroadcasters/CopyToDocContext owners in source order,disables context listening,walks the minimum real sparse table bounds and finally starts native listeners. Cleanup reverses original scope order. Original true bColRowFlags and default clone/caption arguments are retained. The previous attribute-only alternate document copy and custom pattern-run copier are removed.",
-      "Coordinate CopyToDocument validates native tab inputs before real range-overload forwarding,with unchanged geometry true. Content DeleteSelection now tears down intersected groups,purges real broadcasters,traverses selected populated sheets with broadcast defaulttrue,restarts needed listeners and performs source post-split dirty phases. Attribute-only selection deletion retains its original early return. No per-cell browser fill or separate snapshot model is introduced."
+      "Coordinate CopyToDocument validates native tab inputs before real range-overload forwarding,with unchanged geometry true. Content DeleteSelection now tears down intersected groups,purges real broadcasters,traverses selected populated sheets with broadcast defaulttrue,restarts needed listeners and performs source post-split dirty phases. Attribute-only selection deletion retains its original early return. No per-cell browser fill or separate snapshot model is introduced.",
+      "AQF9AG adds the no-range ScDocument::StartAllListeners overload: create one StartListeningContext and call StartListeners(context,true) on every existing sheet. The range overload remains in document10 with its original separate guards."
     ],
     "omittedResponsibilities": [
       "Task76 document/table paste orchestration,source general sparse-sheet copy,UndoToDocument/paste history and EnterBlock/UI are pending. Rich text,notes,sparklines,drawings,3D/matrix,nondefault paste and complete formatter/layout services remain outside this admitted slice."

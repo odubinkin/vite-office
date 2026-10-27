@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/simpletz.transitions.ts",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports actual SimpleTimeZone lazy rule construction with adopted DateTimeRule and owned Annual/Initial/Transition objects, original first-transition ordering, next/previous strict comparisons, borrowed rule output/capacity and cache behavior. Fragments operate on the one original owner. The next-transition cached first assignment continues into annual selection and can return false with changed output, per CALC-307; ID-only updates retain stale rule names, per CALC-309. Source cache reset order is preserved, with native leak finding CALC-308 documented rather than introducing a second cache. Single-thread synchronous initialization projects serialization; native mutex, allocation-failure, ABI and invalid lifetime states are uncertified. Unchanged ICU78.3 libraries/data match45789 combined annual/rule/transition/Calendar time cases; the probe and focused unit tests are limited to the stated operations. System/IANA/locale factories and full LibreOffice calendar/formatter/CSV integration remain incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "initTransitionRules",
+        "getNextTransition",
+        "getPreviousTransition",
+        "getTimeZoneRules"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/simpletz.cpp",
+      "upstreamSymbols": [
+        "SimpleTimeZone::initTransitionRules",
+        "SimpleTimeZone::getNextTransition",
+        "SimpleTimeZone::getPreviousTransition",
+        "SimpleTimeZone::getTimeZoneRules"
+      ]
+    }
+  }
+}

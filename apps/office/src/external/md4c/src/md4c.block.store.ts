@@ -61,7 +61,7 @@ export class MD_BLOCK {
   public get type(): MD_BLOCKTYPE {
     return ((this.words[this.offset / 4] as number) & 255) as MD_BLOCKTYPE;
   }
-  /** Assigns the native 8-bit type field. @param value - Block kind. */
+  /** Assigns the native 8-bit type field. @param value - Block kind.  @returns Nothing. */
   public set type(value: MD_BLOCKTYPE) {
     const index = this.offset / 4;
     this.words[index] = (((this.words[index] as number) & 0xffffff00) | (value & 255)) >>> 0;
@@ -70,7 +70,7 @@ export class MD_BLOCK {
   public get flags(): number {
     return ((this.words[this.offset / 4] as number) >>> 8) & 255;
   }
-  /** Assigns the native 8-bit flags. @param value - Flags. */
+  /** Assigns the native 8-bit flags. @param value - Flags.  @returns Nothing. */
   public set flags(value: number) {
     const index = this.offset / 4;
     this.words[index] = (((this.words[index] as number) & 0xffff00ff) | ((value & 255) << 8)) >>> 0;
@@ -79,7 +79,7 @@ export class MD_BLOCK {
   public get data(): number {
     return (this.words[this.offset / 4] as number) >>> 16;
   }
-  /** Assigns the native 16-bit data field. @param value - Data. */
+  /** Assigns the native 16-bit data field. @param value - Data.  @returns Nothing. */
   public set data(value: number) {
     const index = this.offset / 4;
     this.words[index] = (((this.words[index] as number) & 0xffff) | ((value & 65535) << 16)) >>> 0;
@@ -88,7 +88,7 @@ export class MD_BLOCK {
   public get n_lines(): number {
     return this.words[this.offset / 4 + 1] as number;
   }
-  /** Assigns the native unsigned union value. @param value - Value. */
+  /** Assigns the native unsigned union value. @param value - Value.  @returns Nothing. */
   public set n_lines(value: number) {
     this.words[this.offset / 4 + 1] = value >>> 0;
   }

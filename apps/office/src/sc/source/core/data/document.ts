@@ -117,8 +117,9 @@ export class ScDocument {
     return this.bDelayedDeletingBroadcasters;
   }
   /** Original range listener completion. @param range - Copied range. @returns Nothing. */
-  StartAllListeners(range: ScRange): void {
-    document10.StartAllListeners.call(this, range);
+  StartAllListeners(range?: ScRange): void {
+    if (range) document10.StartAllListeners.call(this, range);
+    else documen7.StartAllListeners.call(this);
   }
   private pDelayedFormulaGrouping: ScRange | null = null;
   private readonly pDelayedStartListeningFormulaCells = new Map<ScColumn, [number, number]>();

@@ -57,12 +57,14 @@ const allowedEdges = new Map([
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
-  // Original queryinterface.hxx and supportsservice.cxx include actual UNO and SAL owners.
-  ["cppuhelper", new Set(["cppu", "sal"])],
+  // Original implbase.hxx includes udkapi XTypeProvider; queryinterface/weak use actual UNO/SAL owners.
+  ["cppuhelper", new Set(["cppu", "sal", "udkapi"])],
   ["cui", new Set(["editeng", "svl", "svx", "tools"])],
   // Original justifyitem.cxx uses actual UNO Any and generated table/style enums.
   // Original frmitems.cxx uses common Tools/o3tl integer unit conversion.
-  ["docmodel", new Set(["tools", "o3tl"])],
+  // Original UnoComplexColor.hxx includes cppuhelper/implbase and offapi XComplexColor;
+  // Library_docmodel links cppuhelper/cppu for actual component references.
+  ["docmodel", new Set(["tools", "o3tl", "cppu", "cppuhelper", "offapi"])],
   // Original xmlcnitm.hxx includes xmloff/xmlcnimp.hxx; Library_editeng links xo.
   [
     "editeng",
@@ -88,6 +90,8 @@ const allowedEdges = new Map([
     ]),
   ],
   ["external", new Set()],
+  // Native Library_msfilter uses Tools colors for the Word highlight palette.
+  // Native msfilter util.cxx returns rtl::OUString color values (Library_msfilter links sal).
   // Native Library_msfilter uses Tools colors and SAL rtl strings/converters in rtfutil.cxx.
   ["filter", new Set(["tools", "sal"])],
   // Formula value owners reuse SAL/OUString and SVL/SharedString; token identity uses native JS references.
@@ -256,6 +260,11 @@ const allowedEdges = new Map([
       "framework",
       // Original Library_sw.mk links i18nutil; shared PaperInfo owns physical page formats.
       "i18nutil",
+      // Native sw/Library_sw.mk links i18npool and ICU (icui18n/icuuc).
+      // writerwordglue.cxx::GetPseudoCharRuns calls the concrete break service and unicode/ubidi.h;
+      // actual existing script queries/default-mode levels bind those dependencies without fake services.
+      "i18npool",
+      "external",
       "o3tl",
       "offapi",
       "package",
@@ -302,6 +311,7 @@ const allowedEdges = new Map([
   // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
   // Original transliterationwrapper.cxx includes i18nutil flags and generated i18n Transliteration API.
   // Original unotools/fontcfg.hxx includes tools/fontenum.hxx for configured weight/width values.
+  // CalendarWrapper owns a native DateTime epoch; Library_utl links tl.
   [
     "unotools",
     new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi", "tools"]),
@@ -310,7 +320,8 @@ const allowedEdges = new Map([
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
   // Original stream.cxx includes rtl/string.hxx and rtl/ustring.hxx for text conversion.
-  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal"])],
+  // time.hxx/datetime.hxx consume published util::Time/DateTime; Library_tl uses the SDK API.
+  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal", "offapi"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.

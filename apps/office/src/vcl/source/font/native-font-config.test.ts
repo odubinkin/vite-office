@@ -20,7 +20,11 @@ it.each([
   ["Vendor italic", F.FAMILY_SCRIPT, P.PITCH_DONTKNOW],
 ])(
   "resolves %s using original configuration then heuristic family precedence",
-  (name, family, pitch) => {
+  /** Verifies resolves %s using original configuration then heuristic family precedence. @param name - name value. @param family - family value. @param pitch - pitch value. @returns Nothing. */ (
+    name,
+    family,
+    pitch,
+  ) => {
     const font = new Font();
     font.SetFamilyName(name);
     const copy = new Font(font);
@@ -31,7 +35,7 @@ it.each([
     expect(copy.GetPitch()).toBe(P.PITCH_DONTKNOW);
   },
 );
-it("fills heuristic weight and width only when unknown, independently from configured field defaults", () => {
+it("fills heuristic weight and width only when unknown, independently from configured field defaults", /** Verifies fills heuristic weight and width only when unknown, independently from configured field defaults. @returns Nothing. */ () => {
   const font = new Font();
   font.SetFamilyName("vendor semilight condensed 123");
   expect(font.GetWeightMaybeAskConfig()).toBe(W.WEIGHT_SEMILIGHT);
@@ -48,7 +52,7 @@ it("fills heuristic weight and width only when unknown, independently from confi
   expect(specified.GetWeight()).toBe(W.WEIGHT_BOLD);
   expect(specified.GetWidthType()).toBe(D.WIDTH_EXPANDED);
 });
-it("retains the source completed lookup flag after changing an unresolved family name", () => {
+it("retains the source completed lookup flag after changing an unresolved family name", /** Verifies retains the source completed lookup flag after changing an unresolved family name. @returns Nothing. */ () => {
   const font = new Font();
   font.SetFamilyName("zzunregisteredzz");
   expect(font.GetFamilyTypeMaybeAskConfig()).toBe(F.FAMILY_DONTKNOW);
@@ -62,7 +66,7 @@ it("retains the source completed lookup flag after changing an unresolved family
   fresh.SetFamilyName("Courier New");
   expect(fresh.GetPitchMaybeAskConfig()).toBe(P.PITCH_FIXED);
 });
-it("preserves explicit family/pitch and the source omission of width from equality", () => {
+it("preserves explicit family/pitch and the source omission of width from equality", /** Verifies preserves explicit family/pitch and the source omission of width from equality. @returns Nothing. */ () => {
   const font = new Font();
   font.SetFamilyName("Courier New");
   font.SetFamily(F.FAMILY_DECORATIVE);
@@ -74,4 +78,13 @@ it("preserves explicit family/pitch and the source omission of width from equali
   expect(font.GetWidthType()).toBe(D.WIDTH_DONTKNOW);
   expect(copy.GetWidthType()).toBe(D.WIDTH_ULTRA_EXPANDED);
   expect(copy.Equals(font)).toBe(true);
+});
+
+it("resolves unknown width without replacing an explicitly selected family", /** Exercises the width-triggered first lookup and configured record precedence. @returns Nothing. */ () => {
+  const font = new Font();
+  font.SetFamilyName("Courier New");
+  font.SetFamily(F.FAMILY_DECORATIVE);
+  font.GetWidthTypeMaybeAskConfig();
+  expect(font.GetPitch()).toBe(P.PITCH_FIXED);
+  expect(font.GetFamilyType()).toBe(F.FAMILY_DECORATIVE);
 });

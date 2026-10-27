@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "include/tools/degree.hxx",
     "localSymbols": [
-      "Degree100"
+      "Degree100",
+      "Degree10"
     ],
     "upstreamSymbols": [
-      "Degree100"
+      "Degree100",
+      "Degree10"
     ],
     "preservedResponsibilities": [
-      "Task116 adds CntInt32Item normal scalar/copy/mutable/equality/hash/actual Any/Clone values and SfxInt32Item default factory/copy/Clone in existing shared SVL owners and canonical headers. Actual existing CPPU signed32 extraction handles integer Any families, including unsigned32 bit reinterpretation. Existing o3tl seed arithmetic is unchanged; its explicit scalar key binding is extended and independently tested for signed32 keys modulo unsigned32/64 seeds, not general std::hash/external stdlib/binary ABI certification. Degree100 is an erased shared tools signed32 hundredths-of-degree type alias over number; native strong_int construction/get and compiler unit identity are adapted, not a new generic wrapper/library or memory mechanism. SdrAngleItem actual SVX header/core value/copy/get/set/Clone retainsWhich and stores negative/multiple-turn values without normalization. Calc ScRotateValueItem requires an explicit angle; actual DocPool supplies0/Which135. Implicit copy retainsWhich, value-based Clone restores135. Ordinary initialized scalar constructor/SetValue signed32 bounds are explicit browser checks outside invalid native typed inputs. Original locale/metric presentation, diagnostic XML/JSON, native caches/assertions/invalid domains/ABI, other SVX/tool/numeric families and complete document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status preserved without broad parity promotion. No fake document/provider/new C++ build/generator/sanitizer/refcount engine. Goalactive, full121next."
+      "Task116 adds CntInt32Item normal scalar/copy/mutable/equality/hash/actual Any/Clone values and SfxInt32Item default factory/copy/Clone in existing shared SVL owners and canonical headers. Actual existing CPPU signed32 extraction handles integer Any families, including unsigned32 bit reinterpretation. Existing o3tl seed arithmetic is unchanged; its explicit scalar key binding is extended and independently tested for signed32 keys modulo unsigned32/64 seeds, not general std::hash/external stdlib/binary ABI certification. Degree100 is an erased shared tools signed32 hundredths-of-degree type alias over number; native strong_int construction/get and compiler unit identity are adapted, not a new generic wrapper/library or memory mechanism. SdrAngleItem actual SVX header/core value/copy/get/set/Clone retainsWhich and stores negative/multiple-turn values without normalization. Calc ScRotateValueItem requires an explicit angle; actual DocPool supplies0/Which135. Implicit copy retainsWhich, value-based Clone restores135. Ordinary initialized scalar constructor/SetValue signed32 bounds are explicit browser checks outside invalid native typed inputs. Original locale/metric presentation, diagnostic XML/JSON, native caches/assertions/invalid domains/ABI, other SVX/tool/numeric families and complete document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status preserved without broad parity promotion. No fake document/provider/new C++ build/generator/sanitizer/refcount engine. Goalactive, full121next.",
+      "Task202610251549-V4DQJW ports native two-line UTF16 brackets, unsigned16 text/character rotation and independent fit flag, typed Any query/put and native bool blink. DOCX adds caps, outline/shadow, blink, exact emphasis combinations, native width narrowing/clamp, relief and collected East Asian rotation/combine/bracket priorities; actual serializers retain native run sorting, reset and detach lifecycle. Native localized GetPresentation/XML diagnostics, item-manager/lifetime, complete pool default registration, browser item transport, general LanguageTag/color/underline/theme and paragraph/style/iterator orchestration remain unported or unverified. No complete DOCX export, UI route or module/capability/default parity is certified."
     ],
     "omittedResponsibilities": [
       "Task116 covers signed32/angle normal values and an erased primitive Degree100 unit only. Other original tool/numeric/SVX families, strong_int template operators/type identity, localized presentation/diagnostics/native caches/debug/ABI/full document/UI/ODS remain unverified or excluded."
@@ -23,6 +26,14 @@
         {
           "path": "apps/office/src/svx/source/svdraw/angle-item.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/text-layout-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

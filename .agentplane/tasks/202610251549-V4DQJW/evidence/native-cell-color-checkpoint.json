@@ -1,0 +1,113 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Complete original CellColorHandler Form/Paragraph/Character state and output contracts, actual complex-color component Any ownership, normal FillStyle enum type binding and original generated CT_Shd resource admission. Strict/Transitional style-cell XML resource integration; no document model/filter/UI completion claim.",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts": "2e154ce4babe40fbdff029df3856430c4bb862d0",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "84d76030450bc9f913245e429e0b03981c366736",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts": "d4c2c8940d773e838c7be50773a76103ae06cd01",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "2e5db3196c1c700d9b1f4d27370ba16f3405e1ee",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "9f55e53528be2f395841a67decfe32a761a6512b",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/drawing/FillStyle.ts.json": "61b6a99773ec25b3b846e30dcd45af18ff5f08c7",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/drawing/FillStyle.ts.json": "45d865c12cce1265d48614f1a766db3a9da3d5c3",
+    "docs/program/registry/writer/capabilities/CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6.json": "0adb4dd8e60af683613705816bddf4223b372b43",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "b71c2a41a45874caf1bf6345f017e1beca09cbff",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "3934637654135984eb27e196bd375fac2242b1a5",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.lists.ts.json": "f375c3fdd76f49d26b3bfdc97c92c54f6178ebad",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "508b3d103325d8a0fc5a1c1f7b6894274f21956c",
+    "docs/program/writer-upstream-suspected-issues.md": "7045bbf44f3a797b4bec7568667303120ad06d6f",
+    "scripts/writer-ooxml/generate-factory.py": "0f3894f111b2c07fd5ce48e01fae9f7e9f19555d",
+    "apps/office/src/sw/source/writerfilter/dmapper/CellColorHandler.ts": "1f32fcebda0228d77d395f40e8df625206825a2b",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-cell-color.test.ts": "d89c018926fa79a21d976e583957b0f3e0b8df63",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/CellColorHandler.ts.json": "61c28c85b9a2304087c40baf9e4b3c3cc8ea367e",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/CellColorHandler.ts.json": "33d2c2c0019463ee610b29f93ccda7b9b0a80403"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ src/docmodel/source/uno/ src/cppuhelper/source/native-implbase.test.ts src/svx/source/tbxctrls/tbcontrl.stylecolor.test.ts --coverage.include=src/sw/source/writerfilter/dmapper/CellColorHandler.ts --coverage.include=src/offapi/com/sun/star/drawing/FillStyle.ts --coverage.reportsDirectory=coverage/native-cell-color --maxWorkers=2",
+      "result": "pass:253 related tests/20 files; two changed executable owners scoped100",
+      "statements": "407/407",
+      "branches": "169/169",
+      "functions": "21/21",
+      "lines": "404/404",
+      "perFile": {
+        "apps/office/src/offapi/com/sun/star/drawing/FillStyle.ts": {
+          "s": {
+            "covered": 11,
+            "total": 11
+          },
+          "f": {
+            "covered": 2,
+            "total": 2
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/CellColorHandler.ts": {
+          "s": {
+            "covered": 396,
+            "total": 396
+          },
+          "f": {
+            "covered": 19,
+            "total": 19
+          },
+          "b": {
+            "covered": 167,
+            "total": 167
+          }
+        }
+      }
+    },
+    "nativeFactory": "pass: unchanged pinned native generators --check through OOXMLFactory.test.ts; namespaces1/defines52/attributes97/elements355/resources418/lists315/actions41",
+    "packageResources": "pass: actual committed ZIP bytes with Content_Types, root/styles relationships and Strict/Transitional styles streams; CellColorHandler receives real parsed cell shd pct25/auto/4070A0/accent2/tint80 and returns scalar305478/themeAccent2/tint4980",
+    "typecheck": "pass:final npm run typecheck (tools and app)",
+    "production": "pass:final npm run test:static (app compilation, production build and relative-asset/no-backend smoke)",
+    "eslint": "pass:five changed TypeScript implementation/test files at max-warnings0",
+    "prettier": "pass:17 changed supported source/registry/test/docs paths; Python generator is executed/checked through original-generator test, not sent to an unsupported formatter parser",
+    "dependencies": "pass:1515 runtime sources/7700 relative imports/205 allowed cross-module edges",
+    "jsdoc": "pass:3525 authored source files",
+    "size": "pass:3529 authored files; original single handler680lines and generated context tables997lines retain unchanged strict below1000 limit",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "provenance": "pass:1516 runtime modules/1311 mapped/178 browser adaptations/27 local infrastructure",
+    "registry": {
+      "moduleCount": 1516,
+      "capabilityCount": 340,
+      "invariantCount": 34,
+      "globalRecordCount": 3436
+    },
+    "doctor": "pass:0 errors, unchanged preexisting managed hook-shim readiness warning",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "sourceReview": {
+    "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "paths": [
+      "sw/source/writerfilter/dmapper/CellColorHandler.cxx",
+      "sw/source/writerfilter/dmapper/CellColorHandler.hxx",
+      "offapi/com/sun/star/drawing/FillStyle.idl",
+      "codemaker/source/cppumaker/cpputype.cxx",
+      "sw/source/writerfilter/ooxml/model.xml",
+      "sw/source/writerfilter/ooxml/factoryimpl_ns.py"
+    ]
+  },
+  "preservedFindings": [
+    "WRITER157:explicit fill followed by auto retains false automatic-fill flag.",
+    "WRITER158:Paragraph nil can emit character background properties.",
+    "WRITER159:scalar background and independent theme-only ComplexColor/default final color remain separate."
+  ],
+  "resolvedValidationFindings": [
+    "Updated the exact generated-record count assertion for newly admitted original CT_Shd rows; generator/model/IDs and check thresholds unchanged.",
+    "Corrected the test null theme Reference to its actual declared XTheme specialization after final TypeScript compilation rejected the erased default pointer. Production component/type owners unchanged."
+  ],
+  "limitations": [
+    "No new compiled native CellColorHandler differential capture, physical component ABI, native thread or complete QA parity is claimed. Normal FillStyle reflection stays normal.",
+    "Resource callbacks and receiver output prove the admitted XML slice; native TablePropertiesHandler/TblStylePrHandler and DomainMapper/style application are still incomplete. No fake table manager or IsInComments fallback was introduced.",
+    "Full Writer DOCX and Calc XLSX import/export, canonical model application and existing desktop/mobile file UI acceptance remain incomplete.",
+    "No UI path changed in this prerequisite checkpoint; complete browser file workflows remain pending. Full suite not due under the approved ten-task cadence.",
+    "Earlier msfilter TransColToIco terminal fallback coverage observation remains open; current coverage certifies only the two explicitly scoped shading/enum owners."
+  ],
+  "stopRule": "Local prerequisite checkpoint only; no merge/publication, task completion or capability/default/parity promotion."
+}

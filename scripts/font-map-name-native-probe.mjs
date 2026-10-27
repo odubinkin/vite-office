@@ -10,12 +10,23 @@ const paths = [
   "include/unotools/fontcfg.hxx",
   "include/tools/fontenum.hxx",
 ];
-const blobs = Object.fromEntries(paths.map((path) => [path, readFileSync(root + path, "utf8")]));
+const blobs = Object.fromEntries(
+  paths.map(
+    /** Applies map to path. @param path - path value. @returns Callback result. */ (path) => [
+      path,
+      readFileSync(root + path, "utf8"),
+    ],
+  ),
+);
 const text = blobs[paths[0]],
   header = blobs[paths[1]],
   enums = blobs[paths[2]];
 const fontEnums = ["enum FontWeight", "enum FontWidth"]
-  .map((marker) => definition(enums, marker) + ";")
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(enums, marker) + ";",
+  )
   .join("\n");
 const attrs = definition(header, "enum class ImplFontAttrs") + ";";
 const tables = text.slice(
@@ -30,7 +41,11 @@ const functions = [
   "static bool ImplFindAndErase(",
   "void FontSubstConfiguration::getMapName(",
 ]
-  .map((marker) => definition(text, marker))
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(text, marker),
+  )
   .join("\n");
 const data = JSON.parse(
   readFileSync("apps/office/src/unotools/source/config/data/font-name-map.json", "utf8"),
@@ -54,10 +69,27 @@ const names = [
     "microsoftadobeserif123ms",
     "msarialsemilightcondensed12",
     ...Object.keys(records.en),
-    ...data.type.map(([word]) => `adobe${word}semilightcondensed123ms`),
-    ...data.weight.map(([word]) => `${word}boldnarrow456`),
-    ...data.width.map(([word]) => `sun${word}serif789ps`),
-    ...data.trailing.filter(Boolean).map((word) => `abcfamily123${word}`),
+    ...data.type.map(
+      /** Applies map to [word]. @param value0 - word value. @returns Callback result. */ ([
+        word,
+      ]) => `adobe${word}semilightcondensed123ms`,
+    ),
+    ...data.weight.map(
+      /** Applies map to [word]. @param value0 - word value. @returns Callback result. */ ([
+        word,
+      ]) => `${word}boldnarrow456`,
+    ),
+    ...data.width.map(
+      /** Applies map to [word]. @param value0 - word value. @returns Callback result. */ ([
+        word,
+      ]) => `sun${word}serif789ps`,
+    ),
+    ...data.trailing
+      .filter(Boolean)
+      .map(
+        /** Applies map to word. @param word - word value. @returns Callback result. */ (word) =>
+          `abcfamily123${word}`,
+      ),
   ]),
 ];
 const source = String.raw`
@@ -79,7 +111,7 @@ namespace utl {class FontSubstConfiguration{public:static void getMapName(OUStri
 ${tables}
 ${functions}}
 static void units(OUString const& value){std::cout<<'[';for(unsigned i=0;i<value.value.size();++i){if(i)std::cout<<',';std::cout<<unsigned(value.value[i]);}std::cout<<']';}
-int main(){std::vector<std::u16string> names={${names.map((name) => `{${Array.from({ length: name.length }, (_, i) => `char16_t(${name.charCodeAt(i)})`).join(",")}}`).join(",")}};bool comma=false;std::cout<<"[";for(unsigned index=0;index<names.size();++index)for(int weight:{0,5,8})for(int width:{0,5,7}){OUString shortName,familyName;FontWeight w=FontWeight(weight);FontWidth d=FontWidth(width);ImplFontAttrs type=ImplFontAttrs::OtherStyle;utl::FontSubstConfiguration::getMapName(OUString(names[index]),shortName,familyName,w,d,type);if(comma)std::cout<<',';comma=true;std::cout<<"{\"name\":"<<index<<",\"weight\":"<<weight<<",\"width\":"<<width<<",\"shortName\":";units(shortName);std::cout<<",\"familyName\":";units(familyName);std::cout<<",\"resultWeight\":"<<int(w)<<",\"resultWidth\":"<<int(d)<<",\"type\":"<<sal_uInt32(type)<<'}';}std::cout<<"]\n";}
+int main(){std::vector<std::u16string> names={${names.map(/** Applies map to name. @param name - name value. @returns Callback result. */ (name) => `{${Array.from({ length: name.length }, /** Applies from to _, i. @param _ - _ value. @param i - i value. @returns Callback result. */ (_, i) => `char16_t(${name.charCodeAt(i)})`).join(",")}}`).join(",")}};bool comma=false;std::cout<<"[";for(unsigned index=0;index<names.size();++index)for(int weight:{0,5,8})for(int width:{0,5,7}){OUString shortName,familyName;FontWeight w=FontWeight(weight);FontWidth d=FontWidth(width);ImplFontAttrs type=ImplFontAttrs::OtherStyle;utl::FontSubstConfiguration::getMapName(OUString(names[index]),shortName,familyName,w,d,type);if(comma)std::cout<<',';comma=true;std::cout<<"{\"name\":"<<index<<",\"weight\":"<<weight<<",\"width\":"<<width<<",\"shortName\":";units(shortName);std::cout<<",\"familyName\":";units(familyName);std::cout<<",\"resultWeight\":"<<int(w)<<",\"resultWidth\":"<<int(d)<<",\"type\":"<<sal_uInt32(type)<<'}';}std::cout<<"]\n";}
 `;
 mkdirSync(output, { recursive: true });
 writeFileSync(`${output}/probe.cxx`, source);
@@ -108,10 +140,12 @@ writeFileSync(
       scope:
         "Unchanged original getMapName, complete ordered tables and helper bodies; original width/weight/type enum declarations. Explicit std::u16string carriers supply consumed SAL string/view/buffer operations. ASan/UBSan. This verifies the name algorithm, not SAL storage/ownership, configuration-provider services, full AskConfig or VCL ABI.",
       sources: Object.fromEntries(
-        Object.entries(blobs).map(([path, value]) => [
-          path,
-          createHash("sha256").update(value).digest("hex"),
-        ]),
+        Object.entries(blobs).map(
+          /** Applies map to [path, value]. @param value0 - path, value value. @returns Callback result. */ ([
+            path,
+            value,
+          ]) => [path, createHash("sha256").update(value).digest("hex")],
+        ),
       ),
       driverHash: createHash("sha256").update(source).digest("hex"),
       names,

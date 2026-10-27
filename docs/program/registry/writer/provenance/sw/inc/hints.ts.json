@@ -88,6 +88,10 @@
         {
           "path": "apps/office/src/sw/inc/hints.ts",
           "marker": "TableHeadingChange"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/attr/native-nearest-node-query.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -118,6 +122,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/layout/tabfrm.cxx",
           "marker": "HandleTableHeadlineChange"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/inc/hints.hxx",
+          "marker": "class SwFindNearestNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/attr/hints.cxx",
+          "marker": "SwFindNearestNode::CheckNode"
         }
       ]
     },
@@ -128,6 +140,7 @@
       "SwModelHint",
       "SwFormatChangeHint",
       "ObjectDyingHint",
+      "SwFindNearestNode",
       "SwUpdateAttr",
       "UpdateAttrHint"
     ],
@@ -148,6 +161,7 @@
       "Resumed correction0V80RE removes the document-device inheritance bridge: SetDerivedFrom now dispatches SwFormatChangeHint(this,this) through original locked Writer clients and the native Svt notifier. DerivedFrom reads actual GetRegisteredIn rather than a separate mirrored parent pointer. Inherited format-change hints preserve original old/new owners and rebind the owned item-set parent under the pinned pointer conditions; native frame invalidation and existing React presentation observe format-change directly. Generic naming/node signals remain separate existing boundaries, not evidence of complete parity. Seven fresh original-owner/core/real-history/mounted UI cases plus related formats/notifiers/layout/style modules accept308 unique cases:306initial passes1fresh source-incompatible history expectation corrected,2failed/new-only closure passes3deliberate passing skips,0passing replay. Pinned SaveTable reconstructs document-default box formats with direct saved items, as the corrected new history fixture asserts; original nodes/cursor/frame clients survive three undo-redo cycles. Entire five changed production modules meet actual same-source/identical-complete-map Istanbul100:378lines428statements112functions237branches,0negative; no older task/V8 counters, counter/location/threshold normalization or module-wide promotion. Initial and closure partial-profile threshold failures are retained. Full baseline XJTGF0 is historical; this is resumed task2 after that full and the next full follows ten-task cadence. Prior semantic fields/defaults/status/classification/history and registered recovery/open/save/settings exceptions remain preserved. Complete native cache/Which/assertions, format death, naming hints, full content-node/VCL registration and overall core/browser parity remain unverified.",
       "Resumed correction FW0RYR ports borrowed ObjectDyingHint/ModifyChangedHint and shared ClientBase CheckRegistration to original Writer clients. Native registration checks return the surviving owner only for the exact dying pointer; EndListeningAll clears reciprocal and single-owner state together. SwModify destruction sends the original locked death hint before teardown, then applies native fallback registration cleanup to overrides that did not detach. Duplicated generic broadcaster-parent repair is removed in favor of the same native operation. SwFormat rebinds or clears its owned item-set parent under the exact dying-parent condition and forwards the original hint; independent original Svt observers invalidate native browser layout/bindings directly. Native object death is immediate across the existing browser transaction boundary and disposed batches do not emit stale queued work. Native physical SwFrame intentionally ignores ObjectDying, as wsfrm.cxx specifies; the actual cell frame keeps valid geometry on this hint and original format/node/cursor identities survive three real undo-redo cycles. Eight fresh core/real-history/mounted UI cases plus related49files accept335unique scenarios:334initial passes1old missing-death-event conflict,1failed-case-only closure pass6intentional skips0passing replay. One old notification expectation now asserts the exact original ObjectDyingHint(second); unrelated old tests remain unchanged. Complete4changed production modules actual same-source/identical-complete-map Istanbul270lines301statements78functions154branches meet all four100 gates, zero negative counters/no older-task/V8 transfer. Raw initial test failure and partial closure threshold exit remain retained. Native TS7/build/static gates pass upstream-absent. Full XJTGF0 historical; correction4/10. Existing statuses/defaults/classifications/history and registered recovery/open/save/settings deviations are preserved. Native linked-client iterators, ListenerEntry/WriterMultiListener families, assertions/cache/name/VCL and full heap/global lifetime remain unverified; browser callback/batching/idempotent teardown retain explicit bounded adaptations. No overall or module-wide semantic parity promotion.",
       "Correction T8EQAC2/10 after full SZKQTN and KVM0ER: native count-only shell/doc command delegates to source-owned ndtbl SetSwRowsToRepeat; exact capped getter no-op, uint16 new value and DoesUndo gate. Dedicated SwUndoTableHeadline retains only native table-node index and capped old/authored new counts, resolves original table for Undo/Redo and stores no graph/format/cursor snapshot. Original frame format publishes concrete no-payload TableHeadingChange after storage; same typed hint also advances the represented browser document revision publication boundary, an explicit browser architecture boundary rather than full native document-state/layout parity. Original master SwTabFrame ignores heading hints as upstream master handler returns before follow-row rebuilding. Original table/row/box/frame/node/cursor/ring identities and unrelated later geometry/row-height/numbering state survive actual command and three undo/redo cycles. Mounted Table Properties changes physical repeated occurrences and real ODT headerless reopening. 2950 distinct accepted related cases,10 fresh native/history/mounted cases; all entire six changed production files actual Istanbul998lines1096statements247functions664branches100 all-four,zero-negative and complete-map/current-source-hash identity. Five exact old insert/native normalized-geometry/headline snapshot/payload expectations migrate with every other old assertion retained; native SetTabCols normalizes actual frame print width before attribute history, so dedicated headline undo cannot restore unrelated pre-normalization geometry. Tests/build/statics physically upstream-absent with finally restoration; restored metadata audits. Twelve canonical classification/status/default/history prefixes retained. Native Repeat context/framework and complete original master/follow-row reconstruction remain unrepresented/unverified; capped table-copy/node-copy and full layout/root/page/section/content/HTML/VCL families remain separate, no whole-module or broad-goal parity promotion. Registered recovery/open/save/settings deviations unchanged. Raw source snapshots/helpers/logs/maps only ignored cache; bounded English task evidence. Task202610091853-T8EQAC; goal ACTIVE/incomplete; correction2/10.",
+      "Task202610251549-V4DQJW ports original SwFindNearestNode same-array/strict-predecessor/after-extras selection and borrowed candidate identity, WriterListener default GetInfo, live SwModify WriterListenerIterator traversal with early termination, and SwPageDesc master/left/first-master/first-left query order. Literal tests use real SwDoc node arrays and format registrations, virtual test receivers for stop/removal behavior, and preserve mutation-aware iterator cleanup. Content-node style registration/lifetime, SwFormatPageDesc descriptor identity, FindPageDesc, document/layout text direction and production DOCX dispatch remain unported or unverified. This is infrastructure evidence only; no capability, default, parity or UI readiness promotion.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged."
     ],
     "status": "mapped",
@@ -157,6 +171,7 @@
       "InsertText",
       "DeleteText",
       "ObjectDyingHint",
+      "SwFindNearestNode",
       "SwUpdateAttr",
       "UpdateAttrHint"
     ]

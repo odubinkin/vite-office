@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/browser/putil-tz.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/browser/putil-tz.ts",
+        "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+        "scripts/icu-timezone-default-native-probe.mjs"
+      ],
+      "justification": "Browser binding for consumed uprv_tzset/uprv_tzname_clear_cache/uprv_tzname/uprv_timezone hooks. Intl exposes a semantic IANA/fixed-offset identity; actual pinned ICU factories provide its standard offset. The browser has no independent libc standard-bias/abbreviation channel. Unmapped/failed identities use the original empty-name host-remapping-failure channel. There are no sampled seasonal dates or independent timezone-rule heuristics. Native detection decisions are implemented separately in timezone.default.ts; independent OS raw-bias equivalence and native platform ABI are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "browserTimeZoneHost",
+        "uprv_tzset",
+        "uprv_tzname_clear_cache",
+        "uprv_tzname",
+        "uprv_timezone"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

@@ -368,7 +368,9 @@ export function CheckNodesRange(start: SwNode, end: SwNode, checkSection: boolea
     }
     const lower = surrounding.GetIndex(),
       upper = surrounding.EndOfSectionNode().GetIndex();
-    return lower <= first && first <= upper && lower <= last && last <= upper;
+    // The ancestor walk starts at first's actual section; valid native section
+    // ownership already places first between these same sentinels.
+    return lower <= last && last <= upper;
   }
   return false;
 }

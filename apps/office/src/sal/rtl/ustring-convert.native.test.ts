@@ -16,20 +16,26 @@ function convert(encoding: number, bytes: readonly number[], flags: number, chec
     live = new Map<object, { id: number; bytes: number }>();
   const events: number[][] = [];
   let next = 1;
-  rtl_stringAllocation.rtl_allocateString = (bytes) => {
-    const data = original.rtl_allocateString(bytes);
-    if (data === null) throw new Error("Unexpected native allocation failure");
-    live.set(data, { id: next++, bytes });
-    events.push([0, live.get(data)?.id as number, bytes]);
-    return data;
-  };
-  rtl_stringAllocation.rtl_freeString = (data) => {
-    const entry = live.get(data);
-    if (!entry) throw new Error("Unowned native free");
-    events.push([1, entry.id, entry.bytes]);
-    live.delete(data);
-    original.rtl_freeString(data);
-  };
+  rtl_stringAllocation.rtl_allocateString =
+    /** Evaluates the ustring-convert.native.test callback. @param bytes - bytes value. @returns Callback result. */ (
+      bytes,
+    ) => {
+      const data = original.rtl_allocateString(bytes);
+      if (data === null) throw new Error("Unexpected native allocation failure");
+      live.set(data, { id: next++, bytes });
+      events.push([0, live.get(data)?.id as number, bytes]);
+      return data;
+    };
+  rtl_stringAllocation.rtl_freeString =
+    /** Evaluates the ustring-convert.native.test callback. @param data - data value. @returns Nothing. */ (
+      data,
+    ) => {
+      const entry = live.get(data);
+      if (!entry) throw new Error("Unowned native free");
+      events.push([1, entry.id, entry.bytes]);
+      live.delete(data);
+      original.rtl_freeString(data);
+    };
   try {
     const old = rtl_uString_alloc(1);
     if (old === null) throw new Error("Unexpected native allocation failure");
@@ -69,7 +75,11 @@ function mix(hash: number, value: number): number {
 
 it.each(native.digests)(
   "matches original core byte-pair wrapper and ownership observations for $encoding, checked=$checked",
-  ({ encoding, checked, hash }) => {
+  /** Verifies matches original core byte-pair wrapper and ownership observations for $encoding, checked=$checked. @param value0 - encoding, checked, hash value. @returns Nothing. */ ({
+    encoding,
+    checked,
+    hash,
+  }) => {
     let digest = 2166136261;
     for (let unit = 0; unit < 65536; unit++) {
       const result = convert(
@@ -94,7 +104,7 @@ it.each(native.digests)(
   },
 );
 
-it("matches original mixed vectors, flags, target identity and complete allocator/free order", () => {
+it("matches original mixed vectors, flags, target identity and complete allocator/free order", /** Verifies matches original mixed vectors, flags, target identity and complete allocator/free order. @returns Nothing. */ () => {
   for (const entry of native.cases) {
     const { encoding, input, flags, checked, ...expected } = entry;
     expect(
@@ -104,7 +114,7 @@ it("matches original mixed vectors, flags, target identity and complete allocato
   }
 });
 
-it("keeps the source partial checked result instead of preserving the old target", () => {
+it("keeps the source partial checked result instead of preserving the old target", /** Verifies keeps the source partial checked result instead of preserving the old target. @returns Nothing. */ () => {
   const target: rtl_uStringSlot = [rtl_uString_alloc(1)];
   const old = target[0];
   expect(rtl_convertStringToUString(target, Uint8Array.of(65, 255, 66), 3, 76, 0x111)).toBe(false);
@@ -113,13 +123,15 @@ it("keeps the source partial checked result instead of preserving the old target
   expect(target[0]?.buffer[0]).toBe(65);
   if (target[0] !== null) rtl_uString_release(target[0]);
 });
-it("preserves the original allocation-failure target alias after releasing its former owned reference", () => {
+it("preserves the original allocation-failure target alias after releasing its former owned reference", /** Verifies preserves the original allocation-failure target alias after releasing its former owned reference. @returns Nothing. */ () => {
   const old = rtl_uString_alloc(1);
   if (old === null) throw new Error("Allocation failure");
   rtl_uString_acquire(old);
   const target: rtl_uStringSlot = [old],
     allocate = rtl_stringAllocation.rtl_allocateString;
-  rtl_stringAllocation.rtl_allocateString = () => null;
+  rtl_stringAllocation.rtl_allocateString =
+    /** Verifies preserves the original allocation-failure target alias after releasing its former owned reference. @returns Callback result. */ () =>
+      null;
   try {
     expect(rtl_convertStringToUString(target, Uint8Array.of(0xc2, 0xa9), 2, 76, 0x333)).toBe(false);
     expect(target[0]).toBe(old);

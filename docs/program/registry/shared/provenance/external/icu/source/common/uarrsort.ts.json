@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uarrsort.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uarrsort.cpp",
+    "localSymbols": [
+      "uprv_stableBinarySearch",
+      "uprv_sortArray"
+    ],
+    "upstreamSymbols": [
+      "uprv_stableBinarySearch",
+      "uprv_sortArray"
+    ],
+    "preservedResponsibilities": [
+      "Original stable binary search/insertion sort and unstable smaller-side-recursive/larger-side-iterative quicksort now operate directly on the one scalar/immutable-record owner. The original MIN_QSORT9 dispatch and subarray threshold, pivot/swap order, stable last-equal insertion, argument guards and sticky status are retained. Unchanged ICU78.3 matches5832 record cases with exact comparator counts and equal-key permutations; existing TimeArrayTimeZoneRule uses the same stable algorithm. Native byte layout/allocator/ABI and comparators mutating records/pivot state remain uncertified. Locale keyword parsing now uses the actual false-stability path rather than a replacement host sort."
+    ],
+    "omittedResponsibilities": [
+      "Native allocator/ABI and unrelated comparator helpers remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uarrsort.ts",
+          "marker": "uprv_stableBinarySearch"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uarrsort.cpp",
+          "marker": "uprv_stableBinarySearch"
+        }
+      ]
+    }
+  }
+}

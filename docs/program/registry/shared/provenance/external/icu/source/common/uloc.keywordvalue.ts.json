@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
+    "localSymbols": [
+      "ulocimp_getKeywordValue",
+      "uloc_getKeywordValue"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_getKeywordValue",
+      "uloc_getKeywordValue"
+    ],
+    "preservedResponsibilities": [
+      "Complete original internal counted-key/C-locale keyword getter and C wrapper retain canonical key validation, source BCP47 conversion/classifier, C-versus-counted NUL boundaries, selected-value-only validation, preserved case/punctuation, first-match return, partial Append-before-error and null-locale illegal behavior. Original C output uses the actual checked sink rather than prevalidating/precomputing output. Current native proof is64154 aggregate keyword/Locale/C-facade/factory cases, with exact whole buffer/guard observations. Invalid native readable ranges/ABI and unrelated locale mutation/likely-subtag/resource services remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; native pointer/allocator/ABI and complete locale/calendar integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+          "marker": "ulocimp_getKeywordValue"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.keywordvalue.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc.cpp",
+          "marker": "ulocimp_getKeywordValue"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+      "rationale": "Original large uloc.cpp implementation is split by keyword/C-buffer API responsibility while sharing actual ByteSink and locale parser owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

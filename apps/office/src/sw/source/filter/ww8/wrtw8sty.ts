@@ -1,4 +1,5 @@
 /** @fileoverview Native wwFont FFN identity and wwFontHelper registration/vector owners. Font-table initialization/export association, binary output and DOCX embedding remain in their respective unported responsibilities. */
+import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
@@ -86,6 +87,16 @@ export class wwFont {
     this.maWW8_FFN[4] = rtl_TextEncodingToWinCharset(meChrSet);
     if (this.mbAlt) this.maWW8_FFN[5] = this.msFamilyNm.length + 1;
   }
+  /** Native font metadata path for the current kernel without font embedding. EmbedFont responsibility is unported, not replaced by a dummy service. @param output - Actual DOCX owner. @returns Nothing. */
+  WriteDocx(output: DocxAttributeOutput): void {
+    if (!this.msFamilyNm) return;
+    output.StartFont(this.msFamilyNm);
+    if (this.mbAlt) output.FontAlternateName(this.msAltNm);
+    output.FontCharset(rtl_TextEncodingToWinCharset(this.meChrSet));
+    output.FontFamilyType(this.meFamily);
+    output.FontPitchType(this.mePitch);
+    output.EndFont();
+  }
   /** Original font-table emission uses complete metadata and the shared RTF font charset predicate. @param output - Actual RTF attribute sink. @returns Nothing. */
   WriteRtf(output: RtfAttributeOutput): void {
     output.FontFamilyType(this.meFamily, this);
@@ -133,8 +144,11 @@ export class wwFontHelper {
     return id;
   }
   /** Original font-table writer visits the ID-indexed vector. @param output - Actual RTF attribute sink. @returns Nothing. */
-  WriteFontTable(output: RtfAttributeOutput): void {
-    for (const font of this.AsVector()) (font as wwFont).WriteRtf(output);
+  WriteFontTable(output: RtfAttributeOutput | DocxAttributeOutput): void {
+    for (const font of this.AsVector()) {
+      if ("GetSerializer" in output) (font as wwFont).WriteDocx(output);
+      else (font as wwFont).WriteRtf(output);
+    }
   }
   /** Original vector is indexed by assigned ID, not sorted map position. @returns Borrowed registered fonts in ID order. */
   AsVector(): readonly (wwFont | null)[] {

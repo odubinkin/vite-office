@@ -38,7 +38,11 @@ function context(text: Uint8Array, budget: number): MD_REF_CONTEXT {
 }
 it.each(fixture.referenceCases)(
   "matches compiled reference state, lookup and budget: $text",
-  ({ text, budget, result }) => {
+  /** Verifies matches compiled reference state, lookup and budget: $text. @param value0 - text, budget, result value. @returns Nothing. */ ({
+    text,
+    budget,
+    result,
+  }) => {
     const input = encoder.encode(text),
       lines = linesFor(input),
       ctx = context(input, budget);
@@ -49,14 +53,15 @@ it.each(fixture.referenceCases)(
       consumed += count;
     }
     md_build_ref_def_hashtable(ctx);
-    const definitions = ctx.ref_defs.map((def) => [
-      def.dest_beg,
-      def.dest_end,
-      [...def.label],
-      [...def.title],
-    ]);
+    const definitions = ctx.ref_defs.map(
+      /** Verifies matches compiled reference state, lookup and budget: $text. @param def - def value. @returns Callback result. */ (
+        def,
+      ) => [def.dest_beg, def.dest_end, [...def.label], [...def.title]],
+    );
     const lookups = ["x", "X", "strasse", "a b", "key0", "KEY0", "key9", "missing"].map(
-      (query) => md_lookup_ref_def(ctx, encoder.encode(query))?.dest_beg ?? -1,
+      /** Verifies matches compiled reference state, lookup and budget: $text. @param query - query value. @returns Callback result. */ (
+        query,
+      ) => md_lookup_ref_def(ctx, encoder.encode(query))?.dest_beg ?? -1,
     );
     const references: number[][] = [];
     const last = lines[lines.length - 1];
@@ -74,13 +79,20 @@ it.each([
   ["(<a b> 'title')", "a b", "title"],
   ['(a(b)c\n"title")', "a(b)c", "title"],
   ['(dest "line\nnext")', "dest", "line\nnext"],
-])("retains source inline destination and title byte ranges: %s", (source, destination, title) => {
-  const text = encoder.encode(source);
-  const value = md_is_inline_link_spec(context(text, 1000), linesFor(text), 0);
-  expect(value).toBeDefined();
-  expect(new TextDecoder().decode(text.subarray(value?.attr.dest_beg, value?.attr.dest_end))).toBe(
+])(
+  "retains source inline destination and title byte ranges: %s",
+  /** Verifies retains source inline destination and title byte ranges: %s. @param source - source value. @param destination - destination value. @param title - title value. @returns Nothing. */ (
+    source,
     destination,
-  );
-  expect(new TextDecoder().decode(value?.attr.title)).toBe(title);
-  expect(value?.end).toBe(text.length);
-});
+    title,
+  ) => {
+    const text = encoder.encode(source);
+    const value = md_is_inline_link_spec(context(text, 1000), linesFor(text), 0);
+    expect(value).toBeDefined();
+    expect(
+      new TextDecoder().decode(text.subarray(value?.attr.dest_beg, value?.attr.dest_end)),
+    ).toBe(destination);
+    expect(new TextDecoder().decode(value?.attr.title)).toBe(title);
+    expect(value?.end).toBe(text.length);
+  },
+);

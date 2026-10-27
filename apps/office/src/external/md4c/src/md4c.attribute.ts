@@ -27,7 +27,10 @@ export function md_is_entity_str(text: Uint8Array, beg: number, end = text.lengt
 }
 /** Builds source attribute slices; only ASCII punctuation and newlines are unescaped. @param raw - Raw UTF-8 attribute. @param flags - MD_BUILD_ATTR_NO_ESCAPES bit. @returns Source text and typed substring boundaries. */
 export function md_build_attribute(raw: Uint8Array, flags = 0): MD_ATTRIBUTE {
-  const trivial = !raw.some((byte) => byte === 0 || byte === 38 || byte === 92);
+  const trivial = !raw.some(
+    /** Applies some to byte. @param byte - byte value. @returns Callback result. */ (byte) =>
+      byte === 0 || byte === 38 || byte === 92,
+  );
   if (trivial)
     return {
       text: raw,

@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uniquecharstr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uniquecharstr.ts",
+        "apps/office/src/external/icu/source/common/loclikely.test.ts",
+        "scripts/icu-likelysubtags-native-probe.mjs",
+        "scripts/icu-locale-resource-native-probe.mjs"
+      ],
+      "justification": "Original logical stable UTF16-key narrow-string pool, duplicate offsets, explicit previous-string NUL and implicit final NUL, invariant conversion error after bookkeeping, frozen write error, release get guard and ownership transfer. Immutable JS keys project MemoryPool stable lifetime; no native allocation or debug assertion equivalence is claimed. Used by the actual full likely/match loader, not replaced by a predecoded LSR map. Native ResourceDataValue/pool probe passes67318 cases: every594 direct langInfo nodes with success/warning/failure, full scalar contents and failed table/array outputs, plus all65536 UTF16 units through original pool add/duplicate/invariant/freeze/get/orphan. Main service/C/Locale/region witness passes813182 cases over15909 locale IDs and all8310 original trie keys, with7527 decoded LSRs and6 paradigms. Conditional first-letter cache assignment is retained with all26 actual pinned slots assigned; source-uninitialized slots for arbitrary replacement packages remain uncertified (CALC-336).",
+      "knownViolations": [],
+      "localSymbols": [
+        "UniqueCharStrings",
+        "orphanCharStrings"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uniquecharstr.h",
+      "upstreamSymbols": [
+        "UniqueCharStrings",
+        "orphanCharStrings"
+      ]
+    }
+  }
+}

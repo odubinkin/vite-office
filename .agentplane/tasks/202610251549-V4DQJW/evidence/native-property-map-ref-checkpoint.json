@@ -1,0 +1,127 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original tools SvRefBase/SvRef/make_ref owner and actual native PropertyMap intrusive base/last-release subtype destruction. Native full-source normal and ASan/UBSan comparison, cached UNO value lifetime and preserved self-move behavior. Full table manager/filter/model/UI acceptance is not claimed.",
+  "sourceBlobs": {
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": "472c6700b1ff5a3504840cdac9ee774806826ab6",
+    "docs/program/calc-upstream-suspected-issues.md": "4da01e6c78016824a67dee2ad75a150be6ae8169",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "9bc59a934cd7cfd744bf5b1e92688842b7171a37",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "2d89af06d719a6fb97d82aee69e0cbc44b4d6382",
+    "docs/program/writer-upstream-suspected-issues.md": "d424da458d034f5e4938205a3c1ab671c5739223",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-ref.test.ts": "28b59039fe14ffe7fbe2d663319e1efde70fe763",
+    "apps/office/src/tools/inc/native-ref-cases.json": "519002516526ab2e2f1ba1e401aee34c6a898a86",
+    "apps/office/src/tools/inc/ref.test.ts": "0e2b327bf8db0769559dd4faaae45e62d2835547",
+    "apps/office/src/tools/inc/ref.ts": "2f5211804d08eba0dab1aae1ecb186eba7af7fa8",
+    "docs/program/registry/shared/capabilities/CAP-1ec57a37-87d6-416f-9f0c-816e86ab65c4.json": "fecfd16d65011a36c9235651d3818fbf14ab9050",
+    "docs/program/registry/shared/provenance/tools/inc/ref.ts.json": "12c6d125d76790a0ed0fa26d5afffab8a8a094fd",
+    "docs/program/registry/shared/runtime/tools/inc/ref.ts.json": "f49b7d84498d393661e7209f23459cf621a30c88",
+    "scripts/tools-ref-native-probe.mjs": "c35fc7498568488e04abb7d73a9262503ccbf9f7"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/tools/inc/ref.test.ts src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ --coverage.include=src/tools/inc/ref.ts --coverage.include=src/sw/source/writerfilter/dmapper/PropertyMap.ts --coverage.reportsDirectory=coverage/native-property-map-ref --maxWorkers=2",
+      "result": "pass:238 related tests/19 files; both changed executable owners unchanged scoped100",
+      "statements": "452/452",
+      "branches": "142/142",
+      "functions": "115/115",
+      "lines": "421/421",
+      "perFile": {
+        "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": {
+          "s": {
+            "covered": 386,
+            "total": 386
+          },
+          "f": {
+            "covered": 94,
+            "total": 94
+          },
+          "b": {
+            "covered": 106,
+            "total": 106
+          }
+        },
+        "apps/office/src/tools/inc/ref.ts": {
+          "s": {
+            "covered": 66,
+            "total": 66
+          },
+          "f": {
+            "covered": 21,
+            "total": 21
+          },
+          "b": {
+            "covered": 36,
+            "total": 36
+          }
+        }
+      }
+    },
+    "native": {
+      "command": "node scripts/tools-ref-native-probe.mjs --write; node scripts/tools-ref-native-probe.mjs --check",
+      "result": "pass:complete unchanged original ref.hxx/ref.cxx and verified real dependencies, normal and ASan/UBSan; no library-body substitutes or unresolved-symbol suppression",
+      "sourceCount": 15,
+      "commands": 12,
+      "allExitCodes": 0,
+      "allSignals": null,
+      "captures": {
+        "lifecycle": {
+          "observations": 33,
+          "digest": "71445dc18308981154ddb3ee28a94bdf5021a26fc639e0660b489393a7769f45"
+        },
+        "assignments": {
+          "observations": 72,
+          "digest": "cb8905726b159a7aa112fa5d7ffec76e9c0229577f9ba8b3ff559e302b7c50a8"
+        },
+        "base": {
+          "observations": 34,
+          "digest": "b582040efc5fd796154ae89e608657b3ee97116056ec471e64adf792203b9785"
+        },
+        "boundary": {
+          "observations": 11,
+          "digest": "59a7d6262661fcb822f698315e8d07766c8fe700bce8aa30228924292c91e488"
+        }
+      },
+      "runtimeStderr": "empty",
+      "leakSanitizer": "unsupported on this macOS host and disabled; not certified"
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production compilation/build and relative assets/no-backend smoke)",
+    "eslint": "pass:four changed TypeScript owner/test files and native probe script, max-warnings0",
+    "prettier": "pass:all13 changed implementation/test/native-capture/registry/docs paths; native --write now uses actual project formatting configuration",
+    "dependencies": "pass:1516 runtime sources/7701 relative imports/205 allowed cross-module edges",
+    "jsdoc": "pass:3529 authored source files",
+    "size": "pass:3533 authored files; unchanged below1000-line hard limit, original PropertyMap824lines remains one native owner",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "provenance": "pass:1517 runtime modules/1312 mapped/178 browser adaptations/27 local infrastructure",
+    "registry": {
+      "moduleCount": 1517,
+      "capabilityCount": 341,
+      "invariantCount": 34,
+      "globalRecordCount": 3439
+    },
+    "doctor": "pass:0 errors; existing managed hook-shim readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "preservedFindings": [
+    "WRITER160/CALC-301:SvRef self-move empties the reference and releases it; no self-move repair introduced."
+  ],
+  "resolvedValidationFindings": [
+    "Previous ignored broad native-build artifacts were unavailable. The bounded fallback uses the existing verified native configuration-template helper and compiles only the complete actual ref.cxx plus its full headers, with no substitute generated/library body.",
+    "LeakSanitizer reported unsupported on the host; ASan/UBSan checks use the supported detect_leaks0 configuration and explicitly make no leak-detection claim.",
+    "Native operator overload evidence required raw-pointer implicit prvalues to choose move assignment; source implementation and complete destructor-reentrancy trace match that original selection.",
+    "Supplied required SectionPropertyMap first-section constructor arguments and checked its actual cached component alongside existing section defaults, instead of assuming one cache entry.",
+    "Registry requires a native test reference; the actual HTML-reader SvRef consumer is cited as unported downstream QA only. Direct ownership evidence remains the complete new native caller/replay.",
+    "Provenance evidence permits original-relative or apps paths, so it cites the actual app capture/replay; the repository-local compiler script stays in the capability evidence where local scripts are supported.",
+    "Native capture --write uses actual project Prettier configuration; capture values/digests remain unchanged."
+  ],
+  "limitations": [
+    "Original empty SvRefBase destructor is co-located in the header owner. Compatibility frame weak wrappers and unrelated WeakBase are not ported; the original native unrelated destructor is naturally dead-stripped.",
+    "Invalid native assert process termination binds to host Errors; invalid process/physical allocation/layout/ABI/thread behavior is not certified. The live boundary uses public increments/releases and does not forge private state or inspect objects after lifetime.",
+    "Actual PropertyMap/TablePropertyMap/ParagraphPropertyMap/first-next SectionPropertyMap last-alias cleanup is verified through cached and stored real UNO component values. Not all existing raw map carriers are migrated.",
+    "Real TableData/TableManager/DomainMapperTableManager and TablePropertiesHandler integration remain pending before complete table model application.",
+    "Full Writer DOCX and Calc XLSX model/import/export and existing desktop/mobile UI acceptance remains incomplete. No UI path changed in this prerequisite block.",
+    "Full suite not due under the approved ten-task cadence. Earlier unrelated msfilter TransColToIco fallback coverage observation remains open; current coverage certifies only the two specified owners."
+  ],
+  "stopRule": "Local prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

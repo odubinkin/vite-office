@@ -7,6 +7,30 @@ import type { SwFrameFormat } from "../source/core/layout/atrfrm";
 import type { SwFormat } from "../source/core/attr/format";
 import type { SwTableLineFormat, SwTableBoxFormat } from "./swtblfmt";
 import type { SwTableLine, SwTableBox } from "../source/core/table/swtable";
+import type { SwNode } from "../source/core/docnode/node";
+
+/** Original nearest preceding body-node query from hints.hxx and hints.cxx; borrows live node identities. */
+export class SwFindNearestNode {
+  private m_pFound: SwNode | undefined;
+  /** Borrows the original search boundary. @param m_pNode - Target node. @returns Nothing. */
+  public constructor(private readonly m_pNode: SwNode) {}
+  /** Applies the original same-array, strictly preceding and after-extras guards in source order. @param node - Candidate node. @returns Nothing. */
+  public CheckNode(node: SwNode): void {
+    if (this.m_pNode.GetNodes() === node.GetNodes()) {
+      const index = node.GetIndex();
+      if (
+        index < this.m_pNode.GetIndex() &&
+        (!this.m_pFound || index > this.m_pFound.GetIndex()) &&
+        index > node.GetNodes().GetEndOfExtras().GetIndex()
+      )
+        this.m_pFound = node;
+    }
+  }
+  /** Returns the retained original candidate. @returns Nearest accepted node or absent. */
+  public GetFoundNode(): SwNode | undefined {
+    return this.m_pFound;
+  }
+}
 
 /** Native Writer death notification borrows the original dying modify. */
 export class ObjectDyingHint implements BrowserNotificationPayload {

@@ -1,0 +1,128 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified parser prerequisite checkpoint; task remains DOING",
+  "scope": "Actual CT_TblPPr native factory admission and Strict/Transitional ZIP styles resource delivery into TablePositionHandler, plus separation of native factoryCreateElementMap generated lookup data. No table/frame insertion or complete format/UI admission is claimed.",
+  "sourceBlobs": {
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "c76b1263ad84a7e5c38d7855bac3702a85185ca3",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "66bf0463445306f80f65256c4b6211ccb1f8406a",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "a7152813eebeab9fef8dcf5309fcfaabbdec647f",
+    "docs/program/registry/writer/capabilities/CAP-fcc6ceaf-fc9c-441c-8624-a74483fbf27e.json": "ba11d526c851392bef69e1325f96de8f7e4f223d",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TablePositionHandler.ts.json": "dad446114860f65dd2a681af05194e451212ef89",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "f29395ce2c228814cbf3f85675dad50746de28c7",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts.json": "b5affd4664ea39c8c2ee435c368df4204449f5da",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TablePositionHandler.ts.json": "751ceca784a0f432ab10fd03840c17d4465f3262",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "979494af5c1b7ac5ae2daf96116373b51a6b6438",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts.json": "9cb8628c76313601feab010639c4e0e69ebeeada",
+    "scripts/writer-ooxml/generate-factory.py": "0e0ddf1e5a0ff829abebba66925c0698f44bdb26",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts": "b813d0df102188386c57afbf8452da98fd462318",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json": "e59d77fd77a8ce19da1fdcdb71f2eda900b0d654",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts.json": "149e666225552e1a9b0ba10dc01b353f8cc9dfce"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sw/source/writerfilter/ooxml/ src/sw/source/writerfilter/dmapper/TablePositionHandler.test.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts --coverage.include=src/sw/source/writerfilter/dmapper/TablePositionHandler.ts --coverage.reportsDirectory=coverage/native-table-position-xml --maxWorkers=2",
+      "result": "pass:124tests/8files, unchanged scoped100 S178/B92/F22/L159",
+      "perFile": {
+        "apps/office/src/sw/source/writerfilter/dmapper/TablePositionHandler.ts": {
+          "s": {
+            "covered": 104,
+            "total": 104
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          },
+          "b": {
+            "covered": 48,
+            "total": 48
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.elements.ts": {
+          "s": {
+            "covered": 1,
+            "total": 1
+          },
+          "f": {
+            "covered": 0,
+            "total": 0
+          },
+          "b": {
+            "covered": 0,
+            "total": 0
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": {
+          "s": {
+            "covered": 5,
+            "total": 5
+          },
+          "f": {
+            "covered": 0,
+            "total": 0
+          },
+          "b": {
+            "covered": 0,
+            "total": 0
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.ts": {
+          "s": {
+            "covered": 68,
+            "total": 68
+          },
+          "f": {
+            "covered": 12,
+            "total": 12
+          },
+          "b": {
+            "covered": 44,
+            "total": 44
+          }
+        }
+      },
+      "owners": "Two procedural owners have positive covered S/F/B; two generated lookup-data owners have literal statements and no functions/branches. No manufactured executable counters or exclusions."
+    },
+    "writerRegressions": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ src/sw/source/writerfilter/inc/ooxml/resourceids.test.ts --maxWorkers=2",
+      "result": "pass:256tests/21files"
+    },
+    "generator": {
+      "command": "python3 scripts/writer-ooxml/generate-factory.py; existing OOXMLFactory test invokes original generator wrapper --check",
+      "result": "pass:namespaces1/defines53/attributes107/elements355/resources428/lists315/actions41; complete regenerated outputs match unchanged pinned native generators/model",
+      "lookupDataPreservation": "All355 former element rows and namespace/action rows are identical; all former attribute/resource rows retain values and relative order; CT_TblPPr1770090 adds one define and10attribute/10resource rows. Existing list file unchanged.",
+      "elementRowsSha256": "8853d1c68c15de12ad418d213cc43a98a2883d041d276521e3115c0160866cfb",
+      "generatedDataResponsibility": "factoryCreateElementMap records live in361line .elements.ts; context lookup tables660lines, retaining one factory owner/API and static re-exports. Both below unchanged1000line hard limit."
+    },
+    "zipIntegration": "pass:actual committed Strict and Transitional ZIP relationships select nondefault styles target; native parser/property references deliver10CT_TblPPr attributes; genuine UNO output preserves orientation/relation/coordinates and signed margins after handler destruction",
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "production": "pass:npm run test:static (production compilation/build and relative-resource/no-backend smoke)",
+    "eslint": "pass:four changed/new TS factory-data/test paths max-warnings0",
+    "prettier": "pass:same four TS paths; generated rows retain existing prettier-ignore policy; docs/program intentionally ignored by existing configuration",
+    "dependencies": "pass:1529runtime sources/7786relative imports/205allowed edges; no new edge",
+    "jsdoc": "pass:3546authored source files",
+    "size": "pass:3550authored files; unchanged <1000hard limit",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:Writer2tests/1file, Calc464commands/11menus/17dispositions, Writer76nativeIDs",
+    "provenance": "pass:1530modules/1325mapped/178browser adaptations/27local infrastructure",
+    "registry": {
+      "moduleCount": 1530,
+      "capabilityCount": 345,
+      "invariantCount": 34,
+      "globalRecordCount": 3469
+    },
+    "doctor": "pass:0errors; pre-existing managed hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "resolvedValidationFindings": [
+    "Initial ad-hoc data comparison assumed resource additions must be a final suffix. Native generation inserts consumed-definition rows before its original start rows; filtering only the new definition proves all previous rows and relative order unchanged. No source output changed to satisfy the incorrect assumption.",
+    "Registry initially rejected elements as a local AST declaration in the context-table proxy after separation. The declaration is now correctly owned by the new generated element module; context runtime localSymbols omits the re-export while provenance retains API traceability. Validator and violation thresholds remain unchanged."
+  ],
+  "limitations": [
+    "The actual test ZIP is committed to bytes and reopened through production ZIP relationships/SAX/native factory resources. Receiver output is not insertion into a SwDoc/frame graph, native TableManager/DomainMapperTableManager/DomainMapperTableHandler resolution or production application/UI admission.",
+    "Whole procedural module source parity/native compiled differential/physical ABI/thread/allocation behavior remain unverified. The existing TablePositionHandler invalid-anchor diagnostic observes only independent initialized values and certifies no native indeterminate relation result (WRITER164).",
+    "All broad behavior/contract/default/verified flags remain unverified; complete Writer DOCX and Calc XLSX import/export and existing desktop/mobile UI acceptance remain pending.",
+    "Full suite not due under approved ten-task cadence; earlier unrelated msfilter terminal-fallback coverage observation remains open."
+  ],
+  "stopRule": "Local parser prerequisite checkpoint only; no merge/publication, task completion or broad parity/default-status promotion."
+}

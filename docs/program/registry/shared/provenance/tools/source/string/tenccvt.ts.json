@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/string/tenccvt.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/string/tenccvt.cxx",
+    "localSymbols": [
+      "GetExtendedCompatibilityTextEncoding",
+      "GetExtendedTextEncoding"
+    ],
+    "upstreamSymbols": [
+      "GetExtendedCompatibilityTextEncoding",
+      "GetExtendedTextEncoding"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/string/tenccvt.ts",
+          "marker": "GetExtendedCompatibilityTextEncoding"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/tools/source/string/tenccvt.cxx",
+          "marker": "GetExtendedCompatibilityTextEncoding"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "Original ISO8859 compatibility/export charset extension maps and unsigned16 input binding. Preserve Latin1/Turkish compatibility and extended Cyrillic/Greek/Latin2/Latin15 choices. No host encoding-name heuristic or invented converter. One-byte/load/store helpers are not admitted."
+    ],
+    "omittedResponsibilities": [
+      "Only the explicitly admitted responsibility is represented; full native ABI/services/format export are not certified."
+    ]
+  }
+}

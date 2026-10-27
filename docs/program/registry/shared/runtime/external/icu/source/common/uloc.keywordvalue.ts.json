@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+        "apps/office/src/external/icu/source/common/uloc.keywordvalue.test.ts",
+        "scripts/icu-keywordvalue-native-probe.mjs"
+      ],
+      "justification": "Complete original internal counted-key/C-locale keyword getter and C wrapper retain canonical key validation, source BCP47 conversion/classifier, C-versus-counted NUL boundaries, selected-value-only validation, preserved case/punctuation, first-match return, partial Append-before-error and null-locale illegal behavior. Original C output uses the actual checked sink rather than prevalidating/precomputing output. Current native proof is64154 aggregate keyword/Locale/C-facade/factory cases, with exact whole buffer/guard observations. Invalid native readable ranges/ABI and unrelated locale mutation/likely-subtag/resource services remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_getKeywordValue",
+        "uloc_getKeywordValue"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "ulocimp_getKeywordValue",
+        "uloc_getKeywordValue"
+      ]
+    }
+  }
+}

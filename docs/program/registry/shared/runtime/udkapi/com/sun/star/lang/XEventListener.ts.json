@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/udkapi/com/sun/star/lang/XEventListener.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-59f58831-f7e6-4ac4-940c-70d1b6cf4c9d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/udkapi/com/sun/star/lang/XEventListener.ts",
+        "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+        "udkapi/com/sun/star/lang/XEventListener.idl"
+      ],
+      "justification": "Original complete IDL interface methods and root inheritance use actual Reference and EventObject values. Normal generated static MI type factory and deprecated getter retain cached identity and incomplete normal reflection. No concrete lifecycle service is supplied. Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XEventListener",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "udkapi/com/sun/star/lang/XEventListener.idl",
+      "upstreamSymbols": [
+        "XEventListener",
+        "disposing"
+      ]
+    }
+  }
+}

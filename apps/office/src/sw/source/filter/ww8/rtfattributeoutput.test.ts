@@ -9,11 +9,18 @@ import {
 } from "../../../../editeng/inc/escapementitem";
 import { SvxAdjust } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import {
+  FontFamily,
+  FontPitch,
+  FontLineStyle,
+  FontStrikeout,
+} from "../../../../tools/inc/fontenum";
 import { RES_PARATR_ADJUST, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";
 import { RtfExport } from "./rtfexport";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
+import { wwFont } from "./wrtw8sty";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 
 /** Supplies stable document-table indices for controls that do not allocate fonts or colors. @returns Attribute writer. */
 function output(): RtfAttributeOutput {
@@ -77,5 +84,47 @@ it("preserves native subscript and manual proportional baseline controls", /** C
     [-25, 70, "{\\*\\updnprop7000}\\dn6"],
   ] as const) {
     expect(output().WriteCharacter({ ...plain, escapement: { offset, height } })).toBe(expected);
+  }
+});
+
+it("emits complete direct font controls and preserves unsupported underline enum values", /** Verifies legacy direct-character caller semantics. @returns Nothing. */ () => {
+  const attributes = {
+    bold: true,
+    italic: true,
+    underline: true,
+    fontFamily: "Test Font",
+    fontSizeTwips: 250,
+  };
+  expect(output().WriteCharacter(attributes)).toBe("\\b\\i\\ul\\ulc0\\f0\\fs25");
+  expect(output().WriteCharacter(attributes, false)).toBe("\\ul\\ulc0");
+  expect(
+    output().WriteCharacter({ ...attributes, underlineStyle: FontLineStyle.LINESTYLE_DOUBLE }),
+  ).toContain("\\uldb");
+  expect(
+    output().WriteCharacter({
+      bold: false,
+      italic: false,
+      underline: false,
+      underlineStyle: FontLineStyle.LINESTYLE_DONTKNOW,
+    }),
+  ).toBe("");
+});
+it("writes all native font family classification controls", /** Verifies all FFN families against RTF vocabulary. @returns Nothing. */ () => {
+  for (const [family, control] of [
+    [FontFamily.FAMILY_MODERN, "fmodern"],
+    [FontFamily.FAMILY_SCRIPT, "fscript"],
+    [FontFamily.FAMILY_DECORATIVE, "fdecor"],
+  ] as const) {
+    const exporter = new RtfExport(),
+      attributes = new RtfAttributeOutput(
+        /** Returns font table slot. @returns Font ID. */ () => 3,
+        /** Returns color table slot. @returns Color ID. */ () => 0,
+        exporter,
+      );
+    attributes.FontFamilyType(
+      family,
+      new wwFont("Fixture", FontPitch.PITCH_FIXED, family, RTL_TEXTENCODING_UTF8),
+    );
+    expect(new TextDecoder().decode(exporter.Strm().GetData())).toBe("{\\f3\\" + control);
   }
 });

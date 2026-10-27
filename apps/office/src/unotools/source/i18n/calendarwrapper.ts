@@ -7,6 +7,8 @@ import {
 } from "../../../i18npool/source/localedata/localedata";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
+import { DateTime, type DateTimeConstReference } from "../../../tools/source/datetime/datetime";
+import { Date } from "../../../tools/source/datetime/tdate";
 
 /** The name fields of the source CalendarItem2 value returned by the calendar service. */
 export interface CalendarItem2Names {
@@ -27,6 +29,12 @@ function calendarItems(items: readonly LocaleCalendarItem[]): CalendarItem2Names
 /** Original CalendarWrapper method boundary for the default calendar's names and counts. */
 export class CalendarWrapper {
   private loaded: LocaleCalendarItems | null = null;
+  private readonly aEpochStart = new DateTime(new Date(1, 1, 1970));
+
+  /** Original borrowed const epoch value initialized to 1 January 1970 at midnight. @returns Epoch. */
+  getEpochStart(): DateTimeConstReference {
+    return this.aEpochStart;
+  }
 
   /** Original loadDefaultCalendar dispatches to the locale calendar service. @param locale - Current locale. @returns Nothing. */
   loadDefaultCalendar(locale: LocaleConstReference): void {

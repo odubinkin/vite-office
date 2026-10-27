@@ -1,0 +1,153 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original non-aggregating WeakImplHelper/class_data direct and deep queries, real XTypeProvider normal type binding, actual UnoComplexColor component and factories. Source-backed dependency edges and WRITER156/CALC-300 documentation. Full model/filter/UI acceptance is not claimed.",
+  "sourceBlobs": {
+    "docs/program/calc-upstream-suspected-issues.md": "af7a30fa73f0823860f4b4642c8427862ea7817c",
+    "docs/program/registry/shared/capabilities/CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06.json": "8c2769ebd3dfac6f2da6ed687625d1810e6fd716",
+    "docs/program/registry/shared/capabilities/CAP-ac5762ac-bc03-420d-9c26-d4581abbe2fa.json": "495f0723b7f072ac629aee82ad0a41deb822275a",
+    "docs/program/writer-upstream-suspected-issues.md": "673567a53175d4c5b145604550618802b380adaf",
+    "scripts/check-module-boundaries.mjs": "43878cf1e4d1f09467e174fb1ce69ec9a0330cd8",
+    "scripts/check-module-boundaries.test.ts": "7de7abcf33152347ce78c2778ebcc4f168219926",
+    "apps/office/src/cppuhelper/inc/implbase.ts": "09881f67d18217a097bc3e91d53bf67234a19963",
+    "apps/office/src/cppuhelper/inc/implbase_ex.ts": "40e73a9379ae28ada0554278432d07c28c3a8136",
+    "apps/office/src/cppuhelper/source/implbase_ex.ts": "c3c325fb5118e78efb679000eb8f8825d1adef9f",
+    "apps/office/src/cppuhelper/source/native-implbase.test.ts": "293fcc007ecc414db6c414b5ef857ff27ead241c",
+    "apps/office/src/docmodel/inc/uno/UnoComplexColor.ts": "652ee86bfa390ee1cb33284488f50614154ed544",
+    "apps/office/src/docmodel/source/uno/UnoComplexColor.test.ts": "47f5819dbbff6a9dbd52b1ba9b8600d8545493c9",
+    "apps/office/src/docmodel/source/uno/UnoComplexColor.ts": "34514f84281b01ea9a0ea7844c5dc275ab8974b7",
+    "apps/office/src/udkapi/com/sun/star/lang/XTypeProvider.ts": "ea3cd1639763f1bd9279a9e2d90b081346c61549",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/implbase.ts.json": "03779733a9f8361135fad3034793c0661a506764",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/implbase_ex.ts.json": "b14c751c332533d9079d73a35a5c6520f64a3cd0",
+    "docs/program/registry/shared/provenance/cppuhelper/source/implbase_ex.ts.json": "e9a7dfd039aefb8b59fc0c6216f33a776ef3987f",
+    "docs/program/registry/shared/provenance/docmodel/inc/uno/UnoComplexColor.ts.json": "394245d7b569a67a806359fc814baacb24c56190",
+    "docs/program/registry/shared/provenance/docmodel/source/uno/UnoComplexColor.ts.json": "aaa309bc210bfb3a7b481ca869c74e3dec0d70c4",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XTypeProvider.ts.json": "1185247e211f8623e0b87e5d193e3e6bcda2268b",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/implbase.ts.json": "f4caae19ffa35fe196527b088c3a3f74278e9281",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/implbase_ex.ts.json": "345641b39358a0f73d62b67a46b5ab72bdea64a8",
+    "docs/program/registry/shared/runtime/cppuhelper/source/implbase_ex.ts.json": "2737f4b8a9fe6df1e1c6c6884d38c30295aa6a5d",
+    "docs/program/registry/shared/runtime/docmodel/inc/uno/UnoComplexColor.ts.json": "2a86164333fbbdd9c05b7601cbc007c1eac40b1f",
+    "docs/program/registry/shared/runtime/docmodel/source/uno/UnoComplexColor.ts.json": "3bc293a391a01a60ae238a99ec5cf0a898b7584e",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XTypeProvider.ts.json": "02d120e7f32e5b713462ba131e1257764a787856"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/cppuhelper/ src/docmodel/ src/offapi/com/sun/star/util/native-color-interfaces.test.ts src/sc/source/core/data/color-uno-types.test.ts src/sw/source/writerfilter/dmapper/ --coverage.include=src/cppuhelper/source/implbase_ex.ts --coverage.include=src/cppuhelper/inc/implbase.ts --coverage.include=src/udkapi/com/sun/star/lang/XTypeProvider.ts --coverage.include=src/docmodel/source/uno/UnoComplexColor.ts --coverage.reportsDirectory=coverage/native-complex-color-component --maxWorkers=2",
+      "result": "pass:121 related tests/20 files; four new executable owners at unchanged scoped100",
+      "statements": "118/118",
+      "branches": "36/36",
+      "functions": "32/32",
+      "lines": "104/104",
+      "perFile": {
+        "apps/office/src/cppuhelper/inc/implbase.ts": {
+          "s": {
+            "covered": 19,
+            "total": 19
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          },
+          "b": {
+            "covered": 4,
+            "total": 4
+          }
+        },
+        "apps/office/src/cppuhelper/source/implbase_ex.ts": {
+          "s": {
+            "covered": 77,
+            "total": 77
+          },
+          "f": {
+            "covered": 12,
+            "total": 12
+          },
+          "b": {
+            "covered": 28,
+            "total": 28
+          }
+        },
+        "apps/office/src/docmodel/source/uno/UnoComplexColor.ts": {
+          "s": {
+            "covered": 13,
+            "total": 13
+          },
+          "f": {
+            "covered": 7,
+            "total": 7
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XTypeProvider.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        }
+      }
+    },
+    "boundaryTests": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers=2",
+      "result": "pass:48 tests; native cppuhelper->udkapi and docmodel->cppu/cppuhelper/offapi admitted, application/browser/reverse gates retained"
+    },
+    "production": "pass:npm run test:static (app typecheck, production build and static smoke)",
+    "typecheck": "pass:npm run typecheck (tools and app); final app compilation also confirmed by production build",
+    "eslint": "pass:10 changed TypeScript/MJS sources/tests at max-warnings0",
+    "prettier": "pass:26 changed source/test/registry/documentation paths",
+    "dependencies": "pass:1514 runtime sources/7679 imports/205 allowed cross-module edges",
+    "provenance": "pass:1515 runtime modules/1310 mapped/178 browser adaptations/27 local infrastructure",
+    "docs": "pass:3523 authored source files",
+    "size": "pass:3527 authored files; unchanged strict below1000-line bound. Existing boundary test remains998lines after equivalent parallel assertions were consolidated.",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "registry": {
+      "moduleCount": 1515,
+      "capabilityCount": 340,
+      "invariantCount": 34,
+      "globalRecordCount": 3434
+    },
+    "doctor": "pass:0 errors; preexisting managed hook-shim readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "sourceReview": {
+    "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "paths": [
+      "include/cppuhelper/implbase.hxx",
+      "include/cppuhelper/implbase_ex.hxx",
+      "cppuhelper/source/implbase_ex.cxx",
+      "cppuhelper/source/type_entries.hxx",
+      "udkapi/com/sun/star/lang/XTypeProvider.idl",
+      "include/docmodel/uno/UnoComplexColor.hxx",
+      "docmodel/source/uno/UnoComplexColor.cxx",
+      "docmodel/Library_docmodel.mk",
+      "offapi/com/sun/star/util/XComplexColor.idl"
+    ]
+  },
+  "resolvedValidationFindings": [
+    "Corrected the literal root-name comparison length and used same-realm native ASCII literal bytes for shared StringConcat. Actual exception/type/string owners were not replaced.",
+    "Used actual private typelib newEmpty export for allocator-record identity witnesses; no fabricated type description.",
+    "Added mandatory nonempty provenance symbols for the reexport-only header boundary.",
+    "Source-backed four dependency edges were added; an initially misplaced assertion edit was corrected and XML reader policy retained. Existing repetitive docmodel assertions were consolidated to stay below the unchanged1000-line bound."
+  ],
+  "limitations": [
+    "Four actual executable owners have positive raw S/F/B and100% S/B/F/L. Header declarations/reexports introduce no additional executable owner.",
+    "TypeScript structural interface casts retain the same object identity; zero compiler offsets on that binding are not native physical layout. Low-level explicit facet-cast callers retain original persistent8-byte MI offsets.",
+    "No new compiled native differential capture, physical ABI/layout/thread/shutdown parity, comprehensive reflection or generic binary exception bridge is claimed. Normal generated type metadata remains normal.",
+    "Other aggregate/component/inheritance helper families and full ComplexColor transformation application remain unported.",
+    "CellColorHandler, TablePropertiesHandler, actual document model application, complete DOCX export and DOCX/XLSX desktop/mobile UI paths remain incomplete.",
+    "Earlier msfilter TransColToIco terminal fallback coverage observation remains open; current checkpoint certifies only four specified owners.",
+    "Full suite not due under the approved ten-task cadence. No UI changes in this prerequisite block; actual full file UI scenarios remain pending."
+  ],
+  "stopRule": "Local prerequisite checkpoint; no merge, publication, task completion or broad parity promotion."
+}

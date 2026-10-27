@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresbund.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresbund.ts",
+        "apps/office/src/external/icu/source/common/uresbund.test.ts",
+        "scripts/icu-timezone-resources.mjs",
+        "scripts/icu-resource-native-probe.mjs",
+        "apps/office/src/external/icu/source/data/misc/zoneinfo64.json",
+        "apps/office/src/external/icu/source/data/misc/keyTypeData.json",
+        "scripts/icu-resource-iterator-native-probe.mjs",
+        "scripts/icu-likelysubtags-native-probe.mjs",
+        "scripts/icu-resource-fallback-native-probe.mjs",
+        "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+        "scripts/icu-resource-bundle-native-probe.mjs"
+      ],
+      "justification": "Original public default-package bundle API now uses actual cached entries, raw aliases, result/path initialization and close/copy ownership. No resolved keyTypeData projection substitutes for dynamic alias resolution. Stored size/cursor, raw zero-token stack state, canonical C keys, scalar type/error/length asymmetries including CALC-312, source alias temporaries, iterator ordering and valid/actual locale identities are preserved. Module reexports the one owner from uresimp and source lifecycle/fallback functions, without dual legacy/new implementations. The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified. Internal ures_getValueWithFallback preserves sticky/nullable-path behavior and attaches the original raw data/valid-locale/resource context to the caller ResourceDataValue through its persistent temporary. Empty C paths borrow the original bundle without changing that temporary;756 native comparisons cover holder context and unchanged failed outputs.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ures_getByIndex",
+        "ures_getStringByIndex",
+        "ures_getIntVector",
+        "ures_hasNext",
+        "ures_resetIterator",
+        "ures_getNextResource",
+        "ures_getValueWithFallback"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresbund.cpp",
+      "upstreamSymbols": [
+        "ures_getByIndex",
+        "ures_getStringByIndex",
+        "ures_getIntVector",
+        "ures_copyResb",
+        "ures_hasNext",
+        "ures_resetIterator",
+        "ures_getNextResource",
+        "ures_getValueWithFallback"
+      ]
+    }
+  }
+}

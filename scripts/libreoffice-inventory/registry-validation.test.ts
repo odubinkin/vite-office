@@ -344,10 +344,13 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
         ),
       ).rejects.toThrow("export");
   });
-  it("checks all and app scopes with complete global discovery and shared references", /** Uses owned upstream markers, not real-source parity claims. @returns Completion after all scoped gates. */ async () => {
-    const { registry, baseline } = await fixture();
-    const deps = dependencies(registry, baseline);
-    for (const scope of ["all", "writer", "calc", "shared"] as RegistryScope[]) {
+  it.each(["all", "writer", "calc", "shared"] as RegistryScope[])(
+    "checks %s scope with complete global discovery and shared references",
+    /** Uses owned upstream markers, not real-source parity claims. @param scope - Registry owner scope. @returns Completion after scoped gates. */ async (
+      scope,
+    ) => {
+      const { registry, baseline } = await fixture();
+      const deps = dependencies(registry, baseline);
       let output = "";
       await runRegistryCli(
         ["check", "--scope", scope],
@@ -366,7 +369,12 @@ describe("global and scoped registry gates", /** Registers inventory concurrency
           (scope === "all" || record.owner === scope || record.owner === "shared"),
       );
       expect(report.capabilityCount).toBe(expectedCapabilities.length);
-    }
+    },
+    60_000,
+  );
+  it("rejects missing and duplicate global runtime discovery", /** Preserves discovery rejection independently of the four scoped reports. @returns Completion after rejection assertions. */ async () => {
+    const { registry, baseline } = await fixture();
+    const deps = dependencies(registry, baseline);
     const parsed = parseInventoryRegistry(registry, baseline);
     await expect(
       validateRegistryEvidence(

@@ -404,6 +404,10 @@ export class ScColumn extends ScColumnData {
   RegroupFormulaCells(positions: ScAddress[] | null = null): void {
     column3.RegroupFormulaCells.call(this, positions);
   }
+  /** Source whole-column listening with the all/needed flag. @param context - Shared listening context. @param all - Include every formula. @returns Nothing. */
+  StartListeners(context: StartListeningContext, all: boolean): void {
+    column3.StartListeners.call(this, context, all);
+  }
   /** Original const metadata lookup borrows a real store element or returns null for an empty block. @param row - Valid row. @returns Metadata or null. */
   GetCellTextAttr(row: number): CellTextAttr | null {
     const position = this.maCellTextAttrs.cposition(row),

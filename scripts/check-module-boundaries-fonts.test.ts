@@ -28,7 +28,7 @@ it("admits original style label language and Writer complex-color dependencies",
   expect(isForbiddenModuleEdge("docmodel", "sw")).toBe(true);
 });
 
-it("admits original font configuration enum ownership without application dependencies", () => {
+it("admits original font configuration enum ownership without application dependencies", /** Verifies admits original font configuration enum ownership without application dependencies. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("unotools", "tools")).toBe(false);
   expect(isForbiddenModuleEdge("unotools", "sw")).toBe(true);
   expect(isForbiddenModuleEdge("tools", "sw")).toBe(true);

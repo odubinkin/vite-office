@@ -6,7 +6,11 @@ import { md_process_doc_blocks } from "./md4c.block";
 import { MD_BLOCK, MD_BLOCK_CONTAINER, type MD_BLOCK_CONTEXT } from "./md4c.block.store";
 it.each(fixture.cases)(
   "matches compiled md4c block queue and reference definitions: $id",
-  ({ text, flags, result }) => {
+  /** Verifies matches compiled md4c block queue and reference definitions: $id. @param value0 - text, flags, result value. @returns Nothing. */ ({
+    text,
+    flags,
+    result,
+  }) => {
     const input = new TextEncoder().encode(text);
     const ctx: MD_BLOCK_CONTEXT = {
       text: input,
@@ -44,19 +48,24 @@ it.each(fixture.cases)(
       const lines =
         block.flags & MD_BLOCK_CONTAINER
           ? []
-          : block.lines().map((line) => [line.beg, line.end, line.indent]);
+          : block
+              .lines()
+              .map(
+                /** Verifies matches compiled md4c block queue and reference definitions: $id. @param line - line value. @returns Callback result. */ (
+                  line,
+                ) => [line.beg, line.end, line.indent],
+              );
       blocks.push([block.type, block.flags, data, block.n_lines, lines]);
       if (!(block.flags & MD_BLOCK_CONTAINER))
         cursor +=
           block.n_lines *
           (block.type === B.MD_BLOCK_CODE || block.type === B.MD_BLOCK_HTML ? 12 : 8);
     }
-    const definitions = ctx.ref_defs.map((def) => [
-      def.dest_beg,
-      def.dest_end,
-      [...def.label],
-      [...def.title],
-    ]);
+    const definitions = ctx.ref_defs.map(
+      /** Verifies matches compiled md4c block queue and reference definitions: $id. @param def - def value. @returns Callback result. */ (
+        def,
+      ) => [def.dest_beg, def.dest_end, [...def.label], [...def.title]],
+    );
     expect({ blocks, definitions }).toEqual(result);
   },
 );

@@ -1,5 +1,6 @@
 /** @fileoverview ImpSvNumberInputScan scan-date implementation, called with the original native owner as this. */
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { StringToDouble } from "./zforfind.scan-value";
 import { convertLanguageToLocale } from "../../../i18nlangtag/source/isolang/mslangid";
 import { toInt32 } from "../../../o3tl/inc/string_view";
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
@@ -247,7 +248,7 @@ export function GetTimeRef(
     let digits = "";
     for (let position = 0; position < fraction.getLength(); ++position)
       digits += String.fromCharCode(units[position] as number);
-    second100 = Number(`0.${digits}`);
+    second100 = StringToDouble(`.${digits}`);
   }
   output[0] = (hour * 3600 + minute * 60 + second + second100) / 86400;
   return valid;

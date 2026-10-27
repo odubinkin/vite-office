@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/text/WrapTextMode.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "docx-style-property-values",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/text/WrapTextMode.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts",
+        "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts"
+      ],
+      "justification": "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WrapTextMode"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/text/WrapTextMode.idl",
+      "upstreamSymbols": [
+        "WrapTextMode",
+        "THROUGHT"
+      ]
+    }
+  }
+}

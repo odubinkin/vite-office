@@ -45,17 +45,24 @@ it.each([
   [enc.RTL_TEXTENCODING_ISCII_DEVANAGARI, [0x950], [0xa1, 0xe9]],
   [enc.RTL_TEXTENCODING_ISO_2022_JP, [0x65e5], [0x1b, 0x24, 0x42, 0x46, 0x7c, 0x1b, 0x28, 0x42]],
   [enc.RTL_TEXTENCODING_ISO_2022_KR, [0xac00], [0x1b, 0x24, 0x29, 0x43, 0x0e, 0x30, 0x21, 0xf]],
-] as const)("dispatches native reverse bytes for encoding %i", (encoding, units, bytes) => {
-  expect(encode(encoding, units)).toEqual({ bytes: [...bytes], info: 0, consumed: units.length });
-});
+] as const)(
+  "dispatches native reverse bytes for encoding %i",
+  /** Verifies dispatches native reverse bytes for encoding %i. @param encoding - encoding value. @param units - units value. @param bytes - bytes value. @returns Nothing. */ (
+    encoding,
+    units,
+    bytes,
+  ) => {
+    expect(encode(encoding, units)).toEqual({ bytes: [...bytes], info: 0, consumed: units.length });
+  },
+);
 
-it("binds every represented single-byte descriptor instead of a smaller handwritten switch", () => {
+it("binds every represented single-byte descriptor instead of a smaller handwritten switch", /** Verifies binds every represented single-byte descriptor instead of a smaller handwritten switch. @returns Nothing. */ () => {
   expect(Object.keys(descriptors)).toHaveLength(55);
   for (const key of Object.keys(descriptors))
     expect(encode(Number(key), [0x41])).toEqual({ bytes: [0x41], info: 0, consumed: 1 });
 });
 
-it("returns the same static descriptor in both directions with unsigned ID binding", () => {
+it("returns the same static descriptor in both directions with unsigned ID binding", /** Verifies returns the same static descriptor in both directions with unsigned ID binding. @returns Nothing. */ () => {
   const native = cvt.rtl_createTextToUnicodeConverter(enc.RTL_TEXTENCODING_MS_932);
   expect(cvt.rtl_createUnicodeToTextConverter(enc.RTL_TEXTENCODING_MS_932)).toBe(native);
   expect(cvt.rtl_createUnicodeToTextConverter(65536 + enc.RTL_TEXTENCODING_MS_932)).toBe(native);
@@ -66,7 +73,7 @@ it("returns the same static descriptor in both directions with unsigned ID bindi
   cvt.rtl_destroyUnicodeToTextContext(null, null);
 });
 
-it("retains actual streaming state across a partial JIS designation and reset", () => {
+it("retains actual streaming state across a partial JIS designation and reset", /** Verifies retains actual streaming state across a partial JIS designation and reset. @returns Nothing. */ () => {
   const converter = cvt.rtl_createUnicodeToTextConverter(enc.RTL_TEXTENCODING_ISO_2022_JP);
   const context = cvt.rtl_createUnicodeToTextContext(converter) as ImplUnicodeToIso2022JpContext;
   const bytes = new Uint8Array(8),
@@ -110,7 +117,7 @@ it("retains actual streaming state across a partial JIS designation and reset", 
   expect(context).toEqual({ m_nHighSurrogate: 0, m_b0208: false });
 });
 
-it("keeps UTF8 signature lifecycle and source missing-converter fallback", () => {
+it("keeps UTF8 signature lifecycle and source missing-converter fallback", /** Verifies keeps UTF8 signature lifecycle and source missing-converter fallback. @returns Nothing. */ () => {
   const converter = cvt.rtl_createUnicodeToTextConverter(enc.RTL_TEXTENCODING_UTF8);
   const context = cvt.rtl_createUnicodeToTextContext(converter) as ImplUnicodeToUtf8Context;
   const bytes = new Uint8Array(8);
@@ -150,7 +157,7 @@ it("keeps UTF8 signature lifecycle and source missing-converter fallback", () =>
   expect(bytes[0]).toBe(0x34);
 });
 
-it("preserves the original JIS X0201 null forward callback and kana table", () => {
+it("preserves the original JIS X0201 null forward callback and kana table", /** Verifies preserves the original JIS X0201 null forward callback and kana table. @returns Nothing. */ () => {
   const converter = cvt.rtl_createUnicodeToTextConverter(enc.RTL_TEXTENCODING_JIS_X_0201);
   expect(converter).toMatchObject({ kind: "single-byte", textToUnicode: null });
   expect(encode(enc.RTL_TEXTENCODING_JIS_X_0201, [0xff61, 0xff65, 0xff9f])).toEqual({
@@ -163,35 +170,37 @@ it("preserves the original JIS X0201 null forward callback and kana table", () =
     info: flags.RTL_UNICODETOTEXT_INFO_UNDEFINED,
     consumed: 2,
   });
-  expect(() =>
-    cvt.rtl_convertTextToUnicode(
-      converter,
-      1,
-      Uint8Array.of(0x41),
-      1,
-      new Uint16Array(1),
-      1,
-      0,
-      null,
-      null,
-    ),
-  ).toThrow("callback is null");
-});
-
-it("admits only the original reverse assertion flag domain", () => {
-  const bytes = new Uint8Array(1);
-  for (const invalid of [0xf, 0xf0, 0x20000])
-    expect(() =>
-      cvt.rtl_convertUnicodeToText(
-        null,
-        null,
-        Uint16Array.of(0x41),
+  expect(
+    /** Verifies preserves the original JIS X0201 null forward callback and kana table. @returns Callback result. */ () =>
+      cvt.rtl_convertTextToUnicode(
+        converter,
         1,
-        bytes,
+        Uint8Array.of(0x41),
         1,
-        invalid,
+        new Uint16Array(1),
+        1,
+        0,
         null,
         null,
       ),
+  ).toThrow("callback is null");
+});
+
+it("admits only the original reverse assertion flag domain", /** Verifies admits only the original reverse assertion flag domain. @returns Nothing. */ () => {
+  const bytes = new Uint8Array(1);
+  for (const invalid of [0xf, 0xf0, 0x20000])
+    expect(
+      /** Verifies admits only the original reverse assertion flag domain. @returns Callback result. */ () =>
+        cvt.rtl_convertUnicodeToText(
+          null,
+          null,
+          Uint16Array.of(0x41),
+          1,
+          bytes,
+          1,
+          invalid,
+          null,
+          null,
+        ),
     ).toThrow("conversion flags");
 });

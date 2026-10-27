@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc.keytype.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
+    "localSymbols": [
+      "ulocimp_toBcpKeyWithFallback",
+      "ulocimp_toBcpTypeWithFallback",
+      "ulocimp_toLegacyKeyWithFallback",
+      "ulocimp_toLegacyTypeWithFallback",
+      "uloc_toUnicodeLocaleKey",
+      "uloc_toLegacyKey",
+      "uloc_toUnicodeLocaleType",
+      "uloc_toLegacyType"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_toBcpKeyWithFallback",
+      "ulocimp_toBcpTypeWithFallback",
+      "ulocimp_toLegacyKeyWithFallback",
+      "ulocimp_toLegacyTypeWithFallback",
+      "uloc_toUnicodeLocaleKey",
+      "uloc_toLegacyKey",
+      "uloc_toUnicodeLocaleType",
+      "uloc_toLegacyType"
+    ],
+    "preservedResponsibilities": [
+      "Original source syntax fallbacks and public C-string key/type facades preserve null/empty rejection at public boundaries, counted internal views including NUL, input alias/canonical distinctions and original grammars. The source empty internal legacy-key all_of and plus omission in legacy type fallback are retained; CALC-324 documents the latter comment/implementation contradiction. The actual maps and source syntax validators are reused, not a host locale service. The unchanged native witness matches95336 map/fallback/public cases including exact input-alias identity. Native allocation/ABI, default locale and full Locale/calendar services remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; complete locale/calendar service integration and native allocator/ABI remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.keytype.ts",
+          "marker": "ulocimp_toBcpKeyWithFallback"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_keytype.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc.cpp",
+          "marker": "ulocimp_toBcpKeyWithFallback"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc.keytype.ts",
+      "rationale": "Original implementation is split by conversion/fallback responsibility to retain the repository file-size budget while operating directly on the actual parsed owner and shared resource maps.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

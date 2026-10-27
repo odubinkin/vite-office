@@ -60,6 +60,13 @@ it.each([
   [RTL_TEXTENCODING_MS_932, [0x82, 0xa0], "あ"],
   [RTL_TEXTENCODING_UTF7, [0x2b, 0x41, 0x4f, 0x6b, 0x2d], "é"],
   [RTL_TEXTENCODING_ISO_2022_JP, [0x1b, 0x24, 0x42, 0x24, 0x22, 0x1b, 0x28, 0x42], "あ"],
-] as const)("uses the common native dispatch for encoding %s", (encoding, bytes, expected) => {
-  expect(OStringToOUString(Uint8Array.from(bytes), encoding)).toBe(expected);
-});
+] as const)(
+  "uses the common native dispatch for encoding %s",
+  /** Verifies uses the common native dispatch for encoding %s. @param encoding - encoding value. @param bytes - bytes value. @param expected - expected value. @returns Nothing. */ (
+    encoding,
+    bytes,
+    expected,
+  ) => {
+    expect(OStringToOUString(Uint8Array.from(bytes), encoding)).toBe(expected);
+  },
+);

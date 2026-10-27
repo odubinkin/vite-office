@@ -8,6 +8,7 @@ import {
   type SwFormatChangeHint,
   type SwAtomicModelHint,
   type SwModelHint,
+  type SwFindNearestNode,
 } from "./hints";
 import type { SfxPoolItem } from "../../svl/source/items/poolitem";
 import type { SwAttrSet } from "../source/core/attr/swatrset";
@@ -56,6 +57,11 @@ export abstract class WriterListener {
   }
   /** Original native notification hook. @param source - Registered owner. @param hint - Native hint. @returns Nothing. */
   protected abstract SwClientNotify(source: SwModify, hint: SwModelHint): void;
+  /** Original default information query leaves the borrowed search state unchanged. @param info - Native nearest-node query. @returns True to continue traversal. */
+  public GetInfo(info: SwFindNearestNode): boolean {
+    void info;
+    return true;
+  }
 }
 /** Erased native friend access; no runtime registry or wrapper. */
 interface WriterClientFields {
@@ -120,6 +126,13 @@ export class SwModify extends SwClient {
   private disposed = false;
   private notificationDepth = 0;
   private pendingHints: SwAtomicModelHint[] = [];
+  /** Queries the original live Writer-listener chain, preserving native order and early termination. @param info - Borrowed nearest-node query. @returns False when a listener stops the traversal. */
+  public override GetInfo(info: SwFindNearestNode): boolean {
+    if (!this.m_pWriterListeners) return true;
+    for (const listener of new WriterListenerIterator(this))
+      if (!listener.GetInfo(info)) return false;
+    return true;
+  }
   /** Original Add inserts immediately right of the anchor and first detaches a foreign registration. @param depend - Actual client. @returns Nothing. */
   Add(depend: SwClient): void {
     if (depend.GetRegisteredIn() === this) return;

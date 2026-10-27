@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresdata.package.ts",
+        "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+        "scripts/icu-resource-fallback-native-probe.mjs",
+        "scripts/icu-locale-resources.mjs",
+        "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+        "scripts/icu-resource-bundle-native-probe.mjs"
+      ],
+      "justification": "Original res_load/res_unload default-package backend now uses only the complete native-exported raw graph for every982 top-level .res file, including zoneinfo64, langInfo and keyTypeData. The temporary legacy-root bridge is removed: public/raw reads share the same graph node and native pointer-group buffer identities, without a second resolved resource projection. Source raw aliases, exact table order, noFallback/pool flags, source status/reset/unload behavior and independent data handles are retained. The previous rich JSON exports remain native comparison/query fixtures only and have no runtime import. Native bundle/path differential witnesses verify complete raw resource contents, public result state, aliases and storage-related metadata.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ResourceData",
+        "res_load",
+        "res_unload"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresdata.cpp",
+      "upstreamSymbols": [
+        "res_load",
+        "res_unload"
+      ]
+    }
+  }
+}

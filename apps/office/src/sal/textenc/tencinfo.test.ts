@@ -83,7 +83,7 @@ it("writes only fields present in the caller's native structure", /** Checks the
   }
 });
 
-it("uses the original multibyte buffer sizes and flags instead of missing-data defaults", () => {
+it("uses the original multibyte buffer sizes and flags instead of missing-data defaults", /** Verifies uses the original multibyte buffer sizes and flags instead of missing-data defaults. @returns Nothing. */ () => {
   const cases = [
     [enc.RTL_TEXTENCODING_MS_932, 2, 2, 8],
     [enc.RTL_TEXTENCODING_MS_936, 2, 2, 8],
@@ -114,7 +114,7 @@ it("uses the original multibyte buffer sizes and flags instead of missing-data d
   });
 });
 
-it("keeps native byte charset lookup, unknown fallback and unsigned argument binding", () => {
+it("keeps native byte charset lookup, unknown fallback and unsigned argument binding", /** Verifies keeps native byte charset lookup, unknown fallback and unsigned argument binding. @returns Nothing. */ () => {
   const bindings = new Map([
     [0, enc.RTL_TEXTENCODING_MS_1252],
     [2, enc.RTL_TEXTENCODING_SYMBOL],

@@ -1,5 +1,5 @@
 /** @fileoverview md4c.c pinned Unicode range search, classification, folding and UTF-8 byte decoding. See ../LICENSE. */
-import data from "./md4c-unicode-data.json";
+import data from "./md4c-unicode-data.json" with { type: "json" };
 /** Searches the source single/range encoded table. @param codepoint - Scalar value. @param map - Pinned encoded map. @returns First range index or -1. */
 export function md_unicode_bsearch__(codepoint: number, map: readonly number[]): number {
   let beg = 0,

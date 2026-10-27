@@ -1402,6 +1402,158 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: a hairline-underline control does not reach the document's underline value. This follows the source dispatch table and default branch; compiled desktop behavior remains unverified.
 - Preservation: the local RTF reader likewise leaves `\\ulhair` without an underline-style item. A focused test pins the ignored control.
 
+### WRITER142 — run font attributes retain the family list while fontTable uses its first token
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `CharFont`; `writerwordglue.cxx`, `FontMapExport`; `wrtw8sty.cxx`, `wwFont::WriteDocx`.
+- Observation: CharFont writes the original GetFamilyName value into w:ascii/w:hAnsi, but font registration tokenizes that value and the font table uses the first family token. For `Liberation Sans;Fallback`, run attributes retain the complete list while fontTable contains `Liberation Sans`. Consumer lookup behavior and desktop impact remain unverified.
+- Preservation: keep original values and registration-before-guards order. A real ZIP font-part test pins the mismatch without normalizing the run attribute or dropping fonts registered by later duplicate-attribute calls.
+
+### WRITER143 — pseudo character runs retain the initial script font charset
+
+- Source: pinned `sw/source/filter/ww8/writerwordglue.cxx`, `sw::util::GetPseudoCharRuns`.
+- Observation: the function selects and extends a font charset from the first script before it builds the script boundaries. Every emitted CharRunEntry receives that same charset even when later runs use another script with a different paragraph font charset. Empty text uses Latin. Effects on encoding-dependent Word filters remain unverified; DOCX RunText ignores its charset parameter.
+- Preservation: keep first-script font lookup and charset reuse, with no per-script refresh or guessed UTF8 replacement. Real three-script node tests retain this behavior for Latin-, CJK- and CTL-first text. The negative-script-end and missing-table guards are also kept despite remaining uncovered with the concrete successful backend.
+
+### WRITER144 — DOCX character width narrows to signed16 before clamping
+
+- Source: pinned `sw/source/filter/ww8/docxattributeoutput.cxx`, `DocxAttributeOutput::CharScaleWidth`; unsigned storage is `SvxCharScaleWidthItem`.
+- Observation: the explicit `std::min<sal_Int16>` template parameter converts the unsigned width before the advertised OOXML range clamp. On the current native compiler, stored values 32768 and 65535 therefore become negative and export as 1 rather than 600. The real short Any width contract can store 65535 from -1, so this is more than an arbitrary widened JavaScript input. Desktop producer reachability and document impact remain unverified.
+- Preservation: perform original signed16 narrowing before min/max; do not widen to a JavaScript unsigned clamp. Literal real-item DOCX tests pin 0/1/100/600/601/32767/32768/65535. The task evidence char-width-narrowing-probe.json records a compiled C++ template-conversion check only; it does not claim a compiled native DOCX export or whole-module parity.
+
+### WRITER145 — property-table delivery bypasses resource-table forwarding guards
+
+- Source: pinned `sw/source/writerfilter/ooxml/OOXMLFastContextHandler.cxx`, `OOXMLFastContextHandlerPropertyTable::lcl_endFastElement` and `OOXMLFastContextHandlerTable::lcl_endFastElement`.
+- Observation: Table sends a cloned table only when event forwarding is enabled and its resource ID is nonzero. PropertyTable instead clones its property set, appends it, and calls `Stream.table` unconditionally, including when forwarding is disabled or the ID is zero; its endAction runs afterwards. Effects on suppressed substreams/MCE and desktop producer reachability remain unverified. This may be intentional for settings/numbering, so no defect is asserted.
+- Preservation: retain both distinct callback contracts; do not add Table guards to PropertyTable. Real native context/resource objects test disabled forwarding, zero IDs, copied property sets, accumulated table snapshots and the ordinary Table guards. Native import orchestration and downstream mapper-table application remain incomplete.
+
+### WRITER146 — conditional table column borders use different insertion and merge checks
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `TableStyleSheetEntry::AddTblStylePr` and `lcl_mergeProps`.
+- Observation: insertion checks RIGHT for FirstCol and LEFT for LastCol before erasing an inside vertical border from the supplied map. Later merging clears the accumulated inside vertical border for LEFT on FirstCol and RIGHT on LastCol. Row border checks are consistent. This may reflect different conflict stages, but their effect differs for a column style containing only one edge; desktop table-layout intent/impact remain unverified.
+- Preservation: keep both original arrays and their order. Literal tests with actual typed BorderLine2 values retain the right-only FirstCol inside border during merge, clear it for a left-only FirstCol, and verify insertion mutates the supplied map.
+
+### WRITER147 — imported stylesheet property inheritance only guards a direct self-reference
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.cxx`, `StyleSheetEntry::GetMergedInheritedProperties`.
+- Observation: recursive lookup skips only an empty base ID and a base equal to the entry's own ID. A longer imported ID cycle has no visited-set or depth guard in this helper. Whether upstream callers exclude such cycles before reaching it remains unverified; no crashing native reproduction or document-impact claim is made.
+- Preservation: retain original recursion and direct-self/missing-parent behavior. Tests cover real acyclic table identities, ordered overrides, missing parents and direct self references. Do not insert a local cycle repair into this kernel helper.
+
+### WRITER148 — stylesheet outline setter accepts negative signed16 values beyond the unset sentinel
+
+- Source: pinned `sw/source/writerfilter/dmapper/PropertyMap.hxx`, `StyleSheetPropertyMap::SetOutlineLevel`.
+- Observation: WW_OUTLINE_MIN is zero, but the setter checks only the upper bound WW_OUTLINE_MAX (9). The normal unset value is -1; other negative signed16 values are retained as well. Native producer reachability and later UNO/application behavior for those values remain unverified.
+- Preservation: retain signed16 argument narrowing and the original upper-only check. Actual owner tests keep -2, reject 10 after 9, and retain the conversion of 65545 to signed16 value 9 without adding a lower clamp.
+
+### WRITER149 — conditional table-style header advertises parent properties that the method does not merge
+
+- Source: pinned `sw/source/writerfilter/dmapper/StyleSheetTable.hxx`, `TableStyleSheetEntry::GetProperties` comment, versus its body in `StyleSheetTable.cxx`.
+- Observation: the declaration describes properties corresponding to the mask plus parent styles. The implementation creates a plain PropertyMap and merges only GetLocalPropertiesFromMask; it performs no imported-parent lookup. Parent merging may be deliberately performed by callers, and the comment may be stale. No desktop rendering defect is asserted.
+- Preservation: retain the local-only body and separate GetMergedInheritedProperties helper. Literal tests keep conditional results independent of the entry's ordinary base properties and unmasked whole-table bucket; imported ancestor-property precedence is tested separately. Do not combine these stages solely to match the header comment.
+
+
+### WRITER150 — cell-margin raw metadata outlives the converted temporary
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `lcl_attribute` and `createGrabBag`.
+- Observation: after each modifier only m_nValue resets to zero. m_nWidth and m_nType persist, so an empty following edge is marked valid with converted zero while its interop entry can retain the preceding edge's nonzero raw width and unit. A non-dxa unit only warns; the width still undergoes the absolute twip conversion. Missing-width input and non-dxa units may be excluded by conforming producers; native document/layout impact remains unverified.
+- Preservation: keep all three independent fields and the exact resolution/reset order. Real nested resource tests retain raw width1440 in an empty next edge while its applied margin is0, and retain conversion of a pct-typed width. Do not synthesize missing attributes or clear the raw fields locally.
+
+### WRITER151 — cell-margin start/end mapping keeps a hardcoded LTR direction
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellMarginHandler.cxx`, `CellMarginHandler::lcl_sprm`, `const bool rtl = false; // TODO`.
+- Observation: start/end map to left/right without consulting the document/table direction. Upstream explicitly leaves direction detection as a TODO; whether later table import stages compensate remains unverified. No native RTL rendering reproduction is claimed.
+- Preservation: retain the effective native LTR mapping and all twelve table/cell edge aliases. Tests cover exact source spelling in interop values, last-write overwrite and independent edge validity. Do not introduce a local text-direction guess into this handler.
+
+
+### WRITER152 — cell-border theme color is constructed without insertion into the property map
+
+- Source: pinned `sw/source/writerfilter/dmapper/TDefTableHandler.cxx`, `TDefTableHandler::fillCellProperties`.
+- Observation: the helper creates a local ComplexColor, assigns the last retained theme type, and appends tint/shade transformations, but never inserts or returns that value. Only the six first border-line values are inserted into the supplied map. The interop grab bag can preserve the theme lexeme separately. Later import stages may compensate, so native document/rendering impact remains unverified.
+- Preservation: retain the local construction and its lack of output; do not silently add complex-color properties. Tests keep six actual BorderLine2 map properties with theme/tint/shade input and verify the separate interop data. The standalone BorderHandler::getComplexColor continues returning its actual native value through its distinct contract.
+
+### WRITER153 — table-border parameters carry over across sibling edges
+
+- Source: pinned `sw/source/writerfilter/dmapper/BorderHandler.cxx`, `BorderHandler::lcl_sprm`, compared with `TDefTableHandler::localResolve`.
+- Observation: the table-border handler neither resets current width/type/color before resolving a new side nor requires nested properties before materializing a supported side. A later side missing attributes can inherit the preceding side's parameters; a null-property side is still marked filled. The cell-border handler instead resets width/type/color and ignores null-property children. Whether valid producers exercise missing/default attributes in a way that causes visible differences remains unverified.
+- Preservation: retain the distinct table and cell algorithms. Actual native resource tests keep table width/color carryover and null-reference materialization, cell per-child resets and first-vector-element precedence. Strict/Transitional ZIP tests retain independently specified table/cell borders. Do not unify the two handlers or insert local per-side defaults into BorderHandler.
+
+
+### WRITER154 — track-change dates retain local clock fields and an unknown timezone
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, and `TrackChangesHandler::getRedlineProperties`.
+- Observation: the helper explicitly describes an MS Office compatibility workaround: it separates the time at uppercase Z, parses integer clock fields, and leaves DateTime.IsUTC at its default false. Numeric timezone offsets and fractional seconds are not applied. A lexical Z therefore does not set IsUTC, and +02:30 does not shift 10:42:05. This is documented native compatibility behavior; downstream metadata/display intent remains unverified, and no defect is asserted.
+- Preservation: retain the original signed32 getToken overload, prefix integer conversion and generated field assignments. Tests keep identical local clock fields for Z/positive/negative offsets, zero nanoseconds and false IsUTC; committed Strict/Transitional ZIP TrackChange attributes reach the actual receiver before clearProps. Do not route this helper through the generic SAX ISO parser or a browser Date conversion.
+
+### WRITER155 — the optional signed year in the date comment is split as a delimiter
+
+- Source: pinned `sw/source/writerfilter/dmapper/ConversionHelper.cxx`, `ConvertDateStringToDateTime`, whose format comment includes an optional leading minus.
+- Observation: the implementation unconditionally reads the first year token using '-' as a delimiter. For -2024-01-02 it therefore assigns Year0, Month2024 and Day1; there is no special leading-sign path or calendar validation. The public DateTime IDL has a signed year, but this helper also narrows the parsed year through unsigned16 before assignment. Native producer reachability and document impact for BCE/large years remain unverified.
+- Preservation: keep the exact token split and original unsigned16 assignments, followed by the DateTime field's declared signed16 year width. Literal owner tests retain the negative-year result and the signed narrowing of year32768; no local calendar repair is introduced.
+
+### WRITER156 — complex-color resolution ignores the supplied theme
+
+- Source: pinned `docmodel/source/uno/UnoComplexColor.cxx`, `UnoComplexColor::resolveColor`, and `offapi/com/sun/star/util/XComplexColor.idl`.
+- Observation: the interface accepts an XTheme when resolving a color, but the concrete component explicitly ignores that argument and returns its previously stored final color, including transparency. Changing the supplied theme therefore cannot recompute a theme-indexed color through this method. This may be intentional cached-color behavior; native document/UI impact and the intended resolution contract remain unverified.
+- Preservation: retain the unused argument and signed32 final-color conversion. The actual component test supplies a nonnull theme whose virtual methods detect any lookup, changes the original source value after construction, and retains the copied final color. Do not add theme lookup or transformation application to this method.
+
+### WRITER157 — explicit shading fill leaves automatic-fill state sticky
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::lcl_attribute` and `getProperties`.
+- Observation: an explicit fill sets m_bAutoFillColor false, but a later auto fill only converts the raw fill to white and does not restore that flag. Reusing the receiver for explicit fill followed by auto therefore produces opaque white and paragraph FillStyle SOLID; a fresh receiver with auto produces the automatic sentinel and FillStyle NONE. Normal producer duplication/reuse and visible document impact remain unverified.
+- Preservation: retain the one-way flag assignment and independent fill-specified state. Actual resource tests retain both fresh-auto and explicit-then-auto results; do not reset the flag when parsing auto.
+
+### WRITER158 — paragraph nil shading falls through to character properties
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `CellColorHandler::getProperties`.
+- Observation: the paragraph branch excludes the nil token, but the following branch treats every non-Form mode as character output. Paragraph mode with nil and a specified fill therefore emits CharBackColor, and emits CharBackgroundComplexColor when a fill theme is present, instead of paragraph fill properties. Whether later native consumers discard or compensate for this output remains unverified.
+- Preservation: keep the exact branch structure and conditions. The owner test retains a paragraph nil witness with CharBackColor and no FillColor; do not replace the fallthrough with an early return or paragraph-specific clearing policy.
+
+### WRITER159 — shading complex colors retain a default final color beside a computed scalar
+
+- Source: pinned `sw/source/writerfilter/dmapper/CellColorHandler.cxx`, `getComplexColor`, `getFillComplexColor` and `getProperties`; `docmodel/source/uno/UnoComplexColor.cxx`, `resolveColor`.
+- Observation: the handler computes a scalar brush color, while its independent ComplexColor builders set only theme identity and transformations. They do not copy that scalar or raw RGB into final color. The created UNO component can therefore resolve to default black alongside a nonblack FillColor or CharBackColor. Paragraph output creates a component even for an Unused color; character output creates one only for a themed fill. Whether downstream color-item application intentionally fills the cached final color is unverified; no native rendering defect is claimed.
+- Preservation: retain the separate scalar and theme-only values, insertion conditions and unchanged component resolver. Real Any/Reference tests check the copied theme/transforms, scalar background and zero final color independently; do not initialize final color locally or add palette resolution.
+
+### WRITER160 — SvRef self-move drops its reference
+
+- Source: pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`; native PropertyMap inherits SvRefBase and uses this pointer owner.
+- Observation: move assignment releases the existing object, reads the source pointer and then clears the source, with no self-move guard. When source and destination are the same SvRef, the result is empty and its reference is released. A separate alias can keep the pointee alive. This may be an allowed moved-from contract rather than a defect; no Writer document failure is claimed.
+- Preservation: retain the exact release/read/clear order and empty self-move result. Complete original normal and ASan/UBSan caller traces retain a surviving alias while the self-moved reference becomes empty. Do not replace the implementation with a self-move no-op or swap policy.
+
+### WRITER161 — cell validity ignores the end and the returned start pointer
+
+- Source: pinned `sw/source/writerfilter/dmapper/TableManager.cxx`, `CellData::IsValid`, and `sw/source/writerfilter/dmapper/TableData.hxx`.
+- Observation: validity requires a nonnull stored start and a getStart call that does not throw RuntimeException. The returned Reference is discarded without a null check, and the stored end/open state is not examined. A nonnull start whose getStart returns an empty Reference is therefore accepted, including a cell with an empty end. This may intentionally test range accessibility; native producer reachability and document impact remain unverified.
+- Preservation: retain the start-only check, temporary destruction and catch-only RuntimeException. Actual component caller tests retain empty result/end acceptance, disposed/runtime failure rejection and foreign exception propagation. Do not add an end check, returned-pointer check or catch-all repair.
+
+### WRITER162 — shared sequence-map overloads reset and merge differently
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator<< overloads.
+- Observation: typed NamedValue/PropertyValue sequences clear the map and accept empty names or VOID values. Sequence<Any> instead merges without clearing, skips VOID elements, rejects empty names/values and retains earlier writes if a later element throws. An outer Any accepts only the typed named/property sequences, not Sequence<Any>. These are explicit implementation differences; downstream intent and document impact remain unverified.
+- Preservation: keep all overload distinctions, exact IllegalArgumentException messages/position-1 and partial mutation. Actual Any/Sequence tests cover both reset and merge paths and every rejection; do not normalize them to a transactional replace operation.
+
+### WRITER163 — shared map extraction preserves reused PropertyValue metadata
+
+- Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
+- Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
+- Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
+
+### WRITER164 — unknown floating-table anchors leave orientation relations uninitialized
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, getTablePosition.
+- Observation: horizontal and vertical relation locals have no initializer. Only margin/page/text assign a value before insertion into the frame property map. A different anchor therefore reads an indeterminate native short. Normal schema/producer reachability and document impact remain unverified; no native value or repeatable invalid-input result is claimed.
+- Preservation: retain the three exact branches with no repair default. Host locals remain uninitialized rather than defaulting to FRAME/PAGE_FRAME. Valid-input tests check all three source relations. A separate host diagnostic covers the unknown-anchor branches and checks only independent initialized properties; it never inspects or asserts the relation payload and does not certify native undefined behavior or ABI.
+
+### WRITER165 — floating-table position equality ignores wrapping distances and overlap
+
+- Source: pinned `sw/source/writerfilter/dmapper/TablePositionHandler.cxx`, operator==.
+- Observation: comparison includes the two anchors, two spec strings and x/y coordinates, but omits four distances from surrounding text and the table-overlap ID. Equal handlers can therefore return different margin or AllowOverlap properties. Whether downstream table grouping intentionally ignores these differences remains unverified; no native document defect is claimed.
+- Preservation: retain the six-field comparison and original short circuit. Public attribute tests vary every compared field, then show that differing margins/overlap leave equality true while actual output properties differ. Do not add those fields to equality.
+
+### WRITER166 — non-character automatic-style families share a tree without a set-subtype discriminator
+
+- Source: pinned `sw/source/core/doc/swstylemanager.cxx`, generic getAutomaticStyle/getByName, and `svl/source/items/stylepool.cxx`, StylePoolImpl::insertItemSet.
+- Observation: RUBY/PARA/NOTXT select one paragraph pool, whose tree is keyed by parent identity and concrete items, with no SfxItemSet subtype key. A generic non-character set inserted first can therefore supply the retained leaf for equal later SwAttrSet input. The generic PARA overload asserts only its input; later getByName for PARA asserts that a found handle is SwAttrSet. Native application reachability and compiled differential behavior remain unverified; no document defect is claimed.
+- Preservation: retain shared family routing and the exact tree key; do not add a pool-identity/subtype discriminator or silently convert the retained set. Source-backed public-owner tests retain the original generic leaf for equal Writer input and preserve the later paragraph subtype assertion. The separate native typed-overload behavior and native assert process/ABI are not certified by these tests.
 ### WRITER120 — Wide RTF borders lose the exporter's thick-width flag on import
 
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `OutTBLBorderLine`, emits `\\brdrth` and halves the converted width when the native line exceeds 255 twips. The pinned tokenizer registers `brdrth` as a flag, while `rtfdispatchflag.cxx` has no `BRDRTH` case. The flag therefore does not double the border width on import.

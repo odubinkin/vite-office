@@ -65,11 +65,13 @@ it("accepts old absent style tables and rejects cyclic or dangling identities", 
     copy.Dispose();
     const base = record.characterFormats?.[0];
     assert(base);
-    expect(() =>
-      decodeWriterDocument({ ...record, characterFormats: [base, { ...base, parent: 1 }] }),
+    expect(
+      /** Verifies accepts old absent style tables and rejects cyclic or dangling identities. @returns Callback result. */ () =>
+        decodeWriterDocument({ ...record, characterFormats: [base, { ...base, parent: 1 }] }),
     ).toThrow("cyclic");
-    expect(() =>
-      decodeWriterDocument({ ...record, characterFormats: [base, { ...base, parent: 2 }] }),
+    expect(
+      /** Verifies accepts old absent style tables and rejects cyclic or dangling identities. @returns Callback result. */ () =>
+        decodeWriterDocument({ ...record, characterFormats: [base, { ...base, parent: 2 }] }),
     ).toThrow("invalid");
   } finally {
     doc.Dispose();

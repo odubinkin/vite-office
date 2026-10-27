@@ -1,11 +1,13 @@
-/** @fileoverview Native automatic-character StylePool/cache ownership from pinned swstylemanager.cxx; the paragraph pool remains outside the represented slice. */
+/** @fileoverview Native automatic-style family routing and StylePool/cache ownership from pinned swstylemanager.cxx. */
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import {
   StylePool,
   acquireStyleHandle,
   releaseStyleHandle,
 } from "../../../../svl/source/items/stylepool";
-import type { IStyleAccess, SwAutoStyleFamily } from "../../../inc/istyleaccess";
+import { SwAutoStyleFamily, type IStyleAccess } from "../../../inc/istyleaccess";
+
+import { SwAttrSet } from "../attr/swatrset";
 
 /** Original native style-name cache; values own their shared pointer, including empty entries created by operator[]. */
 class SwStyleCache {
@@ -37,47 +39,67 @@ class SwStyleCache {
 class SwStyleManager implements IStyleAccess {
   private readonly autoCharPool = new StylePool();
   private readonly charCache = new SwStyleCache();
-  /** Original insertion through the represented native character pool. @param set - Concrete items. @param family - Character family. @param parentName - Optional native parent name. @returns Owned shared pointee. */
-  getAutomaticStyle(
-    set: SfxItemSet,
-    family: SwAutoStyleFamily.AUTO_STYLE_CHAR,
-    parentName?: string,
-  ): SfxItemSet {
-    void family;
-    return this.autoCharPool.insertItemSet(set, parentName);
+  private readonly autoParaPool: StylePool;
+  private readonly paraCache = new SwStyleCache();
+  /** Creates separate character and paragraph pools. @param ignorableParagraphItems - Paragraph ignorable ranges. @returns Manager. */
+  constructor(ignorableParagraphItems?: SfxItemSet) {
+    this.autoParaPool = new StylePool(ignorableParagraphItems);
   }
-  /** Original insert/cache/return sequence. @param set - Concrete items. @param family - Character family. @returns Owned shared pointee. */
-  cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily.AUTO_STYLE_CHAR): SfxItemSet {
+  /** Original insertion through the native family pool. @param set - Concrete items. @param family - Automatic-style family. @param parentName - Optional native parent name. @returns Owned shared pointee. */
+  getAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily, parentName?: string): SfxItemSet {
+    if (family === SwAutoStyleFamily.AUTO_STYLE_PARA && !(set instanceof SwAttrSet))
+      throw new Error("assert paragraph automatic style requires SwAttrSet");
+    const pool =
+      family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool;
+    return pool.insertItemSet(set, parentName);
+  }
+  /** Original insert/cache/return sequence. @param set - Concrete items. @param family - Automatic-style family. @returns Owned shared pointee. */
+  cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily): SfxItemSet {
     const style = this.getAutomaticStyle(set, family);
-    this.charCache.addStyleName(style);
+    const cache = family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.charCache : this.paraCache;
+    cache.addStyleName(style);
     return style;
   }
-  /** Original uncached-name fallback populates the complete pool without replacing its representative-selection policy. @param name - Opaque identity. @param family - Character family. @returns Owned shared pointee or empty. */
-  getByName(name: string, family: SwAutoStyleFamily.AUTO_STYLE_CHAR): SfxItemSet | undefined {
-    void family;
-    let style = this.charCache.getByName(name);
+  /** Original uncached-name fallback populates the complete pool without replacing its representative-selection policy. @param name - Opaque identity. @param family - Automatic-style family. @returns Owned shared pointee or empty. */
+  getByName(name: string, family: SwAutoStyleFamily): SfxItemSet | undefined {
+    const pool =
+        family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool,
+      cache = family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.charCache : this.paraCache;
+    let style = cache.getByName(name);
     if (style === undefined) {
-      this.charCache.addCompletePool(this.autoCharPool);
-      style = this.charCache.getByName(name);
+      cache.addCompletePool(pool);
+      style = cache.getByName(name);
+    }
+    if (
+      style !== undefined &&
+      family === SwAutoStyleFamily.AUTO_STYLE_PARA &&
+      !(style instanceof SwAttrSet)
+    ) {
+      releaseStyleHandle(style);
+      throw new Error("assert paragraph cached style requires SwAttrSet");
     }
     return style;
   }
-  /** Original used-style delegation. @param output - Owning shared-pointer vector. @param family - Character family. @returns Nothing. */
-  getAllStyles(output: SfxItemSet[], family: SwAutoStyleFamily.AUTO_STYLE_CHAR): void {
-    void family;
-    this.autoCharPool.getAllStyles(output);
+  /** Original used-style delegation. @param output - Owning shared-pointer vector. @param family - Automatic-style family. @returns Nothing. */
+  getAllStyles(output: SfxItemSet[], family: SwAutoStyleFamily): void {
+    const pool =
+      family === SwAutoStyleFamily.AUTO_STYLE_CHAR ? this.autoCharPool : this.autoParaPool;
+    pool.getAllStyles(output);
   }
   /** Original cache clear. @returns Nothing. */
   clearCaches(): void {
     this.charCache.clear();
+    this.paraCache.clear();
   }
   /** Logical native manager destruction releases cache before its pool. @returns Nothing. */
   Dispose(): void {
     this.charCache.clear();
+    this.paraCache.clear();
     this.autoCharPool.Dispose();
+    this.autoParaPool.Dispose();
   }
 }
-/** Creates a document's represented automatic-style owner. @returns Style-access manager. */
-export function createStyleManager(): IStyleAccess {
-  return new SwStyleManager();
+/** Creates a document's automatic-style owner. @param ignorableParagraphItems - Paragraph ignorable ranges. @returns Style-access manager. */
+export function createStyleManager(ignorableParagraphItems?: SfxItemSet): IStyleAccess {
+  return new SwStyleManager(ignorableParagraphItems);
 }

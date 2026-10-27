@@ -73,7 +73,9 @@ function rtl_ImplGetFastUTF8ByteLen(source: Uint16Array, length: number): number
       let scalar = character;
       if (i + 1 < length && isLowSurrogate(source[i + 1] as number))
         scalar = combineSurrogates(scalar, source[++i] as number);
-      count += scalar < 0x10000 ? 3 : scalar < 0x200000 ? 4 : scalar < 0x4000000 ? 5 : 6;
+      // This UTF-16 specialization admits one UInt16 unit or a surrogate pair,
+      // hence at most U+10FFFF. Native generic five/six-byte cases have no input.
+      count += scalar < 0x10000 ? 3 : 4;
     }
   }
   return count;

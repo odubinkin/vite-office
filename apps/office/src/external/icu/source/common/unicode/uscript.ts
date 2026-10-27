@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 UScriptCode values; other script services remain unported. */
+/** @fileoverview Original ICU78.3 UScriptCode values and the original short-name getter declaration; other script services remain unported. */
 export enum UScriptCode {
   USCRIPT_INVALID_CODE = -1,
   USCRIPT_COMMON = 0,
@@ -228,3 +228,5 @@ export enum UScriptCode {
   USCRIPT_TRADITIONAL_HAN_WITH_LATIN = 212,
   USCRIPT_CODE_LIMIT = 213,
 }
+/** Original public header declaration of the single propname.cpp implementation owner. */
+export { uscript_getShortName } from "../propname";

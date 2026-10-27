@@ -1,14 +1,180 @@
-/** @fileoverview Complete original weak.cxx OWeakRefListener and WeakReferenceHelper owners; native JS catch/finally and actual OSL counts retain explicit listener/adapter ownership. Weak object/aggregation and native thread synchronization remain separate responsibilities. */
+/** @fileoverview Original non-aggregating weak.cxx object, connection point, listener and helper owners; actual OSL counts and References retain native ownership. Synchronous JS replaces mutex scope and transports caught UNO values; aggregation, native threads and binary exception ABI remain separate responsibilities. */
 import { Reference } from "../../cppu/inc/com/sun/star/uno/Reference";
 import { RuntimeException } from "../../cppu/inc/com/sun/star/uno/RuntimeException";
 import { XWeak, cppu_detail_getUnoType as weakType } from "../../cppu/inc/com/sun/star/uno/XWeak";
 import { XReference } from "../../cppu/inc/com/sun/star/uno/XReference";
-import type { XAdapter } from "../../cppu/inc/com/sun/star/uno/XAdapter";
+import { XAdapter } from "../../cppu/inc/com/sun/star/uno/XAdapter";
+import { DisposedException } from "../../cppu/inc/com/sun/star/lang/DisposedException";
 import type { Type } from "../../cppu/inc/com/sun/star/uno/Type";
 import type { Any } from "../../cppu/inc/com/sun/star/uno/Any";
 import { UnoType } from "../../cppu/inc/unotype";
 import { queryInterface } from "../inc/queryinterface";
 import { osl_atomic_increment, osl_atomic_decrement } from "../../sal/inc/osl/interlck";
+
+/** Original source friend access to the actual protected counter; no second counter or mutation API is introduced. */
+type WeakObjectFriend = { readonly m_refCount: Int32Array };
+
+/** Original internal connection point retains a borrowed weak object and owned listener References. */
+class OWeakConnectionPoint implements XAdapter {
+  private readonly m_aRefCount = new Int32Array([0]);
+  private m_aReferences: Reference[] = [];
+  /** Original constructor borrows the weak object without acquiring it. @param m_pObject - Actual object or null. @returns Connection point. */
+  constructor(private m_pObject: OWeakObject | null) {}
+  /** Original declared adapter/root interface order. @param type - Demanded type. @returns Acquired actual Any. */
+  queryInterface(type: Type): Any {
+    return queryInterface(type, [
+      [XAdapter.static_type, this],
+      [
+        /** Original root type expression. @returns Borrowed type. */ () =>
+          UnoType.get("XInterface"),
+        this,
+      ],
+    ]);
+  }
+  /** Original atomic acquisition. @returns Nothing. */
+  acquire(): void {
+    osl_atomic_increment(this.m_aRefCount);
+  }
+  /** Original zero-count destruction releases remaining vector members. @returns Nothing. */
+  release(): void {
+    if (!osl_atomic_decrement(this.m_aRefCount)) {
+      for (const reference of this.m_aReferences) reference.dispose();
+      this.m_aReferences.length = 0;
+    }
+  }
+  /** Original atomic guard refuses resurrection at count0; direct counter rollback deliberately does not invoke virtual release. @returns Hardened root reference or empty. */
+  queryAdapted(): Reference {
+    const result = new Reference(),
+      object = this.m_pObject;
+    if (!object) return result;
+    const counter = (object as unknown as WeakObjectFriend).m_refCount;
+    const count = osl_atomic_increment(counter);
+    if (count <= 1) {
+      osl_atomic_decrement(counter);
+      return result;
+    }
+    result.assign(object);
+    osl_atomic_decrement(counter);
+    return result;
+  }
+  /** Original vector push_back copies the supplied declared interface reference. @param reference - Borrowed listener reference. @returns Nothing. */
+  addReference(reference: Reference): void {
+    this.m_aReferences.push(new Reference(reference));
+  }
+  /** Original reverse raw-pointer search precedes reverse root-identity comparison. @param reference - Borrowed listener. @returns Nothing. */
+  removeReference(reference: Reference): void {
+    for (let index = this.m_aReferences.length - 1; index >= 0; --index) {
+      if ((this.m_aReferences[index] as Reference).get() === reference.get()) {
+        (this.m_aReferences.splice(index, 1)[0] as Reference).dispose();
+        return;
+      }
+    }
+    for (let index = this.m_aReferences.length - 1; index >= 0; --index) {
+      if ((this.m_aReferences[index] as Reference).operatorEquals(reference)) {
+        (this.m_aReferences.splice(index, 1)[0] as Reference).dispose();
+        return;
+      }
+    }
+  }
+  /** Original snapshot and last-RuntimeException selection; JS retains the actual caught UNO value across callbacks instead of the native C++/binary exception bridge. @returns Nothing; the last actual RuntimeException propagates. */
+  dispose(): void {
+    this.m_pObject = null;
+    const references = this.m_aReferences;
+    this.m_aReferences = [];
+    let pending: RuntimeException | null = null;
+    try {
+      for (const reference of references) {
+        try {
+          (reference.get() as XReference).dispose();
+        } catch (error) {
+          if (error instanceof DisposedException) error.dispose();
+          else if (error instanceof RuntimeException) {
+            pending?.dispose();
+            pending = error;
+          } else throw error;
+        }
+      }
+      if (pending) {
+        const error = pending;
+        pending = null;
+        throw error;
+      }
+    } finally {
+      for (const reference of references) reference.dispose();
+      pending?.dispose();
+    }
+  }
+}
+
+/** Original non-aggregating weak object; actual Reference callers own its zero-starting count. */
+export class OWeakObject implements XWeak {
+  protected readonly m_refCount = new Int32Array([0]);
+  protected m_pWeakConnectionPoint: OWeakConnectionPoint | null = null;
+  protected m_pReserved: unknown = null;
+  /** Original default and dummy-copy constructors initialize fresh zero/null fields and ignore the source object. @param source - Optional native copy source. @returns Object. */
+  constructor(source?: Readonly<OWeakObject>) {
+    void source;
+  }
+  /** Original dummy assignment does not affect fields, counters or listeners. @param source - Ignored right side. @returns This object. */
+  assign(source: Readonly<OWeakObject>): this {
+    void source;
+    return this;
+  }
+  /** Original declared weak/root query order. @param type - Demanded type. @returns Acquired actual Any. */
+  queryInterface(type: Type): Any {
+    return queryInterface(type, [
+      [XWeak.static_type, this],
+      [
+        /** Original root type expression. @returns Borrowed type. */ () =>
+          UnoType.get("XInterface"),
+        this,
+      ],
+    ]);
+  }
+  /** Original atomic acquisition. @returns Nothing. */
+  acquire(): void {
+    osl_atomic_increment(this.m_refCount);
+  }
+  /** Original weak disposal precedes virtual object destruction. @returns Nothing. */
+  release(): void {
+    if (!osl_atomic_decrement(this.m_refCount)) {
+      this.disposeWeakConnectionPoint();
+      this.destroy();
+    }
+  }
+  /** Original diagnostic-only count0 precondition and early member reset; only RuntimeException is swallowed. @returns Nothing. */
+  protected disposeWeakConnectionPoint(): void {
+    if (this.m_pWeakConnectionPoint !== null) {
+      const point = this.m_pWeakConnectionPoint;
+      this.m_pWeakConnectionPoint = null;
+      try {
+        point.dispose();
+      } catch (error) {
+        caughtRuntimeException(error);
+      }
+      point.release();
+    }
+  }
+  /** Original empty virtual destructor; derived components release their own members here. @returns Nothing. */
+  protected destroy(): void {}
+  /** Original lazy connection point retains one owner reference, then returns a separately acquired caller reference. @returns Actual adapter reference. */
+  queryAdapter(): Reference {
+    if (!this.m_pWeakConnectionPoint) {
+      const point = new OWeakConnectionPoint(this);
+      point.acquire();
+      this.m_pWeakConnectionPoint = point;
+    }
+    return new Reference(this.m_pWeakConnectionPoint);
+  }
+  /** Original cast to an acquired root reference. @returns Strong reference. */
+  operatorReference(): Reference {
+    return new Reference(this);
+  }
+  /** Original internal borrowed XWeak pointer. @returns This same weak interface. */
+  getXWeak(): XWeak {
+    return this;
+  }
+}
 
 /** Native catch(RuntimeException&) filter and caught-object destruction; JS catch has no typed filter. OSL_ASSERT is diagnostic in the selected original debug0 build. @param error - Actual caught value. @returns Nothing. */
 function caughtRuntimeException(error: unknown): void {

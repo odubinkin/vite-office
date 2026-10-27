@@ -28,7 +28,11 @@ const wrappers = [
   "void SAL_CALL rtl_string2UString(",
   "sal_Bool rtl_convertStringToUString(",
 ]
-  .map((marker) => definition(unicode, marker))
+  .map(
+    /** Applies map to marker. @param marker - marker value. @returns Callback result. */ (
+      marker,
+    ) => definition(unicode, marker),
+  )
   .join("\n");
 let base = reverseDriver.slice(0, reverseDriver.indexOf("struct Event"));
 base = base.replace(
@@ -69,8 +73,8 @@ static Result convert(unsigned encoding,std::vector<unsigned> const& input,unsig
 static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4;++i){hash^=(value>>(8*i))&255;hash*=16777619u;}return hash;}
 int main(){rtl_allocateString=observeAllocate;rtl_freeString=observeFree;std::cout<<"{\"digests\":[";bool comma=false;
 for(unsigned encoding:{1u,11u,12u,76u})for(bool checked:{false,true}){std::uint32_t hash=2166136261u;for(unsigned unit=0;unit<65536;++unit){auto r=convert(encoding,{unit>>8,unit&255},0x333,checked);for(unsigned value:{unit,unsigned(r.ok),unsigned(r.same),unsigned(r.ref),unsigned(r.length),r.id})hash=mix(hash,value);for(unsigned u:r.units)hash=mix(hash,u);for(auto const& e:r.events){hash=mix(hash,e.kind);hash=mix(hash,e.id);hash=mix(hash,e.bytes);}}if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"checked\":"<<checked<<",\"hash\":"<<hash<<"}";}
-std::cout<<"],\"cases\":[";comma=false;std::vector<std::vector<unsigned>> inputs={${inputs.map((a) => `{${a.join(",")}}`).join(",")}};
-for(unsigned encoding:{1u,11u,12u,76u})for(unsigned input=0;input<inputs.size();++input)for(unsigned flags:{${flagSets.map((f) => f + "u").join(",")}})for(bool checked:{false,true}){auto r=convert(encoding,inputs[input],flags,checked);if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"input\":"<<input<<",\"flags\":"<<flags<<",\"checked\":"<<checked<<",\"ok\":"<<r.ok<<",\"same\":"<<r.same<<",\"ref\":"<<r.ref<<",\"length\":"<<r.length<<",\"id\":"<<r.id<<",\"units\":[";for(unsigned i=0;i<r.units.size();++i){if(i)std::cout<<',';std::cout<<r.units[i];}std::cout<<"],\"events\":[";for(unsigned i=0;i<r.events.size();++i){if(i)std::cout<<',';auto e=r.events[i];std::cout<<'['<<e.kind<<','<<e.id<<','<<e.bytes<<']';}std::cout<<"]}";}std::cout<<"]}\n";}
+std::cout<<"],\"cases\":[";comma=false;std::vector<std::vector<unsigned>> inputs={${inputs.map(/** Applies map to a. @param a - a value. @returns Callback result. */ (a) => `{${a.join(",")}}`).join(",")}};
+for(unsigned encoding:{1u,11u,12u,76u})for(unsigned input=0;input<inputs.size();++input)for(unsigned flags:{${flagSets.map(/** Applies map to f. @param f - f value. @returns Callback result. */ (f) => f + "u").join(",")}})for(bool checked:{false,true}){auto r=convert(encoding,inputs[input],flags,checked);if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"input\":"<<input<<",\"flags\":"<<flags<<",\"checked\":"<<checked<<",\"ok\":"<<r.ok<<",\"same\":"<<r.same<<",\"ref\":"<<r.ref<<",\"length\":"<<r.length<<",\"id\":"<<r.id<<",\"units\":[";for(unsigned i=0;i<r.units.size();++i){if(i)std::cout<<',';std::cout<<r.units[i];}std::cout<<"],\"events\":[";for(unsigned i=0;i<r.events.size();++i){if(i)std::cout<<',';auto e=r.events[i];std::cout<<'['<<e.kind<<','<<e.id<<','<<e.bytes<<']';}std::cout<<"]}";}std::cout<<"]}\n";}
 `;
 mkdirSync(output, { recursive: true });
 writeFileSync(`${output}/probe.cxx`, driver);

@@ -169,22 +169,26 @@ export function GetTextNodeParaAttr(
   const format = new SfxItemSet(result.GetPool(), result.GetRanges());
   if (!onlyText) format.Set(node.GetSwAttrSet());
   /** Consumes lcl_MergeAttr_ExpandChrFormat's supported families, then the original direct item. @param target - Query result. @param item - Actual attribute. @returns Nothing. */
-  const merge = (target: SfxItemSet, item: SfxPoolItem): void => {
-    if (
-      (fromCharacterFormat || item instanceof SwFormatAutoFormat) &&
-      (item instanceof SwFormatAutoFormat ||
-        item instanceof SwFormatCharFormat ||
-        item instanceof SwFormatINetFormat)
-    ) {
-      const set = CharFormat.GetItemSet(item);
-      if (set !== undefined)
-        for (let which = RES_CHRATR_BEGIN; which < RES_CHRATR_END; which++) {
-          const value = set.GetItemIfSet(which, true);
-          if (value !== undefined) target.Put(value);
-        }
-    }
-    target.Put(item);
-  };
+  const merge =
+    /** Evaluates the thints callback. @param target - target value. @param item - item value. @returns Nothing. */ (
+      target: SfxItemSet,
+      item: SfxPoolItem,
+    ): void => {
+      if (
+        (fromCharacterFormat || item instanceof SwFormatAutoFormat) &&
+        (item instanceof SwFormatAutoFormat ||
+          item instanceof SwFormatCharFormat ||
+          item instanceof SwFormatINetFormat)
+      ) {
+        const set = CharFormat.GetItemSet(item);
+        if (set !== undefined)
+          for (let which = RES_CHRATR_BEGIN; which < RES_CHRATR_END; which++) {
+            const value = set.GetItemIfSet(which, true);
+            if (value !== undefined) target.Put(value);
+          }
+      }
+      target.Put(item);
+    };
   const previous = new Map<number, { item: SfxPoolItem; end: number } | null>();
   for (const hint of node.GetpSwpHints()?.entries() ?? []) {
     const first = hint.GetStart(),

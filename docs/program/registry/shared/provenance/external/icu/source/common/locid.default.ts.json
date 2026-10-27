@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/locid.default.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/locid.cpp",
+    "localSymbols": [
+      "locale_set_default_internal",
+      "locale_set_default",
+      "locale_get_default",
+      "getDefaultLocale"
+    ],
+    "upstreamSymbols": [
+      "locale_set_default_internal",
+      "locale_set_default",
+      "locale_get_default",
+      "Locale::getDefault"
+    ],
+    "preservedResponsibilities": [
+      "Original default-locale ownership/cache path canonicalizes only null/host IDs, normalizes explicit IDs, looks up by first normalized C name and inserts under the actual Locale name. getDefault returns the borrowed cached owner; setters preserve incoming failures and actual copied/default/fixed owner distinctions. Native host-independent decision flow is verified with the same semantic host ID through an unchanged locid.cpp platform-function redirect. C-string cache identity and cache reuse are retained without native addresses. The browser supplies only its semantic locale identity; POSIX environment/category/charset equivalence, native mutex/cleanup/hash/allocator/ABI, modern alias-resource canonicalization and full calendar services remain uncertified or pending."
+    ],
+    "omittedResponsibilities": [
+      "Modern alias-resource canonicalization, likely subtags, locale resource fallback and calendar services remain pending; native allocation/ABI is uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/locid.default.ts",
+          "marker": "locale_set_default_internal"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/locid.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/locid.cpp",
+          "marker": "locale_set_default_internal"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/locid.default.ts",
+      "rationale": "Original large source implementation is split by normalization/default ownership responsibility while sharing actual Locale owners and original parser/conversion modules.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

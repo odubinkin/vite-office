@@ -50,11 +50,21 @@ export function md_build_ref_def_hashtable(ctx: MD_REF_CONTEXT): void {
         ctx.ref_def_hashtable[slot] = [bucket, def];
     } else bucket.push(def);
   }
-  const order = new Map(ctx.ref_defs.map((def, index) => [def, index]));
+  const order = new Map(
+    ctx.ref_defs.map(
+      /** Applies map to def, index. @param def - def value. @param index - index value. @returns Callback result. */ (
+        def,
+        index,
+      ) => [def, index],
+    ),
+  );
   for (const bucket of ctx.ref_def_hashtable) {
     if (!Array.isArray(bucket)) continue;
     bucket.sort(
-      (a, b) => md_ref_def_cmp(a, b) || (order.get(a) as number) - (order.get(b) as number),
+      /** Applies sort to a, b. @param a - a value. @param b - b value. @returns Callback result. */ (
+        a,
+        b,
+      ) => md_ref_def_cmp(a, b) || (order.get(a) as number) - (order.get(b) as number),
     );
     for (let index = 1; index < bucket.length; index++)
       if (md_ref_def_cmp(bucket[index - 1] as MD_REF_DEF, bucket[index] as MD_REF_DEF) === 0)

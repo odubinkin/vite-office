@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/bytestream.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/bytestream.cpp",
+    "localSymbols": [
+      "ByteSink",
+      "CheckedArrayByteSink",
+      "asByteSink"
+    ],
+    "upstreamSymbols": [
+      "ByteSink::GetAppendBuffer",
+      "CheckedArrayByteSink::Append"
+    ],
+    "preservedResponsibilities": [
+      "Original base/checked ByteSink state and methods retain negative-capacity clamp, actual written versus attempted counts, INT32_MAX saturation, overflow, reset-without-clearing, direct/scratch append-buffer choice, exact alias skip and native validation order. Typed array views project actual mutable pointers. Existing immutable counted-string sinks use one explicit ByteSink default-method projection; real source-shaped sinks retain their identity, so parser GetAppendBuffer writes affect the actual C buffer before Append. Native probe1530 cases includes524290 valid-readable4096-byte saturation appends. Invalid pointer/readable ranges, non-identical overlapping memcpy, native allocation/ABI and unrelated stream classes remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibilities are ported; native pointer/allocator/ABI and complete locale/calendar integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/bytestream.ts",
+          "marker": "ByteSink"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/bytesinkutil.test.ts",
+          "marker": "source"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/bytestream.cpp",
+          "marker": "ByteSink::GetAppendBuffer"
+        }
+      ]
+    }
+  }
+}

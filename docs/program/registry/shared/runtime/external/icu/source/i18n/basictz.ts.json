@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/basictz.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/basictz.ts",
+        "apps/office/src/external/icu/source/i18n/simpletz.test.ts",
+        "scripts/icu-simpletz-native-probe.mjs",
+        "scripts/icu-calendar-time-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports BasicTimeZone constructor forwarding, option masks, original default getOffsetFromLocal error/output behavior and abstract native transition/count/borrowed-rule query contracts. Actual SimpleTimeZone supplies these methods. Broader equivalent-transition and rule-extraction helpers, native system/IANA factory and allocation/ABI contracts remain unported or uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BasicTimeZone",
+        "getOffsetFromLocal"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/basictz.cpp",
+      "upstreamSymbols": [
+        "BasicTimeZone::BasicTimeZone",
+        "BasicTimeZone::getOffsetFromLocal"
+      ]
+    }
+  }
+}

@@ -32,13 +32,19 @@ function font(name: string): SvxFontItem {
 /** Collects original callback order without deduplicating inherited values. @param doc - Actual document. @param ignore - Original auto-style gate. @returns Names. */
 function names(doc: SwDoc, ignore = false): string[] {
   const result: string[] = [];
-  doc.ForEachCharacterFontItem(RES_CHRATR_FONT, ignore, (item) => {
-    result.push(item.GetFamilyName());
-    return true;
-  });
+  doc.ForEachCharacterFontItem(
+    RES_CHRATR_FONT,
+    ignore,
+    /** Applies ForEachCharacterFontItem to item. @param item - item value. @returns Callback result. */ (
+      item,
+    ) => {
+      result.push(item.GetFamilyName());
+      return true;
+    },
+  );
   return result;
 }
-it("visits named characters, inherited paragraph collections, nodes and automatic styles in source order", () => {
+it("visits named characters, inherited paragraph collections, nodes and automatic styles in source order", /** Verifies visits named characters, inherited paragraph collections, nodes and automatic styles in source order. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     const char = doc.MakeCharFormat("Char", undefined);
@@ -56,10 +62,16 @@ it("visits named characters, inherited paragraph collections, nodes and automati
       expect(names(doc)).toEqual(["Character", "Paragraph", "Node", "Auto"]);
       expect(names(doc, true)).toEqual(["Character", "Paragraph", "Node"]);
       const first: string[] = [];
-      doc.ForEachCharacterFontItem(RES_CHRATR_FONT, false, (item) => {
-        first.push(item.GetFamilyName());
-        return false;
-      });
+      doc.ForEachCharacterFontItem(
+        RES_CHRATR_FONT,
+        false,
+        /** Verifies visits named characters, inherited paragraph collections, nodes and automatic styles in source order. @param item - item value. @returns Callback result. */ (
+          item,
+        ) => {
+          first.push(item.GetFamilyName());
+          return false;
+        },
+      );
       expect(first).toEqual(["Character"]);
     } finally {
       releaseStyleHandle(handle);
@@ -70,7 +82,7 @@ it("visits named characters, inherited paragraph collections, nodes and automati
     doc.Dispose();
   }
 });
-it("retains styles through actual hint snapshots and cache owners, then skips them after the last external owner", () => {
+it("retains styles through actual hint snapshots and cache owners, then skips them after the last external owner", /** Verifies retains styles through actual hint snapshots and cache owners, then skips them after the last external owner. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     const node = doc.paragraphs[0];
@@ -103,7 +115,7 @@ it("retains styles through actual hint snapshots and cache owners, then skips th
     doc.Dispose();
   }
 });
-it("releases non-shareable automatic items through actual item-set, and holder destruction", () => {
+it("releases non-shareable automatic items through actual item-set, and holder destruction", /** Verifies releases non-shareable automatic items through actual item-set, and holder destruction. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     const set = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
@@ -128,7 +140,9 @@ it("releases non-shareable automatic items through actual item-set, and holder d
 
 it.each(["false", "throw"])(
   "releases the complete native automatic-style vector on callback %s",
-  (policy) => {
+  /** Verifies releases the complete native automatic-style vector on callback %s. @param policy - policy value. @returns Nothing. */ (
+    policy,
+  ) => {
     const doc = new SwDoc(),
       handles: SfxItemSet[] = [];
     try {
@@ -140,11 +154,16 @@ it.each(["false", "throw"])(
         );
         set.Dispose();
       }
-      const visit = (): void =>
-        doc.ForEachCharacterFontItem(RES_CHRATR_FONT, false, () => {
-          if (policy === "throw") throw new Error("callback stop");
-          return false;
-        });
+      const visit =
+        /** Verifies releases the complete native automatic-style vector on callback %s. @returns Callback result. */ (): void =>
+          doc.ForEachCharacterFontItem(
+            RES_CHRATR_FONT,
+            false,
+            /** Verifies releases the complete native automatic-style vector on callback %s. @returns Callback result. */ () => {
+              if (policy === "throw") throw new Error("callback stop");
+              return false;
+            },
+          );
       if (policy === "throw") expect(visit).toThrow("callback stop");
       else visit();
       expect(handles.map(styleHandleUseCount)).toEqual([2, 2]);

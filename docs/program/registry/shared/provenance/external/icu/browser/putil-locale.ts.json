@@ -1,0 +1,29 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/external/icu/browser/putil-locale.ts",
+    "rationale": "Browser binding for uprv_getDefaultLocaleID captures Intl resolvedOptions().locale once, supplying a semantic language-tag identity to the original ICU normalization/default cache. No POSIX LC_MESSAGES/environment/charset model, independent OS equivalent or invented fallback is claimed. Actual getRoot/default host-query count is covered by source-backed unit tests and the shared semantic-input native fixture; host API failure and native platform equivalence remain uncertified.",
+    "responsibilities": [
+      "Browser binding for uprv_getDefaultLocaleID captures Intl resolvedOptions().locale once, supplying a semantic language-tag identity to the original ICU normalization/default cache. No POSIX LC_MESSAGES/environment/charset model, independent OS equivalent or invented fallback is claimed. Actual getRoot/default host-query count is covered by source-backed unit tests and the shared semantic-input native fixture; host API failure and native platform equivalence remain uncertified."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Intl semantic locale identity replaces unavailable native POSIX/OS locale-category queries."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/browser/putil-locale.ts",
+          "marker": "uprv_getDefaultLocaleID"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/locid.test.ts",
+          "marker": "host"
+        }
+      ]
+    }
+  }
+}

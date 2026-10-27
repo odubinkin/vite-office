@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/unicode/ucal.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/unicode/ucal.h",
+    "localSymbols": [
+      "UCalendarDaysOfWeek",
+      "UCalendarDateFields",
+      "UTimeZoneLocalOption",
+      "UCalendarWallTimeOption"
+    ],
+    "upstreamSymbols": [
+      "UCalendarDaysOfWeek",
+      "UCalendarDateFields",
+      "UTimeZoneLocalOption",
+      "UCalendarWallTimeOption"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports complete consumed ICU weekday/date-field/local-time and wall-time enums with their original values, aliases and masks; other C calendar APIs remain unported.",
+      "Original UCalendarWeekdayType numbering now also supports actual Calendar weekend classification and transition APIs; constructor/weekend witnesses use these enum values without an alternate weekend model."
+    ],
+    "omittedResponsibilities": [
+      "Full ICU calendar/service graph and unconsumed APIs remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/unicode/ucal.ts",
+          "marker": "UCalendarDaysOfWeek"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/unicode/ucal.h",
+          "marker": "UCalendarDaysOfWeek"
+        }
+      ]
+    }
+  }
+}

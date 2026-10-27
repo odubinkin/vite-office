@@ -94,7 +94,12 @@ export class CSS1Parser {
     } while (identifier(this.m_cNextCh) && !this.m_bEOF);
     return value;
   }
-  /** Executes the native context-independent lexer, including its original fallback and rewind branches. @returns Next token. */
+  /** Executes the native context-independent lexer, including its original fallback and rewind branches.
+   * Every call consumes an input unit or reaches EOF. Hex/unit rewinds stay inside the
+   * current token, never before its start; parser loops either call this lexer or exit.
+   * Consequently a repeated non-EOF input position cannot occur in those loops.
+   * @returns Next token.
+   */
   private GetNextToken(): T {
     let result = T.NULL;
     this.m_aToken = "";
@@ -336,19 +341,13 @@ export class CSS1Parser {
       if (!value.length) return;
       this.InitRead(value);
     }
-    let done = false,
-      old = 0x7fffffff;
+    let done = false;
     while (!done && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       if (this.m_nToken === T.IMPORT_SYM) this.m_nToken = this.GetNextToken();
       else if ([T.IDENT, T.DOT_W_WS, T.HASH, T.PAGE_SYM].includes(this.m_nToken)) done = true;
       if (!done) this.m_nToken = this.GetNextToken();
     }
-    old = 0x7fffffff;
     while (this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       if ([T.IDENT, T.DOT_W_WS, T.HASH, T.PAGE_SYM].includes(this.m_nToken)) this.ParseRule();
       else this.m_nToken = this.GetNextToken();
     }
@@ -362,10 +361,7 @@ export class CSS1Parser {
     let expression = this.ParseDeclaration(property);
     if (expression === undefined) return;
     this.DeclarationParsed(property.value, expression);
-    let old = 0x7fffffff;
     while (this.m_nToken === T.SEMICOLON && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       this.m_nToken = this.GetNextToken();
       if (this.m_nToken === T.IDENT) {
         expression = this.ParseDeclaration(property);
@@ -380,10 +376,7 @@ export class CSS1Parser {
     let selector = this.ParseSelector();
     if (selector === undefined) return;
     this.SelectorParsed(selector, true);
-    let old = 0x7fffffff;
     while (this.m_nToken === T.COMMA && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       this.m_nToken = this.GetNextToken();
       selector = this.ParseSelector();
       if (selector === undefined) return;
@@ -395,10 +388,7 @@ export class CSS1Parser {
     let expression = this.ParseDeclaration(property);
     if (expression === undefined) return;
     this.DeclarationParsed(property.value, expression);
-    old = 0x7fffffff;
     while (this.m_nToken === T.SEMICOLON && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       this.m_nToken = this.GetNextToken();
       if (this.m_nToken === T.IDENT) {
         expression = this.ParseDeclaration(property);
@@ -411,11 +401,8 @@ export class CSS1Parser {
   private ParseSelector(): CSS1Selector | undefined {
     let root: CSS1Selector | undefined,
       last: CSS1Selector | undefined,
-      done = false,
-      old = 0x7fffffff;
+      done = false;
     while (!done && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       let next = true,
         component: CSS1Selector | undefined;
       switch (this.m_nToken) {
@@ -476,11 +463,8 @@ export class CSS1Parser {
     this.m_nToken = this.GetNextToken();
     let done = false,
       sign = 0,
-      op = 0,
-      old = 0x7fffffff;
+      op = 0;
     while (!done && this.m_eState === S.WORKING) {
-      if (old === this.m_nInPos && this.m_cNextCh !== EOF) break;
-      old = this.m_nInPos;
       let expression: CSS1Expression | undefined;
       if (this.m_nToken === T.MINUS) sign = 45;
       else if (this.m_nToken === T.PLUS) sign = 43;

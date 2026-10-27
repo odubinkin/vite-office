@@ -1,0 +1,96 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original non-aggregating OWeakObject and internal OWeakConnectionPoint, weak.hxx inline helpers and real Reference/WeakReferenceHelper integration. No complete component, DOCX/XLSX or UI claim.",
+  "sourceBlobs": {
+    "apps/office/src/cppuhelper/source/weak.ts": "0fecdc34072b5a232d690fb52e3e2d73de56acd3",
+    "apps/office/src/cppuhelper/inc/weak.ts": "1088fac23d0586a515b7f346c43213576a3e3293",
+    "apps/office/src/cppuhelper/source/native-weak-object.test.ts": "d90a7ed961b8959eade83f1f22dd0474c17f8de9",
+    "docs/program/registry/shared/runtime/cppuhelper/source/weak.ts.json": "c42792e293b5bb65b09b4c8e912bbddf8a1ff28b",
+    "docs/program/registry/shared/runtime/cppuhelper/inc/weak.ts.json": "1023687443296fdea008e4c9c1b17b64354805b2",
+    "docs/program/registry/shared/provenance/cppuhelper/source/weak.ts.json": "50f2e3c9c8321980b957716dce317ca8705b48b7",
+    "docs/program/registry/shared/provenance/cppuhelper/inc/weak.ts.json": "5e345e969bb7338312711343d93eadbe57b2e0bd",
+    "docs/program/registry/shared/capabilities/CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06.json": "98e1ae97da6b8f953b6a1b1fa32aad06dc2eaac3"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage -- src/cppuhelper/ src/cppu/inc/com/sun/star/uno/ src/sw/source/writerfilter/dmapper/native-track-changes.test.ts --coverage.include=src/cppuhelper/source/weak.ts --coverage.include=src/cppuhelper/inc/weak.ts --coverage.reportsDirectory=coverage/native-weak-object --maxWorkers=2",
+      "cwd": "apps/office",
+      "result": "pass:72 tests/15 files; ten new real-owner cases including original testReferenceDispose callback order",
+      "statements": "203/203",
+      "branches": "66/66",
+      "functions": "40/40",
+      "lines": "190/190",
+      "perFile": {
+        "apps/office/src/cppuhelper/inc/weak.ts": {
+          "s": {
+            "covered": 5,
+            "total": 5
+          },
+          "f": {
+            "covered": 2,
+            "total": 2
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/cppuhelper/source/weak.ts": {
+          "s": {
+            "covered": 198,
+            "total": 198
+          },
+          "f": {
+            "covered": 38,
+            "total": 38
+          },
+          "b": {
+            "covered": 64,
+            "total": 64
+          }
+        }
+      }
+    },
+    "typecheck": "pass: npm run typecheck (tools and app)",
+    "static": "pass: npm run test:static (production build and static smoke)",
+    "eslint": "pass: three changed TypeScript files, max-warnings0",
+    "prettier": "pass: eight changed code/registry files",
+    "dependencies": "pass:1508 runtime sources/7641 relative imports/201 allowed cross-module edges",
+    "docs": "pass:3515 authored source files",
+    "fileSize": "pass:3519 authored files; both new owners below500-line review threshold",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "sourceProvenance": "pass:1509 runtime modules/1304 mapped/178 browser adaptations/27 local infrastructure",
+    "registry": {
+      "capabilityCount": 340,
+      "moduleCount": 1509,
+      "invariantCount": 34,
+      "globalRecordCount": 3422
+    },
+    "doctor": "pass:0 errors; existing managed hook-shim warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "sourceReview": {
+    "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "paths": [
+      "include/cppuhelper/weak.hxx",
+      "cppuhelper/source/weak.cxx",
+      "cppuhelper/qa/weak/test_weak.cxx"
+    ]
+  },
+  "resolvedValidationFindings": [
+    "Initial test demanded erased UNO spelling long; corrected to actual source-declared sal_Int32 type argument. Production type helpers unchanged.",
+    "Initial provenance references omitted mandatory markers; corrected the records.",
+    "Added required JSDoc on all concrete test callbacks. No checks or thresholds weakened."
+  ],
+  "limitations": [
+    "Synchronous browser execution replaces mutex scope. JS retains actual caught UNO exception objects; no native C++/binary exception bridge or native exception allocation/context-refcount trace parity is claimed.",
+    "Ten new tests exercise the actual ported owners; six preexisting native weak-helper replay tests remain unchanged. No new compiled native OWeakObject capture.",
+    "Original aggregation and real WeakImplHelper/type provider remain missing before UnoComplexColor/CellColorHandler can be connected.",
+    "Writer DOCX and Calc XLSX import/export/model/UI acceptance remains incomplete.",
+    "Full suite not due under the approved ten-task cadence. UI paths are unchanged in this prerequisite block; complete desktop/mobile DOCX/XLSX scenarios remain pending.",
+    "Existing earlier msfilter util TransColToIco terminal fallback coverage observation remains open; this checkpoint certifies only the two scoped weak owners."
+  ],
+  "stopRule": "Local checkpoint only; no merge/integration/publication and no task completion."
+}

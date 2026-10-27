@@ -9,17 +9,23 @@
     "localSymbols": [
       "OWeakRefListener",
       "WeakReferenceHelper",
-      "caughtRuntimeException"
+      "caughtRuntimeException",
+      "OWeakConnectionPoint",
+      "OWeakObject",
+      "WeakObjectFriend"
     ],
     "upstreamSymbols": [
       "OWeakRefListener",
-      "WeakReferenceHelper"
+      "WeakReferenceHelper",
+      "OWeakConnectionPoint",
+      "OWeakObject"
     ],
     "preservedResponsibilities": [
-      "Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task."
+      "Task53 ports complete original OWeakRefListener and WeakReferenceHelper bodies and WeakReference wrapper from weak.cxx/weakref.hxx. Actual Reference/RuntimeException/OSL/queryInterface and original generated XWeak/XAdapter/XReference/Type/Any remain reused. Constructor count1 gate, explicit XWeak versus root-query overload, returned adapter move, actual temporary destruction and callback hardening retain source order. Native JS catch/finally adapts typed catch/destruction; mutex/physical/native thread/compiler/allocator/shutdown/fullconsumer behavior is not claimed. Erased WeakReference specialization stores only declared interface identity on its compiler-emitted class, never on instances or in a new type/default/value provider. Original internal WeakReference<XWeak> duplicate assignment signatures are preserved as a compile-binding rejection; WeakReferenceHelper XWeak overload remains valid. Genuine native --write and final --check pass:73 unchanged complete original translation units per normal-ASan/UBSan build,379 full source hashes,23 generated files (21 headers and2 parser sources),159 runtime/build commands exit0/signalnull and one separate expected original syntax-only compiler exit1. Five whole initialized runtime streams match normal/sanitized/pure replay: lifecycle5524/overloads6800/nulls1888/errors7408/destructor1812 bytes; runtime stderr empty. The actual original Reference<T> upcast is a borrowed root view, with no extra acquire/release. With all3 source links absent together, Calc106/24 and related shared167/47 tests pass, whole19/68 owners every raw S/F/B positive and S/B/F/L100 (Calc2920/2055/474/2564; shared4399/2226/575/3975). Task52 profile retained append-only; exact source links restored. Six adjacent cases pass including the original internal template rejection. No original exception bridge symbols remain unresolved; full weak.cxx is compiled and unrelated owners naturally dead-stripped without substitutes or unresolved-symbol suppression. Broad parity flags remain false. OWeakObject/OWeakConnectionPoint/OWeakAggObject and generic C++ exception bridge are subsequent owners, not stubbed by this task.",
+      "V4DQJW extends the same original weak.cxx owner with non-aggregating OWeakObject and internal OWeakConnectionPoint: zero-starting actual OSL count, lazy independently acquired adapter, guard increment/rollback against resurrection, reverse pointer search then actual root identity comparison, detached ordered listener snapshot, disposed-listener handling, last RuntimeException selection, weak invalidation before virtual destruction and dummy copy/assignment. Actual Reference, queryInterface, XWeak/XAdapter/XReference, Any and exception owners are reused. Synchronous browser execution replaces mutex scope; caught UNO exception values are retained directly rather than copied through the absent native C++/binary exception bridge. This preserves dynamic JS exception fields and selection, but does not certify native exception allocation/context-refcount traces, binary ABI, threads or shutdown. Ten added real-owner tests plus six existing complete native weak-helper replays cover both changed executable owners at unchanged scoped100. No new native OWeakObject capture or generic bridge parity is claimed. OWeakAggObject, WeakImplHelper, UnoComplexColor, CellColorHandler and full DOCX/XLSX model/UI workflows remain incomplete; broad parity flags stay unverified."
     ],
     "omittedResponsibilities": [
-      "Original weak object/connection/aggregation and generic exception bridge remain subsequent; physical ABI/native compiler/allocator/thread/shutdown and complete consumer QA unverified."
+      "OWeakAggObject and generic C++/binary exception bridge remain unported; native exception allocation/context-refcount traces, physical ABI/compiler/allocator/thread/shutdown and complete consumer QA unverified."
     ],
     "evidence": {
       "local": [
@@ -30,12 +36,20 @@
         {
           "path": "apps/office/src/cppuhelper/source/weakref.test.ts",
           "marker": "matches complete original weak reference"
+        },
+        {
+          "path": "apps/office/src/cppuhelper/source/native-weak-object.test.ts",
+          "marker": "rejects resurrection"
         }
       ],
       "upstream": [
         {
           "path": "cppuhelper/source/weak.cxx",
           "marker": "OWeakRefListener"
+        },
+        {
+          "path": "cppuhelper/source/weak.cxx",
+          "marker": "OWeakObject"
         }
       ]
     }

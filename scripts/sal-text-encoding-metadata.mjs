@@ -23,19 +23,31 @@ const ids = new Map(
     ...source("include/rtl/textenc.h").matchAll(
       /#define\s+(RTL_TEXTENCODING_\w+)\s+\(RTL_TEXTENC_CAST\(\s*(\d+)/g,
     ),
-  ].map((m) => [m[1], Number(m[2])]),
+  ].map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [
+      m[1],
+      Number(m[2]),
+    ],
+  ),
 );
 const flags = new Map(
   [
     ...source("include/rtl/tencinfo.h").matchAll(
       /#define\s+(RTL_TEXTENCODING_INFO_\w+)\s+\(\(sal_uInt32\)(0x[\dA-Fa-f]+)\)/g,
     ),
-  ].map((m) => [m[1], Number(m[2])]),
+  ].map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [
+      m[1],
+      Number(m[2]),
+    ],
+  ),
 );
 const core = source("sal/textenc/textenc.cxx");
 const factory = source("sal/textenc/tables.cxx");
 const bindings = new Map(
-  [...factory.matchAll(/&(\w+)(?:,|\s*\};)\s*\/\*\s*(\w+)\s*\*\//g)].map((m) => [m[2], m[1]]),
+  [...factory.matchAll(/&(\w+)(?:,|\s*\};)\s*\/\*\s*(\w+)\s*\*\//g)].map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) => [m[2], m[1]],
+  ),
 );
 for (const m of core.matchAll(/case RTL_TEXTENCODING_(\w+):\s*return &(\w+)/g))
   bindings.set(m[1], m[2]);
@@ -43,28 +55,56 @@ const aggregates = new Map();
 for (const [path, text] of [
   ["sal/textenc/textenc.cxx", core],
   ...readdirSync(`${root}/sal/textenc`)
-    .filter((name) => name.endsWith(".tab"))
+    .filter(
+      /** Applies filter to name. @param name - name value. @returns Callback result. */ (name) =>
+        name.endsWith(".tab"),
+    )
     .sort()
-    .map((name) => {
-      const path = `sal/textenc/${name}`;
-      return [path, source(path)];
-    }),
+    .map(
+      /** Applies map to name. @param name - name value. @returns Callback result. */ (name) => {
+        const path = `sal/textenc/${name}`;
+        return [path, source(path)];
+      },
+    ),
 ]) {
   for (const m of text.matchAll(/ImplTextEncodingData\s+const\s+(\w+)\s*=\s*\{[\s\S]*?\};/g)) {
     const tail = m[0]
       .slice(m[0].lastIndexOf("},") + 2)
       .replace(/\};$/, "")
       .replace(/\/\*[\s\S]*?\*\//g, "");
-    const fields = tail.split(",").map((field) => field.trim());
+    const fields = tail
+      .split(",")
+      .map(
+        /** Applies map to field. @param field - field value. @returns Callback result. */ (
+          field,
+        ) => field.trim(),
+      );
     if (fields.length !== 7) throw new Error(`Unexpected descriptor layout: ${m[1]} in ${path}`);
     const values = fields.slice(2, 6).map(Number);
-    const terms = fields[6].split("|").map((term) => term.trim());
-    const info = terms.reduce((value, term) => {
-      const flag = flags.get(term) ?? (/^\d+$/.test(term) ? Number(term) : undefined);
-      if (flag === undefined) throw new Error(`Unknown source info flag ${term}`);
-      return value | flag;
-    }, 0);
-    if (values.some((value) => !Number.isInteger(value)))
+    const terms = fields[6]
+      .split("|")
+      .map(
+        /** Applies map to term. @param term - term value. @returns Callback result. */ (term) =>
+          term.trim(),
+      );
+    const info = terms.reduce(
+      /** Applies reduce to value, term. @param value - value value. @param term - term value. @returns Callback result. */ (
+        value,
+        term,
+      ) => {
+        const flag = flags.get(term) ?? (/^\d+$/.test(term) ? Number(term) : undefined);
+        if (flag === undefined) throw new Error(`Unknown source info flag ${term}`);
+        return value | flag;
+      },
+      0,
+    );
+    if (
+      values.some(
+        /** Applies some to value. @param value - value value. @returns Callback result. */ (
+          value,
+        ) => !Number.isInteger(value),
+      )
+    )
       throw new Error(`Invalid metadata ${m[1]}`);
     aggregates.set(m[1], {
       MinimumCharSize: values[0],

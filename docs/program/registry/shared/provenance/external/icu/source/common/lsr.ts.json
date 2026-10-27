@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/lsr.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/lsr.cpp",
+    "localSymbols": [
+      "LSR",
+      "indexForRegion",
+      "setHashCode"
+    ],
+    "upstreamSymbols": [
+      "LSR::indexForRegion",
+      "LSR::setHashCode"
+    ],
+    "preservedResponsibilities": [
+      "Original LSR logical default/borrowed/counted/prefixed constructors, region index, flags/equivalence/equality, lazy sparse unsigned32 hash and move ownership/residual fields. Copied storage retains exact counted payload while fields expose C prefixes. Native probe checks constructor status/null fields, owned versus borrowed flag, source region/index/flags surviving moves and cached hash while the moved-to owner remains alive; native-invalid readable spans, failed-field dereferences, self-move, allocator/destructor/ABI remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; native invalid pointer/allocation/ABI and complete Calendar/CSV integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/lsr.ts",
+          "marker": "LSR"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/lsr.cpp",
+          "marker": "LSR::indexForRegion"
+        }
+      ]
+    }
+  }
+}

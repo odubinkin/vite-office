@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/bytestrie.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/bytestrie.ts",
+        "apps/office/src/external/icu/source/common/bytestrie.test.ts",
+        "scripts/icu-bytestrie-native-probe.mjs",
+        "scripts/icu-likelysubtags-native-probe.mjs"
+      ],
+      "justification": "Original borrowed byte-serialized trie reader preserves all non-Iterator current/first/next byte and counted/C span overloads, compact signed32 values and delta jumps, source binary/linear branches, shallow copy, pointer-identity State restore, opaque uint64 valid-pointer states, recursive unique-value output and ordered next-byte enumeration. Native comparison passes1085402 operations against both unchanged builder modes and every prefix of all8310 actual langInfo likely keys, including all5 compact value widths and all5 delta widths in source-valid explicit serialized branches. The source signed-char span behavior and unique-value binary-subtree candidate omission are preserved (CALC-331/332). No lookup-table replacement or Intl likely-subtag inference is introduced. Iterator, builder port/adopted native allocation and destruction, invalid serialized storage/pointers, getValue without a value result, stopped/null uint64 pointer subtraction and native ABI remain uncertified. Also borrows immutable decoded mapped byte arrays directly, preserving exact resource-storage identity without a source-incompatible trie copy; equal typed-array pointer origins retain the existing source State restore rule.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BytesTrie",
+        "nextString",
+        "findUniqueValueFromBranch",
+        "getNextBytes"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/bytestrie.cpp",
+      "upstreamSymbols": [
+        "BytesTrie::next",
+        "BytesTrie::findUniqueValueFromBranch",
+        "BytesTrie::getNextBytes"
+      ]
+    }
+  }
+}

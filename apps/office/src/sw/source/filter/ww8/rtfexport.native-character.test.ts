@@ -34,7 +34,7 @@ function kernAt(node: SwTextNode, offset: number): boolean {
     .GetpSwpHints()
     ?.entries()
     .find(
-      (hint) =>
+      /** Applies find to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
         hint.start <= offset && offset < hint.end && hint.format instanceof SwFormatAutoFormat,
     );
   const items =
@@ -50,46 +50,60 @@ it.each([
   FontWeight.WEIGHT_SEMIBOLD,
   FontWeight.WEIGHT_BOLD,
   FontWeight.WEIGHT_BLACK,
-])("uses exact source weight comparison for native weight %s", (weight) => {
-  const doc = createWriterDocument();
-  try {
-    const node = doc.paragraphs[0];
-    assert(node);
-    node.SetAttr(new SvxWeightItem(weight, RES_CHRATR_WEIGHT));
-    const output = new RtfAttributeOutput(
-      () => 0,
-      () => 0,
-      new RtfExport(),
-    ).WriteNativeCharacter(node.GetSwAttrSet());
-    expect(output).toMatch(weight === FontWeight.WEIGHT_BOLD ? /\\b(?!0)/ : /\\b0/);
-  } finally {
-    doc.Dispose();
-  }
-});
+])(
+  "uses exact source weight comparison for native weight %s",
+  /** Verifies uses exact source weight comparison for native weight %s. @param weight - weight value. @returns Nothing. */ (
+    weight,
+  ) => {
+    const doc = createWriterDocument();
+    try {
+      const node = doc.paragraphs[0];
+      assert(node);
+      node.SetAttr(new SvxWeightItem(weight, RES_CHRATR_WEIGHT));
+      const output = new RtfAttributeOutput(
+        /** Verifies uses exact source weight comparison for native weight %s. @returns Callback result. */ () =>
+          0,
+        /** Verifies uses exact source weight comparison for native weight %s. @returns Callback result. */ () =>
+          0,
+        new RtfExport(),
+      ).WriteNativeCharacter(node.GetSwAttrSet());
+      expect(output).toMatch(weight === FontWeight.WEIGHT_BOLD ? /\\b(?!0)/ : /\\b0/);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
 
 it.each([
   FontItalic.ITALIC_NONE,
   FontItalic.ITALIC_NORMAL,
   FontItalic.ITALIC_OBLIQUE,
   FontItalic.ITALIC_DONTKNOW,
-])("uses source non-NONE posture comparison for native posture %s", (posture) => {
-  const doc = createWriterDocument();
-  try {
-    const node = doc.paragraphs[0];
-    assert(node);
-    node.SetAttr(new SvxPostureItem(posture, RES_CHRATR_POSTURE));
-    const output = new RtfAttributeOutput(
-      () => 0,
-      () => 0,
-      new RtfExport(),
-    ).WriteNativeCharacter(node.GetSwAttrSet());
-    expect(output).toMatch(posture === FontItalic.ITALIC_NONE ? /\\i0/ : /\\i(?!0)/);
-  } finally {
-    doc.Dispose();
-  }
-});
+])(
+  "uses source non-NONE posture comparison for native posture %s",
+  /** Verifies uses source non-NONE posture comparison for native posture %s. @param posture - posture value. @returns Nothing. */ (
+    posture,
+  ) => {
+    const doc = createWriterDocument();
+    try {
+      const node = doc.paragraphs[0];
+      assert(node);
+      node.SetAttr(new SvxPostureItem(posture, RES_CHRATR_POSTURE));
+      const output = new RtfAttributeOutput(
+        /** Verifies uses source non-NONE posture comparison for native posture %s. @returns Callback result. */ () =>
+          0,
+        /** Verifies uses source non-NONE posture comparison for native posture %s. @returns Callback result. */ () =>
+          0,
+        new RtfExport(),
+      ).WriteNativeCharacter(node.GetSwAttrSet());
+      expect(output).toMatch(posture === FontItalic.ITALIC_NONE ? /\\i0/ : /\\i(?!0)/);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
 
-it("truncates native font height to half points in paragraphs and style definitions", () => {
+it("truncates native font height to half points in paragraphs and style definitions", /** Verifies truncates native font height to half points in paragraphs and style definitions. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   let imported: SwDoc | undefined;
   try {
@@ -111,7 +125,7 @@ it("truncates native font height to half points in paragraphs and style definiti
   }
 });
 
-it("retains adjacent native hints that differ only in auto-kerning through RTF and Worker codecs", () => {
+it("retains adjacent native hints that differ only in auto-kerning through RTF and Worker codecs", /** Verifies retains adjacent native hints that differ only in auto-kerning through RTF and Worker codecs. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   let imported: SwDoc | undefined;
   let worker: SwDoc | undefined;
@@ -154,7 +168,7 @@ it("retains adjacent native hints that differ only in auto-kerning through RTF a
   }
 });
 
-it("inherits style auto-kerning and restores group state including plain reset", () => {
+it("inherits style auto-kerning and restores group state including plain reset", /** Verifies inherits style auto-kerning and restores group state including plain reset. @returns Nothing. */ () => {
   const doc = read(
     String.raw`{\rtf1{\stylesheet{\s0\kerning1 Normal;}}\s0 A{\kerning0 B}C\kerning-12 D{\plain E}F}`,
   );
@@ -165,14 +179,14 @@ it("inherits style auto-kerning and restores group state including plain reset",
       const node = document.paragraphs[0];
       assert(node);
       expect(node.GetText()).toBe("ABCDEF");
-      expect([...node.GetText()].map((_, offset) => kernAt(node, offset))).toEqual([
-        true,
-        false,
-        true,
-        true,
-        false,
-        true,
-      ]);
+      expect(
+        [...node.GetText()].map(
+          /** Verifies inherits style auto-kerning and restores group state including plain reset. @param _ - _ value. @param offset - offset value. @returns Callback result. */ (
+            _,
+            offset,
+          ) => kernAt(node, offset),
+        ),
+      ).toEqual([true, false, true, true, false, true]);
     }
   } finally {
     roundtrip?.Dispose();
@@ -184,24 +198,35 @@ it.each([
   String.raw`{\rtf1\up10\fs40 A}`,
   String.raw`{\rtf1\fs40\up10 A}`,
   String.raw`{\rtf1{\stylesheet{\s0\fs40 Normal;}}\s0\up10 A}`,
-])("resolves baseline half points against the final font height: %s", (fixture) => {
-  const doc = read(fixture);
-  try {
-    const node = doc.paragraphs[0];
-    assert(node);
-    expect(projectWriterTextRuns(node)[0]?.attributes.escapement?.offset).toBe(25);
-  } finally {
-    doc.Dispose();
-  }
-});
+])(
+  "resolves baseline half points against the final font height: %s",
+  /** Verifies resolves baseline half points against the final font height: %s. @param fixture - fixture value. @returns Nothing. */ (
+    fixture,
+  ) => {
+    const doc = read(fixture);
+    try {
+      const node = doc.paragraphs[0];
+      assert(node);
+      expect(projectWriterTextRuns(node)[0]?.attributes.escapement?.offset).toBe(25);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
 
-it("restores raw baseline position across font-size groups and clears it for superscript", () => {
+it("restores raw baseline position across font-size groups and clears it for superscript", /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1\up10\fs40 A{\fs20 B}C\super D\nosupersub E}`);
   try {
     const node = doc.paragraphs[0];
     assert(node);
     const runs = projectWriterTextRuns(node);
-    expect(runs.map((run) => [run.text, run.attributes.escapement?.offset ?? 0])).toEqual([
+    expect(
+      runs.map(
+        /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @param run - run value. @returns Callback result. */ (
+          run,
+        ) => [run.text, run.attributes.escapement?.offset ?? 0],
+      ),
+    ).toEqual([
       ["A", 25],
       ["B", 50],
       ["C", 25],
@@ -213,7 +238,7 @@ it("restores raw baseline position across font-size groups and clears it for sup
   }
 });
 
-it("preserves upstream positive paragraph-style position substitution", () => {
+it("preserves upstream positive paragraph-style position substitution", /** Verifies preserves upstream positive paragraph-style position substitution. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1{\stylesheet{\s0\up10\fs40 Normal;}}\s0 A}`);
   try {
     const node = doc.paragraphs[0];
@@ -226,14 +251,18 @@ it("preserves upstream positive paragraph-style position substitution", () => {
     doc.Dispose();
   }
 });
-it("defers negative paragraph-style positions and clamps native baseline offsets", () => {
+it("defers negative paragraph-style positions and clamps native baseline offsets", /** Verifies defers negative paragraph-style positions and clamps native baseline offsets. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1{\stylesheet{\s0\dn10\fs40 Normal;}}\s0 A\up999999 B}`);
   try {
     const node = doc.paragraphs[0];
     assert(node);
-    expect(projectWriterTextRuns(node).map((run) => run.attributes.escapement?.offset)).toEqual([
-      -25, 13999,
-    ]);
+    expect(
+      projectWriterTextRuns(node).map(
+        /** Verifies defers negative paragraph-style positions and clamps native baseline offsets. @param run - run value. @returns Callback result. */ (
+          run,
+        ) => run.attributes.escapement?.offset,
+      ),
+    ).toEqual([-25, 13999]);
   } finally {
     doc.Dispose();
   }
@@ -242,24 +271,34 @@ it("defers negative paragraph-style positions and clamps native baseline offsets
 it.each([
   ["up", 13],
   ["dn", -13],
-] as const)("rounds deferred %s half ties away from zero", (control, expected) => {
-  const doc = read(`{\\rtf1\\${control}5\\fs40 A}`);
-  try {
-    const node = doc.paragraphs[0];
-    assert(node);
-    expect(projectWriterTextRuns(node)[0]?.attributes.escapement?.offset).toBe(expected);
-  } finally {
-    doc.Dispose();
-  }
-});
-it("ignores a zero baseline value as the pinned DomainMapper does", () => {
+] as const)(
+  "rounds deferred %s half ties away from zero",
+  /** Verifies rounds deferred %s half ties away from zero. @param control - control value. @param expected - expected value. @returns Nothing. */ (
+    control,
+    expected,
+  ) => {
+    const doc = read(`{\\rtf1\\${control}5\\fs40 A}`);
+    try {
+      const node = doc.paragraphs[0];
+      assert(node);
+      expect(projectWriterTextRuns(node)[0]?.attributes.escapement?.offset).toBe(expected);
+    } finally {
+      doc.Dispose();
+    }
+  },
+);
+it("ignores a zero baseline value as the pinned DomainMapper does", /** Verifies ignores a zero baseline value as the pinned DomainMapper does. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1\up10\fs40 A\up0 B}`);
   try {
     const node = doc.paragraphs[0];
     assert(node);
-    expect(projectWriterTextRuns(node).map((run) => run.attributes.escapement?.offset)).toEqual([
-      25,
-    ]);
+    expect(
+      projectWriterTextRuns(node).map(
+        /** Verifies ignores a zero baseline value as the pinned DomainMapper does. @param run - run value. @returns Callback result. */ (
+          run,
+        ) => run.attributes.escapement?.offset,
+      ),
+    ).toEqual([25]);
   } finally {
     doc.Dispose();
   }

@@ -175,6 +175,16 @@ export const MID_SCALE_WIDTH_MIN = 8;
 export const MID_SCALE_WIDTH_MAX = 9;
 /** Original paragraph adjustment selector. */
 export const MID_PARAGRAPH_COMPOSER = 10;
+/** Original text/character rotation selector. */
+export const MID_ROTATE = 0;
+/** Original character rotation fit-to-line selector. */
+export const MID_FITTOLINE = 1;
+/** Original two-line mode selector. */
+export const MID_TWOLINES = 0;
+/** Original first bracket selector. */
+export const MID_START_BRACKET = 1;
+/** Original final bracket selector. */
+export const MID_END_BRACKET = 2;
 
 /** Original drawing-color theme palette index member. */
 export const MID_COLOR_THEME_INDEX = 4;

@@ -166,12 +166,51 @@ describe("automatic character StylePool insertion", /** Groups real tree/leaf/ow
   );
 });
 
+it("partitions ignorable range items after ordinary items while preserving actual clones and interning", /** Uses actual item sets, including empty and ignorable-only paths; no private tree state is forged. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    ranges = new SfxItemSet(pool, [[11, 11]]),
+    styles = new StylePool(ranges);
+  // The original constructor retains its independent Clone(false) range template.
+  ranges.MergeRange(15, 15);
+  const empty = input(pool, []),
+    ordinary = input(pool, [[15, 4]]),
+    ignored = input(pool, [[11, 3]]),
+    mixed = input(pool, [
+      [11, 3],
+      [15, 4],
+    ]);
+  const a = styles.insertItemSet(empty),
+    b = styles.insertItemSet(ordinary),
+    c = styles.insertItemSet(ignored),
+    d = styles.insertItemSet(mixed);
+  expect(styles.insertItemSet(mixed.Clone())).toBe(d);
+  expect(styles.insertItemSet(ignored.Clone())).toBe(c);
+  expect(styles.insertItemSet(ordinary.Clone())).toBe(b);
+  expect(styles.insertItemSet(empty.Clone())).toBe(a);
+  expect(d.Get(11).QueryValue()).toBe(3);
+  expect(d.Get(15).QueryValue()).toBe(4);
+  expect(c.Count()).toBe(1);
+  expect(a.Count()).toBe(0);
+});
+
+it("retains fresh non-shareable handles when the non-shareable item lies in the ignorable range", /** Original non-shareable detection runs in both insertion passes. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool(new SfxItemSet(pool, [[11, 11]])),
+    set = input(pool, [[15, 9]]);
+  set.Put(new OwnedItem());
+  const first = styles.insertItemSet(set),
+    second = styles.insertItemSet(set);
+  expect(second).not.toBe(first);
+  expect(second.Count()).toBe(2);
+  expect(first.Count()).toBe(2);
+});
+
 /** Releases an owning native vector and its references. @param styles - Owned output vector. @returns Nothing. */
 function release(styles: SfxItemSet[]): void {
   for (const set of styles) releaseStyleHandle(set);
   styles.length = 0;
 }
-it("filters by actual shared ownership and preserves caller ownership after pool destruction", () => {
+it("filters by actual shared ownership and preserves caller ownership after pool destruction", /** Verifies filters by actual shared ownership and preserves caller ownership after pool destruction. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     styles = new StylePool();
   const value = styles.insertItemSet(input(pool, [[11, 7]]));
@@ -191,7 +230,7 @@ it("filters by actual shared ownership and preserves caller ownership after pool
   releaseStyleHandle(value);
   expect(styleHandleUseCount(value)).toBe(0);
 });
-it("returns the newest used non-shareable copy and caches one representative per tree node", () => {
+it("returns the newest used non-shareable copy and caches one representative per tree node", /** Verifies returns the newest used non-shareable copy and caches one representative per tree node. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     styles = new StylePool(),
     set = input(pool, [[15, 8]]);
@@ -224,7 +263,7 @@ it("returns the newest used non-shareable copy and caches one representative per
   for (const handle of cache.values()) releaseStyleHandle(handle);
   styles.Dispose();
 });
-it("collapses ignorable tails to the first used representative and preserves the root-only omission", () => {
+it("collapses ignorable tails to the first used representative and preserves the root-only omission", /** Verifies collapses ignorable tails to the first used representative and preserves the root-only omission. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     ignorable = new SfxItemSet(pool, [[15, 15]]),
     styles = new StylePool(ignorable);
@@ -260,7 +299,7 @@ it("collapses ignorable tails to the first used representative and preserves the
   releaseStyleHandle(rootOnly);
   styles.Dispose();
 });
-it("appends in source named-parent order without clearing an existing output vector", () => {
+it("appends in source named-parent order without clearing an existing output vector", /** Verifies appends in source named-parent order without clearing an existing output vector. @returns Nothing. */ () => {
   const pool = new SfxItemPool(),
     styles = new StylePool(),
     parentA = input(pool, []),

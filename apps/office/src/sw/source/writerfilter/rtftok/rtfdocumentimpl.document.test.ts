@@ -58,9 +58,12 @@ function read(input: string) {
   return new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(input));
 }
 
-it("retains the source ISCII null-context boundary instead of manufacturing a decoder context", () => {
+it("retains the source ISCII null-context boundary instead of manufacturing a decoder context", /** Verifies retains the source ISCII null-context boundary instead of manufacturing a decoder context. @returns Nothing. */ () => {
   // WRITER181: native null-object access is undefined; TypeError is this port's callback binding, not a C++ execution certificate.
-  expect(() => read(String.raw`{\rtf1\ansi\ansicpg57002\'a1\'e9}`)).toThrow(TypeError);
+  expect(
+    /** Verifies retains the source ISCII null-context boundary instead of manufacturing a decoder context. @returns Callback result. */ () =>
+      read(String.raw`{\rtf1\ansi\ansicpg57002\'a1\'e9}`),
+  ).toThrow(TypeError);
 });
 
 it.each([

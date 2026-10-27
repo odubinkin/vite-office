@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/unicode/ustringtrie.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/unicode/ustringtrie.ts",
+        "apps/office/src/external/icu/source/common/bytestrie.test.ts",
+        "scripts/icu-bytestrie-native-probe.mjs"
+      ],
+      "justification": "Original result enum retains values0..3 and the original result comparison/bit predicates, including numeric low-bit HAS_NEXT rather than a substituted boolean. Consumed by the actual serialized BytesTrie reader and directly tested.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UStringTrieResult",
+        "USTRINGTRIE_MATCHES",
+        "USTRINGTRIE_HAS_VALUE",
+        "USTRINGTRIE_HAS_NEXT"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/unicode/ustringtrie.h",
+      "upstreamSymbols": [
+        "UStringTrieResult",
+        "USTRINGTRIE_MATCHES",
+        "USTRINGTRIE_HAS_VALUE",
+        "USTRINGTRIE_HAS_NEXT"
+      ]
+    }
+  }
+}

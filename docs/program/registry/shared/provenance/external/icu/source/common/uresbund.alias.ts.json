@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.alias.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "init_resb_result",
+      "init_resb_resultFromContainer",
+      "getAliasTargetAsResourceBundle"
+    ],
+    "upstreamSymbols": [
+      "init_resb_result",
+      "getAliasTargetAsResourceBundle"
+    ],
+    "preservedResponsibilities": [
+      "Original recursive result initialization and alias parser walk actual raw Resource nodes and UResourceDataEntry owners. The pinned corpus contains992 LOCALE aliases in root and4 ICUDATA timezoneTypes aliases in keyTypeData. Source C path splitting, valid-versus-actual locale, corresponding-resource/no-key branch, invariant UTF16 validation, depth256 error, nested alias continuation, parent retry and result-path rewrite are preserved. Container path comparison uses actual borrowed byte-storage identity, never string equality. The simpler source overload captures container fields before self-fill mutation. Source TODO about retaining containerResPath across parent retry is preserved as CALC-341; no corrective heuristic is added.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.ts",
+          "marker": "init_resb_result"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "init_resb_result"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.alias.ts",
+      "rationale": "Split large original uresbund.cpp by bundle lifecycle, recursive alias result initialization and fallback lookup while sharing the one source-shaped bundle and entry owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

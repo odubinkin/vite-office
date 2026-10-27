@@ -57,7 +57,7 @@ function expression(input: string): CSS1Expression {
   return new CSS1Expression(term[0], term[1], term[2], term[3]);
 }
 
-it("preserves the original selector groups, expression fields, signed units and predecessor operators", () => {
+it("preserves the original selector groups, expression fields, signed units and predecessor operators", /** Verifies preserves the original selector groups, expression fields, signed units and predecessor operators. @returns Nothing. */ () => {
   const events = new Probe().sheet(
     "H1, P.note:first-letter { margin: -1cm +2em / 3px, -50%; color:#123; }",
   );
@@ -81,7 +81,7 @@ it("preserves the original selector groups, expression fields, signed units and 
   ]);
   expect(declaration(events[3])).toEqual({ property: "color", terms: [[T.HEXCOLOR, "123", 0, 0]] });
 });
-it("retains import skipping, page pseudo selectors, SGML wrappers and unknown at-rule nesting", () => {
+it("retains import skipping, page pseudo selectors, SGML wrappers and unknown at-rule nesting", /** Verifies retains import skipping, page pseudo selectors, SGML wrappers and unknown at-rule nesting. @returns Nothing. */ () => {
   const events = new Probe().sheet(
     " <!-- @import 'old.css'; @unknown { x:'}'; { x:y } } @page:left { margin:1pt } --> ",
   );
@@ -96,7 +96,7 @@ it("retains import skipping, page pseudo selectors, SGML wrappers and unknown at
     { property: "margin", terms: [[T.LENGTH, "1", 20, 0]] },
   ]);
 });
-it("recovers subsequent vendor-prefixed declarations but returns on an invalid initial property", () => {
+it("recovers subsequent vendor-prefixed declarations but returns on an invalid initial property", /** Verifies recovers subsequent vendor-prefixed declarations but returns on an invalid initial property. @returns Nothing. */ () => {
   expect(new Probe().option(";;;font-weight:bold; -vendor-x:1px; color:blue")).toEqual([
     { property: "font-weight", terms: [[T.IDENT, "bold", 0, 0]] },
     { property: "color", terms: [[T.IDENT, "blue", 1, 0]] },
@@ -104,7 +104,7 @@ it("recovers subsequent vendor-prefixed declarations but returns on an invalid i
   expect(new Probe().option("-vendor-x:1px; color:blue")).toEqual([]);
   expect(new Probe().option("width:.5em; color:blue")).toEqual([]);
 });
-it("retains callback-before-brace timing and source unescaped empty-string scanning", () => {
+it("retains callback-before-brace timing and source unescaped empty-string scanning", /** Verifies retains callback-before-brace timing and source unescaped empty-string scanning. @returns Nothing. */ () => {
   expect(new Probe().sheet("h1")).toEqual([{ selector: [[K.ELEMENT, "h1"]], first: true }]);
   expect(new Probe().option('content:""; color:red')).toEqual([
     { property: "content", terms: [[T.STRING, '"; color:red', 0, 0]] },
@@ -113,7 +113,7 @@ it("retains callback-before-brace timing and source unescaped empty-string scann
     { property: "content", terms: [[T.STRING, "\uffff", 0, 0]] },
   ]);
 });
-it("preserves global six-hex color recognition even where selectors expect identifiers", () => {
+it("preserves global six-hex color recognition even where selectors expect identifiers", /** Verifies preserves global six-hex color recognition even where selectors expect identifiers. @returns Nothing. */ () => {
   expect(new Probe().sheet(".abcdef { color:red }")).toEqual([
     {
       selector: [
@@ -127,7 +127,7 @@ it("preserves global six-hex color recognition even where selectors expect ident
   expect(expression("123456").GetType()).toBe(T.HEXCOLOR);
   expect(new Probe().option("color:#abcd")).toEqual([]);
 });
-it("keeps source numeric/unit whitespace, sign and priority behavior", () => {
+it("keeps source numeric/unit whitespace, sign and priority behavior", /** Verifies keeps source numeric/unit whitespace, sign and priority behavior. @returns Nothing. */ () => {
   const events = new Probe().option(
     "width:2 cm!important;height:3unknown; padding: 4em 5ex 6in 7mm 8pt 9pc",
   );
@@ -145,7 +145,7 @@ it("keeps source numeric/unit whitespace, sign and priority behavior", () => {
     [T.LENGTH, "9", 2160, 0],
   ]);
 });
-it("preserves source URL output and single-quote-only stripping", () => {
+it("preserves source URL output and single-quote-only stripping", /** Verifies preserves source URL output and single-quote-only stripping. @returns Nothing. */ () => {
   const output = { value: "old" };
   expression("url( ' image.png ' )").GetURL(output);
   expect(output.value).toBe("image.png");
@@ -155,7 +155,7 @@ it("preserves source URL output and single-quote-only stripping", () => {
   expression("url()").GetURL(output);
   expect(output.value).toBe("old");
 });
-it("uses actual native color fields including source fractional RGB conversion and alpha", () => {
+it("uses actual native color fields including source fractional RGB conversion and alpha", /** Verifies uses actual native color fields including source fractional RGB conversion and alpha. @returns Nothing. */ () => {
   const color = new Color();
   expect(expression("rgb(-0.5,12.5,0.5)").GetColor(color)).toBe(true);
   expect([color.GetRed(), color.GetGreen(), color.GetBlue(), color.GetAlpha()]).toEqual([
@@ -174,7 +174,7 @@ it("uses actual native color fields including source fractional RGB conversion a
     17, 34, 51, 127,
   ]);
 });
-it("retains unpadded eight-hex white blending and subsequent source right padding", () => {
+it("retains unpadded eight-hex white blending and subsequent source right padding", /** Verifies retains unpadded eight-hex white blending and subsequent source right padding. @returns Nothing. */ () => {
   const color = new Color();
   const value = expression("#0000ffff");
   expect(value.GetString()).toBe("ff");
@@ -183,7 +183,7 @@ it("retains unpadded eight-hex white blending and subsequent source right paddin
   expect(expression("#11223344").GetColor(color)).toBe(true);
   expect([color.GetRed(), color.GetGreen(), color.GetBlue()]).toEqual([191, 196, 200]);
 });
-it("owns and resets native expression fields and length rounding independently of successors", () => {
+it("owns and resets native expression fields and length rounding independently of successors", /** Verifies owns and resets native expression fields and length rounding independently of successors. @returns Nothing. */ () => {
   const first = new CSS1Expression(T.LENGTH, "1", -1.5, 47),
     second = new CSS1Expression(T.IDENT, "next", 0);
   first.SetNext(second);

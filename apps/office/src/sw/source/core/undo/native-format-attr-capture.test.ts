@@ -77,7 +77,7 @@ it("captures complete legacy item notifications and ignores missing old or new i
   }
 });
 
-it("moves captured undo ownership only through ReleaseUndo", () => {
+it("moves captured undo ownership only through ReleaseUndo", /** Verifies moves captured undo ownership only through ReleaseUndo. @returns Nothing. */ () => {
   const doc = createWriterDocument();
   const format = doc.MakeTextFormatColl("Transfer", doc.GetDfltTextFormatColl());
   const helper = new SwUndoFormatAttrHelper(format);

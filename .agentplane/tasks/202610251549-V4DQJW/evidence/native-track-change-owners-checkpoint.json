@@ -1,0 +1,174 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "verified prerequisite checkpoint; task remains DOING",
+  "scope": "Original table redline metadata owner, Word-compatible date conversion, signed-token view overloads, normal DateTime value/type binding and actual native send-before-clear context actions. No table model/filter/UI completion claim.",
+  "sourceBlobs": {
+    "apps/office/src/o3tl/inc/string_view-views.test.ts": "88ae1cd3a569c6e9c174885216da76a5c6c97334",
+    "apps/office/src/o3tl/inc/string_view.ts": "4d3a00f64f7d77e2d8a0b26df9bf63e89f4bde29",
+    "apps/office/src/offapi/com/sun/star/util/DateTime.ts": "1af6e308df00d9f1fab293811bb2de385ce1d700",
+    "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts": "db6a2ba3fe92ea336be4a0eb9e65cf05865ff501",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": "5b9def963169b9ac747338cbf0835b695ebbc2ef",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "16ba36ded8eabba7f998644e4c0e9a62924c01d4",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory.test.ts": "66786a84124306d4929b7bd979044bdf55776754",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts": "ee2da2ce39e0560ccf39e8ecc17779a545f3a50b",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": "fd6f43de37c7e1d92c40d78bbaa687184f856562",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "ea98335b762f5a917e4336e6558daa355875deaf",
+    "docs/program/registry/shared/provenance/o3tl/inc/string_view.ts.json": "872226cacab14e0795dcd4221de28f5aecc0f0b6",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/util/DateTime.ts.json": "26271a3369dd3535cfc7fc510d4f5e8827e59422",
+    "docs/program/registry/shared/runtime/o3tl/inc/string_view.ts.json": "21d23005a9ec3d86063ab6308a36aa50382425be",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/util/DateTime.ts.json": "e03f61057dd12e9887adf26075b76b30a5389523",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/ConversionHelper.ts.json": "5816705e2bc8d3a0ba6f78753b2fd6ce161952ce",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "ae1b6b1030e934676f7118a921ac8830ebe8aefb",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "f034f5060eef7d1bdae77dba38d33ba9e26b5777",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "68344fabaf24aabcf5da37fe8cdb13b318fbab15",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "a4246c98437ee44dc3b9fa813b6af2fe6396386c",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/ConversionHelper.ts.json": "2442148b4129ce6a5e857f60aee197857813f80c",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "fc3b3d74275a7b964d0c33a8cefc44f5858f91a1",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "85e3acfa531aea4e1f3e543061bc05f16e2c6b3a",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFactory_wml.tables.ts.json": "61affa2c222eefb9c81f4e04bd5718306ae73f84",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts.json": "3be9bf33a5b76830976ff6d50b708e04e7b4b9a7",
+    "docs/program/writer-upstream-suspected-issues.md": "e554cbeb43931c1c8794d024ced8cb007729d814",
+    "scripts/writer-ooxml/generate-factory.py": "1d95642455a5202acd68701f6a6b3fdfde45fbe2",
+    "apps/office/src/sw/source/writerfilter/dmapper/TrackChangesHandler.ts": "6a13400b2a24db239b504e397aedc9d65362db33",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-track-changes.test.ts": "18af2df109e84c817f183ecc3ca5a1a493603390",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts": "354c3c438dc61100cf27381ed945588d458e3418",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TrackChangesHandler.ts.json": "b4a06e59d26d1bf0b8a23ebd4f21344afa716c15",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TrackChangesHandler.ts.json": "8801a104ecf0f50d39676557b562ad043b5d1422"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage -- src/sw/source/writerfilter/dmapper/ src/sw/source/writerfilter/ooxml/ src/o3tl/inc/string_view src/sax/source/tools/converter-date.test.ts --coverage.include=src/sw/source/writerfilter/dmapper/TrackChangesHandler.ts --coverage.include=src/sw/source/writerfilter/dmapper/ConversionHelper.ts --coverage.include=src/sw/source/writerfilter/dmapper/PropertyMap.ts --coverage.include=src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts --coverage.include=src/offapi/com/sun/star/util/DateTime.ts --coverage.include=src/o3tl/inc/string_view.ts --coverage.reportsDirectory=coverage/native-track-change-owners --maxWorkers=2",
+      "result": "pass:199 tests/20 files; six changed executable owners at unchanged100 threshold",
+      "statements": "1053/1053",
+      "branches": "556/556",
+      "functions": "217/217",
+      "lines": "978/978",
+      "perFile": {
+        "apps/office/src/o3tl/inc/string_view.ts": {
+          "s": {
+            "covered": 87,
+            "total": 87
+          },
+          "b": {
+            "covered": 85,
+            "total": 85
+          },
+          "f": {
+            "covered": 8,
+            "total": 8
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/util/DateTime.ts": {
+          "s": {
+            "covered": 44,
+            "total": 44
+          },
+          "b": {
+            "covered": 14,
+            "total": 14
+          },
+          "f": {
+            "covered": 22,
+            "total": 22
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/ConversionHelper.ts": {
+          "s": {
+            "covered": 227,
+            "total": 227
+          },
+          "b": {
+            "covered": 209,
+            "total": 209
+          },
+          "f": {
+            "covered": 6,
+            "total": 6
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": {
+          "s": {
+            "covered": 384,
+            "total": 384
+          },
+          "b": {
+            "covered": 106,
+            "total": 106
+          },
+          "f": {
+            "covered": 93,
+            "total": 93
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/TrackChangesHandler.ts": {
+          "s": {
+            "covered": 43,
+            "total": 43
+          },
+          "b": {
+            "covered": 7,
+            "total": 7
+          },
+          "f": {
+            "covered": 7,
+            "total": 7
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.ts": {
+          "s": {
+            "covered": 268,
+            "total": 268
+          },
+          "b": {
+            "covered": 135,
+            "total": 135
+          },
+          "f": {
+            "covered": 81,
+            "total": 81
+          }
+        }
+      },
+      "coverageSha256": "a67df96e02efbb25e2e4e6318596c0e286f48c958e297a9088fe28a84cd7be1a"
+    },
+    "xmlEvidence": "Actual committed Strict/Transitional DOCX body range-markup parts, original OOXMLDocument/Stream/SAX/factory resources and original TrackChange attributes. Native style CT_TcPrBase grammar is not widened for cell markup. Table model insertion is not claimed.",
+    "typecheck": "pass:tools+app",
+    "build": "pass; existing chunk-size warning",
+    "static": "pass",
+    "eslint": "pass:12 scoped authored source/test files",
+    "prettier": "pass:30 matched intentional paths; Python validated by unchanged native generation",
+    "nativeGeneration": "pass:namespaces1 defines50 attributes88 elements355 resources409 lists277 actions41; clearProps is the actual base virtual-setter method",
+    "dependencies": "pass:1507 runtime sources/7637 relative imports/201 allowed edges",
+    "sourceProvenance": "pass:1508 modules",
+    "registry": "pass:340 capabilities/1508 modules/34 invariants/3420 records; DateTime retains its old capability association and adds Writer DOCX dependency without status promotion",
+    "jsdoc": "pass:3513 authored files",
+    "fileSize": "pass:3517 authored files; original generated context table977 lines and original PropertyMap owner remain under1000 hard gate",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "doctor": "0 errors/1 pre-existing hook-shim warning",
+    "routing": "pass",
+    "diff": "pass"
+  },
+  "suspectedUpstreamIssues": [
+    "WRITER154: local clock/date fields and default false IsUTC despite timezone/fraction lexemes",
+    "WRITER155: optional signed-year comment versus unconditional minus-delimiter splitting"
+  ],
+  "resolvedFailures": [
+    "Native generation rejected TrackChange clearProps until its actual base-context owner was implemented; no dummy/no-op callback was added.",
+    "An initial XML test placed cell markup in table-style CT_TcPrBase, whose native grammar intentionally excludes it. The invalid test placement was removed; actual body range markup now verifies TrackChange attributes and send/clear actions through real committed ZIP parts.",
+    "Existing shared numeric-view default-radix/byte overload branches were initially unselected; actual bounded C parser calls now cover them without source changes or threshold relaxation.",
+    "A metadata-script string quoting error prevented its update array from executing; corrected structured updates preserve original statuses and include the actual RedlineParams header evidence."
+  ],
+  "boundaries": [
+    "No vendor modifications, network/outside-repository access, subagents, policy changes, publication or save/recovery/autosave/UI behavior changes.",
+    "No full suite due under approved Verify Steps. No whole-task verification pass, evaluator pass, finish or goal completion.",
+    "Previous border checkpoint still records the existing TransColToIco terminal-fallback coverage gap. That unchanged helper was not reimplemented, normalized or excluded from its earlier recorded scope in this block.",
+    "Native physical C++ ABI, direct unconsumed generated header declarations and full UNO component services remain unverified."
+  ],
+  "remaining": [
+    "Implement actual UnoComplexColor and its native weak/interface owner dependencies, then complete CellColorHandler. The required WeakImplHelper/OWeakObject implementation is absent in this checkout; no fake component provider is permitted.",
+    "Complete actual TablePropertiesHandler/TblStylePrHandler, native stylesheet parse/application, DomainMapper.table and document/section/table/list orchestration.",
+    "Retain native style-entry property-map lifetime through type conversion; the original map remains referenced by mapper state until its matching pop.",
+    "Complete canonical DOCX export traversal/package reopen, existing desktop/mobile UI and cancellation/stale-result/failure/persistence acceptance, then the approved Calc XLSX task.",
+    "Keep the existing TransColToIco coverage observation open until source-backed evidence or a real producer exercises it without changing original behavior or100 threshold."
+  ]
+}

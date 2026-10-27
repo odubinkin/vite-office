@@ -1,0 +1,129 @@
+{
+  "task": "202610251549-V4DQJW",
+  "status": "partial implementation checkpoint; task and goal remain active, no complete DOCX/XLSX or UI admission claim",
+  "scope": "Actual paragraph/stylesheet property-map producer types, native frame/list/outline/table side-channel state and native stylesheet entry inheritance/interop/conditional masks",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/text/WrapTextMode.ts": "471dbdd3b164c55e74b4f205cb89b351365f3fed",
+    "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts": "f76578511b3428baa2dd80325b88cedc451f6191",
+    "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": "367c0447c821ac065ae0dec0040be78578cd7b8e",
+    "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts": "58e83a5a001fe4222b16eb65ed334f83b0c42854",
+    "apps/office/src/sw/source/writerfilter/dmapper/TblStylePrHandler.ts": "39028dc8cfadb5c003a1b0646a78b2d82c80a6e3",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-property-map-owners.test.ts": "8118de2fac04ed7dbf9065213434f63464251959",
+    "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts": "b0a7c051e9c098c2f8b59e7a42b885fe7d7f2d45",
+    "apps/office/src/sw/source/writerfilter/inc/ooxml/resourceids.ts": "11988e076503bd0b2bf52d2b93f9351665c172d0",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/text/WrapTextMode.ts.json": "ff97de24eaea00e02a7bc095c5a187e783089ded",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/text/WrapTextMode.ts.json": "1ec91d0f1b6bfddbaae22d298d2199e61615360f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json": "35597479e098a4bf74134a897899b930eba7f11d",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "d6fde339d175ef3b1f9396c640ceee8ac3d27bc9",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/StyleSheetTable.ts.json": "04f9111710e386258e5bab29dd14d5a31baf3309",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/dmapper/TblStylePrHandler.ts.json": "173e4e82096758de5ade529e63e014bb6638c6ca",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "daf5b3bfd3366e0adca9bbceb66545d3f9744145",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts.json": "15e1f679203bad2b9b9c78b57e2ea7ab9742e7f3",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/PropertyMap.ts.json": "c6312cbafb1d1f0de13413ee9b2e7ad818535292",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/StyleSheetTable.ts.json": "bf440265e0a108f0ef1f6a169e02b5433c558173",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/dmapper/TblStylePrHandler.ts.json": "a969b16378d5457330cedf8afaf6e37aac353830",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/inc/ooxml/resourceids.ts.json": "0d06d1ef15580ddd5b4c7e9fb5ddb4441ac1e093",
+    "docs/program/writer-upstream-suspected-issues.md": "f423b137cd03015b3f5c3a2fe6c1086091b5595c"
+  },
+  "checks": {
+    "ownerCoverage": {
+      "command": "npm run test:coverage -- src/sw/source/writerfilter/dmapper/ --coverage.include=src/sw/source/writerfilter/dmapper/PropertyMap.ts --coverage.include=src/sw/source/writerfilter/dmapper/StyleSheetTable.ts --coverage.include=src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts --coverage.reportsDirectory=coverage/native-style-property-owners --maxWorkers=2",
+      "result": "pass:53 tests/6 files",
+      "statements": "659/659",
+      "branches": "230/230",
+      "functions": "143/143",
+      "lines": "614/614",
+      "threshold": 100,
+      "perFile": {
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts": {
+          "statements": {
+            "covered": 125,
+            "total": 125
+          },
+          "branches": {
+            "covered": 79,
+            "total": 79
+          },
+          "functions": {
+            "covered": 21,
+            "total": 21
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/PropertyMap.ts": {
+          "statements": {
+            "covered": 378,
+            "total": 378
+          },
+          "branches": {
+            "covered": 106,
+            "total": 106
+          },
+          "functions": {
+            "covered": 92,
+            "total": 92
+          }
+        },
+        "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts": {
+          "statements": {
+            "covered": 156,
+            "total": 156
+          },
+          "branches": {
+            "covered": 45,
+            "total": 45
+          },
+          "functions": {
+            "covered": 30,
+            "total": 30
+          }
+        }
+      },
+      "coverageSha256": "b1e124a09b9e26b50077e2b265e3b85d924d34fbf3405b5b89b4a389b106c6f8"
+    },
+    "ooxmlRegression": {
+      "command": "npm run test:writer -- src/sw/source/writerfilter/ooxml/ --maxWorkers=2",
+      "result": "pass:104 tests/6 files"
+    },
+    "typecheck": "pass:tools+app",
+    "build": "pass; existing chunk-size warning",
+    "staticBuild": "pass",
+    "eslint": "pass:8 scoped authored source/test files; native enum aliases keep narrowly explained prefer-literal exemptions, no config changes",
+    "prettier": "pass:all matched intentional paths",
+    "dependencies": "pass:1499 sources/7566 relative imports/200 edges",
+    "sourceProvenance": "pass:1500 modules",
+    "registry": "pass:340 capabilities/1500 modules/34 invariants/3404 records/0 semantic violations",
+    "jsdoc": "pass:3501 authored files",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "fileSize": "pass",
+    "routing": "pass",
+    "diff": "pass",
+    "doctor": "0 errors/1 existing hook-shim warning"
+  },
+  "evidence": [
+    "Actual SwDoc/SwXTextDocument live ranges and stable native Unicode frame fields, independent copy/assignment and reset-retained list/name/ranges",
+    "Actual DomainMapper_Impl paragraph contexts and StyleSheetEntry now own native derived property maps",
+    "All eight native table value slots with unchanged output on unset/MAX queries, valid zero, independent Any property and overwrite behavior",
+    "Generated PropertyValue/Any/Sequence interop copies preserve order, duplicate names and Unicode style IDs",
+    "Actual imported style identities, ancestor overrides, missing/direct-self cases and fresh ordinary result ownership",
+    "Typed BorderLine2 values demonstrate conditional mask precedence, source-map mutation and native column conflict asymmetry"
+  ],
+  "suspectedUpstreamIssues": [
+    "WRITER146 column-border insertion/merge asymmetry",
+    "WRITER147 longer inheritance cycles lack a helper guard",
+    "WRITER148 outline setter upper-only guard",
+    "WRITER149 header parent-style comment differs from local-only method body"
+  ],
+  "resolvedFailures": [
+    "Restored signed32 DropCap field annotation instead of retaining a TypeScript literal type.",
+    "Test cleanup now calls actual live range dispose and imports the actual BorderLineStyle enum; no production API changes for fixture mistakes.",
+    "Native enum aliases use original member references with the same source-backed narrow lint annotation already used for native ICU aliases; no linter configuration or coverage threshold weakened."
+  ],
+  "remaining": [
+    "Native stylesheet XML entry/attribute/property handlers and application to Writer styles",
+    "DomainMapper resource-table/settings/numbering/section/table orchestration",
+    "OOXMLDocument full resolve/model-statistics/DOM/substream ownership",
+    "Writer main-text export and page/style/undo/layout prerequisites",
+    "Production DOCX and XLSX UI import/export with roundtrip/cancellation/failure-state evidence"
+  ],
+  "boundaries": "Native corpus, deliberate primary file UI/autosave/recovery policy and semantic/default/parity statuses unchanged. No full test suite due per active task Verify Steps; no merge/integrate or task/goal completion."
+}

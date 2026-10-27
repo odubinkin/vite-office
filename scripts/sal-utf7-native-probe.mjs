@@ -18,7 +18,10 @@ const flags = [
     /^#define\s+(RTL_(?:TEXTTOUNICODE|UNICODETOTEXT)_[A-Z0-9_]+)\s+([^\n\\]+)$/gm,
   ),
 ]
-  .map((m) => `#define ${m[1]} ${m[2]}`)
+  .map(
+    /** Applies map to m. @param m - m value. @returns Callback result. */ (m) =>
+      `#define ${m[1]} ${m[2]}`,
+  )
   .join("\n");
 const inputs = [
   [],
@@ -30,7 +33,13 @@ const inputs = [
   [0xe9, 0xe9],
   [0x2b, 0x2b],
   [0x0, 0xffff, 0x41],
-  Array.from({ length: 128 }, (_, i) => i),
+  Array.from(
+    { length: 128 },
+    /** Applies from to _, i. @param _ - _ value. @param i - i value. @returns Callback result. */ (
+      _,
+      i,
+    ) => i,
+  ),
 ];
 const driver = String.raw`
 #include <cstdint>
@@ -46,7 +55,7 @@ static std::uint32_t mix(std::uint32_t hash,std::uint32_t value){for(int i=0;i<4
 int main(){
 std::cout<<"{\"digests\":[";
 for(unsigned capacity=0;capacity<=8;++capacity){std::uint32_t hash=2166136261u;for(unsigned c=0;c<65536;++c){sal_Unicode input=sal_Unicode(c);char out[32]{};ImplUTF7FromUCContextData context{true,0xDEADBEEF,17};sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplUnicodeToUTF7(nullptr,&context,&input,1,out,capacity,0,&info,&consumed);hash=mix(hash,c);hash=mix(hash,n);hash=mix(hash,info);hash=mix(hash,consumed);hash=mix(hash,context.mbShifted);hash=mix(hash,context.mnBitBuffer);hash=mix(hash,context.mnBufferBits);for(sal_Size i=0;i<n;++i)hash=mix(hash,static_cast<unsigned char>(out[i]));}if(capacity)std::cout<<',';std::cout<<hash;}
-std::cout<<"],\"cases\":[";std::vector<std::vector<sal_Unicode>> inputs={${inputs.map((input) => `{${input.join(",")}}`).join(",")}};bool comma=false;
+std::cout<<"],\"cases\":[";std::vector<std::vector<sal_Unicode>> inputs={${inputs.map(/** Applies map to input. @param input - input value. @returns Callback result. */ (input) => `{${input.join(",")}}`).join(",")}};bool comma=false;
 for(unsigned index=0;index<inputs.size();++index)for(unsigned capacity: {0u,1u,2u,3u,4u,5u,8u,512u})for(unsigned flags: {0u,0x101u,0x8000u}){
 auto const& input=inputs[index];char out[1024]{};ImplUTF7FromUCContextData context{true,0xDEADBEEF,17};sal_uInt32 info=99;sal_Size consumed=99;auto n=ImplUnicodeToUTF7(nullptr,&context,input.data(),input.size(),out,capacity,flags,&info,&consumed);if(comma)std::cout<<',';comma=true;std::cout<<"{\"input\":"<<index<<",\"capacity\":"<<capacity<<",\"flags\":"<<flags<<",\"written\":"<<n<<",\"info\":"<<info<<",\"consumed\":"<<consumed<<",\"context\":["<<context.mbShifted<<','<<context.mnBitBuffer<<','<<context.mnBufferBits<<"],\"bytes\":[";for(sal_Size i=0;i<n;++i){if(i)std::cout<<',';std::cout<<unsigned(static_cast<unsigned char>(out[i]));}std::cout<<"]}";}
 std::cout<<"]}\n";}

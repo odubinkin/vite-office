@@ -58,7 +58,11 @@ class Node {
   hasItemSet(checkUsage: boolean): boolean {
     return (
       this.itemSets.length !== 0 &&
-      (!checkUsage || this.itemSets.some((set) => styleHandleUseCount(set) > 1))
+      (!checkUsage ||
+        this.itemSets.some(
+          /** Applies some to set. @param set - set value. @returns Callback result. */ (set) =>
+            styleHandleUseCount(set) > 1,
+        ))
     );
   }
   /** Original last-added reference, borrowed from the node. @returns Pointee. */
@@ -96,7 +100,7 @@ class Node {
   /** Original recursive ignorable-tail availability test. @param checkUsage - Usage filter. @returns Whether an ignorable representative exists. */
   hasIgnorableChildren(checkUsage: boolean): boolean {
     return this.children.some(
-      (child) =>
+      /** Applies some to child. @param child - child value. @returns Callback result. */ (child) =>
         child.ignorable &&
         (!checkUsage || child.hasItemSet(true) || child.hasIgnorableChildren(true)),
     );
@@ -132,14 +136,23 @@ class Iterator {
     private readonly skipIgnorable: boolean,
     names: Map<SfxItemSet | undefined, string>,
   ) {
-    this.parents = [...roots.keys()].sort((a, b) => handleAddress(a) - handleAddress(b));
+    this.parents = [...roots.keys()].sort(
+      /** Applies sort to a, b. @param a - a value. @param b - b value. @returns Callback result. */ (
+        a,
+        b,
+      ) => handleAddress(a) - handleAddress(b),
+    );
     if (names.size)
-      this.parents.sort((a, b) =>
-        (names.get(a) ?? "") < (names.get(b) ?? "")
-          ? -1
-          : (names.get(a) ?? "") > (names.get(b) ?? "")
-            ? 1
-            : 0,
+      this.parents.sort(
+        /** Applies sort to a, b. @param a - a value. @param b - b value. @returns Callback result. */ (
+          a,
+          b,
+        ) =>
+          (names.get(a) ?? "") < (names.get(b) ?? "")
+            ? -1
+            : (names.get(a) ?? "") > (names.get(b) ?? "")
+              ? 1
+              : 0,
       );
   }
   /** Original source getNext returns one owning pointer copy, never every non-shareable leaf. @returns Owned shared pointee or empty. */

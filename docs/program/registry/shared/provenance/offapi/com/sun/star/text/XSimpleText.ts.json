@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/text/XSimpleText.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/text/XSimpleText.idl",
+    "localSymbols": [
+      "XSimpleText",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XSimpleText",
+      "createTextCursor"
+    ],
+    "preservedResponsibilities": [
+      "Original complete IDL method declarations and direct interface inheritance use actual existing Reference, OUString and generated interface contracts. Normal cppumaker static MI factory, implicit root versus explicit direct base, cached identity and deprecated getter are retained; normal incomplete metadata is preserved without invented comprehensive reflection. Concrete component methods are not implemented by these declarations."
+    ],
+    "omittedResponsibilities": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/XSimpleText.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/text/native-text-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "offapi/com/sun/star/text/XSimpleText.idl",
+          "marker": "XSimpleText"
+        }
+      ]
+    }
+  }
+}

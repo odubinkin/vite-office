@@ -1,7 +1,7 @@
 /** @fileoverview Original OUString/C NUL-terminated signed64 conversion delegates to the existing exact SAL parser. */
 import { expect, it } from "vitest";
 import { OUString } from "../inc/rtl/ustring";
-import { rtl_ustr_toInt64 } from "../inc/rtl/ustring.h";
+import { rtl_ustr_toInt32, rtl_ustr_toInt64 } from "../inc/rtl/ustring.h";
 import { rtl_str_toInt64, rtl_str_toUInt64 } from "../inc/rtl/string.h";
 import { HandleSignChar } from "./strtmpl";
 it("retains unsigned byte null assertions and the default signed sign-handler contract", /** Exercises actual original public scalar entry points. @returns Nothing. */ () => {
@@ -83,4 +83,24 @@ it("supports original char-array literals and existing borrowed field views with
     ).toThrow("ConstCharArrayDetector");
   value.dispose();
   empty.dispose();
+});
+
+it("instantiates the original signed32 parser at its own overflow limits through C and OUString", /** Signed32 parsing is not a narrowing signed64 cast. @returns Nothing. */ () => {
+  for (let radix = 2; radix <= 36; ++radix) {
+    for (const value of [-2147483649, -2147483648, -42, 0, 42, 2147483647, 2147483648]) {
+      const source = value.toString(radix),
+        data = terminated(source),
+        string = new OUString(data, source.length);
+      const expected = value < -2147483648 || value > 2147483647 ? 0 : value;
+      expect(rtl_ustr_toInt32(data, radix)).toBe(expected);
+      expect(string.toInt32(radix)).toBe(expected);
+      string.dispose();
+    }
+  }
+  const source = new OUString(terminated("12\0ignored"), 10);
+  expect(OUString.unacquired(source.getDataAddress()).toInt32()).toBe(12);
+  source.dispose();
+  expect(
+    /** Original pointer precondition. @returns Signed32. */ () => rtl_ustr_toInt32(null, 10),
+  ).toThrow("assert(pStr)");
 });

@@ -1,7 +1,7 @@
 /** @fileoverview Functional registered-subtag lookup from liblangtag's seven DB owners.
  * Copyright (C) 2011–2015 Akira TAGOH. SPDX-License-Identifier: MPL-2.0
  */
-import data from "../data/language-subtag-registry.json";
+import data from "../data/language-subtag-registry.json" with { type: "json" };
 import { lt_strlower } from "./lt-utils";
 
 /** Original registry families, without XML storage or physical singleton ownership. */

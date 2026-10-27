@@ -1,0 +1,74 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-6492284a-276f-4021-b111-403fbecdda95",
+    "capabilityId": "CAP-6492284a-276f-4021-b111-403fbecdda95",
+    "suite": "writer",
+    "subsystem": "docx-import",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original Writer table data range/property ownership and current/completed row lifecycle"
+    ],
+    "capability": "Original Writer table data range/property ownership and current/completed row lifecycle",
+    "gaps": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TableData.hxx",
+          "marker": "CellData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sw/qa/extras/ooxmlimport/ooxmlimport.cxx",
+          "marker": "testN780645"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sw/source/writerfilter/dmapper/TableData.hxx",
+          "marker": "CellData"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/TableData.ts",
+          "marker": "CellData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-table-data.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/writer-upstream-suspected-issues.md",
+          "marker": "WRITER161"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified."
+    },
+    "scopeLimitations": [
+      "Physical C++ ABI/layout, native exception-copy allocation, threads, comprehensive generated reflection and whole-module compiled differential parity remain unverified. Full TableManager/DomainMapperTableManager, concrete Writer text-range/component services, DOCX/XLSX model/export and production desktop/mobile file UI workflows remain incomplete. Broad behavior/contract/default/verified flags stay unverified.",
+      "Referenced native QA is an unported downstream consumer, not a claim of ported native QA or native TableData differential execution. Local source-backed tests use actual shared owners; native vector evidence covers only original SvRef destruction order."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "table-data-lifecycle"
+  }
+}

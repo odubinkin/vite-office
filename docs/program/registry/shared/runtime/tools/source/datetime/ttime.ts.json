@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/datetime/ttime.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "date-time-values",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/datetime/ttime.ts",
+        "apps/office/src/tools/source/datetime/ttime.test.ts",
+        "vendor/libreoffice-reference/tools/source/datetime/ttime.cxx"
+      ],
+      "justification": "AQF9AG adds the native tools::Time scalar needed by DateTime and calendar conversion. The signed64 decimal-packed field uses bigint; native component widths, constructor carry normalization and hour clamp, sign-preserving setters without carry, nanosecond/millisecond conversion and day fraction match the source paths. The CSS DateTime time-field constructor ignores IsUTC as upstream. System/UTC-offset/tick services, GetClock, UNO Time output and the remaining Time arithmetic operators are not represented; no JavaScript Date/calendar substitution is introduced. Tests cover ordinary defined scalar inputs, including packed values beyond binary64 exact-integer range and signed32 millisecond narrowing; C++ undefined overflow behavior is not certified. Source release-build hour clamping is retained; debug-only assertion diagnostics and undefined signed-overflow cases are not a certified runtime contract.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Time"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "tools/source/datetime/ttime.cxx",
+      "upstreamSymbols": [
+        "Time::Time"
+      ]
+    }
+  }
+}

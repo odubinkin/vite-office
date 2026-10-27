@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/calendar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/calendar.ts",
+        "apps/office/src/external/icu/source/i18n/gregocal.test.ts",
+        "scripts/icu-calendar-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+        "scripts/icu-calendar-time-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs",
+        "scripts/icu-olson-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+        "scripts/icu-timezone-default-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/gregocal.constructor.test.ts",
+        "apps/office/src/external/icu/source/i18n/calendar.locale.test.ts",
+        "scripts/icu-calendar-locale-native-probe.mjs",
+        "scripts/icu-gregorian-constructor-native-probe.mjs"
+      ],
+      "justification": "Original Calendar owner now has default/adopted/reference/copy constructor paths, base assignment, actual owned zone, root-initialized Locale metadata, platform UTC getNow, locale/week/weekend data, field/stamp/time cache and complete inherited UTC/field algorithms. Original constructor guard/clear/zone ordering is retained; LocalPointer(null,status) sets memory error before the explicit unreachable null-argument branch (CALC-342). Reference overloads use a transient tag so a clone callback that changes status still leaves the nonnull clone adopted as source. Calendar remains abstract for its actual virtual arithmetic/clone interface, not because construction is replaced by a placeholder. getLocale returns a Locale value, while LocaleBased supplies shared selector/ID semantics. Original zone adopt/set/orphan behavior including CALC-319 and existing CALC-310/311 time behavior remain unchanged. Unchanged ICU78.3 library witnesses pass 14994 locale/week cases over 993 requested names and 1440 constructor/copy/weekend cases. They observe all six week/weekend fields, valid/actual Locale values and literal root IDs, incoming error/warning behavior, default and keyword timezone selection, reference/adoption clone counts, null/error and aliased-status clone callbacks, all initialized field/stamp/flag and derived state, date-versus-clock initialization, completed UTC fields and weekend work clones. Existing 63050 scalar/calendar and 12929 time cases also pass after fixtures use real constructors and explicit public controlled baselines.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Calendar",
+        "resolveFields",
+        "computeJulianDay",
+        "handleComputeJulianDay",
+        "computeGregorianFields",
+        "recalculateStamp"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/calendar.cpp",
+      "upstreamSymbols": [
+        "Calendar",
+        "resolveFields",
+        "computeJulianDay",
+        "handleComputeJulianDay",
+        "computeGregorianFields",
+        "recalculateStamp"
+      ]
+    }
+  }
+}

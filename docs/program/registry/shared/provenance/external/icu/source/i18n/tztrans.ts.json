@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/tztrans.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/tztrans.cpp",
+    "localSymbols": [
+      "TimeZoneTransition",
+      "assign",
+      "adoptFrom",
+      "getFrom"
+    ],
+    "upstreamSymbols": [
+      "TimeZoneTransition::TimeZoneTransition",
+      "TimeZoneTransition::operator=",
+      "TimeZoneTransition::getFrom"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports TimeZoneTransition empty/copy/initialized construction, owned rule cloning and adoption, borrowed const getters and virtual-rule equality. Copy construction preserves nullable fields; assignment follows the original unconditional source-rule dereferences and is certified only for initialized source rules, per CALC-305. GC projects deletion without native allocator/ABI, dangling-borrow or invalid alias/null guarantees. Unchanged ICU78.3 libraries/data match45789 combined annual/rule/transition/Calendar time cases; the probe and focused unit tests are limited to the stated operations. System/IANA/locale factories and full LibreOffice calendar/formatter/CSV integration remain incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated source responsibility is ported. Native allocation/concurrency/ABI and complete factories/services remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/tztrans.ts",
+          "marker": "TimeZoneTransition"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+          "marker": "actual source rules"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/tztrans.cpp",
+          "marker": "TimeZoneTransition::TimeZoneTransition"
+        }
+      ]
+    }
+  }
+}

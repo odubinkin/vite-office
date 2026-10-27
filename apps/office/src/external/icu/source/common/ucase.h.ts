@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 UCaseProps structure and scalar-case constants/macros. */
+/** @fileoverview Original ICU78.3 UCaseProps structure and consumed scalar/full-fold constants/macros. */
 import type { UTrie2 } from "./utrie2.h";
 
 /** Original UCaseProps data owner; numeric typed arrays represent original native constant spans. */
@@ -25,6 +25,9 @@ export const UCASE_EXC_FOLD = 1;
 export const UCASE_EXC_UPPER = 2;
 export const UCASE_EXC_TITLE = 3;
 export const UCASE_EXC_DELTA = 4;
+export const UCASE_EXC_FULL_MAPPINGS = 7;
+export const UCASE_FULL_LOWER = 0xf;
+export const UCASE_MAX_STRING_LENGTH = 0x1f;
 export const UCASE_EXC_DOUBLE_SLOTS = 0x100;
 export const UCASE_EXC_NO_SIMPLE_CASE_FOLDING = 0x200;
 export const UCASE_EXC_DELTA_IS_NEGATIVE = 0x400;

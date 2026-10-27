@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/editeng/inc/blinkitem.ts",
+    "localSymbols": [
+      "SvxBlinkItem"
+    ],
+    "upstreamPath": "include/editeng/blinkitem.hxx",
+    "upstreamSymbols": [
+      "SvxBlinkItem"
+    ],
+    "preservedResponsibilities": [
+      "Task202610251549-V4DQJW ports native two-line UTF16 brackets, unsigned16 text/character rotation and independent fit flag, typed Any query/put and native bool blink. DOCX adds caps, outline/shadow, blink, exact emphasis combinations, native width narrowing/clamp, relief and collected East Asian rotation/combine/bracket priorities; actual serializers retain native run sorting, reset and detach lifecycle. Native localized GetPresentation/XML diagnostics, item-manager/lifetime, complete pool default registration, browser item transport, general LanguageTag/color/underline/theme and paragraph/style/iterator orchestration remain unported or unverified. No complete DOCX export, UI route or module/capability/default parity is certified."
+    ],
+    "omittedResponsibilities": [
+      "Native localized presentation/diagnostics, full item-manager/lifetime/pool registration and browser transport remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/editeng/inc/blinkitem.ts",
+          "marker": "SvxBlinkItem"
+        },
+        {
+          "path": "apps/office/src/editeng/source/items/text-layout-items.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.effects.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/editeng/blinkitem.hxx",
+          "marker": "SvxBlinkItem"
+        }
+      ]
+    }
+  }
+}

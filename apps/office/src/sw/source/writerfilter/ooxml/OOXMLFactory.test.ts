@@ -251,6 +251,6 @@ it.skipIf(!existsSync("../../vendor/libreoffice-reference/sw/source/writerfilter
       ["../../scripts/writer-ooxml/generate-factory.py", "--check"],
       { encoding: "utf8" },
     );
-    expect(output).toContain("attributes=59, elements=231, resources=253, lists=82, actions=25");
+    expect(output).toContain("attributes=107, elements=355, resources=428, lists=315, actions=41");
   },
 );

@@ -16,6 +16,8 @@ import type { __sal_NoAcquire } from "../../../../../../sal/inc/types";
 import type { XInterface } from "./XInterface";
 /** Existing direct ownership members use the original common interface contract's two selected virtual methods, without requiring a query provider. */
 type InterfacePointer = Pick<XInterface, "acquire" | "release">;
+/** Compiler address identity of the existing sole pointer field; these borrowed views own no interface and add no second pointer/count/type provider. */
+const referenceAddresses = new WeakMap<BaseReference, [InterfacePointer | null]>();
 /** Original deprecated no-acquire discriminator. */
 export enum UnoReference_NoAcquire {
   UNO_REF_NO_ACQUIRE,
@@ -208,6 +210,23 @@ export class Reference<T extends InterfacePointer = InterfacePointer> extends Ba
   /** Original castFromXInterface borrowed pointer. @returns Same logical pointer. */
   override get(): T | null {
     return this._pInterface as T | null;
+  }
+  /** Erases the original address-of Reference<T> value used by compound/Any algorithms. The stable accessor aliases its actual pointer field and performs no acquisition, release or independent storage assignment policy. @returns Existing field address. */
+  getAddress(): [T | null] {
+    let address = referenceAddresses.get(this);
+    if (address === undefined) {
+      address = [] as unknown as [InterfacePointer | null];
+      Object.defineProperty(address, "0", {
+        /** Original existing field read. @returns Borrowed pointer. */
+        get: () => this._pInterface,
+        /** Original existing field write; the surrounding native C algorithm alone owns acquire/release. @param value - Already managed pointer. @returns Nothing. */
+        set: (value: InterfacePointer | null) => {
+          this._pInterface = value;
+        },
+      });
+      referenceAddresses.set(this, address);
+    }
+    return address as [T | null];
   }
   /** Original destructor does not clear the field before releasing it. @returns Nothing. */
   dispose(): void {

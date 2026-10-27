@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.buffer.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.buffer.ts",
+        "apps/office/src/external/icu/source/common/uloc.keywordvalue.test.ts",
+        "scripts/icu-keywordvalue-native-probe.mjs"
+      ],
+      "justification": "Original locale C-buffer facades use real normalized/subtag ByteSink operations and actual checked-array adaptation. Null locale default lookup remains before the shared incoming-error guard; keyword getter has a distinct null-locale contract elsewhere. Source language-only early-return and source GetAppendBuffer ISO alias writes, including bytes outside final appended length, are retained. Native facade comparison observes all physical guard bytes across capacity/status/default/NUL cases. Native invalid memory/capacity ranges, reverse conversion and full calendar/service integration remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uloc_getName",
+        "uloc_getBaseName",
+        "uloc_canonicalize",
+        "uloc_getLanguage",
+        "uloc_getScript",
+        "uloc_getCountry",
+        "uloc_getVariant"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "uloc_getName",
+        "uloc_getBaseName",
+        "uloc_canonicalize",
+        "uloc_getLanguage",
+        "uloc_getScript",
+        "uloc_getCountry",
+        "uloc_getVariant"
+      ]
+    }
+  }
+}

@@ -46,3 +46,27 @@ it.each([
     ).toThrow(/invalid/);
   },
 );
+
+it.each([null, [], "color", 42])(
+  "rejects a non-record Worker color envelope %j",
+  /** Validates untrusted structured-clone admission before native allocation. @param candidate - Invalid envelope. @returns Nothing. */ (
+    candidate,
+  ) => {
+    expect(
+      /** Attempts to restore an invalid envelope. @returns No native color. */ () =>
+        decodeComplexColor(candidate),
+    ).toThrow("ComplexColor record is invalid");
+  },
+);
+it.each([null, [], "transform", 42])(
+  "rejects a non-record transformation %j",
+  /** Validates each nested record independently of valid top-level metadata. @param candidate - Invalid nested value. @returns Nothing. */ (
+    candidate,
+  ) => {
+    const record = encodeComplexColor(new ComplexColor());
+    expect(
+      /** Attempts a malformed nested transport. @returns No native color. */ () =>
+        decodeComplexColor({ ...record, transformations: [candidate] }),
+    ).toThrow("ComplexColor transformation is invalid");
+  },
+);

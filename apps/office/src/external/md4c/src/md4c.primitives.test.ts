@@ -14,7 +14,7 @@ import { md_build_attribute, md_is_entity_str } from "./md4c.attribute";
 import { md_link_label_cmp, md_link_label_hash } from "./md4c.label";
 import { MD_TEXTTYPE as T, MD_DIALECT_GITHUB, MD_FLAG_WIKILINKS } from "./md4c.h";
 const bytes = new TextEncoder();
-it("matches compiled md4c classification and folding for every Unicode scalar", () => {
+it("matches compiled md4c classification and folding for every Unicode scalar", /** Verifies matches compiled md4c classification and folding for every Unicode scalar. @returns Nothing. */ () => {
   let digest = 2166136261;
   /** Adds one native unsigned word in the fixture's little-endian order. @param value - Word. @returns Nothing. */
   function hash(value: number): void {
@@ -32,7 +32,12 @@ it("matches compiled md4c classification and folding for every Unicode scalar", 
 });
 it.each(fixture.utf8)(
   "matches compiled forward and reverse UTF-8 decoding: $bytes",
-  ({ bytes: value, cp, width, before }) => {
+  /** Verifies matches compiled forward and reverse UTF-8 decoding: $bytes. @param value0 - bytes: value, cp, width, before value. @returns Nothing. */ ({
+    bytes: value,
+    cp,
+    width,
+    before,
+  }) => {
     const input = new Uint8Array(value);
     expect(md_decode_unicode(input, 0)).toEqual([cp, width]);
     expect(md_decode_utf8_before__(input, input.length)).toBe(before);
@@ -40,17 +45,21 @@ it.each(fixture.utf8)(
 );
 it.each(["&nbsp;", "&unknownEntity;", "&#1234567;", "&#x10ABCD;"])(
   "recognizes native entity syntax without consulting an HTML entity dictionary: %s",
-  (text) => {
+  /** Verifies recognizes native entity syntax without consulting an HTML entity dictionary: %s. @param text - text value. @returns Nothing. */ (
+    text,
+  ) => {
     expect(md_is_entity_str(bytes.encode(text), 0)).toBe(text.length);
   },
 );
 it.each(["&a;", "&#12345678;", "&#x1234567;", "&a-b;", "&nbsp"])(
   "rejects invalid or unterminated native entity syntax: %s",
-  (text) => {
+  /** Verifies rejects invalid or unterminated native entity syntax: %s. @param text - text value. @returns Nothing. */ (
+    text,
+  ) => {
     expect(md_is_entity_str(bytes.encode(text), 0)).toBe(-1);
   },
 );
-it("retains UTF-8 byte offsets and source substring separation for attributes", () => {
+it("retains UTF-8 byte offsets and source substring separation for attributes", /** Verifies retains UTF-8 byte offsets and source substring separation for attributes. @returns Nothing. */ () => {
   const result = md_build_attribute(bytes.encode("é\\* &unknown;\0\0 tail"));
   expect(new TextDecoder().decode(result.text)).toBe("é* &unknown;\0\0 tail");
   expect(result.size).toBe(20);
@@ -63,7 +72,7 @@ it("retains UTF-8 byte offsets and source substring separation for attributes", 
   ]);
   expect(result.substr_offsets).toEqual([0, 4, 13, 14, 15, 20]);
 });
-it("keeps no-escape attributes and zero-length native trivial attributes", () => {
+it("keeps no-escape attributes and zero-length native trivial attributes", /** Verifies keeps no-escape attributes and zero-length native trivial attributes. @returns Nothing. */ () => {
   expect(new TextDecoder().decode(md_build_attribute(bytes.encode("\\*"), 1).text)).toBe("\\*");
   expect(md_build_attribute(new Uint8Array())).toEqual({
     text: new Uint8Array(),
@@ -72,7 +81,7 @@ it("keeps no-escape attributes and zero-length native trivial attributes", () =>
     substr_offsets: [0, 0],
   });
 });
-it("uses pinned Unicode folding and native label comparison ordering", () => {
+it("uses pinned Unicode folding and native label comparison ordering", /** Verifies uses pinned Unicode folding and native label comparison ordering. @returns Nothing. */ () => {
   const a = bytes.encode("  STRAẞE\u2000"),
     b = bytes.encode("straße ");
   expect(md_link_label_cmp(a, b)).toBe(0);
@@ -84,7 +93,11 @@ it("uses pinned Unicode folding and native label comparison ordering", () => {
 
 it.each(fixture.scans)(
   "matches the compiled $operation scanner: $text",
-  ({ operation, text, result }) => {
+  /** Verifies matches the compiled $operation scanner: $text. @param value0 - operation, text, result value. @returns Nothing. */ ({
+    operation,
+    text,
+    result,
+  }) => {
     const input = bytes.encode(text),
       lines: { beg: number; end: number }[] = [];
     let start = 0;

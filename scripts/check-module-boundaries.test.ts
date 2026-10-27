@@ -501,9 +501,9 @@ it("retains actual mutual SAL and o3tl string-header owners without application 
 });
 
 it("permits original cppuhelper UNO and SAL owners while retaining application and browser gates", /** Protects original helper ownership, without reverse or application-layer permission. @returns Nothing. */ () => {
-  for (const dependency of ["cppu", "sal"])
+  for (const dependency of ["cppu", "sal", "udkapi"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(false);
-  for (const dependency of ["sc", "sw", "framework", "vcl", "udkapi", "svl"])
+  for (const dependency of ["sc", "sw", "framework", "vcl", "svl"])
     expect(isForbiddenModuleEdge("cppuhelper", dependency)).toBe(true);
   expect(isForbiddenModuleEdge("cppu", "cppuhelper")).toBe(true);
   expect(getRuntimeOwnershipLayer("cppuhelper/source/supportsservice.ts")).toBe(
@@ -663,8 +663,8 @@ it("admits original Tools Color Any operators while retaining reverse and applic
 });
 
 it("admits native docmodel color values using Tools and o3tl without app or reverse edges", /** Checks shared color value ownership. @returns Nothing. */ () => {
-  expect(isForbiddenModuleEdge("docmodel", "tools")).toBe(false);
-  expect(isForbiddenModuleEdge("docmodel", "o3tl")).toBe(false);
+  for (const module of ["tools", "o3tl", "cppu", "cppuhelper", "offapi"])
+    expect(isForbiddenModuleEdge("docmodel", module)).toBe(false);
   for (const module of ["sw", "sc", "framework", "vcl"])
     expect(isForbiddenModuleEdge("docmodel", module)).toBe(true);
   expect(isForbiddenModuleEdge("tools", "docmodel")).toBe(true);

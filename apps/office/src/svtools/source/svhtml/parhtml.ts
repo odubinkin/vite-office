@@ -14,7 +14,7 @@ import { GetHTMLToken, htmlAsciiLower } from "./htmlkywd";
 import { HTMLOption, GetOptions, UnescapeToken } from "./parhtml.options";
 import { ScanText, htmlAlpha, htmlControl } from "./parhtml.text";
 import { GetNextRawToken } from "./parhtml.raw";
-import tables from "./htmlkywd-data.json";
+import tables from "./htmlkywd-data.json" with { type: "json" };
 const preKept = new Set<number>(tables.preKeptTokens);
 /** Native ASCII whitespace includes form feed in token names/options. @param code - Scalar. @returns Space. */
 function white(code: number): boolean {

@@ -17,7 +17,7 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 
-it("provides the original metadata index/slot/flag table independently of represented default classes", () => {
+it("provides the original metadata index/slot/flag table independently of represented default classes", /** Verifies provides the original metadata index/slot/flag table independently of represented default classes. @returns Nothing. */ () => {
   const owner = SwModule.get().getItemInfoPackageSwAttributes();
   expect(owner.size()).toBe(163);
   for (const row of metadata) {
@@ -31,7 +31,7 @@ it("provides the original metadata index/slot/flag table independently of repres
   const slots = owner.getSlotIDToWhichIDMap();
   for (const row of metadata) if (row.slot) expect(slots.get(row.slot)).toBe(row.which);
 });
-it("uses GetDefaultFonts for module-global fonts before any document construction", () => {
+it("uses GetDefaultFonts for module-global fonts before any document construction", /** Verifies uses GetDefaultFonts for module-global fonts before any document construction. @returns Nothing. */ () => {
   const font = GetDfltAttr(RES_CHRATR_FONT);
   assert(font instanceof SvxFontItem);
   expect(font.GetFamily()).toBe(FontFamily.FAMILY_ROMAN);
@@ -40,7 +40,7 @@ it("uses GetDefaultFonts for module-global fonts before any document constructio
   expect(font.isStaticDefault()).toBe(true);
   expect(GetDfltAttr(RES_CHRATR_FONT)).toBe(font);
 });
-it("shares real static metadata/default identities across documents and pool copies while overrides remain local", () => {
+it("shares real static metadata/default identities across documents and pool copies while overrides remain local", /** Verifies shares real static metadata/default identities across documents and pool copies while overrides remain local. @returns Nothing. */ () => {
   const first = new SwDoc({ locale: "en-US" }),
     second = new SwDoc({ locale: "ja-JP" });
   try {
@@ -68,7 +68,7 @@ it("shares real static metadata/default identities across documents and pool cop
     second.Dispose();
   }
 });
-it("keeps InitNew's two-line orphan/widow overlay distinct from the zero global pool values", () => {
+it("keeps InitNew's two-line orphan/widow overlay distinct from the zero global pool values", /** Verifies keeps InitNew's two-line orphan/widow overlay distinct from the zero global pool values. @returns Nothing. */ () => {
   const doc = new SwDoc();
   try {
     for (const which of [RES_PARATR_ORPHANS, RES_PARATR_WIDOWS]) {
@@ -83,9 +83,12 @@ it("keeps InitNew's two-line orphan/widow overlay distinct from the zero global 
   }
 });
 
-it("requires explicit module initialization and retains native replacement/removal ownership", () => {
+it("requires explicit module initialization and retains native replacement/removal ownership", /** Verifies requires explicit module initialization and retains native replacement/removal ownership. @returns Nothing. */ () => {
   const module = new SwModule();
-  expect(() => module.getItemInfoPackageSwAttributes()).toThrow("InitItemInfoPackageSwAttributes");
+  expect(
+    /** Verifies requires explicit module initialization and retains native replacement/removal ownership. @returns Callback result. */ () =>
+      module.getItemInfoPackageSwAttributes(),
+  ).toThrow("InitItemInfoPackageSwAttributes");
   module.InitItemInfoPackageSwAttributes();
   const first = module.getItemInfoPackageSwAttributes(),
     released = vi.spyOn(first, "Dispose");
@@ -96,7 +99,10 @@ it("requires explicit module initialization and retains native replacement/remov
     removed = vi.spyOn(second, "Dispose");
   module.RemoveItemInfoPackageSwAttributes();
   expect(removed).toHaveBeenCalledTimes(1);
-  expect(() => module.getItemInfoPackageSwAttributes()).toThrow("InitItemInfoPackageSwAttributes");
+  expect(
+    /** Verifies requires explicit module initialization and retains native replacement/removal ownership. @returns Callback result. */ () =>
+      module.getItemInfoPackageSwAttributes(),
+  ).toThrow("InitItemInfoPackageSwAttributes");
   module.RemoveItemInfoPackageSwAttributes();
   expect(removed).toHaveBeenCalledTimes(1);
 });

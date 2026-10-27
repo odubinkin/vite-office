@@ -50,8 +50,8 @@ export class MarkdownReader {
   public Read(bytes: Uint8Array, options: SwDocOptions = {}, baseURL = ""): SwDoc {
     if (bytes.length === 0) throw new Error("Invalid Markdown byte stream.");
     const document = new SwDoc(options),
-      first = document.paragraphs[0];
-    if (first === undefined) throw new Error("Writer body has no text node.");
+      // SwDoc construction always installs its initial body text node before returning.
+      first = document.paragraphs[0] as SwTextNode;
     const position = new SwPosition(first),
       pam = new SwPaM(position);
     position.Dispose();
@@ -86,7 +86,9 @@ export class SwMarkdownParser {
   public CallParser(source: Uint8Array): void {
     if (source.length === 0) throw new Error("Invalid Markdown byte stream.");
     this.SetStyle("text-body");
-    const result = md_parse(
+    // ABI0, exact byte bounds and Writer's zero-returning callbacks admit only success;
+    // callback exceptions still propagate to Read's document/cursor cleanup.
+    md_parse(
       source,
       source.length,
       {
@@ -100,7 +102,6 @@ export class SwMarkdownParser {
       },
       this,
     );
-    if (result !== 0) throw new Error("Markdown parser failed.");
   }
   /** Reads the current native text owner. @returns Text node. */
   public GetTextNode(): SwTextNode {

@@ -117,7 +117,9 @@ class ItemInfoPackageSwAttributes extends ItemInfoPackage {
       fonts.get(RES_CHRATR_CTL_FONT) as SvxFontItem,
     );
     /** Retains one actual source static metadata/default owner. @param item - Owned default. @returns Nothing. */
-    const add = (item: SfxPoolItem): void => {
+    const add = /** Evaluates the init callback. @param item - item value. @returns Nothing. */ (
+      item: SfxPoolItem,
+    ): void => {
       ItemInfoPackageSwAttributes.setItemAtItemInfoStatic(
         item,
         this.getItemInfoStatic(item.Which() - RES_CHRATR_BEGIN),
@@ -207,4 +209,4 @@ export function createItemInfoPackageSwAttributes(): ItemInfoPackage {
   return new ItemInfoPackageSwAttributes();
 }
 
-import defaultMetadata from "./default-metadata.json";
+import defaultMetadata from "./default-metadata.json" with { type: "json" };

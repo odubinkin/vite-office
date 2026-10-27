@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppuhelper/inc/weak.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-type",
+    "capabilityIds": [
+      "CAP-3c31bf0e-6112-4b9e-a7a2-5348ce481e06"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppuhelper/inc/weak.ts",
+        "apps/office/src/cppuhelper/source/native-weak-object.test.ts",
+        "include/cppuhelper/weak.hxx#OWeakObject"
+      ],
+      "justification": "Original weak.hxx inline acquire(nonnull OWeakObject*) and borrowed getXWeak including null; OWeakObject declaration reexports the single source/weak implementation. Compiler assertion binding is explicit; no alternative weak object or type provider. V4DQJW extends the same original weak.cxx owner with non-aggregating OWeakObject and internal OWeakConnectionPoint: zero-starting actual OSL count, lazy independently acquired adapter, guard increment/rollback against resurrection, reverse pointer search then actual root identity comparison, detached ordered listener snapshot, disposed-listener handling, last RuntimeException selection, weak invalidation before virtual destruction and dummy copy/assignment. Actual Reference, queryInterface, XWeak/XAdapter/XReference, Any and exception owners are reused. Synchronous browser execution replaces mutex scope; caught UNO exception values are retained directly rather than copied through the absent native C++/binary exception bridge. This preserves dynamic JS exception fields and selection, but does not certify native exception allocation/context-refcount traces, binary ABI, threads or shutdown. Ten added real-owner tests plus six existing complete native weak-helper replays cover both changed executable owners at unchanged scoped100. No new native OWeakObject capture or generic bridge parity is claimed. OWeakAggObject, WeakImplHelper, UnoComplexColor, CellColorHandler and full DOCX/XLSX model/UI workflows remain incomplete; broad parity flags stay unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "acquire",
+        "getXWeak"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "include/cppuhelper/weak.hxx",
+      "upstreamSymbols": [
+        "acquire",
+        "getXWeak",
+        "OWeakObject"
+      ]
+    }
+  }
+}

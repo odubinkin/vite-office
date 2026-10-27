@@ -7,19 +7,42 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "number-formatting",
-    "capabilityIds": ["CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"],
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "B",
-      "evidence": ["apps/office/src/unotools/source/i18n/calendarwrapper.ts", "apps/office/src/i18npool/source/localedata/native-calendar-items.test.ts", "scripts/extract-libreoffice-calendar-items.py"],
-      "justification": "Task AQF9AG binds default-calendar name and count queries to the pinned generated LC_CALENDAR sections for all 284 registered locale services. Date arithmetic, alternate calendars and full UNO CalendarItem2 transport are pending.",
+      "evidence": [
+        "apps/office/src/unotools/source/i18n/calendarwrapper.ts",
+        "apps/office/src/i18npool/source/localedata/native-calendar-items.test.ts",
+        "scripts/extract-libreoffice-calendar-items.py"
+      ],
+      "justification": "Task AQF9AG binds default-calendar name and count queries to the pinned generated LC_CALENDAR sections for all 284 registered locale services. Date arithmetic, alternate calendars and full UNO CalendarItem2 transport are pending.\nAQF9AG adds the source const DateTime epoch owner initialized to Gregorian 1 January 1970 at midnight and getEpochStart returning its borrowed read-only scalar contract. Date/time subtraction uses source Time/Duration/DateTime values; calendar date arithmetic itself remains unported.",
       "knownViolations": [],
-      "localSymbols": ["CalendarWrapper", "loadDefaultCalendar", "getMonths", "getGenitiveMonths", "getPartitiveMonths", "getDays", "getNumberOfMonthsInYear", "getNumberOfDaysInWeek"],
+      "localSymbols": [
+        "CalendarWrapper",
+        "loadDefaultCalendar",
+        "getMonths",
+        "getGenitiveMonths",
+        "getPartitiveMonths",
+        "getDays",
+        "getNumberOfMonthsInYear",
+        "getNumberOfDaysInWeek"
+      ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "unotools/source/i18n/calendarwrapper.cxx",
-      "upstreamSymbols": ["CalendarWrapper::loadDefaultCalendar", "CalendarWrapper::getMonths", "CalendarWrapper::getGenitiveMonths", "CalendarWrapper::getPartitiveMonths", "CalendarWrapper::getDays", "CalendarWrapper::getNumberOfMonthsInYear", "CalendarWrapper::getNumberOfDaysInWeek"]
+      "upstreamSymbols": [
+        "CalendarWrapper::loadDefaultCalendar",
+        "CalendarWrapper::getMonths",
+        "CalendarWrapper::getGenitiveMonths",
+        "CalendarWrapper::getPartitiveMonths",
+        "CalendarWrapper::getDays",
+        "CalendarWrapper::getNumberOfMonthsInYear",
+        "CalendarWrapper::getNumberOfDaysInWeek"
+      ]
     }
   }
 }

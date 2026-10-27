@@ -3,7 +3,7 @@ import { Font, type ConstFont } from "../../../../vcl/source/font/font";
 import { FontWeight, FontItalic } from "../../../../tools/inc/fontenum";
 import { Size } from "../../../../tools/inc/gen";
 import { RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
-import data from "./number-bullet-data.json";
+import data from "./number-bullet-data.json" with { type: "json" };
 let font: ConstFont | undefined;
 /** Source shipped configuration has no user-set family when its property is void. @returns Native flag. */
 export function IsDefBulletFontUserDefined(): boolean {

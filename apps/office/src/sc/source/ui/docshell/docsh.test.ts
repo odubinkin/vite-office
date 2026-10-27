@@ -37,6 +37,8 @@ it("opens CSV through the text filter and exports the canonical cells without ad
   sheetName.dispose();
   expect(text(document.GetSharedString(new ScAddress(0, 1, 0)).getString())).toBe("A, B");
   expect(document.GetValue(new ScAddress(1, 1, 0))).toBe(42);
+  const importedFormula = document.GetFormulaCell(new ScAddress(2, 1, 0));
+  expect(importedFormula && document.IsInFormulaTree(importedFormula)).toBe(true);
   expect(document.GetValue(new ScAddress(2, 1, 0))).toBe(84);
   const medium = shell.GetMedium();
   const csv = new TextDecoder().decode(shell.AsciiSave());

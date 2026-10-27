@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uinvchar.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uinvchar.ts",
+        "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+        "scripts/icu-olson-native-probe.mjs",
+        "scripts/icu-keytype-native-probe.mjs"
+      ],
+      "justification": "Original invariantChars bit masks and counted/NUL-terminated UTF16 predicate are retained, with all65536 code units checked by the existing Olson native witness. The counted ASCII-platform u_UCharsToChars release path now preserves source NUL substitution for non-invariant units; the key/type witness independently matches all65536 conversion outputs. Native debug assertions, EBCDIC, remaining conversion APIs, general UnicodeString extraction/FixedString allocation, ABI and full locale/calendar service integration remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uprv_isInvariantUString",
+        "u_UCharsToChars"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uinvchar.cpp",
+      "upstreamSymbols": [
+        "uprv_isInvariantUString",
+        "u_UCharsToChars"
+      ]
+    }
+  }
+}

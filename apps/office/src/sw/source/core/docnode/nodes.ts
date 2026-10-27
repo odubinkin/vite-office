@@ -1,7 +1,7 @@
-import { SwNumRule } from "../doc/number";
 /**
  * @fileoverview Implements the Writer SwNodes array and fixed sections from the pinned LibreOffice `sw/source/core/docnode/nodes.cxx` boundary.
  */
+import { SwNumRule } from "../doc/number";
 import { goNext, goPrevious } from "./nodes.navigation";
 import type { SwNodeIndex, SwPosition } from "../crsr/pam";
 import { TextToTableNodes } from "./ndtbl";

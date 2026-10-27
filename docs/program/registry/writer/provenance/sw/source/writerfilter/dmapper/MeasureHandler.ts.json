@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/writerfilter/dmapper/MeasureHandler.ts",
+    "localSymbols": [
+      "MeasureHandler"
+    ],
+    "upstreamPath": "sw/source/writerfilter/dmapper/MeasureHandler.cxx",
+    "upstreamSymbols": [
+      "MeasureHandler",
+      "lcl_attribute",
+      "getMeasureValue"
+    ],
+    "preservedResponsibilities": [
+      "Original measure/unit defaults, MIN row-height mode, string-only height parsing through the actual signed32 OUString/SAL owner, exact-only sticky height, limited dxa/legacy-unit3 conversion and ordered actual PropertyValue interop sequences. Percentage/nil/auto converted width remains zero. XML reaches this receiver through generated style table-property contexts."
+    ],
+    "omittedResponsibilities": [
+      "Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/MeasureHandler.ts",
+          "marker": "MeasureHandler"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/dmapper/native-table-value-handlers.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/MeasureHandler.cxx",
+          "marker": "MeasureHandler"
+        }
+      ]
+    }
+  }
+}

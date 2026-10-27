@@ -1,6 +1,7 @@
 /** @fileoverview Complete compiled md4c 0.5.3 callback-stream differential corpus and public callback-abort contracts. */
 import { expect, it } from "vitest";
 import fixture from "./native-callbacks.json";
+import integrationEdges from "./native-edge-callbacks.json";
 import * as D from "./md4c.h";
 import { md_parse } from "./md4c";
 /** Captures native callback values by copy, matching a consumer that retains callback data. */
@@ -75,19 +76,53 @@ function parser(flags: number): D.MD_PARSER<Capture> {
   return {
     abi_version: 0,
     flags,
-    enter_block: (type, detail, data) => record(data, [0, type, blockDetail(type, detail)]),
-    leave_block: (type, detail, data) => record(data, [1, type, blockDetail(type, detail)]),
-    enter_span: (type, detail, data) => record(data, [2, type, spanDetail(type, detail)]),
-    leave_span: (type, detail, data) => record(data, [3, type, spanDetail(type, detail)]),
-    text: (type, text, size, data) => record(data, [4, type, [...text.subarray(0, size)]]),
-    debug_log: (message, data) => {
-      data.logs.push(message);
-    },
+    enter_block:
+      /** Evaluates the md4c.test callback. @param type - type value. @param detail - detail value. @param data - data value. @returns Callback result. */ (
+        type,
+        detail,
+        data,
+      ) => record(data, [0, type, blockDetail(type, detail)]),
+    leave_block:
+      /** Evaluates the md4c.test callback. @param type - type value. @param detail - detail value. @param data - data value. @returns Callback result. */ (
+        type,
+        detail,
+        data,
+      ) => record(data, [1, type, blockDetail(type, detail)]),
+    enter_span:
+      /** Evaluates the md4c.test callback. @param type - type value. @param detail - detail value. @param data - data value. @returns Callback result. */ (
+        type,
+        detail,
+        data,
+      ) => record(data, [2, type, spanDetail(type, detail)]),
+    leave_span:
+      /** Evaluates the md4c.test callback. @param type - type value. @param detail - detail value. @param data - data value. @returns Callback result. */ (
+        type,
+        detail,
+        data,
+      ) => record(data, [3, type, spanDetail(type, detail)]),
+    text: /** Evaluates the md4c.test callback. @param type - type value. @param text - text value. @param size - size value. @param data - data value. @returns Callback result. */ (
+      type,
+      text,
+      size,
+      data,
+    ) => record(data, [4, type, [...text.subarray(0, size)]]),
+    debug_log:
+      /** Evaluates the md4c.test callback. @param message - message value. @param data - data value. @returns Nothing. */ (
+        message,
+        data,
+      ) => {
+        data.logs.push(message);
+      },
   };
 }
-it.each(fixture.cases)(
+it.each([...fixture.cases, ...integrationEdges.cases])(
   "matches the complete compiled md_parse callback stream: $id",
-  ({ text, flags, events, result }) => {
+  /** Verifies matches the complete compiled md_parse callback stream: $id. @param value0 - text, flags, events, result value. @returns Nothing. */ ({
+    text,
+    flags,
+    events,
+    result,
+  }) => {
     const bytes = new TextEncoder().encode(text),
       capture: Capture = { events: [], logs: [], abortAt: -1, abortCode: 0 };
     expect(md_parse(bytes, bytes.length, parser(flags), capture)).toBe(result);
@@ -95,7 +130,7 @@ it.each(fixture.cases)(
     expect(capture.logs).toEqual([]);
   },
 );
-it("propagates each callback's original abort code and emits no synthetic closing callbacks", () => {
+it("propagates each callback's original abort code and emits no synthetic closing callbacks", /** Verifies propagates each callback's original abort code and emits no synthetic closing callbacks. @returns Nothing. */ () => {
   const source = "**bold** [link](url)\n\n- [x] task",
     bytes = new TextEncoder().encode(source),
     full: Capture = { events: [], logs: [], abortAt: -1, abortCode: 0 };
@@ -107,24 +142,50 @@ it("propagates each callback's original abort code and emits no synthetic closin
     expect(data.logs).toHaveLength(1);
   }
 });
-it("rejects unsupported ABI before calling any rendering callback", () => {
+it("rejects unsupported ABI before calling any rendering callback", /** Verifies rejects unsupported ABI before calling any rendering callback. @returns Nothing. */ () => {
   const data: Capture = { events: [], logs: [], abortAt: -1, abortCode: 0 },
     config = { ...parser(0), abi_version: 1 };
   expect(md_parse(new Uint8Array(), 0, config, data)).toBe(-1);
   expect(data.events).toEqual([]);
   expect(data.logs).toEqual(["Unsupported abi_version."]);
 });
-it("copies parser configuration while retaining the original userdata identity", () => {
+it("copies parser configuration while retaining the original userdata identity", /** Verifies copies parser configuration while retaining the original userdata identity. @returns Nothing. */ () => {
   const data: Capture = { events: [], logs: [], abortAt: -1, abortCode: 0 },
     config = { ...parser(0) },
     original = config.enter_block;
-  config.enter_block = (type, detail, user) => {
-    expect(user).toBe(data);
-    if (type === D.MD_BLOCKTYPE.MD_BLOCK_DOC) config.flags = D.MD_FLAG_NOHTML;
-    return original(type, detail, user);
-  };
+  config.enter_block =
+    /** Verifies copies parser configuration while retaining the original userdata identity. @param type - type value. @param detail - detail value. @param user - user value. @returns Callback result. */ (
+      type,
+      detail,
+      user,
+    ) => {
+      expect(user).toBe(data);
+      if (type === D.MD_BLOCKTYPE.MD_BLOCK_DOC) config.flags = D.MD_FLAG_NOHTML;
+      return original(type, detail, user);
+    };
   const bytes = new TextEncoder().encode("<b>inline</b>");
   expect(md_parse(bytes, bytes.length, config, data)).toBe(0);
   expect(data.events).toContainEqual([0, D.MD_BLOCKTYPE.MD_BLOCK_P, []]);
   expect(data.events).toContainEqual([4, D.MD_TEXTTYPE.MD_TEXT_HTML, [60, 98, 62]]);
 });
+
+it.each(
+  integrationEdges.cases.filter(
+    /** Bounds complete abort-prefix checks to short native streams. @param value - Native case. @returns Whether compact. */ (
+      value,
+    ) => value.events.length < 70,
+  ),
+)(
+  "propagates callback failure throughout native integration edge $id",
+  /** Verifies every callback prefix against independently compiled observations. @param value - Native case. @returns Nothing. */ (
+    value,
+  ) => {
+    const bytes = new TextEncoder().encode(value.text);
+    for (let abortAt = 1; abortAt <= value.events.length; abortAt++) {
+      const data: Capture = { events: [], logs: [], abortAt, abortCode: 37 };
+      expect(md_parse(bytes, bytes.length, parser(value.flags), data)).toBe(37);
+      expect(data.events).toEqual(value.events.slice(0, abortAt));
+      expect(data.logs).toHaveLength(1);
+    }
+  },
+);

@@ -1,0 +1,56 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "chopLocale",
+      "hasVariant",
+      "performFallbackLookup",
+      "getDefaultScript",
+      "getParentLocaleID",
+      "mayHaveParent"
+    ],
+    "upstreamSymbols": [
+      "chopLocale",
+      "hasVariant",
+      "performFallbackLookup",
+      "getDefaultScript",
+      "getParentLocaleID",
+      "mayHaveParent"
+    ],
+    "preservedResponsibilities": [
+      "Original requested-file fallback utilities retain generated default-script/parent tables and pair-wise binary lookup, source literal Latn default, original requested script, variant/parser and open-mode rules, chopLocale and exact mayHaveParent substring predicate. These helpers are separate from existing-bundle inheritance. Native witness compiles the entire unchanged uresbund.cpp and exports original localefallback_data.h arrays, then tests all generated strings, all raw package names, original-script variants, NUL and all256 narrow bytes. CALC-337/338 preserve substring/prefix behavior. Logical C-string names are the projection; unconsumed trailing caller bytes, native allocation/OOM/debug/ABI are not claimed.",
+      "Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+          "marker": "chopLocale"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
+          "marker": "Original resource-cache"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "chopLocale"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+      "rationale": "Original large source is split by immutable package storage, filename fallback and mutable cached-entry ownership while preserving source algorithms and one data owner.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

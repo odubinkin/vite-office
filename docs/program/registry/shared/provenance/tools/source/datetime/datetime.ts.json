@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/datetime/datetime.ts",
+    "status": "mapped",
+    "upstreamPath": "tools/source/datetime/datetime.cxx",
+    "localSymbols": [
+      "DateTime"
+    ],
+    "upstreamSymbols": [
+      "DateTime::Sub"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports DateTime EMPTY, Date, Time, combined, copy and UNO constructors, UNO output and the original Duration-backed Sub dispatch. TypeScript projects C++ multiple inheritance as the existing Date base and one owned Time subobject; copying remains by value and forwarded time getters/setters mutate that subobject. The equal-packed-time branch subtracts native normalized Date days; differing times use the original Duration order. No floating epoch subtraction or host Date backend is substituted. Platform/system-clock constructors, date-time arithmetic, timezone conversion and platform file-date APIs remain unported. Tests verify nanosecond cancellation at midnight, reverse subtraction and independent copies."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated scalar constructor/conversion slice is ported; complete native clock/platform/calendar behavior and native compiled differential QA remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/datetime/datetime.ts",
+          "marker": "DateTime"
+        },
+        {
+          "path": "apps/office/src/tools/source/datetime/datetime.test.ts",
+          "marker": "subtracts near-midnight values"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/tools/source/datetime/datetime.cxx",
+          "marker": "DateTime::Sub"
+        }
+      ]
+    }
+  }
+}

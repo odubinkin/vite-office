@@ -27,7 +27,8 @@
       "Task AQF9AG writes CSV as sequential source stream bytes. Unicode and SAL byte branches preserve native getTextSepPos ordering, including already-encoded multi-byte delimiter doubling and the metadata-selected context/non-ASCII round trip. The special sep= header still uses ASCII double quotes independently of the configured text delimiter.",
       "Task AQF9AG makes AsciiSave test sal_Unicode delimiter codes for zero before taking source quote, separator and sep= header branches; the fixed-width width calculation follows the original operation order and sep= matching is ASCII-only.",
       "Task AQF9AG passes the CSV input stream into ScAsciiOptions::ReadFromString so DETECT separators use the upstream SfxObjectShell owner before ExtText2Doc consumes the source bytes.",
-      "Task AQF9AG follows ScDocShell::ConvertTo for CSV sheet selection: zero exports the active sheet, minus one exports each sheet separately, positive numbers select one-based sheet indices, and invalid selectors fail. Browser downloads use the selected export medium's filter options."
+      "Task AQF9AG follows ScDocShell::ConvertTo for CSV sheet selection: zero exports the active sheet, minus one exports each sheet separately, positive numbers select one-based sheet indices, and invalid selectors fail. Browser downloads use the selected export medium's filter options.",
+      "AQF9AG restores source CSV ConvertFrom post-import order: ImportStream, StartAllListeners(), SetAllFormulasDirty(default context), then the existing medium/BOM/name completion. Imported dirty formulas are entered into the normal formula tree and their listeners use native whole-document traversal."
     ],
     "omittedResponsibilities": [
       "Full native menus,formatting/sidebar/status services,clipboard,rich/multiline cells,functions/ranges/cross-sheet references and locale-aware number formats remain outside this current-core slice.",

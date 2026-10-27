@@ -291,7 +291,7 @@ it("clears the active superscript before appending normal text", /** Checks nati
   }
 });
 
-it("decodes legacy font names and body bytes through the same native SAL wrapper", () => {
+it("decodes legacy font names and body bytes through the same native SAL wrapper", /** Verifies decodes legacy font names and body bytes through the same native SAL wrapper. @returns Nothing. */ () => {
   const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset128 \'82\'a0;}}\f0\'82\'a0}`;
   const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
   try {
@@ -303,7 +303,7 @@ it("decodes legacy font names and body bytes through the same native SAL wrapper
     doc.Dispose();
   }
 });
-it("uses MS1252 for Symbol font-entry hex bytes and preserves Symbol body conversion", () => {
+it("uses MS1252 for Symbol font-entry hex bytes and preserves Symbol body conversion", /** Verifies uses MS1252 for Symbol font-entry hex bytes and preserves Symbol body conversion. @returns Nothing. */ () => {
   const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset2 \'53\'79\'6d\'62\'6f\'6c;}}\f0\'41}`;
   const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
   try {

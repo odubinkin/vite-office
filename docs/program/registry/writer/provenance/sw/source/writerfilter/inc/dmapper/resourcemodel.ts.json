@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/inc/dmapper/resourcemodel.ts",
           "marker": "Id"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -59,7 +63,8 @@
     "preservedResponsibilities": [
       "Consumed native unsigned resource IDs and reference/receiver interfaces; host references replace SvRef transport. Stream/model mapping remains pending.",
       "Consumed native Stream props/text callback declarations preserve typed reference and byte-length transport; remaining Stream callbacks are not yet declared.",
-      "Original Stream grouping, UTF16 and info declarations are extended in the same interface. Parser-state and break owners use a compile-time Pick of the consumed props/text callbacks; no separate runtime Stream adapter is introduced."
+      "Original Stream grouping, UTF16 and info declarations are extended in the same interface. Parser-state and break owners use a compile-time Pick of the consumed props/text callbacks; no separate runtime Stream adapter is introduced.",
+      "Task202610251549-V4DQJW ports original OOXMLFastContextHandlerTable and PropertyTable plus required Stream.table delivery, retaining original resource enums, pending-child collection order, table-vector cloning and property-table set cloning. Table forwarding requires forward-events and nonzero ID; PropertyTable callback remains unconditional and precedes endAction. EG_RPrBase is admitted through unchanged pinned generators with original IDs, yielding59 attributes/282 elements/304 resources/82 lists/25 actions. Real committed ZIP bytes, relationship-selected styles streams, actual OOXMLDocument note/target state, shared SAX, Strict/Transitional namespaces and MCE choices produce ordered style/default resource sets. Native status callback declaration and original zero-initialized note/progress owner fields are represented; no full OOXMLDocument.resolve, graphics/DOM/substream orchestration or model-statistics initialization is advertised. DomainMapper resource-table application, stylesheet finalization, section/table/list managers, document import/export dispatch and existing UI admission remain unported or unverified. No module/capability/default/parity or UI readiness promotion."
     ],
     "omittedResponsibilities": [
       "DOCX document-model mapping, export and shell/UI integration are still being implemented in the same cohesive task.",

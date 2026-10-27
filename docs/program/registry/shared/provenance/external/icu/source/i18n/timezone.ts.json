@@ -1,0 +1,57 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/timezone.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/timezone.cpp",
+    "localSymbols": [
+      "TimeZone",
+      "getOffset",
+      "getID",
+      "assignBase",
+      "equals",
+      "useDaylightTime",
+      "getDSTSavings",
+      "TimeZoneConstReference"
+    ],
+    "upstreamSymbols": [
+      "TimeZone::TimeZone",
+      "TimeZone::operator=",
+      "TimeZone::operator==",
+      "TimeZone::getOffset",
+      "TimeZone::getDSTSavings",
+      "TimeZone::getGMT"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original TimeZone default/ID/base-copy construction, owned UnicodeString identity assignment/query/update, native dynamic-type plus ID equality and the original generic UDate/local offset loop. assignBase projects explicitly qualified base assignment without changing derived scalar rules; TS constructors project native dynamic type. The consumed numeric abstract raw/field-offset and clone boundaries remain original responsibilities. The actual SimpleTimeZone implementation now supplies periodic rules and identity/copy behavior; both native and local Calendar time witnesses use real SimpleTimeZone. IANA/custom/system factories and other native display/enumeration/ABI APIs remain unported. The consumed public pure virtual useDaylightTime and original base getDSTSavings are now exposed; Olson delegates the no-final-zone default to this source base owner. Internal system-zone creation is implemented by timezone.create over actual Olson resources; public custom/unknown/system-default factory dispatch is still pending.",
+      "The consumed borrowed const TimeZone surface excludes ID mutation while allowing owned cloning; public synchronous factory/canonical dispatch is now implemented in timezone.create without a base/concrete class initialization cycle. Host/default factory entrypoints remain pending."
+    ],
+    "omittedResponsibilities": [
+      "IANA/system factories, remaining transition queries, fields-to-UTC and full calendar/CSV integration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.ts",
+          "marker": "getOffset"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+          "marker": "source clock stamps"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/timezone.cpp",
+          "marker": "TimeZone::getOffset"
+        },
+        {
+          "path": "vendor/icu-reference/source/i18n/unicode/timezone.h",
+          "marker": "TimeZone::getID"
+        }
+      ]
+    }
+  }
+}
