@@ -1,0 +1,67 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/calendar.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/calendar.cpp",
+    "localSymbols": [
+      "Calendar",
+      "resolveFields",
+      "computeJulianDay",
+      "handleComputeJulianDay",
+      "computeGregorianFields",
+      "recalculateStamp",
+      "setTimeInMillis",
+      "getTimeInMillis"
+    ],
+    "upstreamSymbols": [
+      "Calendar",
+      "resolveFields",
+      "computeJulianDay",
+      "handleComputeJulianDay",
+      "computeGregorianFields",
+      "recalculateStamp",
+      "Calendar::setTimeInMillis",
+      "Calendar::getTimeInMillis"
+    ],
+    "preservedResponsibilities": [
+      "Original Calendar owner now has default/adopted/reference/copy constructor paths, base assignment, actual owned zone, root-initialized Locale metadata, platform UTC getNow, locale/week/weekend data, field/stamp/time cache and complete inherited UTC/field algorithms. Original constructor guard/clear/zone ordering is retained; LocalPointer(null,status) sets memory error before the explicit unreachable null-argument branch (CALC-342). Reference overloads use a transient tag so a clone callback that changes status still leaves the nonnull clone adopted as source. Calendar remains abstract for its actual virtual arithmetic/clone interface, not because construction is replaced by a placeholder. getLocale returns a Locale value, while LocaleBased supplies shared selector/ID semantics. Original zone adopt/set/orphan behavior including CALC-319 and existing CALC-310/311 time behavior remain unchanged.",
+      "Unchanged ICU78.3 library witnesses pass 14994 locale/week cases over 993 requested names and 1440 constructor/copy/weekend cases. They observe all six week/weekend fields, valid/actual Locale values and literal root IDs, incoming error/warning behavior, default and keyword timezone selection, reference/adoption clone counts, null/error and aliased-status clone callbacks, all initialized field/stamp/flag and derived state, date-versus-clock initialization, completed UTC fields and weekend work clones. Existing 63050 scalar/calendar and 12929 time cases also pass after fixtures use real constructors and explicit public controlled baselines."
+    ],
+    "omittedResponsibilities": [
+      "Generic Calendar service/cache/registration and non-Gregorian calendar classes, remaining unconsumed APIs (including add/roll and custom cutover mutation), LibreOffice calendar-service/formatter/CSV completion, native allocation/OOM/destructor/ABI/RTTI/undefined or uninitialized memory and platform fake-clock facilities remain uncertified. No unsupported-calendar error or alternate type-selection heuristic is supplied for those unported responsibilities."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.ts",
+          "marker": "resolveFields"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+          "marker": "source clamp"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/timezone.default.test.ts",
+          "marker": "orphanTimeZone"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/gregocal.constructor.test.ts",
+          "marker": "Native-witnessed Gregorian construction"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.locale.test.ts",
+          "marker": "Actual source week data"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/calendar.cpp",
+          "marker": "Calendar::resolveFields"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresbund.path.ts",
+        "apps/office/src/external/icu/source/common/uresdata.path.test.ts",
+        "scripts/icu-resource-path-native-probe.mjs",
+        "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+        "scripts/icu-resource-bundle-native-probe.mjs"
+      ],
+      "justification": "Original table-only lookup and counted inheritance reconstruction are now connected to actual nested public fallback and alias-result initialization. The existing80502-case raw path comparison remains the primitive evidence; full public state is additionally witnessed without substituting a path heuristic. The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "getTableItemByKeyPath",
+        "createPath"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresbund.cpp",
+      "upstreamSymbols": [
+        "getTableItemByKeyPath",
+        "createPath"
+      ]
+    }
+  }
+}

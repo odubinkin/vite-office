@@ -311,6 +311,7 @@ const allowedEdges = new Map([
   // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
   // Original transliterationwrapper.cxx includes i18nutil flags and generated i18n Transliteration API.
   // Original unotools/fontcfg.hxx includes tools/fontenum.hxx for configured weight/width values.
+  // CalendarWrapper owns a native DateTime epoch; Library_utl links tl.
   [
     "unotools",
     new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi", "tools"]),
@@ -319,7 +320,8 @@ const allowedEdges = new Map([
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.
   // Original stream.cxx includes rtl/string.hxx and rtl/ustring.hxx for text conversion.
-  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal"])],
+  // time.hxx/datetime.hxx consume published util::Time/DateTime; Library_tl uses the SDK API.
+  ["tools", new Set(["o3tl", "cppu", "comphelper", "sal", "offapi"])],
   // Native XML border handlers use published UNO structs; item mapping belongs to Writer xmlimpit/xmlexpit.
   // Original xmloff/Library_xo.mk links cppu; text import consumes real UNO property/cursor values.
   // Native NamedBoolPropertyHdl.cxx includes comphelper/extract.hxx for cppu::any2bool; Library_xo links comphelper.

@@ -6,13 +6,51 @@
     "localPath": "apps/office/src/unotools/source/i18n/calendarwrapper.ts",
     "status": "mapped",
     "upstreamPath": "unotools/source/i18n/calendarwrapper.cxx",
-    "localSymbols": ["CalendarWrapper", "loadDefaultCalendar", "getUniqueID", "getMonths", "getGenitiveMonths", "getPartitiveMonths", "getDays", "getNumberOfMonthsInYear", "getNumberOfDaysInWeek"],
-    "upstreamSymbols": ["CalendarWrapper::loadDefaultCalendar", "CalendarWrapper::getUniqueID", "CalendarWrapper::getMonths", "CalendarWrapper::getGenitiveMonths", "CalendarWrapper::getPartitiveMonths", "CalendarWrapper::getDays", "CalendarWrapper::getNumberOfMonthsInYear", "CalendarWrapper::getNumberOfDaysInWeek"],
-    "preservedResponsibilities": ["Task AQF9AG binds the original default-calendar identity, name and count queries to pinned LC_CALENDAR generated locale sections. Returned name values are independent owned strings; absent grammatical sections remain empty. The source default Calendar unoid is retained for all 284 locales (283 Gregorian and one Persian); getUniqueID returns that identity or an empty value before load."],
-    "omittedResponsibilities": ["Calendar date arithmetic, time zones, alternate calendars and the complete UNO CalendarItem2 compound remain unported."],
+    "localSymbols": [
+      "CalendarWrapper",
+      "loadDefaultCalendar",
+      "getUniqueID",
+      "getMonths",
+      "getGenitiveMonths",
+      "getPartitiveMonths",
+      "getDays",
+      "getNumberOfMonthsInYear",
+      "getNumberOfDaysInWeek"
+    ],
+    "upstreamSymbols": [
+      "CalendarWrapper::loadDefaultCalendar",
+      "CalendarWrapper::getUniqueID",
+      "CalendarWrapper::getMonths",
+      "CalendarWrapper::getGenitiveMonths",
+      "CalendarWrapper::getPartitiveMonths",
+      "CalendarWrapper::getDays",
+      "CalendarWrapper::getNumberOfMonthsInYear",
+      "CalendarWrapper::getNumberOfDaysInWeek"
+    ],
+    "preservedResponsibilities": [
+      "Task AQF9AG binds the original default-calendar identity, name and count queries to pinned LC_CALENDAR generated locale sections. Returned name values are independent owned strings; absent grammatical sections remain empty. The source default Calendar unoid is retained for all 284 locales (283 Gregorian and one Persian); getUniqueID returns that identity or an empty value before load.",
+      "AQF9AG adds the source const DateTime epoch owner initialized to Gregorian 1 January 1970 at midnight and getEpochStart returning its borrowed read-only scalar contract. Date/time subtraction uses source Time/Duration/DateTime values; calendar date arithmetic itself remains unported."
+    ],
+    "omittedResponsibilities": [
+      "Calendar date arithmetic, time zones, alternate calendars and the complete UNO CalendarItem2 compound remain unported."
+    ],
     "evidence": {
-      "local": [{"path": "apps/office/src/unotools/source/i18n/calendarwrapper.ts", "marker": "class CalendarWrapper"}],
-      "upstream": [{"path": "vendor/libreoffice-reference/unotools/source/i18n/calendarwrapper.cxx", "marker": "CalendarWrapper::getMonths"}]
+      "local": [
+        {
+          "path": "apps/office/src/unotools/source/i18n/calendarwrapper.ts",
+          "marker": "class CalendarWrapper"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/unotools/source/i18n/calendarwrapper.cxx",
+          "marker": "CalendarWrapper::getMonths"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/calendarwrapper.hxx",
+          "marker": "getEpochStart"
+        }
+      ]
     }
   }
 }

@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unicode/bytestrie.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unicode/bytestrie.h",
+    "localSymbols": [
+      "BytesTrie",
+      "BytesTrieState"
+    ],
+    "upstreamSymbols": [
+      "BytesTrie",
+      "resetToState64"
+    ],
+    "preservedResponsibilities": [
+      "Original public BytesTrie header boundary reexports the single actual common/bytestrie.ts reader and its nested State projection. It introduces no second reader or storage state. Actual algorithms/native evidence belong to the common/bytestrie.cpp mapping; Iterator and physical C++ layout/ABI remain outside this header binding."
+    ],
+    "omittedResponsibilities": [
+      "Native ABI, invalid source preconditions and complete likely-subtag/Calendar/CSV integration remain uncertified; the stated reader/query surface is the scope of this binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unicode/bytestrie.ts",
+          "marker": "BytesTrie"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/bytestrie.test.ts",
+          "marker": "original ICU"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unicode/bytestrie.h",
+          "marker": "resetToState64"
+        }
+      ]
+    }
+  }
+}

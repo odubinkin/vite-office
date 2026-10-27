@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/loclikely.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/loclikely.ts",
+        "apps/office/src/external/icu/source/common/loclikely.test.ts",
+        "scripts/icu-likelysubtags-native-probe.mjs"
+      ],
+      "justification": "Original C/internal add/minimize entry points use legacy canonicalization, source variant-length and asymmetric four-letter validation, Locale-based add versus counted minimize and actual checked sink/capacity/status handling. Original supplemental-region selection retains rg/country/sd/inference precedence, generated region bitmap, first-keyword null/error behavior and isolated inferred lookup status. Shared private transform keeps source branches and call order; no inferred grammar rules are added. Preserve permissive legacy suffix checks and dead local four-letter promotion (CALC-334/335). Modern alias canonicalization, layout/ABI and Calendar construction are separate unfinished responsibilities.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_addLikelySubtags",
+        "ulocimp_minimizeSubtags",
+        "ulocimp_getRegionForSupplementalData",
+        "RegionValidateMap"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/loclikely.cpp",
+      "upstreamSymbols": [
+        "ulocimp_addLikelySubtags",
+        "ulocimp_minimizeSubtags",
+        "ulocimp_getRegionForSupplementalData",
+        "RegionValidateMap"
+      ]
+    }
+  }
+}

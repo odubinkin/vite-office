@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/putil.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/putil.cpp",
+    "localSymbols": [
+      "uprv_add32_overflow",
+      "uprv_mul32_overflow",
+      "uprv_getUTCtime"
+    ],
+    "upstreamSymbols": [
+      "uprv_add32_overflow",
+      "uprv_mul32_overflow",
+      "uprv_getUTCtime"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the original widened signed32 checked add/multiply with signed32 output stored before overflow comparison. Exact signed64 multiplication uses bigint, preserving low bits beyond binary64 integer precision. Other native platform/time/utility APIs remain unported. Source uprv_getUTCtime now exposes the OS clock boundary through Date.now only. No host Date calendar arithmetic, parsing or host timezone rule data is used. Debug fake-time and native fractional clock precision/ABI remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Native calendar time-zone/locale construction and full service integration remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/putil.ts",
+          "marker": "uprv_add32_overflow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/putil.cpp",
+          "marker": "uprv_add32_overflow"
+        }
+      ]
+    }
+  }
+}

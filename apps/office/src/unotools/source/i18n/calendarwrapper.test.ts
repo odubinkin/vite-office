@@ -3,6 +3,21 @@ import { expect, it } from "vitest";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { CalendarWrapper, type CalendarItem2Names } from "./calendarwrapper";
+import { DateTime } from "../../../tools/source/datetime/datetime";
+import { Date } from "../../../tools/source/datetime/tdate";
+
+it("owns the source Gregorian epoch independently of a loaded calendar", /** Checks the DateTime value used by input-date serial conversion. @returns Nothing. */ () => {
+  const wrapper = new CalendarWrapper(),
+    epoch = wrapper.getEpochStart();
+  expect([epoch.GetDay(), epoch.GetMonth(), epoch.GetYear(), epoch.GetTime()]).toEqual([
+    1,
+    1,
+    1970,
+    0n,
+  ]);
+  expect(wrapper.getEpochStart()).toBe(epoch);
+  expect(DateTime.Sub(new DateTime(new Date(30, 12, 1899)), epoch)).toBe(-25569);
+});
 
 /** Releases a caller-owned calendar name sequence. @param items - Names. @returns Nothing. */
 function release(items: CalendarItem2Names[]): void {

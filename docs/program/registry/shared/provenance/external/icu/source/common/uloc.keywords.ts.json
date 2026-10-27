@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc.cpp",
+    "localSymbols": [
+      "ulocimp_getKeywords"
+    ],
+    "upstreamSymbols": [
+      "ulocimp_getKeywords",
+      "compareKeywordStructs"
+    ],
+    "preservedResponsibilities": [
+      "Original ulocimp_getKeywords ByteSink path retains 25-key and25-unit-buffer checks, ASCII key casing and all-space removal, deferred output, first strcmp duplicate, exact counted key/NUL-list output and actual unstable sorting. The full stable/unstable uarrsort algorithms now operate on immutable scalar/record values; the source keyword record width48 is a positive native-width projection, not a JavaScript layout/ABI claim. Unchanged ICU78.3 matches41526 keyword cases and5832 record sort cases including exact comparator counts and equal-key identity permutations. Public keyword-value validation, full Locale normalization/BCP47 conversion, default locale and calendar construction remain pending. Native allocator/ABI/EBCDIC and mutating comparators are uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Locale normalization/default construction and resource fallback remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+          "marker": "ulocimp_getKeywords"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc.keywords.test.ts",
+          "marker": "capacity"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc.cpp",
+          "marker": "ulocimp_getKeywords"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+      "rationale": "Original large uloc.cpp implementation is split by source responsibility to keep the repository file-size budget while preserving the exact internal parser contract.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

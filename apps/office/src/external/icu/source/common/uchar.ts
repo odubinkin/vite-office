@@ -1,4 +1,4 @@
-/** @fileoverview Original ICU78.3 Unicode property-vector,script and block scalar algorithms over the actual frozen data. Remaining character APIs are unported. */
+/** @fileoverview Original ICU78.3 property-vector/script/block/category and digit scalar algorithms over pinned data. Remaining character APIs are unported. */
 import {
   propsTrie,
   propsVectorsTrie,
@@ -42,4 +42,25 @@ export function ublock_getCode(c: number): UBlockCode {
 /** Original ICU u_charType reads the main property category bits. @param c - Signed32 Unicode scalar or native out-of-range value. @returns Native general category. */
 export function u_charType(c: number): number {
   return UTRIE2_GET16(propsTrie, c | 0) & 0x1f;
+}
+/** Original decimal digit value reads numeric-type/value bits from the pinned property trie. @param c - UChar32. @returns Decimal digit or minus one. */
+export function u_charDigitValue(c: number): number {
+  const value = (UTRIE2_GET16(propsTrie, c | 0) >>> 6) - 1;
+  return value <= 9 ? value : -1;
+}
+/** Original radix digit lookup includes decimal digits and ASCII/fullwidth Latin letters. @param ch - UChar32. @param radix - Signed8 radix. @returns Digit or minus one. */
+export function u_digit(ch: number, radix: number): number {
+  ch |= 0;
+  radix = (radix << 24) >> 24;
+  let value = -1;
+  if (((radix - 2) & 255) <= 34) {
+    value = u_charDigitValue(ch);
+    if (value < 0) {
+      if (ch >= 0x61 && ch <= 0x7a) value = ch - 0x57;
+      else if (ch >= 0x41 && ch <= 0x5a) value = ch - 0x37;
+      else if (ch >= 0xff41 && ch <= 0xff5a) value = ch - 0xff37;
+      else if (ch >= 0xff21 && ch <= 0xff3a) value = ch - 0xff17;
+    }
+  }
+  return value < radix ? value : -1;
 }

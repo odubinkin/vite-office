@@ -89,7 +89,8 @@
       "ImpSvNumberInputScan::IsNumberFormatMain"
     ],
     "preservedResponsibilities": [
-      "Source decomposition of svl/source/numbers/zforfind.ts: GetDayOfWeek, SkipChar, SkipBlanks, SkipString, GetDecSep, GetTimeAmPm, GetTime100SecSep, GetTimeRef, GetSign, GetESign, GetNextNumber, GetThousandSep, GetLogical, ImplGetDay, ImplGetMonth, ImplGetYear, MayBeIso8601, MayBeMonthDate, IsAcceptedDatePattern, SkipDatePatternSeparator, GetDatePatternNumbers, IsDatePatternNumberOfType, GetDatePatternOrder, GetDateOrder, GetMiddleMonthLongDateOrder, CanForceToIso8601, IsAcceptableIso8601, MatchedReturn. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced."
+      "Source decomposition of svl/source/numbers/zforfind.ts: GetDayOfWeek, SkipChar, SkipBlanks, SkipString, GetDecSep, GetTimeAmPm, GetTime100SecSep, GetTimeRef, GetSign, GetESign, GetNextNumber, GetThousandSep, GetLogical, ImplGetDay, ImplGetMonth, ImplGetYear, MayBeIso8601, MayBeMonthDate, IsAcceptedDatePattern, SkipDatePatternSeparator, GetDatePatternNumbers, IsDatePatternNumberOfType, GetDatePatternOrder, GetDateOrder, GetMiddleMonthLongDateOrder, CanForceToIso8601, IsAcceptableIso8601, MatchedReturn. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced.",
+      "AQF9AG calls the source StringToDouble implementation fragment for fractional seconds instead of a separate inline decimal conversion; input remains an already-scanned unsigned decimal fragment."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."

@@ -4078,3 +4078,253 @@ Pinned `include/tools/ref.hxx`, `tools::SvRef::operator=(SvRef&&)`, releases the
 - Source: pinned `comphelper/source/misc/sequenceashashmap.cxx`, SequenceAsHashMap operator>> for Sequence<PropertyValue>.
 - Observation: extraction reallocates the destination and assigns only Name and Value. Existing slots retain Handle and State, while a fresh sequence starts with generated default metadata. Equal map contents can therefore yield different output Handle/State depending on destination history. This may intentionally preserve caller metadata; downstream document impact remains unverified.
 - Preservation: retain the two-field assignment. The actual Sequence test reuses a slot with Handle123/AMBIGUOUS_VALUE, verifies those fields survive and checks a copied alias retains its original Name through native copy-on-write. Do not rebuild every output slot from a fresh PropertyValue.
+### CALC-300 — Scientific input range failure returns before applying its leading sign
+
+Pinned `svl/source/numbers/zforfind.cxx`, `ImpSvNumberInputScan::IsNumberFormat`, handles RTL scientific-conversion `OutOfRange` by immediately returning success with type Text and either positive `DBL_MAX` or positive zero, depending on the exponent sign. The later `nStringScanSign` and `nSign` application is skipped. Consequently the output value for `-1E9999` is positive `DBL_MAX`, and `-1E-9999` yields positive zero. The retained Text type may make the numeric output irrelevant to many callers, but the sign differs from the ordinary conversion path. Preserve the early return, unchanged scanned-category/sign state and output values; the local numeric-result tests exercise the actual scanner and RTL converter. This result fragment is not yet the public formatter or CSV auto-input path.
+
+### CALC-301 — ICU subnormal negative time can produce a negative millis-in-day
+
+Pinned ICU78.3 `source/i18n/gregoimp.cpp`, `ClockMath::floorDivide(double,int32_t,int32_t*)`, floors the quotient after division but floors the numerator separately when computing the remainder. For `-DBL_TRUE_MIN` milliseconds divided by 86400000, binary64 division underflows to negative zero while flooring the numerator yields -1. Consequently `Grego::timeToFields` returns 1970-01-01 with millis-in-day -1 and success. The unchanged native source reproduces this result, and the local test preserves it without clamping or adjusting the day. Normal LibreOffice calendar entrypoints can round or constrain their input before this helper, so incorrect CSV date values are not established by this witness.
+
+### CALC-302 — ICU byte-weekday negation can admit the invalid value -128
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::decodeStartRule` and `decodeEndRule`, negate a negative encoded weekday and narrow it back to `int8_t`. With -128, the native compiler used by the witness narrows 128 back to -128. The subsequent validation checks only whether the decoded weekday exceeds Saturday, so -128 passes. A rule pair with March day14/weekday-128 and November day-7/weekday-128 constructs successfully and enables DST. The normal encoded weekday domain is -7 through7; accepting this value appears unintended. Preserve the signed-byte narrowing and upper-bound-only validation. The unchanged native comparison and local test cover the witness; no shipped IANA rule or incorrect CSV cell is established by this input.
+
+### CALC-303 — ICU documents negative day-of-month rules that its decoder rejects
+
+Pinned ICU78.3 `source/i18n/unicode/simpletz.h`, the `setStartRule` documentation, describes a negative day with weekday zero as counting backward from the end of the month. In `source/i18n/simpletz.cpp`, weekday zero instead selects `DOM_MODE`, and both rule decoders reject days below one. Thus a start rule for March day-2/weekday0 returns `U_ILLEGAL_ARGUMENT_ERROR` rather than selecting the next-to-last day. The setter has already stored the new fields and updated the active-rule flag before the error. Preserve the source rejection and partial mutation; do not introduce end-of-month interpretation or rollback. The native comparison and local rule test cover this documentation/implementation mismatch.
+
+### CALC-304 — ICU negative-DST overlaps reverse former/latter offset choices
+
+Pinned ICU78.3 `source/i18n/unicode/simpletz.h` explicitly allows negative DST savings. In `source/i18n/simpletz.cpp`, `SimpleTimeZone::getOffsetFromLocal` nevertheless separates its adjustment cases using `savingsDST > 0`. For a raw-zero zone with savings -3600000 and a second-Sunday-in-March 02:00 wall start, the clock moves backward from 02:00 to 01:00 on 2024-03-10. Local 01:30 therefore occurs first at UTC01:30 with offset0 and later at UTC02:30 with offset-3600000. The unchanged native method returns offset-3600000 for `UCAL_TZ_LOCAL_FORMER` and offset0 for `UCAL_TZ_LOCAL_LATTER`, reversing these two interpretations. Preserve the branch and its subtraction of negative savings. The native rule comparison and local regression cover both outputs; effects through other ICU zone implementations or CSV date input are not established.
+
+### CALC-305 — ICU transition assignment dereferences empty source rules
+
+Pinned ICU78.3 `source/i18n/tztrans.cpp`, `TimeZoneTransition` default construction leaves both rule pointers null, and copy construction checks each pointer before cloning. Assignment instead passes `*right.fFrom` and `*right.fTo` unconditionally to the rule setters. Assigning a distinct default-constructed source therefore dereferences null, although copying that source is supported. Preserve the assignment structure and its initialized-source requirement; do not silently make it a nullable copy. The local tests exercise empty copy construction and initialized assignment. No native null dereference was executed or crash outcome certified.
+
+### CALC-306 — ICU annual-rule equality omits name and offset state
+
+Pinned ICU78.3 `source/i18n/tzrule.cpp`, `AnnualTimeZoneRule::operator==`, compares dynamic type, date rule and year range without calling `TimeZoneRule::operator==`. Consequently two annual rules with equal dates/ranges but different names, raw offsets and DST savings compare equal. The same pair can return false from `isEquivalentTo`, which does include the base numeric state. This is surprising for an equality relation and affects virtual rule comparison inside transitions. Preserve both original methods. The unchanged native comparison checks equal dates with names a/b and offsets/savings 0/3600000 versus 3600000/0.
+
+### CALC-307 — ICU next-transition first-result assignment has no early return
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::getNextTransition`, copies the cached first transition into the output when the base precedes it, then continues to the annual-rule selection. Normally this overwrites the copied initial-rule source with an annual-rule source. If standard and DST starts tie, both subsequent strict comparisons fail: the method returns false after changing the output to the cached first transition. An omitted early return appears possible, but equal-rule policy is not established. Preserve the assignment, comparison order and return value. Native and local tests cover equal UTC March1 starts and a base in the preceding year.
+
+### CALC-308 — ICU timezone assignment clears existing cache pointers without deleting them
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `SimpleTimeZone::operator=`, ends by calling `clearTransitionRules`. That helper nulls all four cache pointers; it does not delete their owned objects. `deleteTransitionRules`, used by normal reinitialization and destruction, performs the deletion before clearing. Assigning into a zone whose transition cache was already initialized therefore appears to lose the old native allocations. Preserve the source cache reset order in the browser value projection. This is an ownership finding from source review; native leak instrumentation and allocator/ABI parity are not claimed.
+
+The same clear-without-delete pattern occurs in `source/i18n/olsontz.cpp`, `OlsonTimeZone::operator=`: the previous transition/rule cache is reset after cloning the replacement final zone. Preserve that reset boundary as well; native leak instrumentation is not claimed for either owner.
+
+### CALC-309 — ICU ID-only updates leave cached transition names stale
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp` constructs rule names from the current ID plus `(STD)`/`(DST)` during lazy initialization. The inherited `TimeZone::setID` only replaces the ID and does not invalidate this cache. After querying rules for ID zone and changing it to renamed, the ID query returns renamed while rule names remain zone(STD)/zone(DST). A later rule setter rebuilds the names. Whether cached names are intentionally independent after construction is unverified. Preserve this invalidation boundary; the native borrowed-rule comparison and local test cover both states.
+
+### CALC-310 — ICU February29 rules disagree between offsets and transition queries
+
+Pinned ICU78.3 `source/i18n/simpletz.cpp`, `compareToRule`, clamps a DOM February29 rule to February28 in nonleap years. In `source/i18n/tzrule.cpp`, `AnnualTimeZoneRule::getStartInYear` instead passes DOM February29 to Gregorian day conversion, producing March1; only its DOW_LEQ_DOM case adjusts February29 explicitly. A raw-zero, one-hour-DST zone starting February29 at 02:00 wall and ending October1 at 02:00 therefore has differing offset and transition timelines. With startYear2000, `Calendar` NEXT_VALID input 2023-02-28 02:30 returns UTC2022-10-01 01:00, the earlier annual transition, with success. Preserve both calculations and the previous-transition lookup. The unchanged native witness returns 1664586000000, also asserted locally. The default skipped-time option is LAST; a wrong CSV default result is not established.
+
+### CALC-311 — ICU generic repeated-time debug assertion contradicts its safety window
+
+Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::computeZoneOffset`, says the maximum historical negative offset change is three hours and uses a six-hour lookback. In its non-Basic FIRST-occurrence branch, the debug assertion nevertheless requires `offsetDelta < -6*60*60*1000`. An unchanged zone with delta0, or the documented smaller negative change, fails that assertion. Release logic then separately tests `offsetDelta < 0`. Preserve the release branch and its lookback. Native debug assertions are outside this browser release projection, and no full custom-zone/debug-build result is claimed.
+
+### CALC-312 — ICU indexed string resource lookup can return null with success
+
+Pinned ICU78.3 `source/common/uresbund.cpp`, `ures_getStringByIndex`, passes a non-alias table or array child directly through `ures_getStringWithAlias` to `res_getString`. A nonstring child returns null and resets the length to zero without changing a successful status. By contrast, `ures_getString` on the same child sets `U_RESOURCE_TYPE_MISMATCH`, and non-alias `ures_getStringByKey` sets that error while retaining the incoming length. Alias children use the scalar getter, setting the error and length0 in both paths. For example, index0 of the pinned zoneinfo64 root is the Names array: indexed string lookup returns null, length0 and success. Preserve these distinct behaviors instead of adding a uniform error. The unchanged native resource witness covers every node and keyed child with success, warning and failure input statuses.
+
+### CALC-313 — ICU Olson assignment keeps the recipient ID while replacing its canonical ID and rules
+
+Pinned ICU78.3 `source/i18n/olsontz.cpp`, `OlsonTimeZone::operator=`, copies canonical ID, resource pointers, final-zone state and transition counts without calling the base `TimeZone::operator=`. Assigning Etc/GMT+5 into Etc/GMT+1 therefore retains the requested ID Etc/GMT+1 while its canonical ID and offsets come from Etc/GMT+5. Copy construction first invokes the base copy constructor, so it retains the source ID instead. Preserve this distinction. The unchanged native witness checks warmed-cache assignment, cloned identity, equality/rule comparison and resulting offset; a local regression checks the fixed-zone example.
+
+### CALC-314 — ICU Olson same-rules shortcut accepts two null maps before checking offsets
+
+Pinned ICU78.3 `source/i18n/olsontz.cpp`, `OlsonTimeZone::hasSameRules`, returns true when the two `typeMapData` pointers are equal, before comparing final-zone or numeric offset state. Two fixed historical zones without transitions have null maps. Consequently Etc/GMT+1 and Etc/GMT+5 report the same rules even though their raw offsets are -3600000 and -18000000. Equality still checks their IDs separately. Preserve the early pointer/null comparison and native shared-buffer identity; do not add an offset check ahead of it. The unchanged native witness and local regression verify this result.
+
+### CALC-315 — ICU integer parsing consumes supplementary decimal digits twice
+
+Pinned ICU78.3 `source/common/util_props.cpp`, `ICU_Utility::parseNumber`, obtains a code point through `UnicodeString::char32At(p)` but advances with `++p`. `char32At` combines a surrogate pair from either its lead or trail position. A supplementary decimal digit is therefore processed twice. For example mathematical double-struck digit one U+1D7D9 yields integer11 and position2, while `u_digit` correctly returns1 for the code point. Public `TimeZone::createTimeZone` consequently accepts GMT+𝟙 as GMT+11:00 with raw offset39600000. Preserve the original code-unit advancement, digit/property data and custom-ID parser. The unchanged native utility/public-factory witness and local regression check these outputs.
+
+### CALC-316 — ICU numeric custom zones omit a seconds-only offset from the ID
+
+Pinned ICU78.3 `source/i18n/zonemeta.cpp`, `ZoneMeta::formatCustomID`, appends a sign and offset only when hour or minute is nonzero. Seconds alone are omitted. `ZoneMeta::createCustomTimeZone(30000)` therefore returns ID GMT with raw offset30000. The distinct formatter in `source/i18n/timezone.cpp` includes seconds in its condition, so `TimeZone::createTimeZone` with GMT+00:00:30 returns that full normalized ID for the same raw offset. Preserve the two source formatters and their different conditions. The unchanged native witness and local regression cover the numeric and string paths.
+
+### CALC-317 — ICU canonical lookup can ignore a NUL suffix after its cache is populated
+
+Pinned ICU78.3 `source/i18n/zonemeta.cpp`, `ZoneMeta::getCanonicalCLDRID`, validates and hashes a NUL-terminated UTF16 cache key, whereas system-ID lookup in `source/i18n/timezone.cpp` compares the full counted UnicodeString. After resolving America/New_York, public canonical lookup of America/New_York followed by NUL and trailing returns canonical America/New_York, system=true and success. Creating a zone from the same counted input returns Etc/Unknown. A fresh native process without the prior resolution instead returns an empty canonical output, system=false and `U_ILLEGAL_ARGUMENT_ERROR`. These are malformed IDs, but the cache-dependent difference is observable through the public APIs. Preserve the source counted-string versus C-string/cache behavior; do not trim the factory input or add canonical validation. Separate unchanged native cold/warm queries and a local warmed-cache regression verify the finding.
+
+### CALC-318 — ICU comparison prefix tracking rewinds a different counter from its source pointer
+
+Pinned ICU78.3 `source/common/ustrcase.cpp`, `_cmpFold`, rewinds `s1` when folding a supplementary code point encountered at the second string's trail surrogate, but decrements `m2`. The analogous first-string branch rewinds `s2` and decrements `m2`. This suggests a possible mismatch between the rewound input and its prefix-match counter. The consumed `u_strncasecmp` entrypoint requests no prefix-length outputs, so its comparison result is unaffected; the local port explicitly omits the unused prefix tracking. Native prefix-length behavior and the unported prefix-match API are not certified. If that responsibility is added, retain the original counter updates rather than silently correcting the suspected mismatch.
+
+### CALC-319 — ICU calendar orphaning changes the zone without invalidating computed fields
+
+Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces `fZone` with a default-zone clone but leaves `fAreFieldsSet` unchanged. After computing UTC0 in Europe/Paris, switching the default to Etc/GMT+5 and orphaning the calendar zone returns the original Paris owner and exposes the new default zone, while the cached ZONE_OFFSET field remains3600000. Calling `setTimeZone` with a clone of the already-current zone then invalidates the fields and yields -18000000 for the same UTC time. Preserve orphaning versus adoption/setter invalidation boundaries; do not add an orphan invalidation. The unchanged native Calendar class and local owned-zone regression verify the stale-field result.
+
+### CALC-320 — ICU legacy variant parsing includes a final POSIX terminator
+
+- Upstream: `external/icu` ICU78.3 `source/common/uloc.cpp`, `_getVariant` separator branch.
+- Observation: its historical trailing-separator condition tests any final match of `.@_-`, including POSIX field terminators. Thus the explicit internal view `en_US_FOO.` yields variant `FOO.`, and `en_US_FOO@` yields `FOO@`; adding another byte after the terminator yields only `FOO`.
+- Suspected issue: the comment mentions trailing separators, but the same branch includes a trailing charset/keyword marker as variant content. This is an internal legacy parser observation, not a claim that these are valid fully normalized locale IDs.
+- Local behavior: preserved verbatim, including consumed-pointer checkpoints and incremental sink output. Covered by the unchanged ICU internal ByteSink witness in `scripts/icu-locale-subtags-native-probe.mjs` and source regression tests. No full Locale/BCP47 conversion behavior is inferred.
+
+### CALC-321 — ICU internal va-posix scan does not update the existing-variant flag
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getSubtags` extension loop.
+- Observation: each matched `-va-posix` appends `POSIX` but leaves `hasVariant` unchanged. The raw view `en-u-va-posix-va-posix` therefore yields `POSIXPOSIX`, while a preceding legacy variant causes separators before both additions.
+- Suspected issue: repeated extension matches are concatenated according to the original legacy-variant state rather than current sink content. A repeated Unicode key is not a valid BCP47 tag; this finding concerns the exposed internal parser and must not be generalized to the full language-tag conversion pipeline.
+- Local behavior: preserve the original append and end-pointer behavior without adding validation or deduplication. Verified against unchanged ICU78.3 by the native subtag probe.
+
+### CALC-322 — ICU keyword count guard precedes duplicate suppression
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getKeywords`.
+- Observation: the internal 25-key count guard runs before parsing or ignoring a duplicate. Exactly 25 unique pairs succeed; appending another already-seen key yields `U_INTERNAL_PROGRAM_ERROR` and no appended output. A trailing semicolon plus spaces still succeeds because the empty-input check runs first.
+- Suspected issue: an ignored duplicate can turn an otherwise valid maximum-size input into an internal error, although earlier duplicate entries do not contribute to the limit.
+- Local behavior: preserved without deduplication before the guard or a replacement error code. Covered by unchanged native keyword ByteSink comparisons and source regression tests. This concerns the internal legacy keyword-normalization operation; public keyword-value retrieval has separate validation behavior.
+
+### CALC-323 — ICU lvariant recognition is case-sensitive and accepts a longer prefix
+
+- Upstream: ICU78.3 `source/common/uloc_tag.cpp`, `ultag_parse` private-use loop.
+- Observation: the ICU-specific `lvariant` bridge uses `strncmp` with the marker length before validating the whole subtag. Thus `en-x-foo-lvariant-posix` creates variant `POSIX` and drops the earlier private-use portion, whereas `en-x-foo-LVARIANT-posix` remains private-use text `foo-lvariant-posix`. The overlong marker `lvariantLONG` also activates the bridge and allows following short legacy variants.
+- Suspected issue: the recognition depends on original case despite lowercasing the ordinary private-use result, and it accepts a marker with an arbitrary suffix before checking private-use subtag bounds. This is ICU compatibility parsing, not a statement about valid BCP47 tags or the separate full locale converter.
+- Local behavior: preserve the exact prefix check, case sensitivity, partial acceptance and pointer checkpoints. Verified by compiling the entire unchanged original `uloc_tag.cpp` in the language-tag witness translation unit and comparing its actual internal parser/getters. No corrective normalization or new invalid-tag error is added.
+
+### CALC-324 — ICU legacy type fallback rejects plus despite its explanatory comment
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `isWellFormedLegacyType` and `ulocimp_toLegacyTypeWithFallback`.
+- Observation: the fallback comment lists `[/_-+]` as allowed internal punctuation, but the implementation recognizes only underscore, slash and hyphen. An unknown type `a+b` returns no value, while `a-b` can alias the input. Known mapped timezone names containing plus may still succeed through the resource map before this fallback.
+- Suspected issue: the documented fallback alphabet disagrees with executable code. This is not a reason to add plus support or a new error to the port.
+- Local behavior: preserve the exact grammar and map-first ordering, including public C versus counted internal boundaries. Verified against unchanged ICU78.3 map/fallback APIs, with input-alias identity observed separately from canonical resource values.
+
+### CALC-325 — ICU shortest-subtag classifier omits the final segment
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `getShortestSubtagLength` and `_hasBCP47Extension`.
+- Observation: the shortest-length accumulator is updated only on separators; the final pending segment is never folded into it. Consequently `en-u` is not classified for BCP47 conversion and normalizes as legacy `en__U`, while `en-u-ca` enters the language-tag path and normalizes as `en@calendar=yes`.
+- Suspected issue: the helper comment describes the shortest subtag but the last segment is excluded. This distinction affects automatic constructor normalization; the separate strict language-tag factory follows its own source rules.
+- Local behavior: preserve the exact loop and source branch selection, without adding a new heuristic or rejection. Covered by unchanged ICU native name/base/legacy-canonical comparisons and source regression tests.
+
+### CALC-326 — ICU Heap variant offset can exceed the empty base-name storage
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, `Locale::init`, `Locale::Heap::Alloc::getBaseName/getVariant`; `unicode/locid.h`, `Nest::fits`.
+- Observation: a sufficiently long keywordless POSIX-style name beginning with `@` uses Heap storage. With no `=`, init leaves `variantBegin` at the full normalized length, while Heap::getBaseName returns empty storage for a full name starting with `@`. getVariant then adds that nonzero offset to the empty base-name pointer.
+- Suspected issue: the derived pointer can lie outside the storage. For example `@` followed by 30 letters retains a nonbogus full name and empty base name, but the source variant pointer arithmetic has no defined string result.
+- Local behavior: preserve the payload selection, base-name rule and variant offset calculation. Native full/base/component observations are verified; native getVariant is deliberately not invoked for this source-derived out-of-range case. The JavaScript offset/string projection does not claim to reproduce undefined native bytes, pointer behavior or ABI. This is a source-review finding, not a native outcome certificate.
+
+### CALC-327 — ICU Locale equality treats bogus and root names as equal
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, `Locale::operator==` and `Locale::getField`.
+- Observation: operator== compares only C names. A bogus Locale returns the empty name, as does root, so equality is true even though isBogus differs.
+- Suspected issue: code using name equality alone cannot distinguish an invalid value from a valid root Locale. This may be intentional compatibility behavior, but it differs from comparing the payload states.
+- Local behavior: preserve name-only equality without adding a bogus-state guard. The unchanged native Locale witness compares this case after every clone/transition-to-bogus scenario.
+
+### CALC-328 — Locale keyword getter overloads have different bogus-state guards
+
+- Upstream: ICU78.3 `source/common/locid.cpp`, the C-buffer and ByteSink `Locale::getKeywordValue` overloads.
+- Observation: the C-buffer overload delegates getName directly, so a bogus Locale with empty name can return no value with success and terminate the supplied buffer. The counted-key ByteSink overload instead checks isBogus and sets `U_ILLEGAL_ARGUMENT_ERROR` before lookup.
+- Suspected issue: nominally equivalent getters distinguish invalid owner state differently. This may be legacy API compatibility behavior; the port must not unify the guards.
+- Local behavior: preserve both paths and their exact buffer/status effects. Covered by unchanged native keyword/Locale/facade comparisons, including bogus flags and incoming statuses.
+
+### CALC-329 — Keyword validation failure can retain an unterminated output prefix
+
+- Upstream: ICU78.3 `source/common/uloc.cpp`, `ulocimp_getKeywordValue`; `bytesinkutil.h`, `viaByteSinkToTerminatedChars`.
+- Observation: the selected value is validated and appended one byte at a time. A later invalid byte leaves its valid prefix in the sink. The C adapter then returns zero on the error before termination, so a buffer initially filled with nonzero bytes retains, for example, `AB` without an added NUL for value `AB!CD`.
+- Suspected issue: callers cannot infer an empty or terminated output from result length zero on failure. The caller must inspect the original error status; this finding is not a claim that generic ICU error outputs are valid strings.
+- Local behavior: preserve the partial writes, failure zero, unchanged remaining bytes and skipped termination. Native comparisons inspect allocated buffer/guard bytes, never read a failed output as an unbounded C string.
+
+### CALC-330 — Checked sink attempted-count overflow is classified as buffer overflow
+
+- Upstream: ICU78.3 `source/common/bytestream.cpp`, `CheckedArrayByteSink::Append`; `bytesinkutil.h`, terminated-array adapter.
+- Observation: the source has a TODO to distinguish integer overflow. It saturates attempted bytes at INT32_MAX and sets the same overflow flag used for exhausted destination capacity. The adapter consequently uses `U_BUFFER_OVERFLOW_ERROR` for that flag, with the saturated attempted length.
+- Suspected issue: a caller cannot recover the complete required length once logical output exceeds the signed32 count, and the status does not distinguish count saturation from ordinary insufficient capacity.
+- Local behavior: preserve saturation and the source overflow flag/status selection. The primitive native witness verifies 524290 appends of actual readable 4096-byte chunks with zero destination capacity, without overstating any individual source span or allocating multi-gigabyte storage. Adapter classification also follows the unchanged source branch.
+
+### CALC-331 — BytesTrie string traversal promotes signed char differently from byte traversal
+
+- Upstream: ICU78.3 `source/common/bytestrie.cpp`, the single-byte and `const char*` `BytesTrie::next` overloads; `unicode/bytestrie.h`, `first`.
+- Observation: single-byte next/first adds 256 to a negative input once, accepting the signed byte representation of 128..255. The string overload instead assigns `*s++` directly to int32 and compares that value with serialized uint8 bytes. On the pinned native target with signed char, a string containing FF can fail where single-byte next(-1) succeeds on the same trie. This also occurs in linear matches and after branch transitions. NUL and counted lengths retain their original distinct handling.
+- Suspected issue: the advertised byte-sequence overloads do not give equivalent results for high bytes on signed-char targets. Unsigned-char targets can differ; the differential evidence certifies the actual signed-char reference build, not an assumed platform-independent result.
+- Local behavior: preserve signed8 promotion in the counted/C string overload and the original one-time negative adjustment in byte overloads. No normalization is added to unify them. Compared against original ICU libraries using builder fixtures covering all 256 bytes and the actual langInfo likely trie.
+
+### CALC-332 — BytesTrie unique-value traversal can forget a candidate across binary sub-branches
+
+- Upstream: ICU78.3 `source/common/bytestrie.cpp`, `findUniqueValueFromBranch`.
+- Observation: after successfully traversing the first half of a binary branch, the function updates the candidate through the reference argument but does not set its local haveUniqueValue flag. The next half can replace that candidate. An unchanged native BytesTrieBuilder fixture with one-byte keys 0..7 mapped to 11 and 8..15 mapped to 22 gives hasUniqueValue=true and candidate22 at the root, while direct reads still give both 11 and 22. Both original builder modes reproduce it.
+- Suspected issue: a successful unique-value query can report one value for a subtree containing different values. The recursive flag propagation appears incomplete.
+- Local behavior: retain the source control flow and output writes, including candidate changes on false returns. The native reader comparison and regression test cover the differing-subtree fixture; no corrective flag assignment is introduced.
+
+### CALC-333 — Likely comparison passes a region into a script lookup
+
+- Upstream: ICU78.3 `source/common/loclikelysubtags.cpp`, `LikelySubtags::compareLikely`, region-difference branch.
+- Observation: with equal language/script but different regions, the source calls getLikelyIndex(lsr.language, lsr.region). The second parameter is interpreted as a script. For zh-Hant-TW versus zh-Hant-CN, the unchanged native implementation returns cached bits4754 with the better-candidate bit clear, even though maximization of zh-Hant gives TW. Repeated comparison with those cached bits preserves the result.
+- Suspected issue: region is apparently supplied where the script subtag is needed, affecting which regional default is selected.
+- Local behavior: keep the region argument, source cache flags and exact result; no corrected script argument is substituted. Native and regression comparisons cover the case.
+
+### CALC-334 — Supplemental-region keyword selection accepts legacy punctuation in the suffix
+
+- Upstream: ICU78.3 `source/common/loclikely.cpp`, `GetRegionFromKey`; `uloc.cpp`, keyword-value lookup.
+- Observation: GetRegionFromKey assumes the keyword already fits the UTS35 type syntax, then checks only length3..6, two initial ASCII letters and their valid-region bitmap. The legacy keyword getter permits plus and slash, so en@rg=GB+ is accepted as region GB with success. The source does not verify a literal zzzz suffix for rg. A disallowed keyword byte such as exclamation instead propagates the original keyword error and suppresses inference.
+- Suspected issue: the syntax assumption is weaker than the legacy entry point actually guarantees. This may be intentional legacy permissiveness; the port must not add UTS35 suffix validation here.
+- Local behavior: preserve the source length/prefix/bitmap checks, punctuation acceptance, error propagation and rg/country/sd/likely priority. Covered by unchanged native region-wrapper cases.
+
+### CALC-335 — Four-letter language promotion does not reach the likely-subtag lookup
+
+- Upstream: ICU78.3 `source/common/loclikely.cpp`, `_uloc_addLikelySubtags`.
+- Observation: a parsed four-letter language with no script is moved into the local script string and the local language is cleared. Maximization then constructs a fresh Locale from the unchanged canonical localeID, rather than using those modified strings. The promotion therefore does not affect that lookup; its remaining observable role is the source rejection when a script was already supplied. Native wrapper comparisons cover abcd and abcd_Latn.
+- Suspected issue: bookkeeping appears to prepare a script-only input that is never used by the subsequent lookup.
+- Local behavior: preserve this control flow and the script-already-present error. Do not replace the Locale lookup with a reconstructed language/script tuple.
+
+### CALC-336 — First-letter likely trie cache is not initialized for absent branches
+
+- Upstream: ICU78.3 `source/common/loclikelysubtags.h`, trieFirstLetterStates; `loclikelysubtags.cpp`, constructor and first-letter lookup in maximize/getLikelyIndex.
+- Observation: the C++ array has no field initializer, and construction writes only entries whose root-letter traversal returns NO_VALUE. Later lookup tests an entry against zero for any lower-case initial letter with at least two input units. If a data package omits such a branch, that test can read an uninitialized uint64. The pinned complete langInfo has all26 letters with NO_VALUE branches, so this finding does not claim a reproduced failure on our pinned data.
+- Suspected issue: cache initialization relies on an unstated data-coverage invariant; a missing branch appears to leave indeterminate state rather than an explicit absent-state marker.
+- Local behavior: retain conditional cache assignment and leave unassigned logical slots unset, without adding a zero/default fallback. All26 pinned entries are assigned and exercised against unchanged native code; behavior for a source-uninitialized cache slot or arbitrary replacement data packages remains uncertified.
+
+### CALC-337 — Resource parent hint uses a substring test for nb/nn
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `mayHaveParent`.
+- Observation: the source tests nonempty name and strstr("nb nn", name), rather than equality with nb or nn. Names such as n, b, a single space and b n therefore also return true. The unchanged native helper comparison verifies these cases.
+- Suspected issue: the parent hint recognizes substrings of its compact literal, which is wider than the named special locales described by the surrounding comment. This finding does not claim a public failure for those strings on the pinned locale package.
+- Local behavior: preserve the substring predicate exactly. Do not replace it with a set of two full locale names.
+
+### CALC-338 — Missing-file search classifies a default locale by prefix
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `findFirstExisting` and `entryOpen`.
+- Observation: isDefault is set by strncmp(name, defaultLocale, strlen(name))==0. With default en_US, missing request e is treated as already default and skips default-locale loading, reaching root. A missing non-prefix request zz instead loads en_US. Both produce the original USING_DEFAULT warning, but the actual selected bundle differs. Native cache/entry comparisons verify both cases.
+- Suspected issue: a partial language-name prefix can suppress the default-locale step. An equality or subtag-boundary check would change behavior.
+- Local behavior: retain prefix classification and the distinct selected entries, including original warning codes and cache/reference effects.
+
+### CALC-339 — Direct whole-bundle alias can establish a self-parent
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `entryOpenDirect`, `init_entry` and `loadParentsExceptRoot`; pinned no_NO resource %%ALIAS points to no.
+- Observation: with no cached parent line for target no, init_entry(no_NO) returns target no. Direct open still chops the original name no_NO to no. loadParentsExceptRoot then looks up no, receives that same target and sets its parent to itself. The unchanged native intermediate functions reproduce self-parent=true and reference count3. If the target's parent line was already built through a fallback open, this path is skipped instead.
+- Suspected issue: the final direct-open parent-reference walk would not advance out of that self-cycle. This is an inference from the original loop and the observed intermediate state; the witness deliberately does not invoke that nonterminating full call.
+- Local behavior: preserve alias-target return, original-name parent lookup and source loop. No cycle-breaking heuristic is added. The native/JS witnesses observe the same intermediate state, then restore only their test-owned parent field and release both temporary references before cleanup. Direct alias comparisons otherwise use the source's already-primed finite parent lines; the isolated full nonterminating call is not certified as a successful operation.
+
+### CALC-340 — Resource array path index narrows strtol before validating it
+
+- Upstream: ICU78.3 `source/common/uresdata.cpp`, `res_findResource`.
+- Observation: the result of uprv_strtol is assigned to int32_t before the nonnegative-index/end-pointer checks. On the pinned native long64 target, 4294967296 and -4294967296 both wrap to index0. A negative value below LONG_MIN saturates to LONG_MIN, also narrows to0 and accesses the first element. The unchanged native source witness verifies these accesses on actual raw calendar arrays, including the complete content digest and caller-path/key mutations.
+- Suspected issue: a textual index outside int32 range can select an in-range array element; overflow is not rejected by the later check. This finding describes the witnessed target and does not claim identical behavior on an ABI with a different long width.
+- Local behavior: preserve source decimal strtol whitespace/sign/end-pointer behavior, native long64 saturation and int32 narrowing before validation. Do not add a numeric range rejection or substitute a stricter index grammar. Other native ABIs and physically invalid pointer ranges remain uncertified.
+
+### CALC-341 — Alias parent retry retains the previous container path
+
+- Upstream: ICU78.3 `source/common/uresbund.cpp`, `getAliasTargetAsResourceBundle`, key-path branch; the source TODO explicitly asks whether containerResPath should be reset inside the parent loop.
+- Observation: containerResPath is cleared before the outer loop. After a successful intermediate resolution it is assigned the result path. If the following segment is missing, parent retry resets the raw resource to the new entry root and restores the complete keyPath, while retaining that earlier container path. The next result initializer therefore receives a container path from before the restart. The local port preserves this state lifetime; the unchanged native witness compares all996 pinned aliases and actual resulting path bytes.
+- Suspected issue: root restart and container-path restart appear inconsistent. The original TODO identifies the same concern. No wrong final value or failing public example on the pinned immutable package is claimed by this finding; the concern is the source control flow and intermediate path state.
+- Local behavior: keep containerResPath initialization outside the parent retry loop, together with the original later full-keyPath rewrite. Do not move the reset or normalize the intermediate path based on an inferred correction.
+
+### CALC-342 — Null adopted Calendar zone reports memory error before its argument check
+
+- Upstream: ICU78.3 `source/i18n/calendar.cpp`, `Calendar(TimeZone*, const Locale&, UErrorCode&)`; `source/common/unicode/localpointer.h`, `LocalPointer(T*, UErrorCode&)`.
+- Observation: the constructor first builds LocalPointer(adoptZone,status). For a null pointer and incoming success/warning, that helper sets U_MEMORY_ALLOCATION_ERROR7. The following failure guard returns before the explicit zone.isNull branch can set U_ILLEGAL_ARGUMENT_ERROR1. Unchanged native constructor comparisons verify7 for null with incoming0 or -128 and preserve an incoming positive error.
+- Suspected issue: an explicitly absent caller zone reports an allocation error, and the apparent intended null-argument branch is unreachable after the helper check.
+- Local behavior: preserve the LocalPointer status effect before the failure guard and retain the original explicit argument-check branch. Do not replace the observed7 with1 or synthesize a default zone. Physical deletion/allocator failures remain outside the binding.
+
+
+### CALC-343 — Gregorian assignment retains destination resolver flags
+
+- Upstream: ICU78.3 `source/i18n/gregocal.cpp`, GregorianCalendar copy constructor and operator=.
+- Observation: copy construction copies fGregorianCutover, fCutoverJulianDay, fGregorianCutoverYear, fIsGregorian and fInvertGregorian. Assignment delegates to Calendar::operator= and copies only the three cutover fields, in cutover/time, year, Julian-day order. The two resolver flags retain their destination values. The unchanged native witness distinguishes these operations with controlled boolean flag states.
+- Suspected issue: copy construction and assignment produce different internal resolver state. These are working flags that subsequent calculations can overwrite; this finding does not claim an observed incorrect public date result.
+- Local behavior: preserve the three assignment writes and their order, retaining destination flags. Copy construction and clone retain the original five-field copy behavior.

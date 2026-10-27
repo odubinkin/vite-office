@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "getTableItemByKeyPath",
+      "createPath"
+    ],
+    "upstreamSymbols": [
+      "getTableItemByKeyPath",
+      "createPath"
+    ],
+    "preservedResponsibilities": [
+      "Original table-only key-path helper remains distinct from res_findResource array-index traversal and rejects an unconsumed suffix. Original horizontal-inheritance path reconstruction uses counted original/current paths, exact segment walks and remaining C key, preserving embedded NUL and clear-before-sticky-error behavior. Narrow counted strings project consumed CharString storage; no alternate locale/path heuristic is introduced.",
+      "Unchanged native uresbund.cpp witness passes80502 queries over all982 raw default-package roots and selected nested calendar/zone/locale containers, all256 narrow bytes, full recursive raw content digests, canonical C keys, caller pointer offsets, every mutated path byte, counted inheritance strings and sticky statuses.",
+      "Original table-only lookup and counted inheritance reconstruction are now connected to actual nested public fallback and alias-result initialization. The existing80502-case raw path comparison remains the primitive evidence; full public state is additionally witnessed without substituting a path heuristic. The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+          "marker": "getTableItemByKeyPath"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresdata.path.test.ts",
+          "marker": "Original raw resource path"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "createPath"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+      "rationale": "Split original large resource source by raw path primitives and bundle inheritance-path helpers while preserving original algorithms and shared raw resource ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

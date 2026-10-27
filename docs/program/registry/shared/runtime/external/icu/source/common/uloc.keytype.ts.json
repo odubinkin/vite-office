@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uloc.keytype.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uloc.keytype.ts",
+        "apps/office/src/external/icu/source/common/uloc_keytype.test.ts",
+        "scripts/icu-keytype-native-probe.mjs"
+      ],
+      "justification": "Original source syntax fallbacks and public C-string key/type facades preserve null/empty rejection at public boundaries, counted internal views including NUL, input alias/canonical distinctions and original grammars. The source empty internal legacy-key all_of and plus omission in legacy type fallback are retained; CALC-324 documents the latter comment/implementation contradiction. The actual maps and source syntax validators are reused, not a host locale service. The unchanged native witness matches95336 map/fallback/public cases including exact input-alias identity. Native allocation/ABI, default locale and full Locale/calendar services remain uncertified or pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ulocimp_toBcpKeyWithFallback",
+        "ulocimp_toBcpTypeWithFallback",
+        "ulocimp_toLegacyKeyWithFallback",
+        "ulocimp_toLegacyTypeWithFallback",
+        "uloc_toUnicodeLocaleKey",
+        "uloc_toLegacyKey",
+        "uloc_toUnicodeLocaleType",
+        "uloc_toLegacyType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uloc.cpp",
+      "upstreamSymbols": [
+        "ulocimp_toBcpKeyWithFallback",
+        "ulocimp_toBcpTypeWithFallback",
+        "ulocimp_toLegacyKeyWithFallback",
+        "ulocimp_toLegacyTypeWithFallback",
+        "uloc_toUnicodeLocaleKey",
+        "uloc_toLegacyKey",
+        "uloc_toUnicodeLocaleType",
+        "uloc_toLegacyType"
+      ]
+    }
+  }
+}

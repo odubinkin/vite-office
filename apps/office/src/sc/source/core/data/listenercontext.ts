@@ -1,12 +1,22 @@
-/** @fileoverview Original start/end listening contexts and deferred purge action;optional ColumnSet filtering remains outside the consumed default profile. */
+/** @fileoverview Original start/end listening contexts, optional shared ColumnSet selection and deferred purge action. */
 import type { ScDocument } from "../../../inc/document";
 import type { ScTokenArray } from "../../../inc/tokenarray";
 import { ScAddress } from "../../../inc/address";
 import { ColumnBlockPosition, ColumnBlockPositionSet } from "../../../inc/mtvelements";
 import { ColumnSpanSet, type SpanAction } from "../../../inc/columnspanset";
+import type { ColumnSet } from "../../../inc/columnset";
 /** Original default/shared cursor constructors borrow the same actual document and cache. */
 export class StartListeningContext {
   private readonly mpSet: ColumnBlockPositionSet;
+  private mpColSet: ColumnSet | null = null;
+  /** Retains the source shared column selection. @param columns - Optional selection. @returns Nothing. */
+  setColumnSet(columns: ColumnSet | null): void {
+    this.mpColSet = columns;
+  }
+  /** Borrows the shared source column selection. @returns Selection or null. */
+  getColumnSet(): Pick<ColumnSet, "getColumns" | "hasTab" | "empty"> | null {
+    return this.mpColSet;
+  }
   /** Creates or borrows native column positions. @param mrDoc - Actual document. @param positions - Optional shared owner. @returns Context. */
   constructor(
     private readonly mrDoc: ScDocument,

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/calendar.time.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/calendar.time.ts",
+        "apps/office/src/external/icu/source/i18n/calendar.time.test.ts",
+        "scripts/icu-calendar-time-native-probe.mjs",
+        "apps/office/src/external/icu/source/i18n/tzrule.test.ts",
+        "scripts/icu-transition-native-probe.mjs"
+      ],
+      "justification": "AQF9AG source implementation fragments operate on the one Calendar owner for original UTC-to-fields, fields-to-UTC, zone-offset resolution, immediate previous-transition lookup, clock precedence and validation. Source writes, error/status order, explicit-offset bypass, BasicTimeZone options and generic six-hour fallback are retained. The actual SimpleTimeZone/Annual/Transition graph supplies NEXT_VALID, with45789 unchanged-native combined rule/time cases and focused tests. Source nonleap-February29 earlier-year result and generic debug-assert contradiction are documented in CALC-310/311; release logic remains unchanged. Native debug/mutex/allocator/ABI/undefined inputs and missing zone/locale/system factories/full CSV service integration are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "computeFields",
+        "computeMillisInDay",
+        "validateFields",
+        "validateField"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/calendar.cpp",
+      "upstreamSymbols": [
+        "Calendar::computeFields",
+        "Calendar::computeMillisInDay",
+        "Calendar::validateFields",
+        "Calendar::validateField"
+      ]
+    }
+  }
+}

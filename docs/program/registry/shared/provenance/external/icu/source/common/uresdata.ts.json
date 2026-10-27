@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresdata.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresdata.cpp",
+    "localSymbols": [
+      "ResourceDataValue",
+      "getArray",
+      "getTable"
+    ],
+    "upstreamSymbols": [
+      "ResourceDataValue::getString",
+      "ResourceDataValue::getArray",
+      "ResourceTable::findValue"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed ResourceDataValue holder now owns only its raw resource token, matching source default URES_NONE. It no longer constructs a fake public bundle. Shared low-level scalar storage reads feed both raw value and public bundle getters, retaining mapped buffer identity, mismatch length reset, sticky status and raw alias behavior. Borrowed table/array views update the same concrete holder. Alias/fallback resolution belongs to bundle result initialization, not raw value storage.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified.",
+      "ResourceDataValue now also keeps the original borrowed ResourceData and validLocaleDataEntry context with source set/get APIs. Internal ures_getValueWithFallback attaches those exact fields through the caller-owned temporary; empty paths update only the value and sticky failures preserve all prior value fields. The actual likely-subtag loader now follows this source API and retains one StackUResourceBundle for the whole load, closed in finally."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresdata.ts",
+          "marker": "ResourceDataValue"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresdata.cpp",
+          "marker": "ResourceDataValue::getString"
+        }
+      ]
+    }
+  }
+}

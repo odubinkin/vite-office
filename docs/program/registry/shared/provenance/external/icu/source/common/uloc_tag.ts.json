@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uloc_tag.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uloc_tag.cpp",
+    "localSymbols": [
+      "ultag_parse",
+      "ultag_getLanguage",
+      "ultag_getExtlang",
+      "ultag_getExtlangSize",
+      "ultag_getScript",
+      "ultag_getRegion",
+      "ultag_getVariant",
+      "ultag_getVariantsSize",
+      "ultag_getExtensionKey",
+      "ultag_getExtensionValue",
+      "ultag_getExtensionsSize",
+      "ultag_getPrivateUse",
+      "ultag_isLanguageSubtag",
+      "ultag_isScriptSubtag",
+      "ultag_isRegionSubtag",
+      "ultag_isVariantSubtags",
+      "ultag_isExtensionSubtags",
+      "ultag_isPrivateuseValueSubtags",
+      "ultag_isUnicodeLocaleAttribute",
+      "ultag_isUnicodeLocaleAttributes",
+      "ultag_isUnicodeLocaleKey",
+      "ultag_isUnicodeLocaleType"
+    ],
+    "upstreamSymbols": [
+      "ultag_parse",
+      "ultag_getLanguage",
+      "ultag_getExtlang",
+      "ultag_getExtlangSize",
+      "ultag_getScript",
+      "ultag_getRegion",
+      "ultag_getVariant",
+      "ultag_getVariantsSize",
+      "ultag_getExtensionKey",
+      "ultag_getExtensionValue",
+      "ultag_getExtensionsSize",
+      "ultag_getPrivateUse",
+      "ultag_isLanguageSubtag",
+      "ultag_isScriptSubtag",
+      "ultag_isRegionSubtag",
+      "ultag_isVariantSubtags",
+      "ultag_isExtensionSubtags",
+      "ultag_isPrivateuseValueSubtags",
+      "ultag_isUnicodeLocaleAttribute",
+      "ultag_isUnicodeLocaleAttributes",
+      "ultag_isUnicodeLocaleKey",
+      "ultag_isUnicodeLocaleType"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 ULanguageTag parser with the one owned narrow-byte buffer, nullable field offsets and original linked variant/extension owners. Legacy/redundant replacement tables retain source order and parsed-length deltas, ASCII case mapping, three extlang slots, variant insertion order, ordered extension insertion, duplicate/incomplete extension stop points, private-use/lvariant bridge and partial-success semantics. Original consumed getters and ten source syntax predicates preserve count/null/empty distinctions and explicit/negative C lengths. The entire unchanged original uloc_tag.cpp is included in the native witness translation unit without access-modifier/body rewrites;Current native proof is93046 cases:79774 parser/getter and13272 predicate cases over4424 tag spans, all source table substitutions, explicit/NUL lengths, sticky statuses and large invalid subtags. CALC-323 retains case-sensitive prefix lvariant recognition. Buffer offsets/GC project native pointers/ownership; allocator/destructor/ABI/EBCDIC and invalid readable spans are uncertified. Keyword mapping, complete forLanguageTag conversion, Locale normalization/default/likely-subtags and calendar services remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Reverse conversion, transformed extension validation and full Locale/calendar construction remain unported. Native allocation/ABI are uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_tag.ts",
+          "marker": "ultag_parse"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uloc_tag.test.ts",
+          "marker": "lvariant"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uloc_tag.cpp",
+          "marker": "ultag_parse"
+        }
+      ]
+    }
+  }
+}

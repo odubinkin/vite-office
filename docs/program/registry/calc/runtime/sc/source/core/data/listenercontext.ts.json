@@ -23,7 +23,7 @@
         "apps/office/src/sc/source/core/data/listener-context.test.ts",
         "vendor/libreoffice-reference/sc/source/core/data/listenercontext.cxx"
       ],
-      "justification": "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.",
+      "justification": "Block75 column/group work in progress ports original CompareByTokenArray over actual RPN then lexical references and native cached hash. Start/EndListeningContext share actual ColumnBlockPositionSet cursors and segmented deferred-empty broadcaster spans;explicit purge uses real stores,old code and position deltas. Native NeedsListening and detective flags,always subscriptions and ordinary/context removal differ at their original old-code check. SharedFormulaUtil owns original nonshared template grouping,split,join,unshare and enabled lexical group-listening traversal. Column insertion now joins compatible neighbors;removal records original surviving spans and restarts actual group subscriptions,including partial-block backtracking/excess members. Document delayed grouping owns the original nullable ScRange;whole-column GroupFormulaCells retains and merges existing groups. Source CopyToDocument/attribute-copy definitions moved to documen7 on the same document instance for file-size limits. Normal immediate-edit local-reference profile only:clip/undo/no-listening/change-track/inserting modes,delayed-start batching,group compileCode and final history/native differential/raw100 acceptance remain pending. Matrix cell constructors remain unrepresented while matrix/external RPN comparison rejection is retained. No broad behavior,contract or default parity is certified.\nAQF9AG ports setColumnSet/getColumnSet as shared identity, null by default. The getter exposes only the const ColumnSet query methods; the owner may continue changing its shared set as upstream.",
       "knownViolations": [],
       "localSymbols": [
         "StartListeningContext",
@@ -35,7 +35,9 @@
       "upstreamSymbols": [
         "StartListeningContext::getBlockPosition",
         "EndListeningContext::purgeEmptyBroadcasters",
-        "PurgeListenerAction"
+        "PurgeListenerAction",
+        "StartListeningContext::setColumnSet",
+        "StartListeningContext::getColumnSet"
       ]
     }
   }

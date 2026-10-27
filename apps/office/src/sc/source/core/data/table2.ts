@@ -7,6 +7,22 @@ import type { ScMF } from "../../../inc/attrib";
 import { ScMergeAttr } from "../../../inc/attrib";
 import type { CopyFromClipContext, CopyToDocContext } from "../../../inc/clipcontext";
 import type { ScColumn } from "../../../inc/column";
+import type { StartListeningContext } from "../../../inc/listenercontext";
+
+/** Original table2 StartListeners visits all allocated columns or the source context's selected subset. @param this - Sheet. @param context - Listening context. @param all - Include every formula. @returns Nothing. */
+export function StartListeners(this: ScTable, context: StartListeningContext, all: boolean): void {
+  const selected = context.getColumnSet();
+  if (!selected) {
+    for (let col = 0; col < this["aCol"].length; col++)
+      (this["aCol"][col] as ScColumn).StartListeners(context, all);
+  } else if (selected.hasTab(this["nTab"])) {
+    const columns: number[] = [];
+    selected.getColumns(this["nTab"], columns);
+    for (const col of columns)
+      if (col >= 0 && col < this["aCol"].length)
+        (this["aCol"][col] as ScColumn).StartListeners(context, all);
+  }
+}
 import type { ColumnSpanSet } from "../../../inc/columnspanset";
 import { ScBitMaskCompressedArray } from "../../../inc/compressedarray";
 import {

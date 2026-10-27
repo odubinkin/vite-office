@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/loclikelysubtags.data.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/loclikelysubtags.cpp",
+    "localSymbols": [
+      "LikelySubtagsData",
+      "LocaleDistanceData",
+      "readLSREncodedStrings"
+    ],
+    "upstreamSymbols": [
+      "LikelySubtagsData",
+      "LocaleDistanceData",
+      "readLSREncodedStrings"
+    ],
+    "preservedResponsibilities": [
+      "Original full ordered direct langInfo loader through actual ResourceValue/table/array and UniqueCharStrings owners: m49/encoded LSR and script decoding, optional alias strings, required trie and LSR data, source structural/length checks, optional match trie/partition data/distances, frozen alias-map installation, implicit LSR and paradigm construction. Actual complete direct langInfo has zero alias entries; the two top-level direct paths use the existing bundle key getter, with no locale parent chain to substitute. No precomputed likely result table replaces source decoding. Physical allocator failure/ResourceTracer and dynamic locale fallback remain uncertified.",
+      "Native ResourceDataValue/pool probe passes67318 cases: every594 direct langInfo nodes with success/warning/failure, full scalar contents and failed table/array outputs, plus all65536 UTF16 units through original pool add/duplicate/invariant/freeze/get/orphan. Main service/C/Locale/region witness passes813182 cases over15909 locale IDs and all8310 original trie keys, with7527 decoded LSRs and6 paradigms. Conditional first-letter cache assignment is retained with all26 actual pinned slots assigned; source-uninitialized slots for arbitrary replacement packages remain uncertified (CALC-336).",
+      "Original load-scope stack temporary is reused by ures_getValueWithFallback and closed in finally. The loader owns langInfo until the singleton moves it; close releases any remaining owned bundle. Borrowed ResourceDataValue fields now carry actual data/valid-locale context.",
+      "The previous top-level direct-key shortcut is removed. Original ures_getValueWithFallback uses the one actual source stack temporary across likely and match reads, with complete ResourceDataValue data/valid-locale context and load-scope finally close. The moved langInfo bundle remains owned by the singleton; failed loader cleanup closes its own remaining handle."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; native invalid pointer/allocation/ABI and complete Calendar/CSV integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikelysubtags.data.ts",
+          "marker": "LikelySubtagsData"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/loclikelysubtags.cpp",
+          "marker": "LikelySubtagsData"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/loclikelysubtags.data.ts",
+      "rationale": "Original loader and distance data owners are split from the query owner under authored source size limits while preserving source loading order and ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

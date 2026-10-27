@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/charstrmap.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/charstrmap.h",
+    "localSymbols": [
+      "CharStringMap",
+      "assignMove",
+      "put"
+    ],
+    "upstreamSymbols": [
+      "CharStringMap",
+      "uhash_openSize",
+      "uhash_put"
+    ],
+    "preservedResponsibilities": [
+      "Original borrowed C-key/value map owner, case-sensitive content comparison, sticky-error insertion and source-invalidating moves. JS Map projects actual hash storage and immutable C string views project pointer lifetime. Original default non-map is unusable; null-map operations, physical hash layout/growth/allocator and native ABI are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are implemented; native invalid pointer/allocation/ABI and complete Calendar/CSV integration remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/charstrmap.ts",
+          "marker": "CharStringMap"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/loclikely.test.ts",
+          "marker": "original ICU78.3"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/charstrmap.h",
+          "marker": "CharStringMap"
+        }
+      ]
+    }
+  }
+}

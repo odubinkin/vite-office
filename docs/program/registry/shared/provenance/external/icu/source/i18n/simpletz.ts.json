@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/simpletz.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/simpletz.cpp",
+    "localSymbols": [
+      "SimpleTimeZone",
+      "construct",
+      "decodeStartRule",
+      "decodeEndRule",
+      "getOffsetFromLocal"
+    ],
+    "upstreamSymbols": [
+      "SimpleTimeZone::construct",
+      "SimpleTimeZone::decodeStartRule",
+      "SimpleTimeZone::decodeEndRule",
+      "SimpleTimeZone::getOffsetFromLocal"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original SimpleTimeZone scalar constructors/copy/clone/equality, rule mutation/validation and all consumed offsets, plus its actual owned lazy transition cache, next/previous/count and borrowed-rule APIs. Transition fragments use protected TS visibility for the original cache members/helpers without another owner. Source cache reset/invalidation, name staleness and first-result selection are retained, including CALC-302..310 findings. Existing76480 scalar/identity and12929 UTC-field witnesses are supplemented by45789 unchanged-native combined annual/transition/full Calendar time cases. Deprecated native calendar-construction helper, broader Basic equivalence/extraction, IANA/system factories and complete LibreOffice calendar/CSV integration remain unported; allocation/lifetime/mutex/ABI are not certified."
+    ],
+    "omittedResponsibilities": [
+      "Complete system/IANA/locale/service integration and native allocation/concurrency/ABI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/simpletz.ts",
+          "marker": "SimpleTimeZone"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/simpletz.test.ts",
+          "marker": "native byte-weekday acceptance"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/simpletz.cpp",
+          "marker": "SimpleTimeZone::construct"
+        }
+      ]
+    }
+  }
+}

@@ -47,7 +47,13 @@ import { ScAddress, ScRange, ValidTab, BCA_LISTEN_ALWAYS, MAXTAB } from "../../.
 import { ScHint } from "../../../inc/brdcst";
 import { ScBulkBroadcast } from "../inc/bcaslot";
 import type { ColumnBlockPosition } from "../../../inc/mtvelements";
-import { type StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
+
+/** Original no-range StartAllListeners owns one shared context across every existing sheet. @param this - Document. @returns Nothing. */
+export function StartAllListeners(this: ScDocument): void {
+  const context = new StartListeningContext(this);
+  for (const table of this["maTabs"]) table?.StartListeners(context, true);
+}
 import { ScRefCellValue } from "../../../inc/cellvalue";
 
 /** Borrows the real cell-store value or its empty default. @param this - Document. @param position - Cell. @returns Reference. */

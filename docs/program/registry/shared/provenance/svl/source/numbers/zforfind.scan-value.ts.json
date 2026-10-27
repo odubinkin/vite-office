@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforfind.cxx",
+    "localSymbols": [
+      "StringToDouble",
+      "ConvertScannedNumber",
+      "CheckScannedNumber"
+    ],
+    "upstreamSymbols": [
+      "StringToDouble",
+      "ImpSvNumberInputScan::IsNumberFormat"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the numeric/logical result cases and terminal overflow/failure outputs from ImpSvNumberInputScan::IsNumberFormat as an implementation fragment over the same actual scanner state. It joins numeric fragments by nThousand/nDecPos, converts percentages and simple/mixed fractions, preserves sign multiplication and uses the existing RTL owner for scientific conversion. OutOfRange returns Text with a positive bound before input sign application, preserving CALC-300. StringToDouble binds correctly rounded binary64 conversion only for the source-validated unsigned fixed-decimal fragments within the full scanner input limit; it is not a text-recognition API. GetTimeRef uses this same source helper for its fractional-second fragment. The result fragment requires the source category/count checks and numeric category dispatch to have succeeded. It is not yet connected to a public IsNumberFormat or CSV auto-input; remaining validation, calendar date conversion and formatter format selection are unported. Tests use the actual input scanner classifications and RTL conversion, not a synthetic workbook or compiled native differential oracle. The same fragment now includes source post-classification signed-year/BCE handling, unclosed-parenthesis rejection, category-specific numeric-part count checks, matched-format grouping reconciliation and date-pattern acceptance gates. It invokes the existing source scanner helpers on the real owner. Public input orchestration and actual calendar conversion remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete IsNumberFormat entrypoint/category validation, date/calendar conversion, native fast_float invalid-input/error behavior outside the admitted fixed-decimal fragment precondition, formatter selection and CSV setAutoInput remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+          "marker": "ConvertScannedNumber"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforfind.scan-value.test.ts",
+          "marker": "source exponent overflow"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "ImpSvNumberInputScan::IsNumberFormat"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforfind.cxx",
+          "marker": "static double StringToDouble"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+      "rationale": "The original native responsibility is decomposed into a focused implementation fragment to retain the repository file-size limit; source symbols, owner instance and state are preserved.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

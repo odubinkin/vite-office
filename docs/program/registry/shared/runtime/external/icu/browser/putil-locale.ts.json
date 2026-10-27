@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/browser/putil-locale.ts",
+    "classification": "browser-adaptation",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/browser/putil-locale.ts",
+        "apps/office/src/external/icu/source/common/locid.test.ts",
+        "scripts/icu-locale-native-probe.mjs"
+      ],
+      "justification": "Browser binding for uprv_getDefaultLocaleID captures Intl resolvedOptions().locale once, supplying a semantic language-tag identity to the original ICU normalization/default cache. No POSIX LC_MESSAGES/environment/charset model, independent OS equivalent or invented fallback is claimed. Actual getRoot/default host-query count is covered by source-backed unit tests and the shared semantic-input native fixture; host API failure and native platform equivalence remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "uprv_getDefaultLocaleID"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

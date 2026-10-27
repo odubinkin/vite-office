@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/charstrmap.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/charstrmap.ts",
+        "apps/office/src/external/icu/source/common/loclikely.test.ts",
+        "scripts/icu-likelysubtags-native-probe.mjs"
+      ],
+      "justification": "Original borrowed C-key/value map owner, case-sensitive content comparison, sticky-error insertion and source-invalidating moves. JS Map projects actual hash storage and immutable C string views project pointer lifetime. Original default non-map is unusable; null-map operations, physical hash layout/growth/allocator and native ABI are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CharStringMap",
+        "assignMove",
+        "put"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/charstrmap.h",
+      "upstreamSymbols": [
+        "CharStringMap",
+        "uhash_openSize",
+        "uhash_put"
+      ]
+    }
+  }
+}

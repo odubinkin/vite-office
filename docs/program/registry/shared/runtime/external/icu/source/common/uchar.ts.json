@@ -18,21 +18,26 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/external/icu/source/common/uchar.ts",
-        "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+        "scripts/icu-timezone-custom-native-probe.mjs"
       ],
-      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. TaskRV75WR ports actual main-property trie data and u_charType,original cached UnicodeType mapping and alpha/control category masks. Numeric-field suffix parsing uses these shared native owners rather than host Unicode categories. Unchanged original ICU78.3 and LibreOffice bodies match the complete four-byte protocol for1114112 scalars,including the initial-NUL cache fast path. Native RTL trim and double parsing are reused. Other Unicode utilities,services,threading and broad parity remain unverified.",
+      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. TaskRV75WR ports actual main-property trie data and u_charType,original cached UnicodeType mapping and alpha/control category masks. Numeric-field suffix parsing uses these shared native owners rather than host Unicode categories. Unchanged original ICU78.3 and LibreOffice bodies match the complete four-byte protocol for1114112 scalars,including the initial-NUL cache fast path. Native RTL trim and double parsing are reused. Other Unicode utilities,services,threading and broad parity remain unverified. AQF9AG adds original u_charDigitValue/u_digit over numeric-type bits in the existing pinned property trie, including signed8 radix validation and ASCII/fullwidth Latin letter values. The unchanged native scalar witness checks all Unicode code points; no host Unicode category/digit heuristic is used.",
       "knownViolations": [],
       "localSymbols": [
         "u_getUnicodeProperties",
         "uscript_getScript",
-        "ublock_getCode"
+        "ublock_getCode",
+        "u_charDigitValue",
+        "u_digit"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/icu-reference/source/common/uchar.cpp",
       "upstreamSymbols": [
         "u_getUnicodeProperties",
         "uscript_getScript",
-        "ublock_getCode"
+        "ublock_getCode",
+        "u_charDigitValue",
+        "u_digit"
       ]
     }
   }

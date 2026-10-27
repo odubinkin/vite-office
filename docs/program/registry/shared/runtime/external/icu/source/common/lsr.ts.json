@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/lsr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/lsr.ts",
+        "apps/office/src/external/icu/source/common/loclikely.test.ts",
+        "scripts/icu-likelysubtags-native-probe.mjs"
+      ],
+      "justification": "Original LSR logical default/borrowed/counted/prefixed constructors, region index, flags/equivalence/equality, lazy sparse unsigned32 hash and move ownership/residual fields. Copied storage retains exact counted payload while fields expose C prefixes. Native probe checks constructor status/null fields, owned versus borrowed flag, source region/index/flags surviving moves and cached hash while the moved-to owner remains alive; native-invalid readable spans, failed-field dereferences, self-move, allocator/destructor/ABI remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LSR",
+        "indexForRegion",
+        "setHashCode"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/lsr.cpp",
+      "upstreamSymbols": [
+        "LSR::indexForRegion",
+        "LSR::setHashCode"
+      ]
+    }
+  }
+}

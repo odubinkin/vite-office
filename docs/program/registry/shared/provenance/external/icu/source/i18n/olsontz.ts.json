@@ -1,0 +1,48 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/olsontz.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/olsontz.cpp",
+    "localSymbols": [
+      "OlsonTimeZone",
+      "assign",
+      "hasSameRules",
+      "getOffset",
+      "getTimeZoneRules"
+    ],
+    "upstreamSymbols": [
+      "OlsonTimeZone::OlsonTimeZone",
+      "OlsonTimeZone::operator=",
+      "OlsonTimeZone::hasSameRules",
+      "OlsonTimeZone::getOffset",
+      "OlsonTimeZone::getTimeZoneRules"
+    ],
+    "preservedResponsibilities": [
+      "Actual single OlsonTimeZone owner: resource counts/buffers, canonical/final-zone state and lazy transition/rule cache; copy/assignment/clone/equality, historical/final offset dispatch, scalar field overloads, immutable raw-offset setter, current-clock/year queries, full next/previous/count/borrowed-rule contracts. Shared mapped-buffer identity and source assignment ID omission/null-map rule shortcut are retained (CALC-313/314); cache reset ownership finding extends CALC-308. The original fields and methods are split into implementation fragments solely for file-size limits; no parallel zone state or host timezone rule provider is used. Unchanged ICU78.3 libraries and pinned icudt78l.dat verify all639 system IDs, historical UTC boundaries/local mask midpoints, future/final transitions, field overloads, actual borrowed rules and Calendar wall-time completion via scripts/icu-olson-native-probe.mjs. Public custom/default factories, locale calendar construction, full LibreOffice calendar/formatter/CSV integration and native allocation/concurrency/ABI/undefined input behavior remain incomplete or uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are ported. Complete services and native allocation/concurrency/lifetime/ABI/undefined inputs remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.ts",
+          "marker": "OlsonTimeZone"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/olsontz.test.ts",
+          "marker": "CalendarWitness"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/olsontz.cpp",
+          "marker": "OlsonTimeZone::OlsonTimeZone"
+        }
+      ]
+    }
+  }
+}
