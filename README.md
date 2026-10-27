@@ -5,12 +5,11 @@ browser-only office suite targeting functional, test, and documentation parity w
 LibreOffice baseline. The product is delivered as static frontend assets built with TypeScript,
 Vite, and Tailwind CSS; it does not depend on an application backend.
 
-The project is currently under development. Only part of Writer's functionality has been implemented
-so far; implementation of the other LibreOffice applications has not yet started.
-
-The repository is at the program-foundation stage. No application capability is considered
-implemented until its source, upstream behavior, tests, and documentation are linked by evidence in
-the parity matrix.
+The project is currently under development, with limited working implementations of Writer and Calc.
+Both have browser editing, local document storage, and file import/export. They implement bounded
+subsets of the desktop applications; complete LibreOffice compatibility is not yet achieved. No
+application capability is considered parity-complete until its source, upstream behavior, tests, and
+documentation are linked by evidence in the parity matrix.
 
 ## Program documents
 
@@ -25,19 +24,60 @@ the parity matrix.
 
 ## Current status
 
-The repository now contains the initial TypeScript, React, Vite, and Tailwind CSS workspace under
-`apps/office`. It renders an accessible workbench, builds with relative asset paths, and does not
-use an application backend. Writer includes an early, bounded in-memory plain-text paragraph editor,
-but its functionality is only partially implemented. Implementation of the other LibreOffice
-applications has not yet started. This does not advance a LibreOffice parity row because its
-upstream behavior, tests, and documentation are not yet atomically mapped.
+The TypeScript, React, Vite, and Tailwind CSS workspace lives under `apps/office`. The shared
+browser workbench builds with relative asset paths and does not use an application backend.
 
-The bootstrap includes strict TypeScript, ESLint and Prettier, 100% initial Vitest coverage
-thresholds for authored application behavior, a Chromium and axe smoke test, static-distribution
-validation, JSDoc validation, and authored file-size gates. The ignored research checkout is pinned
-to LibreOffice `libreoffice-26.8.0.2` at commit `9bc445578031fecf56086729d8e4940c77e14d65`; its
-source, test, fixture, and documentation inventory and every office feature remain separate
-AgentPlane tasks so scope, verification, and parity evidence stay auditable.
+- **Writer:** text and paragraph editing, character and paragraph formatting, styles, lists,
+  hyperlinks, bounded table support, page geometry and document rendering, undo/redo, and local
+  saving. This is a partial rich-text implementation, with layout and document-model limitations.
+- **Calc:** an editable spreadsheet grid with cell selection, an input line, text and numeric
+  values, arithmetic formulas, cell/range references, selected aggregate functions (`SUM`, `SUMSQ`,
+  `PRODUCT`, `AVERAGE`), and dependency updates for the implemented formula subset. Cell formatting,
+  sheet operations, row/column sizing, undo/redo, and local saving are available. The complete
+  formula language, function library, and number-format handling remain incomplete.
+- **Other applications:** Impress, Draw, Base, and Math do not yet have working application
+  implementations.
+
+Implementation details and limits are recorded in the
+[Writer format documentation](docs/program/writer-odt-format.md) and
+[Calc UI readiness audit](docs/program/calc-ui-readiness.md). Working features do not by themselves
+establish complete upstream parity; the [parity matrix](docs/program/parity-matrix.md) tracks that
+evidence separately.
+
+The quality contract includes strict TypeScript, ESLint and Prettier, 100% Vitest coverage
+thresholds for authored application behavior, Chromium browser tests and accessibility checks,
+static-distribution validation, JSDoc validation, and authored file-size gates. The ignored research
+checkout is pinned to LibreOffice `libreoffice-26.8.0.2` at commit
+`9bc445578031fecf56086729d8e4940c77e14d65`; its source, test, fixture, and documentation inventory
+and every office feature remain separate AgentPlane tasks so scope, verification, and parity
+evidence stay auditable.
+
+## Supported file formats
+
+These formats are available through the existing browser Open and Export dialogs:
+
+| Application | Format                            | Import | Export      | Current boundary                                                                                                |
+| ----------- | --------------------------------- | ------ | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| Writer      | OpenDocument Text (`.odt`)        | Yes    | Yes         | Supported Writer model and ODF package subset; not full ODT compatibility.                                      |
+| Writer      | Plain text (`.txt`)               | Yes    | Yes         | Text content; rich formatting is not retained.                                                                  |
+| Writer      | Rich Text Format (`.rtf`)         | Yes    | Yes         | Partial native text-filter implementation; feature retention varies.                                            |
+| Writer      | Markdown (`.md`, `.markdown`)     | Yes    | Yes (`.md`) | Partial text-filter implementation; not every Writer feature has a Markdown representation.                     |
+| Calc        | OpenDocument Spreadsheet (`.ods`) | Yes    | Yes         | Supported cell, sheet, formula, and style subset; not full ODS compatibility.                                   |
+| Calc        | Comma-separated values (`.csv`)   | Yes    | Yes         | Tabular text; the Export dialog downloads the active sheet. Workbook structure and formatting are not retained. |
+
+Format support applies only to the currently implemented model. Unsupported content can be rejected
+or omitted according to each filter's documented limits; arbitrary desktop documents are not
+guaranteed to round-trip without loss. See the
+[Writer ODT boundary](docs/program/writer-odt-format.md),
+[Writer TXT/RTF/Markdown audit](docs/program/writer-native-text-filter-slice.md), and
+[Calc implementation audit](docs/program/calc-ui-readiness.md).
+
+DOCX and XLSX are still under development and are not available in the application file dialogs.
+Other LibreOffice import/export formats and PDF export are not currently offered there.
+
+Writer and Calc store local document copies in browser IndexedDB, independently of downloaded files.
+Import creates a browser copy; downloads do not overwrite the original file on disk. Local copies
+belong to the browser profile and origin and can be removed when browser data is cleared.
 
 ## Local development
 
@@ -64,7 +104,7 @@ npm run build
 npm run preview
 ```
 
-Run the complete bootstrap quality contract with:
+Run the complete repository quality contract with:
 
 ```bash
 npm run verify
@@ -80,10 +120,10 @@ Application development has independent unit and browser test commands:
 
 To select one file or directory, append a filter, for example
 `npm run test:writer -- src/sw/source/core/table`. Each coverage command requires 100% coverage only
-for its owner and writes to `apps/office/coverage/<scope>`. Calc commands currently report no tests
-successfully; they discover tests under `src/sc` and `e2e/calc` automatically when implementation
-begins. Shared coverage also runs application integration tests that exercise shared code;
-`test:shared` itself runs only shared unit tests. Writer and Calc coverage runs are independent.
+for its owner and writes to `apps/office/coverage/<scope>`. Calc unit tests cover `src/sc`, and its
+browser tests live under `e2e/calc`. Shared coverage also runs application integration tests that
+exercise shared code; `test:shared` itself runs only shared unit tests. Writer and Calc coverage
+runs are independent.
 
 Run `npm run test:all` for all unit, inventory, test-tooling and browser tests; `npm run verify`
 additionally runs the complete quality contract. Shared-module changes require shared tests and
