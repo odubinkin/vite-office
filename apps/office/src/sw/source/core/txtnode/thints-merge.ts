@@ -1,4 +1,5 @@
 /** @fileoverview Ports MergePortions for the represented character/automatic families from thints.cxx; RSID items remain outside the registered kernel. */
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import type { SwpHints } from "./ndhints";
 import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
 import { SwFormatCharFormat, type SwFormatINetFormat } from "./fmtatr2";
@@ -65,6 +66,7 @@ export function MergeTextHintPortions(hints: SwpHints): boolean {
       for (const hint of second) {
         end = hint.end;
         hints.DeleteAtPos(hints.entries().indexOf(hint));
+        DestroyTextNodeAttribute(hint);
       }
       portions.delete(nextKey++);
       for (const hint of first) {

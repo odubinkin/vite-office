@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
         "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
-        "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx"
+        "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+        "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts"
       ],
-      "justification": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner. Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized.",
+      "justification": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner. Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized. S3HW1E DestroyTextNodeAttribute releases its actual owned item after represented listener cleanup, including shared automatic-style ownership. Complete unrepresented hint families and all destruction callers remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "InsertTextNodeHint",

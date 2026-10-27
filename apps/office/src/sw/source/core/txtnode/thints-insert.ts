@@ -10,9 +10,10 @@ import { MAX_HINTS } from "./thints-nesting";
 import { SwUpdateAttr, UpdateAttrHint } from "../../../inc/hints";
 /** Actual native ranged families represented by the kernel. */
 type Hint = SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>;
-/** Original hint destruction's represented SwClient-base cleanup. GC owns item values; no native pointer/refcount state is synthesized. @param hint - Unowned attribute. @returns Nothing. */
+/** Original hint destruction's represented SwClient-base cleanup. The owned pool item releases its shared automatic-style handle. @param hint - Unowned attribute. @returns Nothing. */
 export function DestroyTextNodeAttribute(hint: Hint): void {
   if (hint instanceof SwTextINetFormat) hint.EndListeningAll();
+  hint.GetAttr().Dispose();
 }
 /** Original TryInsertHint branches; RSID/hidden fields, dummy/content hints and unrepresented nesting families are not fabricated. @param hints - Actual maps. @param hint - New owned-on-success attribute. @param node - Native node. @param mode - Original flags. @returns Native success, independently of whether merging retains the incoming identity. */
 export function TryInsertTextNodeHint(

@@ -6,7 +6,8 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import { MapUnit } from "../../../tools/inc/mapunit";
 import { SfxBroadcaster } from "../notify/SfxBroadcaster";
 import { SfxHint, SfxHintId } from "../../inc/hint";
-import { MergeRange, implCreateItemEntry } from "./itemset";
+import { MergeRange } from "./itemset";
+import { implCreateItemEntry, implCleanupItemEntry } from "./globalpool";
 import type { WhichRangesContainer } from "../../inc/whichranges";
 
 import { SfxPoolItem, type SfxPoolItemSnapshot, type SfxPoolItemValue } from "./poolitem";
@@ -252,7 +253,9 @@ export class SfxItemPool {
   private impClearUserDefault(which: number): void {
     const saved = this.maUserItemInfos.get(which);
     if (saved === undefined) return;
+    const current = this.getItemInfo(which);
     this.replaceItemInfo(which, saved);
+    if (current instanceof ItemInfoUser) current.Dispose();
   }
   /** Original native user-default create/equal-noop/replace behavior in the target pool. @param item - Actual caller value. @returns Nothing. */
   public SetUserDefaultItem(item: SfxPoolItem): void {
@@ -266,6 +269,7 @@ export class SfxItemPool {
     const info = target.getItemInfo(which) as ItemInfo;
     if (SfxPoolItem.areSame(info.getItem(), item)) return;
     target.replaceItemInfo(which, new ItemInfoUser(info, target, item));
+    if (info instanceof ItemInfoUser) info.Dispose();
   }
   /** Original optional current override lookup, independent of the saved original pool item. @param which - Known native identity. @returns Override or null. */
   public GetUserDefaultItem(which: number): SfxPoolItem | null {
@@ -394,6 +398,10 @@ export class ItemInfoUser extends ItemInfo {
   ) {
     super(info);
     this.m_pItem = implCreateItemEntry(pool, item, passingOwnership);
+  }
+  /** Native user-entry destructor releases its held item. @returns Nothing. */
+  Dispose(): void {
+    implCleanupItemEntry(this.m_pItem);
   }
   /** Original borrowed user-default value. @returns Item or null. */
   public override getItem(): SfxPoolItem | null {

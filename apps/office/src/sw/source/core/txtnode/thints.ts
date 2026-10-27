@@ -7,6 +7,7 @@ import { SetAttrMode } from "../../../inc/swtypes";
 import type { SwTextNode } from "./ndtxt";
 import type { SwpHints } from "./ndhints";
 import { assertTextRange } from "./ndhints-range";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_BEGIN, RES_CHRATR_END, RES_TXTATR_END } from "../../../inc/hintids";
@@ -25,7 +26,13 @@ export function MakeTextAttr(
 ): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   if (attr instanceof SfxItemSet) {
     const handle = doc.GetIStyleAccess().getAutomaticStyle(attr, SwAutoStyleFamily.AUTO_STYLE_CHAR);
-    return MakeTextAttr(doc, new SwFormatAutoFormat(handle), start, end);
+    const format = new SwFormatAutoFormat(handle);
+    try {
+      return MakeTextAttr(doc, format, start, end);
+    } finally {
+      format.Dispose();
+      releaseStyleHandle(handle);
+    }
   }
   if (attr.Which() >= RES_CHRATR_BEGIN && attr.Which() < RES_CHRATR_END) {
     const set = new SfxItemSet(doc.GetAttrPool(), [[RES_CHRATR_BEGIN, RES_CHRATR_END]]);
@@ -103,6 +110,7 @@ export function ConvertTextNodeItemsToHints(node: SwTextNode, items: SfxItemSet)
       if (converted.Count() === 0) continue;
       converted.PutSet(old);
       hints.DeleteAtPos(hints.entries().indexOf(span.hint));
+      DestroyTextNodeAttribute(span.hint);
     }
     hints.Insert(MakeTextAttr(node.GetDoc(), converted, span.start, span.end));
   }

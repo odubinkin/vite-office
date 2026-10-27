@@ -1,4 +1,6 @@
 /** @fileoverview Ports native BuildPortions for automatic and named character formats from thints.cxx. */
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwAutoStyleFamily } from "../../../inc/istyleaccess";
@@ -20,6 +22,7 @@ function portioned(hint: Hint): boolean {
 /** Removes the actual hint identity through all native maps. The actual registered history receives the native old-item entry. @param hints - Actual maps. @param hint - Actual owned attribute. @returns Nothing. */
 function remove(hints: SwpHints, hint: Hint): void {
   hints.DeleteAtPos(hints.entries().indexOf(hint));
+  DestroyTextNodeAttribute(hint);
 }
 /** Reuses source sort numbers for fresh split attributes, without copying other constructor flags. @param node - Actual document owner. @param other - Split source. @param start - Start. @param end - End. @returns Fresh range. */
 function split(node: SwTextNode, other: Hint, start: number, end: number): Hint {
@@ -129,6 +132,7 @@ export function BuildTextHintPortions(
         else if (other.format instanceof SwFormatCharFormat) character = other;
       }
       let style: SfxItemSet | undefined = incoming.format.GetStyleHandle();
+      let ownedStyle: SfxItemSet | undefined;
       if (automatic?.format instanceof SwFormatAutoFormat) {
         const merged = automatic.format.GetStyleHandle().Clone();
         merged.PutSet(style);
@@ -145,6 +149,7 @@ export function BuildTextHintPortions(
         }
         remove(hints, automatic);
         if (merged.Count()) result = MakeTextAttr(node.GetDoc(), merged, first, last);
+        merged.Dispose();
       } else {
         let optimize = true;
         if (!empty && node.GetpSwAttrSet() !== undefined && style.Count()) {
@@ -168,10 +173,13 @@ export function BuildTextHintPortions(
                   .GetIStyleAccess()
                   .getAutomaticStyle(reduced, SwAutoStyleFamily.AUTO_STYLE_CHAR)
               : undefined;
+            ownedStyle = style;
+            reduced.Dispose();
           }
         }
         if (optimize && first === start && last === end) result = incoming;
         else if (style !== undefined) result = MakeTextAttr(node.GetDoc(), style, first, last);
+        if (ownedStyle) releaseStyleHandle(ownedStyle);
       }
     }
     if (result !== undefined) {
@@ -180,6 +188,7 @@ export function BuildTextHintPortions(
     }
     if (empty) break;
   }
+  if (!hints.entries().includes(incoming)) DestroyTextNodeAttribute(incoming);
 }
 /** Native NOHINTADJUST sort-number correction for equal-boundary character formats. @param hints - Existing maps. @param hint - New actual character owner. @returns Nothing. */
 export function CheckCharacterHintSortNumber(hints: SwpHints, hint: SwTextCharFormat): void {

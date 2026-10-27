@@ -4,7 +4,12 @@ import { SfxItemPool } from "./itempool";
 import { SfxItemSet } from "./itemset";
 import { SfxInt16Item } from "./intitem";
 import { SfxPoolItem } from "./poolitem";
-import { StylePool } from "./stylepool";
+import {
+  StylePool,
+  acquireStyleHandle,
+  releaseStyleHandle,
+  styleHandleUseCount,
+} from "./stylepool";
 
 /** A native non-shareable item with an otherwise ordinary value contract. */
 class OwnedItem extends SfxPoolItem {
@@ -159,4 +164,114 @@ describe("automatic character StylePool insertion", /** Groups real tree/leaf/ow
       expect(styles.insertItemSet(set).Equals(set, true)).toBe(true);
     },
   );
+});
+
+/** Releases an owning native vector and its references. @param styles - Owned output vector. @returns Nothing. */
+function release(styles: SfxItemSet[]): void {
+  for (const set of styles) releaseStyleHandle(set);
+  styles.length = 0;
+}
+it("filters by actual shared ownership and preserves caller ownership after pool destruction", () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool();
+  const value = styles.insertItemSet(input(pool, [[11, 7]]));
+  expect(styleHandleUseCount(value)).toBe(2);
+  const out: SfxItemSet[] = [];
+  styles.getAllStyles(out);
+  expect(out).toEqual([value]);
+  expect(styleHandleUseCount(value)).toBe(3);
+  release(out);
+  releaseStyleHandle(value);
+  styles.getAllStyles(out);
+  expect(out).toEqual([]);
+  acquireStyleHandle(value);
+  styles.Dispose();
+  expect(styleHandleUseCount(value)).toBe(1);
+  expect(value.Get(11).QueryValue()).toBe(7);
+  releaseStyleHandle(value);
+  expect(styleHandleUseCount(value)).toBe(0);
+});
+it("returns the newest used non-shareable copy and caches one representative per tree node", () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool(),
+    set = input(pool, [[15, 8]]);
+  set.Put(new OwnedItem());
+  const a = styles.insertItemSet(set),
+    b = styles.insertItemSet(set),
+    c = styles.insertItemSet(set),
+    out: SfxItemSet[] = [];
+  releaseStyleHandle(c);
+  styles.getAllStyles(out);
+  expect(out).toEqual([b]);
+  release(out);
+  releaseStyleHandle(b);
+  styles.getAllStyles(out);
+  expect(out).toEqual([a]);
+  release(out);
+  const cache = new Map<string, SfxItemSet>();
+  styles.populateCacheMap(cache);
+  expect([...cache.values()]).toEqual([a]);
+  releaseStyleHandle(a);
+  styles.getAllStyles(out);
+  expect(out).toEqual([a]);
+  release(out);
+  for (const handle of cache.values()) releaseStyleHandle(handle);
+  cache.clear();
+  styles.getAllStyles(out);
+  expect(out).toEqual([]);
+  styles.populateCacheMap(cache);
+  expect([...cache.values()]).toEqual([c]);
+  for (const handle of cache.values()) releaseStyleHandle(handle);
+  styles.Dispose();
+});
+it("collapses ignorable tails to the first used representative and preserves the root-only omission", () => {
+  const pool = new SfxItemPool(),
+    ignorable = new SfxItemSet(pool, [[15, 15]]),
+    styles = new StylePool(ignorable);
+  const a = styles.insertItemSet(
+      input(pool, [
+        [11, 7],
+        [15, 1],
+      ]),
+    ),
+    b = styles.insertItemSet(
+      input(pool, [
+        [11, 7],
+        [15, 2],
+      ]),
+    ),
+    out: SfxItemSet[] = [];
+  styles.getAllStyles(out);
+  expect(out).toEqual([a]);
+  release(out);
+  releaseStyleHandle(a);
+  styles.getAllStyles(out);
+  expect(out).toEqual([b]);
+  release(out);
+  const rootOnly = styles.insertItemSet(input(pool, [[15, 3]]));
+  styles.getAllStyles(out);
+  expect(out).toEqual([b]);
+  release(out);
+  const cache = new Map<string, SfxItemSet>();
+  styles.populateCacheMap(cache);
+  expect([...cache.values()]).toContain(rootOnly);
+  for (const handle of cache.values()) releaseStyleHandle(handle);
+  releaseStyleHandle(b);
+  releaseStyleHandle(rootOnly);
+  styles.Dispose();
+});
+it("appends in source named-parent order without clearing an existing output vector", () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool(),
+    parentA = input(pool, []),
+    parentB = input(pool, []);
+  const a = styles.insertItemSet(input(pool, [[11, 1]], parentA), "Zulu"),
+    b = styles.insertItemSet(input(pool, [[11, 2]], parentB), "Alpha");
+  const out = [acquireStyleHandle(a)];
+  styles.getAllStyles(out);
+  expect(out).toEqual([a, b, a]);
+  release(out);
+  releaseStyleHandle(a);
+  releaseStyleHandle(b);
+  styles.Dispose();
 });

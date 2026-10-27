@@ -1683,3 +1683,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::NumberingLevel`, takes `rNumberingString[0]` for CHAR_SPECIAL/BITMAP and writes its signed16 value followed by a space and question mark. `wrtw8num.cxx`, `GetNumberingLevelBulletStringAndFont`, creates that string from the UCS4 bullet value.
 - Observation: a supplementary bullet is represented as a surrogate pair in the numbering string, but the level-text writer emits only its high surrogate. This is a source-level trace, not a compiled full Writer differential. A zero bullet is likewise emitted as U+0000; the exporter must not replace it with an invented default bullet.
 - Preservation: retain first-unit indexing and the exact signed Unicode control with its space and fallback. Normal run text still emits all UTF16 units through OutString; do not reuse that different behavior for numbering-level text.
+
+### WRITER186 — Used-style iteration omits a style whose whole path is ignorable
+
+- Source: pinned `svl/source/items/stylepool.cxx`, `Iterator::getNext` and `Node::nextItemSet`. A newly selected root is tested for its own item set, then traversal skips ignorable children. The ignorable-child representative check is performed only after obtaining a subsequent node.
+- Observation: a used style whose entire path consists of ignorable items is omitted by `getAllStyles`; an ordinary non-ignorable prefix makes its used ignorable tail visible. The unchanged compiled Node/Iterator/StylePoolImpl witness confirms this with real standard shared pointers under ASan/UBSan. Item/set/iterator values in that witness are explicit probe carriers, not a full native SfxItemSet/Writer ABI.
+- Preservation: retain the root transition and child-skip order. Do not add a special root-tail representative to make iteration appear exhaustive.
+
+### WRITER187 — Complete style-name cache population selects one non-shareable representative per node
+
+- Source: pinned `svl/source/items/stylepool.cxx`, `Node::getUsedOrLastAddedItemSet`, `Iterator::getNext` and `StylePool::populateCacheMap`.
+- Observation: even with unused/ignorable filtering disabled, iteration returns one shared set for each populated node: the newest externally used non-shareable copy, or the last-added copy if all are unused. Cache population consequently cannot recover every older non-shareable pointee name from the pool. The unchanged compiled Node/Iterator/StylePoolImpl witness confirms representative selection and usage transitions with real shared ownership; the full UNO cache-service graph is not compiled by that witness.
+- Preservation: keep representative selection and one-node/one-result iteration. Do not flatten all retained non-shareable handles into the name cache or font collection.

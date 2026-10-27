@@ -16,6 +16,10 @@
         {
           "path": "apps/office/src/sw/source/filter/xml/native-odt-writer-api.test.ts",
           "marker": "SwXText"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/stylepool.native.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -27,20 +31,32 @@
     },
     "localPath": "apps/office/src/svl/source/items/stylepool.ts",
     "localSymbols": [
-      "StylePool"
+      "StylePool",
+      "Node",
+      "Iterator",
+      "acquireStyleHandle",
+      "releaseStyleHandle",
+      "styleHandleUseCount",
+      "handleAddress"
     ],
     "omittedResponsibilities": [
       "Only the currently implemented concrete-item automatic character insertion branch is ported. Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged."
     ],
     "preservedResponsibilities": [
       "Iteration113 introduces the document-owned automatic character StylePool and IStyleAccess/SwStyleManager owner. Concrete SET-only parent-root/item-child/leaf-clone insertion shares handles for shareable items and retains fresh leaves for non-shareable items. Ordinary character creation and browser snapshot decode now use the document pool. SwFormatAutoFormat is non-shareable, retains explicitly supplied handles, copies the shared reference and compares pointer identity rather than item-set value equality. Independent real-owner regressions cover insertion/parent/input/copy/adjacent-range/codec contracts; one obsolete raw-value merge expectation is corrected. Selective reset pool interning, sentinel-bearing style insertion, native unordered iterator order/collisions, paragraph/ignorable families, unused-style enumeration, name/cache/lifetime semantics, native null default constructor and UNO name QueryValue remain unverified. Browser item-record persistence remains the existing adapter; full modules/model/layout/notification/filter/UI parity is not certified. Registered save/open/recovery deviations and existing semantic statuses/defaults/exceptions remain unchanged.",
-      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged."
+      "Task 202610231745-0YVMQG routes the represented ODT text, paragraph properties, common styles, numbering, bookmarks and cell text through shared XMLTextImportHelper and real Writer text/cursor/style/service owners. Removes SwXMLParagraphTarget and direct ordinary filter item construction. Native table structure and end-document node adjustment retain Writer-specific core responsibility. Character automatic styles use document-pooled handles and CharAutoStyleName; common versus automatic numbering retain separate ownership and export streams. Font scalar members, paragraph controls, page, line-number and consumed property contracts are exercised by focused API/ODT tests. Soft page break XML is ignored as in pinned XMLParaContext. Opaque automatic rule and style names are document-local identities. Full engine/UNO services, unrepresented style families/properties, layout and DOCX remain outside this slice; prior semantic statuses and registered I/O deviations are unchanged.",
+      "Native Node/Iterator/StylePoolImpl item-path traversal now replaces the retained-handle Set. It preserves used-count filtering, newest-used non-shareable representatives, ignorable-tail insertion/collapse, named-parent stable sorting, append-only used-style vectors and complete-cache representative iteration. Explicit logical shared-pointer ownership is tracked over the existing raw-pointee binding; opaque process-local address tokens bind pointer identity/order. Fourteen unchanged compiled C++ Node/Iterator/insertion observations with real std::shared_ptr and ASan/UBSan are matched by local tests. Probe item/set/iterator values are explicit carriers; full SfxItemSet/Writer/ABI parity is not asserted. Whole caller lifetime closure, global item interning and full paragraph automatic-style integration remain unverified; WRITER186/187 preserve source iteration quirks."
     ],
     "status": "mapped",
     "upstreamPath": "svl/source/items/stylepool.cxx",
     "upstreamSymbols": [
       "StylePool::insertItemSet",
-      "StylePoolImpl::insertItemSet"
+      "StylePoolImpl::insertItemSet",
+      "Node::nextItemSet",
+      "Node::getUsedOrLastAddedItemSet",
+      "Iterator::getNext",
+      "StylePool::getAllStyles",
+      "StylePool::populateCacheMap"
     ]
   },
   "legacyOrder": 61

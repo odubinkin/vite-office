@@ -2,7 +2,7 @@
  * @fileoverview Implements Writer's ordered auto-format hint container from pinned `sw/source/core/txtnode/ndhints.cxx`.
  */
 
-import { TryInsertTextNodeHint } from "./thints-insert";
+import { TryInsertTextNodeHint, DestroyTextNodeAttribute } from "./thints-insert";
 import { TryInsertInternetNesting } from "./thints-nesting";
 import type { SwRegHistory } from "../undo/rolbck";
 import { CheckCharacterHintSortNumber } from "./thints-portions";
@@ -21,7 +21,6 @@ import {
   RES_CHRATR_FONT,
   RES_TXTATR_AUTOFMT,
   RES_TXTATR_INETFMT,
-  RES_TXTATR_CHARFMT,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
 import type { SwTextNode } from "./ndtxt";
@@ -30,6 +29,7 @@ import { MakeTextAttr, MergeTextNodePortions } from "./thints";
 import { SwTextCharFormat, SwTextINetFormat } from "./txtatr2";
 import { AdjustInsertTextHints, EraseTextHints, UpdateTextHints } from "./ndtxt-hint-update";
 import {
+  NormalizeOwnedTextHints,
   hintWhichStartBound,
   hintPositionBound,
   assertTextRange,
@@ -540,7 +540,10 @@ export class SwpHints {
     const doc = this.pool.GetDoc(),
       ignore = this.m_pTextNode?.IsIgnoreDontExpand() ?? false;
     if (length > 0)
-      this.assignOwned(UpdateTextHints(doc, this.hintsByStart, offset, length, negative, ignore));
+      this.assignOwned(
+        UpdateTextHints(doc, this.hintsByStart, offset, length, negative, ignore),
+        true,
+      );
     return this;
   }
 
@@ -554,7 +557,7 @@ export class SwpHints {
     } finally {
       if (mode & SwInsertFlags.FORCEHINTEXPAND) node?.SetIgnoreDontExpand(oldIgnore);
     }
-    if (len > 0) this.assignOwned(AdjustInsertTextHints(this.hintsByStart, pos, len, mode));
+    if (len > 0) this.assignOwned(AdjustInsertTextHints(this.hintsByStart, pos, len, mode), true);
     return this;
   }
 
@@ -562,7 +565,7 @@ export class SwpHints {
   public EraseText(textLength: number, offset: number, length: number): SwpHints {
     assertTextRange(textLength, offset, offset + length);
     if (length > 0)
-      this.assignOwned(EraseTextHints(this.pool.GetDoc(), this.hintsByStart, offset, length));
+      this.assignOwned(EraseTextHints(this.pool.GetDoc(), this.hintsByStart, offset, length), true);
     return this;
   }
 
@@ -696,54 +699,21 @@ export class SwpHints {
           ? MakeTextAttr(this.pool.GetDoc(), hint.format, hint.start, hint.end)
           : hint.clone(),
     );
-    this.assignOwned(copies);
+    this.assignOwned(copies, true);
   }
 
   /** Normalizes already owned objects without replacing their identities. @param hints - Owned ranged attributes. @returns Nothing. */
-  private assignOwned(hints: readonly RangedTextAttr[]): void {
-    const sorted = hints
-      .filter(
-        /** Keeps meaningful supported items, including native empty ranges. @param hint - Candidate attribute. @returns Whether meaningful. */
-        (hint) =>
-          hint.end >= hint.start &&
-          ((hint.format instanceof SwFormatAutoFormat &&
-            hint.format.GetStyleHandle().Count() > 0) ||
-            (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0) ||
-            hint.format instanceof SwFormatCharFormat),
-      )
-      .sort(compareHints);
-    const normalized: RangedTextAttr[] = [];
-    sorted.forEach(
-      /** Appends or merges one ordered non-overlapping hint. @param hint - Sorted hint. @returns Nothing. */
-      (hint) => {
-        if (hint.start === hint.end) {
-          normalized.push(hint);
-          return;
-        }
-        let previous: RangedTextAttr | undefined;
-        for (let index = normalized.length - 1; index >= 0; index -= 1) {
-          const candidate = normalized[index];
-          if (candidate?.Which() !== hint.Which() || candidate.start === candidate.end) continue;
-          previous = candidate;
-          break;
-        }
-        if (
-          previous !== undefined &&
-          hint.Which() !== RES_TXTATR_CHARFMT &&
-          hint.start < previous.end
-        )
-          throw new Error("Overlapping Writer same-type hints are not normalized.");
-        if (
-          previous !== undefined &&
-          hint.Which() === RES_TXTATR_AUTOFMT &&
-          previous.end === hint.start &&
-          previous.format.equals(hint.format)
-        )
-          previous.SetEnd(hint.end);
-        else normalized.push(hint);
-      },
-    );
-    this.hintsByStart = normalized.sort(compareHints);
+  private assignOwned(hints: readonly RangedTextAttr[], disposePrevious = false): void {
+    const old = disposePrevious ? this.hintsByStart.filter((hint) => !hints.includes(hint)) : [];
+    this.hintsByStart = NormalizeOwnedTextHints(hints);
+    for (const hint of old) DestroyTextNodeAttribute(hint);
+  }
+
+  /** Native owned hint-map destruction after detaching node backlinks. @returns Nothing. */
+  public Dispose(): void {
+    const old = this.hintsByStart;
+    this.hintsByStart = [];
+    for (const hint of old) DestroyTextNodeAttribute(hint);
   }
 
   /** Rebuilds direct item-set hints from complete browser runs. @param runs - Complete text portions. @param inherited - Node/style item set. @returns Nothing. */
@@ -760,12 +730,13 @@ export class SwpHints {
         const format = createSwFormatAutoFormat(this.pool, run.attributes, inheritedAttributes);
         if (format.GetStyleHandle().Count() > 0)
           hints.push(new SwTextAttrEnd(format, start, offset));
+        else format.Dispose();
         const hyperlink = normalizeWriterHyperlink(run.hyperlink);
         if (hyperlink !== undefined)
           hints.push(new SwTextINetFormat(new SwFormatINetFormat(hyperlink), start, offset));
       },
     );
-    this.replace(hints);
+    this.assignOwned(hints, true);
   }
 
   /** Projects item-set hints into complete browser text runs. @param text - Canonical node text. @param inherited - Node/style item set. @returns Complete runs. */

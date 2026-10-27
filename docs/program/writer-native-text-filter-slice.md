@@ -306,3 +306,26 @@ restoration follow the source. The export returns bytes from `SvStream` rather
 than UTF8-encoding the assembled RTF with `TextEncoder`. Source font-table seed
 order, global Writer default-font initialization, automatic-style usage traversal
 and used numbering/bullet font collection remain incomplete.
+
+The RTF font-table prerequisite now exposes the original
+`SwDoc::ForEachCharacterFontItem`: character formats, paragraph collections,
+fixed-count content nodes and automatic styles, with inherited optional lookup,
+early false return and cleanup of the owned style vector. `StylePool` now uses
+the source item tree and iterator, including used-reference filtering, ignorable
+item tails and one newest-used non-shareable representative per node. The
+source `SwStyleCache` owner retains its own references and complete-pool fallback.
+Fourteen observations from unchanged compiled C++ Node/Iterator/insertion bodies
+with real standard shared pointers match the port under ASan/UBSan; probe
+item/set/iterator values are explicit carriers, so this does not certify the
+full native SfxItemSet/Writer ABI. Source quirks are recorded as WRITER186/187.
+
+The existing raw-pointee shared-handle binding now records explicit owning
+copies and releases registered automatic-item, hint-map, cache, item-set and
+holder owners. Item-entry construction/cleanup lives at `globalpool.cxx`'s
+physical owner; sentinels retain native static-default classification. Complete
+undo, transient fragment, UNO/import-cache and document shutdown lifetime
+closure, global item-instance interning and the remaining native held-item
+sharing cases are still open. Font-table seed/default/bullet initialization is
+not yet connected through this collector; the prior pre-registration route
+remains until those prerequisites are completed. No whole-filter or goal
+completion is asserted by this checkpoint.

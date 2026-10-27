@@ -2,6 +2,8 @@
  * @fileoverview Reimplements bounded SfxItemSet delta storage, parent lookup, and item state from pinned `svl/source/items/itemset.cxx`.
  */
 
+import { implCreateItemEntry, implCleanupItemEntry, bindHolderValue } from "./globalpool";
+export { implCreateItemEntry, implCleanupItemEntry } from "./globalpool";
 import { SfxItemPool } from "./itempool";
 import {
   DISABLED_POOL_ITEM,
@@ -23,7 +25,7 @@ export enum SfxItemState {
 import type { WhichRangesContainer } from "../../inc/whichranges";
 export type { WhichRange, WhichRangesContainer } from "../../inc/whichranges";
 
-/** Original pool/item association represented by real JS references and value copies; native cache/refcount/surrogate lifetime registration is deliberately erased. */
+/** Original pool/item association with native logical item reference counts and explicit destructor binding. Global instance caching and surrogate registration remain unported. */
 export class SfxPoolItemHolder {
   private m_pPool: SfxItemPool | null = null;
   private m_pItem: SfxPoolItem | null = null;
@@ -59,9 +61,16 @@ export class SfxPoolItemHolder {
   /** Original logical holder copy assignment, retaining pool/item identity for shareable values. @param source - Native source. @returns This holder. */
   assign(source: SfxPoolItemHolder): this {
     if (this === source || this.equals(source)) return this;
+    implCleanupItemEntry(this.m_pItem);
     this.m_pPool = source.m_pPool;
     this.m_pItem = bindHolderValue(source.m_pPool as SfxItemPool, source.m_pItem, true, false);
     return this;
+  }
+  /** Original holder destructor releases its owned item entry. @returns Nothing. */
+  Dispose(): void {
+    implCleanupItemEntry(this.m_pItem);
+    this.m_pItem = null;
+    this.m_pPool = null;
   }
   /** Original pool plus item identity comparison; no payload-based pointer interning is fabricated. @param other - Other holder. @returns Equality. */
   equals(other: SfxPoolItemHolder): boolean {
@@ -79,32 +88,6 @@ export class SfxPoolItemHolder {
   Which(): number {
     return this.m_pItem === null ? 0 : this.m_pItem.Which();
   }
-}
-
-/** Original shared ItemSet/ItemPool helper entry. Existing logical value binding retains native default/target-pool/copy cases; physical allocation/refcount/cache machinery stays erased. @param pool - Actual pool. @param item - Borrowed item or null. @param passingOwnership - Native adoption argument. @returns Associated logical value. */
-export function implCreateItemEntry(
-  pool: SfxItemPool,
-  item: SfxPoolItem | null,
-  passingOwnership: boolean,
-): SfxPoolItem | null {
-  return bindHolderValue(pool, item, false, passingOwnership);
-}
-
-/** Erases only native allocation/refcount/cache policy while preserving default, request-value, target-set-pool and explicit value-copy cases. No logical item count or registry is introduced. @param pool - Actual destination. @param item - Existing item or null. @param held - Copying an already held const value. @param passing - Original ownership argument, represented by ordinary JS reference adoption. @returns Associated native value. */
-function bindHolderValue(
-  pool: SfxItemPool,
-  item: SfxPoolItem | null,
-  held: boolean,
-  passing: boolean,
-): SfxPoolItem | null {
-  if (item === null || item.isStaticDefault()) return item;
-  if (item.Which() === 0) return passing ? item : item.Clone();
-  if (item.isDynamicDefault() && pool.GetPoolDefaultItem(item.Which()) === item) return item;
-  if (SfxItemPool.IsSlot(item.Which())) return passing ? item : item.Clone(pool.GetMasterPool());
-  const master = pool.GetMasterPool();
-  if (item.isSetItem() && (item as import("./sitem").SfxSetItem).GetItemSet().GetPool() !== master)
-    return item.Clone(master);
-  return passing || (held && item.isShareable()) ? item : item.Clone(master);
 }
 
 /** Stores only explicit item deltas and resolves inherited/default values on demand. */
@@ -247,12 +230,18 @@ export class SfxItemSet {
 
   /** Original insertion ownership argument over actual JS value adoption. @param item - Input. @param passingOwnership - Adopt an already cloned value. @returns Actual stored item or no-op. */
   private PutImpl(item: SfxPoolItem, passingOwnership: boolean): SfxPoolItem | undefined {
-    if (IsDisabledItem(item)) return undefined;
-    if (!this.containsWhich(item.Which())) return undefined;
+    if (IsDisabledItem(item) || !this.containsWhich(item.Which())) {
+      if (passingOwnership) item.Dispose();
+      return undefined;
+    }
     const current = this.poolItemMap.get(item.Which());
-    if (SfxPoolItem.areSame(current, item)) return undefined;
+    if (SfxPoolItem.areSame(current, item)) {
+      if (passingOwnership) item.Dispose();
+      return undefined;
+    }
     const stored = implCreateItemEntry(this.pool, item, passingOwnership) as SfxPoolItem;
     this.Changed(current, stored);
+    implCleanupItemEntry(current);
     this.poolItemMap.set(stored.Which(), stored);
     return stored;
   }
@@ -315,6 +304,7 @@ export class SfxItemSet {
       if (!ignoreDefaults || !old.equals(this.pool.GetUserOrPoolDefaultItem(which))) change = true;
     } else if (!old.equals(source)) change = true;
     if (change) {
+      this.ClearSingleItem_PrepareRemove(old);
       this.poolItemMap.set(which, INVALID_POOL_ITEM);
     }
   }
@@ -338,13 +328,17 @@ export class SfxItemSet {
   public ClearItem(which = 0): number {
     if (which === 0) {
       const count = this.poolItemMap.size;
-      for (const item of this.poolItemMap.values()) this.Changed(item, undefined);
+      for (const item of this.poolItemMap.values()) {
+        this.Changed(item, undefined);
+        implCleanupItemEntry(item);
+      }
       this.poolItemMap.clear();
       return count;
     }
     const item = this.poolItemMap.get(which);
     if (item === undefined) return 0;
     this.Changed(item, undefined);
+    implCleanupItemEntry(item);
     this.poolItemMap.delete(which);
     return 1;
   }
@@ -393,6 +387,12 @@ export class SfxItemSet {
     void newItem;
   }
 
+  /** Logical SfxItemSet destructor releases direct entries without virtual Changed notifications. @returns Nothing. */
+  public Dispose(): void {
+    for (const item of this.poolItemMap.values()) implCleanupItemEntry(item);
+    this.poolItemMap.clear();
+  }
+
   /** Translates the copy constructor's direct item entries independently of PutSet semantics. @param target - Fresh clone. @param includeStates - Whether INVALID/DISABLED entries belong to this clone. @returns Nothing. */
   protected CopyItemsTo(target: SfxItemSet, includeStates = true): void {
     for (const [which, item] of this.poolItemMap) {
@@ -412,12 +412,19 @@ export class SfxItemSet {
     );
   }
 
+  /** Native old-entry notification and cleanup before removing/replacing its map slot. @param item - Borrowed old entry. @returns Nothing. */
+  private ClearSingleItem_PrepareRemove(item: SfxPoolItem): void {
+    this.Changed(item, undefined);
+    implCleanupItemEntry(item);
+  }
+
   /** Stores a sentinel using the pinned shared state transition. @param disable - Whether DISABLED rather than INVALID is requested. @param which - Item identity. @returns Nothing. */
   private DisableOrInvalidateItem_ForWhichID(disable: boolean, which: number): void {
     const sentinel = disable ? DISABLED_POOL_ITEM : INVALID_POOL_ITEM;
     const current = this.poolItemMap.get(which);
     if (current !== undefined) {
       if (current === sentinel) return;
+      this.ClearSingleItem_PrepareRemove(current);
       this.poolItemMap.set(which, sentinel);
     } else if (this.containsWhich(which)) this.poolItemMap.set(which, sentinel);
   }

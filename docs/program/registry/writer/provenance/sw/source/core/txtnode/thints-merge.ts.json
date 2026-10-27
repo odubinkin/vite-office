@@ -37,7 +37,8 @@
     ],
     "preservedResponsibilities": [
       "Native complete-portion comparison and merging of represented automatic and named character formats, with original first/last format-ignore transitions. RSID-only items are outside the registered portable kernel and their special branch is not claimed.",
-      "S3HW1E: Original MergePortions records deleted second portions and old/new endpoint changes. Format-ignore flag changes record old/new entries only when the source condition changes the flag."
+      "S3HW1E: Original MergePortions records deleted second portions and old/new endpoint changes. Format-ignore flag changes record old/new entries only when the source condition changes the flag.",
+      "S3HW1E destroys removed merged hint owners after removing them from native maps, retaining copied history before releasing the original shared automatic item. Other source responsibilities and whole caller lifetime closure are not certified."
     ],
     "omittedResponsibilities": [
       "Full compiled Writer model/UNO/layout parity, unregistered fields and external document loading remain unverified."

@@ -1,4 +1,5 @@
 /** @fileoverview Owns portable hint insertion, copying and projection at the native ndtxt.cxx text-node responsibility boundary. */
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SwContentIndexUpdateMode } from "../bastyp/index";
 import { SwTextINetFormat } from "./txtatr2";
 import { SvxAdjust } from "../../../../editeng/inc/adjustitem";
@@ -66,6 +67,7 @@ export function MoveTextAttrToAttrSet(node: SwTextNode): void {
       )
     ) {
       hints.DeleteAtPos(index);
+      DestroyTextNodeAttribute(hint);
       index--;
     }
   }
@@ -101,6 +103,7 @@ export function ReplaceTextNodeHints(
     if (!retained.has(hint) && hint instanceof SwTextINetFormat) hint.EndListeningAll();
   next?.BindToTextNode(node);
   previous?.BindToTextNode(undefined);
+  previous?.Dispose();
   return next;
 }
 

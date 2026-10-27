@@ -17,9 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/core/txtnode/thints-portions.ts",
-        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
+        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts",
+        "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts"
       ],
-      "justification": "Native automatic/character portion boundaries, replacement policy, named-style membership, paragraph-item reduction, reuse decisions and NOHINTADJUST sort numbers for the represented families. Existing shell/history snapshot owners remain independent; no native allocator or pointer ABI is simulated. S3HW1E: Original BuildPortions old/new history calls surround each existing endpoint change; split and replacement insertions record resets and deletion records old values through actual SwpHints. No fragment/text replacement is used for these native mutations.",
+      "justification": "Native automatic/character portion boundaries, replacement policy, named-style membership, paragraph-item reduction, reuse decisions and NOHINTADJUST sort numbers for the represented families. Existing shell/history snapshot owners remain independent; no native allocator or pointer ABI is simulated. S3HW1E: Original BuildPortions old/new history calls surround each existing endpoint change; split and replacement insertions record resets and deletion records old values through actual SwpHints. No fragment/text replacement is used for these native mutations. S3HW1E releases replaced/unused portion owners, reduced-style temporary handles and temporary merged item sets. Actual retained hint identities and original portion ordering remain intact. Whole callback/exception/undo lifetime closure remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "BuildTextHintPortions",

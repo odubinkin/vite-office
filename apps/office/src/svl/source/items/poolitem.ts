@@ -34,6 +34,21 @@ export abstract class SfxPoolItem {
     return left.equals(right);
   }
 
+  #m_nRefCount = 0;
+  /** Original public reference-count increment for held item entries. @param count - Native UInt32 increment. @returns Nothing. */
+  public AddRef(count = 1): void {
+    this.#m_nRefCount = (this.#m_nRefCount + (count >>> 0)) >>> 0;
+  }
+  /** Original friend-only decrement, exposed to the logical cleanup binding through its host friend-access binding. @param count - Native UInt32 decrement. @returns Remaining count. */
+  protected ReleaseRef(count = 1): number {
+    this.#m_nRefCount = (this.#m_nRefCount - (count >>> 0)) >>> 0;
+    return this.#m_nRefCount;
+  }
+  /** Original item reference-count query. @returns Held entry count. */
+  public GetRefCount(): number {
+    return this.#m_nRefCount;
+  }
+
   private shareable = true;
   private m_bNameOrIndex = false;
   /** Original drawing palette-item classification. @returns Source flag. */
@@ -107,6 +122,9 @@ export abstract class SfxPoolItem {
   /** Compares the concrete payload under the subclass contract; areSame additionally checks WhichId and exact type. @param other - Candidate item. @returns True for equal items. */
   public abstract equals(other: SfxPoolItem): boolean;
 
+  /** Logical virtual destructor binding. Value-only items have no owned resources; non-shareable owning items override it. @returns Nothing. */
+  public Dispose(): void {}
+
   /** Original no-op metric scaling for non-metric items. @param scale - Unused factor. @returns Nothing. */
   public ScaleMetrics(scale: number): void {
     void scale;
@@ -133,6 +151,7 @@ class InvalidItem extends SfxPoolItem {
   /** Creates the zero-WhichId static state item. @returns Nothing. */
   public constructor() {
     super(0);
+    this.setStaticDefault();
   }
 
   /** Mirrors the sentinel's null Clone result. @returns Null. */
@@ -157,6 +176,7 @@ class DisabledItem extends SfxPoolItem {
   /** Creates the zero-WhichId static state item. @returns Nothing. */
   public constructor() {
     super(0);
+    this.setStaticDefault();
   }
 
   /** Mirrors the sentinel's null Clone result. @returns Null. */

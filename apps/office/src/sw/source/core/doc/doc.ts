@@ -1,4 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { ForEachCharacterFontItem } from "./doc.items";
+import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   MakePageDesc,
   DelPageDesc,
@@ -377,6 +379,14 @@ export class SwDoc {
   /** Original document-wide grid-mode mutation. @param squared - Mode. @returns Nothing. */
   public SetDefaultPageMode(squared: boolean): void {
     SetDefaultPageMode(this, squared);
+  }
+  /** Native character-font item traversal. @param which - Native font identity. @param ignoreAutoStyles - Skip automatic styles. @param callback - Borrowed font callback; false stops traversal. @returns Nothing. */
+  public ForEachCharacterFontItem(
+    which: number,
+    ignoreAutoStyles: boolean,
+    callback: (font: SvxFontItem) => boolean,
+  ): void {
+    ForEachCharacterFontItem(this, which, ignoreAutoStyles, callback);
   }
   /** Native node/style traversal for authored tab-stop items. @param callback - Original early-stop visitor. @returns Nothing. */
   public ForEachParaAtrTabStopItem(callback: (item: SvxTabStopItem) => boolean): void {
@@ -961,6 +971,9 @@ export class SwDoc {
     this.undoManager.Dispose();
     this.defaultGrfFormatColl.DisposeModify();
     for (const format of [...this.GetCharFormats()].reverse()) format.DisposeModify();
+    for (const node of this.nodes.entries())
+      if (node instanceof SwTextNode) node.GetpSwpHints()?.Dispose();
+    this.styleAccess.Dispose();
     this.stateManager.Dispose();
   }
 }

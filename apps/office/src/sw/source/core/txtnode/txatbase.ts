@@ -1,6 +1,7 @@
 /**
  * @fileoverview Defines Writer text-range attributes at the pinned LibreOffice `sw/source/core/txtnode/txatbase.cxx` ownership boundary.
  */
+import { acquireStyleHandle, releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import type { SwFormatCharFormat } from "./fmtatr2";
 import {
   writerTextColorValue,
@@ -95,8 +96,12 @@ export function createWriterCharacterItemSet(
 ): SfxItemSet {
   const set = new SfxItemSet(pool, WRITER_CHARACTER_WHICH_RANGES);
   const format = createSwFormatAutoFormat(pool, attributes);
-  set.PutSet(format.GetStyleHandle());
-  return set;
+  try {
+    set.PutSet(format.GetStyleHandle());
+    return set;
+  } finally {
+    format.Dispose();
+  }
 }
 
 /** SfxPoolItem wrapper around the character item set referenced by RES_TXTATR_AUTOFMT. */
@@ -108,7 +113,7 @@ export class SwFormatAutoFormat extends SfxPoolItem {
     super(which);
     if (which !== RES_TXTATR_AUTOFMT) throw new Error("SwFormatAutoFormat WhichId is invalid.");
     this.setNonShareable();
-    this.styleHandle = styleHandle;
+    this.styleHandle = acquireStyleHandle(styleHandle);
   }
 
   /** Returns the shared style handle. @returns Referenced item set. */
@@ -118,7 +123,14 @@ export class SwFormatAutoFormat extends SfxPoolItem {
 
   /** Assigns the shared handle without cloning its contents. @param styleHandle - New style reference. @returns Nothing. */
   public SetStyleHandle(styleHandle: SfxItemSet): void {
-    this.styleHandle = styleHandle;
+    const copy = acquireStyleHandle(styleHandle);
+    releaseStyleHandle(this.styleHandle);
+    this.styleHandle = copy;
+  }
+
+  /** Releases the actual shared handle in the native virtual item destructor. @returns Nothing. */
+  public override Dispose(): void {
+    releaseStyleHandle(this.styleHandle);
   }
 
   /** Creates an independent item sharing the same style handle. @returns Cloned item. */
@@ -509,9 +521,16 @@ export function createSwFormatAutoFormat(
       underline.SetColor(new Color(Number.parseInt(attributes.underlineColor.slice(1), 16)));
     items.Put(underline);
   }
-  return new SwFormatAutoFormat(
-    pool.GetDoc().GetIStyleAccess().getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR),
-  );
+  const handle = pool
+    .GetDoc()
+    .GetIStyleAccess()
+    .getAutomaticStyle(items, SwAutoStyleFamily.AUTO_STYLE_CHAR);
+  try {
+    return new SwFormatAutoFormat(handle);
+  } finally {
+    releaseStyleHandle(handle);
+    items.Dispose();
+  }
 }
 
 /** Projects supported effective character items to the browser command shape. @param items - Direct character item set. @param inherited - Optional inherited style set. @returns Effective boolean properties. */
