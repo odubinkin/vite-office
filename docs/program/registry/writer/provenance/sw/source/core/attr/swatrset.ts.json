@@ -10,7 +10,7 @@
           "path": "apps/office/src/sw/source/core/attr/swatrset.ts"
         },
         {
-          "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+          "path": "apps/office/src/sw/source/core/bastyp/init.ts",
           "marker": "new SfxInt16Item(RES_PARATR_LIST_RESTARTVALUE, 1)"
         },
         {
@@ -168,6 +168,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/native-defaults.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -259,7 +263,8 @@
       "Native Markdown callback prerequisites: text-only AppendTextNode follows AppendNode/MakeNewTextNode successor semantics (same collection, copied direct items excluding breaks/outline rule, no text hints, reset list restart/counting). DontExpandFormat transfers paragraph character items at EOF and updates eligible unlocked end-boundary flags. RES_BACKGROUND=115 supplies the native solid paragraph/frame brush and existing Worker codec. Three focused model tests cover successors, no format leakage and brush transfer. This does not certify structural nontext append, paragraph-insert undo/redlines/layout history or full native document parity.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "Added actual SdrItemPool secondary ownership for represented solid-fill values. Corrected earlier checkpoint error: native init.cxx creates the pool internet default through SwFormatINetFormat(OUString(),OUString()), with normal/visited style IDs; only CreateDefault uses the separate zero constructor.",
-      "Three native language item defaults use LANGUAGE_DONTKNOW, exact source slots and concrete scalar snapshot restoration."
+      "Three native language item defaults use LANGUAGE_DONTKNOW, exact source slots and concrete scalar snapshot restoration.",
+      "Module-global Writer defaults checkpoint: SwModule explicitly initializes/gets/removes its owned ItemInfoPackageSwAttributes; its getter requires initialization. Existing browser singleton bootstrap invokes the source swdll initialization boundary. SwDoc injects that package into the two-argument SwAttrPool constructor, while GetDfltAttr directly borrows the global package. Exact163 native Which/slot/flag entries are extracted from pinned init.cxx and macro/Which declarations. Represented defaults share actual static ItemInfo/default identities across documents/pool copies; sparse snapshot registration accepts actual static/dynamic metadata without value cloning. Global fonts use GetDefaultFonts. Existing document-creation font preferences and two-line orphan/widow values are user overlays, distinct from global defaults (orphan/widow zero). Strict lifecycle, identity, reset/copy, complete metadata/slot map and current consumer tests cover this path. Unrepresented native item classes retain no fabricated value; existing generic paragraph bool/count/break value carriers, full InitNew conditions/configuration and full native pool/ABI still require separate alignment. No whole-filter, module or goal promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/attr/swatrset.cxx",

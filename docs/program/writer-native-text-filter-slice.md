@@ -363,3 +363,15 @@ WRITER189-192 are preserved; physical font matching, runtime configuration
 providers and full VCL/SAL ABI remain unverified. This prerequisite is not yet
 wired through complete wwFontHelper::InitFontTable/global Writer defaults and
 used-numbering initialization, which remain open along with the earlier gaps.
+
+Global default ownership is now separate from document user overrides.
+`SwModule` owns the represented `ItemInfoPackageSwAttributes` and explicit
+initialization/get/remove lifecycle. `SwDoc` injects it into `SwAttrPool`, and
+`GetDfltAttr` reads the same global package. All 163 Which/slot/flag records are
+pinned source data; represented static item/default identities are shared across
+documents and pool copies. Absent native classes have no fabricated defaults.
+The global font triple uses GetDefaultFonts, while existing document creation
+preferences are user defaults; global orphan/widow values are zero and the new
+document overlay remains two. Generic paragraph bool/count/break carriers and
+full InitNew conditions remain unverified. Complete InitFontTable/used numbering,
+Markdown HTMLReader and the other earlier gaps still prevent slice completion.

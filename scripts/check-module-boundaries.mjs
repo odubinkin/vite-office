@@ -435,8 +435,16 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
   const targetLayer = getRuntimeOwnershipLayer(targetPath);
   if (targetLayer === "browser")
     return `${sourceLayer} must receive browser adapters through an injected contract`;
+  // Original docnew.cxx injects SwModule's attribute package into SwAttrPool;
+  // hints.cxx's GetDfltAttr reads that same module-global package directly.
+  const portableSourcePath = sourcePath.split(path.sep).join("/");
+  const writerDefaultModuleRead =
+    (portableSourcePath === "sw/source/core/doc/doc.ts" ||
+      portableSourcePath === "sw/source/core/attr/hints.ts") &&
+    portableTargetPath === "sw/source/uibase/app/swmodule";
   if (
     sourceLayer === "writer-core" &&
+    !writerDefaultModuleRead &&
     (targetLayer === "writer-filter" ||
       targetLayer === "writer-uibase" ||
       targetLayer === "writer-model-api")

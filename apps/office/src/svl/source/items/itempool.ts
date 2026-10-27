@@ -198,25 +198,27 @@ export class SfxItemPool {
     return slot !== 0 ? slot : which;
   }
 
-  /** Registers a consumed native default and its original ItemInfo slot field independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Default item. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @param flags - Original ItemInfo flags. @returns Nothing. */
+  /** Binds an actual shared native static entry or a consumed default value independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Actual native metadata entry or owned default-value input. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @param flags - Original ItemInfo flags. @returns Nothing. */
   public RegisterDefaultItem(
-    item: SfxPoolItem,
+    item: SfxPoolItem | ItemInfo,
     factory?: SfxPoolItemFactory,
     slot = 0,
     flags = 0,
   ): void {
-    if (this.registeredItemInfos.has(item.Which()))
-      throw new Error(`Duplicate pool default: ${item.Which()}`);
+    const which = item instanceof ItemInfo ? item.getWhich() : item.Which();
+    if (this.registeredItemInfos.has(which)) throw new Error(`Duplicate pool default: ${which}`);
+    if (item instanceof ItemInfo && item.getItem() === null)
+      throw new Error("Missing dynamic-default item.");
+    if (item instanceof ItemInfo) slot = item.getSlotID();
     if (slot !== 0 && this.mpSlotIDToWhichIDMap?.has(slot))
       throw new Error(`Duplicate pool slot: ${slot}`);
-    this.registeredItemInfos.set(
-      item.Which(),
-      new ItemInfoStatic(item.Which(), item.Clone(), slot, flags),
-    );
-    if (factory !== undefined) this.factories.set(item.Which(), factory);
+    const info =
+      item instanceof ItemInfo ? item : new ItemInfoStatic(which, item.Clone(), slot, flags);
+    this.registeredItemInfos.set(which, info);
+    if (factory !== undefined) this.factories.set(which, factory);
     if (slot !== 0) {
       const mapping = new Map(this.mpSlotIDToWhichIDMap);
-      mapping.set(slot, item.Which());
+      mapping.set(slot, which);
       this.mpSlotIDToWhichIDMap = mapping;
     }
   }
@@ -410,6 +412,8 @@ export class ItemInfoUser extends ItemInfo {
 }
 /** Original package abstraction and native slot-map cache; ordinary JS Map stores the same logical lookup. */
 export abstract class ItemInfoPackage {
+  /** Logical native virtual package destructor; the base owns no default-item table. @returns Nothing. */
+  public Dispose(): void {}
   private readonly maSlotIDToWhichIDMap = new Map<number, number>();
   private static empty: ItemInfoStatic | undefined;
   /** Original friend operation replacing a static default. Constant-member access erases C++ friendship without widening private visibility. @param item - New nullable default. @param info - Actual static metadata. @returns Nothing. */

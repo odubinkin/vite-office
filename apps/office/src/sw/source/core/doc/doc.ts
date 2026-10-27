@@ -254,7 +254,7 @@ export class SwDoc {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
-    this.attrPool = new SwAttrPool(this);
+    this.attrPool = new SwAttrPool(SwModule.get().getItemInfoPackageSwAttributes(), this);
     this.defaultCharFormat = new SwCharFormat(this.attrPool, "Character style");
     this.defaultGrfFormatColl = new SwGrfFormatColl(this.attrPool, "Graphikformatvorlage");
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
@@ -982,3 +982,5 @@ export class SwDoc {
 export function createWriterDocument(): SwDoc {
   return new SwDoc();
 }
+
+import { SwModule } from "../../uibase/app/swmodule";

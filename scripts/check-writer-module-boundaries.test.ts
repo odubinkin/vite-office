@@ -38,3 +38,28 @@ it("admits only the native Writer default-bullet VCL value owner", () => {
     true,
   );
 });
+
+it("admits only source-proven global default package reads across the native module boundary", () => {
+  for (const source of ["sw/source/core/doc/doc.ts", "sw/source/core/attr/hints.ts"])
+    expect(
+      getRuntimeOwnershipViolation(
+        source,
+        "sw/source/uibase/app/swmodule.ts",
+        "../../uibase/app/swmodule",
+      ),
+    ).toBeUndefined();
+  expect(
+    getRuntimeOwnershipViolation(
+      "sw/source/core/attr/swatrset.ts",
+      "sw/source/uibase/app/swmodule.ts",
+      "../../uibase/app/swmodule",
+    ),
+  ).toMatch(/must not depend on uibase/u);
+  expect(
+    getRuntimeOwnershipViolation(
+      "sw/source/core/doc/doc.ts",
+      "sw/source/uibase/docvw/edtwin.ts",
+      "../../uibase/docvw/edtwin",
+    ),
+  ).toMatch(/must not depend on uibase/u);
+});

@@ -1,6 +1,6 @@
 /** @fileoverview Verifies independent default registration and optional browser restoration in the real item pool. */
-import { expect, it } from "vitest";
-import { SfxItemPool } from "./itempool";
+import { expect, it, vi } from "vitest";
+import { SfxItemPool, ItemInfoStatic } from "./itempool";
 import { SfxStringItem } from "./stritem";
 
 it("routes consumed default registrations through original ItemInfo user override and reset semantics", /** Sparse admission changes storage lookup only; original static/user metadata owns every value. @returns Nothing. */ () => {
@@ -124,4 +124,23 @@ it("owns and resets a user default for bounded registered items", /** Checks own
   pool.ResetUserDefaultItem(1);
   expect(pool.GetUserDefaultItem(1)).toBeNull();
   expect(pool.GetUserOrPoolDefaultItem(1).QueryValue()).toBe("original");
+});
+
+it("retains supplied native static metadata across sparse owners and copies without cloning its default", () => {
+  const value = new SfxStringItem(7, "global"),
+    info = new ItemInfoStatic(7, value, 321, 0),
+    clone = vi.spyOn(value, "Clone"),
+    first = new SfxItemPool(),
+    second = new SfxItemPool();
+  first.RegisterDefaultItem(info);
+  second.RegisterDefaultItem(info);
+  expect(first.GetPoolDefaultItem(7)).toBe(value);
+  expect(second.GetPoolDefaultItem(7)).toBe(value);
+  expect(first.GetSlotId(7)).toBe(321);
+  expect(first.Clone().GetPoolDefaultItem(7)).toBe(value);
+  first.SetUserDefaultItem(new SfxStringItem(7, "local"));
+  expect(second.GetUserDefaultItem(7)).toBeNull();
+  first.ResetUserDefaultItem(7);
+  expect(first.GetPoolDefaultItem(7)).toBe(value);
+  expect(clone).not.toHaveBeenCalled();
 });

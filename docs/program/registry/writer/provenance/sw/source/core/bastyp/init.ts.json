@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/sw/source/core/bastyp/init.ts",
+    "localSymbols": [
+      "ItemInfoPackageSwAttributes",
+      "createItemInfoPackageSwAttributes"
+    ],
+    "upstreamPath": "sw/source/core/bastyp/init.cxx",
+    "upstreamSymbols": [
+      "ItemInfoPackageSwAttributes",
+      "createItemInfoPackageSwAttributes"
+    ],
+    "preservedResponsibilities": [
+      "Module-global Writer defaults checkpoint: SwModule explicitly initializes/gets/removes its owned ItemInfoPackageSwAttributes; its getter requires initialization. Existing browser singleton bootstrap invokes the source swdll initialization boundary. SwDoc injects that package into the two-argument SwAttrPool constructor, while GetDfltAttr directly borrows the global package. Exact163 native Which/slot/flag entries are extracted from pinned init.cxx and macro/Which declarations. Represented defaults share actual static ItemInfo/default identities across documents/pool copies; sparse snapshot registration accepts actual static/dynamic metadata without value cloning. Global fonts use GetDefaultFonts. Existing document-creation font preferences and two-line orphan/widow values are user overlays, distinct from global defaults (orphan/widow zero). Strict lifecycle, identity, reset/copy, complete metadata/slot map and current consumer tests cover this path. Unrepresented native item classes retain no fabricated value; existing generic paragraph bool/count/break value carriers, full InitNew conditions/configuration and full native pool/ABI still require separate alignment. No whole-filter, module or goal promotion."
+    ],
+    "omittedResponsibilities": [
+      "Unrepresented native item classes are absent rather than replaced by stand-ins. Existing generic paragraph bool/count/break carriers and complete native typed defaults remain unverified; complete InitCore/shutdown/native ABI are not represented by this package profile."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/init.ts",
+          "marker": "createItemInfoPackageSwAttributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/bastyp/native-defaults.test.ts",
+          "marker": "it("
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/bastyp/init.cxx",
+          "marker": "createItemInfoPackageSwAttributes"
+        }
+      ]
+    }
+  }
+}

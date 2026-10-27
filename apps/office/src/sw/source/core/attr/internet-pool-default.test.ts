@@ -136,7 +136,7 @@ describe("native document-pool internet default", /** Registers source-independe
     ]);
     expect(item.equals(SwFormatINetFormat.CreateDefault())).toBe(false);
     expect(item.GetTextINetFormat()).toBeUndefined();
-    expect(other.GetAttrPool().GetUserOrPoolDefaultItem(54)).not.toBe(item);
+    expect(other.GetAttrPool().GetUserOrPoolDefaultItem(54)).toBe(item);
     expect(other.GetAttrPool().GetUserOrPoolDefaultItem(54).equals(item)).toBe(true);
     const node = doc.paragraphs[0];
     if (node === undefined) throw new Error("Missing actual text node");
