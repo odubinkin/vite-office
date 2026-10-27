@@ -1,10 +1,11 @@
 ---
 id: "202610270724-301XPW"
 title: "Refresh README and synchronize application branches"
-status: "DOING"
+result_summary: "Published accurate README and merged main into Calc and Writer; final task closure will also be synchronized."
+status: "DONE"
 priority: "med"
 owner: "DOCS"
-revision: 12
+revision: 13
 origin:
   system: "manual"
 depends_on: []
@@ -42,11 +43,16 @@ quality_review:
     - "git merge-base --is-ancestor origin/main HEAD (calc and writer)"
   findings:
     - "No application implementation changed. Existing doctor hook-shim warning and unrelated untracked native probe output remain out of scope. Both application trees match the published main tree."
-commit: null
+commit:
+  hash: "d7e4bc4f51d34cfec2fde674fe4d6241260126ae"
+  message: "📝 301XPW docs: document Writer and Calc features and supported formats"
 comments:
   -
     author: "DOCS"
     body: "Start: user approved README refresh, GitHub push, and main synchronization into Calc and Writer folders; preserve unrelated artifacts."
+  -
+    author: "DOCS"
+    body: "Verified: README documents current Writer/Calc features and formats; docs checks pass; main, Calc and Writer synchronized on GitHub with clean tracked files."
 events:
   -
     type: "status"
@@ -67,8 +73,15 @@ events:
     author: "DOCS"
     state: "ok"
     note: "Documentation checks pass; README pushed to main, main merged conflict-free into calc and writer and both pushed. Main ancestry and identical tree checks pass; unrelated artifacts preserved."
+  -
+    type: "status"
+    at: "2026-10-27T07:29:18.624Z"
+    author: "DOCS"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: README documents current Writer/Calc features and formats; docs checks pass; main, Calc and Writer synchronized on GitHub with clean tracked files."
 doc_version: 3
-doc_updated_at: "2026-10-27T07:28:53.597Z"
+doc_updated_at: "2026-10-27T07:29:18.625Z"
 doc_updated_by: "DOCS"
 description: "Update README from current Writer and Calc implementation and file formats, verify documentation, push main, merge main into Calc and Writer branches and pull their corresponding checkouts. User approved the plan and expanded scope to branch synchronization."
 sections:
