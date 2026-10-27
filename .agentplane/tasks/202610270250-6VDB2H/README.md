@@ -1,10 +1,10 @@
 ---
 id: "202610270250-6VDB2H"
 title: "Integrate Writer and Calc branches and synchronize all checkouts"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 22
 origin:
   system: "manual"
 depends_on: []
@@ -30,6 +30,9 @@ comments:
   -
     author: "CODER"
     body: "Blocked: Full mandatory coverage gate fails across 216 modules. Await explicit scope reapproval for broad test completion or acceptance of the documented coverage gap before publishing main and reverse-merging branches."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
 events:
   -
     type: "status"
@@ -51,8 +54,15 @@ events:
     from: "DOING"
     to: "BLOCKED"
     note: "Blocked: Full mandatory coverage gate fails across 216 modules. Await explicit scope reapproval for broad test completion or acceptance of the documented coverage gap before publishing main and reverse-merging branches."
+  -
+    type: "status"
+    at: "2026-10-27T04:01:47.618Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-27T03:59:42.915Z"
+doc_updated_at: "2026-10-27T05:03:14.518Z"
 doc_updated_by: "CODER"
 description: "User-approved integration: commit current Writer work, push Writer and Calc, merge both into main, resolve conflicts, run full project verification and repair regressions, push main, then merge main back and push both development branches. Preserve local generated artifacts and finish on original branch names."
 sections:
@@ -110,6 +120,14 @@ sections:
     - Observation: Strict full-suite coverage reveals a broad test backlog beyond the immediate integration regressions.
       Impact: The configured 100-percent gate fails in 216 modules: 1595 uncovered lines, 2224 uncovered statements, 2403 uncovered branches and 131 uncovered functions. Publishing main now would bypass the approved verification contract.
       Resolution: Preserve thresholds and full gap evidence. Complete and locally commit bounded integration repairs; request explicit scope reapproval under dod.core material-drift criteria before expanding to hundreds of module test paths or accepting a coverage waiver. Do not push main or reverse-merge branches before that decision.
+
+    - Observation: Scope assessment clarified: the original user instruction explicitly includes adding missing tests found by full project checks.
+      Impact: The broad coverage backlog is necessary verification work within the approved integration request; no waiver is authorized or needed.
+      Resolution: Resume strict coverage completion under the existing approved plan. Keep all thresholds, complete source-backed tests and necessary local fixes, then publish and reverse-merge only after the gate passes. The earlier temporary block and proposed reapproval are superseded by the existing user authorization.
+
+    - Observation: Source-backed supplemental tests now close more than one thousand missing statements and branches without lowering coverage thresholds. Portable minimized cases preserve independently compiled ICU and md4c observations; the complete BytesTrie scope and tools date/time scope reach 100 percent.
+      Impact: A fresh full application assertion run is in progress. Current combined coverage is recorded separately from the original failing run. Remaining gaps include ordinary untested paths as well as proven source-invariant and host-limit guards; they are not all declared unreachable.
+      Resolution: Keep native defensive checks and strict configuration intact. Document the remaining gap precisely. Publication requires either completing the strict gate or the requested explicit user exception; no exception has yet been received.
 id_source: "generated"
 ---
 ## Summary
@@ -184,3 +202,11 @@ Integration commits: Writer snapshot 1d696773a; Writer merge 66d54ddec; Calc mer
 - Observation: Strict full-suite coverage reveals a broad test backlog beyond the immediate integration regressions.
   Impact: The configured 100-percent gate fails in 216 modules: 1595 uncovered lines, 2224 uncovered statements, 2403 uncovered branches and 131 uncovered functions. Publishing main now would bypass the approved verification contract.
   Resolution: Preserve thresholds and full gap evidence. Complete and locally commit bounded integration repairs; request explicit scope reapproval under dod.core material-drift criteria before expanding to hundreds of module test paths or accepting a coverage waiver. Do not push main or reverse-merge branches before that decision.
+
+- Observation: Scope assessment clarified: the original user instruction explicitly includes adding missing tests found by full project checks.
+  Impact: The broad coverage backlog is necessary verification work within the approved integration request; no waiver is authorized or needed.
+  Resolution: Resume strict coverage completion under the existing approved plan. Keep all thresholds, complete source-backed tests and necessary local fixes, then publish and reverse-merge only after the gate passes. The earlier temporary block and proposed reapproval are superseded by the existing user authorization.
+
+- Observation: Source-backed supplemental tests now close more than one thousand missing statements and branches without lowering coverage thresholds. Portable minimized cases preserve independently compiled ICU and md4c observations; the complete BytesTrie scope and tools date/time scope reach 100 percent.
+  Impact: A fresh full application assertion run is in progress. Current combined coverage is recorded separately from the original failing run. Remaining gaps include ordinary untested paths as well as proven source-invariant and host-limit guards; they are not all declared unreachable.
+  Resolution: Keep native defensive checks and strict configuration intact. Document the remaining gap precisely. Publication requires either completing the strict gate or the requested explicit user exception; no exception has yet been received.

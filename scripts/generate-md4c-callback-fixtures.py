@@ -9,6 +9,7 @@ import hashlib
 import json
 import struct
 import subprocess
+import sys
 ROOT=Path(__file__).resolve().parents[1]
 BUILD=ROOT/"test-results/md4c"
 BUILD.mkdir(parents=True,exist_ok=True)
@@ -62,11 +63,15 @@ cases=[dict(id=case["id"],text=case["text"],flags=case["flags"]) for case in cor
 for flag in [0,1,0x10,0x20,0x40,0x60,0x1000,0x4000,0x8000,0x1000|0x4000|1]:
  for index,text in enumerate(["a\t b\nnext", "_u_ **s** ~d~ $x$ $$y$$", "<prefix>\nx\n</pre>", "[[target|**label**]] [www.example.org](target)", "`a\x00b`\n\n``` x &aa;\na\x00b\n```", "[x]: <a b> 'title'\n\n[X] ![alt](u)", "|a||c|\n|-|-|-|\n|x||z|", "<1a:x> <a@b.co> http://a.co/?x=(y)"]):
   cases.append(dict(id=f"flags-{flag}:{index}",text=text,flags=0x2f0c|flag))
+integration_edges="--integration-edges" in sys.argv
+if integration_edges:
+ edge_fixture=json.loads((ROOT/"apps/office/src/external/md4c/src/native-edge-callbacks.json").read_text())
+ cases=[dict(id=case["id"],text=case["text"],flags=case["flags"]) for case in edge_fixture["cases"]]
 encoded=b"".join(struct.pack("<II",case["flags"],len(case["text"].encode()))+case["text"].encode() for case in cases)
 output=subprocess.check_output([str(BUILD/"callback-reference")],input=encoded,cwd=ROOT)
 results=[json.loads(line) for line in output.splitlines()]
 assert len(results)==len(cases)
 for case,result in zip(cases,results):case.update(result)
-path=ROOT/"apps/office/src/external/md4c/src/native-callbacks.json"
-path.write_text(json.dumps({"md4cVersion":"0.5.3","sourceSha256":corpus["sourceSha256"],"corpus":"Bundled CommonMark 0.31.2 and md4c extension examples; see README for attribution.","cases":cases},indent=2)+"\n")
+path=ROOT/"apps/office/src/external/md4c/src"/("native-edge-callbacks.json" if integration_edges else "native-callbacks.json")
+path.write_text(json.dumps({"md4cVersion":"0.5.3","sourceSha256":corpus["sourceSha256"],"corpus":edge_fixture["corpus"] if integration_edges else "Bundled CommonMark 0.31.2 and md4c extension examples; see README for attribution.","cases":cases},indent=2)+"\n")
 print(f"Generated {path.relative_to(ROOT)}: {len(cases)} compiled full md_parse callback streams")

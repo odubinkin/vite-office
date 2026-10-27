@@ -1,6 +1,7 @@
 /** @fileoverview Complete compiled md4c 0.5.3 callback-stream differential corpus and public callback-abort contracts. */
 import { expect, it } from "vitest";
 import fixture from "./native-callbacks.json";
+import integrationEdges from "./native-edge-callbacks.json";
 import * as D from "./md4c.h";
 import { md_parse } from "./md4c";
 /** Captures native callback values by copy, matching a consumer that retains callback data. */
@@ -114,7 +115,7 @@ function parser(flags: number): D.MD_PARSER<Capture> {
       },
   };
 }
-it.each(fixture.cases)(
+it.each([...fixture.cases, ...integrationEdges.cases])(
   "matches the complete compiled md_parse callback stream: $id",
   /** Verifies matches the complete compiled md_parse callback stream: $id. @param value0 - text, flags, events, result value. @returns Nothing. */ ({
     text,
@@ -167,3 +168,24 @@ it("copies parser configuration while retaining the original userdata identity",
   expect(data.events).toContainEqual([0, D.MD_BLOCKTYPE.MD_BLOCK_P, []]);
   expect(data.events).toContainEqual([4, D.MD_TEXTTYPE.MD_TEXT_HTML, [60, 98, 62]]);
 });
+
+it.each(
+  integrationEdges.cases.filter(
+    /** Bounds complete abort-prefix checks to short native streams. @param value - Native case. @returns Whether compact. */ (
+      value,
+    ) => value.events.length < 70,
+  ),
+)(
+  "propagates callback failure throughout native integration edge $id",
+  /** Verifies every callback prefix against independently compiled observations. @param value - Native case. @returns Nothing. */ (
+    value,
+  ) => {
+    const bytes = new TextEncoder().encode(value.text);
+    for (let abortAt = 1; abortAt <= value.events.length; abortAt++) {
+      const data: Capture = { events: [], logs: [], abortAt, abortCode: 37 };
+      expect(md_parse(bytes, bytes.length, parser(value.flags), data)).toBe(37);
+      expect(data.events).toEqual(value.events.slice(0, abortAt));
+      expect(data.logs).toHaveLength(1);
+    }
+  },
+);

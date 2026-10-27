@@ -1,0 +1,89 @@
+[
+  {
+    "report": "apps/office/coverage/6VDB2H-item-codec-verified/coverage-final.json",
+    "replace": [
+      "apps/office/src/sw/browser/filter/xml/item-codec.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-singlebyte-tables/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-icu-buffer-sort/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-icu-values/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-html-edges-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-html-options-text/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-integration/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-likely-data/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-walltime/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-locales-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-bytestrie-verified/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-datetime/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-converter-context/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-resource-bundle-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-olson-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-calendar-native/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-writer-markdown-css/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-common-values/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-native-tag-keytype/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-bytesinkutil-fixed/coverage-final.json",
+    "replace": [
+      "apps/office/src/external/icu/source/common/bytesinkutil.ts"
+    ]
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-writer-edges-final/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-common-values-final/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-number-result-counts/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-allocation-current/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-i18n-complete/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-sal-conversion-current/coverage-final.json"
+  },
+  {
+    "report": "apps/office/coverage/6VDB2H-converter-context-final/coverage-final.json"
+  }
+]
