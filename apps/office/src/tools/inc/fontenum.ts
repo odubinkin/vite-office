@@ -97,3 +97,18 @@ export enum TextAlign {
   ALIGN_BOTTOM,
   TextAlign_FORCE_EQUAL_SIZE = 2147483647,
 }
+
+/** Original width classification and native enum-size sentinel. */
+export enum FontWidth {
+  WIDTH_DONTKNOW,
+  WIDTH_ULTRA_CONDENSED,
+  WIDTH_EXTRA_CONDENSED,
+  WIDTH_CONDENSED,
+  WIDTH_SEMI_CONDENSED,
+  WIDTH_NORMAL,
+  WIDTH_SEMI_EXPANDED,
+  WIDTH_EXPANDED,
+  WIDTH_EXTRA_EXPANDED,
+  WIDTH_ULTRA_EXPANDED,
+  FontWidth_FORCE_EQUAL_SIZE = 2147483647,
+}

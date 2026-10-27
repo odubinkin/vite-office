@@ -3,6 +3,7 @@ import {
   FontFamily,
   FontPitch,
   FontWeight,
+  FontWidth,
   FontItalic,
   TextAlign,
   FontLineStyle,
@@ -23,6 +24,8 @@ interface FontMetadata {
   readonly pitch: FontPitch;
   readonly charSet: rtl_TextEncoding;
   readonly weight: FontWeight;
+  readonly width: FontWidth;
+  readonly configLookup: boolean;
   readonly italic: FontItalic;
   readonly color: Readonly<Color>;
   readonly fillColor: Readonly<Color>;
@@ -44,6 +47,8 @@ const globalDefault: Readonly<FontMetadata> = Object.freeze({
   pitch: FontPitch.PITCH_DONTKNOW,
   charSet: RTL_TEXTENCODING_DONTKNOW,
   weight: FontWeight.WEIGHT_DONTKNOW,
+  width: FontWidth.WIDTH_DONTKNOW,
+  configLookup: false,
   italic: FontItalic.ITALIC_NONE,
   color: Object.freeze(new Color(COL_TRANSPARENT)),
   fillColor: Object.freeze(new Color(COL_TRANSPARENT)),
@@ -59,8 +64,11 @@ const globalDefault: Readonly<FontMetadata> = Object.freeze({
   emphasisMark: FontEmphasisMark.NONE,
 });
 /** Const reference excludes every represented native mutator. */
-export type ConstFont = Omit<Font, Extract<keyof Font, `Set${string}`> | "assign">;
-/** Shared VCL value owner; unrepresented native attributes and MaybeAskConfig are not approximated. */
+export type ConstFont = Omit<
+  Font,
+  Extract<keyof Font, `Set${string}` | `Get${string}MaybeAskConfig`> | "assign"
+>;
+/** Shared VCL value owner with native one-shot configuration lookup over the shipped substitution resource. */
 export class Font {
   private mpImplFont: Readonly<FontMetadata>;
   /** Shares immutable default/copied metadata until this handle changes. @param font - Optional source. @returns Nothing. */
@@ -94,6 +102,11 @@ export class Font {
   public GetFamilyType(): FontFamily {
     return this.mpImplFont.family;
   }
+  /** Original nonconst ImplFont accessor performs the one-shot configuration lookup only for an unknown family. @returns Family. */
+  public GetFamilyTypeMaybeAskConfig(): FontFamily {
+    if (this.mpImplFont.family === FontFamily.FAMILY_DONTKNOW) this.AskConfig();
+    return this.mpImplFont.family;
+  }
   /** Native const reference accessor of the same stored enum. @returns Family. */
   public GetFontFamily(): FontFamily {
     return this.mpImplFont.family;
@@ -107,6 +120,25 @@ export class Font {
   public GetPitch(): FontPitch {
     return this.mpImplFont.pitch;
   }
+  /** Original nonconst pitch accessor only asks configuration while pitch is unknown. @returns Pitch. */
+  public GetPitchMaybeAskConfig(): FontPitch {
+    if (this.mpImplFont.pitch === FontPitch.PITCH_DONTKNOW) this.AskConfig();
+    return this.mpImplFont.pitch;
+  }
+  /** Original stored width accessor does not ask configuration. @returns Width. */
+  public GetWidthType(): FontWidth {
+    return this.mpImplFont.width;
+  }
+  /** Original nonconst width accessor. @returns Width after optional configuration lookup. */
+  public GetWidthTypeMaybeAskConfig(): FontWidth {
+    if (this.mpImplFont.width === FontWidth.WIDTH_DONTKNOW) this.AskConfig();
+    return this.mpImplFont.width;
+  }
+  /** Original guarded width assignment; it does not reset the one-shot lookup flag. @param width - New width. @returns Nothing. */
+  public SetWidthType(width: FontWidth): void {
+    if (this.GetWidthType() !== width)
+      this.mpImplFont = Object.freeze({ ...this.mpImplFont, width });
+  }
   /** Native guarded pitch assignment. @param pitch - Pitch. @returns Nothing. */
   public SetPitch(pitch: FontPitch): void {
     if (this.GetPitch() !== pitch) this.mpImplFont = Object.freeze({ ...this.mpImplFont, pitch });
@@ -119,6 +151,46 @@ export class Font {
   public SetCharSet(charSet: rtl_TextEncoding): void {
     if (this.GetCharSet() !== charSet)
       this.mpImplFont = Object.freeze({ ...this.mpImplFont, charSet });
+  }
+  /** Original nonconst weight accessor. @returns Weight after optional configuration lookup. */
+  public GetWeightMaybeAskConfig(): FontWeight {
+    if (this.mpImplFont.weight === FontWeight.WEIGHT_DONTKNOW) this.AskConfig();
+    return this.mpImplFont.weight;
+  }
+  /** Original ImplFont::AskConfig, including metadata precedence and the lookup flag retained across later family-name changes. Immutable data replacement is this Font carrier's existing copy-on-write binding. @returns Nothing. */
+  private AskConfig(): void {
+    if (this.mpImplFont.configLookup) return;
+    this.mpImplFont = Object.freeze({ ...this.mpImplFont, configLookup: true });
+    const source = new Uint16Array(this.GetFamilyName().length);
+    for (let i = 0; i < source.length; ++i) source[i] = this.GetFamilyName().charCodeAt(i);
+    const normalized = GetEnglishSearchFontName(source);
+    let mapName = "";
+    try {
+      for (let i = 0; i < normalized.getLength(); ++i)
+        mapName += String.fromCharCode(normalized.getStr()[i] as number);
+    } finally {
+      normalized.dispose();
+    }
+    const shortName: [string] = [""],
+      familyName: [string] = [""],
+      type: [ImplFontAttrs] = [ImplFontAttrs.None],
+      weight: [FontWeight] = [FontWeight.WEIGHT_DONTKNOW],
+      width: [FontWidth] = [FontWidth.WIDTH_DONTKNOW];
+    FontSubstConfiguration.getMapName(mapName, shortName, familyName, weight, width, type);
+    const config = FontSubstConfiguration.get();
+    let attributes = config.getSubstInfo(mapName);
+    if (attributes === null && shortName[0] !== mapName)
+      attributes = config.getSubstInfo(shortName[0]);
+    if (attributes !== null) {
+      if (this.GetFamilyType() === FontFamily.FAMILY_DONTKNOW)
+        this.SetFamily(FamilyFromAttributes(attributes.Type));
+      if (this.GetPitch() === FontPitch.PITCH_DONTKNOW && attributes.Type & ImplFontAttrs.Fixed)
+        this.SetPitch(FontPitch.PITCH_FIXED);
+    }
+    if (this.GetFamilyType() === FontFamily.FAMILY_DONTKNOW)
+      this.SetFamily(FamilyFromAttributes(type[0]));
+    if (this.GetWeightMaybeAskConfig() === FontWeight.WEIGHT_DONTKNOW) this.SetWeight(weight[0]);
+    if (this.GetWidthType() === FontWidth.WIDTH_DONTKNOW) this.SetWidthType(width[0]);
   }
   /** Native stored weight accessor; configuration lookup belongs to MaybeAskConfig, not this const operation. @returns Stored weight. */
   public GetWeight(): FontWeight {
@@ -313,4 +385,16 @@ export class Font {
       this.GetFillColor().equals(other.GetFillColor())
     );
   }
+}
+
+import { FontSubstConfiguration, ImplFontAttrs } from "../../../unotools/inc/fontcfg";
+import { GetEnglishSearchFontName } from "../../../unotools/source/misc/fontdefs";
+/** Original repeated AskConfig family-choice order, including Italic rather than the generic Script flag. @param type - Native attributes. @returns Chosen family or unknown. */
+function FamilyFromAttributes(type: ImplFontAttrs): FontFamily {
+  if (type & ImplFontAttrs.Serif) return FontFamily.FAMILY_ROMAN;
+  if (type & ImplFontAttrs.SansSerif) return FontFamily.FAMILY_SWISS;
+  if (type & ImplFontAttrs.Typewriter) return FontFamily.FAMILY_MODERN;
+  if (type & ImplFontAttrs.Italic) return FontFamily.FAMILY_SCRIPT;
+  if (type & ImplFontAttrs.Decorative) return FontFamily.FAMILY_DECORATIVE;
+  return FontFamily.FAMILY_DONTKNOW;
 }

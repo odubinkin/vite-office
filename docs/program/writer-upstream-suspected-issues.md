@@ -1703,3 +1703,37 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/rtl/ustring.cxx`, `rtl_string2UString_status`, releases `*ppThis` before allocating the general converter temporary. On temporary allocation failure it records ERROR/DESTBUFFERTOOSMALL and returns without assigning the target slot. The ASCII retry can likewise retain its released temporary pointer until successful replacement.
 - Observation: the target slot can still alias the old allocation although its owned reference was already consumed. With a sole former owner this is a dangling native pointer; with an independently retained reference it aliases that other owner's string. This is source control-flow evidence plus a local failure-injection test; the sanitized native witness covers successful allocations and does not dereference this failure state.
 - Preservation: retain the original release order, failure status and target-slot alias. Do not make forward checked conversion preserve ownership like the reverse checked wrapper. Access to freed data remains outside the native contract.
+
+
+### WRITER189 — Font map-name digit removal never updates its output family
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `FontSubstConfiguration::getMapName`, constructs an OUStringBuffer from `rFamilyName`, removes ASCII digits in that buffer, and returns without assigning the buffer back to `rFamilyName`.
+- Observation: the family-name output retains those digits despite the final removal loop. Preserve the returned value and do not silently apply the discarded edits. The unchanged compiled function is exercised with numeric names by the map-name witness; string storage is an explicit carrier rather than a full SAL ABI claim.
+- Preservation: the port retains the unchanged family output after ordered attribute removal. Digit normalization is not added to this owner.
+
+### WRITER190 — Font equality and hashing omit the stored width classification
+
+- Source: pinned `vcl/source/font/font.cxx`, `ImplFont::EqualIgnoreColor` and `ImplFont::GetHashValueIgnoreColor`, compare/hash weight, italic, family and pitch but never `meWidthType`. The one-shot `mbConfigLookup` flag is also outside value equality.
+- Observation: two otherwise equal Font values can have different stored width classifications and still compare equal. This is source-level value-contract evidence, not a compiled full VCL ABI certificate.
+- Preservation: expose width getters/setters and configuration lookup while leaving width and the lookup flag out of Font equality. Do not infer a new comparison field from the newly represented metadata.
+
+
+### WRITER191 — Font family-name assignment does not invalidate completed configuration lookup
+
+- Source: pinned `vcl/source/font/font.cxx`, `ImplFont::AskConfig`, sets `mbConfigLookup` before any lookup and returns immediately on subsequent calls. `Font::SetFamilyName` delegates to `ImplFont::SetFamilyName` in `vcl/inc/impfont.hxx`, which changes only `maFamilyName`; the flag is copied by the ImplFont copy constructor.
+- Observation: a font queried under an unrecognized name can remain unresolved after its family name is changed to a configured family. Copy-on-write does not reset the copied flag. This is source control-flow evidence and a local value test, not a complete compiled VCL witness.
+- Preservation: keep the one-shot flag and the setter's lack of invalidation. A new Font created with the configured name can resolve independently.
+
+
+### WRITER192 — The Baekmuk special case tests a different second UTF16 unit
+
+- Source: pinned `unotools/source/config/fontcfg.cxx`, `ImplKillLeading`, labels its Korean special case Baekmuk but tests the units U+BC31, U+BC35. The usual `백묵` sequence is U+BC31, U+BB35, so it does not enter this branch.
+- Observation: the unchanged compiled helper retains the usual Korean prefix, while it strips the source's literal U+BC31/U+BC35 sequence. The port's initial word-based transcription was caught by this differential witness and replaced with the exact source numeric predicates.
+- Preservation: keep U+BC35 in the predicate. Do not correct the second unit or replace it with the usual family spelling.
+
+
+### WRITER193 — AskConfig classifies SCRIPT family from Italic rather than Script flags
+
+- Source: pinned `vcl/source/font/font.cxx`, both family-selection sequences in `ImplFont::AskConfig` test `ImplFontAttrs::Italic` to assign `FAMILY_SCRIPT`. They do not test `ImplFontAttrs::Script`, Handwriting or BrushScript. The `getMapName` table in `unotools/source/config/fontcfg.cxx` assigns Script/BrushScript for the `script` word and Italic for `italic`/`oblique`.
+- Observation: an otherwise unclassified name containing `script` can remain FAMILY_DONTKNOW while a name containing `italic` becomes FAMILY_SCRIPT. This is a source-level branch trace and local value test, not an independently compiled full AskConfig witness.
+- Preservation: keep the exact flag and priority order in configured and heuristic branches. Do not substitute the generic Script bit.

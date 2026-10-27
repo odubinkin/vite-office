@@ -218,7 +218,7 @@ export class SvxFontItem extends SfxPoolItem {
   }
 }
 
-/** Original ordered GetDefaultFonts item updates at the current actual VCL no-device/OnlyOne metadata boundary. Renderer substitution/AskConfig and the platform thread-encoding service remain unported;the browser boundary uses UTF8. @param latin - Actual Latin item. @param asian - Actual Asian item. @param complex - Actual complex-script item. @returns Nothing. */
+/** Original ordered GetDefaultFonts item updates at the current actual VCL no-device/OnlyOne metadata boundary. Renderer substitution and the platform thread-encoding service remain unported;the browser boundary uses UTF8. @param latin - Actual Latin item. @param asian - Actual Asian item. @param complex - Actual complex-script item. @returns Nothing. */
 export function GetDefaultFonts(
   latin: SvxFontItem,
   asian: SvxFontItem,
@@ -233,10 +233,10 @@ export function GetDefaultFonts(
     const locale = MsLangId.Conversion.convertLanguageToLocale(language, false);
     try {
       const font = getDefaultFontWithoutDevice(role, locale, RTL_TEXTENCODING_UTF8);
-      item.SetFamily(font.GetFamilyType());
+      item.SetFamily(font.GetFamilyTypeMaybeAskConfig());
       item.SetFamilyName(font.GetFamilyName());
       item.SetStyleName("");
-      item.SetPitch(font.GetPitch());
+      item.SetPitch(font.GetPitchMaybeAskConfig());
       item.SetCharSet(font.GetCharSet());
     } finally {
       locale.dispose();

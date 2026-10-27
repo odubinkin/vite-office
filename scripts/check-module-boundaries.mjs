@@ -301,7 +301,11 @@ const allowedEdges = new Map([
   // Original Library_utl.mk links i18nlangtag; fontcfg.hxx uses LanguageTag.
   // Original charclass.cxx catches generated UNO Exception; Library_utl links cppu.
   // Original transliterationwrapper.cxx includes i18nutil flags and generated i18n Transliteration API.
-  ["unotools", new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi"])],
+  // Original unotools/fontcfg.hxx includes tools/fontenum.hxx for configured weight/width values.
+  [
+    "unotools",
+    new Set(["sal", "cppu", "udkapi", "i18npool", "i18nlangtag", "i18nutil", "offapi", "tools"]),
+  ],
   // Original Tools/UnitConversion.hxx delegates to o3tl/unit_conversion.hxx.
   // Original tools/color.hxx owns Any color operators and includes com/sun/star/uno/Any.hxx.
   // Original tdate.cxx uses comphelper/date.hxx;Library_tl links comphelper.

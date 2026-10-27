@@ -353,3 +353,13 @@ and WRITER181 also records the forward ISCII null-context mismatch. RTF no longe
 manufactures a special ISCII context outside the source string-wrapper contract.
 Font initialization, Markdown HTML-reader composition and the other open gaps
 above remain required before whole-slice completion.
+
+The numbering-font prerequisite now includes VCL's nonconst MaybeAskConfig
+family/pitch access and its actual one-shot FontSubstConfiguration path. The
+complete shipped substitution fields and ordered name heuristics replace the
+former Name/MS-only record. The unchanged compiled getMapName/helper/table
+bodies match 4095 cases over explicit UTF16 storage carriers. Source anomalies
+WRITER189-192 are preserved; physical font matching, runtime configuration
+providers and full VCL/SAL ABI remain unverified. This prerequisite is not yet
+wired through complete wwFontHelper::InitFontTable/global Writer defaults and
+used-numbering initialization, which remain open along with the earlier gaps.

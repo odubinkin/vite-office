@@ -12,7 +12,8 @@
       "FontItalic",
       "FontWeight",
       "FontLineStyle",
-      "TextAlign"
+      "TextAlign",
+      "FontWidth"
     ],
     "upstreamSymbols": [
       "FontStrikeout",
@@ -20,7 +21,8 @@
       "FontItalic",
       "FontWeight",
       "FontLineStyle",
-      "TextAlign"
+      "TextAlign",
+      "FontWidth"
     ],
     "preservedResponsibilities": [
       "Task121 ports original SvxCrossedOutItem enum/bool/short member values and SvxEmphasisMarkItem unsigned16storage/9wiremappings/style/position masks using actual shared SfxEnumItem/SfxUInt16Item/Any. Factories/copy/Clone/Which and unknown-member untouchedsuccess retained. Native Any2Bool bool-then-signed32/falsefallback now lives once in original SVL header with explicit browser scalar family; existing Writer LR2sites reuse it, including actual Any transport. Original FontStrikeout/FontEmphasisMark/FontEmphasis constants and member narrowing/convertbit preserved. Calc106and121NONE defaults tested through actual shared itemset copies, no fake DocPool/document/provider. textitem.effects shard documents enforced file-size responsibility split, original headers remain canonical. CALC106 records unknown-member success, invalid bool reset and emphasis fallback/below precedence without changing native behavior. Existing metadata history/status retained; broad parity flags unchanged. Other font enums/native diagnostics/localized presentation/cache/refcounts/ABI, actual fullDocPool/config/storage/document/UI/ODS remain pending/excluded. No native compilation/generator/sanitizer/memory library. Full suite not triggered by121; only at actual minimum UI+ODSread/save readiness, then relevant repairs/pause.",
@@ -29,7 +31,8 @@
       "Task124 removes the temporary TextItem FontWeight and FontItalic const/type compatibility bridges. TextItem and all existing Writer defaults, attributes, text hints, numbering fonts, ODT import and paragraph painting consumers use the single original tools enums and native WEIGHT_/ITALIC_ member names directly. Literal numeric values, Svx item behavior and existing document contracts are unchanged. Only two obsolete bridge-consistency assertions are removed; native value, conversion and Writer behavioral assertions remain. This supersedes earlier task122/123 alias notes without rewriting history. The user explicitly authorizes canonical shared and Writer corrections without compatibility workarounds. Existing semantic states, provenance classifications, mapped/local-only status and conscious save/open/recovery deviations remain unchanged; this owner/import cleanup is not broad native parity certification. Complete document/UI and same-model ODS load/save remain pending. Whole Calc and complete changed shared owners require raw S/B/F/L100; Writer-only coverage gaps remain exempt by user instruction. No full regression until minimum actual UI+ODS readiness, then relevant repairs and goal pause.",
       "Task135: Adds original FontFamily/FontPitch declarations, including FORCE_EQUAL_SIZE sentinels. Task135 preserves the five native SvxFontItem fields and original value defaults/constructors/copies/setters/equality/hash using existing SAL/o3tl. Writer state and ODF consumers use the single shared value owner; browser presentation and resource aliases stay at their existing boundaries. Native Any FontDescriptor, localized presentation, full font/device/config services and Calc DocPool/document/UI/ODS remain pending. Existing status/history and conscious save/open/recovery deviations are retained; no broad parity promotion or custom lifetime engine.",
       "Task145 replaces the incorrect scalar-only underline with original SvxTextLineItem enum/Color/ComplexColor value ownership and actual SvxUnderlineItem/SvxOverlineItem specializations. Reuse SfxEnumItem, Tools Color and docmodel ComplexColor; JS GC replaces native instance-manager/lifetime machinery. Defaults are NONE and COL_TRANSPARENT; independent copies retain all payloads; concrete-type/style/color/complex equality ignores Which. Native bool methods, unrestricted initialized enum value domain, signed16 style query, int32 style extraction, bool/Color/own-color member Any operations, alpha preservation and unknown-member untouched success are represented. Actual XComplexColor interface transport is explicitly unsupported (false), not a fabricated object/service; localized EditResId/GetColorString presentation remains unported. Existing browser no-argument style projection is retained as its established transfer boundary, without claiming full native transport. Canonical Tools FontLineStyle includes19LINESTYLE names and native size sentinel; all actual old enum users are migrated, with no duplicate enum or compatibility aliases. Real Calc underline104/overline105 defaults are witnessed without fabricating ScDocumentPool. Complete pool/document/connected UI/ODS and broader presentation/interface parity remain pending; intentional browser I/O/recovery choices preserved.",
-      "Task181 extends the existing shared VCL Font with original transparent Color/fill defaults,true transparency,TextAlign TOP,stored Size and guarded setters/getters including height/average-width aliases. Actual Color and Size values are copied into immutable shared JS state;no refcount,weak-reference,lifetime manager or renderer cache is introduced. Equality includes every represented metadata/paint/alignment/size field;EqualIgnoreColor excludes only paint colors,not transparency. Preserve fill transparency side effects only when fill color changes and do not force false for opaque fill. Const values are borrowed until owner mutation;physical COW uniqueness/native reference validity after mutation is not simulated. Existing metadata APIs remain intact. Configuration lookup,device matching,render/layout/calculated-width cache,other full Font attributes and complete Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad font parity claim."
+      "Task181 extends the existing shared VCL Font with original transparent Color/fill defaults,true transparency,TextAlign TOP,stored Size and guarded setters/getters including height/average-width aliases. Actual Color and Size values are copied into immutable shared JS state;no refcount,weak-reference,lifetime manager or renderer cache is introduced. Equality includes every represented metadata/paint/alignment/size field;EqualIgnoreColor excludes only paint colors,not transparency. Preserve fill transparency side effects only when fill color changes and do not force false for opaque fill. Const values are borrowed until owner mutation;physical COW uniqueness/native reference validity after mutation is not simulated. Existing metadata APIs remain intact. Configuration lookup,device matching,render/layout/calculated-width cache,other full Font attributes and complete Calc/EditEngine pools/document/UI/same-model ODS remain pending;no broad font parity claim.",
+      "RTF font-table prerequisite: complete FontNameAttr shipped fields and native getMapName ordered leading/trailing/exception, first weight/width and all type heuristics now feed Font::GetFamilyTypeMaybeAskConfig/GetPitchMaybeAskConfig. AskConfig preserves normalized/full then shortened lookup, configured-type then heuristic family precedence, fixed-pitch admission, unknown-only heuristic weight/width, copied one-shot lookup flag and source const versus nonconst getter behavior. Font width and config flag remain excluded from equality. Source resources are extracted from pinned VCL.xcu; component configuration-provider/runtime override and physical renderer services remain unported. Compiled unchanged getMapName/helpers/tables over explicit UTF16 carriers match 4095 input/inout cases under ASan/UBSan; no full SAL, AskConfig or VCL ABI claim. WRITER189-192 preserve source anomalies. No module/filter parity promotion."
     ],
     "omittedResponsibilities": [
       "Localized presentation/resources/native instance caches/diagnostics/ABI and complete document/UI/ODS remain pending or excluded.",
@@ -52,6 +55,14 @@
         },
         {
           "path": "apps/office/src/editeng/source/items/native-font-weight.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/unotools/source/config/native-font-map-name.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/vcl/source/font/native-font-config.test.ts",
           "marker": "it("
         }
       ],

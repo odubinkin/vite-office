@@ -1,5 +1,5 @@
 /** @fileoverview Source-backed default-font and MS substitution field bindings over the shipped VCL DefaultFonts resource. No fake configuration provider, LanguageTag class or output device. */
-import substitutions from "./data/font-substitutions-ms.json" with { type: "json" };
+import substitutions from "./data/font-substitutions.json" with { type: "json" };
 import resources from "./data/default-fonts.json" with { type: "json" };
 import { convertToBcp47 } from "../../../i18nlangtag/source/languagetag/languagetag.conversion";
 import { DefaultFontType } from "../../inc/fontdefs";
@@ -51,11 +51,13 @@ export function getConfiguredDefaultFont(
   return new OUString(units, units.length);
 }
 
-/** Consumed original FontNameAttr fields; substitution weight/width/type are not admitted by this export-side configuration binding. */
-export interface FontNameAttr {
-  readonly Name: string;
-  readonly MSSubstitutions: readonly string[];
-}
+import { ImplFontAttrs, type FontNameAttr } from "../../inc/fontcfg";
+import { FontWeight, FontWidth } from "../../../tools/inc/fontenum";
+import mapData from "./data/font-name-map.json";
+export type { FontNameAttr } from "../../inc/fontcfg";
+/** Actual shipped font field map, standing at the existing configuration-provider boundary. */
+type FontConfigurationFields = Readonly<Record<string, string>>;
+
 /** Native substitution owner with its original fixed en language and lazy per-locale load. Shipped VCL configuration replaces component-provider access; no fake UNO configuration service is created. */
 export class FontSubstConfiguration {
   private static instance: FontSubstConfiguration | undefined;
@@ -85,9 +87,19 @@ export class FontSubstConfiguration {
     if (this.m_aSubst.get(locale) !== undefined) return;
     const attributes: FontNameAttr[] = [];
     this.m_aSubst.set(locale, attributes);
-    const values: Readonly<Record<string, Readonly<Record<string, string>>>> = substitutions;
-    for (const [Name, value] of Object.entries(values[locale] as Readonly<Record<string, string>>))
-      attributes.push({ Name, MSSubstitutions: this.fillSubstVector(value) });
+    const values: Readonly<Record<string, Readonly<Record<string, FontConfigurationFields>>>> =
+      substitutions;
+    for (const [Name, value] of Object.entries(
+      values[locale] as Readonly<Record<string, FontConfigurationFields>>,
+    ))
+      attributes.push({
+        Name,
+        Substitutions: this.fillSubstVector(value.SubstFonts ?? ""),
+        MSSubstitutions: this.fillSubstVector(value.SubstFontsMS ?? ""),
+        Weight: FontSubstConfiguration.getSubstWeight(value, "FontWeight"),
+        Width: FontSubstConfiguration.getSubstWidth(value, "FontWidth"),
+        Type: FontSubstConfiguration.getSubstType(value, "FontType"),
+      });
     attributes.sort(
       /** Native StrictStringSort uses Unicode comparison. @param left - Left record. @param right - Right record. @returns Ordering. */ (
         left,
@@ -95,7 +107,111 @@ export class FontSubstConfiguration {
       ) => Number(left.Name > right.Name) - Number(left.Name < right.Name),
     );
   }
-  /** Original lower_bound followed by the asymmetric prefix/length checks. The prevalidated shipped en resource binds the provider lookup; missing-provider and unknown-locale paths are not admitted. Fixed en is the native constructor language; dynamic configuration and other FontNameAttr fields remain separate responsibilities. @param fontName - Native Unicode search value. @returns Borrowed record or null. */
+  /** Original reverse enum-name search with unknown fallback and ASCII-only case folding. @param font - Shipped source field map. @param field - Original property name. @returns Weight. */
+  private static getSubstWeight(font: FontConfigurationFields, field: string): FontWeight {
+    const value = (font[field] ?? "").replace(/[A-Z]/g, (character) => character.toLowerCase());
+    for (let index = mapData.weightNames.length - 1; index >= 0 && value; --index) {
+      const [name, weight] = mapData.weightNames[index] as [string, number];
+      if (value === name) return weight;
+    }
+    return FontWeight.WEIGHT_DONTKNOW;
+  }
+  /** Original reverse width-name search and unknown fallback. @param font - Shipped source field map. @param field - Original property name. @returns Width. */
+  private static getSubstWidth(font: FontConfigurationFields, field: string): FontWidth {
+    const value = (font[field] ?? "").replace(/[A-Z]/g, (character) => character.toLowerCase());
+    for (let index = mapData.widthNames.length - 1; index >= 0 && value; --index) {
+      const [name, width] = mapData.widthNames[index] as [string, number];
+      if (value === name) return width;
+    }
+    return FontWidth.WIDTH_DONTKNOW;
+  }
+  /** Original comma tokens are matched without trimming; unknown attributes do not set a bit. @param font - Shipped source field map. @param field - Original property name. @returns Unsigned32 mask. */
+  private static getSubstType(font: FontConfigurationFields, field: string): ImplFontAttrs {
+    let result = 0;
+    for (const token of (font[field] ?? "").split(",")) {
+      const key = token.replace(/[A-Z]/g, (character) => character.toLowerCase());
+      const index = mapData.typeNames.indexOf(key);
+      if (index !== -1) result = (result | (1 << index)) >>> 0;
+    }
+    return result;
+  }
+  /** Original ordered vendor stripping and first weight/width/type heuristics. Reference slots retain source inout semantics and defaults; the discarded final digit-removal buffer is preserved. @param original - Prepared search name. @param shortName - Output short name. @param familyName - Output family name. @param weight - Inout weight. @param width - Inout width. @param type - Output unsigned32 flags. @returns Nothing. */
+  static getMapName(
+    original: string,
+    shortName: [string],
+    familyName: [string],
+    weight: [FontWeight],
+    width: [FontWidth],
+    type: [ImplFontAttrs],
+  ): void {
+    shortName[0] = original;
+    for (const leading of mapData.leading) {
+      if (leading === null) break;
+      if (shortName[0].startsWith(leading)) {
+        shortName[0] = shortName[0].slice(leading.length);
+        break;
+      }
+    }
+    // Source Baekmuk handling follows the ASCII loop only when no leading entry matched.
+    if (
+      shortName[0] === original &&
+      original.charCodeAt(0) === 0xbc31 &&
+      original.charCodeAt(1) === 0xbc35
+    )
+      shortName[0] = original.slice(original.charCodeAt(2) === 32 ? 3 : 2);
+    for (const trailing of mapData.trailing) {
+      if (trailing === null) break;
+      if (trailing.length < shortName[0].length && shortName[0].endsWith(trailing)) {
+        shortName[0] = shortName[0].slice(0, -trailing.length);
+        break;
+      }
+    }
+    for (let index = 0; mapData.exceptions[index] !== null; ++index) {
+      const suffix = mapData.exceptions[index] as string;
+      if (suffix.length < shortName[0].length && shortName[0].endsWith(suffix)) {
+        let excepted = false;
+        while (mapData.exceptions[++index] !== null) {
+          const exception = mapData.exceptions[index] as string;
+          if (exception.length < shortName[0].length && shortName[0].endsWith(exception))
+            excepted = true;
+        }
+        if (!excepted) shortName[0] = shortName[0].slice(0, -suffix.length);
+        break;
+      }
+      while (mapData.exceptions[++index] !== null) {
+        /* Original exception group skip. */
+      }
+    }
+    familyName[0] = shortName[0];
+    for (const [needle, value] of mapData.weight as [string, FontWeight][]) {
+      const position = familyName[0].indexOf(needle);
+      if (position < 0) continue;
+      familyName[0] =
+        familyName[0].slice(0, position) + familyName[0].slice(position + needle.length);
+      if (weight[0] === FontWeight.WEIGHT_DONTKNOW || weight[0] === FontWeight.WEIGHT_NORMAL)
+        weight[0] = value;
+      break;
+    }
+    for (const [needle, value] of mapData.width as [string, FontWidth][]) {
+      const position = familyName[0].indexOf(needle);
+      if (position < 0) continue;
+      familyName[0] =
+        familyName[0].slice(0, position) + familyName[0].slice(position + needle.length);
+      if (width[0] === FontWidth.WIDTH_DONTKNOW || width[0] === FontWidth.WIDTH_NORMAL)
+        width[0] = value;
+      break;
+    }
+    type[0] = ImplFontAttrs.None;
+    for (const [needle, value] of mapData.type as [string, ImplFontAttrs][]) {
+      const position = familyName[0].indexOf(needle);
+      if (position < 0) continue;
+      familyName[0] =
+        familyName[0].slice(0, position) + familyName[0].slice(position + needle.length);
+      type[0] = (type[0] | value) >>> 0;
+    }
+    // Source removes digits from a local OUStringBuffer but never assigns it back to rFamilyName (WRITER189).
+  }
+  /** Original lower_bound followed by the asymmetric prefix/length checks. The prevalidated shipped en resource binds the provider lookup; missing-provider and unknown-locale paths are not admitted. Fixed en is the native constructor language; dynamic configuration remains a separate responsibility. @param fontName - Native Unicode search value. @returns Borrowed record or null. */
   getSubstInfo(fontName: string): FontNameAttr | null {
     if (!fontName) return null;
     const search = fontName.replace(
