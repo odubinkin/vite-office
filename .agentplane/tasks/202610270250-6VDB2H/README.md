@@ -1,10 +1,11 @@
 ---
 id: "202610270250-6VDB2H"
 title: "Integrate Writer and Calc branches and synchronize all checkouts"
-status: "DOING"
+result_summary: "Writer and Calc integrated and synchronized with main; tests pass with user-accepted residual coverage."
+status: "DONE"
 priority: "high"
 owner: "CODER"
-revision: 31
+revision: 32
 origin:
   system: "manual"
 depends_on: []
@@ -41,7 +42,9 @@ quality_review:
   findings:
     - "Native functionality and source structure retained; actual UnicodeString host allocation failure now maps to native bogus state."
     - "Residual coverage is accepted by direct user instruction; no100-percent claim or threshold change."
-commit: null
+commit:
+  hash: "07246b52aa832f1d5fdabb088321019186993ff2"
+  message: "🧾 6VDB2H task: record synchronized branch evidence"
 comments:
   -
     author: "CODER"
@@ -52,6 +55,9 @@ comments:
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Verified: integrated and published main, reverse-merged and pushed Writer/Calc, confirmed matching tracked trees and remote tips, passed current checks and1931new/changed tests. Residual application coverage explicitly accepted by user; original untracked artifacts preserved."
 events:
   -
     type: "status"
@@ -92,8 +98,15 @@ events:
     author: "CODER"
     state: "ok"
     note: "Main published; reverse merges and pushes completed for Writer and Calc. All three tracked trees identical, local branch heads equal origin, main is an ancestor of both development heads, local main refs current, tracked states clean. Preserved pre-existing untracked artifacts. User-accepted residual coverage is documented;1931new/changed tests and final helper checks pass. Only closure-record propagation remains."
+  -
+    type: "status"
+    at: "2026-10-27T05:33:20.808Z"
+    author: "CODER"
+    from: "DOING"
+    to: "DONE"
+    note: "Verified: integrated and published main, reverse-merged and pushed Writer/Calc, confirmed matching tracked trees and remote tips, passed current checks and1931new/changed tests. Residual application coverage explicitly accepted by user; original untracked artifacts preserved."
 doc_version: 3
-doc_updated_at: "2026-10-27T05:32:37.761Z"
+doc_updated_at: "2026-10-27T05:33:20.810Z"
 doc_updated_by: "CODER"
 description: "User-approved integration: commit current Writer work, push Writer and Calc, merge both into main, resolve conflicts, run full project verification and repair regressions, push main, then merge main back and push both development branches. Preserve local generated artifacts and finish on original branch names."
 sections:
@@ -205,6 +218,10 @@ sections:
     - Observation: User explicitly approved closing without reaching100-percent coverage, requested finishing only scenarios already in progress, and confirmed previously completed full checks suffice with new/affected tests before closure.
       Impact: Residual coverage is accepted for this integration. No threshold or coverage-ignore configuration is changed. Repeating the full application and browser suites is not required; all new/affected assertions and current-source type/lint checks must pass.
       Resolution: Finish only current scenarios, record exact residual coverage and earlier full-run evidence, then publish main and synchronize Writer/Calc branches. Do not expand test scope further.
+extensions:
+  implementation_commit:
+    hash: "519464c3f5634e056db16abf3bbbfe1da98b7793"
+    message: "🛠 6VDB2H code: finish current native edge scenarios and accepted verification"
 id_source: "generated"
 ---
 ## Summary
