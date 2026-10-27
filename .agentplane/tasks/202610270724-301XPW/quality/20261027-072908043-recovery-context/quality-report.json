@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "task_id": "202610270724-301XPW",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-27T07:29:08.043Z",
+  "verdict": "pass",
+  "summary": "README claims match shipped file dialogs and implementation; scoped docs checks and conflict-free branch synchronization pass.",
+  "evaluated_sha": "d7e4bc4f51d34cfec2fde674fe4d6241260126ae",
+  "blueprint_digest": "784e4610bdcaca59d7aebf130c8d3890acaee0218fe6cb8809d05b8c593d6700",
+  "findings": [
+    "No application implementation changed. Existing doctor hook-shim warning and unrelated untracked native probe output remain out of scope. Both application trees match the published main tree."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610270724-301XPW/README.md",
+    "README.md",
+    "node_modules/.bin/prettier --check README.md",
+    "node .agentplane/policy/check-routing.mjs",
+    "ap doctor",
+    "git merge-base --is-ancestor origin/main HEAD (calc and writer)"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}
