@@ -29,16 +29,12 @@ export function createWriterInsertTextAction(
   const flags = forceExpand
     ? SwInsertFlags.FORCEHINTEXPAND | SwInsertFlags.EMPTYEXPAND
     : SwInsertFlags.EMPTYEXPAND;
-  return new SwUndoInsert(
-    paragraph,
-    offset,
-    paragraph.CreateTextFragmentFromText(text, items),
-    group,
-    before,
-    after,
-    flags,
-    items,
-  );
+  const fragment = paragraph.CreateTextFragmentFromText(text, items);
+  try {
+    return new SwUndoInsert(paragraph, offset, fragment, group, before, after, flags, items);
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Projects native SET internet attributes only at the dialog boundary. @param document - Original document. @param cursor - Actual native ring. @returns Dialog fields for uniform native attributes. */
@@ -73,15 +69,20 @@ export function createWriterHyperlinkAction(
       selectedRange.end,
       hyperlink,
     );
-    if (beforeFragment.hints.equals(afterFragment.hints)) return undefined;
-    return new SwUndoAttr(
-      paragraph,
-      selectedRange.start,
-      beforeFragment,
-      afterFragment,
-      before,
-      before,
-    );
+    try {
+      if (beforeFragment.hints.equals(afterFragment.hints)) return undefined;
+      return new SwUndoAttr(
+        paragraph,
+        selectedRange.start,
+        beforeFragment,
+        afterFragment,
+        before,
+        before,
+      );
+    } finally {
+      beforeFragment.hints.Dispose();
+      afterFragment.hints.Dispose();
+    }
   }
   if (hyperlink === undefined) return undefined;
   const value = text === undefined || text.length === 0 ? hyperlink.url : text;
@@ -89,19 +90,24 @@ export function createWriterHyperlinkAction(
   const paragraph = point.GetNode() as WriterParagraph;
   if (paragraph.GetDoc() !== document) throw new Error("Writer hyperlink cursor is foreign.");
   const offset = point.GetContentIndex();
-  return new SwUndoInsert(
-    paragraph,
-    offset,
-    paragraph.CreateTextFragmentFromText(value, pendingItems, hyperlink),
-    undefined,
-    before,
-    {
-      activeParagraph: paragraph,
-      pendingCharacterItems: pendingItems.Clone(),
-      point: { node: paragraph, offset: offset + value.length },
-    },
-    SwInsertFlags.DEFAULT,
-  );
+  const fragment = paragraph.CreateTextFragmentFromText(value, pendingItems, hyperlink);
+  try {
+    return new SwUndoInsert(
+      paragraph,
+      offset,
+      fragment,
+      undefined,
+      before,
+      {
+        activeParagraph: paragraph,
+        pendingCharacterItems: pendingItems.Clone(),
+        point: { node: paragraph, offset: offset + value.length },
+      },
+      SwInsertFlags.DEFAULT,
+    );
+  } finally {
+    fragment.hints.Dispose();
+  }
 }
 
 /** Borrows one original internet attribute range under the represented caret inheritance policy; native UI default selection/word fallback remain separate work. @param cursor - Actual original caret. @returns Original hinted bounds or no inherited attribute. */

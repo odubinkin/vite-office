@@ -1,7 +1,7 @@
-/** @fileoverview Defines consumed automatic-style access branches of pinned sw/inc/istyleaccess.hxx. */
+/** @fileoverview Defines the implemented character branch of pinned sw/inc/istyleaccess.hxx. */
 import type { SfxItemSet } from "../../svl/source/items/itemset";
 
-/** Original ordered automatic-style families; all non-character families share the native paragraph pool. */
+/** Native family identity for the currently implemented automatic character pool. */
 export enum SwAutoStyleFamily {
   AUTO_STYLE_CHAR = 0,
   AUTO_STYLE_RUBY = 1,
@@ -9,14 +9,18 @@ export enum SwAutoStyleFamily {
   AUTO_STYLE_NOTXT = 3,
 }
 
-/** Document automatic-style access; native usage traversal and the typed/parent-name overloads remain unimplemented. */
+/** Document automatic-style access; the paragraph automatic pool remains outside the represented slice. */
 export interface IStyleAccess {
-  /** Original generic automatic-style lookup. @param set - Borrowed concrete items. @param family - Original family. @returns Shared style handle. */
-  getAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily): SfxItemSet;
-  /** Caches the native style by handle identity. @param set - Concrete items. @param family - Original family. @returns Shared handle. */
-  cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily): SfxItemSet;
-  /** Resolves a cached native handle. @param name - Opaque identity. @param family - Original family. @returns Handle when registered. */
-  getByName(name: string, family: SwAutoStyleFamily): SfxItemSet | undefined;
-  /** Original releases both name caches while retaining pools. @returns Nothing. */
+  /** Appends owning copies of used automatic character styles. @param output - Native result vector. @param family - Character family. @returns Nothing. */
+  getAllStyles(output: SfxItemSet[], family: SwAutoStyleFamily): void;
+  /** Original cache clear releases cache-owned shared pointers. @returns Nothing. */
   clearCaches(): void;
+  /** Logical native style-access destructor. @returns Nothing. */
+  Dispose(): void;
+  /** Caches the native style by handle identity. @param set - Concrete items. @param family - Character family. @returns Shared handle. */
+  cacheAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily): SfxItemSet;
+  /** Resolves a cached native handle. @param name - Opaque identity. @param family - Character family. @returns Handle when registered. */
+  getByName(name: string, family: SwAutoStyleFamily): SfxItemSet | undefined;
+  /** Gets an owning automatic-style shared pointer. @param set - Concrete items. @param family - Character family. @param parentName - Optional native parent name. @returns Owned shared pointee. */
+  getAutomaticStyle(set: SfxItemSet, family: SwAutoStyleFamily, parentName?: string): SfxItemSet;
 }

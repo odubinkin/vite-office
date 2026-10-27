@@ -153,6 +153,7 @@ it("keeps common and automatic font rules in independent native owners", /** Che
     expect(
       different
         .GetNumRuleTable()
+        .slice(1)
         .map(
           /** Applies this source-owned operation. @param rule - Native input. @returns Native result. */ (
             rule,

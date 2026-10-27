@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/unotools/inc/fontcfg.ts",
+    "status": "mapped",
+    "upstreamPath": "include/unotools/fontcfg.hxx",
+    "localSymbols": [
+      "ImplFontAttrs",
+      "FontNameAttr"
+    ],
+    "upstreamSymbols": [
+      "ImplFontAttrs",
+      "FontNameAttr"
+    ],
+    "preservedResponsibilities": [
+      "RTF font-table prerequisite: complete FontNameAttr shipped fields and native getMapName ordered leading/trailing/exception, first weight/width and all type heuristics now feed Font::GetFamilyTypeMaybeAskConfig/GetPitchMaybeAskConfig. AskConfig preserves normalized/full then shortened lookup, configured-type then heuristic family precedence, fixed-pitch admission, unknown-only heuristic weight/width, copied one-shot lookup flag and source const versus nonconst getter behavior. Font width and config flag remain excluded from equality. Source resources are extracted from pinned VCL.xcu; component configuration-provider/runtime override and physical renderer services remain unported. Compiled unchanged getMapName/helpers/tables over explicit UTF16 carriers match 4095 input/inout cases under ASan/UBSan; no full SAL, AskConfig or VCL ABI claim. WRITER189-192 preserve source anomalies. No module/filter parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full FontSubstConfiguration/DefaultFontConfiguration provider interfaces, runtime configuration events and native storage/ABI are outside this represented declaration binding."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/unotools/inc/fontcfg.ts",
+          "marker": "ImplFontAttrs"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/unotools/fontcfg.hxx",
+          "marker": "enum class ImplFontAttrs"
+        }
+      ]
+    }
+  }
+}

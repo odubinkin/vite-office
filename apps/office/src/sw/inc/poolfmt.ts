@@ -2,13 +2,79 @@
  * @fileoverview Declares the complete built-in Writer paragraph-style pool from the pinned
  * LibreOffice `sw/inc/poolfmt.hxx` and `SwStyleNameMapper.cxx` tables.
  */
+import characterPool from "./charpool-data.json";
+
+/** Original non-paragraph format marker. */
+export const POOLGRP_NOCOLLID = 1 << 10;
+/** Original paragraph/group range mask excludes the user-origin bit. */
+export const COLL_GET_RANGE_BITS = 15 << 11;
+/** Original character-format group value. */
+export const POOLGRP_CHARFMT = POOLGRP_NOCOLLID;
 
 /** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
   ZERO = 0,
+  /** Native CHR_FOOTNOTE identity. */
+  CHR_FOOTNOTE = 1024,
+  /** Native CHR_PAGENO identity. */
+  CHR_PAGENO = 1025,
+  /** Native CHR_LABEL identity. */
+  CHR_LABEL = 1026,
+  /** Native CHR_DROPCAPS identity. */
+  CHR_DROPCAPS = 1027,
+  /** Native CHR_NUM_LEVEL identity. */
+  CHR_NUM_LEVEL = 1028,
+  /** Native CHR_BULLET_LEVEL identity. */
+  CHR_BULLET_LEVEL = 1029,
+  /** Native CHR_INET_NORMAL identity. */
   CHR_INET_NORMAL = 1030,
+  /** Native CHR_INET_VISIT identity. */
   CHR_INET_VISIT = 1031,
+  /** Native CHR_JUMPEDIT identity. */
+  CHR_JUMPEDIT = 1032,
+  /** Native CHR_TOXJUMP identity. */
+  CHR_TOXJUMP = 1033,
+  /** Native CHR_ENDNOTE identity. */
+  CHR_ENDNOTE = 1034,
+  /** Native CHR_LINENUM identity. */
+  CHR_LINENUM = 1035,
+  /** Native CHR_IDX_MAIN_ENTRY identity. */
+  CHR_IDX_MAIN_ENTRY = 1036,
+  /** Native CHR_FOOTNOTE_ANCHOR identity. */
+  CHR_FOOTNOTE_ANCHOR = 1037,
+  /** Native CHR_ENDNOTE_ANCHOR identity. */
+  CHR_ENDNOTE_ANCHOR = 1038,
+  /** Native CHR_RUBYTEXT identity. */
+  CHR_RUBYTEXT = 1039,
+  /** Native CHR_VERT_NUM identity. */
+  CHR_VERT_NUM = 1040,
+  /** Native CHR_HTML_EMPHASIS identity. */
+  CHR_HTML_EMPHASIS = 1074,
+  /** Native CHR_HTML_CITATION identity. */
+  CHR_HTML_CITATION = 1075,
+  /** Native CHR_HTML_STRONG identity. */
+  CHR_HTML_STRONG = 1076,
+  /** Native CHR_HTML_CODE identity. */
+  CHR_HTML_CODE = 1077,
+  /** Native CHR_HTML_SAMPLE identity. */
+  CHR_HTML_SAMPLE = 1078,
+  /** Native CHR_HTML_KEYBOARD identity. */
+  CHR_HTML_KEYBOARD = 1079,
+  /** Native CHR_HTML_VARIABLE identity. */
+  CHR_HTML_VARIABLE = 1080,
+  /** Native CHR_HTML_DEFINSTANCE identity. */
+  CHR_HTML_DEFINSTANCE = 1081,
+  /** Native CHR_HTML_TELETYPE identity. */
+  CHR_HTML_TELETYPE = 1082,
+
   UNKNOWN = 65535,
+}
+
+/** Original user-format ID bits after removing group/non-collection markers. */
+export const POOL_IDUSER_FMT = 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID);
+/** Original native user-format predicate, including UNKNOWN and assigned user group IDs. @param id - Unsigned16 pool identity. @returns Whether user-defined. */
+export function IsPoolUserFormat(id: SwPoolFormatId): boolean {
+  return POOL_IDUSER_FMT === (id & 65535 & ~(COLL_GET_RANGE_BITS + POOLGRP_NOCOLLID));
 }
 
 /** Built-in paragraph-style groups encoded in the upper pool-id bits. */
@@ -346,3 +412,10 @@ export function getWriterStyleIdFromOdfName(name: string): string | undefined {
       encodeWriterOdfStyleName(definition.name) === name,
   )?.id;
 }
+
+/** Native built-in character format identities and exact programmatic/English UI names. */
+export const WRITER_CHARACTER_STYLE_POOL: readonly Readonly<{
+  poolId: number;
+  name: string;
+  uiName: string;
+}>[] = characterPool;

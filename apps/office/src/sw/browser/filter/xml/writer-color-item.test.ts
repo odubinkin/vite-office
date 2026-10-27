@@ -1,5 +1,6 @@
 /** @fileoverview Genuine Writer character-color values,slot default and lossless worker transfer boundaries. */
 import { expect, it } from "vitest";
+import { encodeComplexColor } from "../../../../docmodel/browser/complex-color-codec";
 import { ComplexColor } from "../../../../docmodel/inc/color/ComplexColor";
 import { ThemeColorUsage } from "../../../../docmodel/inc/theme/ThemeColorType";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -52,41 +53,41 @@ it("uses the native black pool default and preserves opaque,automatic and transp
     ).toThrow("invalid");
 });
 
-it("rejects highlight metadata that a scalar color snapshot cannot preserve", /** Checks actual native brush values before worker transport. @returns Nothing. */ () => {
-  const complex = createWriterHighlightItem("#123456");
-  const rgb = new ComplexColor();
+it("preserves represented brush metadata and rejects the unrepresented graphic filter state", /** Uses concrete decoded brushes and exact complex fields. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    complex = createWriterHighlightItem("#123456"),
+    rgb = new ComplexColor();
   rgb.setRGB(0x123456);
   complex.setComplexColor(rgb);
-  expect(
-    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
-      encodeSfxPoolItem(complex),
-  ).toThrow("complex highlight transfer");
-  const usage = createWriterHighlightItem("#123456");
-  const theme = new ComplexColor();
+  const usage = createWriterHighlightItem("#123456"),
+    theme = new ComplexColor();
   theme.setThemeColorUsage(ThemeColorUsage.Text);
   usage.setComplexColor(theme);
-  expect(
-    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
-      encodeSfxPoolItem(usage),
-  ).toThrow("complex highlight transfer");
-  const filter = createWriterHighlightItem("#123456");
-  filter.SetFiltColor(new Color(0xabcdef));
-  expect(
-    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
-      encodeSfxPoolItem(filter),
-  ).toThrow("complex highlight transfer");
   const graphic = createWriterHighlightItem("#123456");
   graphic.setGraphicTransparency(50);
-  expect(
-    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
-      encodeSfxPoolItem(graphic),
-  ).toThrow("complex highlight transfer");
-  const shading = createWriterHighlightItem("#123456");
-  expect(shading.PutValue(new Any([1], "sal_Int32"), MID_SHADING_VALUE)).toBe(true);
-  expect(
-    /** Rejects metadata absent from the scalar transport. @returns No snapshot. */ () =>
-      encodeSfxPoolItem(shading),
-  ).toThrow("complex highlight transfer");
+  const shading = createWriterHighlightItem("#123456"),
+    value = new Any([1], "sal_Int32");
+  try {
+    expect(shading.PutValue(value, MID_SHADING_VALUE)).toBe(true);
+    for (const item of [complex, usage, graphic, shading]) {
+      const record = encodeSfxPoolItem(item),
+        restored = decodeSfxPoolItem(doc.GetAttrPool(), structuredClone(record));
+      expect(restored).toBeInstanceOf(SvxBrushItem);
+      expect(encodeSfxPoolItem(restored)).toEqual(record);
+      expect(encodeComplexColor((restored as SvxBrushItem).getComplexColor())).toEqual(
+        encodeComplexColor(item.getComplexColor()),
+      );
+    }
+    const filter = createWriterHighlightItem("#123456");
+    filter.SetFiltColor(new Color(0xabcdef));
+    expect(
+      /** Refuses a field without an actual represented restore owner. @returns No snapshot. */ () =>
+        encodeSfxPoolItem(filter),
+    ).toThrow("graphic filter color transfer");
+  } finally {
+    value.dispose();
+    doc.Dispose();
+  }
 });
 
 it("restores the native paragraph border-connection item from worker snapshots", /** Checks the merged pool factory keeps its concrete item type and boolean value. @returns Nothing. */ () => {
@@ -122,27 +123,27 @@ it("keeps native highlight brushes and complete color words across worker snapsh
     createWriterHighlightItem(writerHighlightColorValue(alpha)).GetColor().equals(alpha.GetColor()),
   ).toBe(true);
 });
-it("rejects complex metadata rather than silently losing it in worker transfer", /** Tests real native complex-color values omitted from source equality as well as ordinary theme state. @returns Nothing. */ () => {
-  const item = createWriterTextColorItem("#123456");
-  const final = new ComplexColor();
+it("preserves complex metadata independently of native source equality", /** Includes usage/final-only differences that equality omits. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    item = createWriterTextColorItem("#123456"),
+    final = new ComplexColor(),
+    usage = new ComplexColor(),
+    rgb = new ComplexColor();
   final.setFinalColor(new Color(0xabcdef));
-  item.setComplexColor(final);
-  expect(
-    /** Rejects unsupported real complex metadata. @returns No valid transfer record. */ () =>
-      encodeSfxPoolItem(item),
-  ).toThrow("complex color transfer");
-  const usage = new ComplexColor();
   usage.setThemeColorUsage(ThemeColorUsage.Text);
-  item.setComplexColor(usage);
-  expect(
-    /** Rejects unsupported real complex metadata. @returns No valid transfer record. */ () =>
-      encodeSfxPoolItem(item),
-  ).toThrow("complex color transfer");
-  const rgb = new ComplexColor();
   rgb.setRGB(0x123456);
-  item.setComplexColor(rgb);
-  expect(
-    /** Rejects unsupported real complex metadata. @returns No valid transfer record. */ () =>
-      encodeSfxPoolItem(item),
-  ).toThrow("complex color transfer");
+  try {
+    for (const state of [final, usage, rgb]) {
+      item.setComplexColor(state);
+      const record = encodeSfxPoolItem(item),
+        restored = decodeSfxPoolItem(doc.GetAttrPool(), structuredClone(record));
+      expect(restored).toBeInstanceOf(SvxColorItem);
+      expect(encodeComplexColor((restored as SvxColorItem).getComplexColor())).toEqual(
+        encodeComplexColor(state),
+      );
+      expect(encodeSfxPoolItem(restored)).toEqual(record);
+    }
+  } finally {
+    doc.Dispose();
+  }
 });

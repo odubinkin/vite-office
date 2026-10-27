@@ -20,7 +20,9 @@
       "MSWordStyles::BuildStylesTable",
       "MSWordStyles::GetSlot",
       "MSWordStyles::BuildWwNames",
-      "wwFont::WriteDocx"
+      "wwFont::WriteDocx",
+      "wwFont::WriteRtf",
+      "wwFontHelper::WriteFontTable"
     ],
     "evidence": {
       "local": [
@@ -72,12 +74,15 @@
       "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary/RTF output, actual DocxExport association and complete format orchestration remain pending.",
       "Reserves the source fifteen Word style slots, assigns Standard to slot zero and materialized Heading 1-9 collections to slots 1-9, and assigns remaining document paragraph collections in source order with the source 4091-style limit.",
       "Maps the represented built-in pool identities to their source Word style names, strips the source (WW) suffix for user styles and allocates unique ASCII-case-insensitive names with builtin names first.",
-      "V4DQJW connects wwFont.WriteDocx and wwFontHelper.WriteFontTable to actual DocxAttributeOutput. Preserve empty-family omission, alternate-name admission, charset/family/pitch element order and ID-ordered font traversal. Only native font metadata is admitted for the current kernel without embedding; EmbedFont/doc-setting/native font-access responsibilities are unported and not replaced by dummy services. Existing shared RTF MSWordStyles behavior is unchanged."
+      "V4DQJW connects wwFont.WriteDocx and wwFontHelper.WriteFontTable to actual DocxAttributeOutput. Preserve empty-family omission, alternate-name admission, charset/family/pitch element order and ID-ordered font traversal. Only native font metadata is admitted for the current kernel without embedding; EmbedFont/doc-setting/native font-access responsibilities are unported and not replaced by dummy services. Existing shared RTF MSWordStyles behavior is unchanged.",
+      "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary output, actual DocxExport association and complete format orchestration remain pending.",
+      "Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending."
     ],
     "omittedResponsibilities": [
       "Full native framework/ABI and complete format orchestration are not certified; see admission.",
       "The current Writer document API has no character-style collection table; numbering-style slots are disabled by the pinned RTF constructor's bListStyles=false default. Full desktop style metadata remains unverified.",
-      "Native embedding and complete exporter/filter/traversal context remain pending; no whole-format readiness follows from part tests."
+      "Native embedding and complete exporter/filter/traversal context remain pending; no whole-format readiness follows from part tests.",
+      "Full native character-style slot assignment remains incomplete; numbering-style slots are disabled by the pinned RTF constructor's bListStyles=false default. Full desktop style metadata remains unverified."
     ]
   }
 }

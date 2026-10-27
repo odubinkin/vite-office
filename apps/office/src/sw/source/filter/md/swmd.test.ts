@@ -35,7 +35,8 @@ it("imports headings and nested emphasis as native paragraph styles and hints", 
       ),
     ).toEqual([
       ["heading-2", "Heading"],
-      ["default", "Plain bold italic and link."],
+      ["text-body", "Plain bold italic and link."],
+      ["text-body", ""],
     ]);
     const runs = projectWriterTextRuns(document.paragraphs[1]);
     expect(
@@ -106,7 +107,7 @@ it("keeps relative Markdown links when the source medium has no URL", /** Checks
 });
 
 it("imports ordered and bullet lists with native levels and identities", /** Checks list callback mapping. @returns Nothing. */ () => {
-  const document = read("1. First\n   2. Nested\n- Bullet\n");
+  const document = read("1. First\n   1. Nested\n- Bullet\n");
   try {
     expect(
       document.paragraphs.map(
@@ -118,6 +119,7 @@ it("imports ordered and bullet lists with native levels and identities", /** Che
       ["First", "numbered", 0],
       ["Nested", "numbered", 1],
       ["Bullet", "bullet", 0],
+      ["", "none", 0],
     ]);
     expect(document.paragraphs[0]?.GetListId()).toBe(document.paragraphs[1]?.GetListId());
   } finally {
@@ -134,7 +136,7 @@ it("keeps one native list across a loose-list blank line", /** Checks keeps one 
           node,
         ) => node.GetText(),
       ),
-    ).toEqual(["First", "Second"]);
+    ).toEqual(["First", "Second", ""]);
     expect(document.paragraphs[0]?.GetListId()).toBe(document.paragraphs[1]?.GetListId());
   } finally {
     document.Dispose();
@@ -153,20 +155,22 @@ it("shares one native rule across mixed nested list callbacks and configures eac
           node,
         ) => node.GetListKind(),
       ),
-    ).toEqual(["numbered", "bullet", "numbered"]);
+    ).toEqual(["numbered", "bullet", "numbered", "none"]);
     expect(
       document.paragraphs.map(
         /** Checks shares one native rule across mixed nested list callbacks and configures each used level. @param node - Node. @returns Test completion or assertion result. */ (
           node,
         ) => node.GetListId(),
       ),
-    ).toEqual([first?.GetListId(), first?.GetListId(), first?.GetListId()]);
+    ).toEqual([first?.GetListId(), first?.GetListId(), first?.GetListId(), ""]);
     expect(
-      document.paragraphs.every(
-        /** Checks shares one native rule across mixed nested list callbacks and configures each used level. @param node - Node. @returns Test completion or assertion result. */ (
-          node,
-        ) => node.IsCountedInList(),
-      ),
+      document.paragraphs
+        .slice(0, -1)
+        .every(
+          /** Checks shares one native rule across mixed nested list callbacks and configures each used level. @param node - Node. @returns Test completion or assertion result. */ (
+            node,
+          ) => node.IsCountedInList(),
+        ),
     ).toBe(true);
     expect(first?.GetNumRule()?.Get(1).GetBulletChar()).toBe(0x2022);
   } finally {
@@ -183,7 +187,7 @@ it("retains the first format at a reused Markdown list level as upstream does", 
           node,
         ) => node.GetListKind(),
       ),
-    ).toEqual(["numbered", "bullet", "bullet", "numbered"]);
+    ).toEqual(["numbered", "bullet", "bullet", "numbered", "none"]);
     expect(document.paragraphs[1]?.GetNumRule()).toBe(document.paragraphs[2]?.GetNumRule());
   } finally {
     document.Dispose();
@@ -230,7 +234,7 @@ it("imports a leading table and column alignment into actual Writer cells", /** 
           node,
         ) => node.GetText(),
       ),
-    ).toEqual(["After"]);
+    ).toEqual(["After", ""]);
   } finally {
     document.Dispose();
   }
@@ -248,6 +252,7 @@ it("keeps fenced code text and quote styles without interpreting inline markup",
     ).toEqual([
       ["preformatted-text", "*literal*"],
       ["quotations", "Quoted"],
+      ["quotations", ""],
     ]);
   } finally {
     document.Dispose();
@@ -267,6 +272,7 @@ it("maps setext headings, indented code and one multi-line quote into native par
       ["heading-1", "Title"],
       ["preformatted-text", "*literal*\nsecond"],
       ["quotations", "first\u00a0second"],
+      ["quotations", ""],
     ]);
   } finally {
     document.Dispose();
@@ -307,10 +313,10 @@ it("maps hard and soft line breaks through Markdown text callbacks", /** Checks 
   }
 });
 
-it("omits entity and null-character callbacks while keeping unknown, escaped and code text", /** Checks omits entity and null-character callbacks while keeping unknown, escaped and code text. @returns Test completion or assertion result. */ () => {
+it("omits syntactic entity and null-character callbacks while keeping escaped and code text", /** Checks omits syntactic entity and null-character callbacks while keeping escaped and code text. @returns Test completion or assertion result. */ () => {
   const document = read("A &amp; B &#65; &madeup; \\&amp; `&copy;` \\? N\u0000UL");
   try {
-    expect(document.paragraphs[0]?.GetText()).toBe("A  B  &madeup; &amp; &copy; ? NUL");
+    expect(document.paragraphs[0]?.GetText()).toBe("A  B   &amp; &copy; ? NUL");
   } finally {
     document.Dispose();
   }
@@ -329,7 +335,8 @@ it("keeps md4c thematic breaks distinct from setext headings and list markers", 
       ["horizontal-line", ""],
       ["horizontal-line", ""],
       ["heading-2", "Title"],
-      ["default", "After"],
+      ["text-body", "After"],
+      ["text-body", ""],
     ]);
     const style = document.GetTextFormatColl("horizontal-line");
     const border = style.GetAttrSet().GetItemIfSet(RES_BOX, false) as SvxBoxItem;
@@ -341,6 +348,55 @@ it("keeps md4c thematic breaks distinct from setext headings and list markers", 
         style.GetAttrSet().GetItemIfSet(RES_PARATR_CONNECT_BORDER, false) as SwParaConnectBorderItem
       ).GetValue(),
     ).toBe(false);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("passes raw UTF-8 to md4c and decodes each callback with native SAL grouping", /** Checks native admission instead of fatal host validation or per-byte replacement. @returns Nothing. */ () => {
+  const document = new MarkdownReader().Read(Uint8Array.of(0xe0, 0x80, 0x80, 10, 10, 65));
+  try {
+    expect(
+      document.paragraphs.map(
+        /** Reads actual node text, including the native continuation. @param node - Owner. @returns Text. */ (
+          node,
+        ) => node.GetText(),
+      ),
+    ).toEqual(["\ufffd", "A", ""]);
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("resolves full reference callbacks and suppresses image-description text in the current text-node model", /** Checks the actual md4c link/detail and image stack path. @returns Nothing. */ () => {
+  const document = read(
+    '[label][KEY] ![alt **bold**](image.png)\n\n[key]: https://example.test/path "title"',
+  );
+  try {
+    expect(document.paragraphs[0]?.GetText()).toBe("label ");
+    expect(projectWriterTextRuns(document.paragraphs[0])[0]?.hyperlink?.url).toBe(
+      "https://example.test/path",
+    );
+  } finally {
+    document.Dispose();
+  }
+});
+
+it("keeps inline HTML buffered and preserves source quotation-style inheritance after exit", /** Pins block-only HTML flush and the source depth test. @returns Nothing. */ () => {
+  const document = read("> quote\n\nplain <b>text</b>");
+  try {
+    expect(
+      document.paragraphs.map(
+        /** Reads source style/text pairs. @param node - Owner. @returns Pair. */ (node) => [
+          node.GetParagraphStyle(),
+          node.GetText(),
+        ],
+      ),
+    ).toEqual([
+      ["quotations", "quote"],
+      ["quotations", "plain text"],
+      ["quotations", ""],
+    ]);
   } finally {
     document.Dispose();
   }

@@ -50,6 +50,7 @@ import {
   RTL_TEXTENCODING_ISO_8859_9,
   RTL_TEXTENCODING_KOI8_R,
   RTL_TEXTENCODING_KOI8_U,
+  RTL_TEXTENCODING_MAZOVIA,
   RTL_TEXTENCODING_MS_1250,
   RTL_TEXTENCODING_MS_1251,
   RTL_TEXTENCODING_MS_1252,
@@ -247,7 +248,7 @@ export function rtl_getTextEncodingInfo(
   encoding: rtl_TextEncoding,
   info: rtl_TextEncodingInfo,
 ): boolean {
-  const source = nativeInfo[String(encoding)];
+  const source = nativeInfo[String(encoding & 0xffff)];
   if (info.StructSize < 5) return false;
   info.MinimumCharSize = source?.MinimumCharSize ?? 1;
   if (info.StructSize < 6) return true;
@@ -258,3 +259,71 @@ export function rtl_getTextEncodingInfo(
   info.Flags = source?.Flags ?? 0;
   return source !== undefined;
 }
+
+/** Native octet-encoding range, including the reserved SYSTEM hole. @param encoding - Unsigned native encoding ID. @returns Whether the ID denotes an octet encoding. */
+export function rtl_isOctetTextEncoding(encoding: rtl_TextEncoding): boolean {
+  const value = encoding & 0xffff;
+  return value > RTL_TEXTENCODING_DONTKNOW && value !== 9 && value <= RTL_TEXTENCODING_MAZOVIA;
+}
+
+/** Complete original Windows charset switch, including the unknown default. @param charset - Native unsigned byte. @returns Native encoding ID. */
+export function rtl_getTextEncodingFromWindowsCharset(charset: number): rtl_TextEncoding {
+  switch (charset & 0xff) {
+    case 0:
+      return RTL_TEXTENCODING_MS_1252;
+    case 2:
+      return RTL_TEXTENCODING_SYMBOL;
+    case 77:
+      return RTL_TEXTENCODING_APPLE_ROMAN;
+    case 128:
+      return RTL_TEXTENCODING_MS_932;
+    case 129:
+      return RTL_TEXTENCODING_MS_949;
+    case 130:
+      return RTL_TEXTENCODING_MS_1361;
+    case 134:
+      return RTL_TEXTENCODING_MS_936;
+    case 136:
+      return RTL_TEXTENCODING_MS_950;
+    case 161:
+      return RTL_TEXTENCODING_MS_1253;
+    case 162:
+      return RTL_TEXTENCODING_MS_1254;
+    case 163:
+      return RTL_TEXTENCODING_MS_1258;
+    case 177:
+      return RTL_TEXTENCODING_MS_1255;
+    case 178:
+      return RTL_TEXTENCODING_MS_1256;
+    case 186:
+      return RTL_TEXTENCODING_MS_1257;
+    case 204:
+      return RTL_TEXTENCODING_MS_1251;
+    case 222:
+      return RTL_TEXTENCODING_MS_874;
+    case 238:
+      return RTL_TEXTENCODING_MS_1250;
+    case 255:
+      return RTL_TEXTENCODING_IBM_850;
+    default:
+      return RTL_TEXTENCODING_DONTKNOW;
+  }
+}
+
+/** Original rtl/tencinfo.h UNICODE metadata flag. */
+export const RTL_TEXTENCODING_INFO_UNICODE = 0x00000004;
+
+/** Original rtl/tencinfo.h MULTIBYTE metadata flag. */
+export const RTL_TEXTENCODING_INFO_MULTIBYTE = 0x00000008;
+
+/** Original rtl/tencinfo.h R2L metadata flag. */
+export const RTL_TEXTENCODING_INFO_R2L = 0x00000010;
+
+/** Original rtl/tencinfo.h 7BIT metadata flag. */
+export const RTL_TEXTENCODING_INFO_7BIT = 0x00000020;
+
+/** Original rtl/tencinfo.h SYMBOL metadata flag. */
+export const RTL_TEXTENCODING_INFO_SYMBOL = 0x00000040;
+
+/** Original rtl/tencinfo.h MIME metadata flag. */
+export const RTL_TEXTENCODING_INFO_MIME = 0x00000080;

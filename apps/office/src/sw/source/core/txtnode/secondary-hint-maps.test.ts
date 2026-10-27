@@ -1,4 +1,5 @@
 /** @fileoverview Verifies literal native three-map hint order, dirty intervals and binary queries without upstream access. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { SvxWeightItem } from "../../../../editeng/source/items/textitem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -14,7 +15,7 @@ function attr(
   start: number,
   end: number,
   mask: number,
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   const set = new SfxItemSet(doc.GetAttrPool(), [[1, 49]]);
   set.Put(new SvxWeightItem(8, 15));
   const hint = new SwTextAttrEnd(

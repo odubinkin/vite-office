@@ -1,4 +1,6 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
+import { ForEachCharacterFontItem } from "./doc.items";
+import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   MakePageDesc,
   DelPageDesc,
@@ -13,15 +15,16 @@ import { SwCharFormat } from "../../../inc/charfmt";
 import { SwGrfFormatColl } from "../../../inc/fmtcol";
 import { SwAttrPool } from "../attr/swatrset";
 import { SwTableLineFormat, SwTableBoxFormat } from "../../../inc/swtblfmt";
+import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
+import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
-import type { SwFormat } from "../attr/format";
+import { IsUsed } from "./poolfmt";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
 import { SwTextNode } from "../txtnode/ndtxt";
 import {
-  createWriterTableBoxItem,
   type SwTable,
   type SwTableBox,
   type SwTableBoxFormat as SwTableBoxFormatValue,
@@ -54,8 +57,8 @@ import type { SwFormatFrameSize } from "../../../inc/fmtfsize";
 import type { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import { SwFormatVertOrient } from "../../../inc/fmtornt";
 import type { SwUndoCursorState } from "../undo/undobj";
-import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
-import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
+import type { SwInsertTableOptions } from "../../../inc/itabenum";
+import { InsertTable as InsertNativeTable } from "../docnode/ndtbl";
 import { DocumentContentOperationsManager } from "./DocumentContentOperationsManager";
 import { DocumentMarkAccess } from "./docbm";
 import { DocumentListItemsManager } from "./DocumentListItemsManager";
@@ -81,10 +84,10 @@ import {
 } from "../../../inc/hintids";
 import { SwNumRuleItem } from "../para/paratr";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import type { SwNumRule } from "./number";
+import { SwNumRule, SwNumRuleType } from "./number";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 import { OutlineUpDown as moveOutlineLevels, GetUniqueNumRuleName } from "./docnum";
-import { moveLeftMargin, InsertPoolItem } from "./docfmt";
+import { moveLeftMargin, InsertPoolItem, CopyCharFormat } from "./docfmt";
 import { SwUndoMoveLeftMargin } from "../undo/unattr";
 import { SwPaM, SwPosition } from "../crsr/pam";
 import type { SwAtomicModelHint } from "../../../inc/hints";
@@ -206,6 +209,15 @@ export class SwDoc {
   }
   private mbDtor = false;
   private mbInReading = false;
+  private mbInXMLImport = false;
+  /** Reads the native XML-import portion-building policy. @returns Import flag. */
+  public IsInXMLImport(): boolean {
+    return this.mbInXMLImport;
+  }
+  /** Sets the original XML-import flag around its owning import. @param importing - New flag. @returns Nothing. */
+  public SetInXMLImport(importing: boolean): void {
+    this.mbInXMLImport = importing;
+  }
   /** Reports the native document destruction phase. @returns Destruction flag. */
   public IsInDtor(): boolean {
     return this.mbDtor;
@@ -226,6 +238,7 @@ export class SwDoc {
   private readonly contentOperationsManager: DocumentContentOperationsManager;
   private readonly markAccess: DocumentMarkAccess;
   private readonly listsManager: DocumentListsManager;
+  private readonly mpOutlineRule: SwNumRule;
   private readonly listItemsManager = new DocumentListItemsManager();
   private readonly settingManager = new DocumentSettingManager();
   private readonly stateManager = new DocumentStateManager();
@@ -244,7 +257,7 @@ export class SwDoc {
     const options = typeof createInitialTextNode === "object" ? createInitialTextNode : undefined;
     this.defaultFontDevice = options?.defaultFontDevice;
     this.locale = options?.locale ?? "en-US";
-    this.attrPool = new SwAttrPool(this);
+    this.attrPool = new SwAttrPool(SwModule.get().getItemInfoPackageSwAttributes(), this);
     this.defaultCharFormat = new SwCharFormat(this.attrPool, "Character style");
     this.defaultGrfFormatColl = new SwGrfFormatColl(this.attrPool, "Graphikformatvorlage");
     this.defaultFrameFormat = new SwFrameFormat(this.attrPool, "Default Frame Format");
@@ -253,7 +266,14 @@ export class SwDoc {
       new SfxItemSet(this.attrPool, [[RES_PARATR_LIST_BEGIN, RES_PARATR_LIST_END - 1]]),
     );
     this.stylePoolManager = new DocumentStylePoolManager(this.attrPool);
+    // Native docnew.cxx overrides the root formats, preserving SdrItemPool's SOLID default.
+    this.GetDfltTextFormatColl().SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
+    this.defaultFrameFormat.SetFormatAttr(new XFillStyleItem(FillStyle.NONE));
     this.listsManager = new DocumentListsManager(this.stateManager);
+    this.mpOutlineRule = this.AddNumRule(
+      new SwNumRule(SwNumRule.GetOutlineRuleName(), "label-alignment", SwNumRuleType.OUTLINE_RULE),
+    );
+    this.mpOutlineRule.SetCountPhantoms(!this.GetDocumentSettingManager().get("OLD_NUMBERING"));
     this.nodes = new SwNodes(this);
     this.contentOperationsManager = new DocumentContentOperationsManager(this);
     this.markAccess = new DocumentMarkAccess(this);
@@ -369,6 +389,14 @@ export class SwDoc {
   public SetDefaultPageMode(squared: boolean): void {
     SetDefaultPageMode(this, squared);
   }
+  /** Native character-font item traversal. @param which - Native font identity. @param ignoreAutoStyles - Skip automatic styles. @param callback - Borrowed font callback; false stops traversal. @returns Nothing. */
+  public ForEachCharacterFontItem(
+    which: number,
+    ignoreAutoStyles: boolean,
+    callback: (font: SvxFontItem) => boolean,
+  ): void {
+    ForEachCharacterFontItem(this, which, ignoreAutoStyles, callback);
+  }
   /** Native node/style traversal for authored tab-stop items. @param callback - Original early-stop visitor. @returns Nothing. */
   public ForEachParaAtrTabStopItem(callback: (item: SvxTabStopItem) => boolean): void {
     ForEachParaAtrTabStopItem(this, callback);
@@ -380,6 +408,31 @@ export class SwDoc {
   /** Native default character format. @returns Document-owned format. */
   public GetDfltCharFormat(): SwCharFormat {
     return this.defaultCharFormat;
+  }
+  /** Returns the native character-format table. @returns Character owners. */
+  public GetCharFormats(): readonly SwCharFormat[] {
+    return this.stylePoolManager.GetCharFormats();
+  }
+  /** Materializes a native pooled character style. @param id - Original pool ID. @returns Character owner or undefined. */
+  public GetCharFormatFromPool(id: number): SwCharFormat | undefined {
+    return this.stylePoolManager.GetCharFormatFromPool(id);
+  }
+  /** Finds the first native character style by its UI name. @param name - UI name. @returns Owner. */
+  public FindCharFormatByName(name: string): SwCharFormat | undefined {
+    return this.GetCharFormats().find(
+      /** Checks actual UI identity. @param format - Owner. @returns Match. */ (format) =>
+        format.GetName() === name,
+    );
+  }
+  /** Creates a native named character style. @param name - UI name. @param parent - Optional original parent. @returns Owned style. */
+  public MakeCharFormat(name: string, parent: SwCharFormat | undefined): SwCharFormat {
+    const format = this.stylePoolManager.MakeCharFormat(name, parent);
+    this.stateManager.SetModified();
+    return format;
+  }
+  /** Copies an actual source character format with its native name/parent policy. @param source - Actual source. @returns Destination-owned style. */
+  public CopyCharFormat(source: SwCharFormat): SwCharFormat {
+    return CopyCharFormat(this, source);
   }
   /** Native default graphic collection. @returns Document-owned collection. */
   public GetDfltGrfFormatColl(): SwGrfFormatColl {
@@ -458,17 +511,9 @@ export class SwDoc {
   public GetTextFormatColls(): readonly SwTextFormatColl[] {
     return this.stylePoolManager.GetTextFormatColls();
   }
-  /** Reports regular node use, including derived paragraph collections like native poolfmt.cxx. @param format - Candidate identity. @returns Whether a regular node depends on it. */
-  public IsUsed(format: SwTextFormatColl): boolean {
-    for (const node of this.nodes.entries()) {
-      if (!(node instanceof SwTextNode)) continue;
-      let owner: SwFormat | undefined = node.GetTextFormatColl();
-      while (owner !== undefined) {
-        if (owner === format) return true;
-        owner = owner.DerivedFrom();
-      }
-    }
-    return false;
+  /** Native used-style overloads preserve dependent-node and numbering-client ownership checks. @param format - Paragraph collection or numbering rule. @returns Whether its native owners report use. */
+  public IsUsed(format: SwTextFormatColl | SwNumRule): boolean {
+    return IsUsed(this, format);
   }
   /** Finds a supported paragraph collection. @param id - Programmatic identity. @returns Existing collection. */
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {
@@ -528,12 +573,13 @@ export class SwDoc {
     return GetUniqueNumRuleName(this);
   }
 
-  /** Stores an independent native numbering rule. @param rule - Source rule. @returns Document-owned rule. */
+  /** Returns the actual document-owned outline rule created during docnew initialization. @returns Borrowed outline owner. */
+  public GetOutlineNumRule(): SwNumRule {
+    return this.mpOutlineRule;
+  }
+  /** Transfers a native numbering rule into document ownership without implicit cloning. @param rule - Transferred owner. @returns Borrowed stored identity. */
   public AddNumRule(rule: SwNumRule): SwNumRule {
-    const stored = this.listsManager.AddNumRule(rule);
-    const list = this.listsManager.GetListForListStyle(stored.GetName());
-    if (!stored.GetDefaultListId()) stored.SetDefaultListId(list.GetListId());
-    return stored;
+    return this.listsManager.AddNumRule(rule);
   }
   /** Finds a numbering rule. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
@@ -604,7 +650,7 @@ export class SwDoc {
         let stored = this.FindNumRulePtr(rule.GetName());
         const created = stored === undefined;
         if (stored === undefined) {
-          stored = this.listsManager.AddNumRule(rule);
+          stored = this.AddNumRule(new SwNumRule(rule));
           if (stored.GetDefaultListId().length === 0)
             stored.SetDefaultListId(
               this.listsManager.GetListForListStyle(stored.GetName()).GetListId(),
@@ -910,61 +956,9 @@ export class SwDoc {
     name = "",
     boxFormat?: SwTableBoxFormatValue,
   ): SwTable {
-    const node = position.GetNode();
-    if (
-      !(node instanceof SwTextNode) ||
-      !this.paragraphs.includes(node) ||
-      !Number.isInteger(rows) ||
-      rows < 1 ||
-      rows > 65535 ||
-      !Number.isInteger(columns) ||
-      columns < 1 ||
-      columns > 65535
-    )
-      throw new Error(
-        "Writer insertion requires body text and positive unsigned table dimensions.",
-      );
-    const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
-      borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
-      repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
-      width = Math.floor(65535 / columns) * columns;
-    if (
-      name === "" ||
-      this.GetTables().some(
-        /** Checks the actual native name set. @param table - Existing owner. @returns Collision. */ (
-          table,
-        ) => table.GetName() === name,
-      )
-    )
-      name = this.GetUniqueTableName();
-    const table = this.nodes.InsertTable(node, name, {
-      width,
-      horiOrient: HoriOrientation.FULL,
-      headerRows: header ? Math.max(1, repeat) : 0,
-      repeatHeaderRows: repeat !== 0,
-      layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
-    });
-    for (let column = 0; column < columns; column++) table.AddColumnWidth(width / columns);
-    const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
-    for (let row = 0; row < rows; row++) {
-      const line = this.nodes.AppendTableRow(
-        table,
-        columns,
-        {},
-        Array.from(
-          { length: columns },
-          /** Creates independent represented box attributes. @returns Box format. */ () =>
-            boxFormat === undefined ? { box: createWriterTableBoxItem(borders) } : { ...boxFormat },
-        ),
-      );
-      for (const box of line.GetTabBoxes())
-        for (const paragraph of box.GetParagraphs())
-          paragraph.ChgFormatColl(
-            this.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
-          );
-    }
-    return table;
+    return InsertNativeTable(this, options, position, rows, columns, name, boxFormat);
   }
+
   /** Runs one semantic model transaction. @param mutation - Mutation callback. @returns Callback result. */
   public RunModelTransaction<Result>(mutation: () => Result): Result {
     return this.stateManager.RunModelTransaction(mutation);
@@ -978,7 +972,10 @@ export class SwDoc {
     this.markAccess.Dispose();
     this.undoManager.Dispose();
     this.defaultGrfFormatColl.DisposeModify();
-    this.defaultCharFormat.DisposeModify();
+    for (const format of [...this.GetCharFormats()].reverse()) format.DisposeModify();
+    for (const node of this.nodes.entries())
+      if (node instanceof SwTextNode) node.GetpSwpHints()?.Dispose();
+    this.styleAccess.Dispose();
     this.stateManager.Dispose();
   }
 }
@@ -987,3 +984,5 @@ export class SwDoc {
 export function createWriterDocument(): SwDoc {
   return new SwDoc();
 }
+
+import { SwModule } from "../../uibase/app/swmodule";

@@ -212,14 +212,14 @@ it("native clipboard clones formatted fragments independently into each selected
     transfer = paste(f, "Link"),
     fragment = required(transfer.paragraphs[0]).fragment;
   fragment.hints.Insert(
-    f.body
-      .InsertItem(
+    requireInsertedHint(
+      f.body.InsertItem(
         new SwFormatINetFormat({ url: "https://example.test/paste" }),
         0,
         4,
         SetAttrMode.NOHINTADJUST,
-      )
-      .clone(),
+      ),
+    ).clone(),
   );
   expect(f.shell.PasteAtCursor(transfer)).toBe(true);
   const left = required(f.tails[0]),
@@ -258,3 +258,10 @@ it("native read handles one unmarked cursor without synthesizing a mark", /** Ex
   cursor.Dispose();
   point.Dispose();
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

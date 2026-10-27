@@ -522,7 +522,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     if (node === undefined) throw new Error("Writer fixture has no text node.");
     const rule = createWriterNumRule("List 1", "numbered", "list-id-1");
     const stored = writer.AddNumRule(rule);
-    expect(stored).not.toBe(rule);
+    expect(stored).toBe(rule);
     expect(stored.GetName()).toBe("List 1");
     expect(stored.GetKind()).toBe("numbered");
     expect(stored.GetDefaultListId()).toBe("list-id-1");
@@ -531,7 +531,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(stored.clone().GetDefaultListId()).toBe(stored.GetDefaultListId());
     expect(writer.FindNumRulePtr("List 1")).toBe(stored);
     expect(writer.FindNumRulePtr("missing")).toBeUndefined();
-    expect(writer.GetNumRuleTable()).toEqual([stored]);
+    expect(writer.GetNumRuleTable()).toEqual([writer.GetOutlineNumRule(), stored]);
     expect(writer.EnsureNumRule("List 1", "numbered")).toBe(stored);
     expect(
       throwing(
@@ -539,12 +539,12 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
           writer.EnsureNumRule("List 1", "bullet"),
       ),
     ).toThrow("different format");
-    expect(
-      throwing(
-        /** Adds a duplicate rule. @returns Duplicate rule. */ () =>
-          writer.AddNumRule(createWriterNumRule("List 1", "bullet")),
-      ),
-    ).toThrow("Duplicate");
+    const duplicate = createWriterNumRule("List 1", "bullet");
+    expect(writer.AddNumRule(duplicate)).toBe(duplicate);
+    expect(writer.FindNumRulePtr("List 1")).toBe(duplicate);
+    expect(writer.GetNumRuleTable()).toEqual([writer.GetOutlineNumRule(), stored, duplicate]);
+    const configuredOutline = createWriterNumRule("Outline", "numbered");
+    writer.GetOutlineNumRule().Assign(configuredOutline);
     applyWriterParagraphList(node, { kind: "numbered", level: 2, styleId: "Outline" });
     expect(projectWriterParagraphList(node)).toEqual({
       kind: "numbered",
@@ -552,7 +552,9 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
       styleId: "Outline",
     });
     expect(node.GetSwAttrSet().GetItemState(RES_PARATR_NUMRULE)).toBe(SfxItemState.SET);
-    expect((node.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue()).toBe("Outline");
+    expect((node.GetAttr(RES_PARATR_LIST_ID) as SfxStringItem).GetValue()).toBe(
+      writer.GetOutlineNumRule().GetDefaultListId(),
+    );
     expect((node.GetAttr(RES_PARATR_LIST_LEVEL) as SfxInt16Item).GetValue()).toBe(2);
     applyWriterParagraphList(node, { kind: "none", level: 2, styleId: "Outline" });
     expect(projectWriterParagraphList(node)).toEqual({
@@ -571,7 +573,7 @@ describe("Writer numbering rules and snapshots" /** Groups document tables and c
     expect(automaticRuleName).toBe("List 2");
     expect(writer.FindNumRulePtr(automaticRuleName)?.IsAutoRule()).toBe(true);
     node.SetListId("");
-    expect(node.GetListId()).toBe("list1");
+    expect(node.GetListId()).toBe(writer.FindNumRulePtr(automaticRuleName)?.GetDefaultListId());
     node.SetNumRule("");
     expect(node.GetListId()).toBe("");
     expect(node.GetListItemNumber()).toBeUndefined();

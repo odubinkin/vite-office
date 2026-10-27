@@ -74,7 +74,7 @@ it("inherits native underline style from the RTF stylesheet and applies direct o
       [" inherited", FontLineStyle.LINESTYLE_DOUBLE],
     ]);
     expect(new TextDecoder().decode(new RtfExport().ExportDocument(document))).toContain(
-      "\\ulnone\\ulc0 off",
+      "\\ulc0\\ulnone off",
     );
   } finally {
     document.Dispose();

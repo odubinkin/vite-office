@@ -1,6 +1,6 @@
 /** @fileoverview Exercises collection numbering transitions after real ODT import, through Worker graph transfer, undo and ODT reopen. */
 import { expect, it, vi } from "vitest";
-import { SwNumRuleType } from "../../core/doc/number";
+import { SwNumRule, SwNumRuleType } from "../../core/doc/number";
 import { SwDoc } from "../../core/doc/doc";
 import { SwNumRuleItem } from "../../core/para/paratr";
 import { SwDocShell } from "../../uibase/app/docsh";
@@ -233,7 +233,7 @@ it("preserves explicit rule type through Worker16 without inferring the reserved
   const doc = new SwDoc();
   const chapter = doc.EnsureNumRule("Chapter", "numbered");
   chapter.SetRuleType(SwNumRuleType.OUTLINE_RULE);
-  const named = doc.EnsureNumRule("Outline", "numbered");
+  const named = doc.AddNumRule(new SwNumRule("Outline", "label-alignment"));
   expect(named.IsOutlineRule()).toBe(false);
   const node = firstParagraph(doc);
   node.SetNumRule("Chapter");

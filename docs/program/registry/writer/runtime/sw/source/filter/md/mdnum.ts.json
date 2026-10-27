@@ -19,7 +19,7 @@
         "apps/office/src/sw/source/filter/md/mdnum.ts#SwMdNumRuleInfo",
         "vendor/libreoffice-reference/sw/source/filter/md/mdnum.hxx#SwMdNumRuleInfo"
       ],
-      "justification": "Document-owned Markdown list rules and source level-format decisions are represented; complete md4c callback parity remains unverified.",
+      "justification": "Native numbering state now retains only the current rule, unsigned depth and ten pending-start sentinels from mdnum.hxx. Document mutations and format completion belong to the SwMarkdownParser callbacks. Complete numbering metadata and task controls remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "SwMdNumRuleInfo"

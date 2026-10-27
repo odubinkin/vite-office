@@ -1,4 +1,6 @@
 /** @fileoverview Restores bounded native text-attribute history from sw/source/core/undo/rolbck.cxx. */
+import type { TextAttributeOutput } from "../txtnode/thints-setattr";
+import { SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SwClient, type SwModify } from "../../../inc/calbck";
 import { SwFormat } from "../attr/format";
 import type { SwModelHint } from "../../../inc/hints";
@@ -48,6 +50,8 @@ export abstract class SwHistoryHint {
   public GetDescription(): string {
     return "";
   }
+  /** Logical native virtual destructor; value-only entries own no resources. @returns Nothing. */
+  public Dispose(): void {}
   /** Restores the entry into the graph. @param doc - Destination graph. @param tmp - Temporary rollback. @returns Nothing. */
   public abstract SetInDoc(doc: SwDoc, tmp: boolean): void;
 }
@@ -72,7 +76,12 @@ export class SwHistorySetFormat extends SwHistoryHint {
         .GetTable()
         .GetFrameFormat()
         .SetFormatAttr(this.m_pAttr as SfxPoolItem);
-    if (!tmp) this.m_pAttr = undefined;
+    if (!tmp) this.Dispose();
+  }
+  /** Native unique-item member destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pAttr?.Dispose();
+    this.m_pAttr = undefined;
   }
 }
 
@@ -112,7 +121,7 @@ export class SwHistorySetAttrSet extends SwHistoryHint {
       if (!whichIds.has(item.Which())) this.m_ResetArray.push(item.Which());
       else if (item.Which() === RES_BOXATR_FORMULA)
         throw new Error("Writer history formula external-name conversion is not implemented.");
-      else if (item.Which() !== RES_BOXATR_VALUE) this.m_OldSet.Put(item.Clone() as SfxPoolItem);
+      else if (item.Which() !== RES_BOXATR_VALUE) this.m_OldSet.Put(item);
     }
   }
   /** Restores old items before source-defined resets without recording nested history. @param doc - Native graph. @param tmp - Temporary policy; owned items remain available. @returns Nothing. */
@@ -134,6 +143,10 @@ export class SwHistorySetAttrSet extends SwHistoryHint {
     } finally {
       manager.DoUndo(enabled);
     }
+  }
+  /** Native contained item-set destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_OldSet.Dispose();
   }
 }
 /** Native collection identity and content type,with a live-owner check before restoration. */
@@ -157,18 +170,21 @@ export class SwHistoryChangeFormatColl extends SwHistoryHint {
 }
 /** Cloned native item and original coordinates,retaining only format-ignore flags. */
 export class SwHistorySetText extends SwHistoryHint {
-  private readonly m_pAttr: SwFormatAutoFormat | SwFormatINetFormat;
+  private readonly m_pAttr: SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat;
   private readonly m_nStart: number;
   private readonly m_nEnd: number;
   private readonly m_bFormatIgnoreStart: boolean;
   private readonly m_bFormatIgnoreEnd: boolean;
   /** Records the old item independently of subsequent edits. @param hint - Original attribute. @param m_nNodeIndex - Native node index. @returns Nothing. */
   public constructor(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
     private readonly m_nNodeIndex: number,
   ) {
     super(HISTORY_HINT.HSTRY_SETTXTHNT);
-    this.m_pAttr = hint.format.Clone();
+    this.m_pAttr =
+      hint.format instanceof SwFormatCharFormat
+        ? new SwFormatCharFormat(hint.format.GetCharFormat())
+        : hint.format.Clone();
     this.m_nStart = hint.GetStart();
     this.m_nEnd = hint.GetAnyEnd();
     this.m_bFormatIgnoreStart = hint.IsFormatIgnoreStart();
@@ -177,6 +193,10 @@ export class SwHistorySetText extends SwHistoryHint {
   /** Inserts a fresh attribute with native constructor defaults and retained format-ignore flags. @param doc - Actual graph. @param tmp - Native temporary policy;this entry restores identically in either mode. @returns Nothing. */
   public override SetInDoc(doc: SwDoc, tmp: boolean): void {
     void tmp;
+    if (this.m_pAttr instanceof SwFormatCharFormat) {
+      const format = this.m_pAttr.GetCharFormat();
+      if (format === undefined || !doc.GetCharFormats().includes(format)) return;
+    }
     const node = doc.GetNodes().at(this.m_nNodeIndex);
     if (!(node instanceof SwTextNode)) return;
     const attr = node.InsertItem(
@@ -185,10 +205,38 @@ export class SwHistorySetText extends SwHistoryHint {
       this.m_nEnd,
       SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
     );
+    if (attr === undefined) return;
     if (this.m_bFormatIgnoreStart) attr.SetFormatIgnoreStart(true);
     if (this.m_bFormatIgnoreEnd) attr.SetFormatIgnoreEnd(true);
   }
+  /** Native unique ranged-item destruction releases its automatic style. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pAttr.Dispose();
+  }
 }
+/** Original reset history retains family and exact coordinates, never the inserted item. */
+export class SwHistoryResetText extends SwHistoryHint {
+  /** Records native reset identity. @param m_nAttr - Original Which. @param m_nStart - Exact start. @param m_nEnd - Exact end. @param m_nNodeIndex - Original node slot. @returns Entry. */
+  public constructor(
+    private readonly m_nAttr: number,
+    private readonly m_nStart: number,
+    private readonly m_nEnd: number,
+    private readonly m_nNodeIndex: number,
+  ) {
+    super(HISTORY_HINT.HSTRY_RESETTXTHNT);
+  }
+  /** Original Which query used by insertion-history invariants. @returns Family. */
+  public GetWhich(): number {
+    return this.m_nAttr;
+  }
+  /** Removes exact registered attributes through the actual text-node owner. @param doc - Destination graph. @param tmp - Temporary policy; reset entries restore identically. @returns Nothing. */
+  public override SetInDoc(doc: SwDoc, tmp: boolean): void {
+    void tmp;
+    const node = doc.GetNodes().at(this.m_nNodeIndex);
+    if (node instanceof SwTextNode) node.DeleteAttributes(this.m_nAttr, this.m_nStart, this.m_nEnd);
+  }
+}
+
 /** Native SwHistoryBookmark payload for the existing collapsed ordinary bookmark model. Expanded/typed marks and unrepresented metadata remain unsupported. */
 export class SwHistoryBookmark extends SwHistoryHint {
   private readonly m_aName: string;
@@ -280,14 +328,17 @@ export class SwHistory {
     if (entry === undefined) throw new Error("Missing Writer history entry.");
     return entry;
   }
-  /** Captures the implemented old-ranged-attribute variant. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - New-attribute reset history is not yet implemented. @returns Nothing. */
+  /** Captures old values or original new-attribute reset entries. @param hint - Attribute. @param nodeIndex - Original node index. @param newAttr - Whether record the new family/range reset. @returns Nothing. */
   public AddTextAttr(
-    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat>,
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
     nodeIndex: number,
     newAttr: boolean,
   ): void {
-    if (newAttr) throw new Error("Writer new-attribute reset history is not implemented.");
-    this.m_SwpHstry.push(new SwHistorySetText(hint, nodeIndex));
+    this.m_SwpHstry.push(
+      newAttr
+        ? new SwHistoryResetText(hint.Which(), hint.GetStart(), hint.GetAnyEnd(), nodeIndex)
+        : new SwHistorySetText(hint, nodeIndex),
+    );
   }
 
   /** Copies explicit registered old format values in native item order. @param set - Direct node set. @param nodeIndex - Original index. @returns Nothing. */
@@ -322,7 +373,7 @@ export class SwHistory {
   public Rollback(doc: SwDoc, start = 0): boolean {
     if (this.Count() === 0) return false;
     for (let index = this.Count(); index > start;) this.at(--index).SetInDoc(doc, false);
-    this.m_SwpHstry.splice(start);
+    for (const entry of this.m_SwpHstry.splice(start)) entry.Dispose();
     this.m_nEndDiff = 0;
     return true;
   }
@@ -336,6 +387,11 @@ export class SwHistory {
       for (; start < end; this.m_nEndDiff++, start++) this.at(start).SetInDoc(doc, true);
     }
     return true;
+  }
+  /** Native history-vector destruction releases every retained unique entry. @returns Nothing. */
+  public Dispose(): void {
+    for (const entry of this.m_SwpHstry.splice(0)) entry.Dispose();
+    this.m_nEndDiff = 0;
   }
   /** Re-enables retained text entries for another undo cycle. @param end - New active end. @returns Previous active end. */
   public SetTmpEnd(end: number): number {
@@ -367,6 +423,29 @@ export class SwRegHistory extends SwClient {
             : undefined;
       if (set !== undefined) for (const item of set.entries()) this.m_WhichIdSet.add(item.Which());
     }
+  }
+  /** Original scoped range insertion records direct and ranged native mutations through this registered node. @param set - Original set. @param start - Native start. @param end - Native end. @param mode - Original flags. @param output - Optional first text-attribute pointer. @returns Native setter result. */
+  public InsertItems(
+    set: SfxItemSet,
+    start: number,
+    end: number,
+    mode: SetAttrMode,
+    output?: TextAttributeOutput,
+  ): boolean {
+    if (!set.Count()) return false;
+    const node = this.GetRegisteredIn();
+    if (!(node instanceof SwTextNode)) return false;
+    if (this.m_pHistory !== undefined) node.GetOrCreateSwpHints().Register(this);
+    const inserted = node.SetAttr(set, start, end, mode, output);
+    if (this.m_pHistory !== undefined) node.GetpSwpHints()?.DeRegister();
+    return inserted;
+  }
+  /** Original ranged-attribute history forwarding uses the registered native node slot. @param hint - Actual old or new attribute. @param isNew - Whether record its exact reset. @returns Nothing. */
+  public AddHint(
+    hint: SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat>,
+    isNew: boolean,
+  ): void {
+    this.m_pHistory?.AddTextAttr(hint, this.m_nNodeIndex, isNew);
   }
   /** Records original old deltas only while a distinct new delta exists. @param source - Original emitting modify. @param hint - Borrowed source hint. @returns Nothing. */
   protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {

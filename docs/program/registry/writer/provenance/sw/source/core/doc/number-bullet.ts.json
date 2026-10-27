@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/doc/number-bullet.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-bullet.ts",
+          "marker": "GetDefBulletFont"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/number.cxx",
+          "marker": "GetDefBulletFont"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/doc/number.cxx",
+    "localSymbols": [
+      "GetDefBulletFont",
+      "GetBulletChar"
+    ],
+    "upstreamSymbols": [
+      "GetDefBulletFont",
+      "GetBulletChar",
+      "SwDefBulletConfig::InitFont"
+    ],
+    "preservedResponsibilities": [
+      "Shipped Writer bullet configuration resource fields and native font/glyph defaults; dynamic ConfigItem subscription is outside the current resource binding."
+    ],
+    "omittedResponsibilities": [
+      "Full compiled Writer parity and unrepresented character families remain unverified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/doc/number-bullet.ts",
+      "rationale": "Shipped Writer bullet configuration resource fields and native font/glyph defaults; dynamic ConfigItem subscription is outside the current resource binding.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

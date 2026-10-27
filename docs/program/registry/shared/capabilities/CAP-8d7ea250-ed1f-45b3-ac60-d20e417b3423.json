@@ -10,15 +10,15 @@
     "maturity": "implemented",
     "assertions": [
       "Original and effective pool defaults remain distinct through actual saved metadata and user entries.",
-      "Native first insertion,equality replacement,reset,secondary ownership and existing logical item binding are preserved without new lifetime machinery."
+      "Native first insertion,equality replacement,reset,secondary ownership and existing logical item binding are preserved through the registered native lifetime binding."
     ],
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. Native refcount/cache/allocator/deletion machinery is erased under GC without a new counter/lifetime framework. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
+      "rationale": "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. S3HW1E moves the helper implementation to its original globalpool.cxx owner and restores logical item reference counts, registered entry cleanup and explicit destructor binding. Global instance-manager interning, remaining native held-item sharing, surrogate registration, allocator and full shutdown services remain unported or unverified. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
     },
     "capability": "Native item-pool user defaults",
     "gaps": [
-      "Physical pool/item interned-pointer/refcount/deletion/destructor timing and invalid post-failure cleanup outcomes are not simulated. No new lifetime/cache manager.",
+      "Full native interned-pointer/cache/allocator/shutdown behavior and invalid post-failure cleanup outcomes remain unverified. Registered logical item counts and ordinary destructor timing now have focused tests.",
       "Full native named/copy/shutdown pool ownership,Sc style/page defaults callers/document/connected UI/ODS remain pending.",
       "First creation stores original metadata before potentially throwing entry construction; source ordering is preserved,without a claimed normal cleanup outcome after that failure.",
       "User-default fixtures are source-derived; native Calc screenshot range/item-set usage is supporting QA context,not a claimed user-default QA suite port."
@@ -30,7 +30,7 @@
           "marker": "ItemInfoUser"
         },
         {
-          "path": "apps/office/src/svl/source/items/itemset.ts",
+          "path": "apps/office/src/svl/source/items/globalpool.ts",
           "marker": "export function implCreateItemEntry"
         }
       ],
@@ -42,6 +42,10 @@
         {
           "path": "apps/office/e2e/shared/user-defaults.spec.ts",
           "marker": "separates original and effective"
+        },
+        {
+          "path": "apps/office/src/svl/source/items/native-item-entry-lifetime.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "docs": [
@@ -94,7 +98,7 @@
     "aspect": "model-operation",
     "atomicOperation": "native-item-pool-user-defaults",
     "scopeLimitations": [
-      "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. Native refcount/cache/allocator/deletion machinery is erased under GC without a new counter/lifetime framework. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
+      "Task175 implements actual ItemInfoUser and native SfxItemPool Set/Get/ResetUserDefaultItem required by ScStyleSheet page defaults. Preserve saved original metadata, first equal-value override creation, replacement equality no-op, target-pool entry construction, effective lookup and repeated reset across secondary pools. GetPoolDefaultItem now returns the original saved static/dynamic value while GetUserOrPoolDefaultItem/GetUserDefaultItem expose the effective override. ItemInfoUser, ordinary SfxPoolItemHolder and SfxItemSet.Put share canonical implCreateItemEntry. Existing logical binding now uses the native master pool for scalar, slot and nested-set clones; held-copy association remains the private binding. Explicit Put preserves original static/dynamic default classification even under user overrides. Other existing value algorithms retain emitted tokens. S3HW1E moves the helper implementation to its original globalpool.cxx owner and restores logical item reference counts, registered entry cleanup and explicit destructor binding. Global instance-manager interning, remaining native held-item sharing, surrogate registration, allocator and full shutdown services remain unported or unverified. Original first-create save-before-construction ordering is retained; only defined replacement-failure behavior is tested and first-create exception cleanup has no claimed outcome. Existing separate browser snapshot registry is preserved without inventing native metadata. Full named/copy/shutdown pool contracts,Sc styles/document/connected UI/ODS remain pending; broad parity stays unverified."
     ],
     "implemented": true,
     "contractParity": false,

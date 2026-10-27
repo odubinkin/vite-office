@@ -4,6 +4,7 @@ import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
 import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import type { SwStartNode } from "../../core/docnode/node";
 import { equalWriterHyperlinks } from "../../core/txtnode/fmtatr2";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
@@ -51,6 +52,8 @@ export class RtfDocumentImpl {
     Readonly<{
       name: string;
       character: WriterCharacterAttributes;
+      autoKerning?: boolean;
+      baselineHalfPoints?: number;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
@@ -58,6 +61,7 @@ export class RtfDocumentImpl {
     }>
   >();
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
+  protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
   protected currentListLevels: {
@@ -127,6 +131,8 @@ export class RtfDocumentImpl {
     collection: SwTextFormatColl,
     definition: {
       character: WriterCharacterAttributes;
+      autoKerning?: boolean;
+      baselineHalfPoints?: number;
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
@@ -164,6 +170,8 @@ export class RtfDocumentImpl {
       previous !== undefined &&
       equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
       equalControls(previous.controls, state.characterControls) &&
+      previous.autoKerning === state.autoKerning &&
+      previous.baselineHalfPoints === state.baselineHalfPoints &&
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
@@ -171,6 +179,10 @@ export class RtfDocumentImpl {
       this.runs.push({
         text: value,
         attributes: { ...state.character },
+        ...(state.baselineHalfPoints === undefined
+          ? {}
+          : { baselineHalfPoints: state.baselineHalfPoints }),
+        ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
         controls: new Set(state.characterControls),
         ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
       });

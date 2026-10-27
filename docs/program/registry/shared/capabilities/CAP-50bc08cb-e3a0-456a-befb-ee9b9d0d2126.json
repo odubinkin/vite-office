@@ -29,7 +29,7 @@
           "marker": "restoreFontMetadata"
         },
         {
-          "path": "apps/office/src/sw/browser/filter/xml/writer-document-codec.ts",
+          "path": "apps/office/src/sw/browser/filter/xml/writer-number-format-codec.ts",
           "marker": "encodeFontMetadata(font)"
         }
       ],

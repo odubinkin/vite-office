@@ -18,16 +18,25 @@
       "evidence": [
         "apps/office/src/sal/textenc/tcvtutf7.ts#ImplUTF7ToUnicode",
         "vendor/libreoffice-reference/sal/textenc/tcvtutf7.cxx#ImplUTF7ToUnicode",
-        "apps/office/src/sal/textenc/tcvtutf7.test.ts#decodes direct bytes, shifted UTF-16 units and escaped plus"
+        "apps/office/src/sal/textenc/tcvtutf7.test.ts#decodes direct bytes, shifted UTF-16 units and escaped plus",
+        "apps/office/src/sal/textenc/tcvtutf7.ts#ImplUnicodeToUTF7",
+        "apps/office/src/sal/textenc/tcvtutf7.encode.test.ts",
+        "apps/office/src/sal/textenc/tcvtutf7.encode.native.json",
+        "scripts/sal-utf7-native-probe.mjs"
       ],
-      "justification": "Pinned UTF-7 text-to-Unicode state machine, Base64 indices, bad-input status and context contract. Upstream disables context restoration; preserved and documented. Reverse conversion lies outside RTF import. Compiled upstream differential remains unverified.",
+      "justification": "Pinned original forward converter and documented source context behavior remain preserved. Original reverse UTF-7 shift/Base64 state machine, exact must-shift table including form-feed/carriage-return distinction, ignored flags, partial destination writes, source consumption and disabled context restoration. Compiled unchanged C++ with ASan/UBSan agrees on 589824 BMP/capacity cases and 240 mixed vectors. Original owner bodies use primitive SAL type bindings only; this does not certify full SAL ABI or generic string integration. Forward compiled differential and full format orchestration remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "ImplUTF7ToUnicode",
         "ImplUTF7CreateUTF7TextToUnicodeContext",
         "ImplUTF7ResetTextToUnicodeContext",
         "ImplUTF7DestroyTextToUnicodeContext",
-        "ImplUTF7ToUCContextData"
+        "ImplUTF7ToUCContextData",
+        "ImplUnicodeToUTF7",
+        "ImplUTF7CreateUnicodeToTextContext",
+        "ImplUTF7ResetUnicodeToTextContext",
+        "ImplUTF7DestroyUnicodeToTextContext",
+        "ImplUTF7FromUCContextData"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sal/textenc/tcvtutf7.cxx",
@@ -36,7 +45,12 @@
         "ImplUTF7CreateUTF7TextToUnicodeContext",
         "ImplUTF7ResetTextToUnicodeContext",
         "ImplUTF7DestroyTextToUnicodeContext",
-        "ImplUTF7ToUCContextData"
+        "ImplUTF7ToUCContextData",
+        "ImplUnicodeToUTF7",
+        "ImplUTF7CreateUnicodeToTextContext",
+        "ImplUTF7ResetUnicodeToTextContext",
+        "ImplUTF7DestroyUnicodeToTextContext",
+        "ImplUTF7FromUCContextData"
       ]
     }
   }

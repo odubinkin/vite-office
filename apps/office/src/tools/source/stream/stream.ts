@@ -51,6 +51,22 @@ export class SvStream {
     return bytes.length;
   }
 
+  /** Original std::string_view write uses raw bytes and its logical length, including embedded NUL. The existing byte-string binding carries bytes as code units. @param value - Byte string view. @returns This stream. */
+  WriteOString(value: string): SvStream {
+    this.WriteBytes(Uint8Array.from(value, (unit) => unit.charCodeAt(0) & 0xff));
+    return this;
+  }
+
+  /** Original char write narrows to one byte before stream output. @param value - Native char byte or single-byte character. @returns This stream. */
+  WriteChar(value: number | string): SvStream {
+    return this.WriteUChar(typeof value === "number" ? value : value.charCodeAt(0));
+  }
+
+  /** Original integer instantiations of WriteNumberAsString serialize OString decimal text. @param value - Admitted native integer. @returns This stream. */
+  WriteNumberAsString(value: number): SvStream {
+    return this.WriteOString(value.toString());
+  }
+
   /** Source WriteUChar byte output used by the optional UTF-8 BOM. @param value - Native unsigned byte. @returns This stream. */
   WriteUChar(value: number): SvStream {
     this.WriteBytes(Uint8Array.of(value & 0xff));
@@ -137,6 +153,41 @@ export class SvStream {
   Seek(position: number): void {
     this.position = position;
     this.endOfFile = false;
+  }
+
+  /** Native relative byte seek used by parser lookahead rollback. @param offset - Signed byte delta. @returns Nothing. */
+  SeekRel(offset: number): void {
+    this.Seek(this.position + offset);
+  }
+
+  /** Native in-memory read status; this binding has no device/pending errors. @returns Whether the preceding read succeeded. */
+  good(): boolean {
+    return !this.endOfFile;
+  }
+
+  /** Reads one native signed char and sets EOF only after an unsuccessful read. @param output - Original char reference. @returns This stream. */
+  ReadChar(output: [number]): SvStream {
+    const value = this.bytes[this.position];
+    if (value === undefined) {
+      this.endOfFile = true;
+      return this;
+    }
+    this.position++;
+    output[0] = (value << 24) >> 24;
+    return this;
+  }
+
+  /** Reads one UTF-16 unit using the stream's existing endian setting. @param output - Original unit reference. @returns This stream. */
+  ReadUtf16(output: [number]): SvStream {
+    const first: [number] = [0],
+      second: [number] = [0];
+    this.ReadChar(first);
+    this.ReadChar(second);
+    if (this.good())
+      output[0] = this.bigEndian
+        ? ((first[0] & 255) << 8) | (second[0] & 255)
+        : (first[0] & 255) | ((second[0] & 255) << 8);
+    return this;
   }
 
   /** Native EOF flag becomes set after an unsuccessful read. @returns EOF. */

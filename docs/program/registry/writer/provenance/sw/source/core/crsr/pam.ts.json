@@ -40,6 +40,10 @@
         {
           "path": "apps/office/src/sw/source/core/crsr/native-search-replace.test.ts",
           "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/crsr/pam-selection.test.ts",
+          "marker": "global section"
         }
       ],
       "upstream": [
@@ -74,6 +78,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/crsr/pam.cxx",
           "marker": "SwPosition::Assign( const SwNode&"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/docnode/nodes.cxx",
+          "marker": "startOfGlobalSection"
         }
       ]
     },
@@ -88,7 +96,8 @@
       "getWriterSelectedTextRanges",
       "Normalize",
       "GoNextPos",
-      "GoPreviousPos"
+      "GoPreviousPos",
+      "CheckNodesRange"
     ],
     "omittedResponsibilities": [
       "Upstream obligations outside SwNodeIndex, SwPosition, SwPaM, SwPosition::SwPosition and the bounded SwNodeIndex, SwPosition, SwPaM contract remain intentionally omitted."
@@ -103,7 +112,8 @@
       "Iteration216 verified bounded label-affinity roundtrip: native SwPaM owns defaultfalse state, shell SetPaM/UpdateCursor distinguish label from identical text0 and publish final owners; ordinary Insert clears affinity as Insert2. Browser restores stable editable DOM boundary after the noneditable decoration with distinct native BEFORE-label affinity, keeps marker glyphs out of model offsets and paints caret at label edge; pointer label admission and native history covered. Whole marked-list-level shading/ruler/RTL/bidi/layout and kernel/browser parity remain individually unverified; prior states/defaults/registered exceptions unchanged.",
       "Search task6B984M adds actual SwPaM::Normalize: exchange only when the point/mark order differs from requested bPointFirst; do not mutate selection extent or collapse marks. Portable source contract tests cover both orientations, repeated calls and collapsed selections.",
       "Leaf4586BY adds the actual consumed bChk=false content-node movement of GoNextPos/GoPreviousPos, both assigning content offset zero. These are real node moves across represented content sections; checked movement and full native range validation are not claimed.",
-      "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion."
+      "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion.",
+      "Native CheckNodesRange fixed-section classification and non-body second-level admission; GoNextPos/GoPreviousPos checked and unchecked profiles preserve source zero-offset assignment and reject before moving. Previous-node lookup now honors the native global-section lower bound for represented node kinds. Fly/header/footer/footnote specialized start-node lookup and general SwPaM.Move/character iteration remain outside this consumed branch."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/pam.cxx",
@@ -114,7 +124,8 @@
       "SwPosition::SwPosition",
       "Normalize",
       "GoNextPos",
-      "GoPreviousPos"
+      "GoPreviousPos",
+      "CheckNodesRange"
     ]
   },
   "legacyOrder": 153

@@ -58,7 +58,7 @@ describe("internet text node ownership", /** Registers actual node ownership bou
     expect(made.GetpTextNode()).toBeUndefined();
     expect(made.format.GetTextINetFormat()).toBe(made);
   });
-  it("binds replacements and detaches retained old maps and caller input", /** Checks independent replacement and old map detachment. @returns Nothing. */ function replaceMap(): void {
+  it("binds replacements, destroys old owned maps and keeps caller snapshots detached", /** Checks independent replacement and old map detachment. @returns Nothing. */ function replaceMap(): void {
     const doc = new SwDoc(),
       a = node(doc),
       old = required(a.GetpSwpHints()),
@@ -74,8 +74,8 @@ describe("internet text node ownership", /** Registers actual node ownership bou
     expect(fresh.format).not.toBe(original.format);
     expect(fresh.IsPriorityAttr()).toBe(true);
     expect(original.GetpTextNode()).toBeUndefined();
-    expect(original.m_pHints).toBe(old);
-    expect(old.Get(0)).toBe(original);
+    expect(original.m_pHints).toBeUndefined();
+    expect(old.Count()).toBe(0);
     expect(detached.GetpTextNode()).toBeUndefined();
     expect(detached.m_pHints).toBe(input);
     current.replace(input.entries());

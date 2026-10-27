@@ -27,3 +27,16 @@ it("admits original style label language and Writer complex-color dependencies",
   expect(isForbiddenModuleEdge("i18nlangtag", "svx")).toBe(true);
   expect(isForbiddenModuleEdge("docmodel", "sw")).toBe(true);
 });
+
+it("admits original font configuration enum ownership without application dependencies", () => {
+  expect(isForbiddenModuleEdge("unotools", "tools")).toBe(false);
+  expect(isForbiddenModuleEdge("unotools", "sw")).toBe(true);
+  expect(isForbiddenModuleEdge("tools", "sw")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation(
+      "unotools/source/config/fontcfg.ts",
+      "framework/browser/app/desktop.tsx",
+      "../../../../framework/browser/app/desktop",
+    ),
+  ).toMatch(/browser adapters/u);
+});

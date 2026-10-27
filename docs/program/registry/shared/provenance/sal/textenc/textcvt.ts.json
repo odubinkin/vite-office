@@ -8,17 +8,43 @@
     "upstreamPath": "sal/textenc/textcvt.cxx",
     "localSymbols": [
       "ImplDummyToUnicode",
-      "ImplUnicodeToDummy"
+      "ImplUnicodeToDummy",
+      "rtl_createTextToUnicodeConverter",
+      "rtl_destroyTextToUnicodeConverter",
+      "rtl_createTextToUnicodeContext",
+      "rtl_resetTextToUnicodeContext",
+      "rtl_destroyTextToUnicodeContext",
+      "rtl_createUnicodeToTextConverter",
+      "rtl_destroyUnicodeToTextConverter",
+      "rtl_createUnicodeToTextContext",
+      "rtl_resetUnicodeToTextContext",
+      "rtl_destroyUnicodeToTextContext",
+      "rtl_convertTextToUnicode",
+      "rtl_convertUnicodeToText"
     ],
     "upstreamSymbols": [
       "ImplDummyToUnicode",
-      "ImplUnicodeToDummy"
+      "ImplUnicodeToDummy",
+      "rtl_createTextToUnicodeConverter",
+      "rtl_destroyTextToUnicodeConverter",
+      "rtl_createTextToUnicodeContext",
+      "rtl_resetTextToUnicodeContext",
+      "rtl_destroyTextToUnicodeContext",
+      "rtl_createUnicodeToTextConverter",
+      "rtl_destroyUnicodeToTextConverter",
+      "rtl_createUnicodeToTextContext",
+      "rtl_resetUnicodeToTextContext",
+      "rtl_destroyUnicodeToTextContext",
+      "rtl_convertTextToUnicode",
+      "rtl_convertUnicodeToText"
     ],
     "preservedResponsibilities": [
-      "Both original missing-converter fallbacks preserve native buffer, explicit source span, output capacity, conversion flags, status-cell and consumed-counter contracts. Byte-to-UTF16 conversion zero-extends unsigned bytes; reverse conversion retains each UTF16 unit low byte. Early undefined-error paths preserve prior status bits and leave consumed counters untouched."
+      "Both original missing-converter fallbacks preserve native buffer, explicit source span, output capacity, conversion flags, status-cell and consumed-counter contracts. Byte-to-UTF16 conversion zero-extends unsigned bytes; reverse conversion retains each UTF16 unit low byte. Early undefined-error paths preserve prior status bits and leave consumed counters untouched.",
+      "Native text-to-Unicode descriptor/context API now dispatches the existing source converters, retaining null handles, the pointer-one stateless sentinel, real UTF8/UTF7/ISCII/ISO-2022 contexts, reset behavior, native flag admission and missing-converter fallback. Four direct HTML/SvParser tests and one factory/streaming dispatch test exercise the new consumer. Context storage is released by GC; this is not native pointer/allocation ABI parity.",
+      "Native reverse converter/context APIs now route every represented descriptor family to actual Unicode-to-text owners, preserving shared forward/reverse descriptor identity, unsigned16 IDs, null handles, stateless pointer-one context, original reverse flag assertion domain, reset/destruction guards and missing-converter fallback. JIS X0201 retains its source null forward callback; the JS binding throws instead of substituting a forward service for an undefined native call. Context memory uses GC and does not certify native pointer/allocation ABI. Generic checked string wrappers and unrepresented encoding families remain open."
     ],
     "omittedResponsibilities": [
-      "Full rtl converter factory, lifecycle and context dispatch remain outside this fallback owner. Compiled upstream differential verification remains pending."
+      "Complete SAL registry families and native allocation/ABI/full service differential verification remain unverified. Checked string wrappers and Writer orchestration are separate pending owners."
     ],
     "evidence": {
       "local": [
@@ -37,6 +63,18 @@
         {
           "path": "apps/office/src/sal/textenc/textcvt.test.ts",
           "marker": "retains reverse early-error status"
+        },
+        {
+          "path": "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+          "marker": "reads UTF-8 scalars"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.factory.test.ts",
+          "marker": "dispatches native reverse bytes"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/textcvt.ts",
+          "marker": "rtl_convertUnicodeToText"
         }
       ],
       "upstream": [
@@ -47,6 +85,10 @@
         {
           "path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
           "marker": "ImplUnicodeToDummy"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sal/textenc/textcvt.cxx",
+          "marker": "rtl_convertUnicodeToText"
         }
       ]
     }

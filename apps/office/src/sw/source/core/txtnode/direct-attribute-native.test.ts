@@ -9,6 +9,7 @@ import type { SwNodeNum } from "../SwNumberTree/SwNodeNum";
 import { SwTextFormatColl } from "../doc/fmtcol";
 import { SwNumRuleItem } from "../para/paratr";
 import { SwNumRuleType } from "../doc/number";
+import { createWriterNumRule } from "../doc/DocumentListsManager";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SfxBoolItem } from "../../../../svl/source/items/cenumitm";
 import { SfxInt16Item, SfxUInt16Item } from "../../../../svl/source/items/intitem";
@@ -30,6 +31,9 @@ it("matches unchanged native pre/post handlers before validating counter reads",
         i,
       ) => doc.EnsureNumRule(name, i === 1 ? "bullet" : "numbered"),
     );
+    // The native handler witness explicitly initializes ten numbered outline levels and its fixture list ID.
+    required(rules[2]).Assign(createWriterNumRule("Outline", "numbered"));
+    required(rules[2]).SetDefaultListId("Outline");
     required(rules[2]).SetRuleType(SwNumRuleType.OUTLINE_RULE);
     const styles = Array.from(
       { length: 3 },

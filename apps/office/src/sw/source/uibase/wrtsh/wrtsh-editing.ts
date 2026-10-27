@@ -238,43 +238,50 @@ export function ReplaceRange(
   )
     throw new Error("Writer text range is outside the paragraph.");
   const removedFragment = paragraph.CaptureTextFragment(range.start, range.end);
-  if (removedFragment.text === replacement.text && removedFragment.hints.equals(replacement.hints))
-    return false;
-  const before = shell.CaptureCursorState(),
-    after = shell.CreateCollapsedCursorState(paragraph, range.start + replacement.text.length);
-  if (removedFragment.text === replacement.text)
-    return shell.ApplyAction(
-      new SwUndoAttr(paragraph, range.start, removedFragment, replacement, before, after),
+  try {
+    if (
+      removedFragment.text === replacement.text &&
+      removedFragment.hints.equals(replacement.hints)
+    )
+      return false;
+    const before = shell.CaptureCursorState(),
+      after = shell.CreateCollapsedCursorState(paragraph, range.start + replacement.text.length);
+    if (removedFragment.text === replacement.text)
+      return shell.ApplyAction(
+        new SwUndoAttr(paragraph, range.start, removedFragment, replacement, before, after),
+      );
+    const action = new SfxListUndoAction<SwUndoRedoContext>(
+      replacement.text.length === 0 ? "Delete" : "Paste",
     );
-  const action = new SfxListUndoAction<SwUndoRedoContext>(
-    replacement.text.length === 0 ? "Delete" : "Paste",
-  );
-  const atStart = shell.CreateCollapsedCursorState(paragraph, range.start);
-  if (removedFragment.text.length !== 0)
-    action.AddAction(
-      new SwUndoDelete(
-        paragraph,
-        range.start,
-        removedFragment.text,
-        "delete",
-        undefined,
-        before,
-        replacement.text.length === 0 ? after : atStart,
-      ),
-    );
-  if (replacement.text.length !== 0)
-    action.AddAction(
-      new SwUndoInsert(
-        paragraph,
-        range.start,
-        replacement,
-        undefined,
-        removedFragment.text.length === 0 ? before : atStart,
-        after,
-        SwInsertFlags.DEFAULT,
-      ),
-    );
-  return shell.ApplyAction(action);
+    const atStart = shell.CreateCollapsedCursorState(paragraph, range.start);
+    if (removedFragment.text.length !== 0)
+      action.AddAction(
+        new SwUndoDelete(
+          paragraph,
+          range.start,
+          removedFragment.text,
+          "delete",
+          undefined,
+          before,
+          replacement.text.length === 0 ? after : atStart,
+        ),
+      );
+    if (replacement.text.length !== 0)
+      action.AddAction(
+        new SwUndoInsert(
+          paragraph,
+          range.start,
+          replacement,
+          undefined,
+          removedFragment.text.length === 0 ? before : atStart,
+          after,
+          SwInsertFlags.DEFAULT,
+        ),
+      );
+    return shell.ApplyAction(action);
+  } finally {
+    removedFragment.hints.Dispose();
+  }
 }
 
 /** Reads plain clipboard text through native cursor rings and document-insertion history. @param text - Plain clipboard text. @param shell - Actual native cursor, document and history owner. @returns Whether imported. */

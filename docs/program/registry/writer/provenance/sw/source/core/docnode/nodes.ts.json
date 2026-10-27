@@ -168,6 +168,10 @@
         {
           "path": "apps/office/src/sw/source/core/unocore/native-text-import-api.test.ts",
           "marker": "describe("
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-owner.test.ts",
+          "marker": "creates the persistent outline rule"
         }
       ],
       "upstream": [
@@ -278,6 +282,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/uibase/docvw/edtwin.cxx",
           "marker": "case KEY_TAB:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+          "marker": "mpOutlineRule = new SwNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "void SwDoc::AddNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
+          "marker": "void DocumentListsManager::createListForListStyle"
         }
       ]
     },
@@ -285,7 +301,9 @@
     "localSymbols": [
       "SwNodes",
       "SwTableRowSection",
-      "SwTableBoxSection"
+      "SwTableBoxSection",
+      "GoNext",
+      "GoPrevious"
     ],
     "omittedResponsibilities": [
       "Native layout expansion,redline/original/undo arrays,continuous trees,configurable phantom policy,complete callbacks/reading suppression,word-count/native lifetime machinery and legacy/default factories remain unverified."
@@ -312,7 +330,9 @@
       "Iteration244 connects actual SwFrame and SwLayoutFrame registration and original linked lower/sibling pointers. SwRowFrame constructs SwCellFrame children; native box claims retarget matching physical clients before model registration and history moves original cell frames. Recursive flat layout teardown and actual cell deletion release registrations; JSX, collapsing border paint and width measurement borrow registered native format items and release frames in finally. Full native geometry, flags, invalidation, content, follows, accessibility, fly/root and UNO remain unverified. Targeted verification pending; last full237,next247; prior metadata status/default/classification and registered I/O/recovery deviations preserved.",
       "Iteration244 verified1318 unique app cases including12 fresh linked-frame ownership, claim ordering, transaction/history, deletion and main rendering/lifetime cases, plus25 Chromium cases. All657 prior acceptance files remain byte-identical; no passing runtime replay. Build/runtime upstream physically absent and restored finally; one fresh CSS-unit expectation corrected in a failed-only closure1pass2skip. Actual app/inventory all-four100% coverage binds current source/maps and complete unchanged declarations/bodies/enclosing branches/all locations from243. Invalid focused V8 painter inferred-else counters are retained raw; the entire valid initial current-byte-identical painter maps/counters already all-four100 supply that module, without counter sanitization. Prior316 metadata fields/order/status/default/classification/evidence prefixes retained; new wsfrm module unverified, inserted into required runtime order. Full native geometry/flags/invalidation/content/follows/accessibility/fly/root/UNO and whole project parity remain partial. Registered I/O/recovery deviations preserved; last full237,next247; no full244.",
       "Correction WGQ8944/10 after full baseline SZKQTN moves native width ownership to original RES_FRM_SIZE items and registers SwTable as an original SwClient. Direct, inherited, legacy and existing batched deltas resize original independent boxes with source cumulative integer rounding; paired native table lock prevents separator adjustment from general double-scaling. Complete new cell sizes use Variable width/zero-height as swtable.cxx. SaveTable owns/restores direct original frame item sets under native locks and invalidates actual original frames instead of replaying a scalar width adapter. Connected deletion releases original physical and model clients; React captures render-time table keys before native owner death. Native frame formatting/document separator normalization read effective original size, ignoring stale transport width. Existing SwTableBox and SwTableLine class bodies are physically separated into swtable-boxline.ts to honor the unchanged authored-file size gate, with original class identities and exports retained and no forwarding adapter. Full orientation/spacing/frame-type/default/copy/Repeat/master/follow/nested/merged/root/VCL families remain unrepresented/unverified; missing-size flat-builder fallback remains an explicit unverified boundary. All prior status/default/classification/evidence/responsibility prefixes and registered recovery/open/save/settings deviations preserved; no whole-module or goal promotion. Actual final-source targeted verification is recorded in task202610091947-WGQ894.",
-      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim."
+      "Task202610231627-0F8SYR: Writer import API attachment uses canonical document/nodes/registered positions/items rather than a separate document representation. Connect the existing native owner to import-facing text/range/style/table/numbering APIs. Only the current canonical Writer core slice is represented. Full UNO service metadata/query interfaces, listeners, interactive undo/actions, Unicode cursor navigation, layout, unsupported character/table/conditional styles, ranges in unsupported sections, expanded bookmarks and wider properties remain unverified or unported. DomainMapper, OOXML package parser and export are outside this task; no whole-module parity claim.",
+      "Native SwNodes.GoNext/GoPrevious content lookup overloads for actual node indices and positions. Original goNext/goPrevious lookup and global-section bounds are split into nodes.navigation.ts to keep TypeScript module initialization independent of the table/cursor inheritance graph. The explicit canCrossBoundary flag is retained; specialized fly/header/footer/footnote lookup remains outside represented node kinds.",
+      "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/docnode/nodes.cxx",
@@ -320,7 +340,9 @@
       "SwNodes",
       "SwNodes::SwNodes",
       "SwNodes::~SwNodes",
-      "SwNodes::ChgNode"
+      "SwNodes::ChgNode",
+      "GoNext",
+      "GoPrevious"
     ]
   },
   "legacyOrder": 180

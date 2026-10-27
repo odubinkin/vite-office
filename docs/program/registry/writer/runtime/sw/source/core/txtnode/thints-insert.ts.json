@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+        "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+        "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts"
+      ],
+      "justification": "Original three-family InsertHint/TryInsertHint decisions retain insertion-time actual owner/style binding, DONTEXPAND, endpoint swap, XML/NOHINTADJUST portion/merge decisions, explicit history, native changed-family notification and input-identity-independent success. This is a responsibility split of the large native thints owner. Dummy/content-bearing hints, RSID/hidden values and their native producers remain unrepresented. The existing browser event sink is used when no native Writer listener exists; no native layout/history service is synthesized. S3HW1E DestroyTextNodeAttribute releases its actual owned item after represented listener cleanup, including shared automatic-style ownership. Complete unrepresented hint families and all destruction callers remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InsertTextNodeHint",
+        "TryInsertTextNodeHint",
+        "DestroyTextNodeAttribute"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/thints.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::InsertHint",
+        "SwpHints::TryInsertHint"
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svtools/source/svhtml/htmlkywd.ts",
+    "upstreamPath": "svtools/source/svhtml/htmlkywd.cxx",
+    "localSymbols": [
+      "GetHTMLToken",
+      "GetHTMLCharName",
+      "GetHTMLOption",
+      "GetHTMLColor"
+    ],
+    "upstreamSymbols": [
+      "GetHTMLToken",
+      "GetHTMLCharName",
+      "GetHTMLOption",
+      "GetHTMLColor"
+    ],
+    "preservedResponsibilities": [
+      "Native HTML import foundation for Markdown raw HTML: pinned token/option/entity/color tables, mutable option scanners, text/entity/quote/whitespace automaton, raw script/style/comment scanner, paired-token/tag/EOF scanner, PRE/listing/XMP filters, and shared SvParser incremental character conversion, ring replay and saved state. Uses existing SAL converter functions and the native descriptor/context public API; no browser DOM grammar. Source-only tests currently pass; compiled upstream lexer differential and Writer HTMLReader integration remain pending. The memory stream has no asynchronous device, redline/layout or native allocation lifetime. Its BOM-only probe covers the internal UTF-8 HTML data supplied by Markdown; a general external HTML/ICU encoding detector is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Compiled lexer differential, native byte/device allocation ABI and full Writer HTML/CSS integration remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svtools/source/svhtml/htmlkywd.ts",
+          "marker": "GetHTMLToken"
+        },
+        {
+          "path": "apps/office/src/svtools/source/svhtml/parhtml.test.ts",
+          "marker": "retains native lookup sentinels"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svtools/source/svhtml/htmlkywd.cxx",
+          "marker": "GetHTMLToken"
+        }
+      ]
+    }
+  }
+}

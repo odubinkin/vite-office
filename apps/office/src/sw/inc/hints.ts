@@ -93,6 +93,7 @@ export class TableHeadingChange implements BrowserNotificationPayload {
 }
 /** Atomic Writer notifications emitted by model and shell boundaries. */
 export type SwAtomicModelHint =
+  | UpdateAttrHint
   | LegacyModifyHint
   | ModifyChangedHint
   | ObjectDyingHint
@@ -193,5 +194,48 @@ export class AttrSetChangeHint implements BrowserNotificationPayload {
   public constructor(
     public readonly m_pOld: SwAttrSetChg | undefined,
     public readonly m_pNew: SwAttrSetChg | undefined,
+  ) {}
+}
+
+/** Native range-update value, separate from the pool item hierarchy. */
+export class SwUpdateAttr {
+  private readonly start: number;
+  private readonly end: number;
+  private readonly which: number;
+  private readonly fmtAttrs: readonly number[];
+  /** Retains logical signed32 positions, unsigned16 Which and owned changed-family list. @param start - Inclusive range. @param end - Exclusive range. @param which - Changed family. @param fmtAttrs - Explicit automatic-format families. @returns Value. */
+  constructor(start: number, end: number, which: number, fmtAttrs: readonly number[] = []) {
+    this.start = start | 0;
+    this.end = end | 0;
+    this.which = which & 0xffff;
+    this.fmtAttrs = fmtAttrs.map(
+      /** Copies native vector values by value. @param value - Family. @returns Unsigned16 value. */
+      (value) => value & 0xffff,
+    );
+  }
+  /** Returns the inclusive range start. @returns Position. */
+  getStart(): number {
+    return this.start;
+  }
+  /** Returns the exclusive range end. @returns Position. */
+  getEnd(): number {
+    return this.end;
+  }
+  /** Returns the original family. @returns WhichId. */
+  getWhichAttr(): number {
+    return this.which;
+  }
+  /** Returns the owned changed-family values. @returns Native collection. */
+  getFmtAttrs(): readonly number[] {
+    return this.fmtAttrs;
+  }
+}
+/** Native old/new borrowed range update. */
+export class UpdateAttrHint {
+  readonly kind = "update-attr";
+  /** Borrows original range values for synchronous notification. @param m_pOld - Old value. @param m_pNew - New value. @returns Hint. */
+  constructor(
+    readonly m_pOld: SwUpdateAttr | undefined,
+    readonly m_pNew: SwUpdateAttr | undefined,
   ) {}
 }

@@ -17,14 +17,23 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
+import type { SwTextFormatColl } from "./fmtcol";
 import type { SwEditShell } from "../edit/ednumber";
+import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SwFormat } from "../attr/format";
 import type { SwList, WriterParagraphList, WriterParagraphListKind } from "./list";
 import { WRITER_MAX_LIST_LEVEL } from "./list";
 
 /** Numbering format owned by one level of a SwNumRule, with native base defaults and null client registration. */
 export class SwNumFormat extends SvxNumberFormat {
-  private readonly client = new SwClient();
+  private readonly client = new SwClient(
+    /** Dispatches the native numbering client's format and attribute notifications. @param source - Original owner. @param hint - Original hint. @returns Nothing. */
+    (_source, hint) => {
+      if (hint.kind !== "format-change" && hint.kind !== "attr-set-change") return;
+      const format = this.GetCharFormat();
+      if (format !== undefined && !format.GetDoc().IsInDtor()) this.UpdateNumNodes(format.GetDoc());
+    },
+  );
   /** Initializes native defaults or copies a const base format. @param format - Optional source format. @returns Nothing. */
   public constructor(format?: ConstSvxNumberFormat) {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
@@ -48,7 +57,31 @@ export class SwNumFormat extends SvxNumberFormat {
   public GetRegisteredIn(): SwModify | undefined {
     return this.client.GetRegisteredIn();
   }
-  /** Original virtual name query borrows only GetName from the registered native format base;the actual SwCharFormat owner remains unported. @returns Current registered name or empty. */
+  /** Native character-format registration used by list import and label rendering. @returns Registered character format or undefined. */
+  public GetCharFormat(): SwCharFormat | undefined {
+    return this.client.GetRegisteredIn() as SwCharFormat | undefined;
+  }
+  /** Registers with the native character owner or detaches. @param format - Character format. @returns Nothing. */
+  public SetCharFormat(format: SwCharFormat | undefined): void {
+    if (format !== undefined) this.client.RegisterToModify(format);
+    else this.client.EndListeningAll();
+  }
+
+  /** Invalidates the first owning rule's matching-level text clients in native reverse rule order. Existing NumRuleChgd only publishes layout invalidation, so the document modified flag is preserved. @param doc - Actual owner document. @returns Nothing. */
+  public UpdateNumNodes(doc: SwDoc): void {
+    const rules = doc.GetNumRuleTable();
+    for (let index = rules.length; index > 0;) {
+      const rule = rules[--index] as SwNumRule;
+      for (let level = 0; level < 10; level++) {
+        if (rule.GetNumFormat(level) !== constFormatReference(this)) continue;
+        const nodes: SwTextNode[] = [];
+        rule.GetTextNodeList(nodes);
+        for (const node of nodes) if (node.GetActualListLevel() === level) node.NumRuleChgd();
+        return;
+      }
+    }
+  }
+  /** Original virtual name query reads the registered format UI name. @returns Current registered name or empty. */
   public override GetCharFormatName(): string {
     const source = this.GetRegisteredIn() as (SwModify & Pick<SwFormat, "GetName">) | undefined;
     return source === undefined ? "" : source.GetName();
@@ -124,11 +157,7 @@ export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): 
   return glyph === 0 ? "" : String.fromCodePoint(glyph);
 }
 
-/** Returns the native default bullet configuration glyph at an unsigned-byte level. @param level - Native list level. @returns Configured default UTF16 glyph. */
-export function GetBulletChar(level: number): number {
-  const chars = [0x2022, 0x25e6, 0x25aa, 0x2022, 0x25e6, 0x25aa, 0x2022, 0x25e6, 0x25aa, 0x2022];
-  return chars[Math.min(9, level & 0xff)] as number;
-}
+export { GetBulletChar } from "./number-bullet";
 
 /** Const format reference: callers clone before changing an owned or shared level. */
 export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}` | "Assign">;
@@ -210,6 +239,7 @@ export class SwNumRule {
   private automatic = true;
   private readonly formats: (SwNumFormat | undefined)[] = Array.from({ length: 10 });
   private readonly textNodes: SwTextNode[] = [];
+  private readonly maParagraphStyleList: SwTextFormatColl[] = [];
   private invalidRuleFlag = true;
   private continusNum = false;
   private absSpaces = false;
@@ -300,6 +330,19 @@ export class SwNumRule {
     this.textNodes.splice(position, 1);
     if (this.invalidRuleFlag)
       node.GetDoc().GetDocumentListsManager().GetListByName(node.GetListId())?.InvalidateListTree();
+  }
+  /** Counts directly registered paragraph styles, independently of text-node use. @returns Native client count. */
+  public GetParagraphStyleListSize(): number {
+    return this.maParagraphStyleList.length;
+  }
+  /** Retains a paragraph-style client once, preserving native insertion order. @param collection - Actual style identity. @returns Nothing. */
+  public AddParagraphStyle(collection: SwTextFormatColl): void {
+    if (!this.maParagraphStyleList.includes(collection)) this.maParagraphStyleList.push(collection);
+  }
+  /** Removes the first matching native paragraph-style client. @param collection - Actual style identity. @returns Nothing. */
+  public RemoveParagraphStyle(collection: SwTextFormatColl): void {
+    const index = this.maParagraphStyleList.indexOf(collection);
+    if (index >= 0) this.maParagraphStyleList.splice(index, 1);
   }
   /** Reports pending rule validation. @returns Invalid-rule flag. */
   public IsInvalidRule(): boolean {

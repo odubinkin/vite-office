@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+        "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx"
+      ],
+      "justification": "Original language overlap and point-boundary policy, partial-first/full-later precedence, three-script Which selection and paragraph/application fallback. The absent no-hyphen owner returns LANGUAGE_DONTKNOW through its original independent query. Native INET GetCharFormat/visited URL style resolution and no-hyphen item producer are not registered; no synthetic style or hyphenation provider is introduced. Native Application settings use the established configured-language boundary.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetTextNodeLanguage"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/txtnode/thints.cxx",
+      "upstreamSymbols": [
+        "SwTextNode::GetLang"
+      ]
+    }
+  }
+}

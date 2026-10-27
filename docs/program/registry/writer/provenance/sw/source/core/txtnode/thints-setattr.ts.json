@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/core/txtnode/thints-setattr.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/thints-setattr.ts",
+          "marker": "SetTextNodeAttributes"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::SetAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::DontExpandFormat"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/core/txtnode/thints.cxx",
+    "localSymbols": [
+      "SetTextNodeAttributes",
+      "DontExpandTextNodeFormat"
+    ],
+    "upstreamSymbols": [
+      "SwTextNode::SetAttr"
+    ],
+    "preservedResponsibilities": [
+      "Original ranged item-set direct-versus-hints decisions, SfxItemIter traversal, first explicit output binding, automatic aggregation and default-character-style reset result. DontExpandFormat retains ndtxt.cxx end-order scan, optional FormatToTextAttr and old-only history."
+    ],
+    "omittedResponsibilities": [
+      "UNKNOWN_CONTAINER and other unregistered text families remain absent; no dummy or input-field producer is synthesized."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/core/txtnode/thints-setattr.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original ranged item-set direct-versus-hints decisions, SfxItemIter traversal, first explicit output binding, automatic aggregation and default-character-style reset result. DontExpandFormat retains ndtxt.cxx end-order scan, optional FormatToTextAttr and old-only history."
+    }
+  }
+}

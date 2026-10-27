@@ -190,7 +190,8 @@
       "Task9BAAAC follow-up removes the detached FindAll result transport: ordinary DoFind receives this cursor with original MakeFindRange endpoint orientation, preserves direct GetMark restoration including its unmarked GetPoint alias (WRITER-027), and does not alter undo recording through selection-loop cleanup. Selection/all strategies also receive the actual cursor; whole-body setup and result-ring transfer assign existing endpoint slots instead of replacing their position owners. Source generic visitors exercise saved-ring mark restoration through public initialized cursor operations. Existing point-only and failed-ring identity tests remain intact; no complete other-area/readonly/layout/native-service parity claim.",
       "Task9BAAAC source-scope follow-up: InSel success replaces the previous selection ring even without InSelAll. Other-area search retains its original saved point-only cursor on non-all success; default InSelAll starts before the body unless InBodyOnly is set. Actual plain inserts-section nodes exercise these bounded text/ring outputs. No-ring result fallback retains the point-only Create state, so the explicit final mark is collapsed; original empty-replacement progression,text and undo/redo checks remain and their earlier non-native final-mark expectation is corrected from source. Complete lcl_MakeSel helpers, real RingContainer merging, notes/fields/layout/readonly graph semantics and whole native ownership certification remain pending.",
       "Leaf BHWWEZ replaces copied/manual ring transport with consumed sw/inc/ring.hxx ownership. SwPaM derives from Ring; FindAll uses live original selections, actual virtual Create result identities, native result-ring merge/head deletion, source lcl_MakeSel entry predicates and continuation from current other-area point. Empty section, live sibling endpoints and original result member ownership are tested. Existing endpoint buffer/Assign storage, FillFindPos default global-boundary behavior, progress/UNO/layout/readonly/notes and full native SwCursor lifetime remain unverified; no whole-module promotion.",
-      "The native lcl_FindSelection restores its captured undo flag only on normal exit. A generic strategy exception after default RET_YES at60000 bypasses restoration (WRITER-029), so the former portable finally restoration is removed. Actual generic strategy/undo ownership exercises that boundary without a replacement search backend; concrete native consumer and outer exception behavior remain unverified."
+      "The native lcl_FindSelection restores its captured undo flag only on normal exit. A generic strategy exception after default RET_YES at60000 bypasses restoration (WRITER-029), so the former portable finally restoration is removed. Actual generic strategy/undo ownership exercises that boundary without a replacement search backend; concrete native consumer and outer exception behavior remain unverified.",
+      "Native lcl_MakeSelFwrd/lcl_MakeSelBkwrd use SwNodes.GoPrevious(position,true) for search-region construction, distinct from GoPreviousPos and its protected global bound. Replaces the pre-existing conflated helper while preserving all existing search fixture expectations."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/crsr/swcrsr.cxx",
@@ -204,7 +205,8 @@
       "FindAll",
       "FillFindPos",
       "SwFindParas",
-      "MaxReplaceArived"
+      "MaxReplaceArived",
+      "SwCursor"
     ]
   },
   "legacyOrder": 154

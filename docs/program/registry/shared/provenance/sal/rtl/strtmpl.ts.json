@@ -43,7 +43,8 @@
       "stringbuffer_newFromStringBuffer",
       "stringbuffer_ensureCapacity",
       "stringbuffer_insert",
-      "stringbuffer_remove"
+      "stringbuffer_remove",
+      "EmptyByteStringImpl"
     ],
     "upstreamSymbols": [
       "Alloc",
@@ -81,7 +82,8 @@
       "stringbuffer_newFromStringBuffer",
       "stringbuffer_ensureCapacity",
       "stringbuffer_insert",
-      "stringbuffer_remove"
+      "stringbuffer_remove",
+      "EmptyStringImpl"
     ],
     "preservedResponsibilities": [
       "Original RTL Unicode data and intern-pool dependency closure, shared once by Calc and future Writer consumers. Original initialized identities, signed32 refcounts/flags, static C empty, logical UTF16 length/payload/terminators, allocation/free order and complete initialized free-callback fields, separate copies, selfassignment, source aliases, exact UTF16 forward comparison/hash, full pool slots, linear probing/wrap/reinsertion and2039-to8191 double-prime growth are compared against3336 genuine unchanged-body native calls. Thirteen complete pinned source/header blobs and29 unchanged scopes, including actual pthread recursive mutex functions, original compiler atomic macros and o3tl::make_unsigned assertion, compile under ASan/UBSan. Twenty original fail-fast guards are diagnosed. The complete initialized output is retained and SHA256-hashed; portable observation deltas are independently decoded and compared field-for-field with every complete native snapshot. Tuple pointer slots and Uint16Array adapt concrete storage; original allocator function-pointer slots use an ESM-writable carrier. Browser allocation/free releases owned buffer references for GC; physical malloc/free, uninitialized spare bytes, dead-pointer access, arbitrary exotic JS objects, OOM outside replaceable allocator failures, native ABI and concurrent cross-thread ownership are not certified. Synchronous realm-local hash removal cannot observe a separate thread acquire: original zero-count increment is necessarily1, with its native concurrent recursive branch explicitly outside certification. The64-bit allocation overflow guard is identically true for signed32 nonnegative lengths; active constructor assertions prove the original null-copy return unreachable. Native release-build behavior, alternate STL/platform comparison magnitudes, remaining RTL algorithms, actual C++ OUString/SharedString and Calc storage/document/UI owners remain unverified. Preserve native fast-path destination overwrite (CALC-032), no upstream repair.",
@@ -97,7 +99,8 @@
       "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending.",
       "TaskRJ5DY8 implements actual Unicode stringbuffer template/C/header responsibilities on existing rtl_uString allocator/ref owners:16extra constructor units,copy capacity=max(request,length),growth=max(minimum,2*(length+1)),ordered checks,UTF16/ASCII/UTF32 insertion,overlap-safe native tail movement,null-source initialized-gap retention,remove clamp,acquired same-data return and no-copy makeStringAndClear transfer/reset/reuse. Native returns_nonnull requires initialized nonnull data for transfer;null-held transfer is outside the original public contract and not given a fake result. Original full normal/ASanUBSan SAL/CPPU graph objects are verified and reused,with complete initialized logical-unit/capacity/ref/identity observations and original assertions. No spare uninitialized-memory,invalid alias insertion or ABI/lifetime certification. Full OUStringBuffer/math-buffer append,VCL serializer,item/pool/model/UI integration remain pending;no broad parity promotion.",
       "WZ8225 extends the original single integral template body to byte char and unsigned64 specializations, preserving all existing UTF16 signed callers. Original HandleSignChar<T>/DivMod<T>/toInt<T> signedness/max limits, exact BigInt accumulation and source whitespace/overflow/prefix rules are retained. No second parser or numeric factory; source/portable tests do not promote native ABI/complete SAL parity.",
-      "Task202610251549-V4DQJW: Native integral template binding now selects signed32 or signed64 limits before accumulation; existing unsigned64 and signed64 defaults remain unchanged. Signed32 height parsing uses its own overflow-to-zero bound, not a narrowing cast. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+      "Task202610251549-V4DQJW: Native integral template binding now selects signed32 or signed64 limits before accumulation; existing unsigned64 and signed64 defaults remain unchanged. Signed32 height parsing uses its own overflow-to-zero bound, not a narrowing cast. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
+      "Common Alloc/acquire/release/new_/new_WithLength now bind the native byte specialization using an explicit runtime template witness while retaining the original Unicode specialization. Byte empty identity uses STATIC|1 without INTERN; byte release bypasses the Unicode intern branch. Both use the existing replaceable raw allocation slots. Native byte allocation and wrapper lifetime observations match the original witness; original Unicode ownership replay remains green. Thread/atomic ABI, native pointer representation and arbitrary uninitialized storage remain unverified."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -155,6 +158,14 @@
         {
           "path": "apps/office/src/sal/rtl/byte-integer.test.ts",
           "marker": "preserves signed byte prefix"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.test.ts",
+          "marker": "matches original core BMP wrapper"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/string-convert.native.json",
+          "marker": "driverHash"
         }
       ],
       "upstream": [

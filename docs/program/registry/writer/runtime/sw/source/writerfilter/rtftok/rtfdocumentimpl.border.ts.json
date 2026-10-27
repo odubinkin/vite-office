@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts#dispatchRtfBorder",
+        "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx#RTFKeyword::BRDRW"
+      ],
+      "justification": "Source-shaped RTF border value admission and native box metric conversion; complete filter parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RtfCellBorder",
+        "RTF_BORDER_STYLES",
+        "createRtfBorder",
+        "dispatchRtfBorder",
+        "createRtfBorderLine",
+        "getRtfBorderDistance"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/rtftok/rtfdispatchvalue.cxx",
+      "upstreamSymbols": [
+        "RTFDocumentImpl::dispatchValue"
+      ]
+    }
+  }
+}

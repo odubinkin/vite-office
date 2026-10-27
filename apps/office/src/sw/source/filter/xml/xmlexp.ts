@@ -1,6 +1,7 @@
 /**
  * @fileoverview Reimplements the bounded Writer ODF XML export bridge from pinned LibreOffice `sw/source/filter/xml/xmlexp.cxx`.
  */
+import { getFillProperties, XML_FILL_WHICH_IDS } from "./xmlexp-fill";
 import { writerTextColorValue, writerHighlightColorValue } from "../../core/attr/swatrset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
 import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
@@ -129,7 +130,7 @@ import { LineNumberPosition } from "../../../inc/lineinfo";
 import { exportLineNumberingConfiguration } from "../../../../xmloff/source/text/XMLLineNumberingExport";
 import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
-const OFFICE_NAMESPACES = `xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
+const OFFICE_NAMESPACES = `xmlns:draw="${ODF_NAMESPACES.draw}" xmlns:office="${ODF_NAMESPACES.office}" xmlns:style="${ODF_NAMESPACES.style}" xmlns:text="${ODF_NAMESPACES.text}" xmlns:table="${ODF_NAMESPACES.table}" xmlns:fo="${ODF_NAMESPACES.fo}" xmlns:svg="${ODF_NAMESPACES.svg}" xmlns:xlink="${ODF_NAMESPACES.xlink}" xmlns:loext="${ODF_NAMESPACES.loext}"`;
 
 /** Serializes Writer named paragraph styles into styles.xml. @param document - Canonical SwDoc. @returns Complete XML. */
 export function exportStylesXml(document: SwDoc): string {
@@ -587,6 +588,7 @@ function assertSupportedItems(
   allowStyleNumbering = false,
 ): void {
   const supported = new Set<number>([
+    ...XML_FILL_WHICH_IDS,
     RES_CHRATR_POSTURE,
     RES_CHRATR_COLOR,
     RES_CHRATR_FONT,
@@ -680,6 +682,7 @@ function getParagraphProperties(set: SfxItemSet | undefined): OdfParagraphProper
   )
     throw new Error("ODT paragraph item is invalid.");
   const properties: OdfParagraphProperties = {
+    ...getFillProperties(set),
     ...(firstLine instanceof SvxFirstLineIndentItem
       ? {
           firstLineIndent: firstLine.ResolveTextFirstLineOffset(),

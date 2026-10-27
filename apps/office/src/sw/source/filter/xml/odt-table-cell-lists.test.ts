@@ -94,7 +94,7 @@ function state(doc: SwDoc) {
       kind: node.GetListKind(),
       id: node.GetListId(),
       rule: node.GetNumRule()?.IsAutoRule()
-        ? `automatic-${doc.GetNumRuleTable().indexOf(required(node.GetNumRule()))}`
+        ? `automatic-${doc.GetNumRuleTable().slice(1).indexOf(required(node.GetNumRule()))}`
         : node.GetNumRuleName(),
       level: node.GetAttrListLevel(),
       counted: node.IsCountedInList(),
@@ -107,7 +107,7 @@ function state(doc: SwDoc) {
 /** Copies actual independently owned rules and cell item sets into another graph. @param doc - Source. @returns Owned copied graph. */
 function copy(doc: SwDoc): SwDoc {
   const result = createWriterDocument();
-  for (const rule of doc.GetDocumentListsManager().GetNumRuleTable())
+  for (const rule of doc.GetDocumentListsManager().GetNumRuleTable().slice(1))
     result.GetDocumentListsManager().AddNumRule(rule.clone());
   const sourceTable = required(doc.GetTables()[0]);
   const copied = result.nodes.MakeTableNode(sourceTable.GetName(), sourceTable.GetFormat());

@@ -19,15 +19,17 @@
         "apps/office/src/svx/source/svdraw/angle-item.test.ts",
         "docs/program/calc-core.md#Signed shared item values and cell rotation (task116)"
       ],
-      "justification": " Task116 adds CntInt32Item normal scalar/copy/mutable/equality/hash/actual Any/Clone values and SfxInt32Item default factory/copy/Clone in existing shared SVL owners and canonical headers. Actual existing CPPU signed32 extraction handles integer Any families, including unsigned32 bit reinterpretation. Existing o3tl seed arithmetic is unchanged; its explicit scalar key binding is extended and independently tested for signed32 keys modulo unsigned32/64 seeds, not general std::hash/external stdlib/binary ABI certification. Degree100 is an erased shared tools signed32 hundredths-of-degree type alias over number; native strong_int construction/get and compiler unit identity are adapted, not a new generic wrapper/library or memory mechanism. SdrAngleItem actual SVX header/core value/copy/get/set/Clone retainsWhich and stores negative/multiple-turn values without normalization. Calc ScRotateValueItem requires an explicit angle; actual DocPool supplies0/Which135. Implicit copy retainsWhich, value-based Clone restores135. Ordinary initialized scalar constructor/SetValue signed32 bounds are explicit browser checks outside invalid native typed inputs. Original locale/metric presentation, diagnostic XML/JSON, native caches/assertions/invalid domains/ABI, other SVX/tool/numeric families and complete document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status preserved without broad parity promotion. No fake document/provider/new C++ build/generator/sanitizer/refcount engine. Goalactive, full121next.",
+      "justification": " Task116 adds CntInt32Item normal scalar/copy/mutable/equality/hash/actual Any/Clone values and SfxInt32Item default factory/copy/Clone in existing shared SVL owners and canonical headers. Actual existing CPPU signed32 extraction handles integer Any families, including unsigned32 bit reinterpretation. Existing o3tl seed arithmetic is unchanged; its explicit scalar key binding is extended and independently tested for signed32 keys modulo unsigned32/64 seeds, not general std::hash/external stdlib/binary ABI certification. Degree100 is an erased shared tools signed32 hundredths-of-degree type alias over number; native strong_int construction/get and compiler unit identity are adapted, not a new generic wrapper/library or memory mechanism. SdrAngleItem actual SVX header/core value/copy/get/set/Clone retainsWhich and stores negative/multiple-turn values without normalization. Calc ScRotateValueItem requires an explicit angle; actual DocPool supplies0/Which135. Implicit copy retainsWhich, value-based Clone restores135. Ordinary initialized scalar constructor/SetValue signed32 bounds are explicit browser checks outside invalid native typed inputs. Original locale/metric presentation, diagnostic XML/JSON, native caches/assertions/invalid domains/ABI, other SVX/tool/numeric families and complete document/config/storage/UI/ODS remain pending/excluded. Existing metadata history/status preserved without broad parity promotion. No fake document/provider/new C++ build/generator/sanitizer/refcount engine. Goalactive, full121next. Added represented SdrItemPool constructor/copy/Clone and actual master-secondary attachment with native SOLID/color/transparency/slide defaults and original slot/metadata flags. Preserves the existing SdrAngleItem unchanged. Sparse consumed registrations retain the current pool binding; full Sdr item package, EditEngine secondary pool, drawing services and localized methods remain unverified.",
       "knownViolations": [],
       "localSymbols": [
-        "SdrAngleItem"
+        "SdrAngleItem",
+        "SdrItemPool"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svx/source/svdraw/svdattr.cxx",
       "upstreamSymbols": [
-        "SdrAngleItem"
+        "SdrAngleItem",
+        "SdrItemPool"
       ]
     }
   }

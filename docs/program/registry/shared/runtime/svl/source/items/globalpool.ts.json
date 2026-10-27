@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/items/globalpool.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "formatting-model",
+    "capabilityIds": [
+      "CAP-0121",
+      "CAP-8d7ea250-ed1f-45b3-ac60-d20e417b3423"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts",
+        "vendor/libreoffice-reference/svl/source/items/globalpool.cxx#implCreateItemEntry"
+      ],
+      "justification": "Logical native item-entry classification, held item reference counts and final cleanup, with existing target-pool/adoption/value-copy binding. Global ItemInstanceManager interning and native already-held sharing outside the existing holder-copy binding are not yet ported. No complete globalpool, poolitem, SfxItemSet or ABI parity is claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "implCreateItemEntry",
+        "bindHolderValue",
+        "implCleanupItemEntry"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/items/globalpool.cxx",
+      "upstreamSymbols": [
+        "implCreateItemEntry",
+        "implCleanupItemEntry"
+      ]
+    }
+  }
+}

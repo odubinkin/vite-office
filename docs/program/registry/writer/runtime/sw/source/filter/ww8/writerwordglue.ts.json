@@ -18,15 +18,18 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
         "vendor/libreoffice-reference/sw/source/filter/ww8/writerwordglue.cxx",
-        "apps/office/src/sw/source/filter/ww8/native-character-runs.test.ts"
+        "apps/office/src/sw/source/filter/ww8/native-character-runs.test.ts",
+        "apps/office/src/sw/source/filter/ww8/writerwordglue.rtf-charset.test.ts"
       ],
-      "justification": "Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported. V4DQJW adds the field-specific getPseudoCharRunsForDirection binding of GetPseudoCharRuns, using actual SwTextNode/GetWhichOfScript font items, genuine BreakIteratorImpl script queries, existing ICU default-mode resolved levels and original CharRunEntry records. Preserve empty-Latin run, UTF16 offsets, first-script-only charset selection/extension, weak/trailing-script handling, level rather than parity boundaries, merge order, source guards and erase predicate. The native SwDoc.GetTextDirection result is a required explicit input, never guessed. This helper does not pretend to implement the upstream one-argument entry point; the actual core layout-direction API/public wrapper and exporter traversal remain pending. Existing default-mode ICU level binding replaces physical UBiDi allocation/run tables only for this consumed mode; other modes and status/allocation APIs are not fabricated. Three native defensive branches remain uncovered under the successful concrete backend and the unchanged scoped100 gate fails; no fake provider/error result or exclusion was added.",
+      "justification": "Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported. V4DQJW adds the field-specific getPseudoCharRunsForDirection binding of GetPseudoCharRuns, using actual SwTextNode/GetWhichOfScript font items, genuine BreakIteratorImpl script queries, existing ICU default-mode resolved levels and original CharRunEntry records. Preserve empty-Latin run, UTF16 offsets, first-script-only charset selection/extension, weak/trailing-script handling, level rather than parity boundaries, merge order, source guards and erase predicate. The native SwDoc.GetTextDirection result is a required explicit input, never guessed. This helper does not pretend to implement the upstream one-argument entry point; the actual core layout-direction API/public wrapper and exporter traversal remain pending. Existing default-mode ICU level binding replaces physical UBiDi allocation/run tables only for this consumed mode; other modes and status/allocation APIs are not fabricated. Three native defensive branches remain uncovered under the successful concrete backend and the unchanged scoped100 gate fails; no fake provider/error result or exclusion was added. Native FontMapExport preserves first raw family token, OpenSymbol/StarSymbol override, configured MS alternate and second-token fallback, retaining whitespace and UTF16 units. Native charset wrapper overrides only the original unknown/Unicode encoding cases. Actual unotools/SAL owners are consumed; native broader import/export/encoding helpers are unported. Original private CanEncode and RTF font charset selection now use actual checked SAL byte-string conversion with the original cross-family 0x101 flags, Windows charset inversion, octet check, both primary/alternate names and exact MS932/MS936/MS950/MS949 fallback order/default1. A native byte-string scope supplies temporary ownership; no fake encoding provider or host codec is used. The source font-name algorithm is traced and directly tested but has not been independently compiled with full Writer/OUString/OString value classes. Native RTF font-table serialization remains pending.",
       "knownViolations": [],
       "localSymbols": [
         "FontMapExport",
         "rtl_TextEncodingToWinCharset",
         "getPseudoCharRunsForDirection",
-        "IfBeforeStart"
+        "IfBeforeStart",
+        "CanEncode",
+        "rtl_TextEncodingToWinCharsetRTF"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/writerwordglue.cxx",
@@ -35,7 +38,9 @@
         "FindBestMSSubstituteFont",
         "rtl_TextEncodingToWinCharset",
         "GetPseudoCharRuns",
-        "IfBeforeStart"
+        "IfBeforeStart",
+        "CanEncode",
+        "rtl_TextEncodingToWinCharsetRTF"
       ]
     }
   }

@@ -369,7 +369,8 @@ it("retains represented level starts and bullet glyphs in RTF list definitions",
     const bytes = new RtfExport().ExportDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain("\\levelstartat7");
-    expect(encoded).toContain("\\u9642?");
+    expect(encoded).toContain("\\u9642 ?");
+    expect(encoded).toContain("\\u9642\\'3f");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs[1]?.GetNumRule()?.Get(1).GetStart()).toBe(7);
     expect(imported.paragraphs[1]?.GetNumRule()?.Get(1).GetBulletChar()).toBe(0x25aa);

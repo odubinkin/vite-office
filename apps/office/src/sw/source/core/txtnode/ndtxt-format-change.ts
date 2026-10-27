@@ -1,5 +1,5 @@
 /** @fileoverview Ports the anonymous-namespace format-change numbering helpers from pinned sw/source/core/txtnode/ndtxt.cxx; split from ndtxt.ts to preserve the module-size gate. */
-
+import type { UpdateAttrHint } from "../../../inc/hints";
 import {
   RES_PARATR_LIST_ID,
   RES_PARATR_LIST_LEVEL,
@@ -114,4 +114,39 @@ export function HandleModifyAtTextNodeFormatChange(node: SwTextNode): void {
     }
   }
   HandleApplyTextNodeFormatChange(node, rule, oldRule, ruleSet, true);
+}
+
+/** Native DontExpandFormat boundary flags, optionally moving paragraph character items into text attributes at EOF. @param node - Native text owner. @param index - Content boundary. @param flag - New expansion flag. @param formatToText - Whether to move paragraph items at EOF. @returns Whether any flag changed. */
+export function DontExpandFormat(
+  node: SwTextNode,
+  index: number,
+  flag = true,
+  formatToText = true,
+): boolean {
+  if (formatToText && index === node.Len()) node.FormatToTextAttr(node);
+  const hints = node.GetpSwpHints();
+  let changed = false;
+  if (hints !== undefined) {
+    for (let i = hints.GetLastPosSortedByEnd(index); i >= 0; i--) {
+      const hint = hints.GetSortedByEnd(i),
+        end = hint.End();
+      if (end === undefined) continue;
+      if (end !== index) break;
+      if (flag !== hint.DontExpand() && !hint.IsLockExpandFlag() && end > hint.GetStart()) {
+        hint.SetDontExpand(flag);
+        changed = true;
+      }
+    }
+  }
+  return changed;
+}
+
+/** Runs the original generic range-notification branch against the actual node and outline owner, followed by the existing document projection binding. @param node - Canonical node. @param hint - Native borrowed range hint. @returns Nothing. */
+export function TriggerTextNodeUpdate(node: SwTextNode, hint: UpdateAttrHint): void {
+  node.CallSwClientNotify(hint);
+  node.GetDoc().NotifyModelChange({
+    kind: "attribute-set-changed",
+    nodeIndex: node.GetNodes().indexOfOrUndefined(node),
+  });
+  if (!node.GetDoc().IsInDtor()) node.GetNodes().UpdateOutlineNode(node);
 }

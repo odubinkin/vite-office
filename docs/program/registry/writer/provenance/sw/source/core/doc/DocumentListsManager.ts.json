@@ -32,6 +32,10 @@
         {
           "path": "apps/office/src/sw/source/core/doc/DocumentListItemsManager.test.ts",
           "marker": "sorts independent of insertion order, suppresses equivalent positions and filters bullets and uncounted items"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/native-outline-owner.test.ts",
+          "marker": "creates the persistent outline rule"
         }
       ],
       "upstream": [
@@ -114,6 +118,18 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListItemsManager.cxx",
           "marker": "DocumentListItemsManager::getNumItems("
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnew.cxx",
+          "marker": "mpOutlineRule = new SwNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/docnum.cxx",
+          "marker": "void SwDoc::AddNumRule"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/DocumentListsManager.cxx",
+          "marker": "void DocumentListsManager::createListForListStyle"
         }
       ]
     },
@@ -126,7 +142,8 @@
     ],
     "preservedResponsibilities": [
       "Iteration36 makes the shown number record SwTextNode-owned: SwList inserts/removes records without allocation or a text-node map. SwNodeNum binds/clears its rule in PreAdd/PostRemove and transfers rule clients in ChangeNumRule; rule clients retain insertion order and suppress identity duplicates. DocumentListItemsManager maintains native position ordering and filters counted enumeration records. Attribute rule/list changes detach before mutation; canonical node moves retain records,copy/restore attach independent records. Reads validate the requested prefix rather than unrelated tails. Compiled20 additional unmodified pinned owner/registry definitions alongside37 tree/list definitions compare120 sequences/8976 actual owner states including raw prefix caches,reverse vectors,bound rules,client order and numbered registry. Literal tests cover orphan binding,default1 after removal,duplicate add,disconnected/foreign arrays,rule copies and disposal. Single shown/document-node/hierarchical Arabic and bullet slice only;native layout expansion,redline/original arrays,complete callbacks/word-count/lifetime and legacy/default factories remain unverified. No whole-module/default/goal promotion;registered document IO deviations unchanged.",
-      "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged."
+      "Iteration43 separates native const effective Get from raw optional GetNumFormat, uses shared NUM_RULE/OUTLINE_RULE tables in both position modes, copies only present levels, and preserves owned pointer/validity for equal reference Set. Source-shaped constructor retains native empty DefaultListId and AutoRule=true; established browser list command/import assembly uses explicit manager-owned metadata and Set. Base field equality lives in SvxNumberFormat, with SwNumFormat adding its currently implemented numbering/bullet fields. Twenty unchanged pinned constructor/copy/equality/accessor/reference-Set/constants definitions under ASan/UBSan supply 40 default and19 ownership/equality states, matched by literal local differential tests. Getter type removes setters and JS freeze enforces the const boundary; graph-v16 optional ownership/mode/type metadata preserves sparse levels while historical records retain explicit formats. Raw restart/tree start readers remain optional. Native pointer Set overload, live char-style registration, full graphic/font/color/adjustment/legal/show-symbol state, static refcount destruction, global bullet configuration and complete SvxNumberType hierarchy remain unverified. Browser-only mode accessor transports the native private selector; no corresponding native member getter is claimed. No whole-module/status or goal promotion; registered I/O/recovery deviations are unchanged.",
+      "S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/DocumentListsManager.cxx",

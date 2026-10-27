@@ -1,0 +1,58 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/svx/inc/xfilluseslidebackgrounditem.ts",
+    "upstreamPath": "svx/source/xoutdev/xattr2.cxx",
+    "localSymbols": [
+      "XFillUseSlideBackgroundItem"
+    ],
+    "upstreamSymbols": [
+      "XFillUseSlideBackgroundItem",
+      "XATTR_FILLUSESLIDEBACKGROUND"
+    ],
+    "preservedResponsibilities": [
+      "Native false-default bool construction/copy and concrete clone, retaining shared SfxBoolItem behavior."
+    ],
+    "omittedResponsibilities": [
+      "Localized presentation and XML dump methods remain unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svx/inc/xfilluseslidebackgrounditem.ts",
+          "marker": "XFillUseSlideBackgroundItem"
+        },
+        {
+          "path": "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+          "marker": "native"
+        },
+        {
+          "path": "apps/office/src/svx/inc/xfilluseslidebackgrounditem.ts",
+          "marker": "XATTR_FILLUSESLIDEBACKGROUND"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svx/xfilluseslidebackgrounditem.hxx",
+          "marker": "XFillUseSlideBackgroundItem"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr2.cxx",
+          "marker": "XFillUseSlideBackgroundItem::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svx/source/xoutdev/xattr2.cxx",
+          "marker": "XATTR_FILLUSESLIDEBACKGROUND"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svx/inc/xfilluseslidebackgrounditem.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Original public class/value owner is kept at its include/svx header location; construction and Clone implementation are owned by xattr2.cxx."
+    }
+  }
+}

@@ -151,11 +151,13 @@ it("applies list declarations in source order and stops at native property rejec
             title: "Ordered",
           })
         ).document;
-        const rule = document.GetNumRuleTable()[0];
+        const rule = document.GetNumRuleTable().slice(1)[0];
         if (rule === undefined) throw new Error("Fixture has no native rule");
         expect(rule.IsAutoRule()).toBe(!common);
         const copied = rule.clone(),
-          restored = decodeWriterDocument(encodeWriterDocument(document)).GetNumRuleTable()[0];
+          restored = decodeWriterDocument(encodeWriterDocument(document))
+            .GetNumRuleTable()
+            .slice(1)[0];
         if (restored === undefined) throw new Error("Fixture snapshot lost its rule");
         for (let level = 0; level < 10; level += 1) {
           const expected = testCase.changes.get(level) ?? base(level);
@@ -192,9 +194,9 @@ it("applies list declarations in source order and stops at native property rejec
           (await new ZipFile(exported).readTextEntry("styles.xml")) +
           (await new ZipFile(exported).readTextEntry("content.xml"));
         expect(xml).not.toContain("327.68mm");
-        const reopened = (
-          await readOdtDocument(exported, { title: "Ordered" })
-        ).document.GetNumRuleTable()[0];
+        const reopened = (await readOdtDocument(exported, { title: "Ordered" })).document
+          .GetNumRuleTable()
+          .slice(1)[0];
         if (reopened === undefined) throw new Error("Reopened fixture lost its rule");
         for (let level = 0; level < 10; level += 1) {
           const expected = testCase.changes.get(level) ?? base(level);
@@ -216,15 +218,15 @@ it("retains the native accepted distance boundary and its subsequent export reje
   const document = (
     await readOdtDocument(await input(original, levels, false), { title: "Boundary" })
   ).document;
-  expect(document.GetNumRuleTable()[0]?.Get(0).GetCharTextDistance()).toBe(18577);
+  expect(document.GetNumRuleTable().slice(1)[0]?.Get(0).GetCharTextDistance()).toBe(18577);
   const exported = writeOdtDocument(document, { title: "Boundary" });
   const xml =
     (await new ZipFile(exported).readTextEntry("styles.xml")) +
     (await new ZipFile(exported).readTextEntry("content.xml"));
   expect(xml).toContain('text:min-label-distance="32.768cm"');
-  const reopened = (
-    await readOdtDocument(exported, { title: "Boundary" })
-  ).document.GetNumRuleTable()[0];
+  const reopened = (await readOdtDocument(exported, { title: "Boundary" })).document
+    .GetNumRuleTable()
+    .slice(1)[0];
   if (reopened === undefined) throw new Error("Boundary fixture lost its rule");
   for (let level = 0; level < 10; level += 1)
     expect(state(reopened.Get(level))).toEqual(base(level));

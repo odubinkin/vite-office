@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/md4c/src/md4c.scan.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "markdown-parser",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/external/md4c/src/md4c.scan.ts",
+        "apps/office/src/external/md4c/src/md4c.primitives.test.ts",
+        "apps/office/src/external/md4c/src/native-primitives.json",
+        "scripts/generate-md4c-native-fixtures.py"
+      ],
+      "justification": "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity.",
+      "knownViolations": [],
+      "localSymbols": [
+        "md_ascii_eq",
+        "md_ascii_case_eq",
+        "md_lookup_line",
+        "md_merge_lines"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "vendor/md4c-reference/src/md4c.c",
+      "upstreamSymbols": [
+        "md_ascii_eq",
+        "md_ascii_case_eq",
+        "md_lookup_line",
+        "md_merge_lines"
+      ]
+    }
+  }
+}

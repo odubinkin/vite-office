@@ -1,4 +1,4 @@
-/** @fileoverview UTF-7 text-to-Unicode conversion from sal/textenc/tcvtutf7.cxx. */
+/** @fileoverview UTF-7 conversion from sal/textenc/tcvtutf7.cxx. */
 import * as cvt from "../inc/rtl/textcvt.h";
 
 const base64Index = new Uint8Array(128).fill(0xff);
@@ -225,4 +225,134 @@ export function ImplUTF7ToUnicode(
   }
   sourceConverted[0] = sourceOffset;
   return destinationOffset;
+}
+
+const mustShift = Uint8Array.from([
+  1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0,
+  1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0,
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1,
+]);
+const base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
+/** Original Unicode-to-UTF-7 context; upstream stores but does not restore these fields. */
+export interface ImplUTF7FromUCContextData {
+  mbShifted: boolean;
+  mnBitBuffer: number;
+  mnBufferBits: number;
+}
+
+/** Creates native reverse state. @returns Fresh context. */
+export function ImplUTF7CreateUnicodeToTextContext(): ImplUTF7FromUCContextData {
+  return { mbShifted: false, mnBitBuffer: 0, mnBufferBits: 0 };
+}
+
+/** Resets native reverse state. @param context - Existing context. @returns Nothing. */
+export function ImplUTF7ResetUnicodeToTextContext(context: ImplUTF7FromUCContextData): void {
+  context.mbShifted = false;
+  context.mnBitBuffer = 0;
+  context.mnBufferBits = 0;
+}
+
+/** Releases the context through JavaScript ownership. @param context - Existing context. @returns Nothing. */
+export function ImplUTF7DestroyUnicodeToTextContext(context: ImplUTF7FromUCContextData): void {
+  void context;
+}
+
+/** Original reverse UTF-7 state machine with source shift table, partial writes and disabled context restore.
+ * @param _data - Unused converter data.
+ * @param context - Optional source state.
+ * @param source - UTF-16 units.
+ * @param sourceChars - Input size.
+ * @param destination - Byte output.
+ * @param destinationBytes - Output capacity.
+ * @param _flags - Unused native flags.
+ * @param info - Status pointer.
+ * @param sourceConverted - Consumed-unit pointer.
+ * @returns Bytes written.
+ */
+export function ImplUnicodeToUTF7(
+  _data: unknown,
+  context: ImplUTF7FromUCContextData | null,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  _flags: number,
+  info: [number],
+  sourceConverted: [number],
+): number {
+  let character = 0;
+  let end = false;
+  // The pinned implementation explicitly comments out the context restoration.
+  let shifted = false;
+  let bitBuffer = 0;
+  let bufferBits = 0;
+  let input = 0;
+  let output = 0;
+  info[0] = 0;
+  do {
+    let needShift: boolean;
+    if (input < sourceChars) {
+      character = source[input] as number;
+      needShift = character > 0x7f || mustShift[character] !== 0;
+      if (needShift && !shifted) {
+        if (output >= destinationBytes) {
+          info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+          break;
+        }
+        destination[output++] = 0x2b;
+        if (character === 0x2b) {
+          if (output >= destinationBytes) {
+            info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+            break;
+          }
+          destination[output++] = 0x2d;
+        } else shifted = true;
+      }
+    } else {
+      end = true;
+      needShift = false;
+    }
+    if (shifted) {
+      if (needShift) {
+        bufferBits += 16;
+        bitBuffer = (bitBuffer | (character << (32 - bufferBits))) >>> 0;
+      } else bufferBits += (6 - (bufferBits % 6)) % 6;
+      while (output < destinationBytes && bufferBits >= 6) {
+        destination[output++] = base64.charCodeAt(bitBuffer >>> 26);
+        bitBuffer = (bitBuffer << 6) >>> 0;
+        bufferBits -= 6;
+      }
+      if (bufferBits >= 6) {
+        info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        break;
+      }
+      if (!needShift) {
+        if (output >= destinationBytes) {
+          info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+          break;
+        }
+        destination[output++] = 0x2d;
+        shifted = false;
+      }
+    }
+    if (!end) {
+      if (!needShift) {
+        if (output >= destinationBytes) {
+          info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+          break;
+        }
+        destination[output++] = character & 0xff;
+      }
+      input++;
+    }
+  } while (!end);
+  if (context !== null) {
+    context.mbShifted = shifted;
+    context.mnBitBuffer = bitBuffer;
+    context.mnBufferBits = bufferBits;
+  }
+  sourceConverted[0] = input;
+  return output;
 }

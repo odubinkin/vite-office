@@ -243,11 +243,12 @@ it.each([
 );
 
 it.each([
-  ["brdrhair", 1, 1],
-  ["brdrth", 300, 600],
+  ["brdrhair", 1, 2],
+  ["brdrth", 300, undefined],
+  ["brdrs\\brdrth", 300, 300],
 ] as const)(
   "imports native border %s with Word width %i",
-  /** Checks hairline and thick border controls through an actual table box. @param control - RTF border selector. @param width - Word width. @param expected - Native twip width. @returns Nothing. */ (
+  /** Checks source hairline quantization and the ignored thick flag through a table box. @param control - RTF border selector. @param width - Word width. @param expected - Native twip width or no line. @returns Nothing. */ (
     control,
     width,
     expected,
@@ -285,6 +286,31 @@ it("clears the active superscript before appending normal text", /** Checks nati
     expect(runs[0]?.attributes.escapement?.offset).toBeGreaterThan(0);
     expect(runs.at(-1)?.attributes.escapement?.offset ?? 0).toBe(0);
     expect(paragraph.GetText()).toBe("raisedplain");
+  } finally {
+    doc.Dispose();
+  }
+});
+
+it("decodes legacy font names and body bytes through the same native SAL wrapper", () => {
+  const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset128 \'82\'a0;}}\f0\'82\'a0}`;
+  const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    expect(node.GetText()).toBe("あ");
+    expect(projectWriterTextRuns(node)[0]?.attributes.fontFamily).toBe("あ");
+  } finally {
+    doc.Dispose();
+  }
+});
+it("uses MS1252 for Symbol font-entry hex bytes and preserves Symbol body conversion", () => {
+  const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset2 \'53\'79\'6d\'62\'6f\'6c;}}\f0\'41}`;
+  const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    expect(node.GetText()).toBe("\uf041");
+    expect(projectWriterTextRuns(node)[0]?.attributes.fontFamily).toBe("Symbol");
   } finally {
     doc.Dispose();
   }

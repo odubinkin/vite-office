@@ -4,7 +4,7 @@ import { SwTableBoxStartNode, SwEndNode } from "./node";
 import { SwTableLine, SwTableBox } from "../table/swtable";
 import type { SwDoc } from "../doc/doc";
 import { TableHeadingChange } from "../../../inc/hints";
-import { SwTable } from "../table/swtable";
+import { SwTable, createWriterTableBoxItem, type SwTableBoxFormat } from "../table/swtable";
 import type { SwTabFrame } from "../layout/tabfrm";
 import { SwTabCols } from "../bastyp/tabcol";
 import { SwFrameSize, type SwFormatFrameSize } from "../../../inc/fmtfsize";
@@ -12,8 +12,10 @@ import { SwPosition } from "../crsr/pam";
 import { SwCursor } from "../crsr/swcrsr";
 import { SwTableNode } from "../docnode/node";
 import { SwUndoAttrTable, SwUndoTableNdsChg, SwUndoTableHeadline } from "../undo/untbl";
-import type { SwTextNode } from "../txtnode/ndtxt";
+import { SwTextNode } from "../txtnode/ndtxt";
 import { createWriterCollapsedCursorState, type SwUndoCursorState } from "../undo/undobj";
+import { SwInsertTableFlags, type SwInsertTableOptions } from "../../../inc/itabenum";
+import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 /** Applies the native headline command without a table-format snapshot. @param doc - Original document. @param table - Original table. @param requested - Authored uint16 count. @returns Whether the native effective-count guard admitted a change. */
 export function SetSwRowsToRepeat(doc: SwDoc, table: SwTable, requested: number): boolean {
   const count = requested & 0xffff,
@@ -407,4 +409,70 @@ export function TextToTableNodes(
       return table;
     },
   );
+}
+
+/** Native SwDoc::InsertTable implementation belongs to ndtbl.cxx; constructs represented flat table geometry before the actual body position. @param doc - Document. @param options - Source insertion flags. @param position - Body position. @param rows - Rows. @param columns - Columns. @param name - Requested name. @param boxFormat - Existing browser autoformat attributes. @returns Native table. */
+export function InsertTable(
+  doc: SwDoc,
+  options: SwInsertTableOptions,
+  position: SwPosition,
+  rows: number,
+  columns: number,
+  name = "",
+  boxFormat?: SwTableBoxFormat,
+): SwTable {
+  const node = position.GetNode();
+  if (
+    !(node instanceof SwTextNode) ||
+    !doc.paragraphs.includes(node) ||
+    !Number.isInteger(rows) ||
+    rows < 1 ||
+    rows > 65535 ||
+    !Number.isInteger(columns) ||
+    columns < 1 ||
+    columns > 65535
+  )
+    throw new Error("Writer insertion requires body text and positive unsigned table dimensions.");
+  const header = Boolean(options.mnInsMode & SwInsertTableFlags.Headline),
+    borders = Boolean(options.mnInsMode & SwInsertTableFlags.DefaultBorder),
+    repeat = header ? options.mnRowsToRepeat & 0xffff : 0,
+    width = Math.floor(65535 / columns) * columns;
+  if (
+    name === "" ||
+    doc
+      .GetTables()
+      .some(
+        /** Checks the actual native name set. @param table - Existing owner. @returns Collision. */ (
+          table,
+        ) => table.GetName() === name,
+      )
+  )
+    name = doc.GetUniqueTableName();
+  const table = doc.nodes.InsertTable(node, name, {
+    width,
+    horiOrient: HoriOrientation.FULL,
+    headerRows: header ? Math.max(1, repeat) : 0,
+    repeatHeaderRows: repeat !== 0,
+    layoutSplit: Boolean(options.mnInsMode & SwInsertTableFlags.SplitLayout),
+  });
+  for (let column = 0; column < columns; column++) table.AddColumnWidth(width / columns);
+  const headStyle = header && (rows !== 1 || !borders) ? "table-heading" : "table-contents";
+  for (let row = 0; row < rows; row++) {
+    const line = doc.nodes.AppendTableRow(
+      table,
+      columns,
+      {},
+      Array.from(
+        { length: columns },
+        /** Creates independent represented box attributes. @returns Box format. */ () =>
+          boxFormat === undefined ? { box: createWriterTableBoxItem(borders) } : { ...boxFormat },
+      ),
+    );
+    for (const box of line.GetTabBoxes())
+      for (const paragraph of box.GetParagraphs())
+        paragraph.ChgFormatColl(
+          doc.GetTextFormatColl(row === 0 || row < repeat ? headStyle : "table-contents"),
+        );
+  }
+  return table;
 }

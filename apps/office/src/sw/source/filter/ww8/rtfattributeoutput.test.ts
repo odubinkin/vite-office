@@ -12,6 +12,7 @@ import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/in
 import { FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_ADJUST, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";
+import { RtfExport } from "./rtfexport";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 
 /** Supplies stable document-table indices for controls that do not allocate fonts or colors. @returns Attribute writer. */
@@ -19,6 +20,7 @@ function output(): RtfAttributeOutput {
   return new RtfAttributeOutput(
     /** Returns the represented font slot. @returns Slot zero. */ () => 0,
     /** Returns the represented color slot. @returns Slot zero. */ () => 0,
+    new RtfExport(),
   );
 }
 

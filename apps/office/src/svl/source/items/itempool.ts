@@ -6,7 +6,8 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import { MapUnit } from "../../../tools/inc/mapunit";
 import { SfxBroadcaster } from "../notify/SfxBroadcaster";
 import { SfxHint, SfxHintId } from "../../inc/hint";
-import { MergeRange, implCreateItemEntry } from "./itemset";
+import { MergeRange } from "./itemset";
+import { implCreateItemEntry, implCleanupItemEntry } from "./globalpool";
 import type { WhichRangesContainer } from "../../inc/whichranges";
 
 import { SfxPoolItem, type SfxPoolItemSnapshot, type SfxPoolItemValue } from "./poolitem";
@@ -197,20 +198,27 @@ export class SfxItemPool {
     return slot !== 0 ? slot : which;
   }
 
-  /** Registers a consumed native default and its original ItemInfo slot field independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Default item. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @returns Nothing. */
-  public RegisterDefaultItem(item: SfxPoolItem, factory?: SfxPoolItemFactory, slot = 0): void {
-    if (this.registeredItemInfos.has(item.Which()))
-      throw new Error(`Duplicate pool default: ${item.Which()}`);
+  /** Binds an actual shared native static entry or a consumed default value independently of optional browser snapshot restoration. Complete native packages retain their own original registration path. @param item - Actual native metadata entry or owned default-value input. @param factory - Optional concrete restore function. @param slot - Original ItemInfo slot, zero when unmapped. @param flags - Original ItemInfo flags. @returns Nothing. */
+  public RegisterDefaultItem(
+    item: SfxPoolItem | ItemInfo,
+    factory?: SfxPoolItemFactory,
+    slot = 0,
+    flags = 0,
+  ): void {
+    const which = item instanceof ItemInfo ? item.getWhich() : item.Which();
+    if (this.registeredItemInfos.has(which)) throw new Error(`Duplicate pool default: ${which}`);
+    if (item instanceof ItemInfo && item.getItem() === null)
+      throw new Error("Missing dynamic-default item.");
+    if (item instanceof ItemInfo) slot = item.getSlotID();
     if (slot !== 0 && this.mpSlotIDToWhichIDMap?.has(slot))
       throw new Error(`Duplicate pool slot: ${slot}`);
-    this.registeredItemInfos.set(
-      item.Which(),
-      new ItemInfoStatic(item.Which(), item.Clone(), slot, 0),
-    );
-    if (factory !== undefined) this.factories.set(item.Which(), factory);
+    const info =
+      item instanceof ItemInfo ? item : new ItemInfoStatic(which, item.Clone(), slot, flags);
+    this.registeredItemInfos.set(which, info);
+    if (factory !== undefined) this.factories.set(which, factory);
     if (slot !== 0) {
       const mapping = new Map(this.mpSlotIDToWhichIDMap);
-      mapping.set(slot, item.Which());
+      mapping.set(slot, which);
       this.mpSlotIDToWhichIDMap = mapping;
     }
   }
@@ -247,7 +255,9 @@ export class SfxItemPool {
   private impClearUserDefault(which: number): void {
     const saved = this.maUserItemInfos.get(which);
     if (saved === undefined) return;
+    const current = this.getItemInfo(which);
     this.replaceItemInfo(which, saved);
+    if (current instanceof ItemInfoUser) current.Dispose();
   }
   /** Original native user-default create/equal-noop/replace behavior in the target pool. @param item - Actual caller value. @returns Nothing. */
   public SetUserDefaultItem(item: SfxPoolItem): void {
@@ -261,6 +271,7 @@ export class SfxItemPool {
     const info = target.getItemInfo(which) as ItemInfo;
     if (SfxPoolItem.areSame(info.getItem(), item)) return;
     target.replaceItemInfo(which, new ItemInfoUser(info, target, item));
+    if (info instanceof ItemInfoUser) info.Dispose();
   }
   /** Original optional current override lookup, independent of the saved original pool item. @param which - Known native identity. @returns Override or null. */
   public GetUserDefaultItem(which: number): SfxPoolItem | null {
@@ -390,6 +401,10 @@ export class ItemInfoUser extends ItemInfo {
     super(info);
     this.m_pItem = implCreateItemEntry(pool, item, passingOwnership);
   }
+  /** Native user-entry destructor releases its held item. @returns Nothing. */
+  Dispose(): void {
+    implCleanupItemEntry(this.m_pItem);
+  }
   /** Original borrowed user-default value. @returns Item or null. */
   public override getItem(): SfxPoolItem | null {
     return this.m_pItem;
@@ -397,6 +412,8 @@ export class ItemInfoUser extends ItemInfo {
 }
 /** Original package abstraction and native slot-map cache; ordinary JS Map stores the same logical lookup. */
 export abstract class ItemInfoPackage {
+  /** Logical native virtual package destructor; the base owns no default-item table. @returns Nothing. */
+  public Dispose(): void {}
   private readonly maSlotIDToWhichIDMap = new Map<number, number>();
   private static empty: ItemInfoStatic | undefined;
   /** Original friend operation replacing a static default. Constant-member access erases C++ friendship without widening private visibility. @param item - New nullable default. @param info - Actual static metadata. @returns Nothing. */

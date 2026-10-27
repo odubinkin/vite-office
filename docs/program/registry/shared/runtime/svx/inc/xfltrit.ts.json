@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/inc/xfltrit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-fill-values",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/svx/inc/xfltrit.ts",
+        "apps/office/src/svx/source/unodraw/unobrushitemhelper.test.ts",
+        "vendor/libreoffice-reference/include/svx/xfltrit.hxx"
+      ],
+      "justification": "Native unsigned16 transparency value, default zero, constructor/property debug-domain assertion, copy/clone/hash and exact unsigned16 Any query with legacy signed32 narrowing fallback. Localized presentation/dumps, out-of-assert-domain release behavior and compiled native hash ABI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XFillTransparenceItem"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/svx/xfltrit.hxx",
+      "upstreamSymbols": [
+        "XFillTransparenceItem"
+      ]
+    }
+  }
+}

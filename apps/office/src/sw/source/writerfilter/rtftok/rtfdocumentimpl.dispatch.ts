@@ -9,7 +9,6 @@ import {
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import { BorderLineStyle } from "../../../../offapi/com/sun/star/table/BorderLineStyle";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
 import { RTF_CHARSET_CODEPAGE } from "./rtfcharsets";
@@ -17,7 +16,6 @@ import {
   CHARACTER_PROPERTY_CONTROLS,
   DEFAULT_CHARACTER,
   DEFAULT_PARAGRAPH,
-  fromRtfBorderStyle,
   fromRtfNfc,
   parseRtfHyperlinkInstruction,
   RTF_UNDERLINE_STYLES,
@@ -28,6 +26,7 @@ import {
   type RtfSectionPage,
   type RtfState,
 } from "./rtfdocumentimpl.context";
+import { createRtfBorder, dispatchRtfBorder, RTF_BORDER_STYLES } from "./rtfdocumentimpl.border";
 import { RtfSyntaxError, type RtfToken } from "./rtftokenizer";
 
 /** Dispatches one lexical event under the current group state. @param token - Source event.  @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
@@ -38,11 +37,18 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       destination: previous?.destination ?? "body",
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
+      ...(previous?.baselineHalfPoints === undefined
+        ? {}
+        : { baselineHalfPoints: previous.baselineHalfPoints }),
+      ...(previous?.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
       paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
       fontIndex: previous?.fontIndex ?? 0,
       currentCodepage: previous?.currentCodepage ?? this["defaultCodepage"],
       ...(previous?.fontCodepage === undefined ? {} : { fontCodepage: previous.fontCodepage }),
       colorIndex: previous?.colorIndex ?? 0,
+      ...(previous?.paragraphBorder === undefined
+        ? {}
+        : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
       bookmarkName: "",
@@ -73,6 +79,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         this["styles"].set(previous.styleIndex, {
           name,
           character: { ...previous.character },
+          ...(previous.baselineHalfPoints === undefined
+            ? {}
+            : { baselineHalfPoints: previous.baselineHalfPoints }),
+          ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
           paragraph: { ...previous.paragraph },
           controls: new Set(previous.styleControls),
           ...(previous.basedOnStyleIndex === undefined
@@ -323,6 +333,7 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
+  if ((name === "up" || name === "dn") && parameter === 0) return;
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (name === "sect") {
     if (this["runs"].length > 0) this["CommitParagraph"](state);
@@ -459,6 +470,7 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "clbrdrt" || name === "clbrdrl" || name === "clbrdrb" || name === "clbrdrr") {
+    delete state.paragraphBorder;
     const edge =
       name === "clbrdrt"
         ? SvxBoxItemLine.TOP
@@ -467,24 +479,75 @@ export function DispatchBodyControl(
           : name === "clbrdrb"
             ? SvxBoxItemLine.BOTTOM
             : SvxBoxItemLine.RIGHT;
-    const border: RtfCellBorder = {
-      style: BorderLineStyle.SOLID,
-      width: 0,
-      colorIndex: 0,
-      wordStyle: 0,
-    };
+    const border: RtfCellBorder = createRtfBorder();
     this["nextCellBorders"].set(edge, border);
     this["activeBorder"] = border;
     return;
   }
-  if (this["activeBorder"] !== undefined && name.startsWith("brdr")) {
-    if (name === "brdrw") this["activeBorder"].width = parameter ?? 0;
-    else if (name === "brdrcf") this["activeBorder"].colorIndex = parameter ?? 0;
-    else if (name === "brdrth") this["activeBorder"].wordStyle = 2;
-    else if (name === "brdrhair") {
-      this["activeBorder"].style = BorderLineStyle.SOLID;
-      this["activeBorder"].wordStyle = 5;
-    } else this["activeBorder"].style = fromRtfBorderStyle(name);
+  if (["box", "brdrt", "brdrl", "brdrb", "brdrr", "brdrbtw"].includes(name)) {
+    const edge =
+      name === "box"
+        ? "box"
+        : name === "brdrbtw"
+          ? "between"
+          : name === "brdrt"
+            ? SvxBoxItemLine.TOP
+            : name === "brdrl"
+              ? SvxBoxItemLine.LEFT
+              : name === "brdrb"
+                ? SvxBoxItemLine.BOTTOM
+                : SvxBoxItemLine.RIGHT;
+    state.paragraphBorder = edge;
+    const borders = new Map(state.paragraph.borders);
+    if (edge === "box")
+      for (const side of [
+        SvxBoxItemLine.TOP,
+        SvxBoxItemLine.LEFT,
+        SvxBoxItemLine.BOTTOM,
+        SvxBoxItemLine.RIGHT,
+      ])
+        borders.set(side, createRtfBorder());
+    else borders.set(edge, createRtfBorder());
+    state.paragraph = { ...state.paragraph, borders };
+    return;
+  }
+  if (
+    Object.hasOwn(RTF_BORDER_STYLES, name) ||
+    name === "brdrw" ||
+    name === "brdrcf" ||
+    name === "brsp"
+  ) {
+    if (state.paragraphBorder !== undefined) {
+      const borders = new Map(state.paragraph.borders);
+      const edges =
+        state.paragraphBorder === "box"
+          ? ([
+              SvxBoxItemLine.TOP,
+              SvxBoxItemLine.LEFT,
+              SvxBoxItemLine.BOTTOM,
+              SvxBoxItemLine.RIGHT,
+            ] as const)
+          : [state.paragraphBorder];
+      for (const edge of edges) {
+        const border = { ...(borders.get(edge) ?? createRtfBorder()) };
+        dispatchRtfBorder(border, name, parameter);
+        borders.set(edge, border);
+      }
+      state.paragraph = { ...state.paragraph, borders };
+    } else if (this["activeBorder"] !== undefined)
+      dispatchRtfBorder(this["activeBorder"], name, parameter);
+    else {
+      // putBorderProperty with border state NONE clears all paragraph borders.
+      const borders = new Map(state.paragraph.borders);
+      for (const side of [
+        SvxBoxItemLine.TOP,
+        SvxBoxItemLine.LEFT,
+        SvxBoxItemLine.BOTTOM,
+        SvxBoxItemLine.RIGHT,
+      ])
+        borders.set(side, createRtfBorder());
+      state.paragraph = { ...state.paragraph, borders };
+    }
     return;
   }
   if (name === "clvertalt" || name === "clvertalc" || name === "clvertalb") {
@@ -573,7 +636,13 @@ export function DispatchBodyControl(
     );
     return;
   }
+  if (name === "kerning") {
+    state.autoKerning = (parameter ?? 0) !== 0;
+    return;
+  }
   if (name === "plain") {
+    delete state.baselineHalfPoints;
+    state.autoKerning = false;
     state.character = { ...DEFAULT_CHARACTER };
     state.characterControls.clear();
     state.currentCodepage =
@@ -583,6 +652,7 @@ export function DispatchBodyControl(
   if (name === "pard") {
     if (!this["inTable"] && this["tableRows"].length > 0) this["FlushTable"]();
     state.paragraph = { ...DEFAULT_PARAGRAPH };
+    delete state.paragraphBorder;
     return;
   }
   if (name === "b" || name === "i") {
@@ -624,7 +694,8 @@ export function DispatchBodyControl(
             ? FontStrikeout.STRIKEOUT_DOUBLE
             : FontStrikeout.STRIKEOUT_SINGLE,
     };
-  else if (name === "super" || name === "sub")
+  else if (name === "super" || name === "sub") {
+    delete state.baselineHalfPoints;
     state.character = {
       ...state.character,
       escapement: {
@@ -632,13 +703,16 @@ export function DispatchBodyControl(
         height: DFLT_ESC_PROP,
       },
     };
-  else if (name === "nosupersub") {
+  } else if (name === "nosupersub") {
+    delete state.baselineHalfPoints;
     const character = { ...state.character };
     Reflect.deleteProperty(character, "escapement");
     state.character = character;
   } else if ((name === "up" || name === "dn") && parameter !== undefined) {
     const up = name === "up",
       fontHeight = state.character.fontSizeTwips ?? 240;
+    if (this["pendingUpDn"]?.automatic) delete state.baselineHalfPoints;
+    else state.baselineHalfPoints = parameter * (up ? 1 : -1);
     const offset = this["pendingUpDn"]?.automatic
       ? up
         ? DFLT_ESC_AUTO_SUPER

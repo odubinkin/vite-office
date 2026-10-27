@@ -220,7 +220,7 @@ it("imports native repeated-sublist restart and pending return through real pack
           })
         ).document;
         expect(state(imported)).toEqual(expected);
-        const rule = imported.GetNumRuleTable()[0] as SwNumRule;
+        const rule = imported.GetNumRuleTable().slice(1)[0] as SwNumRule;
         const copied = createWriterDocument();
         copied.GetDocumentListsManager().AddNumRule(rule.clone());
         imported.paragraphs.forEach(
@@ -234,7 +234,7 @@ it("imports native repeated-sublist restart and pending return through real pack
             target.SetListItems(node.CaptureListItems());
           },
         );
-        expect(copied.GetNumRuleTable()[0]).not.toBe(rule);
+        expect(copied.GetNumRuleTable().slice(1)[0]).not.toBe(rule);
         expect(state(copied)).toEqual(expected);
         const record = encodeWriterDocument(imported);
         expect(record.swModelVersion).toBe(17);

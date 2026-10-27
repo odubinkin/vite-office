@@ -1,6 +1,11 @@
-/** @fileoverview UTF-8 to Unicode conversion from sal/textenc/tcvtutf8.cxx. */
+/** @fileoverview Bidirectional UTF-8 conversion from sal/textenc/tcvtutf8.cxx. */
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../inc/rtl/character";
 import * as cvt from "../inc/rtl/textcvt.h";
-import { BadInputConversionAction, handleBadInputTextToUnicodeConversion } from "./converter";
+import {
+  BadInputConversionAction,
+  handleBadInputTextToUnicodeConversion,
+  handleBadInputUnicodeToTextConversion,
+} from "./converter";
 
 /** Original streaming converter context. */
 export interface ImplUtf8ToUnicodeContext {
@@ -210,4 +215,149 @@ export function ImplConvertUtf8ToUnicode(
   }
   sourceConverted[0] = sourceOffset;
   return destinationOffset[0];
+}
+
+/** Original Unicode-to-UTF-8 streaming state; 0xffff means signature not handled. */
+export interface ImplUnicodeToUtf8Context {
+  nHighSurrogate: number;
+}
+/** Creates the native encoder state. @returns Mutable encoder context. */
+export function ImplCreateUnicodeToUtf8Context(): ImplUnicodeToUtf8Context {
+  return { nHighSurrogate: 0xffff };
+}
+/** Resets native signature and pending-surrogate state. @param context - Optional encoder context. @returns Nothing. */
+export function ImplResetUnicodeToUtf8Context(context: ImplUnicodeToUtf8Context | null): void {
+  if (context !== null) context.nHighSurrogate = 0xffff;
+}
+/** Converts using the original SAL Unicode-to-UTF-8 state machine.
+ * @param data - Null for UTF-8, non-null for Java UTF-8.
+ * @param context - Optional persistent encoder state.
+ * @param source - Borrowed UTF-16 units.
+ * @param sourceChars - Number of source units.
+ * @param destination - Borrowed encoded output storage.
+ * @param destinationBytes - Output capacity.
+ * @param flags - Native conversion flags.
+ * @param info - Mutable native status bits.
+ * @param sourceConverted - Mutable consumed-unit count.
+ * @returns Number of written bytes.
+ */
+export function ImplConvertUnicodeToUtf8(
+  data: unknown,
+  context: ImplUnicodeToUtf8Context | null,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number],
+  sourceConverted: [number],
+): number {
+  const javaUtf8 = data !== null;
+  let high = context?.nHighSurrogate ?? 0xffff;
+  let offset = 0;
+  const output: [number] = [0];
+  info[0] = 0;
+  if (high === 0xffff) {
+    if ((flags & cvt.RTL_UNICODETOTEXT_FLAGS_GLOBAL_SIGNATURE) !== 0 && !javaUtf8) {
+      if (destinationBytes < 3) {
+        info[0] = cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+        sourceConverted[0] = 0;
+        return 0;
+      }
+      destination[output[0]++] = 0xef;
+      destination[output[0]++] = 0xbb;
+      destination[output[0]++] = 0xbf;
+    }
+    high = 0;
+  }
+  while (offset < sourceChars) {
+    let character = source[offset++] as number;
+    let bad = false;
+    if (high === 0) {
+      if (isHighSurrogate(character) && !javaUtf8) {
+        high = character;
+        continue;
+      }
+      if (isLowSurrogate(character) && !javaUtf8) bad = true;
+    } else if (isLowSurrogate(character) && !javaUtf8)
+      character = combineSurrogates(high, character);
+    else bad = true;
+    if (bad) {
+      const action = handleBadInputUnicodeToTextConversion(
+        false,
+        0,
+        flags,
+        destination,
+        output,
+        destinationBytes,
+        info,
+        null,
+        0,
+        null,
+      );
+      if (action === BadInputConversionAction.STOP) {
+        high = 0;
+        break;
+      }
+      if (action === BadInputConversionAction.CONTINUE) {
+        high = 0;
+        continue;
+      }
+    } else {
+      const needed =
+        character <= 0x7f && (!javaUtf8 || character !== 0)
+          ? 1
+          : character <= 0x7ff
+            ? 2
+            : character <= 0xffff
+              ? 3
+              : 4;
+      if (destinationBytes - output[0] >= needed) {
+        if (needed === 1) destination[output[0]++] = character;
+        else {
+          if (needed === 4) destination[output[0]++] = 0xf0 | (character >> 18);
+          if (needed >= 3)
+            destination[output[0]++] =
+              needed === 4 ? 0x80 | ((character >> 12) & 0x3f) : 0xe0 | (character >> 12);
+          destination[output[0]++] =
+            needed === 2 ? 0xc0 | (character >> 6) : 0x80 | ((character >> 6) & 0x3f);
+          destination[output[0]++] = 0x80 | (character & 0x3f);
+        }
+        high = 0;
+        continue;
+      }
+    }
+    offset--;
+    info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+    break;
+  }
+  if (
+    high !== 0 &&
+    (info[0] &
+      (cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) ===
+      0
+  ) {
+    if ((flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0)
+      info[0] |= cvt.RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
+    else {
+      const action = handleBadInputUnicodeToTextConversion(
+        false,
+        0,
+        flags,
+        destination,
+        output,
+        destinationBytes,
+        info,
+        null,
+        0,
+        null,
+      );
+      if (action === BadInputConversionAction.NO_OUTPUT)
+        info[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      else high = 0;
+    }
+  }
+  if (context !== null) context.nHighSurrogate = high;
+  sourceConverted[0] = offset;
+  return output[0];
 }

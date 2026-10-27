@@ -7,19 +7,35 @@
     "state": "foundation",
     "suite": "shared",
     "subsystem": "rtl-text-conversion",
-    "capabilityIds": ["CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"],
+    "capabilityIds": [
+      "CAP-5df323d7-52ab-467e-8bf5-be066c4dec3b"
+    ],
     "semantic": {
       "behaviorStatus": "unverified",
       "contractStatus": "unverified",
       "defaultStatus": "unverified",
       "divergenceClass": "B",
-      "evidence": ["apps/office/src/tools/source/stream/stream.ts", "apps/office/src/tools/source/stream/stream.test.ts", "vendor/libreoffice-reference/tools/source/stream/stream.cxx"],
-      "justification": "Task AQF9AG places Calc CSV's consumed in-memory SvStream BOM, physical-line reader and AsciiSave writer operations at the original tools/source/stream owner. The allowed-encoding BOM switch, byte position, byte versus Unicode line decoding, source default and explicit line limits (CALC-293), opposite CR/LF pair handling, Unicode NUL compaction, original UTF-16BE swapped-buffer order after NUL (CALC-290) and EOF after unsuccessful read follow the pinned source. The output side preserves the source UTF-16 BOM, encoded-text, raw-byte and code-unit writes; byte extraction is the browser memory-stream boundary. Full stream buffering, errors and other SvStream operations remain unported.",
+      "evidence": [
+        "apps/office/src/tools/source/stream/stream.ts",
+        "apps/office/src/tools/source/stream/stream.test.ts",
+        "vendor/libreoffice-reference/tools/source/stream/stream.cxx",
+        "apps/office/src/svtools/source/svrtf/svparser.test.ts",
+        "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts"
+      ],
+      "justification": "Task AQF9AG places Calc CSV's consumed in-memory SvStream BOM, physical-line reader and AsciiSave writer operations at the original tools/source/stream owner. The allowed-encoding BOM switch, byte position, byte versus Unicode line decoding, source default and explicit line limits (CALC-293), opposite CR/LF pair handling, Unicode NUL compaction, original UTF-16BE swapped-buffer order after NUL (CALC-290) and EOF after unsuccessful read follow the pinned source. The output side preserves the source UTF-16 BOM, encoded-text, raw-byte and code-unit writes; byte extraction is the browser memory-stream boundary. Full stream buffering, errors and other SvStream operations remain unported. Adds native ReadChar, ReadUtf16, good and SeekRel operations consumed by SvParser, retaining signed byte references, current stream endianness, byte offsets and EOF only on unsuccessful read. The existing memory-stream binding has no device/pending I/O; generic native stream error/lifetime semantics are not claimed. Native WriteOString raw byte-view writes, WriteChar byte narrowing and the represented integer WriteNumberAsString instantiations support the RTF export stream. These byte writes preserve embedded NUL and high bytes without UTF8 recoding. Generic float formatting and full stream/device error services are not admitted by these integer/byte operations.",
       "knownViolations": [],
-      "localSymbols": ["SvStream"],
+      "localSymbols": [
+        "SvStream"
+      ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "tools/source/stream/stream.cxx",
-      "upstreamSymbols": ["SvStream::StartReadingUnicodeText", "SvStream::ReadUniOrByteStringLine", "SvStream::StartWritingUnicodeText", "SvStream::WriteUnicodeOrByteText", "SvStream::WriteUniOrByteChar"]
+      "upstreamSymbols": [
+        "SvStream::StartReadingUnicodeText",
+        "SvStream::ReadUniOrByteStringLine",
+        "SvStream::StartWritingUnicodeText",
+        "SvStream::WriteUnicodeOrByteText",
+        "SvStream::WriteUniOrByteChar"
+      ]
     }
   }
 }

@@ -1,0 +1,2111 @@
+{
+  "en": {
+    "agdasima": {
+      "SubstFonts": "Agency FB",
+      "SubstFontsMS": "Agency FB",
+      "FontType": "Normal,SansSerif"
+    },
+    "agencyfb": {
+      "SubstFonts": "Agdasima",
+      "FontType": "Normal,SansSerif"
+    },
+    "albany": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,SansSerif"
+    },
+    "albanyamt": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,SansSerif"
+    },
+    "algerian": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar",
+      "SubstFontsMS": "comic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Title,Outline,Shadow"
+    },
+    "almanac": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "andalesans": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Trebuchet",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "andalesansui": {
+      "SubstFonts": "andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "Arial Unicode MS",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Normal,SansSerif,Full"
+    },
+    "andalewtui": {
+      "SubstFonts": "andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "Arial Unicode MS",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Normal,SansSerif,Full"
+    },
+    "andy": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Comic"
+    },
+    "antiqueolive": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "arial": {
+      "SubstFonts": "liberationsans;albanyamt;albany;arimo;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "arialnarrow": {
+      "SubstFonts": "arialnarrowmt;liberationsansnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "arialunicode": {
+      "SubstFonts": "andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;liberationsans;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Full"
+    },
+    "arimo": {
+      "SubstFonts": "arial;liberationsans;albany;albanyamt;helvetica;",
+      "SubstFontsMS": "arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "arioso": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "avantgarde": {
+      "SubstFonts": "centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "bacasimeantique": {
+      "SubstFonts": "Baskerville Old Face",
+      "SubstFontsMS": "Baskerville Old Face",
+      "FontType": "Normal,Serif"
+    },
+    "baskervilleoldface": {
+      "SubstFonts": "Bacasime Antique;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Other"
+    },
+    "batang": {
+      "SubstFonts": "Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;Noto Serif KR;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "바탕",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,CJK,CJK_KR"
+    },
+    "batangche": {
+      "SubstFonts": "Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;Noto Serif KR;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "belanosima": {
+      "SubstFonts": "Berlin Sans FB",
+      "SubstFontsMS": "Berlin Sans FB",
+      "FontType": "Normal,SansSerif"
+    },
+    "bell": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "berlinsansfb": {
+      "SubstFonts": "Belanosima",
+      "FontType": "Normal,SansSerif"
+    },
+    "bitstreamverasans": {
+      "SubstFonts": "dejavusans",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,SansSerif"
+    },
+    "bitstreamveraserif": {
+      "SubstFonts": "dejavuserif",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Serif"
+    },
+    "bitstreamverasansmono": {
+      "SubstFonts": "dejavusansmono;cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Fixed,Typewriter"
+    },
+    "blackadder": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "bookantiqua": {
+      "SubstFonts": "palatino;palatinolinotype;bookantiqua;palladio;palladiol;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "bookman": {
+      "SubstFonts": "bookman;itcbookman;bookmanl;bookmanoldstyle;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "bookmanl": {
+      "SubstFonts": "bookman;itcbookman;bookmanl;bookmanoldstyle;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "bookmanoldstyle": {
+      "SubstFonts": "bookman;itcbookman;bookmanl;bookmanoldstyle;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Other"
+    },
+    "bradleyhand": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Handwriting"
+    },
+    "broadway": {
+      "SubstFonts": "broadway;mtbroadway;broadwaymt;falstaff;widelatin;latinwide;impact",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "Expanded",
+      "FontType": "Decorative,Special"
+    },
+    "calibri": {
+      "SubstFonts": "carlito;hiraginomarugothicpronw3;hiraginomarugothicprow3",
+      "FontType": "Normal,SansSerif"
+    },
+    "carlito": {
+      "SubstFonts": "calibri;hiraginomarugothicpronw3;hiraginomarugothicprow3",
+      "SubstFontsMS": "Calibri",
+      "FontType": "Normal,SansSerif"
+    },
+    "cambria": {
+      "SubstFonts": "caladea;applelisung",
+      "FontType": "Normal,Serif"
+    },
+    "caladea": {
+      "SubstFonts": "cambria;applelisung",
+      "SubstFontsMS": "Cambria",
+      "FontType": "Normal,Serif"
+    },
+    "candara": {
+      "FontType": "Normal,SansSerif"
+    },
+    "caprasimo": {
+      "SubstFonts": "Cooper Black",
+      "SubstFontsMS": "Cooper Black",
+      "FontType": "Normal,Serif"
+    },
+    "consolas": {
+      "FontType": "Normal,SansSerif,Fixed"
+    },
+    "constantia": {
+      "FontType": "Normal,Serif"
+    },
+    "cooperblack": {
+      "SubstFonts": "Caprasimo",
+      "FontType": "Normal,Serif"
+    },
+    "corbel": {
+      "FontType": "Normal,SansSerif"
+    },
+    "cordia": {
+      "FontType": "Normal,SansSerif"
+    },
+    "calisto": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "castellar": {
+      "SubstFonts": "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Title,Outline,Shadow"
+    },
+    "century": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "centurygothic": {
+      "SubstFonts": "centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "centuryschoolbook": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Schoolbook"
+    },
+    "centuryschoolbookl": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Schoolbook"
+    },
+    "cfangsong": {
+      "SubstFonts": "fangsong;fzfangsong;cfangsong;simkai;fzkai;zycjkkai;mkai;kai;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "cgtimes": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "chancery": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "chanceryl": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "chevara": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Capitals,Outline,Shadow"
+    },
+    "chevaraoutline": {
+      "SubstFonts": "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Capitals,Outline,Shadow"
+    },
+    "chicago": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "chiller": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Special,Italic,Script"
+    },
+    "cmusansserif": {
+      "SubstFonts": "albanyamt;albany;arial;dejavusans;cmusansserif;freesans;nimbussansl;helvetica;lucida;geneva;helmet;andalesansui;arialunicodems;lucidasansunicode;tahoma",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "cmuserif": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;dejavuserif;cmuserif;freeserif;nimbusromanno9l;luxiserif;times;lucidaserif;lucidabright;timmons;newyork;serif",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Serif"
+    },
+    "cmutypewritertext": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;dejavusansmono;cmutypewritertext;freemono;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "colonna": {
+      "SubstFonts": "monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Outline,Shadow"
+    },
+    "comicsans": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Italic,Script,Comic"
+    },
+    "comicsansms": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Italic,Script,Comic"
+    },
+    "conga": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Decorative,Capitals"
+    },
+    "copperlategothic": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Decorative,Capitals"
+    },
+    "corsiva": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "courier": {
+      "SubstFonts": "cumberlandamt;cumberland;cousine;liberationmono;couriernew;nimbusmonol;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "couriernew": {
+      "SubstFonts": "cumberlandamt;cumberland;cousine;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "cousine": {
+      "SubstFonts": "couriernew;cumberland;cumberlandamt;liberationmono;courier",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "cumberland": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Fixed,Typewriter"
+    },
+    "cumberlandamt": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;liberationmono;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Fixed,Typewriter"
+    },
+    "curlz": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Special,Italic,Script"
+    },
+    "cursive": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script"
+    },
+    "dejavusans": {
+      "SubstFonts": "bitstreamverasans",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,SansSerif"
+    },
+    "dejavuserif": {
+      "SubstFonts": "bitstreamveraserif",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Serif"
+    },
+    "dejavusansmono": {
+      "SubstFonts": "bitstreamverasansmono;cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Fixed,Typewriter"
+    },
+    "dejavusanscondensed": {
+      "SubstFonts": "liberationsansnarrow;arialnarrow",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "SansSerif"
+    },
+    "din": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,SansSerif"
+    },
+    "dingbats": {
+      "SubstFonts": "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "dotum": {
+      "SubstFonts": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,CJK,CJK_KR"
+    },
+    "dotumche": {
+      "SubstFonts": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "haansoftdotum": {
+      "SubstFonts": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "edwardianscript": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "elite": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "elited": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "engravers": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Decorative,Capitals"
+    },
+    "extra": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "falstaff": {
+      "SubstFonts": "falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "UltraExpanded",
+      "FontType": "Serif,Decorative,Special"
+    },
+    "fangsong": {
+      "SubstFonts": "fangsong;fzfangsong;cfangsong;simkai;fzkai;zycjkkai;mkai;kai;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "fantasy": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special"
+    },
+    "felixtitling": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Decorative,Capitals"
+    },
+    "forte": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Italic,Script,Comic"
+    },
+    "freemono": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;dejavusansmono;cmutypewritertext;freemono;nimbusmonol;courier;lucidasanstypewriter;lucidatypewriter;monaco;monospaced",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "freesans": {
+      "SubstFonts": "albanyamt;albany;arial;dejavusans;cmusansserif;freesans;nimbussansl;helvetica;lucida;geneva;helmet;andalesansui;arialunicodems;lucidasansunicode;tahoma",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "freeserif": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;dejavuserif;cmuserif;freeserif;nimbusromanno9l;luxiserif;times;lucidaserif;lucidabright;timmons;newyork;serif",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Serif"
+    },
+    "frenchscript": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Special,Italic,Script,BrushScript"
+    },
+    "frutiger": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "fujiyama": {
+      "SubstFonts": "arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "SansSerif,Special"
+    },
+    "fzhei": {
+      "SubstFonts": "simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "fzkai": {
+      "SubstFonts": "simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "gallia": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian;imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Title,Outline,Shadow"
+    },
+    "garamond": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "gautami": {
+      "SubstFonts": "nirmalaui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "geneva": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "gigi": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Special,Italic,Script"
+    },
+    "gothic": {
+      "SubstFonts": "msgothic;mspgothic;ipagothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "gothicb": {
+      "SubstFonts": "msgothic;mspgothic;ipagothic;gothic;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "gothicl": {
+      "SubstFonts": "msgothic;mspgothic;ipapgothic;gothic;centurygothic;avantgarde;itcavantgarde;avantgardegothic;conga;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "gulim": {
+      "SubstFonts": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,CJK,CJK_KR"
+    },
+    "gulimche": {
+      "SubstFonts": "Noto Sans CJK KR;Source Han Sans KR;나눔고딕;NanumGothic;맑은 고딕;Malgun Gothic;애플 SD 산돌고딕 Neo;Apple SD Gothic Neo;Noto Sans KR;나눔바른고딕;NanumBarunGothic;나눔바른고딕 옛한글;NanumBarunGothic YetHangul;KoPubWorld돋움체;KoPubWorld Dotum;KoPub돋움체;돋움;Dotum;돋움체;DotumChe;굴림;Gulim;굴림체;GulimChe;애플고딕;Apple Gothic;은 돋움;UnDotum;백묵 굴림;Baekmuk Gulim;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "gungsuh": {
+      "SubstFonts": "궁서;gungsuh;궁서체;gungsuhche;은 궁서;Un Gungsuh;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "gungsuhche": {
+      "SubstFonts": "궁서;gungsuh;궁서체;gungsuhche;은 궁서;Un Gungsuh;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "hei": {
+      "SubstFonts": "hei;andalesansui;simhei;fzhei;zycjkhei;mhei;fzmingti;msunglighttc;mingliu;pmingliu;ming;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "heiseimin": {
+      "SubstFonts": "msmincho;mspmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "helmet": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "helmetcondensed": {
+      "SubstFonts": "arialnarrow;helveticanarrow;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "helv": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "helvetica": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "helveticanarrow": {
+      "SubstFonts": "liberationsansnarrow;arialnarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "holidaypi": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "holidays": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "haansoftbatang": {
+      "SubstFonts": "Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;Noto Serif KR;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "impact": {
+      "SubstFonts": "falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "UltraExpanded",
+      "FontType": "SansSerif,Decorative,Special"
+    },
+    "imprint": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Outline,Shadow"
+    },
+    "imprintmtshadow": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Outline,Shadow"
+    },
+    "imprintshadow": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Outline,Shadow"
+    },
+    "informalroman": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script"
+    },
+    "kai": {
+      "SubstFonts": "kai;simkai;fzkai;zycjkkai;mkai;fzmingti;msunglighttc;mingliu;pmingliu;ming;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "kidprint": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Italic,Script,Comic"
+    },
+    "kristen": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Comic"
+    },
+    "kunstlerscript": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "latinwide": {
+      "SubstFonts": "falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "UltraExpanded",
+      "FontType": "Serif,Decorative,Special"
+    },
+    "lettergothic": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "liberationsans": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,SansSerif"
+    },
+    "liberationserif": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Serif"
+    },
+    "liberationmono": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;dejavusansmono;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Fixed,Typewriter"
+    },
+    "linedraw": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "lineprinter": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "losangeles": {
+      "SubstFonts": "onyx;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif,Special"
+    },
+    "lucidabright": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "lucidacalligraphic": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "lucidacalligraphy": {
+      "SubstFonts": "Lugrasimo;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "lucidaconsole": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "lucidadingbats": {
+      "SubstFonts": "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "lucidahandwriting": {
+      "SubstFonts": "Lumanosimo;andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Handwriting"
+    },
+    "lucidagrande": {
+      "SubstFonts": "Lunasima",
+      "FontType": "Normal,SansSerif"
+    },
+    "lucidasans": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "lucidasansdingbats": {
+      "SubstFonts": "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "lucidasanstyp": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "lucidasanstypewriter": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "lucidasansunicode": {
+      "SubstFonts": "andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "lucidatypewriter": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "lugrasimo": {
+      "SubstFonts": "Lucida Calligraphy",
+      "SubstFontsMS": "Lucida Calligraphy",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "lunasima": {
+      "SubstFonts": "Lucida Grande",
+      "SubstFontsMS": "Lucida Grande",
+      "FontType": "Normal,SansSerif"
+    },
+    "lumanosimo": {
+      "SubstFonts": "Lucida Handwriting",
+      "SubstFontsMS": "Lucida Handwriting",
+      "FontType": "Italic,Script,Handwriting"
+    },
+    "marlett": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "mhei": {
+      "SubstFonts": "simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "mincho": {
+      "SubstFonts": "msmincho;mspmincho;hiraginominchopronw3;hiraginominchoprow3;ipamincho;ipapmincho;minchol;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "minchoj": {
+      "SubstFonts": "msmincho;mspmincho;minchol;hgheiseimin;heiseimin;mincho;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "minchol": {
+      "SubstFonts": "msmincho;ipamincho;mspmincho;mincho;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "minchou": {
+      "SubstFonts": "msmincho;ipamicho;ipapmincho;mspmincho;minchol;mincho;heiseimin;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "ming": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "mingli": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "mingliu": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "mkai": {
+      "SubstFonts": "simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "monaco": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "mono": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "monol": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "monospace": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "monospaced": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "morewingbats": {
+      "SubstFonts": "starsymbol;wingdings;morewingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "hiraginominchopronw3": {
+      "SubstFonts": "hiraginominchoprow3;msmincho",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "hiraginominchoprow3": {
+      "SubstFonts": "hiraginominchopronw3;msmincho",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "hiraginokakugothicpronw3": {
+      "SubstFonts": "hiraginokakugothicprow3;msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "hiraginokakugothicprow3": {
+      "SubstFonts": "hiraginokakugothicpronw3;msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "hiraginomarugothicpronw4": {
+      "SubstFonts": "hiraginomarugothicprow4;meiryo;msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "hiraginomarugothicprow4": {
+      "SubstFonts": "hiraginomarugothicpronw4;meiryo;msgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "meiryo": {
+      "SubstFonts": "msgothic;hiraginomarugothicpronw4",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "msgothic": {
+      "SubstFonts": "mspgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;ipagothic;gothic;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "mspgothic": {
+      "SubstFonts": "mspgothic;msgothic;hiraginokakugothicpronw3;hiraginokakugothicprow3;ipapgothic;gothic;arialunicodems;lucidaunicode",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "msmincho": {
+      "SubstFonts": "ipamincho;hiraginominchopronw3;hiraginominchoprow3;mspmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "msong": {
+      "SubstFonts": "song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "mspmincho": {
+      "SubstFonts": "msmincho;hiraginominchopronw3;hiraginominchoprow3;ipapmincho;minchol;mincho;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "msuigothic": {
+      "SubstFonts": "mspgothic;msgothic;ipauigothic;gothic;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "msunglightsc": {
+      "SubstFonts": "fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "fzsongti": {
+      "SubstFonts": "fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "msunglighttc": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "fzmingti": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "mtbroadway": {
+      "SubstFonts": "broadway;mtbroadway;broadwaymt;falstaff;widelatin;latinwide;impact",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "UltraExpanded",
+      "FontType": "Decorative,Special"
+    },
+    "myeongjo": {
+      "SubstFonts": "Noto Serif CJK KR;Source Han Serif KR;나눔명조;NanumMyeongjo;Noto Serif KR;나눔명조 옛한글;NanumMyeongjo YetHangul;KoPubWorld바탕체;KoPubWorld Batang;KoPub바탕체;애플명조;AppleMyungjo;바탕;Batang;바탕체;BatangChe;명조;Myeongjo;은 바탕;UnBatang;백묵 바탕;Baekmuk Batang;백묵 명조;Baekmuk Myeongjo;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_KR"
+    },
+    "newcenturyschlbk": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Schoolbook"
+    },
+    "newcenturyschoolbook": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Schoolbook"
+    },
+    "newyork": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "nimbusromanno9l": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Serif"
+    },
+    "nlq": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "nimbussansl": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,SansSerif"
+    },
+    "nimbusromannol": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Serif"
+    },
+    "nimbusmonol": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;liberationmono;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono",
+      "SubstFontsMS": "Courier New",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Fixed,Typewriter"
+    },
+    "nsimsun": {
+      "SubstFonts": "fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "ocean": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "omega": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "onyx": {
+      "SubstFonts": "losangeles;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif,Special"
+    },
+    "opensymbol": {
+      "SubstFonts": "starsymbol;andalesansui;arialunicodems;lucidaunicode;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl",
+      "SubstFontsMS": "Arial Unicode MS",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "outlook": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "palacescript": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Italic,Script,BrushScript"
+    },
+    "palatino": {
+      "SubstFonts": "palatino;bookantiqua;palladio;palladiol;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "palladio": {
+      "SubstFonts": "palatino;bookantiqua;palladio;palladiol;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "palladiol": {
+      "SubstFonts": "palatino;bookantiqua;palladio;palladiol;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "pepita": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "pgothic": {
+      "SubstFonts": "mspgothic;msgothic;ipapgothic;gothic;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "mspgothic",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "pica": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "picad": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed,Typewriter"
+    },
+    "pmincho": {
+      "SubstFonts": "mspmincho;msmincho;ipapmincho;minchol;mincho;hgheiseimin;heiseimin;minchou;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_JP"
+    },
+    "pmingliu": {
+      "SubstFonts": "fzmingti;msunglighttc;mingliu;pmingliu;ming;hei;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_TW"
+    },
+    "pristina": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "ps": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "psd": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "psnlq": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "roman": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "romanno9": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "romanno9l": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "romanps": {
+      "SubstFonts": "cumberlandamt;cumberland;couriernew;nimbusmonol;courier;lucidatypewriter;lucidasanstypewriter;monaco;monospaced;nimbusmono;nimbusmonol",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Fixed"
+    },
+    "sans": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;bitstreamvera;verdana;luxisans;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sanscondensed": {
+      "SubstFonts": "liberationsansnarrow;arialnarrow;helveticanarrow;helmetcondensed;dejavusanscondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansl": {
+      "SubstFonts": "albanyamt;albany;liberationsans;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Verdana",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sanslcondensed": {
+      "SubstFonts": "liberationsansnarrow;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed;dejavusanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansserif": {
+      "SubstFonts": "liberationsans;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "Arial",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "schoolbook": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif,Schoolbook"
+    },
+    "script": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "segoe": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "serif": {
+      "SubstFonts": "liberationserif;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "sheffield": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Normal,SansSerif,Decorative,Capitals"
+    },
+    "shelley": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "shusong": {
+      "SubstFonts": "song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "simhei": {
+      "SubstFonts": "simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "simkai": {
+      "SubstFonts": "simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "simsong": {
+      "SubstFonts": "song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "simsun": {
+      "SubstFonts": "fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "snowcap": {
+      "SubstFonts": "imprintmtshadow;imprintshadow;imprint;chevaraoutline;chevara;gallia;colonnamt;algerian;castellar;monotypeoldstyleboldoutline;monotypeoldstyleoutline;chevaraoutline;imprintmtshadow;imprintshadow;imprint;colonnamt;castellar;imprintmtshadow;imprintshadow;imprint;chevara;gallia;algerian",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Decorative,Special,Outline,Shadow"
+    },
+    "song": {
+      "SubstFonts": "song;fzsongyi;fzsong;msong;shusong;fzshusong;fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "sorts": {
+      "SubstFonts": "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "sorts2": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "sorts3": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "spartan": {
+      "SubstFonts": "sheffield;conga;centurygothic;copperlategothic;felixtitling;centurygothic;avantgarde;itcavantgarde;gothic;avantgardegothic;conga;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif,Decorative,Capitals"
+    },
+    "standardsymbols": {
+      "SubstFonts": "starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "standardsymbolsl": {
+      "SubstFonts": "starsymbol;symbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "starbats": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "starmath": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "starsymbol": {
+      "SubstFonts": "opensymbol;andalesansui;arialunicodems;lucidaunicode;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl",
+      "SubstFontsMS": "Arial Unicode MS",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "swiss": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "swissnarrow": {
+      "SubstFonts": "dejavuserifcondensed;liberationsansnarrow;arialnarrow;helveticanarrow;helmetcondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "symbol": {
+      "SubstFonts": "starsymbol;opensymbol;standardsymbols;standardsymbolsl;mtsymbol;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "tahoma": {
+      "SubstFonts": "andalesansui;arialunicodems;lucidaunicode;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "thorndale": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Serif"
+    },
+    "thorndaleamt": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Default,Standard,Normal,Serif"
+    },
+    "times": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;timesnewroman;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;nimbusromanno9l;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Serif"
+    },
+    "timesnewroman": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Serif"
+    },
+    "timesroman": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;timesnewroman;nimbusromanno9l;times;newyork;timmons;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "timmons": {
+      "SubstFonts": "thorndaleamt;thorndale;liberationserif;timesnewroman;nimbusromanno9l;times;timesroman;newyork;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "timos": {
+      "SubstFonts": "timesnewroman;thorndale;thorndaleamt;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Standard,Normal,Serif"
+    },
+    "tmsrmn": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;liberationserif;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "Times New Roman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "trebuchet": {
+      "SubstFonts": "andalesans;verdana;trebuchetms;albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "univers": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "universcondensed": {
+      "SubstFonts": "arialnarrow;helveticanarrow;dejavucondensed;helmetcondensed;nimbussanslcondensed;nimbussanscondensed",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "utah": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans;lucida;geneva;helmet;sansserif;nimbussans;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "utopia": {
+      "SubstFonts": "newcenturyschlbk;newcenturyschoolbook;centuryschoolbook;centuryschoolbookl;thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons;serif;lucidaserif;lucidabright;roman;nimbusromanno9;bookman;itcbookman;garamond;garamondmt;palatino",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "vacation": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "verdana": {
+      "SubstFonts": "segoe;lucidasans;albanyamt;albany;arial;nimbussansl;helvetica;lucida;geneva;helmet;sansserif;nimbussans",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "vinerhand": {
+      "SubstFonts": "andymt;comicsansms;andy;kidprint;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Handwriting"
+    },
+    "vivaldi": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "vladimirscript": {
+      "SubstFonts": "palacescript;palacescriptmt;arioso;shelley;zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,BrushScript"
+    },
+    "webdings": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "webdings2": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "webdings3": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "widelatin": {
+      "SubstFonts": "falstaff;widelatin;latinwide;impact;broadway;mtbroadway;broadwaymt",
+      "SubstFontsMS": "",
+      "FontWeight": "Black",
+      "FontWidth": "UltraExpanded",
+      "FontType": "Serif,Decorative,Special"
+    },
+    "wingdings": {
+      "SubstFonts": "starsymbol;wingdings;morewingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "wingdings2": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "wingdings3": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "wingdings4": {
+      "SubstFonts": "starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "zapfcalligraphic": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "zapfcalligraphy": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "zapfchancery": {
+      "SubstFonts": "zapfchancery;itczapfchancery;monotypecorsiva;corsiva;chancery;chanceryl;lucidacalligraphy;lucidahandwriting;palacescript;palacescriptmt;arioso;shelley;andymt;comicsansms;andy;kidprint;",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Script,Chancery"
+    },
+    "zapfdingbats": {
+      "SubstFonts": "starsymbol;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;opensymbol;starsymbol;opensymbol;starbats;wingdings;zapfdingbats;itczapfdingbats;monotypesorts;dingbats;lucidadingbats;lucidasansdingbats;webdings;symbol;standardsymbols;standardsymbolsl;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Symbol,Special"
+    },
+    "zycjkhei": {
+      "SubstFonts": "simhei;fzhei;zycjkhei;mhei;hei;andalesansui;fzsongti;msunglightsc;simsun;nsimsun;zycjksun;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "zycjkkai": {
+      "SubstFonts": "simkai;fzkai;zycjkkai;mkai;kai;fangsong;fzfangsong;cfangsong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "zycjksun": {
+      "SubstFonts": "fzsongti;msunglightsc;simsun;nsimsun;arplshanheisununi;zycjksun;song;fzsongyi;fzsong;msong;shusong;fzshusong;andalesansui;arialunicodems;lucidaunicode",
+      "SubstFontsMS": "",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "CJK,CJK_SC"
+    },
+    "sansregular": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansdemi": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Demi",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansheavy": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Heavy",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansbold": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Bold",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sansitalic": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,SansSerif"
+    },
+    "sansbolditalic": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Bold",
+      "FontWidth": "Normal",
+      "FontType": "Italic,SansSerif"
+    },
+    "sanssemibold": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "SemiBold",
+      "FontWidth": "Normal",
+      "FontType": "Normal,SansSerif"
+    },
+    "sanssemibolditalic": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "SemiBold",
+      "FontWidth": "Normal",
+      "FontType": "Italic,SansSerif"
+    },
+    "sanscondensedsemibold": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "Semi",
+      "FontWidth": "Condensed",
+      "FontType": "Normal,SansSerif"
+    },
+    "sanscondensedsemibolditalic": {
+      "SubstFonts": "albanyamt;albany;arial;nimbussansl;helvetica;lucidasans",
+      "FontWeight": "SemiBold",
+      "FontWidth": "Condensed",
+      "FontType": "Italic,SansSerif"
+    },
+    "serifregular": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "serifbold": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "FontWeight": "Bold",
+      "FontWidth": "Normal",
+      "FontType": "Normal,Serif"
+    },
+    "serifbolditalic": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "FontWeight": "Bold",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Serif"
+    },
+    "serifitalic": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Italic,Serif"
+    },
+    "serifcaps": {
+      "SubstFonts": "thorndaleamt;thorndale;timesnewroman;nimbusromanno9l;times;timesroman;newyork;timmons",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Serif,Capitals"
+    },
+    "charter": {
+      "SubstFonts": "bitstreamcharter;georgia;timesnewroman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Serif"
+    },
+    "bitstreamcharter": {
+      "SubstFonts": "charter;georgia;timesnewroman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Serif"
+    },
+    "georgia": {
+      "SubstFonts": "bell;bitstreamcharter;charter;timesnewroman",
+      "FontWeight": "Normal",
+      "FontWidth": "Normal",
+      "FontType": "Serif"
+    },
+    "angsananew": {
+      "SubstFonts": "angsanaupc;oonaksit;tahoma;browallianew;lucidasans;arialunicodems;clearlyu"
+    },
+    "angsanaupc": {
+      "SubstFonts": "angsananew;oonaksit;tahoma;browalliaupc;lucidasans;arialunicodems;clearlyu"
+    },
+    "browallianew": {
+      "SubstFonts": "browalliaupc;angsananew;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu"
+    },
+    "browalliaupc": {
+      "SubstFonts": "browallianew;angsanaupc;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu"
+    },
+    "cordianew": {
+      "SubstFonts": "cordiaupc;browalliaupc;angsananew;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu"
+    },
+    "cordiaupc": {
+      "SubstFonts": "cordianew;browallianew;angsanaupc;oonaksit;tahoma;lucidasans;arialunicodems;clearlyu"
+    },
+    "ooannop": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "oonaksit": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "ooratchada": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "oosawasdee": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "oothanakrit": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "garuda": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "norasi": {
+      "SubstFonts": "cordianew;browallianew;angsananew;tahoma",
+      "FontType": "CTL",
+      "SubstFontsMS": "angsananew"
+    },
+    "nftnorasi": {
+      "SubstFonts": "norasi",
+      "FontType": "CTL"
+    }
+  }
+}

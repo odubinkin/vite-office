@@ -1,4 +1,5 @@
 /** @fileoverview Checks literal native ranged lookup contracts,mutable owners and valid internet integration without upstream execution. */
+import type { SwFormatCharFormat } from "./fmtatr2";
 import { describe, expect, it } from "vitest";
 import { SwDoc } from "../doc/doc";
 import type { SwTextNode } from "./ndtxt";
@@ -35,7 +36,7 @@ function hint(
   start: number,
   end: number,
   name = "link",
-): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat> {
+): SwTextAttrEnd<SwFormatAutoFormat | SwFormatINetFormat | SwFormatCharFormat> {
   if (which === 53)
     return new SwTextAttrEnd(
       new SwFormatAutoFormat(

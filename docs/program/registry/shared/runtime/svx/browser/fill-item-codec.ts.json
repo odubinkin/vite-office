@@ -1,0 +1,32 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svx/browser/fill-item-codec.ts",
+    "classification": "browser-adaptation",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "browser-value-transfer",
+    "capabilityIds": [
+      "CAP-0112"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "not-applicable",
+      "defaultStatus": "not-applicable",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svx/browser/fill-item-codec.ts"
+      ],
+      "justification": "Browser-only fill-item records preserve concrete native item classes, raw full enum, transparency/bool state and named/indexed resolved/complex color ownership. Indexed colors use a read-only view of their actual private resolved payload because the native getter requires non-indexed state; no palette resolution or source mutation is synthesized.",
+      "knownViolations": [],
+      "localSymbols": [
+        "encodeFillItem",
+        "decodeFillItem"
+      ],
+      "sourceResponsibility": "browser-owned",
+      "upstreamFile": null,
+      "upstreamSymbols": []
+    }
+  }
+}

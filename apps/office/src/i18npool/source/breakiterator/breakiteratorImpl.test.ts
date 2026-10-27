@@ -41,3 +41,15 @@ it("returns native UTF16 run boundaries and attaches trailing weak codepoints", 
   expect(bi.endOfScript(units("𠀀A"), 0, S.ASIAN)).toBe(2);
   expect(bi.endOfScript(units("A𠀀"), 0, S.LATIN)).toBe(1);
 });
+it("retains backward-run weak asymmetry and source low-surrogate offsets", /** beginOfScript searches exactly its input class and advances past a mismatching codepoint. @returns Nothing. */ () => {
+  const bi = new BreakIteratorImpl(),
+    text = units("A  漢");
+  expect(bi.beginOfScript(text, -1, S.WEAK)).toBe(-1);
+  expect(bi.beginOfScript(text, 4, S.WEAK)).toBe(-1);
+  expect(bi.beginOfScript(text, 0, S.ASIAN)).toBe(-1);
+  expect(bi.beginOfScript(text, 0, S.LATIN)).toBe(0);
+  expect(bi.beginOfScript(text, 2, S.WEAK)).toBe(1);
+  expect(bi.beginOfScript(text, 3, S.ASIAN)).toBe(3);
+  expect(bi.beginOfScript(units("𠀀𠀀"), 2, S.ASIAN)).toBe(0);
+  expect(bi.beginOfScript(units("𠀀"), 1, S.WEAK)).toBe(2);
+});

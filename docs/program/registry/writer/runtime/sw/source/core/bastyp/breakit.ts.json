@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/core/bastyp/breakit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-lifecycle",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/core/bastyp/breakit.ts",
+        "apps/office/src/sw/source/core/bastyp/breakit.test.ts",
+        "vendor/libreoffice-reference/sw/source/core/bastyp/breakit.cxx"
+      ],
+      "justification": "Original real-script weak-run and next-mark selection, raw UTF16 end adjustment, native backward/forward script services and all-script masks. Application data language borrows the existing configured-language boundary; process lifetime binds through module initialization. Native UNO BreakIterator factory, LanguageTag locale/forbidden caches, word/grapheme services and native startup/shutdown ownership remain unported. This is not a complete SwBreakIt or Application settings certificate.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwBreakIt",
+        "GetWriterTextUnits",
+        "g_pBreakIt"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/core/bastyp/breakit.cxx",
+      "upstreamSymbols": [
+        "SwBreakIt::GetRealScriptOfText",
+        "SwBreakIt::GetAllScriptsOfText"
+      ]
+    }
+  }
+}

@@ -72,8 +72,21 @@ export class SwUndoInsert extends SwUndo {
       text: left.text + right.text,
       hints: left.hints.concat(right.hints, left.text.length),
     };
-    this.SetAfterCursor(nextAction.GetAfterCursorState(this.m_rDoc));
+    left.hints.Dispose();
+    const state = nextAction.GetAfterCursorState(this.m_rDoc);
+    try {
+      this.SetAfterCursor(state);
+    } finally {
+      state.pendingCharacterItems.Dispose();
+    }
     return true;
+  }
+
+  /** Releases owned fragment and pending-item copies when insertion history is discarded. @returns Nothing. */
+  public override Dispose(): void {
+    this.insertedFragment.hints.Dispose();
+    this.insertionItems?.Dispose();
+    super.Dispose();
   }
 
   /** Reports retained inserted text rather than document size. @returns Approximate payload units. */
@@ -100,7 +113,9 @@ export class SwUndoInsert extends SwUndo {
       );
       const text = this.insertedFragment.text;
       node.InsertText(text, this.offset, this.m_nInsertFlags, this.insertionItems);
+      const previous = this.insertedFragment;
       this.insertedFragment = node.CaptureTextFragment(this.offset, this.offset + text.length);
+      previous.hints.Dispose();
       return;
     }
     ReplaceUndoRange(
@@ -120,6 +135,11 @@ export class SwUndoReplace extends SwUndo {
   public constructor(range: SwPaM, inserted: string, regExp = false) {
     super("Replace");
     this.m_pImpl = new SwUndoReplaceImpl(range, inserted, regExp);
+  }
+  /** Native unique implementation destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pImpl.Dispose();
+    super.Dispose();
   }
   /** Records completed insertion coordinates. @param range - Completed range. @returns Nothing. */
   public SetEnd(range: SwPaM): void {
@@ -200,6 +220,10 @@ class SwUndoReplaceImpl extends SwUndoSaveContent {
     this.m_pHistory.CopyAttr(node.GetpSwpHints(), node.GetIndex(), 0, node.Len(), true);
     if (this.m_pHistory.Count() === 0) this.m_pHistory = undefined;
     this.m_sOld = node.GetText().slice(this.m_nSttCnt, this.m_nSelEnd);
+  }
+  /** Native SaveContent-base member destruction uses this implementation's actual document. @returns Nothing. */
+  public override Dispose(): void {
+    super.Dispose(this.m_rDoc);
   }
   /** Stores actual completed end. @param range - Completed range. @returns Nothing. */
   public SetEnd(range: SwPaM): void {

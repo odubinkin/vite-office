@@ -92,7 +92,8 @@
       "TaskCMHQFZ adds original double output macro25 and its native Unicode-header alias for OUStringBuffer double/G17 insertion. Existing integer/float macros and C implementations remain unchanged;native actual header buffer output and declared25value are checked without broad parity promotion.",
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
       "Exports the pinned OSTRING_TO_OUSTRING_CVTFLAGS bit combination used by native Writer RTF byte conversion.",
-      "Task202610251549-V4DQJW: Declares the original shared SAL signed32 C string conversion. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+      "Task202610251549-V4DQJW: Declares the original shared SAL signed32 C string conversion. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
+      "Forward SAL string-wrapper checkpoint ports rtl_string2UString_status, its UTF8 estimate, checked/unchecked C wrappers, early old-target release, ASCII fast path/retry, FLUSH/null-context dispatch, +8-unit retries, shrink fallback and partial checked output. OStringToOUString now delegates to this native owner for octet encodings; the existing explicit UTF16 byte bridge remains a bounded application adaptation. A compiled unchanged native witness observes 524288 core byte-pair calls and 720 mixed/flag cases with allocator identities/sizes/free order under ASan/UBSan. Full registry/ABI and allocation failures are not certified by that witness. WRITER188 records original allocation-failure aliasing; WRITER181 records forward ISCII null-context mismatch. No whole SAL/filter parity promotion."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -150,6 +151,14 @@
         {
           "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
           "marker": "matches original buffer construction"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.native.test.ts",
+          "marker": "it("
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-convert.native.json",
+          "marker": "baselineCommit"
         }
       ],
       "upstream": [

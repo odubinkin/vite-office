@@ -8,17 +8,19 @@
     "upstreamPath": "sal/textenc/converter.cxx",
     "localSymbols": [
       "BadInputConversionAction",
-      "handleBadInputTextToUnicodeConversion"
+      "handleBadInputTextToUnicodeConversion",
+      "handleBadInputUnicodeToTextConversion"
     ],
     "upstreamSymbols": [
       "BadInputConversionAction",
-      "handleBadInputTextToUnicodeConversion"
+      "handleBadInputTextToUnicodeConversion",
+      "handleBadInputUnicodeToTextConversion"
     ],
     "preservedResponsibilities": [
-      "Pinned SAL invalid/undefined byte actions, info bits, flag masks and destination accounting for the UTF-8 decoder."
+      "Pinned SAL invalid/undefined conversion actions in both directions, flag overrides, replacement bytes, optional prefix ownership and exact destination accounting."
     ],
     "omittedResponsibilities": [
-      "Unicode-to-text bad-input actions and remaining converter.cxx responsibilities are not yet used by this import-focused path."
+      "Native byte-pointer and optional output-pointer storage is represented by borrowed typed arrays and mutable tuples; compiled native differential remains unverified."
     ],
     "evidence": {
       "local": [

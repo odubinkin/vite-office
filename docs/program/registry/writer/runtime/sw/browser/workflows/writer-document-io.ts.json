@@ -18,9 +18,10 @@
       "defaultStatus": "not-applicable",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterOdtToPort"
+        "apps/office/src/sw/browser/workflows/writer-document-io.ts#saveWriterOdtToPort",
+        "apps/office/src/sw/browser/presentation/WriterFileDialog.test.tsx#native byte conversion"
       ],
-      "justification": "Exports ODT and TXT through browser download ports; native Save is intentionally absent.",
+      "justification": "Exports ODT, TXT, RTF and Markdown through browser download ports. TXT byte encoding uses the native SAL UTF-8 wrapper; native Save is intentionally absent. Other export grammar parity remains independently unverified.",
       "knownViolations": [],
       "localSymbols": [
         "saveWriterOdtToPort",

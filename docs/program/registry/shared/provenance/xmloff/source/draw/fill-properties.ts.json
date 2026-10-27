@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/xmloff/source/draw/fill-properties.ts",
+    "upstreamPath": "xmloff/source/draw/sdpropls.cxx",
+    "localSymbols": [
+      "importFillProperties",
+      "exportFillProperties"
+    ],
+    "upstreamSymbols": [
+      "aXML_FillStyle_EnumMap"
+    ],
+    "preservedResponsibilities": [
+      "Consumed paragraph FillStyle map, SAX RGB and XMLNegPercentPropHdl conversions are split from large original shared owners; exact map order and percent bounds/inversion are retained."
+    ],
+    "omittedResponsibilities": [
+      "Full drawing style/property factory/service graph and bitmap/gradient/hatch values are not claimed; only represented enum values are mapped."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/xmloff/source/draw/fill-properties.ts",
+          "marker": "importFillProperties"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/draw/sdpropls.cxx",
+          "marker": "aXML_FillStyle_EnumMap"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/style/xmlbahdl.cxx",
+          "marker": "XMLNegPercentPropHdl::importXML"
+        },
+        {
+          "path": "vendor/libreoffice-reference/xmloff/source/text/txtprmap.cxx",
+          "marker": "XML_SW_TYPE_FILLSTYLE"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/xmloff/source/draw/fill-properties.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Consumed paragraph FillStyle map, SAX RGB and XMLNegPercentPropHdl conversions are split from large original shared owners; exact map order and percent bounds/inversion are retained."
+    }
+  }
+}

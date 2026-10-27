@@ -188,6 +188,8 @@ export class SwUndoSaveContent {
     if (this.boundaryNodeId !== undefined) undoNodes.Release(this.boundaryNodeId);
     this.boundaryNodeId = undefined;
     for (const id of this.nodeIds.splice(0)) undoNodes.Release(id);
+    this.m_pHistory?.Dispose();
+    this.m_pHistory = undefined;
   }
 }
 
@@ -269,6 +271,12 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
     this.after = after === undefined ? undefined : captureCursorRange(after);
   }
 
+  /** Releases the owned shell cursor adjuncts in the logical native action destructor. @returns Nothing. */
+  public override Dispose(): void {
+    this.after?.pendingCharacterItems.Dispose();
+    this.before?.pendingCharacterItems.Dispose();
+  }
+
   /** Reverts the model payload and restores the pre-command cursor. @param context - Active Writer undo context. @returns Nothing. */
   public finalUndo(context: SwUndoRedoContext): void {
     this.UndoImpl(context);
@@ -300,7 +308,9 @@ export abstract class SwUndo extends SfxUndoAction<SwUndoRedoContext> {
 
   /** Replaces the post-command cursor after compatible action grouping. @param state - New grouped endpoint. @returns Nothing. */
   protected SetAfterCursor(state: SwUndoCursorState): void {
-    this.after = captureCursorRange(state);
+    const next = captureCursorRange(state);
+    this.after?.pendingCharacterItems.Dispose();
+    this.after = next;
   }
 
   /** Records a completed native mutation's collapsed point while retaining its owned pending items and mode. @param position - Actual post-mutation native point. @returns Nothing. */
@@ -335,7 +345,12 @@ export function GetUndoTextNode(document: SwDoc, node: SwTextNode): SwTextNode {
 
 /** Captures a native Writer text/hint fragment for undo. @param node - Source node. @param start - Inclusive offset. @param end - Exclusive offset. @returns Independent fragment. */
 export function CopyTextFragment(node: SwTextNode, start: number, end: number): SwTextFragment {
-  return CopyUndoFragment(node.CaptureTextFragment(start, end));
+  const captured = node.CaptureTextFragment(start, end);
+  try {
+    return CopyUndoFragment(captured);
+  } finally {
+    captured.hints.Dispose();
+  }
 }
 
 /** Deep-copies a native Writer fragment without browser projection. @param fragment - Source fragment. @returns Independent fragment. */

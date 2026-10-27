@@ -43,7 +43,16 @@ export class SwUndoNodes {
 
   /** Releases content when its action leaves the undo or redo stack. @param id - Undo node ID. @returns Nothing. */
   public Release(id: number): void {
+    const entry = this.entries.get(id);
     this.entries.delete(id);
+    if (entry === undefined) return;
+    if (isTextFragment(entry)) entry.hints.Dispose();
+    else if (entry.GetNodes().indexOfOrUndefined(entry) === undefined) {
+      // A restored node is owned by the live SwNodes; this bounded ID binding only borrows it.
+      entry.RemoveFromList();
+      entry.ClearSwpHintsArr(true);
+      entry.GetpSwAttrSet()?.Dispose();
+    }
   }
 
   /** Returns retained node count for bounded-history assertions. @returns Retained count. */
@@ -53,7 +62,7 @@ export class SwUndoNodes {
 
   /** Clears retained content when the document is discarded. @returns Nothing. */
   public Clear(): void {
-    this.entries.clear();
+    for (const id of [...this.entries.keys()]) this.Release(id);
   }
 }
 

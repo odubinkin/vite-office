@@ -1,6 +1,11 @@
-/** @fileoverview Native ISCII Devanagari text-to-Unicode converter from sal/textenc/convertisciidevangari.cxx. */
+/** @fileoverview Native ISCII Devanagari converters from sal/textenc/convertisciidevangari.cxx. */
 import * as cvt from "../inc/rtl/textcvt.h";
-import { BadInputConversionAction, handleBadInputTextToUnicodeConversion } from "./converter";
+import {
+  BadInputConversionAction,
+  handleBadInputTextToUnicodeConversion,
+  handleBadInputUnicodeToTextConversion,
+} from "./converter";
+import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../inc/rtl/character";
 import { IsciiDevanagariMap } from "./convertisciidevangari.data";
 
 /** Original text-to-Unicode context's previous input byte. */
@@ -158,4 +163,234 @@ export function ImplConvertIsciiDevanagariToUnicode(
   }
   sourceConverted[0] = converted;
   return destinationOffset;
+}
+
+/** Original ordered Unicode-to-ISCII ranges: starting unit, range length, first byte. */
+const unicodeToISCIIEncoding: readonly (readonly [number, number, number])[] = [
+  [0x0000, 127, 0x00],
+  [0x0901, 2, 0xa1],
+  [0x0905, 6, 0xa4],
+  [0x090d, 0, 0xae],
+  [0x090e, 2, 0xab],
+  [0x0911, 0, 0xb2],
+  [0x0912, 2, 0xaf],
+  [0x0915, 26, 0xb3],
+  [0x0930, 9, 0xcf],
+  [0x093c, 0, 0xe9],
+  [0x093e, 5, 0xda],
+  [0x0945, 0, 0xe3],
+  [0x0946, 2, 0xe0],
+  [0x0949, 0, 0xe7],
+  [0x094a, 2, 0xe4],
+  [0x094d, 0, 0xe8],
+  [0x095f, 0, 0xce],
+  [0x0964, 0, 0xea],
+  [0x0966, 9, 0xf1],
+];
+
+/** Original reverse context owns previous Unicode unit and pending high surrogate. */
+export interface UnicodeToIsciiDevanagariContext {
+  m_cPrevChar: number;
+  m_cHighSurrogate: number;
+}
+
+/** Creates native reverse state. @returns Fresh context. */
+export function ImplCreateUnicodeToIsciiDevanagariContext(): UnicodeToIsciiDevanagariContext {
+  return { m_cPrevChar: 0, m_cHighSurrogate: 0 };
+}
+
+/** Resets native reverse state. @param context - Existing state. @returns Nothing. */
+export function ImplResetUnicodeToIsciiDevanagariContext(
+  context: UnicodeToIsciiDevanagariContext,
+): void {
+  context.m_cPrevChar = 0;
+  context.m_cHighSurrogate = 0;
+}
+
+/** Releases reverse state through JavaScript ownership. @param context - Existing state. @returns Nothing. */
+export function ImplDestroyUnicodeToIsciiDevanagariContext(
+  context: UnicodeToIsciiDevanagariContext,
+): void {
+  void context;
+}
+
+/** Original UnicodeToIsciiDevanagari::convert, including the native FLUSH condition for pending surrogates.
+ * @param _data - Unused data.
+ * @param context - Required native state.
+ * @param source - UTF-16 source units.
+ * @param sourceChars - Source size.
+ * @param destination - Byte output.
+ * @param destinationBytes - Capacity.
+ * @param flags - Native reverse flags.
+ * @param info - Optional status pointer.
+ * @param sourceConverted - Optional consumed-unit pointer.
+ * @returns Bytes written.
+ */
+export function ImplConvertUnicodeToIsciiDevanagari(
+  _data: unknown,
+  context: UnicodeToIsciiDevanagariContext,
+  source: Uint16Array,
+  sourceChars: number,
+  destination: Uint8Array,
+  destinationBytes: number,
+  flags: number,
+  info: [number] | null,
+  sourceConverted: [number] | null,
+): number {
+  let highSurrogate = context.m_cHighSurrogate;
+  const status: [number] = [0];
+  const output: [number] = [0];
+  let converted = 0;
+  for (; converted < sourceChars; converted++) {
+    let undefinedInput = true;
+    let character = source[converted] as number;
+    let invalid = false;
+    if (highSurrogate === 0) {
+      if (isHighSurrogate(character)) {
+        highSurrogate = character;
+        continue;
+      } else if (isLowSurrogate(character)) invalid = true;
+    } else if (isLowSurrogate(character)) character = combineSurrogates(highSurrogate, character);
+    else invalid = true;
+    if (invalid) undefinedInput = false;
+    else {
+      let special = 0;
+      if (context.m_cPrevChar === 0x094d && character === 0x200c) special = 0xe8;
+      else if (context.m_cPrevChar === 0x094d && character === 0x200d) special = 0xe9;
+      if (special !== 0) {
+        if (destinationBytes - output[0] < 1) {
+          status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+          break;
+        }
+        destination[output[0]++] = special;
+        context.m_cPrevChar = 0;
+        highSurrogate = 0;
+        continue;
+      }
+      switch (character) {
+        case 0x0950:
+          special = 0xa1;
+          break;
+        case 0x090c:
+          special = 0xa6;
+          break;
+        case 0x0961:
+          special = 0xa7;
+          break;
+        case 0x0960:
+          special = 0xaa;
+          break;
+        case 0x0958:
+          special = 0xb3;
+          break;
+        case 0x0959:
+          special = 0xb4;
+          break;
+        case 0x095a:
+          special = 0xb5;
+          break;
+        case 0x095b:
+          special = 0xba;
+          break;
+        case 0x095c:
+          special = 0xbf;
+          break;
+        case 0x095d:
+          special = 0xc0;
+          break;
+        case 0x095e:
+          special = 0xc9;
+          break;
+        case 0x0962:
+          special = 0xdb;
+          break;
+        case 0x0963:
+          special = 0xdc;
+          break;
+        case 0x0944:
+          special = 0xdf;
+          break;
+        case 0x093d:
+          special = 0xea;
+          break;
+      }
+      if (special !== 0) {
+        if (destinationBytes - output[0] < 2) {
+          status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+          break;
+        }
+        destination[output[0]++] = special;
+        destination[output[0]++] = 0xe9;
+        context.m_cPrevChar = 0;
+        highSurrogate = 0;
+        continue;
+      }
+      let mapped = false;
+      for (const [unicode, range, byte] of unicodeToISCIIEncoding) {
+        if (character < unicode) break;
+        if (character <= unicode + range) {
+          if (destinationBytes - output[0] < 1) {
+            status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+            break;
+          }
+          destination[output[0]++] = byte + character - unicode;
+          context.m_cPrevChar = character;
+          mapped = true;
+          break;
+        }
+      }
+      if ((status[0] & cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL) !== 0) break;
+      if (mapped) {
+        highSurrogate = 0;
+        continue;
+      }
+    }
+    const action = handleBadInputUnicodeToTextConversion(
+      undefinedInput,
+      character,
+      flags,
+      destination,
+      output,
+      destinationBytes,
+      status,
+      null,
+      0,
+      null,
+    );
+    if (action === BadInputConversionAction.NO_OUTPUT)
+      status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+    else highSurrogate = 0;
+    if (action === BadInputConversionAction.CONTINUE) continue;
+    break;
+  }
+  if (
+    highSurrogate !== 0 &&
+    (status[0] &
+      (cvt.RTL_UNICODETOTEXT_INFO_ERROR | cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL)) ===
+      0
+  ) {
+    if ((flags & cvt.RTL_UNICODETOTEXT_FLAGS_FLUSH) !== 0)
+      status[0] |= cvt.RTL_UNICODETOTEXT_INFO_SRCBUFFERTOSMALL;
+    else {
+      const action = handleBadInputUnicodeToTextConversion(
+        false,
+        0,
+        flags,
+        destination,
+        output,
+        destinationBytes,
+        status,
+        null,
+        0,
+        null,
+      );
+      if (action === BadInputConversionAction.NO_OUTPUT)
+        status[0] |= cvt.RTL_UNICODETOTEXT_INFO_DESTBUFFERTOSMALL;
+      else highSurrogate = 0;
+    }
+  }
+  context.m_cHighSurrogate = highSurrogate;
+  if (info !== null) info[0] = status[0];
+  if (sourceConverted !== null) sourceConverted[0] = converted;
+  return output[0];
 }

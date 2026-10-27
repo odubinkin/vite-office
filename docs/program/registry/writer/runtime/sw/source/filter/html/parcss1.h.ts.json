@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/parcss1.h.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/parcss1.h.ts",
+        "apps/office/src/sw/source/filter/html/parcss1.test.ts"
+      ],
+      "justification": "Original complete CSS1 token/state/selector values, linked selector/expression fields, reset/operator/length contracts and native URL/Color operations. CSS1Expression out parameters use ordinary JS reference cells or actual mutable Color values; UTF16 views adapt immutable strings to existing SAL/o3tl. Source color and lexer quirks are preserved as WRITER160..165. Native allocator/ABI, out-of-domain floating casts and compiled full Writer parity are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CSS1Token",
+        "CSS1ParserState",
+        "CSS1SelectorType",
+        "CSS1Selector",
+        "CSS1Expression",
+        "css1Units"
+      ],
+      "sourceResponsibility": "aligned",
+      "upstreamFile": "sw/source/filter/html/parcss1.hxx",
+      "upstreamSymbols": [
+        "CSS1Token",
+        "CSS1Selector",
+        "CSS1Expression"
+      ]
+    }
+  }
+}

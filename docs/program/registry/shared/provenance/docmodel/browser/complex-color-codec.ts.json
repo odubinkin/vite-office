@@ -1,0 +1,25 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "browser-adaptation",
+    "status": "local-only",
+    "localPath": "apps/office/src/docmodel/browser/complex-color-codec.ts",
+    "rationale": "Browser-only complete ComplexColor Worker record preserves discriminator, raw double components, system-last color, independent theme/usage fields, ordered transformations and final color. A read-only layout view accesses only the actual maLastColor field missing from the native getter surface; decode reconstructs an actual native owner through existing setters without adding core persistence APIs.",
+    "responsibilities": [
+      "Browser-only complete ComplexColor Worker record preserves discriminator, raw double components, system-last color, independent theme/usage fields, ordered transformations and final color. A read-only layout view accesses only the actual maLastColor field missing from the native getter surface; decode reconstructs an actual native owner through existing setters without adding core persistence APIs."
+    ],
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "The existing browser Worker graph requires structured-cloneable records instead of native in-process object references."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/docmodel/browser/complex-color-codec.ts",
+          "marker": "encodeComplexColor"
+        }
+      ]
+    }
+  }
+}

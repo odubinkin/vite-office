@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { IsPoolUserFormat } from "../../inc/poolfmt";
 import { writerTextColorValue, writerHighlightColorValue } from "../../source/core/attr/swatrset";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
 import { SvxEscapementItem } from "../../../editeng/inc/escapementitem";
@@ -590,7 +591,7 @@ function createParagraphStyleOptions(document: SwDoc): readonly WriterParagraphS
     userDefined: collections
       .filter(
         /** Selects custom declarations. @param collection - Owner. @returns User-defined flag. */
-        (collection) => collection.poolId === 0,
+        (collection) => IsPoolUserFormat(collection.GetPoolFormatId()),
       )
       .map(
         /** Detaches a custom owner. @param collection - Owner. @returns Entry. */

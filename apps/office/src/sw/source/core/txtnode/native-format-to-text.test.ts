@@ -44,11 +44,13 @@ function weightSet(doc: SwDoc, weight: FontWeight, which = 15) {
 }
 /** Inserts one actual AUTO portion. @param node - Actual owner. @param start - Inclusive start. @param end - Exclusive end. @param weight - Literal weight. @returns Owned hint. */
 function auto(node: SwTextNode, start: number, end: number, weight = FontWeight.WEIGHT_BOLD) {
-  return node.InsertItem(
-    new SwFormatAutoFormat(weightSet(node.GetDoc(), weight)),
-    start,
-    end,
-    SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+  return requireInsertedHint(
+    node.InsertItem(
+      new SwFormatAutoFormat(weightSet(node.GetDoc(), weight)),
+      start,
+      end,
+      SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+    ),
   );
 }
 /** Reads direct item values only. @param node - Actual node. @param which - WhichId. @returns Optional value. */
@@ -164,11 +166,13 @@ describe("native paragraph character conversion", /** Registers five-pair and re
   it("fills gaps while ranged items override converted direct items and INET ownership survives", /** Checks native span collection without BuildPortions. @returns Nothing. */ () => {
     const { doc, first } = fixture("abcdefgh");
     const old = auto(first, 2, 6, FontWeight.WEIGHT_NORMAL);
-    const inet = first.InsertItem(
-      new SwFormatINetFormat("url", "target"),
-      1,
-      7,
-      SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+    const inet = requireInsertedHint(
+      first.InsertItem(
+        new SwFormatINetFormat("url", "target"),
+        1,
+        7,
+        SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+      ),
     );
     const items = weightSet(doc, FontWeight.WEIGHT_BOLD);
     items.Put(new SvxPostureItem(FontItalic.ITALIC_NORMAL, 11));
@@ -207,14 +211,18 @@ describe("native paragraph character conversion", /** Registers five-pair and re
   it("merges equal adjacent AUTO portions,skips zero and INET,normalizes nonzero flags", /** Verifies actual owner retention and all sorted maps. @returns Nothing. */ () => {
     const { first } = fixture("abcdef");
     const a = auto(first, 0, 2),
-      b = first.InsertItem(a.format, 2, 4, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+      b = requireInsertedHint(
+        first.InsertItem(a.format, 2, 4, SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST),
+      ),
       zero = auto(first, 2, 2),
       c = auto(first, 4, 6, FontWeight.WEIGHT_NORMAL);
-    const inet = first.InsertItem(
-      new SwFormatINetFormat("url"),
-      1,
-      5,
-      SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+    const inet = requireInsertedHint(
+      first.InsertItem(
+        new SwFormatINetFormat("url"),
+        1,
+        5,
+        SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+      ),
     );
     for (const hint of [a, b, zero, c]) {
       hint.SetFormatIgnoreStart(true);
@@ -361,11 +369,13 @@ describe("native paragraph join preparation and history", /** Registers actual s
         secondStyle = doc.GetTextFormatColl("heading-1");
       first.ChgFormatColl(firstStyle);
       second.ChgFormatColl(secondStyle);
-      const hint = second.InsertItem(
-        new SwFormatINetFormat("url", "target"),
-        1,
-        3,
-        SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+      const hint = requireInsertedHint(
+        second.InsertItem(
+          new SwFormatINetFormat("url", "target"),
+          1,
+          3,
+          SetAttrMode.NOTXTATRCHR | SetAttrMode.NOHINTADJUST,
+        ),
       );
       hint.SetLockExpandFlag(false);
       hint.dontMoveAttr = true;
@@ -446,3 +456,10 @@ describe("native paragraph join preparation and history", /** Registers actual s
     },
   );
 });
+
+/** Requires a surviving owner for the existing native NOHINTADJUST fixture input. @param hint - Actual nullable insertion result. @returns Original owned attribute. */
+function requireInsertedHint<T>(hint: T | undefined): T {
+  if (hint === undefined)
+    throw new Error("Expected native insertion to retain its actual hint owner.");
+  return hint;
+}

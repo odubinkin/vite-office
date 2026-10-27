@@ -1,4 +1,6 @@
 /** @fileoverview Writer Markdown output following sw/source/filter/md/wrtmd.cxx. */
+import { OUStringToOString } from "../../../../sal/rtl/ustring-convert";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
 import {
   SvxFontItem,
@@ -75,7 +77,7 @@ export class SwMDWriter {
       }
       output.push("\n");
     }
-    return new TextEncoder().encode(output.join(""));
+    return OUStringToOString(output.join(""), RTL_TEXTENCODING_UTF8);
   }
 }
 

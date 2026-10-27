@@ -1,0 +1,21 @@
+{
+  "properties": [
+    "BulletFont/FontFamilyname",
+    "BulletFont/FontWeight",
+    "BulletFont/FontItalic",
+    "BulletCharLvl1",
+    "BulletCharLvl2",
+    "BulletCharLvl3",
+    "BulletCharLvl4",
+    "BulletCharLvl5",
+    "BulletCharLvl6",
+    "BulletCharLvl7",
+    "BulletCharLvl8",
+    "BulletCharLvl9",
+    "BulletCharLvl10"
+  ],
+  "values": [null, null, null, null, null, null, null, null, null, null, null, null, null],
+  "family": "OpenSymbol",
+  "height": 14,
+  "characters": [8226, 9702, 9642, 8226, 9702, 9642, 8226, 9702, 9642, 8226]
+}

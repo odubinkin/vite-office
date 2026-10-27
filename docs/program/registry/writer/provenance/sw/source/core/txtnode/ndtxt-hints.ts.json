@@ -23,7 +23,7 @@
         },
         {
           "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
-          "marker": "copyEmpty"
+          "marker": "InsertTextNodeHint"
         },
         {
           "path": "apps/office/src/sw/source/uibase/wrtsh/native-table-delete.test.ts",
@@ -48,6 +48,26 @@
         {
           "path": "apps/office/src/sw/source/core/edit/native-character-shell.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-ranged-attribute-history.test.ts",
+          "marker": "source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
+          "marker": "Source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/ndtxt-hints.ts",
+          "marker": "PrepareTextNodeReplacementHints"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -78,6 +98,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
           "marker": "SwTextNode *SwTextNode::SplitContentNode"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/ndtxt.cxx",
+          "marker": "SwTextNode::"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/txtnode/thints.cxx",
+          "marker": "SwTextNode::InsertHint"
         }
       ]
     },
@@ -98,7 +126,8 @@
       "getWriterParagraphAlignment",
       "CreateTextNodeFontFamilyFragment",
       "CreateTextNodeFontSizeFragment",
-      "CreateTextNodeColorFragment"
+      "CreateTextNodeColorFragment",
+      "PrepareTextNodeReplacementHints"
     ],
     "omittedResponsibilities": [
       "Full native style registration,visited/client/listener/refcount/destruction,all families and insertion modes remain unverified. Portable map binding is a friend-boundary adapter."
@@ -112,7 +141,13 @@
       "Task1KGJBF connects native Calc Bold/Italic/Underline slots through the actual shared Writer command controls to real script-specific weight/posture and underline items,selection state,attribute undo and cell painting. Shared xmloff weight/posture/underline/color handlers retain actual Any,source maps,failed conversion,merge order and consumed unit-converter contracts. Writer text filters now preserve native independent script scalars,font metadata and exact underline style/color instead of browser booleans;automatic-style keys include every represented field,and insertion fragments retain actual native items. Original Writer underline-color ContextFilter suppression is retained. Shared literal underline Worker transport preserves style and packed alpha/color using the real pool;unported complex interface state rejects rather than silently flattening. Native source full constructors,UNO property-set/service/factory graph,complex color XML/Worker transport,rich-text editing,script/device layout,named Calc styles and complete UI/filter parity remain unverified. Source-based managed tests are not a compiled native parity certificate;intentional browser primary-save/open/no-recovery policy remains. Bounded managed verification is recorded in task1KGJBF;no broad parity flags are promoted.",
       "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
       "Leaf4586BY moves existing pure alignment conversion and immutable font/size/color fragment preparation out of the full SwTextNode class into its existing hint/fragment responsibility shard. The actual node retains private text, owned hints and all mutation ordering; no prototype patch, alternate model or duplicate state is introduced.",
-      "TaskN700C9 now reuses original GetParaAttr for caret pending-item capture, including zero-width attributes and DontExpand boundaries, instead of previous-character sampling. Selective full-node RstTextAttr now mutates actual original maps and retains unrelated actual hint owners; independent history values share the same single-item deletion rule. Full-node attributes use direct setters/registered old-reset history; marked zero attributes preserve independent adjacent items. Complete generic InsertItemSet/BreakIterator word/URL/character-style/merged history remains unverified; current-source tests do not promote prior statuses/defaults."
+      "TaskN700C9 now reuses original GetParaAttr for caret pending-item capture, including zero-width attributes and DontExpand boundaries, instead of previous-character sampling. Selective full-node RstTextAttr now mutates actual original maps and retains unrelated actual hint owners; independent history values share the same single-item deletion rule. Full-node attributes use direct setters/registered old-reset history; marked zero attributes preserve independent adjacent items. Complete generic InsertItemSet/BreakIterator word/URL/character-style/merged history remains unverified; current-source tests do not promote prior statuses/defaults.",
+      "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
+      "S3HW1E: Existing full-text/fragment replacement content-index updates are shared at this responsibility split, preserving actual node ownership, exact offsets, Negative/Default modes and prior mutation ordering. This helper is a local representation of the existing bounded replacement path, not a new native service.",
+      "S3HW1E releases the actual composed native INET client base when browser whole-map replacement discards that attribute; retained actual owners are excluded. No native URL-history provider or visit state is synthesized.",
+      "Existing fragment-replacement hint preparation is split from text/index mutation without changing ordering or ownership.",
+      "S3HW1E releases replaced node-owned hint maps and whole-span attributes moved into node item sets. A copied caller snapshot remains independent; a replaced borrowed old map is destroyed. Complete graph/fragment/undo lifetime closure remains pending.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

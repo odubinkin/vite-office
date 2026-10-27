@@ -172,9 +172,11 @@ it("uses reserved outline identity and suppresses empty outline labels without s
     level: 0,
     styleId: SwNumRule.GetOutlineRuleName(),
   });
+  expect(write(first, second, 0, 5, false, clipboard())).toBe("Alpha\nOmega");
+  const rule = first.GetNumRule() as SwNumRule;
+  rule.Set(0, new SwNumRule("Numbered fixture", "label-alignment").Get(0));
   expect(write(first, second, 0, 5, false, clipboard())).toBe("1. Alpha\nOmega");
-  const rule = first.GetNumRule() as SwNumRule,
-    format = rule.Get(0).clone();
+  const format = rule.Get(0).clone();
   format.SetListFormat("");
   rule.Set(0, format);
   expect(write(first, second, 0, 5, false, clipboard())).toBe("Alpha\nOmega");
