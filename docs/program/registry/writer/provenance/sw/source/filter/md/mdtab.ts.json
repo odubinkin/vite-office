@@ -7,13 +7,13 @@
     "localPath": "apps/office/src/sw/source/filter/md/mdtab.ts",
     "upstreamPath": "sw/source/filter/md/mdtab.cxx",
     "localSymbols": [
-      "readMarkdownTableRow"
+      "MDTable"
     ],
     "upstreamSymbols": [
       "SwMarkdownParser::StartTable"
     ],
     "preservedResponsibilities": [
-      "Reads represented Markdown table cells and column alignment before native table construction."
+      "Native table state retains the actual SwTable and -1 row/column counters. Grammar is owned by the external md4c parser; source insertion defaults and cell selection belong to SwMarkdownParser. End-table position/append differential remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -21,8 +21,8 @@
     "evidence": {
       "local": [
         {
-          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
-          "marker": "imports a leading table"
+          "path": "apps/office/src/sw/source/filter/md/mdtab.ts",
+          "marker": "MDTable"
         }
       ],
       "upstream": [

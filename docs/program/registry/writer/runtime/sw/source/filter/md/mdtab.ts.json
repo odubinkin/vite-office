@@ -19,10 +19,10 @@
         "apps/office/src/sw/source/filter/md/mdtab.ts#readMarkdownTableRow",
         "vendor/libreoffice-reference/sw/source/filter/md/mdtab.cxx#SwMarkdownParser::StartTable"
       ],
-      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified.",
+      "justification": "Native table state retains the actual SwTable and -1 row/column counters. Grammar is owned by the external md4c parser; source insertion defaults and cell selection belong to SwMarkdownParser. End-table position/append differential remains unverified.",
       "knownViolations": [],
       "localSymbols": [
-        "readMarkdownTableRow"
+        "MDTable"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/md/mdtab.cxx",

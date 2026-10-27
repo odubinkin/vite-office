@@ -1,181 +1,240 @@
-/** @fileoverview Markdown span callbacks for Writer text hints, following sw/source/filter/md/mdcallbcks.cxx. */
-import { md_is_entity_str } from "../../../../external/md4c/src/md4c.attribute";
-const UTF8 = new TextEncoder();
-import { FontStrikeout } from "../../../../tools/inc/fontenum";
-import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import type { WriterTextRun } from "../basflt/writer-transfer";
+/** @fileoverview Writer md4c callbacks from pinned sw/source/filter/md/mdcallbcks.cxx. */
+import * as M from "../../../../external/md4c/src/md4c.h";
+import {
+  SvxPostureItem,
+  SvxWeightItem,
+  SvxUnderlineItem,
+  FontLineStyle,
+} from "../../../../editeng/source/items/textitem";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { FontItalic, FontWeight, FontStrikeout } from "../../../../tools/inc/fontenum";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { OStringToOUString } from "../../../../sal/rtl/ustring-convert";
+import { getSystemLocale } from "../../../../unotools/source/misc/syslocale";
+import { decomposeCanonicalLanguageTag } from "../../../../i18nlangtag/source/languagetag/languagetag";
+import {
+  RES_CHRATR_POSTURE,
+  RES_CHRATR_WEIGHT,
+  RES_CHRATR_CROSSEDOUT,
+  RES_CHRATR_FONT,
+} from "../../../inc/hintids";
+import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SwMarkdownParser } from "./swmd";
 
-const DEFAULT_ATTRIBUTES: WriterCharacterAttributes = {
-  bold: false,
-  italic: false,
-  underline: false,
-};
-
-/** Resolves the md4c hyperlink callback through the supplied document base URL.  @param baseURL - Base URL. @param target - Target. @returns The string result. */
-function resolveMarkdownLink(baseURL: string, target: string): string {
-  if (target.length === 0 || target.startsWith("#")) return target;
+/** Source SAL UTF-8 conversion, without whole-document validation or newline rewriting. @param bytes - Exact source callback bytes. @returns Text. */
+export function decodeMarkdownText(bytes: Uint8Array): string {
+  return OStringToOUString(bytes, RTL_TEXTENCODING_UTF8);
+}
+/** Resolves native source-medium relative destinations. @param base - Medium URL. @param target - Raw attribute. @returns Absolute or original URL. */
+export function resolveMarkdownLink(base: string, target: string): string {
+  if (target === "" || target.startsWith("#")) return target;
   try {
-    return new URL(target, baseURL || undefined).href;
+    return new URL(target, base || undefined).href;
   } catch {
-    // INetURLObject::GetAbsURL returns the original relative text on conversion failure.
     return target;
   }
 }
-
-/** Converts represented md4c span events into native Writer run inputs. @param source - One Markdown inline body. @param baseURL - Source document URL when available. @returns Styled text portions. */
-export function parseMarkdownSpans(source: string, baseURL = ""): readonly WriterTextRun[] {
-  const runs: WriterTextRun[] = [];
-  /** Appends a text callback with the current span stack. @param text - Visible text. @param attributes - Active direct attributes. @param url - Active hyperlink.  @returns Nothing. */
-  function append(text: string, attributes: WriterCharacterAttributes, url?: string): void {
-    if (text.length === 0) return;
-    const hyperlink = url === undefined ? undefined : { url };
-    const previous = runs.at(-1);
-    if (
-      previous !== undefined &&
-      previous.hyperlink?.url === url &&
-      equalAttributes(previous.attributes, attributes)
-    ) {
-      runs[runs.length - 1] = { ...previous, text: previous.text + text };
-      return;
+/** Native block entry dispatch. @param type - md4c kind. @param detail - md4c detail. @param parser - Original userdata. @returns Zero. */
+export function enter_block_callback(
+  type: M.MD_BLOCKTYPE,
+  detail: M.MD_BLOCK_DETAIL | undefined,
+  parser: SwMarkdownParser,
+): number {
+  switch (type) {
+    case M.MD_BLOCKTYPE.MD_BLOCK_QUOTE:
+      parser.AddBlockQuote();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_UL:
+    case M.MD_BLOCKTYPE.MD_BLOCK_OL:
+      parser.StartNumberedBulletList(type);
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_LI:
+      parser.StartNumberedBulletListItem(detail as M.MD_BLOCK_LI_DETAIL);
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_HR:
+      parser.AddHR();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_H:
+      parser.StartHeading((detail as M.MD_BLOCK_H_DETAIL).level);
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_CODE:
+      parser.BeginCodeBlock();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_HTML:
+      parser.BeginHtmlBlock();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_P:
+      parser.StartPara();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_TABLE: {
+      const table = detail as M.MD_BLOCK_TABLE_DETAIL;
+      parser.StartTable(table.body_row_count + table.head_row_count, table.col_count);
+      break;
     }
-    runs.push({
-      text,
-      attributes: { ...attributes },
-      ...(hyperlink === undefined ? {} : { hyperlink }),
-    });
+    case M.MD_BLOCKTYPE.MD_BLOCK_TR:
+      parser.StartRow();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_TH:
+    case M.MD_BLOCKTYPE.MD_BLOCK_TD:
+      parser.StartCell((detail as M.MD_BLOCK_TD_DETAIL).align);
+      break;
   }
-  /** Dispatches nested emphasis, link, code and escaped-character spans. @param text - Source range. @param attributes - Inherited attributes. @param url - Inherited link.  @returns Nothing. */
-  function visit(text: string, attributes: WriterCharacterAttributes, url?: string): void {
-    for (let offset = 0; offset < text.length;) {
-      const character = text[offset] as string;
-      if (character === "\u0000") {
-        // Pinned MD_TEXT_NULLCHAR callback has no insertion branch.
-        offset++;
-        continue;
-      }
-      if (
-        character === "\\" &&
-        offset + 1 < text.length &&
-        isAsciiPunctuation(text[offset + 1] as string)
-      ) {
-        append(text[offset + 1] as string, attributes, url);
-        offset += 2;
-        continue;
-      }
-      if (character === "&") {
-        // Native named-entity recognition is syntactic and has no HTML dictionary.
-        const entityEnd = md_is_entity_str(UTF8.encode(text.slice(offset, offset + 64)), 0);
-        if (entityEnd >= 0) {
-          // Pinned MD_TEXT_ENTITY callback has no insertion branch.
-          offset += entityEnd;
-          continue;
-        }
-      }
-      if (character === "\\" && text[offset + 1] === "\n") {
-        append("\n", attributes, url);
-        offset += 2;
-        continue;
-      }
-      if (character === "[" && url === undefined) {
-        const close = findClosing(text, "]", offset + 1);
-        if (close >= 0 && text[close + 1] === "(") {
-          const end = findClosing(text, ")", close + 2);
-          if (end >= 0) {
-            const target = text.slice(close + 2, end).trim();
-            if (target.length > 0) {
-              visit(
-                text.slice(offset + 1, close),
-                attributes,
-                resolveMarkdownLink(baseURL, target),
-              );
-              offset = end + 1;
-              continue;
-            }
-          }
-        }
-      }
-      if (character === "`" || character === "*" || character === "_" || character === "~") {
-        const marker =
-          character === "*" || character === "_"
-            ? text.startsWith(character + character, offset)
-              ? character + character
-              : character
-            : character === "~"
-              ? "~~"
-              : "`";
-        if (character !== "~" || text.startsWith(marker, offset)) {
-          const end = findClosing(text, marker, offset + marker.length);
-          if (end > offset + marker.length) {
-            const inner = text.slice(offset + marker.length, end);
-            if (marker === "`")
-              append(
-                inner.replaceAll("\n", " "),
-                { ...attributes, fontFamily: "Liberation Mono" },
-                url,
-              );
-            else if (marker === "~~")
-              visit(inner, { ...attributes, strikeout: FontStrikeout.STRIKEOUT_SINGLE }, url);
-            else if (marker.length === 2) visit(inner, { ...attributes, bold: true }, url);
-            else visit(inner, { ...attributes, italic: true }, url);
-            offset = end + marker.length;
-            continue;
-          }
-        }
-      }
-      if (character === "\n") {
-        if (text.slice(Math.max(0, offset - 2), offset) === "  ") {
-          const previous = runs.at(-1);
-          if (previous !== undefined) {
-            const trimmed = previous.text.replace(/ +$/u, "");
-            if (trimmed.length === 0) runs.pop();
-            else runs[runs.length - 1] = { ...previous, text: trimmed };
-          }
-          append("\n", attributes, url);
-        } else append("\u00a0", attributes, url);
-        offset++;
-        continue;
-      }
-      append(character, attributes, url);
-      offset++;
+  return 0;
+}
+/** Native block exit dispatch. @param type - md4c kind. @param detail - Unused source detail. @param parser - Original userdata. @returns Zero. */
+export function leave_block_callback(
+  type: M.MD_BLOCKTYPE,
+  detail: M.MD_BLOCK_DETAIL | undefined,
+  parser: SwMarkdownParser,
+): number {
+  void detail;
+  switch (type) {
+    case M.MD_BLOCKTYPE.MD_BLOCK_QUOTE:
+      parser.EndBlockQuote();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_UL:
+    case M.MD_BLOCKTYPE.MD_BLOCK_OL:
+      parser.EndNumberedBulletList();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_LI:
+      parser.EndNumberedBulletListItem();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_HR:
+      parser.EndHR();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_H:
+      parser.EndHeading();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_CODE:
+      parser.EndCodeBlock();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_HTML:
+      parser.EndHtmlBlock();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_P:
+      parser.EndPara();
+      break;
+    case M.MD_BLOCKTYPE.MD_BLOCK_TABLE:
+      parser.EndTable();
+      break;
+  }
+  return 0;
+}
+/** Native span entry creates one owned pool item, including null entries for itemless spans. @param type - Span kind. @param detail - Raw attributes. @param parser - Original userdata. @returns Zero. */
+export function enter_span_callback(
+  type: M.MD_SPANTYPE,
+  detail: M.MD_SPAN_DETAIL | undefined,
+  parser: SwMarkdownParser,
+): number {
+  let item: SfxPoolItem | undefined;
+  switch (type) {
+    case M.MD_SPANTYPE.MD_SPAN_EM:
+      item = new SvxPostureItem(FontItalic.ITALIC_NORMAL, RES_CHRATR_POSTURE);
+      break;
+    case M.MD_SPANTYPE.MD_SPAN_STRONG:
+      item = new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT);
+      break;
+    case M.MD_SPANTYPE.MD_SPAN_A: {
+      const href = (detail as M.MD_SPAN_A_DETAIL).href;
+      item = new SwFormatINetFormat(
+        resolveMarkdownLink(
+          parser.m_sBaseURL,
+          decodeMarkdownText(href.text.subarray(0, href.size)),
+        ),
+        "",
+      );
+      break;
     }
-  }
-  visit(source, DEFAULT_ATTRIBUTES);
-  return runs;
-}
-
-/** md4c backslash escapes any ASCII punctuation, not only markup delimiters.  @param character - Character. @returns The boolean result. */
-function isAsciiPunctuation(character: string): boolean {
-  const code = character.charCodeAt(0);
-  return (
-    (code >= 33 && code <= 47) ||
-    (code >= 58 && code <= 64) ||
-    (code >= 91 && code <= 96) ||
-    (code >= 123 && code <= 126)
-  );
-}
-
-/** Finds an unescaped delimiter, including multi-character emphasis markers. @param text - Source. @param marker - Closing marker. @param from - Search start. @returns Offset or -1. */
-function findClosing(text: string, marker: string, from: number): number {
-  for (let offset = from; offset <= text.length - marker.length; offset++) {
-    if (text[offset] === "\\") {
-      offset++;
-      continue;
+    case M.MD_SPANTYPE.MD_SPAN_IMG: {
+      const image = detail as M.MD_SPAN_IMG_DETAIL,
+        top = parser.m_aAttrStack.at(-1);
+      parser.m_aImg.url = decodeMarkdownText(image.src.text.subarray(0, image.src.size));
+      parser.m_aImg.title = decodeMarkdownText(image.title.text.subarray(0, image.title.size));
+      if (top instanceof SwFormatINetFormat) parser.m_aImg.link = top.GetValue();
+      parser.m_bInsideImage = true;
+      break;
     }
-    if (text.startsWith(marker, offset))
-      return marker.length === 2 && text.startsWith(marker + marker[0], offset)
-        ? offset + 1
-        : offset;
+    case M.MD_SPANTYPE.MD_SPAN_CODE:
+      item = new SvxFontItem(
+        parser.m_xDoc
+          .GetTextFormatColl("preformatted-text")
+          .GetAttrSet()
+          .Get(RES_CHRATR_FONT) as SvxFontItem,
+      );
+      break;
+    case M.MD_SPANTYPE.MD_SPAN_DEL:
+      item = new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_SINGLE, RES_CHRATR_CROSSEDOUT);
+      break;
+    case M.MD_SPANTYPE.MD_SPAN_WIKILINK: {
+      const target = (detail as M.MD_SPAN_WIKILINK_DETAIL).target;
+      const locale = getSystemLocale();
+      const language = String.fromCharCode(
+        ...locale.Language.getStr().subarray(0, locale.Language.getLength()),
+      );
+      const applicationLanguage =
+        language === "qlt"
+          ? decomposeCanonicalLanguageTag(
+              String.fromCharCode(
+                ...locale.Variant.getStr().subarray(0, locale.Variant.getLength()),
+              ),
+            ).language
+          : language;
+      item = new SwFormatINetFormat(
+        "https://" +
+          applicationLanguage +
+          ".wikipedia.org/wiki/" +
+          decodeMarkdownText(target.text.subarray(0, target.size)),
+        "",
+      );
+      break;
+    }
+    case M.MD_SPANTYPE.MD_SPAN_U:
+      item = new SvxUnderlineItem(FontLineStyle.LINESTYLE_SINGLE, RES_CHRATR_CROSSEDOUT);
+      break;
   }
-  return -1;
+  parser.m_aAttrStack.push(item);
+  return 0;
 }
-
-/** Compares the represented direct-format state for adjacent run merging. @param a - First. @param b - Second. @returns Equality. */
-function equalAttributes(a: WriterCharacterAttributes, b: WriterCharacterAttributes): boolean {
-  return (
-    a.bold === b.bold &&
-    a.italic === b.italic &&
-    a.underline === b.underline &&
-    a.strikeout === b.strikeout &&
-    a.fontFamily === b.fontFamily
-  );
+/** Native span exit always pops once and completes image state. @param type - Span kind. @param detail - Unused source detail. @param parser - Original userdata. @returns Zero. */
+export function leave_span_callback(
+  type: M.MD_SPANTYPE,
+  detail: M.MD_SPAN_DETAIL | undefined,
+  parser: SwMarkdownParser,
+): number {
+  void detail;
+  if (parser.m_aAttrStack.length !== 0) parser.m_aAttrStack.pop();
+  if (type === M.MD_SPANTYPE.MD_SPAN_IMG) {
+    parser.InsertCurImage();
+    parser.m_bInsideImage = false;
+  }
+  return 0;
+}
+/** Native text callback distinguishes raw HTML, normal/code, breaks and intentionally ignored entity/NULL/math callbacks. @param type - Text kind. @param text - Original bytes. @param size - Callback byte length. @param parser - Original userdata. @returns Zero. */
+export function text_callback(
+  type: M.MD_TEXTTYPE,
+  text: Uint8Array,
+  size: number,
+  parser: SwMarkdownParser,
+): number {
+  switch (type) {
+    case M.MD_TEXTTYPE.MD_TEXT_HTML:
+      parser.m_htmlData += decodeMarkdownText(text.subarray(0, size));
+      break;
+    case M.MD_TEXTTYPE.MD_TEXT_NORMAL:
+    case M.MD_TEXTTYPE.MD_TEXT_CODE: {
+      const value = decodeMarkdownText(text.subarray(0, size));
+      if (parser.m_bInsideImage) parser.m_aImg.desc = value;
+      else parser.InsertText(value);
+      break;
+    }
+    case M.MD_TEXTTYPE.MD_TEXT_BR:
+      parser.m_xDoc.GetDocumentContentOperationsManager().InsertString(parser.m_pPam, "\n");
+      break;
+    case M.MD_TEXTTYPE.MD_TEXT_SOFTBR:
+      parser.m_xDoc.GetDocumentContentOperationsManager().InsertString(parser.m_pPam, "\u00a0");
+      break;
+  }
+  return 0;
 }

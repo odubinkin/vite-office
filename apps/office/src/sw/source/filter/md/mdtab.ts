@@ -1,66 +1,34 @@
-/** @fileoverview Markdown table cell and alignment parsing following sw/source/filter/md/mdtab.cxx. */
-import type { WriterParagraphAlignment } from "../../core/txtnode/ndtxt";
-
-/** A represented table cell before native SwTable construction. */
-export interface MarkdownCell {
-  readonly text: string;
-  readonly alignment: WriterParagraphAlignment;
-}
-
-/** Splits a GFM table row at actual pipe delimiters, preserving escaped and code-span pipes. @param source - Table line. @returns Cell text. */
-export function splitMarkdownTableRow(source: string): readonly string[] {
-  const cells: string[] = [];
-  let cell = "",
-    codeFence = 0;
-  const line = source.trim().replace(/^\|/u, "").replace(/\|$/u, "");
-  for (let index = 0; index < line.length; index++) {
-    const character = line[index] as string;
-    if (character === "\\" && line[index + 1] === "|") {
-      cell += "|";
-      index++;
-    } else if (character === "`") {
-      let count = 1;
-      while (line[index + count] === "`") count++;
-      codeFence = codeFence === count ? 0 : codeFence === 0 ? count : codeFence;
-      cell += "`".repeat(count);
-      index += count - 1;
-    } else if (character === "|" && codeFence === 0) {
-      cells.push(cell.trim());
-      cell = "";
-    } else cell += character;
+/** @fileoverview Native Markdown table callback cursor from sw/source/filter/md/mdtab.cxx. */
+import type { SwTable } from "../../core/table/swtable";
+/** One native table and callback row/column counters, initially -1. */
+export class MDTable {
+  private table: SwTable | undefined;
+  private row = -1;
+  private column = -1;
+  /** Stores the actual document-owned table. @param table - Native table. @returns Nothing. */
+  public SetTable(table: SwTable): void {
+    this.table = table;
   }
-  cells.push(cell.trim());
-  return cells;
-}
-
-/** Reads one Markdown table separator. @param source - Separator line. @returns Column adjustments, or undefined. */
-export function readMarkdownTableAlignment(
-  source: string,
-): readonly WriterParagraphAlignment[] | undefined {
-  const cells = splitMarkdownTableRow(source);
-  if (
-    cells.some(
-      /** Computes the cell result. @param cell - Cell. @returns The computed result. */ (cell) =>
-        !/^:?-+:?$/u.test(cell),
-    )
-  )
-    return undefined;
-  return cells.map(
-    /** Computes the cell result. @param cell - Cell. @returns The computed result. */ (cell) =>
-      cell.startsWith(":") && cell.endsWith(":") ? "center" : cell.endsWith(":") ? "right" : "left",
-  );
-}
-
-/** Builds cell values and retains the first-row column count. @param source - Row line. @param alignments - Column adjustments. @returns Cells. */
-export function readMarkdownTableRow(
-  source: string,
-  alignments: readonly WriterParagraphAlignment[],
-): readonly MarkdownCell[] {
-  const values = splitMarkdownTableRow(source);
-  return alignments.map(
-    /** Computes the alignment result. @param alignment - Alignment. @param index - Index. @returns The computed result. */ (
-      alignment,
-      index,
-    ) => ({ text: values[index] ?? "", alignment }),
-  );
+  /** Reads the actual table. @returns Native owner. */
+  public GetTable(): SwTable {
+    if (this.table === undefined) throw new Error("Markdown table has not been installed.");
+    return this.table;
+  }
+  /** Reads the current row. @returns Row. */
+  public GetCurRow(): number {
+    return this.row;
+  }
+  /** Reads the current column. @returns Column. */
+  public GetCurCol(): number {
+    return this.column;
+  }
+  /** Advances row and resets column. @returns Nothing. */
+  public IncCurRow(): void {
+    this.row++;
+    this.column = -1;
+  }
+  /** Advances column. @returns Nothing. */
+  public IncCurCol(): void {
+    this.column++;
+  }
 }
