@@ -1,5 +1,6 @@
 /** @fileoverview Calendar UTC-field state, numeric TimeZone dispatch, clock precedence and source validation. Fixture zones supply explicit offsets; production zone factories/rules are not simulated. */
 import { expect, it } from "vitest";
+import { Locale } from "../common/locid";
 import { GregorianCalendar } from "./gregocal";
 import { TimeZone } from "./timezone";
 import { UnicodeString } from "../common/unistr";
@@ -50,13 +51,18 @@ class RecordingZone extends TimeZone {
 }
 /** Actual calendar owner with an explicit test dependency and source week settings. */
 class CalendarWitness extends GregorianCalendar {
-  readonly zone = new RecordingZone();
-  readonly validated: F[] = [];
-  /** Returns the numeric test dependency. @returns Zone. */
-  override getTimeZone(): TimeZone {
-    return this.zone;
+  /** Real source construction followed by the public controlled fixture baseline. @returns Fixture. */
+  constructor() {
+    const zone = new RecordingZone();
+    super(zone, Locale.getRoot(), [0]);
+    this.zone = zone;
+    this.setTime(0, [0]);
+    this.clear();
   }
-  /** Rejects unrelated unported fields-to-time computation. @returns Never. */
+
+  readonly zone: RecordingZone;
+  readonly validated: F[] = [];
+  /** Rejects fields-to-time computation outside this UTC-field witness. @returns Never. */
   protected override computeTime(): never {
     throw Error("Fields-to-UTC backend is not part of this test");
   }

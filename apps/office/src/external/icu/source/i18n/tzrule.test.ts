@@ -11,6 +11,7 @@ import {
 } from "./tzrule";
 import { TimeZoneTransition } from "./tztrans";
 import { SimpleTimeZone, TimeMode } from "./simpletz";
+import { Locale } from "../common/locid";
 import { GregorianCalendar } from "./gregocal";
 import { Grego } from "./gregoimp";
 import { UCalendarDateFields as F, UCalendarWallTimeOption as W } from "./unicode/ucal";
@@ -113,14 +114,12 @@ it("keeps stable signed-zero starts and distinguishes name equality from numeric
 /** Explicit zone/week construction around the actual completed algorithms; system/locale factories remain outside this test. */
 class CalendarWitness extends GregorianCalendar {
   /** Supplies a real production rule owner and explicit week data. @param zone - Zone. @returns Constructed witness. */
-  constructor(private readonly zone: SimpleTimeZone) {
-    super();
+  constructor(zone: SimpleTimeZone) {
+    super(zone, Locale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
-  }
-  /** Source zone dependency. @returns Zone. */
-  override getTimeZone(): SimpleTimeZone {
-    return this.zone;
   }
   /** Sets the same public fields as a calendar service. @param month - Month. @param day - Day. @param hour - Hour. @returns Nothing. */
   input(month: number, day: number, hour: number): void {

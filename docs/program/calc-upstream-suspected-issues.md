@@ -4294,3 +4294,18 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: containerResPath is cleared before the outer loop. After a successful intermediate resolution it is assigned the result path. If the following segment is missing, parent retry resets the raw resource to the new entry root and restores the complete keyPath, while retaining that earlier container path. The next result initializer therefore receives a container path from before the restart. The local port preserves this state lifetime; the unchanged native witness compares all996 pinned aliases and actual resulting path bytes.
 - Suspected issue: root restart and container-path restart appear inconsistent. The original TODO identifies the same concern. No wrong final value or failing public example on the pinned immutable package is claimed by this finding; the concern is the source control flow and intermediate path state.
 - Local behavior: keep containerResPath initialization outside the parent retry loop, together with the original later full-keyPath rewrite. Do not move the reset or normalize the intermediate path based on an inferred correction.
+
+### CALC-342 — Null adopted Calendar zone reports memory error before its argument check
+
+- Upstream: ICU78.3 `source/i18n/calendar.cpp`, `Calendar(TimeZone*, const Locale&, UErrorCode&)`; `source/common/unicode/localpointer.h`, `LocalPointer(T*, UErrorCode&)`.
+- Observation: the constructor first builds LocalPointer(adoptZone,status). For a null pointer and incoming success/warning, that helper sets U_MEMORY_ALLOCATION_ERROR7. The following failure guard returns before the explicit zone.isNull branch can set U_ILLEGAL_ARGUMENT_ERROR1. Unchanged native constructor comparisons verify7 for null with incoming0 or -128 and preserve an incoming positive error.
+- Suspected issue: an explicitly absent caller zone reports an allocation error, and the apparent intended null-argument branch is unreachable after the helper check.
+- Local behavior: preserve the LocalPointer status effect before the failure guard and retain the original explicit argument-check branch. Do not replace the observed7 with1 or synthesize a default zone. Physical deletion/allocator failures remain outside the binding.
+
+
+### CALC-343 — Gregorian assignment retains destination resolver flags
+
+- Upstream: ICU78.3 `source/i18n/gregocal.cpp`, GregorianCalendar copy constructor and operator=.
+- Observation: copy construction copies fGregorianCutover, fCutoverJulianDay, fGregorianCutoverYear, fIsGregorian and fInvertGregorian. Assignment delegates to Calendar::operator= and copies only the three cutover fields, in cutover/time, year, Julian-day order. The two resolver flags retain their destination values. The unchanged native witness distinguishes these operations with controlled boolean flag states.
+- Suspected issue: copy construction and assignment produce different internal resolver state. These are working flags that subsequent calculations can overwrite; this finding does not claim an observed incorrect public date result.
+- Local behavior: preserve the three assignment writes and their order, retaining destination flags. Copy construction and clone retain the original five-field copy behavior.

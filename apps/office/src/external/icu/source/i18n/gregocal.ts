@@ -1,6 +1,10 @@
-/** @fileoverview ICU78.3 GregorianCalendar hybrid Julian/Gregorian field arithmetic. Locale/time-zone constructors remain unported; calendar fields/time algorithms use the original source backend. */
+/** @fileoverview ICU78.3 GregorianCalendar constructors, source-owned zone/locale state and hybrid Julian/Gregorian field arithmetic. Native service/cache factory dispatch is a separate responsibility. */
+import { Locale, type LocaleConstReference } from "../common/locid";
+import { CalendarZoneReference } from "./calendar.ctor";
+import { createDefault, forLocaleOrDefault } from "./timezone.default";
+import type { TimeZone, TimeZoneConstReference } from "./timezone";
 import { UErrorCode, U_FAILURE, type UDate } from "../common/unicode/utypes";
-import { Calendar, ELimitType } from "./calendar";
+import { Calendar, ELimitType, type CalendarConstructionArgs } from "./calendar";
 import { ClockMath, Grego, kEpochStartAsJulianDay, kJan1_1JulianDay, kOneDay } from "./gregoimp";
 import { UCalendarDateFields as F } from "./unicode/ucal";
 
@@ -35,14 +39,122 @@ const kGregorianCalendarLimits: readonly (readonly number[])[] = [
   [0, 0, 11, 11],
 ];
 
-/** Original Gregorian owner state and scalar hooks; unported constructors and time/zone backend remain abstract. */
-export abstract class GregorianCalendar extends Calendar {
+/** Original constructor overload projection. Pointer and const-reference zone ownership use distinct explicit entrypoints in TypeScript. */
+type GregorianConstructionArgs =
+  | [status: [number]]
+  | [source: GregorianCalendar]
+  | [locale: LocaleConstReference, status: [number]]
+  | [zone: TimeZone | CalendarZoneReference | null, status: [number]]
+  | [zone: TimeZone | CalendarZoneReference | null, locale: LocaleConstReference, status: [number]]
+  | [year: number, month: number, day: number, status: [number]]
+  | [year: number, month: number, day: number, hour: number, minute: number, status: [number]]
+  | [
+      year: number,
+      month: number,
+      day: number,
+      hour: number,
+      minute: number,
+      second: number,
+      status: [number],
+    ];
+/** Resolves only the source overload/ownership boundary, before base construction. @param args - Source arguments. @returns Base and derived-body arguments. */
+function construction(args: GregorianConstructionArgs): {
+  base: CalendarConstructionArgs;
+  status: [number] | null;
+  copy: GregorianCalendar | null;
+  date: number[] | null;
+} {
+  if (args.length === 1) {
+    if (Array.isArray(args[0])) return { base: [args[0]], status: args[0], copy: null, date: null };
+    return {
+      base: [args[0] as GregorianCalendar],
+      status: null,
+      copy: args[0] as GregorianCalendar,
+      date: null,
+    };
+  }
+  if (typeof args[0] === "number") {
+    const status = args[args.length - 1] as [number];
+    return {
+      base: [createDefault(), Locale.getDefault(), status],
+      status,
+      copy: null,
+      date: args.slice(0, -1) as number[],
+    };
+  }
+  if (args.length === 2) {
+    const status = args[1] as [number];
+    if (args[0] instanceof Locale) {
+      const locale = args[0];
+      return { base: [forLocaleOrDefault(locale), locale, status], status, copy: null, date: null };
+    }
+    return {
+      base: [args[0] as TimeZone | CalendarZoneReference | null, Locale.getDefault(), status],
+      status,
+      copy: null,
+      date: null,
+    };
+  }
+  const [zone, locale, status] = args as [
+    TimeZone | CalendarZoneReference | null,
+    LocaleConstReference,
+    [number],
+  ];
+  return { base: [zone, locale, status], status, copy: null, date: null };
+}
+/** Original concrete Gregorian owner, constructor/copy state and hybrid calendar hooks. */
+export class GregorianCalendar extends Calendar {
   private fGregorianCutover = (2299161 - kEpochStartAsJulianDay) * kOneDay;
   private fCutoverJulianDay = 2299161;
   private fGregorianCutoverYear = 1582;
   private fIsGregorian = true;
   private fInvertGregorian = false;
 
+  /** Original constructor overloads. Date forms set fields without setting now; locale/default forms set the actual UTC clock after base initialization. @param args - Source arguments. @returns Calendar. */
+  constructor(...args: GregorianConstructionArgs) {
+    const spec = construction(args);
+    super(...spec.base);
+    if (spec.copy !== null) {
+      this.fGregorianCutover = spec.copy.fGregorianCutover;
+      this.fCutoverJulianDay = spec.copy.fCutoverJulianDay;
+      this.fGregorianCutoverYear = spec.copy.fGregorianCutoverYear;
+      this.fIsGregorian = spec.copy.fIsGregorian;
+      this.fInvertGregorian = spec.copy.fInvertGregorian;
+    } else if (spec.date !== null) {
+      this.set(F.UCAL_ERA, 1);
+      this.set(F.UCAL_YEAR, (spec.date[0] as number) | 0);
+      this.set(F.UCAL_MONTH, (spec.date[1] as number) | 0);
+      this.set(F.UCAL_DATE, (spec.date[2] as number) | 0);
+      if (spec.date.length >= 5) {
+        this.set(F.UCAL_HOUR_OF_DAY, (spec.date[3] as number) | 0);
+        this.set(F.UCAL_MINUTE, (spec.date[4] as number) | 0);
+      }
+      if (spec.date.length >= 6) this.set(F.UCAL_SECOND, (spec.date[5] as number) | 0);
+    } else this.setTimeInMillis(Calendar.getNow(), spec.status as [number]);
+  }
+  /** Explicit source const-TimeZone-reference constructors; the default-locale overload evaluates Locale::getDefault before base construction. The ephemeral tag preserves clone timing inside the base constructor. @param zone - Borrowed const zone. @param args - Status or explicit locale/status. @returns Owned calendar. */
+  static fromZoneReference(
+    zone: TimeZoneConstReference,
+    ...args: [status: [number]] | [locale: LocaleConstReference, status: [number]]
+  ): GregorianCalendar {
+    const locale = args.length === 1 ? Locale.getDefault() : args[0],
+      status = args.length === 1 ? args[0] : args[1];
+    return new GregorianCalendar(new CalendarZoneReference(zone), locale, status);
+  }
+  /** Original Gregorian assignment copies only three cutover fields and retains destination resolver flags. @param source - Gregorian source. @returns This owner. */
+  override assign(source: GregorianCalendar): this {
+    if (this !== source) {
+      super.assign(source);
+      this.fGregorianCutover = source.fGregorianCutover;
+      this.fGregorianCutoverYear = source.fGregorianCutoverYear;
+      this.fCutoverJulianDay = source.fCutoverJulianDay;
+    }
+    return this;
+  }
+  /** Original concrete clone invokes the copy constructor. @returns Independent Gregorian owner. */
+  clone(): GregorianCalendar {
+    return new GregorianCalendar(this);
+  }
   /** Source subclass limits table. @param field - Calendar field. @param type - Limit kind. @returns Limit. */
   protected handleGetLimit(field: F, type: ELimitType): number {
     return (kGregorianCalendarLimits[field] as readonly number[])[type] as number;

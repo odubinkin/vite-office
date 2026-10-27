@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/calendar.ctor.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/calendar.ctor.ts",
+        "apps/office/src/external/icu/source/i18n/calendar.locale.test.ts",
+        "apps/office/src/external/icu/source/i18n/gregocal.constructor.test.ts",
+        "scripts/icu-calendar-locale-native-probe.mjs",
+        "scripts/icu-gregorian-constructor-native-probe.mjs"
+      ],
+      "justification": "Original base assignment copies actual field/stamp/time/cache/locale/week state and clones the owned source zone in source order. The ephemeral CalendarZoneReference tag represents only the native const-reference constructor overload; it is never stored as fZone and does not create a second Calendar state object. This tag keeps cloning inside base initialization, after incoming-status check and clear and before week data, unlike an early clone adapter that would lose a nonnull clone when its virtual callback changes the aliased status. Physical pointer/const-reference syntax is the host-language projection. Unchanged ICU78.3 library witnesses pass 14994 locale/week cases over 993 requested names and 1440 constructor/copy/weekend cases. They observe all six week/weekend fields, valid/actual Locale values and literal root IDs, incoming error/warning behavior, default and keyword timezone selection, reference/adoption clone counts, null/error and aliased-status clone callbacks, all initialized field/stamp/flag and derived state, date-versus-clock initialization, completed UTC fields and weekend work clones. Existing 63050 scalar/calendar and 12929 time cases also pass after fixtures use real constructors and explicit public controlled baselines.",
+      "knownViolations": [],
+      "localSymbols": [
+        "CalendarZoneReference",
+        "assignCalendar"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/calendar.cpp",
+      "upstreamSymbols": [
+        "Calendar::Calendar",
+        "Calendar::operator="
+      ]
+    }
+  }
+}

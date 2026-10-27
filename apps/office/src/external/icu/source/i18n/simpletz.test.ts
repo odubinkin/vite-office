@@ -3,6 +3,7 @@ import { expect, it } from "vitest";
 import { UnicodeString } from "../common/unistr";
 import { SimpleTimeZone, TimeMode } from "./simpletz";
 import { BasicTimeZone } from "./basictz";
+import { Locale } from "../common/locid";
 import { GregorianCalendar } from "./gregocal";
 import { Grego } from "./gregoimp";
 import { UCalendarDateFields as F, UTimeZoneLocalOption as O } from "./unicode/ucal";
@@ -30,19 +31,17 @@ function usRules(): SimpleTimeZone {
 function utc(year: number, month: number, day: number, hour = 0): number {
   return Number(Grego.fieldsToDay(year, month, day)) * 86400000 + hour * 3600000;
 }
-/** Calendar time/locale construction remains unported; this witness supplies actual production zone rules and explicit week data to the real UTC-field implementation. */
+/** This witness adopts actual production zone rules through the real constructor and supplies explicit week settings for UTC-field observations. */
 class ZonedCalendar extends GregorianCalendar {
   /** Supplies the consumed zone dependency. @param zone - Actual rule owner. @returns Constructed witness. */
-  constructor(private readonly zone: SimpleTimeZone) {
-    super();
+  constructor(zone: SimpleTimeZone) {
+    super(zone, Locale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
   }
-  /** Returns the actual zone dependency. @returns Zone. */
-  override getTimeZone(): SimpleTimeZone {
-    return this.zone;
-  }
-  /** Rejects unported fields-to-UTC completion. @returns Never. */
+  /** Rejects fields-to-UTC completion outside this UTC-field witness. @returns Never. */
   protected override computeTime(): never {
     throw Error("Fields-to-UTC construction is outside this witness");
   }

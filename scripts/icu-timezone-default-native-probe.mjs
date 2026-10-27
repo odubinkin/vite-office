@@ -13,6 +13,7 @@ import {
 } from "../apps/office/src/external/icu/source/i18n/timezone.default.ts";
 import * as Host from "../apps/office/src/external/icu/browser/putil-tz.ts";
 import { OlsonTimeZone } from "../apps/office/src/external/icu/source/i18n/olsontz.ts";
+import { Locale as IcuLocale } from "../apps/office/src/external/icu/source/common/locid.ts";
 import { GregorianCalendar } from "../apps/office/src/external/icu/source/i18n/gregocal.ts";
 import { UCalendarDateFields as F } from "../apps/office/src/external/icu/source/i18n/unicode/ucal.ts";
 const source = resolve("vendor/icu-reference/source"),
@@ -208,12 +209,13 @@ for (const name of ["UTC", "America/New_York", "Etc/GMT+5", "GMT+05:30", "Bad/Na
   row.push(...zone(createDefault()));
   add("D", name, 0, "", row);
 }
-/** Explicit source zone/week bootstrap only; locale/time-zone constructors are not represented. */
+/** Explicit source zone/week bootstrap only; the explicit source constructor is followed by controlled fixture state. */
 class OwnedCalendar extends GregorianCalendar {
   /** Supplies the real owned zone and explicit week fields. @param z - Transferred zone. @returns Owner. */
   constructor(z) {
-    super();
-    this.adoptTimeZone(z);
+    super(z, IcuLocale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
   }

@@ -54,3 +54,11 @@ export enum UCalendarWallTimeOption {
   UCAL_WALLTIME_FIRST = 1,
   UCAL_WALLTIME_NEXT_VALID = 2,
 }
+
+/** Original weekend classification enum from ucal.h. */
+export enum UCalendarWeekdayType {
+  UCAL_WEEKDAY,
+  UCAL_WEEKEND,
+  UCAL_WEEKEND_ONSET,
+  UCAL_WEEKEND_CEASE,
+}

@@ -15,6 +15,7 @@ import {
   TimeArrayTimeZoneRule,
 } from "../apps/office/src/external/icu/source/i18n/tzrule.ts";
 import { TimeZoneTransition } from "../apps/office/src/external/icu/source/i18n/tztrans.ts";
+import { Locale as IcuLocale } from "../apps/office/src/external/icu/source/common/locid.ts";
 import { GregorianCalendar } from "../apps/office/src/external/icu/source/i18n/gregocal.ts";
 import { UCalendarDateFields as F } from "../apps/office/src/external/icu/source/i18n/unicode/ucal.ts";
 const source = resolve("vendor/icu-reference/source"),
@@ -223,14 +224,11 @@ meta(-1, bogus, 0);
 class CalendarWitness extends GregorianCalendar {
   /** Original explicit dependency projection. @param zone - Actual cloned zone. @returns Owner. */
   constructor(zone) {
-    super();
-    this.zone = zone;
+    super(zone, IcuLocale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
-  }
-  /** Supplies the actual production zone. @returns Zone. */
-  getTimeZone() {
-    return this.zone;
   }
 }
 /** Observes actual public calendar completion through IANA historical/final rules. @param index - Pinned index. @param tuple - Year/month/day/hour/minute. @param repeat - Repeat option. @param skip - Skip option. @param lenient - Lenience. @param incoming - Status. @returns Nothing. */

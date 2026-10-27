@@ -1,4 +1,9 @@
-/** @fileoverview ICU78.3 Calendar field storage, stamp precedence, UTC-field completion and Gregorian helpers. Native zone/locale construction remains unported. */
+/** @fileoverview ICU78.3 Calendar construction, field/stamp state, locale/zone ownership, week/weekend contracts and original UTC completion. Service/cache factories are separate pending responsibilities. */
+import { Locale, type LocaleConstReference } from "../common/locid";
+import { LocaleBased } from "../common/locbased";
+import { CalendarZoneReference, assignCalendar } from "./calendar.ctor";
+import { getDayOfWeekType, getWeekendTransition, isWeekend } from "./calendar.weekend";
+import { setWeekData } from "./calendar.locale";
 import { UErrorCode, U_FAILURE, type UDate } from "../common/unicode/utypes";
 import {
   computeFields,
@@ -14,11 +19,12 @@ import { createDefault } from "./timezone.default";
 import type { BasicTimeZone } from "./basictz";
 import { SimpleTimeZone } from "./simpletz";
 import { OlsonTimeZone } from "./olsontz";
-import { uprv_add32_overflow, uprv_mul32_overflow } from "../common/putil";
+import { uprv_add32_overflow, uprv_mul32_overflow, uprv_getUTCtime } from "../common/putil";
 import { Grego, kEpochStartAsJulianDay, MIN_MILLIS, MAX_MILLIS } from "./gregoimp";
 import {
   UCalendarDateFields as F,
   UCalendarDaysOfWeek,
+  UCalendarWeekdayType as DayType,
   UCalendarWallTimeOption as W,
 } from "./unicode/ucal";
 
@@ -64,7 +70,12 @@ const kCalendarLimits: readonly (readonly number[])[] = [
   [0, 0, 11, 11],
 ];
 
-/** Original abstract Calendar owner. Native locale/time-zone constructors are not yet exposed by this partial port. */
+/** Source constructor arguments; native adopting pointer and copying object overloads remain distinct. */
+export type CalendarConstructionArgs =
+  | [status: [number]]
+  | [source: Calendar]
+  | [zone: TimeZone | CalendarZoneReference | null, locale: LocaleConstReference, status: [number]];
+/** Original abstract Calendar owner, including default/adopted-zone/copy initialization and locale metadata. */
 export abstract class Calendar {
   protected static readonly kUnset = 0;
   protected static readonly kInternallySet = 1;
@@ -87,6 +98,78 @@ export abstract class Calendar {
   private fFirstDayOfWeek!: UCalendarDaysOfWeek;
   private fMinimalDaysInFirstWeek!: number;
   private fZone: TimeZone | null = null;
+  private fWeekendOnset!: UCalendarDaysOfWeek;
+  private fWeekendOnsetMillis!: number;
+  private fWeekendCease!: UCalendarDaysOfWeek;
+  private fWeekendCeaseMillis!: number;
+  private readonly validLocale: Locale;
+  private readonly actualLocale: Locale;
+  /** Original default, adopted-zone and copy constructor paths. TimeZone const-reference construction is adapted explicitly by the concrete reference factory. @param args - Source overload arguments. @returns Calendar. */
+  protected constructor(...args: CalendarConstructionArgs) {
+    if (args.length === 1 && !Array.isArray(args[0])) {
+      this.validLocale = new Locale();
+      this.actualLocale = new Locale();
+      Calendar.prototype.assign.call(this, args[0] as Calendar);
+      return;
+    }
+    this.validLocale = new Locale(Locale.getRoot());
+    this.actualLocale = new Locale(Locale.getRoot());
+    if (args.length === 1) {
+      const status = args[0] as [number];
+      Calendar.prototype.clear.call(this);
+      if (U_FAILURE(status[0])) return;
+      this.fZone = createDefault();
+      if (this.fZone === null) status[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
+      setWeekData.call(this, Locale.getDefault(), null, status);
+    } else {
+      const [zone, locale, status] = args;
+      if (zone instanceof CalendarZoneReference) {
+        if (U_FAILURE(status[0])) return;
+        Calendar.prototype.clear.call(this);
+        this.fZone = zone.zone.clone();
+        if (this.fZone === null) {
+          status[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
+          return;
+        }
+        setWeekData.call(this, locale, null, status);
+        return;
+      }
+      // Original LocalPointer(adoptZone,status) reports null before the explicit argument check below.
+      if (zone === null && !U_FAILURE(status[0])) status[0] = UErrorCode.U_MEMORY_ALLOCATION_ERROR;
+      if (U_FAILURE(status[0])) return;
+      if (zone === null) {
+        status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+        return;
+      }
+      Calendar.prototype.clear.call(this);
+      this.fZone = zone;
+      setWeekData.call(this, locale, null, status);
+    }
+  }
+  /** Original base assignment copies field/cache state and clones the owned zone. @param source - Source owner. @returns This owner. */
+  assign(source: Calendar): this {
+    assignCalendar.call(this, source);
+    return this;
+  }
+  /** Original polymorphic owner clone. @returns Independent owned calendar. */
+  abstract clone(): Calendar;
+  /** Original platform UTC clock, without host date-field arithmetic. @returns UTC milliseconds. */
+  static getNow(): UDate {
+    return uprv_getUTCtime();
+  }
+
+  /** Original locale week/weekend data load on the actual owner. @param locale - Desired locale. @param type - Calendar type/null. @param status - Status. @returns Nothing. */
+  protected setWeekData(locale: LocaleConstReference, type: string | null, status: [number]): void {
+    setWeekData.call(this, locale, type, status);
+  }
+  /** Original Calendar metadata returns a copied Locale value. @param type - ACTUAL0/VALID1. @param status - Status. @returns Locale value. */
+  getLocale(type: number, status: [number]): Locale {
+    return new Locale(LocaleBased.getLocale(this.validLocale, this.actualLocale, type, status));
+  }
+  /** Original Calendar borrowed metadata ID, including literal root. @param type - Enum. @param status - Status. @returns ID/root/null. */
+  getLocaleID(type: number, status: [number]): string | null {
+    return LocaleBased.getLocaleID(this.validLocale, this.actualLocale, type, status);
+  }
 
   /** Source date precedence groups; the first satisfied group wins, then its newest complete line. */
   protected static readonly kDatePrecedence: UFieldResolutionTable = [
@@ -131,6 +214,22 @@ export abstract class Calendar {
     [[-1]],
   ];
 
+  /** Original weekend classification; incoming failure precedes day validation. @param day - Native weekday enum. @param status - Status. @returns Classification. */
+  getDayOfWeekType(day: UCalendarDaysOfWeek, status: [number]): DayType {
+    return getDayOfWeekType.call(this, day, status);
+  }
+  /** Original transition lookup tests onset before cease without a separate weekday-range guard. @param day - Weekday. @param status - Status. @returns Milliseconds/zero. */
+  getWeekendTransition(day: UCalendarDaysOfWeek, status: [number]): number {
+    return getWeekendTransition.call(this, day, status);
+  }
+  /** Original current-date weekend query. @returns Weekend. */
+  isWeekend(): boolean;
+  /** Original explicit-date query uses an independent calendar clone. @param date - UTC milliseconds. @param status - Status. @returns Weekend. */
+  isWeekend(date: UDate, status: [number]): boolean;
+  /** Original overloads preserve clone ownership and current-owner field completion. @param date - Optional UTC date. @param status - Explicit-date status. @returns Weekend. */
+  isWeekend(date?: UDate, status?: [number]): boolean {
+    return isWeekend.call(this, date, status);
+  }
   /** Original borrowed const zone query. Non-null ownership is a native constructed-calendar precondition; no replacement zone is synthesized here. @returns Borrowed zone. */
   getTimeZone(): TimeZoneConstReference {
     return this.fZone as TimeZone;

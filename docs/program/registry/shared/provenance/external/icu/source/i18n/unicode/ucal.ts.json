@@ -19,7 +19,8 @@
       "UCalendarWallTimeOption"
     ],
     "preservedResponsibilities": [
-      "AQF9AG ports complete consumed ICU weekday/date-field/local-time and wall-time enums with their original values, aliases and masks; other C calendar APIs remain unported."
+      "AQF9AG ports complete consumed ICU weekday/date-field/local-time and wall-time enums with their original values, aliases and masks; other C calendar APIs remain unported.",
+      "Original UCalendarWeekdayType numbering now also supports actual Calendar weekend classification and transition APIs; constructor/weekend witnesses use these enum values without an alternate weekend model."
     ],
     "omittedResponsibilities": [
       "Full ICU calendar/service graph and unconsumed APIs remain unported."

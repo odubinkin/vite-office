@@ -5,6 +5,7 @@ import { uprv_isInvariantUString } from "../common/uinvchar";
 import { createSystemTimeZone } from "./timezone.create";
 import { OlsonTimeZone } from "./olsontz";
 import { ZoneMeta } from "./zonemeta";
+import { Locale } from "../common/locid";
 import { GregorianCalendar } from "./gregocal";
 import { Grego } from "./gregoimp";
 import { UCalendarDateFields as F, UCalendarWallTimeOption as W } from "./unicode/ucal";
@@ -20,17 +21,15 @@ function zone(name: string): OlsonTimeZone {
 function utc(year: number, month: number, day: number, hour = 0): number {
   return Number(Grego.fieldsToDay(year, month, day)) * 86400000 + hour * 3600000;
 }
-/** Actual zone injection while public locale/default calendar constructors remain unported. */
+/** Actual zone adoption through the real constructor, with explicit week settings for historical and future transition observations. */
 class CalendarWitness extends GregorianCalendar {
   /** Supplies actual production ownership and explicit source week settings. @param actual - Source zone. @returns Owner. */
-  constructor(private readonly actual: OlsonTimeZone) {
-    super();
+  constructor(actual: OlsonTimeZone) {
+    super(actual, Locale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
-  }
-  /** Source zone dependency. @returns Actual zone. */
-  override getTimeZone(): OlsonTimeZone {
-    return this.actual;
   }
   /** Sets real public calendar fields. @param month - Month. @param day - Day. @param hour - Hour. @param minute - Minute. @returns Nothing. */
   input(month: number, day: number, hour: number, minute: number): void {

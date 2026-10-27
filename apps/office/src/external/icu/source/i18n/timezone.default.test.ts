@@ -25,8 +25,9 @@ afterEach(
 class OwnedCalendar extends GregorianCalendar {
   /** Transfers a real production zone. @param zone - Owner. @returns Calendar. */
   constructor(zone: TimeZone) {
-    super();
-    this.adoptTimeZone(zone);
+    super(zone, Locale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
     this.setFirstDayOfWeek(2);
     this.setMinimalDaysInFirstWeek(4);
   }

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -119,6 +119,44 @@ comments:
       Other checks pass: npm run typecheck; scoped eslint/Prettier; check:docs3605 source files; check:source-provenance1556 runtime modules/1349 mapped; check:dependencies1555 runtime sources/7785 imports/201 edges; inventory:parity:calc/shared; check:calc-resources; check:source-tree; check:file-size; policy routing; git diff --check. Runtime local-symbol records now identify declarations in the actual header/lifecycle owners instead of stale public-module reexports. TypeScript null-pointer typing and lint documentation assertions were corrected without inserting extra runtime guards or changing source errors. Full suite is not repeated: this remains the same open Agentplane task, not a tenth completed task.
 
       Scope limits: immutable top-level default package and source-valid narrow/count ranges on the pinned native build. External/named packages, replacement/malformed data, raw binary layout/magic addresses, native allocator/OOM/concurrency/teardown, version allocation ownership and invalid/overlapping/freed-pointer behavior remain uncertified. No unsupported-CSV-option policy, locale heuristic, browser save/autosave/recovery behavior or other format implementation was changed. Overall task remains DOING and incomplete: actual Calendar construction/week data and LibreOffice calendar-service integration, formatter auto-input/date recognition, then final requirement-by-requirement CSV/UI audit remain required. Native build/report artifacts stay intentional untracked output/native files and are excluded from the source commit.
+  -
+    author: "CODER"
+    body: |-
+      AQF9AG Calendar construction/week-data checkpoint (partial task; overall CSV goal remains incomplete).
+
+      Scope: ported the original ICU78.3 Calendar default/adopted/reference/copy constructor paths, base assignment, LocaleBased metadata selector, Calendar::setWeekData and weekend queries. GregorianCalendar is now concrete with original default/locale/zone/numeric-date construction, copy, clone and assignment. Const-reference overload representation preserves clone timing inside the actual base owner. Tests and native witnesses now use actual constructor/adoption state rather than shadow zone getters. Native service/cache factory dispatch and LibreOffice calendar/formatter integration remain pending.
+
+      Upstream fidelity: pinned ICU source and unchanged native libraries are the behavior oracle. CALC-342 preserves null LocalPointer memory error before the unreachable explicit argument error. CALC-343 preserves the copy-construction versus assignment asymmetry: five derived fields for copy/clone, only three cutover fields in original order for assignment, retaining destination resolver flags. Native controlled distinct flag states verify this difference. Both findings are documented in docs/program/calc-upstream-suspected-issues.md; no inferred correction or unsupported-calendar rejection is added.
+
+      Command: npx tsx scripts/icu-calendar-locale-native-probe.mjs.
+      Result: pass.
+      Evidence: 14994 exact comparisons over 993 requested locale names.
+      Scope: representative calendar/monthNames aliases/fallback, six actual week/weekend fields, fw/rg/script behavior, metadata IDs, incoming error/warning and unchanged caches.
+
+      Command: npx tsx scripts/icu-gregorian-constructor-native-probe.mjs.
+      Result: pass.
+      Evidence: 1440 comparisons across 16 modes, including null clone, aliased-status mutation during clone, copy/assignment distinction, field/stamp/derived state and weekend clones.
+      Scope: original constructors and one actual zone/Calendar owner; controlled private flags distinguish source copy versus assignment. Native uninitialized states/physical allocator/ABI behavior are not certified.
+
+      Commands: npx tsx scripts/icu-calendar-native-probe.mjs; npx tsx scripts/icu-calendar-time-native-probe.mjs; npx tsx scripts/icu-transition-native-probe.mjs; npx tsx scripts/icu-olson-native-probe.mjs; npx tsx scripts/icu-timezone-default-native-probe.mjs.
+      Result: pass.
+      Evidence: 63050 scalar arithmetic, 12929 UTC-field/time, 75189 recurring rules/transition/wall-time, 386736 Olson/IANA (639 zones), 310 default-zone comparisons. Logs and source/data fingerprints are under output/native/AQF9AG-icu-grego.
+      Scope: related existing consumers after migration to real constructors and actual adopted zones.
+
+      Commands: npm run test:shared -- src/external/icu/source; npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npm run build; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc.
+      Result: pass.
+      Evidence: 167 shared cases in 32 suites; 70 CSV cases in five suites; production build; one browser CSV import -> primary ODS save -> active-sheet CSV export scenario.
+      Scope: current calendar owners and existing CSV UI/conversion paths, not a certificate of remaining formatter date auto-input integration.
+
+      Commands: npm run typecheck; npm run lint; npm run check:docs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources; npm run check:file-size; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; changed-file npx prettier --check; git diff --check.
+      Result: pass.
+      Evidence: 1560 runtime provenance modules; zero reported semantic violations in current Calc/shared inventories; 3613 authored JSDoc files. Existing foundation/unverified coverage declarations are retained; inventory success does not claim complete ICU or CSV behavior.
+
+      Observation: an initial native-probe invocation with plain node failed because the project TypeScript enum syntax requires the documented tsx loader. Resolution: reran using npx tsx, all corresponding native comparisons passed. Final review found assignment originally copied two extra flags; removed those writes before commit, strengthened native/unit witnesses, reran related shared tests, typecheck, lint, provenance/parity, build and browser CSV checks. This was a local implementation correction, not an upstream fix.
+
+      Full-suite cadence: same open Agentplane task, no tenth completed task boundary crossed. Full suite intentionally not run under the user's focused-test instruction.
+
+      Remaining: original ICU Calendar factory/shared cache and consumed LibreOffice calendar service; GetDateRef/public formatter/ParseString/setAutoInput integration; final CSV/UI upstream audit. No additional format work started. Task remains DOING, not complete. Native build/probe artifacts remain intentional untracked local evidence and are excluded from the source commit.
 
 events:
   -
@@ -291,9 +329,49 @@ events:
       Other checks pass: npm run typecheck; scoped eslint/Prettier; check:docs3605 source files; check:source-provenance1556 runtime modules/1349 mapped; check:dependencies1555 runtime sources/7785 imports/201 edges; inventory:parity:calc/shared; check:calc-resources; check:source-tree; check:file-size; policy routing; git diff --check. Runtime local-symbol records now identify declarations in the actual header/lifecycle owners instead of stale public-module reexports. TypeScript null-pointer typing and lint documentation assertions were corrected without inserting extra runtime guards or changing source errors. Full suite is not repeated: this remains the same open Agentplane task, not a tenth completed task.
 
       Scope limits: immutable top-level default package and source-valid narrow/count ranges on the pinned native build. External/named packages, replacement/malformed data, raw binary layout/magic addresses, native allocator/OOM/concurrency/teardown, version allocation ownership and invalid/overlapping/freed-pointer behavior remain uncertified. No unsupported-CSV-option policy, locale heuristic, browser save/autosave/recovery behavior or other format implementation was changed. Overall task remains DOING and incomplete: actual Calendar construction/week data and LibreOffice calendar-service integration, formatter auto-input/date recognition, then final requirement-by-requirement CSV/UI audit remain required. Native build/report artifacts stay intentional untracked output/native files and are excluded from the source commit.
+  -
+    type: "comment"
+    at: "2026-10-27T01:31:27.190Z"
+    author: "CODER"
+    body: |-
+      AQF9AG Calendar construction/week-data checkpoint (partial task; overall CSV goal remains incomplete).
+
+      Scope: ported the original ICU78.3 Calendar default/adopted/reference/copy constructor paths, base assignment, LocaleBased metadata selector, Calendar::setWeekData and weekend queries. GregorianCalendar is now concrete with original default/locale/zone/numeric-date construction, copy, clone and assignment. Const-reference overload representation preserves clone timing inside the actual base owner. Tests and native witnesses now use actual constructor/adoption state rather than shadow zone getters. Native service/cache factory dispatch and LibreOffice calendar/formatter integration remain pending.
+
+      Upstream fidelity: pinned ICU source and unchanged native libraries are the behavior oracle. CALC-342 preserves null LocalPointer memory error before the unreachable explicit argument error. CALC-343 preserves the copy-construction versus assignment asymmetry: five derived fields for copy/clone, only three cutover fields in original order for assignment, retaining destination resolver flags. Native controlled distinct flag states verify this difference. Both findings are documented in docs/program/calc-upstream-suspected-issues.md; no inferred correction or unsupported-calendar rejection is added.
+
+      Command: npx tsx scripts/icu-calendar-locale-native-probe.mjs.
+      Result: pass.
+      Evidence: 14994 exact comparisons over 993 requested locale names.
+      Scope: representative calendar/monthNames aliases/fallback, six actual week/weekend fields, fw/rg/script behavior, metadata IDs, incoming error/warning and unchanged caches.
+
+      Command: npx tsx scripts/icu-gregorian-constructor-native-probe.mjs.
+      Result: pass.
+      Evidence: 1440 comparisons across 16 modes, including null clone, aliased-status mutation during clone, copy/assignment distinction, field/stamp/derived state and weekend clones.
+      Scope: original constructors and one actual zone/Calendar owner; controlled private flags distinguish source copy versus assignment. Native uninitialized states/physical allocator/ABI behavior are not certified.
+
+      Commands: npx tsx scripts/icu-calendar-native-probe.mjs; npx tsx scripts/icu-calendar-time-native-probe.mjs; npx tsx scripts/icu-transition-native-probe.mjs; npx tsx scripts/icu-olson-native-probe.mjs; npx tsx scripts/icu-timezone-default-native-probe.mjs.
+      Result: pass.
+      Evidence: 63050 scalar arithmetic, 12929 UTC-field/time, 75189 recurring rules/transition/wall-time, 386736 Olson/IANA (639 zones), 310 default-zone comparisons. Logs and source/data fingerprints are under output/native/AQF9AG-icu-grego.
+      Scope: related existing consumers after migration to real constructors and actual adopted zones.
+
+      Commands: npm run test:shared -- src/external/icu/source; npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npm run build; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc.
+      Result: pass.
+      Evidence: 167 shared cases in 32 suites; 70 CSV cases in five suites; production build; one browser CSV import -> primary ODS save -> active-sheet CSV export scenario.
+      Scope: current calendar owners and existing CSV UI/conversion paths, not a certificate of remaining formatter date auto-input integration.
+
+      Commands: npm run typecheck; npm run lint; npm run check:docs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:calc; npm run inventory:parity:shared; npm run check:calc-resources; npm run check:file-size; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; changed-file npx prettier --check; git diff --check.
+      Result: pass.
+      Evidence: 1560 runtime provenance modules; zero reported semantic violations in current Calc/shared inventories; 3613 authored JSDoc files. Existing foundation/unverified coverage declarations are retained; inventory success does not claim complete ICU or CSV behavior.
+
+      Observation: an initial native-probe invocation with plain node failed because the project TypeScript enum syntax requires the documented tsx loader. Resolution: reran using npx tsx, all corresponding native comparisons passed. Final review found assignment originally copied two extra flags; removed those writes before commit, strengthened native/unit witnesses, reran related shared tests, typecheck, lint, provenance/parity, build and browser CSV checks. This was a local implementation correction, not an upstream fix.
+
+      Full-suite cadence: same open Agentplane task, no tenth completed task boundary crossed. Full suite intentionally not run under the user's focused-test instruction.
+
+      Remaining: original ICU Calendar factory/shared cache and consumed LibreOffice calendar service; GetDateRef/public formatter/ParseString/setAutoInput integration; final CSV/UI upstream audit. No additional format work started. Task remains DOING, not complete. Native build/probe artifacts remain intentional untracked local evidence and are excluded from the source commit.
 
 doc_version: 3
-doc_updated_at: "2026-10-27T00:19:50.043Z"
+doc_updated_at: "2026-10-27T01:31:27.190Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:

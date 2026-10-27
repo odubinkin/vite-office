@@ -13,6 +13,7 @@ import {
 } from "../apps/office/src/external/icu/source/i18n/tzrule.ts";
 import { TimeZoneTransition } from "../apps/office/src/external/icu/source/i18n/tztrans.ts";
 import { SimpleTimeZone } from "../apps/office/src/external/icu/source/i18n/simpletz.ts";
+import { Locale as IcuLocale } from "../apps/office/src/external/icu/source/common/locid.ts";
 import { GregorianCalendar } from "../apps/office/src/external/icu/source/i18n/gregocal.ts";
 import { Grego } from "../apps/office/src/external/icu/source/i18n/gregoimp.ts";
 import { UCalendarDateFields as F } from "../apps/office/src/external/icu/source/i18n/unicode/ucal.ts";
@@ -95,12 +96,22 @@ execFileSync(
   ],
   { stdio: "inherit" },
 );
-/** Calendar witness supplies actual SimpleTimeZone and explicit week data; public locale/system construction is not certified. */
+/** Calendar witness supplies actual SimpleTimeZone and explicit week data; constructor/service coverage is recorded by separate witnesses. */
 class CalendarWitness extends GregorianCalendar {
-  zone = new SimpleTimeZone(0, new UnicodeString("zone"));
-  /** Returns the actual zone. @returns Zone. */
-  getTimeZone() {
-    return this.zone;
+  /** Initializes the real constructor and public controlled baseline. @returns Fixture. */
+  constructor() {
+    super(new SimpleTimeZone(0, new UnicodeString("fixture")), IcuLocale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
+  }
+
+  /** Borrows the actual owned zone for controlled rule changes. @returns Zone. */
+  get zone() {
+    return this.getTimeZone();
+  }
+  /** Transfers the real fixture zone through the original adoption API. @param zone - Owner. @returns Nothing. */
+  set zone(zone) {
+    this.adoptTimeZone(zone);
   }
 }
 const cal = new CalendarWitness(),

@@ -6,8 +6,15 @@ import { resolve } from "node:path";
 import { GregorianCalendar } from "../apps/office/src/external/icu/source/i18n/gregocal.ts";
 import { UCalendarDateFields as F } from "../apps/office/src/external/icu/source/i18n/unicode/ucal.ts";
 
-/** Test-only exposure of protected native arithmetic; invoking an unported time backend fails the witness. */
+/** Test-only exposure of protected native arithmetic; invoking time completion outside this scalar scope fails the witness. */
 class CalendarWitness extends GregorianCalendar {
+  /** Initializes the real constructor and public controlled baseline. @returns Fixture. */
+  constructor() {
+    super([0]);
+    this.setTime(0, [0]);
+    this.clear();
+  }
+
   /** Rejects time-zone use outside the scalar witness. @returns Never. */
   getTimeZone() {
     throw Error("Time-zone lookup is outside this scalar witness");
@@ -341,7 +348,7 @@ const report = {
   ),
   result: "pass",
   scope:
-    "Calendar field/stamp precedence, Gregorian cache and default GregorianCalendar hybrid scalar hooks. Native construction uses real pinned ICU resources; Zone/locale constructors remain unported. Bidirectional completion is covered by the separate time and transition witnesses.",
+    "Calendar field/stamp precedence, Gregorian cache and default GregorianCalendar hybrid scalar hooks. Native construction uses real pinned ICU resources; Zone/locale constructor contracts are covered by the separate constructor witness. Bidirectional completion is covered by the separate time and transition witnesses.",
 };
 writeFileSync(`${build}/calendar-comparison.json`, JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify(report, null, 2));

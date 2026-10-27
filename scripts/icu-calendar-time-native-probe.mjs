@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 import { SimpleTimeZone } from "../apps/office/src/external/icu/source/i18n/simpletz.ts";
 import { UnicodeString } from "../apps/office/src/external/icu/source/common/unistr.ts";
+import { Locale as IcuLocale } from "../apps/office/src/external/icu/source/common/locid.ts";
 import { GregorianCalendar } from "../apps/office/src/external/icu/source/i18n/gregocal.ts";
 import { UCalendarDateFields as F } from "../apps/office/src/external/icu/source/i18n/unicode/ucal.ts";
 import {
@@ -15,11 +16,22 @@ import {
 
 /** Actual production Calendar/GregorianCalendar owner with only the zone dependency supplied by this test. */
 class TimeWitness extends GregorianCalendar {
-  zone = new SimpleTimeZone(0, new UnicodeString("fixture"));
-  /** Returns the actual SimpleTimeZone owner. @returns Zone dependency. */
-  getTimeZone() {
-    return this.zone;
+  /** Initializes the real constructor and public controlled baseline. @returns Fixture. */
+  constructor() {
+    super(new SimpleTimeZone(0, new UnicodeString("fixture")), IcuLocale.getRoot(), [0]);
+    this.setTime(0, [0]);
+    this.clear();
   }
+
+  /** Borrows the actual owned zone for controlled rule changes. @returns Zone. */
+  get zone() {
+    return this.getTimeZone();
+  }
+  /** Transfers the real fixture zone through the original adoption API. @param zone - Owner. @returns Nothing. */
+  set zone(zone) {
+    this.adoptTimeZone(zone);
+  }
+
   /** Rejects fields-to-time calls outside this UTC-only witness. @returns Never. */
   computeTime() {
     throw Error("Fields-to-UTC computation is outside this witness");
@@ -322,7 +334,7 @@ const report = {
     ),
   ),
   scope:
-    "Calendar UTC-to-fields, time-range/stamp transitions, clock-field selection and protected single-field validation. Both sides use actual SimpleTimeZone owners for fixed offsets and recurring DST rules. System/IANA zone factories and CSV services remain unported; bidirectional time completion is covered by the separate transition witness.",
+    "Calendar UTC-to-fields, time-range/stamp transitions, clock-field selection and protected single-field validation. Both sides use actual SimpleTimeZone owners for fixed offsets and recurring DST rules. System/IANA zone factories and CSV services are outside this witness; bidirectional time completion is covered by the separate transition witness.",
 };
 writeFileSync(`${build}/calendar-time-comparison.json`, JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify(report, null, 2));

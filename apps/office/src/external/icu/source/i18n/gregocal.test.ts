@@ -1,4 +1,4 @@
-/** @fileoverview Actual Calendar/GregorianCalendar owner arithmetic, precedence and hybrid cutover. Only protected scalar hooks are exposed; unported time/zone completion is never substituted. */
+/** @fileoverview Actual Calendar/GregorianCalendar owner arithmetic, precedence and hybrid cutover. Only protected scalar hooks are exposed; time/zone completion is outside this scalar witness. */
 import { expect, it } from "vitest";
 import { GregorianCalendar } from "./gregocal";
 import { UCalendarDateFields as F } from "./unicode/ucal";
@@ -7,6 +7,13 @@ import { uprv_add32_overflow, uprv_mul32_overflow } from "../common/putil";
 
 /** Exposes original protected hooks for isolated owner tests. */
 class ArithmeticWitness extends GregorianCalendar {
+  /** Real source construction followed by the public controlled fixture baseline. @returns Fixture. */
+  constructor() {
+    super([0]);
+    this.setTime(0, [0]);
+    this.clear();
+  }
+
   /** Rejects calls outside this arithmetic test. @returns Never. */
   protected override computeFields(): never {
     throw Error("Time-zone completion must not be invoked by this arithmetic test");
