@@ -354,8 +354,8 @@ export class SwpHints {
   /** Clips snapshot or cut attributes without changing the source container. @param start - Inclusive offset. @param end - Exclusive offset. @param cut - Whether native CutImpl construction applies. @returns Independent rebased attributes. */
   private sliceRange(start: number, end: number, cut: boolean): SwpHints {
     assertHintSlice(start, end);
-    return new SwpHints(
-      this.pool,
+    const result = new SwpHints(this.pool);
+    result.assignOwned(
       this.hintsByStart.flatMap(
         /** Clips one source hint. @param hint - Source hint. @returns Zero or one clipped hint. */ (
           hint,
@@ -373,6 +373,7 @@ export class SwpHints {
         },
       ),
     );
+    return result;
   }
 
   /** Removes a range, transferring strictly interior owned attributes and reconstructing split attributes. @param start - Inclusive cut offset. @param end - Exclusive cut offset. @returns Consumable same-pool hint fragment. */
@@ -412,25 +413,17 @@ export class SwpHints {
 
   /** Returns an independent copy with every range shifted by the supplied offset. @param offset - Signed range delta. @returns Shifted hints. */
   public shifted(offset: number): SwpHints {
-    return new SwpHints(
-      this.pool,
-      this.hintsByStart.map(
-        /** Shifts one hint. @param hint - Source hint. @returns Shifted clone. */ (hint) => {
-          const copy = hint.clone();
-          copy.start += offset;
-          copy.SetEnd(copy.end + offset);
-          return copy;
-        },
-      ),
-    );
+    const result = this.clone();
+    result.assignOwned(result.takeOwned(offset));
+    return result;
   }
 
   /** Concatenates another fragment's hints after a leading text length. @param other - Trailing hints. @param leadingLength - Leading text length. @returns Concatenated hints. */
   public concat(other: SwpHints, leadingLength: number): SwpHints {
-    return new SwpHints(this.pool, [
-      ...this.entries(),
-      ...other.clone(this.pool).shifted(leadingLength).entries(),
-    ]);
+    const result = this.clone(),
+      trailing = other.clone(this.pool);
+    result.assignOwned([...result.takeOwned(0), ...trailing.takeOwned(leadingLength)]);
+    return result;
   }
 
   /** Replaces a text range's hints with a native hint fragment. @param textLength - Original text length. @param start - Inclusive replacement start. @param end - Exclusive replacement end. @param replacement - Replacement hints. @param replacementLength - Replacement text length. @param transferHints - Whether to consume owned same-pool hints. @returns Rebased combined hints. */
@@ -444,19 +437,15 @@ export class SwpHints {
   ): SwpHints {
     if (transferHints && replacement.pool !== this.pool)
       throw new Error("Writer hint transfer requires the same document pool.");
-    const trailing = this.slice(end, textLength).shifted(start + replacementLength);
-    const prefix = this.slice(0, start);
-    const middle = transferHints
-      ? replacement.takeOwned(start)
-      : replacement.clone(this.pool).shifted(start).entries();
-    const hints = [
-      ...(transferHints ? prefix.takeOwned(0) : prefix.entries()),
-      ...middle,
-      ...(transferHints ? trailing.takeOwned(0) : trailing.entries()),
-    ];
+    const trailing = this.slice(end, textLength),
+      prefix = this.slice(0, start);
+    const middle = transferHints ? replacement : replacement.clone(this.pool);
     const result = new SwpHints(this.pool);
-    if (transferHints) result.assignOwned(hints);
-    else result.replace(hints);
+    result.assignOwned([
+      ...prefix.takeOwned(0),
+      ...middle.takeOwned(start),
+      ...trailing.takeOwned(start + replacementLength),
+    ]);
     return result;
   }
 
@@ -499,16 +488,20 @@ export class SwpHints {
       const inserted = this.createItemHints(insertedLength, attributes, inherited).takeOwned(
         offset,
       );
-      this.assignOwned([...retained, ...inserted]);
+      this.assignOwned([...retained, ...inserted], true);
       return this;
     }
-    return this.replaceRange(
-      textLength,
-      offset,
-      offset,
-      this.createItemHints(insertedLength, attributes ?? inherited, inherited, hyperlink),
+    const replacement = this.createItemHints(
       insertedLength,
+      attributes ?? inherited,
+      inherited,
+      hyperlink,
     );
+    try {
+      return this.replaceRange(textLength, offset, offset, replacement, insertedLength);
+    } finally {
+      replacement.Dispose();
+    }
   }
 
   /** Builds insertion hints from complete native items without a browser attribute projection. @param length - Inserted UTF16 length. @param attributes - Actual character items. @param inherited - Effective node/style items. @param hyperlink - Optional explicit link. @returns Independent native hints. */
@@ -525,7 +518,11 @@ export class SwpHints {
     const direct = new SfxItemSet(this.pool, WRITER_CHARACTER_WHICH_RANGES);
     for (const item of attributes.entries())
       if (!item.equals(inherited.Get(item.Which()))) direct.Put(item);
-    if (direct.Count() !== 0) hints.Insert(MakeTextAttr(this.pool.GetDoc(), direct, 0, length));
+    try {
+      if (direct.Count() !== 0) hints.Insert(MakeTextAttr(this.pool.GetDoc(), direct, 0, length));
+    } finally {
+      direct.Dispose();
+    }
     const link = normalizeWriterHyperlink(hyperlink);
     if (link !== undefined)
       hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(link), 0, length));
@@ -686,7 +683,9 @@ export class SwpHints {
     const normalized = normalizeWriterHyperlink(hyperlink);
     if (normalized !== undefined && end > start)
       retained.push(new SwTextINetFormat(new SwFormatINetFormat(normalized), start, end));
-    return new SwpHints(this.pool, retained);
+    const result = new SwpHints(this.pool);
+    result.assignOwned(retained);
+    return result;
   }
 
   /** Replaces all hints, removing empty item sets and merging adjacent equal auto formats. @param hints - Replacement hints. @returns Nothing. */

@@ -1,5 +1,6 @@
 /** @fileoverview Original ranged RstTextAttr geometry and selective automatic-style reset from txtedt.cxx for registered hint families. */
 import type { SwTextNode } from "./ndtxt";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
 import { SfxItemSet, SfxItemState } from "../../../../svl/source/items/itemset";
 import { SfxItemIter } from "../../../../svl/inc/itemiter";
 import { SwFormatAutoFormat, type SwTextAttrEnd } from "./txatbase";
@@ -35,17 +36,21 @@ function common(
       }
     }
   }
-  return reduced === undefined
-    ? [false, undefined]
-    : [
-        true,
-        reduced.Count()
-          ? node
-              .GetDoc()
-              .GetIStyleAccess()
-              .getAutomaticStyle(reduced, SwAutoStyleFamily.AUTO_STYLE_CHAR)
-          : undefined,
-      ];
+  try {
+    return reduced === undefined
+      ? [false, undefined]
+      : [
+          true,
+          reduced.Count()
+            ? node
+                .GetDoc()
+                .GetIStyleAccess()
+                .getAutomaticStyle(reduced, SwAutoStyleFamily.AUTO_STYLE_CHAR)
+            : undefined,
+        ];
+  } finally {
+    reduced?.Dispose();
+  }
 }
 /** Original selection policy over the actual supported families. @param node - Actual node. @param hint - Original hint. @param requested - Optional set. @param which - Single-item selector. @returns Skip policy and native remainder handle. */
 export function GetTextResetStyle(
@@ -92,49 +97,53 @@ export function ResetTextNodeAttributes(
     if (!(a < end || length === 0 || (end === a && a === node.Len()))) break;
     if (hint.HasContent()) continue;
     const [skip, style] = GetTextResetStyle(node, hint, requested, which);
-    if (skip) continue;
-    if (start <= a) {
-      if (end > a || (end === b && end === a)) {
-        min = Math.min(min, a);
-        max = Math.max(max, b);
-        changed ||= end > a || empty;
-        if (b <= end) {
-          removed.push(hint);
-          if (style !== undefined) added.push(MakeTextAttr(node.GetDoc(), style, a, b));
-        } else {
+    try {
+      if (skip) continue;
+      if (start <= a) {
+        if (end > a || (end === b && end === a)) {
+          min = Math.min(min, a);
+          max = Math.max(max, b);
+          changed ||= end > a || empty;
+          if (b <= end) {
+            removed.push(hint);
+            if (style !== undefined) added.push(MakeTextAttr(node.GetDoc(), style, a, b));
+          } else {
+            changed = true;
+            hints.NoteInHistory(hint);
+            hint.SetStart(end);
+            hints.NoteInHistory(hint, true);
+            if (style !== undefined && a < end)
+              added.push(MakeTextAttr(node.GetDoc(), style, a, end));
+          }
+        }
+      } else if (b > start) {
+        if (b < end) {
+          min = Math.min(min, a);
+          max = Math.max(max, b);
           changed = true;
           hints.NoteInHistory(hint);
-          hint.SetStart(end);
+          hint.SetEnd(start);
           hints.NoteInHistory(hint, true);
-          if (style !== undefined && a < end)
-            added.push(MakeTextAttr(node.GetDoc(), style, a, end));
+          if (style !== undefined) added.push(MakeTextAttr(node.GetDoc(), style, start, b));
+        } else if (length !== 0) {
+          min = Math.min(min, a);
+          max = Math.max(max, b);
+          changed = true;
+          hints.NoteInHistory(hint);
+          hint.SetEnd(start);
+          hints.NoteInHistory(hint, true);
+          if (style !== undefined && start < end)
+            added.push(MakeTextAttr(node.GetDoc(), style, start, end));
+          if (end < b) {
+            const trailing = MakeTextAttr(node.GetDoc(), hint.GetAttr(), end, b);
+            if (hint instanceof SwTextCharFormat && trailing instanceof SwTextCharFormat)
+              trailing.SetSortNumber(hint.GetSortNumber());
+            added.push(trailing);
+          }
         }
       }
-    } else if (b > start) {
-      if (b < end) {
-        min = Math.min(min, a);
-        max = Math.max(max, b);
-        changed = true;
-        hints.NoteInHistory(hint);
-        hint.SetEnd(start);
-        hints.NoteInHistory(hint, true);
-        if (style !== undefined) added.push(MakeTextAttr(node.GetDoc(), style, start, b));
-      } else if (length !== 0) {
-        min = Math.min(min, a);
-        max = Math.max(max, b);
-        changed = true;
-        hints.NoteInHistory(hint);
-        hint.SetEnd(start);
-        hints.NoteInHistory(hint, true);
-        if (style !== undefined && start < end)
-          added.push(MakeTextAttr(node.GetDoc(), style, start, end));
-        if (end < b) {
-          const trailing = MakeTextAttr(node.GetDoc(), hint.GetAttr(), end, b);
-          if (hint instanceof SwTextCharFormat && trailing instanceof SwTextCharFormat)
-            trailing.SetSortNumber(hint.GetSortNumber());
-          added.push(trailing);
-        }
-      }
+    } finally {
+      if (style !== undefined) releaseStyleHandle(style);
     }
   }
   if (exact) {

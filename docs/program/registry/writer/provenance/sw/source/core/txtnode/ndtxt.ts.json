@@ -336,6 +336,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-text-language.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -610,7 +614,8 @@
       "S3HW1E: Original DeleteAttributes and TryDeleteSwpHints entrypoints are connected for registered ranged families. Existing fragment/full-text net content-index updates were split by responsibility without changing their timing or modes.",
       "S3HW1E connects original ownership-transfer InsertHint for registered non-dummy/non-content ranged families, retaining success independently of surviving input identity.",
       "Native range overload delegates source SetAttr, RstTextAttr and DontExpandFormat to their native responsibility splits while retaining direct paragraph lifecycle.",
-      "Native GetLang delegates to the original thints.cxx range language owner."
+      "Native GetLang delegates to the original thints.cxx range language owner.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

@@ -28,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-internet-nesting.test.ts",
           "marker": "Source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -81,7 +85,8 @@
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "S3HW1E: Original single borrowed SwRegHistory registration, explicit NoteInHistory and DeleteAtPos old-value capture are now retained. Insert itself intentionally does not auto-record new history; native mutation sites do.",
       "S3HW1E connects original TryInsertHint/TryInsertNesting owner entrypoints to the represented native insertion and INET nesting decisions. Raw map insertion/history ownership remains separate.",
-      "S3HW1E moves owned projection normalization to the range responsibility split, destroys discarded normalized owners, exposes explicit owned-map destruction, releases replaced snapshot maps and temporary projection items, and distinguishes native transfer paths from destructive replacement. This supersedes earlier GC-only automatic-item lifetime claims for these paths; all fragment/transient and undo callers remain unverified."
+      "S3HW1E moves owned projection normalization to the range responsibility split, destroys discarded normalized owners, exposes explicit owned-map destruction, releases replaced snapshot maps and temporary projection items, and distinguishes native transfer paths from destructive replacement. This supersedes earlier GC-only automatic-item lifetime claims for these paths; all fragment/transient and undo callers remain unverified.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndhints.cxx",

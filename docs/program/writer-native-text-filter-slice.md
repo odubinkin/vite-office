@@ -329,3 +329,16 @@ sharing cases are still open. Font-table seed/default/bullet initialization is
 not yet connected through this collector; the prior pre-registration route
 remains until those prerequisites are completed. No whole-filter or goal
 completion is asserted by this checkpoint.
+
+History and fragment lifetime checkpoint: `SwHistory` now releases erased and
+destroyed unique entries, and represented undo actions destroy their retained
+items, item sets, text snapshots and history members. Temporary snapshots in
+insertion, formatting, projection, joining and selective reset release their
+owners after copying or transfer. `CaptureTextFragment` borrows its source map
+before creating the independent range snapshot. Real font collection tests
+cover temporary rollback, history moves, typing/grouping, selected shell edits,
+reduced reset styles and restored versus disconnected undo nodes. The existing
+browser undo-node ID carrier distinguishes restored live nodes from retained
+disconnected content; it is not the native separate SwNodes undo section.
+Complete UNO/import-cache and remaining transient owner closure is still open,
+as are font-table initialization and the other filter gaps listed above.

@@ -50,6 +50,8 @@ export abstract class SwHistoryHint {
   public GetDescription(): string {
     return "";
   }
+  /** Logical native virtual destructor; value-only entries own no resources. @returns Nothing. */
+  public Dispose(): void {}
   /** Restores the entry into the graph. @param doc - Destination graph. @param tmp - Temporary rollback. @returns Nothing. */
   public abstract SetInDoc(doc: SwDoc, tmp: boolean): void;
 }
@@ -74,7 +76,12 @@ export class SwHistorySetFormat extends SwHistoryHint {
         .GetTable()
         .GetFrameFormat()
         .SetFormatAttr(this.m_pAttr as SfxPoolItem);
-    if (!tmp) this.m_pAttr = undefined;
+    if (!tmp) this.Dispose();
+  }
+  /** Native unique-item member destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pAttr?.Dispose();
+    this.m_pAttr = undefined;
   }
 }
 
@@ -114,7 +121,7 @@ export class SwHistorySetAttrSet extends SwHistoryHint {
       if (!whichIds.has(item.Which())) this.m_ResetArray.push(item.Which());
       else if (item.Which() === RES_BOXATR_FORMULA)
         throw new Error("Writer history formula external-name conversion is not implemented.");
-      else if (item.Which() !== RES_BOXATR_VALUE) this.m_OldSet.Put(item.Clone() as SfxPoolItem);
+      else if (item.Which() !== RES_BOXATR_VALUE) this.m_OldSet.Put(item);
     }
   }
   /** Restores old items before source-defined resets without recording nested history. @param doc - Native graph. @param tmp - Temporary policy; owned items remain available. @returns Nothing. */
@@ -136,6 +143,10 @@ export class SwHistorySetAttrSet extends SwHistoryHint {
     } finally {
       manager.DoUndo(enabled);
     }
+  }
+  /** Native contained item-set destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_OldSet.Dispose();
   }
 }
 /** Native collection identity and content type,with a live-owner check before restoration. */
@@ -197,6 +208,10 @@ export class SwHistorySetText extends SwHistoryHint {
     if (attr === undefined) return;
     if (this.m_bFormatIgnoreStart) attr.SetFormatIgnoreStart(true);
     if (this.m_bFormatIgnoreEnd) attr.SetFormatIgnoreEnd(true);
+  }
+  /** Native unique ranged-item destruction releases its automatic style. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pAttr.Dispose();
   }
 }
 /** Original reset history retains family and exact coordinates, never the inserted item. */
@@ -358,7 +373,7 @@ export class SwHistory {
   public Rollback(doc: SwDoc, start = 0): boolean {
     if (this.Count() === 0) return false;
     for (let index = this.Count(); index > start;) this.at(--index).SetInDoc(doc, false);
-    this.m_SwpHstry.splice(start);
+    for (const entry of this.m_SwpHstry.splice(start)) entry.Dispose();
     this.m_nEndDiff = 0;
     return true;
   }
@@ -372,6 +387,11 @@ export class SwHistory {
       for (; start < end; this.m_nEndDiff++, start++) this.at(start).SetInDoc(doc, true);
     }
     return true;
+  }
+  /** Native history-vector destruction releases every retained unique entry. @returns Nothing. */
+  public Dispose(): void {
+    for (const entry of this.m_SwpHstry.splice(0)) entry.Dispose();
+    this.m_nEndDiff = 0;
   }
   /** Re-enables retained text entries for another undo cycle. @param end - New active end. @returns Previous active end. */
   public SetTmpEnd(end: number): number {

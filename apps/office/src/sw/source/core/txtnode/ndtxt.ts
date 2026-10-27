@@ -910,7 +910,7 @@ export class SwTextNode extends SwContentNode {
     if (direct !== undefined) clone.SetAttr(direct);
     clone.SetText(this.mText);
     if (this.pSwpHints !== undefined)
-      clone.SetTextHints(this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool()));
+      clone.pSwpHints = this.pSwpHints.CopyTo(nodes.GetDoc().GetAttrPool());
     clone.SetListGeometryWins(this.listGeometryWins);
     clone.mbEmptyListStyleSetDueToSetOutlineLevelAttr =
       this.mbEmptyListStyleSetDueToSetOutlineLevelAttr;
@@ -978,9 +978,9 @@ export class SwTextNode extends SwContentNode {
     return CreateTextNodeHyperlinkFragment(this, start, end, hyperlink);
   }
 
-  /** Returns an independent native hint container, including the empty case. @returns Independent hints. */
+  /** Borrows the source map for snapshot-producing operations, including an empty map when absent. @returns Source hints. */
   private GetTextHints(): SwpHints {
-    return this.pSwpHints?.clone() ?? new SwpHints(this.GetDoc().GetAttrPool());
+    return this.pSwpHints ?? new SwpHints(this.GetDoc().GetAttrPool());
   }
 }
 

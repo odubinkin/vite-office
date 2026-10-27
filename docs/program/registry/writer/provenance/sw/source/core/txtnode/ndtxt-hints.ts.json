@@ -64,6 +64,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -142,7 +146,8 @@
       "S3HW1E: Existing full-text/fragment replacement content-index updates are shared at this responsibility split, preserving actual node ownership, exact offsets, Negative/Default modes and prior mutation ordering. This helper is a local representation of the existing bounded replacement path, not a new native service.",
       "S3HW1E releases the actual composed native INET client base when browser whole-map replacement discards that attribute; retained actual owners are excluded. No native URL-history provider or visit state is synthesized.",
       "Existing fragment-replacement hint preparation is split from text/index mutation without changing ordering or ownership.",
-      "S3HW1E releases replaced node-owned hint maps and whole-span attributes moved into node item sets. A copied caller snapshot remains independent; a replaced borrowed old map is destroyed. Complete graph/fragment/undo lifetime closure remains pending."
+      "S3HW1E releases replaced node-owned hint maps and whole-span attributes moved into node item sets. A copied caller snapshot remains independent; a replaced borrowed old map is destroyed. Complete graph/fragment/undo lifetime closure remains pending.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/txtnode/ndtxt.cxx",

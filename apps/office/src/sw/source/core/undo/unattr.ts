@@ -57,6 +57,7 @@ export class SwUndoResetAttr extends SwUndo {
 
   /** Performs the initial exact reset without restoring a history cursor. @returns Nothing. */
   public ApplyExact(): void {
+    const previous = this.history;
     this.history = this.history.map(
       /** Captures text reset at its own native boundary after collection/delete-set processing. @param entry - Range node. @returns Current hint history. */
       ({ index }) => {
@@ -67,8 +68,16 @@ export class SwUndoResetAttr extends SwUndo {
         };
       },
     );
+    for (const entry of previous) entry.hints.Dispose();
     for (const { index } of this.history)
       resetFullParagraphAutoFormat(this.m_rDoc.GetNodes().at(index) as SwTextNode);
+  }
+
+  /** Releases owned per-node hint snapshots when the reset action is discarded. @returns Nothing. */
+  public override Dispose(): void {
+    for (const entry of this.history) entry.hints.Dispose();
+    this.history = [];
+    super.Dispose();
   }
 
   /** Reports retained hint payload only. @returns Payload units. */
@@ -165,7 +174,18 @@ export class SwUndoAttr extends SwUndo {
           ),
         );
       if (!original.equals(replacement)) this.changedWhich.add(which);
+      original.Dispose();
+      replacement.Dispose();
     }
+  }
+
+  /** Releases actual fragment, direct-set and retained history owners. @returns Nothing. */
+  public override Dispose(): void {
+    this.afterFragment.hints.Dispose();
+    this.beforeFragment.hints.Dispose();
+    this.directItems?.Dispose();
+    this.directHistory?.Dispose();
+    super.Dispose();
   }
 
   /** Performs the initial family-only mutation without restoring a history cursor; full native ResetAttrs history remains unverified. @returns Nothing. */
@@ -260,6 +280,13 @@ export class SwUndoParagraphItem extends SwUndo {
     this.afterItem = afterItem.Clone() as SfxPoolItem;
   }
 
+  /** Native unique old/new item destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.afterItem.Dispose();
+    this.beforeItem?.Dispose();
+    super.Dispose();
+  }
+
   /** Reports the scalar item pair. @returns Payload units. */
   public override GetPayloadSize(): number {
     return 2;
@@ -295,9 +322,14 @@ export function CreateWriterFontUndo(
 ): SwUndoAttr | undefined {
   const beforeFragment = CopyTextFragment(paragraph, start, end);
   const afterFragment = paragraph.CreateFontTextFragment(start, end, family);
-  return beforeFragment.hints.equals(afterFragment.hints)
-    ? undefined
-    : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
+  try {
+    return beforeFragment.hints.equals(afterFragment.hints)
+      ? undefined
+      : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
+  } finally {
+    beforeFragment.hints.Dispose();
+    afterFragment.hints.Dispose();
+  }
 }
 
 /** Builds a font-height range undo action. @param paragraph - Target node. @param start - Range start. @param end - Range end. @param fontSizeTwips - Font height in twips. @param before - Initial cursor. @param after - Final cursor. @returns Undo action or undefined for a no-op. */
@@ -311,9 +343,14 @@ export function CreateWriterFontSizeUndo(
 ): SwUndoAttr | undefined {
   const beforeFragment = CopyTextFragment(paragraph, start, end);
   const afterFragment = paragraph.CreateFontSizeTextFragment(start, end, fontSizeTwips);
-  return beforeFragment.hints.equals(afterFragment.hints)
-    ? undefined
-    : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
+  try {
+    return beforeFragment.hints.equals(afterFragment.hints)
+      ? undefined
+      : new SwUndoAttr(paragraph, start, beforeFragment, afterFragment, before, after);
+  } finally {
+    beforeFragment.hints.Dispose();
+    afterFragment.hints.Dispose();
+  }
 }
 
 /** Reversible RES_PARATR_ADJUST change for one paragraph. */
@@ -373,6 +410,12 @@ export class SwUndoMoveLeftMargin extends SwUndo {
     this.m_rDoc = range.GetPoint().GetNode().GetDoc();
     this.hasCursorState = state !== undefined;
   }
+  /** Releases the native history member when the action is discarded. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pHistory.Dispose();
+    super.Dispose();
+  }
+
   /** Borrows the original retained history for initial registered mutation. @returns Original history. */
   public GetHistory(): SwHistory {
     return this.m_pHistory;
@@ -453,6 +496,11 @@ export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
     // Original Init never retains a content-node index that can become stale.
     this.m_oOldSet.ClearItem(RES_CNTNT);
   }
+  /** Native optional old item-set member destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_oOldSet?.Dispose();
+    this.m_oOldSet = undefined;
+  }
   /** Original PutAttr overwrites previously recorded values and excludes content indices. @param item - Borrowed old item. @param doc - Original owner. @returns Nothing. */
   public PutAttr(item: SfxPoolItem, doc: SwDoc): void {
     void doc;
@@ -472,6 +520,7 @@ export class SwUndoFormatAttr extends SfxUndoAction<SwUndoRedoContext> {
       format.SetFormatAttrSet(this.m_oOldSet);
       const undo = helper.GetUndo();
       if (undo?.m_oOldSet) {
+        this.m_oOldSet.Dispose();
         this.m_oOldSet = undo.m_oOldSet;
         undo.m_oOldSet = undefined;
       } else this.m_oOldSet.ClearItem();
@@ -496,6 +545,18 @@ export class SwUndoFormatAttrHelper extends SwClient {
   /** Borrows the captured native action. @returns Action or absence. */
   GetUndo(): SwUndoFormatAttr | undefined {
     return this.m_pUndo;
+  }
+  /** Original explicit unique-pointer ownership transfer, distinct from borrowed GetUndo. @returns Owned action or absence. */
+  ReleaseUndo(): SwUndoFormatAttr | undefined {
+    const result = this.m_pUndo;
+    this.m_pUndo = undefined;
+    return result;
+  }
+  /** Native captured-action member destruction precedes SwClient-base cleanup. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pUndo?.Dispose();
+    this.m_pUndo = undefined;
+    super.Dispose();
   }
   /** Original change and legacy-item callbacks retain native old-before-new admission. @param source - Notifying owner. @param hint - Original hint. @returns Nothing. */
   protected override SwClientNotify(source: SwModify, hint: SwModelHint): void {
@@ -533,6 +594,13 @@ export class SwUndoDefaultAttr extends SfxUndoAction<SwUndoRedoContext> {
       if (set.Count() !== 1) this.m_oOldSet = new SfxItemSet(set);
     } else this.m_oOldSet = new SfxItemSet(set);
   }
+  /** Native optional set and unique tab-stop member destruction. @returns Nothing. */
+  public override Dispose(): void {
+    this.m_pTabStop?.Dispose();
+    this.m_pTabStop = undefined;
+    this.m_oOldSet?.Dispose();
+    this.m_oOldSet = undefined;
+  }
   /** Native default-attribute operation label. @returns Label. */
   public override GetComment(): string {
     return "Modify default values";
@@ -544,6 +612,7 @@ export class SwUndoDefaultAttr extends SfxUndoAction<SwUndoRedoContext> {
       const helper = new SwUndoFormatAttrHelper(doc.GetDfltTextFormatColl());
       try {
         doc.SetDefault(this.m_oOldSet);
+        this.m_oOldSet.Dispose();
         this.m_oOldSet = undefined;
         const captured = helper.GetUndo();
         if (captured?.m_oOldSet) {
@@ -557,6 +626,7 @@ export class SwUndoDefaultAttr extends SfxUndoAction<SwUndoRedoContext> {
     if (this.m_pTabStop) {
       const old = doc.GetDefault(RES_PARATR_TABSTOP).Clone() as SvxTabStopItem;
       doc.SetDefault(this.m_pTabStop);
+      this.m_pTabStop.Dispose();
       this.m_pTabStop = old;
     }
   }

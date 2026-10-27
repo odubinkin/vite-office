@@ -25,6 +25,7 @@ import {
   RES_CHRATR_UNDERLINE,
   WRITER_CHARACTER_WHICH_RANGES,
 } from "../../../inc/hintids";
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import { SwpHints } from "./ndhints";
 import { CharFormat, SwAttrHandler, type SwAttributeHint } from "../text/atrstck";
 import {
@@ -149,9 +150,17 @@ export function setCharacterItems(
       if (!keepDirect && item.equals(inherited.Get(which))) items.ClearItem(which);
       else items.Put(item);
     }
-    if (items.Count() > 0) retained.push(MakeTextAttr(pool.GetDoc(), items, first, last));
+    try {
+      if (items.Count() > 0) retained.push(MakeTextAttr(pool.GetDoc(), items, first, last));
+    } finally {
+      items.Dispose();
+    }
   }
-  return new SwpHints(pool, retained);
+  try {
+    return new SwpHints(pool, retained);
+  } finally {
+    for (const hint of retained) DestroyTextNodeAttribute(hint);
+  }
 }
 
 /** Projects actual active native item stacks only at the existing immutable run/control boundary; the document retains named style references. @param pool - Actual Writer pool. @param hints - Native start-ordered attributes. @param position - Character position. @param inherited - Effective paragraph attributes. @returns Existing browser projection. */
@@ -178,5 +187,9 @@ export function projectCharacterHintAttributes(
         )
       )
         effective.Put(handler.ReadItem(which));
-  return projectWriterCharacterAttributes(effective, inherited);
+  try {
+    return projectWriterCharacterAttributes(effective, inherited);
+  } finally {
+    effective.Dispose();
+  }
 }

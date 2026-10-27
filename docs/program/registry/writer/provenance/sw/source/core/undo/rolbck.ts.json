@@ -88,6 +88,10 @@
         {
           "path": "apps/office/src/sw/source/core/txtnode/native-ranged-itemset.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/undo/native-auto-style-lifetime.test.ts",
+          "marker": "it("
         }
       ],
       "upstream": [
@@ -128,7 +132,8 @@
       "LeafV6W22V adds actual SwHistoryBookmark numeric node/content/name payload, current-node lookup, same-name deletion/recreation and undo guard for the existing collapsed ordinary mark model. AddIMark dispatches that represented type; unsupported expanded-end capture rejects explicitly. Source Move transfers actual entry ownership in order and never resets either temporary-end counter, with identical empty-source early return. Native metadata/keycode/typed marks and generic complete history remain unverified.",
       "S3HW1E ranged character-style checkpoint: native SwFormatCharFormat/SwTextCharFormat retain actual style identity, fresh backlinks, sort numbers and synchronous range-update notifications; JS weak references/collection bind listener destruction without pointer/refcount emulation. Source FillProgName character disambiguation, native common default internet item, cross-document style name/parent/item copy, three-map style sort order and query expansion are consumed. Native BuildPortions now serves actual character/automatic InsertItem calls and document insertion; complete represented portions merge together. InsertItem has the original nullable surviving-owner result after splitting/merging; existing NOHINTADJUST fixture inputs assert surviving ownership without weakening their prior cases. Actual styles remain in the model and Worker graph; immutable control/run and formatter stack projections resolve them on read. WRITER158/159 preserve source early-return and count-based sort quirks. RSID-only items, native pointer tie-breaking, unrepresented help/link-style services, full HTML/CSS reader and compiled Writer parity remain unverified. Registered save/open/recovery deviations are unchanged.",
       "S3HW1E: Original SwHistoryResetText/new AddTextAttr branch and SwRegHistory AddHint forwarding are connected. SwHistorySetText retains the original fresh character-item constructor and actual document character-table membership check before restoration. Native registration, reset coordinate payloads and source temporary/destructive rollback work on real owners. Field/fly/structured history and general SwUndoAttr insertion composition remain unported.",
-      "Original SwRegHistory::InsertItems registers history only when present, invokes actual node range SetAttr, refetches the surviving map and deregisters it; return is the original insertion result."
+      "Original SwRegHistory::InsertItems registers history only when present, invokes actual node range SetAttr, refetches the surviving map and deregisters it; return is the original insertion result.",
+      "Native lifetime checkpoint: logical history/action destructors release unique item, item-set and automatic-style owners on rollback, discard and replacement; temporary fragment snapshots and reduced reset-style handles are balanced in represented editing paths. Real font collection observes undo-held styles until the final owner is discarded. Browser fragment and disconnected-node ID carriers remain explicit bindings, not native SwNodes undo sections or full C++ ABI. Complete UNO/import/cache/temporary-owner closure and native item-instance interning remain unverified; no whole-filter parity promotion."
     ],
     "omittedResponsibilities": [
       "Native field/footnote/fly/structured mark variants, general insertion SwUndoAttr/lcl_InsAttr composition and full native lifetime remain unimplemented/unverified. Registered reset entries and SwRegHistory forwarding are now represented as documented in preserved responsibilities; broader history parity is not promoted."

@@ -1,6 +1,8 @@
 /** @fileoverview Ports the ordinary exact/selective whole-paragraph RstTextAttr branches from pinned sw/source/core/txtnode/txtedt.cxx. */
 import type { SwTextNode } from "./ndtxt";
 import { SwpHints } from "./ndhints";
+import { releaseStyleHandle } from "../../../../svl/source/items/stylepool";
+import { DestroyTextNodeAttribute } from "./thints-insert";
 import { MakeTextAttr } from "./thints";
 import { GetTextResetStyle } from "./txtedt-reset";
 import { type SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -34,7 +36,12 @@ export function ResetTextNodeHintItems(
       return value === undefined ? [] : [value];
     },
   );
-  return changed ? new SwpHints(node.GetDoc().GetAttrPool(), retained) : undefined;
+  try {
+    return changed ? new SwpHints(node.GetDoc().GetAttrPool(), retained) : undefined;
+  } finally {
+    for (const hint of retained)
+      if (!hints.entries().includes(hint)) DestroyTextNodeAttribute(hint);
+  }
 }
 
 /** Retains the original owner unless a requested item actually participates in selective native deletion. @param node - Original pool owner. @param hint - Actual native attribute. @param resetSet - Requested items. @returns Original, freshly reconstructed,or removed native attribute. */
@@ -44,9 +51,13 @@ function ResetTextHintItem(
   resetSet: SfxItemSet,
 ): ReturnType<SwpHints["Get"]> | undefined {
   const [skip, style] = GetTextResetStyle(node, hint, resetSet, 0);
-  return skip
-    ? hint
-    : style === undefined
-      ? undefined
-      : MakeTextAttr(node.GetDoc(), style, hint.GetStart(), hint.GetEnd());
+  try {
+    return skip
+      ? hint
+      : style === undefined
+        ? undefined
+        : MakeTextAttr(node.GetDoc(), style, hint.GetStart(), hint.GetEnd());
+  } finally {
+    if (style !== undefined) releaseStyleHandle(style);
+  }
 }

@@ -76,3 +76,25 @@ it("captures complete legacy item notifications and ignores missing old or new i
     doc.Dispose();
   }
 });
+
+it("moves captured undo ownership only through ReleaseUndo", () => {
+  const doc = createWriterDocument();
+  const format = doc.MakeTextFormatColl("Transfer", doc.GetDfltTextFormatColl());
+  const helper = new SwUndoFormatAttrHelper(format);
+  try {
+    format.SetFormatAttr(new SvxFontHeightItem(300, 100, RES_CHRATR_FONTSIZE));
+    const borrowed = helper.GetUndo();
+    assert(borrowed);
+    const owned = helper.ReleaseUndo();
+    expect(owned).toBe(borrowed);
+    expect(helper.GetUndo()).toBeUndefined();
+    expect(helper.ReleaseUndo()).toBeUndefined();
+    helper.Dispose();
+    expect(owned?.m_oOldSet?.Count()).toBe(1);
+    owned?.Dispose();
+    expect(owned?.m_oOldSet).toBeUndefined();
+  } finally {
+    helper.Dispose();
+    doc.Dispose();
+  }
+});

@@ -100,23 +100,28 @@ it("native hint append retains unformatted empty and nonempty sources without in
   expect(first.GetText()).toBe("Text");
   expect(first.GetpSwpHints()).toBeUndefined();
 });
-it("native item copy retains the explicit unsupported nonempty guard and undo insertion priority", /** Keeps unported nonempty adjustment explicit and NOHINTADJUST unchanged. @returns Nothing. */ () => {
+it("native internet copy, default and NOHINTADJUST insertion retain nesting precedence", /** Source IsNesting precedes the NOHINTADJUST branch and replaces coincident empty internet hints. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     node = required(doc.paragraphs[0]),
     item = new SwFormatINetFormat({ url: "https://example.test/copy" });
   node.SetText("Text");
-  expect(
-    /** Rejects unported nonempty copy before mutation. @returns Unsupported insertion. */ () =>
-      requireInsertedHint(node.InsertItem(item, 0, 1, SetAttrMode.IS_COPY)),
-  ).toThrow("without NOHINTADJUST");
-  expect(
-    /** Rejects unported default adjustment before mutation. @returns Unsupported insertion. */ () =>
-      requireInsertedHint(node.InsertItem(item, 0, 0, SetAttrMode.DEFAULT)),
-  ).toThrow("without NOHINTADJUST");
-  requireInsertedHint(node.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY));
-  requireInsertedHint(node.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY));
-  expect(node.GetpSwpHints()?.Count()).toBe(2);
+  const copied = requireInsertedHint(node.InsertItem(item, 0, 1, SetAttrMode.IS_COPY));
+  expect(copied.GetStart()).toBe(0);
+  expect(copied.GetEnd()).toBe(1);
+  expect((copied.GetAttr() as SwFormatINetFormat).GetValue()).toBe("https://example.test/copy");
+  const empty = requireInsertedHint(node.InsertItem(item, 0, 0, SetAttrMode.DEFAULT));
+  expect(empty.GetStart()).toBe(0);
+  expect(empty.GetEnd()).toBe(0);
+  const undoNode = doc.nodes.MakeTextNode("Undo");
+  requireInsertedHint(
+    undoNode.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY),
+  );
+  requireInsertedHint(
+    undoNode.InsertItem(item, 0, 0, SetAttrMode.NOHINTADJUST | SetAttrMode.IS_COPY),
+  );
+  expect(undoNode.GetpSwpHints()?.Count()).toBe(1);
 });
+
 it("native nonempty append preserves independently formatted text on both sides", /** Protects the existing nonempty join profile while separating empty CopyAttr ownership. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     first = required(doc.paragraphs[0]),
