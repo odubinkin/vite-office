@@ -1,30 +1,13 @@
 /** @fileoverview Original ICU78.3 uresbund.cpp default-package entry cache, alias-file loading, distinct requested-file search and existing-parent inheritance. U_USE_USRDATA is0 in the pinned source build. Raw resources/flags come from the complete native package; native mutex/OOM/raw allocation/layout and external packages remain uncertified. */
 /* eslint-disable no-useless-assignment -- Preserve the original entryOpen initialization and assertion/finish bookkeeping. */
-import { ResourceData, res_load, res_unload } from "./uresdata.package";
+import { type ResourceData, res_load, res_unload } from "./uresdata.package";
+import { UResourceDataEntry } from "./uresimp";
+export { UResourceDataEntry } from "./uresimp";
 import type { Resource } from "./uresbund";
 import { locale_get_default } from "./locid.default";
 import { u_UCharsToChars } from "./uinvchar";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 import { chopLocale, getParentLocaleID, mayHaveParent, UResOpenType } from "./uresbund.fallback";
-/** Original logical entry fields from uresimp.h. Native short-name buffer/hash addresses are immutable-string/Map projections. */
-export class UResourceDataEntry {
-  fName = "";
-  readonly fPath: null = null;
-  readonly fData = new ResourceData();
-  fParent: UResourceDataEntry | null = null;
-  fAlias: UResourceDataEntry | null = null;
-  fPool: UResourceDataEntry | null = null;
-  fBogus = 0;
-  private countExisting = 0;
-  /** Original uint32 reference count. @returns Native bits. */
-  get fCountExisting(): number {
-    return this.countExisting;
-  }
-  /** Original native unsigned assignment, including wrap on increment/decrement. @param value - New count. @returns Nothing. */
-  set fCountExisting(value: number) {
-    this.countExisting = value >>> 0;
-  }
-}
 let cache: Map<string, UResourceDataEntry> | null = null;
 /** Source C prefix. @param text - Narrow storage. @returns Prefix. */
 function cstring(text: string): string {

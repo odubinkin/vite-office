@@ -46,101 +46,120 @@ function timezoneId(text: string): string {
   for (let i = 0; i < text.length; ++i) value += text[i] === ":" ? "/" : text[i];
   return value;
 }
-/** Original map initialization consumes the actual pinned resource owners and iterator protocol. Native allocation failures, init races and cleanup are outside this port. @param sts - Sticky resource status. @returns Nothing. */
+/** Original map initialization consumes the actual pinned resource owners and iterator protocol. Native allocation failures, init races and global cleanup remain outside this port; local bundle owners follow source close boundaries. @param sts - Sticky resource status. @returns Nothing. */
 function initFromResourceBundle(sts: [number]): void {
   const map = new Map<string, LocExtKeyData>();
   gLocExtKeyMap = map;
   const root = R.ures_openDirect(null, "keyTypeData", sts),
     keyMap = R.ures_getByKey(root, "keyMap", null, sts),
     typeMap = R.ures_getByKey(root, "typeMap", null, sts);
-  if (U_FAILURE(sts[0])) return;
-  const typeAlias = R.ures_getByKey(root, "typeAlias", null, [0]),
+  let typeAlias: R.UResourceBundle | null = null,
+    bcpTypeAlias: R.UResourceBundle | null = null,
+    keyEntry: R.UResourceBundle | null = null;
+  try {
+    if (U_FAILURE(sts[0])) return;
+    typeAlias = R.ures_getByKey(root, "typeAlias", null, [0]);
     bcpTypeAlias = R.ures_getByKey(root, "bcpTypeAlias", null, [0]);
-  let keyEntry: R.UResourceBundle | null = null;
-  while (R.ures_hasNext(keyMap)) {
-    keyEntry = R.ures_getNextResource(keyMap, keyEntry, sts);
-    if (U_FAILURE(sts[0])) break;
-    const legacyKeyId = R.ures_getKey(keyEntry) as string,
-      uBcpKeyId = invariantValue(keyEntry, sts);
-    if (U_FAILURE(sts[0])) break;
-    const bcpKeyId = uBcpKeyId.length === 0 ? legacyKeyId : uBcpKeyId,
-      isTZ = legacyKeyId === "timezone",
-      types = new Map<string, LocExtType>();
-    let specialTypes = 0;
-    const typeAliasStatus: [number] = [0],
-      bcpAliasStatus: [number] = [0];
-    let typeAliasByKey =
-        typeAlias !== null ? R.ures_getByKey(typeAlias, legacyKeyId, null, typeAliasStatus) : null,
-      bcpAliasByKey =
-        bcpTypeAlias !== null
-          ? R.ures_getByKey(bcpTypeAlias, bcpKeyId, null, bcpAliasStatus)
-          : null;
-    if (U_FAILURE(typeAliasStatus[0])) typeAliasByKey = null;
-    if (U_FAILURE(bcpAliasStatus[0])) bcpAliasByKey = null;
-    const typeMapByKey = R.ures_getByKey(typeMap, legacyKeyId, null, sts);
-    if (U_SUCCESS(sts[0])) {
-      let typeEntry: R.UResourceBundle | null = null;
-      while (R.ures_hasNext(typeMapByKey)) {
-        typeEntry = R.ures_getNextResource(typeMapByKey, typeEntry, sts);
-        if (U_FAILURE(sts[0])) break;
-        let legacyTypeId = R.ures_getKey(typeEntry) as string;
-        if (legacyTypeId === "CODEPOINTS") {
-          specialTypes |= SPECIALTYPE_CODEPOINTS;
-          continue;
-        }
-        if (legacyTypeId === "REORDER_CODE") {
-          specialTypes |= SPECIALTYPE_REORDER_CODE;
-          continue;
-        }
-        if (legacyTypeId === "RG_KEY_VALUE") {
-          specialTypes |= SPECIALTYPE_RG_KEY_VALUE;
-          continue;
-        }
-        if (isTZ) legacyTypeId = timezoneId(legacyTypeId);
-        const uBcpTypeId = invariantValue(typeEntry, sts);
-        if (U_FAILURE(sts[0])) break;
-        const bcpTypeId = uBcpTypeId.length === 0 ? legacyTypeId : uBcpTypeId,
-          t: LocExtType = { legacyId: legacyTypeId, bcpId: bcpTypeId };
-        types.set(hashKey(t.legacyId), t);
-        if (bcpTypeId !== legacyTypeId) types.set(hashKey(t.bcpId), t);
-        if (typeAliasByKey !== null) {
-          let aliasEntry: R.UResourceBundle | null = null;
-          R.ures_resetIterator(typeAliasByKey);
-          while (R.ures_hasNext(typeAliasByKey) && U_SUCCESS(sts[0])) {
-            aliasEntry = R.ures_getNextResource(typeAliasByKey, aliasEntry, sts);
-            const to = R.ures_getString(aliasEntry, null, sts);
-            if (U_FAILURE(sts[0])) break;
-            if (t.legacyId === to) {
-              let from = R.ures_getKey(aliasEntry) as string;
-              if (isTZ) from = timezoneId(from);
-              types.set(hashKey(from), t);
+    while (R.ures_hasNext(keyMap)) {
+      keyEntry = R.ures_getNextResource(keyMap, keyEntry, sts);
+      if (U_FAILURE(sts[0])) break;
+      const legacyKeyId = R.ures_getKey(keyEntry) as string,
+        uBcpKeyId = invariantValue(keyEntry, sts);
+      if (U_FAILURE(sts[0])) break;
+      const bcpKeyId = uBcpKeyId.length === 0 ? legacyKeyId : uBcpKeyId,
+        isTZ = legacyKeyId === "timezone",
+        types = new Map<string, LocExtType>();
+      let specialTypes = 0;
+      const typeAliasStatus: [number] = [0],
+        bcpAliasStatus: [number] = [0];
+      let typeAliasByKey =
+          typeAlias !== null
+            ? R.ures_getByKey(typeAlias, legacyKeyId, null, typeAliasStatus)
+            : null,
+        bcpAliasByKey =
+          bcpTypeAlias !== null
+            ? R.ures_getByKey(bcpTypeAlias, bcpKeyId, null, bcpAliasStatus)
+            : null;
+      if (U_FAILURE(typeAliasStatus[0])) typeAliasByKey = null;
+      if (U_FAILURE(bcpAliasStatus[0])) bcpAliasByKey = null;
+      const typeMapByKey = R.ures_getByKey(typeMap, legacyKeyId, null, sts);
+      if (U_SUCCESS(sts[0])) {
+        let typeEntry: R.UResourceBundle | null = null;
+        while (R.ures_hasNext(typeMapByKey)) {
+          typeEntry = R.ures_getNextResource(typeMapByKey, typeEntry, sts);
+          if (U_FAILURE(sts[0])) break;
+          let legacyTypeId = R.ures_getKey(typeEntry) as string;
+          if (legacyTypeId === "CODEPOINTS") {
+            specialTypes |= SPECIALTYPE_CODEPOINTS;
+            continue;
+          }
+          if (legacyTypeId === "REORDER_CODE") {
+            specialTypes |= SPECIALTYPE_REORDER_CODE;
+            continue;
+          }
+          if (legacyTypeId === "RG_KEY_VALUE") {
+            specialTypes |= SPECIALTYPE_RG_KEY_VALUE;
+            continue;
+          }
+          if (isTZ) legacyTypeId = timezoneId(legacyTypeId);
+          const uBcpTypeId = invariantValue(typeEntry, sts);
+          if (U_FAILURE(sts[0])) break;
+          const bcpTypeId = uBcpTypeId.length === 0 ? legacyTypeId : uBcpTypeId,
+            t: LocExtType = { legacyId: legacyTypeId, bcpId: bcpTypeId };
+          types.set(hashKey(t.legacyId), t);
+          if (bcpTypeId !== legacyTypeId) types.set(hashKey(t.bcpId), t);
+          if (typeAliasByKey !== null) {
+            let aliasEntry: R.UResourceBundle | null = null;
+            R.ures_resetIterator(typeAliasByKey);
+            while (R.ures_hasNext(typeAliasByKey) && U_SUCCESS(sts[0])) {
+              aliasEntry = R.ures_getNextResource(typeAliasByKey, aliasEntry, sts);
+              const to = R.ures_getString(aliasEntry, null, sts);
+              if (U_FAILURE(sts[0])) break;
+              if (t.legacyId === to) {
+                let from = R.ures_getKey(aliasEntry) as string;
+                if (isTZ) from = timezoneId(from);
+                types.set(hashKey(from), t);
+              }
             }
-          }
-          if (U_FAILURE(sts[0])) break;
-        }
-        if (bcpAliasByKey !== null) {
-          let aliasEntry: R.UResourceBundle | null = null;
-          R.ures_resetIterator(bcpAliasByKey);
-          while (R.ures_hasNext(bcpAliasByKey) && U_SUCCESS(sts[0])) {
-            aliasEntry = R.ures_getNextResource(bcpAliasByKey, aliasEntry, sts);
-            const to = R.ures_getString(aliasEntry, null, sts);
+            R.ures_close(aliasEntry);
             if (U_FAILURE(sts[0])) break;
-            if (t.bcpId === to) types.set(hashKey(R.ures_getKey(aliasEntry) as string), t);
           }
-          if (U_FAILURE(sts[0])) break;
+          if (bcpAliasByKey !== null) {
+            let aliasEntry: R.UResourceBundle | null = null;
+            R.ures_resetIterator(bcpAliasByKey);
+            while (R.ures_hasNext(bcpAliasByKey) && U_SUCCESS(sts[0])) {
+              aliasEntry = R.ures_getNextResource(bcpAliasByKey, aliasEntry, sts);
+              const to = R.ures_getString(aliasEntry, null, sts);
+              if (U_FAILURE(sts[0])) break;
+              if (t.bcpId === to) types.set(hashKey(R.ures_getKey(aliasEntry) as string), t);
+            }
+            R.ures_close(aliasEntry);
+            if (U_FAILURE(sts[0])) break;
+          }
         }
+        R.ures_close(typeEntry);
       }
+      R.ures_close(typeMapByKey);
+      R.ures_close(bcpAliasByKey);
+      R.ures_close(typeAliasByKey);
+      // The source unreachable assertion on a missing required typeMap does not turn into a new release-mode error.
+      if (U_FAILURE(sts[0])) break;
+      const keyData: LocExtKeyData = {
+        legacyId: legacyKeyId,
+        bcpId: bcpKeyId,
+        specialTypes,
+        typeMap: types,
+      };
+      map.set(hashKey(legacyKeyId), keyData);
+      if (legacyKeyId !== bcpKeyId) map.set(hashKey(bcpKeyId), keyData);
     }
-    // The source unreachable assertion on a missing required typeMap does not turn into a new release-mode error.
-    if (U_FAILURE(sts[0])) break;
-    const keyData: LocExtKeyData = {
-      legacyId: legacyKeyId,
-      bcpId: bcpKeyId,
-      specialTypes,
-      typeMap: types,
-    };
-    map.set(hashKey(legacyKeyId), keyData);
-    if (legacyKeyId !== bcpKeyId) map.set(hashKey(bcpKeyId), keyData);
+  } finally {
+    R.ures_close(keyEntry);
+    R.ures_close(bcpTypeAlias);
+    R.ures_close(typeAlias);
+    R.ures_close(typeMap);
+    R.ures_close(keyMap);
+    R.ures_close(root);
   }
 }
 let initialized = false;

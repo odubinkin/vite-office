@@ -1,0 +1,64 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
+    "localSymbols": [
+      "ures_appendResPath",
+      "ures_freeResPath",
+      "ures_closeBundle",
+      "ures_close",
+      "ures_copyResb",
+      "ures_openWithType",
+      "ures_open",
+      "ures_openNoDefault",
+      "ures_openDirect",
+      "ures_openFillIn"
+    ],
+    "upstreamSymbols": [
+      "ures_appendResPath",
+      "ures_freeResPath",
+      "ures_closeBundle",
+      "ures_close",
+      "ures_copyResb",
+      "ures_openWithType",
+      "ures_open",
+      "ures_openNoDefault",
+      "ures_openDirect",
+      "ures_openFillIn"
+    ],
+    "preservedResponsibilities": [
+      "Original path append/free, stack/heap logical ownership, close without metadata reset, shallow metadata copy plus independent path storage, entry retain/release and mode-specific entry open. Default/parent/root opens use original base-name canonicalization; direct open retains unnormalized entry/whole-bundle alias behavior and original parent chains. Reusable open closes prior state only after successful entry lookup and preserves stack identity while zeroing inline fields. Path pointer identity, separate counted length and original strcpy behavior are retained; heap transition uses original64<=len+1 condition.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+          "marker": "ures_appendResPath"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/uresbund.cpp",
+          "marker": "ures_appendResPath"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+      "rationale": "Split large original uresbund.cpp by bundle lifecycle, recursive alias result initialization and fallback lookup while sharing the one source-shaped bundle and entry owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

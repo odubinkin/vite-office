@@ -110,6 +110,8 @@ export class ZoneMeta {
       if (isInputCanonical && !canonicalIDCache.has(canonical))
         canonicalIDCache.set(canonical, canonical);
     }
+    R.ures_close(rb);
+    R.ures_close(top);
     return canonical;
   }
 }

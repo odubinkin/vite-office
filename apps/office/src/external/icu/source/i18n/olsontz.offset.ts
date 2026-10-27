@@ -100,9 +100,11 @@ export function construct(
           // Source deliberately does not setStartYear here; rule extraction uses a separate clone.
           this["finalStartMillis"] = Number(Grego.fieldsToDay(year, 0, 1)) * 86400000;
         } else status[0] = E.U_INVALID_FORMAT_ERROR;
+        R.ures_close(rule);
       } else if (status[0] === E.U_MISSING_RESOURCE_ERROR) status[0] = 0;
     }
     this["canonicalID"] = ZoneMeta.getCanonicalCLDRID(id, status);
+    R.ures_close(r);
   }
   if (U_FAILURE(status[0])) this["constructEmpty"]();
 }

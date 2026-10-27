@@ -112,8 +112,12 @@ export class LikelySubtags {
     if (this.singleton === null) {
       const data = new LikelySubtagsData(status);
       data.load(status);
-      if (U_FAILURE(status[0])) return null;
+      if (U_FAILURE(status[0])) {
+        data.close();
+        return null;
+      }
       this.singleton = new LikelySubtags(data);
+      data.close();
       this.macroregions = getStaticMacroregions();
     }
     return this.singleton;

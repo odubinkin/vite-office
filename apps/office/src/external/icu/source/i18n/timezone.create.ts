@@ -1,7 +1,7 @@
-/** @fileoverview ICU78.3 synchronous system/custom/Unknown zone creation, static GMT/Unknown owners and public canonical-ID dispatch. Free functions avoid a base/concrete class evaluation cycle. Host/default factory dispatch remains unported. */
+/** @fileoverview ICU78.3 synchronous system/custom/Unknown zone creation, static GMT/Unknown owners and public canonical-ID dispatch. Free functions avoid a base/concrete class evaluation cycle. Host/default factory dispatch is owned by timezone.default.ts. */
 import { UnicodeString } from "../common/unistr";
 import { U_FAILURE } from "../common/unicode/utypes";
-import { UResourceBundle } from "../common/uresbund";
+import { UResourceBundle, ures_close } from "../common/uresbund";
 import { openOlsonResource } from "./timezone.resources";
 import { OlsonTimeZone } from "./olsontz";
 import { SimpleTimeZone } from "./simpletz";
@@ -78,5 +78,7 @@ export function createSystemTimeZone(
     top = openOlsonResource(id, res, status);
   let zone: OlsonTimeZone | null = null;
   if (!U_FAILURE(status[0])) zone = new OlsonTimeZone(top, res, id, status);
+  ures_close(top);
+  ures_close(res);
   return U_FAILURE(status[0]) ? null : zone;
 }

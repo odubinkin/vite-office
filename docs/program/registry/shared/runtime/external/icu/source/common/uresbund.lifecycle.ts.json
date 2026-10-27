@@ -1,0 +1,54 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+        "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+        "scripts/icu-resource-bundle-native-probe.mjs"
+      ],
+      "justification": "Original path append/free, stack/heap logical ownership, close without metadata reset, shallow metadata copy plus independent path storage, entry retain/release and mode-specific entry open. Default/parent/root opens use original base-name canonicalization; direct open retains unnormalized entry/whole-bundle alias behavior and original parent chains. Reusable open closes prior state only after successful entry lookup and preserves stack identity while zeroing inline fields. Path pointer identity, separate counted length and original strcpy behavior are retained; heap transition uses original64<=len+1 condition. The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ures_appendResPath",
+        "ures_freeResPath",
+        "ures_closeBundle",
+        "ures_close",
+        "ures_copyResb",
+        "ures_openWithType",
+        "ures_open",
+        "ures_openNoDefault",
+        "ures_openDirect",
+        "ures_openFillIn"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uresbund.cpp",
+      "upstreamSymbols": [
+        "ures_appendResPath",
+        "ures_freeResPath",
+        "ures_closeBundle",
+        "ures_close",
+        "ures_copyResb",
+        "ures_openWithType",
+        "ures_open",
+        "ures_openNoDefault",
+        "ures_openDirect",
+        "ures_openFillIn"
+      ]
+    }
+  }
+}

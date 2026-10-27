@@ -16,11 +16,11 @@
       "res_unload"
     ],
     "preservedResponsibilities": [
-      "Original res_load/res_unload logical default-package backend over every982 top-level .res file from the pinned native package, including raw resource aliases and noFallback/pool flags. Compact immutable graph preserves shared native node/string/buffer storage and exact table order; independent opaque data handles alias the same mapped root. Source res_load clears all fields before checking incoming failure; empty/null names use original udata illegal-argument error and missing files use file-access error. Existing alias-free zoneinfo64/langInfo scalar owners preserve shared buffer identities; keyTypeData is decoded raw because its earlier public export resolves four timezoneTypes aliases. Native full-content event checksums verify every raw root and status/reset/unload effects. Raw graph contains85761 strings,2066 buffers and204559 nodes. Physical packed offsets/mmap handles/allocator/ABI, named or non-top-level package paths, external filesystem resources and modified data are outside this consumed backend.",
-      "Final native source witness passes111053 cases:14364 cache/entry operations,2958 raw-load cases with full canonical content-event checksums for all982 files, requested-file helpers, four defaults, retain/release/flush, uint32 wrap, independent open handles and shared roots. Counted CharString default-script arguments preserve embedded-NUL behavior before C table lookup. Source data snapshot is data/in/icudt78l.resources.json; generated fallback tables stay beside their source owner in common/localefallback_data.json."
+      "Original res_load/res_unload default-package backend now uses only the complete native-exported raw graph for every982 top-level .res file, including zoneinfo64, langInfo and keyTypeData. The temporary legacy-root bridge is removed: public/raw reads share the same graph node and native pointer-group buffer identities, without a second resolved resource projection. Source raw aliases, exact table order, noFallback/pool flags, source status/reset/unload behavior and independent data handles are retained. The previous rich JSON exports remain native comparison/query fixtures only and have no runtime import.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified."
     ],
     "omittedResponsibilities": [
-      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
     ],
     "evidence": {
       "local": [
@@ -31,6 +31,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
           "marker": "Original resource-cache"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
         }
       ],
       "upstream": [

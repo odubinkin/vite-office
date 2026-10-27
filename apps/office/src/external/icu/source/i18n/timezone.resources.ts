@@ -41,6 +41,7 @@ export function getZoneByName(
     tmp = R.ures_getByKey(top, "Zones", tmp, status);
     old = R.ures_getByIndex(tmp, index, old, status);
   }
+  R.ures_close(tmp);
   return U_FAILURE(status[0]) ? null : old;
 }
 /** Original resource open and exactly one integer-link dereference. @param id - Requested ID. @param res - Reused zone result. @param status - Status. @returns Root handle even when the requested ID is missing. */
@@ -55,6 +56,7 @@ export function openOlsonResource(
     const deref = R.ures_getInt(res, status),
       zones = R.ures_getByKey(top, "Zones", null, status);
     R.ures_getByIndex(zones, deref, res, status);
+    R.ures_close(zones);
   }
   return top;
 }
@@ -77,6 +79,8 @@ export function findID(id: UnicodeString): string | null {
     names = R.ures_getByKey(root, "Names", null, status),
     index = findInStringArray(names, id, status),
     result = R.ures_getStringByIndex(names, index, null, status);
+  R.ures_close(names);
+  R.ures_close(root);
   return U_FAILURE(status[0]) ? null : result;
 }
 /** Original single Olson-link dereference used by ZoneMeta. @param id - ID. @returns Pinned target name or null. */
@@ -93,5 +97,7 @@ export function dereferOlsonLink(id: UnicodeString): string | null {
       value = R.ures_getStringByIndex(names, deref, null, status);
     if (!U_FAILURE(status[0])) result = value;
   }
+  R.ures_close(names);
+  R.ures_close(root);
   return result;
 }

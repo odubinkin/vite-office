@@ -7,14 +7,13 @@
     "localPath": "apps/office/src/external/icu/source/common/uresbund.ts",
     "upstreamPath": "vendor/icu-reference/source/common/uresbund.cpp",
     "localSymbols": [
-      "UResourceBundle",
       "ures_getByIndex",
       "ures_getStringByIndex",
       "ures_getIntVector",
-      "ures_copyResb",
       "ures_hasNext",
       "ures_resetIterator",
-      "ures_getNextResource"
+      "ures_getNextResource",
+      "ures_getValueWithFallback"
     ],
     "upstreamSymbols": [
       "ures_getByIndex",
@@ -23,23 +22,26 @@
       "ures_copyResb",
       "ures_hasNext",
       "ures_resetIterator",
-      "ures_getNextResource"
+      "ures_getNextResource",
+      "ures_getValueWithFallback"
     ],
     "preservedResponsibilities": [
-      "AQF9AG ports consumed synchronous direct-resource handle/getter contracts over complete pinned ICU78.3 zoneinfo64/keyTypeData snapshots. Unchanged native resource APIs export public values, native table key order, shared binary/vector storage groups and resolved-alias indices; JSON is the browser storage representation. Native mapped data ownership is projected as borrowed readonly scalar buffers and reusable handles. Original sticky warnings/errors, unchanged failed fillIn, scalar size one, failed integer minus-one, length mutation and indexed alias/non-alias string behavior (CALC-312) are preserved. Generator --check and a separate unchanged native witness verify the snapshots and all tree nodes. Arbitrary package opening, locale fallback, dynamic alias machinery, native allocation/lifetime/ABI and complete timezone/calendar service integration remain unported or uncertified.",
-      "Original iterator reset/hasNext/getNextResource and bundle-copy semantics now preserve the actual fIndex state, source cursor increment before dispatch, scalar copy versus child initialization, reused/self fillIn and exact exhaustion error8. Existing scalar indexed lookup now uses the real bundle-copy path rather than reinitializing the cursor. Unchanged native APIs match66957 observations across all4872 pinned resource nodes, three statuses, copy/indexed-copy/null/self cases. Locale fallback, dynamic alias engine, paths/refcounts/native allocation/lifetime/ABI remain uncertified.",
-      "Direct langInfo is now loaded from the same pinned complete native export as zoneinfo64/keyTypeData, with globally unique shared storage IDs. Actual langInfo contains zero alias entries. Generic locale fallback remains unported.",
-      "Resource type/storage representation admits original raw alias3 and explicitly scoped immutable package-buffer identities, while the existing public direct factory behavior remains unchanged pending source result/alias integration.",
-      "Shared original binary C-key lookup now lives in uresdata.path.ts and is consumed by both public direct bundle reads and ResourceTable.findValue, avoiding duplicate key handling and retaining embedded-NUL canonical key behavior. Existing direct public alias projection and its stated omissions remain unchanged; new raw path helpers do not certify public alias/fallback dispatch. The unchanged native resource-path witness passes80502 cases."
+      "Original public default-package bundle API now uses actual cached entries, raw aliases, result/path initialization and close/copy ownership. No resolved keyTypeData projection substitutes for dynamic alias resolution. Stored size/cursor, raw zero-token stack state, canonical C keys, scalar type/error/length asymmetries including CALC-312, source alias temporaries, iterator ordering and valid/actual locale identities are preserved. Module reexports the one owner from uresimp and source lifecycle/fallback functions, without dual legacy/new implementations.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified.",
+      "Internal ures_getValueWithFallback preserves sticky/nullable-path behavior and attaches the original raw data/valid-locale/resource context to the caller ResourceDataValue through its persistent temporary. Empty C paths borrow the original bundle without changing that temporary;756 native comparisons cover holder context and unchanged failed outputs."
     ],
     "omittedResponsibilities": [
-      "Only the stated consumed source responsibilities are ported; allocation/lifetime/ABI and the complete ICU service graph remain uncertified."
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
     ],
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/external/icu/source/common/uresbund.ts",
           "marker": "UResourceBundle"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
         }
       ],
       "upstream": [

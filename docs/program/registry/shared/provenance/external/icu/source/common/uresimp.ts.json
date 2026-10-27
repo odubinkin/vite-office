@@ -8,17 +8,21 @@
     "upstreamPath": "vendor/icu-reference/source/common/uresimp.h",
     "localSymbols": [
       "UResourceDataEntry",
-      "UResourceBundle"
+      "UResourceBundle",
+      "ures_initStackObject"
     ],
     "upstreamSymbols": [
       "UResourceDataEntry",
-      "UResourceBundle"
+      "UResourceBundle",
+      "ures_initStackObject"
     ],
     "preservedResponsibilities": [
-      "Original internal header boundary reexports the one actual entry/cache owner and existing bundle owner; no duplicate state or native struct-layout equivalence is introduced. Full bundle resource-result initialization/alias and locale fallback dispatch remain unfinished work in the implementation owner."
+      "Original logical UResourceBundle owner contains actual/valid entry pointers, fallback/top-level flags, cursor/size, raw resource/key, inline64-byte buffer, borrowed-or-heap path pointer with separate counted length, version pointer projection and source stack identity. ures_initStackObject zeroes fields and existing inline storage to original zero Resource STRING token/size0/index0. Both actual entry and bundle classes are declared at this original header boundary; the cache imports and reexports the same entry class, without a duplicate owner or native ABI equivalence.",
+      "The unchanged ICU78.3 uresbund.cpp public witness passes19888 queries: all982 direct package opens, all996 raw alias occurrences from root/keyTypeData, default/parent/root/direct and fill-in open modes, sticky failures, valid/actual identities, complete content digests, every initialized inline/path byte, long heap paths and the63-byte threshold, source alias-depth boundaries, scalar/iterator/copy state, same-handle/fill-in reuse and retained parent/pool references, plus756 actual ResourceDataValue data/valid-locale context cases. Source-valid narrow/count ranges and the pinned immutable default package are the certified projection; physical allocator/OOM/ABI/freed-pointer states and other packages remain uncertified.",
+      "Both actual UResourceDataEntry and UResourceBundle structs now live at the original uresimp.h header boundary. The entry-cache module imports and reexports the same entry class, preserving one mutable owner and original unsigned count assignment; no parallel header/cache object exists."
     ],
     "omittedResponsibilities": [
-      "Only the stated consumed source responsibilities are implemented; full public bundle alias/fallback result APIs, Calendar/CSV completion, other packages and native physical contracts remain uncertified."
+      "Unconsumed ICU APIs, external/named/non-top-level packages, user replacement data, physical struct layout/magic bytes, allocator/OOM/mutex/cleanup races, invalid/overlapping/freed pointers and version-allocation ownership remain uncertified. Complete Calendar service/formatter/CSV integration is still pending; foundation records do not claim it complete."
     ],
     "evidence": {
       "local": [
@@ -29,6 +33,10 @@
         {
           "path": "apps/office/src/external/icu/source/common/uresbund.entries.test.ts",
           "marker": "Original resource-cache"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/common/uresbund.alias.test.ts",
+          "marker": "Native-witnessed public resource"
         }
       ],
       "upstream": [

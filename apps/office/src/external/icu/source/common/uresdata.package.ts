@@ -1,7 +1,5 @@
 /** @fileoverview Pinned ICU78.3 res_load/res_unload logical default-package storage from uresdata.cpp. Native decoded raw resource graph preserves every top-level .res file, aliases, native table order, shared buffers and nofallback/pool metadata. Packed offsets, file handles, arbitrary external packages and allocator/ABI remain uncertified. */
 import raw from "../data/in/icudt78l.resources.json";
-import zoneinfo64 from "../data/misc/zoneinfo64.json";
-import langInfo from "../data/misc/langInfo.json";
 import type { Resource } from "./uresbund";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
 /** Actual immutable decoded package graph. Tuple indexes are a host projection of shared native resource storage, not substitute locale results. */
@@ -13,11 +11,6 @@ interface PackageGraph {
 }
 const graph = raw as unknown as PackageGraph;
 const nodes = new Map<number, Resource>();
-/** Existing alias-free zoneinfo64/langInfo owners share their original immutable scalar/buffer identities. keyTypeData retains raw aliases here; its earlier public projection resolved them. */
-const existingRoots: Readonly<Record<string, Resource>> = {
-  zoneinfo64: zoneinfo64.resource as Resource,
-  langInfo: langInfo.resource as Resource,
-};
 /** Original raw resource materialization over immutable mapped storage. @param id - Native-exported graph index. @returns Shared resource node. */
 function resource(id: number): Resource {
   const cached = nodes.get(id);
@@ -93,9 +86,7 @@ export function res_load(out: ResourceData, path: null, name: string, status: [n
   }
   const tuple = graph.bundles[name] as readonly [number, number, number, number];
   out.data = {};
-  out.rootRes = Object.hasOwn(existingRoots, name)
-    ? (existingRoots[name] as Resource)
-    : resource(tuple[0]);
+  out.rootRes = resource(tuple[0]);
   out.noFallback = tuple[1] !== 0;
   out.usesPoolBundle = tuple[2] !== 0;
   out.isPoolBundle = tuple[3] !== 0;

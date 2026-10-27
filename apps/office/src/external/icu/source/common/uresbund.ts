@@ -1,15 +1,22 @@
-/** @fileoverview ICU78.3 direct resource read contract for pinned zoneinfo64/keyTypeData/langInfo. JSON projects immutable mapped resource storage and resolved alias boundaries; locale fallback, dynamic alias resolution, native allocation/lifetime and arbitrary packages remain unported. */
-import zoneinfo64 from "../data/misc/zoneinfo64.json";
-import keyTypeData from "../data/misc/keyTypeData.json";
-import langInfo from "../data/misc/langInfo.json";
-import {
-  res_countArrayItems,
-  res_getTableItemByKey,
-  res_getTableItemByIndex,
-  res_getArrayItem,
-} from "./uresdata.path";
+/** @fileoverview Original ICU78.3 default-package public resource APIs. Actual bundle/entry owners perform alias substitution, path and locale inheritance, copy/close and iterator state; immutable decoded resources project mapped storage. Native physical ABI/OOM and external packages remain uncertified. */
+import { UResourceBundle } from "./uresimp";
+import type { UResourceDataEntry } from "./uresbund.entries";
+import { ures_close, ures_copyResb } from "./uresbund.lifecycle";
+import { init_resb_resultFromContainer } from "./uresbund.alias";
+import { getFallbackData, ures_getByKeyWithFallback } from "./uresbund.lookup";
+import { res_getBuffer, type ResourceDataValue } from "./uresdata";
+import { res_getTableItemByKey, res_getTableItemByIndex, res_getArrayItem } from "./uresdata.path";
 import { UErrorCode as E, U_FAILURE } from "./unicode/utypes";
-
+export { UResourceBundle, ures_initStackObject } from "./uresimp";
+export {
+  ures_open,
+  ures_openNoDefault,
+  ures_openDirect,
+  ures_openFillIn,
+  ures_close,
+  ures_copyResb,
+} from "./uresbund.lifecycle";
+export { ures_getByKeyWithFallback } from "./uresbund.lookup";
 export const UResType = {
   URES_NONE: -1,
   URES_STRING: 0,
@@ -36,107 +43,41 @@ export type Resource =
       readonly aliasIndices: readonly number[];
       readonly value: readonly Resource[];
     };
-/** Native nullable UErrorCode pointer. */
+/** Source nullable public status pointer where checked by the original function. */
 type Status = [number] | null;
-const mappedBuffers = new Map<number | string, readonly number[]>();
-/** Original reusable bundle handle; storage and keys borrow the immutable mapped resource. */
-export class UResourceBundle {
-  fIndex = -1;
-  /** Projects native result initialization; a default stack bundle has no resource. @param resource - Borrowed storage. @param key - Borrowed table key. @returns Handle. */
-  constructor(
-    public resource: Resource | null = null,
-    public key: string | null = null,
-  ) {}
-}
-/** Original direct-open consumed package/name overload, without locale fallback. @param packageName - Default ICU package. @param name - Pinned resource. @param status - Nullable sticky status. @returns Handle or null. */
-export function ures_openDirect(
-  packageName: null,
-  name: "zoneinfo64" | "keyTypeData" | "langInfo",
-  status: Status,
-): UResourceBundle | null {
-  void packageName;
-  if (status === null || U_FAILURE(status[0])) return null;
-  return new UResourceBundle(
-    (name === "zoneinfo64"
-      ? zoneinfo64.resource
-      : name === "keyTypeData"
-        ? keyTypeData.resource
-        : langInfo.resource) as Resource,
-  );
-}
-/** Original scalar/table/array public size. @param bundle - Handle or null. @returns Size; scalar resources always have size one. */
+/** Original stored bundle size. @param bundle - Owner/null. @returns Count. */
 export function ures_getSize(bundle: UResourceBundle | null): number {
-  return res_countArrayItems(bundle?.resource ?? null);
+  return bundle?.fSize ?? 0;
 }
-/** Original public type query. @param bundle - Handle. @returns Type or NONE. */
+/** Original public raw type. @param bundle - Owner/null. @returns Type/NONE. */
 export function ures_getType(bundle: UResourceBundle | null): number {
-  return bundle?.resource?.type ?? UResType.URES_NONE;
+  return bundle?.fRes?.type ?? -1;
 }
-/** Original table key query. @param bundle - Handle. @returns Key or null. */
+/** Original key pointer. @param bundle - Owner/null. @returns Key/null. */
 export function ures_getKey(bundle: UResourceBundle | null): string | null {
-  return bundle?.key ?? null;
+  return bundle?.fKey ?? null;
 }
-/** Original reusable result initialization; source storage is captured before overwriting the handle. @param resource - Borrowed storage. @param key - Table key. @param fillIn - Reused handle. @returns Handle. */
-function result(
-  resource: Resource | null,
-  key: string | null,
-  fillIn: UResourceBundle | null,
-): UResourceBundle {
-  if (fillIn === null) return new UResourceBundle(resource, key);
-  fillIn.resource = resource;
-  fillIn.key = key;
-  fillIn.fIndex = -1;
-  return fillIn;
+/** Original actual filename query. @param bundle - Owner/null. @returns Name/null. */
+export function ures_getName(bundle: UResourceBundle | null): string | null {
+  return bundle === null ? null : (bundle.fData as UResourceDataEntry).fName;
 }
-/** Original direct table lookup and unchanged fillIn on failure. @param bundle - Source. @param key - Key. @param fillIn - Result owner. @param status - Nullable sticky status. @returns Reused/new handle or original fillIn on failure. */
-export function ures_getByKey(
+/** Original valid/actual locale distinction; requested-locale enum is rejected by source. @param bundle - Owner/null. @param type - ACTUAL0/VALID1. @param status - Status. @returns Filename/null. */
+export function ures_getLocaleByType(
   bundle: UResourceBundle | null,
-  key: string,
-  fillIn: UResourceBundle | null,
+  type: number,
   status: Status,
-): UResourceBundle | null {
-  if (status === null || U_FAILURE(status[0])) return fillIn;
+): string | null {
+  if (status === null || U_FAILURE(status[0])) return null;
   if (bundle === null) {
     status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
-    return fillIn;
+    return null;
   }
-  const resource = bundle.resource;
-  if (resource?.type !== 2) status[0] = E.U_RESOURCE_TYPE_MISMATCH;
-  else {
-    const canonical: [string | null] = [key],
-      child = res_getTableItemByKey(resource, canonical);
-    if (child === null) status[0] = E.U_MISSING_RESOURCE_ERROR;
-    else return result(child, canonical[0], fillIn);
-  }
-  return fillIn;
+  if (type === 0) return (bundle.fData as UResourceDataEntry).fName;
+  if (type === 1) return (bundle.fValidLocaleDataEntry as UResourceDataEntry).fName;
+  status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
+  return null;
 }
-/** Original indexed lookup; indexing any scalar at zero copies its bundle. @param bundle - Source. @param index - Native int32 index. @param fillIn - Result owner. @param status - Nullable sticky status. @returns Result or original fillIn on failure. */
-export function ures_getByIndex(
-  bundle: UResourceBundle | null,
-  index: number,
-  fillIn: UResourceBundle | null,
-  status: Status,
-): UResourceBundle | null {
-  if (status === null || U_FAILURE(status[0])) return fillIn;
-  if (bundle === null) {
-    status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
-    return fillIn;
-  }
-  index |= 0;
-  if (index < 0 || index >= ures_getSize(bundle)) {
-    status[0] = E.U_MISSING_RESOURCE_ERROR;
-    return fillIn;
-  }
-  const resource = bundle.resource as Resource;
-  if (resource.type === 2) {
-    const key: [string | null] = [null],
-      child = res_getTableItemByIndex(resource, index, key);
-    return result(child, key[0], fillIn);
-  }
-  if (resource.type === 8) return result(res_getArrayItem(resource, index), null, fillIn);
-  return ures_copyResb(fillIn, bundle, status);
-}
-/** Original typed scalar getter guard. @param bundle - Handle. @param status - Sticky status. @returns Whether source may be read. */
+/** Original nullable bundle/status guard. @param bundle - Owner/null. @param status - Status. @returns Readable. */
 function readable(bundle: UResourceBundle | null, status: Status): boolean {
   if (status === null || U_FAILURE(status[0])) return false;
   if (bundle === null) {
@@ -145,14 +86,14 @@ function readable(bundle: UResourceBundle | null, status: Status): boolean {
   }
   return true;
 }
-/** Original signed integer getter; failed output is int32 minus one. @param bundle - Handle. @param status - Status. @returns Integer or minus one. */
+/** Original integer read. @param bundle - Owner/null. @param status - Status. @returns Signed int/-1. */
 export function ures_getInt(bundle: UResourceBundle | null, status: Status): number {
   if (!readable(bundle, status)) return -1;
-  if (bundle?.resource?.type === 7) return bundle.resource.value;
+  if (bundle?.fRes?.type === 7) return bundle.fRes.value;
   (status as [number])[0] = E.U_RESOURCE_TYPE_MISMATCH;
   return -1;
 }
-/** Original typed buffer/string getter with low-level mismatch length reset; null handles and incoming failures leave length untouched. @param bundle - Handle. @param type - Expected public type. @param length - Optional length output. @param status - Status. @returns Borrowed scalar buffer or string. */
+/** Original public typed status boundary over raw mapped storage. @param bundle - Owner/null. @param type - Expected type. @param length - Output. @param status - Status. @returns Storage/null. */
 function buffer(
   bundle: UResourceBundle | null,
   type: 0 | 1 | 14,
@@ -160,22 +101,11 @@ function buffer(
   status: Status,
 ): string | readonly number[] | null {
   if (!readable(bundle, status)) return null;
-  const resource = bundle?.resource;
-  if (resource?.type !== type) {
-    if (length !== null) length[0] = 0;
-    (status as [number])[0] = E.U_RESOURCE_TYPE_MISMATCH;
-    return null;
-  }
-  let value = resource.value as string | readonly number[];
-  if (resource.type === 1 || resource.type === 14) {
-    const mapped = mappedBuffers.get(resource.storage);
-    if (mapped !== undefined) value = mapped;
-    else mappedBuffers.set(resource.storage, resource.value);
-  }
-  if (length !== null) length[0] = value.length;
+  const value = res_getBuffer((bundle as UResourceBundle).fRes, type, length);
+  if (value === null) (status as [number])[0] = E.U_RESOURCE_TYPE_MISMATCH;
   return value;
 }
-/** Original string getter. @param bundle - Handle. @param length - Length output. @param status - Status. @returns Borrowed string or null. */
+/** Original string read. @param bundle - Owner/null. @param length - Output. @param status - Status. @returns Storage/null. */
 export function ures_getString(
   bundle: UResourceBundle | null,
   length: [number] | null,
@@ -183,7 +113,7 @@ export function ures_getString(
 ): string | null {
   return buffer(bundle, 0, length, status) as string | null;
 }
-/** Original binary getter. @param bundle - Handle. @param length - Length output. @param status - Status. @returns Borrowed bytes or null. */
+/** Original binary read. @param bundle - Owner/null. @param length - Output. @param status - Status. @returns Storage/null. */
 export function ures_getBinary(
   bundle: UResourceBundle | null,
   length: [number] | null,
@@ -191,7 +121,7 @@ export function ures_getBinary(
 ): readonly number[] | null {
   return buffer(bundle, 1, length, status) as readonly number[] | null;
 }
-/** Original int-vector getter. @param bundle - Handle. @param length - Length output. @param status - Status. @returns Borrowed vector or null. */
+/** Original vector read. @param bundle - Owner/null. @param length - Output. @param status - Status. @returns Storage/null. */
 export function ures_getIntVector(
   bundle: UResourceBundle | null,
   length: [number] | null,
@@ -199,86 +129,251 @@ export function ures_getIntVector(
 ): readonly number[] | null {
   return buffer(bundle, 14, length, status) as readonly number[] | null;
 }
-/** Original keyed string lookup retains length on missing keys or non-alias child type mismatch; aliases delegate to the scalar getter. @param bundle - Handle. @param key - Key. @param length - Length output. @param status - Status. @returns Borrowed string or null. */
+/** Original key lookup, root fallback only when enabled and dynamic alias result initialization. @param bundle - Owner/null. @param inKey - C key. @param fillIn - Result. @param status - Status. @returns Result/prior fill-in. */
+export function ures_getByKey(
+  bundle: UResourceBundle | null,
+  inKey: string,
+  fillIn: UResourceBundle | null,
+  status: Status,
+): UResourceBundle | null {
+  if (!readable(bundle, status)) return fillIn;
+  const source = bundle as UResourceBundle,
+    s = status as [number],
+    key: [string | null] = [inKey];
+  if (source.fRes?.type !== 2) {
+    s[0] = E.U_RESOURCE_TYPE_MISMATCH;
+    return fillIn;
+  }
+  const resource = res_getTableItemByKey(source.fRes, key);
+  if (resource !== null)
+    return init_resb_resultFromContainer(
+      source.fData as UResourceDataEntry,
+      resource,
+      key[0],
+      -1,
+      source,
+      fillIn,
+      s,
+    );
+  key[0] = inKey;
+  if (source.fHasFallback) {
+    const res: [Resource | null] = [null],
+      data = getFallbackData(source, key, res, s);
+    if (!U_FAILURE(s[0]))
+      return init_resb_resultFromContainer(
+        data as UResourceDataEntry,
+        res[0],
+        key[0],
+        -1,
+        source,
+        fillIn,
+        s,
+      );
+  }
+  s[0] = E.U_MISSING_RESOURCE_ERROR;
+  return fillIn;
+}
+/** Original indexed child initialization or scalar bundle copy. @param bundle - Owner/null. @param index - int32. @param fillIn - Result. @param status - Status. @returns Result/prior fill-in. */
+export function ures_getByIndex(
+  bundle: UResourceBundle | null,
+  index: number,
+  fillIn: UResourceBundle | null,
+  status: Status,
+): UResourceBundle | null {
+  if (!readable(bundle, status)) return fillIn;
+  const source = bundle as UResourceBundle,
+    s = status as [number];
+  index |= 0;
+  if (index < 0 || index >= source.fSize) {
+    s[0] = E.U_MISSING_RESOURCE_ERROR;
+    return fillIn;
+  }
+  const r = source.fRes,
+    key: [string | null] = [null];
+  if (r?.type === 2 || r?.type === 8)
+    return init_resb_resultFromContainer(
+      source.fData as UResourceDataEntry,
+      r.type === 2 ? res_getTableItemByIndex(r, index, key) : res_getArrayItem(r, index),
+      key[0],
+      index,
+      source,
+      fillIn,
+      s,
+    );
+  if (r?.type === 0 || r?.type === 1 || r?.type === 7 || r?.type === 14)
+    return ures_copyResb(fillIn, source, s);
+  return fillIn;
+}
+/** Original string-by-key fast path, with a closed temporary owner only for alias resolution. @param bundle - Owner/null. @param inKey - Key. @param length - Output. @param status - Status. @returns Storage/null. */
 export function ures_getStringByKey(
   bundle: UResourceBundle | null,
-  key: string,
+  inKey: string,
   length: [number] | null,
   status: Status,
 ): string | null {
-  const child = ures_getByKey(bundle, key, null, status);
-  if (child === null) return null;
-  const parent = bundle?.resource;
-  if (parent?.type === 2 && parent.aliasIndices.includes(parent.keys.indexOf(child.key as string)))
-    return ures_getString(child, length, status);
-  if (child.resource?.type !== 0) {
-    if (status !== null) status[0] = E.U_RESOURCE_TYPE_MISMATCH;
+  if (!readable(bundle, status)) return null;
+  const source = bundle as UResourceBundle,
+    s = status as [number],
+    key: [string | null] = [inKey];
+  if (source.fRes?.type !== 2) {
+    s[0] = E.U_RESOURCE_TYPE_MISMATCH;
     return null;
   }
-  return ures_getString(child, length, status);
+  let resource = res_getTableItemByKey(source.fRes, key);
+  if (resource === null) {
+    key[0] = inKey;
+    if (!source.fHasFallback) {
+      s[0] = E.U_MISSING_RESOURCE_ERROR;
+      return null;
+    }
+    const res: [Resource | null] = [null];
+    getFallbackData(source, key, res, s);
+    resource = res[0];
+    if (U_FAILURE(s[0])) {
+      s[0] = E.U_MISSING_RESOURCE_ERROR;
+      return null;
+    }
+  }
+  if (resource?.type === 0) return res_getBuffer(resource, 0, length) as string | null;
+  if (resource?.type === 3) {
+    const temp = ures_getByKey(source, inKey, null, s),
+      result = ures_getString(temp, length, s);
+    ures_close(temp);
+    return result;
+  }
+  s[0] = E.U_RESOURCE_TYPE_MISMATCH;
+  return null;
 }
-/** Original indexed string lookup: nonstring table/array children return null and length zero without setting an error; nonstring scalar bundles set a mismatch and retain length. @param bundle - Handle. @param index - Index. @param length - Length output. @param status - Status. @returns Borrowed string or null. */
+/** Original indexed string helper leaves ordinary nonstring child status unchanged. @param bundle - Owner. @param r - Raw child. @param index - Index. @param length - Output. @param status - Status. @returns String/null. */
+function stringWithAlias(
+  bundle: UResourceBundle,
+  r: Resource | null,
+  index: number,
+  length: [number] | null,
+  status: [number],
+): string | null {
+  if (r?.type === 3) {
+    const temp = ures_getByIndex(bundle, index, null, status),
+      value = ures_getString(temp, length, status);
+    ures_close(temp);
+    return value;
+  }
+  return res_getBuffer(r, 0, length) as string | null;
+}
+/** Original indexed string dispatch with distinct scalar/child mismatch behavior. @param bundle - Owner/null. @param index - int32. @param length - Output. @param status - Status. @returns Storage/null. */
 export function ures_getStringByIndex(
   bundle: UResourceBundle | null,
   index: number,
   length: [number] | null,
   status: Status,
 ): string | null {
-  const child = ures_getByIndex(bundle, index, null, status);
-  if (child === null) return null;
-  const parent = bundle?.resource;
-  if ((parent?.type === 2 || parent?.type === 8) && parent.aliasIndices.includes(index | 0))
-    return ures_getString(child, length, status);
-  if (child.resource?.type !== 0) {
-    if (bundle?.resource?.type === 2 || bundle?.resource?.type === 8) {
-      if (length !== null) length[0] = 0;
-    } else if (status !== null) status[0] = E.U_RESOURCE_TYPE_MISMATCH;
+  if (!readable(bundle, status)) return null;
+  const source = bundle as UResourceBundle,
+    s = status as [number];
+  index |= 0;
+  if (index < 0 || index >= source.fSize) {
+    s[0] = E.U_MISSING_RESOURCE_ERROR;
     return null;
   }
-  return ures_getString(child, length, status);
+  const r = source.fRes;
+  if (r?.type === 0) return res_getBuffer(r, 0, length) as string | null;
+  if (r?.type === 2 || r?.type === 8)
+    return stringWithAlias(
+      source,
+      r.type === 2 ? res_getTableItemByIndex(r, index, [null]) : res_getArrayItem(r, index),
+      index,
+      length,
+      s,
+    );
+  if (r?.type === 3) return stringWithAlias(source, r, index, length, s);
+  s[0] =
+    r?.type === 1 || r?.type === 7 || r?.type === 14
+      ? E.U_RESOURCE_TYPE_MISMATCH
+      : E.U_INTERNAL_PROGRAM_ERROR;
+  return null;
 }
-
-/** Original bundle copy retains the source iterator cursor; self-copy and null source are no-ops. Native path storage/refcount/allocator ownership is not simulated. @param fillIn - Reusable/new owner. @param original - Copied source/null. @param status - Sticky status. @returns Result owner. */
-export function ures_copyResb(
-  fillIn: UResourceBundle | null,
-  original: UResourceBundle | null,
-  status: [number],
-): UResourceBundle | null {
-  if (U_FAILURE(status[0]) || fillIn === original) return fillIn;
-  if (original !== null) {
-    const index = original.fIndex;
-    fillIn = result(original.resource, original.key, fillIn);
-    fillIn.fIndex = index;
-  }
-  return fillIn;
-}
-/** Original iterator reset ignores null. @param bundle - Actual owner. @returns Nothing. */
+/** Original iterator reset. @param bundle - Owner/null. @returns Nothing. */
 export function ures_resetIterator(bundle: UResourceBundle | null): void {
   if (bundle !== null) bundle.fIndex = -1;
 }
-/** Original strict cursor/size query. @param bundle - Actual owner/null. @returns Remaining resource. */
+/** Original stored cursor/size test. @param bundle - Owner/null. @returns Remaining. */
 export function ures_hasNext(bundle: UResourceBundle | null): boolean {
-  return bundle !== null && bundle.fIndex < ures_getSize(bundle) - 1;
+  return bundle !== null && bundle.fIndex < bundle.fSize - 1;
 }
-/** Original getNextResource increments the actual source cursor before dispatch and retains fillIn on failure. Scalar copies preserve the incremented cursor; child initialization resets its cursor. @param bundle - Iterated owner/null. @param fillIn - Reusable child/null. @param status - Nullable sticky status. @returns Child or prior fillIn. */
+/** Original increments source cursor before child initialization or scalar copy. @param bundle - Owner/null. @param fillIn - Result. @param status - Status. @returns Result/prior fill-in. */
 export function ures_getNextResource(
   bundle: UResourceBundle | null,
   fillIn: UResourceBundle | null,
   status: Status,
 ): UResourceBundle | null {
-  if (status === null || U_FAILURE(status[0])) return fillIn;
-  if (bundle === null) {
+  if (!readable(bundle, status)) return fillIn;
+  const source = bundle as UResourceBundle,
+    s = status as [number];
+  if (source.fIndex === source.fSize - 1) {
+    s[0] = E.U_INDEX_OUTOFBOUNDS_ERROR;
+    return fillIn;
+  }
+  ++source.fIndex;
+  const r = source.fRes,
+    key: [string | null] = [null];
+  if (r?.type === 0 || r?.type === 1 || r?.type === 7 || r?.type === 14)
+    return ures_copyResb(fillIn, source, s);
+  if (r?.type === 2 || r?.type === 8)
+    return init_resb_resultFromContainer(
+      source.fData as UResourceDataEntry,
+      r.type === 2
+        ? res_getTableItemByIndex(r, source.fIndex, key)
+        : res_getArrayItem(r, source.fIndex),
+      key[0],
+      source.fIndex,
+      source,
+      fillIn,
+      s,
+    );
+  return fillIn;
+}
+/** Original fallback string wrapper closes stack storage and handles the three-empty-set inheritance marker. @param bundle - Owner/null. @param key - Path. @param length - Output. @param status - Nonnull status. @returns Storage/null. */
+export function ures_getStringByKeyWithFallback(
+  bundle: UResourceBundle | null,
+  key: string,
+  length: [number] | null,
+  status: [number],
+): string | null {
+  const stack = new UResourceBundle(),
+    n: [number] = [0];
+  ures_getByKeyWithFallback(bundle, key, stack, status);
+  let value = ures_getString(stack, n, status);
+  ures_close(stack);
+  if (U_FAILURE(status[0])) return null;
+  if (n[0] === 3 && value === "∅∅∅") {
+    value = null;
+    n[0] = 0;
+    status[0] = E.U_MISSING_RESOURCE_ERROR;
+  }
+  if (length !== null) length[0] = n[0];
+  return value;
+}
+
+/** Original internal borrowed ResourceDataValue setup, using the caller's persistent temporary bundle for alias/path context. @param bundle - Original source. @param path - C path/null. @param tempFillIn - Caller-owned temporary. @param value - Actual holder. @param status - Sticky status. @returns Nothing. */
+export function ures_getValueWithFallback(
+  bundle: UResourceBundle | null,
+  path: string | null,
+  tempFillIn: UResourceBundle,
+  value: ResourceDataValue,
+  status: [number],
+): void {
+  if (U_FAILURE(status[0])) return;
+  if (path === null) {
     status[0] = E.U_ILLEGAL_ARGUMENT_ERROR;
-    return fillIn;
+    return;
   }
-  if (bundle.fIndex === ures_getSize(bundle) - 1) {
-    status[0] = E.U_INDEX_OUTOFBOUNDS_ERROR;
-    return fillIn;
-  }
-  ++bundle.fIndex;
-  const resource = bundle.resource;
-  if (resource === null) return fillIn;
-  if (resource.type === 0 || resource.type === 1 || resource.type === 7 || resource.type === 14)
-    return ures_copyResb(fillIn, bundle, status);
-  return ures_getByIndex(bundle, bundle.fIndex, fillIn, status);
+  const rb =
+    path === "" || path[0] === "\0"
+      ? bundle
+      : ures_getByKeyWithFallback(bundle, path, tempFillIn, status);
+  if (U_FAILURE(status[0])) return;
+  const result = rb as UResourceBundle;
+  value.setData((result.fData as UResourceDataEntry).fData);
+  value.setValidLocaleDataEntry(result.fValidLocaleDataEntry);
+  value.setResource(result.fRes as Resource);
 }

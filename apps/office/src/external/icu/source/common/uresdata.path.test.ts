@@ -9,7 +9,7 @@ import {
   res_getTableItemByIndex,
 } from "./uresdata.path";
 import { getTableItemByKeyPath, createPath } from "./uresbund.path";
-import { UResourceBundle, ures_getByKey, ures_getStringByKey } from "./uresbund";
+import { ures_openDirect, ures_close, ures_getByKey, ures_getStringByKey } from "./uresbund";
 /** Actual raw root, without public alias/fallback dispatch. @returns Root node. */
 function root() {
   const data = new ResourceData();
@@ -85,7 +85,7 @@ it("shares original C-key primitives with public direct reads and retains failed
     status: [number] = [0];
   expect(res_getTableItemByIndex(r, -1, key)).toBeNull();
   expect(key[0]).toBe("incoming");
-  const bundle = new UResourceBundle(r),
+  const bundle = ures_openDirect(null, "root", status),
     a = ures_getByKey(bundle, "calendar", null, status),
     b = ures_getByKey(bundle, "calendar\0ignored", null, status);
   expect(b?.resource).toBe(a?.resource);
@@ -94,4 +94,7 @@ it("shares original C-key primitives with public direct reads and retains failed
   const scalar = getTableItemByKeyPath(r, "Version");
   expect(scalar?.type).toBe(0);
   expect(ures_getStringByKey(bundle, "Version\0ignored", [0], status)).toBe(scalar?.value);
+  ures_close(a);
+  ures_close(b);
+  ures_close(bundle);
 });
