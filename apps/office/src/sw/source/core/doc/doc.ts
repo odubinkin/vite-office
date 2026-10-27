@@ -19,7 +19,7 @@ import { XFillStyleItem } from "../../../../svx/inc/xfillit0";
 import { FillStyle } from "../../../../offapi/com/sun/star/drawing/FillStyle";
 import { SwFrameFormat } from "../layout/atrfrm";
 import { SetTableName } from "./docchart";
-import type { SwFormat } from "../attr/format";
+import { IsUsed } from "./poolfmt";
 import { SwLineNumberInfo } from "../../../inc/lineinfo";
 import { SwNodes } from "../docnode/nodes";
 import { SwTableNode, type SwNode } from "../docnode/node";
@@ -502,17 +502,9 @@ export class SwDoc {
   public GetTextFormatColls(): readonly SwTextFormatColl[] {
     return this.stylePoolManager.GetTextFormatColls();
   }
-  /** Reports regular node use, including derived paragraph collections like native poolfmt.cxx. @param format - Candidate identity. @returns Whether a regular node depends on it. */
-  public IsUsed(format: SwTextFormatColl): boolean {
-    for (const node of this.nodes.entries()) {
-      if (!(node instanceof SwTextNode)) continue;
-      let owner: SwFormat | undefined = node.GetTextFormatColl();
-      while (owner !== undefined) {
-        if (owner === format) return true;
-        owner = owner.DerivedFrom();
-      }
-    }
-    return false;
+  /** Native used-style overloads preserve dependent-node and numbering-client ownership checks. @param format - Paragraph collection or numbering rule. @returns Whether its native owners report use. */
+  public IsUsed(format: SwTextFormatColl | SwNumRule): boolean {
+    return IsUsed(this, format);
   }
   /** Finds a supported paragraph collection. @param id - Programmatic identity. @returns Existing collection. */
   public FindTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl | undefined {

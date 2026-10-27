@@ -375,3 +375,8 @@ preferences are user defaults; global orphan/widow values are zero and the new
 document overlay remains two. Generic paragraph bool/count/break carriers and
 full InitNew conditions remain unverified. Complete InitFontTable/used numbering,
 Markdown HTMLReader and the other earlier gaps still prevent slice completion.
+
+
+### Numbering-style usage prerequisite
+
+S3HW1E used-numbering prerequisites: native SwNumRule paragraph-style clients retain identity and duplicate suppression; copies start empty while assignment/reset retain recipient clients. SwTextFormatColl single-item/set/range changes transfer only explicit nonempty numbering references through the actual document. SwDoc.IsUsed gains the source numbering predicate for text clients, paragraph styles, redline use and matching nonempty default list, alongside the existing represented paragraph dependent-node traversal. Owner tests cover inherited/unresolved rules, locked changes, reset ranges and default-list override. Source ResetAllFormatAttr bypasses registration removal (WRITER194); this behavior is retained. No full native Writer ABI or whole-filter parity is claimed. Native persistent outline-rule ownership, used-numbering-table export orchestration and InitFontTable remain separate unfinished obligations.

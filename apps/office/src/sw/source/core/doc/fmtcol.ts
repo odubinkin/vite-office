@@ -10,6 +10,9 @@ import {
 import type { WhichRangesContainer } from "../../../../svl/inc/whichranges";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import type { SwNumRuleItem } from "../para/paratr";
+import type { SwNumRule } from "./number";
+import { SfxItemState, type SfxItemSet } from "../../../../svl/source/items/itemset";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { SwFormat } from "../attr/format";
 import type { SwAttrPool } from "../attr/swatrset";
 import {
@@ -101,6 +104,32 @@ export class SwTextFormatColl extends SwFormatColl {
     this.SetFormatAttr(new SfxUInt16Item(RES_PARATR_OUTLINELEVEL, level));
   }
 
+  /** Native single-item mutation detaches and reattaches the direct numbering-style client even for an unchanged value. @param item - Incoming direct item. @returns Whether the base attributes changed. */
+  public override SetFormatAttr(item: SfxPoolItem): boolean {
+    const affected = item.Which() === RES_PARATR_NUMRULE;
+    if (affected) GetNumRuleForParagraphStyle(this)?.RemoveParagraphStyle(this);
+    const changed = super.SetFormatAttr(item);
+    if (affected) GetNumRuleForParagraphStyle(this)?.AddParagraphStyle(this);
+    return changed;
+  }
+  /** Native set overload checks direct SET state before transferring numbering registration. @param set - Incoming item set. @returns Whether base attributes changed. */
+  public override SetFormatAttrSet(set: SfxItemSet): boolean {
+    const affected = set.GetItemState(RES_PARATR_NUMRULE, false) === SfxItemState.SET;
+    if (affected) GetNumRuleForParagraphStyle(this)?.RemoveParagraphStyle(this);
+    const changed = super.SetFormatAttrSet(set);
+    if (affected) GetNumRuleForParagraphStyle(this)?.AddParagraphStyle(this);
+    return changed;
+  }
+  /** Native reset unregisters the direct rule when the supplied inclusive range covers its identity; inherited rules are not registered. @param which - First identity. @param last - Optional inclusive last identity. @returns Whether attributes changed. */
+  public override ResetFormatAttr(which: number, last = 0): boolean {
+    const affected =
+      last !== 0 && last > which
+        ? which <= RES_PARATR_NUMRULE && RES_PARATR_NUMRULE <= last
+        : which === RES_PARATR_NUMRULE;
+    if (affected) GetNumRuleForParagraphStyle(this)?.RemoveParagraphStyle(this);
+    return super.ResetFormatAttr(which, last);
+  }
+
   /** Returns the outline rule's zero-based level. @returns Attribute value minus one. */
   public GetAssignedOutlineStyleLevel(): number {
     return this.GetAttrOutlineLevel() - 1;
@@ -143,4 +172,13 @@ export function createWriterTextFormatColl(
     collection.AssignToListLevelOfOutlineStyle(level);
   }
   return collection;
+}
+
+/** Source TextFormatCollFunc::GetNumRule resolves only an explicit nonempty numbering item through its owning document. @param collection - Paragraph style. @returns Existing native numbering rule. */
+function GetNumRuleForParagraphStyle(collection: SwTextFormatColl): SwNumRule | undefined {
+  const item = collection.GetAttrSet().GetItemIfSet(RES_PARATR_NUMRULE, false) as
+    SwNumRuleItem | undefined;
+  return item !== undefined && item.GetValue().length !== 0
+    ? collection.GetDoc().FindNumRulePtr(item.GetValue())
+    : undefined;
 }

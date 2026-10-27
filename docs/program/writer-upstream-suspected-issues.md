@@ -1737,3 +1737,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `vcl/source/font/font.cxx`, both family-selection sequences in `ImplFont::AskConfig` test `ImplFontAttrs::Italic` to assign `FAMILY_SCRIPT`. They do not test `ImplFontAttrs::Script`, Handwriting or BrushScript. The `getMapName` table in `unotools/source/config/fontcfg.cxx` assigns Script/BrushScript for the `script` word and Italic for `italic`/`oblique`.
 - Observation: an otherwise unclassified name containing `script` can remain FAMILY_DONTKNOW while a name containing `italic` becomes FAMILY_SCRIPT. This is a source-level branch trace and local value test, not an independently compiled full AskConfig witness.
 - Preservation: keep the exact flag and priority order in configured and heuristic branches. Do not substitute the generic Script bit.
+
+
+### WRITER194 — ResetAllFormatAttr leaves a numbering rule's paragraph-style client registered
+
+- Source: pinned `sw/source/core/doc/fmtcol.cxx`, `SwTextFormatColl::SetFormatAttr` and `ResetFormatAttr`, explicitly remove a direct numbering client's registration. `SwTextFormatColl::ResetAllFormatAttr` instead calls `SwFormatColl::ResetAllFormatAttr`; the inherited implementation in `sw/source/core/attr/format.cxx` clears `m_aSet` directly and does not call the virtual single/range reset. The numbering-related notification branch only checks outline assignment and does not unregister that client.
+- Observation: clearing all attributes can leave `SwNumRule::GetParagraphStyleListSize()` nonzero after the style no longer has a direct numbering item, so the numbering overload of `SwDoc::IsUsed` still reports use. This is source control-flow evidence and a local owner test; a complete native Writer execution is not claimed.
+- Preservation: keep the explicit registration boundaries of the source single-item/set/range operations. Do not add cleanup to the inherited reset-all path while porting used-numbering-table prerequisites.

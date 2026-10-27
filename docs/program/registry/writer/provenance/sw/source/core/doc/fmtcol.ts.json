@@ -8,12 +8,28 @@
         {
           "marker": "WRITER_PARAGRAPH_STYLES",
           "path": "apps/office/src/sw/source/core/doc/fmtcol.ts"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/doc/number-style-clients.test.ts",
+          "marker": "registers only explicit style rules"
         }
       ],
       "upstream": [
         {
           "marker": "SwFormatColl",
           "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx",
+          "marker": "SwTextFormatColl::SetFormatAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx",
+          "marker": "SwTextFormatColl::ResetFormatAttr"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/core/doc/fmtcol.cxx",
+          "marker": "SwNumRule* GetNumRule( SwTextFormatColl& rTextFormatColl )"
         }
       ]
     },
@@ -33,7 +49,8 @@
       "Reimplements bounded SwFormatColl and SwTextFormatColl hierarchy from pinned `sw/source/core/doc/fmtcol.cxx`.",
       "Iteration37 ports the anonymous-namespace collection numbering transition helpers. Initial inherited attachment,retained record rebinding,five-attribute removal reset,Outline exclusion/assignment and synthesized empty-rule return match16 unchanged extracted native definitions over277 sequences/10394 actual states. Native footnotes,conditional/inline styles,outline index,platform flags/cache,live format callbacks and full history/attribute lifetime remain separate unverified obligations.",
       "V4DQJW native identity correction: resolve the actual pinned hintids.hxx expressions rather than preserving the obsolete numeric table. Paragraph IDs were offset by2 and list/frame/cell IDs by3; native frame-size93/grid125 and exact row/cell ranges now apply. Correct the separate old protection misregistration127 to native RES_PROTECT110; number-format uses RES_BOXATR_FORMAT160. Browser graph17 emits native IDs only and explicitly migrates v16 records at ingress, including old protection. Earlier numerical claims remain historical and do not establish parity. The shared SwFormat base now owns original GetDoc; default SwCharFormat/SwGrfFormatColl are real document-pooled owners. Page collection operations live in original docdesc responsibility, with page/frame teardown on deletion and document destruction. Native source-expression guard is wired into verification. General SetDefault/default-page-mode, SectionPropertyMap/style/document loading and DOCX export/Open/download remain pending; all prior statuses and intentional file UI/autosave/recovery deviations are preserved.",
-      "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged."
+      "S3HW1E character prerequisite: common SwFormat pool identity now starts UNKNOWN65535; text collections delegate their existing readonly poolId view. Native character pool IDs/names/defaults and numbering registrations use actual SwCharFormat owners. Browser graph retains character identity, parents, pool IDs, auto flag, items and numbering references without name merging; paragraph pool IDs now restore losslessly too. Native numbering label projection applies represented style items after paragraph resets and before explicit bullet font. Existing InsertTable body moves unchanged to its native ndtbl.cxx owner. Related source-only and Worker roundtrip evidence does not establish compiled Writer parity; ranged style hints, HTML/CSS reader, user ConfigItem subscriptions and unrepresented item families remain open. Existing registered recovery/save/open deviations remain unchanged.",
+      "S3HW1E used-numbering prerequisites: native SwNumRule paragraph-style clients retain identity and duplicate suppression; copies start empty while assignment/reset retain recipient clients. SwTextFormatColl single-item/set/range changes transfer only explicit nonempty numbering references through the actual document. SwDoc.IsUsed gains the source numbering predicate for text clients, paragraph styles, redline use and matching nonempty default list, alongside the existing represented paragraph dependent-node traversal. Owner tests cover inherited/unresolved rules, locked changes, reset ranges and default-list override. Source ResetAllFormatAttr bypasses registration removal (WRITER194); this behavior is retained. No full native Writer ABI or whole-filter parity is claimed. Native persistent outline-rule ownership, used-numbering-table export orchestration and InitFontTable remain separate unfinished obligations."
     ],
     "status": "mapped",
     "upstreamPath": "sw/source/core/doc/fmtcol.cxx",
@@ -41,7 +58,10 @@
       "SwFormatColl",
       "SwTextFormatColl",
       "SwTextFormatColl::SwTextFormatColl",
-      "SwTextFormatColl::~SwTextFormatColl"
+      "SwTextFormatColl::~SwTextFormatColl",
+      "SwTextFormatColl::SetFormatAttr",
+      "SwTextFormatColl::ResetFormatAttr",
+      "GetNumRule"
     ]
   },
   "legacyOrder": 170

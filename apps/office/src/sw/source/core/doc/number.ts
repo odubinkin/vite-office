@@ -17,6 +17,7 @@ import { SwClient, type SwModify } from "../../../inc/calbck";
 
 import type { SwTextNode } from "../txtnode/ndtxt";
 import type { SwDoc } from "./doc";
+import type { SwTextFormatColl } from "./fmtcol";
 import type { SwEditShell } from "../edit/ednumber";
 import type { SwCharFormat } from "../../../inc/charfmt";
 import type { SwFormat } from "../attr/format";
@@ -238,6 +239,7 @@ export class SwNumRule {
   private automatic = true;
   private readonly formats: (SwNumFormat | undefined)[] = Array.from({ length: 10 });
   private readonly textNodes: SwTextNode[] = [];
+  private readonly maParagraphStyleList: SwTextFormatColl[] = [];
   private invalidRuleFlag = true;
   private continusNum = false;
   private absSpaces = false;
@@ -328,6 +330,19 @@ export class SwNumRule {
     this.textNodes.splice(position, 1);
     if (this.invalidRuleFlag)
       node.GetDoc().GetDocumentListsManager().GetListByName(node.GetListId())?.InvalidateListTree();
+  }
+  /** Counts directly registered paragraph styles, independently of text-node use. @returns Native client count. */
+  public GetParagraphStyleListSize(): number {
+    return this.maParagraphStyleList.length;
+  }
+  /** Retains a paragraph-style client once, preserving native insertion order. @param collection - Actual style identity. @returns Nothing. */
+  public AddParagraphStyle(collection: SwTextFormatColl): void {
+    if (!this.maParagraphStyleList.includes(collection)) this.maParagraphStyleList.push(collection);
+  }
+  /** Removes the first matching native paragraph-style client. @param collection - Actual style identity. @returns Nothing. */
+  public RemoveParagraphStyle(collection: SwTextFormatColl): void {
+    const index = this.maParagraphStyleList.indexOf(collection);
+    if (index >= 0) this.maParagraphStyleList.splice(index, 1);
   }
   /** Reports pending rule validation. @returns Invalid-rule flag. */
   public IsInvalidRule(): boolean {
