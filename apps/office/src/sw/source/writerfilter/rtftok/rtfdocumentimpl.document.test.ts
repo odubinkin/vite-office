@@ -58,6 +58,11 @@ function read(input: string) {
   return new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(input));
 }
 
+it("retains the source ISCII null-context boundary instead of manufacturing a decoder context", () => {
+  // WRITER181: native null-object access is undefined; TypeError is this port's callback binding, not a C++ execution certificate.
+  expect(() => read(String.raw`{\rtf1\ansi\ansicpg57002\'a1\'e9}`)).toThrow(TypeError);
+});
+
 it.each([
   [51949, String.raw`\'a1\'a1\'81\'41`, "\u3000\uF181A"],
   [10003, String.raw`\'81\'41`, "\uAC02"],
@@ -66,7 +71,6 @@ it.each([
   [10008, String.raw`\'a1\'a1`, "\u3000"],
   [10002, String.raw`\'a1\'40`, "\u3000"],
   [51932, String.raw`\'8e\'a1\'a1\'a1\'8f\'a2\'af`, "\uFF61\u3000\u02D8"],
-  [57002, String.raw`\'a1\'e9\'e8\'e8`, "\u0950\u094D\u200C"],
 ])(
   "uses pinned SAL EUC and Apple DBCS aggregates for code page %i",
   /** Checks uses pinned SAL EUC and Apple DBCS aggregates for code page %i. @param codepage - Codepage. @param bytes - Bytes. @param expected - Expected. @returns Test completion or assertion result. */ (

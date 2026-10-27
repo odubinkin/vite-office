@@ -1657,6 +1657,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sal/textenc/convertisciidevangari.cxx`, `ImplConvertUnicodeToIsciiDevanagari`, casts its context and unconditionally calls its member function; that function reads `m_cHighSurrogate`. Pinned `sal/rtl/string.cxx`, `rtl_impl_convertUStringToString`, calls `rtl_convertUnicodeToText` with a null context. The ISCII descriptor in `convertisciidevangari.tab` supplies this context-dependent reverse callback.
 - Observation: the generic string-wrapper route provides no ISCII context despite the converter's unconditional object access. This is a source-level contract finding; null-object execution is undefined and is excluded from the native witness. Direct reverse-call tests use the actual context constructor and reset contract.
 - Preservation: keep the converter's context ownership requirement. Do not manufacture a context inside its callback or silently substitute another encoding to conceal the source contract mismatch.
+- Forward evidence: `rtl_string2UString_status` in pinned `sal/rtl/ustring.cxx` likewise calls its converter with nullptr. `ImplConvertIsciiDevanagariToUnicode` unconditionally calls `pCtx->convert`, whose loop reads `m_cPrevChar`. RTF `checkUnicode` uses this OStringToOUString route. The former local RTF-only context construction was removed; the null-context callback binding raises TypeError, while native null-object execution remains undefined and excluded from sanitized witnesses.
 
 
 ### WRITER182 — JIS X 0201 exposes an encoding descriptor with a null forward callback
@@ -1695,3 +1696,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `svl/source/items/stylepool.cxx`, `Node::getUsedOrLastAddedItemSet`, `Iterator::getNext` and `StylePool::populateCacheMap`.
 - Observation: even with unused/ignorable filtering disabled, iteration returns one shared set for each populated node: the newest externally used non-shareable copy, or the last-added copy if all are unused. Cache population consequently cannot recover every older non-shareable pointee name from the pool. The unchanged compiled Node/Iterator/StylePoolImpl witness confirms representative selection and usage transitions with real shared ownership; the full UNO cache-service graph is not compiled by that witness.
 - Preservation: keep representative selection and one-node/one-result iteration. Do not flatten all retained non-shareable handles into the name cache or font collection.
+
+
+### WRITER188 — Forward string conversion can leave a released old pointer in its target after allocation failure
+
+- Source: pinned `sal/rtl/ustring.cxx`, `rtl_string2UString_status`, releases `*ppThis` before allocating the general converter temporary. On temporary allocation failure it records ERROR/DESTBUFFERTOOSMALL and returns without assigning the target slot. The ASCII retry can likewise retain its released temporary pointer until successful replacement.
+- Observation: the target slot can still alias the old allocation although its owned reference was already consumed. With a sole former owner this is a dangling native pointer; with an independently retained reference it aliases that other owner's string. This is source control-flow evidence plus a local failure-injection test; the sanitized native witness covers successful allocations and does not dereference this failure state.
+- Preservation: retain the original release order, failure status and target-slot alias. Do not make forward checked conversion preserve ownership like the reverse checked wrapper. Access to freed data remains outside the native contract.

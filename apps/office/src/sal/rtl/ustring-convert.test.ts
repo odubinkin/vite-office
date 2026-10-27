@@ -4,6 +4,9 @@ import {
   RTL_TEXTENCODING_MS_1251,
   RTL_TEXTENCODING_UNICODE,
   RTL_TEXTENCODING_UTF8,
+  RTL_TEXTENCODING_MS_932,
+  RTL_TEXTENCODING_UTF7,
+  RTL_TEXTENCODING_ISO_2022_JP,
 } from "../inc/rtl/textenc";
 import { OStringToOUString, OUStringToOString } from "./ustring-convert";
 
@@ -51,4 +54,12 @@ it("uses the native UTF-8 encoder including malformed UTF-16 grouping", /** Chec
   expect([...OUStringToOString("A\ud800B", RTL_TEXTENCODING_UTF8)]).toEqual([65, 63]);
   expect([...OUStringToOString("A\ud800", RTL_TEXTENCODING_UTF8)]).toEqual([65]);
   expect([...OUStringToOString("\udc00", RTL_TEXTENCODING_UTF8)]).toEqual([63]);
+});
+
+it.each([
+  [RTL_TEXTENCODING_MS_932, [0x82, 0xa0], "あ"],
+  [RTL_TEXTENCODING_UTF7, [0x2b, 0x41, 0x4f, 0x6b, 0x2d], "é"],
+  [RTL_TEXTENCODING_ISO_2022_JP, [0x1b, 0x24, 0x42, 0x24, 0x22, 0x1b, 0x28, 0x42], "あ"],
+] as const)("uses the common native dispatch for encoding %s", (encoding, bytes, expected) => {
+  expect(OStringToOUString(Uint8Array.from(bytes), encoding)).toBe(expected);
 });

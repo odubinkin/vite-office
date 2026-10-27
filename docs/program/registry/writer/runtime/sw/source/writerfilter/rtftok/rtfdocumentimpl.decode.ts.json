@@ -17,9 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.decode.ts",
-        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts"
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+        "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.admission.test.ts"
       ],
-      "justification": "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: DecodeBytes. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified.",
+      "justification": "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: DecodeBytes. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced. Full upstream and compiled differential parity remain unverified. RTF byte decoding now uses the source checkUnicode OStringToOUString call instead of a duplicate per-converter dispatch and fixed byte-length output buffer. Retains group-selected encoding and the Symbol font-entry/field-parent MS1252 exception; direct ISCII context manufacture is removed under WRITER181. Native SAL wrapper and actual legacy font/body import tests cover this route; full RTF destination/state/ABI remains unverified.",
       "knownViolations": [],
       "localSymbols": [
         "DecodeBytes"

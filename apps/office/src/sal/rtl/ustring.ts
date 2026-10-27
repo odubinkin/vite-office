@@ -312,3 +312,169 @@ export function rtl_uString_iterateCodePoints(
     incrementCodePoints,
   );
 }
+
+import * as cvt from "../inc/rtl/textcvt.h";
+import {
+  RTL_TEXTENCODING_ASCII_US,
+  RTL_TEXTENCODING_UTF8,
+  type rtl_TextEncoding,
+} from "../inc/rtl/textenc";
+import {
+  rtl_createTextToUnicodeConverter,
+  rtl_convertTextToUnicode,
+  rtl_destroyTextToUnicodeConverter,
+} from "../textenc/textcvt";
+
+/** Original fast UTF8 estimate deliberately classifies leading bytes without validating sequences. @param source - Borrowed byte prefix. @param length - Signed32 length. @param ascii - Output all-ASCII flag. @returns Estimated UTF16 capacity. */
+function rtl_ImplGetFastUTF8UnicodeLen(
+  source: Uint8Array | Int8Array,
+  length: number,
+  ascii: [boolean],
+): number {
+  ascii[0] = true;
+  let count = 0;
+  for (let offset = 0; offset < length; ++count) {
+    const c = (source[offset] as number) & 255;
+    if (!(c & 0x80)) ++offset;
+    else {
+      offset +=
+        (c & 0xe0) === 0xc0
+          ? 2
+          : (c & 0xf0) === 0xe0
+            ? 3
+            : (c & 0xf8) === 0xf0
+              ? 4
+              : (c & 0xfc) === 0xf8
+                ? 5
+                : (c & 0xfe) === 0xfc
+                  ? 6
+                  : 1;
+      ascii[0] = false;
+    }
+  }
+  return count;
+}
+/** Original forward conversion owner releases the old target before conversion, retries from the beginning with eight more units, and keeps partial output on conversion error. Allocation failures retain the source pointer-slot behavior. @param target - Inout owned slot. @param source - Borrowed bytes. @param length - Signed32 count. @param encoding - Unsigned16 encoding. @param flags - Native flags. @param info - Optional result flags. @returns Nothing. */
+function rtl_string2UString_status(
+  target: rtl_uStringSlot,
+  source: Uint8Array | Int8Array | null,
+  length: number,
+  encoding: rtl_TextEncoding,
+  flags: number,
+  info: [number] | null,
+): void {
+  if (!length) {
+    rtl_uString_new(target);
+    if (info !== null) info[0] = 0;
+    return;
+  }
+  if (target[0] !== null) rtl_uString_release(target[0]);
+  const bytes = source as Uint8Array | Int8Array;
+  if (encoding === RTL_TEXTENCODING_ASCII_US) {
+    target[0] = rtl_uString_ImplAlloc(length);
+    if (target[0] === null) {
+      if (info !== null)
+        info[0] = cvt.RTL_TEXTTOUNICODE_INFO_ERROR | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+      return;
+    }
+    let offset = 0;
+    for (; offset < length; ++offset) {
+      const unit = (bytes[offset] as number) & 255;
+      if (unit > 127) {
+        rtl_uString_release(target[0]);
+        break;
+      }
+      target[0].buffer[offset] = unit;
+    }
+    if (offset === length) {
+      if (info !== null) info[0] = 0;
+      return;
+    }
+  }
+  let capacity = length;
+  if (encoding === RTL_TEXTENCODING_UTF8) {
+    const ascii: [boolean] = [false];
+    capacity = rtl_ImplGetFastUTF8UnicodeLen(bytes, length, ascii);
+    if (ascii[0]) {
+      target[0] = rtl_uString_ImplAlloc(length);
+      if (target[0] === null) {
+        if (info !== null)
+          info[0] =
+            cvt.RTL_TEXTTOUNICODE_INFO_ERROR | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+        return;
+      }
+      for (let i = 0; i < length; ++i) target[0].buffer[i] = bytes[i] as number;
+      if (info !== null) info[0] = 0;
+      return;
+    }
+  }
+  flags |= cvt.RTL_TEXTTOUNICODE_FLAGS_FLUSH;
+  const converter = rtl_createTextToUnicodeConverter(encoding),
+    status: [number] = [0],
+    consumed: [number] = [0];
+  let temporary: rtl_uString, written: number;
+  for (;;) {
+    const allocation = rtl_uString_ImplAlloc(capacity);
+    if (allocation === null) {
+      if (info !== null)
+        info[0] = cvt.RTL_TEXTTOUNICODE_INFO_ERROR | cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL;
+      return;
+    }
+    temporary = allocation;
+    written = rtl_convertTextToUnicode(
+      converter,
+      null,
+      bytes,
+      length,
+      temporary.buffer,
+      capacity,
+      flags,
+      status,
+      consumed,
+    );
+    if (!(status[0] & cvt.RTL_TEXTTOUNICODE_INFO_DESTBUFFERTOOSMALL)) break;
+    rtl_stringAllocation.rtl_freeString(temporary);
+    capacity += 8;
+  }
+  if (info !== null) info[0] = status[0];
+  const smaller = capacity > written + 8 ? rtl_uString_ImplAlloc(written) : null;
+  if (smaller !== null) {
+    smaller.buffer.set(temporary.buffer.subarray(0, written));
+    rtl_stringAllocation.rtl_freeString(temporary);
+    temporary = smaller;
+  } else {
+    temporary.length = written;
+    temporary.buffer[written] = 0;
+  }
+  rtl_destroyTextToUnicodeConverter(converter);
+  target[0] = temporary;
+  if (!written) rtl_uString_new(target);
+}
+/** Original unchecked byte-to-Unicode C entry point. @param target - Inout owned slot. @param source - Borrowed bytes. @param length - Signed32 count. @param encoding - Unsigned16 encoding. @param flags - Native flags. @returns Nothing. */
+export function rtl_string2UString(
+  target: rtl_uStringSlot | null,
+  source: Uint8Array | Int8Array | null,
+  length: number,
+  encoding: rtl_TextEncoding,
+  flags: number,
+): void {
+  length |= 0;
+  if (target === null) throw new Error("assert(ppThis)");
+  if (length < 0) throw new Error("assert(nLen >= 0)");
+  rtl_string2UString_status(target, source, length, encoding & 0xffff, flags >>> 0, null);
+}
+/** Original checked wrapper keeps partial converted output even on failure, unlike the reverse wrapper. @param target - Inout owned slot. @param source - Borrowed bytes. @param length - Signed32 count. @param encoding - Unsigned16 encoding. @param flags - Native flags. @returns Whether ERROR is absent. */
+export function rtl_convertStringToUString(
+  target: rtl_uStringSlot | null,
+  source: Uint8Array | Int8Array | null,
+  length: number,
+  encoding: rtl_TextEncoding,
+  flags: number,
+): boolean {
+  length |= 0;
+  if (target === null) throw new Error("assert(target)");
+  if (length < 0) throw new Error("assert(length >= 0)");
+  const info: [number] = [0];
+  rtl_string2UString_status(target, source, length, encoding & 0xffff, flags >>> 0, info);
+  return (info[0] & cvt.RTL_TEXTTOUNICODE_INFO_ERROR) === 0;
+}

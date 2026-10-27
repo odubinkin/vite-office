@@ -1,22 +1,25 @@
 /** @fileoverview Observes unchanged original byte ownership and checked conversion over real core SAL descriptors. */
+import { resolve } from "node:path";
+import { pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 const root = "vendor/libreoffice-reference/",
   target = "output/playwright/rtl-string-convert-native",
   sources = {};
+export { sources };
 /** Loads pinned original source. @param path - Original path. @returns Original text. */
-function source(path) {
+export function source(path) {
   const text = readFileSync(root + path, "utf8");
   sources[path] = createHash("sha256").update(text).digest("hex");
   return text;
 }
 /** Retains original bodies while removing external include directives. @param text - Original source. @returns Adapted text. */
-function includes(text) {
+export function includes(text) {
   return text.replace(/^#include.*$/gm, "");
 }
 /** Extracts one unchanged balanced definition, skipping strings and comments. @param text - Source. @param marker - Unique definition marker. @returns Exact original definition. */
-function definition(text, marker) {
+export function definition(text, marker) {
   const start = text.indexOf(marker);
   if (start < 0) throw new Error(`Missing original definition: ${marker}`);
   const first = text.indexOf("{", start);
@@ -184,7 +187,7 @@ const inputs = [
   [65, 0xe9, 66],
 ];
 const combinations = [0, 0x11, 0x101, 0x566, 0x22, 0x8466];
-const driver = String.raw`
+export const driver = String.raw`
 #include <algorithm>
 #include <cassert>
 #include <concepts>
@@ -260,34 +263,39 @@ for(unsigned encoding:{1u,11u,12u,76u})for(bool checked:{false,true}){std::uint3
 std::cout<<"],\"cases\":[";comma=false;std::vector<std::vector<sal_Unicode>> inputs={${inputs.map((a) => `{${a.join(",")}}`).join(",")}};
 for(unsigned encoding:{1u,11u,12u,76u})for(unsigned input=0;input<inputs.size();++input)for(unsigned flags:{${combinations.map((f) => `${f}u`).join(",")}})for(bool checked:{false,true}){auto r=convert(encoding,inputs[input],flags,checked);if(comma)std::cout<<',';comma=true;std::cout<<"{\"encoding\":"<<encoding<<",\"input\":"<<input<<",\"flags\":"<<flags<<",\"checked\":"<<checked<<",\"ok\":"<<r.ok<<",\"same\":"<<r.same<<",\"ref\":"<<r.ref<<",\"length\":"<<r.length<<",\"id\":"<<r.id<<",\"bytes\":[";for(unsigned i=0;i<r.bytes.size();++i){if(i)std::cout<<',';std::cout<<r.bytes[i];}std::cout<<"],\"events\":[";for(unsigned i=0;i<r.events.size();++i){if(i)std::cout<<',';auto e=r.events[i];std::cout<<'['<<e.kind<<','<<e.id<<','<<e.bytes<<']';}std::cout<<"]}";}std::cout<<"]}\n";}
 `;
-mkdirSync(target, { recursive: true });
-writeFileSync(`${target}/probe.cxx`, driver);
-execFileSync(
-  "clang++",
-  [
-    "-std=c++20",
-    "-O1",
-    "-g",
-    "-fsigned-char",
-    "-fsanitize=address,undefined",
-    "-fno-sanitize-recover=all",
-    `${target}/probe.cxx`,
-    "-o",
-    `${target}/probe`,
-  ],
-  { stdio: "inherit" },
-);
-const result = JSON.parse(
-  execFileSync(`${target}/probe`, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }),
-);
-writeFileSync(
-  "apps/office/src/sal/rtl/string-convert.native.json",
-  `${JSON.stringify({ baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65", driverHash: createHash("sha256").update(driver).digest("hex"), scope: "Unchanged original checked/unchecked UTF16-to-byte wrappers, byte ownership templates/C wrappers, core factory descriptors, UTF8/single-byte converters and helper/classification dependencies. Primitive SAL types, original atomic macros and malloc/free allocator globals. Full registry service traps and is never invoked. Nonfatal diagnostic/log macros omitted. Real replaceable allocator hooks observe sizes, identities and frees; ASan/UBSan enabled. Core encodings only; not full SAL ABI, OSL or Writer parity.", sources, inputs, ...result }, null, 2)}\n`,
-);
-console.log(
-  JSON.stringify({
-    bmpCases: result.digests.length * 65536,
-    vectors: result.cases.length,
-    sanitized: true,
-  }),
-);
+/** Runs the original reverse-wrapper probe when invoked directly. @returns Nothing. */
+export function runReverseProbe() {
+  mkdirSync(target, { recursive: true });
+  writeFileSync(`${target}/probe.cxx`, driver);
+  execFileSync(
+    "clang++",
+    [
+      "-std=c++20",
+      "-O1",
+      "-g",
+      "-fsigned-char",
+      "-fsanitize=address,undefined",
+      "-fno-sanitize-recover=all",
+      `${target}/probe.cxx`,
+      "-o",
+      `${target}/probe`,
+    ],
+    { stdio: "inherit" },
+  );
+  const result = JSON.parse(
+    execFileSync(`${target}/probe`, { encoding: "utf8", maxBuffer: 8 * 1024 * 1024 }),
+  );
+  writeFileSync(
+    "apps/office/src/sal/rtl/string-convert.native.json",
+    `${JSON.stringify({ baselineCommit: "9bc445578031fecf56086729d8e4940c77e14d65", driverHash: createHash("sha256").update(driver).digest("hex"), scope: "Unchanged original checked/unchecked UTF16-to-byte wrappers, byte ownership templates/C wrappers, core factory descriptors, UTF8/single-byte converters and helper/classification dependencies. Primitive SAL types, original atomic macros and malloc/free allocator globals. Full registry service traps and is never invoked. Nonfatal diagnostic/log macros omitted. Real replaceable allocator hooks observe sizes, identities and frees; ASan/UBSan enabled. Core encodings only; not full SAL ABI, OSL or Writer parity.", sources, inputs, ...result }, null, 2)}\n`,
+  );
+  console.log(
+    JSON.stringify({
+      bmpCases: result.digests.length * 65536,
+      vectors: result.cases.length,
+      sanitized: true,
+    }),
+  );
+}
+if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.meta.url)
+  runReverseProbe();

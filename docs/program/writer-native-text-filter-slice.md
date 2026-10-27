@@ -342,3 +342,14 @@ browser undo-node ID carrier distinguishes restored live nodes from retained
 disconnected content; it is not the native separate SwNodes undo section.
 Complete UNO/import-cache and remaining transient owner closure is still open,
 as are font-table initialization and the other filter gaps listed above.
+
+RTF collected bytes now use the native SAL forward string wrapper. This removes
+the duplicated encoding switch and fixed byte-count output estimate, and restores
+native checked/unchecked ownership, retry sizing and Symbol font-entry handling.
+The native witness covers 524288 core byte-pair calls and 720 mixed vectors,
+including actual allocation/free traces; it does not certify the full encoding
+registry or ABI. WRITER188 preserves the source allocation-failure pointer alias,
+and WRITER181 also records the forward ISCII null-context mismatch. RTF no longer
+manufactures a special ISCII context outside the source string-wrapper contract.
+Font initialization, Markdown HTML-reader composition and the other open gaps
+above remain required before whole-slice completion.

@@ -49,6 +49,8 @@ export {
   rtl_uString_newFromStr_WithLength,
   rtl_uString_newFromString,
   rtl_uString_release,
+  rtl_string2UString,
+  rtl_convertStringToUString,
   rtl_uString_iterateCodePoints,
 } from "../../rtl/ustring";
 

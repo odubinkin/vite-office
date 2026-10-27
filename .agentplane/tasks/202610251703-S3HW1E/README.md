@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 98
+revision: 99
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-27T00:53:59.632Z"
+doc_updated_at: "2026-10-27T01:02:32.835Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -302,6 +302,15 @@ sections:
     - Checks passed: office TypeScript; focused ESLint; source provenance (1557 modules); module boundaries (1556 sources, 8014 imports, 203 edges); Writer and shared registries (zero semantic violations); file-size gate (3602 authored files). Final undo/txtnode focused rerun is pending at this documentation checkpoint.
     - Residual gaps: remaining transient/import/UNO owners, global item-instance sharing, font-table InitFontTable/default/numbering collection, forward SAL string wrapper and Markdown HTMLReader composition remain open. Task stays DOING and goal active; no complete filter parity assertion.
     - Final focused command: npm run test:writer -- src/sw/source/core/undo/ src/sw/source/core/txtnode/ --reporter=json --outputFile=../../output/playwright/stylepool-native/undo-lifetime-final.json. Result: pass, 8382/8382 tests; no failures. The final targeted formatting and lifetime checks passed; the broad 12309-case initial run is retained as debugging evidence, not reported as an all-pass run.
+
+    ### Native forward SAL string owner and RTF decoding checkpoint
+    - Implemented pinned rtl_ImplGetFastUTF8UnicodeLen, rtl_string2UString_status, rtl_string2UString and rtl_convertStringToUString at the original ustring physical owner and C declaration boundary. Preserves old-target release before allocation, ASCII attempt/retry, UTF8 capacity estimate, FLUSH/null context, repeated +8-unit full-source conversion, shrink-allocation fallback, terminator/static-empty and partial checked output. Original octet-encoding OSL diagnostic remains nonfatal. Existing explicit UTF16 byte bridge is a bounded application adaptation and remains unchanged.
+    - OStringToOUString uses this actual owner for octet encodings. RTF checkUnicode byte path now calls OStringToOUString instead of carrying a second converter switch and a fixed byte-count output buffer; retains the native Symbol font-entry/field-parent MS1252 exception.
+    - Source issues: WRITER188 records the original released-target alias on temporary allocation failure, preserved by failure-injection coverage. WRITER181 now also records the forward ISCII null-context contract mismatch. Removed the RTF-only manufactured ISCII context; its former success fixture is replaced by an explicit JavaScript TypeError callback-boundary test. Native null-object execution remains undefined and is not executed by the sanitized witness.
+    - Native evidence: node scripts/rtl-ustring-convert-native-probe.mjs compiles unchanged original wrapper/allocator/core descriptor/conversion bodies with ASan/UBSan. 524288 core byte-pair cases and 720 mixed/flag vectors match the TypeScript wrapper, including checked results, target identity, static empty refcount, terminator and full allocation/free trace. Nonstatic interning/full-registry services trap and are never called. Full ABI, full encoding registry and allocation-failure native execution are not certified. The reverse probe was refactored for reuse without changing its observations and rerun successfully (524288 BMP calls,720 vectors).
+    - Validation: shared SAL RTL and stream tests pass,115 tests/23 files; Writer RTF tokenizer/document and encoding tests pass,195/7; Writer TXT/general RTF tests pass,37/3. Office typecheck, scoped ESLint, provenance1557, boundaries1556sources/8004imports/203edges, Writer and shared registry zero semantic violations pass.
+    - Debugging: initial native mixed-vector flag values included invalid MB policies and triggered the original assertion; corrected to the actual source-valid flags and reran successfully. A guessed producer path was absent; actual path was discovered and route refreshed. No network, SDK download or external publication.
+    - Remaining: wwFontHelper InitFontTable/global defaults/used numbering, common item insertion/HTMLReader for Markdown, remaining lifecycle/global interning and other matrix gaps still prevent complete slice/filter parity. Task remains DOING and goal active.
 id_source: "generated"
 ---
 ## Summary
@@ -582,3 +591,12 @@ Observation: runtime metadata initially listed reexported header functions as lo
 - Checks passed: office TypeScript; focused ESLint; source provenance (1557 modules); module boundaries (1556 sources, 8014 imports, 203 edges); Writer and shared registries (zero semantic violations); file-size gate (3602 authored files). Final undo/txtnode focused rerun is pending at this documentation checkpoint.
 - Residual gaps: remaining transient/import/UNO owners, global item-instance sharing, font-table InitFontTable/default/numbering collection, forward SAL string wrapper and Markdown HTMLReader composition remain open. Task stays DOING and goal active; no complete filter parity assertion.
 - Final focused command: npm run test:writer -- src/sw/source/core/undo/ src/sw/source/core/txtnode/ --reporter=json --outputFile=../../output/playwright/stylepool-native/undo-lifetime-final.json. Result: pass, 8382/8382 tests; no failures. The final targeted formatting and lifetime checks passed; the broad 12309-case initial run is retained as debugging evidence, not reported as an all-pass run.
+
+### Native forward SAL string owner and RTF decoding checkpoint
+- Implemented pinned rtl_ImplGetFastUTF8UnicodeLen, rtl_string2UString_status, rtl_string2UString and rtl_convertStringToUString at the original ustring physical owner and C declaration boundary. Preserves old-target release before allocation, ASCII attempt/retry, UTF8 capacity estimate, FLUSH/null context, repeated +8-unit full-source conversion, shrink-allocation fallback, terminator/static-empty and partial checked output. Original octet-encoding OSL diagnostic remains nonfatal. Existing explicit UTF16 byte bridge is a bounded application adaptation and remains unchanged.
+- OStringToOUString uses this actual owner for octet encodings. RTF checkUnicode byte path now calls OStringToOUString instead of carrying a second converter switch and a fixed byte-count output buffer; retains the native Symbol font-entry/field-parent MS1252 exception.
+- Source issues: WRITER188 records the original released-target alias on temporary allocation failure, preserved by failure-injection coverage. WRITER181 now also records the forward ISCII null-context contract mismatch. Removed the RTF-only manufactured ISCII context; its former success fixture is replaced by an explicit JavaScript TypeError callback-boundary test. Native null-object execution remains undefined and is not executed by the sanitized witness.
+- Native evidence: node scripts/rtl-ustring-convert-native-probe.mjs compiles unchanged original wrapper/allocator/core descriptor/conversion bodies with ASan/UBSan. 524288 core byte-pair cases and 720 mixed/flag vectors match the TypeScript wrapper, including checked results, target identity, static empty refcount, terminator and full allocation/free trace. Nonstatic interning/full-registry services trap and are never called. Full ABI, full encoding registry and allocation-failure native execution are not certified. The reverse probe was refactored for reuse without changing its observations and rerun successfully (524288 BMP calls,720 vectors).
+- Validation: shared SAL RTL and stream tests pass,115 tests/23 files; Writer RTF tokenizer/document and encoding tests pass,195/7; Writer TXT/general RTF tests pass,37/3. Office typecheck, scoped ESLint, provenance1557, boundaries1556sources/8004imports/203edges, Writer and shared registry zero semantic violations pass.
+- Debugging: initial native mixed-vector flag values included invalid MB policies and triggered the original assertion; corrected to the actual source-valid flags and reran successfully. A guessed producer path was absent; actual path was discovered and route refreshed. No network, SDK download or external publication.
+- Remaining: wwFontHelper InitFontTable/global defaults/used numbering, common item insertion/HTMLReader for Markdown, remaining lifecycle/global interning and other matrix gaps still prevent complete slice/filter parity. Task remains DOING and goal active.

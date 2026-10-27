@@ -290,3 +290,28 @@ it("clears the active superscript before appending normal text", /** Checks nati
     doc.Dispose();
   }
 });
+
+it("decodes legacy font names and body bytes through the same native SAL wrapper", () => {
+  const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset128 \'82\'a0;}}\f0\'82\'a0}`;
+  const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    expect(node.GetText()).toBe("あ");
+    expect(projectWriterTextRuns(node)[0]?.attributes.fontFamily).toBe("あ");
+  } finally {
+    doc.Dispose();
+  }
+});
+it("uses MS1252 for Symbol font-entry hex bytes and preserves Symbol body conversion", () => {
+  const source = String.raw`{\rtf1{\fonttbl{\f0\fcharset2 \'53\'79\'6d\'62\'6f\'6c;}}\f0\'41}`;
+  const doc = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(source));
+  try {
+    const node = doc.paragraphs[0];
+    assert(node);
+    expect(node.GetText()).toBe("\uf041");
+    expect(projectWriterTextRuns(node)[0]?.attributes.fontFamily).toBe("Symbol");
+  } finally {
+    doc.Dispose();
+  }
+});
