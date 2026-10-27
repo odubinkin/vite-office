@@ -97,10 +97,10 @@
     "status": "pass"
   },
   "publication": {
-    "writer": "pushed 1d696773a",
-    "calc": "pushed b7243fe91",
-    "main": "not pushed; coverage approval pending",
-    "reverseMerges": "not performed; main publication pending"
+    "main": "e168a4fe7d1fb89c99508d8578d7ae86c82d4796",
+    "writer": "8959e85c7dbd4783447efce8653e6c9338ab324f",
+    "calc": "98755eab1a559b3993ca6bcde4a6f914b8d4f3f5",
+    "status": "published and synchronized; final closure record will be propagated as well"
   },
   "postRegressionCoverage": {
     "method": "Conservative standard Istanbul union of earlier full suite and current source-owner scopes. Changed owners replace old maps entirely; earlier observations of unchanged functions in those owners are not transplanted. This is not a fresh full-suite coverage invocation.",

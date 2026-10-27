@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc branches and synchronize all checkouts"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 30
+revision: 31
 origin:
   system: "manual"
 depends_on: []
@@ -18,9 +18,9 @@ plan_approval:
   note: null
 verification:
   state: "ok"
-  updated_at: "2026-10-27T05:29:58.439Z"
+  updated_at: "2026-10-27T05:32:37.702Z"
   updated_by: "CODER"
-  note: "All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish."
+  note: "Main published; reverse merges and pushes completed for Writer and Calc. All three tracked trees identical, local branch heads equal origin, main is an ancestor of both development heads, local main refs current, tracked states clean. Preserved pre-existing untracked artifacts. User-accepted residual coverage is documented;1931new/changed tests and final helper checks pass. Only closure-record propagation remains."
   attempts: 0
 quality_review:
   state: "pass"
@@ -86,8 +86,14 @@ events:
     author: "CODER"
     state: "ok"
     note: "All1931new/changed tests and9final helper regressions pass; current full TypeScript, scoped lint/format/docs, affected owner checks and build pass. Completed537E2E,159tooling and130inventory tests retained. User explicitly accepted residual application coverage and waived full-suite repetition; thresholds unchanged. Network synchronization remains to execute before finish."
+  -
+    type: "verify"
+    at: "2026-10-27T05:32:37.702Z"
+    author: "CODER"
+    state: "ok"
+    note: "Main published; reverse merges and pushes completed for Writer and Calc. All three tracked trees identical, local branch heads equal origin, main is an ancestor of both development heads, local main refs current, tracked states clean. Preserved pre-existing untracked artifacts. User-accepted residual coverage is documented;1931new/changed tests and final helper checks pass. Only closure-record propagation remains."
 doc_version: 3
-doc_updated_at: "2026-10-27T05:29:58.497Z"
+doc_updated_at: "2026-10-27T05:32:37.761Z"
 doc_updated_by: "CODER"
 description: "User-approved integration: commit current Writer work, push Writer and Calc, merge both into main, resolve conflicts, run full project verification and repair regressions, push main, then merge main back and push both development branches. Preserve local generated artifacts and finish on original branch names."
 sections:
@@ -131,6 +137,36 @@ sections:
     - freshness: route=computed_local remote=remote_skipped
     - repeat_allowed: false
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-27T05:32:37.702Z — VERIFY — ok
+
+    By: CODER
+
+    Note: Main published; reverse merges and pushes completed for Writer and Calc. All three tracked trees identical, local branch heads equal origin, main is an ancestor of both development heads, local main refs current, tracked states clean. Preserved pre-existing untracked artifacts. User-accepted residual coverage is documented;1931new/changed tests and final helper checks pass. Only closure-record propagation remains.
+    Attempts: 0
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T05:29:58.497Z, excerpt_hash=sha256:2d26fcbfe34fec734c192c2f92ef3a4312f41ddc1c73705274be6f89c62c0c4d
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
+    - old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+    - current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task complete 202610270250-6VDB2H --result verified-202610270250-6VDB2H --commit e168a4fe7d1fb89c99508d8578d7ae86c82d4796
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
     <!-- END VERIFICATION RESULTS -->
@@ -224,6 +260,36 @@ DecisionContextRef:
 - freshness: route=computed_local remote=remote_skipped
 - repeat_allowed: false
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-27T05:32:37.702Z — VERIFY — ok
+
+By: CODER
+
+Note: Main published; reverse merges and pushes completed for Writer and Calc. All three tracked trees identical, local branch heads equal origin, main is an ancestor of both development heads, local main refs current, tracked states clean. Preserved pre-existing untracked artifacts. User-accepted residual coverage is documented;1931new/changed tests and final helper checks pass. Only closure-record propagation remains.
+Attempts: 0
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-27T05:29:58.497Z, excerpt_hash=sha256:2d26fcbfe34fec734c192c2f92ef3a4312f41ddc1c73705274be6f89c62c0c4d
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610270250-6VDB2H/blueprint/resolved-snapshot.json
+- old_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+- current_digest: 37de21fd03d8e2a33684c090afadb154a7b42ef436b2a7ffba21aaf1a8bf2e7c
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610270250-6VDB2H
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task complete 202610270250-6VDB2H --result verified-202610270250-6VDB2H --commit e168a4fe7d1fb89c99508d8578d7ae86c82d4796
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
 <!-- END VERIFICATION RESULTS -->
