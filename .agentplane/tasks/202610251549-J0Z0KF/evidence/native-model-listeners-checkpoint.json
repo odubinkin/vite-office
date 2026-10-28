@@ -1,0 +1,244 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native listener/COW/model callback block; full task incomplete and current full coverage gate failed for preserved source branch",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/inc/interfacecontainer3.test.ts": "6c655dde5097aef5256a1758fedd46b9b27b048d",
+    "apps/office/src/comphelper/inc/interfacecontainer3.ts": "e818289fce04222ad8e8539d4f7d6702c0ac8227",
+    "apps/office/src/o3tl/inc/cow_wrapper.test.ts": "6ceeb22f95cf66cab9dda21318560af5a4e51a7d",
+    "apps/office/src/o3tl/inc/cow_wrapper.ts": "6da5d2194a39118ff909f57c3e6f639a71f45fbf",
+    "apps/office/src/offapi/com/sun/star/document/EventObject.ts": "5341ec3aa43f7743a82fb95b09c532d48bdffe68",
+    "apps/office/src/offapi/com/sun/star/document/XEventListener.ts": "3af85b2cce0b52c2e57c8b00c1427b155839adbe",
+    "apps/office/src/offapi/com/sun/star/util/XModifyListener.ts": "554a394d4e77da15f2bd2c54aa8dd6b7cccf4860",
+    "apps/office/src/sfx2/source/doc/native-model-listeners.test.ts": "2fc16b25eee8e4b2b40761da5451b7d4f505c843",
+    "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": "cd85c1b759c515b210925f45cfaf817180f12d38",
+    "docs/program/calc-upstream-suspected-issues.md": "bb33b939ab89939e2877aea18ab39d1be0634b49",
+    "docs/program/registry/calc/capabilities/CAP-ef082a1c-04b5-4c68-bf19-dbfd0dea0280.json": "3470f4f4c6da61643fd5e2845bc7620a073d3848",
+    "docs/program/registry/shared/provenance/comphelper/inc/interfacecontainer3.ts.json": "0f0a7452fdb2bb92fed992d076b581053830cc41",
+    "docs/program/registry/shared/provenance/o3tl/inc/cow_wrapper.ts.json": "7d935f5362a03923b41e38d8161b52b2f84fc57a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/document/EventObject.ts.json": "683d8c50f0bce80208dc22a61e6aa3b5eaea2750",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XEventListener.ts.json": "170b47b867ea71e8e49a68dfba20b5b6ec2b1eb6",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/util/XModifyListener.ts.json": "d0a665171b68284bf362b1bb73aa77e8a7799810",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/sfxbasemodel.ts.json": "1b97d9f0a0bbada374005c1e1df08758902b2c24",
+    "docs/program/registry/shared/runtime/comphelper/inc/interfacecontainer3.ts.json": "4fea3650a734cc3c2a998a4cd00fc8233ee25511",
+    "docs/program/registry/shared/runtime/o3tl/inc/cow_wrapper.ts.json": "6ef5d3eca193088d6c3f955f12686f6f51677056",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/document/EventObject.ts.json": "1be1878ba3bdb6a27d11a35f09a64520bd4ca367",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XEventListener.ts.json": "19dd5bec91df4f3cd99db29c4590eafb67169b12",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/util/XModifyListener.ts.json": "7ce0af3cde0ee847c4dfa9c35d26203a51c2e701",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/sfxbasemodel.ts.json": "49b66edc32b5de9946511de0bd8cfe0cbac6d74e",
+    "docs/program/uno-model-sdk.md": "a178303faa28269f715b9e49312861e99c1e43a7",
+    "scripts/check-module-boundaries.mjs": "ea89d7c4a483ba93a441f3e853789ee17d88a195",
+    "scripts/native-model-listener-boundary.test.ts": "8dd818b9c4baec01da2bf5d94e9567f36bef73a5"
+  },
+  "scope": "Consumed original cow_wrapper ownership and refcount policies; complete represented listener container/iterator algorithms with actual References; model registration overloads, initialization guards and original disposing queries/priority; actual published listener SDK declarations and document event field declaration. No replacement component/query/type provider or fake mutex is supplied.",
+  "checks": {
+    "testsfinal": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sfx2/source/doc/native-model-listeners.test.ts src/sfx2/source/doc/native-model-child.test.ts src/sc/source/ui/unoobj/docuno.test.ts src/o3tl/inc/cow_wrapper.test.ts src/comphelper/inc/interfacecontainer3.test.ts --coverage.include=src/sfx2/source/doc/sfxbasemodel.ts --coverage.include=src/o3tl/inc/cow_wrapper.ts --coverage.include=src/comphelper/inc/interfacecontainer3.ts --coverage.include=src/offapi/com/sun/star/util/XModifyListener.ts --coverage.include=src/offapi/com/sun/star/document/XEventListener.ts --coverage.reportsDirectory=coverage/model-listeners-final --maxWorkers=2",
+      "result": "fail coverage gate;22tests/5files pass; retained original CALC-357 source branch",
+      "log": "apps/office/coverage/model-listeners-testsfinal.log",
+      "sha256": "593138a3259166afbf0a7dceda0481f4e674f2f73d1d6387079c4cbd8444e94f"
+    },
+    "related": {
+      "command": "npm run test:shared -- src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/cppu/inc/com/sun/star/lang/DisposedException.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts src/offapi/com/sun/star/frame/native-model-interfaces.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-related.log",
+      "sha256": "a4cef39ec6cfd36cfa5d3fa5e278a3eb1c7c6187b787c85000d80cda3ecfb43e"
+    },
+    "calc": {
+      "command": "npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-calc.log",
+      "sha256": "78c431b80c668977f15a7be7b7787b2152e729a65526e554787333b08e900b3c"
+    },
+    "tooling": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/native-attribute-value-boundary.test.ts scripts/native-input-event-boundary.test.ts scripts/native-model-listener-boundary.test.ts --maxWorkers 2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-tooling.log",
+      "sha256": "7a4e3f08f90aa6bbc33784a44b810a82ef770c1d73f265dda62f5c71150e0b40"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "build": {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-build.log",
+      "sha256": "3867880bcad6966475ddb06e22da7cdda2db33c167fbdb6fdce145df614d8f26"
+    },
+    "deps": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-deps.log",
+      "sha256": "d8de7d5d31f9dcd0821a336012282c737556f3146fc425ed16242eea994ee306"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-docs.log",
+      "sha256": "64673b76cf3ed70a59483c977268cb045b233ee189499890a00801da12da9d2d"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-size.log",
+      "sha256": "03191ba1fdd77979d231d80055863ee86cb503f619a39305732001095dd1edcb"
+    },
+    "tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-provenance.log",
+      "sha256": "69dd08fa57a33e4a12749bae901e4c8b306d899dbf597b1a9a2cd36e90c6b4ce"
+    },
+    "registrycheck": {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-registrycheck.log",
+      "sha256": "ac303dec84b6ed7c6edebcc9fe5b66ea0ce01f224b43f15bb65a70fe4afe2d24"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-doctor.log",
+      "sha256": "95c26dd8071e59f225fd87c09b86c35f8788bb24a86bdd4c08400369dbae16e4"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "lint": {
+      "command": "npx eslint apps/office/src/comphelper/inc/interfacecontainer3.test.ts apps/office/src/comphelper/inc/interfacecontainer3.ts apps/office/src/o3tl/inc/cow_wrapper.test.ts apps/office/src/o3tl/inc/cow_wrapper.ts apps/office/src/offapi/com/sun/star/document/EventObject.ts apps/office/src/offapi/com/sun/star/document/XEventListener.ts apps/office/src/offapi/com/sun/star/util/XModifyListener.ts apps/office/src/sfx2/source/doc/native-model-listeners.test.ts apps/office/src/sfx2/source/doc/sfxbasemodel.ts scripts/check-module-boundaries.mjs scripts/native-model-listener-boundary.test.ts --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check apps/office/src/comphelper/inc/interfacecontainer3.test.ts apps/office/src/comphelper/inc/interfacecontainer3.ts apps/office/src/o3tl/inc/cow_wrapper.test.ts apps/office/src/o3tl/inc/cow_wrapper.ts apps/office/src/offapi/com/sun/star/document/EventObject.ts apps/office/src/offapi/com/sun/star/document/XEventListener.ts apps/office/src/offapi/com/sun/star/util/XModifyListener.ts apps/office/src/sfx2/source/doc/native-model-listeners.test.ts apps/office/src/sfx2/source/doc/sfxbasemodel.ts scripts/check-module-boundaries.mjs scripts/native-model-listener-boundary.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/model-listeners-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "twoOwnerWholeEntries": {
+      "command": "node --input-type=module: read unmodified model-listeners-final/coverage-final.json through istanbul-lib-coverage; assert statements/branches/functions/lines100 for both complete o3tl/inc/cow_wrapper.ts and comphelper/inc/interfacecontainer3.ts entries",
+      "result": "pass current two-owner whole entries100 S148/148 B43/43 F49/49 L135/135; the full profile still fails",
+      "log": "apps/office/coverage/model-listeners-cow100.log",
+      "sha256": "38097f28cf6b1f61aab3d08beafc8bdeeaafe66e20caaa5eed5ac8bb012e4fdb"
+    }
+  },
+  "rawCoverage": {
+    "path": "apps/office/coverage/model-listeners-final/coverage-final.json",
+    "sha256": "a5200f974899d2b3534cc4b5f36a757b424ac2a9e7219ebbd42599813548bb75",
+    "files": {
+      "apps/office/src/comphelper/inc/interfacecontainer3.ts": {
+        "s": {
+          "covered": 85,
+          "total": 85
+        },
+        "b": {
+          "covered": 18,
+          "total": 18
+        },
+        "f": {
+          "covered": 26,
+          "total": 26
+        }
+      },
+      "apps/office/src/o3tl/inc/cow_wrapper.ts": {
+        "s": {
+          "covered": 63,
+          "total": 63
+        },
+        "b": {
+          "covered": 25,
+          "total": 25
+        },
+        "f": {
+          "covered": 23,
+          "total": 23
+        }
+      },
+      "apps/office/src/offapi/com/sun/star/document/XEventListener.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/offapi/com/sun/star/util/XModifyListener.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": {
+        "s": {
+          "covered": 75,
+          "total": 76
+        },
+        "b": {
+          "covered": 35,
+          "total": 36
+        },
+        "f": {
+          "covered": 16,
+          "total": 16
+        }
+      }
+    },
+    "result": "22tests pass; full scope FAIL S241/242 B82/83 F71/71 L223/224; only original SfxBaseModel document-removal arm uncovered. All other complete file entries100. No thresholds/exclusions/counters edited."
+  },
+  "tests": {
+    "focused": "22pass/5files; coverage command exits1",
+    "relatedShared": "47pass/6files",
+    "CalcODSCSV": "51pass/4files",
+    "tooling": "50pass/4files",
+    "uniqueTotal": 170
+  },
+  "sourceIssue": "CALC-357: actual document XEventListener inherits language XEventListener, so the earlier language query/removal shadows the document arm. Real WeakImplHelper listener retains that source behavior. No invalid query provider is created to force the arm.",
+  "initialCorrections": [
+    "Two compiler-emitted anonymous specialization classes needed their JSDoc annotations; fixed without behavioral changes.",
+    "disposeAndClear now directly clears its actual vector as upstream rather than routing through the public clear method; only this affected implementation/targeted profile was revalidated. Earlier two-owner145/145 capture is superseded by current whole-entry148/148 evidence.",
+    "Source-backed comphelper->o3tl and sfx2->comphelper/offapi dependencies were admitted with reverse/browser rejection tests."
+  ],
+  "limitations": [
+    "No full task verification: original complete XModel/factory/controller/undo/property/broadcast/UNO close-dispose/filter/workbook/UI paths remain pending.",
+    "Native mutex scopes are omitted by synchronous binding; actual native shared-object/thread/ABI/static-shutdown behavior is unverified. Counters represent the selected64-bit size_t policy; cross-target native layouts are not certified.",
+    "COW T value/rvalue constructors and nonmember value comparisons remain unported. Document EventObject is an IDL field declaration only; generated runtime value constructors/copy/destruction/metadata remain unported.",
+    "Model declares only implemented XChild and language XEventListener; static language/document overload declaration tokens erase original C++ compile-time selection, without dynamic guessing.",
+    "Host Dispose remains the explicit destructor binding, separate from native UNO close/dispose; tests do not claim calls on destroyed native C++ objects.",
+    "No independently compiled new native differential or complete original QA port is claimed. Full suite not run at this checkpoint under the approved cadence.",
+    "Doctor retains the existing managed pre-push readiness warning; no hooks/global settings changed."
+  ],
+  "workingTree": "Only26 intentional source/registry/docs/tooling paths and canonical task artifacts. Postcommit clean status must be checked separately."
+}
