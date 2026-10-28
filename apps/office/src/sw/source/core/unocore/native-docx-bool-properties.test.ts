@@ -86,7 +86,7 @@ it.each([0, 2, 28])(
     threshold,
   ) => {
     const model = new SwXTextDocument(createWriterDocument()),
-      mapper = new DomainMapper(model);
+      mapper = new DomainMapper(model, SourceDocumentType.OOXML);
     try {
       mapper.startParagraphGroup();
       mapper.startCharacterGroup();
@@ -126,3 +126,5 @@ it.each([0, 2, 28])(
     }
   },
 );
+
+import { SourceDocumentType } from "../../writerfilter/inc/dmapper/DomainMapperFactory";

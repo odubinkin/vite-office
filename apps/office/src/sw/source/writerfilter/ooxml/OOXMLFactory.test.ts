@@ -174,7 +174,7 @@ it("uses original typed lexical conversions, integer prefix/overflow rules and i
 
 it("dispatches attributes in native schema order and resolves converted indent values through actual Writer model APIs", /** Checks source dispatch plus canonical SwDoc mutations, without an XML-to-document DTO. @returns Nothing. */ () => {
   const model = new SwXTextDocument(createWriterDocument()),
-    mapper = new DomainMapper(model),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML),
     receiver = new Receiver(define("CT_Ind"));
   Factory.attributes(receiver, [
     { token: nativeToken("doc:firstLine"), value: "360" },
@@ -254,3 +254,5 @@ it.skipIf(!existsSync("../../vendor/libreoffice-reference/sw/source/writerfilter
     expect(output).toContain("attributes=107, elements=355, resources=428, lists=315, actions=41");
   },
 );
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

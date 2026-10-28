@@ -39,9 +39,24 @@ export class DomainMapper_Impl {
   private defaultParaStyleName = "";
   private currentParaStyleName = "";
   private inStyleSheetImport = false;
-  /** Borrows actual Writer model/text interfaces. @param model - Destination model. @returns Mapper state. */
-  constructor(readonly model: SwXTextDocument) {
+  /** Borrows actual Writer model/text interfaces. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @returns Mapper state. */
+  constructor(
+    readonly model: SwXTextDocument,
+    private readonly m_eDocumentType: SourceDocumentType,
+  ) {
     this.body = model.getText();
+  }
+  /** Original immutable source-format query. @returns Whether RTF. */
+  IsRTFImport(): boolean {
+    return this.m_eDocumentType === SourceDocumentType.RTF;
+  }
+  /** Original immutable source-format query. @returns Whether OOXML. */
+  IsOOXMLImport(): boolean {
+    return this.m_eDocumentType === SourceDocumentType.OOXML;
+  }
+  /** Original stylesheet phase query. @returns Whether importing a style. */
+  IsStyleSheetImport(): boolean {
+    return this.inStyleSheetImport;
   }
   /** Original borrowed document supplier. @returns Actual model. */
   GetTextDocument(): SwXTextDocument {
@@ -227,3 +242,5 @@ export class DomainMapper_Impl {
     this.styleSheetTable.dispose();
   }
 }
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

@@ -330,3 +330,133 @@ it("keeps an original character style at index zero separate from the paragraph 
   expect(named(doc)[0]?.style).toBe(style);
   expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(true);
 });
+
+it.each([
+  [String.raw`\striked\strike0`, FontStrikeout.STRIKEOUT_DOUBLE],
+  [String.raw`\strike\striked0`, FontStrikeout.STRIKEOUT_SINGLE],
+  [String.raw`\strike\striked\strike`, FontStrikeout.STRIKEOUT_DOUBLE],
+  [String.raw`\striked\strike`, FontStrikeout.STRIKEOUT_SINGLE],
+])(
+  "keeps independent ordered native strike modifiers for %s",
+  /** False toggles do not overwrite a previously mapped strike kind; repeated source keys retain their insertion position. @param controls - Original controls. @param expected - Native strike kind. @returns Nothing. */ (
+    controls,
+    expected,
+  ) => {
+    const doc = read(String.raw`{\rtf1` + controls + " Text}");
+    expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.strikeout).toBe(expected);
+  },
+);
+
+it("restores copied native strike lists across groups and resets them for plain", /** Real RTFSprms copy-on-write boundaries preserve parent state after a nested modifier. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1\strike A{\striked B}C\plain D}`);
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Projects model values after actual mapper insertion. @param run - Model run. @returns Text and native kind. */ (
+        run,
+      ) => [run.text, run.attributes.strikeout ?? FontStrikeout.STRIKEOUT_NONE],
+    ),
+  ).toEqual([
+    ["A", FontStrikeout.STRIKEOUT_SINGLE],
+    ["B", FontStrikeout.STRIKEOUT_DOUBLE],
+    ["C", FontStrikeout.STRIKEOUT_SINGLE],
+    ["D", FontStrikeout.STRIKEOUT_NONE],
+  ]);
+});
+
+it("retains an explicit no-strike item through a later paragraph-style edit", /** The native property vector preserves direct default presence instead of dropping equal values. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1\strike0 Text}`);
+  doc.paragraphs[0]
+    ?.GetTextFormatColl()
+    .SetFormatAttr(new SvxCrossedOutItem(FontStrikeout.STRIKEOUT_DOUBLE, RES_CHRATR_CROSSEDOUT));
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.strikeout ??
+      FontStrikeout.STRIKEOUT_NONE,
+  ).toBe(FontStrikeout.STRIKEOUT_NONE);
+});
+
+it("passes arbitrary RTF highlight RGB values and explicit automatic reset through the actual mapper", /** RTF uses integer colors rather than the OOXML palette IDs. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\colortbl;\red18\green52\blue86;}\highlight1 A\highlight0 B}`);
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual inserted highlight items. @param run - Model run. @returns Text and color. */ (
+        run,
+      ) => [run.text, run.attributes.highlight ?? "transparent"],
+    ),
+  ).toEqual([
+    ["A", "#123456"],
+    ["B", "transparent"],
+  ]);
+});
+
+it("preserves ignored character-style highlighting and native equal-run deduplication", /** Native style import ignores character highlighting even though its raw reference can remove an equal direct run value (WRITER208). @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\colortbl;\red18\green52\blue86;\red170\green187\blue204;}{\stylesheet{\s0 Normal;}{\*\cs21\highlight1 Named;}}\cs21\highlight1 A\highlight2 B}`,
+  );
+  expect(
+    doc.FindCharFormatByName("Named")?.GetAttrSet().GetItemIfSet(RES_CHRATR_HIGHLIGHT, false),
+  ).toBeUndefined();
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Compares actual character/style normalization output. @param run - Model run. @returns Text and highlight. */ (
+        run,
+      ) => [run.text, run.attributes.highlight ?? "transparent"],
+    ),
+  ).toEqual([
+    ["A", "transparent"],
+    ["B", "#aabbcc"],
+  ]);
+});
+
+it("applies paragraph-style highlights while preserving native direct reset presence", /** The character-style exclusion does not apply to paragraph styles. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\colortbl;\red18\green52\blue86;}{\stylesheet{\s0 Normal;}{\s1\highlight1 Paragraph;}}\s1 A\highlight0 B}`,
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads the real paragraph inheritance and run override. @param run - Native run. @returns Text and highlight. */ (
+        run,
+      ) => [run.text, run.attributes.highlight ?? "transparent"],
+    ),
+  ).toEqual([
+    ["A", "#123456"],
+    ["B", "transparent"],
+  ]);
+});
+import { FontStrikeout } from "../../../../tools/inc/fontenum";
+import { SvxCrossedOutItem } from "../../../../editeng/inc/crossedoutitem";
+import { RES_CHRATR_CROSSEDOUT, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
+
+it.each([
+  [String.raw`{\rtf1\strike A{\striked B}C}`, false],
+  [String.raw`{\rtf1\trowd\cellx2000\intbl\strike A\cell\row`, true],
+])(
+  "releases native character snapshots after reader completion or failure %s",
+  /** Real scalar owners must not survive only because queued run/table buffers copied their native list payload. @param source - Original source. @param invalid - Whether parsing fails. @returns Nothing. */ (
+    source,
+    invalid,
+  ) => {
+    /** Borrows actual emitted run value identities before model insertion or parse failure. */
+    class Reader extends RtfDocumentImpl {
+      readonly values: RTFValue[] = [];
+      /** Observes original native owners without acquiring them. @param value - Original text. @param state - Real parser state. @returns Nothing. */
+      protected override AppendText(value: string, state: RtfState): void {
+        super.AppendText(value, state);
+        const run = this.runs.at(-1);
+        if (run !== undefined)
+          for (const [, pointer] of run.characterSprms)
+            this.values.push(pointer.operatorDereference());
+      }
+    }
+    const reader = new Reader();
+    if (invalid)
+      expect(
+        /** Executes the invalid source through the real byte parser. @returns Document only on unexpected success. */ () =>
+          reader.ResolveBytes(new TextEncoder().encode(source)),
+      ).toThrow();
+    else docs.push(reader.ResolveBytes(new TextEncoder().encode(source)));
+    expect(reader.values.length).toBeGreaterThan(0);
+    for (const value of reader.values) expect(value.GetRefCount()).toBe(1 << 30);
+  },
+);
+import type { RtfState } from "./rtfdocumentimpl.context";
+import type { RTFValue } from "./rtfvalue";

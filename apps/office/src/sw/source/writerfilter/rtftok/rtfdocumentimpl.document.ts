@@ -106,7 +106,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   this["FlushTable"]();
   const document = new SwDoc(options);
   const model = new SwXTextDocument(document),
-    mapper = new DomainMapper(model);
+    mapper = new DomainMapper(model, SourceDocumentType.RTF);
   this["m_pMapperStream"] = mapper;
   let complete = false;
   let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
@@ -427,13 +427,10 @@ export function ApplyStyleDefinition(
   const current = projectWriterCharacterAttributes(collection.GetAttrSet());
   let target: WriterCharacterAttributes = {
     ...current,
-    ...(controls.has("strike") || controls.has("striked")
-      ? { strikeout: definition.character.strikeout }
-      : {}),
+
     ...(controls.has("super") || controls.has("sub") || controls.has("up") || controls.has("dn")
       ? { escapement: definition.character.escapement }
       : {}),
-    ...(controls.has("highlight") ? { highlight: definition.character.highlight } : {}),
   };
   if (definition.baselineHalfPoints !== undefined) {
     const position = definition.baselineHalfPoints;
@@ -607,12 +604,7 @@ export function ApplyParagraph(
         node.GetDoc().GetAttrPool(),
         {
           ...run.inherited,
-          ...(run.attributes.highlight === undefined
-            ? {}
-            : { highlight: run.attributes.highlight }),
-          ...(run.attributes.strikeout === undefined
-            ? {}
-            : { strikeout: run.attributes.strikeout }),
+
           ...(run.attributes.escapement === undefined
             ? {}
             : { escapement: run.attributes.escapement }),
@@ -717,3 +709,5 @@ import {
 import { unicode } from "../../core/unocore/unocrsrhelper";
 import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
 import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

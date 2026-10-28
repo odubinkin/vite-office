@@ -1984,3 +1984,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `SwStyleNameMapper.cxx`, lcl_SuffixIsUser, lcl_CheckSuffixAndDelete and character-family FillProgName/FillUIName.
 - Observation: the shared suffix predicate requires total UTF16 length greater than8 before recognizing the seven-unit ` (user)` suffix. Thus `A (user)` remains unchanged, while `AB (user)` can lose its suffix. The upstream comment itself questions the one-character-prefix exclusion and records its historical origin.
 - Preservation/evidence: retain the strict greater-than8 guard in both admitted character-name directions. Actual character-family tests compare zero-, one- and two-character prefixes, programmatic/UI hyperlink aliases and collision lookup. This is source-contract evidence, not a desktop-document certification.
+
+
+### WRITER208 — Ignored character-style highlighting can remove an equal direct run highlight
+
+- Source: pinned `DomainMapper.cxx`, LN_EG_RPrBase_highlight, ignores character-style highlighting; `rtfdocumentimpl.cxx`, raw style references/getProperties; `rtfsprm.cxx`, cloneAndDeduplicate.
+- Observation: the raw RTF style reference still contains its highlight. An equal direct run value may therefore deduplicate away even though the materialized character style ignores the value, leaving that run without the requested highlight. A different direct color survives. This is a source-chain inference, not a confirmed desktop-document result.
+- Preservation/evidence: retain the mapper exclusion and original raw-reference normalization. Actual RTF owner tests distinguish an equal inline highlight from a different inline RGB value, while paragraph-style highlighting remains supported. No corrective fallback applies character-style highlighting.

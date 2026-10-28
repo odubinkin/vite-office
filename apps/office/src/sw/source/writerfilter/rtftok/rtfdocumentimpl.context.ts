@@ -55,6 +55,7 @@ export interface RtfParagraphState {
 }
 /** Group-scoped RTF dispatch state. */
 export interface RtfState {
+  characterSprms: RTFSprms;
   destination:
     | "body"
     | "fonttbl"
@@ -106,6 +107,7 @@ export interface RtfParagraph {
 }
 /** Parsed RTF text plus controls explicitly active at that span. */
 export interface RtfRun extends WriterTextRun {
+  readonly characterSprms: RTFSprms;
   readonly paragraphStyleIndex?: number;
   readonly characterStyleIndex?: number;
   readonly currentCharacterStyleIndex?: number;
@@ -339,7 +341,7 @@ export function resolveRtfBaseline(position: number, fontHeight: number): number
 }
 /** Keeps absent RTF direct controls inherited from the selected paragraph style.  @param run - Run. @param inherited - Inherited. @returns The WriterCharacterAttributes result. */
 export function resolveRtfRunAttributes(
-  run: RtfRun,
+  run: Omit<RtfRun, "characterSprms">,
   inherited: WriterCharacterAttributes,
 ): WriterCharacterAttributes {
   const controls = run.controls;
@@ -568,3 +570,5 @@ export interface RtfStyleDefinition {
   readonly basedOnStyleName?: string;
   readonly nextStyleName?: string;
 }
+
+import type { RTFSprms } from "./rtfsprm";

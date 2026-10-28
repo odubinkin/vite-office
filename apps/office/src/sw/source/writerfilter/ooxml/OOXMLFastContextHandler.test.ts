@@ -250,7 +250,7 @@ it("preserves native MCE exact Requires matching, supported choices, fallback an
 it("applies schema property/value contexts to a real SwDoc through DomainMapper", /** Checks the actual kernel graph while section mapping remains outside this run-context scope. @returns Nothing. */ () => {
   const doc = createWriterDocument(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper(model);
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML);
   const stream = new Receiver();
   stream.startParagraphGroup = /** Delegates native paragraph start. @returns Nothing. */ () =>
     mapper.startParagraphGroup();
@@ -603,3 +603,5 @@ it("ignores nonmatching paraId attributes and nested modifiers during paragraph 
   context.startParagraphGroup();
   expect(receiver.sets).toEqual([]);
 });
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

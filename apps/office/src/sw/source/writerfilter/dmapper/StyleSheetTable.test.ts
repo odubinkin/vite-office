@@ -114,7 +114,7 @@ it("preserves first duplicate ID, ordered converted-name lookup and native curre
 
 it("follows native parent/style/paragraph-default/character-default precedence and direct-self guard", /** Uses actual native typed property maps and original output flag. @returns Nothing. */ () => {
   const model = new SwXTextDocument(createWriterDocument()),
-    mapper = new DomainMapper(model),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML),
     impl = mapper.impl,
     table = impl.GetStyleSheetTable();
   const parent = entry("base", "Normal"),
@@ -188,7 +188,7 @@ it("follows native parent/style/paragraph-default/character-default precedence a
 
 it("inverts 129 against imported style properties and DocDefaults rather than Writer pool defaults or prior direct runs", /** Verifies float/short/enum/absent native branches. @returns Nothing. */ () => {
   const model = new SwXTextDocument(createWriterDocument()),
-    mapper = new DomainMapper(model),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML),
     table = mapper.impl.GetStyleSheetTable(),
     style = entry("Normal", "Normal");
   table.AppendEntry(style);
@@ -320,3 +320,5 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 import type { SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
 
 import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

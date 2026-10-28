@@ -288,7 +288,7 @@ it("delivers original attributes before modifiers and keeps an RTFSprm bound to 
 it("resolves real RTFReferenceProperties through the genuine mapper into Writer text", /** No synthetic document or property receiver replaces the actual import owner chain. @returns Nothing. */ () => {
   const doc = createWriterDocument(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper(model),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML),
     attrs = list(),
     sprms = list();
   sprms.set(N.LN_EG_RPrBase_b, new RTFValue(1));
@@ -350,7 +350,7 @@ import { ReferencePointer, resolveReturnedReference } from "../inc/dmapper/resou
 it("keeps borrowed stream properties live and releases nested pointer returns after mapper resolution", /** Real mapper nested queries must not retain COW owners after the full expression ends. @returns Nothing. */ () => {
   const doc = createWriterDocument(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper(model),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML),
     attrs = list(),
     sprms = list();
   put(sprms, N.LN_EG_RPrBase_color, N.LN_CT_Color_val, new RTFValue(0x123456));
@@ -416,3 +416,5 @@ it("releases a returned native property pointer when a resource callback throws"
     existing.clear();
   }
 });
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

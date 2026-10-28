@@ -109,6 +109,7 @@ export function getRtfCharacterProperties(
     attrs = new RTFSprms();
   try {
     writeRtfCharacterProperties(direct, run.attributes, run.controls, run.autoKerning);
+    for (const [id, value] of run.characterSprms) direct.set(id, value);
     const selectedParagraph =
       (run.paragraphStyleIndex ?? 0) === 0
         ? EnsureDefaultStyle(table)
@@ -194,9 +195,10 @@ function writeRtfCharacterProperties(
   if (autoKerning !== undefined)
     target.set(N.LN_EG_RPrBase_kern, new RTFValue(Number(autoKerning)));
 }
-/** Native admitted character-reference part of createStyleProperties. Remaining paragraph property families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @returns Owned source table entry. */
+/** Native admitted character-reference part of createStyleProperties. Remaining paragraph property families retain their existing callback owner. @param definition - Actual parsed definition with source-captured link names. @param characterSprms - Original group-scoped native character modifiers. @returns Owned source table entry. */
 export function createRtfStyleProperties(
   definition: RtfStyleDefinition,
+  characterSprms: RTFSprms,
 ): ReferencePointer<Properties> {
   const attrs = new RTFSprms(),
     sprms = new RTFSprms(),
@@ -223,6 +225,7 @@ export function createRtfStyleProperties(
       definition.controls,
       definition.autoKerning,
     );
+    for (const [id, value] of characterSprms) characters.set(id, value);
     sprms.set(N.LN_CT_Style_rPr, new RTFValue(empty, characters));
     return new ReferencePointer(new RTFReferenceProperties(attrs, sprms));
   } finally {

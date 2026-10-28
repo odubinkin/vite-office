@@ -172,7 +172,7 @@ it("keeps native frame defaults including the wrap sentinel and separates list/n
 it("uses native derived property owners for actual paragraph contexts and style entries without sharing components", /** Refactors the real producer rather than constructing a test-only owner graph. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model),
+    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML),
     entry = new StyleSheetEntry();
   const paragraph = mapper.PushProperties(C.CONTEXT_PARAGRAPH);
   expect(paragraph).toBeInstanceOf(ParagraphPropertyMap);
@@ -263,3 +263,5 @@ it("merges all native table-value slots independently of the ordinary map and pr
   plain.dispose();
   absent.dispose();
 });
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

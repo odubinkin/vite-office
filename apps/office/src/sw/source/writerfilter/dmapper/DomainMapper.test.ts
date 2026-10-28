@@ -34,7 +34,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 function session() {
   const doc = createWriterDocument(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper(model);
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML);
   return { doc, model, mapper };
 }
 /** Original native modifier construction. @param id - ID. @param value - Value. @returns Modifier. */
@@ -294,7 +294,7 @@ it("retains native positive-limit asymmetry and float upward versus integral uni
 
 it("retains native color receiver defaults and reference context lifetime", /** Covers shared style maps and actual body paragraph disposal. @returns Nothing. */ () => {
   const { model } = session(),
-    impl = new DomainMapper_Impl(model),
+    impl = new DomainMapper_Impl(model, SourceDocumentType.OOXML),
     shared = new PropertyMap();
   expect(impl.GetTopContext()).toBeNull();
   expect(impl.GetTopContextOfType(C.CONTEXT_CHARACTER)).toBeNull();
@@ -422,4 +422,38 @@ it("retains native underline token variants, highlight colors, false weights and
   mapper.dispose();
   shared.dispose();
   model.dispose();
+});
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+it("distinguishes native source profiles for the same numeric highlight payload", /** The exact same integer is an OOXML color token or an RTF RGB value according to the original SourceDocumentType. @returns Nothing. */ () => {
+  const doc = createWriterDocument(),
+    model = new SwXTextDocument(doc);
+  const rtf = new DomainMapper(model, SourceDocumentType.RTF),
+    xml = new DomainMapper(model, SourceDocumentType.OOXML);
+  try {
+    expect(rtf.IsRTFImport()).toBe(true);
+    expect(xml.IsOOXMLImport()).toBe(true);
+    for (const mapper of [rtf, xml]) {
+      mapper.startCharacterGroup();
+      mapper.sprm(sprm(N.LN_EG_RPrBase_highlight, V.createInteger(0x123456)));
+    }
+    const color = rtf.impl.GetTopContext()?.getProperty(P.PROP_CHAR_HIGHLIGHT)?.[1];
+    expect(color).toBeDefined();
+    const n: [number] = [0];
+    try {
+      expect(color?.extract(n, "sal_Int32")).toBe(true);
+      expect(n[0]).toBe(0x123456);
+    } finally {
+      color?.dispose();
+    }
+    expect(xml.impl.GetTopContext()?.getProperty(P.PROP_CHAR_HIGHLIGHT)).toBeUndefined();
+    rtf.endCharacterGroup();
+    xml.endCharacterGroup();
+  } finally {
+    rtf.dispose();
+    xml.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
 });

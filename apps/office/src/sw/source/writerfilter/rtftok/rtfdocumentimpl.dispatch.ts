@@ -35,6 +35,8 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     const previous = this["states"].at(-1);
     this["states"].push({
       destination: previous?.destination ?? "body",
+      characterSprms:
+        previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
       ...(previous?.baselineHalfPoints === undefined
@@ -82,74 +84,78 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     if (this["states"].length === 1 && this["runs"].length > 0)
       this["CommitParagraph"](this["states"][0]);
     const previous = this["states"].pop();
-    if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
-      this["CommitFont"](previous);
-    if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
-      const name = (previous.styleName.split(";")[0] as string).trim();
-      if (name.length > 0) {
-        const definition: RtfStyleDefinition = {
-          name,
-          ...(previous.basedOnStyleName === undefined
-            ? {}
-            : { basedOnStyleName: previous.basedOnStyleName }),
-          ...(previous.nextStyleName === undefined
-            ? {}
-            : { nextStyleName: previous.nextStyleName }),
-          styleType: previous.styleType ?? "paragraph",
-          character: { ...previous.character },
-          ...(previous.baselineHalfPoints === undefined
-            ? {}
-            : { baselineHalfPoints: previous.baselineHalfPoints }),
-          ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
-          paragraph: { ...previous.paragraph },
-          controls: new Set(previous.styleControls),
-          ...(previous.basedOnStyleIndex === undefined
-            ? {}
-            : { basedOnStyleIndex: previous.basedOnStyleIndex }),
-          ...(previous.nextStyleIndex === undefined
-            ? {}
-            : { nextStyleIndex: previous.nextStyleIndex }),
-        };
-        this["m_aStyleNames"].set(previous.styleIndex, name);
-        const properties = createRtfStyleProperties(definition);
-        if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
-          this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
-          this["styles"].set(previous.styleIndex, definition);
-        } else properties.clear();
+    try {
+      if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
+        this["CommitFont"](previous);
+      if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
+        const name = (previous.styleName.split(";")[0] as string).trim();
+        if (name.length > 0) {
+          const definition: RtfStyleDefinition = {
+            name,
+            ...(previous.basedOnStyleName === undefined
+              ? {}
+              : { basedOnStyleName: previous.basedOnStyleName }),
+            ...(previous.nextStyleName === undefined
+              ? {}
+              : { nextStyleName: previous.nextStyleName }),
+            styleType: previous.styleType ?? "paragraph",
+            character: { ...previous.character },
+            ...(previous.baselineHalfPoints === undefined
+              ? {}
+              : { baselineHalfPoints: previous.baselineHalfPoints }),
+            ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
+            paragraph: { ...previous.paragraph },
+            controls: new Set(previous.styleControls),
+            ...(previous.basedOnStyleIndex === undefined
+              ? {}
+              : { basedOnStyleIndex: previous.basedOnStyleIndex }),
+            ...(previous.nextStyleIndex === undefined
+              ? {}
+              : { nextStyleIndex: previous.nextStyleIndex }),
+          };
+          this["m_aStyleNames"].set(previous.styleIndex, name);
+          const properties = createRtfStyleProperties(definition, previous.characterSprms);
+          if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
+            this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
+            this["styles"].set(previous.styleIndex, definition);
+          } else properties.clear();
+        }
       }
-    }
-    if (previous?.destination === "bookmarkstart") {
-      const name = previous.bookmarkName.trim();
-      if (name.length > 0)
-        this["marks"].push({
-          name,
-          offset: this["runs"].reduce(
-            /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
-              length,
-              run,
-            ) => length + run.text.length,
-            0,
-          ),
-        });
-    }
-    if (previous?.destination === "leveltext") {
-      const glyph = [...previous.levelText].find(
-        /** Computes the value result. @param value - Value. @returns The computed result. */ (
-          value,
-        ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
-      );
-      if (glyph !== undefined) {
-        const level = this["currentListLevels"].at(-1);
-        if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
+      if (previous?.destination === "bookmarkstart") {
+        const name = previous.bookmarkName.trim();
+        if (name.length > 0)
+          this["marks"].push({
+            name,
+            offset: this["runs"].reduce(
+              /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
+                length,
+                run,
+              ) => length + run.text.length,
+              0,
+            ),
+          });
       }
-    }
-    if (previous?.destination === "list")
-      this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
-    if (previous?.destination === "listoverride")
-      this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
-    if (previous?.destination === "fldinst" && previous.field !== undefined) {
-      const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
-      if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
+      if (previous?.destination === "leveltext") {
+        const glyph = [...previous.levelText].find(
+          /** Computes the value result. @param value - Value. @returns The computed result. */ (
+            value,
+          ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
+        );
+        if (glyph !== undefined) {
+          const level = this["currentListLevels"].at(-1);
+          if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
+        }
+      }
+      if (previous?.destination === "list")
+        this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
+      if (previous?.destination === "listoverride")
+        this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
+      if (previous?.destination === "fldinst" && previous.field !== undefined) {
+        const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
+        if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
+      }
+    } finally {
+      previous?.characterSprms.dispose();
     }
     return;
   }
@@ -677,6 +683,7 @@ export function DispatchBodyControl(
   }
   if (name === "plain") {
     delete state.baselineHalfPoints;
+    state.characterSprms.clear();
     delete state.characterStyleIndex;
     delete state.currentCharacterStyleIndex;
     delete state.autoKerning;
@@ -721,7 +728,11 @@ export function DispatchBodyControl(
       ...state.character,
       underlineColor: parameter === 0 ? "auto" : (this["colors"][parameter] ?? "auto"),
     };
-  } else if (name === "strike" || name === "striked")
+  } else if (name === "strike" || name === "striked") {
+    state.characterSprms.set(
+      name === "strike" ? N.LN_EG_RPrBase_strike : N.LN_EG_RPrBase_dstrike,
+      new RTFValue(Number(parameter !== 0)),
+    );
     state.character = {
       ...state.character,
       strikeout:
@@ -731,7 +742,7 @@ export function DispatchBodyControl(
             ? FontStrikeout.STRIKEOUT_DOUBLE
             : FontStrikeout.STRIKEOUT_SINGLE,
     };
-  else if (name === "super" || name === "sub") {
+  } else if (name === "super" || name === "sub") {
     delete state.baselineHalfPoints;
     state.character = {
       ...state.character,
@@ -788,6 +799,10 @@ export function DispatchBodyControl(
     const character = { ...state.character };
     Reflect.deleteProperty(character, "highlight");
     const highlight = parameter === 0 ? undefined : this["colors"][parameter];
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_highlight,
+      new RTFValue(writerColorFromPrimitive(highlight ?? "auto", "auto").toInt32()),
+    );
     state.character = { ...character, ...(highlight === undefined ? {} : { highlight }) };
   } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj" || name === "qd")
     state.paragraph = {
@@ -866,3 +881,8 @@ export function DispatchBodyControl(
 
 import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
 import { createRtfStyleProperties } from "./rtfdocumentimpl.character";
+
+import { RTFSprms } from "./rtfsprm";
+import { RTFValue } from "./rtfvalue";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { writerColorFromPrimitive } from "../../core/attr/swatrset";

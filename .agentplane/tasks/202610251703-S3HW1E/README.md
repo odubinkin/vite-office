@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 132
+revision: 136
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T11:24:05.724Z"
+  updated_at: "2026-10-28T12:02:35.647Z"
   updated_by: "CODER"
-  note: "Final native character-style application checkpoint passes816 latest related assertions and static/source checks, including corrected character0 owner selection. Broad current-slice task remains unfinished: complete native stylesheet/parser/property/script/replay and remaining TXT/RTF/Markdown matrix need implementation and audit."
-  attempts: 9
+  note: "Ordered RTF strike/highlight checkpoint passes841 latest related assertions and static/source gates. Keep full format goal open for actual filter failures: Markdown raw HTML throws, represented RTF language controls are ignored, character-style displacement disagrees with source; complete remaining capability audit without unrelated API expansion."
+  attempts: 10
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -149,8 +152,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T12:02:35.647Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Ordered RTF strike/highlight checkpoint passes841 latest related assertions and static/source gates. Keep full format goal open for actual filter failures: Markdown raw HTML throws, represented RTF language controls are ignored, character-style displacement disagrees with source; complete remaining capability audit without unrelated API expansion."
+  -
+    type: "status"
+    at: "2026-10-28T12:04:06.717Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T11:24:32.816Z"
+doc_updated_at: "2026-10-28T12:04:06.717Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -162,17 +178,17 @@ sections:
   Plan: "Audit canonical Writer body and attribute model against pinned LibreOffice TXT RTF Markdown paths; repair all represented import and export gaps in current filter scope; add a capability matrix and targeted round-trip tests; run TypeScript, lint, provenance, registry and module-boundary checks. Keep browser save deviations intact; no full suite before tenth task."
   Verify Steps: "1. Run focused Writer TXT, RTF, Markdown filter and document I/O tests; all pass. 2. Run TypeScript typecheck and ESLint/Prettier for changed source; all pass. 3. Run source-provenance, Writer registry and module-boundary checks; all pass. 4. Review the capability matrix against current SwDoc/SwTextNode/SwTable and pinned upstream sources, recording supported, format-inapplicable and unsupported cases with evidence. 5. Confirm git status has no unintended changes."
   Verification: |-
-    Native character-style application checkpoint: final latest complete related-suite records contain 816 passed assertions across 68 suites. Filter/UNO/mapper/document-I/O/worker tests, final character-family/name/metadata/atomicity tests, style0 ownership and current file-dialog UI pass; overlapping suites use their latest complete records. Full typecheck and final app typecheck, changed-source ESLint, Prettier, JSDoc, file-size, module boundaries, source-provenance and Writer/shared registry checks pass. Source audit preserves raw versus deduplicated RTF tables, native property ordering, character0 family ownership and suffix guard WRITER207. No full-project replay or complete current-slice parity/finish claim. Remaining stylesheet/base-sheet, property/parser/script/replay and filter obligations remain in Findings and the capability document.
+    RTF strike/highlight checkpoint:841 latest related assertions across61 suites pass after explicit source-profile construction, native group/run COW snapshots, ordered strike handling and snapshot cleanup. Full typecheck, changed-source ESLint/Prettier, JSDoc, file-size, module boundaries, provenance and Writer/shared registry checks pass. Current TXT/RTF/Markdown, OOXML caller profiles, worker/document-I/O and file UI are covered. No full-project replay. The broad filter task remains unfinished because concrete current-model scenarios are still missing: Markdown HTML-block insertion, RTF language control mapping, character-style displacement and remaining capability audit. Generic unconsumed module/API/physical-ABI completeness is not a filter completion gate; no complete current-slice claim.
 
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-28T11:24:05.724Z — VERIFY — blocked_external
+    ### 2026-10-28T12:02:35.647Z — VERIFY — blocked_external
 
     By: CODER
 
-    Note: Final native character-style application checkpoint passes816 latest related assertions and static/source checks, including corrected character0 owner selection. Broad current-slice task remains unfinished: complete native stylesheet/parser/property/script/replay and remaining TXT/RTF/Markdown matrix need implementation and audit.
-    Attempts: 9
+    Note: Ordered RTF strike/highlight checkpoint passes841 latest related assertions and static/source gates. Keep full format goal open for actual filter failures: Markdown raw HTML throws, represented RTF language controls are ignored, character-style displacement disagrees with source; complete remaining capability audit without unrelated API expansion.
+    Attempts: 10
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T11:24:05.038Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:02:35.050Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -647,17 +663,17 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Verification
 
-Native character-style application checkpoint: final latest complete related-suite records contain 816 passed assertions across 68 suites. Filter/UNO/mapper/document-I/O/worker tests, final character-family/name/metadata/atomicity tests, style0 ownership and current file-dialog UI pass; overlapping suites use their latest complete records. Full typecheck and final app typecheck, changed-source ESLint, Prettier, JSDoc, file-size, module boundaries, source-provenance and Writer/shared registry checks pass. Source audit preserves raw versus deduplicated RTF tables, native property ordering, character0 family ownership and suffix guard WRITER207. No full-project replay or complete current-slice parity/finish claim. Remaining stylesheet/base-sheet, property/parser/script/replay and filter obligations remain in Findings and the capability document.
+RTF strike/highlight checkpoint:841 latest related assertions across61 suites pass after explicit source-profile construction, native group/run COW snapshots, ordered strike handling and snapshot cleanup. Full typecheck, changed-source ESLint/Prettier, JSDoc, file-size, module boundaries, provenance and Writer/shared registry checks pass. Current TXT/RTF/Markdown, OOXML caller profiles, worker/document-I/O and file UI are covered. No full-project replay. The broad filter task remains unfinished because concrete current-model scenarios are still missing: Markdown HTML-block insertion, RTF language control mapping, character-style displacement and remaining capability audit. Generic unconsumed module/API/physical-ABI completeness is not a filter completion gate; no complete current-slice claim.
 
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-28T11:24:05.724Z — VERIFY — blocked_external
+### 2026-10-28T12:02:35.647Z — VERIFY — blocked_external
 
 By: CODER
 
-Note: Final native character-style application checkpoint passes816 latest related assertions and static/source checks, including corrected character0 owner selection. Broad current-slice task remains unfinished: complete native stylesheet/parser/property/script/replay and remaining TXT/RTF/Markdown matrix need implementation and audit.
-Attempts: 9
+Note: Ordered RTF strike/highlight checkpoint passes841 latest related assertions and static/source gates. Keep full format goal open for actual filter failures: Markdown raw HTML throws, represented RTF language controls are ignored, character-style displacement disagrees with source; complete remaining capability audit without unrelated API expansion.
+Attempts: 10
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T11:24:05.038Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:02:35.050Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 

@@ -63,9 +63,20 @@ const highlights = [
 /** Receives native property sets and paragraph/run groups; lifecycle state remains on the shell, outside this model mapper. */
 export class DomainMapper implements Properties {
   readonly impl: DomainMapper_Impl;
-  /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @returns Mapper. */
-  constructor(readonly model: SwXTextDocument) {
-    this.impl = new DomainMapper_Impl(model);
+  /** Borrows the destination's actual UNO-facing document. @param model - Canonical model supplier. @param documentType - Original explicit source format. @returns Mapper. */
+  constructor(
+    readonly model: SwXTextDocument,
+    documentType: SourceDocumentType,
+  ) {
+    this.impl = new DomainMapper_Impl(model, documentType);
+  }
+  /** Original source-format trait. @returns Whether RTF. */
+  IsRTFImport(): boolean {
+    return this.impl.IsRTFImport();
+  }
+  /** Original source-format trait. @returns Whether OOXML. */
+  IsOOXMLImport(): boolean {
+    return this.impl.IsOOXMLImport();
   }
   /** Original paragraph context starts with its document's default paragraph style. @returns Nothing. */
   startParagraphGroup(): void {
@@ -304,6 +315,15 @@ export class DomainMapper implements Properties {
         this.insert(context, P.PROP_CHAR_AUTO_KERNING, new Any([n !== 0], "bool"));
         break;
       case N.LN_EG_RPrBase_highlight: {
+        if (
+          this.impl.IsStyleSheetImport() &&
+          this.impl.GetStyleSheetTable().GetCurrentEntry()?.m_nStyleTypeCode === StyleType.Character
+        )
+          break;
+        if (this.IsRTFImport()) {
+          this.insert(context, P.PROP_CHAR_HIGHLIGHT, new Any([n], "sal_Int32"));
+          break;
+        }
         const color = highlights[n - N.LN_Value_ST_HighlightColor_black];
         if (color !== undefined)
           this.insert(context, P.PROP_CHAR_HIGHLIGHT, new Any([color], "sal_Int32"));
@@ -399,3 +419,7 @@ export class DomainMapper implements Properties {
 }
 
 import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+import { StyleType } from "./StyleSheetTable";

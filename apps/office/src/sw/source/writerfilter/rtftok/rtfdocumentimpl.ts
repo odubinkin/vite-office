@@ -61,6 +61,37 @@ export class RtfDocumentImpl {
     for (const pointer of this.m_pStyleTableEntries.values()) pointer.clear();
     this.m_pStyleTableEntries.clear();
   }
+  /** Releases actual run snapshots at the atomic reader lifetime boundary, including incomplete table buffers on parse failure. A temporary identity set follows shared references to the same parsed run, not a second resource registry. @returns Nothing. */
+  protected ClearCharacterProperties(): void {
+    const lists = new Set<RTFSprms>();
+    const paragraph =
+      /** Visits actual parsed paragraph owners. @param value - Paragraph. @returns Nothing. */ (
+        value: RtfParagraph,
+      ) => {
+        for (const run of value.runs) lists.add(run.characterSprms);
+      };
+    const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
+      values: readonly RtfTableRow[],
+    ) => {
+      for (const row of values)
+        for (const cell of row.cells) for (const value of cell) paragraph(value);
+    };
+    for (const state of this.states) lists.add(state.characterSprms);
+    for (const run of this.runs) lists.add(run.characterSprms);
+    for (const block of this.blocks)
+      if (block.kind === "paragraph") paragraph(block.paragraph);
+      else rows(block.rows);
+    rows(this.tableRows);
+    for (const cell of this.tableRow) for (const value of cell) paragraph(value);
+    for (const value of this.tableCell) paragraph(value);
+    for (const list of lists) list.dispose();
+    this.states.length = 0;
+    this.runs.length = 0;
+    this.blocks.length = 0;
+    this.tableRows.length = 0;
+    this.tableRow.length = 0;
+    this.tableCell.length = 0;
+  }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
@@ -118,6 +149,7 @@ export class RtfDocumentImpl {
       return this.Finish(options);
     } finally {
       this.ClearStyleTable();
+      this.ClearCharacterProperties();
     }
   }
 
@@ -128,6 +160,7 @@ export class RtfDocumentImpl {
       return this.Finish(options);
     } finally {
       this.ClearStyleTable();
+      this.ClearCharacterProperties();
     }
   }
 
@@ -181,6 +214,7 @@ export class RtfDocumentImpl {
       previous !== undefined &&
       equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
       equalControls(previous.controls, state.characterControls) &&
+      previous.characterSprms.equals(state.characterSprms) &&
       previous.autoKerning === state.autoKerning &&
       previous.baselineHalfPoints === state.baselineHalfPoints &&
       previous.characterStyleIndex === state.characterStyleIndex &&
@@ -192,6 +226,7 @@ export class RtfDocumentImpl {
     else
       this.runs.push({
         text: value,
+        characterSprms: new RTFSprms(state.characterSprms),
         attributes: { ...state.character },
         ...(state.paragraph.styleIndex === undefined
           ? {}
@@ -294,3 +329,5 @@ import type { DomainMapper } from "../dmapper/DomainMapper";
 
 import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel";
 import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
+
+import { RTFSprms } from "./rtfsprm";
