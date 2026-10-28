@@ -1193,5 +1193,27 @@
     "diagnosticBranchArmsTotal": 74579,
     "remainingOwners": 230,
     "finalFullVerifierPassed": false
+  },
+  "civilDatesAndOptionalOwners": {
+    "testFiles": 5,
+    "tests": 72,
+    "assertionsPassed": true,
+    "reports": [
+      "apps/office/coverage/integration-civil-optional-owners",
+      "apps/office/coverage/integration-named-tabs-only"
+    ],
+    "diagnosticStatementsCovered": 118034,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72641,
+    "diagnosticBranchArmsTotal": 74579,
+    "diagnosticFunctionsCovered": 18429,
+    "diagnosticFunctionsTotal": 18429,
+    "remainingOwners": 225,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "typecheckPassed": true,
+    "lintPassed": true,
+    "jsdocPassed": true,
+    "finalFullVerifierPassed": false
   }
 }

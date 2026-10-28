@@ -8,6 +8,10 @@
         {
           "path": "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
           "marker": "encodeTextHint"
+        },
+        {
+          "path": "apps/office/src/sw/browser/filter/xml/writer-codec.boundaries.test.ts",
+          "marker": "@fileoverview"
         }
       ]
     },
@@ -22,7 +26,8 @@
     },
     "status": "local-only",
     "preservedResponsibilities": [
-      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
+      "B8TCAE bounded regression: A real SwTextCharFormat with the optional native style pointer absent preserves its range, sort number and flags through encode/decode without fabricating a character-style table index."
     ],
     "localSymbols": [
       "encodeTextHint",

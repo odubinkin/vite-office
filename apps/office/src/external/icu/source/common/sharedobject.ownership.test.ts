@@ -54,3 +54,21 @@ it("releases the old destination before acquiring the source and preserves exter
   unowned.deleteIfZeroRefCount();
   expect(events).toEqual([1, "source destroyed", "unowned destroyed"]);
 });
+
+it("clears an owned destination through the original nullable copy API", /** Native copyPtr(nullptr, dest) releases the last reference before storing null. @returns Nothing. */ () => {
+  const events: string[] = [];
+  /** Concrete native client records its virtual destruction. */
+  class Value extends SharedObject {
+    /** Records actual final release. @returns Nothing. */ override dispose(): void {
+      events.push("destroyed");
+    }
+  }
+  const value = new Value();
+  value.addRef();
+  const pointer: [Value | null] = [value];
+  SharedObject.copyPtr(null, pointer);
+  expect(pointer[0]).toBeNull();
+  expect(events).toEqual(["destroyed"]);
+  SharedObject.copyPtr(null, pointer);
+  expect(events).toEqual(["destroyed"]);
+});

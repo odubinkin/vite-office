@@ -15,12 +15,16 @@ beforeAll(
 );
 it.each([
   ["January", ""],
+  ["2025 10 January", ""],
+  ["2025 10 January 08:23", ""],
+  ["02/30/2025", ""],
+  ["2025-02-29", ""],
   ["31/12/2024", "DD/MM/YYYY"],
   ["2024/12", "YYYY/MM"],
   ["12/2024", "MM/YYYY"],
 ])(
-  "preserves original input-admission gate for %s with ordinary date separator pattern %s",
-  /** Original IsNumberFormatMain admits only logical strings without numeric particles; DATE admission at zforfind.cxx4017 requires an accepted locale pattern, ISO form or literal match. Ordinary DATESEP tokens are not GetNumForString literals. @param input - Input rejected by that source gate. @param pattern - Optional real compiled format. @returns Nothing. */ (
+  "rejects incomplete, impossible or unsupported date %s with compiled pattern %s",
+  /** Original admission requires an accepted locale pattern, ISO form or literal match; calendar validation rejects impossible civil dates and unsupported month-at-end order. Ordinary DATESEP tokens are not GetNumForString literals. @param input - Rejected source input. @param pattern - Optional real compiled format. @returns Nothing. */ (
     input,
     pattern,
   ) => {
@@ -67,6 +71,9 @@ it.each([
 );
 afterAll(/** Restores the host clock. @returns Nothing. */ () => vi.useRealTimers());
 const dates = [
+  // Original invalid day fragments fall through to short-year expansion, not a guessed day.
+  [0x0409, "January 32", "", E.International, 2032, 1, 1],
+  [0x0409, "January 0", "", E.International, 2000, 1, 1],
   [0x0409, "January 10", "", E.International, 2024, 1, 10],
   [0x0409, "January 2024", "", E.International, 2024, 1, 1],
   [0x0407, "Januar 2024", "", E.International, 2024, 1, 1],
@@ -99,10 +106,30 @@ const dates = [
   [0x0409, "2024-Dec-31", "", E.International, 2024, 12, 31],
   [0x0409, "02|29|2024", 'DD"|"MM"|"YYYY', E.FormatThenInternational, 2024, 2, 29],
   [0x0409, "2024 January 10", 'YYYY" January "DD', E.Format, 2024, 1, 10],
+  [0x0409, "2025|10", 'YYYY"|"DD', E.Format, 2025, 6, 10],
+  [0x0409, "10|2025", 'DD"|"YYYY', E.Format, 2025, 6, 10],
+  [0x0409, "10|12", 'DD"|"MM', E.Format, 2024, 12, 10],
+  [0x0409, "12|10", 'MM"|"DD', E.Format, 2024, 12, 10],
+  [0x0409, "January 2025 10", 'MMMM" "YYYY" "DD', E.Format, 2025, 1, 10],
+  [0x0409, "2025 January 10", 'YYYY" "MMMM" "DD', E.Format, 2025, 1, 10],
+  [0x0409, "10 January 2025", 'DD" "MMMM" "YYYY', E.Format, 2025, 1, 10],
+  [0x0407, "Januar 10", "", E.International, 2010, 1, 1],
+  [0x0409, "2025 January", 'YYYY" "MMM', E.Format, 2025, 1, 1],
+  [0x0409, "12/2025", 'MM"/"DD', E.Format, 2025, 12, 1],
+  [0x0407, "12.2025", 'DD"."MM', E.Format, 2025, 12, 1],
+  [0x0409, "12/31/49", "", E.International, 2049, 12, 31],
+  [0x0407, "31.12.50", "", E.International, 1950, 12, 31],
+  [0x0409, "January 2025 10 08:23", 'MMMM" "YYYY" "DD HH:MM', E.Format, 2025, 1, 10, 8, 23],
+  [0x0409, "January 10 2025 08:23", "", E.International, 2025, 1, 10, 8, 23],
+  [0x0409, "2025 January 10 08:23", 'YYYY" "MMMM" "DD HH:MM', E.Format, 2025, 1, 10, 8, 23],
+  [0x0407, "10. Januar 2025 08:23", "", E.International, 2025, 1, 10, 8, 23],
+  [0x0409, "12/31 08:23", "", E.International, 2024, 12, 31, 8, 23],
+  [0x0407, "31.12. 08:23", "", E.International, 2024, 12, 31, 8, 23],
+  [0x0409, "2025-01-10 08:23", "", E.International, 2025, 1, 10, 8, 23],
 ] as const;
 it.each(dates)(
   "recognizes civil date with locale %i, input %s, compiled pattern %s and policy %i",
-  /** Real constructor output supplies format order without manufactured tokens or scanner state. @param locale - Source locale. @param input - Date text. @param pattern - Optional complete format. @param policy - Original evaluation policy. @param year - Independent expected civil year. @param month - Expected month1..12. @param day - Expected day. @returns Nothing. */ (
+  /** Real constructor output supplies format order without manufactured tokens or scanner state. @param locale - Source locale. @param input - Date text. @param pattern - Optional complete format. @param policy - Original evaluation policy. @param year - Independent expected civil year. @param month - Expected month1..12. @param day - Expected day. @param hour - Expected civil hour. @param minute - Expected civil minute. @returns Nothing. */ (
     locale,
     input,
     pattern,
@@ -110,6 +137,8 @@ it.each(dates)(
     year,
     month,
     day,
+    hour: number = 0,
+    minute: number = 0,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
       language = createNumberFormatLanguage(mapper, locale),
@@ -144,9 +173,9 @@ it.each(dates)(
           new NativeNumberWrapper(),
         ),
       ).toBe(true);
-      expect(type[0]).toBe(T.DATE);
+      expect(type[0]).toBe(input.includes(":") ? T.DATETIME : T.DATE);
       const serial = (Date.UTC(year, month - 1, day) - Date.UTC(1899, 11, 30)) / 86400000;
-      expect(output[0]).toBe(serial);
+      expect(output[0]).toBe(serial + (hour * 60 + minute) / 1440);
     } finally {
       format?.dispose();
       code.dispose();

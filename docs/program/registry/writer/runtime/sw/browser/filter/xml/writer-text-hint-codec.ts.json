@@ -19,9 +19,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
-        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts"
+        "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts",
+        "apps/office/src/sw/browser/filter/xml/writer-codec.boundaries.test.ts"
       ],
-      "justification": "Existing browser hint graph envelopes now preserve actual character-style references, sort number and mutable native flags; automatic/internet records retain their prior representation. Native pool item QueryValue/UNO remain independent from this browser graph.",
+      "justification": "Existing browser hint graph envelopes now preserve actual character-style references, sort number and mutable native flags; automatic/internet records retain their prior representation. Native pool item QueryValue/UNO remain independent from this browser graph. B8TCAE bounded regression: A real SwTextCharFormat with the optional native style pointer absent preserves its range, sort number and flags through encode/decode without fabricating a character-style table index. Broad semantic statuses remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "encodeTextHint",

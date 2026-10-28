@@ -3,6 +3,12 @@ import { assert, expect, it } from "vitest";
 import { SwDoc } from "../../../source/core/doc/doc";
 import { SwCharFormat } from "../../../inc/charfmt";
 import { SwFormatCharFormat } from "../../../source/core/txtnode/fmtatr2";
+import { SwFormatAutoFormat } from "../../../source/core/txtnode/txatbase";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxBrushItem } from "../../../../editeng/inc/brushitem";
+import { Color } from "../../../../tools/inc/color";
+import { WRITER_CHARACTER_WHICH_RANGES, RES_CHRATR_HIGHLIGHT } from "../../../inc/hintids";
+import { SwTextCharFormat } from "../../../source/core/txtnode/txtatr2";
 import { SwTextAttrEnd } from "../../../source/core/txtnode/txatbase";
 import { encodeWriterDocument, decodeWriterDocument } from "./writer-document-codec";
 import {
@@ -150,6 +156,50 @@ it("rejects invalid paragraph pool identities and restores factory outline assig
       restored.Dispose();
     }
   } finally {
+    doc.Dispose();
+  }
+});
+
+it("round trips a real character hint with an absent optional style pointer", /** Optional native character references must remain absent through primitive persistence. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    hint = new SwTextCharFormat(new SwFormatCharFormat(), 2, 5);
+  try {
+    hint.SetSortNumber(7);
+    hint.SetDontExpand(true);
+    const record = encodeTextHint(doc, hint);
+    expect(record).not.toHaveProperty("characterStyle");
+    const restored = decodeTextHint(doc, record);
+    try {
+      expect(restored).toBeInstanceOf(SwTextCharFormat);
+      expect(restored.format).toBeInstanceOf(SwFormatCharFormat);
+      expect(encodeTextHint(doc, restored)).toEqual(record);
+      expect([restored.start, restored.end]).toEqual([2, 5]);
+    } finally {
+      restored.GetAttr().Dispose();
+    }
+  } finally {
+    hint.GetAttr().Dispose();
+    doc.Dispose();
+  }
+});
+
+it("preserves brush color values through an actual automatic character owner", /** Automatic format QueryValue exposes primitive color rather than a mutable brush owner. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    items = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+  let automatic: SwFormatAutoFormat | undefined;
+  try {
+    items.Put(new SvxBrushItem(new Color(0xabcdef), RES_CHRATR_HIGHLIGHT));
+    automatic = new SwFormatAutoFormat(items);
+    expect(automatic.QueryValue()).toEqual([{ which: RES_CHRATR_HIGHLIGHT, value: 0xabcdef }]);
+    const copy = automatic.Clone();
+    try {
+      expect(copy.QueryValue()).toEqual(automatic.QueryValue());
+    } finally {
+      copy.Dispose();
+    }
+  } finally {
+    automatic?.Dispose();
+    items.Dispose();
     doc.Dispose();
   }
 });
