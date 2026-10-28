@@ -1,0 +1,82 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-719a7f4d-1031-4809-8c40-63220d57a7e9",
+    "capabilityId": "CAP-719a7f4d-1031-4809-8c40-63220d57a7e9",
+    "suite": "calc",
+    "subsystem": "package-relationship-sdk",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original generated StringPair value ownership reuses actual SAL/CPPU types and compound data operations.",
+      "Complete XRelationshipAccess SDK declarations introduce no replacement service or query provider."
+    ],
+    "capability": "Native StringPair value and complete XRelationshipAccess SDK contract",
+    "gaps": [
+      "Original StringPair two-field OUString ownership, normal struct metadata, copy/assign/equality/member moves/address/destruction and compiler borrowed aggregate views reuse actual shared SAL/CPPU owners. The complete original XRelationshipAccess IDL method set uses actual strings/nested Sequence contracts and normal cached implicit-XInterface-root metadata. Actual Any and initialized struct Sequence COW exercise retained views and field ownership; no alternate type/default/query/relationship provider or incomplete service component is instantiated. Physical ABI, complete reflection/marshalling, allocation-failure unwind and threads remain unverified. Existing host metadata pairs, package property/relationship implementations, real cache/output connection and complete DOCX/XLSX model/filter/worker/UI import/export remain pending. Existing browser open/save/autosave/recovery behavior is preserved."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/beans/StringPair.idl",
+          "marker": "StringPair"
+        },
+        {
+          "path": "offapi/com/sun/star/embed/XRelationshipAccess.idl",
+          "marker": "XRelationshipAccess"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_any.cxx",
+          "marker": "Any"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/embed/XRelationshipAccess.idl",
+          "marker": "XRelationshipAccess"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts",
+          "marker": "StringPair"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+          "marker": "XRelationshipAccess"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-relationship-sdk.md",
+          "marker": "# Native package relationship SDK"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original StringPair two-field OUString ownership, normal struct metadata, copy/assign/equality/member moves/address/destruction and compiler borrowed aggregate views reuse actual shared SAL/CPPU owners. The complete original XRelationshipAccess IDL method set uses actual strings/nested Sequence contracts and normal cached implicit-XInterface-root metadata. Actual Any and initialized struct Sequence COW exercise retained views and field ownership; no alternate type/default/query/relationship provider or incomplete service component is instantiated. Physical ABI, complete reflection/marshalling, allocation-failure unwind and threads remain unverified. Existing host metadata pairs, package property/relationship implementations, real cache/output connection and complete DOCX/XLSX model/filter/worker/UI import/export remain pending. Existing browser open/save/autosave/recovery behavior is preserved."
+    },
+    "scopeLimitations": [
+      "Original StringPair two-field OUString ownership, normal struct metadata, copy/assign/equality/member moves/address/destruction and compiler borrowed aggregate views reuse actual shared SAL/CPPU owners. The complete original XRelationshipAccess IDL method set uses actual strings/nested Sequence contracts and normal cached implicit-XInterface-root metadata. Actual Any and initialized struct Sequence COW exercise retained views and field ownership; no alternate type/default/query/relationship provider or incomplete service component is instantiated. Physical ABI, complete reflection/marshalling, allocation-failure unwind and threads remain unverified. Existing host metadata pairs, package property/relationship implementations, real cache/output connection and complete DOCX/XLSX model/filter/worker/UI import/export remain pending. Existing browser open/save/autosave/recovery behavior is preserved."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-stream-encoding-conversion"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "package-relationship-sdk",
+    "capabilityIds": [
+      "CAP-719a7f4d-1031-4809-8c40-63220d57a7e9"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/embed/XRelationshipAccess.idl"
+      ],
+      "justification": "Original StringPair two-field OUString ownership, normal struct metadata, copy/assign/equality/member moves/address/destruction and compiler borrowed aggregate views reuse actual shared SAL/CPPU owners. The complete original XRelationshipAccess IDL method set uses actual strings/nested Sequence contracts and normal cached implicit-XInterface-root metadata. Actual Any and initialized struct Sequence COW exercise retained views and field ownership; no alternate type/default/query/relationship provider or incomplete service component is instantiated. Physical ABI, complete reflection/marshalling, allocation-failure unwind and threads remain unverified. Existing host metadata pairs, package property/relationship implementations, real cache/output connection and complete DOCX/XLSX model/filter/worker/UI import/export remain pending. Existing browser open/save/autosave/recovery behavior is preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XRelationshipAccess",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/embed/XRelationshipAccess.idl",
+      "upstreamSymbols": [
+        "XRelationshipAccess",
+        "getRelationshipByID",
+        "insertRelationshipByID",
+        "clearRelationships"
+      ]
+    }
+  }
+}

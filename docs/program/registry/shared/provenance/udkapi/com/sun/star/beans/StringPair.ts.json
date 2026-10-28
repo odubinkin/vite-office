@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/beans/StringPair.idl",
+    "localSymbols": [
+      "StringPair",
+      "cppu_detail_getUnoType_StringPair"
+    ],
+    "upstreamSymbols": [
+      "StringPair",
+      "First",
+      "Second"
+    ],
+    "preservedResponsibilities": [
+      "Original StringPair two-field OUString ownership, normal struct metadata, copy/assign/equality/member moves/address/destruction and compiler borrowed aggregate views reuse actual shared SAL/CPPU owners. The complete original XRelationshipAccess IDL method set uses actual strings/nested Sequence contracts and normal cached implicit-XInterface-root metadata. Actual Any and initialized struct Sequence COW exercise retained views and field ownership; no alternate type/default/query/relationship provider or incomplete service component is instantiated. Physical ABI, complete reflection/marshalling, allocation-failure unwind and threads remain unverified. Existing host metadata pairs, package property/relationship implementations, real cache/output connection and complete DOCX/XLSX model/filter/worker/UI import/export remain pending. Existing browser open/save/autosave/recovery behavior is preserved."
+    ],
+    "omittedResponsibilities": [
+      "Actual native relationship/storage/output components, full ABI/reflection/marshalling/constructor unwind/thread and DOCX/XLSX model/filter/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts",
+          "marker": "StringPair"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/beans/StringPair.idl",
+          "marker": "StringPair"
+        }
+      ]
+    }
+  }
+}
