@@ -31,6 +31,7 @@ import type { RefUpdateContext } from "../../../inc/refupdatecontext";
 import { ScAddress, BCA_LISTEN_ALWAYS } from "../../../inc/address";
 import { StartListeningContext, EndListeningContext } from "../../../inc/listenercontext";
 import type { ScDocument } from "../../../inc/document";
+import { FormulaResultValue } from "../../../inc/formularesult";
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { ScFormulaCellGroup } from "./formulacellgroup";
@@ -628,6 +629,14 @@ export class ScFormulaCell extends SvtListener<SfxHint> {
       this.rDocument.DecInterpretLevel();
       this.bRunning = false;
     }
+  }
+  /** Original non-const GetResult lazily interprets before preferring compiler errors over the actual result owner. @returns Owned native result value. */
+  GetResult(): FormulaResultValue {
+    this.MaybeInterpret();
+    const error = this.pCode.GetCodeError();
+    return error !== FormulaError.NONE
+      ? new FormulaResultValue(error, FormulaError)
+      : this.aResult.GetResult();
   }
   /** Reads native empty-result state after lazy interpretation. @returns Empty. */
   IsEmpty(): boolean {

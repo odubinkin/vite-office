@@ -9,7 +9,8 @@
     "localSymbols": [
       "ScFormulaCell",
       "SetNeedNumberFormat",
-      "NeedsNumberFormat"
+      "NeedsNumberFormat",
+      "GetResult"
     ],
     "upstreamSymbols": [
       "ScFormulaCell::ScFormulaCell",
@@ -17,7 +18,8 @@
       "ScFormulaCell::GetErrCode",
       "ScFormulaCell::IsEmptyDisplayedAsString",
       "ScFormulaCell::GetFormula",
-      "ScFormulaCell::SetResultDouble"
+      "ScFormulaCell::SetResultDouble",
+      "ScFormulaCell::GetResult"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
@@ -39,7 +41,8 @@
       "Task76: Original mbNeedsNumberFormat and mbAllowNumberFormatChange defaults,SetNeedNumberFormat,NeedsNumberFormat and copy-constructor request/reset behavior are represented. Full native result-format interpretation/compatibility and hard-format mutation remain unported;these metadata changes do not claim completion of those formatter services.",
       "Represented scalar interpretation brackets the real interpreter with native document nesting increment/decrement,including exceptional cleanup. Matrix/group-threaded interpretation remains outside this slice;no replacement interpreter is introduced.",
       "Original IsEmptyDisplayedAsString delegates through MaybeInterpret to the real formula result. Empty-code GetFormula errors now return actual ScGlobal GetErrorString values instead of the previous unsupported-localization throw;other serialization/grammar paths remain unchanged.",
-      "AQF9AG adds source SetResultDouble forwarding directly to ScFormulaResult::SetDouble without changing the formula dirty state, for the import cached-result overload."
+      "AQF9AG adds source SetResultDouble forwarding directly to ScFormulaResult::SetDouble without changing the formula dirty state, for the import cached-result overload.",
+      "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim.",
@@ -110,6 +113,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/clipboard-single-row.test.ts",
           "marker": "original document fast path"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

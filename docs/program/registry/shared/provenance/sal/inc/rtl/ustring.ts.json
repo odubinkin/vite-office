@@ -45,7 +45,8 @@
       "unacquired",
       "view",
       "getDataAddress",
-      "toInt32"
+      "toInt32",
+      "numberDouble"
     ],
     "upstreamSymbols": [
       "Concat",
@@ -72,7 +73,9 @@
       "operator==",
       "reverseCompareTo",
       "subView",
-      "unacquired"
+      "unacquired",
+      "number( double d )",
+      "rtl_string2UString"
     ],
     "preservedResponsibilities": [
       "Original OUString runtime lifetime/constructor/copy/move/assignment/clear/getters and complete SharedString value/query contract reuse one shared SAL RTL data/refcount/intern owner. Complete original OUString/SharedString headers and unchanged SharedString cxx compile with32 pinned full source/config/header blobs and31 unchanged RTL dependency scopes. All4424 initialized native owner, both pointer fields, static C++ empty versus C empty versus literal identity, refcounts/length/capacity/logical UTF16/terminators, allocation/free events, query results and held live reference snapshots match portable runtime. Valid native capture also passes ASan/UBSan with identical output. Two original constructor assertions, three original compile-time constructor rejection witnesses and three invalid original lifetime sanitizer diagnoses are retained separately without inventing post-UB golden results. Explicit move factories/destructor calls adapt C++ rvalues/RAII; nullable const-reference query types and stable nonowning WeakMap-backed pointer-slot views adapt reinterpret references without copy/acquire/release. Native const/deleted-overload/template/layout/constant-evaluation enforcement, full OUString search/conversion/format/append APIs, physical pointer ABI/free/dead views, thread concurrency and complete upstream QA remain unverified. SharedString source owns one compiled class with original inline header behaviors; header reexports it instead of defining a duplicate. No Calc-specific strings, allocators or document placeholders.",
@@ -88,7 +91,8 @@
       "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified.",
       "TaskCMHQFZ introduces actual rtl/stringutils.hxx IsValidStrLen/ThrowIfInvalidStrLen and ConstCharArrayDetector::isValid responsibilities. Runtime number/bigint parameters bind original integral templates;native signed32 margin/default0 and maxLen bound,negative length and margin assertion,bad_alloc,final-zero/no-embedded-zero predicate are preserved. OUString reuses this exact predicate without changing its constructor ownership/exception expression. Full C++ SFINAE,constexpr/type enforcement/trait fields and unrelated stringutils services remain unported. Native source observations and checked boundary evidence are bounded,not full ABI/template certification.",
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
-      "Task202610251549-V4DQJW: Exposes original OUString::toInt32 and its const borrowed view through the real C wrapper; signed32 limits and embedded-NUL semantics are retained. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+      "Task202610251549-V4DQJW: Exposes original OUString::toInt32 and its const borrowed view through the real C wrapper; signed32 limits and embedded-NUL semantics are retained. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
+      "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."
@@ -142,6 +146,10 @@
         {
           "path": "apps/office/src/sal/rtl/oustringbuffer.test.ts",
           "marker": "matches original buffer construction"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-xlsx.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

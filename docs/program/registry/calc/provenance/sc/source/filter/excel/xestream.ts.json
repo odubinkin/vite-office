@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/filter/excel/xestream.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/filter/excel/xestream.cxx",
+    "localSymbols": [
+      "XclXmlUtils",
+      "GetFormulaTypeAndValue",
+      "GetStreamName",
+      "ToOString",
+      "ToOUString",
+      "WriteElement",
+      "lcl_GetErrorString"
+    ],
+    "upstreamSymbols": [
+      "XclXmlUtils::GetFormulaTypeAndValue",
+      "XclXmlUtils::GetStreamName",
+      "XclXmlUtils::ToOString",
+      "XclXmlUtils::ToOUString",
+      "lcl_GetErrorString"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestream.ts",
+          "marker": "XclXmlUtils"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/filter/excel/xestream.cxx",
+          "marker": "XclXmlUtils::GetFormulaTypeAndValue"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "J0Z0KF connects the complete non-const ScFormulaCell::GetResult lazy/error-precedence method to existing ScFormulaResult/FormulaResultValue, and XclXmlUtils cached-result XML typing/spelling. Real SharedString temporaries, typed outputs, exact LOGICAL0/1 classification, Invalid inlineStr, SPILL-to-VALUE and complete Excel/core error-byte/NaN mappings are preserved. Native part-name, ARGB, UTF16-vector/range UTF8 and vector/ASCII Unicode conversions and raw WriteElement use actual shared owners/serializers. Static member objects erase deleted native utility constructors; existing ordinary Uint8Array UTF8 value transport does not claim a native OString or byte-buffer owner. Native encoded OUString construction and number(double) call actual SAL conversion/formatting with original flags, ownership and null guards. Request17 retains original formatter15-digit rounding; no host Number.toString substitute is used for numeric formula values. Full XclExpRoot/XclExpXmlStream, address-buffer/XclExpString overloads, font output, formula-expression serialization, workbook/model import/export and shell/UI acceptance remain unported or unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full native utility/root/stream/font/formula-expression/byte-owner contracts, compiled native differential and full workbook import/export/model/UI acceptance remain pending."
+    ]
+  }
+}

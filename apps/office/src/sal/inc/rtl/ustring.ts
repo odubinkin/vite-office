@@ -31,7 +31,12 @@ import {
   rtl_ustr_valueOfInt64,
   RTL_USTR_MAX_VALUEOFINT32,
   RTL_USTR_MAX_VALUEOFINT64,
+  RTL_USTR_MAX_VALUEOFDOUBLE,
+  rtl_string2UString,
+  OSTRING_TO_OUSTRING_CVTFLAGS,
 } from "./ustring.h";
+import type { rtl_TextEncoding } from "./textenc";
+import { rtl_math_doubleToUString, rtl_math_StringFormat } from "./math.h";
 import { SAL_NO_ACQUIRE } from "../types";
 import { ConstCharArrayDetector } from "./stringutils";
 import type { __sal_NoAcquire } from "../types";
@@ -133,10 +138,25 @@ export class OUString {
         ]
       | [value: rtl_uString, noAcquire: __sal_NoAcquire]
       | [value: Uint16Array | null, length: number]
+      | [
+          value: Uint8Array | null,
+          length: number,
+          encoding: rtl_TextEncoding,
+          convertFlags?: number,
+        ]
   ) {
     const [value, argument] = args;
     this.slot = [null];
-    if (value === undefined) this.pData = OUString.empty.str;
+    if (args.length >= 3) {
+      rtl_string2UString(
+        this.slot,
+        value as Uint8Array | null,
+        argument as number,
+        args[2] as rtl_TextEncoding,
+        args[3] ?? OSTRING_TO_OUSTRING_CVTFLAGS,
+      );
+      if (this.slot[0] === null) throw new Error("std::bad_alloc");
+    } else if (value === undefined) this.pData = OUString.empty.str;
     else if (value instanceof StringConcat) {
       const length = value.length();
       this.pData = rtl_uString_alloc(length) as rtl_uString;
@@ -182,6 +202,24 @@ export class OUString {
     return typeof value === "number"
       ? new StringNumber(RTL_USTR_MAX_VALUEOFINT32, rtl_ustr_valueOfInt32, value, radix)
       : new StringNumber(RTL_USTR_MAX_VALUEOFINT64, rtl_ustr_valueOfInt64, value, radix);
+  }
+  /** Original number(double) overload, explicitly named for the erased scalar type. Requests the original17 significant digits, G notation, dot and fractional-zero erasure; the formatter retains its own rounding policy. @param value - Native binary64. @returns Owned native string. */
+  static numberDouble(value: number): OUString {
+    const result: rtl_uStringSlot = [null];
+    rtl_math_doubleToUString(
+      result,
+      null,
+      0,
+      value,
+      rtl_math_StringFormat.rtl_math_StringFormat_G,
+      RTL_USTR_MAX_VALUEOFDOUBLE - 9 + 1,
+      46,
+      null,
+      0,
+      true,
+    );
+    if (result[0] === null) throw new Error("std::bad_alloc");
+    return new OUString(result[0], SAL_NO_ACQUIRE);
   }
   /** Original marker entry into lazy Unicode concatenation. @param value - Borrowed original operand. @returns Original unary expression. */
   static Concat(value: UnicodeConcatOperand): StringConcat {

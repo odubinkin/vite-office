@@ -4342,3 +4342,24 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: in the admitted local/no-error-token path, failure to scan a second column leaves both second-axis valid bits absent; the first return takes its invalid alternative. A successful second column followed by a failed second row takes the valid alternative. The opposite alternatives are not reached by local lexical inputs. The first alternative appears unreachable more broadly from the initialized source flags; error-token/header services have not been independently compiled or certified here.
 - Suspected issue: the first conditional appears to retain an impossible singleton-success path, while the second also serves unported invalid/error-token states. This is a control-flow finding, not proof that either branch may safely be removed from upstream.
 - Local behavior: keep both original decisions and helper. Report the resulting scoped branch-coverage gap under the unchanged100 threshold; do not manufacture flags in tests, drop source branches or add exclusions.
+
+### CALC-346 — Invalid formula result falls back to inlineStr
+
+- Upstream: `sc/source/filter/excel/xestream.cxx`, `XclXmlUtils::GetFormulaTypeAndValue`; the original branch includes a TODO asking whether this is correct.
+- Observation: the Invalid/default branch chooses type inlineStr and copies the formula cell string, while the normal string branch chooses str. A real FormulaMissingToken cached result exercises Invalid and an empty string in the represented model.
+- Suspected issue: absence of a valid result is represented as inline string content rather than a missing/error cache. The source TODO identifies uncertainty; this finding does not claim that the whole downstream cell writer produces an invalid package.
+- Local behavior: preserve inlineStr and the second GetString call. Do not invent an error or coerce the result to zero.
+
+### CALC-347 — number(double) requests17 significance while normal rounding stays at15
+
+- Upstream: `include/rtl/ustring.hxx`, `OUString::number(double)`; `sal/rtl/strtmpl.hxx`, `doubleToString`.
+- Observation: the public overload passes G and25-minus9-plus1, i.e.17 significant digits. The formatter initializes nRoundDigits to15 and retains it for ordinary fractional values. Consequently the represented1/3 call yields0.333333333333333, rather than17 significant decimal digits. Exact integer and extreme-DBL_MAX paths have separate source policies.
+- Suspected issue: a request that appears sufficient to preserve binary64 precision is capped by another internal rounding policy for normal fractions. This is source analysis and actual SAL caller acceptance; no new independently compiled full native wrapper result is claimed.
+- Local behavior: retain both the17 request and source rounding. Corrected the initially overprecise test expectation after checking the pinned formatter; no formatter or threshold was changed.
+
+### CALC-348 — Logical negative-zero cache keeps the spelling -0
+
+- Upstream: `sc/source/filter/excel/xestream.cxx`, `XclXmlUtils::GetFormulaTypeAndValue`; `sal/rtl/strtmpl.hxx`, `doubleToString` signbit handling.
+- Observation: exact LOGICAL format plus value equal to0.0 chooses type b, including IEEE negative zero. The original number(double) path preserves signbit and writes -0. A real group-formatted ScFormulaCell with a cached negative zero exercises this source combination.
+- Suspected issue: the emitted cache has boolean type but a signed-zero numeric spelling; the downstream consumer acceptance of that spelling is unverified here. This is source-based/local-owner evidence, not a complete XLSX roundtrip or standards claim.
+- Local behavior: preserve type b and value -0. Do not normalize the sign, force numeric type or change the cached core value.
