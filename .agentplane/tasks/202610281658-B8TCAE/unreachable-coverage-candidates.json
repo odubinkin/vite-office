@@ -70,11 +70,15 @@
       "id": "B8TCAE-A04",
       "approval": "pending-user-response",
       "path": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
-      "sourceSha256": "4e0bdb82ba8be75d341211eff27aa6b3f7bfebf59f7e82c9965ad53a96c16a36",
+      "sourceSha256": "1005397a0e3c2a8859114fc0a8e45d460f3836e22e1bb3f4e467179834670dad",
       "branch": "mergeParenthesis final return after the currency-position switch",
       "nativeSource": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
       "proof": "The private helper is reached only from GetEffectiveNegativeFormat currency cases0,4,14,15. Its own currency switch exhausts those same four values; every inner sign value is0,1,2 and returns, while parenthesized intl formats return earlier. The original comment explicitly restricts this helper to parenthesized currency formats. Public scalar helper tests exercise original unknown intl/currency diagnostic handling without violating that private caller precondition. The final defensive return is not reached through any admitted original public caller.",
-      "status": "Individual approval question displayed via request_user_input_async. accepted=true confirms delivery only. No exclusion or counter/source exception has been applied."
+      "status": "Individual approval question displayed via request_user_input_async. accepted=true confirms delivery only. No exclusion or counter/source exception has been applied.",
+      "questionSourceCommit": "279a74173a46",
+      "questionSourceSha256": "4e0bdb82ba8be75d341211eff27aa6b3f7bfebf59f7e82c9965ad53a96c16a36",
+      "auditedFunctionSha256": "c85585e2d3d8920114698dced429538371b9243d3ca9f1569ec886167996f252",
+      "functionUnchangedSinceQuestion": true
     }
   ]
 }

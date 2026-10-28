@@ -1065,5 +1065,55 @@
     },
     "unreachableAudit": "B8TCAE-A04 individual response pending; no exception applied.",
     "finalFullVerifierPassed": false
+  },
+  "publicCurrencyCompletionRestoration": {
+    "nativeObservations": 3402,
+    "portableNativeComparisons": 6804,
+    "nativeFixture": "apps/office/src/svl/source/numbers/native-currency-completion.json",
+    "nativeFixtureSha256": "ff6e96203093094b4a834ea30ec2cf23f21c2e51bf23f1092301c96698a07fcc",
+    "nativePinnedSourceAndHeaderCount": 36,
+    "report": "apps/office/coverage/integration-currency-completion-consumers",
+    "testFiles": 40,
+    "tests": 495,
+    "assertionsPassed": true,
+    "coveredStatements": 204,
+    "totalStatements": 205,
+    "coveredBranchArms": 113,
+    "totalBranchArms": 113,
+    "coveredFunctions": 29,
+    "totalFunctions": 29,
+    "coveredLines": 197,
+    "totalLines": 198,
+    "strictCoveragePassed": false,
+    "productionSourcesChanged": [
+      "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
+      "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts"
+    ],
+    "coverageExceptionsApplied": false,
+    "counterMaps": "Both owners recollected after instance/static completion restoration. Older placement-only maps are historical and are not merged with these changed owners. Diagnostic union replaces those two stale owners and requires exact map equality for every subsequent merge.",
+    "diagnosticUnion": {
+      "statementsCovered": 117972,
+      "statementsTotal": 119511,
+      "branchArmsCovered": 72601,
+      "branchArmsTotal": 74579,
+      "functionsCovered": 18422,
+      "functionsTotal": 18429,
+      "linesCovered": 107212,
+      "linesTotal": 108171,
+      "remainingOwners": 232,
+      "remainingFunctions": 7
+    },
+    "remainingCurrencyGap": "A04 final private helper return only; its function bytes are unchanged since the pending individual question. No exception applied.",
+    "fixtureFormatting": "Prettier formatting only for existing calendar-hooks/calendar-type fixtures, verified by parsed equality with committed native values. Native currency probes compare parsed captured observations, independent of JSON whitespace.",
+    "finalFullVerifierPassed": false,
+    "nativeSanitizersPassed": true,
+    "fullFormatCheckPassed": true,
+    "placementFixtureSha256AfterFormatting": "f45b4e2779d8c92dd12f4bc2a3f099cd489efba5d522d9aa63d13f0955ff0ced",
+    "runtimeSourceHashes": {
+      "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts": "e61655af278a3296fafc319154b81dcc0f953daf91ef64e6fced9ea2a5612e8b",
+      "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts": "1005397a0e3c2a8859114fc0a8e45d460f3836e22e1bb3f4e467179834670dad"
+    },
+    "rawReport": "apps/office/coverage/integration-currency-completion-consumers/coverage-final.json",
+    "rawReportSha256": "dc376f453149905cb5cbaab5d0811a1db549ea0f6603fd7fb4d6cb6d537b433f"
   }
 }

@@ -20,14 +20,18 @@
         "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
         "apps/office/src/svl/source/numbers/zforlist.recognition.test.ts",
         "apps/office/src/svl/source/numbers/currency-placement.native.test.ts",
-        "apps/office/src/svl/source/numbers/native-currency-placement.json"
+        "apps/office/src/svl/source/numbers/native-currency-placement.json",
+        "apps/office/src/svl/source/numbers/currency-completion.native.test.ts",
+        "apps/office/src/svl/source/numbers/native-currency-completion.json"
       ],
-      "justification": "Extracts the existing original currency value unchanged and restores zero-character storage and original positive/negative format entry points. Actual locale/currency fields and original code owners remain in use. B8TCAE restores the original public NfCurrencyEntry::GetEffectivePositiveFormat and GetEffectiveNegativeFormat scalar contracts declared in include/svl/zforlist.hxx. The existing pattern builder delegates to those same source responsibilities with original NF_BANKSYMBOL_FIX_POSITION=1 and UInt16 argument conversion. No immutable currency field or locale provider is replaced. An independent witness compiles unchanged original member bodies, original private parenthesis helper and original public declarations; only SAL_WARN logging is silenced.1936 native output rows span all defined placements, bank modes, diagnostic values and unsigned16 conversion boundaries. This establishes scalar placement results, not full native currency/formatter ABI, allocation or concurrency equivalence. Prior currency-owner counter maps are stale after this restoration and require recollection.",
+      "justification": "Extracts the existing original currency value unchanged and restores zero-character storage and original positive/negative format entry points. Actual locale/currency fields and original code owners remain in use. B8TCAE restores the original public NfCurrencyEntry::GetEffectivePositiveFormat and GetEffectiveNegativeFormat scalar contracts declared in include/svl/zforlist.hxx. The existing pattern builder delegates to those same source responsibilities with original NF_BANKSYMBOL_FIX_POSITION=1 and UInt16 argument conversion. No immutable currency field or locale provider is replaced. An independent witness compiles unchanged original member bodies, original private parenthesis helper and original public declarations; only SAL_WARN logging is silenced.1936 native output rows span all defined placements, bank modes, diagnostic values and unsigned16 conversion boundaries. This establishes scalar placement results, not full native currency/formatter ABI, allocation or concurrency equivalence. Prior currency-owner counter maps are stale after this restoration and require recollection. B8TCAE restores original public static CompletePositiveFormatString/CompleteNegativeFormatString and their instance bank-symbol overloads. The actual pattern builder now invokes those same original instance completions on its owned OUStringBuffer. Source buffer mutation order and lazy counted-view concatenation are retained.3402 independent native observations compile the unchanged original completion bodies, actual original OUStringBuffer/Concat headers and unchanged complete RTL dependency scopes; each included pinned header is verified against the pinned Git blob. Inputs cover all placements, UInt16 conversion, diagnostic values, empty/NUL/paired and unpaired UTF16 spans, and growth boundaries. Portable replay checks capacity, logical length, actual live reference count, all logical units and terminator for both raw counted views and owned-string const views. The source-symbol input remains unchanged. This evidence does not certify full currency-object/formatter ABI, logging, allocation failures or concurrency. The two changed owners require fresh counter maps again; previous placement-only maps are historical.",
       "knownViolations": [],
       "localSymbols": [
         "NfCurrencyEntry",
         "GetEffectivePositiveFormat",
-        "GetEffectiveNegativeFormat"
+        "GetEffectiveNegativeFormat",
+        "CompletePositiveFormatString",
+        "CompleteNegativeFormatString"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svl/source/numbers/zforlist.cxx",
@@ -36,7 +40,9 @@
         "NfCurrencyEntry::BuildPositiveFormatString",
         "NfCurrencyEntry::BuildNegativeFormatString",
         "NfCurrencyEntry::GetEffectivePositiveFormat",
-        "NfCurrencyEntry::GetEffectiveNegativeFormat"
+        "NfCurrencyEntry::GetEffectiveNegativeFormat",
+        "NfCurrencyEntry::CompletePositiveFormatString",
+        "NfCurrencyEntry::CompleteNegativeFormatString"
       ]
     }
   }

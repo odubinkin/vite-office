@@ -1,4 +1,6 @@
 /** @fileoverview Original NfCurrencyEntry value and currency-pattern methods split from zforlist.cxx. */
+import type { OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import type { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { LANGUAGE_DONTKNOW, LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
@@ -10,6 +12,8 @@ import {
   BuildCurrencyFormat,
   GetEffectivePositiveFormat,
   GetEffectiveNegativeFormat,
+  CompletePositiveFormatString,
+  CompleteNegativeFormatString,
 } from "./zforlist.currency-patterns";
 /** Original language/country currency value used by SvNumberFormatter's ordered currency tables. */
 export class NfCurrencyEntry {
@@ -20,6 +24,40 @@ export class NfCurrencyEntry {
   /** Original public unsigned16 negative-sign/parenthesis placement helper. @param intl - Locale negative placement. @param currency - Currency negative placement. @param bank - Fixed bank-symbol policy. @returns Effective placement. */
   static GetEffectiveNegativeFormat(intl: number, currency: number, bank: boolean): number {
     return GetEffectiveNegativeFormat(intl, currency, bank);
+  }
+  /** Original public static counted-view completion. @param output - Caller buffer. @param symbol - Borrowed symbol view. @param placement - UInt16 positive placement. @returns Nothing. */
+  static CompletePositiveFormatString(
+    output: OUStringBuffer,
+    symbol: OUStringConstReference | Uint16Array,
+    placement: number,
+  ): void {
+    CompletePositiveFormatString(output, symbol, placement);
+  }
+  /** Original public static counted-view negative completion. @param output - Caller buffer. @param symbol - Borrowed symbol view. @param placement - UInt16 negative placement. @returns Nothing. */
+  static CompleteNegativeFormatString(
+    output: OUStringBuffer,
+    symbol: OUStringConstReference | Uint16Array,
+    placement: number,
+  ): void {
+    CompleteNegativeFormatString(output, symbol, placement);
+  }
+  /** Original instance overload owns a temporary symbol string. @param output - Caller buffer. @param bank - Bank-symbol mode. @param placement - Positive placement. @returns Nothing. */
+  CompletePositiveFormatString(output: OUStringBuffer, bank: boolean, placement: number): void {
+    const symbol = this.BuildSymbolString(bank);
+    try {
+      NfCurrencyEntry.CompletePositiveFormatString(output, symbol, placement);
+    } finally {
+      symbol.dispose();
+    }
+  }
+  /** Original instance negative overload owns a temporary symbol string. @param output - Caller buffer. @param bank - Bank-symbol mode. @param placement - Negative placement. @returns Nothing. */
+  CompleteNegativeFormatString(output: OUStringBuffer, bank: boolean, placement: number): void {
+    const symbol = this.BuildSymbolString(bank);
+    try {
+      NfCurrencyEntry.CompleteNegativeFormatString(output, symbol, placement);
+    } finally {
+      symbol.dispose();
+    }
   }
   private readonly symbol: OUString;
   private readonly bankSymbol: OUString;

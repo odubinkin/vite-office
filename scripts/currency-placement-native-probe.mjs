@@ -103,6 +103,6 @@ const captured = {
 };
 const serialized = JSON.stringify(captured, null, 2) + "\n";
 if (process.argv.includes("--write")) writeFileSync(fixture, serialized);
-else if (readFileSync(fixture, "utf8") !== serialized)
+else if (JSON.stringify(JSON.parse(readFileSync(fixture, "utf8"))) !== JSON.stringify(captured))
   throw new Error("Native currency placement fixture differs");
 console.log(`Verified ${rows.length} original currency-placement observations`);

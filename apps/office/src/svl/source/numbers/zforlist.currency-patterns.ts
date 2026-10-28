@@ -1,5 +1,6 @@
 /** @fileoverview Original currency numeric-pattern construction and sign/symbol placement, including the enabled fixed bank-symbol positions. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
+import { StringConcat } from "../../../sal/inc/rtl/stringconcat";
 import { OUStringBuffer } from "../../../sal/inc/rtl/ustrbuf";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
@@ -98,7 +99,109 @@ export function GetEffectiveNegativeFormat(intl: number, currency: number, bank:
   }
   return intl;
 }
-/** Original numeric characters plus positive/negative placement. Unknown placement keeps the numeric code as source diagnostics do. @param entry - Actual currency value. @param locale - Actual locale data. @param zero - Original zero character. @param bank - Bank mode. @param decimal - Native decimal mode. @param negative - Negative overload. @returns Owned format code. */
+/** Source constant UTF16 operands for the original lazy concat expressions. */
+const open = Uint16Array.of(40),
+  minus = Uint16Array.of(45),
+  space = Uint16Array.of(32),
+  spaceMinus = Uint16Array.of(32, 45);
+/** Original public static positive completion over the caller's actual buffer. @param output - Mutable format code. @param symbol - Borrowed counted UTF16 view. @param placement - Original UInt16 placement. @returns Nothing. */
+export function CompletePositiveFormatString(
+  output: OUStringBuffer,
+  symbol: OUStringConstReference | Uint16Array,
+  placement: number,
+): void {
+  switch (placement & 65535) {
+    case 0:
+      output.insert(0, symbol);
+      break;
+    case 1:
+      output.append(symbol);
+      break;
+    case 2:
+      output.insert(0, new StringConcat(symbol, space));
+      break;
+    case 3:
+      output.insertChar(output.getLength(), 32);
+      output.append(symbol);
+      break;
+  }
+}
+/** Original public static negative completion and its source buffer mutation order. @param output - Mutable format code. @param symbol - Borrowed counted UTF16 view. @param placement - Original UInt16 placement. @returns Nothing. */
+export function CompleteNegativeFormatString(
+  output: OUStringBuffer,
+  symbol: OUStringConstReference | Uint16Array,
+  placement: number,
+): void {
+  switch (placement & 65535) {
+    case 0:
+      output.insert(0, new StringConcat(open, symbol));
+      output.insertChar(output.getLength(), 41);
+      break;
+    case 1:
+      output.insert(0, new StringConcat(minus, symbol));
+      break;
+    case 2:
+      output.insert(0, new StringConcat(symbol, minus));
+      break;
+    case 3:
+      output.insert(0, symbol);
+      output.insertChar(output.getLength(), 45);
+      break;
+    case 4:
+      output.insertChar(0, 40);
+      output.append(symbol);
+      output.insertChar(output.getLength(), 41);
+      break;
+    case 5:
+      output.append(symbol);
+      output.insertChar(0, 45);
+      break;
+    case 6:
+      output.insertChar(output.getLength(), 45);
+      output.append(symbol);
+      break;
+    case 7:
+      output.append(symbol);
+      output.insertChar(output.getLength(), 45);
+      break;
+    case 8:
+      output.insertChar(output.getLength(), 32);
+      output.append(symbol);
+      output.insertChar(0, 45);
+      break;
+    case 9:
+      output.insert(0, new StringConcat(new StringConcat(minus, symbol), space));
+      break;
+    case 10:
+      output.insertChar(output.getLength(), 32);
+      output.append(symbol);
+      output.insertChar(output.getLength(), 45);
+      break;
+    case 11:
+      output.insert(0, new StringConcat(symbol, spaceMinus));
+      break;
+    case 12:
+      output.insert(0, new StringConcat(symbol, space));
+      output.insertChar(output.getLength(), 45);
+      break;
+    case 13:
+      output.insertChar(output.getLength(), 45);
+      output.insertChar(output.getLength(), 32);
+      output.append(symbol);
+      break;
+    case 14:
+      output.insert(0, new StringConcat(new StringConcat(open, symbol), space));
+      output.insertChar(output.getLength(), 41);
+      break;
+    case 15:
+      output.insertChar(0, 40);
+      output.insertChar(output.getLength(), 32);
+      output.append(symbol);
+      output.insertChar(output.getLength(), 41);
+      break;
+  }
+}
+/** Original numeric characters plus source instance completion. Unknown placement retains the numeric code as the original diagnostic path does. @param entry - Actual currency value. @param locale - Actual locale data. @param zero - Original zero character. @param bank - Bank mode. @param decimal - Native decimal mode. @param negative - Negative overload. @returns Owned format code. */
 export function BuildCurrencyFormat(
   entry: NfCurrencyEntry,
   locale: LocaleDataWrapper,
@@ -108,8 +211,7 @@ export function BuildCurrencyFormat(
   negative: boolean,
 ): OUString {
   decimal &= 65535;
-  const number = new OUStringBuffer(),
-    symbol = entry.BuildSymbolString(bank);
+  const number = new OUStringBuffer();
   try {
     const integer = join("#", locale.getNumThousandSep(), "##0");
     try {
@@ -122,74 +224,21 @@ export function BuildCurrencyFormat(
       for (let index = 0; index < entry.GetDigits(); ++index)
         number.insertChar(number.getLength(), decimal === 2 ? 45 : zero);
     }
-    const digits = number.toString();
-    try {
-      if (!negative) {
-        const placement = GetEffectivePositiveFormat(
-          locale.getCurrPositiveFormat(),
-          entry.GetPositiveFormat(),
-          bank,
-        );
-        switch (placement) {
-          case 0:
-            return join(symbol, digits);
-          case 1:
-            return join(digits, symbol);
-          case 2:
-            return join(symbol, " ", digits);
-          case 3:
-            return join(digits, " ", symbol);
-          default:
-            return new OUString(digits);
-        }
-      }
-      const placement = GetEffectiveNegativeFormat(
-        locale.getCurrNegativeFormat(),
-        entry.GetNegativeFormat(),
+    if (negative)
+      entry.CompleteNegativeFormatString(
+        number,
         bank,
+        GetEffectiveNegativeFormat(locale.getCurrNegativeFormat(), entry.GetNegativeFormat(), bank),
       );
-      switch (placement) {
-        case 0:
-          return join("(", symbol, digits, ")");
-        case 1:
-          return join("-", symbol, digits);
-        case 2:
-          return join(symbol, "-", digits);
-        case 3:
-          return join(symbol, digits, "-");
-        case 4:
-          return join("(", digits, symbol, ")");
-        case 5:
-          return join("-", digits, symbol);
-        case 6:
-          return join(digits, "-", symbol);
-        case 7:
-          return join(digits, symbol, "-");
-        case 8:
-          return join("-", digits, " ", symbol);
-        case 9:
-          return join("-", symbol, " ", digits);
-        case 10:
-          return join(digits, " ", symbol, "-");
-        case 11:
-          return join(symbol, " -", digits);
-        case 12:
-          return join(symbol, " ", digits, "-");
-        case 13:
-          return join(digits, "- ", symbol);
-        case 14:
-          return join("(", symbol, " ", digits, ")");
-        case 15:
-          return join("(", digits, " ", symbol, ")");
-        default:
-          return new OUString(digits);
-      }
-    } finally {
-      digits.dispose();
-    }
+    else
+      entry.CompletePositiveFormatString(
+        number,
+        bank,
+        GetEffectivePositiveFormat(locale.getCurrPositiveFormat(), entry.GetPositiveFormat(), bank),
+      );
+    return number.makeStringAndClear();
   } finally {
     number.dispose();
-    symbol.dispose();
   }
 }
 /** Original deduplicating append copies only newly encountered code values. @param formats - Actual owned vector. @param format - Expression result consumed here. @returns Existing or appended index. */

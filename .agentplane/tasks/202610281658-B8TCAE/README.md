@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 37
+revision: 38
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:24:59.234Z"
+doc_updated_at: "2026-10-28T22:43:07.240Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -153,6 +153,8 @@ sections:
     - Observation: Scanner public palette/compatibility/quote dispatch, actual system-currency cache insertion and multi-property character descriptor attachment pass40 tests in3 files. Pinned source explicitly uses GREY and compatibility DEM; test expectations follow those original contracts. Diagnostic union now leaves8 missing functions and232 incomplete owners. No production change or coverage exception.
 
     - Observation: Restored original public positive/negative currency placement methods with source UInt16 boundaries and fixed bank policy.1936 unchanged native C++ outputs replay successfully. All38 number-format suites484 tests pass, plus2 actual bank/language-owner tests and8 existing currency-catalog tests. Both changed owners have fresh counter maps; their obsolete baseline maps are omitted only from the diagnostic union and replaced with recollected counters, with thresholds/discovery unchanged. Diagnostic union has117911/119464 statements72589/74581 branches18416/18423 functions107151/108124 lines;232 owners and7 functions remain incomplete. A04 final private helper return has a source caller proof; the individual approval question is pending and no exclusion has been applied. Final full verifier/publication/reverse merges remain pending.
+
+    - Observation: Original public static and instance currency completions are restored, with source buffer mutation order and lazy concatenation.3402 unchanged original C++ observations replay6804 portable raw/owned-view comparisons of full capacity/length/live-refcount/code-unit/terminator state. All40 consumer suites495 tests pass; the two owners have204/205 statements113/113 branches29/29 functions197/198 lines. Only the A04 defensive return remains, and its question is pending with no exception. Current diagnostic union uses newly recollected owner maps and leaves7 functions232 owners incomplete. Existing ICU JSON reformatting preserves every parsed native value/metadata. Final full verifier and branch publication/synchronization remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -286,3 +288,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Scanner public palette/compatibility/quote dispatch, actual system-currency cache insertion and multi-property character descriptor attachment pass40 tests in3 files. Pinned source explicitly uses GREY and compatibility DEM; test expectations follow those original contracts. Diagnostic union now leaves8 missing functions and232 incomplete owners. No production change or coverage exception.
 
 - Observation: Restored original public positive/negative currency placement methods with source UInt16 boundaries and fixed bank policy.1936 unchanged native C++ outputs replay successfully. All38 number-format suites484 tests pass, plus2 actual bank/language-owner tests and8 existing currency-catalog tests. Both changed owners have fresh counter maps; their obsolete baseline maps are omitted only from the diagnostic union and replaced with recollected counters, with thresholds/discovery unchanged. Diagnostic union has117911/119464 statements72589/74581 branches18416/18423 functions107151/108124 lines;232 owners and7 functions remain incomplete. A04 final private helper return has a source caller proof; the individual approval question is pending and no exclusion has been applied. Final full verifier/publication/reverse merges remain pending.
+
+- Observation: Original public static and instance currency completions are restored, with source buffer mutation order and lazy concatenation.3402 unchanged original C++ observations replay6804 portable raw/owned-view comparisons of full capacity/length/live-refcount/code-unit/terminator state. All40 consumer suites495 tests pass; the two owners have204/205 statements113/113 branches29/29 functions197/198 lines. Only the A04 defensive return remains, and its question is pending with no exception. Current diagnostic union uses newly recollected owner maps and leaves7 functions232 owners incomplete. Existing ICU JSON reformatting preserves every parsed native value/metadata. Final full verifier and branch publication/synchronization remain pending.
