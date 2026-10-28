@@ -623,5 +623,48 @@
       }
     },
     "scope": "Both unchanged original host/path owners reach100 in the current6-file230-test URL suite. Path additions are bounded source-contract cases; original6110 host observations retain their separate native witness scope. No coverage exceptions."
+  },
+  "stylePoolCurrent": {
+    "testFiles": 2,
+    "tests": 21,
+    "newTests": 4,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "runtimeCodeChanged": false,
+    "report": "apps/office/coverage/integration-stylepool/coverage-final.json",
+    "reportSha256": "09776130764b0aa592285b7ca73b63e53e1a6a7852a66bd11f9e6525108f6348",
+    "metrics": {
+      "lines": {
+        "total": 127,
+        "covered": 126,
+        "skipped": 0,
+        "pct": 99.21
+      },
+      "statements": {
+        "total": 146,
+        "covered": 145,
+        "skipped": 0,
+        "pct": 99.31
+      },
+      "functions": {
+        "total": 26,
+        "covered": 26,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 110,
+        "covered": 108,
+        "skipped": 0,
+        "pct": 98.18
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "scope": "Actual public insertion/ownership/iteration/cache/named-parent tests and existing bounded native replay. Remaining last-not-child and missing-ignorable-representative alternatives have no exception; source/counters/thresholds remain unchanged."
   }
 }

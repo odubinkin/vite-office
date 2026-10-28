@@ -43,6 +43,120 @@ function input(
   return set;
 }
 
+it("finds a used descendant through multiple ignorable items while retaining ordinary siblings", /** Public insertion builds the real node tree; one unused ignorable sibling must not hide a deeper used representative or a separate ordinary child. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    ignorable = new SfxItemSet(pool, [[15, 16]]),
+    styles = new StylePool(ignorable),
+    ordinaryInput = input(pool, [
+      [11, 7],
+      [14, 9],
+    ]),
+    unusedInput = input(pool, [
+      [11, 7],
+      [15, 0],
+      [16, 2],
+    ]),
+    usedInput = input(pool, [
+      [11, 7],
+      [15, 1],
+      [16, 2],
+    ]),
+    ordinary = styles.insertItemSet(ordinaryInput),
+    unused = styles.insertItemSet(unusedInput),
+    used = styles.insertItemSet(usedInput),
+    output: SfxItemSet[] = [];
+  releaseStyleHandle(unused);
+  try {
+    styles.getAllStyles(output);
+    expect(output).toEqual([used, ordinary]);
+    expect(output[0]?.Get(15).QueryValue()).toBe(1);
+    expect(output[0]?.Get(16).QueryValue()).toBe(2);
+    expect(styleHandleUseCount(used)).toBe(3);
+    expect(styleHandleUseCount(unused)).toBe(1);
+  } finally {
+    for (const handle of output) releaseStyleHandle(handle);
+    releaseStyleHandle(used);
+    releaseStyleHandle(ordinary);
+    styles.Dispose();
+    usedInput.Dispose();
+    unusedInput.Dispose();
+    ordinaryInput.Dispose();
+    ignorable.Dispose();
+  }
+});
+
+it("rejects releasing a set that never acquired an automatic-style handle", /** This is the existing host shared-pointer binding's checked misuse contract; no native dangling-pointer behavior is claimed. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    set = new SfxItemSet(pool, [[1, 20]]);
+  try {
+    expect(styleHandleUseCount(set)).toBe(0);
+    expect(
+      /** Calls the public ownership boundary without manufacturing counters. @returns Nothing. */ () =>
+        releaseStyleHandle(set),
+    ).toThrow("Releasing an unowned automatic-style handle");
+    expect(styleHandleUseCount(set)).toBe(0);
+    expect(set.Count()).toBe(0);
+  } finally {
+    set.Dispose();
+  }
+});
+
+it("iterates an owned empty root and replaces an existing cache owner without changing its count", /** An empty concrete item path belongs to the actual root; repeated cache population replaces one owning shared-pointer copy. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool(),
+    empty = input(pool, []),
+    handle = styles.insertItemSet(empty),
+    output: SfxItemSet[] = [],
+    cache = new Map<string, SfxItemSet>();
+  try {
+    styles.getAllStyles(output);
+    expect(output).toEqual([handle]);
+    for (const value of output) releaseStyleHandle(value);
+    output.length = 0;
+    styles.populateCacheMap(cache);
+    expect([...cache.values()]).toEqual([handle]);
+    expect(styleHandleUseCount(handle)).toBe(3);
+    styles.populateCacheMap(cache);
+    expect([...cache.values()]).toEqual([handle]);
+    expect(styleHandleUseCount(handle)).toBe(3);
+  } finally {
+    for (const value of output) releaseStyleHandle(value);
+    for (const value of cache.values()) releaseStyleHandle(value);
+    releaseStyleHandle(handle);
+    styles.Dispose();
+    empty.Dispose();
+  }
+});
+
+it("orders named parents around equal and absent names while retaining independent roots", /** Public insertion supplies actual distinct parent identities and optional source names; no order between equal names is asserted as a portable pointer ABI guarantee. @returns Nothing. */ () => {
+  const pool = new SfxItemPool(),
+    styles = new StylePool(),
+    parents: SfxItemSet[] = [],
+    inputs: SfxItemSet[] = [],
+    handles: SfxItemSet[] = [],
+    output: SfxItemSet[] = [];
+  try {
+    for (const [index, name] of [undefined, "Alpha", "Zulu", "Alpha", undefined].entries()) {
+      const parent = input(pool, [[1, index + 1]]),
+        value = input(pool, [], parent);
+      parents.push(parent);
+      inputs.push(value);
+      handles.push(styles.insertItemSet(value, name));
+    }
+    styles.getAllStyles(output);
+    expect(output).toHaveLength(5);
+    expect(new Set(output.slice(0, 2))).toEqual(new Set([handles[0], handles[4]]));
+    expect(new Set(output.slice(2, 4))).toEqual(new Set([handles[1], handles[3]]));
+    expect(output[4]).toBe(handles[2]);
+  } finally {
+    for (const value of output) releaseStyleHandle(value);
+    for (const value of handles) releaseStyleHandle(value);
+    styles.Dispose();
+    for (const value of inputs) value.Dispose();
+    for (const parent of parents) parent.Dispose();
+  }
+});
+
 describe("automatic character StylePool insertion", /** Groups real tree/leaf/owner tests. @returns Nothing. */ () => {
   it.each([false, true])(
     "retains root and subset leaves with child-first=%s",

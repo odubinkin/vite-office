@@ -30,5 +30,19 @@
       "existingEvidence": "native-currencies.test.ts enumerates real installed locale values; resource/inventory checks retain the generated data contract.",
       "proposedScope": "Only the missing-identity throw alternative in coverage; retain runtime integrity validation, catalog tests and the100% threshold."
     }
+  ],
+  "additionalAudits": [
+    {
+      "id": "B8TCAE-A01",
+      "approval": "not-requested",
+      "path": "apps/office/src/svl/source/items/stylepool.ts",
+      "sourceSha256": "e6f04a675df5604d2df140de42146f1d9b3e90b75be1d731fb47f2fd651b4761",
+      "alternatives": [
+        "nextItemSet: indexOf(last)<0 at line88",
+        "getItemSetOfIgnorableChild empty return at line116 and Iterator empty representative at line171"
+      ],
+      "proof": "Node/Iterator are private and tree children are append-only during public iteration. nextItemSet receives null, self, or a direct child from its fixed traversal; child removal occurs only in pool disposal outside iteration. The ignorable lookup is called only after hasIgnorableChildren with the same usage filter. Recursive lookup searches that same unchanged tree and actual ownership counts synchronously, without callbacks that can release the selected external owner. An actual matching descendant must exist. This is a local single-turn source-domain invariant; concurrent native shared_ptr owner changes and full ABI/threading behavior are not certified.",
+      "status": "Proof audit retained for later individual user review; no exclusion or source change."
+    }
   ]
 }
