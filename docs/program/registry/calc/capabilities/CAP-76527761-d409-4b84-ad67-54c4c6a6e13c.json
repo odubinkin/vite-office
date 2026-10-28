@@ -1,0 +1,101 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-76527761-d409-4b84-ad67-54c4c6a6e13c",
+    "capabilityId": "CAP-76527761-d409-4b84-ad67-54c4c6a6e13c",
+    "suite": "calc",
+    "subsystem": "sax-input-source",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual UNO streams feed native XMLFile2UTFConverter and the DOM-free host SAX backend."
+    ],
+    "capability": "Actual SAX InputSource and locator ownership through incremental byte admission",
+    "gaps": [
+      "Actual InputSource Reference/OUString aggregate ownership, cached XLocator SDK, generated SAXException and FastLocatorImpl component now admit genuine XInputStream bytes through XMLFile2UTFConverter. Source copies and ParserData snapshots precede document callbacks; 16KiB reads stop at EOF without closing input. The existing saxes backend receives incrementally decoded UTF8/UTF16/UTF32 or actual RTL legacy-descriptor output without DOM. This backend binding is not a port or certification of native libxml2 encoding aliases, diagnostics or locator positions. Host FastSaxParseError remains an explicit host envelope; only the missing-input SAXException is an actual generated UNO exception. Native parser mutex/thread machinery, complete XFastParser service, unported RTL encodings, allocation unwind/ABI and full package/model/filter/DOCX/XLSX/Worker/UI acceptance remain unverified. Existing file/autosave/recovery behavior is preserved."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/InputSource.idl",
+          "marker": "InputSource"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/XLocator.idl",
+          "marker": "XLocator"
+        },
+        {
+          "path": "offapi/com/sun/star/xml/sax/SAXException.idl",
+          "marker": "SAXException"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "Entity"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sax/qa/cppunit/parser.cxx",
+          "marker": "ParserTest"
+        }
+      ],
+      "docs": [
+        {
+          "path": "offapi/com/sun/star/xml/sax/InputSource.idl",
+          "marker": "InputSource"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/InputSource.ts",
+          "marker": "InputSource"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts",
+          "marker": "XLocator"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts",
+          "marker": "SAXException"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/streaminput.ts",
+          "marker": "Entity"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+          "marker": "FastLocatorImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sax/source/fastparser/InputSource.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-sax-input-source.md",
+          "marker": "# Native SAX InputSource"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Actual InputSource Reference/OUString aggregate ownership, cached XLocator SDK, generated SAXException and FastLocatorImpl component now admit genuine XInputStream bytes through XMLFile2UTFConverter. Source copies and ParserData snapshots precede document callbacks; 16KiB reads stop at EOF without closing input. The existing saxes backend receives incrementally decoded UTF8/UTF16/UTF32 or actual RTL legacy-descriptor output without DOM. This backend binding is not a port or certification of native libxml2 encoding aliases, diagnostics or locator positions. Host FastSaxParseError remains an explicit host envelope; only the missing-input SAXException is an actual generated UNO exception. Native parser mutex/thread machinery, complete XFastParser service, unported RTL encodings, allocation unwind/ABI and full package/model/filter/DOCX/XLSX/Worker/UI acceptance remain unverified. Existing file/autosave/recovery behavior is preserved."
+    },
+    "scopeLimitations": [
+      "Actual InputSource Reference/OUString aggregate ownership, cached XLocator SDK, generated SAXException and FastLocatorImpl component now admit genuine XInputStream bytes through XMLFile2UTFConverter. Source copies and ParserData snapshots precede document callbacks; 16KiB reads stop at EOF without closing input. The existing saxes backend receives incrementally decoded UTF8/UTF16/UTF32 or actual RTL legacy-descriptor output without DOM. This backend binding is not a port or certification of native libxml2 encoding aliases, diagnostics or locator positions. Host FastSaxParseError remains an explicit host envelope; only the missing-input SAXException is an actual generated UNO exception. Native parser mutex/thread machinery, complete XFastParser service, unported RTL encodings, allocation unwind/ABI and full package/model/filter/DOCX/XLSX/Worker/UI acceptance remain unverified. Existing file/autosave/recovery behavior is preserved."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-stream-encoding-conversion"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/xml/sax/XLocator.idl",
+    "localSymbols": [
+      "XLocator",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XLocator",
+      "getLineNumber"
+    ],
+    "preservedResponsibilities": [
+      "Actual InputSource Reference/OUString aggregate ownership, cached XLocator SDK, generated SAXException and FastLocatorImpl component now admit genuine XInputStream bytes through XMLFile2UTFConverter. Source copies and ParserData snapshots precede document callbacks; 16KiB reads stop at EOF without closing input. The existing saxes backend receives incrementally decoded UTF8/UTF16/UTF32 or actual RTL legacy-descriptor output without DOM. This backend binding is not a port or certification of native libxml2 encoding aliases, diagnostics or locator positions. Host FastSaxParseError remains an explicit host envelope; only the missing-input SAXException is an actual generated UNO exception. Native parser mutex/thread machinery, complete XFastParser service, unported RTL encodings, allocation unwind/ABI and full package/model/filter/DOCX/XLSX/Worker/UI acceptance remain unverified. Existing file/autosave/recovery behavior is preserved."
+    ],
+    "omittedResponsibilities": [
+      "Full libxml2/parser service, native threading/ABI, missing RTL descriptors and DOCX/XLSX model/filter/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts",
+          "marker": "XLocator"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/InputSource.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/xml/sax/XLocator.idl",
+          "marker": "XLocator"
+        }
+      ]
+    }
+  }
+}
