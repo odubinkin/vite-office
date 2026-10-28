@@ -18,9 +18,11 @@
       "evidence": [
         "apps/office/src/sw/source/filter/html/htmlctxt.ts",
         "apps/office/src/sw/source/filter/html/htmlctxt.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/html/htmlctxt.cxx"
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlctxt.cxx",
+        "apps/office/src/sw/source/filter/html/swhtml.context-owners.test.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.block-boundaries.integration.test.ts"
       ],
-      "justification": "Native represented HTML context constructors/defaults, borrowed attribute deque, pool-style/default-style selection, class text, changed-margin/spacing out parameters, uint16/signed-short narrowing, restart/visibility/append flags and actual saved numbering-rule identity. Source-contract tests only; complete Writer/compiled native parity remains unverified.",
+      "justification": "Native represented HTML context constructors/defaults, borrowed attribute deque, pool-style/default-style selection, class text, changed-margin/spacing out parameters, uint16/signed-short narrowing, restart/visibility/append flags and actual saved numbering-rule identity. Source-contract tests only; complete Writer/compiled native parity remains unverified. B8TCAE restores original swhtml.cxx LINEBREAK-in-PRE/NEWPARA shared control flow using grouped TypeScript case labels because compiler noFallthroughCasesInSwitch remains enabled. The extra raw TABCHAR insertion case has no original SwHTMLParser counterpart and is removed; real HTMLParser FilterPRE tab expansion remains covered by actual byte-stream input. Original soft-hyphen, repeated PRE break and existing block behavior are retained. Context API regressions use actual constructors/setters for default-only spacing, NONE search boundaries, PopStack, real node preconditions, paragraph-space restoration and interrupted real-token consumer lifetimes; no private parser fields or original operation results are fabricated. Seven suites119 assertions pass. Current HTML source maps differ from the initial integration run, so old HTML coverage is historical only; broad100% remains unfinished and semantic statuses are unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "HTMLAttrContext",

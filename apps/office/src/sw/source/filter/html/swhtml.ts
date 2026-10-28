@@ -714,20 +714,13 @@ export class SwHTMLParser extends HTMLParser {
       case T.SOFTHYPH:
         this.m_xDoc.GetDocumentContentOperationsManager().InsertString(this.m_pPam, "\u00ad");
         break;
-      case T.TABCHAR:
-        this.m_xDoc.GetDocumentContentOperationsManager().InsertString(this.m_pPam, "\t");
-        break;
       case T.LINEBREAK:
-        if (!this.bReadPRE) {
+      case T.NEWPARA:
+        // Group the original fallthrough cases: TypeScript forbids a nonempty fallthrough.
+        if (token === T.LINEBREAK && !this.bReadPRE) {
           this.m_xDoc.GetDocumentContentOperationsManager().InsertString(this.m_pPam, "\n");
           break;
         }
-        if (this.m_pPam.GetPoint().GetContentIndex()) {
-          this.AppendTextNode();
-          this.SetTextCollAttrs();
-        }
-        break;
-      case T.NEWPARA:
         if (token === T.NEWPARA || this.m_pPam.GetPoint().GetContentIndex()) {
           this.AppendTextNode();
           this.SetTextCollAttrs();

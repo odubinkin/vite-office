@@ -53,10 +53,19 @@ function inspectHtml(input: string, inspect: (doc: SwDoc) => void): void {
 }
 /** Derived consumer invokes the original token handler before caller interruption; no parser state is injected. */
 class InterruptedConsumer extends SwHTMLParser {
+  /** Keeps the caller interruption choice separate from all original parser state. @param doc - Actual borrowed document. @param pam - Actual borrowed cursor. @param input - Real byte stream. @param stop - Filtered token after which the caller aborts. @returns Original parser with caller metadata. */
+  constructor(
+    doc: SwDoc,
+    pam: SwPaM,
+    input: SvStream,
+    private readonly stop = HtmlTokenId.TEXTTOKEN,
+  ) {
+    super(doc, pam, input);
+  }
   /** Interrupts at the original virtual consumer boundary after actual text insertion. @param token - Real filtered stream token. @returns Nothing. */
   protected override NextToken(token: HtmlTokenId): void {
     super.NextToken(token);
-    if (token === HtmlTokenId.TEXTTOKEN) throw new Error("caller interrupted HTML import");
+    if (token === this.stop) throw new Error("caller interrupted HTML import");
   }
 }
 it.each([false, true])(
@@ -96,6 +105,38 @@ it.each([false, true])(
     }
   },
 );
+it("releases closed pending inline owners if the consumer interrupts before their final flush", /** The actual scanner closes the source attribute heads and queues their completed ranges; destruction must release that pending queue after a consumer abort. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = doc.paragraphs[0];
+  assert(node);
+  const position = new SwPosition(node),
+    pam = new SwPaM(position);
+  position.Dispose();
+  const parser = new InterruptedConsumer(
+    doc,
+    pam,
+    new SvStream(
+      OUStringToOString("<b><i>payload</i></b>", RTL_TEXTENCODING_UTF8),
+      RTL_TEXTENCODING_UTF8,
+    ),
+    HtmlTokenId.BOLD_OFF,
+  );
+  try {
+    expect(
+      /** Uses real source close handlers before the caller aborts. @returns Parser completion if interruption is missed. */ () =>
+        parser.CallParser(),
+    ).toThrow("caller interrupted HTML import");
+    expect(node.GetText()).toBe("payload");
+    expect(parser.m_aContexts).toHaveLength(0);
+    expect(parser.m_aSetAttrTab.length).toBeGreaterThan(0);
+  } finally {
+    parser.SourceDispose();
+    expect(parser.m_aSetAttrTab).toHaveLength(0);
+    expect(doc.GetDocumentSettingManager().get("HTML_MODE")).toBe(false);
+    pam.Dispose();
+    doc.Dispose();
+  }
+});
 it.each([false, true])(
   "creates the original internal sender style in HTML_MODE=%s",
   /** Original DocumentStylePoolManager.cxx1005 gives HTML all-script italic, ordinary documents3pt lower spacing, and both branches disable line counting. @param htmlMode - Original document setting. @returns Nothing. */ (
@@ -123,6 +164,9 @@ it.each([
   ["<p>A<center>B</center>C", ["A", "B", "C"]],
   ["<p>A<blockquote>B</blockquote>C", ["A", "B", "C"]],
   ["<pre>A<br>B</pre>", ["A", "B"]],
+  ["<pre>A<br><br>B</pre>", ["A", "B"]],
+  ["<pre>A\tB</pre>", ["A       B"]],
+  ["<p>A&shy;B</p>", ["A\u00adB"]],
   ["<listing>A\nB</listing>", ["A", "B"]],
   ["<xmp>A\nB</xmp>", ["A", "B"]],
   ["<p>A<pre>B\nC</pre>D", ["A", "B", "C", "D"]],

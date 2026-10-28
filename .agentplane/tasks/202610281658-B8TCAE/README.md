@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 15
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T18:26:59.445Z"
+doc_updated_at: "2026-10-28T18:43:38.370Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -79,6 +79,10 @@ sections:
     - Observation: Additional actual byte-stream parser interruption tests invoke the original NextToken handler before a derived virtual consumer aborts. Live nested inline owners and both initial HTML_MODE states are verified during SourceDispose.
       Impact: All6 Writer suites108 assertions pass. The broader HTML+style coverage profile still fails the configured100% threshold for remaining HTML paths; the separate strict100% profile for2 changed style owners remains valid.
       Resolution: Record raw profile and exact scope, keep all coverage policy unchanged, and continue remaining gaps. No parser state, resource counter, original handler return or expected native value is fabricated.
+
+    - Observation: Pinned swhtml.cxx1499..1524 shares PRE LINEBREAK with NEWPARA by fallthrough. The port had duplicated that body and retained an always-true NEWPARA-only condition; it also inserted raw TABCHAR through a case absent in original SwHTMLParser.
+      Impact: Restore the shared body through grouped TypeScript cases while keeping compiler fallthrough enforcement. Remove the unsourced raw TAB callback path; real PRE tabs still expand through original HTMLParser FilterPRE. New actual-byte and context-owner regressions pass119 assertions across7 suites.
+      Resolution: Preserve source token behavior and all coverage policy. Retain current raw maps, treat prior HTML coverage as historical, and continue remaining gaps; this is a local port-structure correction, not a suspected upstream bug or a coverage exception.
 id_source: "generated"
 ---
 ## Summary
@@ -138,3 +142,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Additional actual byte-stream parser interruption tests invoke the original NextToken handler before a derived virtual consumer aborts. Live nested inline owners and both initial HTML_MODE states are verified during SourceDispose.
   Impact: All6 Writer suites108 assertions pass. The broader HTML+style coverage profile still fails the configured100% threshold for remaining HTML paths; the separate strict100% profile for2 changed style owners remains valid.
   Resolution: Record raw profile and exact scope, keep all coverage policy unchanged, and continue remaining gaps. No parser state, resource counter, original handler return or expected native value is fabricated.
+
+- Observation: Pinned swhtml.cxx1499..1524 shares PRE LINEBREAK with NEWPARA by fallthrough. The port had duplicated that body and retained an always-true NEWPARA-only condition; it also inserted raw TABCHAR through a case absent in original SwHTMLParser.
+  Impact: Restore the shared body through grouped TypeScript cases while keeping compiler fallthrough enforcement. Remove the unsourced raw TAB callback path; real PRE tabs still expand through original HTMLParser FilterPRE. New actual-byte and context-owner regressions pass119 assertions across7 suites.
+  Resolution: Preserve source token behavior and all coverage policy. Retain current raw maps, treat prior HTML coverage as historical, and continue remaining gaps; this is a local port-structure correction, not a suspected upstream bug or a coverage exception.

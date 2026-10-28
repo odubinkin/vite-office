@@ -3,7 +3,7 @@
   "finalFullVerifierPassed": false,
   "thresholdsChanged": false,
   "exceptionsApproved": false,
-  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required.",
+  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps.",
   "icu": {
     "testFiles": 9,
     "groupedTests": 70,
@@ -259,5 +259,49 @@
     "result": "passed",
     "log": ".agentplane/tmp/coverage-checkpoint-tooling.log",
     "scope": "Run after native host/locale work and before Writer style fix; final full verifier still required."
+  },
+  "writerHtmlSharedControl": {
+    "testFiles": 7,
+    "tests": 119,
+    "contextOwnerTests": 7,
+    "blockAndLifecycleTests": 19,
+    "runtimeCodeChanged": [
+      "apps/office/src/sw/source/filter/html/swhtml.ts"
+    ],
+    "report": "apps/office/coverage/integration-html-current/coverage-final.json",
+    "reportSha256": "1c073a5cf6a614bf6b875bbd3d659cf6c27b3b531d6092c0a1658261cc18bd70",
+    "metrics": {
+      "lines": {
+        "total": 691,
+        "covered": 685,
+        "skipped": 0,
+        "pct": 99.13
+      },
+      "statements": {
+        "total": 769,
+        "covered": 752,
+        "skipped": 0,
+        "pct": 97.78
+      },
+      "functions": {
+        "total": 63,
+        "covered": 63,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 582,
+        "covered": 539,
+        "skipped": 0,
+        "pct": 92.61
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "scope": "B8TCAE restores original swhtml.cxx LINEBREAK-in-PRE/NEWPARA shared control flow using grouped TypeScript case labels because compiler noFallthroughCasesInSwitch remains enabled. The extra raw TABCHAR insertion case has no original SwHTMLParser counterpart and is removed; real HTMLParser FilterPRE tab expansion remains covered by actual byte-stream input. Original soft-hyphen, repeated PRE break and existing block behavior are retained. Context API regressions use actual constructors/setters for default-only spacing, NONE search boundaries, PopStack, real node preconditions, paragraph-space restoration and interrupted real-token consumer lifetimes; no private parser fields or original operation results are fabricated. Seven suites119 assertions pass. Current HTML source maps differ from the initial integration run, so old HTML coverage is historical only; broad100% remains unfinished and semantic statuses are unchanged."
   }
 }
