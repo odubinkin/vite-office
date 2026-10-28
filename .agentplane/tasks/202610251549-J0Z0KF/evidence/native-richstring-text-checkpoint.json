@@ -1,0 +1,131 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native XString/attribute/rich-string text prerequisite checkpoint; DOING/needs_rework",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Original XString escape decoding, surrogate sanitation, actual counted UTF8 FastAttributeList values, optional/defaulted AttributeList Unicode queries, RichString text portions and content concatenation. Native dependency directions admitted from Library_oox/Library_scfilt.",
+  "sourceBlobs": {
+    "apps/office/src/sax/source/tools/fastattribs.ts": "8072cc47f0b45bf700dfbb3920c109ffbc09a202",
+    "docs/program/calc-upstream-suspected-issues.md": "134213f37fb57b623ff1c918a9de5759670212b3",
+    "docs/program/registry/shared/provenance/sax/source/tools/fastattribs.ts.json": "9eacf32eec6578950c6e72728c3f86b1f46787f5",
+    "docs/program/registry/shared/runtime/sax/source/tools/fastattribs.ts.json": "59809b71a68a3f17d7dcae089a98987ed518333b",
+    "scripts/check-module-boundaries.mjs": "9757a4f2476d61ccfc8834b08ea54805f8a53b1a",
+    "apps/office/src/comphelper/source/misc/string.ts": "9156aa74296fc9991395648f672a6b3b64222f6b",
+    "apps/office/src/oox/source/helper/attributelist.test.ts": "42aad79e091e3767c29b64be121867999225b5fc",
+    "apps/office/src/oox/source/helper/attributelist.ts": "bba8db80928aa7a4a66036096416fb02fca79535",
+    "apps/office/src/sc/source/filter/inc/richstring.ts": "86ecf6838c359e92aff6c1df49226f175648edd9",
+    "apps/office/src/sc/source/filter/oox/richstring.test.ts": "cf8e1a863858048400ea09c80118c37ce5d1de17",
+    "apps/office/src/sc/source/filter/oox/richstring.ts": "778c5860b86c1833c127a9481f82645f92ff554c",
+    "docs/program/registry/calc/capabilities/CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10.json": "0ecebea17292489aff9f64a7aa51ffc5ecfda80e",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/richstring.ts.json": "139784c540df508543da33370a59313e49abbfff",
+    "docs/program/registry/calc/provenance/sc/source/filter/oox/richstring.ts.json": "831b44e8f6b1fdcb1e5ad1e1679657ae1b90b6b8",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/richstring.ts.json": "41122ffeaf121ab3de60dfd7526027f3d733d9a8",
+    "docs/program/registry/calc/runtime/sc/source/filter/oox/richstring.ts.json": "97c91056f0f2baf27996f0b7d8cf774d64887373",
+    "docs/program/registry/shared/provenance/comphelper/source/misc/string.ts.json": "17ffe96e4028d6cd04ba3ffe793f7c0eee18fbc6",
+    "docs/program/registry/shared/provenance/oox/source/helper/attributelist.ts.json": "ee4fc53e4c28185bf900729e49342657f2ea896d",
+    "docs/program/registry/shared/runtime/comphelper/source/misc/string.ts.json": "b63df02318337ee2a428c5316aa886072b4bca52",
+    "docs/program/registry/shared/runtime/oox/source/helper/attributelist.ts.json": "7bbe8500e958dd6daac9734871cdc7ce3da944b9"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/oox/source/helper/attributelist.test.ts src/sc/source/filter/oox/richstring.test.ts src/sax/source/tools/fastattribs.test.ts --coverage.include=src/oox/source/helper/attributelist.ts --coverage.include=src/comphelper/source/misc/string.ts --coverage.include=src/sc/source/filter/oox/richstring.ts --coverage.include=src/sax/source/tools/fastattribs.ts --coverage.reportsDirectory=coverage/xlsx-richstring-final --maxWorkers=2",
+      "result": "pass37 tests/3files, entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. No threshold/exclusion changes.",
+      "rawFile": "apps/office/coverage/xlsx-richstring-final/coverage-final.json",
+      "sha256": "939efbdc39f849bf82bd280cd68ce031b551d6ae295a903060c703e87f40f197",
+      "files": {
+        "apps/office/src/comphelper/source/misc/string.ts": {
+          "s": {
+            "covered": 11,
+            "total": 11
+          },
+          "b": {
+            "covered": 8,
+            "total": 8
+          },
+          "f": {
+            "covered": 1,
+            "total": 1
+          }
+        },
+        "apps/office/src/oox/source/helper/attributelist.ts": {
+          "s": {
+            "covered": 50,
+            "total": 50
+          },
+          "b": {
+            "covered": 36,
+            "total": 36
+          },
+          "f": {
+            "covered": 9,
+            "total": 9
+          }
+        },
+        "apps/office/src/sax/source/tools/fastattribs.ts": {
+          "s": {
+            "covered": 37,
+            "total": 37
+          },
+          "b": {
+            "covered": 12,
+            "total": 12
+          },
+          "f": {
+            "covered": 13,
+            "total": 13
+          }
+        },
+        "apps/office/src/sc/source/filter/oox/richstring.ts": {
+          "s": {
+            "covered": 29,
+            "total": 29
+          },
+          "b": {
+            "covered": 4,
+            "total": 4
+          },
+          "f": {
+            "covered": 10,
+            "total": 10
+          }
+        }
+      }
+    },
+    "regression": {
+      "command": "npm run test:shared -- src/sax/source/ src/oox/source/ src/sal/rtl/ustring-xlsx.test.ts --maxWorkers=2",
+      "result": "pass125 tests/15files, related shared SAX/OOXML/SAL only; no full-suite claim"
+    },
+    "typecheck": "pass:npm run typecheck tools and app",
+    "static": "pass:npm run test:static",
+    "eslint": "pass:all seven changed/new source/test TS paths and boundary script max-warnings0",
+    "prettier": "pass:same eight TS/MJS paths",
+    "dependencies": "pass1691 runtime sources/8743 relative imports/211 allowed cross-module edges. New oox->sal and sc->oox match native Library_oox.mk and Library_scfilt.mk and consumed original includes.",
+    "docs": "pass3890 authored source files",
+    "fileSize": "pass3894 authored files, existing decomposition candidates retained",
+    "sourceTree": "pass115required paths/32retired roots",
+    "resources": "pass464commands/11menus/17dispositions",
+    "provenance": "pass1692 runtime modules/1480mapped/182browser adaptations/30infrastructure",
+    "registry": "pass1692modules/350capabilities/34invariants/3797records; full parity false",
+    "doctor": "pass0errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-351:conditional XString decoding triggers native first-invalid-surrogate truncation; marker-free fast paths preserve original value.",
+    "CALC-352:RichString preserve-space state is sticky but never read by pinned native conversion; keep unconditional concatenation."
+  ],
+  "resolvedValidationFindings": [
+    "Initial model test used absent SetString/GetString names; replaced with actual SetTextCell and real edit-text retrieval. Multiline native text cells intentionally use EditTextObject, not SharedString. Production document core unchanged.",
+    "Removed test non-null assertions with actual runtime assertions and corrected an accidental shadowed disposal variable.",
+    "Preserved private native sticky flag using equivalent monotone boolean write to satisfy typed-language unread-private-field validation without exposing invented public APIs.",
+    "Admitted two genuine original module dependencies backed by original gbuild libraries/includes; no dynamic import or copied boundary facade."
+  ],
+  "limitations": [
+    "Full WorkbookGlobals/WorkbookHelper/AddressConverter, XML rich-string contexts/shared-string buffering, worksheet/style/formula/filter/shell/UI paths remain pending. These are callable native primitives, not a complete XLSX importer/exporter.",
+    "RichString font/phonetic/binary/UNO/edit-engine conversion/finalization and plain-string/font classification are unported; no null/false font provider is substituted.",
+    "Native pointer/ABI/reference ownership and independently compiled original differential remain unverified. Existing SAL COW/Unicode and FastAttributeList owners are used; host arrays/strings bind current runtime values.",
+    "Referenced original testRichTextCellFormatXLSX is unported downstream full export/format QA, not a claimed local port or full XLSX roundtrip fixture. Direct local model test writes text through actual ScDocument; it does not parse a workbook.",
+    "Earlier address/OUString/ScFormulaCell coverage gaps remain open; this scoped100 profile does not certify or close those owners.",
+    "Writer DOCX model/export/filter/UI acceptance remains pending and unchanged in this checkpoint.",
+    "Full suites not due under approved ten-task cadence. No publication, merge or task completion performed."
+  ]
+}
