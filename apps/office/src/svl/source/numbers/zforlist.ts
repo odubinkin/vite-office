@@ -21,6 +21,18 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import type { Color } from "../../../tools/inc/color";
 import type { DateConstReference } from "../../../tools/source/datetime/tdate";
 import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
+import { generateStandardNumberFormat } from "./zforlist.generate";
+export { generateStandardNumberFormat } from "./zforlist.generate";
+import {
+  FindCachedDefaultFormat,
+  ImpGetDefaultFormat,
+  GetIndexTableOffset,
+  CacheFormatRW,
+  FindFormatRW,
+  CacheFormatRO,
+  FindFormatRO,
+  ZF_STANDARD_TEXT,
+} from "./zforlist.index";
 import { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
 import { CharClass } from "../../../unotools/source/i18n/charclass";
 import {
@@ -39,7 +51,6 @@ import {
   NUMBERFORMAT_ENTRY_NOT_FOUND,
   NfIndexTableOffset as Offset,
   SV_COUNTRY_LANGUAGE_OFFSET,
-  SV_MAX_COUNT_STANDARD_FORMATS,
   SvNumFormatType,
 } from "../../inc/zforlist";
 import { ImpSvNumberInputScan } from "./zforfind";
@@ -48,10 +59,9 @@ import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
 import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
 
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { CURRENCY, FIXED_NUMBER } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
+import { CURRENCY } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
 import type { NumberFormatCodeConstReference } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
-import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import type { LocaleCurrency } from "../../../unotools/source/i18n/localedatawrapper";
 
 /** Original language/country currency value used by SvNumberFormatter's ordered currency tables. */
@@ -423,6 +433,10 @@ export class SvNFFormatData {
     nDefaultSystemCurrencyFormat: NUMBERFORMAT_ENTRY_NOT_FOUND,
     bNoZero: false,
   };
+  /** Original owner-cache query. @param search - Native uint32 search key. @returns Cached key or missing sentinel. */
+  FindCachedDefaultFormat(search: number): number {
+    return FindCachedDefaultFormat(this.fields.aDefaultFormatKeys, search);
+  }
   /** Original exact-key lookup;native unsigned32 argument conversion is explicit. @param key - Format key. @returns Actual borrowed entry or null. */
   GetEntry(key: number): SvNumberformat | null {
     return this.fields.aFTable.get(key >>> 0) ?? null;
@@ -545,58 +559,13 @@ export class SvNFFormatData {
   }
 }
 
-/** Original General-number phase of ImpGenerateFormats,not a replacement for the remaining builtin/table generator. The admitted scanner is in native non-conversion mode;actual prepared locale/scanner/language/decimal fields are supplied explicitly,without a fake SvNFLanguageData service. @param table - Actual owning format table. @param mapper - Actual source-code mapper. @param locale - Original locale. @param scanner - Actual prepared scanner. @param language - Original ActLnge field. @param decimal - Original decimal separator field. @param offset - Native locale block offset. @returns Nothing. */
-export function generateStandardNumberFormat(
-  table: SvNFFormatData,
-  mapper: XNumberFormatCode,
-  locale: LocaleConstReference,
-  scanner: ImpSvNumberformatScan,
-  language: [number],
-  decimal: OUStringConstReference,
-  offset: number,
-): void {
-  offset >>>= 0;
-  const formats = mapper.getAllFormatCode(FIXED_NUMBER, locale);
-  try {
-    ImpAdjustFormatCodeDefault(formats.getArray() as SequenceElements, formats.getLength());
-    const index = ImpGetFormatCodeIndex(formats, Offset.NF_NUMBER_STANDARD, decimal);
-    const standard = table.ImpInsertFormat(
-      scanner,
-      language,
-      NumberFormatCode.borrowed(formats.operatorIndex(index)),
-      (offset + Offset.NF_NUMBER_STANDARD) >>> 0,
-    );
-    if (standard) {
-      standard.SetType(SvNumFormatType.NUMBER);
-      standard.SetStandard();
-      standard.SetLastInsertKey(SV_MAX_COUNT_STANDARD_FORMATS);
-    }
-    for (const [key, type] of [
-      [Offset.NF_BOOLEAN, SvNumFormatType.LOGICAL],
-      [Offset.NF_TEXT, SvNumFormatType.TEXT],
-    ] as const) {
-      const code = key === Offset.NF_TEXT ? unicode("@") : new OUString(scanner.GetBooleanString()),
-        check: [number] = [0];
-      try {
-        const format = new SvNumberformat(code, scanner, check, language);
-        if (check[0] !== 0) {
-          format.dispose();
-          throw new Error("Built-in format scan failed");
-        }
-        format.SetType(type);
-        format.SetStandard();
-        table.InsertStandardFormat((offset + key) >>> 0, format);
-      } finally {
-        code.dispose();
-      }
-    }
-  } finally {
-    formats.dispose();
-  }
-}
-
 /** Original static-only engine namespace after erasing C++ class syntax,with no instance state. General, Boolean and Text standard formatting is represented. Date/time substitution, other pattern output and full read/write policies remain unported. */
 export const SvNFEngine = {
+  ImpGetDefaultFormat,
+  CacheFormatRW,
+  FindFormatRW,
+  CacheFormatRO,
+  FindFormatRO,
   /** Original null-date update order:format scanner normalizes/validates,then input scanner receives the original raw Date value. Only the actual input date field is projected;no input-scanner service is fabricated. @param current - Real current language state. @param day - Native day. @param month - Native month. @param year - Native year. @returns Nothing. */
   ChangeNullDate(current: SvNFLanguageData, day: number, month: number, year: number): void {
     current.GetFormatScanner().ChangeNullDate(day, month, year);
@@ -628,7 +597,7 @@ export const SvNFEngine = {
         current.GetFormatScanner(),
       );
     } else {
-      const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(Offset.NF_TEXT);
+      const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(ZF_STANDARD_TEXT);
       if (!format) throw new Error("Required native standard text format is absent");
       if (!format.IsTextFormat() && !format.HasTextFormat()) {
         color[0] = null;
@@ -878,6 +847,10 @@ export class SvNumberFormatter {
     } finally {
       generator.dispose();
     }
+  }
+  /** Original static runtime-key to builtin-index conversion. @param format - Native uint32 format key. @returns Source index or entries sentinel. */
+  static GetIndexTableOffset(format: number): number {
+    return GetIndexTableOffset(format);
   }
   /** Original borrowed exact-entry lookup; absent ungenerated entries return null. @param key - Native key. @returns Actual parsed entry or null. */
   GetEntry(key: number): SvNumberformatConstReference | null {

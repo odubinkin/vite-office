@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.generate.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "generateStandardNumberFormat"
+    ],
+    "upstreamSymbols": [
+      "SvNFFormatData::ImpGenerateFormats"
+    ],
+    "preservedResponsibilities": [
+      "Moves the actual existing General/Boolean/Text standard-entry generation fragment without changing its owners, provider/scanner calls or source format metadata. Boolean and Text now use original runtime keys99 and100, distinct from enum ordinals48 and49. The same compiled entries supply numeric/text output and its Text fallback."
+    ],
+    "omittedResponsibilities": [
+      "Numeric/date/time/currency/fraction builtin generation, general format compilation/output, converter modes and full CSV auto-input remain pending; this function is explicitly the consumed initial source generator phase, not a replacement for the full ImpGenerateFormats."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.generate.ts",
+          "marker": "generateStandardNumberFormat"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.index.test.ts",
+          "marker": "runtime keys"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFFormatData::ImpGenerateFormats"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.generate.ts",
+      "rationale": "Split the original large zforlist.cxx by builtin index/default lookup and standard-entry generation responsibilities while keeping the same actual table, language and compiled-entry owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

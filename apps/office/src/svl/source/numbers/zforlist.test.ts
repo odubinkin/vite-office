@@ -589,27 +589,27 @@ it("generates and dispatches the source Boolean and Text standard formats", /** 
     literal = unicode("CSV text"),
     color: [Color | null] = [null];
   try {
-    expect(text((formatter.GetEntry(48) as SvNumberformat).GetFormatstring())).toBe("LOGISCH");
-    expect(text((formatter.GetEntry(49) as SvNumberformat).GetFormatstring())).toBe("@");
-    expect(formatter.GetType(48)).toBe(SvNumFormatType.LOGICAL);
-    expect(formatter.GetType(49)).toBe(SvNumFormatType.TEXT);
-    formatter.GetOutputString(1, 48, output, color);
+    expect(text((formatter.GetEntry(99) as SvNumberformat).GetFormatstring())).toBe("LOGISCH");
+    expect(text((formatter.GetEntry(100) as SvNumberformat).GetFormatstring())).toBe("@");
+    expect(formatter.GetType(99)).toBe(SvNumFormatType.LOGICAL);
+    expect(formatter.GetType(100)).toBe(SvNumFormatType.TEXT);
+    formatter.GetOutputString(1, 99, output, color);
     expect(text(output)).toBe("WAHR");
-    formatter.GetOutputString(0, 48, output, color);
+    formatter.GetOutputString(0, 99, output, color);
     expect(text(output)).toBe("FALSCH");
-    formatter.GetOutputString(1.2345, 49, output, color);
+    formatter.GetOutputString(1.2345, 100, output, color);
     expect(text(output)).toBe("1,23");
     formatter.ChangeStandardPrec(65535);
-    formatter.GetOutputString(1e-10, 49, output, color);
+    formatter.GetOutputString(1e-10, 100, output, color);
     expect(text(output)).toBe("0,0000000001");
     formatter.ChangeStandardPrec(2);
-    formatter.GetOutputString(literal, 49, output, color);
+    formatter.GetOutputString(literal, 100, output, color);
     expect(text(output)).toBe("CSV text");
     color[0] = new Color(0x123456);
     formatter.GetOutputString(literal, 404, output, color);
     expect(text(output)).toBe("CSV text");
     expect(color[0]).toBeNull();
-    const input = formatter.GetInputLineString(1.2345, 49);
+    const input = formatter.GetInputLineString(1.2345, 100);
     try {
       expect(text(input)).toBe("1,23");
     } finally {

@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 36
+revision: 38
 origin:
   system: "manual"
 depends_on: []
@@ -159,8 +159,11 @@ comments:
       Remaining: original ICU Calendar factory/shared cache and consumed LibreOffice calendar service; GetDateRef/public formatter/ParseString/setAutoInput integration; final CSV/UI upstream audit. No additional format work started. Task remains DOING, not complete. Native build/probe artifacts remain intentional untracked local evidence and are excluded from the source commit.
   -
     author: "CODER"
+    body: "Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope."
+  -
+    author: "CODER"
     body: |-
-      Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope.
+      Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause.
 
 events:
   -
@@ -377,11 +380,16 @@ events:
     type: "comment"
     at: "2026-10-28T09:37:14.231Z"
     author: "CODER"
+    body: "Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope."
+  -
+    type: "comment"
+    at: "2026-10-28T09:55:50.289Z"
+    author: "CODER"
     body: |-
-      Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope.
+      Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause.
 
 doc_version: 3
-doc_updated_at: "2026-10-28T09:37:14.231Z"
+doc_updated_at: "2026-10-28T09:55:50.289Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -563,6 +571,27 @@ sections:
     Local repair iterations: TypeScript/lint/source mapping checks identified local binding/declaration/docs issues, fixed before this checkpoint. Two previous name tests incorrectly expected empty English genitive/partitive sections; they now assert the source fallback. A new rollback test initially chose en_US Jewish, which is actually defined in pinned locale data; the test now uses de_DE, where that registered service has no locale row. Generator --check previously compared compact output with canonical formatted JSON; it now compares canonical formatter output. These were local fixtures/bindings, not upstream behavior changes or an overall task blocker.
 
     Remaining next work: original SvNFEngine/SvNumberFormatter format-index selection and required real builtin format generation/output, ScSetStringParam/ScColumn::ParseString, ScDocumentImport::setAutoInput, CSV explicit-date/English/special-number paths and actual EditEngine callers, followed by the full CSV option/export/UI requirement audit. The calendar checkpoint does not claim those paths are complete. Continue implementation; do not pause the goal or mark AQF9AG finished.
+
+    Builtin index/default-selection continuation (2026-10-28):
+
+    - Expanded NfIndexTableOffset to the complete pinned enum and aliases, and ported original indexTable, forward/inverse index conversion, category cache/search offsets, uncached standard/default lookup and mutable/readonly cache helpers over actual table/entry owners. Exact find(CLOffset) semantics and source fallback keys are retained.
+    - Fixed an existing local source mismatch: Boolean/Text enum values48/49 had been used as runtime table keys. Original runtime keys are99/100. Initial standard-entry generation and missing string-format fallback now use those original keys. The date runtime key49 is no longer occupied by the Text entry.
+    - Split the existing initial standard generation into zforlist.generate.ts to keep the actual zforlist owner under the file-size budget and provide the correct responsibility boundary for the remaining source generator. No alternative/full format generator is fabricated.
+    - Recorded CALC-348: the native GetROPolicy lookup captures a cache snapshot while its writer captures the external map by reference. Policy construction remains unported; future implementation must preserve that capture behavior rather than silently changing it.
+
+    Command: npx tsx scripts/calc-format-index-native-probe.mjs.
+    Result: pass. Evidence:32184 cases comparing unchanged pinned enum/table/index/default-search C++ bodies. Scope: runtime keys, inverse/forward conversions, search offsets and exact-start/default lookup on scalar metadata/std::map fixture declarations. Parsing, locale generation and complete SvNumberformat binary equivalence are explicitly outside this witness. An initial fixture incorrectly attempted nonexistent SetStandard(false); it was corrected to compile actual nonstandard General entries and invoke SetStandard only for true metadata, preserving the actual source API.
+
+    Command: npm run test:shared -- src/svl/source/numbers src/unotools/source/i18n/calendarwrapper.test.ts; npm run test:shared -- src/svl/source/numbers/zforlist.index.test.ts.
+    Result: pass. Evidence:20 files,139 tests, followed by3 focused index/cache tests after the public static-forwarding assertion was added. Scope: actual format owners, corrected99/100 generation/output and table/default/cache contracts.
+
+    Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc.
+    Result: pass. Evidence:72 CSV tests and1 browser CSV import/save/export flow.
+
+    Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run check:calc-resources; npm run check:source-tree; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check; prettier --check on the16 intentional source/registry paths.
+    Result: pass. Evidence:1720 mapped/runtime provenance records validated, no semantic parity violation and parityReady remains false. Scope: this index/default-selection block; full-suite cadence unchanged because AQF9AG remains the same open task.
+
+    Next source dependency: replace the existing single-General/Boolean/Text scanner admission with original Symbol_Division, ScanType, FinalScan and their real keyword/scanner state before enabling the complete ImpGenerateFormats generator. Continue through SvNFEngine/SvNumberFormatter::IsNumberFormat, ParseString/setAutoInput, remaining CSV option paths and final UI/export audit. Goal remains active; no pause or completion is recorded.
 id_source: "generated"
 ---
 ## Summary
@@ -757,3 +786,24 @@ Result: pass for this checkpoint. Evidence:1718 source provenance records, no ne
 Local repair iterations: TypeScript/lint/source mapping checks identified local binding/declaration/docs issues, fixed before this checkpoint. Two previous name tests incorrectly expected empty English genitive/partitive sections; they now assert the source fallback. A new rollback test initially chose en_US Jewish, which is actually defined in pinned locale data; the test now uses de_DE, where that registered service has no locale row. Generator --check previously compared compact output with canonical formatted JSON; it now compares canonical formatter output. These were local fixtures/bindings, not upstream behavior changes or an overall task blocker.
 
 Remaining next work: original SvNFEngine/SvNumberFormatter format-index selection and required real builtin format generation/output, ScSetStringParam/ScColumn::ParseString, ScDocumentImport::setAutoInput, CSV explicit-date/English/special-number paths and actual EditEngine callers, followed by the full CSV option/export/UI requirement audit. The calendar checkpoint does not claim those paths are complete. Continue implementation; do not pause the goal or mark AQF9AG finished.
+
+Builtin index/default-selection continuation (2026-10-28):
+
+- Expanded NfIndexTableOffset to the complete pinned enum and aliases, and ported original indexTable, forward/inverse index conversion, category cache/search offsets, uncached standard/default lookup and mutable/readonly cache helpers over actual table/entry owners. Exact find(CLOffset) semantics and source fallback keys are retained.
+- Fixed an existing local source mismatch: Boolean/Text enum values48/49 had been used as runtime table keys. Original runtime keys are99/100. Initial standard-entry generation and missing string-format fallback now use those original keys. The date runtime key49 is no longer occupied by the Text entry.
+- Split the existing initial standard generation into zforlist.generate.ts to keep the actual zforlist owner under the file-size budget and provide the correct responsibility boundary for the remaining source generator. No alternative/full format generator is fabricated.
+- Recorded CALC-348: the native GetROPolicy lookup captures a cache snapshot while its writer captures the external map by reference. Policy construction remains unported; future implementation must preserve that capture behavior rather than silently changing it.
+
+Command: npx tsx scripts/calc-format-index-native-probe.mjs.
+Result: pass. Evidence:32184 cases comparing unchanged pinned enum/table/index/default-search C++ bodies. Scope: runtime keys, inverse/forward conversions, search offsets and exact-start/default lookup on scalar metadata/std::map fixture declarations. Parsing, locale generation and complete SvNumberformat binary equivalence are explicitly outside this witness. An initial fixture incorrectly attempted nonexistent SetStandard(false); it was corrected to compile actual nonstandard General entries and invoke SetStandard only for true metadata, preserving the actual source API.
+
+Command: npm run test:shared -- src/svl/source/numbers src/unotools/source/i18n/calendarwrapper.test.ts; npm run test:shared -- src/svl/source/numbers/zforlist.index.test.ts.
+Result: pass. Evidence:20 files,139 tests, followed by3 focused index/cache tests after the public static-forwarding assertion was added. Scope: actual format owners, corrected99/100 generation/output and table/default/cache contracts.
+
+Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc.
+Result: pass. Evidence:72 CSV tests and1 browser CSV import/save/export flow.
+
+Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run check:calc-resources; npm run check:source-tree; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check; prettier --check on the16 intentional source/registry paths.
+Result: pass. Evidence:1720 mapped/runtime provenance records validated, no semantic parity violation and parityReady remains false. Scope: this index/default-selection block; full-suite cadence unchanged because AQF9AG remains the same open task.
+
+Next source dependency: replace the existing single-General/Boolean/Text scanner admission with original Symbol_Division, ScanType, FinalScan and their real keyword/scanner state before enabling the complete ImpGenerateFormats generator. Continue through SvNFEngine/SvNumberFormatter::IsNumberFormat, ParseString/setAutoInput, remaining CSV option paths and final UI/export audit. Goal remains active; no pause or completion is recorded.

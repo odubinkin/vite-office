@@ -30,7 +30,8 @@
       "Task76 adds original General and currency index constants consumed by actual format-code selection.",
       "Native builtin limit100,missing-key uint32 sentinel and reserved-index bounds51/62 support actual format-table insertion.",
       "Task76 adds original NfEvalDateFormat enum0..3 and International0 default used by actual language state;date parsing remains a separate unported responsibility.",
-      "Task AQF9AG adds source NONE/LAX_TIME input flags for time classification."
+      "Task AQF9AG adds source NONE/LAX_TIME input flags for time classification.",
+      "AQF9AG now represents the complete pinned NfIndexTableOffset enumeration, all aliases and appended builtin values, preserving enum ordinals separately from zforlist.cxx indexTable runtime keys (notably BOOLEAN48->99 and TEXT49->100)."
     ],
     "omittedResponsibilities": [
       "Only represented value/notification responsibilities are implemented;remaining task75/native services and final acceptance are pending."

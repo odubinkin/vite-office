@@ -4356,3 +4356,10 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: fa_IR marks persian as its default Calendar2 ID. The component registers no Calendar_persian implementation. CalendarImpl::loadCalendarTZ explicitly falls back to Calendar_gregorian when a requested service is absent but its calendar ID is defined in locale data. The loaded ID/names remain persian; the temporal body is the Gregorian service. ICU's PersianCalendar exists but is not selected by this LibreOffice service-manager branch.
 - Suspected issue: the resource identity and temporal calendar can disagree. No additional native full-UNO-service binary result is claimed; the registration, resource and fallback source contracts establish the branch.
 - Local behavior: retain the original service lookup and defined-ID Gregorian fallback. Do not substitute ICU PersianCalendar or add an unsupported-calendar error.
+
+### CALC-348 — Read-only format policy captures a cache snapshot for lookup
+
+- Upstream: LibreOffice `svl/source/numbers/zforlist.cxx`, SvNFEngine::GetROPolicy.
+- Observation: mCacheFormat captures rFormatCache by reference and writes to the supplied map. The separate mFindFormat lambda captures rFormatCache by value, alongside rFormatData by reference, and passes that copied map to FindFormatRO. Since DefaultFormatKeysMap is a std::map value, writes after policy construction do not update the lookup lambda's captured map. The actual format owner's cache remains preferred by FindFormatRO.
+- Suspected issue: entries cached during the lifetime of the readonly policy may remain invisible to its own subsequent find callback. This is a source capture/lifetime observation; no full multithreaded formatter failure or native policy binary test is claimed here.
+- Local behavior: preserve original standalone CacheFormatRO/FindFormatRO responsibilities. When porting GetROPolicy, retain the source lookup snapshot and writer reference rather than silently changing the lookup capture to a reference. The policy factory is not yet exposed by the current local slice.

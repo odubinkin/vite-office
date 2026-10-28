@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.index.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.index.ts",
+        "apps/office/src/svl/source/numbers/zforlist.index.test.ts",
+        "scripts/calc-format-index-native-probe.mjs"
+      ],
+      "justification": "Original complete builtin runtime-key table, exact enum-to-key and inverse conversions, category search offsets, uncached find(CLOffset)-based standard/default search and original fallback keys, plus mutable and readonly owner/external-map cache operations. Helpers operate on actual SvNFFormatData/SvNumberformat owners. Native uint32 argument/addition boundaries and cached zero versus missing are retained. Native unchanged source bodies match32184 index/search/default cases with explicit scalar metadata fixture declarations; no format parser/locale-generator binary equivalence is claimed. Remaining Accessor policy factories, cached default-selection overload, locale generation, currency defaults and public formatter/CSV recognition remain pending. Native invalid negative enum indexing is undefined and uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "indexTable",
+        "ImpGetFormatIndex",
+        "GetIndexTableOffset",
+        "ImpGetSearchOffset",
+        "ImpGetDefaultFormat",
+        "FindCachedDefaultFormat",
+        "CacheFormatRW",
+        "FindFormatRW",
+        "CacheFormatRO",
+        "FindFormatRO"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "indexTable",
+        "ImpGetFormatIndex",
+        "SvNumberFormatter::GetIndexTableOffset",
+        "SvNFEngine::ImpGetDefaultFormat",
+        "SvNFEngine::CacheFormatRW",
+        "SvNFEngine::FindFormatRO"
+      ]
+    }
+  }
+}
