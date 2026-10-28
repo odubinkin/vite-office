@@ -37,7 +37,8 @@
     ],
     "preservedResponsibilities": [
       "Source decomposition of sw/source/writerfilter/rtftok/rtfdocumentimpl.ts: RtfParagraphState, RtfState, RtfParagraph, RtfRun, RtfBlock, RtfSectionPage, RtfTableRow, DEFAULT_CHARACTER, RTF_UNDERLINE_STYLES, hasRtfUnderlineControl, DEFAULT_PARAGRAPH, SKIPPED_DESTINATIONS, STYLE_PROPERTY_CONTROLS, CHARACTER_PROPERTY_CONTROLS, createRtfTabStops, createRtfLineSpacing, equalCharacter, resolveRtfRunAttributes, equalControls, getRtfFieldCommandParts, parseRtfHyperlinkInstruction, fromRtfNfc, RtfDocumentImplContext. Existing native algorithms operate on the original class instance and retain original state, method ordering and observable behavior. No independent scanner or parser state is introduced.",
-      "Retains signed half-point baseline positions until final run/style font height resolution, with pinned rounding, MAX_ESC_POS clamping, zero-value admission and positive paragraph-style automatic substitution (WRITER142)."
+      "Retains signed half-point baseline positions until final run/style font height resolution, with pinned rounding, MAX_ESC_POS clamping, zero-value admission and positive paragraph-style automatic substitution (WRITER142).",
+      "S3HW1E native paragraph item dispatch exposes inherited stylesheet tab definitions without redundant body copies. The existing RTF tab kind/leader handlers are now admitted in style entries as well as body state, matching unconditional tab attribute ownership in pinned RTFDocumentImpl::dispatchFlag; no empty direct tab override is fabricated."
     ],
     "omittedResponsibilities": [
       "This fragment does not certify full upstream parity or compiled differential behavior."
@@ -197,6 +198,10 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/writerfilter/dmapper/DomainMapper.cxx",
           "marker": "case NS_ooxml::LN_EG_RPrBase_position:"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/writerfilter/rtftok/rtfdispatchflag.cxx",
+          "marker": "case RTFKeyword::TQC:"
         }
       ]
     },

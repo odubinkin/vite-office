@@ -1,10 +1,10 @@
 ---
 id: "202610251703-S3HW1E"
 title: "Complete current Writer model slice across TXT RTF Markdown filters"
-status: "DOING"
+status: "BLOCKED"
 priority: "med"
 owner: "CODER"
-revision: 111
+revision: 113
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-28T08:46:02.669Z"
+  state: "blocked_external"
+  updated_at: "2026-10-28T09:35:48.938Z"
   updated_by: "CODER"
-  note: "Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings."
-  attempts: 3
+  note: "RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings."
+  attempts: 4
 commit: null
 comments:
   -
@@ -53,8 +53,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings."
+  -
+    type: "verify"
+    at: "2026-10-28T09:35:48.938Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings."
 doc_version: 3
-doc_updated_at: "2026-10-28T08:46:02.832Z"
+doc_updated_at: "2026-10-28T09:35:49.006Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -135,6 +141,36 @@ sections:
     Attempts: 3
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T09:35:48.938Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings.
+    Attempts: 4
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -531,6 +567,21 @@ sections:
     - Result: pass. Boundaries1686runtime/8745imports/210edges; provenance1687runtime/1475mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-word-styles/{writer-parity,shared-parity,file-size,jsdoc}.txt. New source semantic statuses remain unverified.
     - Observation: typecheck exposed missing native paragraph enum identities; admitted the consumed pinned values. The native probe initially lacked enum arithmetic/reserved-slot macro; copied original operators/macro rather than changing source functions. ESLint required unified TS signatures and explicit handling of original enum aliases; numeric-returning overloads now share a union, and six original symbolic range aliases retain narrowly documented prefer-literal exceptions like existing native enums. A formatting command had missing .ts extensions and the JSON generator needed project formatting; command corrected and probe now formats its output reproducibly. Final gates pass.
     - Scope/remaining: this completes the named-slot/cache prerequisite, not original ParaNumRule integration. Native property/output-buffer closure, linked style graph, full model auto-update state, list-style true mode, hidden default paragraph representation, full OutColorTable collection, character-style importer, paragraph restart dispatch and previous goal gaps remain audited. Current core's Standard-at-index0 logical table binding is explicit. No network, external write, merge or publication. Task remains DOING; goal remains active.
+
+    ### RTF native paragraph-numbering dispatch and item-order checkpoint (2026-10-28)
+
+    - Scope/result: InitFontTable integration already landed in dd23f48a3e4d and remains consumed by the actual RtfExport. This continuation replaces the remaining inline list-label shortcut with real AttributeOutputBase::ParaNumRule / RtfAttributeOutput::ParaNumRule_Impl dispatch and actual exporter node/item context. It consumes the prior native style cache and temporary numbering owner. Empty/unknown/style/uncounted/restart branches, unsigned16 IDs, signed restart cast, Writer level9 duplication before Word level8 clamp, outline/empty-label tab policy, original-rule reference and copied native first-line/left items are retained.
+    - Source review: pinned ww8atr.cxx ParaNumRule and OutputItemSet, wrtw8nds.cxx OutputTextNode and ww8atr.cxx CorrectTabStopInSet, rtfattributeoutput.cxx ParaNumRule_Impl/FormatFirstLineIndent/FormatTextLeftMargin and paragraph callbacks. OutputItemSet outputs numbering before ascending WhichID explicit paragraph items; explicit/native prepared margins can therefore overwrite intermediate numbering margins. Temporary copied item sets implement represented non-RTL legacy indentation/tab correction, inherited rule injection, alignment applicability and uncounted visual indentation. They are disposed and original context restored without writing attributes back to nodes. CorrectTabStopInSet retains its native static MSWordExportBase facade, with implementation in ww8atr.ts.
+    - Regression correction: removing redundant body style-property copies exposed the existing style-entry admission omission for tab adjustment/leader controls. Real RTFDocumentImpl dispatchFlag handles these controls in style state too; admitted existing tqr/tqc/tqdec/tldot/tlul/tlth handlers to stylesheet entries. Existing style tab roundtrip now verifies center alignment and dot fill. Source TLTH/TLEQ quirks remain WRITER097; no invented reader behavior.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/writer-tests.json
+      Result: pass; 496 tests. Scope: actual RTF/Word export, RTF import, TXT and Markdown filters; includes paragraph-numbering cases and prior native font/style/lifetime contracts.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/ui-tests.json
+      Result: pass; 33 tests. Scope: existing browser open/save/export integration, preserved intentional UI behavior.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts src/sw/source/core/doc/number-destructor.test.ts src/sw/source/core/doc/number-ownership.test.ts src/sw/source/core/doc/number-style-clients.test.ts src/sw/source/core/doc/native-numbering-indent.test.ts --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/owners-tests.json
+      Result: pass; 33 tests including final11 paragraph cases. Scope: full inherited style-list export without installing direct rule attributes, restart/cache/margin/tab behavior and actual rule ownership/style clients.
+    - Static evidence: output/playwright/rtf-paragraph-numbering contains typecheck.log, eslint.log/eslint-final.log, format.log, provenance.log, dependencies.log, jsdoc.log, size.log, parity-writer.log and parity-shared.log. Provenance covers1688 runtime modules/1476 mapped, boundaries1687 runtime/8774 imports/210 edges, JSDoc3889 sources; Writer/shared semanticViolationCount0. Final source typecheck/lint/format are recorded after the final test addition. No full test-suite run: same continuing AgentPlane task, user requested related suites and full run once per10 tasks.
+    - Failures/remediation: early typecheck found required explicit SvxFontUnitMetrics constructor and unused callback arguments; corrected actual typed owners/argument names. Native-order change invalidated the old exact concatenation expectation; retained real roundtrip assertions and checked native control groups in native order. Legacy tab fixture wrongly assumed no shipped default stops; now compares all original stored positions. An initial test path selected only307 cases; bounded fallback used the actual writerfilter/rtftok path and reached496. Registry checks exposed facade re-exports and fields listed as local declarations; declaration evidence now points to actual styles.ts/ww8atr.ts owners, preserving header re-export contracts. Static helper definition provenance belongs to ww8atr.cxx rather than wrtww8.cxx; corrected mapping.
+    - Residual obligations: NOT whole-task completion. The common dispatch here admits the real current RTF/non-DOCX derived owner; native DOCX override-list machinery is not synthesized. Writer frame-direction/layout owners are absent from the represented Writer pool/model; preparation is explicitly the represented non-RTL profile, with no fake direction provider. Full native OutputFormat/item-buffer ABI and style property traversal, complete color collectors, character-style import, bidi/script iteration and the previously recorded filter/current-core gaps remain open. The current Standard-first/hidden-default style-table binding remains unverified. WRITER096 now references actual local restart tests without claiming a native desktop run. All semantic parity statuses stay unverified; no full RTF parity claim.
 id_source: "generated"
 ---
 ## Summary
@@ -622,6 +673,36 @@ Note: Word character-style slot/cache checkpoint passed492 related tests,39 fina
 Attempts: 3
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T09:35:48.938Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings.
+Attempts: 4
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1022,3 +1103,18 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Result: pass. Boundaries1686runtime/8745imports/210edges; provenance1687runtime/1475mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-word-styles/{writer-parity,shared-parity,file-size,jsdoc}.txt. New source semantic statuses remain unverified.
 - Observation: typecheck exposed missing native paragraph enum identities; admitted the consumed pinned values. The native probe initially lacked enum arithmetic/reserved-slot macro; copied original operators/macro rather than changing source functions. ESLint required unified TS signatures and explicit handling of original enum aliases; numeric-returning overloads now share a union, and six original symbolic range aliases retain narrowly documented prefer-literal exceptions like existing native enums. A formatting command had missing .ts extensions and the JSON generator needed project formatting; command corrected and probe now formats its output reproducibly. Final gates pass.
 - Scope/remaining: this completes the named-slot/cache prerequisite, not original ParaNumRule integration. Native property/output-buffer closure, linked style graph, full model auto-update state, list-style true mode, hidden default paragraph representation, full OutColorTable collection, character-style importer, paragraph restart dispatch and previous goal gaps remain audited. Current core's Standard-at-index0 logical table binding is explicit. No network, external write, merge or publication. Task remains DOING; goal remains active.
+
+### RTF native paragraph-numbering dispatch and item-order checkpoint (2026-10-28)
+
+- Scope/result: InitFontTable integration already landed in dd23f48a3e4d and remains consumed by the actual RtfExport. This continuation replaces the remaining inline list-label shortcut with real AttributeOutputBase::ParaNumRule / RtfAttributeOutput::ParaNumRule_Impl dispatch and actual exporter node/item context. It consumes the prior native style cache and temporary numbering owner. Empty/unknown/style/uncounted/restart branches, unsigned16 IDs, signed restart cast, Writer level9 duplication before Word level8 clamp, outline/empty-label tab policy, original-rule reference and copied native first-line/left items are retained.
+- Source review: pinned ww8atr.cxx ParaNumRule and OutputItemSet, wrtw8nds.cxx OutputTextNode and ww8atr.cxx CorrectTabStopInSet, rtfattributeoutput.cxx ParaNumRule_Impl/FormatFirstLineIndent/FormatTextLeftMargin and paragraph callbacks. OutputItemSet outputs numbering before ascending WhichID explicit paragraph items; explicit/native prepared margins can therefore overwrite intermediate numbering margins. Temporary copied item sets implement represented non-RTL legacy indentation/tab correction, inherited rule injection, alignment applicability and uncounted visual indentation. They are disposed and original context restored without writing attributes back to nodes. CorrectTabStopInSet retains its native static MSWordExportBase facade, with implementation in ww8atr.ts.
+- Regression correction: removing redundant body style-property copies exposed the existing style-entry admission omission for tab adjustment/leader controls. Real RTFDocumentImpl dispatchFlag handles these controls in style state too; admitted existing tqr/tqc/tqdec/tldot/tlul/tlth handlers to stylesheet entries. Existing style tab roundtrip now verifies center alignment and dot fill. Source TLTH/TLEQ quirks remain WRITER097; no invented reader behavior.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/writer-tests.json
+  Result: pass; 496 tests. Scope: actual RTF/Word export, RTF import, TXT and Markdown filters; includes paragraph-numbering cases and prior native font/style/lifetime contracts.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/ui-tests.json
+  Result: pass; 33 tests. Scope: existing browser open/save/export integration, preserved intentional UI behavior.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts src/sw/source/core/doc/number-destructor.test.ts src/sw/source/core/doc/number-ownership.test.ts src/sw/source/core/doc/number-style-clients.test.ts src/sw/source/core/doc/native-numbering-indent.test.ts --reporter=json --outputFile=../../output/playwright/rtf-paragraph-numbering/owners-tests.json
+  Result: pass; 33 tests including final11 paragraph cases. Scope: full inherited style-list export without installing direct rule attributes, restart/cache/margin/tab behavior and actual rule ownership/style clients.
+- Static evidence: output/playwright/rtf-paragraph-numbering contains typecheck.log, eslint.log/eslint-final.log, format.log, provenance.log, dependencies.log, jsdoc.log, size.log, parity-writer.log and parity-shared.log. Provenance covers1688 runtime modules/1476 mapped, boundaries1687 runtime/8774 imports/210 edges, JSDoc3889 sources; Writer/shared semanticViolationCount0. Final source typecheck/lint/format are recorded after the final test addition. No full test-suite run: same continuing AgentPlane task, user requested related suites and full run once per10 tasks.
+- Failures/remediation: early typecheck found required explicit SvxFontUnitMetrics constructor and unused callback arguments; corrected actual typed owners/argument names. Native-order change invalidated the old exact concatenation expectation; retained real roundtrip assertions and checked native control groups in native order. Legacy tab fixture wrongly assumed no shipped default stops; now compares all original stored positions. An initial test path selected only307 cases; bounded fallback used the actual writerfilter/rtftok path and reached496. Registry checks exposed facade re-exports and fields listed as local declarations; declaration evidence now points to actual styles.ts/ww8atr.ts owners, preserving header re-export contracts. Static helper definition provenance belongs to ww8atr.cxx rather than wrtww8.cxx; corrected mapping.
+- Residual obligations: NOT whole-task completion. The common dispatch here admits the real current RTF/non-DOCX derived owner; native DOCX override-list machinery is not synthesized. Writer frame-direction/layout owners are absent from the represented Writer pool/model; preparation is explicitly the represented non-RTL profile, with no fake direction provider. Full native OutputFormat/item-buffer ABI and style property traversal, complete color collectors, character-style import, bidi/script iteration and the previously recorded filter/current-core gaps remain open. The current Standard-first/hidden-default style-table binding remains unverified. WRITER096 now references actual local restart tests without claiming a native desktop run. All semantic parity statuses stay unverified; no full RTF parity claim.

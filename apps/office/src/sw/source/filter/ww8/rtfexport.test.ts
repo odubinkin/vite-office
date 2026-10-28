@@ -402,7 +402,9 @@ it("round trips native paragraph spacing, keep, split and widow controls", /** C
   try {
     const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
-    expect(encoded).toContain("\\sb120\\sa240\\contextualspace\\keepn\\keep\\nowidctlpar");
+    expect(encoded).toContain("\\sb120\\sa240\\contextualspace");
+    expect(encoded).toContain("\\keep\\nowidctlpar");
+    expect(encoded).toContain("\\keepn");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const result = imported.paragraphs[0];
     expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(120);
@@ -493,6 +495,7 @@ it("retains explicit native tab stops in an RTF named paragraph style", /** Chec
     expect(result.Count()).toBe(1);
     expect(result.At(0).GetTabPos()).toBe(900);
     expect(result.At(0).GetAdjustment()).toBe(SvxTabAdjust.Center);
+    expect(result.At(0).GetFill()).toBe(".");
   } finally {
     imported?.Dispose();
     source.Dispose();

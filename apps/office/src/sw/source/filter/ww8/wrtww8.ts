@@ -18,7 +18,13 @@ import type {
 } from "../../../../filter/source/msfilter/util";
 /** Native common Word export owner for the currently consumed context. */
 export abstract class MSWordExportBase {
+  /** Original static paragraph tab correction. @param set - Temporary item set. @param left - Absolute indent. @returns Nothing. */
+  static CorrectTabStopInSet(set: SfxItemSet, left: number): void {
+    CorrectTabStopInSet(set, left);
+  }
   public m_pStyles: MSWordStyles | undefined;
+  public m_pOutFormatNode: SwFormat | SwContentNode | undefined;
+  public m_pISet: SfxItemSet | undefined;
   /** Original exporter-kind virtual. @returns Actual output format. */
   abstract GetExportFormat(): MSWordExportFormat;
   readonly m_aFontHelper = new wwFontHelper();
@@ -102,3 +108,9 @@ export enum MSWordExportFormat {
 }
 
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
+
+import type { SwFormat } from "../../core/attr/format";
+import type { SwContentNode } from "../../core/docnode/node";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
+
+import { CorrectTabStopInSet } from "./ww8atr";

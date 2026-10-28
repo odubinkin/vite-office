@@ -4,3 +4,5 @@ export enum StyleType {
   STYLE_TYPE_CHAR,
   STYLE_TYPE_LIST,
 }
+
+export { AttributeOutputBase } from "./ww8atr";

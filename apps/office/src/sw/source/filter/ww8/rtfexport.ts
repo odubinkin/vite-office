@@ -44,7 +44,7 @@ import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { type SwNumRule, getWriterNumFormatKind } from "../../core/doc/number";
+import { type SwNumRule } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
@@ -582,22 +582,8 @@ export class RtfExport extends MSWordExportBase {
     start = 0,
     end = paragraph.GetText().length,
   ): string {
-    let output = this.attributeOutput.WriteParagraphProperties(paragraph);
-    output += `\\s${this.GetId(paragraph.GetFormatColl() as SwTextFormatColl)}`;
-    const rule = paragraph.GetNumRule();
-    if (rule !== undefined && paragraph.IsCountedInList()) {
-      const id = this.GetNumberingId(rule);
-      if (id !== 0xffff) {
-        const level = paragraph.GetAttrListLevel();
-        const format = rule.Get(level);
-        const label =
-          getWriterNumFormatKind(format) === "bullet"
-            ? String.fromCodePoint(format.GetBulletChar())
-            : paragraph.GetNumString();
-        output += `{\\listtext\\pard\\plain ${OutString(label, this.GetDefaultEncoding())}\\tab}`;
-        output += `\\ilvl${Math.min(level, 8)}\\ls${id + 1}`;
-      }
-    }
+    let output = `\\s${this.GetId(paragraph.GetFormatColl() as SwTextFormatColl)}`;
+    output += this.attributeOutput.WriteParagraphProperties(paragraph);
     output += " ";
     const marks = paragraph
       .GetDoc()

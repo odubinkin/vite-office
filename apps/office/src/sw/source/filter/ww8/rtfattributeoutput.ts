@@ -73,28 +73,62 @@ import { projectWriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 
 /** Emits represented native paragraph and character items into one RTF stream. */
-export class RtfAttributeOutput {
+export class RtfAttributeOutput extends AttributeOutputBase {
   private readonly associated: RtfAssociatedProperties;
   /** Binds document-scoped font and color table indices. @param fontIndex - Font table lookup. @param colorIndex - Color table lookup. @param exporter - Original document encoding owner.  @returns Constructed instance. */
   public constructor(
     private readonly fontIndex: (font: SvxFontItem | wwFont) => number,
     private readonly colorIndex: (color: string) => number,
-    private readonly exporter: Pick<
-      RtfExport,
-      | "GetCurrentEncoding"
-      | "SetCurrentEncoding"
-      | "GetDefaultEncoding"
-      | "Strm"
-      | "OutColorTable"
-      | "InsStyle"
-    >,
+    private readonly exporter: RtfExport,
   ) {
+    super();
     this.associated = new RtfAssociatedProperties(
       /** Borrows the original attribute output sink. @param font - Native item. @param assoc - Associated flag. @returns Controls. */
       (font, assoc) => this.OutputCharFontAssoc(font, assoc),
     );
   }
 
+  /** Original virtual returns the genuine RTF owner. @returns Actual exporter. */
+  GetExport(): RtfExport {
+    return this.exporter;
+  }
+  /** Native paragraph numbering uses the original rule reference even when common dispatch supplies a restart-copy ID. Current numeric format geometry is stored in twips. @param node - Actual text node or native null. @param level - Word level. @param id - Common one-based ID used only by the original guard. @returns Paragraph controls. */
+  ParaNumRule_Impl(node: SwTextNode | undefined, level: number, id: number): string {
+    if (id === 0xffff || id === 0 || node === undefined) return "";
+    const rule = node.GetNumRule();
+    if (rule === undefined || !node.IsInList()) return "";
+    const format = rule.GetNumFormat(level) ?? rule.Get(level),
+      set = node.GetSwAttrSet();
+    const firstLine = new SvxFirstLineIndentItem(
+      set.Get(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem,
+    );
+    const left = new SvxTextLeftMarginItem(set.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem);
+    left.SetTextLeft(SvxIndentValue.twips(left.ResolveTextLeft() + format.GetIndentAt()));
+    firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(format.GetFirstLineOffset()));
+    let output = "{\\listtext\\pard\\plain ";
+    const properties = this.exporter.GetStyle(this.exporter.GetId(format.GetCharFormat()));
+    if (properties !== undefined) output += properties;
+    const text =
+      format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL ||
+      format.GetNumberingType() === SvxNumType.SVX_NUM_BITMAP
+        ? String.fromCodePoint(format.GetBulletChar())
+        : node.GetNumString();
+    if (text !== "") output += " " + OutString(text, this.exporter.GetDefaultEncoding());
+    if (rule.GetRuleType() !== SwNumRuleType.OUTLINE_RULE) {
+      if (text !== "") output += "\\tab";
+      output += `}\\ilvl${level > 8 ? `8{\\*\\soutlvl${level}}` : level}`;
+    } else output += "\\tab}";
+    output += `\\ls${this.exporter.GetNumberingId(rule) + 1} `;
+    return output + this.FormatFirstLineIndent(firstLine) + this.FormatTextLeftMargin(left);
+  }
+  /** Original first-line margin output resolves with empty metrics. @param item - Actual copied margin. @returns Controls. */
+  FormatFirstLineIndent(item: SvxFirstLineIndentItem): string {
+    return `\\fi${item.ResolveTextFirstLineOffset()}`;
+  }
+  /** Original logical left margin writes both li and lin. @param item - Actual copied margin. @returns Controls. */
+  FormatTextLeftMargin(item: SvxTextLeftMarginItem): string {
+    return `\\li${item.ResolveTextLeft()}\\lin${item.ResolveTextLeft()}`;
+  }
   private m_aStylesheet = "";
   private m_rStyleName = "";
   private m_nStyleId = 0;
@@ -282,35 +316,131 @@ export class RtfAttributeOutput {
 
   /** Emits paragraph adjustment and margin items. @param paragraph - Native paragraph. @returns RTF controls. */
   public WriteParagraphProperties(paragraph: SwTextNode): string {
-    const text = paragraph.GetText();
-    return (
-      this.WriteParagraphValues(
-        paragraph.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem,
-        paragraph.GetParagraphTextLeftMargin(),
-        paragraph.GetParagraphRightMargin(),
-        (
-          paragraph.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem
-        ).ResolveTextFirstLineOffset(),
-        paragraph.GetAttr(RES_UL_SPACE) as SvxULSpaceItem,
-        paragraph.GetAttr(RES_KEEP) as SfxBoolItem,
-        paragraph.GetAttr(RES_PARATR_SPLIT) as SfxBoolItem,
-        paragraph.GetAttr(RES_PARATR_WIDOWS) as SfxInt16Item,
-        paragraph.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem,
-        paragraph.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
-          ? paragraph.GetParagraphTextLeftMargin()
-          : 0,
-        (paragraph.GetAttr(RES_BREAK) as SfxInt16Item).GetValue(),
-        false,
-        this.WriteLineSpacing(
-          paragraph.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem,
-          paragraph.GetSwAttrSet(),
+    const previousNode = this.exporter.m_pOutFormatNode,
+      previousSet = this.exporter.m_pISet;
+    const temporary = PrepareParagraphNumbering(paragraph);
+    const set = temporary ?? paragraph.GetpSwAttrSet();
+    this.exporter.m_pOutFormatNode = paragraph;
+    this.exporter.m_pISet = set;
+    try {
+      if (set === undefined || set.Count() === 0) return "";
+      let output = "";
+      const rule = set.GetItemIfSet(RES_PARATR_NUMRULE, false) as SwNumRuleItem | undefined;
+      if (rule !== undefined) {
+        output += this.ParaNumRule(rule);
+        if (rule.GetValue() === "") {
+          for (const which of [RES_MARGIN_FIRSTLINE, RES_MARGIN_TEXTLEFT]) {
+            if (set.GetItemIfSet(which, false) !== undefined) continue;
+            const item = set.GetItemIfSet(which, true);
+            if (item !== undefined) output += this.WriteParagraphItem(item, paragraph);
+          }
+        }
+      }
+      for (const item of set
+        .entries()
+        .slice()
+        .sort(
+          /** Preserves native WhichID callback order. @param a - First item. @param b - Second item. @returns Numeric order. */ (
+            a,
+            b,
+          ) => a.Which() - b.Which(),
+        ))
+        if (item.Which() !== RES_PARATR_NUMRULE) output += this.WriteParagraphItem(item, paragraph);
+      return output;
+    } finally {
+      this.exporter.m_pOutFormatNode = previousNode;
+      this.exporter.m_pISet = previousSet;
+      temporary?.Dispose();
+    }
+  }
+
+  /** Admitted native paragraph item callbacks in OutputItemSet order. Other native item families remain outside this existing property sink. @param item - Actual set entry. @param node - Actual text context. @returns Controls. */
+  private WriteParagraphItem(item: SfxPoolItem, node: SwTextNode): string {
+    switch (item.Which()) {
+      case RES_PARATR_ADJUST: {
+        const adjust = item as SvxAdjustItem;
+        switch (adjust.GetAdjust()) {
+          case SvxAdjust.Left:
+            return "\\ql";
+          case SvxAdjust.Right:
+            return "\\qr";
+          case SvxAdjust.Center:
+            return "\\qc";
+          case SvxAdjust.Block:
+          case SvxAdjust.BlockLine:
+            return adjust.GetLastBlock() === SvxAdjust.Block ? "\\qd" : "\\qj";
+          default:
+            return "";
+        }
+      }
+      case RES_MARGIN_FIRSTLINE:
+        return this.FormatFirstLineIndent(item as SvxFirstLineIndentItem);
+      case RES_MARGIN_TEXTLEFT:
+        return this.FormatTextLeftMargin(item as SvxTextLeftMarginItem);
+      case RES_MARGIN_RIGHT: {
+        const value = (item as SvxRightMarginItem).ResolveRight();
+        return `\\ri${value}\\rin${value}`;
+      }
+      case RES_UL_SPACE: {
+        const value = item as SvxULSpaceItem;
+        return `\\sb${value.GetUpper()}\\sa${value.GetLower()}${value.GetContext() ? "\\contextualspace" : ""}`;
+      }
+      case RES_KEEP:
+        return (item as SfxBoolItem).GetValue() ? "\\keepn" : "";
+      case RES_PARATR_SPLIT:
+        return (item as SfxBoolItem).GetValue() ? "" : "\\keep";
+      case RES_PARATR_WIDOWS:
+        return (item as SfxInt16Item).GetValue() ? "\\widctlpar" : "\\nowidctlpar";
+      case RES_BOX:
+        return this.WriteFormatBox(item as SvxBoxItem);
+      case RES_BREAK:
+        return (item as SfxInt16Item).GetValue() === 4 ? "\\pagebb" : "";
+      case RES_PARATR_LINESPACING: {
+        const text = node.GetText();
+        return this.WriteLineSpacing(
+          item as SvxLineSpacingItem,
+          node.GetSwAttrSet(),
           text.length === 0 ? LATIN : GetScriptClass(text.codePointAt(0) as number),
-        ),
-      ) +
-      this.WriteFormatBox(
-        paragraph.GetSwAttrSet().GetItemIfSet(RES_BOX, true) as SvxBoxItem | undefined,
-      )
-    );
+        );
+      }
+      case RES_PARATR_TABSTOP: {
+        const tabs = item as SvxTabStopItem;
+        const offset = node.GetDoc().GetDocumentSettingManager().get("TABS_RELATIVE_TO_INDENT")
+          ? (
+              this.exporter.m_pISet?.Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem
+            ).ResolveTextLeft()
+          : 0;
+        let output = "";
+        for (let index = 0; index < tabs.Count(); ++index) {
+          const tab = tabs.At(index),
+            adjust = tab.GetAdjustment();
+          if (adjust === SvxTabAdjust.Default) continue;
+          const fill = tab.GetFill();
+          output +=
+            fill === "."
+              ? "\\tldot"
+              : fill === "_"
+                ? "\\tlul"
+                : fill === "-"
+                  ? "\\tlth"
+                  : fill === "="
+                    ? "\\tleq"
+                    : "";
+          output +=
+            adjust === SvxTabAdjust.Right
+              ? "\\tqr"
+              : adjust === SvxTabAdjust.Center
+                ? "\\tqc"
+                : adjust === SvxTabAdjust.Decimal
+                  ? "\\tqdec"
+                  : "";
+          output += `\\tx${tab.GetTabPos() + offset}`;
+        }
+        return output;
+      }
+      default:
+        return "";
+    }
   }
 
   /** Emits effective paragraph values for one named Writer style definition.  @param style - Style. @returns The string result. */
@@ -729,3 +859,12 @@ import { RES_CHRATR_CJK_LANGUAGE } from "../../../inc/hintids";
 import { LANGUAGE_CHINESE_SIMPLIFIED } from "../../../../i18nlangtag/inc/lang";
 
 import { StyleType } from "./attributeoutputbase";
+
+import { AttributeOutputBase } from "./attributeoutputbase";
+import { SwNumRuleType } from "../../core/doc/number";
+import { SvxIndentValue } from "../../../../editeng/inc/lrspitem";
+
+import { PrepareParagraphNumbering } from "./wrtw8nds";
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
+import type { SwNumRuleItem } from "../../core/para/paratr";
