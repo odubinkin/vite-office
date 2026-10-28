@@ -1,0 +1,332 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded SAX InputSource checkpoint; full DOCX/XLSX task remains incomplete; whole-owner coverage gate fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts": "44f7b60b97b0e50834d0b6a4260749a711aea86c",
+    "apps/office/src/offapi/com/sun/star/xml/sax/InputSource.ts": "c539a4ece831103018181adc3bee72e8d9580cc5",
+    "apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts": "73da93d9126693289f66a01a055ec8add0b252f0",
+    "apps/office/src/sax/source/fastparser/InputSource.test.ts": "3caacd2bbcfc2499e2c0ed45db1b921704ae4561",
+    "apps/office/src/sax/source/fastparser/fastparser.ts": "4c295d31589c89100e9088dfd29f0e6d2d3a04c3",
+    "apps/office/src/sax/source/fastparser/streaminput.ts": "033bc10a4b129c774f919a73eeca2e05c780bad9",
+    "docs/program/native-sax-input-source.md": "f23a14ce5d4e3633dba5e32e223d74f109e5d385",
+    "docs/program/registry/calc/capabilities/CAP-76527761-d409-4b84-ad67-54c4c6a6e13c.json": "71b2ec31da6b8248b3af913f1c47f1c47ebe037e",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json": "f806c79905386651af313f2e70823ae7fdb8ce81",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/InputSource.ts.json": "ff66bf9292ff8eda3264fa611e9286ac6d4792a4",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/xml/sax/XLocator.ts.json": "6ce2241b6253e1ccb99e7dcff271fd7a87a4493a",
+    "docs/program/registry/shared/provenance/sax/source/fastparser/fastparser.ts.json": "780ec8c7b3c7cbc213bee79bcd1ab53cea99fcc1",
+    "docs/program/registry/shared/provenance/sax/source/fastparser/streaminput.ts.json": "7e430d02f633624043d101d36abbb5e9ebef7111",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/xml/sax/SAXException.ts.json": "a2a5dae56304fe57de1db7cc152842e245518b26",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/InputSource.ts.json": "dee64f0129f2899fa374ae413591453425426209",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/xml/sax/XLocator.ts.json": "5879e65a9a2dae99b43695faf4eda2a0936d14c0",
+    "docs/program/registry/shared/runtime/sax/source/fastparser/fastparser.ts.json": "1cd6535cd8fa773c52d7fe97b1997be4063eda1a",
+    "docs/program/registry/shared/runtime/sax/source/fastparser/streaminput.ts.json": "6d7f8a1f492c20a7fd561865c9f67154cff39e8e",
+    "scripts/check-module-boundaries.mjs": "ad8bf4a01863f338f870fee77ccbb1b97570d4b1",
+    "scripts/native-sax-input-boundary.test.ts": "753ce20f67460152a11ac9280015a59646d837bc"
+  },
+  "checks": [
+    {
+      "command": "npx vitest run src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/FastSaxParser.test.ts src/sax/source/expatwrap/xml2utf.test.ts --maxWorkers=2",
+      "result": "pass:28 tests/3 files",
+      "log": "apps/office/coverage/input-source-unit-final.log",
+      "sha256": "1bcd37816a335fd50b17d6e9fda45a967c96c8c039cccea2905ddbf35493fb14"
+    },
+    {
+      "command": "npx vitest run src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandler.test.ts src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/source/filter/xml/ods.test.ts src/sax/source/fastparser/fastparser.test.ts --maxWorkers=2",
+      "result": "pass:74 tests/7 files",
+      "log": "apps/office/coverage/input-source-regressions-final.log",
+      "sha256": "edf7e801365eaf852c87f0cd2908c6af9fac97464f406dccd1ecb10f286c1fbf"
+    },
+    {
+      "command": "npx vitest run src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts --maxWorkers=2",
+      "result": "pass:50 tests/3 files",
+      "log": "apps/office/coverage/input-source-csv.log",
+      "sha256": "e8f94ad510f4c0567b098767ebdb7b2e5976f39466aadca44d584dc935d0d9c2"
+    },
+    {
+      "command": "npx vitest run scripts/native-sax-input-boundary.test.ts scripts/native-inline-sequence-boundary.test.ts scripts/check-source-provenance.test.ts --maxWorkers=2",
+      "result": "pass:6 tests/3 files",
+      "log": "apps/office/coverage/input-source-tooling.log",
+      "sha256": "d4c9bd6dcb208ba2c3df899a5b71445a9e7316ae0adb5947dd1b090ef89442b4"
+    },
+    {
+      "command": "npx vitest run src/sax/source/fastparser/InputSource.test.ts src/sax/source/fastparser/FastSaxParser.test.ts src/sax/source/expatwrap/xml2utf.test.ts --maxWorkers=2 --coverage --coverage.include=src/sax/source/fastparser/fastparser.ts --coverage.include=src/sax/source/fastparser/streaminput.ts --coverage.include=src/offapi/com/sun/star/xml/sax/InputSource.ts --coverage.include=src/offapi/com/sun/star/xml/sax/XLocator.ts --coverage.include=src/cppu/inc/com/sun/star/xml/sax/SAXException.ts --coverage.reportsDirectory=coverage/input-source --coverage.reporter=json-summary --coverage.reporter=text",
+      "result": "fail:28 tests pass; unchanged100 coverage S427/465 B222/282 F78/79 L399/411",
+      "log": "apps/office/coverage/input-source-coverage-final.log",
+      "sha256": "f5e3c6d5922506635f25feaa9b6f7950c162bb17401ab6bb5e77f3ae89c7d81b"
+    },
+    {
+      "command": "npm run typecheck --workspace @vite-office/office",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-type-final.log",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": "npm run build",
+      "result": "pass; existing chunk-size warning",
+      "log": "apps/office/coverage/input-source-build.log",
+      "sha256": "489a152a264a7d4ecb219956dec0fe98987e0a524f47833534ac2de342313c61"
+    },
+    {
+      "command": "node scripts/check-static-build.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-static.log",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-boundaries.log",
+      "sha256": "e4e802ab6236082d4260b923330111a95f9f8c2235d5bd4eb352522f27ea618a"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-provenance.log",
+      "sha256": "07fe3453a12138aad0be5e7a1e992bd17eec3b44694b24e53e8dfccf36b5cc5e"
+    },
+    {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-docs-final.log",
+      "sha256": "8aaa24913faaa2820ad5d30a75ffcef5b3b4347f105deaaa1e4bef49e7a83eb6"
+    },
+    {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-size.log",
+      "sha256": "53c448978f523ff216b2573dbee943d613715b5e7ececb992681d9b9bb8aecfd"
+    },
+    {
+      "command": "npx eslint apps/office/src/sax/source/fastparser/InputSource.test.ts apps/office/src/sax/source/fastparser/streaminput.ts apps/office/src/sax/source/fastparser/fastparser.ts apps/office/src/offapi/com/sun/star/xml/sax/InputSource.ts apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts scripts/native-sax-input-boundary.test.ts scripts/check-module-boundaries.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-lint-final.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sax/source/fastparser/InputSource.test.ts apps/office/src/sax/source/fastparser/streaminput.ts apps/office/src/sax/source/fastparser/fastparser.ts apps/office/src/offapi/com/sun/star/xml/sax/InputSource.ts apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts scripts/native-sax-input-boundary.test.ts scripts/check-module-boundaries.mjs docs/program/native-sax-input-source.md",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-invariants.log",
+      "sha256": "14d3487cf400f9ed3f91c31a5b97d6d618ddc96ad484b295a5b2f2d605ea452b"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-parity.log",
+      "sha256": "64b8aeb74f4cfecb2a6aa7f58d3953f4ab705e4e51a9800492be7cb7b0b15e16"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "result": "pass:2 tests",
+      "log": "apps/office/coverage/input-source-writer-resources.log",
+      "sha256": "8013ec79ef28411b6ab622bb55862d37147796b6b189e7ebb21d8be7a6ac01fe"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-calc-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "ap doctor",
+      "result": "pass; existing pre-push runner readiness warning",
+      "log": "apps/office/coverage/input-source-doctor.log",
+      "sha256": "fecc1d28e1dc40cbea7e55d2c2be5487cea3577bd24f6db13ffe78a8a53faf15"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/input-source-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 411,
+        "covered": 399,
+        "skipped": 0,
+        "pct": 97.08
+      },
+      "statements": {
+        "total": 465,
+        "covered": 427,
+        "skipped": 0,
+        "pct": 91.82
+      },
+      "functions": {
+        "total": 79,
+        "covered": 78,
+        "skipped": 0,
+        "pct": 98.73
+      },
+      "branches": {
+        "total": 282,
+        "covered": 222,
+        "skipped": 0,
+        "pct": 78.72
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/inc/com/sun/star/xml/sax/SAXException.ts": {
+      "lines": {
+        "total": 36,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/InputSource.ts": {
+      "lines": {
+        "total": 39,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 17,
+        "covered": 17,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 40,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/xml/sax/XLocator.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.ts": {
+      "lines": {
+        "total": 197,
+        "covered": 191,
+        "skipped": 0,
+        "pct": 96.95
+      },
+      "functions": {
+        "total": 40,
+        "covered": 39,
+        "skipped": 0,
+        "pct": 97.5
+      },
+      "statements": {
+        "total": 221,
+        "covered": 206,
+        "skipped": 0,
+        "pct": 93.21
+      },
+      "branches": {
+        "total": 119,
+        "covered": 103,
+        "skipped": 0,
+        "pct": 86.55
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/streaminput.ts": {
+      "lines": {
+        "total": 130,
+        "covered": 124,
+        "skipped": 0,
+        "pct": 95.38
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 156,
+        "covered": 133,
+        "skipped": 0,
+        "pct": 85.25
+      },
+      "branches": {
+        "total": 133,
+        "covered": 89,
+        "skipped": 0,
+        "pct": 66.91
+      }
+    }
+  },
+  "scope": "Actual InputSource/XLocator/SAXException owners, native converter Entity read loop, active locator and document/token configuration snapshots, DOM-free byte engine binding over existing saxes. No replacement model/query/allocator/service provider.",
+  "limits": [
+    "Full native libxml2 encoding aliases/diagnostics/locator positions unverified.",
+    "Full XFastParser service, native mutex/thread/ABI/allocation unwind and missing RTL descriptors unverified.",
+    "Complete package/model/factory/filter/workbook and DOCX/XLSX worker/UI acceptance pending.",
+    "No full suite at this prerequisite checkpoint; user ten-task cadence retained."
+  ],
+  "correctedDuringVerification": [
+    "Initial TypeScript typed-array buffer generic mismatch fixed.",
+    "TextEncoder cross-realm Uint8Array could select the wrong OUString constructor in generated ASCII member-name literal; native literal now uses actual local Uint8Array.from, matching other generated owners.",
+    "Initial regression command included a nonexistent CSV path; seven actual suites passed but exit1 was not accepted. Repeated exact seven-file command exits0; actual three CSV suites independently pass.",
+    "Initial constructor JSDoc lacked two source ID parameters; corrected and full JSDoc check passes."
+  ]
+}

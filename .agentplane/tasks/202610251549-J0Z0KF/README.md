@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 47
+revision: 50
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T13:44:40.090Z"
+  updated_at: "2026-10-28T14:29:31.275Z"
   updated_by: "CODER"
-  note: "Bounded native XML converter/SJIS dependency closure checkpoint:201 targeted tests pass; compiled original new64/BMP/151032 round-trip evidence preserves11 prior digests. Whole4-owner scoped100 FAILS S317/338 B179/184 F29/29 L282/302; do not promote. Final typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing pass after recorded guard/filename corrections. Evidence/native-xml-stream-converter-checkpoint.json records24 source blobs. InputSource/parser/package/full model/filter/DOCX/XLSX worker/UI remain incomplete; continue direct implementation."
-  attempts: 15
+  note: "Bounded SAX InputSource checkpoint only: 160 targeted tests pass, typecheck/build/static and required source/registry/tooling guards pass. Unchanged whole-five-owner100 coverage fails S427/465 B222/282 F78/79 L399/411; no exclusions or thresholds changed. Full libxml2/parser service and DOCX/XLSX package/model/filter/worker/UI acceptance remain incomplete. Evidence: evidence/native-sax-input-source-checkpoint.json."
+  attempts: 16
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -248,8 +251,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:29:31.275Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded SAX InputSource checkpoint only: 160 targeted tests pass, typecheck/build/static and required source/registry/tooling guards pass. Unchanged whole-five-owner100 coverage fails S427/465 B222/282 F78/79 L399/411; no exclusions or thresholds changed. Full libxml2/parser service and DOCX/XLSX package/model/filter/worker/UI acceptance remain incomplete. Evidence: evidence/native-sax-input-source-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-10-28T14:29:48.536Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T13:44:53.298Z"
+doc_updated_at: "2026-10-28T14:29:48.536Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -714,6 +730,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T14:29:31.275Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded SAX InputSource checkpoint only: 160 targeted tests pass, typecheck/build/static and required source/registry/tooling guards pass. Unchanged whole-five-owner100 coverage fails S427/465 B222/282 F78/79 L399/411; no exclusions or thresholds changed. Full libxml2/parser service and DOCX/XLSX package/model/filter/worker/UI acceptance remain incomplete. Evidence: evidence/native-sax-input-source-checkpoint.json.
+    Attempts: 16
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:29:30.736Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -778,6 +824,10 @@ sections:
     - Observation: Original XML byte stream converter and RTL ownership implemented; actual native SJIS descriptor64 closed with exact256/256 tables/shared EUDC. Existing compiled original witness extended: new BMP digest283198542,151032 defined round-trip cases;11 previous digests/source hashes/EUCJP unchanged. 201 targeted scenarios pass; whole4-owner coverage100 still FAILS S317/338 B179/184 F29/29 L282/302.
       Impact: Source EOF/quote/no-FLUSH/MS-compatible quirks preserved as CALC-363..366 / WRITER200..203. Actual InputSource/parser byte/package/model/filter/DOCX/XLSX worker/UI admission remains incomplete. New logic does not inherit broad native ABI/service parity.
       Resolution: Command/result/evidence/scope in evidence/native-xml-stream-converter-checkpoint.json records24 source blobs, raw full profile, native manifest/table audit, failed initial checks and final corrections. Exact inline-header witness resolves coarse SAX/Comphelper cycle without allowing other cycles;52 guard/tooling tests pass. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing pass. Continue approved native pipeline work; no private state/fake providers or threshold/exclusion changes.
+
+    - Observation: SAX InputSource checkpoint admits genuine UNO streams and locator ownership through the existing DOM-free backend. Initial typed-array/literal/JSDoc issues are corrected; missing CSV test path was replaced by actual impex/docsh suites.
+      Impact: 160 targeted tests pass across unit, Writer OOXML and ODF workers, Calc CSV, tooling and resource checks. Whole-five-owner unchanged100 coverage fails S427/465 B222/282 F78/79 L399/411. Full DOCX/XLSX core/filter/UI acceptance is still incomplete.
+      Resolution: Preserve native source-copy/read-loop/locator ownership and existing UI policy; do not promote broad libxml2 or task parity. Evidence: evidence/native-sax-input-source-checkpoint.json. Continue remaining parser branches and actual package/model/filter admission.
 id_source: "generated"
 ---
 ## Summary
@@ -1252,6 +1302,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T14:29:31.275Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded SAX InputSource checkpoint only: 160 targeted tests pass, typecheck/build/static and required source/registry/tooling guards pass. Unchanged whole-five-owner100 coverage fails S427/465 B222/282 F78/79 L399/411; no exclusions or thresholds changed. Full libxml2/parser service and DOCX/XLSX package/model/filter/worker/UI acceptance remain incomplete. Evidence: evidence/native-sax-input-source-checkpoint.json.
+Attempts: 16
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:29:30.736Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1320,3 +1400,7 @@ DecisionContextRef:
 - Observation: Original XML byte stream converter and RTL ownership implemented; actual native SJIS descriptor64 closed with exact256/256 tables/shared EUDC. Existing compiled original witness extended: new BMP digest283198542,151032 defined round-trip cases;11 previous digests/source hashes/EUCJP unchanged. 201 targeted scenarios pass; whole4-owner coverage100 still FAILS S317/338 B179/184 F29/29 L282/302.
   Impact: Source EOF/quote/no-FLUSH/MS-compatible quirks preserved as CALC-363..366 / WRITER200..203. Actual InputSource/parser byte/package/model/filter/DOCX/XLSX worker/UI admission remains incomplete. New logic does not inherit broad native ABI/service parity.
   Resolution: Command/result/evidence/scope in evidence/native-xml-stream-converter-checkpoint.json records24 source blobs, raw full profile, native manifest/table audit, failed initial checks and final corrections. Exact inline-header witness resolves coarse SAX/Comphelper cycle without allowing other cycles;52 guard/tooling tests pass. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing pass. Continue approved native pipeline work; no private state/fake providers or threshold/exclusion changes.
+
+- Observation: SAX InputSource checkpoint admits genuine UNO streams and locator ownership through the existing DOM-free backend. Initial typed-array/literal/JSDoc issues are corrected; missing CSV test path was replaced by actual impex/docsh suites.
+  Impact: 160 targeted tests pass across unit, Writer OOXML and ODF workers, Calc CSV, tooling and resource checks. Whole-five-owner unchanged100 coverage fails S427/465 B222/282 F78/79 L399/411. Full DOCX/XLSX core/filter/UI acceptance is still incomplete.
+  Resolution: Preserve native source-copy/read-loop/locator ownership and existing UI policy; do not promote broad libxml2 or task parity. Evidence: evidence/native-sax-input-source-checkpoint.json. Continue remaining parser branches and actual package/model/filter admission.
