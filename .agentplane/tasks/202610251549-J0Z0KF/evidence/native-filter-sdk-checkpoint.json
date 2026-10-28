@@ -1,0 +1,155 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native filter/service SDK prerequisite checkpoint; full task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Complete XImporter/XExporter/XFilter/XServiceInfo/XInitialization/XMultiServiceFactory IDL declarations with original root inheritance and normal CPPUMaker static bindings. Exact original FilterBase_BASE template interface order is checked through actual WeakImplHelper class data, without creating a concrete component.",
+  "sourceBlobs": {
+    "docs/program/calc-upstream-suspected-issues.md": "44186414eeaf1580a032d66ac7a7ddcbbc7bb020",
+    "apps/office/src/offapi/com/sun/star/document/XExporter.ts": "88c7eeb233e41ff517890085be79eaa20fc41fa8",
+    "apps/office/src/offapi/com/sun/star/document/XFilter.ts": "52adbda106ba5da63ba61d0a3277d9417cad6a77",
+    "apps/office/src/offapi/com/sun/star/document/XImporter.ts": "0a8802d17f75078dfcc19068350cdfc89cf165ae",
+    "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts": "d8bed51e527f030780469dbc16bb1cba221b6ed0",
+    "apps/office/src/udkapi/com/sun/star/lang/XInitialization.ts": "07a1a987a4d980111ac00a88b7e0c11d07d94be6",
+    "apps/office/src/udkapi/com/sun/star/lang/XMultiServiceFactory.ts": "542ead6e75f455162b28463347a0bff7e9600e88",
+    "apps/office/src/udkapi/com/sun/star/lang/XServiceInfo.ts": "8d166cf1ad1456ba35d7dc0ad437eb8e1e08568d",
+    "docs/program/registry/calc/capabilities/CAP-f047e48d-9532-4697-8b92-74ac314708c6.json": "aab9cfedd24322defd77e44cef7582c74dd5ff08",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XExporter.ts.json": "040002a7d98bc3f3b9baa80a54235efbb4059a69",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XFilter.ts.json": "50853968215bd42ac2300b8b5dd2d20a99148d15",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/document/XImporter.ts.json": "014d3eefeb4b5053d7e0e6e9802a422cd2160f40",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XInitialization.ts.json": "486e3c3deca3f86030fdfea11787b8042f102fda",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XMultiServiceFactory.ts.json": "01f927fe215b492d42de91065722d6f5a886088a",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/lang/XServiceInfo.ts.json": "c2ca08270f846344cc862c06d5297aa0825db98d",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XExporter.ts.json": "fc393d8c75fb23aad7636b34acb34bd1a4624e4f",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XFilter.ts.json": "23152f71a9ea860a72732937fb506f3cb3e27758",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/document/XImporter.ts.json": "92dabb9a9d05e3e652409613ac0ab8146c3bf19f",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XInitialization.ts.json": "97385444ec456e2ca412a1f129aa74075d178c8d",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XMultiServiceFactory.ts.json": "90b78512e3d35c944ec4479363fe032bd2738a1a",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/lang/XServiceInfo.ts.json": "d48086f28d0e506008987ed946f66a74e4b56b66"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/offapi/com/sun/star/document/native-filter-interfaces.test.ts --coverage.include=src/offapi/com/sun/star/document/XImporter.ts --coverage.include=src/offapi/com/sun/star/document/XExporter.ts --coverage.include=src/offapi/com/sun/star/document/XFilter.ts --coverage.include=src/udkapi/com/sun/star/lang/XServiceInfo.ts --coverage.include=src/udkapi/com/sun/star/lang/XInitialization.ts --coverage.include=src/udkapi/com/sun/star/lang/XMultiServiceFactory.ts --coverage.reportsDirectory=coverage/oox-filter-sdk --maxWorkers=2",
+      "result": "pass8tests/1file; complete six-owner scoped100 S54/54 B12/12 F18/18 L54/54. Production SDK blobs unchanged after this pass; later test-only type/cast cleanup does not change executed interface/factory behavior. No exclusions/threshold changes.",
+      "rawFile": "apps/office/coverage/oox-filter-sdk/coverage-final.json",
+      "sha256": "9a03d3fca7f799183843aa7346dddb8eaea9a2c6e027ffc85078065efce72bae",
+      "files": {
+        "apps/office/src/offapi/com/sun/star/document/XExporter.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/document/XFilter.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/offapi/com/sun/star/document/XImporter.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XInitialization.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XMultiServiceFactory.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/udkapi/com/sun/star/lang/XServiceInfo.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 2,
+            "total": 2
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        }
+      }
+    },
+    "regression": {
+      "command": "npm run test:shared -- src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppu/source/typelib/ src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts --maxWorkers=2",
+      "result": "pass77tests/14files; actual shared weak/typelib/text/filter SDK owners, not a whole-format or full-suite test"
+    },
+    "typecheck": "pass:npm run typecheck tools and app; final app compiler repeat after type-only assertion cleanup also exited0",
+    "static": "pass:npm run test:static",
+    "eslint": "pass:all seven new source/test TS paths max-warnings0",
+    "prettier": "pass:same seven paths",
+    "dependencies": "pass1700runtime sources/8807relative imports/212allowed edges; no boundary exceptions added",
+    "docs": "pass3903authored source files",
+    "fileSize": "pass3907authored files; direct check exited0, unchanged1000line threshold",
+    "sourceTree": "pass115required paths/32retired roots",
+    "resources": "pass464commands/11menus/17dispositions",
+    "provenance": "pass1701runtime modules/1489mapped/182browser adaptations/30infrastructure",
+    "registry": "pass1701modules/353capabilities/34invariants/3818records; full parity false",
+    "doctor": "pass0errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-356:common native FilterBase.cancel has an empty body despite XFilter cancellation request; SDK void declaration preserved, browser cancellation and concrete filter behavior unchanged/unverified."
+  ],
+  "resolvedValidationFindings": [
+    "Removed a test non-null cast with an ordinary typed descriptor pointer and rewrote the cancel return-type assertion as its equivalent function type for strict void lint. No production declaration, runtime behavior or lint rule changed; final app typecheck and scoped lint pass."
+  ],
+  "limitations": [
+    "This is full SDK declaration/normal type-factory evidence only. No concrete filter/model/factory, alternative query provider or fabricated service instance is supplied or instantiated by the tests.",
+    "FilterBase setDocumentModel must validate real XModel and XMultiServiceFactory references. Those concrete component/model/factory contracts, remaining SfxBaseModel/ScModelObj UNO migration and shared metadata/services are still pending; direct raw-model attachment would not certify the native boundary.",
+    "WorkbookGlobals/WorkbookHelper/AddressConverter, complete XLSX import/export/filter/model/shell/UI and Writer DOCX acceptance remain incomplete and unchanged in this checkpoint.",
+    "Native Test::testUnoType is related unported type QA, not a claimed compiled port of these six SDK interfaces. Physical native ABI/layout, full RDB method reflection, exception/marshalling/thread lifetime and independently compiled SDK differential remain unverified.",
+    "Previously recorded whole-core address/OUString/ScFormulaCell/document/documen2 coverage gaps remain open; this six-owner scoped100 cannot close them or the full task.",
+    "Full suites not due under approved ten-task cadence. No merge, push, publication or task-completion claim."
+  ]
+}
