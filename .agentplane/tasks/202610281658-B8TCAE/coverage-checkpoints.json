@@ -906,5 +906,38 @@
     "productionSourcesChanged": false,
     "nativeParityClaimed": false,
     "coverageExceptionsApplied": false
+  },
+  "cssStateSourceContracts": {
+    "testFiles": 1,
+    "tests": 7,
+    "report": "apps/office/coverage/integration-css-state",
+    "coveredStatements": 189,
+    "totalStatements": 190,
+    "coveredBranchArms": 77,
+    "totalBranchArms": 78,
+    "functions100": true,
+    "lines100": true,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "remaining": "Protected DeclarationParsed inactive-context assertion; public parser entry points establish target state."
+  },
+  "icuTypeNativeReplay": {
+    "testFiles": 1,
+    "tests": 1,
+    "nativeObservations": 1580,
+    "nativeDifferentialPassed": true,
+    "report": "apps/office/coverage/integration-icu-type",
+    "assertionsPassed": true,
+    "coveredStatements": 67,
+    "totalStatements": 69,
+    "coveredBranchArms": 21,
+    "totalBranchArms": 26,
+    "functions100": true,
+    "lines100": true,
+    "strictCoveragePassed": false,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false
   }
 }

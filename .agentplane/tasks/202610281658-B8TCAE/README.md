@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 30
+revision: 32
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T21:54:35.693Z"
+doc_updated_at: "2026-10-28T22:01:19.845Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -139,6 +139,10 @@ sections:
     - Observation: Integrated35 original native Markdown scan-limit/line-view cases,109 total public edge callback fixtures,6 original RTL allocation-failure witnesses, and18 actual CalendarWrapper checked-error propagation cases. Targeted profiles passed40 files2122 tests; their source maps exactly match the fresh full baseline. Standard Istanbul union closes25 additional statements and25 branch arms, leaving238 owners incomplete. Native SIGABRT and local checked Error remain explicitly distinct. Production sources, thresholds and exceptions are unchanged; final full verification is still pending.
 
     - Observation: Actual compiled ISO format recognition and HTML numbering state source-contract tests pass21 cases. Both focused owners now have strict100% coverage:49 statements37 branch arms13 functions45 lines. No runtime source or coverage policy changed; basic source-contract expectations are distinguished from independently compiled native evidence.
+
+    - Observation: Seven additional CSS source-contract tests pass on actual Writer and EditEngine pools. Scalar property copy/merge/Clear, all three owned maps and independent margin sides are verified. Real EditEngine direction registration closes the previously untested cleanup arm without replacing a mapper or owner. Focused coverage is189/190 statements77/78 branch arms30/30 functions168/168 lines; only the protected inactive-context assertion remains. No coverage exception or runtime change.
+
+    - Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.
 id_source: "generated"
 ---
 ## Summary
@@ -258,3 +262,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Integrated35 original native Markdown scan-limit/line-view cases,109 total public edge callback fixtures,6 original RTL allocation-failure witnesses, and18 actual CalendarWrapper checked-error propagation cases. Targeted profiles passed40 files2122 tests; their source maps exactly match the fresh full baseline. Standard Istanbul union closes25 additional statements and25 branch arms, leaving238 owners incomplete. Native SIGABRT and local checked Error remain explicitly distinct. Production sources, thresholds and exceptions are unchanged; final full verification is still pending.
 
 - Observation: Actual compiled ISO format recognition and HTML numbering state source-contract tests pass21 cases. Both focused owners now have strict100% coverage:49 statements37 branch arms13 functions45 lines. No runtime source or coverage policy changed; basic source-contract expectations are distinguished from independently compiled native evidence.
+
+- Observation: Seven additional CSS source-contract tests pass on actual Writer and EditEngine pools. Scalar property copy/merge/Clear, all three owned maps and independent margin sides are verified. Real EditEngine direction registration closes the previously untested cleanup arm without replacing a mapper or owner. Focused coverage is189/190 statements77/78 branch arms30/30 functions168/168 lines; only the protected inactive-context assertion remains. No coverage exception or runtime change.
+
+- Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.

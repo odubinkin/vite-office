@@ -2,13 +2,14 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import {
   gCalTypes,
   getCalendarType,
   getCalendarTypeForLocale,
   isStandardSupportedKeyword,
 } from "../apps/office/src/external/icu/source/i18n/calendar.type.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   source = resolve("vendor/icu-reference/source");
 writeFileSync(
   `${build}/calendar-type-witness.cc`,
@@ -106,6 +107,11 @@ for (let i = 0; i < expected.length; ++i)
   if (actual[i] !== expected[i])
     throw Error(`Type mismatch ${i}: ${input[i]}\nC++ ${actual[i]}\nTS ${expected[i]}`);
 if (actual.length !== expected.length) throw Error("Type witness length mismatch");
+writeIcuObservations("calendar-type", input, actual, build, source, [
+  "i18n/calendar.cpp",
+  "common/locid.cpp",
+  "common/uloc.cpp",
+]);
 writeFileSync(
   `${build}/calendar-type-comparison.json`,
   JSON.stringify(

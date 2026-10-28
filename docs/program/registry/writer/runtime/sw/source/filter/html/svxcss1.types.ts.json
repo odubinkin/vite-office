@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/html/svxcss1.types.ts",
         "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx"
+        "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx",
+        "apps/office/src/sw/source/filter/html/svxcss1.state.test.ts"
       ],
-      "justification": "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified.",
+      "justification": "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified. B8TCAE adds7 source-contract tests on real SwDoc and complete EditEngine pools: parser encoding/font options, grouped base stylesheet lifecycle, public scalar copy/Clear/Merge omissions, independent class/ID/tag entries, separate paragraph spacing sides, and flagged first/left/right margin propagation. Actual EditEngine SID_ATTR_FRAMEDIRECTION registration exercises direction cleanup while retaining parsed font weight; no pool method or private state is replaced. Missing optional TypeScript arguments retain the local checked guard. These are source-contract tests, not full native CSS/import ABI parity. Both owners have100% functions and lines; the protected DeclarationParsed inactive-context assertion remains unexercised because normal parser entry points establish the target set.",
       "knownViolations": [],
       "localSymbols": [
         "SvxCSS1PropertyInfo",
