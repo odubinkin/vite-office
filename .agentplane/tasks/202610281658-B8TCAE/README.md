@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 33
+revision: 34
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:04:48.577Z"
+doc_updated_at: "2026-10-28T22:07:51.547Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -145,6 +145,8 @@ sections:
     - Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.
 
     - Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.
+
+    - Observation: Twelve real calendar minimum-week settings checks and17 RTF property tests pass. Nested RTF helper owner reaches strict100% for35 statements21 branch arms7 functions34 lines. Additional scenarios check borrowed last-modifier attributes and true absent-parent fallbacks without forging internal list state. Current-code coverage remains incomplete; no threshold/exclusion change or exception.
 id_source: "generated"
 ---
 ## Summary
@@ -270,3 +272,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.
 
 - Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.
+
+- Observation: Twelve real calendar minimum-week settings checks and17 RTF property tests pass. Nested RTF helper owner reaches strict100% for35 statements21 branch arms7 functions34 lines. Additional scenarios check borrowed last-modifier attributes and true absent-parent fallbacks without forging internal list state. Current-code coverage remains incomplete; no threshold/exclusion change or exception.

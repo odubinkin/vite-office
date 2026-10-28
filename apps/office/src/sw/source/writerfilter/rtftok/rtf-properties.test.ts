@@ -4,7 +4,14 @@ import native from "./rtf-properties-native.json";
 import { RTFSprms, RTFConflictPolicy as P, RTFSprm } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { RTFReferenceProperties } from "./rtfreferenceproperties";
-import { putNestedAttribute as put, eraseNestedAttribute } from "./rtfdocumentimpl.properties";
+import {
+  putNestedAttribute as put,
+  eraseNestedAttribute,
+  putNestedSprm,
+  getNestedSprm,
+  getLastAttributes,
+  getParagraphBorder,
+} from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { SvRef } from "../../../../tools/inc/ref";
 import type { Properties, Sprm, Value } from "../inc/dmapper/resourcemodel";
@@ -15,6 +22,51 @@ import { unicode, text } from "../../core/unocore/unocrsrhelper";
 import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 const lists: RTFSprms[] = [],
   refs: SvRef<RTFValue>[] = [];
+
+it("borrows the final nested border attributes while preserving separate modifiers", /** Source helpers select the last modifier's actual attribute list and fall back to the outer list for absent or empty parents. @returns Nothing. */ () => {
+  const outer = list(),
+    parentId = N.LN_CT_PrBase_pBdr;
+  const absent = getNestedSprm(outer, parentId, N.LN_CT_PBdr_top);
+  refs.push(absent);
+  expect(absent.is()).toBe(false);
+  expect(eraseNestedAttribute(outer, parentId, N.LN_CT_Border_sz)).toBe(false);
+  expect(getLastAttributes(outer, parentId)).toBe(outer);
+  put(outer, parentId, N.LN_CT_Border_val, new RTFValue(1));
+  expect(getLastAttributes(outer, parentId)).toBe(outer);
+  putNestedSprm(outer, parentId, N.LN_CT_PBdr_top, new RTFValue(2));
+  const first = getNestedSprm(outer, parentId, N.LN_CT_PBdr_top);
+  refs.push(first);
+  const firstAttributes = getLastAttributes(outer, parentId);
+  expect(firstAttributes).toBe(first.operatorDereference().getAttributes());
+  firstAttributes.set(N.LN_CT_Border_sz, new RTFValue(12));
+  putNestedSprm(outer, parentId, N.LN_CT_PBdr_bottom, new RTFValue(3));
+  const last = getNestedSprm(outer, parentId, N.LN_CT_PBdr_bottom);
+  refs.push(last);
+  expect(getLastAttributes(outer, parentId)).toBe(last.operatorDereference().getAttributes());
+  expect(getLastAttributes(outer, parentId).empty()).toBe(true);
+  const retained = firstAttributes.find(N.LN_CT_Border_sz);
+  refs.push(retained);
+  expect(retained.operatorDereference().getInt()).toBe(12);
+});
+
+it("maps each valid paragraph border and rejects host indices outside the native domain", /** Five source edge identities feed the border property's nested modifier path. Invalid host indexing has an explicit local checked boundary rather than native out-of-bounds semantics. @returns Nothing. */ () => {
+  expect(
+    [0, 1, 2, 3, 4].map(
+      /** Maps a defined source edge. @param index - Edge index. @returns Resource ID. */ (index) =>
+        getParagraphBorder(index),
+    ),
+  ).toEqual([
+    N.LN_CT_PBdr_top,
+    N.LN_CT_PBdr_left,
+    N.LN_CT_PBdr_bottom,
+    N.LN_CT_PBdr_right,
+    N.LN_CT_PBdr_between,
+  ]);
+  expect(
+    /** Exercises the local checked boundary for untyped host input. @returns Never. */ () =>
+      getParagraphBorder(5),
+  ).toThrow("getParagraphBorder outside native domain");
+});
 afterEach(
   /** Releases actual borrowed and owned references before stack list destruction. @returns Nothing. */ () => {
     for (const ref of refs.splice(0)) ref.clear();

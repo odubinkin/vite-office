@@ -952,5 +952,22 @@
     "coverageExceptionsApplied": false,
     "strictCoveragePassed": false,
     "scope": "Existing protected Islamic year/month hooks and bounded DATE actual-maximum fragment over actual owners. Native allocation-failure clone-null arm is not forced."
+  },
+  "weekAndRtfHelperContracts": {
+    "reports": [
+      "apps/office/coverage/integration-calendar-week",
+      "apps/office/coverage/integration-rtf-nested-helpers"
+    ],
+    "testFiles": 2,
+    "tests": 29,
+    "assertionsPassed": true,
+    "rtfHelperOwnerAllMetrics100": true,
+    "rtfStatements": 35,
+    "rtfBranchArms": 21,
+    "rtfFunctions": 7,
+    "rtfLines": 34,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "finalFullVerifierPassed": false
   }
 }
