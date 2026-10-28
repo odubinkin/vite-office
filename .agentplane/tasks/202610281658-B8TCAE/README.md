@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 40
+revision: 41
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T23:17:21.698Z"
+doc_updated_at: "2026-10-28T23:34:55.909Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -159,6 +159,8 @@ sections:
     - Observation: Missing naming-list callback revealed an actual local port bug: custom styles carry UNKNOWN65535, while the dialog checked poolId===0. The concrete existing-user-style test fails before correction and passes after reusing original IsPoolUserFormat. User names are offered for overwrite and native builtin names remain reserved. All3 related owner/UI suites77 tests pass with strict100% coverage for123 statements96 branches27 functions110 lines. Third changed owner has fresh maps; current diagnostic gaps are231 owners6 functions. Upstream classification is correct; no suspected upstream issue or coverage exception is introduced.
 
     - Observation: Actual XML phase/style layering, local deleted-assignment host guard, logical package release and96 original key-buffer diagnostics pass30 tests in4 files. No production code or private state is replaced. The compatible diagnostic union now covers all18429 functions, while other metrics remain below100:117986/119511 statements72607/74579 branches107224/108171 lines;230 owners are incomplete. This milestone is not final full verification. Native key outputs compare actual compiled headers/libraries with real Calendar-factory keys; source-contract/host boundaries are explicitly distinguished from native ABI/failure parity.
+
+    Compiled unchanged ICU abstract-key SDK clients cover two additional default constructor arms with actual clone/cache/reference ownership. Three suites/three tests pass; the focused owner retains one NUL-prefix guard gap (29/30 statements,17/18 arms), not excluded. Native fixture check, typecheck, lint, JSDoc, source provenance and invariants pass. Diagnostic union covers all18429 functions and72609/74579 arms;230 owners still incomplete. No full verifier success or publication claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -298,3 +300,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Missing naming-list callback revealed an actual local port bug: custom styles carry UNKNOWN65535, while the dialog checked poolId===0. The concrete existing-user-style test fails before correction and passes after reusing original IsPoolUserFormat. User names are offered for overwrite and native builtin names remain reserved. All3 related owner/UI suites77 tests pass with strict100% coverage for123 statements96 branches27 functions110 lines. Third changed owner has fresh maps; current diagnostic gaps are231 owners6 functions. Upstream classification is correct; no suspected upstream issue or coverage exception is introduced.
 
 - Observation: Actual XML phase/style layering, local deleted-assignment host guard, logical package release and96 original key-buffer diagnostics pass30 tests in4 files. No production code or private state is replaced. The compatible diagnostic union now covers all18429 functions, while other metrics remain below100:117986/119511 statements72607/74579 branches107224/108171 lines;230 owners are incomplete. This milestone is not final full verification. Native key outputs compare actual compiled headers/libraries with real Calendar-factory keys; source-contract/host boundaries are explicitly distinguished from native ABI/failure parity.
+
+Compiled unchanged ICU abstract-key SDK clients cover two additional default constructor arms with actual clone/cache/reference ownership. Three suites/three tests pass; the focused owner retains one NUL-prefix guard gap (29/30 statements,17/18 arms), not excluded. Native fixture check, typecheck, lint, JSDoc, source provenance and invariants pass. Diagnostic union covers all18429 functions and72609/74579 arms;230 owners still incomplete. No full verifier success or publication claimed.

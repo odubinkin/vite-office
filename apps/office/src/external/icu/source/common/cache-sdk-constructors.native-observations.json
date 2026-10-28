@@ -1,0 +1,23 @@
+{
+  "icuVersion": "78.3",
+  "sourceHashes": {
+    "common/unifiedcache.h": "a5de0d4ea46b34b5e34ad0f1381122d00cb3d885928eccdf449b9f0e7800fb1d",
+    "i18n/sharedcalendar.h": "010cecfc6a111e4781758c509bf756bfd81791e3e283c3efb44a2b2c9787f058",
+    "common/unifiedcache.cpp": "2323ff5dbbdd8d707d33fb7f85be4b38b2b45ccdc11c6bb85e90583ffc1c1f20",
+    "i18n/calendar.cpp": "8f5438923e5b6a285f207d3329bf16a095e3617ed44a888c3c1c75405e21e3a4",
+    "common/sharedobject.cpp": "6a181fee0b30745dc9336dce3f9a505793a68001a2d3f5f88ceb6410e0ceff29",
+    "common/uhash.cpp": "07eb020d394d369c34417a0036ea2af5865f2260694120631f156d73110f65b7",
+    "common/sharedobject.h": "1dbed4d9ac06d00bb7dd1327384fafefcd0722f75eb8c89fdecb7761fd9b05a1"
+  },
+  "libraryHashes": {
+    "lib/libicui18n.a": "cf3979dfdde524fd278b02c2f82783c63c5d91b8f109852f5e72d8a49812e337",
+    "lib/libicuuc.a": "21a90ae9e2d0ee448a3d8c10640412688c13ab319e4c80d1288e302ccaaa1b59",
+    "stubdata/libicudata.a": "02b36f4bddb2de058bec34e1daffb9c05df6a57a595e9ed30e556caf79d2e5db"
+  },
+  "witnessSha256": "3657d4203a4bf28ecce7aabda61cfd41dafb3e24db01b58b948bf6b7cf15479b",
+  "valueTypeName": "8AppValue",
+  "scope": "Original default/copy key constructors, locale/type equality, actual SharedObject references and UnifiedCache protocol. Concrete application key/value classes implement the original abstract extension interfaces in the compiled caller. Their factories allocate real SharedObject-derived values and return actual owned hard references; the original library and production Calendar factory are unchanged. No private field/counter or source algorithm is substituted. Native physical allocator/threading and whole application ABI parity are not claimed.",
+  "snapshot": [
+    7, 7, 1, 7, 1, 11, 11, 1, 11, 1, -40502552, -40502552, 1, 0, 0, 5, 1, 0, 1, 1, 11, 2, 1, 0, 0, 0
+  ]
+}

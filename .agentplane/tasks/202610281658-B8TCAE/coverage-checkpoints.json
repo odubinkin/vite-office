@@ -1164,5 +1164,34 @@
     },
     "scope": "Native compiled key diagnostics plus real XML phase/source contracts and explicit local deleted-assignment host guard. Diagnostic union is not a fresh full npm run verify.",
     "finalFullVerifierPassed": false
+  },
+  "cacheSdkConstructors": {
+    "report": "apps/office/coverage/integration-cache-sdk-constructors",
+    "testFiles": 3,
+    "tests": 3,
+    "assertionsPassed": true,
+    "nativeCheckPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "ownerStatements": [
+      29,
+      30
+    ],
+    "ownerBranchArms": [
+      17,
+      18
+    ],
+    "ownerFunctions": [
+      14,
+      14
+    ],
+    "ownerLines": [
+      25,
+      25
+    ],
+    "diagnosticBranchArmsCovered": 72609,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 230,
+    "finalFullVerifierPassed": false
   }
 }
