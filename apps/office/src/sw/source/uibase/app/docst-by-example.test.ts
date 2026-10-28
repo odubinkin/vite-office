@@ -164,6 +164,27 @@ it("opens and cancels native naming without mutating, then accepts the original 
   await next;
   expect(f.node.GetTextFormatColl().GetName()).toBe("Accepted");
 });
+it("lists actual user-defined style names while reserving native builtins", /** Original newstyle.cxx requests a UserDefined iterator, whose Writer classification is IsPoolUserFormat. Real custom collections use UNKNOWN65535 rather than zero. @returns Completion. */ async () => {
+  const f = fixture(),
+    controller = f.view.GetDialogController(),
+    custom = f.doc.MakeTextFormatColl("Existing custom style", f.doc.GetDfltTextFormatColl()),
+    builtin = f.doc.GetTextFormatColl("heading-1"),
+    pending = f.docShell.ExecStyleSheet(new SfxRequest(5555));
+  const snapshot = controller.GetSnapshot();
+  try {
+    expect(custom.GetPoolFormatId()).toBe(65535);
+    expect(snapshot?.request.kind).toBe("new-style");
+    if (snapshot?.request.kind !== "new-style") throw new Error("Missing actual naming request");
+    expect(snapshot.request.names).toContain(custom.GetName());
+    expect(snapshot.request.names).not.toContain(builtin.GetName());
+    expect(snapshot.request.names).not.toContain(f.doc.GetDfltTextFormatColl().GetName());
+    expect(snapshot.request.reservedNames).not.toContain(custom.GetName());
+    expect(snapshot.request.reservedNames).toContain(builtin.GetName());
+  } finally {
+    if (snapshot) controller.Cancel(snapshot.id);
+    await pending;
+  }
+});
 it("persists new and updated named owners through ODT and the browser graph codec", /** Checks actual export/reopen and direct/inherited formatting. @returns Completion. */ async () => {
   const f = fixture();
   f.node.SetAttr(new SvxTextLeftMarginItem(SvxIndentValue.twips(960), RES_MARGIN_TEXTLEFT));

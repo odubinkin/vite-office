@@ -1115,5 +1115,26 @@
     },
     "rawReport": "apps/office/coverage/integration-currency-completion-consumers/coverage-final.json",
     "rawReportSha256": "dc376f453149905cb5cbaab5d0811a1db549ea0f6603fd7fb4d6cb6d537b433f"
+  },
+  "nativeUserStyleClassification": {
+    "regressionBefore": ".agentplane/tmp/style-name-classification-before.log",
+    "regressionBeforeFailed": true,
+    "report": "apps/office/coverage/integration-style-name-classification",
+    "testFiles": 3,
+    "tests": 77,
+    "assertionsPassed": true,
+    "allMetrics100": true,
+    "statements": 123,
+    "branchArms": 96,
+    "functions": 27,
+    "lines": 110,
+    "runtimeSource": "apps/office/src/sw/source/uibase/app/docst.ts",
+    "runtimeSourceSha256": "99e7e7a6de2dd80dfbe22c2db5ac1e04b4bda788892950dee4d11feb2c6e7299",
+    "sourceMapMigration": "Third changed owner recollected; obsolete baseline docst map replaced in diagnostic union, not merged.",
+    "scope": "Local port bug; original UserDefined pool classification is correct. No suspected upstream issue.",
+    "coverageExceptionsApplied": false,
+    "diagnosticRemainingOwners": 231,
+    "diagnosticRemainingFunctions": 6,
+    "finalFullVerifierPassed": false
   }
 }

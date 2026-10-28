@@ -4,7 +4,7 @@ import { SfxInterface } from "../../../../sfx2/source/control/objface";
 import { SfxRequest } from "../../../../sfx2/source/control/request";
 import { SfxUInt16Item } from "../../../../svl/source/items/intitem";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
-import { WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { IsPoolUserFormat, WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
 import { getWriterCommandArguments, getWriterSlotId } from "../../../sdi/swriter";
 import { WRITER_COMMAND_IDS } from "../../../uiconfig/swriter/menubar/menubar-commands";
 import { getWriterCommandResource } from "../../../uiconfig/swriter/writer-command-resources";
@@ -151,7 +151,9 @@ function execByExample(owner: SwDocShell, request: SfxRequest): undefined | Prom
       .GetTextFormatColls()
       .filter(
         /** The dialog lists user-defined styles only. @param collection - Actual owner. @returns User-defined. */
-        (collection) => collection.poolId === 0 && collection !== document.GetDfltTextFormatColl(),
+        (collection) =>
+          IsPoolUserFormat(collection.GetPoolFormatId()) &&
+          collection !== document.GetDfltTextFormatColl(),
       )
       .map(
         /** Detaches native name. @param collection - Actual owner. @returns Name. */
