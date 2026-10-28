@@ -5,6 +5,7 @@ import fs from "node:fs";
 import path from "node:path";
 import process from "node:process";
 import ts from "typescript";
+import { isOriginalInputEventIdentifier } from "./module-boundaries/input-event-binding.mjs";
 import { isOriginalEscapementConstantImport } from "./module-boundaries/escapement-imports.mjs";
 export { isOriginalEscapementConstantImport } from "./module-boundaries/escapement-imports.mjs";
 import { isOriginalCharacterValueImport } from "./module-boundaries/character-value-imports.mjs";
@@ -476,8 +477,8 @@ export function getRuntimeOwnershipViolation(sourcePath, targetPath, importName)
   return undefined;
 }
 
-/** Finds browser-global identifiers that must remain behind adapters. Comments and larger domain names are ignored by parsing the source AST. @param sourceText - Authored TypeScript source. @returns Stable forbidden symbol names. */
-export function getProtectedBrowserGlobalReferences(sourceText) {
+/** Finds browser-global identifiers that must remain behind adapters. Comments and larger domain names are ignored by parsing the source AST. @param sourceText - Authored TypeScript source. @param relativePath - Optional original source owner. @returns Stable forbidden symbol names. */
+export function getProtectedBrowserGlobalReferences(sourceText, relativePath = "") {
   const sourceFile = ts.createSourceFile(
     "protected-source.ts",
     sourceText,
@@ -488,7 +489,11 @@ export function getProtectedBrowserGlobalReferences(sourceText) {
   const references = new Set();
   /** Visits identifiers in the parsed source. @param node - Current syntax node. @returns Nothing. */
   function visit(node) {
-    if (ts.isIdentifier(node) && protectedBrowserGlobalSymbols.has(node.text))
+    if (
+      ts.isIdentifier(node) &&
+      protectedBrowserGlobalSymbols.has(node.text) &&
+      !isOriginalInputEventIdentifier(sourceFile, node, relativePath)
+    )
       references.add(node.text);
     ts.forEachChild(node, visit);
   }
@@ -806,7 +811,10 @@ for (const sourceFile of runtimeSources) {
         failures.push(
           `${displayPath(sourceFile)}: Writer source layers must not declare browser projection symbol ${browserProjectionSymbol}`,
         );
-    for (const browserGlobalSymbol of getProtectedBrowserGlobalReferences(sourceText))
+    for (const browserGlobalSymbol of getProtectedBrowserGlobalReferences(
+      sourceText,
+      relativeSource.split(path.sep).join("/"),
+    ))
       failures.push(
         `${displayPath(sourceFile)}: protected source layers must not reference browser global ${browserGlobalSymbol}`,
       );

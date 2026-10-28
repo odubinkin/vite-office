@@ -1,0 +1,242 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-d25115b5-c9e5-4d2c-8579-1ee1c12c92a0",
+    "capabilityId": "CAP-d25115b5-c9e5-4d2c-8579-1ee1c12c92a0",
+    "suite": "calc",
+    "subsystem": "uno-model-sdk",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Thirteen original interface declarations retain complete method types, direct bases and actual normal CPPU ownership.",
+      "Eight event field contracts and original FrameAction literal values close the declaration graph without manufactured runtime event or component owners."
+    ],
+    "capability": "Original model/controller/frame/window SDK declaration graph",
+    "gaps": [
+      "J0Z0KF ports the closed original XModel/XController/XFrame/XFramesSupplier/XFrames model, frame and window listener IDL declaration graph. Thirteen interfaces retain complete method signatures, direct base inheritance and actual cached CPPUMaker-normal Type/Reference ownership over existing shared CPPU factories. Existing XComponent/XEventListener/XIndexAccess roots are reused. Eight event/rectangle records provide IDL field declarations only; their generated constructors, copying/destruction, runtime values, field ABI and struct metadata remain unported. FrameAction retains its eight original literal enum values; generated enum metadata is unported. These are SDK contracts, not instantiated model/controller/window/listener implementations or replacement service providers. SfxBaseModel/ScModelObj concrete XModel and service-factory migration, model guard/controller undo behavior, FilterBase model admission, WorkbookGlobals/WorkbookHelper/AddressConverter, full DOCX/XLSX import/export and existing UI round trips remain pending. Physical ABI, native threading/marshalling, complete reflection and independently compiled original SDK differential are not certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/frame/XModel.idl",
+          "marker": "XModel"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/XController.idl",
+          "marker": "XController"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/XFrame.idl",
+          "marker": "XFrame"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/XFrameActionListener.idl",
+          "marker": "XFrameActionListener"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/FrameActionEvent.idl",
+          "marker": "FrameActionEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/FrameAction.idl",
+          "marker": "FrameAction"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XWindow.idl",
+          "marker": "XWindow"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XPaintListener.idl",
+          "marker": "XPaintListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/PaintEvent.idl",
+          "marker": "PaintEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/Rectangle.idl",
+          "marker": "Rectangle"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XMouseMotionListener.idl",
+          "marker": "XMouseMotionListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/MouseEvent.idl",
+          "marker": "MouseEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/InputEvent.idl",
+          "marker": "InputEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XMouseListener.idl",
+          "marker": "XMouseListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XKeyListener.idl",
+          "marker": "XKeyListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/KeyEvent.idl",
+          "marker": "KeyEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XFocusListener.idl",
+          "marker": "XFocusListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/FocusEvent.idl",
+          "marker": "FocusEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/XWindowListener.idl",
+          "marker": "XWindowListener"
+        },
+        {
+          "path": "offapi/com/sun/star/awt/WindowEvent.idl",
+          "marker": "WindowEvent"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/XFramesSupplier.idl",
+          "marker": "XFramesSupplier"
+        },
+        {
+          "path": "offapi/com/sun/star/frame/XFrames.idl",
+          "marker": "XFrames"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "Test::testUnoType"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/core/filterbase.hxx",
+          "marker": "getModel"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XModel.ts",
+          "marker": "XModel"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XController.ts",
+          "marker": "XController"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XFrame.ts",
+          "marker": "XFrame"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XFrameActionListener.ts",
+          "marker": "XFrameActionListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/FrameActionEvent.ts",
+          "marker": "FrameActionEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/FrameAction.ts",
+          "marker": "FrameAction"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XWindow.ts",
+          "marker": "XWindow"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XPaintListener.ts",
+          "marker": "XPaintListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/PaintEvent.ts",
+          "marker": "PaintEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/Rectangle.ts",
+          "marker": "Rectangle"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XMouseMotionListener.ts",
+          "marker": "XMouseMotionListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/MouseEvent.ts",
+          "marker": "MouseEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/InputEvent.ts",
+          "marker": "InputEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XMouseListener.ts",
+          "marker": "XMouseListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XKeyListener.ts",
+          "marker": "XKeyListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/KeyEvent.ts",
+          "marker": "KeyEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XFocusListener.ts",
+          "marker": "XFocusListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/FocusEvent.ts",
+          "marker": "FocusEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/XWindowListener.ts",
+          "marker": "XWindowListener"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/awt/WindowEvent.ts",
+          "marker": "WindowEvent"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XFramesSupplier.ts",
+          "marker": "XFramesSupplier"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XFrames.ts",
+          "marker": "XFrames"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/native-model-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/uno-model-sdk.md",
+          "marker": "# Model and controller SDK contracts"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF ports the closed original XModel/XController/XFrame/XFramesSupplier/XFrames model, frame and window listener IDL declaration graph. Thirteen interfaces retain complete method signatures, direct base inheritance and actual cached CPPUMaker-normal Type/Reference ownership over existing shared CPPU factories. Existing XComponent/XEventListener/XIndexAccess roots are reused. Eight event/rectangle records provide IDL field declarations only; their generated constructors, copying/destruction, runtime values, field ABI and struct metadata remain unported. FrameAction retains its eight original literal enum values; generated enum metadata is unported. These are SDK contracts, not instantiated model/controller/window/listener implementations or replacement service providers. SfxBaseModel/ScModelObj concrete XModel and service-factory migration, model guard/controller undo behavior, FilterBase model admission, WorkbookGlobals/WorkbookHelper/AddressConverter, full DOCX/XLSX import/export and existing UI round trips remain pending. Physical ABI, native threading/marshalling, complete reflection and independently compiled original SDK differential are not certified."
+    },
+    "scopeLimitations": [
+      "J0Z0KF ports the closed original XModel/XController/XFrame/XFramesSupplier/XFrames model, frame and window listener IDL declaration graph. Thirteen interfaces retain complete method signatures, direct base inheritance and actual cached CPPUMaker-normal Type/Reference ownership over existing shared CPPU factories. Existing XComponent/XEventListener/XIndexAccess roots are reused. Eight event/rectangle records provide IDL field declarations only; their generated constructors, copying/destruction, runtime values, field ABI and struct metadata remain unported. FrameAction retains its eight original literal enum values; generated enum metadata is unported. These are SDK contracts, not instantiated model/controller/window/listener implementations or replacement service providers. SfxBaseModel/ScModelObj concrete XModel and service-factory migration, model guard/controller undo behavior, FilterBase model admission, WorkbookGlobals/WorkbookHelper/AddressConverter, full DOCX/XLSX import/export and existing UI round trips remain pending. Physical ABI, native threading/marshalling, complete reflection and independently compiled original SDK differential are not certified."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "model-controller-frame-window-sdk-declarations"
+  }
+}

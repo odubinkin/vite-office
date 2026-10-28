@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/awt/WindowEvent.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-model-sdk",
+    "capabilityIds": [
+      "CAP-d25115b5-c9e5-4d2c-8579-1ee1c12c92a0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/awt/WindowEvent.ts",
+        "apps/office/src/offapi/com/sun/star/frame/native-model-interfaces.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/awt/WindowEvent.idl",
+        "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx#InterfaceType::dumpNormalGetCppuType"
+      ],
+      "justification": "J0Z0KF ports the closed original XModel/XController/XFrame/XFramesSupplier/XFrames model, frame and window listener IDL declaration graph. Thirteen interfaces retain complete method signatures, direct base inheritance and actual cached CPPUMaker-normal Type/Reference ownership over existing shared CPPU factories. Existing XComponent/XEventListener/XIndexAccess roots are reused. Eight event/rectangle records provide IDL field declarations only; their generated constructors, copying/destruction, runtime values, field ABI and struct metadata remain unported. FrameAction retains its eight original literal enum values; generated enum metadata is unported. These are SDK contracts, not instantiated model/controller/window/listener implementations or replacement service providers. SfxBaseModel/ScModelObj concrete XModel and service-factory migration, model guard/controller undo behavior, FilterBase model admission, WorkbookGlobals/WorkbookHelper/AddressConverter, full DOCX/XLSX import/export and existing UI round trips remain pending. Physical ABI, native threading/marshalling, complete reflection and independently compiled original SDK differential are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "WindowEvent"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/awt/WindowEvent.idl",
+      "upstreamSymbols": [
+        "WindowEvent",
+        "X"
+      ]
+    }
+  }
+}

@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/frame/XFrame.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/frame/XFrame.idl",
+    "localSymbols": [
+      "XFrame",
+      "cppu_detail_getUnoType",
+      "getCppuType",
+      "initialize"
+    ],
+    "upstreamSymbols": [
+      "XFrame",
+      "initialize"
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF ports the closed original XModel/XController/XFrame/XFramesSupplier/XFrames model, frame and window listener IDL declaration graph. Thirteen interfaces retain complete method signatures, direct base inheritance and actual cached CPPUMaker-normal Type/Reference ownership over existing shared CPPU factories. Existing XComponent/XEventListener/XIndexAccess roots are reused. Eight event/rectangle records provide IDL field declarations only; their generated constructors, copying/destruction, runtime values, field ABI and struct metadata remain unported. FrameAction retains its eight original literal enum values; generated enum metadata is unported. These are SDK contracts, not instantiated model/controller/window/listener implementations or replacement service providers. SfxBaseModel/ScModelObj concrete XModel and service-factory migration, model guard/controller undo behavior, FilterBase model admission, WorkbookGlobals/WorkbookHelper/AddressConverter, full DOCX/XLSX import/export and existing UI round trips remain pending. Physical ABI, native threading/marshalling, complete reflection and independently compiled original SDK differential are not certified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete model/controller/window implementations, generated event value owners and full DOCX/XLSX filter/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/XFrame.ts",
+          "marker": "XFrame"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/frame/native-model-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/frame/XFrame.idl",
+          "marker": "XFrame"
+        }
+      ]
+    }
+  }
+}
