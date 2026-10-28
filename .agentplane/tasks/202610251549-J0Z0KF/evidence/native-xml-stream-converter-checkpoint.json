@@ -1,0 +1,388 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native XML stream converter/SJIS dependency closure; full task incomplete; whole4-owner coverage fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/inc/sequence.test.ts": "1cc1f6a64166ddb9d40c94ace2e3b9700c44bd71",
+    "apps/office/src/comphelper/inc/sequence.ts": "ff772a30e44822a4a980362b077c31d3275810fe",
+    "apps/office/src/sal/textenc/native-sjis.test.ts": "bbdedf1590bfe06155da88e25d052667d220910c",
+    "apps/office/src/sal/textenc/tables.ts": "f7d227ecf2a74c4c498e8af640fa5376a9e5b34e",
+    "apps/office/src/sal/textenc/tcvtjp6.sjis.ts": "a72a84ae214dd768eeb7431238c8232a22ead302",
+    "apps/office/src/sal/textenc/tcvtmb.encode.native.json": "0e0453658b50067c4dd529d896bf135e540f59cf",
+    "apps/office/src/sax/source/expatwrap/xml2utf.test.ts": "13369512ed850cf4697f2a4920f9fe8848cf107f",
+    "apps/office/src/sax/source/expatwrap/xml2utf.ts": "58e1cba9e9efeeb818e28a84a1f47d2e53d44ea0",
+    "docs/program/calc-upstream-suspected-issues.md": "3b3d1c2a5b12ef2e5245efd6cb298e0692135c80",
+    "docs/program/native-xml-stream-converter.md": "69cf295ffcae565a8608b4b9ee3dc9db7ba9cb87",
+    "docs/program/registry/calc/capabilities/CAP-cd5e8519-def3-4ea5-83ee-8c0ae0f17ba2.json": "3d293aa8cca1eeb34922a179f7375a4df36cbce7",
+    "docs/program/registry/shared/provenance/comphelper/inc/sequence.ts.json": "dc38a48843cd8554b9307386538ff06e37de035e",
+    "docs/program/registry/shared/provenance/sal/textenc/tables.ts.json": "ac88dc6503dfac2f17a4560b89fa004a08404b85",
+    "docs/program/registry/shared/provenance/sal/textenc/tcvtjp6.sjis.ts.json": "876c50b4e5d1b38818a457b31c3c99d9ca4c80b9",
+    "docs/program/registry/shared/provenance/sax/source/expatwrap/xml2utf.ts.json": "4dc9be6000d268872fa536b655d93c26cd2bcbe5",
+    "docs/program/registry/shared/runtime/comphelper/inc/sequence.ts.json": "f953583976cc28c2e9ff4c229f49ec58d754cc03",
+    "docs/program/registry/shared/runtime/sal/textenc/tables.ts.json": "1b6af7512dfd72eabbab18ba2f674b342423a743",
+    "docs/program/registry/shared/runtime/sal/textenc/tcvtjp6.sjis.ts.json": "f4a74024d63fded4683b147a5754b7dbd49c155a",
+    "docs/program/registry/shared/runtime/sax/source/expatwrap/xml2utf.ts.json": "6997b662433faa78b673f12827b905fe6ae3ccb6",
+    "docs/program/writer-upstream-suspected-issues.md": "d9ed9a6b810ea45e507124779df3605853997b68",
+    "scripts/check-module-boundaries.mjs": "a8e1a6961d9082f7b1a02a1c664f44b33681de08",
+    "scripts/module-boundaries/inline-sequence-imports.mjs": "166cafbfada0f89c0fdfb37439076538639c65fa",
+    "scripts/native-inline-sequence-boundary.test.ts": "cbfbafa1b07cc7c1bcb3c3027f934556b87b27a8",
+    "scripts/sal-dbcs-native-probe.mjs": "94b05d2d56733d4258d384720e318af519f40cee"
+  },
+  "scope": "Original XMLFile2UTFConverter/Text2UnicodeConverter/Unicode2TextConverter with actual Sequence/OString/Reference/RTL owners, original scan/flags/quote/EOF/byte sizing and reverse cleanup. Native concatSequences consumes actual compiler T/sizeof and CPPU lvalue assignment. Missing original SJIS descriptor closes actual64 factory slot, exact256/256 source pointer tables and genuinely shared EUDC owner.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-check-0.log",
+      "sha256": "2cff9c02277171f96e2f00507d752b4913747389e68bd334cb17f41cddc511cf"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-1.log",
+      "sha256": "7770b2a792d6ba656bb2f3f91b2a11d50b8c747273abd8f9128e27900e7ebe88"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-2.log",
+      "sha256": "d785a27c190ba21d139768254a7e2fe2dfdcaa021a464a170fb757809c00d31e"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-3.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-check-4.log",
+      "sha256": "d7107b6e87f8ace224eb10ccf791bdd74f39c5328337f8929838ec1328c73604"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-check-5.log",
+      "sha256": "3942da501885179057e9c7d71ddd8beebc52bd57b0ebe48d87aa4e40425b71c8"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-check-6.log",
+      "sha256": "b73e65b159095075143494adc5069bd259b31b80100c283f2173b5b162450382"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-check-7.log",
+      "sha256": "e5d3220addc28d6c9f2ddfcd0e29e8960a2cc2f32f599eff51bf64d53a353d3f"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-8.log",
+      "sha256": "a9cfec64a4b16801fd4e8cbd21efcb3b7c79f73aa42aa264b1ac7db1f644865e"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-9.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-10.log",
+      "sha256": "e2112e5f038b55802dca0f6d378ce5ece0e0d0ea83d8fed23054c47e8f6b2d69"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-11.log",
+      "sha256": "3bc99b50433465a3e19039a61a4fb27f52b3af0afc2e25eb34e4eac9ed7fff8d"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-12.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-check-13.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-0.log",
+      "sha256": "b08fa8f5cd68eae9906bfe586400c80fd278803d803ea86b3bc0cf7b8c3f4680"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-1.log",
+      "sha256": "1378f2436da16a4a6da80ebc5622b56a9dc6c4c65ef0e91b660bcde5905321d7"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-2.log",
+      "sha256": "38aadb063cfa78e84b53b46cc147a3747cdd85a7607979cf76c89172cb5f584b"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-3.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-4.log",
+      "sha256": "a8d1d0f1e2328ebd16437b853d454c0db789409626f88f5ce003ddd3638c83f6"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-5.log",
+      "sha256": "9e685b585ad30e2846ca0881c9394f24889176cf029f2ee595a74db5498c6992"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-6.log",
+      "sha256": "5d2442e980a67e41abbb17bfcd99c55948c00548f27e1c22e44a8c4f733ac962"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-7.log",
+      "sha256": "0e84ae44c079a27186a0c5915b4a1fb69218c1f561d61662240ad1660ff293f4"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-8.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-finalcheck-9.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sax/source/expatwrap/xml2utf.test.ts src/comphelper/inc/sequence.test.ts src/sal/textenc/native-sjis.test.ts src/sal/textenc/textcvt.factory.test.ts src/sal/textenc/tcvtmb.encode.test.ts --coverage.include=src/sax/source/expatwrap/xml2utf.ts --coverage.include=src/comphelper/inc/sequence.ts --coverage.include=src/sal/textenc/tcvtjp6.sjis.ts --coverage.include=src/sal/textenc/tables.ts --coverage.reportsDirectory=coverage/native-xml2utf-final4 --maxWorkers=2",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml2utf-testsfinal4.log",
+      "sha256": "241a94fddc10cd6b2e4d09b9bc6216f9c1d31c3be61e594737915d3d34ee31a0"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-typecheckfinal4.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-staticfinal4.log",
+      "sha256": "cf11b6f92b673cb3ac967ab60fa443969cda2c15b002906b1e0d3ddb082770cb"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-registry-buildfinal.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "node scripts/sal-dbcs-native-probe.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-native-probe.log",
+      "sha256": "09bbeb5fbf7e97fea01219e14bf82d523f528d5a4fc1334aaeb6a58846f98886"
+    },
+    {
+      "command": "npx vitest run scripts/native-inline-sequence-boundary.test.ts scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts --maxWorkers=2",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-tooling.log",
+      "sha256": "fc36c6857385ef6592204b708cc5285b575b3608127f9fd5e1377d0e45b0ae78"
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/streaming/seqstream.test.ts src/oox/source/helper/binary-streams.test.ts src/sal/inc/rtl/native-ostring.test.ts src/sal/textenc/native-mime-charset.test.ts src/sal/textenc/textcvt.context.integration.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --maxWorkers=2 [cwd apps/office]",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-related.log",
+      "sha256": "4a204d415c375b413d53714a5dbc4ad5198e92c9ceffecf130e30bf51a4bedaf"
+    },
+    {
+      "command": "npx eslint apps/office/src/comphelper/inc/sequence.test.ts apps/office/src/comphelper/inc/sequence.ts apps/office/src/sal/textenc/native-sjis.test.ts apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/tcvtjp6.sjis.ts apps/office/src/sax/source/expatwrap/xml2utf.test.ts apps/office/src/sax/source/expatwrap/xml2utf.ts scripts/check-module-boundaries.mjs scripts/module-boundaries/inline-sequence-imports.mjs scripts/native-inline-sequence-boundary.test.ts scripts/sal-dbcs-native-probe.mjs --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-lintfinal4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/comphelper/inc/sequence.test.ts apps/office/src/comphelper/inc/sequence.ts apps/office/src/sal/textenc/native-sjis.test.ts apps/office/src/sal/textenc/tables.ts apps/office/src/sal/textenc/tcvtjp6.sjis.ts apps/office/src/sax/source/expatwrap/xml2utf.test.ts apps/office/src/sax/source/expatwrap/xml2utf.ts scripts/check-module-boundaries.mjs scripts/module-boundaries/inline-sequence-imports.mjs scripts/native-inline-sequence-boundary.test.ts scripts/sal-dbcs-native-probe.mjs docs/program/calc-upstream-suspected-issues.md docs/program/native-xml-stream-converter.md docs/program/writer-upstream-suspected-issues.md",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml2utf-formatfinal4.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  ],
+  "rawCoverage": {
+    "path": "apps/office/coverage/native-xml2utf-final4/coverage-final.json",
+    "sha256": "639940700e1a8c6293c1a595bbb3f68fad02b0a5f3d51ec11be79dc64ba5f243",
+    "files": {
+      "apps/office/src/comphelper/inc/sequence.ts": {
+        "s": {
+          "covered": 15,
+          "total": 17
+        },
+        "b": {
+          "covered": 0,
+          "total": 0
+        },
+        "f": {
+          "covered": 1,
+          "total": 1
+        }
+      },
+      "apps/office/src/sal/textenc/tables.ts": {
+        "s": {
+          "covered": 44,
+          "total": 44
+        },
+        "b": {
+          "covered": 46,
+          "total": 46
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/sal/textenc/tcvtjp6.sjis.ts": {
+        "s": {
+          "covered": 5,
+          "total": 5
+        },
+        "b": {
+          "covered": 0,
+          "total": 0
+        },
+        "f": {
+          "covered": 2,
+          "total": 2
+        }
+      },
+      "apps/office/src/sax/source/expatwrap/xml2utf.ts": {
+        "s": {
+          "covered": 253,
+          "total": 272
+        },
+        "b": {
+          "covered": 133,
+          "total": 138
+        },
+        "f": {
+          "covered": 23,
+          "total": 23
+        }
+      }
+    },
+    "result": "FAIL S317/338 B179/184 F29/29 L282/302; unchanged100 thresholds, counters and exclusions. Raw map covers complete four owners.",
+    "gaps": [
+      "Native scan length<4 guard is not reachable after public8-byte recognition; preserved, without private-state/helper invocation.",
+      "RTL text2 target growth and Unicode2 pending remainder branches are not exercised by current genuine callers.",
+      "RAII/constructor/assignment failure cleanup is not covered; no fake allocator/type/query/converter context was injected."
+    ]
+  },
+  "nativeWitness": {
+    "command": "node scripts/sal-dbcs-native-probe.mjs",
+    "fixture": "apps/office/src/sal/textenc/tcvtmb.encode.native.json",
+    "sha256": "1c5e0872a262d24b3e858bd3e1d4e944b28314c31b1410a58946426517ef0889",
+    "previousFixtureSha256": "1e298b1f1a8a37ce5e4c8c3f084346b5046f4a13e3a9fc8c00ffefa9eb033937",
+    "previousCommittedBlob": "8e85014e80af1f34c1130ac980be8181890e97fb",
+    "driverSha256": "d1a43b99022d98443a1332093715fb20905d161be61daf54ec056ab1415bf382",
+    "originalSourceHashes": {
+      "sal/textenc/tenchelp.hxx": "b62d3429f7780648bf3d7f86834a55a07b23dd3a8685c1193770bdb52b3c8f44",
+      "sal/textenc/tcvtjp1.tab": "e79d416b05a0b2f8dad08e45bf0ea3d4600df20563f47080fd7342d78f660be3",
+      "sal/textenc/tcvtjp2.tab": "be5342b70c390078fea7d58f3ebd4e1de5405d677b39594ae6a35767522baf82",
+      "sal/textenc/tcvtjp3.tab": "1d7b054229a48685dbe0239cdcba0940242e61dd3d26aae80f05294265a81dfb",
+      "sal/textenc/tcvtjp4.tab": "36c69a7a5fdf4d6d956c5cbef6e9701bf09f85990ce40ff02452c823f9ccf2da",
+      "sal/textenc/tcvtjp5.tab": "68b0923fcf8537c6f38e29687f323b67586a20b715e220b6c7bc0ca9a7a718ae",
+      "sal/textenc/tcvtjp6.tab": "dbb957e9479042c250ce56b02b23eecbf1c7c83bee50f2de46f5f29f0d249dc8",
+      "sal/textenc/tcvtkr1.tab": "dbf2624f1e18f64c6fd5a4f48eda0fe2197fea8e841e1c5546645748d0b8a610",
+      "sal/textenc/tcvtkr2.tab": "b57d1fb5484a34ae9c0e67caf8fd34b975c17cc208b1bcc637ffb6680c23c872",
+      "sal/textenc/tcvtkr4.tab": "63a92dde7f2b92f31096bd595c563ccd95c3352dcb731ffcbc5eb881f5d4c039",
+      "sal/textenc/tcvtkr5.tab": "9ff259aa3829b2df4e61a94a62c946df06642969d8c347104bb2d0d53012b29a",
+      "sal/textenc/tcvtkr6.tab": "5933fc66eb759ed9a90cc52c7a742613c6800c2121751823f05d1e681437d1a6",
+      "sal/textenc/tcvtscn1.tab": "8d59e66baf524b00291ba245dc5b55238f40648df7d63193851e4c28b53e101e",
+      "sal/textenc/tcvtscn2.tab": "c60e45dcee62ab7d0b88bcfefc17063341ed8d3d2bb7e6ddd32d32939139a348",
+      "sal/textenc/tcvtscn3.tab": "a172234f9beb422884842d6c61562e57c99db3078a1722a393477b463ed09c12",
+      "sal/textenc/tcvtscn4.tab": "e316cd59723bd25f39f697664949291b1f6b9bf23cab94715e2f00858a27ccda",
+      "sal/textenc/tcvtscn5.tab": "6e44f04a05975c57982ef36adc595a4268ccbca2b6c7c3a59b41faa342c480fc",
+      "sal/textenc/tcvtscn6.tab": "042e90cd0a7181282afe550e846015123d9a8d7516b34ac5ceb05f71c490cd7f",
+      "sal/textenc/tcvttcn1.tab": "d1a1b3acca8978dc82e2facf03ce73c19dbf9d05040ca2be6934d35be6b6f9a1",
+      "sal/textenc/tcvttcn2.tab": "f03ccfaf921ab29dd846f9a7bbea7bcbe7b2faf7e40fcfbec39b24df7c619397",
+      "sal/textenc/tcvttcn6.tab": "aaa1e93c5c710dc3cfa1412121a66b86b6b6676bef23e6079b20c44f8ce93fa4",
+      "include/rtl/textcvt.h": "ac7b22baf902ce068fcd4ee18e0ac7a6820bcea48f61a774d0f72fb6ff5e07d1",
+      "sal/textenc/handleundefinedunicodetotextchar.cxx": "c430865de2a09a93a826b0101c8d7afb3ba5e39ef0ab28216eaaef65af56826a",
+      "sal/textenc/tcvtmb.cxx": "e2861019a7adda9ab5a1da02526ab42b4721538c044da9356a4b25112b060186",
+      "include/rtl/textenc.h": "42549f898782d2cda4f80f1818afd91a4aa8545a212378466912b6f2cc91c4c3",
+      "sal/textenc/tables.cxx": "3363a6932e44f0a4a572cd6aed8ee7ab151f0c0a79534512b12a4860667efd4c"
+    },
+    "previous11DigestsAndEucJpAndSourceHashesUnchanged": true,
+    "newShiftJisDigest": {
+      "encoding": 64,
+      "hash": 283198542,
+      "undefinedUnits": []
+    },
+    "roundTrip": {
+      "checked": 151032,
+      "divergences": {
+        "56:unmappable": 1,
+        "57:alias": 1,
+        "57:unmappable": 1,
+        "58:unmappable": 1,
+        "60:unmappable": 3,
+        "64:unmappable": 3,
+        "79:unmappable": 3126,
+        "84:unmappable": 4
+      }
+    },
+    "limits": "Original unchanged DBCS/EUC-JP conversion bodies/tables compiled by existing witness, signed plain char explicit. Undefined reverse table reads classified and excluded, unused ignore-classification services trap. This is not full original XML converter/UNO/service/native ABI/thread evidence."
+  },
+  "tableAudit": {
+    "path": "apps/office/coverage/xml2utf-sjis-source-audit.json",
+    "sha256": "2eb96625d411162c0ab00956b8e49b1e4508dbbb3617799c2e862e7879f9be07",
+    "result": "All256 lead and256 reverse numeric fields/symbolic pointers match source order; original EUDC object reused from the same represented native owner."
+  },
+  "tests": {
+    "focused": "65pass/5files;coverage command exits1 on unchanged100 gate",
+    "relatedStreamsSalCalcODSCSV": "84pass/9files",
+    "tooling": "52pass/3files",
+    "uniqueTotal": 201
+  },
+  "corrections": [
+    "Initial pending Shift-JIS test exposed unported actual descriptor64; ported genuine original pointer/range/EUDC closure, rather than substituting MS932 or a host encoding provider.",
+    "Initial surrogate and wave-dash expectations assumed standard behavior. Corrected to original no-FLUSH question-mark replacement and explicitly documented upstream U+FF5E compatibility mapping. Original production flags/tables preserved.",
+    "Compiled native fixture was extended by adding64 to the existing source-derived native bindings, because the dispatcher-wide round-trip test now includes that encoding. All11 previous digests/source hashes and EUC-JP remain unchanged. No expected digest was synthesized from TypeScript.",
+    "Original writable removeEncoding pointer borrow retains actual output COW detachment even if no attribute is removed.",
+    "Initial module-cycle guard treated original inline comphelper/sequence.hxx as a Comphelper service dependency. Added exact source/target/named binding and declaration-only CPPU dependency witness with rejection tests, following existing inline-date boundary approach. All other imports retain normal graph-cycle checks.",
+    "Initial source registry check required a canonical filename-divergence explanation for source tcvtjp6.tab split; added the same responsibility-split contract used by existing MS932/EUCJP owners, then rebuilt/validated the registry."
+  ],
+  "sourceIssues": [
+    "CALC-363/WRITER200 initial prefix lost at EOF.",
+    "CALC-364/WRITER201 absent single quote wins index ordering.",
+    "CALC-365/WRITER202 default no-FLUSH split surrogate replacement.",
+    "CALC-366/WRITER203 MS-compatible SJIS wave mapping."
+  ],
+  "limitations": [
+    "Actual SAX InputSource values/parser byte admission, package/model/controller/factory/filter/workbook and full DOCX/XLSX import/export/reopen/worker/UI remain pending.",
+    "Existing unported RTL descriptors still limit encoding coverage. Untested generic aggregate copy/ABI, raw pointer aliasing/overflow, allocation/constructor failure and native threads remain unverified.",
+    "Current host Dispose binds C++ destructors, not new UNO component dispose services. No service factory or complete model was fabricated. Existing browser file/autosave/recovery policy unchanged.",
+    "Full test suite not run under approved ten-task cadence. Doctor passed with existing managed pre-push readiness warning; no global hooks/settings changed."
+  ],
+  "workingTree": "Only24 intentional implementation/test/native fixture/guard/registry/docs paths and canonical task artifacts; verify final source blobs and clean status after commit."
+}
