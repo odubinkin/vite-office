@@ -21,7 +21,7 @@
         "apps/office/src/tools/source/datetime/tdate.test.ts",
         "vendor/libreoffice-reference/tools/source/datetime/tdate.cxx"
       ],
-      "justification": "Actual tools Date packed signed32 value,DMY/raw/copy constructors,implicit member assignment,absolute day/month and signed16 year extraction,validity, normalization, GetAsNormalizedDays and AddDays delegate to genuine shared comphelper algorithms. DateConstReference projects the original borrowed const value surface; no host JavaScript Date, timezone or alternate calendar provider is used. The 1899-12-30 fast path and nonmutating normalized-day conversion follow tdate.cxx. Native representability assertions and year0 constructor diagnostic-only policy are preserved. SYSTEM clock, UNO conversions and other Date operations remain unported.",
+      "justification": "Original tools Date packed signed32 raw/copy/DMY value, signed16 year extraction, validity/normalization and comphelper-backed day arithmetic are retained. DateInitSystem is a distinct host tag, calls original GetSystemDateTime date-output boundary, and retains 1900-01-01 failure fallback. Numeric browser clock construction and local field getters bind system_clock/localtime only; parsing and arithmetic use original source algorithms. UNO conversion, native platform-failure/ABI and unconsumed Date methods remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "Date",

@@ -19,6 +19,7 @@ import { createDefault } from "./timezone.default";
 import type { BasicTimeZone } from "./basictz";
 import { SimpleTimeZone } from "./simpletz";
 import { OlsonTimeZone } from "./olsontz";
+import { RuleBasedTimeZone } from "./rbtz";
 import { uprv_add32_overflow, uprv_mul32_overflow, uprv_getUTCtime } from "../common/putil";
 import { Grego, kEpochStartAsJulianDay, MIN_MILLIS, MAX_MILLIS } from "./gregoimp";
 import {
@@ -98,10 +99,10 @@ export abstract class Calendar {
   private fFirstDayOfWeek!: UCalendarDaysOfWeek;
   private fMinimalDaysInFirstWeek!: number;
   private fZone: TimeZone | null = null;
-  private fWeekendOnset!: UCalendarDaysOfWeek;
-  private fWeekendOnsetMillis!: number;
-  private fWeekendCease!: UCalendarDaysOfWeek;
-  private fWeekendCeaseMillis!: number;
+  protected fWeekendOnset!: UCalendarDaysOfWeek;
+  protected fWeekendOnsetMillis!: number;
+  protected fWeekendCease!: UCalendarDaysOfWeek;
+  protected fWeekendCeaseMillis!: number;
   private readonly validLocale: Locale;
   private readonly actualLocale: Locale;
   /** Original default, adopted-zone and copy constructor paths. TimeZone const-reference construction is adapted explicitly by the concrete reference factory. @param args - Source overload arguments. @returns Calendar. */
@@ -151,6 +152,8 @@ export abstract class Calendar {
   }
   /** Original polymorphic owner clone. @returns Independent owned calendar. */
   abstract clone(): Calendar;
+  /** Original concrete calendar type identity. @returns Type. */
+  abstract getType(): string;
   /** Original platform UTC clock, without host date-field arithmetic. @returns UTC milliseconds. */
   static getNow(): UDate {
     return uprv_getUTCtime();
@@ -260,10 +263,14 @@ export abstract class Calendar {
   protected computeTime(status: [number]): void {
     computeTime.call(this, status);
   }
-  /** Original known-concrete-type detection for the ported SimpleTimeZone/OlsonTimeZone classes; RuleBased/VTimeZone recognition awaits their actual classes. @returns Recognized basic zone/null. */
+  /** Original known-concrete-type detection for actual SimpleTimeZone, OlsonTimeZone and RuleBasedTimeZone classes; VTimeZone remains unported. @returns Recognized basic zone/null. */
   protected getBasicTimeZone(): BasicTimeZone | null {
     const zone = this.getTimeZone();
-    return zone instanceof SimpleTimeZone || zone instanceof OlsonTimeZone ? zone : null;
+    return zone instanceof SimpleTimeZone ||
+      zone instanceof OlsonTimeZone ||
+      zone instanceof RuleBasedTimeZone
+      ? zone
+      : null;
   }
   /** Original wall-zone conversion. @param millis - Date milliseconds. @param inDay - Clock milliseconds. @param status - ICU status. @returns Total zone offset. */
   protected computeZoneOffset(millis: number, inDay: number, status: [number]): number {
@@ -388,10 +395,32 @@ export abstract class Calendar {
     useMonth: boolean,
     status: [number],
   ): bigint;
-  /** Source subclass month-length hook. @param year - Extended year. @param month - Month. @param status - ICU status. @returns Length. */
-  protected abstract handleGetMonthLength(year: number, month: number, status: [number]): number;
-  /** Source subclass year-length hook. @param year - Extended year. @param status - ICU status. @returns Length. */
-  protected abstract handleGetYearLength(year: number, status: [number]): number;
+  /** Original base month length from two virtual month starts. @param year - Extended year. @param month - Month. @param status - ICU status. @returns Length. */
+  protected handleGetMonthLength(year: number, month: number, status: [number]): number {
+    const next: [number] = [0];
+    if (uprv_add32_overflow(month, 1, next)) {
+      status[0] = UErrorCode.U_ILLEGAL_ARGUMENT_ERROR;
+      return 0;
+    }
+    return Number(
+      BigInt.asIntN(
+        32,
+        this.handleComputeMonthStart(year, next[0], true, status) -
+          this.handleComputeMonthStart(year, month, true, status),
+      ),
+    );
+  }
+  /** Original base year length narrows the start difference before checking status. @param year - Extended year. @param status - ICU status. @returns Length. */
+  protected handleGetYearLength(year: number, status: [number]): number {
+    const result = Number(
+      BigInt.asIntN(
+        32,
+        this.handleComputeMonthStart((year + 1) | 0, 0, false, status) -
+          this.handleComputeMonthStart(year, 0, false, status),
+      ),
+    );
+    return U_FAILURE(status[0]) ? 0 : result;
+  }
   /** Source subclass extended-year hook. @param status - ICU status. @returns Extended year. */
   protected abstract handleGetExtendedYear(status: [number]): number;
   /** Source subclass limit hook. @param field - Calendar field. @param type - Limit type. @returns Limit. */
@@ -539,11 +568,9 @@ export abstract class Calendar {
   /** Original ordinal-month resolution and optional unset default. @param status - ICU status. @param defaultValue - Optional default. @returns Month or zero on failure. */
   protected internalGetMonth(status: [number], defaultValue?: number): number {
     if (U_FAILURE(status[0])) return 0;
-    const field =
-      this.resolveFields(Calendar.kMonthPrecedence) === F.UCAL_ORDINAL_MONTH
-        ? F.UCAL_ORDINAL_MONTH
-        : F.UCAL_MONTH;
-    return this.internalGet(field, defaultValue);
+    if (this.resolveFields(Calendar.kMonthPrecedence) === F.UCAL_ORDINAL_MONTH)
+      return this.internalGet(F.UCAL_ORDINAL_MONTH);
+    return this.internalGet(F.UCAL_MONTH, defaultValue);
   }
   /** Original Gregorian-cache computation and weekday write, retaining checked conversion and partial writes. @param julianDay - Signed32 Julian day. @param status - ICU status. @returns Nothing. */
   protected computeGregorianFields(julianDay: number, status: [number]): void {

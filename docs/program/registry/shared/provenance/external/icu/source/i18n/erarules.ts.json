@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/erarules.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/erarules.cpp",
+    "localSymbols": [
+      "EraRules"
+    ],
+    "upstreamSymbols": [
+      "EraRules::EraRules"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 EraRules loading, sparse era indices, encoded sentinel dates and source era lookup from erarules.cpp.",
+      "Unchanged ICU78.3 libraries match16302 pinned resource, tentative-era, sparse/invalid-index, sentinel, start-date/year and YMD lookup cases. Original MIN_INT32=-1 and hasEnd=true behavior is retained; custom malformed-resource injection remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/erarules.ts",
+          "marker": "EraRules"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/erarules.cpp",
+          "marker": "EraRules::EraRules"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/calendar.cpp",
+    "localSymbols": [
+      "createStandardCalendar",
+      "makeInstance",
+      "createInstance",
+      "createInstanceFromZoneReference",
+      "getCalendarTypeFromLocale"
+    ],
+    "upstreamSymbols": [
+      "Calendar::createInstance"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 unregistered-service Calendar factory path from calendar.cpp. All18 standard type branches are present. Static C++ functions live outside Calendar to avoid an ESM base/derived initialization cycle, as with the TimeZone factory split.",
+      "Unchanged ICU78.3 libraries match15600 factory/default/locale/adopt/null/reference/cache type-buffer cases, over the pinned locale catalog; native SharedCalendar RTTI name is verified. Positive capacities preserve strncpy partial outputs and warning/error behavior. Service registration/OOM remain unclaimed."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+          "marker": "createStandardCalendar"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/calendar.cpp",
+          "marker": "Calendar::createInstance"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+      "rationale": "Split the original source responsibility into a TypeScript fragment while retaining the actual source owner, to satisfy file-size and ESM initialization constraints.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

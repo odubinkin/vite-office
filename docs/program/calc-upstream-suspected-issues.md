@@ -4328,3 +4328,31 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: copy construction copies fGregorianCutover, fCutoverJulianDay, fGregorianCutoverYear, fIsGregorian and fInvertGregorian. Assignment delegates to Calendar::operator= and copies only the three cutover fields, in cutover/time, year, Julian-day order. The two resolver flags retain their destination values. The unchanged native witness distinguishes these operations with controlled boolean flag states.
 - Suspected issue: copy construction and assignment produce different internal resolver state. These are working flags that subsequent calculations can overwrite; this finding does not claim an observed incorrect public date result.
 - Local behavior: preserve the three assignment writes and their order, retaining destination flags. Copy construction and clone retain the original five-field copy behavior.
+
+### CALC-344 — Cached-value destruction can reenter the same UnifiedCache mutex
+
+- Upstream: ICU78.3 `source/common/unifiedcache.cpp`, UnifiedCache::flush/_flush/removeSoftRef/handleUnreferencedObject; `source/common/sharedobject.cpp`, SharedObject::removeRef.
+- Observation: flush holds gCacheMutex while final soft-reference release deletes a cached value. If that value's destructor releases the last hard reference to another cached value, SharedObject::removeRef calls handleUnreferencedObject, which attempts to lock the same nonrecursive std::mutex. An unchanged native-library witness with a value owning another cached value stopped in this path; a sampled stack showed flush -> _flush -> value destructor -> handleUnreferencedObject -> std::mutex::lock. The process was explicitly terminated after this stack established the blocked operation.
+- Suspected issue: the flush fixed-point loop explicitly anticipates values owning hard references to other values, but synchronous destructor release can deadlock before the next pass. This finding does not assert that every ICU value graph reaches the condition.
+- Local behavior: retain original release/callback order and reference bookkeeping. The single-realm JavaScript binding does not simulate native mutexes or claim native concurrency equivalence. The native comparison excludes dependent-value destruction under the cache lock; it must not be reported as a passing lifetime/mutex test. No unlock-before-delete correction is applied to upstream logic.
+
+### CALC-345 — EraRules decodes its minimum-year sentinel as -1
+
+- Upstream: ICU78.3 `source/i18n/erarules.cpp`, MIN_INT32, decodeDate and compareEncodedDateWithYMD.
+- Observation: MIN_INT32 is initialized with `0xFFFFFFFF`, whose signed32 value is -1. Decoding MIN_ENCODED_START returns year -1 rather than INT32_MIN; the out-of-packed-range comparison also uses this -1 constant. Unchanged ICU libraries match16302 pinned EraRules lookup cases, including sentinel, negative/extreme years, sparse and invalid era codes.
+- Suspected issue: the constant name and the surrounding minimum-year handling suggest INT32_MIN, while the literal represents -1. This finding does not infer a replacement value.
+- Local behavior: retain -1, the exact encoded sentinel and the original comparison branches. Do not correct the constant or reinterpret the era boundary.
+
+### CALC-346 — EraRules starts its end-presence flag true
+
+- Upstream: ICU78.3 `source/i18n/erarules.cpp`, EraRules::createInstance.
+- Observation: hasEnd starts true; encountering an end resource sets it true again. Consequently the no-start branch treats any missing start as an end-only era, including a hypothetical row lacking both start and end. Later special-era placement checks still apply. The pinned immutable resources do not supply a demonstrated malformed missing-both public case; this is a source-control-flow finding.
+- Suspected issue: initializing the presence flag true makes its apparent missing-end validation unreachable.
+- Local behavior: retain the true initialization, explicit end assignment and subsequent validation. No stricter resource rejection is added.
+
+### CALC-347 — Defined Persian locale data loads the Gregorian service
+
+- Upstream: LibreOffice `i18npool/util/i18npool.component`, `i18npool/source/calendar/calendarImpl.cxx`, and `i18npool/source/localedata/data/fa_IR.xml`.
+- Observation: fa_IR marks persian as its default Calendar2 ID. The component registers no Calendar_persian implementation. CalendarImpl::loadCalendarTZ explicitly falls back to Calendar_gregorian when a requested service is absent but its calendar ID is defined in locale data. The loaded ID/names remain persian; the temporal body is the Gregorian service. ICU's PersianCalendar exists but is not selected by this LibreOffice service-manager branch.
+- Suspected issue: the resource identity and temporal calendar can disagree. No additional native full-UNO-service binary result is claimed; the registration, resource and fallback source contracts establish the branch.
+- Local behavior: retain the original service lookup and defined-ID Gregorian fallback. Do not substitute ICU PersianCalendar or add an unsupported-calendar error.

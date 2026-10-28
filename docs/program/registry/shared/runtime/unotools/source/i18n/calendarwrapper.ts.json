@@ -20,7 +20,7 @@
         "apps/office/src/i18npool/source/localedata/native-calendar-items.test.ts",
         "scripts/extract-libreoffice-calendar-items.py"
       ],
-      "justification": "Task AQF9AG binds default-calendar name and count queries to the pinned generated LC_CALENDAR sections for all 284 registered locale services. Date arithmetic, alternate calendars and full UNO CalendarItem2 transport are pending.\nAQF9AG adds the source const DateTime epoch owner initialized to Gregorian 1 January 1970 at midnight and getEpochStart returning its borrowed read-only scalar contract. Date/time subtraction uses source Time/Duration/DateTime values; calendar date arithmetic itself remains unported.",
+      "justification": "Original wrapper owns the actual CalendarImpl service and Gregorian 1970 epoch, forwards UTC/local date-time and pending field/validity queries, loads explicit/default calendars with the original optional UTC flag, and catches only actual UNO Exceptions with original empty/zero/false defaults. Calendar names come from the loaded provider, with source genitive-to-month and partitive-to-genitive fallback; returned strings retain independent ownership. setGregorianDateTime performs tools DateTime subtraction without selecting a different calendar. Unconsumed display/native-number methods, full UNO compound ABI, native service-manager registration/refcount/concurrency and final formatter/column/CSV integration remain unverified.",
       "knownViolations": [],
       "localSymbols": [
         "CalendarWrapper",

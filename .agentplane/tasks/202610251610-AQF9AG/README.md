@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 34
+revision: 36
 origin:
   system: "manual"
 depends_on: []
@@ -157,6 +157,10 @@ comments:
       Full-suite cadence: same open Agentplane task, no tenth completed task boundary crossed. Full suite intentionally not run under the user's focused-test instruction.
 
       Remaining: original ICU Calendar factory/shared cache and consumed LibreOffice calendar service; GetDateRef/public formatter/ParseString/setAutoInput integration; final CSV/UI upstream audit. No additional format work started. Task remains DOING, not complete. Native build/probe artifacts remain intentional untracked local evidence and are excluded from the source commit.
+  -
+    author: "CODER"
+    body: |-
+      Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope.
 
 events:
   -
@@ -369,9 +373,15 @@ events:
       Full-suite cadence: same open Agentplane task, no tenth completed task boundary crossed. Full suite intentionally not run under the user's focused-test instruction.
 
       Remaining: original ICU Calendar factory/shared cache and consumed LibreOffice calendar service; GetDateRef/public formatter/ParseString/setAutoInput integration; final CSV/UI upstream audit. No additional format work started. Task remains DOING, not complete. Native build/probe artifacts remain intentional untracked local evidence and are excluded from the source commit.
+  -
+    type: "comment"
+    at: "2026-10-28T09:37:14.231Z"
+    author: "CODER"
+    body: |-
+      Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope.
 
 doc_version: 3
-doc_updated_at: "2026-10-27T01:31:27.190Z"
+doc_updated_at: "2026-10-28T09:37:14.231Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -516,7 +526,7 @@ sections:
     - Revert task-related commit(s).
     - Re-run required checks to confirm rollback safety.
   Findings: |-
-    User requested stopping after the current block for a manual merge; do not continue implementation until the user resumes.
+    The user completed the manual merge, resumed calendar/CSV implementation and explicitly instructed continuing to the end without pausing the goal. Task AQF9AG and the goal remain active.
 
     Checkpoint AQF9AG includes CSV options, stream import/export, existing file UI wiring and their required shared dependencies. The current block replaces normal-edit numeric/string/formula import writes with source block-position writes, implements the owned EditTextObject setter and per-sheet cursor cache, and finalizes imported cell metadata, formula grouping and listeners. CSV, XML import and browser worker reconstruction call finalize. Source behavior observations CALC-298 and CALC-299 are recorded.
 
@@ -529,6 +539,30 @@ sections:
     Commands: npm run build; npm run typecheck; npm run lint; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Scope: current repository checks and current checkpoint. Inventory check validates registry invariants; its parityReady remains false and is not a product-completion claim.
 
     Full suite was not run for this checkpoint: the task remains open and changed-module tests follow the user requested full-run cadence. The user will perform the merge; no merge or publication is authorized in this pause.
+
+    Calendar-service and public input-scanner checkpoint (2026-10-28):
+
+    - Implemented the actual ICU factory and all18 standard calendar branches, original SharedCalendar/SharedObject/UnifiedCache/UHashtable owners, EraRules, astronomical/calendar caches and RuleBasedTimeZone required by that factory. No known calendar type is substituted or rejected by a new unsupported-type error.
+    - Implemented LibreOffice Calendar_gregorian and registered era/Hijri/Jewish temporal providers, actual CalendarImpl cache/load/rollback and CalendarWrapper temporal forwarding. LO Hijri/Jewish preserve their own original algorithms rather than substituting ICU calendars. Defined Persian locale data retains the native Gregorian-service fallback (CALC-347).
+    - Extracted complete ordered Calendar2 fields for284 locale lists; corrected original generator genitive/partitive fallback and local-calendar ref indices. Generator check now uses the repository's installed formatter so canonical generated bytes remain reproducible.
+    - Connected original GetDateRef and public ImpSvNumberInputScan::IsNumberFormat, including actual calendar validation, prescribed date-order retries, local-clock today, null-date subtraction, numeric/date/time/datetime dispatch and original failure/overflow outputs. THE_FUTURE calendar switching stays disabled.
+    - Documented and retained suspected upstream behavior CALC-344..347. The native dependent-cache-value-destructor case demonstrably deadlocks under the source mutex; this case is excluded from passing lifetime/concurrency claims. Native undefined inputs/ABI, custom service registration, full UNO compounds/display/native-number output remain uncertified.
+
+    Command: npx tsx scripts/icu-calendar-type-native-probe.mjs; npx tsx scripts/icu-standard-calendar-native-probe.mjs; npx tsx scripts/icu-calendar-factory-native-probe.mjs; npx tsx scripts/icu-era-rules-native-probe.mjs; npx tsx scripts/icu-rbtz-native-probe.mjs; npx tsx scripts/icu-unifiedcache-native-probe.mjs; npx tsx scripts/libreoffice-calendar-native-probe.mjs; npx tsx scripts/icu-resource-path-native-probe.mjs.
+    Result: pass. Evidence:1580 type-selector cases over1502 locale names;6426 standard-calendar cases;15600 factory/cache/type-buffer cases (native SharedCalendar RTTI verified);16302 EraRules cases;4032 rule-based timezone cases;2445 cache cases with842 lifetimes (native dependent destruction excluded);2226 unchanged extracted LibreOffice temporal method cases;80502 unchanged raw resource/path cases. Scope: the stated consumed methods; this is not whole LibreOffice/ICU certification.
+
+    Command: npm run test:shared -- src/external/icu/source src/i18npool/source/calendar src/i18npool/source/localedata src/svl/source/numbers src/unotools/source/i18n/calendarwrapper.test.ts src/tools/source/datetime.
+    Result: pass. Evidence:94 files,1014 tests. Scope: changed calendar/ICU dependencies, public scanner integration, locale and tools date/time owners.
+
+    Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2.
+    Result: pass. Evidence:72 CSV tests,1 browser CSV import/save/export flow,47 module-boundary tests.
+
+    Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check.
+    Result: pass for this checkpoint. Evidence:1718 source provenance records, no new semantic parity violation; parityReady remains false. Scope: repository static checks and the current calendar block. Full-suite cadence unchanged: same still-open task, so no new tenth-task full run is due.
+
+    Local repair iterations: TypeScript/lint/source mapping checks identified local binding/declaration/docs issues, fixed before this checkpoint. Two previous name tests incorrectly expected empty English genitive/partitive sections; they now assert the source fallback. A new rollback test initially chose en_US Jewish, which is actually defined in pinned locale data; the test now uses de_DE, where that registered service has no locale row. Generator --check previously compared compact output with canonical formatted JSON; it now compares canonical formatter output. These were local fixtures/bindings, not upstream behavior changes or an overall task blocker.
+
+    Remaining next work: original SvNFEngine/SvNumberFormatter format-index selection and required real builtin format generation/output, ScSetStringParam/ScColumn::ParseString, ScDocumentImport::setAutoInput, CSV explicit-date/English/special-number paths and actual EditEngine callers, followed by the full CSV option/export/UI requirement audit. The calendar checkpoint does not claim those paths are complete. Continue implementation; do not pause the goal or mark AQF9AG finished.
 id_source: "generated"
 ---
 ## Summary
@@ -686,7 +720,7 @@ DecisionContextRef:
 
 ## Findings
 
-User requested stopping after the current block for a manual merge; do not continue implementation until the user resumes.
+The user completed the manual merge, resumed calendar/CSV implementation and explicitly instructed continuing to the end without pausing the goal. Task AQF9AG and the goal remain active.
 
 Checkpoint AQF9AG includes CSV options, stream import/export, existing file UI wiring and their required shared dependencies. The current block replaces normal-edit numeric/string/formula import writes with source block-position writes, implements the owned EditTextObject setter and per-sheet cursor cache, and finalizes imported cell metadata, formula grouping and listeners. CSV, XML import and browser worker reconstruction call finalize. Source behavior observations CALC-298 and CALC-299 are recorded.
 
@@ -699,3 +733,27 @@ Command: npx playwright test --config=apps/office/playwright.config.ts --project
 Commands: npm run build; npm run typecheck; npm run lint; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check. Result: pass. Scope: current repository checks and current checkpoint. Inventory check validates registry invariants; its parityReady remains false and is not a product-completion claim.
 
 Full suite was not run for this checkpoint: the task remains open and changed-module tests follow the user requested full-run cadence. The user will perform the merge; no merge or publication is authorized in this pause.
+
+Calendar-service and public input-scanner checkpoint (2026-10-28):
+
+- Implemented the actual ICU factory and all18 standard calendar branches, original SharedCalendar/SharedObject/UnifiedCache/UHashtable owners, EraRules, astronomical/calendar caches and RuleBasedTimeZone required by that factory. No known calendar type is substituted or rejected by a new unsupported-type error.
+- Implemented LibreOffice Calendar_gregorian and registered era/Hijri/Jewish temporal providers, actual CalendarImpl cache/load/rollback and CalendarWrapper temporal forwarding. LO Hijri/Jewish preserve their own original algorithms rather than substituting ICU calendars. Defined Persian locale data retains the native Gregorian-service fallback (CALC-347).
+- Extracted complete ordered Calendar2 fields for284 locale lists; corrected original generator genitive/partitive fallback and local-calendar ref indices. Generator check now uses the repository's installed formatter so canonical generated bytes remain reproducible.
+- Connected original GetDateRef and public ImpSvNumberInputScan::IsNumberFormat, including actual calendar validation, prescribed date-order retries, local-clock today, null-date subtraction, numeric/date/time/datetime dispatch and original failure/overflow outputs. THE_FUTURE calendar switching stays disabled.
+- Documented and retained suspected upstream behavior CALC-344..347. The native dependent-cache-value-destructor case demonstrably deadlocks under the source mutex; this case is excluded from passing lifetime/concurrency claims. Native undefined inputs/ABI, custom service registration, full UNO compounds/display/native-number output remain uncertified.
+
+Command: npx tsx scripts/icu-calendar-type-native-probe.mjs; npx tsx scripts/icu-standard-calendar-native-probe.mjs; npx tsx scripts/icu-calendar-factory-native-probe.mjs; npx tsx scripts/icu-era-rules-native-probe.mjs; npx tsx scripts/icu-rbtz-native-probe.mjs; npx tsx scripts/icu-unifiedcache-native-probe.mjs; npx tsx scripts/libreoffice-calendar-native-probe.mjs; npx tsx scripts/icu-resource-path-native-probe.mjs.
+Result: pass. Evidence:1580 type-selector cases over1502 locale names;6426 standard-calendar cases;15600 factory/cache/type-buffer cases (native SharedCalendar RTTI verified);16302 EraRules cases;4032 rule-based timezone cases;2445 cache cases with842 lifetimes (native dependent destruction excluded);2226 unchanged extracted LibreOffice temporal method cases;80502 unchanged raw resource/path cases. Scope: the stated consumed methods; this is not whole LibreOffice/ICU certification.
+
+Command: npm run test:shared -- src/external/icu/source src/i18npool/source/calendar src/i18npool/source/localedata src/svl/source/numbers src/unotools/source/i18n/calendarwrapper.test.ts src/tools/source/datetime.
+Result: pass. Evidence:94 files,1014 tests. Scope: changed calendar/ICU dependencies, public scanner integration, locale and tools date/time owners.
+
+Command: npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/browser/presentation/calc-files.test.tsx; npx playwright test apps/office/e2e/calc/csv.spec.ts --config apps/office/playwright.config.ts --project=calc; npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers 2.
+Result: pass. Evidence:72 CSV tests,1 browser CSV import/save/export flow,47 module-boundary tests.
+
+Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:calc-resources; npm run check:source-provenance; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check.
+Result: pass for this checkpoint. Evidence:1718 source provenance records, no new semantic parity violation; parityReady remains false. Scope: repository static checks and the current calendar block. Full-suite cadence unchanged: same still-open task, so no new tenth-task full run is due.
+
+Local repair iterations: TypeScript/lint/source mapping checks identified local binding/declaration/docs issues, fixed before this checkpoint. Two previous name tests incorrectly expected empty English genitive/partitive sections; they now assert the source fallback. A new rollback test initially chose en_US Jewish, which is actually defined in pinned locale data; the test now uses de_DE, where that registered service has no locale row. Generator --check previously compared compact output with canonical formatted JSON; it now compares canonical formatter output. These were local fixtures/bindings, not upstream behavior changes or an overall task blocker.
+
+Remaining next work: original SvNFEngine/SvNumberFormatter format-index selection and required real builtin format generation/output, ScSetStringParam/ScColumn::ParseString, ScDocumentImport::setAutoInput, CSV explicit-date/English/special-number paths and actual EditEngine callers, followed by the full CSV option/export/UI requirement audit. The calendar checkpoint does not claim those paths are complete. Continue implementation; do not pause the goal or mark AQF9AG finished.

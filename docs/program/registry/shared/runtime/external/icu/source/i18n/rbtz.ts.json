@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/rbtz.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/rbtz.ts",
+        "scripts/icu-rbtz-native-probe.mjs"
+      ],
+      "justification": "Original ICU78.3 RuleBasedTimeZone ownership, transition completion and offset/transition queries from rbtz.cpp. Native UVector ownership is represented by owned rule arrays; cached transitions borrow those same rule owners. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced. Unchanged ICU78.3 libraries match4032 dirty/completed/copy, historic/final-annual rule, partial-rule error, UTC/local offset and inclusive/exclusive previous/next transition cases, including a historic rule added after completion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RuleBasedTimeZone"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/rbtz.cpp",
+      "upstreamSymbols": [
+        "RuleBasedTimeZone::RuleBasedTimeZone"
+      ]
+    }
+  }
+}

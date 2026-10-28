@@ -104,7 +104,8 @@ const allowedEdges = new Map([
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
   // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
   // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
-  ["i18npool", new Set(["cppu", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
+  // Native Library_i18npool links ICU i18n/common; calendar_gregorian uses its real Calendar/TimeZone factories.
+  ["i18npool", new Set(["cppu", "external", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],

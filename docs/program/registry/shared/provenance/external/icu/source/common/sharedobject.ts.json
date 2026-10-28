@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/sharedobject.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/sharedobject.cpp",
+    "localSymbols": [
+      "UnifiedCacheBase",
+      "SharedObject"
+    ],
+    "upstreamSymbols": [
+      "SharedObject::addRef"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 SharedObject logical hard/soft ownership and UnifiedCache notification. Native deletion is an explicit release hook; JS execution is synchronous within one realm and does not simulate native atomics."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/sharedobject.ts",
+          "marker": "UnifiedCacheBase"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/sharedobject.cpp",
+          "marker": "SharedObject::addRef"
+        }
+      ]
+    }
+  }
+}

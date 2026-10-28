@@ -37,7 +37,8 @@
       "getLocaleCurrencies",
       "getAllInstalledLocaleNames",
       "getLocaleLongDateSeparators",
-      "getLocaleTimeSeparator"
+      "getLocaleTimeSeparator",
+      "getLocaleCalendars"
     ],
     "upstreamSymbols": [
       "LocaleDataImpl::getLocaleItem2",
@@ -70,7 +71,8 @@
       "Task AQF9AG ports LocaleNode's explicit-before-generated date acceptance pattern arrays, including edit formatindex 21, separators and LC_FORMAT refs, for all 284 registered locales.",
       "Task AQF9AG extracts LC_CURRENCY rows for all 284 registered locales in native aLibTable order, resolves generated section references, preserves Currency2 LegacyOnly and returns independent field projections through the existing native locale resolver. Installed Locale enumeration follows aLibTable order and source LC_INFO identities.",
       "Task AQF9AG extracts the three wrapper-exposed LC_CTYPE long-date separators for all 284 services through generated section refs, without inferring them from host locale data.",
-      "Task AQF9AG projects the pinned LC_CTYPE TIME_SEPARATOR field for every installed locale in source order."
+      "Task AQF9AG projects the pinned LC_CTYPE TIME_SEPARATOR field for every installed locale in source order.",
+      "AQF9AG now loads complete ordered Calendar2 temporal/name fields from generated calendars.json for284 locale entries. Original earlier-local-calendar positional references and external calendar references, genitive-to-month and partitive-to-genitive fallbacks, start-of-week, minimum-days and era data follow LocaleNode generation/localedata decoding. getLocaleCalendarItems retains its original two-name-field projection; getLocaleCalendars supplies immutable raw rows to actual CalendarImpl providers."
     ],
     "omittedResponsibilities": [
       "Complete LanguageTag/LocaleData service and configuration-event synchronization remain pending. Task188 implements public system fallback and current configured scalar field behavior."

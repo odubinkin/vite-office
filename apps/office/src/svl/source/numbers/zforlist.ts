@@ -404,6 +404,7 @@ export class SvNFLanguageData {
     fields.aThousandSep.dispose();
     fields.aDecimalSepAlt.dispose();
     fields.aDecimalSep.dispose();
+    fields.pCalendar.dispose();
     fields.pLocaleData.dispose();
     fields.xCharClass.dispose();
     fields.xTransliteration.dispose();

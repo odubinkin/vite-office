@@ -1,4 +1,5 @@
 /** @fileoverview Original ICU78.3 res_findResource and source resource table/array path primitives. Uint8Array+offset projects mutable narrow pointers. Original strtol long64-to-int32 conversion is retained on the pinned native target; invalid readable ranges/overlap and other ABIs remain uncertified. */
+import { uprv_strtol } from "./cstring";
 import type { Resource } from "./uresbund";
 /** Native borrowed char pointer, including its actual mutable storage. */
 export interface ResPointer {
@@ -71,26 +72,9 @@ export function res_getArrayItem(array: Resource | null, index: number): Resourc
 }
 /** Original strtol decimal, including C whitespace/sign, long64 saturation, end pointer and assigned int32 wrapping. @param text - C span. @returns Native assigned value and consumed byte offset. */
 function arrayIndex(text: string): readonly [number, number] {
-  let p = 0;
-  while (p < text.length && " \t\n\v\f\r".includes(text[p] as string)) ++p;
-  let negative = false;
-  if (text[p] === "-" || text[p] === "+") {
-    negative = text[p] === "-";
-    ++p;
-  }
-  const first = p;
-  let value = 0n;
-  while (p < text.length && (text[p] as string) >= "0" && (text[p] as string) <= "9") {
-    value = value * 10n + BigInt(text.charCodeAt(p) - 48);
-    ++p;
-  }
-  if (p === first) return [0, 0];
-  if (negative) value = -value;
-  const min = -(1n << 63n),
-    max = (1n << 63n) - 1n;
-  if (value < min) value = min;
-  else if (value > max) value = max;
-  return [Number(BigInt.asIntN(32, value)), p];
+  const end: [number] = [0];
+  const value = uprv_strtol(text, end, 10);
+  return [Number(BigInt.asIntN(32, value)), end[0]];
 }
 /** Original path walk mutates separators, updates the caller pointer even on many failures, stops at scalar/alias nodes and retains key for empty initial paths. @param resource - Starting node. @param path - Mutable pointer reference. @param key - Key output/incoming for unchanged cases. @returns Found node/bogus. */
 export function res_findResource(

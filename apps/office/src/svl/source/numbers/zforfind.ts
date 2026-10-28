@@ -1,4 +1,4 @@
-/** @fileoverview Original ImpSvNumberInputScan state, locale invalidation and input-date ownership from zforfind.cxx; number classification remains an unported source boundary. */
+/** @fileoverview Original ImpSvNumberInputScan state, locale invalidation and input-date ownership from zforfind.cxx; public input recognition, calendar date conversion and result dispatch operate on the original owner. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { Date as ToolsDate } from "../../../tools/source/datetime/tdate";
 import {
@@ -6,6 +6,9 @@ import {
   LongDateOrder,
   type LocaleDataWrapper,
 } from "../../../unotools/source/i18n/localedatawrapper";
+import { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import { TransformInput } from "./zforfind.context";
+import { CheckScannedNumber, ConvertScannedNumber } from "./zforfind.scan-value";
 import { SvNumFormatType } from "../../inc/zforlist";
 import { SV_MAX_COUNT_INPUT_STRINGS } from "./zforfind.context";
 import {
@@ -38,6 +41,7 @@ import {
   SkipDatePatternSeparator,
   SkipString,
 } from "./zforfind.scan-date";
+import { GetDateRef } from "./zforfind.scan-date-value";
 import { IsNumberFormatMain, ScanEndString, ScanMidString } from "./zforfind.scan-numeric";
 import {
   GetCurrency,
@@ -279,6 +283,37 @@ export class ImpSvNumberInputScan {
     inputOptions: number,
   ): boolean {
     return GetTimeRef.call(this, output, firstIndex, count, inputOptions);
+  }
+  /** Original IsNumberFormat public orchestration, input-length boundary, uppercase/native-number conversion and final failure outputs. @param value - Source input. @param type - Old/new category. @param output - Numeric result. @param format - Optional compiled format. @param nativeNumber - Original native-number wrapper. @param inputOptions - Source flags. @returns Whether the input converts. */
+  IsNumberFormat(
+    value: OUStringConstReference,
+    type: [number],
+    output: [number],
+    format: SvNumberformatConstReference | null,
+    nativeNumber: NativeNumberWrapper,
+    inputOptions = 0,
+  ): boolean {
+    this.fields.eSetType = type[0];
+    let result = false;
+    if (value.getLength() !== 0 && value.getLength() <= 308) {
+      const upper = this.language.GetCharClass().uppercase(value);
+      try {
+        TransformInput(nativeNumber, this.language, upper);
+        result = this.IsNumberFormatMain(upper, format);
+      } finally {
+        upper.dispose();
+      }
+    }
+    if (result) result = CheckScannedNumber.call(this);
+    if (result) return ConvertScannedNumber.call(this, type, output, inputOptions);
+    this.fields.eScannedType = SvNumFormatType.TEXT;
+    output[0] = 0;
+    type[0] = this.fields.eScannedType;
+    return false;
+  }
+  /** Original date conversion through the calendar service. @param output - Serial days. @param count - Consumed numeric parts. @returns Whether the source date is valid. */
+  protected GetDateRef(output: [number], count: [number]): boolean {
+    return GetDateRef.call(this, output, count);
   }
   /** Original leading-sign scan accepts plus, ASCII and Unicode minus, and an opening negative parenthesis. @param value - Input text. @param position - Mutable UTF-16 cursor. @returns Signed source indicator. */
   protected GetSign(value: OUString, position: [number]): number {

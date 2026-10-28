@@ -27,7 +27,7 @@ function release(items: CalendarItem2Names[]): void {
   }
 }
 
-it("loads source default calendar, keeps empty grammatical sections, and returns owned names", /** Checks loads source default calendar, keeps empty grammatical sections, and returns owned names. @returns Test completion or assertion result. */ () => {
+it("loads source default calendar, uses native grammatical-section fallback, and returns owned names", /** Checks loads source default calendar, uses native grammatical-section fallback, and returns owned names. @returns Test completion or assertion result. */ () => {
   const language = unicode("en"),
     country = unicode("US"),
     variant = unicode("");
@@ -59,7 +59,20 @@ it("loads source default calendar, keeps empty grammatical sections, and returns
       if (!firstMonth || !firstDay) throw new Error("Pinned default calendar names are absent");
       expect(text(firstMonth.FullName)).toBe("January");
       expect(text(firstDay.AbbrevName)).toBe("Sun");
-      expect(genitive).toHaveLength(0);
+      expect(genitive).toHaveLength(12);
+      expect(
+        genitive.map(
+          /** Extracts a returned owned name for comparison. @param item - Row. @returns Name text. */ (
+            item,
+          ) => text(item.FullName),
+        ),
+      ).toEqual(
+        months.map(
+          /** Extracts a returned owned name for comparison. @param item - Row. @returns Name text. */ (
+            item,
+          ) => text(item.FullName),
+        ),
+      );
       const changed = unicode("changed");
       try {
         firstMonth.FullName.assign(changed);
@@ -80,6 +93,7 @@ it("loads source default calendar, keeps empty grammatical sections, and returns
       release(genitive);
     }
   } finally {
+    wrapper.dispose();
     locale.dispose();
     variant.dispose();
     country.dispose();

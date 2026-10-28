@@ -1,4 +1,4 @@
-/** @fileoverview Numeric-result cases extracted from pinned ImpSvNumberInputScan::IsNumberFormat; calendar dispatch remains in its separate source path. */
+/** @fileoverview Result conversion from pinned ImpSvNumberInputScan::IsNumberFormat; date/time dispatch uses the actual calendar and time methods on the same scanner owner. */
 import { text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { rtl_math_ConversionStatus, rtl_math_uStringToDouble } from "../../../sal/inc/rtl/math.h";
@@ -94,11 +94,12 @@ export function CheckScannedNumber(this: ImpSvNumberInputScanContext): boolean {
   return true;
 }
 
-/** Original numeric/logical result switch and its final overflow/failure outputs. Requires the original category/count checks to have succeeded; DATE, TIME and DATETIME are dispatched elsewhere by the source caller. @param this - Original scanner owner. @param outputType - Original F_Type output. @param output - Original fOutNumber output. @returns Numeric conversion success. */
+/** Original numeric/logical result switch and its final overflow/failure outputs. Requires the original category/count checks to have succeeded; Date/time cases use the actual CalendarWrapper and source time conversion. @param inputOptions - Source input flags. @param this - Original scanner owner. @param outputType - Original F_Type output. @param output - Original fOutNumber output. @returns Numeric conversion success. */
 export function ConvertScannedNumber(
   this: ImpSvNumberInputScanContext,
   outputType: [number],
   output: [number],
+  inputOptions = 0,
 ): boolean {
   const state = this["fields"];
   const part =
@@ -180,6 +181,28 @@ export function ConvertScannedNumber(
       if (state.nStringScanSign)
         state.nSign = state.nSign ? state.nSign * state.nStringScanSign : state.nStringScanSign;
       if (state.nSign < 0) output[0] = -output[0];
+      break;
+    case SvNumFormatType.TIME:
+      result = this["GetTimeRef"](output, 0, state.nNumericsCnt, inputOptions);
+      if (state.nSign < 0) output[0] = -output[0];
+      break;
+    case SvNumFormatType.DATE: {
+      const count: [number] = [0];
+      result = this["GetDateRef"](output, count);
+      break;
+    }
+    case SvNumFormatType.DATETIME: {
+      const count: [number] = [0];
+      result = this["GetDateRef"](output, count);
+      if (result) {
+        const time: [number] = [0];
+        result = this["GetTimeRef"](time, count[0], state.nNumericsCnt - count[0], inputOptions);
+        output[0] += time[0];
+      }
+      break;
+    }
+    default:
+      output[0] = 0;
       break;
   }
   if (result) {

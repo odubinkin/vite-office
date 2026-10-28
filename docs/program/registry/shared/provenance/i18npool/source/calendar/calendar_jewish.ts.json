@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/i18npool/source/calendar/calendar_jewish.ts",
+    "upstreamPath": "i18npool/source/calendar/calendar_jewish.cxx",
+    "localSymbols": [
+      "Calendar_jewish"
+    ],
+    "upstreamSymbols": [
+      "Calendar_jewish::Calendar_jewish"
+    ],
+    "preservedResponsibilities": [
+      "Original LibreOffice Calendar_jewish temporal conversion from Calendrical Calculations. Source absolute-day searches and integer division are retained; ICU Hebrew is a separate implementation.",
+      "Unchanged extracted LibreOffice temporal method bodies linked against unchanged ICU78.3 match2226 field/era/offset/validation cases across seven temporal providers and six zones. Minimal UNO declarations and integral-millisecond RTL round binding isolate this witness; full UNO service registration/display/fractional rounding are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/i18npool/source/calendar/calendar_jewish.ts",
+          "marker": "Calendar_jewish"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/i18npool/source/calendar/calendar_jewish.cxx",
+          "marker": "Calendar_jewish::Calendar_jewish"
+        }
+      ]
+    }
+  }
+}
