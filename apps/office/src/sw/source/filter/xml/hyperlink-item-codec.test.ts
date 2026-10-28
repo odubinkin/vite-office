@@ -135,8 +135,32 @@ describe("native internet browser value records", /** Registers literal independ
       }
     },
   );
-  it("retains active-link and item snapshot validation at the shared browser boundary", /** Checks record shape,empty active destinations,WhichId and primitive parsing. @returns Nothing. */ function invalidRecords(): void {
-    for (const record of [null, undefined, [], true, 0, "url", {}, { url: 0 }, { url: "" }])
+  it("round trips a source-admitted empty HREF with its native metadata", /** NewAnchor constructs the internet item whenever HREF is present, even after resolution yields empty. Both boundary codecs must retain the actual item and its identities. @returns Nothing. */ () => {
+    const item = new SwFormatINetFormat("", "target");
+    item.SetName("anchor");
+    item.SetINetFormatAndId("normal", 65000 as SwPoolFormatId);
+    item.SetVisitedFormatAndId("visited", 65535 as SwPoolFormatId);
+    const record = encodeSwFormatINetFormatRecord(item);
+    expect(record.url).toBe("");
+    for (const restored of [
+      decodeSwFormatINetFormatRecord(record),
+      decodeSwFormatINetFormat(encodeSfxPoolItem(item)),
+    ]) {
+      expect(restored.equals(item)).toBe(true);
+      expect(restored.GetHyperlink()).toEqual({
+        url: "",
+        targetFrame: "target",
+        name: "anchor",
+        styleName: "normal",
+        visitedStyleName: "visited",
+      });
+      expect(restored.GetINetFormatId()).toBe(65000);
+      expect(restored.GetVisitedFormatId()).toBe(65535);
+    }
+    expect(decodeSwFormatINetFormatRecord({ url: "" }).GetHyperlink()).toEqual({ url: "" });
+  });
+  it("retains item snapshot shape validation at the shared browser boundary", /** Checks record shape,WhichId and primitive parsing; empty native destinations are valid. @returns Nothing. */ function invalidRecords(): void {
+    for (const record of [null, undefined, [], true, 0, "url", {}, { url: 0 }])
       expect(decodeSwFormatINetFormatRecord.bind(undefined, record)).toThrow("snapshot is invalid");
     for (const snapshot of [
       { which: 1, value: '{"url":"url"}' },

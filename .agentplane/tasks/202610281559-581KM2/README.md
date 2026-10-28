@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc and synchronize development branches"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 10
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Execute approved integration of Writer and Calc with full verification and branch synchronization."
 doc_version: 3
-doc_updated_at: "2026-10-28T16:35:28.629Z"
+doc_updated_at: "2026-10-28T16:49:37.651Z"
 doc_updated_by: "CODER"
 description: "Push current Writer and Calc branches, merge both into main, resolve conflicts, run full verification and repair failures, document suspected upstream issues, push main and merge it back into both development branches. User explicitly authorized network pushes and all three repositories."
 sections:
@@ -55,6 +55,10 @@ sections:
     - Observation: Coverage diagnostic for actual BinaryXInputStream caller: all9 binary-stream tests pass; binaryinputstream.ts branches96.55%, only conditional branch0 at line30 remains [0,3]. Reaching the smaller-than32768 remaining count requires copying almost SAL_MAX_INT64 bytes. This source-preserved limitation is already documented in CALC-361.
       Impact: The configured strict100 global branch gate cannot pass this practical test domain. Upstream source and thresholds remain unchanged.
       Resolution: Requested an explicit user decision for this one recorded coverage exception while the complete application suite continues. Other test failures and checks remain mandatory.
+
+    - Observation: Full initial application run also found one stale Writer codec fixture: invalid-record list rejected empty url despite the source-admitted HTML HREF contract already implemented and documented as WRITER233. Pinned htmlgrin.cxx lines1344-1358 constructs SwFormatINetFormat whenever bHasHRef is true without rechecking a nonempty resolved URL.
+      Impact: Old boundary test contradicted the integrated native item behavior; production decoder correctly preserves the native empty internet item.
+      Resolution: Keep malformed-shape/WhichId/type checks, remove empty native URL from invalid shapes and add both-codec empty-HREF round trips retaining name,target,style strings and unsigned16 IDs. Current focused suite30/30 passes. No production decoder or portable UI link validation changed. Canonical registry references for both journal renumberings are corrected and provenance/invariant/parity checks pass.
 id_source: "generated"
 ---
 ## Summary
@@ -90,3 +94,7 @@ Resolved merge conflicts preserving both feature sets and registry evidence. New
 - Observation: Coverage diagnostic for actual BinaryXInputStream caller: all9 binary-stream tests pass; binaryinputstream.ts branches96.55%, only conditional branch0 at line30 remains [0,3]. Reaching the smaller-than32768 remaining count requires copying almost SAL_MAX_INT64 bytes. This source-preserved limitation is already documented in CALC-361.
   Impact: The configured strict100 global branch gate cannot pass this practical test domain. Upstream source and thresholds remain unchanged.
   Resolution: Requested an explicit user decision for this one recorded coverage exception while the complete application suite continues. Other test failures and checks remain mandatory.
+
+- Observation: Full initial application run also found one stale Writer codec fixture: invalid-record list rejected empty url despite the source-admitted HTML HREF contract already implemented and documented as WRITER233. Pinned htmlgrin.cxx lines1344-1358 constructs SwFormatINetFormat whenever bHasHRef is true without rechecking a nonempty resolved URL.
+  Impact: Old boundary test contradicted the integrated native item behavior; production decoder correctly preserves the native empty internet item.
+  Resolution: Keep malformed-shape/WhichId/type checks, remove empty native URL from invalid shapes and add both-codec empty-HREF round trips retaining name,target,style strings and unsigned16 IDs. Current focused suite30/30 passes. No production decoder or portable UI link validation changed. Canonical registry references for both journal renumberings are corrected and provenance/invariant/parity checks pass.
