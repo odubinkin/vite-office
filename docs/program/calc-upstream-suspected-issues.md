@@ -4429,3 +4429,12 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Source: `comphelper/source/streaming/seqstream.cxx`, `MemoryInputStream::closeInput/seek/avail/getPosition/getLength`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Suspicion: closeInput marks the stream closed by setting its position to -1, but a subsequent in-range seek overwrites that sentinel without checking closure. Reads then succeed again. Position and length queries also remain callable while closed; getPosition reports -1. Whether consumers intentionally rely on reopening a closed memory wrapper is unverified.
 - Preservation: keep the single position/closed sentinel, original seek bounds and absence of a closed check. Actual MemoryInputStream/SequenceInputStream tests observe closure, typed NotConnectedException and successful seek/read afterward using real byte Sequence memory. This is source/local value evidence, not independently compiled stream-service or native threading/ABI proof. Browser open/save/recovery/autosave behavior is unchanged.
+
+
+### CALC-360 — BinaryXInputStream closes inputs even when autoclose is false
+
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` unconditionally invokes a present input's `closeInput()`. The `mbAutoClose` flag only participates in `OSL_ENSURE`, while `include/oox/helper/binaryinputstream.hxx` documents closure conditional on that flag. Explicit close and destruction both retain this source behavior. Actual SequenceInputStream/Reference tests prove that a false-autoclose wrapper still closes its input. See WRITER197; native ABI/thread/service/filter/UI contracts remain unverified.
+
+### CALC-361 — BinaryInputStream copy writes the buffer even after a zero-byte read
+
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` always writes its current Sequence before inspecting the read count. If the input is already EOF, BinaryXInputStream::readData returns zero without resizing that Sequence. The fresh copy buffer therefore remains32768 bytes and is written as zeros. Actual null-input and comphelper-output owners reproduce this behavior without a fake read provider. Preserve the source loop and write ordering. Its remaining-count branch below32768 requires almost SAL_MAX_INT64 bytes and remains uncovered; thresholds/counters/source logic are unchanged. See WRITER198.

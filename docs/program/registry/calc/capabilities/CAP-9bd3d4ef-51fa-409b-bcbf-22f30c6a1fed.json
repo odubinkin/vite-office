@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-9bd3d4ef-51fa-409b-bcbf-22f30c6a1fed",
+    "capabilityId": "CAP-9bd3d4ef-51fa-409b-bcbf-22f30c6a1fed",
+    "suite": "calc",
+    "subsystem": "native-binary-streams",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Raw binary UNO stream wrappers retain original Reference ownership, buffers and position/EOF semantics.",
+      "Original input/output exception and autoclose asymmetries are preserved."
+    ],
+    "capability": "Original OOXML raw UNO binary stream transport",
+    "gaps": [
+      "Original BinaryStreamBase/BinaryXSeekableStream/SequenceSeekableStream position, EOF, alignment and actual UNO Reference owners plus BinaryXInputStream/BinaryXOutputStream raw transport and BinaryInputStream::copyToStream. Native virtual-base identity is lowered through a role mixin. Actual 32KiB Sequence buffers, two seeking queries, signed64-bit positions, count/atom loops, typed-only catches with owned exception cleanup and reverse member destruction are retained. CALC-360/WRITER197 preserve unconditional input closure despite false autoclose; CALC-361/WRITER198 preserve stale-buffer copy from an already-EOF input. Nine tests pass; unchanged whole-three-owner100 gate FAILS S176/176 B82/83 F32/32 L163/163 because the final sub32KiB copy request needs almost SAL_MAX_INT64 bytes. Source/counters/exclusions/thresholds unchanged. Numeric/array/string convenience templates, relative/Sequence binary input implementations, services, package/SAX encoding transport, full model/filter/worker/UI acceptance remain pending. Physical ABI/pointers/native threads/overflow/undefined atom sizes and original compiled differential are unverified. Existing browser file/autosave/recovery policy is unchanged."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "oox/source/helper/binarystreambase.cxx",
+          "marker": "BinaryStreamBase::getRemaining"
+        },
+        {
+          "path": "oox/source/helper/binaryinputstream.cxx",
+          "marker": "BinaryInputStream::copyToStream"
+        },
+        {
+          "path": "oox/source/helper/binaryoutputstream.cxx",
+          "marker": "BinaryXOutputStream::writeData"
+        }
+      ],
+      "tests": [
+        {
+          "path": "oox/qa/unit/CryptoTest.cxx",
+          "marker": "BinaryXInputStream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/helper/binaryinputstream.hxx",
+          "marker": "BinaryXInputStream"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/oox/source/helper/binarystreambase.ts",
+          "marker": "BinaryStreamBase"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/binaryinputstream.ts",
+          "marker": "BinaryInputStream"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/binaryoutputstream.ts",
+          "marker": "BinaryOutputStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/helper/binary-streams.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-binary-streams.md",
+          "marker": "# Native OOXML binary transport"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original BinaryStreamBase/BinaryXSeekableStream/SequenceSeekableStream position, EOF, alignment and actual UNO Reference owners plus BinaryXInputStream/BinaryXOutputStream raw transport and BinaryInputStream::copyToStream. Native virtual-base identity is lowered through a role mixin. Actual 32KiB Sequence buffers, two seeking queries, signed64-bit positions, count/atom loops, typed-only catches with owned exception cleanup and reverse member destruction are retained. CALC-360/WRITER197 preserve unconditional input closure despite false autoclose; CALC-361/WRITER198 preserve stale-buffer copy from an already-EOF input. Nine tests pass; unchanged whole-three-owner100 gate FAILS S176/176 B82/83 F32/32 L163/163 because the final sub32KiB copy request needs almost SAL_MAX_INT64 bytes. Source/counters/exclusions/thresholds unchanged. Numeric/array/string convenience templates, relative/Sequence binary input implementations, services, package/SAX encoding transport, full model/filter/worker/UI acceptance remain pending. Physical ABI/pointers/native threads/overflow/undefined atom sizes and original compiled differential are unverified. Existing browser file/autosave/recovery policy is unchanged."
+    },
+    "scopeLimitations": [
+      "Original BinaryStreamBase/BinaryXSeekableStream/SequenceSeekableStream position, EOF, alignment and actual UNO Reference owners plus BinaryXInputStream/BinaryXOutputStream raw transport and BinaryInputStream::copyToStream. Native virtual-base identity is lowered through a role mixin. Actual 32KiB Sequence buffers, two seeking queries, signed64-bit positions, count/atom loops, typed-only catches with owned exception cleanup and reverse member destruction are retained. CALC-360/WRITER197 preserve unconditional input closure despite false autoclose; CALC-361/WRITER198 preserve stale-buffer copy from an already-EOF input. Nine tests pass; unchanged whole-three-owner100 gate FAILS S176/176 B82/83 F32/32 L163/163 because the final sub32KiB copy request needs almost SAL_MAX_INT64 bytes. Source/counters/exclusions/thresholds unchanged. Numeric/array/string convenience templates, relative/Sequence binary input implementations, services, package/SAX encoding transport, full model/filter/worker/UI acceptance remain pending. Physical ABI/pointers/native threads/overflow/undefined atom sizes and original compiled differential are unverified. Existing browser file/autosave/recovery policy is unchanged."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-uno-binary-stream-transport"
+  }
+}

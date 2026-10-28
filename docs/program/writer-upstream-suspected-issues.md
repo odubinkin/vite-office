@@ -1905,8 +1905,17 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.
 
 
-### WRITER195 — Shared MemoryInputStream can be reopened by seeking after closure
+### WRITER196 — Shared MemoryInputStream can be reopened by seeking after closure
 
 - Source: pinned `comphelper/source/streaming/seqstream.cxx`, `MemoryInputStream::closeInput/seek/avail/getPosition/getLength`.
 - Observation: closeInput stores -1 in the position, while an in-range seek replaces that value without a closure check. Later reads succeed again; closed position/length queries remain readable. This is shared stream source/local-value evidence, not a claim about full DOCX/stream-service/native-thread behavior.
 - Preservation: retain the exact sentinel, validation and seek behavior. Use real Sequence/Reference/exception owners in tests rather than adding a second closed flag. The shared finding is also recorded as CALC-359; existing browser document workflows are unchanged.
+
+
+### WRITER197 — Shared OOXML binary input ignores its autoclose flag
+
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` always calls `closeInput()` when its input reference exists. The stored `mbAutoClose` is consulted only by the diagnostic, unlike the header documentation and output wrapper. Both explicit close and the destructor therefore close an input supplied with `bAutoClose=false`. This source behavior is preserved; see CALC-360 and the actual component tests in `oox/source/helper/binary-streams.test.ts`. Native synchronization, ABI and complete filter/UI integration remain unverified.
+
+### WRITER198 — Shared OOXML copy can write an untouched buffer from an EOF input
+
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` allocates a32KiB Sequence and calls `writeData(aBuffer)` even when `readData()` returns zero without reallocating that Sequence. `BinaryXInputStream` in EOF does exactly that. Copying an initially absent input therefore writes32768 zero bytes to a valid output. This original behavior is preserved and exercised through actual comphelper input/output components; see CALC-361. Related original native package/SAX workflows are not certified by this bounded test.
