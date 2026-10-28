@@ -54,7 +54,8 @@ const allowedEdges = new Map([
   // Original comphelper extract.hxx uses the actual Any and generated UNO TypeClass.
   // Original attributelist.hxx/cxx also owns actual OUString values.
   // Original OFOPXMLHelper uses the native SAX parser/writer services.
-  ["comphelper", new Set(["cppu", "sal", "sax", "udkapi"])],
+  // Original interfacecontainer3.hxx owns its vector through o3tl::cow_wrapper.
+  ["comphelper", new Set(["cppu", "o3tl", "sal", "sax", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],
@@ -171,7 +172,11 @@ const allowedEdges = new Map([
   // Library_sfx.mk links SAL; objstor.cxx takes rtl_TextEncoding directly.
   // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
   // Library_sfx links cppu/cppuhelper and uses the SDK API.
-  ["sfx2", new Set(["cppu", "cppuhelper", "sal", "svl", "tools", "udkapi"])],
+  // Original SfxBaseModel listener containers use comphelper and published document/util SDK listeners.
+  [
+    "sfx2",
+    new Set(["comphelper", "cppu", "cppuhelper", "offapi", "sal", "svl", "tools", "udkapi"]),
+  ],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.

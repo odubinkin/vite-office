@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/o3tl/inc/cow_wrapper.ts",
+    "status": "mapped",
+    "upstreamPath": "include/o3tl/cow_wrapper.hxx",
+    "localSymbols": [
+      "cow_wrapper",
+      "UnsafeRefCountingPolicy",
+      "ThreadSafeRefCountingPolicy"
+    ],
+    "upstreamSymbols": [
+      "cow_wrapper",
+      "make_unique"
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF ports consumed original cow_wrapper default/copy/optional/move/assignment/detach ownership and size_t policy operations, original OInterfaceContainerHelper3/iterator algorithms, two complete published listener interfaces and document event field declarations. Actual per-template DEFAULT COW vectors retain genuine Reference values, shallow snapshots, reverse callbacks, duplicate entries, pointer/identity removal, reentrant mutation and typed exception ownership. Explicit specialization binds erased original T operations and listener declaration identity; it supplies no replacement document/interface/query provider. The model declares only implemented XChild and language XEventListener interfaces on its actual WeakImplHelper identity. Original event/modify registration guards and static language/document overload selection, three disposal queries and their else-if priority are retained. CALC-357 documents the original unreachable document removal arm: a conforming document listener necessarily exposes its language base. No malformed query fixture is used to cover it; the five-owner coverage profile correctly fails unchanged100 at S241/242 B82/83 F71/71 L223/224, while the complete two new COW/container owners pass100 S148/148 B43/43 F49/49 L135/135. This is bounded source/type/ownership evidence. Native mutex scopes are omitted in synchronous JS without fake locks; native shared-object/thread/ABI/static-shutdown behavior is unverified. T value/rvalue constructors and nonmember COW comparisons, document event value construction/copy/destruction/metadata, full model interface list and UNO close/dispose/broadcasting/factories/controllers/undo, FilterBase, workbook context and full DOCX/XLSX UI round trips remain pending. Host Dispose remains a separate C++ destructor binding. Native QA targets are related unported source QA, not independently compiled new differentials."
+    ],
+    "omittedResponsibilities": [
+      "Native synchronization/ABI, unconsumed COW constructors/comparisons, generated document event values and full model/filter/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/o3tl/inc/cow_wrapper.ts",
+          "marker": "cow_wrapper"
+        },
+        {
+          "path": "apps/office/src/o3tl/inc/cow_wrapper.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/interfacecontainer3.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/native-model-listeners.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/o3tl/cow_wrapper.hxx",
+          "marker": "cow_wrapper"
+        }
+      ]
+    }
+  }
+}

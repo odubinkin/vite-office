@@ -34,7 +34,7 @@ and file UI decisions are unchanged.
 ## Model component ownership
 
 SfxBaseModel and ScModelObj now use the actual shared WeakImplHelper and the
-same-identity SfxListener role. Only their fully implemented XChild interface is
+same-identity SfxListener role. Their fully implemented XChild and language XEventListener interfaces are
 declared at this stage. The original complete interface list remains pending;
 XModel and XMultiServiceFactory queries do not receive substitute implementations.
 
@@ -56,3 +56,27 @@ entry checks to it. Tests use real model/shell/document owners and the existing
 shared Reference, weak-reference, exception and type factories. Full native
 interface registration, XModel/factory/controller/undo services, synchronization
 and format/UI round trips remain pending.
+
+## Listener containers and model callbacks
+
+The model now uses the original OInterfaceContainerHelper3 listener ownership
+and reverse snapshot iterator over o3tl cow_wrapper. Actual Reference copies,
+mutable detach, duplicate registration, pointer-first/identity-fallback removal,
+reentrant mutation and typed exception handling retain their source algorithms.
+The current cow_wrapper surface includes default/copy/optional/move ownership;
+T value/rvalue constructors and nonmember value comparisons remain unported.
+Specializations bind the original erased T operations and per-interface DEFAULT
+singleton. The pinned size_t policy uses a 64-bit word; this does not certify
+native shared-object transport, locking, ABI or static shutdown.
+
+Model language/document event overloads and modify listener registration retain
+their distinct initialization guards. An explicit document declaration selects
+the erased C++ overload; runtime interface guessing is not used. The model
+implements the language XEventListener disposing method using its original three
+queries and priority. The document arm remains present although valid document
+listeners are handled by the earlier language-base query (CALC-357).
+
+Only represented container members are destroyed at the host destructor boundary.
+Full UNO close/dispose, event broadcasting and other model interfaces remain
+pending. Original mutex scopes are omitted by the synchronous binding; no fake
+mutex object or synchronization claim is supplied.
