@@ -1923,3 +1923,19 @@ Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream`
 ### WRITER199 — Shared MIME charset lookup uses permissive alias prefixes
 
 Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` checks exact VIP names before ordered prefix aliases after30-byte ASCII normalization. A trailing suffix rejects UTF-8 but can still select an ISO alias. The complete original40/184 tables, their duplicates and matching order are retained rather than replaced with browser alias rules. See CALC-362 and `sal/textenc/native-mime-charset.test.ts`. SAX encoding transport and complete DOCX model/filter/UI acceptance remain pending; this finding does not certify native ABI or all encoding conversion behavior.
+
+### WRITER200 — Shared XML converter can discard a short initial source prefix
+
+Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` concatenates buffered prefix bytes only when the latest read is nonzero. EOF before recognition therefore loses accumulated input, including a four-byte `<a/>`. Preserve this flow, as exercised by actual fragmented SequenceInputStream callers; see CALC-363. Complete SAX parser and DOCX model/filter/UI acceptance remain pending.
+
+### WRITER201 — Shared XML declaration quote selection prefers an absent single quote
+
+Pinned XMLFile2UTFConverter scanForEncoding/removeEncoding compare the single-quote index directly with the double-quote index, allowing -1 to win. A double-quoted encoding with no later single quote is not captured or removed. Preserve exact quote ordering, lexical matching and first-line scanning; see CALC-364. Tests use actual OString values and source byte owners.
+
+### WRITER202 — Shared SAX converter replaces separately supplied surrogate halves
+
+Pinned Unicode2TextConverter passes its original no-FLUSH default flags to RTL. The UTF8 converter's original trailing-surrogate branch replaces a split high surrogate immediately; a later low surrogate is independently invalid. Separate calls produce two `?`, while a complete pair in one call produces valid UTF8. Preserve these flags and existing RTL state behavior; see CALC-365. No synthetic converter context or private pending-state mutation is supplied.
+
+### WRITER203 — Shared Shift-JIS retains upstream MS-compatible wave mapping
+
+Pinned `sal/textenc/tcvtjp1.tab` intentionally uses U+FF5E for8160 in Shift-JIS for Microsoft compatibility. The complete original SJIS descriptor is now wired separately from MS932, reusing actual original forward/reverse payload tables and the same EUDC object. All512 pointer/range entries match source. Compiled original reverse conversion over all BMP units and the extended151032-case profile confirm the represented defined scope; see CALC-366. Native undefined reads, ABI and full document services remain unverified.

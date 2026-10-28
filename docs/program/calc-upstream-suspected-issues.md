@@ -4442,3 +4442,19 @@ Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream`
 ### CALC-362 — MIME charset aliases accept suffixes while VIP names require equality
 
 Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` normalizes at most30 ASCII alphanumeric bytes, then checks exact names in aVIPMimeCharsetTab and prefix matches in aMimeCharsetTab. Thus UTF-8-suffix remains DONTKNOW, but ISO-8859-15-junk resolves to ISO_8859_15 and ISO-8859-1-win resolves to MS_1252. Table order, including longer ISO aliases and original duplicates, is significant. This permissive source lookup is preserved for the future XMLFile2UTFConverter path. All40 VIP and184 alias entries match the pinned source in order. See WRITER199; full XML/model/filter/UI and native ABI contracts remain unverified.
+
+### CALC-363 — XML converter discards an accumulated short prefix at source EOF
+
+Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` retains initial chunks until isEncodingRecognizable succeeds. If the next read returns zero, it enters the nonempty-prefix branch but does not concatenate seqStart back into seq because that operation is inside the nRead guard. It then marks started and returns the empty latest read. A four-byte `<a/>` input is therefore lost, as is an unterminated XML declaration. Preserve this source flow; actual fragmented SequenceInputStream callers reproduce it. See WRITER200. Full parser/filter/document acceptance is not certified by these byte-owner tests.
+
+### CALC-364 — XML encoding quote choice treats an absent single quote as earlier
+
+Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::scanForEncoding` and removeEncoding select single quotes when `indexOf(singleQuote) < nStart`, even when that index is -1. A double-quoted encoding declaration with no later single quote therefore is neither captured nor removed; adding a later single quote can select the double-quoted branch instead. The first-line limit and exact space-plus-encoding match are also retained. Source algorithms remain unchanged; see WRITER201 and the actual OString/Sequence converter tests.
+
+### CALC-365 — SAX Unicode-to-text wrapper replaces split UTF16 surrogate halves
+
+Pinned `sax/source/expatwrap/xml2utf.cxx#Unicode2TextConverter::convert` passes UNDEFINED_DEFAULT and INVALID_DEFAULT without FLUSH to rtl_convertUnicodeToText. In pinned `sal/textenc/tcvtutf8.cxx`, a trailing high surrogate without FLUSH is processed as bad input, producing `?` under these defaults and clearing the pending high surrogate. Two separate calls with a valid pair's halves therefore produce two question marks, while one call with the full pair produces correct four-byte UTF8. Preserve these original flags and source behavior; see WRITER202. No private pending-state injection or changed flags are used to manufacture a different result.
+
+### CALC-366 — Native Shift-JIS deliberately uses the MS-compatible fullwidth wave mapping
+
+Pinned `sal/textenc/tcvtjp1.tab` explicitly maps byte pair8160 to U+FF5E across SJIS/MS932/Apple-Japanese for Microsoft compatibility, rather than canonical Shift-JIS U+301C. The SJIS descriptor's original lead/reverse tables are preserved separately from MS932 extension tables, while its EUDC pointer is genuinely shared. Both256-entry tables exactly match original numeric fields and symbolic pointers. Compiled original DBCS bodies confirm the new descriptor's reverse digest over all BMP units and the extended151032-case round-trip profile. See WRITER203; this does not certify arbitrary undefined native table accesses or all SAL/service behavior.

@@ -33,7 +33,8 @@
       "Selects the pinned UTF-7 converter path for RTF code page 65000.",
       "Selects pinned ISO-2022-JP/KR text-to-Unicode state machines for RTF code pages 50220 and 50225.",
       "Lookup of 55 native single-byte converter descriptors, generated from the authenticated LibreOffice descriptor capture already used by SAL converter tests.",
-      "The duplicate 47-entry handwritten single-byte switch is replaced by the existing pinned 55-descriptor capture, making all represented reverse data reachable through the shared factory. JIS X0201 records its actual null text-to-Unicode callback separately from absent encoding data. Native unsigned16 lookup binding is preserved. Other native registry encoding families and native function-pointer ABI remain unported."
+      "The duplicate 47-entry handwritten single-byte switch is replaced by the existing pinned 55-descriptor capture, making all represented reverse data reachable through the shared factory. JIS X0201 records its actual null text-to-Unicode callback separately from absent encoding data. Native unsigned16 lookup binding is preserved. Other native registry encoding families and native function-pointer ABI remain unported.",
+      "Original XMLFile2UTFConverter/Text2UnicodeConverter/Unicode2TextConverter stream, OString, Sequence, RTL descriptor/context, default flags, accumulation, encoding scan/removal, grow/retry and reverse member ownership are represented without TextDecoder or alternate UNO/encoding providers. Actual logical cells lower native pointer views at the RTL boundary. Original comphelper variadic concatSequences uses actual compiled Sequence T/sizeof and existing CPPU initialized C assignment owners; actual scalar/OUString references are exercised. Missing original Shift-JIS descriptor is wired with full256 lead and256 reverse entries using unchanged original payload pointers and actual shared MS932 EUDC object. Both tables match numeric fields/symbolic pointers in exact source order. Existing compiled original DBCS witness now includes encoding64; all11 previous digests/source hashes remain unchanged, new full-BMP reverse digest and151032-case defined round-trip profile come from compiled original source. Initial tests incorrectly assumed canonical wave/surrogate behavior; expectations now retain pinned MS-compatible U+FF5E and original no-FLUSH split-surrogate replacement. CALC-363..366 / WRITER200..203 preserve EOF prefix loss, quote ordering, split replacement and compatibility mapping. Whole4-owner coverage100 still fails; source/counters/exclusions/thresholds are unchanged. Actual SAX InputSource/parser byte admission, package/model/controller/factory/filter/workbook/DOCX/XLSX/worker/UI paths remain incomplete. Unported RTL descriptors, native ABI/pointer/aggregate copy, allocation/constructor unwind and threads remain unverified. Existing file/autosave/recovery choices are preserved."
     ],
     "omittedResponsibilities": [
       "Other encoding families and complete SAL conversion factories remain outside the current Writer filter slice.",
@@ -56,6 +57,10 @@
         {
           "path": "apps/office/src/sal/textenc/textcvt.factory.test.ts",
           "marker": "binds every represented single-byte descriptor"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/native-sjis.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

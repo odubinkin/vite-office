@@ -13,6 +13,7 @@ import {
   RTL_TEXTENCODING_ISO_2022_KR,
   RTL_TEXTENCODING_MS_1361,
   RTL_TEXTENCODING_MS_932,
+  RTL_TEXTENCODING_SHIFT_JIS,
   RTL_TEXTENCODING_MS_936,
   RTL_TEXTENCODING_MS_949,
   RTL_TEXTENCODING_MS_950,
@@ -25,6 +26,7 @@ import {
 import { aImplAPPLEJAPANESEDBCSCvtData } from "./tcvtjp6.applejapanese";
 import { aImplEUCJPCvtData } from "./tcvtjp6.eucjp";
 import { aImplMS932DBCSCvtData } from "./tcvtjp6.ms932";
+import { aImplSJISDBCSCvtData } from "./tcvtjp6.sjis";
 import { aImplJOHABDBCSCvtData } from "./tcvtkr6.johab";
 import { aImplKSC5601DBCSCvtData, aImplMS949DBCSCvtData } from "./tcvtkr6.ms949";
 
@@ -73,6 +75,7 @@ export function getTextToUnicodeData(
   if (encoding === RTL_TEXTENCODING_ISCII_DEVANAGARI) return { kind: "iscii" };
   if (encoding === RTL_TEXTENCODING_ISO_2022_JP) return { kind: "iso2022jp" };
   if (encoding === RTL_TEXTENCODING_ISO_2022_KR) return { kind: "iso2022kr" };
+  if (encoding === RTL_TEXTENCODING_SHIFT_JIS) return { kind: "dbcs", data: aImplSJISDBCSCvtData };
   if (encoding === RTL_TEXTENCODING_MS_932) return { kind: "dbcs", data: aImplMS932DBCSCvtData };
   if (encoding === RTL_TEXTENCODING_APPLE_JAPANESE)
     return { kind: "dbcs", data: aImplAPPLEJAPANESEDBCSCvtData };

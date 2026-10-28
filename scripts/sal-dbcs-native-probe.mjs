@@ -78,6 +78,7 @@ const names = [
   "APPLE_JAPANESE",
   "APPLE_KOREAN",
   "MS_932",
+  "SHIFT_JIS",
   "MS_936",
   "MS_949",
   "MS_950",
