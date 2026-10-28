@@ -994,5 +994,31 @@
       "remainingFunctions": 17
     },
     "finalFullVerifierPassed": false
+  },
+  "scannerCurrencyAndStyleContracts": {
+    "reports": [
+      "apps/office/coverage/integration-scanner-public",
+      "apps/office/coverage/integration-system-currency",
+      "apps/office/coverage/integration-style-public"
+    ],
+    "testFiles": 3,
+    "tests": 40,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "strictCoveragePassed": false,
+    "compatibleCurrentDiagnosticUnion": {
+      "statementsCovered": 117888,
+      "statementsTotal": 119458,
+      "branchArmsCovered": 72552,
+      "branchArmsTotal": 74581,
+      "functionsCovered": 18412,
+      "functionsTotal": 18420,
+      "linesCovered": 107128,
+      "linesTotal": 108118,
+      "remainingOwners": 232,
+      "remainingFunctions": 8
+    },
+    "finalFullVerifierPassed": false
   }
 }

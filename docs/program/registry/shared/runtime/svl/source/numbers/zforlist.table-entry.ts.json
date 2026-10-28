@@ -18,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svl/source/numbers/zforlist.table-entry.ts",
-        "apps/office/src/svl/source/numbers/zforlist.recognition.test.ts"
+        "apps/office/src/svl/source/numbers/zforlist.recognition.test.ts",
+        "apps/office/src/svl/source/numbers/zforlist.generate-formats.test.ts"
       ],
-      "justification": "Original language-block generation, actual compiled-entry insertion/duplicate behavior and default currency cache/search/generation. System currency output aliases its actual owning field through a mutable scalar reference; no guessed key or unsupported currency error is substituted.",
+      "justification": "Original language-block generation, actual compiled-entry insertion/duplicate behavior and default currency cache/search/generation. System currency output aliases its actual owning field through a mutable scalar reference; no guessed key or unsupported currency error is substituted. B8TCAE adds source-contract evidence: Both initial and cached system-currency lookup arms execute over the actual formatter table, current language and native-number wrapper. No table key, entry, return value or cache counter is manufactured. Existing native comparisons remain; these added assertions do not establish full native ABI or complete application parity.",
       "knownViolations": [],
       "localSymbols": [
         "ImpGenerateCL",

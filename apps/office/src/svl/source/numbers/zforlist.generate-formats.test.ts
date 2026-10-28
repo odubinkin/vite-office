@@ -5,6 +5,23 @@ import { SvNumberFormatter, SvNFFormatData } from "./zforlist";
 import { SvNumberformat } from "./zformat";
 import { NfIndexTableOffset as N, SvNumFormatType as T } from "../../inc/zforlist";
 import { ImpGetFormatIndex } from "./zforlist.index";
+it("lazily inserts and reuses the source system-currency format in the actual generated table", /** Real locale providers, currency strings, scanner and constructor own the inserted entry; repeated lookup must retain its original key and owner. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x409),
+    table = formatter["m_aFormatData"],
+    current = formatter["m_aCurrentLanguage"];
+  try {
+    const key = table.ImpGetDefaultSystemCurrencyFormat(current, formatter.GetNatNum()),
+      entry = table.GetFormatEntry(key);
+    expect(key).not.toBe(0xffffffff);
+    expect(entry).not.toBeNull();
+    expect((entry as SvNumberformat).GetMaskedType() & T.CURRENCY).not.toBe(0);
+    expect((entry as SvNumberformat).GetFormatstring().isEmpty()).toBe(false);
+    expect(table.ImpGetDefaultSystemCurrencyFormat(current, formatter.GetNatNum())).toBe(key);
+    expect(table.GetFormatEntry(key)).toBe(entry);
+  } finally {
+    formatter.dispose();
+  }
+});
 it.each([0x409, 0x407, 0x411, 0x412, 0x401, 0x429, 0x41e, 0x455])(
   "initializes every source builtin and the locale's additional entries for %i",
   /** Actual locale code provider, scanner and constructor generate real formats; no keys or parsed states are injected. @param language - Requested locale. @returns Nothing. */ (

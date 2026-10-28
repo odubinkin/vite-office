@@ -5,6 +5,83 @@ import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.table
 import { SvNumberFormatter } from "./zforlist";
 import { ImpSvNumberformatScan, KeywordLocalization as M } from "./zforscan";
 import { SvNumberformat } from "./zformat";
+it("publishes the original borrowed standard palette in color-prefix order", /** Each compiled color prefix must resolve to the very same native palette entry exposed by the static view. @returns Nothing. */ () => {
+  const formatter = new SvNumberFormatter(0x409),
+    scanner = formatter["m_aCurrentLanguage"].GetFormatScanner(),
+    palette = ImpSvNumberformatScan.GetStandardColors();
+  try {
+    expect(ImpSvNumberformatScan.GetStandardColorCount()).toBe(10);
+    expect(palette).toHaveLength(10);
+    expect(ImpSvNumberformatScan.GetStandardColors()).toBe(palette);
+    for (const [index, name] of [
+      "BLACK",
+      "BLUE",
+      "GREEN",
+      "CYAN",
+      "RED",
+      "MAGENTA",
+      "BROWN",
+      "GREY",
+      "YELLOW",
+      "WHITE",
+    ].entries()) {
+      const source = unicode(name);
+      try {
+        expect(scanner.GetColor(source), name).toBe(palette[index]);
+      } finally {
+        source.dispose();
+      }
+    }
+  } finally {
+    formatter.dispose();
+  }
+});
+
+it.each([
+  [0x409, "USD"],
+  [0x407, "DEM"],
+  [0x809, "GBP"],
+] as const)(
+  "retains the source compatibility bank abbreviation for locale %i",
+  /** Lazy compatibility-currency initialization preserves its borrowed abbreviation across repeated reads. @param language - Actual locale. @param expected - Pinned bank symbol. @returns Nothing. */ (
+    language,
+    expected,
+  ) => {
+    const formatter = new SvNumberFormatter(language),
+      scanner = formatter["m_aCurrentLanguage"].GetFormatScanner();
+    try {
+      const abbreviation = scanner.GetCurAbbrev();
+      expect(text(abbreviation)).toBe(expected);
+      expect(scanner.GetCurAbbrev()).toBe(abbreviation);
+    } finally {
+      formatter.dispose();
+    }
+  },
+);
+
+it.each([
+  ['"ab"', "ab", 2],
+  ["\\x", "x", 1],
+  ["abc", "abc", 0],
+] as const)(
+  "retains original protected quote-removal dispatch for %s",
+  /** Valid derived callers can invoke the original protected helper on actual owned strings. No token array or scanner state is replaced. @param source - Literal token text. @param expected - Unquoted text. @param removed - Removed source units. @returns Nothing. */ (
+    source,
+    expected,
+    removed,
+  ) => {
+    const formatter = new SvNumberFormatter(0x409),
+      scanner = formatter["m_aCurrentLanguage"].GetFormatScanner(),
+      value = unicode(source);
+    try {
+      expect(scanner["RemoveQuotes"](value)).toBe(removed);
+      expect(text(value)).toBe(expected);
+    } finally {
+      value.dispose();
+      formatter.dispose();
+    }
+  },
+);
 it.each([
   [0x0409, M.AllowEnglish, "red", "RED", 0xff0000],
   [0x0407, M.AllowEnglish, "red", "ROT", 0xff0000],

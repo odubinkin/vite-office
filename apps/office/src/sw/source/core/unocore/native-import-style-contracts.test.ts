@@ -335,6 +335,7 @@ it("attaches native character descriptors without admitting paragraph properties
   const family = f.families.GetCharacterStyles(),
     descriptor = f.model.createCharacterStyle(),
     normal = new Any([100], "float"),
+    height = new Any([18], "float"),
     bold = new Any([150], "float");
   try {
     expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("CharWeightComplex"))).toBe(
@@ -354,7 +355,13 @@ it("attaches native character descriptors without admitting paragraph properties
       weight.Name.dispose();
     }
     descriptor.setPropertyValue(f.key("CharWeight"), normal);
+    descriptor.setPropertyValue(f.key("CharHeight"), height);
+    descriptor.setPropertyValue(f.key("CharWeightComplex"), bold);
     family.insertStyleByName(f.key("Character"), descriptor);
+    expect(family.getElementNames()).toContain("Standard");
+    expect(family.getElementNames()).toContain("Character");
+    expect(number(descriptor.getPropertyValue(f.key("CharHeight")))).toBe(18);
+    expect(number(descriptor.getPropertyValue(f.key("CharWeightComplex")))).toBe(150);
     expect(f.document.FindCharFormatByName("Character")).toBeDefined();
     expect(f.document.FindTextFormatCollByName("Character")).toBeUndefined();
     expect(descriptor.getPropertyState(f.key("CharWeight"))).toBe(PropertyState.DIRECT_VALUE);
@@ -374,6 +381,7 @@ it("attaches native character descriptors without admitting paragraph properties
   } finally {
     descriptor.dispose();
     normal.dispose();
+    height.dispose();
     bold.dispose();
     f.close();
   }

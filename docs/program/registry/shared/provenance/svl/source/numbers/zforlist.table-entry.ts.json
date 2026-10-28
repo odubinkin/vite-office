@@ -19,7 +19,8 @@
       "SvNFFormatData::ImpGetDefaultCurrencyFormat"
     ],
     "preservedResponsibilities": [
-      "Original language-block generation, actual compiled-entry insertion/duplicate behavior and default currency cache/search/generation. System currency output aliases its actual owning field through a mutable scalar reference; no guessed key or unsupported currency error is substituted."
+      "Original language-block generation, actual compiled-entry insertion/duplicate behavior and default currency cache/search/generation. System currency output aliases its actual owning field through a mutable scalar reference; no guessed key or unsupported currency error is substituted.",
+      "B8TCAE adds source-contract evidence: Both initial and cached system-currency lookup arms execute over the actual formatter table, current language and native-number wrapper. No table key, entry, return value or cache counter is manufactured. Existing native comparisons remain; these added assertions do not establish full native ABI or complete application parity."
     ],
     "omittedResponsibilities": [
       "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
