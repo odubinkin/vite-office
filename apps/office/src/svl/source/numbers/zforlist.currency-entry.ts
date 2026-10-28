@@ -6,9 +6,21 @@ import {
   LocaleDataWrapper,
   type LocaleCurrency,
 } from "../../../unotools/source/i18n/localedatawrapper";
-import { BuildCurrencyFormat } from "./zforlist.currency-patterns";
+import {
+  BuildCurrencyFormat,
+  GetEffectivePositiveFormat,
+  GetEffectiveNegativeFormat,
+} from "./zforlist.currency-patterns";
 /** Original language/country currency value used by SvNumberFormatter's ordered currency tables. */
 export class NfCurrencyEntry {
+  /** Original public unsigned16 currency-placement helper. @param intl - Locale positive placement. @param currency - Currency positive placement. @param bank - Fixed bank-symbol policy. @returns Effective placement. */
+  static GetEffectivePositiveFormat(intl: number, currency: number, bank: boolean): number {
+    return GetEffectivePositiveFormat(intl, currency, bank);
+  }
+  /** Original public unsigned16 negative-sign/parenthesis placement helper. @param intl - Locale negative placement. @param currency - Currency negative placement. @param bank - Fixed bank-symbol policy. @returns Effective placement. */
+  static GetEffectiveNegativeFormat(intl: number, currency: number, bank: boolean): number {
+    return GetEffectiveNegativeFormat(intl, currency, bank);
+  }
   private readonly symbol: OUString;
   private readonly bankSymbol: OUString;
   private language: number;

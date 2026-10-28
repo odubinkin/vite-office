@@ -64,8 +64,15 @@ function mergeParenthesis(intl: number, currency: number): number {
   }
   return currency;
 }
+/** Original public GetEffectivePositiveFormat with NF_BANKSYMBOL_FIX_POSITION=1. @param intl - Locale placement. @param currency - Currency placement. @param bank - Bank mode. @returns Effective placement. */
+export function GetEffectivePositiveFormat(intl: number, currency: number, bank: boolean): number {
+  void intl;
+  return bank ? 3 : currency & 65535;
+}
 /** Original GetEffectiveNegativeFormat with NF_BANKSYMBOL_FIX_POSITION=1. @param intl - Locale placement. @param currency - Currency placement. @param bank - Bank mode. @returns Effective placement. */
-function effectiveNegative(intl: number, currency: number, bank: boolean): number {
+export function GetEffectiveNegativeFormat(intl: number, currency: number, bank: boolean): number {
+  intl &= 65535;
+  currency &= 65535;
   if (bank) return 8;
   if (intl !== currency) {
     switch (currency) {
@@ -118,7 +125,11 @@ export function BuildCurrencyFormat(
     const digits = number.toString();
     try {
       if (!negative) {
-        const placement = bank ? 3 : entry.GetPositiveFormat();
+        const placement = GetEffectivePositiveFormat(
+          locale.getCurrPositiveFormat(),
+          entry.GetPositiveFormat(),
+          bank,
+        );
         switch (placement) {
           case 0:
             return join(symbol, digits);
@@ -132,7 +143,7 @@ export function BuildCurrencyFormat(
             return new OUString(digits);
         }
       }
-      const placement = effectiveNegative(
+      const placement = GetEffectiveNegativeFormat(
         locale.getCurrNegativeFormat(),
         entry.GetNegativeFormat(),
         bank,

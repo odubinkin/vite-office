@@ -8,17 +8,21 @@
     "upstreamPath": "svl/source/numbers/zforlist.cxx",
     "localSymbols": [
       "BuildCurrencyFormat",
-      "GetCurrencyFormatStrings"
+      "GetCurrencyFormatStrings",
+      "GetEffectivePositiveFormat",
+      "GetEffectiveNegativeFormat"
     ],
     "upstreamSymbols": [
       "NfCurrencyEntry::Impl_BuildFormatStringNumChars",
       "NfCurrencyEntry::GetEffectiveNegativeFormat",
       "NfCurrencyEntry::CompletePositiveFormatString",
       "NfCurrencyEntry::CompleteNegativeFormatString",
-      "SvNFLanguageData::GetCurrencyFormatStrings"
+      "SvNFLanguageData::GetCurrencyFormatStrings",
+      "NfCurrencyEntry::GetEffectivePositiveFormat"
     ],
     "preservedResponsibilities": [
-      "Original currency numeric pattern, enabled fixed bank placement, negative-parenthesis merge, mixed/bank format list order, duplicate retention and default index. Materialized concatenations use actual UTF16 owners. Full native currency-pattern differential and SAL allocation/lifetime parity remain uncertified."
+      "Original currency numeric pattern, enabled fixed bank placement, negative-parenthesis merge, mixed/bank format list order, duplicate retention and default index. Materialized concatenations use actual UTF16 owners. Full native currency-pattern differential and SAL allocation/lifetime parity remain uncertified.",
+      "B8TCAE restores the original public NfCurrencyEntry::GetEffectivePositiveFormat and GetEffectiveNegativeFormat scalar contracts declared in include/svl/zforlist.hxx. The existing pattern builder delegates to those same source responsibilities with original NF_BANKSYMBOL_FIX_POSITION=1 and UInt16 argument conversion. No immutable currency field or locale provider is replaced. An independent witness compiles unchanged original member bodies, original private parenthesis helper and original public declarations; only SAL_WARN logging is silenced.1936 native output rows span all defined placements, bank modes, diagnostic values and unsigned16 conversion boundaries. This establishes scalar placement results, not full native currency/formatter ABI, allocation or concurrency equivalence. Prior currency-owner counter maps are stale after this restoration and require recollection."
     ],
     "omittedResponsibilities": [
       "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
@@ -28,6 +32,14 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
           "marker": "BuildCurrencyFormat"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/currency-placement.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/native-currency-placement.json",
+          "marker": "witnessSha256"
         }
       ],
       "upstream": [

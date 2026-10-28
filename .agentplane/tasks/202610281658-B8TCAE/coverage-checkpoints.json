@@ -1020,5 +1020,50 @@
       "remainingFunctions": 8
     },
     "finalFullVerifierPassed": false
+  },
+  "publicCurrencyPlacementRestoration": {
+    "nativeObservations": 1936,
+    "nativeCheckPassed": true,
+    "nativeFixture": "apps/office/src/svl/source/numbers/native-currency-placement.json",
+    "nativeFixtureSha256": "1d6959f7f6d74020c882efae9908799c9273a382e47f30b4cdc6baaa76e781a6",
+    "reports": [
+      {
+        "path": "apps/office/coverage/integration-currency-placement",
+        "testFiles": 38,
+        "tests": 484
+      },
+      {
+        "path": "apps/office/coverage/integration-currency-placement-public",
+        "testFiles": 1,
+        "tests": 2
+      },
+      {
+        "path": "apps/office/coverage/integration-currency-placement-catalog",
+        "testFiles": 1,
+        "tests": 8
+      }
+    ],
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "productionSourcesChanged": [
+      "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
+      "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts"
+    ],
+    "coverageExceptionsApplied": false,
+    "sourceMapMigration": "Old baseline maps for these two owners were removed only from the diagnostic union and replaced with newly collected compatible maps from all number-format suites, public owned-currency cases and existing source-catalog currency tests. No counter editing or configured coverage exclusion. A fresh final complete configured report remains required.",
+    "compatibleCurrentDiagnosticUnion": {
+      "statementsCovered": 117911,
+      "statementsTotal": 119464,
+      "branchArmsCovered": 72589,
+      "branchArmsTotal": 74581,
+      "functionsCovered": 18416,
+      "functionsTotal": 18423,
+      "linesCovered": 107151,
+      "linesTotal": 108124,
+      "remainingOwners": 232,
+      "remainingFunctions": 7
+    },
+    "unreachableAudit": "B8TCAE-A04 individual response pending; no exception applied.",
+    "finalFullVerifierPassed": false
   }
 }

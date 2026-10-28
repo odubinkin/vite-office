@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 36
+revision: 37
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:14:50.433Z"
+doc_updated_at: "2026-10-28T22:24:59.234Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -151,6 +151,8 @@ sections:
     - Observation: Additional actual owner/view checks pass38 tests in4 files: concrete DOCX export identity, original sorted property-vector borrow, resource-ordered deferred text position, real SharedCalendar final release with independent clone, and current Japanese era. Current compatible union leaves17 missing functions and232 incomplete owners. Production sources, coverage thresholds and exceptions remain unchanged; final full npm run verify and publication/reverse merges are still pending.
 
     - Observation: Scanner public palette/compatibility/quote dispatch, actual system-currency cache insertion and multi-property character descriptor attachment pass40 tests in3 files. Pinned source explicitly uses GREY and compatibility DEM; test expectations follow those original contracts. Diagnostic union now leaves8 missing functions and232 incomplete owners. No production change or coverage exception.
+
+    - Observation: Restored original public positive/negative currency placement methods with source UInt16 boundaries and fixed bank policy.1936 unchanged native C++ outputs replay successfully. All38 number-format suites484 tests pass, plus2 actual bank/language-owner tests and8 existing currency-catalog tests. Both changed owners have fresh counter maps; their obsolete baseline maps are omitted only from the diagnostic union and replaced with recollected counters, with thresholds/discovery unchanged. Diagnostic union has117911/119464 statements72589/74581 branches18416/18423 functions107151/108124 lines;232 owners and7 functions remain incomplete. A04 final private helper return has a source caller proof; the individual approval question is pending and no exclusion has been applied. Final full verifier/publication/reverse merges remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -282,3 +284,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Additional actual owner/view checks pass38 tests in4 files: concrete DOCX export identity, original sorted property-vector borrow, resource-ordered deferred text position, real SharedCalendar final release with independent clone, and current Japanese era. Current compatible union leaves17 missing functions and232 incomplete owners. Production sources, coverage thresholds and exceptions remain unchanged; final full npm run verify and publication/reverse merges are still pending.
 
 - Observation: Scanner public palette/compatibility/quote dispatch, actual system-currency cache insertion and multi-property character descriptor attachment pass40 tests in3 files. Pinned source explicitly uses GREY and compatibility DEM; test expectations follow those original contracts. Diagnostic union now leaves8 missing functions and232 incomplete owners. No production change or coverage exception.
+
+- Observation: Restored original public positive/negative currency placement methods with source UInt16 boundaries and fixed bank policy.1936 unchanged native C++ outputs replay successfully. All38 number-format suites484 tests pass, plus2 actual bank/language-owner tests and8 existing currency-catalog tests. Both changed owners have fresh counter maps; their obsolete baseline maps are omitted only from the diagnostic union and replaced with recollected counters, with thresholds/discovery unchanged. Diagnostic union has117911/119464 statements72589/74581 branches18416/18423 functions107151/108124 lines;232 owners and7 functions remain incomplete. A04 final private helper return has a source caller proof; the individual approval question is pending and no exclusion has been applied. Final full verifier/publication/reverse merges remain pending.
