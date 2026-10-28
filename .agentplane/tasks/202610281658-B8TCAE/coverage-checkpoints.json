@@ -666,5 +666,63 @@
       }
     },
     "scope": "Actual public insertion/ownership/iteration/cache/named-parent tests and existing bounded native replay. Remaining last-not-child and missing-ignorable-representative alternatives have no exception; source/counters/thresholds remain unchanged."
+  },
+  "md4cPublicInputBoundaries": {
+    "testFiles": 6,
+    "tests": 1848,
+    "newNativeInputs": 14,
+    "newStatements": 11,
+    "newBranchArms": 19,
+    "exactMapsCompared": true,
+    "runtimeCodeChanged": false,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "report": "apps/office/coverage/integration-md4c-final/coverage-final.json",
+    "reportSha256": "09f816f54017ecb354cc8975cfd84a6aad702badde8ea2a5225dbc4398d5b373",
+    "metrics": {
+      "lines": {
+        "total": 1918,
+        "covered": 1906,
+        "skipped": 0,
+        "pct": 99.37
+      },
+      "statements": {
+        "total": 2183,
+        "covered": 2149,
+        "skipped": 0,
+        "pct": 98.44
+      },
+      "functions": {
+        "total": 135,
+        "covered": 135,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1923,
+        "covered": 1876,
+        "skipped": 0,
+        "pct": 97.55
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "fixtureSha256": "13a407b7666993633c46bad34fd7d07934d8c03297b440dcc381f9a7b64e1008",
+    "owners": [
+      "external/md4c/src/md4c.autolink.scan.ts",
+      "external/md4c/src/md4c.autolink.ts",
+      "external/md4c/src/md4c.block.scan.ts",
+      "external/md4c/src/md4c.inline.ts",
+      "external/md4c/src/md4c.link.ts",
+      "external/md4c/src/md4c.mark.analyze.ts",
+      "external/md4c/src/md4c.mark.collect.ts",
+      "external/md4c/src/md4c.ref.ts",
+      "external/md4c/src/md4c.render.ts"
+    ],
+    "scope": "14 minimized legal public-input/flag cases with complete unchanged original native callback streams and existing block-consumer replay. Read-only diagnostic counter selection is removed from final tests; no counters, runtime sources, thresholds or exclusions changed. Native sources match exact original archive members."
   }
 }

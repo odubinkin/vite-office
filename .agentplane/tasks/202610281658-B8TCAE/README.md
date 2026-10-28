@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 22
+revision: 23
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:21:30.252Z"
+doc_updated_at: "2026-10-28T20:29:55.105Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -111,6 +111,10 @@ sections:
     - Observation: Four public StylePool regressions build actual nested ignorable/ordinary paths, root-only styles, replacement cache ownership and equal/absent named parents. Current2files21tests pass;145/146 statements and108/110 branch arms are covered without source or counter changes.
       Impact: Remaining alternatives are private closed-state traversal guards; additional audit A01 retains the synchronous local invariant and explicitly avoids native concurrency/ABI claims. No exception has been requested for A01 or applied.
       Resolution: Continue remaining admitted inputs/owners and individual pending U01/U02 review; final full verifier and repository publication/synchronization remain outstanding.
+
+    - Observation:14 minimized md4c public input/flag boundaries have complete callback streams regenerated from unchanged md4c0.5.3 archive members. Current6 suites1848 tests pass, including existing block-consumer and complete callback replay. Temporary diagnostics only read before/after counters to select inputs and were removed from final tests.
+      Impact: Exact unchanged statement/function/branch maps show11 additional statements and19 branch arms covered in9 owners, without fake contexts, private writes, source changes, exclusions or altered counters. Full source-owner100 still fails and is recorded as such.
+      Resolution: Retain small native-backed malformed/end-of-input regressions and continue remaining coverage; no broad final verifier or publication success is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -202,3 +206,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Four public StylePool regressions build actual nested ignorable/ordinary paths, root-only styles, replacement cache ownership and equal/absent named parents. Current2files21tests pass;145/146 statements and108/110 branch arms are covered without source or counter changes.
   Impact: Remaining alternatives are private closed-state traversal guards; additional audit A01 retains the synchronous local invariant and explicitly avoids native concurrency/ABI claims. No exception has been requested for A01 or applied.
   Resolution: Continue remaining admitted inputs/owners and individual pending U01/U02 review; final full verifier and repository publication/synchronization remain outstanding.
+
+- Observation:14 minimized md4c public input/flag boundaries have complete callback streams regenerated from unchanged md4c0.5.3 archive members. Current6 suites1848 tests pass, including existing block-consumer and complete callback replay. Temporary diagnostics only read before/after counters to select inputs and were removed from final tests.
+  Impact: Exact unchanged statement/function/branch maps show11 additional statements and19 branch arms covered in9 owners, without fake contexts, private writes, source changes, exclusions or altered counters. Full source-owner100 still fails and is recorded as such.
+  Resolution: Retain small native-backed malformed/end-of-input regressions and continue remaining coverage; no broad final verifier or publication success is claimed.
