@@ -1,0 +1,676 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded genuine package input/Writer SAX checkpoint; full task incomplete; unchanged six-owner100 coverage fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": "c85c7f5fa744f409818e9836e1426a73f8c4f240",
+    "apps/office/src/oox/source/core/fragmenthandler.ts": "b9bbb5cf43346cac61f50ce0f074ddd404c0e378",
+    "apps/office/src/oox/source/core/xmlfilterbase.test.ts": "72d11b196a5a3051a2a919fa6f834c4933aa2ebb",
+    "apps/office/src/oox/source/core/xmlfilterbase.ts": "80879f4d9c39f30b19e6d56239a98c9b118a4ebe",
+    "apps/office/src/oox/source/helper/zipstorage.ts": "b52aa99541ac7424d16e6ce26a7be8d8bc71ad5a",
+    "apps/office/src/sax/source/fastparser/fastparser.ts": "78b671ce54971098e5bf380c74f9afe3ccc6ee44",
+    "apps/office/src/sax/source/tools/fastserializer.test.ts": "f3279c0c86cc3586eb71aeb3ade9264453d6e17e",
+    "apps/office/src/sc/source/filter/excel/xestream.test.ts": "21ee1deb20dfb91a6a7d2792508843241345ce24",
+    "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts": "2cd4aa6c841c40340308087c0c4e3514e59d2f76",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts": "37c31eec858e7d722f0559e3298274a4e6fe545f",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts": "9ab7cc6708fbdfec6010251c09917e7d041e971f",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": "a320701f58ba1c5e86c4122ca922cfe04d888c2e",
+    "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts": "c50d0442f5cb5bd5470d9e815bd312e4ea2650f9",
+    "apps/office/src/test/oox-input.ts": "a082a88b4b1ebb50929b9ebb1363c2631d7d9cec",
+    "docs/program/calc-upstream-suspected-issues.md": "723b0acf4267af4fbbbd3039cfc2ac964762f32e",
+    "docs/program/native-oox-package-input.md": "0df67a8f4c538b51c3f27d9632c9e719d11c4e56",
+    "docs/program/registry/calc/capabilities/CAP-49e7031a-e716-4127-b398-a34ff0f1f08d.json": "716dbf5300fce7d86389f423d51102e283947d9a",
+    "docs/program/registry/shared/provenance/comphelper/source/xml/ofopxmlhelper.ts.json": "08e84bfd87454585a6bdccd7a8cce54905fba311",
+    "docs/program/registry/shared/provenance/oox/source/core/fragmenthandler.ts.json": "e4b93abe0ac131a29cde8fd5c95d44ecc9651ba9",
+    "docs/program/registry/shared/provenance/oox/source/core/xmlfilterbase.ts.json": "78f336409595810751a2ddb1c2387b2f201432a3",
+    "docs/program/registry/shared/provenance/oox/source/helper/zipstorage.ts.json": "8033edca3d547eca7921f8279ea1cf85102314f5",
+    "docs/program/registry/shared/provenance/sax/source/fastparser/fastparser.ts.json": "16056b5de765dd4f27bbff9b78f80483683c0459",
+    "docs/program/registry/shared/runtime/comphelper/source/xml/ofopxmlhelper.ts.json": "2849142ea884b6f2bcc6ef01a75f01f6ab39a010",
+    "docs/program/registry/shared/runtime/oox/source/core/fragmenthandler.ts.json": "5278568dbddd1a3eaaa5e28b9e7f6377127cbf2e",
+    "docs/program/registry/shared/runtime/oox/source/core/xmlfilterbase.ts.json": "65dfa8e84b43bf5a365016fa5d33f6af51b124b6",
+    "docs/program/registry/shared/runtime/oox/source/helper/zipstorage.ts.json": "cb15d8b744c26bc67cec12d641cc54ea26afed83",
+    "docs/program/registry/shared/runtime/sax/source/fastparser/fastparser.ts.json": "6ff9bd14f34b3bb60dc5b21f4ef3d4093bf2170f",
+    "docs/program/registry/writer/provenance/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "cde32a1e2670729decd8f8b24aa0c08e4bf394e2",
+    "docs/program/registry/writer/runtime/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts.json": "998cf1fb1ec6024fd6b7522617edd84fd987d946",
+    "docs/program/writer-upstream-suspected-issues.md": "7fdd32a20e9630afc9f596364f4f8d7ceeb61854",
+    "scripts/check-module-boundaries.mjs": "e649800ac4c94975cfd3221857f5d87ab1afc8b9",
+    "scripts/native-sax-input-boundary.test.ts": "98bbc08e66bbb49f1c1630ca9e4a8abda1ec3143"
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-0.log",
+      "cwd": ".",
+      "sha256": "262d835886c7fbb3a37f072932d6e48c520343a2db1084b7a07d6bef02b231e3"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-stream-check-1.log",
+      "cwd": ".",
+      "sha256": "2f3db8325f47f2d02ec173aa81bba892cbc53cf3f51b3dc72f20a1f8502d404d"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-2.log",
+      "cwd": ".",
+      "sha256": "03af90ce4adfefe58790697dd4e48870fc30b2620a126c52fb20ad73e4c5a10c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-3.log",
+      "cwd": ".",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-4.log",
+      "cwd": ".",
+      "sha256": "700d4bf4107c7f6f204dca05e7966c3f4a01f2b1bdcc6ad1486d221dc1f375a1"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-5.log",
+      "cwd": ".",
+      "sha256": "51994369f2f6b897b4954239848fa7294459e287e667b89bcffac2c3607632f4"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-6.log",
+      "cwd": ".",
+      "sha256": "f4d56632f2940a6d743f12094ffe67a65891e59fbb2324c3b6ec0542faf4526a"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-7.log",
+      "cwd": ".",
+      "sha256": "6a74f044954298b83b83db5edaecd98e0657d74af9d1f1d4209683ed87f967c4"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-check-8.log",
+      "cwd": ".",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@vite-office/office"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-0.log",
+      "cwd": ".",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-1.log",
+      "cwd": ".",
+      "sha256": "b02feec96060a48f4575bd035378652df1a8c15a01c1db94051f9875337a3b8e"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-2.log",
+      "cwd": ".",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-3.log",
+      "cwd": ".",
+      "sha256": "9e834877ed8429e10bda0a0c103ff4f282e9782e8d59cd1d44936db00bc22571"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-4.log",
+      "cwd": ".",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-stream-build-5.log",
+      "cwd": ".",
+      "sha256": "df09a817d18eaf970392abb66f959b9ee5545f481d8f7cdb6abb47133b64913f"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts",
+        "docs/program/native-oox-package-input.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-build-6.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-repair-0.log",
+      "cwd": ".",
+      "sha256": "92326329871cdd7f4dacc3ab4ba21a783cb4c10ab05def55441e55c3b2869698"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-repair-1.log",
+      "cwd": ".",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts",
+        "docs/program/native-oox-package-input.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-repair-2.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@vite-office/office"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-final-check-0.log",
+      "cwd": ".",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-final-check-1.log",
+      "cwd": ".",
+      "sha256": "92326329871cdd7f4dacc3ab4ba21a783cb4c10ab05def55441e55c3b2869698"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-final-check-2.log",
+      "cwd": ".",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+        "apps/office/src/oox/source/core/fragmenthandler.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+        "apps/office/src/oox/source/core/xmlfilterbase.ts",
+        "apps/office/src/oox/source/helper/zipstorage.ts",
+        "apps/office/src/sax/source/fastparser/fastparser.ts",
+        "apps/office/src/sax/source/tools/fastserializer.test.ts",
+        "apps/office/src/sc/source/filter/excel/xestream.test.ts",
+        "apps/office/src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "apps/office/src/test/oox-input.ts",
+        "docs/program/native-oox-package-input.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-final-check-3.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/oox/source/core/xmlfilterbase.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+        "src/sax/source/tools/fastserializer.test.ts",
+        "src/sc/source/filter/excel/xestream.test.ts",
+        "src/sw/source/filter/ww8/docxexport.fonts.test.ts",
+        "src/sax/source/fastparser/InputSource.test.ts",
+        "src/sax/source/fastparser/FastSaxParser.test.ts",
+        "src/sax/source/fastparser/fastparser.test.ts",
+        "src/oox/source/core/fastparser.test.ts",
+        "src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.include=src/comphelper/source/xml/ofopxmlhelper.ts",
+        "--coverage.include=src/oox/source/core/fragmenthandler.ts",
+        "--coverage.include=src/oox/source/core/xmlfilterbase.ts",
+        "--coverage.include=src/oox/source/helper/zipstorage.ts",
+        "--coverage.include=src/sax/source/fastparser/fastparser.ts",
+        "--coverage.include=src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+        "--coverage.reportsDirectory=coverage/package-stream-verified",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json-summary",
+        "--coverage.reporter=json"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 1,
+      "log": "apps/office/coverage/package-stream-coverage-verified.log",
+      "result": "156 tests pass; unchanged six-owner100 coverage fails S584/591 B325/333 F110/110 L533/535",
+      "sha256": "b104128f0f10e439017cac2a34e5f1f05ebf4a531d8b51ac94d0103db2bdaaea"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/sc/source/filter/xml/ods.test.ts",
+        "src/sc/browser/filter/xml/ods-worker-runtime.test.ts",
+        "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+        "src/sc/source/ui/docshell/impex.test.ts",
+        "src/sc/source/ui/docshell/impex.admission.test.ts",
+        "src/sc/source/ui/docshell/docsh.csv-export.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-regressions.log",
+      "result": "76 tests/6 files pass",
+      "sha256": "d202267a68085e06c58e82a361588e12d27130560895e5ee8fef46c20a6a306e"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "scripts/native-sax-input-boundary.test.ts",
+        "scripts/native-inline-sequence-boundary.test.ts",
+        "scripts/check-source-provenance.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/package-stream-tooling.log",
+      "result": "8 tests/3 files pass",
+      "sha256": "839adec8bde39b0b3c88f96304d10974457d7e782b4af10401d327a183606833"
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 535,
+        "covered": 533,
+        "skipped": 0,
+        "pct": 99.62
+      },
+      "statements": {
+        "total": 591,
+        "covered": 584,
+        "skipped": 0,
+        "pct": 98.81
+      },
+      "functions": {
+        "total": 110,
+        "covered": 110,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 333,
+        "covered": 325,
+        "skipped": 0,
+        "pct": 97.59
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/comphelper/source/xml/ofopxmlhelper.ts": {
+      "lines": {
+        "total": 87,
+        "covered": 87,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 21,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 94,
+        "covered": 94,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 47,
+        "covered": 47,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/core/fragmenthandler.ts": {
+      "lines": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 10,
+        "covered": 10,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 13,
+        "covered": 13,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/core/xmlfilterbase.ts": {
+      "lines": {
+        "total": 76,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 16,
+        "covered": 16,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 81,
+        "covered": 81,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 48,
+        "covered": 48,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/helper/zipstorage.ts": {
+      "lines": {
+        "total": 49,
+        "covered": 49,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 56,
+        "covered": 56,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sax/source/fastparser/fastparser.ts": {
+      "lines": {
+        "total": 203,
+        "covered": 201,
+        "skipped": 0,
+        "pct": 99.01
+      },
+      "functions": {
+        "total": 40,
+        "covered": 40,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 227,
+        "covered": 220,
+        "skipped": 0,
+        "pct": 96.91
+      },
+      "branches": {
+        "total": 121,
+        "covered": 113,
+        "skipped": 0,
+        "pct": 93.38
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts": {
+      "lines": {
+        "total": 107,
+        "covered": 107,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 120,
+        "covered": 120,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 95,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "testCounts": {
+    "focused": 156,
+    "ODFAndCSV": 76,
+    "tooling": 8,
+    "writerResources": 2,
+    "total": 242
+  },
+  "scope": "Package input, fragment filter and Writer document streams now return actual Reference<XInputStream>. Genuine signed Sequence/SequenceInputStream at the browser ZIP boundary. Actual InputSource feeds XMLFile2UTFConverter and the shared host SAX backend, including relationship/content-type metadata and Writer table/change contexts. Local XML string shortcuts removed. Independent opens, shared return-value positions, retained reference ownership, VBA temporary/failure cleanup and actual caught UNO exception destruction are exercised. Existing UI/open/save/autosave/recovery policy preserved.",
+  "limits": [
+    "Full native XStorage/XStream/XRelationshipAccess/StorageBase hierarchy, input-disconnection/getInputStream lifecycle and generated token/UNO fragment/StringPair service contracts remain unverified.",
+    "Host expanded-name fragment callbacks and libxml2 encoding/diagnostic/locator equivalence remain unverified.",
+    "Native ABI/threading/pointer/constructor-allocation unwind remain unverified.",
+    "Global six-owner100 coverage fails; five whole-file owners100 in the same map do not make the full profile pass. No thresholds, exclusions or private state modified.",
+    "Complete DOCX/XLSX model/filter/worker/UI import/export/reopen acceptance remains pending.",
+    "Full suites remain on the approved ten-completed-task cadence."
+  ],
+  "correctedDuringVerification": [
+    "Old test callers decoded byte arrays; all affected consumers now read and release real stream Reference return values.",
+    "Short malformed/cancellation fixtures did not reach native eight-byte recognition; intended error tests now use recognized input, while explicit short-prefix tests preserve known CALC-363/WRITER200 EOF-loss behavior.",
+    "BOMless UTF16 fixtures now carry an XML declaration to exercise the actual native signature path; the removed permissive local decoder is not preserved.",
+    "Content-type test incorrectly assumed Override for application/xml; original WriteContentTypes emits its predefined xml Default, which is now asserted.",
+    "New test-local Closed fragment class lacked JSDoc; repaired, then final JSDoc/lint/format/typecheck checks pass."
+  ],
+  "finalNonsemanticEdits": "After the final successful test profile, moved import declarations before constants and clarified comments/documentation only; executable bodies are unchanged. Final typecheck/JSDoc/ESLint/Prettier pass."
+}

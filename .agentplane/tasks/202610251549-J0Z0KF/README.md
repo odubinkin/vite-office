@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 53
+revision: 56
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:39:29.524Z"
+  updated_at: "2026-10-28T14:57:20.757Z"
   updated_by: "CODER"
-  note: "Bounded native oox FastParser checkpoint:42 targeted tests pass, whole-new-owner coverage100 S37/37 B15/15 F9/9 L34/34, typecheck/build/static/dependency/docs/source/provenance/registry/resource/doctor/routing checks pass. Full task remains incomplete: genuine StorageBase/fragment migration, complete UNO parser handlers and DOCX/XLSX package/model/filter/Worker/UI acceptance pending. Previous broader SAX coverage failure is not superseded. Evidence: evidence/native-oox-fast-parser-checkpoint.json."
-  attempts: 17
+  note: "Bounded native OOXML package input checkpoint:242 targeted tests pass; native input Reference/Sequence ownership, metadata, real DOCX contexts and exporter reopen tested. Build/static/type/source/provenance/registry/resources/docs/lint/format/doctor/routing pass. Unchanged six-owner100 gate fails S584/591 B325/333 F110/110 L533/535; five owners100 do not supersede full failure. Full XStorage/XStream/fragment services and DOCX/XLSX model/filter/worker/UI acceptance pending. Evidence: evidence/native-oox-package-input-checkpoint.json."
+  attempts: 18
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -280,8 +283,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:57:20.757Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native OOXML package input checkpoint:242 targeted tests pass; native input Reference/Sequence ownership, metadata, real DOCX contexts and exporter reopen tested. Build/static/type/source/provenance/registry/resources/docs/lint/format/doctor/routing pass. Unchanged six-owner100 gate fails S584/591 B325/333 F110/110 L533/535; five owners100 do not supersede full failure. Full XStorage/XStream/fragment services and DOCX/XLSX model/filter/worker/UI acceptance pending. Evidence: evidence/native-oox-package-input-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-10-28T14:57:41.606Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:39:42.458Z"
+doc_updated_at: "2026-10-28T14:57:41.606Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -806,6 +822,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T14:57:20.757Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native OOXML package input checkpoint:242 targeted tests pass; native input Reference/Sequence ownership, metadata, real DOCX contexts and exporter reopen tested. Build/static/type/source/provenance/registry/resources/docs/lint/format/doctor/routing pass. Unchanged six-owner100 gate fails S584/591 B325/333 F110/110 L533/535; five owners100 do not supersede full failure. Full XStorage/XStream/fragment services and DOCX/XLSX model/filter/worker/UI acceptance pending. Evidence: evidence/native-oox-package-input-checkpoint.json.
+    Attempts: 18
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:57:20.145Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -878,6 +924,10 @@ sections:
     - Observation: Original oox FastParser source/input overloads, namespace registration and independent Reference close guard now use actual native owners. Header default bCloseStream=false is preserved. The initial namespace test used XML prefix w instead of original generated alias doc and is corrected.
       Impact: 42 targeted scenarios and all scoped static/build checks pass; new whole-file owner coverage is100 S37/37 B15/15 F9/9 L34/34. Complete parser UNO services, genuine StorageBase/fragment input migration and DOCX/XLSX core/UI acceptance remain incomplete. Prior broader SAX coverage failure remains valid.
       Resolution: Evidence: evidence/native-oox-fast-parser-checkpoint.json. Continue genuine package and fragment contract migration without fake storage/handler service identity. Correction: previous claim that an initial regression command exited1 was not established because concurrent results were unlabeled; retain final exact successful regression output and structured command/exit evidence.
+
+    - Observation: OOXML package input, FragmentHandler and Writer document streams now use actual Reference<XInputStream>; real SequenceInputStream cells feed InputSource/XMLFile2UTFConverter and shared SAX. Local filter/Writer byte-to-XML shortcuts are removed. Metadata, Writer table/change contexts, shared positions, independent opens, retained references and actual UNO read-exception cleanup are exercised.
+      Impact: 242 targeted scenarios pass:156 focused,76 ODF/CSV,8 tooling,2 resources. Five whole-file owners are100 in the same map; the unchanged six-owner100 gate still fails S584/591 B325/333 F110/110 L533/535 in existing SAX paths. Full native storage/fragment services and DOCX/XLSX core/worker/UI acceptance remain incomplete.
+      Resolution: Evidence: evidence/native-oox-package-input-checkpoint.json. Preserve CALC-363/WRITER200 EOF prefix loss through package input; malformed/cancellation fixtures now reach recognition and UTF16 signature fixtures carry declarations. Final build/static/source/registry/resources/type/lint/format checks pass after documented test expectation and JSDoc repairs. Continue genuine storage/fragment/model/filter integration without replacement service identity.
 id_source: "generated"
 ---
 ## Summary
@@ -1412,6 +1462,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T14:57:20.757Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native OOXML package input checkpoint:242 targeted tests pass; native input Reference/Sequence ownership, metadata, real DOCX contexts and exporter reopen tested. Build/static/type/source/provenance/registry/resources/docs/lint/format/doctor/routing pass. Unchanged six-owner100 gate fails S584/591 B325/333 F110/110 L533/535; five owners100 do not supersede full failure. Full XStorage/XStream/fragment services and DOCX/XLSX model/filter/worker/UI acceptance pending. Evidence: evidence/native-oox-package-input-checkpoint.json.
+Attempts: 18
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:57:20.145Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1488,3 +1568,7 @@ DecisionContextRef:
 - Observation: Original oox FastParser source/input overloads, namespace registration and independent Reference close guard now use actual native owners. Header default bCloseStream=false is preserved. The initial namespace test used XML prefix w instead of original generated alias doc and is corrected.
   Impact: 42 targeted scenarios and all scoped static/build checks pass; new whole-file owner coverage is100 S37/37 B15/15 F9/9 L34/34. Complete parser UNO services, genuine StorageBase/fragment input migration and DOCX/XLSX core/UI acceptance remain incomplete. Prior broader SAX coverage failure remains valid.
   Resolution: Evidence: evidence/native-oox-fast-parser-checkpoint.json. Continue genuine package and fragment contract migration without fake storage/handler service identity. Correction: previous claim that an initial regression command exited1 was not established because concurrent results were unlabeled; retain final exact successful regression output and structured command/exit evidence.
+
+- Observation: OOXML package input, FragmentHandler and Writer document streams now use actual Reference<XInputStream>; real SequenceInputStream cells feed InputSource/XMLFile2UTFConverter and shared SAX. Local filter/Writer byte-to-XML shortcuts are removed. Metadata, Writer table/change contexts, shared positions, independent opens, retained references and actual UNO read-exception cleanup are exercised.
+  Impact: 242 targeted scenarios pass:156 focused,76 ODF/CSV,8 tooling,2 resources. Five whole-file owners are100 in the same map; the unchanged six-owner100 gate still fails S584/591 B325/333 F110/110 L533/535 in existing SAX paths. Full native storage/fragment services and DOCX/XLSX core/worker/UI acceptance remain incomplete.
+  Resolution: Evidence: evidence/native-oox-package-input-checkpoint.json. Preserve CALC-363/WRITER200 EOF prefix loss through package input; malformed/cancellation fixtures now reach recognition and UTF16 signature fixtures carry declarations. Final build/static/source/registry/resources/type/lint/format checks pass after documented test expectation and JSDoc repairs. Continue genuine storage/fragment/model/filter integration without replacement service identity.
