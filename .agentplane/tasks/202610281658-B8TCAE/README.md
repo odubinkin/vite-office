@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 26
+revision: 27
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:54:03.564Z"
+doc_updated_at: "2026-10-28T21:06:43.310Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -127,6 +127,10 @@ sections:
     - Observation: Complete configured application coverage is collecting at stable commitd660986a2b69/application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd with unchanged100 thresholds. During read-only source audit,23 genuine bounded HTML/tag and borrowed prefix-line lookup cases were compiled from unchanged original C and match the current portable owners.
       Impact: Prepared cases exercise independent scanner limit/query arguments; they do not inject invalid private reference/container/mark state. The application/test tree remains frozen until complete collection ends. Source audit A02/A03 distinguishes added TypeScript missing-line guards from original native reference helper preconditions; no native invalid dereference or invented failure result is used.
       Resolution: Preserve pending original U01/U02 decisions and unapproved A01/A02/A03 audits. Integrate prepared native tests only after baseline collection finishes, then continue complete coverage work and final verification/publication/synchronization.
+
+    - Observation: Five original RTL allocation-failure caller outcomes are prepared and match current portable event streams. The existing native extern rtl_allocateString/rtl_freeString slots provide the failure environment; original core functions, source lengths, fields and reference counts are not replaced. NoThrow concat/append return null and release the old destination in original order; byte reserve/raw/owned replacement assert in isolated native processes with core dumps disabled.
+      Impact: Tests can cover admitted resource-error paths through the existing original contract, rather than introducing fake factories or source-method replacements. Native pre-abort initialized events and nonfatal diagnostics are independent expectations. Local checked Error bindings are explicitly distinguished from native SIGABRT, with no native C++ exception/ABI claim.
+      Resolution: Preserve the frozen application tree during complete coverage collection. Integrate prepared23 scanner/line and5 allocation-failure cases only after session3491 finishes and its snapshot is checked. User exceptions remain unapplied.
 id_source: "generated"
 ---
 ## Summary
@@ -234,3 +238,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Complete configured application coverage is collecting at stable commitd660986a2b69/application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd with unchanged100 thresholds. During read-only source audit,23 genuine bounded HTML/tag and borrowed prefix-line lookup cases were compiled from unchanged original C and match the current portable owners.
   Impact: Prepared cases exercise independent scanner limit/query arguments; they do not inject invalid private reference/container/mark state. The application/test tree remains frozen until complete collection ends. Source audit A02/A03 distinguishes added TypeScript missing-line guards from original native reference helper preconditions; no native invalid dereference or invented failure result is used.
   Resolution: Preserve pending original U01/U02 decisions and unapproved A01/A02/A03 audits. Integrate prepared native tests only after baseline collection finishes, then continue complete coverage work and final verification/publication/synchronization.
+
+- Observation: Five original RTL allocation-failure caller outcomes are prepared and match current portable event streams. The existing native extern rtl_allocateString/rtl_freeString slots provide the failure environment; original core functions, source lengths, fields and reference counts are not replaced. NoThrow concat/append return null and release the old destination in original order; byte reserve/raw/owned replacement assert in isolated native processes with core dumps disabled.
+  Impact: Tests can cover admitted resource-error paths through the existing original contract, rather than introducing fake factories or source-method replacements. Native pre-abort initialized events and nonfatal diagnostics are independent expectations. Local checked Error bindings are explicitly distinguished from native SIGABRT, with no native C++ exception/ABI claim.
+  Resolution: Preserve the frozen application tree during complete coverage collection. Integrate prepared23 scanner/line and5 allocation-failure cases only after session3491 finishes and its snapshot is checked. User exceptions remain unapplied.
