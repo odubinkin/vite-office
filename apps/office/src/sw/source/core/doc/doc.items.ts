@@ -46,3 +46,50 @@ export function ForEachCharacterFontItem(
     }
   }
 }
+
+/** Original character-item template visits named character styles and the accumulated automatic-style vector in native family order. @param doc - Actual document. @param which - Typed identity binding. @param callback - Borrowed item callback. @returns Nothing. */
+function ForEachCharacterItem<T extends SfxPoolItem>(
+  doc: SwDoc,
+  which: number,
+  callback: (item: T) => boolean,
+): void {
+  for (const format of doc.GetCharFormats()) {
+    const item = format.GetAttrSet().GetItemIfSet(which) as T | undefined;
+    if (item !== undefined && !callback(item)) return;
+  }
+  const styles: SfxItemSet[] = [];
+  try {
+    for (const family of [
+      SwAutoStyleFamily.AUTO_STYLE_CHAR,
+      SwAutoStyleFamily.AUTO_STYLE_RUBY,
+      SwAutoStyleFamily.AUTO_STYLE_PARA,
+      SwAutoStyleFamily.AUTO_STYLE_NOTXT,
+    ]) {
+      doc.GetIStyleAccess().getAllStyles(styles, family);
+      for (const set of styles) {
+        const item = set.GetItemIfSet(which) as T | undefined;
+        if (item !== undefined && !callback(item)) return;
+      }
+    }
+  } finally {
+    for (const set of styles) releaseStyleHandle(set);
+  }
+}
+/** Original document color-item visitor. @param doc - Actual document. @param callback - Native callback. @returns Nothing. */
+export function ForEachCharacterColorItem(
+  doc: SwDoc,
+  callback: (item: SvxColorItem) => boolean,
+): void {
+  ForEachCharacterItem(doc, RES_CHRATR_COLOR, callback);
+}
+/** Original document underline-item visitor. @param doc - Actual document. @param callback - Native callback. @returns Nothing. */
+export function ForEachCharacterUnderlineItem(
+  doc: SwDoc,
+  callback: (item: SvxUnderlineItem) => boolean,
+): void {
+  ForEachCharacterItem(doc, RES_CHRATR_UNDERLINE, callback);
+}
+import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import type { SvxColorItem } from "../../../../editeng/inc/colritem";
+import type { SvxUnderlineItem } from "../../../../editeng/source/items/textitem";
+import { RES_CHRATR_COLOR, RES_CHRATR_UNDERLINE } from "../../../inc/hintids";

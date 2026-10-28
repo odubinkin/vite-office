@@ -75,3 +75,15 @@ export const SID_ATTR_CHAR_COLOR = 10017 as const;
 export const SID_ATTR_CHAR_LANGUAGE = 10020 as const;
 export const SID_ATTR_CHAR_CJK_LANGUAGE = 10889 as const;
 export const SID_ATTR_CHAR_CTL_LANGUAGE = 10894 as const;
+
+/** Original SID_ATTR_CHAR_CASEMAP. */
+export const SID_ATTR_CHAR_CASEMAP = 10019 as const;
+/** Original SID_ATTR_PARA_ADJUST. */
+export const SID_ATTR_PARA_ADJUST = 10027 as const;
+/** Original SID_ATTR_ULSPACE, distinct from the paragraph-dialog slot. */
+export const SID_ATTR_ULSPACE = 10049 as const;
+/** Original SID_ATTR_FRAMEDIRECTION. */
+export const SID_ATTR_FRAMEDIRECTION = 10944 as const;
+
+/** Native frame/paragraph background brush slot, SID_SVX_START +1. */
+export const SID_ATTR_BRUSH = 10001 as const;

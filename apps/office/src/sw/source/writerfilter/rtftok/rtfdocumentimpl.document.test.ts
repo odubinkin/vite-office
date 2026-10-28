@@ -4,7 +4,7 @@ import { expect, it } from "vitest";
 
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 
-import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
+import { DFLT_ESC_PROP, DFLT_ESC_AUTO_SUPER } from "../../../../editeng/inc/escapementitem";
 
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
@@ -635,7 +635,7 @@ it("maps stylesheet paragraph controls to available Writer styles", /** Checks m
 
 it("creates a document-owned collection for an external RTF paragraph style", /** Checks creates a document-owned collection for an external RTF paragraph style. @returns Test completion or assertion result. */ () => {
   const document = read(
-    "{\\rtf1{\\stylesheet{\\s42\\b\\fs28\\qc\\li180 Custom Note;}}\\pard\\s42 Styled}",
+    "{\\rtf1{\\stylesheet{\\s42\\b\\fs28\\qc\\li180 Custom Note;}}\\pard\\s42\\b\\fs28 Styled}",
   );
   let reopened;
   try {
@@ -649,7 +649,7 @@ it("creates a document-owned collection for an external RTF paragraph style", /*
       fontSizeTwips: 280,
     });
     reopened = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(document)).Tokenize(),
+      new RtfTokenizer(RtfExport.WriteDocument(document)).Tokenize(),
     );
     expect(reopened.paragraphs[0]?.GetParagraphStyle()).toBe("custom-note");
     expect(reopened.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
@@ -660,14 +660,14 @@ it("creates a document-owned collection for an external RTF paragraph style", /*
   }
 });
 
-it("resolves forward stylesheet based-on and next references after all styles exist", /** Checks resolves forward stylesheet based-on and next references after all styles exist. @returns Test completion or assertion result. */ () => {
+it("preserves source unresolved forward stylesheet parent and follow names", /** Source names are captured immediately without deferred numeric-index fixup (WRITER206). @returns Test completion or assertion result. */ () => {
   const document = read(
-    "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2 Styled}",
+    "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2\\b Styled}",
   );
   try {
     const child = document.FindTextFormatCollByName("Child");
-    expect(child?.DerivedFrom()?.GetName()).toBe("Parent");
-    expect(child?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(child?.DerivedFrom()).toBe(document.GetDfltTextFormatColl());
+    expect(child?.GetNextTextFormatColl()).toBe(child);
     expect(document.paragraphs[0]?.GetTextFormatColl()).toBe(child);
     expect(projectWriterTextRuns(document.paragraphs[0])[0]?.attributes.bold).toBe(true);
   } finally {
@@ -745,7 +745,7 @@ it("keeps qd distributed-last-line alignment in styles and direct overrides", /*
   }
 });
 
-it("inherits RTF style characters until an explicit run control overrides them", /** Checks inherits RTF style characters until an explicit run control overrides them. @returns Test completion or assertion result. */ () => {
+it("retains style definitions while native missing run-property defaults override their appearance", /** Checks inherits RTF style characters until an explicit run control overrides them. @returns Test completion or assertion result. */ () => {
   const document = read("{\\rtf1{\\stylesheet{\\s3\\b Strong Note;}}\\pard\\s3 Yes {\\b0 No} Yes}");
   try {
     expect(
@@ -754,11 +754,7 @@ it("inherits RTF style characters until an explicit run control overrides them",
           run,
         ) => [run.text, run.attributes.bold],
       ),
-    ).toEqual([
-      ["Yes ", true],
-      ["No", false],
-      [" Yes", true],
-    ]);
+    ).toEqual([["Yes No Yes", false]]);
   } finally {
     document.Dispose();
   }
@@ -803,7 +799,7 @@ it("imports first-line indentation, strikeout, superscript and hyperlink field r
         ) => run.text === "raised",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_SUPER,
+      offset: DFLT_ESC_AUTO_SUPER,
       height: DFLT_ESC_PROP,
     });
     expect(

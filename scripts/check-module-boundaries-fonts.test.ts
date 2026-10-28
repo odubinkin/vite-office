@@ -40,3 +40,9 @@ it("admits original font configuration enum ownership without application depend
     ),
   ).toMatch(/browser adapters/u);
 });
+
+it("admits the native MS symbol converter dependency without reverse application coupling", /** Original util.cxx consumes unotools/fontcvt.hxx and fontdefs.hxx; Library_msfilter links utl. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("filter", "unotools")).toBe(false);
+  expect(isForbiddenModuleEdge("unotools", "filter")).toBe(true);
+  expect(isForbiddenModuleEdge("filter", "sw")).toBe(true);
+});

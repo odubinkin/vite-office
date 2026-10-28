@@ -17,17 +17,20 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/ww8/rtfexport.encoding.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx#SwWW8AttrIter::GetSnippet"
+        "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8nds.cxx#SwWW8AttrIter::GetSnippet",
+        "apps/office/src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts"
       ],
-      "justification": "Original represented text-snippet UTF16 slicing, hard line break, hard/soft hyphen substitutions, and CH_TXTATR_BREAKWORD removal. The current Writer item pool has no RES_CHRATR_CASEMAP, so only source non-title-case behavior is admitted. RTF run emission consumes this owner before RunText/RawText. Full MSWord attribute/script/bidi iteration, capitalization with ICU/break iterators and other wrtw8nds.cxx responsibilities remain unported and are not certified.",
+      "justification": "Original represented text-snippet UTF16 slicing, hard line break, hard/soft hyphen substitutions, and CH_TXTATR_BREAKWORD removal. The current Writer item pool has no RES_CHRATR_CASEMAP, so only source non-title-case behavior is admitted. RTF run emission consumes this owner before RunText/RawText. Full MSWord attribute/script/bidi iteration, capitalization with ICU/break iterators and other wrtw8nds.cxx responsibilities remain unported and are not certified. S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified.",
       "knownViolations": [],
       "localSymbols": [
-        "SwWW8AttrIter"
+        "SwWW8AttrIter",
+        "PrepareParagraphNumbering"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/wrtw8nds.cxx",
       "upstreamSymbols": [
-        "SwWW8AttrIter::GetSnippet"
+        "SwWW8AttrIter::GetSnippet",
+        "MSWordExportBase::OutputTextNode"
       ]
     }
   }

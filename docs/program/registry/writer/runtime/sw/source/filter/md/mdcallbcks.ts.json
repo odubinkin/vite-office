@@ -17,16 +17,19 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/md/mdcallbcks.ts#parseMarkdownSpans",
-        "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx#SwMarkdownParser::enter_span_callback"
+        "vendor/libreoffice-reference/sw/source/filter/md/mdcallbcks.cxx#SwMarkdownParser::enter_span_callback",
+        "apps/office/src/sw/source/filter/md/swmd.test.ts",
+        "apps/office/src/tools/source/fsys/urlobj.object.ts#GetAbsURL"
       ],
-      "justification": "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open.",
+      "justification": "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open. Markdown hyperlink callbacks now use the actual native INetURLObject::GetAbsURL strict-relative path, replacing browser URL resolution. This preserves original default-argument conversion-failure fallback, host/port spelling, absolute-path dot segments, query-only directory resolution and leading-fragment shortcut. Actual MarkdownReader/SwDoc hyperlink tests distinguish these cases; no complete Markdown/filter or compiled Writer parity promotion is made.",
       "knownViolations": [],
       "localSymbols": [
         "enter_block_callback",
         "leave_block_callback",
         "enter_span_callback",
         "leave_span_callback",
-        "text_callback"
+        "text_callback",
+        "resolveMarkdownLink"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/md/mdcallbcks.cxx",

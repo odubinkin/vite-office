@@ -118,7 +118,7 @@ export class HTMLAttr {
   public m_bLikePara = false;
   public m_bValid = true;
   public readonly m_pItem: SfxPoolItem;
-  public m_xAttrTab: HTMLAttrTable;
+  public m_xAttrTab: HTMLAttrTable | null;
   public m_pNext: HTMLAttr | null = null;
   public m_pPrev: HTMLAttr | null = null;
   public m_ppHead: HTMLAttrHead | null;
@@ -129,7 +129,7 @@ export class HTMLAttr {
     position: SwPosition,
     item: SfxPoolItem,
     head: HTMLAttrHead | null,
-    table: HTMLAttrTable,
+    table: HTMLAttrTable | null,
   );
   /** Original copy constructor starts a fresh chain at the supplied end. @param source - Source attribute. @param endNode - End paragraph. @param endContent - Raw end offset. @param head - Stable table slot. @param table - Retained native table. @returns New owner. */
   public constructor(
@@ -137,7 +137,7 @@ export class HTMLAttr {
     endNode: SwNode,
     endContent: number,
     head: HTMLAttrHead | null,
-    table: HTMLAttrTable,
+    table: HTMLAttrTable | null,
   );
   /** Implements the original position and copy construction overloads. @param source - Cursor or attribute. @param itemOrEnd - Item or end node. @param headOrEnd - Head or end offset. @param tableOrHead - Table or head. @param copiedTable - Copy table. @returns New owner. */
   public constructor(
@@ -145,7 +145,7 @@ export class HTMLAttr {
     itemOrEnd: SfxPoolItem | SwNode,
     headOrEnd: HTMLAttrHead | null | number,
     tableOrHead: HTMLAttrTable | HTMLAttrHead | null,
-    copiedTable?: HTMLAttrTable,
+    copiedTable?: HTMLAttrTable | null,
   ) {
     if (source instanceof HTMLAttr) {
       this.m_nStartPara = new SwNodeIndex(source.m_nStartPara.GetNode());
@@ -156,7 +156,7 @@ export class HTMLAttr {
       this.m_bLikePara = source.m_bLikePara;
       this.m_bValid = source.m_bValid;
       this.m_pItem = source.m_pItem.Clone() as SfxPoolItem;
-      this.m_xAttrTab = copiedTable as HTMLAttrTable;
+      this.m_xAttrTab = copiedTable as HTMLAttrTable | null;
       this.m_ppHead = tableOrHead as HTMLAttrHead | null;
     } else {
       this.m_nStartPara = new SwNodeIndex(source.GetNode());
@@ -164,7 +164,7 @@ export class HTMLAttr {
       this.m_nStartContent = source.GetContentIndex();
       this.m_nEndContent = source.GetContentIndex();
       this.m_pItem = (itemOrEnd as SfxPoolItem).Clone() as SfxPoolItem;
-      this.m_xAttrTab = tableOrHead as HTMLAttrTable;
+      this.m_xAttrTab = tableOrHead as HTMLAttrTable | null;
       this.m_ppHead = headOrEnd as HTMLAttrHead | null;
     }
   }
@@ -265,6 +265,10 @@ export class HTMLAttr {
     }
     tail.m_pPrev = previous;
   }
+  /** Original destructor releases this cloned item, never borrowed chain links; node indices use existing identity wrappers. @returns Nothing. */
+  public SourceDispose(): void {
+    this.m_pItem.Dispose();
+  }
   /** Clears the pending chain without touching its owners. @returns Nothing. */
   public ClearPrev(): void {
     this.m_pPrev = null;
@@ -334,6 +338,7 @@ export function DeleteAttr(parser: SwHTMLAttributeState, attr: HTMLAttr): void {
   }
   if (last !== null) last.m_pNext = next;
   else if (head !== null) head[0] = next;
+  attr.SourceDispose();
 }
 /** Moves all open lists into the saved native table and rebinds every open head.
  * @param parser - Borrowed native parser fields.
@@ -358,7 +363,7 @@ export function SaveAttrTab(parser: SwHTMLAttributeState, saved: HTMLAttrTable):
 }
 
 /** Source script-dependent item classification; script type stays zero for unrelated items. @param attr - Native attribute. @returns Script dependency and native ScriptType. */
-function lcl_swhtml_getItemInfo(attr: HTMLAttr): readonly [boolean, number] {
+export function lcl_swhtml_getItemInfo(attr: HTMLAttr): readonly [boolean, number] {
   switch (attr.GetItem().Which()) {
     case H.RES_CHRATR_FONT:
     case H.RES_CHRATR_FONTSIZE:
@@ -474,5 +479,6 @@ export function EndAttr(
   if (last !== null) last.m_pNext = next;
   else if (head !== null) head[0] = next;
   if (movedBack) moveAttributeBoundary(parser, false);
+  if (!insert) attr.SourceDispose();
   return result;
 }

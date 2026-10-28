@@ -1,7 +1,7 @@
 /** @fileoverview Consumed DomainMapper resource-to-model contracts through actual Writer native text, paragraph, style and pooled-item APIs. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { DomainMapper } from "./DomainMapper";
-import { DomainMapper_Impl, ContextType as C } from "./DomainMapper_Impl";
+import { ContextType as C } from "./DomainMapper_Impl";
 import { PropertyMap } from "./PropertyMap";
 import { PropertyIds as P } from "./PropertyIds";
 import { ThemeColorHandler } from "./ThemeColorHandler";
@@ -34,7 +34,7 @@ import { OUString } from "../../../../sal/inc/rtl/ustring";
 function session() {
   const doc = createWriterDocument(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper(model);
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML);
   return { doc, model, mapper };
 }
 /** Original native modifier construction. @param id - ID. @param value - Value. @returns Modifier. */
@@ -294,7 +294,7 @@ it("retains native positive-limit asymmetry and float upward versus integral uni
 
 it("retains native color receiver defaults and reference context lifetime", /** Covers shared style maps and actual body paragraph disposal. @returns Nothing. */ () => {
   const { model } = session(),
-    impl = new DomainMapper_Impl(model),
+    impl = new DomainMapper(model, SourceDocumentType.OOXML).impl,
     shared = new PropertyMap();
   expect(impl.GetTopContext()).toBeNull();
   expect(impl.GetTopContextOfType(C.CONTEXT_CHARACTER)).toBeNull();
@@ -423,3 +423,114 @@ it("retains native underline token variants, highlight colors, false weights and
   shared.dispose();
   model.dispose();
 });
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";
+
+it("distinguishes native source profiles for the same numeric highlight payload", /** The exact same integer is an OOXML color token or an RTF RGB value according to the original SourceDocumentType. @returns Nothing. */ () => {
+  const doc = createWriterDocument(),
+    model = new SwXTextDocument(doc);
+  const rtf = new DomainMapper(model, SourceDocumentType.RTF),
+    xml = new DomainMapper(model, SourceDocumentType.OOXML);
+  try {
+    expect(rtf.IsRTFImport()).toBe(true);
+    expect(xml.IsOOXMLImport()).toBe(true);
+    for (const mapper of [rtf, xml]) {
+      mapper.startCharacterGroup();
+      mapper.sprm(sprm(N.LN_EG_RPrBase_highlight, V.createInteger(0x123456)));
+    }
+    const color = rtf.impl.GetTopContext()?.getProperty(P.PROP_CHAR_HIGHLIGHT)?.[1];
+    expect(color).toBeDefined();
+    const n: [number] = [0];
+    try {
+      expect(color?.extract(n, "sal_Int32")).toBe(true);
+      expect(n[0]).toBe(0x123456);
+    } finally {
+      color?.dispose();
+    }
+    expect(xml.impl.GetTopContext()?.getProperty(P.PROP_CHAR_HIGHLIGHT)).toBeUndefined();
+    rtf.endCharacterGroup();
+    xml.endCharacterGroup();
+  } finally {
+    rtf.dispose();
+    xml.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
+
+it("defers an owned numeric position until text insertion and uses final UNO character height", /** Position and height may arrive in either order; final text consumes the current stream's value once. @returns Nothing. */ () => {
+  const { doc, model, mapper } = session();
+  try {
+    mapper.startParagraphGroup();
+    mapper.startCharacterGroup();
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(-5)));
+    const context = mapper.impl.GetTopContext();
+    assert(context);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT)).toBeUndefined();
+    mapper.sprm(sprm(N.LN_EG_RPrBase_sz, V.createInteger(40)));
+    send(mapper, "A");
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT)).toBe(-13);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT_HEIGHT)).toBe(100);
+    mapper.endCharacterGroup();
+    mapper.startCharacterGroup();
+    send(mapper, "B");
+    const next = mapper.impl.GetTopContext();
+    assert(next);
+    expect(scalar(next, P.PROP_CHAR_ESCAPEMENT)).toBeUndefined();
+    mapper.endCharacterGroup();
+    mapper.endParagraphGroup();
+  } finally {
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
+it("ignores stylesheet position in document defaults and retains the native paragraph sign asymmetry", /** Uses actual stylesheet context and entry owners rather than the RTF legacy callback. @returns Nothing. */ () => {
+  const { doc, model, mapper } = session();
+  const entry = new StyleSheetEntry();
+  entry.m_nStyleTypeCode = StyleType.Paragraph;
+  mapper.impl.SetStyleSheetImport(true);
+  mapper.impl.GetStyleSheetTable().SetCurrentEntry(entry);
+  mapper.impl.PushStyleProperties(entry.m_pProperties);
+  try {
+    mapper.impl.SetDocDefaultsImport(true);
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(10)));
+    expect(scalar(entry.m_pProperties, P.PROP_CHAR_ESCAPEMENT)).toBeUndefined();
+    mapper.impl.SetDocDefaultsImport(false);
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(-10)));
+    expect(scalar(entry.m_pProperties, P.PROP_CHAR_ESCAPEMENT)).toBeUndefined();
+    mapper.sprm(sprm(N.LN_EG_RPrBase_sz, V.createInteger(40)));
+    mapper.ProcessDeferredStyleCharacterProperties();
+    expect(scalar(entry.m_pProperties, P.PROP_CHAR_ESCAPEMENT)).toBe(-25);
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(10)));
+    expect(scalar(entry.m_pProperties, P.PROP_CHAR_ESCAPEMENT)).toBe(14000);
+    expect(scalar(entry.m_pProperties, P.PROP_CHAR_ESCAPEMENT_HEIGHT)).toBe(58);
+  } finally {
+    mapper.impl.PopProperties(C.CONTEXT_STYLESHEET);
+    mapper.impl.GetStyleSheetTable().SetCurrentEntry(null);
+    entry.dispose();
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
+it("retains native zero-font position fallback and the no-op of a zero resource value", /** An unavailable size uses native default super/sub rather than dividing by zero. @returns Nothing. */ () => {
+  const { doc, model, mapper } = session();
+  try {
+    mapper.startCharacterGroup();
+    mapper.sprm(sprm(N.LN_EG_RPrBase_sz, V.createInteger(0)));
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(-10)));
+    mapper.sprm(sprm(N.LN_EG_RPrBase_position, V.createInteger(0)));
+    mapper.impl.processDeferredCharacterProperties();
+    const context = mapper.impl.GetTopContext();
+    assert(context);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT)).toBe(-8);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT_HEIGHT)).toBe(100);
+    mapper.endCharacterGroup();
+  } finally {
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
+import { StyleSheetEntry, StyleType } from "./StyleSheetTable";

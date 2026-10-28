@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/writerfilter/inc/dmapper/DomainMapperFactory.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "rtf-filter",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.test.ts",
+        "vendor/libreoffice-reference/sw/source/writerfilter/inc/dmapper/DomainMapperFactory.hxx"
+      ],
+      "justification": "Original SourceDocumentType enum declaration order OOXML=0 and RTF=1 is consumed by real mapper construction and source-profile highlight handling. No source-format constructor default is invented; all callers supply the actual format. Full factory creation/service orchestration is unconsumed and is not advertised. Its omission is not an independent filter completion gate.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SourceDocumentType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/writerfilter/inc/dmapper/DomainMapperFactory.hxx",
+      "upstreamSymbols": [
+        "SourceDocumentType"
+      ]
+    }
+  }
+}

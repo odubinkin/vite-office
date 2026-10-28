@@ -11,7 +11,9 @@
       "wwFontHelper",
       "wwFontLess",
       "MSWordStyles",
-      "WriteDocx"
+      "WriteDocx",
+      "GetWWId",
+      "BuildGetSlot"
     ],
     "upstreamSymbols": [
       "wwFont::wwFont",
@@ -22,7 +24,10 @@
       "MSWordStyles::BuildWwNames",
       "wwFont::WriteDocx",
       "wwFont::WriteRtf",
-      "wwFontHelper::WriteFontTable"
+      "wwFontHelper::WriteFontTable",
+      "wwFontHelper::InitFontTable",
+      "MSWordStyles::GetWWId",
+      "BuildGetSlot"
     ],
     "evidence": {
       "local": [
@@ -32,7 +37,7 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
-          "marker": "round trips native RTF stylesheet parent and next links"
+          "marker": "retains native backward parent and unresolved forward follow links"
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
@@ -41,6 +46,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
           "marker": "WriteDocx"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-font-table.test.ts",
+          "marker": "registers source seeds"
         }
       ],
       "upstream": [
@@ -67,6 +76,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
           "marker": "wwFont::WriteDocx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "void wwFontHelper::InitFontTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "void MSWordExportBase::EnsureUsedNumberingTable"
         }
       ]
     },
@@ -76,7 +93,10 @@
       "Maps the represented built-in pool identities to their source Word style names, strips the source (WW) suffix for user styles and allocates unique ASCII-case-insensitive names with builtin names first.",
       "V4DQJW connects wwFont.WriteDocx and wwFontHelper.WriteFontTable to actual DocxAttributeOutput. Preserve empty-family omission, alternate-name admission, charset/family/pitch element order and ID-ordered font traversal. Only native font metadata is admitted for the current kernel without embedding; EmbedFont/doc-setting/native font-access responsibilities are unported and not replaced by dummy services. Existing shared RTF MSWordStyles behavior is unchanged.",
       "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary output, actual DocxExport association and complete format orchestration remain pending.",
-      "Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending."
+      "Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending.",
+      "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged.",
+      "S3HW1E Word style/cache integration: MSWordStyles now consumes the actual MSWordExportBase, appends non-default character formats before non-reserved paragraph formats and keeps source4091 limits, reserved heading slots, character self-next, identity lookup and builtin-first ASCII name disambiguation across both families. Native GetWWId and all91 original English names replace the partial paragraph-name map; consumed paragraph pool enum identities are admitted from the pinned header. Actual concrete exporters implement the native ExportFormat virtual. MSWordExportBase character GetId uses the actual initialized style table. Source GetSlot(null) selects the first empty reserved entry (WRITER201), not an invented missing sentinel. RTF style framing/colors/buffer flushing use native StartStyles/StartStyle/EndStyle/EndStyles, and InsStyle/GetStyle keep first-inserted property-only entries. Existing StyleDefinition string sinks bind EndStyle with explicit drained properties; full native OutputFormat/item-buffer contracts remain unverified. Full typed SwFormat auto-update state is not admitted; document export passes its represented native defaultfalse. The current core lacks native hidden default paragraph collection0, so the existing Standard-first logical paragraph table binding is retained and not certified as source ownership equivalence. Footnote materialization, list-style true branch, linked style graph, full OutColorTable collectors, character style importer and paragraph numbering dispatcher/restart integration remain explicit obligations. Unchanged compiled native style helpers plus original enums/operators match all65536 pool IDs,91 names and null slots1/10 under ASan/UBSan, with a scalar SwFormat/vector-entry carrier only; this is not complete Writer/style ABI or whole-module certification.",
+      " The style table retains its actual m_rExport owner. Both format GetId overloads use original slot sentinels; text output now uses actual paragraph-format identity and Standard slot0 for a missing style rather than suppressing its style control."
     ],
     "omittedResponsibilities": [
       "Full native framework/ABI and complete format orchestration are not certified; see admission.",

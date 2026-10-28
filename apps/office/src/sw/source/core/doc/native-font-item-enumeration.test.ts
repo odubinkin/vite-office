@@ -173,3 +173,53 @@ it.each(["false", "throw"])(
     }
   },
 );
+
+it("preserves the native accumulated color-style vector and releases all repeated shared handles", /** Checks native family aliasing and early/exception cleanup with actual style owners. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    handles: SfxItemSet[] = [];
+  try {
+    for (const [family, color] of [
+      [SwAutoStyleFamily.AUTO_STYLE_CHAR, 0x112233],
+      [SwAutoStyleFamily.AUTO_STYLE_NOTXT, 0x445566],
+    ] as const) {
+      const set = new SfxItemSet(doc.GetAttrPool(), WRITER_CHARACTER_WHICH_RANGES);
+      set.Put(new SvxColorItem(new Color(color), RES_CHRATR_COLOR));
+      handles.push(doc.GetIStyleAccess().getAutomaticStyle(set, family));
+      set.Dispose();
+    }
+    const baseline = handles.map(styleHandleUseCount),
+      colors: number[] = [];
+    doc.ForEachCharacterColorItem(
+      /** Collects actual source visit order. @param item - Borrowed color. @returns Continue. */ (
+        item,
+      ) => {
+        colors.push(item.GetValue().toInt32());
+        return true;
+      },
+    );
+    expect(colors).toEqual([
+      0x112233, 0x112233, 0x445566, 0x112233, 0x445566, 0x445566, 0x112233, 0x445566, 0x445566,
+      0x445566,
+    ]);
+    expect(handles.map(styleHandleUseCount)).toEqual(baseline);
+    doc.ForEachCharacterColorItem(
+      /** Stops at the first borrowed item. @returns Stop. */ () => false,
+    );
+    expect(handles.map(styleHandleUseCount)).toEqual(baseline);
+    expect(
+      /** Exercises source-vector unwinding on an exception. @returns Never. */ () =>
+        doc.ForEachCharacterColorItem(
+          /** Raises from the actual callback. @returns Never. */ () => {
+            throw new Error("stop color callback");
+          },
+        ),
+    ).toThrow("stop color callback");
+    expect(handles.map(styleHandleUseCount)).toEqual(baseline);
+  } finally {
+    for (const handle of handles) releaseStyleHandle(handle);
+    doc.Dispose();
+  }
+});
+import { SvxColorItem } from "../../../../editeng/inc/colritem";
+import { Color } from "../../../../tools/inc/color";
+import { RES_CHRATR_COLOR } from "../../../inc/hintids";

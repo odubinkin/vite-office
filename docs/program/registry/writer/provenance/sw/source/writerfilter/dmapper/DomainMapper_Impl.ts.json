@@ -34,6 +34,10 @@
         {
           "path": "apps/office/src/sw/source/writerfilter/dmapper/native-style-entry-merge.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/rtftok/rtf-position.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -57,7 +61,11 @@
       "ContextType",
       "GetTextDocument",
       "GetPageStyles",
-      "GetUnusedPageStyleName"
+      "GetUnusedPageStyleName",
+      "GetAnyProperty",
+      "GetPropertyFromCharStyleSheet",
+      "deferCharacterProperty",
+      "processDeferredCharacterProperties"
     ],
     "upstreamSymbols": [
       "DomainMapper_Impl::GetPropertyFromStyleSheet",
@@ -65,12 +73,18 @@
       "DomainMapper_Impl::RemoveLastParagraph",
       "DomainMapper_Impl::GetPageStyles",
       "DomainMapper_Impl::GetUnusedPageStyleName",
-      "DomainMapper_Impl::PushProperties"
+      "DomainMapper_Impl::PushProperties",
+      "DomainMapper_Impl::GetAnyProperty",
+      "DomainMapper_Impl::GetPropertyFromCharStyleSheet",
+      "DomainMapper_Impl::deferCharacterProperty",
+      "DomainMapper_Impl::processDeferredCharacterProperties"
     ],
     "preservedResponsibilities": [
       "Original property context ownership, imported-style inheritance and DocDefaults precedence, body current/default style names, actual SwXText append/finish and generated trailing-paragraph disposal. Direct self-parent guard is preserved; multi-entry cycles are not repaired. Shapes/headers/footnotes/tables/lists/sections and other native responsibilities remain pending.",
       "V4DQJW section attachment prerequisite adds real SwXPageStyle identity, native typed page factory/family entrypoints, lazy DomainMapper page-family cache and original scan-once Converted suffix allocation using o3tl signed32 prefix conversion. Section contexts now own SectionPropertyMap with original consumed Letter dimensions, one-inch margins, typed ALL layout and disabled grid defaults. GetPageStyle retains cached actual wrappers and original UNO-only catch/name-reservation behavior. ApplyProperties_ retains ordinary-then-character-bag-then-paragraph-bag order, section-only protection exclusion, real UNO failure catch and partial-write semantics. Existing page property algorithms remain on the inherited SwXStyle implementation over actual SwPageDesc; no parallel catalog, property DTO or fabricated model is introduced. Actual Any get signed32 specialization ports default initialization, extraction and original cppu failure diagnostic. This is source-backed evidence, not compiled native differential. Complete section field owners, SetStart/pre-start cursor navigation, CloseSectionGroup/header/footer/columns, section parser mapping, document/style loading, DOCX export and production file workflows remain pending; all previous semantic statuses and intentional file UI/autosave/recovery deviations remain unchanged.",
-      "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced."
+      "Task202610251549-V4DQJW replaces generic PropertyMap stand-ins in actual paragraph contexts and stylesheet entries with native ParagraphPropertyMap/StyleSheetPropertyMap. ParagraphProperties owns original frame/drop-cap/wrap/list fields, signed-width setters, x/y validity, stable actual Unicode members and actual Writer range identities; ResetFrameProperties deliberately retains names/list/ranges. StyleSheetPropertyMap retains signed16 list/outline levels and upper-only outline guard. TablePropertyMap keeps eight independent zero/invalid slots and original validity/overwrite merging even when ordinary properties are empty. StyleSheetEntry owns copied generated interop values and recursive parent-property merging with only the original direct-self guard. TableStyleSheetEntry preserves selected-field conversion, exact conditional masks/order, borrowed source-map mutation, separate ordinary results and insertion-versus-merge column-border asymmetry. All original statuses and source/default/capability claims remain unverified. Full stylesheet XML handlers/application, table/section/list/settings orchestration, native SvRef/UNO interface lifetime/type registration and production DOCX/XLSX UI admission remain unported or unverified; no fake table handler, document projection, cycle repair or border normalization is introduced.",
+      "S3HW1E RTF strike/highlight checkpoint: original explicit SourceDocumentType now selects RTF integer highlight colors versus OOXML palette tokens, and character-style highlights follow the original mapper exclusion. RTF parser groups and emitted run snapshots own genuine RTFSprms copies for strike/dstrike/highlight; ordered independent toggle values, overwrite positions, native COW and native normalization replace the collapsed strike DTO as the materialization input. Plain clears the admitted modifier state. Actual style/run mapper vectors retain direct zero-valued items and native equal-value deduplication. Existing difference-based strike/highlight item creation was removed; escapement remains on its prior path pending a concrete position/inheritance fix. Actual group members and all queued paragraph/table snapshots release at the atomic reader lifetime boundary, including parse errors. Tests exercise valid RTF inputs, inherited/direct values and source-profile colors, rather than requiring unrelated module API completeness. Whole native parser state and unconsumed factory/UNO/module operations are not claimed complete and are not independent filter completion gates.",
+      "S3HW1E native position/vertAlign checkpoint supersedes earlier legacy escapement notes: raw RTF up/dn and super/sub now retain independent original RTFSprms values and source ordering; nosupersub erases only vertAlign and zero position replaces raw state while remaining a mapper no-op. Actual native style/run normalization precedes model insertion. DomainMapper owns nonzero stylesheet substitution and deferred run/negative-paragraph calculation; DomainMapper_Impl retains actual Any copies in the represented body SubstreamContext, resolves final height through direct paragraph/character maps, retained stylesheet entries and original defaults, and flushes at nonempty text application. Named SwFormatCharFormat insertion remains with the existing atomic hint binding; its mapper property participates in final-height lookup without duplicate named-reference application. Obsolete half-point DTO state, pendingUpDn interpretation, difference-based escapement hints and unused projected character callbacks were removed. Native writerfilter ignores the legacy exporter updnprop extension, preserving source reductions rather than inventing roundtrip fidelity. Related actual-model integration and mapper tests cover these consumed branches; whole desktop parser, substream replay, unrelated UNO API and physical ABI parity are not certified or independent filter completion gates."
     ],
     "omittedResponsibilities": [
       "Whole native module interfaces/ABI and unconsumed responsibilities are not claimed.",

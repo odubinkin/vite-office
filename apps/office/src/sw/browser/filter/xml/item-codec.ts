@@ -41,11 +41,7 @@ import {
 } from "../../../../editeng/inc/lrspitem";
 import { MeasureUnit } from "../../../../offapi/com/sun/star/util/MeasureUnit";
 import { type SfxPoolItem, type SfxPoolItemSnapshot } from "../../../../svl/source/items/poolitem";
-import {
-  normalizeWriterHyperlink,
-  SwFormatINetFormat,
-  type WriterHyperlink,
-} from "../../../source/core/txtnode/fmtatr2";
+import { SwFormatINetFormat, type WriterHyperlink } from "../../../source/core/txtnode/fmtatr2";
 import { RES_TXTATR_INETFMT } from "../../../inc/hintids";
 import { SwPoolFormatId } from "../../../inc/poolfmt";
 /** Browser-owned internet value record; omitted native IDs retain the existing ZERO contract. */
@@ -69,14 +65,22 @@ export function encodeSwFormatINetFormatRecord(
 
 /** Restores the supported native internet fields at a browser boundary. @param candidate - Untrusted cloneable record. @returns Detached native item. */
 export function decodeSwFormatINetFormatRecord(candidate: unknown): SwFormatINetFormat {
-  const hyperlink = normalizeWriterHyperlink(candidate);
-  if (hyperlink === undefined) throw new Error("SwFormatINetFormat snapshot is invalid.");
+  if (typeof candidate !== "object" || candidate === null || Array.isArray(candidate))
+    throw new Error("SwFormatINetFormat snapshot is invalid.");
   const value = candidate as Record<string, unknown>;
+  if (typeof value.url !== "string") throw new Error("SwFormatINetFormat snapshot is invalid.");
   const normal = decodeInternetStyleId(value.inetFormatId),
     visited = decodeInternetStyleId(value.visitedFormatId);
-  const item = new SwFormatINetFormat(hyperlink);
-  item.SetINetFormatAndId(item.GetINetFormat(), normal);
-  item.SetVisitedFormatAndId(item.GetVisitedFormat(), visited);
+  const item = new SwFormatINetFormat(
+    value.url,
+    typeof value.targetFrame === "string" ? value.targetFrame : "",
+  );
+  item.SetName(typeof value.name === "string" ? value.name : "");
+  item.SetINetFormatAndId(typeof value.styleName === "string" ? value.styleName : "", normal);
+  item.SetVisitedFormatAndId(
+    typeof value.visitedStyleName === "string" ? value.visitedStyleName : "",
+    visited,
+  );
   return item;
 }
 

@@ -19,6 +19,7 @@ import { MID_PAGEDESC_PAGEDESCNAME, MID_PAGEDESC_PAGENUMOFFSET } from "../../../
 /** Native item member transport already provided by the bounded core item. */
 export interface SwUnoPropertyEntry {
   readonly which: number;
+  readonly attributes?: number;
   readonly member: number;
   readonly kind:
     | "any"
@@ -218,13 +219,38 @@ export const SwUnoPropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map
   ["OutlineLevel", { which: H.RES_PARATR_OUTLINELEVEL, member: 0, kind: "short" }],
 ]);
 
-/** Builds native property descriptors for the represented property map and explicit semantic properties. @param extra - Extra name/type pairs consumed by the caller. @returns Independent metadata owner. @param includeItems - Original includeItems input. */
+/** Represented entries of GetCharStylePropertyMap; cursor-only text hints and paragraph/frame items are excluded. */
+export const SwUnoCharStylePropertyMap: ReadonlyMap<string, SwUnoPropertyEntry> = new Map(
+  [...SwUnoPropertyMap]
+    .filter(
+      /** Admits only original character item properties. @param entry - Shared represented entry. @returns Whether admitted. */ ([
+        ,
+        entry,
+      ]) => entry.which >= H.RES_CHRATR_BEGIN && entry.which < H.RES_CHRATR_END,
+    )
+    .map(
+      /** Original STANDARD/CJK/CTL font macros and strikeout use MAYBEVOID; other admitted character-style entries use PROPERTY_NONE. @param pair - Original property. @returns Exact represented descriptor flags. */ ([
+        name,
+        entry,
+      ]) => [
+        name,
+        {
+          ...entry,
+          attributes:
+            /^Char(?:Height|Weight|Posture|Font)/u.test(name) || name === "CharStrikeout" ? 1 : 0,
+        },
+      ],
+    ),
+);
+
+/** Builds native property descriptors for the represented property map and explicit semantic properties. @param extra - Extra name/type pairs consumed by the caller. @returns Independent metadata owner. @param includeItems - Original includeItems input. @param itemMap - Original property-map family. */
 export function createPropertySetInfo(
   extra: readonly (readonly [string, UnoTypeArgument])[] = [],
   includeItems = true,
+  itemMap: ReadonlyMap<string, SwUnoPropertyEntry> = SwUnoPropertyMap,
 ): SfxItemPropertySetInfo {
   const properties: Property[] = [];
-  for (const [name, entry] of includeItems ? SwUnoPropertyMap : []) {
+  for (const [name, entry] of includeItems ? itemMap : []) {
     const argument: UnoTypeArgument =
       name === "FillStyle"
         ? fillStyleType
@@ -277,7 +303,7 @@ export function createPropertySetInfo(
                                                 ? "bool"
                                                 : "float";
     const key = unicode(name);
-    properties.push(new Property(key, entry.which, UnoType.get(argument), 1));
+    properties.push(new Property(key, entry.which, UnoType.get(argument), entry.attributes ?? 1));
     key.dispose();
   }
   for (const [name, argument] of extra) {

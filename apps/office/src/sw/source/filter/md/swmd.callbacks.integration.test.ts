@@ -146,19 +146,28 @@ it("selects all native table alignments and ignores cells beyond represented row
   );
 });
 
-it("propagates unsupported native HTML imports and releases the failed reader document", /** Verifies actual unsupported input failure. @returns Nothing. */ () => {
-  expect(
-    /** Imports a raw block. @returns Document or failure. */ () =>
-      new MarkdownReader().Read(new TextEncoder().encode("<div>raw</div>")),
-  ).toThrow("Native Writer HTML reader is not yet implemented.");
+it("imports native HTML blocks and clears the completed HTML buffer", /** Uses the actual reader and borrowed Markdown cursor rather than an unsupported placeholder. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(new TextEncoder().encode("<div>raw</div>"));
+  try {
+    expect(
+      doc.paragraphs.map(
+        /** Reads real native body nodes. @param node - Node. @returns Text. */ (node) =>
+          node.GetText(),
+      ),
+    ).toEqual(["raw"]);
+  } finally {
+    doc.Dispose();
+  }
   withParser(
-    /** Exercises public block completion. @param parser - Parser. @returns Nothing. */ (
+    /** Exercises the public block completion on its actual cursor. @param parser - Parser. @param document - Real model. @returns Nothing. */ (
       parser,
+      document,
     ) => {
       parser.BeginHtmlBlock();
-      expect(
-        /** Finishes unsupported block. @returns Nothing. */ () => parser.EndHtmlBlock(),
-      ).toThrow("Native Writer HTML reader is not yet implemented.");
+      parser.m_htmlData = "<p>body</p>";
+      parser.EndHtmlBlock();
+      expect(parser.m_htmlData).toBe("");
+      expect(document.paragraphs[0]?.GetText()).toBe("body");
     },
   );
 });

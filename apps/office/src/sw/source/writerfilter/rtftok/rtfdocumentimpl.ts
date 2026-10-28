@@ -29,6 +29,12 @@ import { RtfTokenizer, type RtfToken } from "./rtftokenizer";
 
 /** Imports a represented RTF body without coupling the tokenizer to browser I/O. */
 export class RtfDocumentImpl {
+  protected m_pMapperStream: DomainMapper | undefined;
+  /** Original stream accessor for the actual current mapper. @returns Borrowed mapper. */
+  protected Mapper(): DomainMapper {
+    if (this.m_pMapperStream === undefined) throw new Error("assert(mapper stream initialized)");
+    return this.m_pMapperStream;
+  }
   protected readonly states: RtfState[] = [];
   protected readonly blocks: RtfBlock[] = [];
   protected readonly runs: RtfRun[] = [];
@@ -47,20 +53,47 @@ export class RtfDocumentImpl {
       numberingType: SvxNumType;
     }>[]
   >();
-  protected readonly styles = new Map<
-    number,
-    Readonly<{
-      name: string;
-      character: WriterCharacterAttributes;
-      autoKerning?: boolean;
-      baselineHalfPoints?: number;
-      paragraph: RtfParagraphState;
-      controls: ReadonlySet<string>;
-      basedOnStyleIndex?: number;
-      nextStyleIndex?: number;
-    }>
-  >();
+  protected readonly styles = new Map<number, RtfStyleDefinition>();
+  protected readonly m_pStyleTableEntries = new Map<number, ReferencePointer<Properties>>();
+  protected readonly m_aStyleNames = new Map<number, string>();
+  /** Releases original raw style reference members at the existing atomic import boundary. @returns Nothing. */
+  protected ClearStyleTable(): void {
+    for (const pointer of this.m_pStyleTableEntries.values()) pointer.clear();
+    this.m_pStyleTableEntries.clear();
+  }
+  /** Releases actual run snapshots at the atomic reader lifetime boundary, including incomplete table buffers on parse failure. A temporary identity set follows shared references to the same parsed run, not a second resource registry. @returns Nothing. */
+  protected ClearCharacterProperties(): void {
+    const lists = new Set<RTFSprms>();
+    const paragraph =
+      /** Visits actual parsed paragraph owners. @param value - Paragraph. @returns Nothing. */ (
+        value: RtfParagraph,
+      ) => {
+        for (const run of value.runs) lists.add(run.characterSprms);
+      };
+    const rows = /** Visits original parsed table rows. @param values - Rows. @returns Nothing. */ (
+      values: readonly RtfTableRow[],
+    ) => {
+      for (const row of values)
+        for (const cell of row.cells) for (const value of cell) paragraph(value);
+    };
+    for (const state of this.states) lists.add(state.characterSprms);
+    for (const run of this.runs) lists.add(run.characterSprms);
+    for (const block of this.blocks)
+      if (block.kind === "paragraph") paragraph(block.paragraph);
+      else rows(block.rows);
+    rows(this.tableRows);
+    for (const cell of this.tableRow) for (const value of cell) paragraph(value);
+    for (const value of this.tableCell) paragraph(value);
+    for (const list of lists) list.dispose();
+    this.states.length = 0;
+    this.runs.length = 0;
+    this.blocks.length = 0;
+    this.tableRows.length = 0;
+    this.tableRow.length = 0;
+    this.tableCell.length = 0;
+  }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
+  protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
@@ -94,7 +127,6 @@ export class RtfDocumentImpl {
   protected nextCellPaddings = new Map<SvxBoxItemLine, number>();
   protected rowDefaultPaddings = new Map<SvxBoxItemLine, number>();
   protected inTable = false;
-  protected pendingUpDn: { height: number; automatic: boolean } | undefined;
   protected defaultTabStop = 720;
   protected firstRun = true;
   protected pendingPageBreak = false;
@@ -105,20 +137,30 @@ export class RtfDocumentImpl {
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
   public ResolveBytes(bytes: Uint8Array, options: SwDocOptions = {}): SwDoc {
-    new RtfTokenizer(bytes).Parse(
-      /** Computes the token result. @param token - Token. @returns The computed result. */ (
-        token,
-      ) => this.Dispatch(token),
-      /** Computes the callback result. @returns The computed result. */ () =>
-        this.states.at(-1)?.currentCodepage ?? this.defaultCodepage,
-    );
-    return this.Finish(options);
+    try {
+      new RtfTokenizer(bytes).Parse(
+        /** Computes the token result. @param token - Token. @returns The computed result. */ (
+          token,
+        ) => this.Dispatch(token),
+        /** Computes the callback result. @returns The computed result. */ () =>
+          this.states.at(-1)?.currentCodepage ?? this.defaultCodepage,
+      );
+      return this.Finish(options);
+    } finally {
+      this.ClearStyleTable();
+      this.ClearCharacterProperties();
+    }
   }
 
   /** Resolves already-lexed events into a fresh Writer document.  @param tokens - Tokens. @param options - Options. @returns The SwDoc result. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
-    for (const token of tokens) this.Dispatch(token);
-    return this.Finish(options);
+    try {
+      for (const token of tokens) this.Dispatch(token);
+      return this.Finish(options);
+    } finally {
+      this.ClearStyleTable();
+      this.ClearCharacterProperties();
+    }
   }
 
   /** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result. */
@@ -126,19 +168,20 @@ export class RtfDocumentImpl {
     return Finish.call(this, options);
   }
 
-  /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing. */
+  /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @param properties - Original deduplicated native style properties. @returns Nothing. */
   protected ApplyStyleDefinition(
-    collection: SwTextFormatColl,
+    collection: SwTextFormatColl | SwCharFormat,
     definition: {
       character: WriterCharacterAttributes;
       autoKerning?: boolean;
-      baselineHalfPoints?: number;
+
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
     },
+    properties: ReferencePointer<Properties>,
   ): void {
-    return ApplyStyleDefinition.call(this, collection, definition);
+    return ApplyStyleDefinition.call(this, collection, definition, properties);
   }
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing. */
@@ -170,18 +213,29 @@ export class RtfDocumentImpl {
       previous !== undefined &&
       equalWriterHyperlinks(previous.hyperlink, state.hyperlink) &&
       equalControls(previous.controls, state.characterControls) &&
+      previous.characterSprms.equals(state.characterSprms) &&
       previous.autoKerning === state.autoKerning &&
-      previous.baselineHalfPoints === state.baselineHalfPoints &&
+      previous.characterStyleIndex === state.characterStyleIndex &&
+      previous.paragraphStyleIndex === state.paragraph.styleIndex &&
+      previous.currentCharacterStyleIndex === state.currentCharacterStyleIndex &&
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
     else
       this.runs.push({
         text: value,
+        characterSprms: new RTFSprms(state.characterSprms),
         attributes: { ...state.character },
-        ...(state.baselineHalfPoints === undefined
+        ...(state.paragraph.styleIndex === undefined
           ? {}
-          : { baselineHalfPoints: state.baselineHalfPoints }),
+          : { paragraphStyleIndex: state.paragraph.styleIndex }),
+        ...(state.currentCharacterStyleIndex === undefined
+          ? {}
+          : { currentCharacterStyleIndex: state.currentCharacterStyleIndex }),
+        ...(state.characterStyleIndex === undefined
+          ? {}
+          : { characterStyleIndex: state.characterStyleIndex }),
+
         ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
         controls: new Set(state.characterControls),
         ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),
@@ -264,3 +318,12 @@ export class RtfDocumentImpl {
       }
   }
 }
+
+import type { SwCharFormat } from "../../../inc/charfmt";
+
+import type { DomainMapper } from "../dmapper/DomainMapper";
+
+import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel";
+import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
+
+import { RTFSprms } from "./rtfsprm";

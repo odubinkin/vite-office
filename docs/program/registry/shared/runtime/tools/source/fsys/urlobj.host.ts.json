@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/fsys/urlobj.host.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "uri-reference",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/fsys/urlobj.host.ts",
+        "apps/office/src/tools/source/fsys/urlobj.components.test.ts",
+        "vendor/libreoffice-reference/tools/source/fsys/urlobj.cxx",
+        "apps/office/src/tools/source/fsys/urlobj.object.test.ts"
+      ],
+      "justification": "Original hostname/IPv4/IPv6 state machine, canonical output, caller pointer commit/rollback and file-only visible-character NetBIOS fallback. Immutable canonical-string return binds the optional native output buffer; general native string/ABI lifetime is not simulated. Unchanged extracted C++ parseHost matches 13749 source/input/range cases under ASan/UBSan, with explicit UTF16/string-buffer/ASCII predicate shims. Probe evidence output/playwright/rtf-properties-native/html9-host-probe-report.json; no full class or ABI certification. Complete authority production/filter integration is pending. Actual INetURLObject strict/smart absolute parser and relative converter now call this native component, and URIHelper::SmartRel2Abs consumes that value. This supersedes prior class-assembly-pending notes; real HTML HREF insertion and compiled complete-URL equivalence remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "parseHost",
+        "parseHostOrNetBiosName"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "tools/source/fsys/urlobj.cxx",
+      "upstreamSymbols": [
+        "INetURLObject::parseHost",
+        "INetURLObject::parseHostOrNetBiosName"
+      ]
+    }
+  }
+}

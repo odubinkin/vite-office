@@ -1,4 +1,5 @@
 /** @fileoverview Consumed DomainMapper_Impl property-context and body text-append ownership; all text mutations use existing native SwXText APIs. */
+import type { DomainMapper } from "./DomainMapper";
 import { toInt32 } from "../../../../o3tl/inc/string_view";
 import type { SwXStyleFamily } from "../../core/unocore/unostyle";
 import type { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -39,9 +40,61 @@ export class DomainMapper_Impl {
   private defaultParaStyleName = "";
   private currentParaStyleName = "";
   private inStyleSheetImport = false;
-  /** Borrows actual Writer model/text interfaces. @param model - Destination model. @returns Mapper state. */
-  constructor(readonly model: SwXTextDocument) {
+  private m_bInDocDefaultsImport = false;
+  /** Represented body stream; substream producers extend the original stack when consumed. */
+  private readonly m_StreamStateStack = [{ deferredCharacterProperties: new Map<number, Any>() }];
+  /** Borrows actual Writer model/text interfaces. @param m_rDMapper - Original mapper callback owner. @param model - Destination model. @param m_eDocumentType - Original immutable source-format field. @returns Mapper state. */
+  constructor(
+    private readonly m_rDMapper: DomainMapper,
+    readonly model: SwXTextDocument,
+    private readonly m_eDocumentType: SourceDocumentType,
+  ) {
     this.body = model.getText();
+  }
+  /** Original document-default phase. @param value - Import phase. @returns Nothing. */
+  SetDocDefaultsImport(value: boolean): void {
+    this.m_bInDocDefaultsImport = value;
+  }
+  /** Original document-default query. @returns Import phase. */
+  IsDocDefaultsImport(): boolean {
+    return this.m_bInDocDefaultsImport;
+  }
+  /** Original current context type. @returns Native enum. */
+  GetTopContextType(): ContextType {
+    const current = this.contexts.at(-1);
+    if (!current) throw new Error("assert(!m_aContextStack.empty())");
+    return current.type;
+  }
+  /** Native last-write deferred property copy in the current stream. @param id - Resource identity. @param value - Borrowed native value. @returns Nothing. */
+  deferCharacterProperty(id: number, value: Any): void {
+    const stream = this.m_StreamStateStack.at(-1);
+    if (!stream) throw new Error("assert(!m_StreamStateStack.empty())");
+    const values = stream.deferredCharacterProperties;
+    values.get(id)?.dispose();
+    values.set(id, new Any(value));
+  }
+  /** Original flush delegates calculation back to the mapper before clearing native Any owners. @param charContext - Original context assertion selector. @returns Nothing. */
+  processDeferredCharacterProperties(charContext = true): void {
+    const stream = this.m_StreamStateStack.at(-1);
+    if (!stream) throw new Error("assert(!m_StreamStateStack.empty())");
+    const values = stream.deferredCharacterProperties;
+    if (values.size) {
+      this.m_rDMapper.processDeferredCharacterProperties(values, charContext);
+      for (const value of values.values()) value.dispose();
+      values.clear();
+    }
+  }
+  /** Original immutable source-format query. @returns Whether RTF. */
+  IsRTFImport(): boolean {
+    return this.m_eDocumentType === SourceDocumentType.RTF;
+  }
+  /** Original immutable source-format query. @returns Whether OOXML. */
+  IsOOXMLImport(): boolean {
+    return this.m_eDocumentType === SourceDocumentType.OOXML;
+  }
+  /** Original stylesheet phase query. @returns Whether importing a style. */
+  IsStyleSheetImport(): boolean {
+    return this.inStyleSheetImport;
   }
   /** Original borrowed document supplier. @returns Actual model. */
   GetTextDocument(): SwXTextDocument {
@@ -195,8 +248,41 @@ export class DomainMapper_Impl {
       : this.styleSheetTable.FindStyleSheetByConvertedStyleName(this.GetCurrentParaStyleName());
     return this.GetPropertyFromStyleSheet(id, entry, true, true);
   }
+  /** Original character-style lookup excludes stylesheet phase, the style-name property itself and non-character properties. @param id - Property. @param context - Direct map. @returns Owned native value. */
+  GetPropertyFromCharStyleSheet(id: P, context: PropertyMap | null): Any {
+    if (this.inStyleSheetImport || id === P.PROP_CHAR_STYLE_NAME || !isCharacterProperty(id))
+      return new Any();
+    const name = new OUString(),
+      value = this.GetAnyProperty(P.PROP_CHAR_STYLE_NAME, context);
+    try {
+      const entry = value.extract(name, "OUString")
+        ? this.styleSheetTable.FindStyleSheetByConvertedStyleName(text(name))
+        : null;
+      return this.GetPropertyFromStyleSheet(id, entry, false, false);
+    } finally {
+      name.dispose();
+      value.dispose();
+    }
+  }
+  /** Original final property precedence: direct run, direct paragraph, character style, paragraph style and document defaults. @param id - Property. @param context - Direct map. @returns Owned native value. */
+  GetAnyProperty(id: P, context: PropertyMap | null): Any {
+    const direct = context?.getProperty(id);
+    if (direct) return direct[1];
+    const paragraph = this.GetTopContextOfType(ContextType.CONTEXT_PARAGRAPH);
+    if (paragraph && paragraph !== context) {
+      const property = paragraph.getProperty(id);
+      if (property) return property[1];
+    }
+    if (id !== P.PROP_CHAR_STYLE_NAME && isCharacterProperty(id)) {
+      const inherited = this.GetPropertyFromCharStyleSheet(id, context);
+      if (inherited.hasValue()) return inherited;
+      inherited.dispose();
+    }
+    return this.GetPropertyFromParaStyleSheet(id);
+  }
   /** Appends through the canonical NOHINTEXPAND import API. @param value - Native text. @param properties - Current character map. @returns Nothing. */
   appendTextPortion(value: OUStringConstReference, properties: PropertyMap | null): void {
+    if (value.getLength()) this.processDeferredCharacterProperties();
     const range = this.body.appendTextPortion(value, properties?.GetPropertyValues() ?? []);
     range.dispose();
   }
@@ -224,6 +310,11 @@ export class DomainMapper_Impl {
       const context = this.contexts.pop() as Context;
       if (context.owned) context.properties.dispose();
     }
+    for (const stream of this.m_StreamStateStack)
+      for (const value of stream.deferredCharacterProperties.values()) value.dispose();
+    this.m_StreamStateStack.length = 0;
     this.styleSheetTable.dispose();
   }
 }
+
+import { SourceDocumentType } from "../inc/dmapper/DomainMapperFactory";

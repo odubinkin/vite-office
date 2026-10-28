@@ -6,6 +6,12 @@ portable Writer model**, not all desktop Writer features. `sw/source/filter/asci
 `sw/source/filter/ww8`, `sw/source/writerfilter/rtftok` and `sw/source/filter/md`
 under `vendor/libreoffice-reference` are the source comparison points.
 
+## Filter completion boundary
+
+Completion means faithful TXT export and RTF/Markdown import/export for the current Writer model and its existing UI entry points. Shared-kernel work belongs on the critical path only when a consuming filter path and a concrete supported document scenario require it. Preserve the original owners, defaults and consumed contracts; do not replace a required path with a local shortcut. Completeness of unrelated UNO operations, desktop services or unconsumed portions of a shared module is not a prerequisite for filter completion. Module-wide unverified status must not by itself be treated as evidence that a particular filter path is incomplete; verify the actual filter requirement and its observable result.
+
+For every remaining kernel dependency, record the calling filter, the affected current-model capability and the behavior that fails without that dependency. Historical prerequisite checkpoints below are evidence and implementation history, not an automatically expanding list of filter completion gates.
+
 | Current native model capability | TXT export | RTF import/export | Markdown import/export | Closure status |
 | --- | --- | --- | --- | --- |
 | Body paragraphs, Unicode, hard line breaks | `SwASCWriter` and `OutASC_SwTextNode` | `RtfTokenizer`, `RtfDocumentImpl`, `RtfExport`; hex CR/LF each dispatch a paragraph in body text, and Unicode fallback skips characters while preserving intervening control words and the parent group's fallback state. Signed `\uc` and its bare default follow source. Raw ANSI bytes reach the document parser, where group-scoped `\ansicpg`/`\cpg`, selected-font `\fcharset`, default-font `\plain`, and the pinned font-name suffix precedence select decoding. The live parser callback preserves Shift-JIS trailing backslashes and braces as encoded text. ASCII, ISO-8859-1–9/15, KOI8-R/U, IBM 437/737/775/850/852/855/857/860–866/869, Windows-874, Windows-1250–1258 and Apple Roman/Central European/Croatian/Cyrillic/Greek/Icelandic/Romanian/Turkish/Ukrainian use pinned SAL tables; MS-932/936/949/950, JOHAB/MS-1361, EUC-CN/KR and Apple Korean/Japanese/Simplified Chinese/Traditional Chinese use pinned SAL DBCS lead/trail tables and each source aggregate’s EUDC setting; EUC-JP uses its separate pinned SAL JIS-0208/JIS-0212, SS2 and SS3 converter; ISO-2022-JP/KR code pages 50220/50225 use pinned SAL state machines and source-owned JIS/KS tables; ISCII Devanagari uses its pinned stateful map and nukta/halant combinations; UTF-7 code page 65000 uses the pinned SAL Base64-shift decoder, including its disabled context restore; UTF-8 code page 65001 uses the pinned SAL streaming decoder, including its default BOM and malformed-input behavior; OStringToOUString flags map undefined single bytes to U+F100–U+F1FF and flush incomplete UTF-8; missing SAL converters use the pinned byte-to-U+00xx dummy fallback, including Apple Arabic/Hebrew code pages 10004/10005 and unknown code pages; Symbol uses the pinned private-use converter | `SwMarkdownParser`, `SwMDWriter`; recognized HTML entities and null characters follow the pinned no-insertion callbacks, while escaped forms and code text remain visible | Targeted coverage exists. **Open:** the full byte/code-page matrix and compiled upstream differential behavior remain unverified. Apple Arabic/Hebrew are explicitly unimplemented in pinned SAL (WRITER115). Pinned negative `\uc` can suppress later text (WRITER108), while Markdown entity callbacks discard recognized text (WRITER106). |
@@ -385,3 +391,277 @@ S3HW1E used-numbering prerequisites: native SwNumRule paragraph-style clients re
 ### Persistent outline-rule ownership prerequisite
 
 S3HW1E outline-owner checkpoint: SwDoc now creates and retains the original Outline SwNumRule during docnew initialization, using the represented shipped ODF>=1.2 label-alignment profile, OUTLINE_RULE and count-phantoms derived from OLD_NUMBERING. AddNumRule retains transferred object identity in insertion order and separately updates the last-name lookup, preserving native duplicate-name/default-list behavior (WRITER195). Original createListForListStyle creates the default list once and resolves an already used ID to a fresh identity. Existing cross-document node/style copy and SetNumRule creation paths now clone explicitly. Worker restoration stores the actual outline pointer as an optional table index, restores that owner once without inferring identity from names/types, and loads numbering owners before applying paragraph items through SetFormatAttrSet so style clients register. Legacy graphs without the pointer index preserve their authored rules separately from the new default outline. Existing browser deterministic generated list IDs, list-service storage placement, legacy public convenience access and table-full exception instead of native process abort remain explicit unverified platform/structural obligations; full native list manager, outline editing/history/configuration and RTF InitFontTable orchestration are not claimed complete. Existing UI/open/save/autosave/recovery deviations remain unchanged.
+
+
+### RTF native font-table initialization
+
+S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged.
+
+
+### RTF used-numbering table and level definitions (S3HW1E)
+
+- Implemented: native pointer-ID lookup and the font helper's actual used-rule table; source abstract/concrete definitions, nine Word levels or one continuous level; outline/style/redline uses; per-level UTF16 ListFormat strings/positions; separator suppression and level10 omission; legal/follow/start/alignment/NFC/CJK-language controls; signed16 geometry; bullet font preparation and actual character-item output. The separate RTF name-keyed ten-level map and fixed level-zero numeric string are removed.
+- Implemented prerequisite: command rule assembly now supplies actual level-specific ListFormat; character color/underline enumeration visits the original named/automatic owners before RTF attribute callbacks, retaining append-only vector behavior and releasing shared handles. Temporary character-item sets are disposed.
+- Evidence: `rtf-numbering.test.ts`, `native-font-item-enumeration.test.ts`, `number-list-format.test.ts`, existing RTF export/import and browser I/O tests; pinned source responsibilities remain semantically unverified, not certified by round-trip tests alone.
+- Remaining: original paragraph numbering dispatch, temporary restart-rule ownership, character-style table/cache, complete OutColorTable, importer level-pattern/font/geometry ownership and full common AttributeOutputBase/DOCX numbering. Graphic brush/picture numbering has no admitted core owner. Do not infer completeness from this table-writing checkpoint. WRITER198/WRITER199 preserve source separator and visitor behavior.
+
+
+### Temporary Word numbering owners (S3HW1E)
+
+- Implemented: native temporary numbering-rule creation, ten effective-level copies, original default metadata and legacy mode, preferred export names with collision handling, unsigned16 restart value/counter and lookup ID. Temporary rules stay out of SwDoc and are destroyed from the export-owned tail; browser full-document RTF and test bridges invoke exporter teardown before releasing their real ranges.
+- Implemented prerequisites: format replacement/reset/destruction unlink actual character-style clients; document table insertion binds the native name map; rule teardown erases its current name and clears actual client containers. Four base-format tables initialize at first rule creation and release after the last rule, retaining source unsigned16 reference-count behavior and protected const reads. Document teardown now destroys its transferred rules through the existing browser aggregate binding.
+- Evidence: `number-destructor.test.ts`, `rtf-numbering-lifetime.test.ts`, existing native rule/pointer differential fixtures, related filter/import/export and browser I/O tests. WRITER200 records source counter-width hazards. Full native ownership location/ABI and all broader document lifecycle services remain unverified.
+- Remaining: consume these functions from original paragraph numbering dispatch and complete character-style table/cache and original paragraph list output; prior importer/color/common-output obligations also remain. The existing body serializer still does not invoke DuplicateNumRule, so this checkpoint must not be reported as complete RTF restart integration.
+
+
+### Word character-style slots and RTF cache (S3HW1E)
+
+- Implemented: real-exporter style context and format-kind virtual, native character-first named table with source slot limit, complete pinned GetWWId/English builtin naming, shared-family disambiguation, character self-next, native null-slot behavior, character GetId, RTF style framing and first-inserted property-only InsStyle/GetStyle cache. Character definitions now enter the actual RTF stylesheet.
+- Evidence: `word-styles-native-probe.mjs` compiles unchanged GetWWId/BuildGetSlot/GetSlot/GetStiNames/GetEnglishNameFromSti and native enums/operators with a scalar format/vector carrier under ASan/UBSan; all65536 pool IDs,91 names and null-slot1/10 cases are compared in actual-owner tests. This proves those selected finite mappings, not complete style ABI or document orchestration. WRITER201 preserves null lookup semantics.
+- Bindings and remaining work: this core still represents Standard at paragraph index0 without native hidden default0. RTF EndStyle explicitly receives the existing drained StyleDefinition string sink; full native OutputFormat/item-buffer contracts, linked styles, full model auto-update state and true list-style mode remain unverified. OutColorTable now owns emission but retains the audited precollection slice. Character-style import and original paragraph-numbering dispatch/restart consumption remain open; do not report whole RTF completion.
+
+The style table retains its actual export owner. Body paragraph style IDs now use native format identity and fallback Standard slot0; the previous overflow behavior that omitted the style control is removed.
+
+S3HW1E paragraph-numbering checkpoint: S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified. Evidence: `rtf-paragraph-numbering.test.ts` and related filter/browser I/O suites. Earlier paragraph-dispatch/restart obligations above are superseded for this consumed profile; broader filter completion remains open.
+
+S3HW1E named character-style checkpoint: S3HW1E named character-style integration: stylesheet cs entries materialize actual SwCharFormat owners separately from paragraph collections, resolve same-family forward parents, and apply represented character properties. Real SwFormatCharFormat/SwTextCharFormat hints retain selected style identity, direct-property precedence and group/plain restoration; the native current character-style index remains distinct from the selected rStyle reference for failed lookups. RTF OutputTextCharFormat emits original cs IDs before repeated effective properties, as the source requires. Character-style positive baseline percentages are kept separate from paragraph automatic superscript. The represented RTFSprms getDefaultSPRM character families reset absent run bold/italic/underline/font/height/color properties present in the flattened style reference; non-defaulted strikeout/highlight/escapement/kerning inherit. Plain clears direct kerning rather than inventing a false direct override. Native style-default helper compiled unchanged with original generated OOXML IDs under ASan/UBSan yields9 defaults among35 queried tokens; scalar/nested value carriers are not full RTFValue/RTFSprms or mapper ABI. Existing run-projection/string-sink bindings remain explicit; complete native property graph, duplicate style-index semantics, linked styles, paragraph-style cs/s cross-family behavior, CJK/CTL import association, script/bidi and remaining whole-filter obligations are unverified. Temporary imported automatic style handles/sets are disposed, and export run item sets now use generator-scoped ownership. The earlier statement that absent RTF character controls always inherit style values is superseded for these native defaulted families. Evidence: `rtf-character-styles.test.ts`, migrated source-backed expectations in existing import/native-character tests and `scripts/rtf-style-defaults-native-probe.mjs`. Full filter completion remains open.
+
+S3HW1E native property-container checkpoint: S3HW1E native property-container checkpoint: real RTFValue scalar/string/nested alternatives own OUString and tools SvRef list members; actual RTFSprms owns an intrusive shared payload, deep-clones values at native write barriers, preserves duplicate ordering/conflict policies, recursive style defaults and denylist, implicit pPr, expected-child behavior and list dedup/duplication. RTFReferenceProperties preserves by-value list ownership and attribute-before-modifier delivery; RTFSprm borrows the real mutable pointer cell. Original nested helpers operate on these owners. The actual current RTF run-reference consumer now constructs native property trees and calls cloneAndDeduplicate, replacing the hand-coded default-policy shortcut. Ten newly consumed resource IDs come from the unchanged pinned generator. Compiled unchanged RTFSprms declarations/algorithms, nested helpers, SvRefBase/SvRef and scalar RTFValue query/equality functions match32 native tree cases under ASan/UBSan; OUString and remaining scalar/nested value construction/clone transport in this witness are explicit carriers, not full SAL/RTFValue/mapper/Writer ABI. Runtime uses genuine existing OUString/SvRef owners. Existing Western run projection and delayed parser materialization remain explicit interfaces; complete parser-property state, generic mapper return-reference transport, default-property presence through final model insertion, all script families and earlier format obligations remain open. Do not certify whole RTF parity. Evidence: `rtf-properties.test.ts`, `rtf-properties-native.json`, `scripts/rtf-properties-native-probe.mjs` and existing named-style/filter/UI tests. The prior statement that RTFSprms/RTFValue mechanisms are entirely unported is superseded for the represented scalar/string/nested property graph; broader parser/mapper closure remains open.
+
+
+### Native RTF property presence and mapper boundary (S3HW1E)
+
+The admitted run-property families now travel as genuine intrusive native resource references through the actual DomainMapper/PropertyMap into SetPropertyValues on real document ranges. The NOFORMATATTR insertion mode matches the source text-portion boundary and preserves explicit zero-valued items over named styles, including when the imported style is later edited. Borrowed Stream.props retains ownership; nested property-return temporaries release their original SvRef owners after resolution, including exceptional callbacks. Existing OOXML host references keep their current transport.
+
+The raw style-reference table is separate from materialized SwAttrSet inheritance. Native getProperties flattens only the selected entries' rPr children; it does not flatten their based-on model ancestors. Default index0 insertion, first-entry retention and numeric table delivery order follow source. Parent/follow names are captured when their controls are parsed, rather than resolved by a later index fixup (WRITER206). This corrects the earlier forward-reference fixture. Source-contract tests cover retained explicit/synthesized b0, equal-property deduplication, inherited model versus raw-reference differences, Western/CJK/CTL mapper scope and pointer cleanup.
+
+This checkpoint does not complete native stylesheet application, parser-wide property state, paragraph/table/list normalization, all script families, replay/substream orchestration, duplicate-ID/name selection, remaining character callbacks or the full TXT/RTF/Markdown capability matrix. Compiled container probes from the preceding checkpoint remain bounded evidence; no compiled Writer desktop differential or whole-module parity is claimed.
+
+
+### Native character-style UNO application and deduplicated RTF styles (S3HW1E)
+
+The real document style supplier now exposes CharacterStyles, including native descriptors, actual SwCharFormat identities, lazy pooled styles, original programmatic/UI names and the source short-suffix guard (WRITER207). The consumed character property map excludes paragraph/frame/cursor-only items and carries original MAYBEVOID/NONE flags. Attached character multi-property writes stage actual item members before one format commit, preserve explicit values equal to their inherited defaults, and retain original WrappedTargetException transport for unknown properties.
+
+RTF now creates character styles through these real services and resets existing represented direct pool properties before applying imported values. The original raw reference table remains unchanged for run normalization. A separately owned deduplicateStyleTable result uses original parent-name lookup and existing native RTFSprms algorithms for model application. Admitted style properties resolve through a real StyleSheetEntry/StyleSheetPropertyMap and mapper stylesheet context, followed by stable PropValVector insertion, genuine UNO name/value sequences and real style setters. Native sequence addresses use the existing borrowed OUString view and by-value Any boundary; this does not certify physical ABI.
+
+Related owner/import tests distinguish paragraph explicit-default retention from character duplicate removal, test later parent edits, native Western/CJK/CTL scope, built-in hyperlink identity/reset, stable duplicate-name ordering, independent sequence lifetimes and invalid bulk-property rollback. Complete native style-pool/base-sheet orchestration, paragraph bulk staging, remaining legacy property callbacks, parser-wide native state, complete script metadata, replay/substreams and the broader filter matrix remain open. No whole-format or full desktop parity promotion is made.
+
+
+### RTF strike/highlight behavior and remaining functional blockers
+
+RTF strike, double-strike and highlight now retain original ordered RTFSprms values across group copies, emitted runs, plain and raw style references. Native mapper insertion replaces value-difference formatting for these families. Explicit no-strike survives later style changes; false toggles preserve the native non-overwrite rule. Actual SourceDocumentType selects literal RTF RGB values versus OOXML palette IDs. Character-style highlight exclusion and equal-run deduplication are preserved (WRITER208). Snapshot ownership is released on successful import and parse failure.
+
+The immediate remaining work is defined by format scenarios, not generic module completeness:
+
+| Supported scenario | Current evidence | Required work |
+| --- | --- | --- |
+| Markdown raw HTML blocks | EndHtmlBlock now invokes the original UTF8 byte conversion and connected native HTML token/attribute owner. Actual-model tests cover ordinary body/inline/block formatting and worker-codec transport. | Finish current-model HTML CSS, named semantic character styles, font/link/bookmark, list and table producers; audit current-model raw HTML capability coverage. Standalone desktop media/network orchestration does not expand the model slice. |
+| RTF language metadata on represented Western/CJK/CTL items | The current model owns language items; DispatchBodyControl has no lang/langfe/alang path. | Add source control-to-item mapping and verify actual GetLang/model values on imported documents. |
+| RTF position/vertical-alignment property normalization | Raw independent properties now pass through actual RTFSprms style/run normalization, native mapper stylesheet substitution and deferred final-height resolution. Related actual-model tests cover equality, zero replacement/no-op, control order, inherited height and group boundaries. | Consumed represented body/style path connected; whole-format capability audit remains open. Preserve the native updnprop reduction (WRITER209). |
+
+Whole factory/UNO API completion and physical ABI certification are not prerequisites for these scenarios. Existing module-wide unverified records remain cautious provenance dispositions rather than automatic filter blockers. Earlier broad audit paragraphs must be checked against concrete current paths before becoming additional work.
+
+### Character-style position correction
+
+The existing style-application branch now retains the pinned DomainMapper nonzero character-style behavior: both positive and negative positions use automatic super/subscript with DFLT_ESC_PROP, regardless of numeric magnitude. Actual named SwCharFormat owners and inherited text runs are covered for both signs and two magnitudes; a distinct direct position still resolves against final run font size. This fixes the previous incorrect percentage expectation; it does not certify the remaining legacy position/vertAlign pipeline. In particular, equal direct and style raw positions must participate in native RTFSprms deduplication before materialization, and zero position must preserve the native no-op rule. No unrelated general kernel API is a prerequisite.
+
+
+### Native position/vertAlign materialization
+
+This checkpoint replaces the earlier character-style-only callback correction with the actual consumed native property path. RTF up/dn store signed half-points in RTFSprms; super/sub store the independent vertAlign string; nosupersub erases only vertAlign. Zero position changes raw state and is ignored by the mapper. Raw style/run deduplication therefore occurs before final item creation, including equal numeric positions whose style model value is automatic.
+
+DomainMapper now applies the pinned nonzero stylesheet rules and computes deferred positions after the final native CharHeight is available. DomainMapper_Impl retains original Any copies, character/paragraph/style/default precedence and the consumed body stream's deferred map. Actual retained StyleSheetEntry owners make inherited height lookup possible. The existing atomic reader still installs named SwFormatCharFormat hints; direct native mapper properties are applied to actual SwPaM ranges. The unused projected-character callback path, legacy half-point DTO, difference-based escapement hints and custom pendingUpDn extension reader are removed. Their three helper-only tests are replaced by actual RTF/model and mapper integration scenarios; no remaining helper API is advertised.
+
+Source-backed expectation changes preserve automatic super/sub markers and the native loss of proportional-height/automatic metadata through unrecognized updnprop (WRITER209). This does not certify desktop physical ABI, unrepresented substreams or full TXT/RTF/Markdown coverage. Markdown HTML blocks and RTF language commands remain concrete outstanding scenarios.
+
+
+### Connected native Markdown HTML body path
+
+The unsupported InsertHtmlData exception is removed. Its SAL UTF16-to-UTF8 conversion feeds the existing SvStream and HTMLParser scanner; real SwHTMLParser state owns native HTMLAttrTable heads, original contexts and deferred item ranges on the Markdown document/cursor. The consumed pending-list SetAttr_ branch applies real SwPaM ranges with DONTREPLACE and raw offset clamping. Paragraph append splits open Latin/CJK/CTL attributes through the original script service; native context close/search order, explicit paragraph spacing, heading/quotation/preformatted style identities and 80 percent HTML super/sub heights are retained. Native item owners now release at their actual close/removal/application points. The original constructor/destructor temporarily enable and restore the actual document HTML_MODE setting, so pool styles use the native HTML defaults without leaving that mode enabled on the Markdown document.
+
+Actual Markdown BeginHtmlBlock starts on a blank paragraph at its section EOF. This checkpoint connects that consumed profile, including empty final-paragraph removal, directly to native parser operations. Generic SwReader/Sfx medium orchestration, standalone HTML file I/O and arbitrary insertion into preexisting text are not certified or made unrelated API completion gates. The ignored parser return and empty HTML base URL follow the pinned Markdown caller.
+
+This is not complete current-model Markdown HTML support: CSS inline/sheet property mapping, named semantic character tags, fonts, links/bookmarks, lists and tables remain concrete input scenarios, alongside RTF language commands. Unrepresented graphics/forms/fields and desktop media plumbing do not broaden the current core slice. The native text filters' full capability audit remains open.
+
+### Connected semantic HTML and inline CSS consumers
+
+Markdown raw HTML now reaches native semantic character-format hints for emphasis,
+citation, strong, code, sample, keyboard, variable, definition and teletype tags,
+and source-named quote/language/author/person/acronym/abbreviation styles. These
+are document-owned styles, not boolean tag substitutions. Inline declarations
+on the represented inline tags now use CSS1Parser -> SvxCSS1Parser -> SwCSS1Parser
+and the existing deferred HTML attribute stacks. Consumed handlers cover weight,
+posture, absolute/configured height, color, underline and strikeout; percentage
+height insertion and unsupported native HTML overline mapping are intentionally
+omitted as in the corresponding source dispatch. Case-map/blink/direction items
+are absent from the current sparse Writer pool and are not added to the model.
+The seven HTML font-size defaults are 7/10/12/14/18/24/36pt from pinned Common.xcs.
+Configurable HTML font preferences remain unimplemented.
+
+A real consumer exposed an existing InsertPoolItem shortcut: direct character
+items were reconstructed as unpartitioned automatic hints, allowing shorter named
+style hints to override explicit CSS normal weight. This path now uses existing
+MakeTextAttr/InsertHint/BuildPortions owners and preserves the native insertion
+mode; whole-paragraph character items also remain hints when character styles
+already exist, as native SwTextNode::SetAttr requires. Targeted actual-model cases
+cover nested and whole-paragraph precedence, restoration, CSS font heights and
+Markdown raw HTML entry. WRITER211/212 record retained CSS source quirks.
+
+This block does not close stylesheet selector application, class/ID application,
+HTML font-family/shorthand/background/borders/paragraph CSS, language/direction,
+whitespace flags, hyperlinks/bookmarks, HTML lists/tables or the remaining RTF
+matrix entries. These are assessed by their real filter callers and current-model
+cases; unconsumed generic services remain outside the completion gate.
+
+### Native font CSS and the actual Markdown stylesheet boundary
+
+The current Markdown reader always constructs its native HTML insertion parser
+with `newDoc=false`. Pinned `SwCSS1Parser::StyleParsed` immediately returns in
+that mode: stylesheet rules do not populate class/ID maps or mutate paragraph
+and character styles. An actual Markdown `<style>`/class/semantic-tag case now
+verifies this behavior. Implementing the full new-document stylesheet receiver
+is therefore **not a completion prerequisite for this Markdown caller**. Earlier
+open-item mentions of stylesheet selectors/class/ID application must be read with
+this native caller restriction; existing named-style lookup is a separate path.
+
+Inline `font-family`, `font` and `line-height` now consume actual pooled font and
+spacing items. Family names preserve source identifier joining, semicolon list
+storage, unknown family/pitch, empty style name and the current UTF-8 thread
+encoding. The current model has no DocShell/device font-list owner, matching the
+source null-list branch; no browser font substitution or invented metric provider
+is introduced. Native Symbol charset promotion would require an actual DocShell
+font list and is outside this caller profile. `FontSetting` remains its pinned
+false default; the application has no HTML font-import preference UI.
+
+Font shorthand retains original prefix admission, resets and partial writes;
+keyword-size rejection and missing-family writes are WRITER213/214. Native
+line-height preserves minimum/auto/interline rule owners, 16-bit narrowing and
+the integral 2.5mm minimum (142twips), using the existing integral o3tl conversion.
+Absolute line-height is minimum spacing, not fixed spacing; `normal` emits no
+item in the pinned handler. Existing HTML P, heading and quotation/address/PRE
+contexts now apply these same direct declarations. P retains native ALIGN-after-
+CSS order and consumes `white-space: pre`/`pre-wrap`; EndPara restores whitespace.
+Headings and other contexts do not acquire P-only whitespace behavior.
+
+Actual-model tests cover font resets, list values, the existing empty CSS string
+scanner quirk (WRITER161), normal-weight precedence, paragraph spacing/alignment,
+block-style identities, whitespace restoration, stylesheet omission, Markdown raw
+HTML entry and Worker serialization. Remaining real HTML consumers include legacy
+FONT/BIG/SMALL tags, backgrounds/borders/remaining paragraph CSS, language,
+hyperlinks/bookmarks and lists/tables. Remaining RTF matrix work is unchanged;
+no whole-filter completion is claimed by this checkpoint.
+
+The existing shared browser font-family presentation adapter now converts native
+semicolon fallback separators to CSS comma separators. The document/Worker still
+retain the source list string; a mounted Writer paragraph test verifies valid CSS
+at the display boundary. Physical font matching/rendering is not certified.
+
+### Connected legacy HTML font consumers
+
+Native BASEFONT/FONT/BIG/SMALL paths now use the actual parser-owned base/font
+stacks, original context lookup and deferred native items. BASEFONT applies the
+source unsigned16 narrowing, default3 and 1..7 clamp. FONT relative sizes use the
+base stack rather than the enclosing FONT size; BIG/SMALL use the font-stack tail,
+with the native heading-start marker selecting adjacent heading style heights.
+FACE retains comma splitting, ASCII-space trimming, source semicolon storage and
+the current no-DocShell font-list branch. COLOR uses the existing native HTML
+option converter; inline CSS overrides seeded legacy items before insertion.
+
+WRITER215/216/217 record the retained shared-Western-head branch, missing-SIZE zero
+stack entry and unmatched-closer stack pop. Actual parser-state and selected-range
+tests verify the original wiring and all three script items without claiming a
+compiled desktop defect. Actual Markdown/Worker tests verify legacy font items
+reach the existing document/UI transport. Legacy font tags are no longer an open
+producer in this consumed profile; pending ID/bookmark/language/direction handling
+remains tracked separately from font value/stack behavior.
+
+### Connected native CSS paragraph spacing, margins and background color
+
+Native CSS margin/text-indent/background-color handlers now supply actual existing
+SvxFirstLineIndentItem, SvxTextLeftMarginItem, SvxRightMarginItem, SvxULSpaceItem and
+SvxBrushItem values. Native context lookup retains signed contributions separately
+from unsigned item measures, clamps a negative contribution against accumulated
+context margins and preserves 16-bit narrowing. Text-indent uses the source
+length clamp versus pixel narrowing. Single-side spacing borrows the other side
+from native context/body-style lookup. Paragraph style changes retain the consumed
+native context margin contributions and original pending paragraph invalidation.
+This is not certification of the remaining generic style-graph/positioning paths.
+WRITER218/219 record ignored bare zero, partial shorthand writes and case-sensitive
+auto-margin recognition; no browser CSS grammar is substituted.
+
+Paragraph RES_BACKGROUND is already represented by the current core. Native
+background-color now feeds that brush for block contexts and survives the existing
+Worker codec. The browser projection reads the actual paragraph brush and paints
+the paragraph wrapper independently of character highlight. A real Markdown ->
+SwDoc -> WriterViewProjection -> mounted WriterEditableParagraph test covers the
+path. The distinct RES_CHRATR_BACKGROUND family has no current value owner or
+registered Which in this slice; inline background is not translated to highlight
+or used as a reason to extend the model. Background images and shorthand URL
+resolution remain separate native producer work only where the current model
+represents them. Remaining borders, language/bookmarks/hyperlinks and HTML
+list/table consumers and RTF capability rows keep overall completion open.
+
+### Connected native HTML point bookmarks
+
+Actual ID-only options on the connected paragraph/heading/quotation/PRE,
+standard/semantic inline and legacy-font producers now follow native
+ParseStyleOptions -> property-info ID -> InsertAttrs -> InsertBookmark. The
+producer queues a real HTMLAttr with filter-private RES_FLTR_BOOKMARK, no head or
+table owner and raw source offsets. SetAttr_ consumes the original reverse queue,
+clamps positions after text cleanup, suppresses same-name/same-point duplicates
+and delegates unique-name allocation to the existing actual document mark owner.
+Empty trailing marked paragraphs remain document-owned. The filter-private Which
+is not registered as a new document attribute/default.
+
+The no-HREF named-anchor branch closes an earlier anchor context, preserves the
+stored exact name and filters native implicit Writer targets using the consumed
+INetURLObject::decode Unambiguous/UTF8 algorithm, its exact ASCII category and
+source ASCII-only suffix rules. General URL parsing/SmartRel2Abs and URL-bearing
+SwFormatINetFormat production remain open; a NAME on an HREF anchor is not
+incorrectly converted into a standalone mark. Macro/footnote target producers
+remain outside represented current-model owners.
+
+Actual-model tests cover ID producers, queue-dependent duplicate allocation
+(WRITER221), raw name spelling, implicit target filtering, tail preservation,
+BR-position clamping and real Markdown/Worker and RTF paths. Language/direction,
+division/section-specific IDs, hyperlinks, borders/background shorthand, lists and
+tables and remaining represented RTF rows still require their real consumer work.
+No full HTML or whole-filter completion is claimed here.
+
+### Connected native URI resolution and HTML HREF items
+
+The consumed URI chain now includes the original INetURLObject scalar/escape,
+scheme/prefix, host, per-protocol path, strict/smart absolute and relative-value
+productions. Ordinary Markdown span callbacks call original GetAbsURL, including
+its default-only failed-conversion fallback. Embedded HTML HREF calls original
+SmartRel2Abs with the source null-handler/false arguments; an empty HREF instead
+uses the source medium's GetPartBeforeLastName. The two resolution contracts are
+kept distinct. These connected paths supersede the earlier URL-resolver and HREF
+pending notes above; compiled complete-URL/desktop equivalence is not certified.
+
+NewAnchor now inserts an actual SwFormatINetFormat through pINetFormat and the
+native context/deferred queue, retaining target, raw stored name, independent
+normal/visited style IDs and the previous-anchor close order. SetATagStyles
+consumes native A, A:link and A:visited map precedence once, with original body
+color flags and percentage-height removal from the owned map. The current
+Markdown HTML reader uses existing-document insertion; this does not add a
+standalone new-document HTML import profile or its encoding setup. Unsupported
+character background/box Which families are not replaced with other attributes.
+
+The existing document insertion facade now passes the concrete internet item to
+InsertItem/MakeTextAttr/SwTextINetFormat with its original mode. Its old portable
+SetHyperlink conversion lost native style IDs and treated an empty URL as a
+removal. Owned-map copying and the Worker item decoder also stopped discarding
+empty native internet values. WRITER233 records why HREF presence can produce a
+valid native attribute whose resolved URL is empty; UI-facing blank-link
+validation remains a separate boundary. Actual HTML, Markdown/Worker, nested and
+adjacent range, one-shot CSS-map and HTML-to-RTF tests cover these paths.
+
+Remaining applicable embedded-HTML consumers include native language options,
+represented paragraph-border/background shorthand properties, lists and tables.
+Direction, positioned fields, macros and foot/endnote owners must be assessed
+against the actual current model rather than added solely for generic HTML
+completeness. Remaining RTF rows still need a fresh current-state reconciliation;
+earlier historical pending notes are not independent proof that those paths are
+still missing. The overall TXT/RTF/Markdown goal remains open until that final
+capability and UI audit is complete.

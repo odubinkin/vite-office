@@ -1,0 +1,12 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "shared.internal.tools.append-escape",
+    "modulePath": "apps/office/src/tools/source/fsys/urlobj.ts",
+    "symbol": "appendEscape",
+    "classification": "upstream-mechanism",
+    "capabilityId": "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
+    "description": "Native uppercase percent-octet append represented by a returned immutable string."
+  }
+}

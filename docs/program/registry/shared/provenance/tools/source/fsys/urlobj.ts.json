@@ -7,13 +7,29 @@
     "status": "mapped",
     "stackDivergence": {
       "kind": "browser-adaptation",
-      "rationale": "Host UTF16 strings, Uint8Array and asynchronous ZIP/SAX bindings replace native component streams and generated token transport at the consumed package boundary."
+      "rationale": "Immutable host UTF16 strings and explicit scalar iteration represent the original native Unicode value/escape loop; native pointer and buffer allocation ABI is not certified."
     },
     "evidence": {
       "local": [
         {
           "path": "apps/office/src/tools/source/fsys/urlobj.ts",
           "marker": "decodeToIUri"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.lexical.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.object.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -29,17 +45,35 @@
     },
     "upstreamPath": "tools/source/fsys/urlobj.cxx",
     "localSymbols": [
-      "decodeToIUri"
+      "decodeToIUri",
+      "decodeUnambiguous",
+      "decode",
+      "getUTF32",
+      "mustEncode",
+      "appendEscape",
+      "appendUCS4Escape",
+      "appendUCS4",
+      "parseScheme",
+      "scanDomain",
+      "scanIPv6reference",
+      "guessFSysStyleByCounting"
     ],
     "upstreamSymbols": [
       "INetURLObject::decode",
-      "INetURLObject::getUTF32"
+      "INetURLObject::getUTF32",
+      "INetURLObject::appendUCS4",
+      "INetURLObject::appendUCS4Escape",
+      "INetURLObject::scanDomain",
+      "INetURLObject::scanIPv6reference",
+      "parseScheme",
+      "guessFSysStyleByCounting"
     ],
     "preservedResponsibilities": [
-      "Consumed ToIUri/UTF8 native escaped scalar algorithm, ASCII escape retention, uppercase invalid octets and non-ASCII scalar decoding."
+      "Native URI scalar/escape owner now serves actual ToIUri and Unambiguous production callers. getUTF32 retains code-unit bounds, surrogate handling, WasEncoded charset branches, NotCanonical octets and invalid UTF8 continuation rollback. Exact 128-entry admission masks and original appendUCS4/legacy UCS4 escape branches are retained. Source generic scheme, filesystem delimiter vote, domain and bracket-reference scanners are ported as prerequisites of the pending native HREF resolver; they do not yet certify whole URL parsing. URI lexical tests and existing shared/filter tests cover this bounded slice. Full INetURLObject parsing, SmartRel2Abs, general decode modes and compiled desktop equivalence remain pending; no parity promotion.",
+      "Native decode now supports NONE/ToIUri/WithCharset/Unambiguous with original ToIUri UTF8 forcing and supplied charset handling in other modes, consumed by the actual INetURLObject URI value. Existing Markdown and bookmark entrypoints delegate to this same decode loop. Full absolute/relative assembly is represented in urlobj.object.ts; HTML HREF insertion and compiled complete-class equivalence remain pending."
     ],
     "omittedResponsibilities": [
-      "Ports only the consumed XML/package contract; native UNO services, general storage hierarchy, encrypted/ZIP64 packages, XLSB RecordParser and complete application document filters are outside this prerequisite. Strings/byte arrays and Promises bind host XML/ZIP transport; whole-module parity remains unverified."
+      "Native string/buffer allocation ABI, complete URL services and compiled complete-class equivalence are not certified. HTML HREF production integration is pending."
     ]
   }
 }

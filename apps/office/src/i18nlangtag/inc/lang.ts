@@ -38,3 +38,6 @@ export const LANGUAGE_ARABIC_SAUDI_ARABIA = LanguageType(0x0401);
 export const LANGUAGE_PROCESS_OR_USER_DEFAULT = LanguageType(0x0400);
 /** Original system-default language alias. */
 export const LANGUAGE_SYSTEM_DEFAULT = LanguageType(0x0800);
+
+/** Original simplified Chinese language identity used by Word numbering export. */
+export const LANGUAGE_CHINESE_SIMPLIFIED = LanguageType(0x0804);

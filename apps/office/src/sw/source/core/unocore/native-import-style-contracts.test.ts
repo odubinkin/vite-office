@@ -197,6 +197,7 @@ it("rejects invalid style names, typed values and ownership transfers before rep
   const wrong = new Any([true], "bool");
   try {
     expect(f.families.getElementNames()).toEqual([
+      "CharacterStyles",
       "ParagraphStyles",
       "PageStyles",
       "NumberingStyles",
@@ -328,3 +329,145 @@ it("retains typed failures for missing follow styles, invalid numbering supplier
     f.close();
   }
 });
+
+it("attaches native character descriptors without admitting paragraph properties", /** The original CharacterStyles supplier must own a real SwCharFormat and preserve explicit defaults. @returns Nothing. */ () => {
+  const f = fixture();
+  const family = f.families.GetCharacterStyles(),
+    descriptor = f.model.createCharacterStyle(),
+    normal = new Any([100], "float"),
+    bold = new Any([150], "float");
+  try {
+    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("CharWeightComplex"))).toBe(
+      true,
+    );
+    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("ParaLeftMargin"))).toBe(false);
+    expect(descriptor.getPropertySetInfo().hasPropertyByName(f.key("FollowStyle"))).toBe(false);
+    const underline = descriptor.getPropertySetInfo().getPropertyByName(f.key("CharUnderline"));
+    const weight = descriptor.getPropertySetInfo().getPropertyByName(f.key("CharWeight"));
+    try {
+      expect(underline.Attributes).toBe(0);
+      expect(weight.Attributes).toBe(1);
+    } finally {
+      underline.Type.dispose();
+      underline.Name.dispose();
+      weight.Type.dispose();
+      weight.Name.dispose();
+    }
+    descriptor.setPropertyValue(f.key("CharWeight"), normal);
+    family.insertStyleByName(f.key("Character"), descriptor);
+    expect(f.document.FindCharFormatByName("Character")).toBeDefined();
+    expect(f.document.FindTextFormatCollByName("Character")).toBeUndefined();
+    expect(descriptor.getPropertyState(f.key("CharWeight"))).toBe(PropertyState.DIRECT_VALUE);
+    const parent = f.model.createCharacterStyle();
+    try {
+      family.insertStyleByName(f.key("Parent character"), parent);
+      parent.setPropertyValue(f.key("CharWeight"), bold);
+      descriptor.setParentStyle(f.key("Parent character"));
+      expect(text(descriptor.getParentStyle())).toBe("Parent character");
+      expect(number(descriptor.getPropertyValue(f.key("CharWeight")))).toBe(100);
+      descriptor.setPropertyToDefault(f.key("CharWeight"));
+      expect(number(descriptor.getPropertyValue(f.key("CharWeight")))).toBe(150);
+      expect(descriptor.getPropertyState(f.key("CharWeight"))).toBe(PropertyState.DEFAULT_VALUE);
+    } finally {
+      parent.dispose();
+    }
+  } finally {
+    descriptor.dispose();
+    normal.dispose();
+    bold.dispose();
+    f.close();
+  }
+});
+
+it("stages native character bulk items and wraps unknown properties without partial changes", /** Source SetPropertyValues_Impl commits its item set only after all represented member writes succeed. @returns Nothing. */ () => {
+  const f = fixture(),
+    family = f.families.GetCharacterStyles(),
+    descriptor = f.model.createCharacterStyle(),
+    bold = new Any([150], "float"),
+    wrong = new Any([true], "bool");
+  try {
+    family.insertByName(f.key("Atomic character"), descriptor);
+    const single = failure(
+      /** Original single-property API retains its unwrapped exception message. @returns Nothing. */ () =>
+        descriptor.setPropertyValue(f.key("ParaLeftMargin"), wrong),
+    );
+    expect(single).toBeInstanceOf(UnknownPropertyException);
+    if (single instanceof UnknownPropertyException) {
+      try {
+        expect(text(single.Message)).toBe("Unknown property: ParaLeftMargin");
+      } finally {
+        single.dispose();
+      }
+    }
+    const error = failure(
+      /** Validates an unknown second property after staging the first. @returns Nothing. */ () =>
+        descriptor.setPropertyValues([f.key("CharWeight"), f.key("ParaLeftMargin")], [bold, wrong]),
+    );
+    expect(error).toBeInstanceOf(WrappedTargetException);
+    if (!(error instanceof WrappedTargetException))
+      throw new Error("Expected original wrapped exception");
+    const type = error.TargetException.getValueTypeName();
+    try {
+      expect(text(type)).toBe("com.sun.star.beans.UnknownPropertyException");
+    } finally {
+      type.dispose();
+      error.dispose();
+    }
+    expect(number(descriptor.getPropertyValue(f.key("CharWeight")))).toBe(100);
+    expect(descriptor.getPropertyState(f.key("CharWeight"))).toBe(PropertyState.DEFAULT_VALUE);
+    const invalid = failure(
+      /** A later invalid item value cannot publish an earlier valid item. @returns Nothing. */ () =>
+        descriptor.setPropertyValues([f.key("CharWeight"), f.key("CharHeight")], [bold, wrong]),
+    );
+    expect(invalid).toBeInstanceOf(IllegalArgumentException);
+    if (invalid instanceof IllegalArgumentException) invalid.dispose();
+    expect(number(descriptor.getPropertyValue(f.key("CharWeight")))).toBe(100);
+  } finally {
+    descriptor.dispose();
+    bold.dispose();
+    wrong.dispose();
+    f.close();
+  }
+});
+
+it("uses original character programmatic aliases and native short suffix behavior", /** Character name lookup uses UI/programmatic disambiguation rather than paragraph-name lookup or a second catalog. @returns Nothing. */ () => {
+  const f = fixture();
+  const family = f.families.GetCharacterStyles();
+  const internet = family.getStyleByName(f.key("Internet link"));
+  try {
+    expect(text(internet.getName())).toBe("Internet link");
+    expect(f.document.GetCharFormatFromPool(SwPoolFormatId.CHR_INET_NORMAL)?.GetName()).toBe(
+      "Internet Link",
+    );
+    expect(internet.isUserDefined()).toBe(false);
+    expect(family.hasByName(f.key("Emphasis (user)"))).toBe(true);
+    const duplicate = f.model.createCharacterStyle();
+    try {
+      const error = failure(
+        /** Original UI name resolution detects the built-in collision. @returns Nothing. */ () =>
+          family.insertByName(f.key("Emphasis (user)"), duplicate),
+      );
+      expect(error).toBeInstanceOf(ElementExistException);
+      if (error instanceof ElementExistException) error.dispose();
+    } finally {
+      duplicate.dispose();
+    }
+    expect(text(family.getStyleByName(f.key("Standard")).getParentStyle())).toBe("");
+    expect(SwStyleNameMapper.FillUIName("Internet Link", SwGetPoolIdFromName.ChrFmt)).toBe(
+      "Internet Link (user)",
+    );
+    expect(SwStyleNameMapper.FillUIName("Internet link", SwGetPoolIdFromName.ChrFmt)).toBe(
+      "Internet Link",
+    );
+    for (const value of [" (user)", "A (user)", "AB (user)"])
+      expect(SwStyleNameMapper.FillProgName(value, SwGetPoolIdFromName.ChrFmt)).toBe(
+        value.length > 8 ? "AB" : value,
+      );
+    expect(SwStyleNameMapper.FillUIName("A (user)", SwGetPoolIdFromName.ChrFmt)).toBe("A (user)");
+  } finally {
+    internet.dispose();
+    f.close();
+  }
+});
+import { WrappedTargetException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetException";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";

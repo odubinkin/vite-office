@@ -52,7 +52,7 @@ it("writes initial native page geometry to RTF global and first-section controls
   first.SetAttr(new SwFormatPageDesc("Landscape"));
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const rtf = new TextDecoder().decode(bytes);
     expect(rtf).toContain(String.raw`{\*\pgdscno1}`);
     expect(rtf).toContain(String.raw`\landscape\paperh9000\paperw15000`);
@@ -85,7 +85,7 @@ it("selects the first RTF page descriptor inherited from a paragraph style", /**
     const style = source.MakeTextFormatColl("Styled", source.GetTextFormatColl("default"));
     style.SetFormatAttr(new SwFormatPageDesc("Styled Page"));
     paragraph.ChgFormatColl(style);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf).toContain(String.raw`{\*\pgdscno1}`);
     expect(rtf).toContain(String.raw`\paperw14000`);
   } finally {
@@ -101,7 +101,7 @@ it("writes a native RTF page section and restart before a later paragraph", /** 
     source.ChgPageDesc({ ...alternate.GetValue(), width: 15120, leftMargin: 990 }, "Second Page");
     const next = source.nodes.MakeTextNode("After");
     next.SetAttr(new SwFormatPageDesc("Second Page", 7));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf).toContain(
       String.raw`\sect\sectd\sectunlocked1\pgwsxn15120\pghsxn15840\marglsxn990`,
     );
@@ -122,7 +122,7 @@ it("imports an exported later page section through native page descriptors", /**
     const next = source.nodes.MakeTextNode("After");
     next.SetAttr(new SwFormatPageDesc("Second Page", 7));
     imported = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(source)).Tokenize(),
+      new RtfTokenizer(RtfExport.WriteDocument(source)).Tokenize(),
     );
     expect(
       imported.paragraphs.map(
@@ -151,7 +151,7 @@ it("writes a page section before a table with its own page descriptor", /** Chec
     table.GetFrameFormat().SetFormatAttr(new SwFormatPageDesc("Table Page"));
     const row = source.nodes.AppendTableRow(table, 1);
     row.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText("Cell");
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf).toContain(String.raw`\sect\sectd\sectunlocked1\pgwsxn14500`);
     expect(rtf.indexOf(String.raw`\sect\sectd`)).toBeLessThan(rtf.indexOf(String.raw`\trowd`));
   } finally {
@@ -169,7 +169,7 @@ it("keeps distinct follow-page geometry out of a combined later RTF section", /*
     source.ChgPageDesc({ ...follow.GetValue(), width: 13000 }, "New Follow");
     first.SetFollow(follow);
     source.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("New First"));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     const laterSection = rtf.slice(rtf.indexOf(String.raw`\sect\sectd`));
     expect(laterSection).toContain(String.raw`\pgwsxn15000`);
     expect(laterSection).not.toContain(String.raw`\pgwsxn13000`);
@@ -188,7 +188,7 @@ it("combines matching first/follow pages and advances the current section page",
     first.SetFollow(follow);
     source.nodes.MakeTextNode("After").SetAttr(new SwFormatPageDesc("New First"));
     source.nodes.MakeTextNode("Follow").SetAttr(new SwFormatPageDesc("New Follow"));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf.match(/\\sect\\sectd/gu)).toHaveLength(1);
     expect(rtf.slice(rtf.indexOf(String.raw`\sect\sectd`))).toContain(String.raw`\titlepg`);
   } finally {
@@ -213,7 +213,7 @@ it("splits a text node at a soft page boundary only for a distinct follow sectio
     const follow = source.MakePageDesc("Follow", source.GetPageDesc());
     source.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
     source.GetPageDesc().SetFollow(follow);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf.match(/\\pard/gu)?.length).toBe(2);
     expect(rtf.match(/\\sect\\sectd/gu)?.length).toBe(1);
     expect(rtf.match(/HYPERLINK/gu)?.length).toBe(2);
@@ -247,7 +247,7 @@ it("ignores soft page positions without a distinct follow-style section", /** Ch
     source.GetIDocumentMarkAccess().AddSoftPageBreak(paragraph, 5);
     const follow = source.MakePageDesc("Same Geometry", source.GetPageDesc());
     source.GetPageDesc().SetFollow(follow);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf.match(/\\pard/gu)?.length).toBe(1);
     expect(rtf).not.toContain(String.raw`\sect\sectd`);
   } finally {
@@ -264,7 +264,7 @@ it("preserves source RTF suppression for a soft split after a preceding text nod
     const follow = source.MakePageDesc("Follow", source.GetPageDesc());
     source.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
     source.GetPageDesc().SetFollow(follow);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf.match(/\\pard/gu)?.length).toBe(3);
     expect(rtf).not.toContain(String.raw`\sect\sectd`);
   } finally {
@@ -280,7 +280,7 @@ it("keeps the source RTF section suppression when a page follows the previous pa
     source.GetPageDesc().SetFollow(follow);
     const next = source.nodes.MakeTextNode("Second");
     next.SetAttr(new SwFormatPageDesc("Follow", 9));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf).toContain(String.raw`\titlepg`);
     expect(rtf).not.toContain(String.raw`\sect\sectd`);
     expect(rtf).not.toContain(String.raw`\pgnstarts9`);
@@ -301,7 +301,7 @@ it.each([1, 2, 3, 5, 6])(
       first.SetText("First");
       const second = source.nodes.MakeTextNode("Second");
       second.SetAttr(new SfxInt16Item(RES_BREAK, mode));
-      const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+      const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
       expect(rtf).not.toMatch(/\\(?:pagebb|column|page)(?![a-z])/u);
     } finally {
       source.Dispose();
@@ -334,7 +334,7 @@ it.each([
     paragraph.SetAttr(item);
     let imported;
     try {
-      const bytes = new RtfExport().ExportDocument(source);
+      const bytes = RtfExport.WriteDocument(source);
       expect(new TextDecoder().decode(bytes)).toContain(`\\sl${space}\\slmult${multi}`);
       imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
       const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING) as SvxLineSpacingItem;
@@ -380,7 +380,7 @@ it("adds measured font height to native RTF leading as the pinned Word exporter 
   paragraph.SetAttr(item);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\sl350\\slmult0");
     expect(measured).toHaveLength(1);
     expect(measured[0]?.[1]).toBeGreaterThan(0);
@@ -422,9 +422,7 @@ it("measures the actual CJK paragraph font when exporting native RTF leading", /
     const spacing = new SvxLineSpacingItem(200, RES_PARATR_LINESPACING);
     spacing.SetInterLineSpace(40);
     paragraph.SetAttr(spacing);
-    expect(new TextDecoder().decode(new RtfExport().ExportDocument(source))).toContain(
-      "\\sl340\\slmult0",
-    );
+    expect(new TextDecoder().decode(RtfExport.WriteDocument(source))).toContain("\\sl340\\slmult0");
     expect(measured).toEqual([["CJK Test", 360]]);
   } finally {
     source.Dispose();
@@ -444,7 +442,7 @@ it("round trips point bookmarks inside formatted text and table cells", /** Chec
   source.GetIDocumentMarkAccess().MakeMark(cell, 2, "CellPoint");
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\bkmkstart Midpoint");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(

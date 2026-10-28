@@ -1,4 +1,4 @@
-/** @fileoverview Ports the StarBats/StarMath import table branch of native unotools ConvertChar. */
+/** @fileoverview Native StarBats/StarMath import conversion and StarSymbol multi-font export conversion; the standard multimap binding is checked against unchanged compiled source. */
 /** LibreOffice conversion tables are distributed under MPL-2.0 and the Apache-2.0 notice in upstream fontcvt.cxx. */
 const aStarBatsTab = Object.freeze([
   0x0020, 0x263a, 0x25cf, 0x274d, 0x25a0, 0x25a1, 0xe000, 0x2751, 0x2752, 0xe001, 0xe002, 0xe003,
@@ -63,4 +63,175 @@ export function createLegacySymbolImportConverter(
   family: "StarBats" | "StarMath",
 ): Readonly<ConvertChar> {
   return family === "StarBats" ? starBats : starMath;
+}
+
+import exportData from "./fontcvt-export-data.json" with { type: "json" };
+/** Original mutable sal_Unicode reference for export symbol conversion. */
+export interface SymbolCharacterReference {
+  value: number;
+}
+/** Native multi-font export converter interface; factories return independent owners. */
+export abstract class StarSymbolToMSMultiFont {
+  /** Converts one native UTF16 unit in place. @param character - Mutable native unit. @returns Original selected MS font name, or empty. */
+  abstract ConvertChar(character: SymbolCharacterReference): string;
+  /** Explicit native destructor binding. @returns Nothing. */
+  abstract Dispose(): void;
+}
+/** Native ordered equivalent-key entries retain conservative before aggressive preferences. */
+class StarSymbolToMSMultiFontImpl extends StarSymbolToMSMultiFont {
+  private readonly maMagicMap = new SymbolExportMap();
+  /** Builds the original seven reverse tables and four ordered extra tables. @returns Converter owner. */
+  constructor() {
+    super();
+    for (const table of exportData.conservative) {
+      for (let index = 0xff; index >= 0x20; --index) {
+        const character = table.values[index - 0x20] as number;
+        if (character) this.insert(character, index, table.font);
+      }
+    }
+    for (const table of exportData.aggressive) {
+      for (let index = table.values.length - 1; index >= 0; --index) {
+        const entry = table.values[index] as number[];
+        this.insert(entry[0] as number, entry[1] as number, table.font);
+      }
+    }
+  }
+  /** Retains native multimap equivalent-key insertion order. @param character - Original key. @param cIndex - Original MS byte. @param eFont - Symbol font enum. @returns Nothing. */
+  private insert(character: number, cIndex: number, eFont: number): void {
+    this.maMagicMap.insert(character, { cIndex, eFont });
+  }
+  /** Original find uses the native tree lookup rather than correcting equivalent-key preference. @param character - Mutable source unit. @returns Selected font or empty. */
+  override ConvertChar(character: SymbolCharacterReference): string {
+    character.value &= 0xffff;
+    const entry = this.maMagicMap.find(character.value);
+    if (entry === undefined) return "";
+    character.value = entry.cIndex;
+    return SymbolFontToString(entry.eFont);
+  }
+  /** Original owned multimap destruction. @returns Nothing. */
+  override Dispose(): void {
+    this.maMagicMap.clear();
+  }
+}
+/** Original font-name lookup selects the first set native font bit. @param result - SymbolFont flags. @returns Native family name. */
+function SymbolFontToString(result: number): string {
+  let index = 0,
+    flag = 1;
+  while (flag <= result) {
+    if ((flag & result) !== 0) break;
+    flag <<= 1;
+    ++index;
+  }
+  return exportData.names[index] as string;
+}
+/** Original export factory allocates a fresh converter, rather than an import-only or fallback mapper. @returns Owned native converter. */
+export function CreateStarSymbolToMSMultiFont(): StarSymbolToMSMultiFont {
+  return new StarSymbolToMSMultiFontImpl();
+}
+
+/** Browser node storage for the original standard multimap binding; these are container internals, not new LibreOffice public APIs. */
+interface SymbolMapNode {
+  key: number;
+  value: { cIndex: number; eFont: number };
+  red: boolean;
+  parent: SymbolMapNode | undefined;
+  left: SymbolMapNode | undefined;
+  right: SymbolMapNode | undefined;
+}
+/** Standard red/black equal-key insertion and direct find binding used by the pinned native witness. Keeping duplicate nodes is significant: find does not promise the first preference entry. */
+class SymbolExportMap {
+  private root: SymbolMapNode | undefined;
+  /** Original ordered insertion retains duplicate keys as distinct nodes. @param key - Native Unicode key. @param value - Original entry. @returns Nothing. */
+  insert(key: number, value: { cIndex: number; eFont: number }): void {
+    let parent: SymbolMapNode | undefined,
+      at = this.root;
+    while (at !== undefined) {
+      parent = at;
+      at = key < at.key ? at.left : at.right;
+    }
+    let node: SymbolMapNode = { key, value, red: true, parent, left: undefined, right: undefined };
+    if (parent === undefined) this.root = node;
+    else if (key < parent.key) parent.left = node;
+    else parent.right = node;
+    while (node.parent?.red) {
+      const p = node.parent,
+        g = p.parent as SymbolMapNode;
+      if (p === g.left) {
+        const uncle = g.right;
+        if (uncle?.red) {
+          p.red = false;
+          uncle.red = false;
+          g.red = true;
+          node = g;
+        } else {
+          if (node === p.right) {
+            node = p;
+            this.rotateLeft(node);
+          }
+          const parent = node.parent as SymbolMapNode,
+            grandparent = parent.parent as SymbolMapNode;
+          parent.red = false;
+          grandparent.red = true;
+          this.rotateRight(grandparent);
+        }
+      } else {
+        const uncle = g.left;
+        if (uncle?.red) {
+          p.red = false;
+          uncle.red = false;
+          g.red = true;
+          node = g;
+        } else {
+          if (node === p.left) {
+            node = p;
+            this.rotateRight(node);
+          }
+          const parent = node.parent as SymbolMapNode,
+            grandparent = parent.parent as SymbolMapNode;
+          parent.red = false;
+          grandparent.red = true;
+          this.rotateLeft(grandparent);
+        }
+      }
+    }
+    (this.root as SymbolMapNode).red = false;
+  }
+  /** Native direct key lookup returns the first tree equality, which need not be the first equivalent entry. @param key - Original Unicode key. @returns Borrowed entry or undefined. */
+  find(key: number): SymbolMapNode["value"] | undefined {
+    let at = this.root;
+    while (at !== undefined) {
+      if (key < at.key) at = at.left;
+      else if (key > at.key) at = at.right;
+      else return at.value;
+    }
+    return undefined;
+  }
+  /** Original left balancing rotation. @param node - Subtree root. @returns Nothing. */
+  private rotateLeft(node: SymbolMapNode): void {
+    const right = node.right as SymbolMapNode;
+    node.right = right.left;
+    if (right.left !== undefined) right.left.parent = node;
+    right.parent = node.parent;
+    if (node.parent === undefined) this.root = right;
+    else if (node === node.parent.left) node.parent.left = right;
+    else node.parent.right = right;
+    right.left = node;
+    node.parent = right;
+  }
+  /** Original right balancing rotation. @param node - Subtree root. @returns Nothing. */
+  private rotateRight(node: SymbolMapNode): void {
+    const left = node.left as SymbolMapNode;
+    node.left = left.right;
+    if (left.right !== undefined) left.right.parent = node;
+    left.parent = node.parent;
+    if (node.parent === undefined) this.root = left;
+    else if (node === node.parent.right) node.parent.right = left;
+    else node.parent.left = left;
+    left.right = node;
+    node.parent = left;
+  }
+  /** Releases the actual owned node tree. @returns Nothing. */
+  clear(): void {
+    this.root = undefined;
+  }
 }

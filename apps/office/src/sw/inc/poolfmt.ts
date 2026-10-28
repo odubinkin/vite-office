@@ -13,6 +13,100 @@ export const POOLGRP_CHARFMT = POOLGRP_NOCOLLID;
 
 /** Native unsigned16 sentinels and internet character-style identities; other native enum families remain outside this bounded export. */
 export enum SwPoolFormatId {
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_LEVEL1 = 4118,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_LEVEL2 = 4122,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_LEVEL3 = 4126,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_LEVEL4 = 4130,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_LEVEL5 = 4134,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_NONUM1 = 4120,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_NONUM2 = 4124,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_NONUM3 = 4128,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_NONUM4 = 4132,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_BULLET_NONUM5 = 4136,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_DOC_APPENDIX = 10242,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_DOC_SUBTITLE = 10241,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_DOC_TITLE = 10240,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_ENDNOTE = 6162,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_ENVELOPE_ADDRESS = 6160,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_FOOTER = 6148,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_FOOTNOTE = 6159,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_GREETING = 2053,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_HEADER = 6145,
+  /** Native HTML quotation paragraph style. */
+  COLL_HTML_BLOCKQUOTE = 12288,
+  /** Native HTML preformatted paragraph style. */
+  COLL_HTML_PRE = 12289,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_HEADLINE1 = 10244,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_HEADLINE9 = 10252,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_LABEL = 6153,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_LISTS_BEGIN = 4096,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_MARGINAL = 2056,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_NUM_LEVEL1 = 4098,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_NUM_LEVEL2 = 4102,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_NUM_LEVEL3 = 4106,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_NUM_LEVEL4 = 4110,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_NUM_LEVEL5 = 4114,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_SEND_ADDRESS = 6161,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_SIGNATURE = 2054,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_STANDARD = 2048,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TEXT = 2049,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TEXT_IDENT = 2050,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TEXT_MOVE = 2052,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_AUTHORITIESH = 8221,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_CNTNT1 = 8199,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_CNTNT5 = 8203,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_CNTNT6 = 8210,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_CNTNT9 = 8213,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_CNTNTH = 8198,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_IDX1 = 8194,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_IDX3 = 8196,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_IDXH = 8193,
+  /** Original paragraph pool identity consumed by Word style mapping. */
+  COLL_TOX_ILLUS1 = 8216,
   ZERO = 0,
   /** Native CHR_FOOTNOTE identity. */
   CHR_FOOTNOTE = 1024,

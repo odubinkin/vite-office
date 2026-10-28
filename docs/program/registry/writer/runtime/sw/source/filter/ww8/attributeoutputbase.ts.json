@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/ww8/attributeoutputbase.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "writer",
+    "subsystem": "word-export-styles",
+    "capabilityIds": [
+      "CAP-0121"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sw/source/filter/ww8/attributeoutputbase.ts",
+        "apps/office/src/sw/source/filter/ww8/wrtw8sty.styles.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/ww8/attributeoutputbase.hxx",
+        "apps/office/src/sw/source/filter/ww8/rtf-paragraph-numbering.test.ts"
+      ],
+      "justification": "S3HW1E Word style/cache integration: MSWordStyles now consumes the actual MSWordExportBase, appends non-default character formats before non-reserved paragraph formats and keeps source4091 limits, reserved heading slots, character self-next, identity lookup and builtin-first ASCII name disambiguation across both families. Native GetWWId and all91 original English names replace the partial paragraph-name map; consumed paragraph pool enum identities are admitted from the pinned header. Actual concrete exporters implement the native ExportFormat virtual. MSWordExportBase character GetId uses the actual initialized style table. Source GetSlot(null) selects the first empty reserved entry (WRITER201), not an invented missing sentinel. RTF style framing/colors/buffer flushing use native StartStyles/StartStyle/EndStyle/EndStyles, and InsStyle/GetStyle keep first-inserted property-only entries. Existing StyleDefinition string sinks bind EndStyle with explicit drained properties; full native OutputFormat/item-buffer contracts remain unverified. Full typed SwFormat auto-update state is not admitted; document export passes its represented native defaultfalse. The current core lacks native hidden default paragraph collection0, so the existing Standard-first logical paragraph table binding is retained and not certified as source ownership equivalence. Footnote materialization, list-style true branch, linked style graph, full OutColorTable collectors, character style importer and paragraph numbering dispatcher/restart integration remain explicit obligations. Unchanged compiled native style helpers plus original enums/operators match all65536 pool IDs,91 names and null slots1/10 under ASan/UBSan, with a scalar SwFormat/vector-entry carrier only; this is not complete Writer/style ABI or whole-module certification. S3HW1E paragraph numbering: the actual RtfAttributeOutput now derives from AttributeOutputBase and consumes native empty/unknown/uncounted/style/restart ParaNumRule dispatch. Restart duplication occurs at Writer level before Word level8 clamping; RTF retains original-rule ls references (WRITER096). Actual character property cache feeds listtext with original outline/empty-label tab policy. Native non-RTL Out_SwTextNode numbering preparation copies actual paragraph items, handles inherited rule injection, legacy indents/tab correction and uncounted visual geometry; OutputItemSet numbering-first then ascending WhichID paragraph callback order lets explicit/copied margins override intermediate numbering margins. Genuine exporter node/item contexts are restored and temporary sets disposed. This is the represented RTF non-DOCX paragraph profile only: Writer frame-direction/layout owners, full script/bidi iteration, full native OutputFormat/buffer ABI, DOCX override-list branch, style importer and whole filter closure remain unverified. AttributeOutputBase is re-exported by this header facade; its actual class declaration and semantic symbol evidence belong to ww8atr.ts.",
+      "knownViolations": [],
+      "localSymbols": [
+        "StyleType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/ww8/attributeoutputbase.hxx",
+      "upstreamSymbols": [
+        "enum StyleType",
+        "AttributeOutputBase"
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Projects the live Writer graph to immutable browser presentation values. */
+import { RES_BACKGROUND } from "../../inc/hintids";
 import { IsPoolUserFormat } from "../../inc/poolfmt";
 import { writerTextColorValue, writerHighlightColorValue } from "../../source/core/attr/swatrset";
 import { SvxColorItem } from "../../../editeng/inc/colritem";
@@ -161,6 +162,7 @@ export interface WriterParagraphComputedStyle {
   readonly fontSizePt: number;
   readonly fontWeight: 400 | 700;
   readonly highlight?: string;
+  readonly backgroundColor?: string;
   readonly lineHeight: number;
   readonly lineSpacingMode?: "proportional" | "fixed" | "minimum" | "leading";
   readonly lineSpacingValue?: number;
@@ -332,6 +334,7 @@ export class WriterViewProjection {
         const highlight = writerHighlightColorValue(
           node.GetAttr(RES_CHRATR_HIGHLIGHT) as SvxBrushItem,
         );
+        const background = writerHighlightColorValue(node.GetAttr(RES_BACKGROUND) as SvxBrushItem);
         const font = node.GetAttr(RES_CHRATR_FONT) as SvxFontItem;
         const fontFamilyGeneric = getFontFamilyGeneric(font.GetFamily());
         return Object.freeze({
@@ -359,6 +362,7 @@ export class WriterViewProjection {
               ? 700
               : 400,
             ...(highlight === "transparent" ? {} : { highlight }),
+            ...(background === "transparent" ? {} : { backgroundColor: background }),
             lineHeight: projectWriterLineHeightItem(
               lineSpacing,
               (node.GetAttr(RES_CHRATR_FONTSIZE) as SvxFontHeightItem).GetHeight() / 20,

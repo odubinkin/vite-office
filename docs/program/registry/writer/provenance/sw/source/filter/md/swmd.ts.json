@@ -13,7 +13,8 @@
       "MarkdownReader::Read"
     ],
     "preservedResponsibilities": [
-      "Rejects empty Markdown streams and reads other bytes using the browser UTF-8 default, then maps represented Markdown blocks, including setext headings, thematic lines, indented code, multiline quotations and loose-list blank-line continuation with nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available."
+      "Rejects empty Markdown streams and reads other bytes using the browser UTF-8 default, then maps represented Markdown blocks, including setext headings, thematic lines, indented code, multiline quotations and loose-list blank-line continuation with nesting based on marker continuation width, into native Writer paragraph styles, hints, lists and tables; supplies a source document URL to hyperlink span callbacks when available.",
+      "InsertHtmlData now uses the original SAL UTF16-to-UTF8 conversion and existing SvStream, passing the real Markdown SwDoc and borrowed SwPaM to the consumed native SwHTMLParser. The private document callback begins at a blank paragraph at section EOF; unconsumed SwReader/Sfx media orchestration is not recreated as a generic API prerequisite. Empty path/baseURL and ignored parser result follow the pinned Markdown caller, and EndHtmlBlock clears its buffer after successful insertion. Actual native HTML/model/worker-codec tests replace the unsupported-placeholder fixture. This is initial connected HTML body/inline/block coverage, not full CSS/named-style/font/link/list/table HTML support."
     ],
     "omittedResponsibilities": [
       "Platform-dependent thread encoding, explicit unknown-encoding detection, complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -39,6 +40,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
           "marker": "rejects an empty Markdown stream"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

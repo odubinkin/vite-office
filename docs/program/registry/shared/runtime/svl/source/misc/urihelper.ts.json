@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/misc/urihelper.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "uri-reference",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/misc/urihelper.ts",
+        "apps/office/src/tools/source/fsys/urlobj.object.test.ts",
+        "vendor/libreoffice-reference/svl/source/misc/urihelper.cxx",
+        "vendor/libreoffice-reference/tools/qa/cppunit/test_urlobj.cxx",
+        "vendor/libreoffice-reference/include/svl/urihelper.hxx"
+      ],
+      "justification": "Original SmartRel2Abs leading-fragment compatibility, invalid-base smart parsing, valid-base relative conversion, optional non-file preference and maybe-file callback selection. The source callback local OUString pointer is represented by a mutable single-string slot; no browser URL/OS filesystem resolver or fabricated Link service replaces the native algorithm. All original defaults are retained, including checkFileExists=true; actual HTML caller is expected to pass null/false. Complete URIHelper factory/context/other services and native Link ABI are outside this consumed slice. Native full-class differential and actual HTML HREF insertion remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SmartRel2Abs",
+        "MaybeFileHdl"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "svl/source/misc/urihelper.cxx",
+      "upstreamSymbols": [
+        "URIHelper::SmartRel2Abs"
+      ]
+    }
+  }
+}

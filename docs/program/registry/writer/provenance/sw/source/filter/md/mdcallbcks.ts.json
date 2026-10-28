@@ -17,7 +17,8 @@
       "SwMarkdownParser::enter_span_callback"
     ],
     "preservedResponsibilities": [
-      "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open."
+      "Native md4c block/span/text callbacks now dispatch directly to the Writer parser and actual pool items. Retains itemless stack entries, raw href attributes, ignored entity/NULL/math callbacks, image-text suppression and block-only HTML buffering. Application language uses the existing shared configured system-locale field binding. HTMLReader/CSS integration, task control ownership, graphic nodes, complete numbering format metadata and compiled Writer differential remain open.",
+      "Markdown hyperlink callbacks now use the actual native INetURLObject::GetAbsURL strict-relative path, replacing browser URL resolution. This preserves original default-argument conversion-failure fallback, host/port spelling, absolute-path dot segments, query-only directory resolution and leading-fragment shortcut. Actual MarkdownReader/SwDoc hyperlink tests distinguish these cases; no complete Markdown/filter or compiled Writer parity promotion is made."
     ],
     "omittedResponsibilities": [
       "Complete upstream Markdown grammar, HTML, images, frames, complex styles, fields and desktop filter options remain unverified."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/sw/source/filter/md/mdcallbcks.ts",
           "marker": "enter_block_callback"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/md/swmd.test.ts",
+          "marker": "uses original GetAbsURL rules"
         }
       ],
       "upstream": [
@@ -45,6 +50,10 @@
         {
           "path": "vendor/md4c-reference/src/md4c.c",
           "marker": "md_is_entity_str"
+        },
+        {
+          "path": "tools/source/fsys/urlobj.cxx",
+          "marker": "INetURLObject::GetAbsURL"
         }
       ]
     }

@@ -183,3 +183,15 @@ it("does not invent native range metadata from the browser snapshot default regi
   ).toThrow("valid nonzero");
   expect(new SfxItemSet(browser, [[1, 1]]).Get(1).QueryValue()).toBe(false);
 });
+
+it("distinguishes true slot translations from fallback identities", /** CSS constructors need zero for absent native item families, including shallow lookup. @returns Nothing. */ () => {
+  const a = pool(1, 2, 6000),
+    b = pool(4, 5, 7000);
+  a.SetSecondaryPool(b);
+  expect(a.GetTrueWhichIDFromSlotID(6000, false)).toBe(1);
+  expect(a.GetTrueWhichIDFromSlotID(7000, false)).toBe(0);
+  expect(a.GetTrueWhichIDFromSlotID(7000)).toBe(4);
+  expect(a.GetTrueWhichIDFromSlotID(1)).toBe(0);
+  expect(a.GetTrueWhichIDFromSlotID(9000)).toBe(0);
+  expect(a.GetWhichIDFromSlotID(9000)).toBe(9000);
+});

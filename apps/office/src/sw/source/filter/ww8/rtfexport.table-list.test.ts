@@ -83,7 +83,7 @@ it("round trips table rows and cell paragraph order", /** Checks native RTF row 
   source.nodes.MakeTextNode("After");
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain(
       "\\trowd\\trql\\trleft360\\ltrrow\\trrh-720\\trkeep",
     );
@@ -214,12 +214,12 @@ it("uses the native table frame and page widths for fixed and relative RTF cell 
     box.SetFrameSize(size);
   }
   try {
-    const relative = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const relative = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(relative).toMatch(/\\cellx2592\\cellx6912/);
     const orientation = table.GetFrameFormat().GetHoriOrient().Clone();
     orientation.SetHoriOrient(HoriOrientation.LEFT);
     table.GetFrameFormat().SetFormatAttr(orientation);
-    const fixed = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const fixed = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(fixed).toMatch(/\\cellx1800\\cellx4800/);
   } finally {
     document.Dispose();
@@ -234,7 +234,7 @@ it("writes both physical and logical RTF paragraph indents", /** Checks writes b
   paragraph.SetParagraphTextLeftMargin(180);
   paragraph.SetParagraphRightMargin(300);
   try {
-    const output = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const output = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(output).toContain("\\li180\\lin180\\ri300\\rin300");
   } finally {
     document.Dispose();
@@ -251,7 +251,7 @@ it("round trips native distributed-last-line paragraph alignment through qd", /*
   paragraph.SetAttr(adjust);
   let restored;
   try {
-    const bytes = new RtfExport().ExportDocument(document);
+    const bytes = RtfExport.WriteDocument(document);
     expect(new TextDecoder().decode(bytes)).toContain("\\qd");
     restored = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const result = restored.paragraphs[0]?.GetAttr(RES_PARATR_ADJUST) as SvxAdjustItem | undefined;
@@ -273,7 +273,7 @@ it("retains numbered list identity and levels through RTF list tables", /** Chec
   applyWriterParagraphList(second, { kind: "numbered", level: 1 });
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("{\\listtext\\pard\\plain ");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(
@@ -304,7 +304,7 @@ it("omits RTF list controls for a native uncounted paragraph", /** Checks omits 
   uncounted.SetCountedInList(false);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const body = new TextDecoder().decode(bytes).split("\\par\n");
     expect(body[0]).toContain("\\listtext");
     expect(body[1]).not.toContain("\\listtext");
@@ -336,7 +336,7 @@ it("retains the pinned RTF original-rule reference on a restarted paragraph", /*
   restarted.SetAttrListRestartValue(9);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const body = new TextDecoder().decode(bytes).split("\\par\n");
     expect(body[1]).toContain("\\ls1");
     expect(body[1]).toContain("\\listtext");
@@ -366,7 +366,7 @@ it("retains represented level starts and bullet glyphs in RTF list definitions",
   source.GetDocumentListsManager().InvalidateAllLists();
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain("\\levelstartat7");
     expect(encoded).toContain("\\u9642 ?");
@@ -404,8 +404,10 @@ it.each([
     source.GetDocumentListsManager().InvalidateAllLists();
     let imported;
     try {
-      const bytes = new RtfExport().ExportDocument(source);
-      expect(new TextDecoder().decode(bytes)).toContain(`\\levelnfc${nfc}\\levelstartat7`);
+      const bytes = RtfExport.WriteDocument(source);
+      expect(new TextDecoder().decode(bytes)).toContain(
+        `\\levelnfc${nfc}\\leveljc0\\levelstartat7`,
+      );
       imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
       expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetStart()).toBe(7);
       expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetNumberingType()).toBe(numberingType);
@@ -417,7 +419,7 @@ it.each([
   },
 );
 
-it("round trips native decoration, hyperlink and first-line paragraph items", /** Checks source RTF controls through writer and mapper. @returns Nothing. */ () => {
+it("preserves native RTF decoration, hyperlink, indentation and escapement reductions", /** Checks source RTF controls through writer and mapper. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const node = source.paragraphs[0];
   if (node === undefined) throw new Error("Missing paragraph.");
@@ -442,7 +444,7 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
   node.SetText(
     runs
       .map(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text,
       )
@@ -454,7 +456,10 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
   node.SetParagraphFirstLineIndent(-180);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
+    // Source emits this legacy extension, which current writerfilter deliberately does not consume.
+    expect(new TextDecoder().decode(bytes)).toContain(String.raw`{\*\updnprop7000}\up10`);
+    expect(new TextDecoder().decode(bytes)).toContain(String.raw`{\*\updnprop7101}\up6`);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const restored = imported.paragraphs[0];
     expect(restored?.GetParagraphFirstLineIndent()).toBe(-180);
@@ -462,40 +467,41 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
     const projected = projectWriterTextRuns(restored);
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "struck",
       )?.attributes.strikeout,
     ).toBe(FontStrikeout.STRIKEOUT_DOUBLE);
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === " raised ",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_SUPER,
+      offset: DFLT_ESC_AUTO_SUPER,
       height: DFLT_ESC_PROP,
     });
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "lift ",
       )?.attributes.escapement,
     ).toEqual({
       offset: 25,
-      height: 70,
+      height: 100,
     });
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "auto ",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_AUTO_SUPER,
-      height: 71,
+      // The retained native stylesheet/default lookup yields 10pt: 6 / 2 / 10 * 100.
+      offset: 30,
+      height: 100,
     });
     expect(
       projected.find(
@@ -527,7 +533,7 @@ it("exports source-escaped hyperlink URLs and target frames through native RTF f
   node.SetTextHints(fragment.hints);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const rtf = new TextDecoder().decode(bytes);
     expect(rtf).toContain(String.raw`HYPERLINK "https://example.test/a\\\\b" \\t "New Window"`);
     expect(rtf).not.toContain(String.raw`\\o "Omitted by source exporter"`);
@@ -555,7 +561,7 @@ it("keeps one native RTF hyperlink field across differently formatted text runs"
   node.SetTextHints(fragment.hints);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes).match(/\\field\b/gu)).toHaveLength(1);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const runs = projectWriterTextRuns(imported.paragraphs[0]);
@@ -595,7 +601,7 @@ it("retains upstream default-height escapement suppression", /** Checks the sour
   hints.setTextRuns(runs, node.GetSwAttrSet());
   node.SetTextHints(hints);
   try {
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(rtf).not.toContain("\\up");
     expect(rtf).not.toContain("\\super");
   } finally {
@@ -611,7 +617,7 @@ it("exports the authored first-line item without layout short narrowing", /** Ch
   node.SetParagraphFirstLineIndent(40000);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\fi40000");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(

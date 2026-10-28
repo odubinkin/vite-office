@@ -65,7 +65,7 @@ it.each([
           0,
         /** Verifies uses exact source weight comparison for native weight %s. @returns Callback result. */ () =>
           0,
-        new RtfExport(),
+        createRtfExport(),
       ).WriteNativeCharacter(node.GetSwAttrSet());
       expect(output).toMatch(weight === FontWeight.WEIGHT_BOLD ? /\\b(?!0)/ : /\\b0/);
     } finally {
@@ -94,7 +94,7 @@ it.each([
           0,
         /** Verifies uses source non-NONE posture comparison for native posture %s. @returns Callback result. */ () =>
           0,
-        new RtfExport(),
+        createRtfExport(),
       ).WriteNativeCharacter(node.GetSwAttrSet());
       expect(output).toMatch(posture === FontItalic.ITALIC_NONE ? /\\i0/ : /\\i(?!0)/);
     } finally {
@@ -111,7 +111,7 @@ it("truncates native font height to half points in paragraphs and style definiti
     assert(node);
     node.SetText("Odd");
     node.GetTextFormatColl().SetFormatAttr(new SvxFontHeightItem(245, 100, RES_CHRATR_FONTSIZE));
-    const bytes = new RtfExport().ExportDocument(doc);
+    const bytes = RtfExport.WriteDocument(doc);
     const text = new TextDecoder().decode(bytes);
     expect(text).toContain("\\fs24");
     expect(text).not.toContain("\\fs25");
@@ -149,7 +149,7 @@ it("retains adjacent native hints that differ only in auto-kerning through RTF a
     }
     node.SetTextHints(hints);
     expect(projectWriterTextRuns(node)).toHaveLength(1);
-    const bytes = new RtfExport().ExportDocument(doc);
+    const bytes = RtfExport.WriteDocument(doc);
     expect(new TextDecoder().decode(bytes)).toMatch(
       /\\kerning1[^{}]* A\}\{[^{}]*\\kerning0[^{}]* B/,
     );
@@ -168,13 +168,13 @@ it("retains adjacent native hints that differ only in auto-kerning through RTF a
   }
 });
 
-it("inherits style auto-kerning and restores group state including plain reset", /** Verifies inherits style auto-kerning and restores group state including plain reset. @returns Nothing. */ () => {
+it("inherits style auto-kerning across plain because native style deduplication has no kerning default", /** Verifies inherits style auto-kerning and restores group state including plain reset. @returns Nothing. */ () => {
   const doc = read(
     String.raw`{\rtf1{\stylesheet{\s0\kerning1 Normal;}}\s0 A{\kerning0 B}C\kerning-12 D{\plain E}F}`,
   );
   let roundtrip: SwDoc | undefined;
   try {
-    roundtrip = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(doc));
+    roundtrip = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(doc));
     for (const document of [doc, roundtrip]) {
       const node = document.paragraphs[0];
       assert(node);
@@ -186,7 +186,7 @@ it("inherits style auto-kerning and restores group state including plain reset",
             offset,
           ) => kernAt(node, offset),
         ),
-      ).toEqual([true, false, true, true, false, true]);
+      ).toEqual([true, false, true, true, true, true]);
     }
   } finally {
     roundtrip?.Dispose();
@@ -197,7 +197,7 @@ it("inherits style auto-kerning and restores group state including plain reset",
 it.each([
   String.raw`{\rtf1\up10\fs40 A}`,
   String.raw`{\rtf1\fs40\up10 A}`,
-  String.raw`{\rtf1{\stylesheet{\s0\fs40 Normal;}}\s0\up10 A}`,
+  String.raw`{\rtf1{\stylesheet{\s0\fs40 Normal;}}\s0\fs40\up10 A}`,
 ])(
   "resolves baseline half points against the final font height: %s",
   /** Verifies resolves baseline half points against the final font height: %s. @param fixture - fixture value. @returns Nothing. */ (
@@ -214,7 +214,7 @@ it.each([
   },
 );
 
-it("restores raw baseline position across font-size groups and clears it for superscript", /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @returns Nothing. */ () => {
+it("retains independent raw baseline position across font-size groups and superscript", /** Verifies retains independent raw baseline position across font-size groups and superscript. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1\up10\fs40 A{\fs20 B}C\super D\nosupersub E}`);
   try {
     const node = doc.paragraphs[0];
@@ -222,16 +222,14 @@ it("restores raw baseline position across font-size groups and clears it for sup
     const runs = projectWriterTextRuns(node);
     expect(
       runs.map(
-        /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @param run - run value. @returns Callback result. */ (
+        /** Verifies retains independent raw baseline position across font-size groups and superscript. @param run - run value. @returns Callback result. */ (
           run,
         ) => [run.text, run.attributes.escapement?.offset ?? 0],
       ),
     ).toEqual([
       ["A", 25],
       ["B", 50],
-      ["C", 25],
-      ["D", 33],
-      ["E", 0],
+      ["CDE", 25],
     ]);
   } finally {
     doc.Dispose();
@@ -298,8 +296,10 @@ it("ignores a zero baseline value as the pinned DomainMapper does", /** Verifies
           run,
         ) => run.attributes.escapement?.offset,
       ),
-    ).toEqual([25]);
+    ).toEqual([25, undefined]);
   } finally {
     doc.Dispose();
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

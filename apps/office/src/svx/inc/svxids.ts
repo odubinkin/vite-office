@@ -17,3 +17,6 @@ export const SID_ATTR_FILL_TRANSPARENCE = 11124 as const;
 
 /** Original SID_SVX_START +1135 slide-background fill slot. */
 export const SID_ATTR_FILL_USE_SLIDE_BACKGROUND = 11135 as const;
+
+/** Original SID_ATTR_FLASH. */
+export const SID_ATTR_FLASH = 10406 as const;

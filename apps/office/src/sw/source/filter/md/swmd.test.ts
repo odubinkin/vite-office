@@ -401,3 +401,35 @@ it("keeps inline HTML buffered and preserves source quotation-style inheritance 
     document.Dispose();
   }
 });
+
+it("uses original GetAbsURL rules for actual Markdown hyperlink items", /** Browser URL normalization must not replace native scheme/port/path and default-error contracts. @returns Nothing. */ () => {
+  const document = new MarkdownReader().Read(
+    new TextEncoder().encode(
+      "[Native](http://EXAMPLE.test:00080/a/../b) [Query](?q) [Path](/a/../b) [Numeric](http://123/) [Unicode](http://ü.example/)",
+    ),
+    {},
+    "http://host/dir/file.md",
+  );
+  try {
+    const links = projectWriterTextRuns(document.paragraphs[0])
+      .filter(
+        /** Selects actual native hyperlink ranges. @param run - Actual text run. @returns Hyperlink presence. */ (
+          run,
+        ) => run.hyperlink !== undefined,
+      )
+      .map(
+        /** Projects the existing item's portable URL boundary. @param run - Actual text run. @returns Owned URL. */ (
+          run,
+        ) => run.hyperlink?.url,
+      );
+    expect(links).toEqual([
+      "http://EXAMPLE.test:00080/a/../b",
+      "http://host/dir/?q",
+      "http://host/a/../b",
+      "http://123/",
+      "http://ü.example/",
+    ]);
+  } finally {
+    document.Dispose();
+  }
+});

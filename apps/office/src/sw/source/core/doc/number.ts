@@ -39,6 +39,10 @@ export class SwNumFormat extends SvxNumberFormat {
     super(format ?? SvxNumType.SVX_NUM_ARABIC);
     if (format instanceof SwNumFormat) this.client.StartListeningToSameModifyAs(format);
   }
+  /** Logical native SwClient destructor releases the actual character-format registration. @returns Nothing. */
+  public Dispose(): void {
+    this.client.EndListeningAll();
+  }
   /** Classifies native character-special and bitmap itemization independently of symbol visibility. @returns Itemize flag. */
   public IsItemize(): boolean {
     switch (this.GetNumberingType()) {
@@ -157,10 +161,11 @@ export function getWriterNumFormatBullet(format: ConstSwNumFormat | undefined): 
   return glyph === 0 ? "" : String.fromCodePoint(glyph);
 }
 
+import { GetBulletChar } from "./number-bullet";
 export { GetBulletChar } from "./number-bullet";
 
 /** Const format reference: callers clone before changing an owned or shared level. */
-export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}` | "Assign">;
+export type ConstSwNumFormat = Omit<SwNumFormat, `Set${string}` | "Assign" | "Dispose">;
 
 /** Stable JS const-pointer bridge: native owners stay mutable while exported reads retain identity and reject setters/assignment. */
 const constFormatViews = new WeakMap<SwNumFormat, ConstSwNumFormat>();
@@ -173,7 +178,7 @@ function constFormatReference(owner: SwNumFormat): ConstSwNumFormat {
     /** Resolves reads against the current owner, keeping mutation outside the const boundary. @param unused - Frozen facade. @param key - Requested member. @returns Bound reader or protected mutator. */
     get(unused, key) {
       void unused;
-      if (String(key).startsWith("Set") || key === "Assign")
+      if (String(key).startsWith("Set") || key === "Assign" || key === "Dispose")
         return /** Rejects a forced runtime const violation. @returns Nothing. */ (): never => {
           throw new TypeError("Cannot mutate a const SwNumFormat reference; clone it first.");
         };
@@ -208,6 +213,11 @@ export class SwNumRule {
     defaultMode?: SvxNumPositionAndSpaceMode,
     type = SwNumRuleType.NUM_RULE,
   ) {
+    if (typeof source === "string" && source.trim().length === 0)
+      throw new Error("SwNumRule name must not be blank.");
+    if (!(source instanceof SwNumRule) && ruleReferenceCount === 0)
+      baseFormats = createSharedBaseFormats();
+    ruleReferenceCount = (ruleReferenceCount + 1) & 0xffff;
     if (source instanceof SwNumRule) {
       this.name = source.name;
       this.defaultMode = source.defaultMode;
@@ -225,13 +235,36 @@ export class SwNumRule {
         if (format !== undefined) this.Set(level, format);
       }
     } else {
-      if (source.trim().length === 0) throw new Error("SwNumRule name must not be blank.");
       this.name = source;
       this.defaultMode = defaultMode as SvxNumPositionAndSpaceMode;
       this.meRuleType = type;
     }
   }
 
+  private disposed = false;
+  private mpNumRuleMap: Map<string, SwNumRule> | undefined;
+  /** Native map pointer binding does not insert or take ownership. @param map - Actual document name index. @returns Nothing. */
+  public SetNumRuleMap(map: Map<string, SwNumRule> | undefined): void {
+    this.mpNumRuleMap = map;
+  }
+  /** Logical native destructor destroys owned formats, erases the bound current name and releases the four shared base tables after the last live rule. The guard permits repeated JS owner teardown. @returns Nothing. */
+  public Dispose(): void {
+    if (this.disposed) return;
+    this.disposed = true;
+    for (let level = 0; level < 10; ++level) {
+      this.formats[level]?.Dispose();
+      this.formats[level] = undefined;
+    }
+    this.mpNumRuleMap?.delete(this.GetName());
+    ruleReferenceCount = (ruleReferenceCount - 1) & 0xffff;
+    if (ruleReferenceCount === 0) {
+      for (const mode of ["label-width-and-position", "label-alignment"] as const)
+        for (const tables of baseFormats) for (const format of tables[mode]) format.Dispose();
+      baseFormats = [];
+    }
+    this.textNodes.length = 0;
+    this.maParagraphStyleList.length = 0;
+  }
   private name: string;
   private readonly defaultMode: SvxNumPositionAndSpaceMode;
   private meRuleType: SwNumRuleType;
@@ -381,12 +414,9 @@ export class SwNumRule {
   public Get(level: number): ConstSwNumFormat {
     return (
       this.GetNumFormat(level) ??
-      ((
-        baseFormats[this.meRuleType] as Record<
-          SvxNumPositionAndSpaceMode,
-          readonly ConstSwNumFormat[]
-        >
-      )[this.defaultMode][level] as ConstSwNumFormat)
+      constFormatReference(
+        (baseFormats[this.meRuleType] as SharedBaseFormats)[this.defaultMode][level] as SwNumFormat,
+      )
     );
   }
   /** Returns only an explicitly owned const format. @param level - Native level. @returns Owned format or undefined for the native null pointer. */
@@ -405,7 +435,9 @@ export class SwNumRule {
     this.CheckLevel(level);
     const owned = this.formats[level];
     if (owned === undefined || !owned.Equals(format)) {
-      this.formats[level] = new SwNumFormat(format);
+      const copy = new SwNumFormat(format);
+      owned?.Dispose();
+      this.formats[level] = copy;
       this.invalidRuleFlag = true;
     }
   }
@@ -419,6 +451,7 @@ export class SwNumRule {
         this.invalidRuleFlag = true;
       }
     } else if (format === undefined) {
+      owned.Dispose();
       this.formats[level] = undefined;
       this.invalidRuleFlag = true;
     } else if (!owned.Equals(format)) {
@@ -629,45 +662,50 @@ export class SwNumRule {
 function createBaseFormats(
   outline: boolean,
   mode: SvxNumPositionAndSpaceMode,
-): readonly ConstSwNumFormat[] {
+): readonly SwNumFormat[] {
   return Array.from(
     { length: 10 },
     /** Initializes one complete implemented base level. @param _unused - Placeholder. @param level - Native level. @returns Const format. */
     (_unused, level) => {
       const indent = 720 + level * 360;
-      return Object.freeze(
-        createWriterNumFormat("numbered", ["•", "◦", "▪"][level % 3], {
-          bulletFont: "",
-          numberingType: outline ? "none" : "arabic",
-          includeUpperLevels: outline ? 10 : 1,
-          positionAndSpaceMode: mode,
-          ...(outline
-            ? {
-                charTextDistance: mode === "label-width-and-position" ? 216 : 0,
-                labelFollowedBy: mode === "label-alignment" ? "nothing" : "listtab",
-              }
-            : {
-                ...(mode === "label-alignment"
-                  ? { firstLineIndent: -360, indentAt: indent, listTabPosition: indent }
-                  : {
-                      absLSpace: indent,
-                      firstLineOffset: -360,
-                    }),
-                suffix: ".",
-                listFormat: `%${level + 1}%.`,
-              }),
-        }),
-      );
+      return createWriterNumFormat("numbered", String.fromCodePoint(GetBulletChar(level)), {
+        bulletFont: "",
+        numberingType: outline ? "none" : "arabic",
+        includeUpperLevels: outline ? 10 : 1,
+        positionAndSpaceMode: mode,
+        ...(outline
+          ? {
+              charTextDistance: mode === "label-width-and-position" ? 216 : 0,
+              labelFollowedBy: mode === "label-alignment" ? "nothing" : "listtab",
+            }
+          : {
+              ...(mode === "label-alignment"
+                ? { firstLineIndent: -360, indentAt: indent, listTabPosition: indent }
+                : {
+                    absLSpace: indent,
+                    firstLineOffset: -360,
+                  }),
+              suffix: ".",
+              listFormat: `%${level + 1}%.`,
+            }),
+      });
     },
   );
 }
-const baseFormats = [true, false].map(
-  /** Shares both geometry families for a native rule type. @param outline - Classification. @returns Tables. */
-  (outline) => ({
-    "label-width-and-position": createBaseFormats(outline, "label-width-and-position"),
-    "label-alignment": createBaseFormats(outline, "label-alignment"),
-  }),
-);
+/** Native static base-format families. */
+type SharedBaseFormats = Record<SvxNumPositionAndSpaceMode, readonly SwNumFormat[]>;
+let ruleReferenceCount = 0;
+let baseFormats: SharedBaseFormats[] = [];
+/** Initializes the four original shared tables for the first live rule. @returns Owned tables. */
+function createSharedBaseFormats(): SharedBaseFormats[] {
+  const tables: SharedBaseFormats[] = [];
+  for (const outline of [false, true])
+    tables[outline ? SwNumRuleType.OUTLINE_RULE : SwNumRuleType.NUM_RULE] = {
+      "label-width-and-position": createBaseFormats(outline, "label-width-and-position"),
+      "label-alignment": createBaseFormats(outline, "label-alignment"),
+    };
+  return tables;
+}
 
 /** Describes the list subset of a Writer paragraph needed for deterministic marker calculation. */
 export interface WriterNumberingParagraph {

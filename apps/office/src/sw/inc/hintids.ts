@@ -346,3 +346,8 @@ export function isDrawingLayerAttribute(which: number): boolean {
 export const RES_UPDATEATTR_FMT_CHG = RES_UNKNOWNATR_END + 7;
 export const RES_UPDATEATTR_ATTRSET_CHG = RES_UNKNOWNATR_END + 8;
 export const RES_UPDATEATTR_OBJECTDYING = RES_UNKNOWNATR_END + 9;
+
+/** Native filter-private attribute range follows seven format IDs and three format messages. */
+export const RES_FLTRATTR_BEGIN = RES_UNKNOWNATR_END + 10;
+/** Native queued HTML bookmark string, not a document-pool default. */
+export const RES_FLTR_BOOKMARK = RES_FLTRATTR_BEGIN;

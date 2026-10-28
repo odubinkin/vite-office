@@ -102,7 +102,7 @@ export class SwDocShell extends SfxObjectShell {
   /** Serializes the live Writer model through the native RTF writer. @returns RTF bytes. */
   public SerializeRtf(): Uint8Array {
     this.EnsureOpen();
-    return new RtfExport().ExportDocument(this.document);
+    return RtfExport.WriteDocument(this.document);
   }
 
   /** Serializes the live Writer model through the native Markdown writer. @returns UTF-8 Markdown bytes. */

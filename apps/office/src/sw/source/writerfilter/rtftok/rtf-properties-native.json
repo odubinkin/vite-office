@@ -1,0 +1,98 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "sw/source/writerfilter/rtftok/rtfsprm.cxx": "6da754ed4649c92391a357a86449548db040fcf3e09ff48cd14f34052dd804c6",
+    "sw/source/writerfilter/rtftok/rtfsprm.hxx": "60c3b2ecef04f80c48fb94363d43dde2a2e1276811bb79fb322ac0cd744eeaa0",
+    "sw/source/writerfilter/rtftok/rtfvalue.cxx": "8e7e9e052c08800a19c0f4a260fb8a87fb838c3cd91d8036f0e7b8cda2752e8b",
+    "sw/source/writerfilter/rtftok/rtfdocumentimpl.cxx": "fb2f192e3e8b77eb25729c47906551aae815a410348b06a3e0ea9c1b57f68a8e",
+    "include/tools/ref.hxx": "10df0ec3caab9081c8eeda9174d1ba27928be1ae6253eaaca6e161a0c5160678",
+    "tools/source/ref/ref.cxx": "625ed2f8a999bf74dbee04c3ea6b4575a82e18bee696d727047ef3439ff090e9",
+    "sw/source/writerfilter/ooxml/resourceids.py": "d751ebc9000d2af27ecb7ec1a0e3136dd7a1edabc7e63d88ed7876c9c32b5393",
+    "sw/source/writerfilter/ooxml/model.xml": "5db9f7534823f52a2728a34cbf88e022b7106eafffc3e1b5557608bcd0264379"
+  },
+  "scope": "Unchanged RTFSprms declarations/algorithms, nested helpers, SvRefBase/SvRef and RTFValue scalar queries/equality; OUString and non-query scalar/nested RTFValue construction/clone transport use explicit carriers, not complete SAL/RTFValue/Writer ABI. ASan/UBSan.",
+  "cases": {
+    "policies": [
+      [1, [40, "40", [], []]],
+      [1, [20, "20", [], []]],
+      [2, [30, "30", [], []]]
+    ],
+    "eraseLast": [
+      [1, [40, "40", [], []]],
+      [2, [30, "30", [], []]]
+    ],
+    "prepend": [
+      [1, [60, "60", [], []]],
+      [2, [30, "30", [], []]]
+    ],
+    "eraseFirst": [[2, [30, "30", [], []]]],
+    "readAliasA": [[1, [10, "shared", [], []]]],
+    "readAliasB": [[1, [10, "shared", [], []]]],
+    "writeA": [[1, [10, "shared", [], []]]],
+    "writeB": [[1, [10, "isolated", [], []]]],
+    "clearA": [[1, [10, "shared", [], []]]],
+    "clearB": [],
+    "copyAssignmentA": [[1, [5, "5", [], []]]],
+    "copyAssignmentB": [[1, [6, "6", [], []]]],
+    "moveAssignment": [[1, [6, "6", [], []]]],
+    "reinitializedMoved": [],
+    "copyForWriteA": [[1, [5, "5", [], []]]],
+    "copyForWriteB": [[1, [5, "detached", [], []]]],
+    "nestedEraseA": [[92219, [0, "0", [], []]]],
+    "nestedEraseB": [[92219, [0, "0", [], []]]],
+    "nestedWriteA": [[92219, [0, "0", [], []]]],
+    "nestedWriteB": [[92219, [0, "0", [[91990, [300, "300", [], []]]], []]]],
+    "shading": [
+      [
+        92772,
+        [
+          0,
+          "0",
+          [
+            [91879, [-1, "-1", [], []]],
+            [91883, [1193046, "1193046", [], []]]
+          ],
+          []
+        ]
+      ]
+    ],
+    "defaults": [
+      [92555, [0, "0", [], []]],
+      [92576, [24, "24", [], []]],
+      [92554, [0, "0", [[92545, [0, "Times New Roman", [], []]]], []]],
+      [92571, [0, "0", [[91603, [0, "0", [], []]]], []]],
+      [92579, [0, "0", [[91627, [91626, "91626", [], []]]], []]]
+    ],
+    "paragraphNoCharDefault": [],
+    "equalCharacter": [
+      [92576, [24, "24", [], []]],
+      [92554, [0, "0", [[92545, [0, "Times New Roman", [], []]]], []]],
+      [92571, [0, "0", [[91603, [0, "0", [], []]]], []]],
+      [92579, [0, "0", [[91627, [91626, "91626", [], []]]], []]]
+    ],
+    "equalParagraph": [[92555, [1, "1", [], []]]],
+    "denylist": [[91968, [3, "3", [], []]]],
+    "listDenylist": [
+      [91990, [120, "120", [], []]],
+      [92203, [0, "0", [], []]]
+    ],
+    "emptyExpectedChildren": [[92219, [2, "2", [[91988, [120, "120", [], []]]], []]]],
+    "implicitParagraph": [[92219, [0, "0", [[91990, [0, "0", [], []]]], []]]],
+    "duplicateList": [
+      [
+        92219,
+        [
+          0,
+          "0",
+          [
+            [91990, [0, "0", [], []]],
+            [91988, [0, "0", [], []]]
+          ],
+          []
+        ]
+      ]
+    ],
+    "deduplicateList": [[92219, [0, "0", [[91990, [0, "0", [], []]]], []]]],
+    "forceEquality": true
+  }
+}

@@ -28,7 +28,7 @@ it("omits zero margins and an absent default tab stop from the RTF header", /** 
     doc
       .GetAttrPool()
       .SetUserDefaultItem(new SvxTabStopItem(0, 0, SvxTabAdjust.Default, RES_PARATR_TABSTOP));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(doc));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(doc));
     expect(rtf).not.toMatch(/\\marg[lrbt]sxn/u);
     expect(rtf).not.toContain("\\deftab");
   } finally {
@@ -43,7 +43,7 @@ it("falls back to the current native page when a paragraph names an absent descr
     assert(paragraph);
     paragraph.SetText("Missing descriptor");
     paragraph.SetAttr(new SwFormatPageDesc("Absent descriptor"));
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(doc));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(doc));
     expect(rtf).toContain(`\\pgwsxn${doc.GetPageDesc().GetValue().width}`);
     expect(rtf).toContain("Missing descriptor");
   } finally {
@@ -102,7 +102,7 @@ it.each([
         SvxBoxItemLine.TOP,
       );
       first.ClaimFrameFormat().SetFormatAttr(border);
-      const bytes = new RtfExport().ExportDocument(doc);
+      const bytes = RtfExport.WriteDocument(doc);
       const rtf = new TextDecoder().decode(bytes);
       expect(rtf).toContain("\\trrh720");
       expect(rtf).toContain("\\clvertalt\\cellx585");

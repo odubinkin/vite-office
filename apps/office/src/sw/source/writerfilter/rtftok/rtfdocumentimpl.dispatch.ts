@@ -1,11 +1,4 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
-import {
-  DFLT_ESC_AUTO_SUB,
-  DFLT_ESC_AUTO_SUPER,
-  DFLT_ESC_PROP,
-  DFLT_ESC_SUB,
-  DFLT_ESC_SUPER,
-} from "../../../../editeng/inc/escapementitem";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
@@ -35,11 +28,11 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     const previous = this["states"].at(-1);
     this["states"].push({
       destination: previous?.destination ?? "body",
+      characterSprms:
+        previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
-      ...(previous?.baselineHalfPoints === undefined
-        ? {}
-        : { baselineHalfPoints: previous.baselineHalfPoints }),
+
       ...(previous?.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
       paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
       fontIndex: previous?.fontIndex ?? 0,
@@ -51,6 +44,17 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
+      ...(previous?.basedOnStyleName === undefined
+        ? {}
+        : { basedOnStyleName: previous.basedOnStyleName }),
+      ...(previous?.nextStyleName === undefined ? {} : { nextStyleName: previous.nextStyleName }),
+      ...(previous?.currentCharacterStyleIndex === undefined
+        ? {}
+        : { currentCharacterStyleIndex: previous.currentCharacterStyleIndex }),
+      ...(previous?.styleType === undefined ? {} : { styleType: previous.styleType }),
+      ...(previous?.characterStyleIndex === undefined
+        ? {}
+        : { characterStyleIndex: previous.characterStyleIndex }),
       bookmarkName: "",
       levelText: "",
       ...(previous?.field === undefined ? {} : { field: previous.field }),
@@ -71,60 +75,76 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     if (this["states"].length === 1 && this["runs"].length > 0)
       this["CommitParagraph"](this["states"][0]);
     const previous = this["states"].pop();
-    if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
-      this["CommitFont"](previous);
-    if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
-      const name = (previous.styleName.split(";")[0] as string).trim();
-      if (name.length > 0)
-        this["styles"].set(previous.styleIndex, {
-          name,
-          character: { ...previous.character },
-          ...(previous.baselineHalfPoints === undefined
-            ? {}
-            : { baselineHalfPoints: previous.baselineHalfPoints }),
-          ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
-          paragraph: { ...previous.paragraph },
-          controls: new Set(previous.styleControls),
-          ...(previous.basedOnStyleIndex === undefined
-            ? {}
-            : { basedOnStyleIndex: previous.basedOnStyleIndex }),
-          ...(previous.nextStyleIndex === undefined
-            ? {}
-            : { nextStyleIndex: previous.nextStyleIndex }),
-        });
-    }
-    if (previous?.destination === "bookmarkstart") {
-      const name = previous.bookmarkName.trim();
-      if (name.length > 0)
-        this["marks"].push({
-          name,
-          offset: this["runs"].reduce(
-            /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
-              length,
-              run,
-            ) => length + run.text.length,
-            0,
-          ),
-        });
-    }
-    if (previous?.destination === "leveltext") {
-      const glyph = [...previous.levelText].find(
-        /** Computes the value result. @param value - Value. @returns The computed result. */ (
-          value,
-        ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
-      );
-      if (glyph !== undefined) {
-        const level = this["currentListLevels"].at(-1);
-        if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
+    try {
+      if (previous?.destination === "fonttbl" && previous.fontIndex >= 0)
+        this["CommitFont"](previous);
+      if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
+        const name = (previous.styleName.split(";")[0] as string).trim();
+        if (name.length > 0) {
+          const definition: RtfStyleDefinition = {
+            name,
+            ...(previous.basedOnStyleName === undefined
+              ? {}
+              : { basedOnStyleName: previous.basedOnStyleName }),
+            ...(previous.nextStyleName === undefined
+              ? {}
+              : { nextStyleName: previous.nextStyleName }),
+            styleType: previous.styleType ?? "paragraph",
+            character: { ...previous.character },
+
+            ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
+            paragraph: { ...previous.paragraph },
+            controls: new Set(previous.styleControls),
+            ...(previous.basedOnStyleIndex === undefined
+              ? {}
+              : { basedOnStyleIndex: previous.basedOnStyleIndex }),
+            ...(previous.nextStyleIndex === undefined
+              ? {}
+              : { nextStyleIndex: previous.nextStyleIndex }),
+          };
+          this["m_aStyleNames"].set(previous.styleIndex, name);
+          const properties = createRtfStyleProperties(definition, previous.characterSprms);
+          if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
+            this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
+            this["styles"].set(previous.styleIndex, definition);
+          } else properties.clear();
+        }
       }
-    }
-    if (previous?.destination === "list")
-      this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
-    if (previous?.destination === "listoverride")
-      this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
-    if (previous?.destination === "fldinst" && previous.field !== undefined) {
-      const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
-      if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
+      if (previous?.destination === "bookmarkstart") {
+        const name = previous.bookmarkName.trim();
+        if (name.length > 0)
+          this["marks"].push({
+            name,
+            offset: this["runs"].reduce(
+              /** Computes the length result. @param length - Length. @param run - Run. @returns The computed result. */ (
+                length,
+                run,
+              ) => length + run.text.length,
+              0,
+            ),
+          });
+      }
+      if (previous?.destination === "leveltext") {
+        const glyph = [...previous.levelText].find(
+          /** Computes the value result. @param value - Value. @returns The computed result. */ (
+            value,
+          ) => (value.codePointAt(0) as number) > 0x20 && value !== ";",
+        );
+        if (glyph !== undefined) {
+          const level = this["currentListLevels"].at(-1);
+          if (level !== undefined) level.bullet = glyph.codePointAt(0) as number;
+        }
+      }
+      if (previous?.destination === "list")
+        this["listFormats"].set(this["currentListId"], [...this["currentListLevels"]]);
+      if (previous?.destination === "listoverride")
+        this["listOverrides"].set(this["currentOverrideIndex"], this["currentOverrideListId"]);
+      if (previous?.destination === "fldinst" && previous.field !== undefined) {
+        const hyperlink = parseRtfHyperlinkInstruction(previous.field.instruction);
+        if (hyperlink !== undefined) previous.field.hyperlink = hyperlink;
+      }
+    } finally {
+      previous?.characterSprms.dispose();
     }
     return;
   }
@@ -205,14 +225,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else Reflect.deleteProperty(state, "hyperlink");
     return;
   }
-  if (token.name === "updnprop" && token.parameter !== undefined && state.starred) {
-    this["pendingUpDn"] = {
-      height: Math.floor(token.parameter / 100),
-      automatic: token.parameter % 100 === 1,
-    };
-    state.starred = false;
-    return;
-  }
   if (state.destination === "body" && (token.name === "bkmkstart" || token.name === "bkmkend")) {
     state.destination = token.name === "bkmkstart" ? "bookmarkstart" : "bookmarkend";
     state.bookmarkName = "";
@@ -230,22 +242,32 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = false;
     return;
   }
-  if (state.destination === "stylesheet" && token.name === "s") {
+  if (state.destination === "stylesheet" && (token.name === "s" || token.name === "cs")) {
+    state.starred = false;
+    state.styleType = token.name === "cs" ? "character" : "paragraph";
     state.destination = "styleentry";
     state.styleIndex = token.parameter ?? 0;
     state.styleName = "";
     state.styleControls = new Set();
     delete state.basedOnStyleIndex;
     delete state.nextStyleIndex;
+    delete state.basedOnStyleName;
+    delete state.nextStyleName;
     return;
   }
   if (state.destination === "styleentry") {
     if (token.name === "sbasedon") {
-      if (token.parameter !== undefined) state.basedOnStyleIndex = token.parameter;
+      if (token.parameter !== undefined) {
+        state.basedOnStyleIndex = token.parameter;
+        state.basedOnStyleName = this["m_aStyleNames"].get(token.parameter) ?? "";
+      }
       return;
     }
     if (token.name === "snext") {
-      if (token.parameter !== undefined) state.nextStyleIndex = token.parameter;
+      if (token.parameter !== undefined) {
+        state.nextStyleIndex = token.parameter;
+        state.nextStyleName = this["m_aStyleNames"].get(token.parameter) ?? "";
+      }
       return;
     }
     if (STYLE_PROPERTY_CONTROLS.has(token.name)) {
@@ -333,7 +355,6 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
-  if ((name === "up" || name === "dn") && parameter === 0) return;
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (name === "sect") {
     if (this["runs"].length > 0) this["CommitParagraph"](state);
@@ -641,8 +662,10 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "plain") {
-    delete state.baselineHalfPoints;
-    state.autoKerning = false;
+    state.characterSprms.clear();
+    delete state.characterStyleIndex;
+    delete state.currentCharacterStyleIndex;
+    delete state.autoKerning;
     state.character = { ...DEFAULT_CHARACTER };
     state.characterControls.clear();
     state.currentCodepage =
@@ -684,7 +707,11 @@ export function DispatchBodyControl(
       ...state.character,
       underlineColor: parameter === 0 ? "auto" : (this["colors"][parameter] ?? "auto"),
     };
-  } else if (name === "strike" || name === "striked")
+  } else if (name === "strike" || name === "striked") {
+    state.characterSprms.set(
+      name === "strike" ? N.LN_EG_RPrBase_strike : N.LN_EG_RPrBase_dstrike,
+      new RTFValue(Number(parameter !== 0)),
+    );
     state.character = {
       ...state.character,
       strikeout:
@@ -694,38 +721,28 @@ export function DispatchBodyControl(
             ? FontStrikeout.STRIKEOUT_DOUBLE
             : FontStrikeout.STRIKEOUT_SINGLE,
     };
-  else if (name === "super" || name === "sub") {
-    delete state.baselineHalfPoints;
-    state.character = {
-      ...state.character,
-      escapement: {
-        offset: name === "super" ? DFLT_ESC_SUPER : DFLT_ESC_SUB,
-        height: DFLT_ESC_PROP,
-      },
-    };
+  } else if (name === "super" || name === "sub") {
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_vertAlign,
+      stringValue(name === "super" ? "superscript" : "subscript"),
+    );
   } else if (name === "nosupersub") {
-    delete state.baselineHalfPoints;
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "escapement");
-    state.character = character;
-  } else if ((name === "up" || name === "dn") && parameter !== undefined) {
-    const up = name === "up",
-      fontHeight = state.character.fontSizeTwips ?? 240;
-    if (this["pendingUpDn"]?.automatic) delete state.baselineHalfPoints;
-    else state.baselineHalfPoints = parameter * (up ? 1 : -1);
-    const offset = this["pendingUpDn"]?.automatic
-      ? up
-        ? DFLT_ESC_AUTO_SUPER
-        : DFLT_ESC_AUTO_SUB
-      : Math.round(((parameter * 1000) / fontHeight) * (up ? 1 : -1));
-    state.character = {
-      ...state.character,
-      escapement: { offset, height: this["pendingUpDn"]?.height ?? 100 },
-    };
-    this["pendingUpDn"] = undefined;
+    state.characterSprms.erase(N.LN_EG_RPrBase_vertAlign);
+  } else if (name === "up" || name === "dn") {
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_position,
+      new RTFValue((parameter ?? 6) * (name === "up" ? 1 : -1)),
+    );
   } else if (name === "ls" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listOverride: parameter };
-  else if (name === "s" && parameter !== undefined)
+  else if (name === "cs" && parameter !== undefined) {
+    state.currentCharacterStyleIndex = parameter;
+    if (this["styles"].has(parameter)) {
+      state.characterStyleIndex = parameter;
+      const name = this["m_aStyleNames"].get(parameter);
+      if (name) state.characterSprms.set(N.LN_EG_RPrBase_rStyle, stringValue(name));
+    }
+  } else if (name === "s" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
   else if (name === "ilvl" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };
@@ -748,6 +765,10 @@ export function DispatchBodyControl(
     const character = { ...state.character };
     Reflect.deleteProperty(character, "highlight");
     const highlight = parameter === 0 ? undefined : this["colors"][parameter];
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_highlight,
+      new RTFValue(writerColorFromPrimitive(highlight ?? "auto", "auto").toInt32()),
+    );
     state.character = { ...character, ...(highlight === undefined ? {} : { highlight }) };
   } else if (name === "ql" || name === "qc" || name === "qr" || name === "qj" || name === "qd")
     state.paragraph = {
@@ -823,3 +844,13 @@ export function DispatchBodyControl(
   else if (name === "slmult" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, lineMulti: parameter, lineSpacingSet: true };
 }
+
+import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
+import { createRtfStyleProperties } from "./rtfdocumentimpl.character";
+
+import { RTFSprms } from "./rtfsprm";
+import { RTFValue } from "./rtfvalue";
+import { NS_ooxml as N } from "../inc/ooxml/resourceids";
+import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+
+import { stringValue } from "./rtfdocumentimpl.character";

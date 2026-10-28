@@ -1,4 +1,4 @@
-/** @fileoverview MS filter color-index conversion from filter/source/msfilter/util.cxx. */
+/** @fileoverview MS filter color and native OpenSymbol export conversion from filter/source/msfilter/util.cxx. */
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import { Color, COL_AUTO } from "../../../tools/inc/color";
 
@@ -71,4 +71,50 @@ export function ConvertColorOU(color: Readonly<Color>): OUString {
     buffer[index * 2 + 1] = digits.charCodeAt(value & 15);
   }
   return new OUString(buffer);
+}
+
+import { CreateStarSymbolToMSMultiFont } from "../../../unotools/source/misc/fontcvt";
+import { GetNextFontToken } from "../../../unotools/inc/fontdefs";
+import {
+  RTL_TEXTENCODING_SYMBOL,
+  RTL_TEXTENCODING_UCS2,
+  type rtl_TextEncoding,
+} from "../../../sal/inc/rtl/textenc";
+/** Original in/out scalar bindings consumed by the MS symbol export helpers. */
+export interface SymbolExportEncoding {
+  value: rtl_TextEncoding;
+}
+/** Original family-name in/out binding. */
+export interface SymbolExportFontName {
+  value: string;
+}
+/** Original exact reverse-font match, standardized-Unicode fallback and private-area Wingdings fallback. @param character - Native UTF16 unit. @param encoding - Mutable charset. @param family - Mutable family name. @returns Native substituted unit. */
+export function bestFitOpenSymbolToMSFont(
+  character: number,
+  encoding: SymbolExportEncoding,
+  family: SymbolExportFontName,
+): number {
+  const value = { value: character & 0xffff };
+  const converter = CreateStarSymbolToMSMultiFont();
+  let font: string;
+  try {
+    font = converter.ConvertChar(value);
+  } finally {
+    converter.Dispose();
+  }
+  if (font.length !== 0) {
+    value.value |= 0xf000;
+    family.value = font;
+    encoding.value = RTL_TEXTENCODING_SYMBOL;
+  } else if (value.value < 0xe000 || value.value > 0xf8ff) {
+    encoding.value = RTL_TEXTENCODING_UCS2;
+    const units = new Uint16Array(family.value.length);
+    for (let index = 0; index < units.length; ++index)
+      units[index] = family.value.charCodeAt(index);
+    family.value = String.fromCharCode(...GetNextFontToken(units, { value: 0 }));
+  } else {
+    family.value = "Wingdings";
+    value.value = 0x6c;
+  }
+  return value.value;
 }

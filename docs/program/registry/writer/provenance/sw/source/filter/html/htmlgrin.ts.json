@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmlgrin.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlgrin.ts",
+          "marker": "InsertBookmark"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.links.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlgrin.cxx",
+          "marker": "SwHTMLParser::InsertBookmark"
+        },
+        {
+          "path": "sw/source/filter/html/htmlgrin.cxx",
+          "marker": "SwHTMLParser::NewAnchor"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmlgrin.cxx",
+    "localSymbols": [
+      "InsertBookmark",
+      "NewAnchor"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::InsertBookmark"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion.",
+      "Native represented HREF branch now resolves nonempty destinations with original URIHelper::SmartRel2Abs(INetURLObject(base),href,null,false), uses original medium parent for an empty HREF, calls SetATagStyles, creates actual SwFormatINetFormat URL/target/name values and inserts through the pINetFormat head/context. HREF presence is distinct from URL validity, retaining empty native items rather than creating name bookmarks. Source first-option precedence, reserved-name filtering, script-class admission and prior-anchor closure remain intact. Macro events, foot/endnotes and positioned fields are outside the represented model; native LANG/direction option producers remain pending and no full raw-HTML/filter parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full URL-bearing anchor, section, language/direction and unrepresented macro/footnote producer paths are not certified."
+    ]
+  }
+}

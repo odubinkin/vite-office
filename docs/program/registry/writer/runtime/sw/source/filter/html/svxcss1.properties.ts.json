@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/svxcss1.properties.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/svxcss1.properties.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx"
+      ],
+      "justification": "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified. Native font-family, font shorthand and line-height now feed original actual HTMLAttr heads for font and paragraph spacing; P/heading/block-style consumers apply direct CSS. Family lists retain source joining, unknown family/pitch, current UTF8 default encoding and no-DocShell null-font-list path. Shorthand prefix/partial-reset quirks and minimum/auto/interline spacing use existing native items and integral o3tl conversion. Real Markdown/Worker integration and stylesheet-inert newDoc=false behavior are tested. Full new-document stylesheet logic is outside this Markdown caller; remaining FONT/background/border/language/link/list/table consumers remain open. No whole-filter or compiled desktop differential promotion. S3HW1E connects consumed native margin/indent/spacing/background-color properties and restores the original inline-versus-block selector in InsertAttrs. Actual nearest context lookups and paragraph style margin contributions feed existing attribute heads, with original queued paragraph invalidation and negative/unsigned arithmetic. Block background survives Worker/UI transport; inline background has no current model owner and is not fabricated. Native source quirks are documented as WRITER218/219. Broader style-graph, positioning, background images, border/language/link/list/table and remaining RTF behavior remain open; no whole-module promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParseCSS1Property"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/svxcss1.cxx",
+      "upstreamSymbols": [
+        "ParseCSS1_font_weight"
+      ]
+    }
+  }
+}

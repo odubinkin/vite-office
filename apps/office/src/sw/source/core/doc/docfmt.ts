@@ -24,6 +24,7 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
+import { MakeTextAttr } from "../txtnode/thints";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -216,26 +217,23 @@ export function InsertPoolItem(
     const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0;
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
     if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
-    else if (item instanceof SwFormatINetFormat)
-      node.SetHyperlink(start, end, item.GetValue() ? item.GetHyperlink() : undefined);
+    else if (item instanceof SwFormatINetFormat) node.InsertItem(item, start, end, mode);
     else if (item instanceof SwFormatAutoFormat) node.InsertItem(item, start, end, mode);
     else if (
       item.Which() < RES_CHRATR_END &&
       start !== end &&
-      ((mode & SetAttrMode.NOFORMATATTR) !== 0 || start !== 0 || end !== node.Len())
+      ((mode & SetAttrMode.NOFORMATATTR) !== 0 ||
+        start !== 0 ||
+        end !== node.Len() ||
+        node
+          .GetpSwpHints()
+          ?.entries()
+          .some(
+            /** Native whole-paragraph SetAttr retains hints when a character style is present. @param hint - Actual hint. @returns Named character owner. */
+            (hint) => hint.IsCharFormatAttr(),
+          ))
     )
-      node.SetTextHints(
-        setCharacterItems(
-          node.GetOrCreateSwpHints(),
-          document.GetAttrPool(),
-          node.Len(),
-          start,
-          end,
-          [item],
-          node.GetSwAttrSet(),
-          true,
-        ),
-      );
+      node.InsertHint(MakeTextAttr(document, item, start, end), mode);
     else node.SetAttr(item);
   }
 }

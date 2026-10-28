@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmlcss1.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmlcss1.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx",
+        "apps/office/src/sw/source/filter/html/swhtml.links.integration.test.ts"
+      ],
+      "justification": "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified. Consumed SetATagStyles/SetLinkCharFormats now retain one-shot A then A:link/A:visited map precedence, native body-color flags, actual document pool-format ownership and mutable map percentage-height removal through shared SetCharFormatAttrs. Existing GetChrFormat class clones use that same native helper. The current Markdown caller inserts into an existing document; standalone new-document font-encoding setup and unrepresented RES_CHRATR_BACKGROUND/RES_CHRATR_BOX conversions remain outside this implemented slice. No brush-to-highlight substitution or stylesheet/class production is added.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwCSS1Parser"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmlcss1.cxx",
+      "upstreamSymbols": [
+        "SwCSS1Parser::GetChrFormat"
+      ]
+    }
+  }
+}

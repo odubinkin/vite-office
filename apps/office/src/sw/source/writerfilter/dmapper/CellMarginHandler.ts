@@ -42,7 +42,7 @@ export class CellMarginHandler implements Properties {
   sprm(modifier: Sprm): void {
     const properties = modifier.getProps();
     if (properties) {
-      properties.resolve(this);
+      resolveReturnedReference(properties, this);
       switch (modifier.getId()) {
         case N.LN_CT_TblCellMar_top:
         case N.LN_CT_TcMar_top:
@@ -177,3 +177,5 @@ export class CellMarginHandler implements Properties {
     this.m_aInteropGrabBag.length = 0;
   }
 }
+
+import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";

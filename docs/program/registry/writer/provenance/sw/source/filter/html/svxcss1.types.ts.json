@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/svxcss1.types.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.types.ts",
+          "marker": "SvxCSS1PropertyInfo"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx",
+          "marker": "SvxCSS1PropertyInfo"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/svxcss1.cxx",
+    "localSymbols": [
+      "SvxCSS1PropertyInfo",
+      "SvxCSS1MapEntry"
+    ],
+    "upstreamSymbols": [
+      "SvxCSS1PropertyInfo"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Only connected consumer paths are implemented; full CSS/HTML module and compiled differential parity are not claimed."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/svxcss1.types.ts",
+      "rationale": "Original scalar property-info and map-entry ownership from svxcss1.hxx/cxx is split from grammar dispatch to preserve the required 1000-line module ceiling as native CSS families are connected; the class hierarchy and document-pool item owners remain unchanged.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

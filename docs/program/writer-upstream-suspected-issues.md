@@ -1262,6 +1262,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/ww8atr.cxx`, `AttributeOutputBase::ParaNumRule`, and `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::ParaNumRule_Impl`; `sw/source/filter/ww8/rtfexport.cxx`, `RtfExport::WriteNumbering`.
 - Observation: the shared paragraph exporter calls `DuplicateNumRule` when a Writer text node restarts its list, assigning the duplicate identifier to the `nNumId` argument. The RTF implementation accepts this argument but, after checking for zero or `USHRT_MAX`, writes `\\ls` using `GetNumberingId(*pRule) + 1` on the node's original rule instead. `WriteNumbering` has already emitted the list tables before body paragraphs are written. The explicit restart value therefore does not reach the RTF list reference from this path. This is a source-level inference, not a confirmed desktop round-trip observation.
 - Preservation: retain the original-rule `\\ls` selection in the current RTF exporter; do not add a restart override solely to improve a round trip. Keep the local capability audit explicit about this upstream behavior.
+- Local evidence: `rtf-paragraph-numbering.test.ts` now exercises real common dispatch and temporary-rule ownership for Writer level9 restarts, including signed16 restart32768 and the65535 reset sentinel. It confirms the original-rule reference and pre-body list table ordering in the browser port; no native desktop observation is claimed.
 
 ### WRITER097 — RTF tab leaders are not symmetric across writer and reader
 
@@ -1564,7 +1565,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_position`, defers ordinary run positions and negative paragraph-style positions. Other nonzero stylesheet positions instead insert `DFLT_ESC_AUTO_SUPER` or `DFLT_ESC_AUTO_SUB` with `DFLT_ESC_PROP`; the source explicitly says `DON'T FIXME` and describes the missing final-font-size calculation.
 - Observation: a positive paragraph-style position does not retain its numeric half-point offset, while a negative paragraph-style position follows the deferred calculation. This asymmetric branch is source-derived; compiled desktop differential behavior remains unverified.
-- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import remains outside this completed block.
+- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import now also retains the automatic positive/negative substitutions, independent of the supplied magnitude and font size. Ordinary run position normalization remains a separate filter gap.
 
 ### WRITER143 — md4c tag recognizer accepts a slash in a closing tag
 
@@ -1642,7 +1643,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `text_callback`, appends all `MD_TEXT_HTML` text to `m_htmlData`; only `SwMarkdownParser::EndHtmlBlock` invokes `InsertHtmlData` and clears the buffer.
 - Observation: inline HTML callbacks have no immediate native HTMLReader invocation. A later raw HTML block exit can consume that earlier buffered markup as well. This is a source-level trace; compiled Writer behavior remains unverified.
-- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text.
+- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text. The connected native HTML/model integration test now confirms that an unclosed inline bold tag affects a later raw block while the earlier Markdown text remains plain; this is port evidence, not a compiled desktop differential.
 
 ### WRITER156 — SvParser's explicit UCS2 setter does not select the UTF-16 read branch
 
@@ -1905,47 +1906,286 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.
 
 
-### WRITER196 — Shared MemoryInputStream can be reopened by seeking after closure
+### WRITER196 — InitFontTable does not visit Writer's tenth list level
+
+- Source: pinned `sw/source/filter/ww8/wrtw8sty.cxx`, `wwFontHelper::InitFontTable`, uses `WW8ListManager::nMinLevel` for continuous rules and `nMaxLevel` otherwise. The pinned `sw/source/filter/ww8/ww8par.hxx` defines those bounds as 1 and 9, while SwNumRule supports ten levels.
+- Observation: a bullet font referenced only at zero-based level 9 is absent from this initialization traversal, even when the rule is used. Continuous rules contribute only level 0. This is exact source-bound evidence and a real RTF integration test, not a complete compiled Writer witness.
+- Preservation: retain the original bounds instead of expanding the Word exporter to ten levels. The used-numbering table still includes the actual outline owner independently of its use.
+
+### WRITER197 — StarSymbol duplicate-key font preference depends on the standard multimap find
+
+- Source: pinned `unotools/source/misc/fontcvt.cxx`, `StarSymbolToMSMultiFontImpl` inserts conservative and aggressive reverse tables into `std::multimap` in its stated preference order, but `ConvertChar` calls `find`, not `lower_bound`. Selection among equivalent keys is a standard-library binding detail rather than an explicit first-preference choice.
+- Observation: the unchanged locally compiled constructor/ConvertChar/factory selects Webdings for U+0020 rather than the first inserted Symbol entry. A simple first-entry JavaScript map port therefore disagreed at the first mapped unit. The browser binding now retains duplicate nodes and the measured red/black insertion/direct-lookup behavior; all 65536 UTF16 inputs match the unchanged native witness. This certifies the fixed input tables on that native runtime, not cross-standard-library identity or the SAL ABI.
+- Preservation: do not silently replace find with a first-preference lookup. RTF still keeps its original m_bSubstituteBullets=false branch, so its bullet strings and fonts bypass this conversion exactly as upstream does.
+
+
+### WRITER198 — Word numbering separator suppression can retain adjacent separators
+
+- Source: pinned `sw/source/filter/ww8/wrtw8num.cxx`, `MSWordExportBase::NumberingLevel`, `oEraseFrom` handling for unsupported forward references and `%10%`.
+- Observation: at level 2, `%3%/%9%/suffix` keeps the slash already appended before `%9%` and appends `/suffix` from the remembered suffix start. The resulting level string is U+0002 followed by `//suffix`. `%3%/%10%/end` similarly retains two slashes. This follows the source loop directly; it is not a compiled full-Writer or desktop defect confirmation.
+- Preservation: keep the original append/erase state and suffix restoration rather than normalizing separators. Focused actual-owner RTF tests assert both strings, the source nine-byte positions and their unsigned-byte overflow.
+
+
+### WRITER199 — Character-item visitors revisit accumulated automatic styles
+
+- Source: pinned `sw/source/core/doc/doc.cxx`, template `ForEachCharacterItem`; `svl/source/items/stylepool.cxx`, `StylePool::getAllStyles`; `sw/source/core/doc/swstylemanager.cxx`, family-to-pool routing.
+- Observation: the template allocates its vector outside the four-family loop, getAllStyles appends, and each iteration visits the entire accumulated vector. With one used character and one used non-character style, callbacks visit the character four times and the other style six times because RUBY/PARA/NOTXT share the paragraph pool. RTF color insertion deduplicates colors, but a different callback can observe the repeated visits. This is source-bound evidence, not a complete native runtime certification.
+- Preservation: retain append-only collection, repeated callback order and immediate false-stop behavior. Browser shared handles release every appended reference on completion, false return and callback exceptions; focused actual-owner tests check the order and reference counts.
+
+
+### WRITER200 — Numbering lifetime and temporary-rule counters are unsigned16
+
+- Source: pinned `sw/inc/numrule.hxx`, static `sal_uInt16 snRefCount`; `sw/source/core/doc/number.cxx`, rule constructors/destructor; `sw/source/filter/ww8/wrtww8.hxx`, `sal_uInt16 m_nUniqueList`; `wrtw8num.cxx`, `DuplicateNumRuleImpl`; `wrtww8.cxx`, base destructor.
+- Observation: more than65535 simultaneously live rules can wrap the global reference count, making first/last-rule tests unreliable for the four shared base tables. After enough temporary export rules the unsigned16 unique counter also wraps, so the destructor's borrowed-prefix/owned-tail split can no longer describe all created temporaries. The per-document rule-table limit does not bound rule totals across documents and exporters. This is a source-level edge-case inference, not a compiled stress witness or confirmed desktop defect.
+- Preservation: retain both unsigned16 counters and original post-increment/decrement and tail-split logic rather than silently widening them. Ordinary valid-owner lifetimes and actual client release are covered by focused tests; native overflow/undefined-behavior equivalence is not certified.
+
+
+### WRITER201 — GetSlot(null) finds an empty reserved style entry
+
+- Source: pinned `sw/source/filter/ww8/wrtw8sty.cxx`, `MSWordStyles::GetSlot` compares every entry's format pointer with the supplied pointer without a null guard. `MSWordExportBase::GetId(const SwCharFormat*)` applies fallback10 only when that lookup returns0x0fff.
+- Observation: a valid table with Standard at0 and no headings returns1 for null; after filling heading slots1..9 it returns10. Thus the character GetId comment about default character style does not describe every null-pointer call. The unchanged native lookup compiled with a vector-entry carrier confirms1/10 under ASan/UBSan. This does not certify the full Writer ABI or desktop rendering.
+- Preservation: use actual pointer identity, including null/undefined entries, instead of returning the missing sentinel early for a null argument. Actual-exporter tests check both slot layouts and the different fallback for a non-null default character format absent from the table.
+
+### WRITER202 — RTF style normalization can replace active style properties with hard-coded run defaults
+
+- Source: pinned `sw/source/writerfilter/rtftok/rtfsprm.cxx`, `getDefaultSPRM`, `cloneAndDeduplicateSprm` and `RTFSprms::cloneAndDeduplicate`; `rtfdocumentimpl.cxx`, `RTFDocumentImpl::getProperties`; `sw/source/filter/ww8/rtfattributeoutput.cxx`, `TextCharFormat` and `OutputTextCharFormat`.
+- Observation: for character normalization, an absent direct property can introduce an override over the flattened paragraph/character-style reference. The helper supplies bold/italic zero, underline none, 24 half-points, literal color zero and `Times New Roman` for the applicable font families. Thus a selected named style is not sufficient to inherit these values when the run omits their commands. Other families, including kerning, strikeout and highlight, have no default in this helper. The exporter explicitly comments that character style properties must accompany the run and repeats them. This may be intentional RTF normalization; the surprising hard-coded style override is recorded without classifying it as a confirmed upstream defect.
+- Preservation: retain the named `SwCharFormat` reference and produce native direct defaults for the represented families instead of flattening all style values into the text or assuming universal inheritance. Export the actual `\\cs` identifier before repeated effective properties. `\\plain` clears the direct kerning property; it does not invent a false override over an otherwise inherited style value.
+- Evidence: `scripts/rtf-style-defaults-native-probe.mjs` compiles unchanged pinned `getDefaultSPRM` and `getParagraphBorder` with original generated OOXML IDs, recognizing nine defaults among 35 queried tokens under ASan/UBSan. Scalar/nested value carriers do not prove the full `RTFValue`/`RTFSprms`, mapper or desktop Writer ABI. `rtf-character-styles.test.ts` covers actual browser owners, direct/default differences, named references, parent changes, group/plain behavior, unknown lookup and Worker/RTF round trips. No native desktop run is claimed.
+
+### WRITER203 — RTFValue equality ignores the force-string discriminator
+
+- Source: pinned `rtfvalue.cxx`, `RTFValue::equals`, `getString`, `getAny` and `Clone`.
+- Observation: an integer-default value and an empty forced-string value compare equal because the equality predicate checks integer/string contents and nested lists but omits `m_bForceString`. Their string/Any results differ. Style deduplication uses this predicate. No confirmed desktop-document symptom is claimed.
+- Preservation/evidence: keep the omitted flag comparison. Compiled unchanged scalar query/equality functions report `forceEquality=true`; actual owner tests retain distinct `"0"` and empty-string queries and clone the force flag. The witness's remaining value/string transport is explicitly bounded in `rtf-properties-native.json`.
+
+### WRITER204 — Nested RTF attribute erase can mutate a shared outer value
+
+- Source: pinned `rtfdocumentimpl.cxx`, `eraseNestedAttribute`; `rtfsprm.cxx`, `RTFSprms::find`, `ensureCopyBeforeWrite` and `deduplicateList`.
+- Observation: nested insertion uses `find(..., true, true)` to detach the outer shared payload. Nested erase instead performs a read lookup, then mutates the attribute list on the shared value object. Copying an outer RTFSprms followed by nested erase can therefore change both original and copy. Its use by invalid-list-indent deduplication retains this alias behavior.
+- Preservation/evidence: do not add an outer write barrier to erase. Unchanged compiled RTFSprms/nested-helper/SvRef algorithms and runtime owner tests match `nestedEraseA/B` and subsequent isolated `nestedWriteA/B` cases. These are source-container observations, not a complete Writer desktop round trip.
+
+### WRITER205 — Expected-child normalization can leave the original modifier intact
+
+- Source: pinned `rtfsprm.cxx`, `cloneAndDeduplicateSprm` and `isSPRMChildrenExpected`.
+- Observation: for unequal parent values whose normalized children become empty, an expected-child modifier skips the replacement `set` call. The direct tree was already copied into the result, so its original modifier can remain unchanged; the guard does not explicitly erase it. This differs from the apparent reading of the nearby removal comment.
+- Preservation/evidence: retain the skipped replacement without inserting an erase. The compiled `emptyExpectedChildren` case and actual runtime property-tree test preserve the original scalar2 parent and first-line120 attribute. No broader desktop symptom is asserted.
+
+
+### WRITER206 — RTF parent and follow links capture unknown names before later declarations
+
+- Source: pinned `rtfdispatchvalue.cxx`, SBASEDON/SNEXT dispatch; `rtfdocumentimpl.cxx`, getStyleName and stylesheet insertion; `rtfvalue.cxx`, getString.
+- Observation: these commands immediately call getStyleName with the numeric index. An index whose name has not yet been read returns an empty OUString. The resulting non-forced RTFValue reports the string `"0"`; later style declarations do not rewrite the stored name. A forward link can therefore fail to select the later named style. This is an inference from the source owner chain, not a confirmed desktop-document result.
+- Preservation/evidence: capture the current name at control dispatch and preserve the original empty-string query semantics. Actual RTFValue tests already compare the empty non-forced value with `"0"`; native character-style tests distinguish backward parent/follow links from forward declarations. Do not introduce deferred numeric-index resolution to repair this behavior.
+
+
+### WRITER207 — Style-name suffix removal requires more than one prefix character
+
+- Source: pinned `SwStyleNameMapper.cxx`, lcl_SuffixIsUser, lcl_CheckSuffixAndDelete and character-family FillProgName/FillUIName.
+- Observation: the shared suffix predicate requires total UTF16 length greater than8 before recognizing the seven-unit ` (user)` suffix. Thus `A (user)` remains unchanged, while `AB (user)` can lose its suffix. The upstream comment itself questions the one-character-prefix exclusion and records its historical origin.
+- Preservation/evidence: retain the strict greater-than8 guard in both admitted character-name directions. Actual character-family tests compare zero-, one- and two-character prefixes, programmatic/UI hyperlink aliases and collision lookup. This is source-contract evidence, not a desktop-document certification.
+
+
+### WRITER208 — Ignored character-style highlighting can remove an equal direct run highlight
+
+- Source: pinned `DomainMapper.cxx`, LN_EG_RPrBase_highlight, ignores character-style highlighting; `rtfdocumentimpl.cxx`, raw style references/getProperties; `rtfsprm.cxx`, cloneAndDeduplicate.
+- Observation: the raw RTF style reference still contains its highlight. An equal direct run value may therefore deduplicate away even though the materialized character style ignores the value, leaving that run without the requested highlight. A different direct color survives. This is a source-chain inference, not a confirmed desktop-document result.
+- Preservation/evidence: retain the mapper exclusion and original raw-reference normalization. Actual RTF owner tests distinguish an equal inline highlight from a different inline RGB value, while paragraph-style highlighting remains supported. No corrective fallback applies character-style highlighting.
+
+
+### WRITER209 — RTF exporter writes updnprop but writerfilter does not recognize it
+
+- Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharEscapement`, writes a starred `updnprop` group carrying proportional height and an automatic-position flag before numeric `up`/`dn`. The pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` keyword table has no updnprop entry; its dispatch/value/flag handlers consume position and vertAlign independently. The older editeng RTF importer is a different consumer.
+- Observation: the current writerfilter import path cannot recover that extension's height/automatic metadata through this keyword. For ordinary numeric displacement it uses the final font height and sets proportional height to 100. Thus the exporter and reader do not promise exact escapement item roundtrips. Desktop document differential behavior remains unverified.
+- Preservation/evidence: remove our custom pendingUpDn interpretation and preserve the actual unknown starred group handling. Tests exercise real exported bytes and actual document import, distinguish conventional super/sub from numeric position, and retain the native reader's height reduction. No compensating parser extension is introduced.
+
+
+### WRITER210 — Markdown HTML insertion passes an empty base URL
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::InsertHtmlData`, constructs SwReader with two empty OUString arguments; the stream insertion constructor in `sw/source/filter/basflt/shellio.cxx` assigns the second string as its base URL.
+- Observation: the embedded native HTML reader receives an empty base URL even when the surrounding Markdown reader has a nonempty source base URL. Relative-resource behavior may therefore differ across Markdown and embedded HTML paths. This is a source-level finding; desktop differential behavior is unverified.
+- Preservation: the connected raw HTML path retains empty path/base URL arguments. No compensation using the Markdown parser's m_sBaseURL is introduced; link/font/CSS/table producers remain separately tracked work.
+
+### WRITER211 — CSS property-info copying and resetting omit whitespace/visibility flags
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `SvxCSS1PropertyInfo` copy constructor, `Clear` and `Merge`; member defaults in `svxcss1.hxx`.
+- Observation: copy construction leaves `m_bPreserveSpace=false` and `m_bVisible=true` instead of copying them; `Clear` and `Merge` leave the destination flags unchanged. A parsed `white-space: pre` can therefore behave differently through an inline property-info owner and a copied stylesheet map entry.
+- Local behavior: scalar owners retain these omissions. This is source-level evidence; visible stylesheet/whitespace integration and compiled upstream differential behavior remain unverified.
+
+### WRITER212 — Unknown CSS text-decoration values enable underline
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_text_decoration` default switch branch.
+- Observation: an admitted identifier/string other than the recognized decoration values sets single underline rather than discarding that value.
+- Local behavior: the native property handler and actual HTML/Markdown document insertion retain this fallback. `swhtml.native.integration.test.ts` checks unknown-value underline and restoration after the closing tag. This is not a compiled upstream differential certificate.
+
+### WRITER213 — CSS font shorthand consumes keyword sizes as prefix identifiers
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_font` prefix loop and subsequent font-size dispatch.
+- Observation: the prefix loop consumes every identifier/string/number with no operator, including `medium` and subsequent family identifiers. If no later expression remains, the handler returns without applying any font reset. The separate `font-size` handler does recognize size keywords. This is source-level evidence, not a compiled desktop result.
+- Preservation: do not replace the loop with browser CSS shorthand parsing. Actual HTML insertion verifies that `font: medium Example` leaves the outer bold attribute intact.
+
+### WRITER214 — Incomplete CSS font shorthand can apply partial attribute changes
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_font` writes posture/case/weight resets and font size before checking for the optional slash and font-family expression.
+- Observation: `font: 18pt` has no family, but can still reset weight/posture and set height. The declaration is not transactionally rejected after the missing family is found. This is source-level evidence, not compiled upstream differential behavior.
+- Preservation: actual native HTML attribute insertion keeps these partial writes, including explicit normal weight inside an outer bold span. Tests cover restoration after the closing span and real Markdown/Worker font-item transport.
+
+### WRITER215 — Legacy FONT uses Western attribute heads for all three scripts
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::NewFontAttr` branch without style options. All three height items are passed to `pFontHeight`, and all three font items to `pFont`; the CSS/InsertAttrs branch and NewBasefontAttr use separate Western/CJK/CTL heads.
+- Observation: script-specific items are linked through one shared Western head rather than their individual script heads. This can change deferred-chain ordering and interactions with nested font attributes. This is source-level evidence; no compiled desktop symptom is asserted. A simple mixed-script case still applies all three values after native range selection.
+- Preservation: retain the exact head selection. Actual parser-state tests distinguish the shared chain from the CSS branch, and actual selected-range tests cover Western, CJK and CTL family/height items. Do not normalize the head wiring merely because it looks like a copy/paste error.
+
+### WRITER216 — FONT without SIZE pushes a zero logical size affecting nested BIG
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::NewFontAttr` initializes `nSize=0`, changes it only for SIZE or BIG/SMALL, and unconditionally appends it to `m_aFontStack`. The next font element reads the stack tail masked with FONTSIZE_MASK.
+- Observation: a face-only FONT can cause a nested BIG to choose logical size 1 rather than enlarging the inherited logical size. In the consumed default configuration, `<font face="Example"><big>A</big></font>` produces the first configured height (7pt). This is source-derived actual-model behavior, not a compiled LibreOffice defect confirmation.
+- Preservation: retain the zero entry and original seven-step arithmetic. Do not infer a missing SIZE from the effective font item or replace it with the base logical size.
+
+### WRITER217 — Unmatched legacy font closing tags still pop the size stack
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::EndFontAttr` calls EndTag and then independently removes the last size when above the stack minimum; it does not require a matching context to have been found.
+- Observation: in `<font size="5">A</big><big>B</big>C</font>D`, the unmatched BIG closer removes the size-5 stack entry while the FONT context remains open. The following BIG consequently uses base size 3 and emits logical size 4. Existing FONT attributes still cover A/C. This is source-derived actual-model evidence; compiled upstream differential behavior remains unverified.
+- Preservation: retain the independent token-context search and stack pop, including minimum guards. Do not make size removal conditional on context lookup success.
+
+### WRITER218 — CSS margin and text-indent handlers ignore bare zero
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_margin_left/right/top/bottom, ParseCSS1_margin and ParseCSS1_text_indent switch on LENGTH/PIXLENGTH, with no NUMBER-zero branch.
+- Observation: `margin-left: 0` does not reset an earlier authored margin, although `margin-left: 0pt` does. Unsupported shorthand tokens still consume their positional index; earlier sides remain applied rather than rolling back the declaration. This is source-level evidence, not a compiled desktop defect confirmation.
+- Preservation: actual HTML insertion retains both behaviors. A shorthand `margin: 1pt auto 3pt` keeps 1pt on both horizontal sides and 3pt below; a later bare-zero left margin leaves that value intact.
+
+### WRITER219 — CSS auto margin recognition uses a case-sensitive string comparison
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_margin_left/right compare `pExpr->GetString() == "auto"` rather than an ASCII-insensitive CSS keyword comparison.
+- Observation: lowercase `auto` sets the margin flag/type without producing a numeric margin item; differently cased spellings do not enter that branch. Other recognized CSS property handlers use ASCII-insensitive lookup. This is a source-level finding; a compiled document/layout effect is not established.
+- Preservation: retain the literal comparison and source flag/type state. Do not substitute a browser CSS declaration normalizer.
+
+### WRITER220 — CSS text-indent clamps absolute lengths but wraps pixel lengths
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_text_indent LENGTH branch rounds/clamps to signed16, while the PIXLENGTH branch converts truncated pixels to twips then casts directly to short.
+- Observation: physically equivalent `text-indent: 2250pt` and `text-indent: 3000px` become 32767 and -20536 twips respectively. The pixel path can reverse the indent sign through signed16 narrowing. This is source-derived actual-model evidence; compiled LibreOffice differential behavior is unverified.
+- Preservation: retain both conversion branches and their distinct outcomes; do not unify them through browser CSS length conversion or a common clamp.
+
+### WRITER221 — HTML duplicate bookmark names depend on deferred queue flush boundaries
+
+- Source: pinned `sw/source/filter/html/htmlgrin.cxx`, InsertBookmark appends a filter-private HTMLAttr to m_aSetAttrTab; swhtml.cxx SetAttr_ walks that queue backward and suppresses only an existing original-name mark at the same point before makeMark allocates a unique name.
+- Observation: two same-name targets in one paragraph are created in reverse pending order, so the later target keeps the original name and the earlier gets a copy suffix. A paragraph boundary can flush the earlier target first, reversing which position receives the original name. This is source-derived actual-model behavior; no compiled LibreOffice defect is asserted.
+- Preservation: keep queued raw positions, reverse processing and exact name/position deduplication. Actual parser tests distinguish same-point suppression, within-paragraph allocation and cross-paragraph allocation; no eager bookmark creation or input-order normalization is introduced.
+
+### WRITER222 — URI domain scanning admits underscores despite its domain grammar
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::scanDomain`, accepts `_` alongside ASCII alphanumeric characters in its Dot, Label and Hyphen states. The surrounding source grammar describes labels using alphanumeric characters and hyphens.
+- Observation: the lexical scanner admits underscore-containing labels, including labels beginning or ending with an underscore. This is a source-level grammar/implementation discrepancy; acceptance by the complete URL parser and a visible Writer symptom are not established.
+- Preservation: retain the scanner's character tests when porting the native URI path required by HTML HREF. Do not substitute browser hostname validation or infer that this scanner alone certifies a complete URL. The local scanner port is covered by `urlobj.lexical.test.ts`; complete native HREF resolver/filter integration remains pending.
+
+### WRITER223 — URI IPv6-reference scanner leaves address validation as a TODO
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::scanIPv6reference`, explicitly contains `TODO: check for valid IPv6address (RFC 2373)` and scans only hexadecimal digits, colons and dots between brackets.
+- Observation: the lexical scanner can recognize `[]` and `[:]` as bracketed references. This does not establish that the complete URL parser accepts them: the separate host parser has additional validation. This is a source-level finding, not a confirmed LibreOffice document defect.
+- Preservation: retain the scanner's recognition and cursor-advance rules when porting the consumed native URI path; preserve downstream host validation separately. Do not silently strengthen the scanner or weaken the complete parser. The local scanner port is covered by `urlobj.lexical.test.ts`; complete native HREF resolver/filter integration remains pending.
+
+### WRITER224 — URI UCS4 escape output includes sequences rejected by its scalar decoder
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::appendUCS4Escape` supports values below 0x80000000 with up to six escaped bytes and has no surrogate exclusion. `INetURLObject::getUTF32` accepts escaped UTF8 only through lead byte 0xF4, requires a Unicode scalar and rejects overlong encodings.
+- Observation: the low-level writer can emit `%ED%A0%80` for an isolated surrogate or five/six-byte sequences for values beyond Unicode, while the decoder preserves these as escaped octets rather than reconstructing the input value. This is a source-level asymmetry, not proof that Writer's complete URL path generates every such input or a confirmed desktop defect.
+- Preservation: retain the distinct writer and decoder ranges rather than replacing both with a browser TextEncoder/TextDecoder pair. Native lexical tests cover raw surrogate input, rejected escaped surrogates, the Unicode upper bound and the legacy output branch boundaries; full native HREF integration remains pending.
+
+### WRITER225 — URI host IPv4 components have no 255 upper bound
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parseHost`, STATE_IP4 and STATE_IP6_IP4 accumulate up to three decimal digits per component without checking the value against 255; the embedded IPv4 ambiguity branches likewise convert decimal digits without a range check.
+- Observation: the host parser admits `999.888.777.666` and corresponding embedded numeric components, and canonicalizes leading zeros. This is confirmed against the unchanged extracted native host function under ASan/UBSan; complete LibreOffice URL/filter/UI behavior is not certified by that isolated probe.
+- Preservation: keep source digit-count and state admission rather than applying browser IP-address validation. `urlobj.components.test.ts` pins canonical output and caller cursor behavior. Complete native HREF integration remains pending.
+
+### WRITER226 — URI host IPv6 state machine does not enforce the total group count
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parseHost`, STATE_IP6_HEXSEQ1/STATE_IP6_HEXSEQ2 accept a closing bracket without counting total groups; colon transitions do not track an eight-group maximum.
+- Observation: the isolated host function admits `[a]` and `[1:2:3:4:5:6:7:8:9]`. It still rejects other invalid transitions such as `[1::2::3]`, so replacing it with the separate permissive bracket lexer would also change behavior. Extracted native differential evidence establishes the host-function result, not complete document/UI behavior.
+- Preservation: retain the exact native state machine, numeric normalization and pointer commits. Host tests distinguish admitted and rejected forms; no browser IPv6 validator or silent group-count repair is introduced.
+
+### WRITER227 — Generic and SFTP path emptiness checks include the existing URI prefix
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parsePath`, the Generic/Sftp branch checks `rSynPath.isEmpty()` rather than the change from `nSynPathBeforeLen`. Other branches explicitly compare the appended path length.
+- Observation: an empty path succeeds when the caller already populated the output buffer with a scheme/authority, but fails with an empty output buffer. This is a source-level dependency on buffer state; it is not a compiled complete-parser or desktop defect confirmation.
+- Preservation: the local path function retains the full initial output string and that exact emptiness check. A focused test distinguishes empty and populated buffer calls; do not normalize the branch to a path-length check or add a default slash.
+
+### WRITER228 — SFTP path scanning consumes the query delimiter despite its scheme flag
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, SchemeInfo marks Sftp as supporting a query, but `INetURLObject::parsePath` handles it with Generic and stops only at the fragment delimiter. The later `setAbsURIRef` query branch can only run if the path parser stopped at `?`.
+- Observation: the SFTP path production consumes `/a?q` as its path, whereas the HTTP path production stops before `?`. The resulting URL spelling can conceal the internal path/query difference. This is source-level evidence and a local path-function result; complete LibreOffice URL/filter behavior remains unverified.
+- Preservation: retain the scheme flag and path stop condition independently. A focused path test pins the source cursor/output, and no browser query splitter or HTTP-path substitution is introduced.
+
+### WRITER229 — A query-only relative URI is resolved against the base directory
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::convertRelToAbs`, STATE_AUTH treats an initial query delimiter as STATE_REL_PATH; that branch first copies the base path only through its last slash, then appends the new query.
+- Observation: resolving `?q` against `http://host/dir/file` produces `http://host/dir/?q`, dropping the base filename. Empty and leading-fragment inputs take a different path and retain the full base path. This is source-derived local-value behavior, not a compiled complete-LibreOffice differential certificate.
+- Preservation: retain the state selection and base-directory copy. `urlobj.object.test.ts` checks query-only, empty and fragment-only cases separately; no browser URL query-resolution rule is substituted.
+
+### WRITER230 — HTTP and HTTPS authority flags reject user information
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, getSchemeInfo marks Http/Https with m_bUser=false; setAbsURIRef consequently passes the entire authority containing an unescaped `@` to the host parser, whose complete-consumption check fails.
+- Observation: `http://user@host/` is rejected by this native path rather than parsed into user and host fields, although FTP/SFTP admit user information through separate flags. This is a source-derived local parser result; intentional policy versus defect and compiled desktop behavior remain unverified.
+- Preservation: keep the original flags and host admission. URI-value tests check rejection and full invalidation rather than adopting browser user-info parsing.
+
+### WRITER231 — Extended UNC relative detection retains the pre-prefix delimiter distance
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, convertRelToAbs computes `n` from q after the initial double backslash, then can advance q past `?\\` and `UNC\\` while constructing qe from the original `q + n` distance.
+- Observation: the tentative host range can describe only the first host character after an extended UNC prefix instead of the full server name. A later smart absolute parse still validates the resulting reference; this finding alone does not prove acceptance of an invalid full URL. Native OUString's terminating NUL also matters when the tentative range extends through the terminator. This is source-level evidence, not a compiled defect confirmation.
+- Preservation: retain the original distance reuse and native terminating-NUL view in the relative-value port. Original Windows long-drive and extended-UNC CppUnit cases are represented in URI-value tests; no opportunistic range recalculation is introduced.
+
+### WRITER232 — Recognized private sub-prefixes are stored outside the path range
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, getPrefix recognizes `private:factory/` and similar longer internal prefixes; setAbsURIRef appends that entire prefix before recording the later m_aPath start offset.
+- Observation: `private:factory/swriter` retains that complete main URL, but GetURLPath(NONE) returns only `swriter`. A reference admitted through the shorter `private:` prefix records a different path boundary. This is source-derived local coordinate behavior; downstream desktop effects and whether the split is intentional remain unverified.
+- Preservation: retain longest-prefix selection and original path-start timing rather than reconstructing a browser-style scheme/path split. URI-value tests assert the native path substring alongside complete main-URL checks.
+
+### WRITER233 — HTML HREF presence creates an internet item even when resolution yields no URL
+
+- Source: pinned `sw/source/filter/html/htmlgrin.cxx`, SwHTMLParser::NewAnchor tests bHasHRef before URI resolution and unconditionally constructs SwFormatINetFormat afterward. It does not recheck the resolved string before inserting the native attribute. Native MakeTextAttr and TryInsertHint in `sw/source/core/txtnode/thints.cxx` admit the INET item without a URL-nonempty guard.
+- Observation: an empty HREF with no valid source-medium parent, or a nonempty HREF rejected by SmartRel2Abs, still creates a native internet range with empty URL and retained name/target/style identities. It does not fall back to the name-only bookmark branch. This is source-derived local-model behavior; a compiled desktop symptom is not certified.
+- Preservation: actual HTML insertion and Worker transport retain the complete empty native item. The old local owned-map pruning and nonempty-only native item decoder were removed; the separate portable UI link validator still rejects blank destinations. Focused tests cover HREF presence, native ranges, style IDs and serialized restoration.
+
+### WRITER234 — Shared MemoryInputStream can be reopened by seeking after closure
 
 - Source: pinned `comphelper/source/streaming/seqstream.cxx`, `MemoryInputStream::closeInput/seek/avail/getPosition/getLength`.
 - Observation: closeInput stores -1 in the position, while an in-range seek replaces that value without a closure check. Later reads succeed again; closed position/length queries remain readable. This is shared stream source/local-value evidence, not a claim about full DOCX/stream-service/native-thread behavior.
 - Preservation: retain the exact sentinel, validation and seek behavior. Use real Sequence/Reference/exception owners in tests rather than adding a second closed flag. The shared finding is also recorded as CALC-359; existing browser document workflows are unchanged.
 
 
-### WRITER197 — Shared OOXML binary input ignores its autoclose flag
+### WRITER235 — Shared OOXML binary input ignores its autoclose flag
 
 Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` always calls `closeInput()` when its input reference exists. The stored `mbAutoClose` is consulted only by the diagnostic, unlike the header documentation and output wrapper. Both explicit close and the destructor therefore close an input supplied with `bAutoClose=false`. This source behavior is preserved; see CALC-360 and the actual component tests in `oox/source/helper/binary-streams.test.ts`. Native synchronization, ABI and complete filter/UI integration remain unverified.
 
-### WRITER198 — Shared OOXML copy can write an untouched buffer from an EOF input
+### WRITER236 — Shared OOXML copy can write an untouched buffer from an EOF input
 
 Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` allocates a32KiB Sequence and calls `writeData(aBuffer)` even when `readData()` returns zero without reallocating that Sequence. `BinaryXInputStream` in EOF does exactly that. Copying an initially absent input therefore writes32768 zero bytes to a valid output. This original behavior is preserved and exercised through actual comphelper input/output components; see CALC-361. Related original native package/SAX workflows are not certified by this bounded test.
 
-### WRITER199 — Shared MIME charset lookup uses permissive alias prefixes
+### WRITER237 — Shared MIME charset lookup uses permissive alias prefixes
 
 Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` checks exact VIP names before ordered prefix aliases after30-byte ASCII normalization. A trailing suffix rejects UTF-8 but can still select an ISO alias. The complete original40/184 tables, their duplicates and matching order are retained rather than replaced with browser alias rules. See CALC-362 and `sal/textenc/native-mime-charset.test.ts`. SAX encoding transport and complete DOCX model/filter/UI acceptance remain pending; this finding does not certify native ABI or all encoding conversion behavior.
 
-### WRITER200 — Shared XML converter can discard a short initial source prefix
+### WRITER238 — Shared XML converter can discard a short initial source prefix
 
 Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` concatenates buffered prefix bytes only when the latest read is nonzero. EOF before recognition therefore loses accumulated input, including a four-byte `<a/>`. Preserve this flow, as exercised by actual fragmented SequenceInputStream callers; see CALC-363. Complete SAX parser and DOCX model/filter/UI acceptance remain pending.
 
 Package-input follow-up: actual OOXML ZIP parts now pass through this converter. Empty input and short `<a/>`/`<root>` fragments consequently finish document callbacks without a parsed root and can return successful optional-fragment import. Tests preserve this behavior explicitly. Cancellation and malformed-input tests use recognized inputs to exercise their intended error paths independently of prefix loss.
 
-### WRITER201 — Shared XML declaration quote selection prefers an absent single quote
+### WRITER239 — Shared XML declaration quote selection prefers an absent single quote
 
 Pinned XMLFile2UTFConverter scanForEncoding/removeEncoding compare the single-quote index directly with the double-quote index, allowing -1 to win. A double-quoted encoding with no later single quote is not captured or removed. Preserve exact quote ordering, lexical matching and first-line scanning; see CALC-364. Tests use actual OString values and source byte owners.
 
-### WRITER202 — Shared SAX converter replaces separately supplied surrogate halves
+### WRITER240 — Shared SAX converter replaces separately supplied surrogate halves
 
 Pinned Unicode2TextConverter passes its original no-FLUSH default flags to RTL. The UTF8 converter's original trailing-surrogate branch replaces a split high surrogate immediately; a later low surrogate is independently invalid. Separate calls produce two `?`, while a complete pair in one call produces valid UTF8. Preserve these flags and existing RTL state behavior; see CALC-365. No synthetic converter context or private pending-state mutation is supplied.
 
-### WRITER203 — Shared Shift-JIS retains upstream MS-compatible wave mapping
+### WRITER241 — Shared Shift-JIS retains upstream MS-compatible wave mapping
 
 Pinned `sal/textenc/tcvtjp1.tab` intentionally uses U+FF5E for8160 in Shift-JIS for Microsoft compatibility. The complete original SJIS descriptor is now wired separately from MS932, reusing actual original forward/reverse payload tables and the same EUDC object. All512 pointer/range entries match source. Compiled original reverse conversion over all BMP units and the extended151032-case profile confirm the represented defined scope; see CALC-366. Native undefined reads, ABI and full document services remain unverified.
 
-### WRITER204 — Shared empty ByteSequence COW leaves the old count unchanged
+### WRITER242 — Shared empty ByteSequence COW leaves the old count unchanged
 
 Pinned `sal/rtl/byteseq.cxx#rtl_byte_sequence_reference2One` omits old-count decrement in its zero-element allocation branch. Preserve this behavior; actual owner tests and compiled unchanged SAL C/C++ bodies reproduce it. See CALC-367. Allocation failure and native resource lifetime outside the witness domain remain unverified.
 
-### WRITER205 — Shared serializer cache writes can bypass retained Sequence COW
+### WRITER243 — Shared serializer cache writes can bypass retained Sequence COW
 
 Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached original pSeq and changes its nElements while `toUnoSequence` can expose that same header/storage to a retaining output sink. This conditional aliasing is suspected from source; full sink/service reproduction remains pending. Preserve the raw-pointer flow rather than adding a defensive copy during output migration. See CALC-368.
+

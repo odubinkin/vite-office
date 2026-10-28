@@ -24,7 +24,27 @@ export const SwStyleNameMapper = {
       )
     )
       return name + " (user)";
-    return name.endsWith(" (user)") ? name.slice(0, -7) : name;
+    return name.length > 8 && name.endsWith(" (user)") ? name.slice(0, -7) : name;
+  },
+  /** Original character-family FillUIName, including Standard and the source suffix-length guard. @param name - Programmatic name. @param flags - Original character family. @returns UI name. */
+  FillUIName(name: string, flags: SwGetPoolIdFromName.ChrFmt): string {
+    void flags;
+    if (name === "Standard") return "No Character Style";
+    const entry = WRITER_CHARACTER_STYLE_POOL.find(
+      /** Resolves the original programmatic name. @param value - Native pool metadata. @returns Match. */ (
+        value,
+      ) => value.name === name,
+    );
+    if (entry !== undefined) return entry.uiName;
+    if (
+      WRITER_CHARACTER_STYLE_POOL.some(
+        /** Disambiguates a custom name matching a built-in UI name. @param value - Native entry. @returns Match. */ (
+          value,
+        ) => value.uiName === name,
+      )
+    )
+      return name + " (user)";
+    return name.length > 8 && name.endsWith(" (user)") ? name.slice(0, -7) : name;
   },
   /** Returns the supported English UI resource or the supplied fallback. @param id - Native pool identity. @param name - Fallback name for an unsupported identity. @returns UI name. */
   GetUIName(id: SwPoolFormatId, name: string): string {

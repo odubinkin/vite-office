@@ -115,15 +115,22 @@ describe("native internet item empty strings", /** Registers native value and ac
     expect(item.GetHyperlink()).toEqual({ url: "url" });
     expect(item.equals(new SwFormatINetFormat({ url: "url" }))).toBe(true);
   });
-  it("prunes empty active links while retaining valid native empty metadata in node history and copies", /** Checks actual range/history/graph boundaries and unchanged blank-link normalization. @returns Nothing. */ function graphValues(): void {
+  it("retains native empty internet items in active maps while preserving history and copy ownership", /** Checks original empty-item admission through maps and graph boundaries; portable blank-link normalization remains separate. @returns Nothing. */ function graphValues(): void {
     const doc = new SwDoc(),
       node = required(doc.paragraphs[0]);
     node.SetText("abcd");
     const blank = new SwTextINetFormat(new SwFormatINetFormat(), 0, 4),
       empty = new SwpHints(doc.GetAttrPool(), [blank]);
-    expect(empty.Count()).toBe(0);
+    expect(empty.Count()).toBe(1);
     node.SetTextHints(empty);
-    expect(node.GetpSwpHints()).toBeUndefined();
+    expect(required(node.GetpSwpHints()).Count()).toBe(1);
+    expect(strings(required(node.GetpSwpHints()).Get(0).format as SwFormatINetFormat)).toEqual([
+      "",
+      "",
+      "",
+      "",
+      "",
+    ]);
     const caller = { url: "valid", name: "", targetFrame: "", styleName: "", visitedStyleName: "" };
     const input = new SwTextINetFormat(new SwFormatINetFormat(caller), 0, 4);
     node.SetTextHints(new SwpHints(doc.GetAttrPool(), [input]));

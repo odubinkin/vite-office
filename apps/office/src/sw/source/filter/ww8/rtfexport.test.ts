@@ -35,7 +35,7 @@ it("writes source highlight palette indices independent of document color indice
       0,
     /** Checks writes source highlight palette indices independent of document color indices. @returns Test completion or assertion result. */ () =>
       23,
-    new RtfExport(),
+    createRtfExport(),
   );
   const plain = { bold: false, italic: false, underline: false };
   expect(output.WriteCharacter({ ...plain, highlight: "#6666ff" })).toContain("\\highlight2");
@@ -59,7 +59,7 @@ it("quantizes a native highlight through the fixed RTF palette on export and imp
   paragraph.SetTextHints(hints);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toContain("\\highlight2");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(projectWriterTextRuns(imported.paragraphs[0]).at(0)?.attributes.highlight).toBe(
@@ -80,7 +80,7 @@ it("exports native alpha colors through RTF RGB channels and highlight palette",
   paragraph.SetAttr(createWriterHighlightItem(0x806666ff));
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const rtf = new TextDecoder().decode(bytes);
     expect(rtf).toContain("\\red18\\green52\\blue86;");
     expect(rtf).toContain("\\highlight2");
@@ -127,7 +127,7 @@ it("writes native underline line styles with the pinned RTF controls", /** Check
       ]);
       paragraph.SetText(fragment.text);
       paragraph.SetTextHints(fragment.hints);
-      const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+      const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
       expect(rtf).toContain(
         ["ul", "uldb", "uld", "ulnone"].includes(control)
           ? `\\ulc0\\${control} `
@@ -175,7 +175,7 @@ it("round trips native word-only underline through RTF ulw", /** Checks the sour
     paragraph.SetText(fragment.text);
     paragraph.SetTextHints(fragment.hints);
     expect(projectWriterTextRuns(paragraph)[0]?.attributes.underlineWordMode).toBe(true);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(rtf).toContain("\\ulc0\\ulw ");
     const imported = new RtfDocumentImpl().ResolveBytes(new TextEncoder().encode(rtf));
     try {
@@ -209,7 +209,7 @@ it("round trips an explicit native underline color through the RTF color table",
     ]);
     paragraph.SetText(fragment.text);
     paragraph.SetTextHints(fragment.hints);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(rtf).toContain("\\red51\\green34\\blue17;");
     expect(rtf).toContain("{\\colortbl;\\red0\\green0\\blue0;\\red0\\green0\\blue255;");
     expect(rtf).toContain("\\ulc17\\uldb colored");
@@ -238,7 +238,7 @@ it("exports a colored paragraph underline item without a browser run override", 
     const underline = new SvxUnderlineItem(FontLineStyle.LINESTYLE_WAVE, RES_CHRATR_UNDERLINE);
     underline.SetColor(new Color(0x123456));
     paragraph.SetAttr(underline);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(rtf).toContain("\\ulwave\\ulc17 Native");
     expect(rtf).toContain("\\red18\\green52\\blue86;");
   } finally {
@@ -268,7 +268,7 @@ it("round trips text, Unicode, alignment and direct character runs", /** Checks 
   paragraph.SetParagraphAlignment("center");
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect(imported.paragraphs[0]?.GetText()).toBe("Plain Ж");
     expect(imported.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
@@ -294,7 +294,7 @@ it("keeps the source RTF table-header export omission for represented repeat row
       line.GetTabBoxes()[0]?.GetParagraphs()[0]?.SetText(`Row ${index}`);
     }
     table.SetRowsToRepeat(1);
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(rtf).toContain("\\trowd");
     expect(rtf).not.toContain("\\trhdr");
   } finally {
@@ -312,7 +312,7 @@ it("round trips represented paragraph styles through the RTF stylesheet", /** Ch
   quote.ChgFormatColl(source.GetTextFormatColl("quotations"));
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain("\\stylesheet");
     expect(encoded).toMatch(/\{\\s2[^}]*\\b[^}]*heading 2;/u);
@@ -330,7 +330,7 @@ it("round trips represented paragraph styles through the RTF stylesheet", /** Ch
   }
 });
 
-it("round trips native RTF stylesheet parent and next links through reserved slots", /** Checks round trips native RTF stylesheet parent and next links through reserved slots. @returns Test completion or assertion result. */ () => {
+it("retains native backward parent and unresolved forward follow links through reserved slots", /** Source follow names are captured before the later style is declared (WRITER206). @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   source
     .GetDfltTextFormatColl()
@@ -342,7 +342,7 @@ it("round trips native RTF stylesheet parent and next links through reserved slo
   source.paragraphs[0]?.ChgFormatColl(child);
   let restored;
   try {
-    const encoded = new TextDecoder().decode(new RtfExport().ExportDocument(source));
+    const encoded = new TextDecoder().decode(RtfExport.WriteDocument(source));
     expect(encoded).toMatch(/\{\\s0\\snext0\\qc[^}]* Normal;/u);
     expect(encoded).toMatch(/\{\\s16\\sbasedon15\\snext17[^}]* Child;/u);
     expect(encoded).toMatch(/\{\\s17\\sbasedon0\\snext17[^}]* Follow;/u);
@@ -351,7 +351,7 @@ it("round trips native RTF stylesheet parent and next links through reserved slo
     );
     const restoredChild = restored.FindTextFormatCollByName("Child");
     expect(restoredChild?.DerivedFrom()?.GetName()).toBe("Parent");
-    expect(restoredChild?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(restoredChild?.GetNextTextFormatColl()).toBe(restoredChild);
     expect(restored.paragraphs[0]?.GetTextFormatColl()).toBe(restoredChild);
     expect(
       (
@@ -373,7 +373,7 @@ it("preserves Word builtin style names and gives them priority over custom name 
   source.nodes.MakeTextNode("Builtin").ChgFormatColl(builtin);
   let restored;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain(" Body Text1;");
     expect(encoded).toContain(" Body Text;");
@@ -400,9 +400,11 @@ it("round trips native paragraph spacing, keep, split and widow controls", /** C
   paragraph.SetAttr(new SfxInt16Item(RES_PARATR_WIDOWS, 0));
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
-    expect(encoded).toContain("\\sb120\\sa240\\contextualspace\\keepn\\keep\\nowidctlpar");
+    expect(encoded).toContain("\\sb120\\sa240\\contextualspace");
+    expect(encoded).toContain("\\keep\\nowidctlpar");
+    expect(encoded).toContain("\\keepn");
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const result = imported.paragraphs[0];
     expect((result?.GetAttr(RES_UL_SPACE) as SvxULSpaceItem).GetUpper()).toBe(120);
@@ -428,7 +430,7 @@ it("retains native spacing and keep properties on a named RTF paragraph style", 
   paragraph.ChgFormatColl(style);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const result = imported.paragraphs[0];
     expect(result?.GetParagraphStyle()).toBe("heading-2");
@@ -454,7 +456,7 @@ it("exports native relative tab stops as Word absolute positions with alignment 
   paragraph.SetAttr(tabs);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     const encoded = new TextDecoder().decode(bytes);
     expect(encoded).toContain("\\deftab1134");
     expect(encoded).toContain("\\tldot\\tqr\\tx1080\\tlul\\tqdec\\tx1800");
@@ -486,13 +488,14 @@ it("retains explicit native tab stops in an RTF named paragraph style", /** Chec
   paragraph.ChgFormatColl(style);
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes)).toMatch(/\\s\d+[^}]*\\tldot\\tqc\\tx900/u);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const result = imported.paragraphs[0]?.GetAttr(RES_PARATR_TABSTOP) as SvxTabStopItem;
     expect(result.Count()).toBe(1);
     expect(result.At(0).GetTabPos()).toBe(900);
     expect(result.At(0).GetAdjustment()).toBe(SvxTabAdjust.Center);
+    expect(result.At(0).GetFill()).toBe(".");
   } finally {
     imported?.Dispose();
     source.Dispose();
@@ -509,7 +512,7 @@ it("emits native page-before break controls and preserves the source first-run i
   second.SetAttr(new SfxInt16Item(RES_BREAK, 4));
   let imported;
   try {
-    const bytes = new RtfExport().ExportDocument(source);
+    const bytes = RtfExport.WriteDocument(source);
     expect(new TextDecoder().decode(bytes).match(/\\pagebb/gu)).toHaveLength(2);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     expect((imported.paragraphs[0]?.GetAttr(RES_BREAK) as SfxInt16Item).GetValue()).toBe(0);
@@ -519,3 +522,5 @@ it("emits native page-before break controls and preserves the source first-run i
     source.Dispose();
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

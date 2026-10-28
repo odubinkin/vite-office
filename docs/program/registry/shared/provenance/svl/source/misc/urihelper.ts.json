@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/misc/urihelper.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Immutable host UTF16 strings and explicit scalar iteration represent the original native Unicode value/escape loop; native pointer and buffer allocation ABI is not certified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/misc/urihelper.ts",
+          "marker": "SmartRel2Abs"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.object.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "svl/source/misc/urihelper.cxx",
+          "marker": "URIHelper::SmartRel2Abs"
+        },
+        {
+          "path": "include/svl/urihelper.hxx",
+          "marker": "SmartRel2Abs"
+        }
+      ]
+    },
+    "upstreamPath": "svl/source/misc/urihelper.cxx",
+    "localSymbols": [
+      "SmartRel2Abs",
+      "MaybeFileHdl"
+    ],
+    "upstreamSymbols": [
+      "URIHelper::SmartRel2Abs"
+    ],
+    "preservedResponsibilities": [
+      "Original SmartRel2Abs leading-fragment compatibility, invalid-base smart parsing, valid-base relative conversion, optional non-file preference and maybe-file callback selection. The source callback local OUString pointer is represented by a mutable single-string slot; no browser URL/OS filesystem resolver or fabricated Link service replaces the native algorithm. All original defaults are retained, including checkFileExists=true; actual HTML caller is expected to pass null/false. Complete URIHelper factory/context/other services and native Link ABI are outside this consumed slice. Native full-class differential and actual HTML HREF insertion remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete URL/URIHelper services, native string/Link ABI, compiled complete-class equivalence and actual HTML HREF insertion are not certified."
+    ]
+  }
+}

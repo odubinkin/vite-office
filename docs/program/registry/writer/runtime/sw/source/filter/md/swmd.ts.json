@@ -17,9 +17,10 @@
       "divergenceClass": "none",
       "evidence": [
         "apps/office/src/sw/source/filter/md/swmd.ts#MarkdownReader",
-        "vendor/libreoffice-reference/sw/source/filter/md/swmd.cxx#MarkdownReader::Read"
+        "vendor/libreoffice-reference/sw/source/filter/md/swmd.cxx#MarkdownReader::Read",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts"
       ],
-      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified.",
+      "justification": "Native Markdown filter path for represented Writer content; complete upstream parity remains unverified. InsertHtmlData now uses the original SAL UTF16-to-UTF8 conversion and existing SvStream, passing the real Markdown SwDoc and borrowed SwPaM to the consumed native SwHTMLParser. The private document callback begins at a blank paragraph at section EOF; unconsumed SwReader/Sfx media orchestration is not recreated as a generic API prerequisite. Empty path/baseURL and ignored parser result follow the pinned Markdown caller, and EndHtmlBlock clears its buffer after successful insertion. Actual native HTML/model/worker-codec tests replace the unsupported-placeholder fixture. This is initial connected HTML body/inline/block coverage, not full CSS/named-style/font/link/list/table HTML support.",
       "knownViolations": [],
       "localSymbols": [
         "MarkdownReader"

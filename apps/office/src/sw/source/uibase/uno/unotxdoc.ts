@@ -78,6 +78,10 @@ export class SwXTextDocument {
   createPageStyle(): SwXPageStyle {
     return SwXStyleFamilies.CreateStylePage(this.GetDoc());
   }
+  /** Original character-style service descriptor over the actual document owner. @returns Detached character style. */
+  createCharacterStyle(): SwXStyle {
+    return new SwXStyle(this.GetDoc(), "CharacterStyles");
+  }
   /** Implements the represented native createInstance operation. @param name - Native property or element name. @returns The represented native operation result. */
   createInstance(name: OUStringConstReference): SwXStyle | SwXNumberingRules | SwXBookmark {
     const n = text(name),
@@ -85,6 +89,8 @@ export class SwXTextDocument {
     switch (n) {
       case "com.sun.star.text.Bookmark":
         return new SwXBookmark();
+      case "com.sun.star.style.CharacterStyle":
+        return this.createCharacterStyle();
       case "com.sun.star.style.ParagraphStyle":
         return new SwXStyle(doc, "ParagraphStyles");
       case "com.sun.star.style.NumberingStyle":
