@@ -1,0 +1,137 @@
+{
+  "status": "prepared-not-integrated",
+  "publicOperations": [
+    {
+      "name": "loadDefaultCalendar",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "loadCalendar",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getUniqueID",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getAllCalendars",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "setDateTime",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getDateTime",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "setLocalDateTime",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getLocalDateTime",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "setValue",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getValue",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "isValid",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getFirstDayOfWeek",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getNumberOfMonthsInYear",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getNumberOfDaysInWeek",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getMonths",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getGenitiveMonths",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getPartitiveMonths",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    },
+    {
+      "name": "getDays",
+      "attempts": 1,
+      "errorClass": "Error",
+      "message": "assert(*ppThis != nullptr)",
+      "realOwner": true
+    }
+  ],
+  "preparedChecks": 18,
+  "draftComparison": ".agentplane/tmp/calendar-allocation-failures-observe.ts",
+  "comparisonLog": ".agentplane/tmp/coverage-calendar-allocation-compare.log",
+  "failureEnvironment": "Existing original RTL externally replaceable allocation slot returns null. Actual CalendarWrapper/CalendarImpl operations and real Locale/string owners execute; no service/method/return factory or private state is replaced. Normal missing-provider UNO error construction or real calendar-name materialization encounters the actual checked SAL allocation failure.",
+  "scope": "Local non-UNO checked Error propagation through all18 real wrapper forwarding operations, with original allocator restored and normal UNO default behavior rechecked after each call. Independent low-level native allocation/assertion evidence is the prepared6-case RTL witness. No native high-level Calendar allocation-failure result, C++ exception, physical recovery or full ABI equivalence is claimed.",
+  "integrationGate": "Complete baseline collection has ended at the preserved application snapshot. Integrate source-contract tests with this bounded scope; keep production sources/thresholds/exclusions unchanged."
+}

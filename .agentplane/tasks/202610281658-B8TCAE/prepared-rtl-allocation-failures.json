@@ -1,9 +1,9 @@
 {
   "status": "prepared-not-integrated",
-  "nativeCases": 5,
+  "nativeCases": 6,
   "nativeComparedToCurrentPortableOwners": true,
   "originalAllocationContract": "vendor/libreoffice-reference/sal/rtl/strimp.hxx declares externally replaceable rtl_allocateString/rtl_freeString function pointers. Native and portable callers use these actual existing slots; core concat/replacement/reserve bodies, lengths, refcounts and source values are unchanged.",
-  "nativeFixtureSha256": "0c88e88a88f62aead8d655a768b3a487c85f3a3b9e55ee188e413b6c03f7baa5",
+  "nativeFixtureSha256": "8384da4b60f0e4df5fb7ff119a008e0b2157554edea7d115cbcc85a08f465ea4",
   "draftScript": ".agentplane/tmp/rtl-allocation-failures-native-probe.mjs",
   "draftFixture": ".agentplane/tmp/native-allocation-failures.json",
   "draftComparison": ".agentplane/tmp/rtl-allocation-failures-observe.ts",
@@ -13,5 +13,7 @@
   "plannedFixture": "apps/office/src/sal/rtl/native-allocation-failures.json",
   "integrationNotes": "Wait for current-full-baseline session3491 to finish before editing application/runtime/test/resource/config sources. When moving the draft script from .agentplane/tmp to scripts, change its helper import from ../../scripts/rtl-ustring-native-sources.mjs to ./rtl-ustring-native-sources.mjs and recheck native output. Native assertions terminate isolated processes with core dumps disabled. Portable checked Error tests must retain explicit no-native-C++-exception claim, restore actual allocator/free/diagnostic slots, and release caller-owned test references without private counter writes.",
   "scope": "Unchanged original storage, concat/replacement, C wrappers, allocation declarations/defaults and original headers. Failure is supplied through the actual rtl_allocateString function pointer declared in sal/rtl/strimp.hxx; no core method or length/refcount field is replaced. Allocator/free events inspect only initialized live storage, before the original free call. NoThrow callers return null; original byte-reserve and replacement assertions terminate isolated processes. Local checked Error binding is not a claim of native C++ exceptions, full ABI, allocator or threading equivalence.",
-  "coverageExceptionsApplied": false
+  "coverageExceptionsApplied": false,
+  "integrationGate": "Satisfied: complete current-full-baseline session3491 ended with1685files26573tests passed and unchanged application tree; all100 thresholds still fail. Integrate under the same active task and retain native/portable error-binding scope.",
+  "additionalCase": "X directly witnesses the original Unicode counted-string constructor allocation assertion used by calendar message/name materialization. This is low-level native source evidence, not high-level native Calendar OOM result equivalence."
 }

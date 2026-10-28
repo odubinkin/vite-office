@@ -820,5 +820,59 @@
     },
     "fixtureSha256": "f00ac2c4556724d24b7fa05cd62d6fac162ce01c7048a261a5738ae396118788",
     "scope": "Five actual public input regressions and all108 native edge callbacks rechecked. No fake hashtable/context injection, source/counter/exclusion/threshold changes. Native memory/ABI/fault equivalence remains unverified."
+  },
+  "currentFullBaseline": {
+    "commit": "d660986a2b69d4cf6c671a69cfcdf7499e28a134",
+    "applicationTree": "902c5679e75ef0f88954ac5ca5f0704e98a5d0bd",
+    "applicationSourceTree": "53b5b9737e81172095b6e9d2e32a76e8fc19a813",
+    "scriptsTree": "5b94a44901355114adf19b2337ef174399f4afc5",
+    "command": "npm run test:coverage -- --reporter=verbose --coverage.reportsDirectory=coverage/current-full-baseline",
+    "scope": "Complete configured application test discovery and unchanged100% thresholds. Current-code diagnostic baseline, not final full npm run verify. Keep application/runtime/test/resource/config sources unchanged during collection; task evidence and read-only source audits may continue.",
+    "status": "completed",
+    "exitCode": 1,
+    "applicationSnapshotUnchanged": true,
+    "rawReport": "apps/office/coverage/current-full-baseline/coverage-final.json",
+    "rawReportSha256": "bf94993cff9d9e933e3516bd41f8fcce171fd000bfe9885ee2ced6a3d67f8e53",
+    "summary": {
+      "lines": {
+        "total": 108118,
+        "covered": 106994,
+        "skipped": 0,
+        "pct": 98.96
+      },
+      "statements": {
+        "total": 119458,
+        "covered": 117707,
+        "skipped": 0,
+        "pct": 98.53
+      },
+      "functions": {
+        "total": 18420,
+        "covered": 18369,
+        "skipped": 0,
+        "pct": 99.72
+      },
+      "branches": {
+        "total": 74581,
+        "covered": 72429,
+        "skipped": 0,
+        "pct": 97.11
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "testFiles": 1685,
+    "tests": 26573,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "remainingStatements": 1751,
+    "remainingBranchArms": 2152,
+    "remainingFunctions": 51,
+    "remainingLines": 1124,
+    "note": "Complete configured application discovery at the preserved current application tree. Exit1 is entirely unchanged100% threshold failure; all1685 files26573 tests passed. This is the new current diagnostic baseline, not a completed final npm run verify."
   }
 }

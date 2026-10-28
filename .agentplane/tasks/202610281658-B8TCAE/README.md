@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 27
+revision: 28
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T21:06:43.310Z"
+doc_updated_at: "2026-10-28T21:24:58.753Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -131,6 +131,10 @@ sections:
     - Observation: Five original RTL allocation-failure caller outcomes are prepared and match current portable event streams. The existing native extern rtl_allocateString/rtl_freeString slots provide the failure environment; original core functions, source lengths, fields and reference counts are not replaced. NoThrow concat/append return null and release the old destination in original order; byte reserve/raw/owned replacement assert in isolated native processes with core dumps disabled.
       Impact: Tests can cover admitted resource-error paths through the existing original contract, rather than introducing fake factories or source-method replacements. Native pre-abort initialized events and nonfatal diagnostics are independent expectations. Local checked Error bindings are explicitly distinguished from native SIGABRT, with no native C++ exception/ABI claim.
       Resolution: Preserve the frozen application tree during complete coverage collection. Integrate prepared23 scanner/line and5 allocation-failure cases only after session3491 finishes and its snapshot is checked. User exceptions remain unapplied.
+
+    - Observation: Complete current application coverage finished at the preserved d660986a2b69/application tree:1685 files26573 tests all pass in2250.95s. Unchanged100 thresholds fail at117707/119458 statements98.53%,72429/74581 branch arms97.11%,18369/18420 functions99.72%,106994/108118 lines98.96%.
+      Impact: The refreshed same-runtime baseline leaves1751 statements2152 branch arms51 functions1124 lines; no runtime test failure is hidden by a partial profile. Application tree was verified unchanged throughout collection. Six independent original RTL resource-failure outcomes now include the actual Unicode constructor used by18 real CalendarWrapper host checked-error propagation checks, with no substituted service or private state. High-level native Calendar OOM parity is explicitly unclaimed.
+      Resolution: End the application freeze, integrate prepared23 bounded scanner/line cases and6 RTL allocation cases plus18 actual wrapper error-filter checks, then continue remaining full100 work. Final npm run verify and main/child publication/sync remain outstanding; no exceptions applied.
 id_source: "generated"
 ---
 ## Summary
@@ -242,3 +246,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Five original RTL allocation-failure caller outcomes are prepared and match current portable event streams. The existing native extern rtl_allocateString/rtl_freeString slots provide the failure environment; original core functions, source lengths, fields and reference counts are not replaced. NoThrow concat/append return null and release the old destination in original order; byte reserve/raw/owned replacement assert in isolated native processes with core dumps disabled.
   Impact: Tests can cover admitted resource-error paths through the existing original contract, rather than introducing fake factories or source-method replacements. Native pre-abort initialized events and nonfatal diagnostics are independent expectations. Local checked Error bindings are explicitly distinguished from native SIGABRT, with no native C++ exception/ABI claim.
   Resolution: Preserve the frozen application tree during complete coverage collection. Integrate prepared23 scanner/line and5 allocation-failure cases only after session3491 finishes and its snapshot is checked. User exceptions remain unapplied.
+
+- Observation: Complete current application coverage finished at the preserved d660986a2b69/application tree:1685 files26573 tests all pass in2250.95s. Unchanged100 thresholds fail at117707/119458 statements98.53%,72429/74581 branch arms97.11%,18369/18420 functions99.72%,106994/108118 lines98.96%.
+  Impact: The refreshed same-runtime baseline leaves1751 statements2152 branch arms51 functions1124 lines; no runtime test failure is hidden by a partial profile. Application tree was verified unchanged throughout collection. Six independent original RTL resource-failure outcomes now include the actual Unicode constructor used by18 real CalendarWrapper host checked-error propagation checks, with no substituted service or private state. High-level native Calendar OOM parity is explicitly unclaimed.
+  Resolution: End the application freeze, integrate prepared23 bounded scanner/line cases and6 RTL allocation cases plus18 actual wrapper error-filter checks, then continue remaining full100 work. Final npm run verify and main/child publication/sync remain outstanding; no exceptions applied.
