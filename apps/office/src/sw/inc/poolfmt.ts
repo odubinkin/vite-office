@@ -442,13 +442,13 @@ export function getWriterAvailableParagraphStyleDefinition(
   );
 }
 
-/** Resolves an exposed pool style or Writer's internal Table Contents style. @param id - Pool style identity. @returns Materializable definition. */
+/** Resolves exposed pool styles and source-backed internal table/sender collections. @param id - Pool style identity. @returns Materializable definition. */
 export function getWriterMaterializedParagraphStyleDefinition(
   id: string,
 ): WriterParagraphStyleDefinition | undefined {
   return (
     getWriterAvailableParagraphStyleDefinition(id) ??
-    (id === "table-contents" || id === "table-heading"
+    (id === "table-contents" || id === "table-heading" || id === "sender"
       ? getWriterParagraphStyleDefinition(id)
       : undefined)
   );

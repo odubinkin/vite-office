@@ -168,5 +168,96 @@
         "pct": "Unknown"
       }
     }
+  },
+  "writerBlocksAndStyles": {
+    "testFiles": 6,
+    "tests": 106,
+    "newBlockIntegrationTests": 15,
+    "newPoolIdentityAndInternalHeadingTests": 8,
+    "runtimeCodeChanged": [
+      "apps/office/src/sw/inc/poolfmt.ts",
+      "apps/office/src/sw/source/core/doc/poolfmt-defaults.ts"
+    ],
+    "report": "apps/office/coverage/integration-writer-styles/coverage-final.json",
+    "reportSha256": "1cb4e3b1206bef2c7c36874b267878bcf771321da2efc2841bdd370577e19637",
+    "metrics": {
+      "lines": {
+        "total": 219,
+        "covered": 219,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 235,
+        "covered": 235,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 24,
+        "covered": 24,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 177,
+        "covered": 177,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "scope": "Fix existing ADDRESS path by materializing original internal Sender pool and original HTML/ordinary defaults. New real-byte block tests and actual3-script item range assertions retain original HTML paragraph behavior and Worker snapshot style identity. Native script handling unchanged; no Western browser projection is used for CJK/CTL source items. Strict100 profile covers2 changed style owners only; SwHTMLParser and whole-project coverage remain in progress.",
+    "latestRegressionVerification": {
+      "testFiles": 6,
+      "tests": 108,
+      "report": "apps/office/coverage/integration-writer-blocks/coverage-final.json",
+      "reportSha256": "926946c08e93a4c6d3cf274e2c6059728bef82e85dddbd26148889037f89d1f6",
+      "metrics": {
+        "lines": {
+          "total": 697,
+          "covered": 678,
+          "skipped": 0,
+          "pct": 97.27
+        },
+        "statements": {
+          "total": 775,
+          "covered": 739,
+          "skipped": 0,
+          "pct": 95.35
+        },
+        "functions": {
+          "total": 63,
+          "covered": 63,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 583,
+          "covered": 522,
+          "skipped": 0,
+          "pct": 89.53
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": 100
+        }
+      },
+      "note": "Adds2 derived virtual-consumer interruption cases after actual original token handling. Parser/context/attribute state is initialized only by the real byte-stream pipeline; original SourceDispose releases live nested chains and restores initial HTML_MODE. All assertions pass; this broader profile includes partially covered SwHTMLParser and therefore still fails global100% threshold. Earlier strict2-style-owner profile is retained separately above."
+    }
+  },
+  "toolingCheckpoint": {
+    "testFiles": 40,
+    "tests": 169,
+    "result": "passed",
+    "log": ".agentplane/tmp/coverage-checkpoint-tooling.log",
+    "scope": "Run after native host/locale work and before Writer style fix; final full verifier still required."
   }
 }

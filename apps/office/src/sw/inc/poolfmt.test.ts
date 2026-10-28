@@ -18,9 +18,12 @@ import {
   getWriterStyleIdFromOdfName,
   WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL,
   WRITER_PARAGRAPH_STYLE_POOL,
+  IsPoolUserFormat,
+  SwPoolFormatId,
 } from "./poolfmt";
 import { createWriterDocument } from "../source/core/doc/doc";
 import { getWriterParagraphStyleDefaults } from "../source/core/doc/poolfmt-defaults";
+
 import {
   SvxFontHeightItem,
   SvxFontItem,
@@ -416,3 +419,33 @@ function ulValues(item: SvxULSpaceItem | undefined): readonly unknown[] | undefi
   const values = [item.QueryValue(3), item.QueryValue(4)];
   return item.QueryValue(7) === true ? [...values, 1] : values;
 }
+
+it.each([
+  [0xffff, true],
+  [0x83ff, true],
+  [0x87ff, true],
+  [0x8000, false],
+  [0, false],
+  [0x1811, false],
+  [0x1ffff, true],
+] as const)(
+  "retains original unsigned16 user-pool identity for %i",
+  /** Original poolfmt.hxx accepts UNKNOWN and user-origin/all-low-bits identities across group markers; built-in and merely user-bit-set identities remain distinct. @param identity - Native integral argument. @param expected - Source identity classification. @returns Nothing. */ (
+    identity,
+    expected,
+  ) => expect(IsPoolUserFormat(identity as SwPoolFormatId)).toBe(expected),
+);
+it("materializes original internal table-heading defaults and ancestry", /** Original DocumentStylePoolManager.cxx943 creates all-script bold, centered adjustment and disabled line counting; GetPoolParent derives it from Table Contents. @returns Nothing. */ () => {
+  const document = createWriterDocument();
+  try {
+    const heading = document.GetTextFormatColl("table-heading"),
+      items = heading.GetAttrSet();
+    expect(heading.DerivedFrom()).toBe(document.GetTextFormatColl("table-contents"));
+    expect((items.Get(RES_PARATR_ADJUST) as SvxAdjustItem).GetAdjust()).toBe(SvxAdjust.Center);
+    expect((items.Get(RES_LINENUMBER) as SfxBoolItem).GetValue()).toBe(false);
+    for (const which of [RES_CHRATR_WEIGHT, RES_CHRATR_CJK_WEIGHT, RES_CHRATR_CTL_WEIGHT])
+      expect((items.Get(which) as SvxWeightItem).GetValue()).toBe(FontWeight.WEIGHT_BOLD);
+  } finally {
+    document.Dispose();
+  }
+});

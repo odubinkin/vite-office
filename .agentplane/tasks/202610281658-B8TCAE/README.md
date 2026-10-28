@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 12
+revision: 14
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T18:11:25.055Z"
+doc_updated_at: "2026-10-28T18:26:59.445Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -71,6 +71,14 @@ sections:
     - Observation: Original host parser6110 native observations plus existing URL tests pass202 tests with strict100% for urlobj.host.ts. Original format locale182059 comparisons/17804 portable rows plus existing value and real checked-boundary tests pass26 tests at strict100% for zformat.locale.ts and zformat.locale-calendar.ts.
       Impact: Three more runtime owners reach all required coverage metrics without runtime changes or exclusions. Native scalar-context scope and the distinction between TS assertion Error and native assertion abort are explicit.
       Resolution: Preserve independent native fixtures/provenance; continue remaining whole-project coverage work. Final full verifier and Git publication/backmerges remain pending.
+
+    - Observation: New genuine HTML block regressions exposed an existing missing Sender materialization path. Pinned upstream DocumentStylePoolManager.cxx1005 specifies all-script italic in HTML,3pt lower spacing outside HTML and disabled line counting in both. The port now admits that internal style and applies those defaults.
+      Impact: ADDRESS imports and Worker snapshot roundtrips now pass. Real CJK/CTL native bold was already preserved; the initial broad assertion had incorrectly used the Western-only browser projection as its oracle. Correct source-item assertions pass without changing native script logic.
+      Resolution: Six Writer suites106 tests pass, with strict100 coverage for both changed pool/style owners. Add source provenance and retain full final verification requirement; no upstream issue is inferred from this local missing implementation.
+
+    - Observation: Additional actual byte-stream parser interruption tests invoke the original NextToken handler before a derived virtual consumer aborts. Live nested inline owners and both initial HTML_MODE states are verified during SourceDispose.
+      Impact: All6 Writer suites108 assertions pass. The broader HTML+style coverage profile still fails the configured100% threshold for remaining HTML paths; the separate strict100% profile for2 changed style owners remains valid.
+      Resolution: Record raw profile and exact scope, keep all coverage policy unchanged, and continue remaining gaps. No parser state, resource counter, original handler return or expected native value is fabricated.
 id_source: "generated"
 ---
 ## Summary
@@ -122,3 +130,11 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Original host parser6110 native observations plus existing URL tests pass202 tests with strict100% for urlobj.host.ts. Original format locale182059 comparisons/17804 portable rows plus existing value and real checked-boundary tests pass26 tests at strict100% for zformat.locale.ts and zformat.locale-calendar.ts.
   Impact: Three more runtime owners reach all required coverage metrics without runtime changes or exclusions. Native scalar-context scope and the distinction between TS assertion Error and native assertion abort are explicit.
   Resolution: Preserve independent native fixtures/provenance; continue remaining whole-project coverage work. Final full verifier and Git publication/backmerges remain pending.
+
+- Observation: New genuine HTML block regressions exposed an existing missing Sender materialization path. Pinned upstream DocumentStylePoolManager.cxx1005 specifies all-script italic in HTML,3pt lower spacing outside HTML and disabled line counting in both. The port now admits that internal style and applies those defaults.
+  Impact: ADDRESS imports and Worker snapshot roundtrips now pass. Real CJK/CTL native bold was already preserved; the initial broad assertion had incorrectly used the Western-only browser projection as its oracle. Correct source-item assertions pass without changing native script logic.
+  Resolution: Six Writer suites106 tests pass, with strict100 coverage for both changed pool/style owners. Add source provenance and retain full final verification requirement; no upstream issue is inferred from this local missing implementation.
+
+- Observation: Additional actual byte-stream parser interruption tests invoke the original NextToken handler before a derived virtual consumer aborts. Live nested inline owners and both initial HTML_MODE states are verified during SourceDispose.
+  Impact: All6 Writer suites108 assertions pass. The broader HTML+style coverage profile still fails the configured100% threshold for remaining HTML paths; the separate strict100% profile for2 changed style owners remains valid.
+  Resolution: Record raw profile and exact scope, keep all coverage policy unchanged, and continue remaining gaps. No parser state, resource counter, original handler return or expected native value is fabricated.

@@ -124,6 +124,10 @@ export function getWriterParagraphStyleDefaults(
     };
   }
   switch (id) {
+    case "sender":
+      return htmlMode
+        ? { italic: true, lineNumber: false }
+        : { lowerTwips: 3 * 20, lineNumber: false };
     case "table-heading":
       return { bold: true, adjust: SvxAdjust.Center, lineNumber: false };
     case "table-contents":
