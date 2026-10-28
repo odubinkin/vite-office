@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 22
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T09:32:47.304Z"
+  updated_at: "2026-10-28T09:57:26.896Z"
   updated_by: "CODER"
-  note: "Native model-ownership checkpoint:70 final tests/47 tooling cases pass;461 related pre-decomposition and39 post-decomposition cases pass. Two new model owners and documen3/documen6 individually100; whole document/documen2 coverage FAILS unchanged100. All other bounded gates pass. Corrected previous typed-attribute size PASS claim: actual raw log failed1011line tooling test; split unchanged test and native file/header code now passes size. Evidence/native-model-ownership-checkpoint.json binds30source blobs and records all limitations. Full XLSX/DOCX model/filter/UI remains incomplete, no external blocker or completion claim."
-  attempts: 6
+  note: "Bounded filter/service SDK checkpoint:8scoped cases and77shared regressions pass; six SDK owners unchanged scoped100 S54/54 B12/12 F18/18 L54/54. Evidence/native-filter-sdk-checkpoint.json binds21source blobs and records actual FilterBase_BASE interface order, normal incomplete type reflection and no fake component/service provider. All bounded quality gates pass. Complete concrete model/filter/workbook/DOCX/XLSX/UI acceptance and earlier coverage gaps remain pending; no external blocker, full-suite, publication or task-completion claim."
+  attempts: 7
 commit: null
 comments:
   -
@@ -104,8 +104,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T09:57:26.896Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded filter/service SDK checkpoint:8scoped cases and77shared regressions pass; six SDK owners unchanged scoped100 S54/54 B12/12 F18/18 L54/54. Evidence/native-filter-sdk-checkpoint.json binds21source blobs and records actual FilterBase_BASE interface order, normal incomplete type reflection and no fake component/service provider. All bounded quality gates pass. Complete concrete model/filter/workbook/DOCX/XLSX/UI acceptance and earlier coverage gaps remain pending; no external blocker, full-suite, publication or task-completion claim."
 doc_version: 3
-doc_updated_at: "2026-10-28T09:41:18.926Z"
+doc_updated_at: "2026-10-28T09:57:26.959Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -300,6 +306,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-28T09:57:26.896Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded filter/service SDK checkpoint:8scoped cases and77shared regressions pass; six SDK owners unchanged scoped100 S54/54 B12/12 F18/18 L54/54. Evidence/native-filter-sdk-checkpoint.json binds21source blobs and records actual FilterBase_BASE interface order, normal incomplete type reflection and no fake component/service provider. All bounded quality gates pass. Complete concrete model/filter/workbook/DOCX/XLSX/UI acceptance and earlier coverage gaps remain pending; no external blocker, full-suite, publication or task-completion claim.
+    Attempts: 7
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:57:26.387Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -328,6 +364,10 @@ sections:
     - Observation: Command: six-owner model/core coverage and related targeted/regression/tooling checks; exact commands and source blobs in evidence/native-model-ownership-checkpoint.json. Result:70 final scoped tests pass,47 boundary tests pass,39 post-decomposition and461 pre-decomposition Calc/ODS/shell tests pass. New SfxBaseModel/ScModelObj and complete documen3/documen6 individually100; whole document/documen2 profile FAILS unchanged100. CALC-355 retains independent Calc/base shell references on Dying.
       Impact: Actual ScModelObj getters and real shell/document observer registrations provide model ownership prerequisites. Full UNO/model services and workbook/filter/UI admission remain incomplete; unsupported Notify throws are local guards and not native-equivalence claims. Private fields and original documen2/3/6 placement are retained; no fake model, mutex, provider or public state getter introduced.
       Resolution: CORRECTION: prior native-typed-attribute-checkpoint.json checks.fileSize pass was incorrect; its raw xlsx-attribute-size.log failed scripts/check-module-boundaries.test.ts at1011lines. This block extracts the unchanged coherent tooling test, relocates native script-service code/header parameter declarations and reruns strict size successfully with exit0. Prior immutable evidence is retained and superseded by this correction. Current typecheck/static/lint/format/dependencies/docs/size/tree/resources/provenance/registry/doctor/routing/diff pass. Keep full XLSX/DOCX acceptance and coverage gaps open; no completion or publication.
+
+    - Observation: Command: six-interface SDK scoped100 and shared weak/typelib/text SDK regression; exact argv and21 source blobs in evidence/native-filter-sdk-checkpoint.json. Result: pass8focused tests/1file at S54/54 B12/12 F18/18 L54/54 and77related tests/14files. Full XImporter/XExporter/XFilter/XServiceInfo/XInitialization/XMultiServiceFactory IDL declarations use actual Reference/Sequence/Any/PropertyValue/OUString and original CPPU normal caches. CALC-356 records native base cancellation empty body.
+      Impact: Source inspection found missing actual filter/service SDK contracts before FilterBase model validation can be implemented faithfully. Exact native five-interface FilterBase_BASE order and real XTypeProvider tail are checked via actual WeakImplHelper class_data, without constructing a component that lacks method implementations or inventing an alternate provider. This is SDK evidence only, not concrete filtering or UI acceptance.
+      Resolution: Keep full XLSX/DOCX acceptance and previous coverage gaps open. Actual XModel/model-factory validation, concrete SfxBaseModel/ScModelObj UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and shell/UI routes remain pending. All bounded typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff checks pass; unchanged thresholds/no new boundary exceptions. Full suites not due; no publication/completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -532,6 +572,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-28T09:57:26.896Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded filter/service SDK checkpoint:8scoped cases and77shared regressions pass; six SDK owners unchanged scoped100 S54/54 B12/12 F18/18 L54/54. Evidence/native-filter-sdk-checkpoint.json binds21source blobs and records actual FilterBase_BASE interface order, normal incomplete type reflection and no fake component/service provider. All bounded quality gates pass. Complete concrete model/filter/workbook/DOCX/XLSX/UI acceptance and earlier coverage gaps remain pending; no external blocker, full-suite, publication or task-completion claim.
+Attempts: 7
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:57:26.387Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -564,3 +634,7 @@ DecisionContextRef:
 - Observation: Command: six-owner model/core coverage and related targeted/regression/tooling checks; exact commands and source blobs in evidence/native-model-ownership-checkpoint.json. Result:70 final scoped tests pass,47 boundary tests pass,39 post-decomposition and461 pre-decomposition Calc/ODS/shell tests pass. New SfxBaseModel/ScModelObj and complete documen3/documen6 individually100; whole document/documen2 profile FAILS unchanged100. CALC-355 retains independent Calc/base shell references on Dying.
   Impact: Actual ScModelObj getters and real shell/document observer registrations provide model ownership prerequisites. Full UNO/model services and workbook/filter/UI admission remain incomplete; unsupported Notify throws are local guards and not native-equivalence claims. Private fields and original documen2/3/6 placement are retained; no fake model, mutex, provider or public state getter introduced.
   Resolution: CORRECTION: prior native-typed-attribute-checkpoint.json checks.fileSize pass was incorrect; its raw xlsx-attribute-size.log failed scripts/check-module-boundaries.test.ts at1011lines. This block extracts the unchanged coherent tooling test, relocates native script-service code/header parameter declarations and reruns strict size successfully with exit0. Prior immutable evidence is retained and superseded by this correction. Current typecheck/static/lint/format/dependencies/docs/size/tree/resources/provenance/registry/doctor/routing/diff pass. Keep full XLSX/DOCX acceptance and coverage gaps open; no completion or publication.
+
+- Observation: Command: six-interface SDK scoped100 and shared weak/typelib/text SDK regression; exact argv and21 source blobs in evidence/native-filter-sdk-checkpoint.json. Result: pass8focused tests/1file at S54/54 B12/12 F18/18 L54/54 and77related tests/14files. Full XImporter/XExporter/XFilter/XServiceInfo/XInitialization/XMultiServiceFactory IDL declarations use actual Reference/Sequence/Any/PropertyValue/OUString and original CPPU normal caches. CALC-356 records native base cancellation empty body.
+  Impact: Source inspection found missing actual filter/service SDK contracts before FilterBase model validation can be implemented faithfully. Exact native five-interface FilterBase_BASE order and real XTypeProvider tail are checked via actual WeakImplHelper class_data, without constructing a component that lacks method implementations or inventing an alternate provider. This is SDK evidence only, not concrete filtering or UI acceptance.
+  Resolution: Keep full XLSX/DOCX acceptance and previous coverage gaps open. Actual XModel/model-factory validation, concrete SfxBaseModel/ScModelObj UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and shell/UI routes remain pending. All bounded typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff checks pass; unchanged thresholds/no new boundary exceptions. Full suites not due; no publication/completion claim.

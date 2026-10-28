@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/udkapi/com/sun/star/lang/XInitialization.ts",
+    "status": "mapped",
+    "upstreamPath": "udkapi/com/sun/star/lang/XInitialization.idl",
+    "localSymbols": [
+      "XInitialization",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XInitialization",
+      "initialize"
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified."
+    ],
+    "omittedResponsibilities": [
+      "Concrete model/filter/factory implementations, complete UNO component integration/reflection/ABI and full DOCX/XLSX UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XInitialization.ts",
+          "marker": "XInitialization"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/udkapi/com/sun/star/lang/XInitialization.idl",
+          "marker": "XInitialization"
+        },
+        {
+          "path": "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        }
+      ]
+    }
+  }
+}

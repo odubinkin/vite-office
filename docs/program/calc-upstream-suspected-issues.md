@@ -4405,3 +4405,9 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Source: `sc/source/ui/unoobj/docuno.cxx`, `ScModelObj::Notify/GetDocument/GetEmbeddedObject`, and `sfx2/source/doc/sfxbasemodel.cxx`, `SfxBaseModel::Notify/GetObjectShell`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Suspicion: a Dying hint unconditionally clears ScModelObj::pDocShell, while its base data container keeps a distinct shell reference and base Notify has no Dying reset. Base GetObjectShell and Calc GetEmbeddedObject may therefore differ during lifetime transitions. Whether the broader native disposal/reference protocol makes this hazardous remains unverified.
 - Preservation: keep the independent references and exact Calc pointer invalidation. Local actual document-broadcaster teardown tests observe this asymmetry; they do not prove a native use-after-free or independently compiled C++ lifetime behavior. Full native component disposal/guards and intrusive shell references remain unported.
+
+### CALC-356 — Base OOXML XFilter cancellation has no operation
+
+- Source: `offapi/com/sun/star/document/XFilter.idl`, `cancel`, and `oox/source/core/filterbase.cxx`, `FilterBase::cancel`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: XFilter declares a cancellation request, but the pinned common FilterBase implementation has an empty cancel body. This alone does not establish how every derived filter, stream or external controller handles cancellation.
+- Preservation: the SDK retains the exact void cancel declaration without inventing a filter implementation. A future base implementation must preserve this source body; current browser cooperative SAX controls and file UI are unchanged. Full filter cancellation/admission and independently compiled concrete behavior remain unverified.

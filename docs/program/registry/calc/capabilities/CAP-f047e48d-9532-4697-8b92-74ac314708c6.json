@@ -1,0 +1,119 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f047e48d-9532-4697-8b92-74ac314708c6",
+    "capabilityId": "CAP-f047e48d-9532-4697-8b92-74ac314708c6",
+    "suite": "calc",
+    "subsystem": "uno-filter-sdk",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Six complete original IDL declarations retain actual component/descriptor/factory value signatures and XInterface roots.",
+      "Actual CPPU normal type ownership and original FilterBase_BASE ordered declarations are preserved without fabricated concrete components."
+    ],
+    "capability": "Original OOXML filter and service SDK interface declarations",
+    "gaps": [
+      "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "offapi/com/sun/star/document/XImporter.idl",
+          "marker": "XImporter"
+        },
+        {
+          "path": "offapi/com/sun/star/document/XExporter.idl",
+          "marker": "XExporter"
+        },
+        {
+          "path": "offapi/com/sun/star/document/XFilter.idl",
+          "marker": "XFilter"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XServiceInfo.idl",
+          "marker": "XServiceInfo"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XInitialization.idl",
+          "marker": "XInitialization"
+        },
+        {
+          "path": "udkapi/com/sun/star/lang/XMultiServiceFactory.idl",
+          "marker": "XMultiServiceFactory"
+        },
+        {
+          "path": "codemaker/source/cppumaker/cpputype.cxx",
+          "marker": "InterfaceType::dumpNormalGetCppuType"
+        }
+      ],
+      "tests": [
+        {
+          "path": "cppu/qa/test_unotype.cxx",
+          "marker": "Test::testUnoType"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/core/filterbase.hxx",
+          "marker": "FilterBase_BASE"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XImporter.ts",
+          "marker": "XImporter"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XExporter.ts",
+          "marker": "XExporter"
+        },
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/XFilter.ts",
+          "marker": "XFilter"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XServiceInfo.ts",
+          "marker": "XServiceInfo"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XInitialization.ts",
+          "marker": "XInitialization"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/lang/XMultiServiceFactory.ts",
+          "marker": "XMultiServiceFactory"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-356"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified."
+    },
+    "scopeLimitations": [
+      "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified.",
+      "Native testUnoType is related unported shared type QA, not a claimed compiled port of these six interfaces or filter/model/UI acceptance."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "oox-filter-service-sdk-declarations"
+  }
+}

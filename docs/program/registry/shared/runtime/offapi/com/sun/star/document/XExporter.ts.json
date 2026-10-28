@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/offapi/com/sun/star/document/XExporter.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "uno-filter-sdk",
+    "capabilityIds": [
+      "CAP-f047e48d-9532-4697-8b92-74ac314708c6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/offapi/com/sun/star/document/XExporter.ts",
+        "apps/office/src/offapi/com/sun/star/document/native-filter-interfaces.test.ts",
+        "vendor/libreoffice-reference/offapi/com/sun/star/document/XExporter.idl",
+        "vendor/libreoffice-reference/codemaker/source/cppumaker/cpputype.cxx#InterfaceType::dumpNormalGetCppuType",
+        "vendor/libreoffice-reference/include/oox/core/filterbase.hxx#FilterBase_BASE"
+      ],
+      "justification": "J0Z0KF ports complete original XImporter, XExporter, XFilter, XServiceInfo, XInitialization and XMultiServiceFactory IDL method declarations and root inheritance. Their cppumaker-normal getters use actual shared typelib_static_mi_interface_type_init/UnoType ownership, original cached type identity, implicit XInterface root, deprecated Reference overload and incomplete normal reflection. Actual Reference/Sequence/Any/PropertyValue/OUString values define component, descriptor, initialization and factory signatures; no fake document/filter/service factory or alternate query provider is supplied. Tests inspect the exact original FilterBase_BASE five-interface template order plus real XTypeProvider tail through existing WeakImplHelper class_data/getTypeEntries, without constructing a component that lacks interface method bodies. This is SDK/type evidence only. FilterBase model validation and factories, ScModelObj/SfxBaseModel concrete UNO migration, WorkbookGlobals/WorkbookHelper/AddressConverter and complete DOCX/XLSX model/filter/UI workflows remain unported or unverified. Physical C++ ABI/layout, service registration, full RDB method reflection, native exception/marshalling/thread contracts and independently compiled original SDK differential are not certified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "XExporter",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "offapi/com/sun/star/document/XExporter.idl",
+      "upstreamSymbols": [
+        "XExporter",
+        "setSourceDocument"
+      ]
+    }
+  }
+}
