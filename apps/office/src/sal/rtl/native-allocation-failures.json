@@ -1,0 +1,66 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "sal/rtl/strtmpl.hxx": "12d2bc50c11768dd386a3fde274e538f62ae7617ea7ae8ee258ee3940efebcab",
+    "sal/rtl/ustring.cxx": "1d0ebdbf05c73420d9a27041f36bcc73bbee0ff6c20509c15d2311985d083f96",
+    "sal/rtl/hash.cxx": "a1eae0d82168df7436350c631c7a6baebc0f87e2246b6cc06b6114ae2f2da932",
+    "sal/rtl/hash.hxx": "86b3a350079946645340b8d8fc1bbb9c34f572bd17a86dd0f3bf4dc37e3730ff",
+    "sal/rtl/strimp.hxx": "115851896a7f0db512e3bcfa6c6aa6bae587299335d884119ae1c7bf50954efe",
+    "sal/rtl/strimp.cxx": "f0cf1b699eaec19114dffcd5bee451c3a85f389e67a0995fda0384537a992a9f",
+    "include/rtl/ustring.h": "977a5dbfb359bd5f22b9f409df602ef7828e50861aa203c011bc1a7c856e1163",
+    "include/rtl/string.h": "51ac31c271b5c69d67ae7e50d9bfe2ca5aea3e1f3a282dcc706ed137997d1c45",
+    "include/osl/interlck.h": "d1c488d832f6cc215b3b1f96a21eeca6d586421fc98c92b7d37abe049259f7b4",
+    "include/osl/diagnose.h": "155ecd7e3f13e46c8c71a0987ec1e87a29c5854250c203eeb85de63125fc3480",
+    "sal/osl/unx/mutex.cxx": "d637fc6fdf022d37d7ea664954ee54b509e5de719317685c5de31e008b56879b",
+    "include/rtl/character.hxx": "bcd4b28d8fb363cf2f9ea86bc943d8dc820cc52a73d4a555bb69fd72171c0694",
+    "include/o3tl/safeint.hxx": "c17b1cb7e30fb3f1e733a36d65f28d131badab3e959a509301b1554f6c7c760f",
+    "config_host/config_typesizes.h.in": "f009364809b5bd8df424d65539173d6152cb41443c10db1e3673b6f09af39e2e",
+    "config_host/config_global.h.in": "6a710a13ae1c2052a29e64ca740e34b9083a6cd19b1e3564d368351a20714da0"
+  },
+  "witnessSha256": "e6bd12202a04b4cff32f1617154adcc769c54a9996e1fd3734fa11aa06fc308d",
+  "scope": "Unchanged original storage, concat/replacement, C wrappers, allocation declarations/defaults and original headers. Failure is supplied through the actual rtl_allocateString function pointer declared in sal/rtl/strimp.hxx; no core method or length/refcount field is replaced. Allocator/free events inspect only initialized live storage, before the original free call. NoThrow callers return null; original byte-reserve, Unicode construction and replacement assertions terminate isolated processes. Local checked Error binding is not a claim of native C++ exceptions, full ABI, allocator or threading equivalence.",
+  "cases": [
+    {
+      "operation": "N",
+      "events": ["A 16", "F 1 0 3 111 108 100 0", "S 1 1 2 97 98 0 1 1 99 0"],
+      "nativeSignal": null,
+      "exitCode": 0,
+      "diagnostics": ["OSL_ASSERT: pTempStr != nullptr"]
+    },
+    {
+      "operation": "V",
+      "events": ["A 16", "F 1 0 3 111 108 100 0", "S 1 1 2 97 98 0 1 1 99 0"],
+      "nativeSignal": null,
+      "exitCode": 0,
+      "diagnostics": ["OSL_ASSERT: pTempStr != nullptr"]
+    },
+    {
+      "operation": "B",
+      "events": ["F 1 0 3 111 108 100 0", "A 12"],
+      "nativeSignal": "SIGABRT",
+      "exitCode": null,
+      "diagnostics": ["assert(*ppThis != nullptr)"]
+    },
+    {
+      "operation": "R",
+      "events": ["A 16"],
+      "nativeSignal": "SIGABRT",
+      "exitCode": null,
+      "diagnostics": ["assert(*ppThis != nullptr)"]
+    },
+    {
+      "operation": "D",
+      "events": ["A 16"],
+      "nativeSignal": "SIGABRT",
+      "exitCode": null,
+      "diagnostics": ["assert(*ppThis != nullptr)"]
+    },
+    {
+      "operation": "X",
+      "events": ["A 18"],
+      "nativeSignal": "SIGABRT",
+      "exitCode": null,
+      "diagnostics": ["assert(*ppThis != nullptr)"]
+    }
+  ]
+}

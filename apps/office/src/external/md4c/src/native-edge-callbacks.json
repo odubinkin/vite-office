@@ -1,7 +1,7 @@
 {
   "md4cVersion": "0.5.3",
   "sourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
-  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse. Six additional B8TCAE structured cases retain all three multiline title quote syntaxes, image titles and the63/64-byte email-domain label boundary. Five further B8TCAE cases cover missing reference lookup in a real complex hash bucket and repeated unclosed comment/processing/CDATA/declaration spans.",
+  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse. Six additional B8TCAE structured cases retain all three multiline title quote syntaxes, image titles and the63/64-byte email-domain label boundary. Five further B8TCAE cases cover missing reference lookup in a real complex hash bucket and repeated unclosed comment/processing/CDATA/declaration spans. An additional B8TCAE uppercase HTML block exercises original ASCII-insensitive tag recognition while preserving raw callback bytes.",
   "cases": [
     {
       "id": "reference-buckets-6",
@@ -6938,6 +6938,24 @@
           ]
         ],
         [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-uppercase-html-block-tag",
+      "text": "<DIV>\ncontent\n</DIV>",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 8, []],
+        [4, 6, [60, 68, 73, 86, 62]],
+        [4, 6, [10]],
+        [4, 6, [99, 111, 110, 116, 101, 110, 116]],
+        [4, 6, [10]],
+        [4, 6, [60, 47, 68, 73, 86, 62]],
+        [4, 6, [10]],
+        [1, 8, []],
         [1, 0, []]
       ],
       "result": 0

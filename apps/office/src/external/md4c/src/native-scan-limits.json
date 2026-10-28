@@ -1,0 +1,227 @@
+{
+  "md4cVersion": "0.5.3",
+  "archiveSha256": "353c346f376b87c954a13f3415ede2d51264cc61dc5abcd38ff1d2aa0d059b9e",
+  "sourceHashes": {
+    "src/md4c.c": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
+    "src/md4c.h": "4efd19bf7ec270691d5b4189f496886e421768a814b5e817eb945aa85e859f18"
+  },
+  "witnessSha256": "6ebc9e264261622e5bb814eab53dbbf037005e6d10565205764cf619bf7a28da",
+  "scope": "Unchanged original md_is_html_tag with its independent max_end bound and md_lookup_line over nonempty borrowed line subsets of a longer initialized source buffer. All offsets are inside the actual global buffer; no absent-reference dereference, zero-line native lookup, inconsistent containers or forged marks. Logical native success/end and actual selected line/index observations only; no full public parser/ABI/fault equivalence claim.",
+  "cases": [
+    { "operation": "html-tag", "text": "<a \n b>", "maxEnd": 3, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b>", "maxEnd": 4, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b>", "maxEnd": 5, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b>", "maxEnd": 6, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b>", "maxEnd": 7, "result": 7 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 3, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 4, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 5, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 6, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 7, "result": -1 },
+    { "operation": "html-tag", "text": "<a \n b/>", "maxEnd": 8, "result": 8 },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 0,
+      "result": [0, 3, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 1,
+      "result": [0, 3, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 2,
+      "result": [0, 3, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 3,
+      "result": [0, 3, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 4,
+      "result": [4, 7, 1]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 5,
+      "result": [4, 7, 1]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 6,
+      "result": [4, 7, 1]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 7,
+      "result": [4, 7, 1]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 8,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 9,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 10,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [
+        { "beg": 0, "end": 3 },
+        { "beg": 4, "end": 7 }
+      ],
+      "offset": 11,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 0,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 1,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 2,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 3,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 4,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 5,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 6,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 7,
+      "result": [4, 7, 0]
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 8,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 9,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 10,
+      "result": null
+    },
+    {
+      "operation": "line-lookup",
+      "text": "abc\nxyz\nend",
+      "lines": [{ "beg": 4, "end": 7 }],
+      "offset": 11,
+      "result": null
+    }
+  ]
+}

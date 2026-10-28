@@ -118,7 +118,8 @@
       "AQF9AG: Original CompareIgnoreAsciiCase known-length shortened specialization preserves exact mismatch subtraction, embedded-zero traversal, ASCII-only folding and generic end ordering. Native RTL probe covers the added bounded comparison; broad module parity remains unverified.",
       "AQF9AG ports exact bounded UTF16 replace-all capacity growth, source search loop, no-match sharing and alias-safe final release. Bounded full-header RTL witness covers initialized values, refcounts and source/replacement views; native fatal OOM/ABI behavior remains outside the witness.",
       "B8TCAE adds real RTL slot regressions for Unicode concatenation and source/output aliases, empty/null-side sharing, counted raw spans and embedded nulls, prefix/interior/suffix/full replacement, replace-all start offsets/nonoverlap/no-match sharing, signed-length assertions and shortened ASCII-insensitive comparisons. Assertions inspect actual values, allocation terminators, ownership identities and refcounts without counter mutation or allocator substitution. Literal expected results are bounded source contracts; existing native ownership witnesses retain their separate scope, and full native ABI/OOM equivalence is not claimed.",
-      "B8TCAE restores the independent original raw UTF16 newReplaceStrAt overload and rtl_uString_newReplaceStrAtUtf16L C boundary. The owning overload delegates after its own append/full-range sharing paths, matching pinned strtmpl.hxx1001/1055 and ustring.cxx1198. The previous flattened interior-only body made the raw full-range branch unreachable and omitted raw append admission. Independent unchanged original C++ observations cover2304 owned/raw calls, all legal removal spans, empty/null replacement, embedded nulls/surrogate units and independently acquired output aliases, comparing complete initialized data/terminators, sharing identities and refcounts. Native source/witness hashes and portable replay are retained; no allocator replacement, private counter writes, exclusions or threshold changes. Full ABI/OOM/threading behavior remains unverified."
+      "B8TCAE restores the independent original raw UTF16 newReplaceStrAt overload and rtl_uString_newReplaceStrAtUtf16L C boundary. The owning overload delegates after its own append/full-range sharing paths, matching pinned strtmpl.hxx1001/1055 and ustring.cxx1198. The previous flattened interior-only body made the raw full-range branch unreachable and omitted raw append admission. Independent unchanged original C++ observations cover2304 owned/raw calls, all legal removal spans, empty/null replacement, embedded nulls/surrogate units and independently acquired output aliases, comparing complete initialized data/terminators, sharing identities and refcounts. Native source/witness hashes and portable replay are retained; no allocator replacement, private counter writes, exclusions or threshold changes. Full ABI/OOM/threading behavior remains unverified.",
+      "B8TCAE adds6 native allocation-failure observations using the original externally replaceable rtl_allocateString/rtl_freeString slots declared in strimp.hxx. Original initialized owners, concat, replacement and counted construction bodies are unchanged. NoThrow results and allocation/free events match; original assertion SIGABRT is recorded in isolated processes with core dumps disabled. The existing portable checked Error binding is explicitly distinguished from native termination and C++ exceptions. No private counter mutation or full ABI/threading/fault equivalence is claimed."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -200,6 +201,14 @@
         {
           "path": "apps/office/src/sal/rtl/ustring-replacement.native.test.ts",
           "marker": "rtl_uString_newReplaceStrAtUtf16L"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-allocation-failures.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/native-allocation-failures.json",
+          "marker": "scope"
         }
       ],
       "upstream": [

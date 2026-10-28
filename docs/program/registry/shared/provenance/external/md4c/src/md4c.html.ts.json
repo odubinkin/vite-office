@@ -26,7 +26,8 @@
     ],
     "preservedResponsibilities": [
       "Direct TypeScript port of the pinned md4c 0.5.3 UTF-8 block, mark-resolution and callback pipeline. Preserves source byte offsets, callback chunk boundaries and attributes, source flag defaults, reference budgets, container state and callback abort codes. All 813 complete callback streams match compiled unmodified md_parse, including 733 bundled CommonMark/extension cases. Native allocation failures, C pointer ABI and unused/uninitialized fields are not emulated. Writer callback integration remains pending; these dependency fixtures do not establish complete Writer import parity.",
-      "B8TCAE adds5 native-backed public-input cases for a missing reference in an actual complex hash bucket (two real definitions a/c and unresolved e) and repeated unclosed comment/processing/CDATA/declaration spans. Complete callback expectations are generated and rechecked by unchanged pinned md4c0.5.3. Current6 suites1870 tests pass, exact same-source maps cover2 additional statements and2 branch arms, and no private table/context state is injected. Runtime source, counters and all100% thresholds remain unchanged; remaining full coverage is incomplete and no native ABI/fault equivalence is claimed."
+      "B8TCAE adds5 native-backed public-input cases for a missing reference in an actual complex hash bucket (two real definitions a/c and unresolved e) and repeated unclosed comment/processing/CDATA/declaration spans. Complete callback expectations are generated and rechecked by unchanged pinned md4c0.5.3. Current6 suites1870 tests pass, exact same-source maps cover2 additional statements and2 branch arms, and no private table/context state is injected. Runtime source, counters and all100% thresholds remain unchanged; remaining full coverage is incomplete and no native ABI/fault equivalence is claimed.",
+      "B8TCAE adds35 observations compiled from unchanged pinned md4c source: independent HTML scan limits and line lookup over nonempty borrowed subsets of a longer initialized document. All offsets remain within the backing document. A complete public uppercase HTML callback case is also replayed. No absent reference dereference, zero-line lookup, forged parser state or full ABI/fault equivalence claim is introduced."
     ],
     "omittedResponsibilities": [
       "Native allocation failures and C pointer ABI are not emulated. Writer callback integration remains pending."
@@ -44,6 +45,14 @@
         {
           "path": "apps/office/src/external/md4c/src/native-edge-callbacks.json",
           "marker": "B8TCAE-missing-reference-collision-buckets"
+        },
+        {
+          "path": "apps/office/src/external/md4c/src/md4c.scan-limits.native.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/md4c/src/native-scan-limits.json",
+          "marker": "scope"
         }
       ],
       "upstream": [

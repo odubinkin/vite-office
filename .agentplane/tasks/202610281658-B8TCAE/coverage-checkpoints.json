@@ -874,5 +874,24 @@
     "remainingFunctions": 51,
     "remainingLines": 1124,
     "note": "Complete configured application discovery at the preserved current application tree. Exit1 is entirely unchanged100% threshold failure; all1685 files26573 tests passed. This is the new current diagnostic baseline, not a completed final npm run verify."
+  },
+  "nativeScanAndAllocationIntegration": {
+    "reports": [
+      "integration-md4c-scan-limits",
+      "integration-rtl-allocation",
+      "integration-calendar-allocation"
+    ],
+    "testFiles": 40,
+    "tests": 2122,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "thresholdsChanged": false,
+    "exceptionsApproved": false,
+    "compatibleCurrentBaselineMaps": true,
+    "additionalCoveredStatements": 25,
+    "additionalCoveredBranchArms": 25,
+    "diagnosticUnion": ".agentplane/tmp/current-coverage-union.json",
+    "remainingOwners": 238,
+    "finalFullVerifierPassed": false
   }
 }

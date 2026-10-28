@@ -1,8 +1,8 @@
 {
-  "status": "prepared-not-integrated",
-  "nativeObservations": 23,
+  "status": "integrated-targeted-assertions-passed",
+  "nativeObservations": 35,
   "nativeComparedToCurrentPortableOwners": true,
-  "nativeFixtureSha256": "6f9242cbf8f09999a3fdc5b30ef0fec4a5f66494c03d49afce9be9890f393c4f",
+  "nativeFixtureSha256": "0fae5613f126a17a9a443b4eb259f1f49367f8c605152158df6f81dc23b473c7",
   "nativeCheckLog": ".agentplane/tmp/coverage-md4c-scan-limits-native.log",
   "portableCheckLog": ".agentplane/tmp/coverage-md4c-scan-limits-compare.log",
   "draftScript": ".agentplane/tmp/md4c-scan-limits-native-probe.mjs",
@@ -10,7 +10,12 @@
   "draftComparison": ".agentplane/tmp/md4c-scan-limits-observe.ts",
   "plannedScript": "scripts/md4c-scan-limits-native-probe.mjs",
   "plannedFixture": "apps/office/src/external/md4c/src/native-scan-limits.json",
-  "scope": "Unchanged original md_is_html_tag with its independent max_end bound and md_lookup_line over a nonempty borrowed prefix of a longer initialized source buffer. All offsets are inside the actual global buffer; no absent-reference dereference, zero-line native lookup, inconsistent containers or forged marks. Logical native success/end and actual selected line/index observations only; no full public parser/ABI/fault equivalence claim.",
+  "scope": "Unchanged original md_is_html_tag with its independent max_end bound and md_lookup_line over a nonempty borrowed subsets of a longer initialized source buffer. All offsets are inside the actual global buffer; no absent-reference dereference, zero-line native lookup, inconsistent containers or forged marks. Logical native success/end and actual selected line/index observations only; no full public parser/ABI/fault equivalence claim.",
   "integrationGate": "Satisfied: complete baseline collection ended; application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd stayed unchanged. Recheck native output and integrate prepared tests under the active task.",
-  "coverageExceptionsApplied": false
+  "coverageExceptionsApplied": false,
+  "testFiles": 7,
+  "tests": 1907,
+  "report": "apps/office/coverage/integration-md4c-scan-limits",
+  "assertionsPassed": true,
+  "strictCoveragePassed": false
 }

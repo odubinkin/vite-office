@@ -1,5 +1,5 @@
 {
-  "status": "prepared-not-integrated",
+  "status": "integrated-targeted-assertions-passed",
   "publicOperations": [
     {
       "name": "loadDefaultCalendar",
@@ -133,5 +133,11 @@
   "comparisonLog": ".agentplane/tmp/coverage-calendar-allocation-compare.log",
   "failureEnvironment": "Existing original RTL externally replaceable allocation slot returns null. Actual CalendarWrapper/CalendarImpl operations and real Locale/string owners execute; no service/method/return factory or private state is replaced. Normal missing-provider UNO error construction or real calendar-name materialization encounters the actual checked SAL allocation failure.",
   "scope": "Local non-UNO checked Error propagation through all18 real wrapper forwarding operations, with original allocator restored and normal UNO default behavior rechecked after each call. Independent low-level native allocation/assertion evidence is the prepared6-case RTL witness. No native high-level Calendar allocation-failure result, C++ exception, physical recovery or full ABI equivalence is claimed.",
-  "integrationGate": "Complete baseline collection has ended at the preserved application snapshot. Integrate source-contract tests with this bounded scope; keep production sources/thresholds/exclusions unchanged."
+  "integrationGate": "Complete baseline collection has ended at the preserved application snapshot. Integrate source-contract tests with this bounded scope; keep production sources/thresholds/exclusions unchanged.",
+  "testFiles": 4,
+  "tests": 33,
+  "report": "apps/office/coverage/integration-calendar-allocation",
+  "assertionsPassed": true,
+  "strictCoveragePassed": false,
+  "coverageExceptionsApplied": false
 }

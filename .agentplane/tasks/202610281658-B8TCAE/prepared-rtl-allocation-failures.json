@@ -1,9 +1,9 @@
 {
-  "status": "prepared-not-integrated",
+  "status": "integrated-targeted-assertions-passed",
   "nativeCases": 6,
   "nativeComparedToCurrentPortableOwners": true,
   "originalAllocationContract": "vendor/libreoffice-reference/sal/rtl/strimp.hxx declares externally replaceable rtl_allocateString/rtl_freeString function pointers. Native and portable callers use these actual existing slots; core concat/replacement/reserve bodies, lengths, refcounts and source values are unchanged.",
-  "nativeFixtureSha256": "8384da4b60f0e4df5fb7ff119a008e0b2157554edea7d115cbcc85a08f465ea4",
+  "nativeFixtureSha256": "85734e695f39510c04d6dbcc7a3011420b1d436f7212767c059e273477b02d40",
   "draftScript": ".agentplane/tmp/rtl-allocation-failures-native-probe.mjs",
   "draftFixture": ".agentplane/tmp/native-allocation-failures.json",
   "draftComparison": ".agentplane/tmp/rtl-allocation-failures-observe.ts",
@@ -15,5 +15,10 @@
   "scope": "Unchanged original storage, concat/replacement, C wrappers, allocation declarations/defaults and original headers. Failure is supplied through the actual rtl_allocateString function pointer declared in sal/rtl/strimp.hxx; no core method or length/refcount field is replaced. Allocator/free events inspect only initialized live storage, before the original free call. NoThrow callers return null; original byte-reserve and replacement assertions terminate isolated processes. Local checked Error binding is not a claim of native C++ exceptions, full ABI, allocator or threading equivalence.",
   "coverageExceptionsApplied": false,
   "integrationGate": "Satisfied: complete current-full-baseline session3491 ended with1685files26573tests passed and unchanged application tree; all100 thresholds still fail. Integrate under the same active task and retain native/portable error-binding scope.",
-  "additionalCase": "X directly witnesses the original Unicode counted-string constructor allocation assertion used by calendar message/name materialization. This is low-level native source evidence, not high-level native Calendar OOM result equivalence."
+  "additionalCase": "X directly witnesses the original Unicode counted-string constructor allocation assertion used by calendar message/name materialization. This is low-level native source evidence, not high-level native Calendar OOM result equivalence.",
+  "testFiles": 29,
+  "tests": 182,
+  "report": "apps/office/coverage/integration-rtl-allocation",
+  "assertionsPassed": true,
+  "strictCoveragePassed": false
 }
