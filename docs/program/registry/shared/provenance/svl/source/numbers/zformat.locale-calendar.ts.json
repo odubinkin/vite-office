@@ -13,7 +13,9 @@
       "SvNumberformat::ImpObtainCalendarAndNumerals"
     ],
     "preservedResponsibilities": [
-      "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-378. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending."
+      "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-378. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending.",
+      "B8TCAE compares182059 unchanged extracted original locale/parser/calendar/numeral calls and replays17804 native observations across metadata/parser cases and separate numeral/calendar axes. Actual LocaleType/OUString/OUStringBuffer owners receive original arguments; configured data-language input is applied through its existing setter and restored. All calendar selection case labels are exercised. Scalar string/numeric/configured-language bindings do not establish full constructor, output, UNO/SAL lifetime or ABI parity; existing semantic statuses remain unchanged.",
+      "The original checked stringbuffer_insert offset invariant is also exercised through actual LocaleType/OUStringBuffer owners, without replacing an allocator or method. The TS assertion binding throws Error; no native C++ exception-on-assertion claim is made. Together with existing metadata/compiled-owner regressions,26 tests pass strict100% statement/branch/function/line coverage for both locale owners."
     ],
     "omittedResponsibilities": [
       "Complete constructor dispatch and standard-format initialization, formatted output and CSV recognition remain incomplete; bounded native value witnesses do not certify full SAL/UNO ABI."
@@ -23,6 +25,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.locale-calendar.ts",
           "marker": "ImpObtainCalendarAndNumerals"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/format-locale.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

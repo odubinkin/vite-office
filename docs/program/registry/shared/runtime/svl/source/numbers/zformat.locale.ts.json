@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/svl/source/numbers/zformat.locale.ts",
         "apps/office/src/svl/source/numbers/zformat.locale.test.ts",
-        "scripts/calc-format-locale-native-probe.mjs"
+        "scripts/calc-format-locale-native-probe.mjs",
+        "apps/office/src/svl/source/numbers/format-locale.native.integration.test.ts"
       ],
-      "justification": "AQF9AG restores original compiled-entry LocaleType, raw32 language/substitution/calendar/numeral decoding, source disabled extended-code output, uppercase hex without leading zeros, exact eight-unit parser/cursor behavior and compiler-generated metadata assignment. Actual SvNumberformat now owns and copies this original metadata and reads its language/substitution flags. No invented locale normalization or source-prefix parsing shortcut is introduced.",
+      "justification": "AQF9AG restores original compiled-entry LocaleType, raw32 language/substitution/calendar/numeral decoding, source disabled extended-code output, uppercase hex without leading zeros, exact eight-unit parser/cursor behavior and compiler-generated metadata assignment. Actual SvNumberformat now owns and copies this original metadata and reads its language/substitution flags. No invented locale normalization or source-prefix parsing shortcut is introduced. B8TCAE compares182059 unchanged extracted original locale/parser/calendar/numeral calls and replays17804 native observations across metadata/parser cases and separate numeral/calendar axes. Actual LocaleType/OUString/OUStringBuffer owners receive original arguments; configured data-language input is applied through its existing setter and restored. All calendar selection case labels are exercised. Scalar string/numeric/configured-language bindings do not establish full constructor, output, UNO/SAL lifetime or ABI parity; existing semantic statuses remain unchanged. The original checked stringbuffer_insert offset invariant is also exercised through actual LocaleType/OUStringBuffer owners, without replacing an allocator or method. The TS assertion binding throws Error; no native C++ exception-on-assertion claim is made. Together with existing metadata/compiled-owner regressions,26 tests pass strict100% statement/branch/function/line coverage for both locale owners.",
       "knownViolations": [],
       "localSymbols": [
         "LocaleType",
