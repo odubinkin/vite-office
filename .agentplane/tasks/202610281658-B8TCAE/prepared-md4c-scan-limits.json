@@ -1,0 +1,16 @@
+{
+  "status": "prepared-not-integrated",
+  "nativeObservations": 23,
+  "nativeComparedToCurrentPortableOwners": true,
+  "nativeFixtureSha256": "6f9242cbf8f09999a3fdc5b30ef0fec4a5f66494c03d49afce9be9890f393c4f",
+  "nativeCheckLog": ".agentplane/tmp/coverage-md4c-scan-limits-native.log",
+  "portableCheckLog": ".agentplane/tmp/coverage-md4c-scan-limits-compare.log",
+  "draftScript": ".agentplane/tmp/md4c-scan-limits-native-probe.mjs",
+  "draftFixture": ".agentplane/tmp/native-scan-limits.json",
+  "draftComparison": ".agentplane/tmp/md4c-scan-limits-observe.ts",
+  "plannedScript": "scripts/md4c-scan-limits-native-probe.mjs",
+  "plannedFixture": "apps/office/src/external/md4c/src/native-scan-limits.json",
+  "scope": "Unchanged original md_is_html_tag with its independent max_end bound and md_lookup_line over a nonempty borrowed prefix of a longer initialized source buffer. All offsets are inside the actual global buffer; no absent-reference dereference, zero-line native lookup, inconsistent containers or forged marks. Logical native success/end and actual selected line/index observations only; no full public parser/ABI/fault equivalence claim.",
+  "integrationGate": "Wait for complete current-full-baseline collection to finish before changing application/runtime/test/resource/config sources. Baseline process session3491; commitd660986a2b69, application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd. Recheck the app tree and native fixture before integration.",
+  "coverageExceptionsApplied": false
+}

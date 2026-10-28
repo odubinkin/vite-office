@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 25
+revision: 26
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:43:59.963Z"
+doc_updated_at: "2026-10-28T20:54:03.564Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -123,6 +123,10 @@ sections:
     - Observation: Five additional small public md4c cases exercise a missing reference in a genuine complex hash bucket and repeated unclosed HTML comment/processing/CDATA/declaration spans. Current6 suites1870 tests pass; all108 final edge callback streams match unchanged native output.
       Impact: Two more statements and2 branch arms close by exact same-source comparison, without manufactured private context/table states or exceptions. Writer/calc tracked repositories remain clean on their originally pushed778a24dd3/251c2997b branch tips; main publication and reverse merges remain pending.
       Resolution: Refresh complete current-code coverage at a stable application snapshot before further runtime/test edits, then continue remaining coverage and individual unreachable decisions. No final full verifier success is recorded.
+
+    - Observation: Complete configured application coverage is collecting at stable commitd660986a2b69/application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd with unchanged100 thresholds. During read-only source audit,23 genuine bounded HTML/tag and borrowed prefix-line lookup cases were compiled from unchanged original C and match the current portable owners.
+      Impact: Prepared cases exercise independent scanner limit/query arguments; they do not inject invalid private reference/container/mark state. The application/test tree remains frozen until complete collection ends. Source audit A02/A03 distinguishes added TypeScript missing-line guards from original native reference helper preconditions; no native invalid dereference or invented failure result is used.
+      Resolution: Preserve pending original U01/U02 decisions and unapproved A01/A02/A03 audits. Integrate prepared native tests only after baseline collection finishes, then continue complete coverage work and final verification/publication/synchronization.
 id_source: "generated"
 ---
 ## Summary
@@ -226,3 +230,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Five additional small public md4c cases exercise a missing reference in a genuine complex hash bucket and repeated unclosed HTML comment/processing/CDATA/declaration spans. Current6 suites1870 tests pass; all108 final edge callback streams match unchanged native output.
   Impact: Two more statements and2 branch arms close by exact same-source comparison, without manufactured private context/table states or exceptions. Writer/calc tracked repositories remain clean on their originally pushed778a24dd3/251c2997b branch tips; main publication and reverse merges remain pending.
   Resolution: Refresh complete current-code coverage at a stable application snapshot before further runtime/test edits, then continue remaining coverage and individual unreachable decisions. No final full verifier success is recorded.
+
+- Observation: Complete configured application coverage is collecting at stable commitd660986a2b69/application tree902c5679e75ef0f88954ac5ca5f0704e98a5d0bd with unchanged100 thresholds. During read-only source audit,23 genuine bounded HTML/tag and borrowed prefix-line lookup cases were compiled from unchanged original C and match the current portable owners.
+  Impact: Prepared cases exercise independent scanner limit/query arguments; they do not inject invalid private reference/container/mark state. The application/test tree remains frozen until complete collection ends. Source audit A02/A03 distinguishes added TypeScript missing-line guards from original native reference helper preconditions; no native invalid dereference or invented failure result is used.
+  Resolution: Preserve pending original U01/U02 decisions and unapproved A01/A02/A03 audits. Integrate prepared native tests only after baseline collection finishes, then continue complete coverage work and final verification/publication/synchronization.
