@@ -1,0 +1,329 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native OOXML parser-wrapper checkpoint; complete task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/oox/source/core/fastparser.test.ts": "f127463e32b2c3944068f34d6bd718429e8c7c25",
+    "apps/office/src/oox/source/core/fastparser.ts": "8939d0e4e1f9489944101e967c94ffadcf694a4e",
+    "docs/program/native-oox-fast-parser.md": "f0c7978c267cbb1580b4fde64ba8ee0003ee5769",
+    "docs/program/registry/calc/capabilities/CAP-25ba1973-71f6-456d-9164-48f1704f3a61.json": "894020db28096162c69a2436848b4b9920ae7901",
+    "docs/program/registry/shared/provenance/oox/source/core/fastparser.ts.json": "12b3a5355ec2d90dd572c2efe16347a7776df52b",
+    "docs/program/registry/shared/runtime/oox/source/core/fastparser.ts.json": "dc3ee893e115a2224350f27f151f4a463ea4a0d4",
+    "scripts/check-module-boundaries.mjs": "9e9289e427ef08cfda597e2ff5a5748c1474beb6",
+    "scripts/native-sax-input-boundary.test.ts": "cf53d4c6e97b152f6c30c38e508049092c171012"
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-0.log",
+      "cwd": ".",
+      "sha256": "5b0261cf5aa5f6a3aa5afffd8ed4d5c698d60e386f3ed6dad79db8063429b01c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-1.log",
+      "cwd": ".",
+      "sha256": "c2fc585a2bb7072e5db3704a6955a890af23292a04b0c7fa1878b91baf734583"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-2.log",
+      "cwd": ".",
+      "sha256": "868ff09f66fa8ec9fffad7eea15549da05b128dab878310f2fd4415e259fcd61"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-3.log",
+      "cwd": ".",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-4.log",
+      "cwd": ".",
+      "sha256": "700d4bf4107c7f6f204dca05e7966c3f4a01f2b1bdcc6ad1486d221dc1f375a1"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-5.log",
+      "cwd": ".",
+      "sha256": "1ea66c647a9a5d5ea4c06ad82ad999a9075e896d3575aa441ac7f8392226eb2c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-6.log",
+      "cwd": ".",
+      "sha256": "b86c6b1cb86917fb5b1f2000af5ad971781ddb0b5355171d02aa3d6d1e926925"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-7.log",
+      "cwd": ".",
+      "sha256": "ae469c0643865f0d1bcfd78f8b313036d9e37bf358bc0c9c7edc35a6108c05a5"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-check-8.log",
+      "cwd": ".",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@vite-office/office"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-0.log",
+      "cwd": ".",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-1.log",
+      "cwd": ".",
+      "sha256": "9446cba6a365543053a6e4aa51d84c7a0c7a21a1af4befca1b57561840260e3f"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-2.log",
+      "cwd": ".",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-3.log",
+      "cwd": ".",
+      "sha256": "28ea846081542acb580a8b2d03cd10766a90481966024ad038b25ca9ddf63c94"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-4.log",
+      "cwd": ".",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/oox/source/core/fastparser.ts",
+        "apps/office/src/oox/source/core/fastparser.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts",
+        "docs/program/native-oox-fast-parser.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/oox-fastparser-build-5.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/oox/source/core/fastparser.test.ts",
+        "--maxWorkers=1",
+        "--coverage",
+        "--coverage.include=src/oox/source/core/fastparser.ts",
+        "--coverage.reportsDirectory=coverage/oox-fastparser",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json-summary"
+      ],
+      "exitCode": 0,
+      "cwd": "apps/office",
+      "log": "apps/office/coverage/oox-fastparser-unit-final2.log",
+      "sha256": "ee185fd3a0a222f234a728acc3107d3bfbcfb63a9f3357577f6159735fa3daec"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/oox/source/core/xmlfilterbase.test.ts",
+        "src/sax/source/fastparser/InputSource.test.ts",
+        "src/sax/source/fastparser/FastSaxParser.test.ts",
+        "--maxWorkers=2"
+      ],
+      "exitCode": 0,
+      "cwd": "apps/office",
+      "log": "apps/office/coverage/oox-fastparser-related-final.log",
+      "sha256": "7682aa6c2a08279216188d4cfaaa639c2a511095e8435c8df3fdef2b3c0fb345"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "scripts/native-sax-input-boundary.test.ts",
+        "scripts/native-inline-sequence-boundary.test.ts",
+        "scripts/check-source-provenance.test.ts",
+        "--maxWorkers=2"
+      ],
+      "exitCode": 0,
+      "cwd": ".",
+      "log": "apps/office/coverage/oox-fastparser-tooling.log",
+      "sha256": "3354c4e049109322f4c55dc764098b4c8d641950dea15f281e5fd8d5ee8d9276"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/oox/source/core/fastparser.ts",
+        "apps/office/src/oox/source/core/fastparser.test.ts",
+        "scripts/check-module-boundaries.mjs",
+        "scripts/native-sax-input-boundary.test.ts"
+      ],
+      "exitCode": 0,
+      "cwd": ".",
+      "log": "apps/office/coverage/oox-fastparser-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 34,
+        "covered": 34,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 37,
+        "covered": 37,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/oox/source/core/fastparser.ts": {
+      "lines": {
+        "total": 34,
+        "covered": 34,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 37,
+        "covered": 37,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "testCounts": {
+    "newOwner": 9,
+    "relatedPackageAndSax": 24,
+    "tooling": 7,
+    "writerResources": 2,
+    "total": 42
+  },
+  "scope": "Native FastParser namespace registration, token/parser ownership, actual InputSource and input/name forwarding, independent Reference close guard and original false close default. Explicit close runs on success/unwind, suppresses and destroys only actual UNO exceptions from close.",
+  "limits": [
+    "Consumed host handler/token types are not full native UNO service/component identity.",
+    "Genuine StorageBase overload and package bytes-to-stream/fragment receiver migration remain unported.",
+    "Native unreachable null-parser guards, ABI/threading/constructor failure unwind and termination behavior for unrelated host errors remain unverified.",
+    "Previous whole-five-owner SAX coverage failure remains valid; new wrapper100 does not supersede it.",
+    "Full DOCX/XLSX package/model/filter/Worker/UI acceptance remains pending.",
+    "Full suite not run under the approved ten-completed-task cadence."
+  ],
+  "correctedEvidence": [
+    "Initial test incorrectly used namespace alias w; source generator uses doc. Test corrected without modifying namespace data.",
+    "Related command was repeated using only verified existing file paths; final command exits0.",
+    "Earlier checkpoint description attributing exit1 to an initial regression command was based on unlabeled concurrent tool results. That attribution is not established and is superseded; final exact regression output and current labeled/structured check evidence remain authoritative."
+  ]
+}
