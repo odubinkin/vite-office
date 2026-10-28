@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/html/htmlnum.ts",
         "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
-        "vendor/libreoffice-reference/sw/source/filter/html/htmlnum.hxx"
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlnum.hxx",
+        "apps/office/src/sw/source/filter/html/htmlnum.test.ts"
       ],
-      "justification": "Original default numbering pointer/depth/restart/numbered fields and MAXLEVEL USHRT_MAX start sentinels; copied state retains real SwNumRule identity. The consumed parser uses this actual owner for SetAttr_ numbering admission. Node-based export construction and restart comparison are unconsumed and unported. Source-backed actual-model tests only; compiled desktop differential and whole-module parity remain unverified.",
+      "justification": "Original default numbering pointer/depth/restart/numbered fields and MAXLEVEL USHRT_MAX start sentinels; copied state retains real SwNumRule identity. The consumed parser uses this actual owner for SetAttr_ numbering admission. Node-based export construction and restart comparison are unconsumed and unported. Source-backed actual-model tests only; compiled desktop differential and whole-module parity remain unverified. B8TCAE checks default USHRT_MAX start values, guarded decrement, unsigned16 increment wrap, MAXLEVEL clamp, actual borrowed SwNumRule identity, independent copied starts and Clear through public methods. Rule ownership remains with the actual caller. No document-node export constructor, forged private state or full native export parity is claimed.",
       "knownViolations": [],
       "localSymbols": [
         "SwHTMLNumRuleInfo"

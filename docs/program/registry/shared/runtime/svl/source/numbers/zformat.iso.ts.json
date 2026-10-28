@@ -18,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svl/source/numbers/zformat.iso.ts",
-        "apps/office/src/sc/source/core/data/column3.input.test.ts"
+        "apps/office/src/sc/source/core/data/column3.input.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.iso.test.ts"
       ],
-      "justification": "Original subformat uint16 bound and Y-M-D token-state query preserve source acceptance of single-width month/day and two-digit year and stop after a recognized date prefix. Actual compiled subformat owners supply the tokens; no string-pattern heuristic is substituted. Full native differential, ABI and broader CSV output acceptance remain pending.",
+      "justification": "Original subformat uint16 bound and Y-M-D token-state query preserve source acceptance of single-width month/day and two-digit year and stop after a recognized date prefix. Actual compiled subformat owners supply the tokens; no string-pattern heuristic is substituted. Full native differential, ABI and broader CSV output acceptance remain pending. B8TCAE adds18 source-contract cases using actual SvNumberFormatter/scanner compilation, with no fabricated subformat tokens. Pinned ImpIsIso8601 accepts YY and single-width month/day, quoted hyphens and a trailing time after a valid date; reordered, incomplete and non-hyphen forms fail. The original unsigned16 section guard and empty fourth section are checked. These are source-contract tests, not a native full formatter ABI claim.",
       "knownViolations": [],
       "localSymbols": [
         "IsIso8601"

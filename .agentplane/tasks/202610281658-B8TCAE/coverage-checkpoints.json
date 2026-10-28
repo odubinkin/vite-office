@@ -893,5 +893,18 @@
     "diagnosticUnion": ".agentplane/tmp/current-coverage-union.json",
     "remainingOwners": 238,
     "finalFullVerifierPassed": false
+  },
+  "isoAndHtmlNumbering": {
+    "testFiles": 2,
+    "tests": 21,
+    "report": "apps/office/coverage/integration-iso-htmlnum",
+    "statements": 49,
+    "branches": 37,
+    "functions": 13,
+    "lines": 45,
+    "allMetrics100": true,
+    "productionSourcesChanged": false,
+    "nativeParityClaimed": false,
+    "coverageExceptionsApplied": false
   }
 }

@@ -13,7 +13,8 @@
       "SvNumberformat::ImpIsIso8601"
     ],
     "preservedResponsibilities": [
-      "Original subformat uint16 bound and Y-M-D token-state query preserve source acceptance of single-width month/day and two-digit year and stop after a recognized date prefix. Actual compiled subformat owners supply the tokens; no string-pattern heuristic is substituted."
+      "Original subformat uint16 bound and Y-M-D token-state query preserve source acceptance of single-width month/day and two-digit year and stop after a recognized date prefix. Actual compiled subformat owners supply the tokens; no string-pattern heuristic is substituted.",
+      "B8TCAE adds18 source-contract cases using actual SvNumberFormatter/scanner compilation, with no fabricated subformat tokens. Pinned ImpIsIso8601 accepts YY and single-width month/day, quoted hyphens and a trailing time after a valid date; reordered, incomplete and non-hyphen forms fail. The original unsigned16 section guard and empty fourth section are checked. These are source-contract tests, not a native full formatter ABI claim."
     ],
     "omittedResponsibilities": [
       "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
@@ -23,6 +24,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.iso.ts",
           "marker": "IsIso8601"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.iso.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
