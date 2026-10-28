@@ -1,0 +1,631 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded SAL ByteSequence/UNO shared-owner checkpoint; whole task incomplete; retained native allocation-failure coverage gate fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts": "a8094d228a85e2e95eff9846d914915ae4765311",
+    "apps/office/src/cppu/source/uno/data.ts": "610196343017d00ba73af85f19cbed5b44bfa321",
+    "apps/office/src/cppu/source/uno/sequence.ts": "221fb65d3b6b91c85f1f4d42f8b7c17087b33733",
+    "apps/office/src/sal/inc/rtl/byteseq.h.ts": "40581f46074a73e185b9f82f89e7ae831993af47",
+    "apps/office/src/sal/inc/rtl/byteseq.ts": "e1a3ac0923473c2e45c3564e67edddc01b34a6a5",
+    "apps/office/src/sal/inc/types.ts": "8738eed393198c4a95991846ca82b94908b311ef",
+    "apps/office/src/sal/rtl/byteseq.native.json": "9dc652cd8faa7fcde4cdf89e224010343700a315",
+    "apps/office/src/sal/rtl/byteseq.test.ts": "ebd5683cd3edceb0cee100c3aef71cb0f6b634ab",
+    "apps/office/src/sal/rtl/byteseq.ts": "0b34ed031c82121629c19aa07ed6053d8bfdf048",
+    "docs/program/calc-upstream-suspected-issues.md": "7504d6c1d0bafcf67e2386d7d66dbb13f8e5bc84",
+    "docs/program/native-byte-sequence.md": "6c0411221aef308e80cac3c355f93986981e215d",
+    "docs/program/registry/calc/capabilities/CAP-f840e100-47eb-4b22-8cf0-ec0b1fe13ce1.json": "6b246bc12671f8c373b001ae2f07e38712aeadeb",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/uno/Sequence.ts.json": "1e55afa8693307c06602fdd349f5f1e0ecdd1dd7",
+    "docs/program/registry/shared/provenance/cppu/source/uno/data.ts.json": "659b795704b0518f7aced54c893b92701303c840",
+    "docs/program/registry/shared/provenance/cppu/source/uno/sequence.ts.json": "80a80efcfe32a8814f98e0e2e050d05165fced1f",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/byteseq.h.ts.json": "f1cdc9600db0cc65e1f260f37ea958cbe9c6d79d",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/byteseq.ts.json": "27b93562cb67846ff84d3887f912625774137a82",
+    "docs/program/registry/shared/provenance/sal/inc/types.ts.json": "ab3dfaeea97b3b06c0deb27a51cb3ab2780d95c5",
+    "docs/program/registry/shared/provenance/sal/rtl/byteseq.ts.json": "794f7fccd4761fd0a6126387b717b11a91766ba5",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/uno/Sequence.ts.json": "93170d3f80165d1d3a6997ae23b55ff3dca55eee",
+    "docs/program/registry/shared/runtime/cppu/source/uno/data.ts.json": "a51ec3cf7248ba23c58efe3f75e1f4d9f814d6bd",
+    "docs/program/registry/shared/runtime/cppu/source/uno/sequence.ts.json": "9cdcc6399b8582984fecde5f89f574d55f1f120f",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/byteseq.h.ts.json": "d19a950d67e95da78112716a70b122655abd4d25",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/byteseq.ts.json": "858928d6f20ba3a53636dfd899e2394919f47ad8",
+    "docs/program/registry/shared/runtime/sal/inc/types.ts.json": "815cfd8b4c40f8bc316bbfbb9062e89804849ac6",
+    "docs/program/registry/shared/runtime/sal/rtl/byteseq.ts.json": "dec58b86522479081c29bbb95304caf66e07d2a8",
+    "docs/program/writer-upstream-suspected-issues.md": "1d3396d82b15d19902d872c52298343ce335be28",
+    "scripts/sal-byteseq-native-probe.mjs": "a756675866850d609fc327ba67641ccaf49b7564"
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-0.log",
+      "cwd": ".",
+      "sha256": "4fcf269b4b734aaa1d69afc09b2b99c0ddfe01bb35d119d8b545cb0c01d9814b"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-1.log",
+      "cwd": ".",
+      "sha256": "1180fe4cbc3a17f9e06c5e86f2bb43c05332073e47cbc515f4baed8ab06b3f84"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-2.log",
+      "cwd": ".",
+      "sha256": "5242bf2db23cf79cd1114d87265b63041e220434fe494b98697d07cf38b8e32c"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-3.log",
+      "cwd": ".",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/byteseq-check-4.log",
+      "cwd": ".",
+      "sha256": "2badd34f847e5689260382422f08e28b6308edde575f666e7c8d5f5294bc9012"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/byteseq-check-5.log",
+      "cwd": ".",
+      "sha256": "e8017aca08559db6e1a3db9bd6cce616daf9a140a7003defa834b41bdae3dc82"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 1,
+      "log": "apps/office/coverage/byteseq-check-6.log",
+      "cwd": ".",
+      "sha256": "4df5965af9f2b754d08ce197044c16120cbc66ba678c7c8152af97a1aab27628"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-7.log",
+      "cwd": ".",
+      "sha256": "37bd9fe17e078f10d587454140525eefddf5a2567f4e451a419dfdb4c74f7ed2"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-check-8.log",
+      "cwd": ".",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@vite-office/office"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-0.log",
+      "cwd": ".",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-1.log",
+      "cwd": ".",
+      "sha256": "ff968c425167009f89384374771f18a4fb50eb19a86e7033680595b391eb8e9e"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-2.log",
+      "cwd": ".",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-3.log",
+      "cwd": ".",
+      "sha256": "1293aa6a7eb52c41fa1c50263d9acf4a80826decd7594b6af8f8e1627185ccea"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-4.log",
+      "cwd": ".",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/sal/inc/types.ts",
+        "apps/office/src/cppu/source/uno/sequence.ts",
+        "apps/office/src/cppu/source/uno/data.ts",
+        "apps/office/src/sal/rtl/byteseq.ts",
+        "apps/office/src/sal/inc/rtl/byteseq.ts",
+        "apps/office/src/sal/inc/rtl/byteseq.h.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts",
+        "apps/office/src/sal/rtl/byteseq.test.ts",
+        "scripts/sal-byteseq-native-probe.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-5.log",
+      "cwd": ".",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/sal/inc/types.ts",
+        "apps/office/src/cppu/source/uno/sequence.ts",
+        "apps/office/src/cppu/source/uno/data.ts",
+        "apps/office/src/sal/rtl/byteseq.ts",
+        "apps/office/src/sal/inc/rtl/byteseq.ts",
+        "apps/office/src/sal/inc/rtl/byteseq.h.ts",
+        "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts",
+        "apps/office/src/sal/rtl/byteseq.test.ts",
+        "scripts/sal-byteseq-native-probe.mjs",
+        "docs/program/native-byte-sequence.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-build-6.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:registry:build"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-repair-0.log",
+      "cwd": ".",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-repair-1.log",
+      "cwd": ".",
+      "sha256": "98ebf3500a441c9f7c3b08d16a32134322412ba546d1fd84ed623da9075fbe2f"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-repair-2.log",
+      "cwd": ".",
+      "sha256": "a72697404ce842d750cce5d7f938630697e3608a3c4319a516e1c82f2297fdeb"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-repair-3.log",
+      "cwd": ".",
+      "sha256": "dd034ec1ca1cdad8af8dcd45c0812ec41f1d1317764ed23a712b50b1d3a06adc"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/sal/rtl/byteseq.test.ts",
+        "src/cppu/source/uno",
+        "src/cppu/inc/com/sun/star/uno",
+        "src/comphelper/source/streaming/seqstream.test.ts",
+        "src/sax/source/expatwrap/xml2utf.test.ts",
+        "--maxWorkers=2",
+        "--coverage",
+        "--coverage.include=src/sal/rtl/byteseq.ts",
+        "--coverage.include=src/sal/inc/rtl/byteseq.ts",
+        "--coverage.include=src/sal/inc/rtl/byteseq.h.ts",
+        "--coverage.include=src/sal/inc/types.ts",
+        "--coverage.include=src/cppu/source/uno/sequence.ts",
+        "--coverage.include=src/cppu/source/uno/data.ts",
+        "--coverage.include=src/cppu/inc/com/sun/star/uno/Sequence.ts",
+        "--coverage.reportsDirectory=coverage/byteseq-verified",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json-summary"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 1,
+      "log": "apps/office/coverage/byteseq-coverage-verified.log",
+      "result": "107 tests/23 files pass; unchanged whole-seven-owner100 coverage fails S374/379 B179/187 F93/93 L342/342",
+      "sha256": "54779cf0feeaf4195e60b57c18f7b26b5f35a2cabe8465207d5a0572f8540f2d"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/oox/source/core/xmlfilterbase.test.ts",
+        "src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+        "src/sc/browser/filter/xml/ods-worker-runtime.test.ts",
+        "src/sw/source/filter/xml/odt-worker-runtime.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-package-regressions.log",
+      "result": "47 tests/4 files pass",
+      "sha256": "89054a3e52d2b632493167b3cfbf896b1729ea21b24ae40082f9b0c1810bbcde"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "scripts/check-source-provenance.test.ts",
+        "scripts/native-inline-sequence-boundary.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-tooling.log",
+      "result": "5 tests/2 files pass",
+      "sha256": "491347e1f9767a782ff492a800ff9bbff6b73bee24170aa8f4c9e335923fe335"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/sal-byteseq-native-probe.mjs"
+      ],
+      "cwd": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/byteseq-native-final.log",
+      "result": "unchanged native C/C++/allocator/OSL source initialized-domain trace matches portable runtime",
+      "sha256": "819ff52aa91177cb0889e57eada92b0e3dedf8c1d2c8d4e689aefb981a1f75d2"
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 342,
+        "covered": 342,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 379,
+        "covered": 374,
+        "skipped": 0,
+        "pct": 98.68
+      },
+      "functions": {
+        "total": 93,
+        "covered": 93,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 187,
+        "covered": 179,
+        "skipped": 0,
+        "pct": 95.72
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts": {
+      "lines": {
+        "total": 69,
+        "covered": 69,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 26,
+        "covered": 26,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 73,
+        "covered": 73,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 42,
+        "covered": 42,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/source/uno/data.ts": {
+      "lines": {
+        "total": 61,
+        "covered": 61,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 23,
+        "covered": 23,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 66,
+        "covered": 66,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 19,
+        "covered": 19,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/cppu/source/uno/sequence.ts": {
+      "lines": {
+        "total": 90,
+        "covered": 90,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 11,
+        "covered": 11,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 95,
+        "covered": 95,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 54,
+        "covered": 54,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/types.ts": {
+      "lines": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 4,
+        "covered": 4,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 20,
+        "covered": 20,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/byteseq.h.ts": {
+      "lines": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 6,
+        "covered": 6,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/inc/rtl/byteseq.ts": {
+      "lines": {
+        "total": 36,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 43,
+        "covered": 38,
+        "skipped": 0,
+        "pct": 88.37
+      },
+      "branches": {
+        "total": 26,
+        "covered": 21,
+        "skipped": 0,
+        "pct": 80.76
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/sal/rtl/byteseq.ts": {
+      "lines": {
+        "total": 60,
+        "covered": 60,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 15,
+        "covered": 15,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 76,
+        "covered": 76,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 44,
+        "covered": 41,
+        "skipped": 0,
+        "pct": 93.18
+      }
+    }
+  },
+  "testCounts": {
+    "focusedAndUNORegressions": 107,
+    "packageAndODFWorkers": 47,
+    "tooling": 5,
+    "writerResources": 2,
+    "total": 161
+  },
+  "nativeWitness": {
+    "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+    "sourceHashes": {
+      "include/sal/types.h": "fa5c543603b8dece9bde68a517e63c43a7f849a56395d2b3e5c020fe58c83ad0",
+      "sal/osl/unx/interlck.cxx": "84fd6dab68b2c646278b945b4e905108ac8e093a7ac11508359a1f3b90f9097b",
+      "sal/rtl/alloc_global.cxx": "d47bf231ea3d19cc021692d8b01346d77b216fd4c6467871d5637c3c0d1242bb",
+      "include/rtl/byteseq.h": "d64a5786a5b2362af3e613c50e954930689b4eac010c33a687a492ef9f3ca7cc",
+      "include/rtl/byteseq.hxx": "3db4ea39faeb376f897536a7e2ead51187b2a43404f4ef60860dbadefe3104c2",
+      "sal/rtl/byteseq.cxx": "21ff490921f0d02e59fba1e6f2fdd27e5506703bae2028c80099cf4a0825ec1a"
+    },
+    "result": {
+      "emptyShared": 1,
+      "noDefaultZeroIndependent": 1,
+      "emptyCowOldCountDelta": 0,
+      "copyShared": 1,
+      "cowDetached": 1,
+      "movedNull": 1,
+      "moveAssignedNull": 1,
+      "source": [
+        1,
+        2,
+        -128,
+        -1
+      ],
+      "detached": [
+        1,
+        9,
+        -128,
+        -1
+      ],
+      "sharedGrowth": [
+        1,
+        2,
+        -128,
+        -1,
+        0,
+        0
+      ],
+      "initializedUniqueGrowth": [
+        1,
+        2,
+        7
+      ]
+    },
+    "limits": "Small initialized byte/count/COW/move cases only. Native resource failure, undefined bytes/pointers, complete UNO/ABI/thread/service behavior and serializer/package/UI integration remain unverified."
+  },
+  "scope": "Original SAL byte-sequence C algorithms and ByteSequence value ownership over actual SAL headers and one original count address shared with existing CPPU/OSL owners. Actual toUnoSequence shares header/elements via original acquisition/adopt rather than rebuilding bytes. Real UNO Any transport, both directions of SAL/UNO sharing, COW, copy/adopt/default/no-default-zero/resize/move and actual realloc header producer are exercised. No substitute UNO/count/default/allocator provider is introduced.",
+  "limits": [
+    "Native physical allocation/realloc addresses, malloc failure, uninitialized byte/pointer behavior, C++ allocation/index syntax lowering and binary ABI/thread/service behavior remain unverified.",
+    "Unchanged source allocation-failure checks remain uncovered; no test allocator/private-state forcing/coverage exclusions/threshold changes. Whole-seven-owner coverage100 fails; five wholly covered files do not supersede this.",
+    "CALC-367/WRITER204 empty COW count omission is preserved and corroborated by compiled unchanged SAL source.",
+    "CALC-368/WRITER205 retaining-sink cache aliasing concern is source-suspected; complete cache/output-sink witness remains pending.",
+    "Actual CachedOutputStream/XOutputStream/package export connection and complete DOCX/XLSX model/filter/Worker/UI acceptance remain pending.",
+    "Existing file/autosave/recovery choices are preserved; no full suite under the approved ten-completed-task cadence."
+  ],
+  "correctedDuringVerification": [
+    "Constructor handle branch required explicit selected sal_Sequence type after tuple/control-flow erasure; final typecheck passes.",
+    "Initial native probe JSON literal quoting failed compilation; raw C++ string literals corrected it, then unchanged source bodies compile and produce the committed trace.",
+    "A uniqueness-reallocation test initially assumed stable physical/logical pointer identity; expectation was narrowed to actual SAL/UNO count agreement after the original producer, with no realloc-address promise.",
+    "Native QA evidence path corrected to sal/qa/ByteSequence/ByteSequence.cxx.",
+    "C/C++ header basename collision requires explicit module-resolution filename divergence for byteseq.h.ts; final provenance/registry guards pass after registering it."
+  ]
+}
