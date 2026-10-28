@@ -1,7 +1,7 @@
 /** @fileoverview Generated LocaleDataImpl decimal,measurement and transliteration field bindings with original locale-name fallback;no complete UNO service facade is fabricated. */
 import { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { MsLangId } from "../../../i18nlangtag/inc/mslangid";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import {
   decomposeCanonicalLanguageTag,
   getFallbackStrings,
@@ -135,10 +135,6 @@ function lookup<T>(name: string, values: ReadonlyMap<string, T>): T | undefined 
   return (
     values.get(name) ?? (!name.includes("_") ? values.get(fallbackServiceName(name)) : undefined)
   );
-}
-/** Extracts the native string units, excluding OUString's logical trailing terminator. @param value - Shared string reference. @returns JS text. */
-function text(value: LocaleConstReference["Language"]): string {
-  return String.fromCharCode(...value.getStr().slice(0, value.getLength()));
 }
 /** Prepared-locale generated-field query with actual Locale value input. This is a field-specific browser resource binding, not an implementation of the whole LocaleData service. @param locale - Native locale triplet. @param values - Source field table. @returns Original field value. */
 function getLocaleDataField<T>(locale: LocaleConstReference, values: ReadonlyMap<string, T>): T {

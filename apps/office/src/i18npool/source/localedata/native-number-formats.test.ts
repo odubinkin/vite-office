@@ -1,8 +1,10 @@
 /** @fileoverview Native LC_FORMAT ordering,locale fallback,currency ref replacement and independent value rows. */
-import { expect, it } from "vitest";
+import { assert, expect, it } from "vitest";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
-import { getLocaleFormatElements } from "./localedata";
+import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import type { rtl_uStringSlot } from "../../../sal/inc/rtl/ustring.h";
+import { getLocaleFormatElements, getLocaleAllFormats } from "./localedata";
 import catalogs from "./data/number-formats.json";
 /** Constructs the original Locale value and releases temporary caller strings. @param language - Language. @param country - Country. @param variant - Variant. @returns Actual Locale. */
 function locale(language: string, country: string, variant = ""): Locale {
@@ -17,6 +19,35 @@ function locale(language: string, country: string, variant = ""): Locale {
     v.dispose();
   }
 }
+it("returns the original owned FormatElement sequence after temporary source strings have been released", /** Original FormatElement.idl member order and pinned en_US LC_FORMAT define all5 strings, short index and default flag. A copied actual string remains live after the original Sequence is destroyed. @returns Nothing. */ () => {
+  const requested = locale("en", "US");
+  let retained: OUString | undefined;
+  try {
+    const sequence = getLocaleAllFormats(requested);
+    try {
+      expect(sequence.getLength()).toBe(70);
+      const first = sequence.operatorIndex(0);
+      expect(
+        [0, 8, 16, 24, 32].map(
+          /** Reads actual shared compound string lvalues through their original borrowed-reference API. @param offset - Native member offset from the generated type. @returns Original field text. */
+          (offset) => text(OUString.unacquired(first.get(offset) as rtl_uStringSlot)),
+        ),
+      ).toEqual(["General", "", "FixedFormatskey1", "medium", "FIXED_NUMBER"]);
+      expect((first.get(40) as [number])[0]).toBe(0);
+      expect((first.get(42) as [boolean])[0]).toBe(true);
+      expect((sequence.operatorIndex(69).get(40) as [number])[0]).toBe(75);
+      retained = new OUString(OUString.unacquired(first.get(0) as rtl_uStringSlot));
+    } finally {
+      sequence.dispose();
+    }
+    assert(retained);
+    expect(retained.pData.refCount).toBe(1);
+    expect(text(retained)).toBe("General");
+  } finally {
+    retained?.dispose();
+    requested.dispose();
+  }
+});
 
 it("retains the registered locale set and original sections without synthesizing missing sections", /** Expected examples come from pinned XML/LocaleNode output. @returns Nothing. */ () => {
   expect(Object.keys(catalogs)).toHaveLength(284);

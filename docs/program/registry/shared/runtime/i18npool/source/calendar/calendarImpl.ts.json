@@ -17,9 +17,10 @@
       "defaultStatus": "unverified",
       "divergenceClass": "B",
       "evidence": [
-        "apps/office/src/i18npool/source/calendar/calendarImpl.ts"
+        "apps/office/src/i18npool/source/calendar/calendarImpl.ts",
+        "apps/office/src/unotools/source/i18n/calendarwrapper.integration.test.ts"
       ],
-      "justification": "Original CalendarImpl temporal dispatch, cache and calendar-load rollback. The service-manager binding constructs the actual registered local providers; CalendarImpl retains the native locale-data Gregorian fallback for unregistered but defined IDs. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced.",
+      "justification": "Original CalendarImpl temporal dispatch, cache and calendar-load rollback. The service-manager binding constructs the actual registered local providers; CalendarImpl retains the native locale-data Gregorian fallback for unregistered but defined IDs. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced. B8TCAE adds real CalendarWrapper/CalendarImpl integration over registered providers and pinned locale resources: pre-load UNO defaults, UTC forwarding, invalid field indices, failed-ID rollback, locale reload on the same calendar/timezone cache key, independent grammatical name owners, Hanja success and hanja_yoil resource rejection. Source en_US calendar order includes Gregorian and Jewish. Three200000-unit Locale field cases reproduced a JavaScript argument-spread RangeError; LocaleData field lookup now reuses the existing counted-UTF16 text bridge, preserving every input unit and existing direct/language/en_US fallback. No input cap, resource mutation, service replacement or full native UNO-wrapper ABI claim is introduced. Both convenience service loads and actual FormatElement Sequence ownership are checked; a copied General string retains its real sole logical reference after Sequence destruction. Coverage policy and semantic statuses remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "CalendarImpl"
