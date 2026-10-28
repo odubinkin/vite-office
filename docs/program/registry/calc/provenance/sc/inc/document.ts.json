@@ -7,16 +7,19 @@
     "status": "mapped",
     "upstreamPath": "sc/inc/document.hxx",
     "localSymbols": [
-      "ScDocument"
+      "ScDocument",
+      "ApplyPatternAreaTabParameters"
     ],
     "upstreamSymbols": [
       "ScDocument",
       "SetValue",
-      "GetCellType"
+      "GetCellType",
+      "ApplyPatternAreaTab"
     ],
     "preservedResponsibilities": [
       "Task200 connects numeric ODFF source to real ScTokenArray/shared FormulaCompiler RPN, ScInterpreter and existing ScFormulaResult inside the actual document-sheet-column formula blocks. Native scalar arithmetic precedence, code/runtime error projection, lazy result state, default bracket completion, forced recalc and logical formula-block events are represented. ScSheetLimits, RTL parsing/cancellation, mdds and shared token/result owners are reused. Formula pointers use JS GC; no physical pointer deletion or reference counting is introduced. Source constructor/service subsets are explicit. References/functions, localized formatter/string conversion, groups/listening/recalc dependencies, serialization/ODS/UI, complete contexts/RNG/caches/vector/hash scheduling and broad parity remain unsupported. Native power fenv-only subnormal classifications reject explicitly. Formula block copy/clone is noncopyable and unavailable semantic equality throws instead of substituting identity. Broad parity/verification flags remain false.",
-      "Block75 document-mode work in progress now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,source auto-calc defaults,independent string pools,normal/function-access-only ScPoolHelper and broadcast-area allocation,and nullable GetPool/GetStyleSheetPool contracts. Actual helper owns ScDocumentPool and ScStyleSheetPool on the existing shared style base. SourceDocumentGone clears the actual style-pool source pointer;managed references retain physical identity without a global reference-count simulator. CellAttributeHelper is allocated lazily and rejects unshared clipboard/undo access as native assertions require. Real document NoListening and formula change-track membership flags preserve native start/end subscription asymmetry after group teardown. Tests use genuine documents,resources and listeners. Existing normal-document shell/export/test consumers explicitly borrow the known owned pool at original dereference boundaries;nullable document API remains honest. Calc style creation/copy factories explicitly reject unsupported ScStyleSheet construction rather than creating the wrong shared style type. Standard-style population,formatter/edit-engine services,clipboard resource sharing/reset/paste belong outside this consumed allocation/lifetime slice. Full closure/raw100 and broad native parity remain pending."
+      "Block75 document-mode work in progress now preserves DOCUMENT0,CLIP1,UNDO2,FUNCTIONACCESS3,source auto-calc defaults,independent string pools,normal/function-access-only ScPoolHelper and broadcast-area allocation,and nullable GetPool/GetStyleSheetPool contracts. Actual helper owns ScDocumentPool and ScStyleSheetPool on the existing shared style base. SourceDocumentGone clears the actual style-pool source pointer;managed references retain physical identity without a global reference-count simulator. CellAttributeHelper is allocated lazily and rejects unshared clipboard/undo access as native assertions require. Real document NoListening and formula change-track membership flags preserve native start/end subscription asymmetry after group teardown. Tests use genuine documents,resources and listeners. Existing normal-document shell/export/test consumers explicitly borrow the known owned pool at original dereference boundaries;nullable document API remains honest. Calc style creation/copy factories explicitly reject unsupported ScStyleSheet construction rather than creating the wrong shared style type. Standard-style population,formatter/edit-engine services,clipboard resource sharing/reset/paste belong outside this consumed allocation/lifetime slice. Full closure/raw100 and broad native parity remain pending.",
+      "J0Z0KF restores consumed real SfxBaseModel shell data/listener ownership and GetObjectShell/IsInitialized, ScModelObj nullable shell/document access and actual shell/document registrations, Calc Dying pointer invalidation and ordered destructor unregistration. Actual ScDocument lazily owns its original pUnoBroadcaster; original serial/no-active-BroadcastUno Add/Remove behavior remains in documen3 on the actual typed ScDocument instance, and documen2 destroys that broadcaster after area destruction and before cell clearing. This retains actual owners instead of a fake getDocument/getModel provider or transplanted test service. Private field declarations remain on the real class and original null initialization/destruction belongs to documen2. Script-service method bodies are relocated unchanged into original documen6; its earlier standalone service-loop test now calls the actual ScDocument. Existing ApplyPatternAreaTab parameter declarations move to sc/inc/document as a type-only tuple; the pre-existing local boolean return is unchanged and not certified as upstream parity. A typed-attribute boundary test is extracted into its own focused tooling test, restoring the existing size limit without changing checks. Full SfxBaseModel/ScModelObj UNO/WeakImplHelper/SfxBaseModel guards, model factories and shell installation, property/controller/event/render/calculate/aggregation services, native intrusive shell reference counts and thread/finalizer synchronization remain unported or unverified. Service-dependent Notify paths explicitly reject unsupported local admission; their throws are not original behavior/parity claims. BroadcastUno, deferred calls and its active cross-thread Remove branch are outside the represented caller domain; no fake SolarMutex is supplied. No current Open/save/recovery/autosave/UI flow is changed or full XLSX/DOCX model/filter/UI acceptance claimed."
     ],
     "omittedResponsibilities": [
       "References, functions, localized formatter/string formulas, dependency/listener services, ODS/UI, complete constructor/service APIs and broad parity remain unsupported."
@@ -34,6 +37,10 @@
         {
           "path": "apps/office/src/sc/source/core/data/formula-copy.test.ts",
           "marker": "constructs native mode"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/unoobj/docuno.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -44,6 +51,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/inc/mtvelements.hxx",
           "marker": "CellStoreTraits"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/inc/document.hxx",
+          "marker": "ApplyPatternAreaTab"
         }
       ]
     }

@@ -20,6 +20,9 @@ export function Dispose(this: ScDocument): void {
   const machine = this["pBASM"];
   this["pBASM"] = null;
   machine?.Dispose();
+  const uno = this["pUnoBroadcaster"];
+  this["pUnoBroadcaster"] = null;
+  uno?.Dispose();
   this.Clear();
   if (this["mxPoolHelper"] && !this.IsClipOrUndo()) this["mxPoolHelper"].SourceDocumentGone();
   this["mxPoolHelper"]?.release();
@@ -74,6 +77,7 @@ export function ResetClip(
 
 /** Original documen2 construction of mode-dependent native resources and the independent string pool. @param this - Actual document. @returns Nothing. */
 export function InitializeResources(this: ScDocument): void {
+  this["pUnoBroadcaster"] = null;
   if (this.GetAutoCalc()) {
     const helper = new ScPoolHelper(this);
     helper.acquire(); // Original rtl::Reference assignment from the newly constructed raw pointer.

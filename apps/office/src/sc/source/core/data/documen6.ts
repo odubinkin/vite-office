@@ -4,7 +4,7 @@ import type { XBreakIterator } from "../../../../offapi/com/sun/star/i18n/XBreak
 import * as ScriptType from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 /** Original ScDocument string classification loop,ignoring weak runs. The service is borrowed explicitly at this consumed scope boundary;native GetBreakIterator's UNO factory is not emulated. @param string - Native logical UTF16 string. @param breakIterator - Actual script-query service or missing service. @returns Combined native flags. */
-export function GetStringScriptType(
+function lcl_GetStringScriptType(
   string: OUStringConstReference,
   breakIterator: XBreakIterator | null,
 ): SvtScriptType {
@@ -29,4 +29,26 @@ export function GetStringScriptType(
     } while (pos >= 0 && pos < text.length);
   }
   return result;
+}
+
+import type { ScDocument } from "../../../inc/document";
+import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
+/** Original lazy script-service owner access, retaining the existing borrowed host factory binding. @param this - Actual document. @param factory - Existing actual service factory or unavailable port. @returns Actual iterator or null. */
+export function GetBreakIterator(
+  this: ScDocument,
+  factory?: ScScriptServiceFactory,
+): XBreakIterator | null {
+  this["pScriptTypeData"] ??= new ScScriptTypeData();
+  this["pScriptTypeData"].xBreakIter ??= factory?.() ?? null;
+  return this["pScriptTypeData"].xBreakIter;
+}
+/** Original document-bound empty guard and actual service access before the existing native script-run loop. @param this - Actual document. @param string - Actual Unicode input. @param factory - Existing host factory binding. @returns Script flags. */
+export function GetStringScriptType(
+  this: ScDocument,
+  string: OUStringConstReference,
+  factory?: ScScriptServiceFactory,
+): SvtScriptType {
+  return string.getLength() === 0
+    ? SvtScriptType.NONE
+    : lcl_GetStringScriptType(string, this.GetBreakIterator(factory));
 }

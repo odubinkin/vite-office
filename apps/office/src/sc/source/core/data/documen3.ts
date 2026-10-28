@@ -22,3 +22,15 @@ export function UpdateReference(
   for (let tab = context.maRange.aStart.Tab(); tab <= last; ++tab)
     this.FetchTable(tab)?.UpdateReference(context, undo, includeDraw, updateNoteCaptionPos);
 }
+
+import { SfxBroadcaster } from "../../../../svl/source/notify/SfxBroadcaster";
+import type { SfxListener } from "../../../../svl/source/notify/lstner";
+/** Original lazy UNO broadcaster creation and actual registration. @param this - Actual document. @param listener - Native listener. @returns Nothing. */
+export function AddUnoObject(this: ScDocument, listener: SfxListener): void {
+  if (this["pUnoBroadcaster"] === null) this["pUnoBroadcaster"] = new SfxBroadcaster();
+  listener.StartListening(this["pUnoBroadcaster"]);
+}
+/** Original serial/no-active-BroadcastUno removal. Active finalizer/broadcast waiting remains outside the admitted owner domain. @param this - Actual document. @param listener - Native listener. @returns Nothing. */
+export function RemoveUnoObject(this: ScDocument, listener: SfxListener): void {
+  if (this["pUnoBroadcaster"] !== null) listener.EndListening(this["pUnoBroadcaster"]);
+}

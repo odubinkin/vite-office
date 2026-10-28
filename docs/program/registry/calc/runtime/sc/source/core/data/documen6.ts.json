@@ -8,7 +8,8 @@
     "suite": "calc",
     "subsystem": "font-script-attributes",
     "capabilityIds": [
-      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681"
+      "CAP-dc45e9eb-2c4d-4d11-8e1d-3fd33dcce681",
+      "CAP-4dc9be05-d644-4470-af83-b28d4da3de3b"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -17,17 +18,24 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/sc/source/core/data/documen6.ts",
-        "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx"
+        "apps/office/src/sc/browser/presentation/calc-font-family.test.tsx",
+        "apps/office/src/sc/source/ui/unoobj/docuno.test.ts",
+        "apps/office/src/sc/source/core/data/script-type.test.ts",
+        "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx"
       ],
-      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted.",
+      "justification": "Task6PMYVV connects the actual shared Writer FontNameSelect to native Calc CharFontName10007,complete SvxFontItem values,source script selection,actual pattern/history owners and real ODS font declarations. Pinned ICU78.3 property data and original consumed scalar algorithms match compiled original block/script/editing-class observations for every Unicode codepoint. The compiled witness uses an explicitly constrained SCRIPT dispatcher bootstrap;it is not a full ICU or LibreOffice service certificate. Source BreakIterator script runs retain the initial-NUL cache quirk. The browser binds its current plain-cell display to the consumed XBreakIterator script port and GetStringScriptType loop;it does not emulate native formatted-cell caches or the UNO factory. Shared selection carries all five font fields. Writer family operations,caret item queries and pending items preserve native items instead of flattening them through browser projections. Actual ODS pools/contexts retain independent script fonts and optional styles.xml declarations. Task37 verification covers only the documented font UI/native-item slice;no broad parity flags are promoted. J0Z0KF restores consumed real SfxBaseModel shell data/listener ownership and GetObjectShell/IsInitialized, ScModelObj nullable shell/document access and actual shell/document registrations, Calc Dying pointer invalidation and ordered destructor unregistration. Actual ScDocument lazily owns its original pUnoBroadcaster; original serial/no-active-BroadcastUno Add/Remove behavior remains in documen3 on the actual typed ScDocument instance, and documen2 destroys that broadcaster after area destruction and before cell clearing. This retains actual owners instead of a fake getDocument/getModel provider or transplanted test service. Private field declarations remain on the real class and original null initialization/destruction belongs to documen2. Script-service method bodies are relocated unchanged into original documen6; its earlier standalone service-loop test now calls the actual ScDocument. Existing ApplyPatternAreaTab parameter declarations move to sc/inc/document as a type-only tuple; the pre-existing local boolean return is unchanged and not certified as upstream parity. A typed-attribute boundary test is extracted into its own focused tooling test, restoring the existing size limit without changing checks. Full SfxBaseModel/ScModelObj UNO/WeakImplHelper/SfxBaseModel guards, model factories and shell installation, property/controller/event/render/calculate/aggregation services, native intrusive shell reference counts and thread/finalizer synchronization remain unported or unverified. Service-dependent Notify paths explicitly reject unsupported local admission; their throws are not original behavior/parity claims. BroadcastUno, deferred calls and its active cross-thread Remove branch are outside the represented caller domain; no fake SolarMutex is supplied. No current Open/save/recovery/autosave/UI flow is changed or full XLSX/DOCX model/filter/UI acceptance claimed.",
       "knownViolations": [],
       "localSymbols": [
-        "GetStringScriptType"
+        "GetStringScriptType",
+        "GetBreakIterator",
+        "lcl_GetStringScriptType"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "vendor/libreoffice-reference/sc/source/core/data/documen6.cxx",
       "upstreamSymbols": [
-        "GetStringScriptType"
+        "GetStringScriptType",
+        "ScDocument::GetBreakIterator",
+        "ScDocument::GetStringScriptType"
       ]
     }
   }

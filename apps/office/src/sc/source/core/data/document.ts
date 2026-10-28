@@ -22,6 +22,8 @@ import { SharedString } from "../../../../svl/inc/sharedstring";
 import type { SharedStringPool } from "../../../../svl/inc/sharedstringpool";
 import type { SvtBroadcaster } from "../../../../svl/source/notify/broadcast";
 import type { SvtListener } from "../../../../svl/source/notify/listener";
+import type { SfxListener } from "../../../../svl/source/notify/lstner";
+import type { SfxBroadcaster } from "../../../../svl/source/notify/SfxBroadcaster";
 import type { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import {
   MAXCOL,
@@ -52,16 +54,26 @@ import type { ScTable } from "../../../inc/table";
 import { ScViewOptions } from "../../../inc/viewopti";
 import type { ScBroadcastAreaSlotMachine } from "../inc/bcaslot";
 import type { ScPoolHelper } from "../inc/poolhelp";
-import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
+import type { ScScriptTypeData } from "../inc/scrdata";
 import type { ScDocumentPool } from "./docpool";
 import * as documen2 from "./documen2";
 import * as documen3 from "./documen3";
-import { GetStringScriptType as classifyString } from "./documen6";
+import { GetBreakIterator, GetStringScriptType } from "./documen6";
+import type { ApplyPatternAreaTabParameters } from "../../../inc/document";
 import * as documen7 from "./documen7";
 import * as documen9 from "./documen9";
 import * as document10 from "./document10";
 /** Explicit initial document subset;all supported cells live in its actual sheet/column chain. */
 export class ScDocument {
+  declare private pUnoBroadcaster: SfxBroadcaster | null;
+  /** Original lazy document UNO observer registration. @param listener - Actual native listener. @returns Nothing. */
+  AddUnoObject(listener: SfxListener): void {
+    documen3.AddUnoObject.call(this, listener);
+  }
+  /** Original represented serial observer removal. Cross-thread finalizer waiting and BroadcastUno deferred calls remain unported. @param listener - Actual listener. @returns Nothing. */
+  RemoveUnoObject(listener: SfxListener): void {
+    documen3.RemoveUnoObject.call(this, listener);
+  }
   private mbStreamValidLocked = false;
   /** Original stream-validity lock query. @returns Lock state. */
   IsStreamValidLocked(): boolean {
@@ -317,21 +329,14 @@ export class ScDocument {
   GetDataArea(...args: Parameters<typeof documen7.GetDataArea>): void {
     return documen7.GetDataArea.apply(this, args);
   }
-  private pScriptTypeData: ScScriptTypeData | undefined;
-  /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param factory - Real service creation binding or unavailable host port. @returns Stable borrowed service or empty reference. */
-  GetBreakIterator(factory?: ScScriptServiceFactory): XBreakIterator | null {
-    this.pScriptTypeData ??= new ScScriptTypeData();
-    this.pScriptTypeData.xBreakIter ??= factory?.() ?? null;
-    return this.pScriptTypeData.xBreakIter;
+  declare private pScriptTypeData: ScScriptTypeData | undefined;
+  /** Original lazily owned script service. The actual process-context factory is an explicit borrowed host port;the kernel depends only on XBreakIterator. @param args - Existing real service factory or unavailable host port. @returns Stable borrowed service or empty reference. */
+  GetBreakIterator(...args: Parameters<typeof GetBreakIterator>): XBreakIterator | null {
+    return GetBreakIterator.apply(this, args);
   }
-  /** Original document string classifier,retaining the empty-string lazy-service guard and consumed source loop. @param string - Actual UTF16 string. @param factory - Borrowed real service creation binding. @returns Native script flags. */
-  GetStringScriptType(
-    string: OUStringConstReference,
-    factory?: ScScriptServiceFactory,
-  ): SvtScriptType {
-    return string.getLength() === 0
-      ? SvtScriptType.NONE
-      : classifyString(string, this.GetBreakIterator(factory));
+  /** Original document-bound string classifier delegates to its native implementation file. @param args - Actual string and existing borrowed script-service factory. @returns Native script flags. */
+  GetStringScriptType(...args: Parameters<typeof GetStringScriptType>): SvtScriptType {
+    return GetStringScriptType.apply(this, args);
   }
   /** Original address-only const getter reads cached metadata without evaluating or updating it. @param position - Actual coordinate. @returns Stored flags or NONE. */
   GetScriptType(position: ScAddress): SvtScriptType {
@@ -717,12 +722,7 @@ export class ScDocument {
   }
   /** Applies an actual source pattern delta on a single sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Pattern delta. @returns Whether changed. */
   ApplyPatternAreaTab(
-    startCol: number,
-    startRow: number,
-    endCol: number,
-    endRow: number,
-    tab: number,
-    delta: ScPatternAttr,
+    ...[startCol, startRow, endCol, endRow, tab, delta]: ApplyPatternAreaTabParameters
   ): boolean {
     return (
       this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false

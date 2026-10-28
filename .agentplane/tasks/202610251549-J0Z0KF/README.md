@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 19
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T09:00:46.514Z"
+  updated_at: "2026-10-28T09:32:47.304Z"
   updated_by: "CODER"
-  note: "Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim."
-  attempts: 5
+  note: "Native model-ownership checkpoint:70 final tests/47 tooling cases pass;461 related pre-decomposition and39 post-decomposition cases pass. Two new model owners and documen3/documen6 individually100; whole document/documen2 coverage FAILS unchanged100. All other bounded gates pass. Corrected previous typed-attribute size PASS claim: actual raw log failed1011line tooling test; split unchanged test and native file/header code now passes size. Evidence/native-model-ownership-checkpoint.json binds30source blobs and records all limitations. Full XLSX/DOCX model/filter/UI remains incomplete, no external blocker or completion claim."
+  attempts: 6
 commit: null
 comments:
   -
@@ -88,8 +88,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T09:32:47.304Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native model-ownership checkpoint:70 final tests/47 tooling cases pass;461 related pre-decomposition and39 post-decomposition cases pass. Two new model owners and documen3/documen6 individually100; whole document/documen2 coverage FAILS unchanged100. All other bounded gates pass. Corrected previous typed-attribute size PASS claim: actual raw log failed1011line tooling test; split unchanged test and native file/header code now passes size. Evidence/native-model-ownership-checkpoint.json binds30source blobs and records all limitations. Full XLSX/DOCX model/filter/UI remains incomplete, no external blocker or completion claim."
 doc_version: 3
-doc_updated_at: "2026-10-28T09:07:18.967Z"
+doc_updated_at: "2026-10-28T09:32:47.531Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -254,6 +260,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-28T09:32:47.304Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native model-ownership checkpoint:70 final tests/47 tooling cases pass;461 related pre-decomposition and39 post-decomposition cases pass. Two new model owners and documen3/documen6 individually100; whole document/documen2 coverage FAILS unchanged100. All other bounded gates pass. Corrected previous typed-attribute size PASS claim: actual raw log failed1011line tooling test; split unchanged test and native file/header code now passes size. Evidence/native-model-ownership-checkpoint.json binds30source blobs and records all limitations. Full XLSX/DOCX model/filter/UI remains incomplete, no external blocker or completion claim.
+    Attempts: 6
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:32:45.749Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -278,6 +314,10 @@ sections:
     - Observation: Command: seven-file typed-attribute scoped coverage, shared numeric/XML/SAX, Calc string/value/range and boundary tests; exact commands and blob-bound results in evidence/native-typed-attribute-checkpoint.json. Result:93 scoped tests pass with whole four-owner S249/249 B202/202 F56/56 L220/220;175 related shared tests,80 Calc tests and47 boundary tests pass. CALC-353/354 preserve conversion/default asymmetries and the required-handler token-call precondition.
       Impact: Actual FastTokenHandlerBase/FastTokenHandler now feed borrowed/copy-preserving native FastAttributeList token/numeric/view methods. AttributeList optional/defaulted bool/token/numeric values call actual existing SAL/o3tl parsers, including original byte-view toDouble. No fake value-token provider, null-handler witness or full workbook/filter/UI claim.
       Resolution: Full task incomplete; keep original remaining XLSX/DOCX acceptance and earlier coverage gaps open. Corrected source QA location and updated exact paired original SAL/o3tl edge witnesses with retained negative boundary tests. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass. CLI previous rework-limit status normalization was resumed through its emitted approved start-ready route; no external blocker or goal pause inferred.
+
+    - Observation: Command: six-owner model/core coverage and related targeted/regression/tooling checks; exact commands and source blobs in evidence/native-model-ownership-checkpoint.json. Result:70 final scoped tests pass,47 boundary tests pass,39 post-decomposition and461 pre-decomposition Calc/ODS/shell tests pass. New SfxBaseModel/ScModelObj and complete documen3/documen6 individually100; whole document/documen2 profile FAILS unchanged100. CALC-355 retains independent Calc/base shell references on Dying.
+      Impact: Actual ScModelObj getters and real shell/document observer registrations provide model ownership prerequisites. Full UNO/model services and workbook/filter/UI admission remain incomplete; unsupported Notify throws are local guards and not native-equivalence claims. Private fields and original documen2/3/6 placement are retained; no fake model, mutex, provider or public state getter introduced.
+      Resolution: CORRECTION: prior native-typed-attribute-checkpoint.json checks.fileSize pass was incorrect; its raw xlsx-attribute-size.log failed scripts/check-module-boundaries.test.ts at1011lines. This block extracts the unchanged coherent tooling test, relocates native script-service code/header parameter declarations and reruns strict size successfully with exit0. Prior immutable evidence is retained and superseded by this correction. Current typecheck/static/lint/format/dependencies/docs/size/tree/resources/provenance/registry/doctor/routing/diff pass. Keep full XLSX/DOCX acceptance and coverage gaps open; no completion or publication.
 id_source: "generated"
 ---
 ## Summary
@@ -452,6 +492,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-28T09:32:47.304Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native model-ownership checkpoint:70 final tests/47 tooling cases pass;461 related pre-decomposition and39 post-decomposition cases pass. Two new model owners and documen3/documen6 individually100; whole document/documen2 coverage FAILS unchanged100. All other bounded gates pass. Corrected previous typed-attribute size PASS claim: actual raw log failed1011line tooling test; split unchanged test and native file/header code now passes size. Evidence/native-model-ownership-checkpoint.json binds30source blobs and records all limitations. Full XLSX/DOCX model/filter/UI remains incomplete, no external blocker or completion claim.
+Attempts: 6
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:32:45.749Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -480,3 +550,7 @@ DecisionContextRef:
 - Observation: Command: seven-file typed-attribute scoped coverage, shared numeric/XML/SAX, Calc string/value/range and boundary tests; exact commands and blob-bound results in evidence/native-typed-attribute-checkpoint.json. Result:93 scoped tests pass with whole four-owner S249/249 B202/202 F56/56 L220/220;175 related shared tests,80 Calc tests and47 boundary tests pass. CALC-353/354 preserve conversion/default asymmetries and the required-handler token-call precondition.
   Impact: Actual FastTokenHandlerBase/FastTokenHandler now feed borrowed/copy-preserving native FastAttributeList token/numeric/view methods. AttributeList optional/defaulted bool/token/numeric values call actual existing SAL/o3tl parsers, including original byte-view toDouble. No fake value-token provider, null-handler witness or full workbook/filter/UI claim.
   Resolution: Full task incomplete; keep original remaining XLSX/DOCX acceptance and earlier coverage gaps open. Corrected source QA location and updated exact paired original SAL/o3tl edge witnesses with retained negative boundary tests. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass. CLI previous rework-limit status normalization was resumed through its emitted approved start-ready route; no external blocker or goal pause inferred.
+
+- Observation: Command: six-owner model/core coverage and related targeted/regression/tooling checks; exact commands and source blobs in evidence/native-model-ownership-checkpoint.json. Result:70 final scoped tests pass,47 boundary tests pass,39 post-decomposition and461 pre-decomposition Calc/ODS/shell tests pass. New SfxBaseModel/ScModelObj and complete documen3/documen6 individually100; whole document/documen2 profile FAILS unchanged100. CALC-355 retains independent Calc/base shell references on Dying.
+  Impact: Actual ScModelObj getters and real shell/document observer registrations provide model ownership prerequisites. Full UNO/model services and workbook/filter/UI admission remain incomplete; unsupported Notify throws are local guards and not native-equivalence claims. Private fields and original documen2/3/6 placement are retained; no fake model, mutex, provider or public state getter introduced.
+  Resolution: CORRECTION: prior native-typed-attribute-checkpoint.json checks.fileSize pass was incorrect; its raw xlsx-attribute-size.log failed scripts/check-module-boundaries.test.ts at1011lines. This block extracts the unchanged coherent tooling test, relocates native script-service code/header parameter declarations and reruns strict size successfully with exit0. Prior immutable evidence is retained and superseded by this correction. Current typecheck/static/lint/format/dependencies/docs/size/tree/resources/provenance/registry/doctor/routing/diff pass. Keep full XLSX/DOCX acceptance and coverage gaps open; no completion or publication.
