@@ -169,7 +169,9 @@ const allowedEdges = new Map([
   ],
   // Native objembed.cxx owns GetMapUnit/SetMapUnit; Library_sfx links tl.
   // Library_sfx.mk links SAL; objstor.cxx takes rtl_TextEncoding directly.
-  ["sfx2", new Set(["sal", "svl", "tools"])],
+  // Original SfxBaseModel uses WeakImplHelper, actual UNO References/exceptions and XChild.
+  // Library_sfx links cppu/cppuhelper and uses the SDK API.
+  ["sfx2", new Set(["cppu", "cppuhelper", "sal", "svl", "tools", "udkapi"])],
   // Original enum items include comphelper/extract.hxx and UNO Any.hxx.
   // Original cintitem.cxx hashes unsigned values through o3tl/hash_combine.hxx.
   // Original poolitem.hxx/setitem.hxx presentation signatures use tools/mapunit.hxx.

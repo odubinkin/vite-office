@@ -962,3 +962,20 @@ it("admits the original VCL numeric-field Unicode utility dependency without adm
   expect(isForbiddenModuleEdge("vcl", "i18nutil")).toBe(false);
   expect(isForbiddenModuleEdge("i18nutil", "vcl")).toBe(true);
 });
+
+it("retains original SfxBaseModel UNO/SDK dependencies without reverse or browser edges", /** Library_sfx links actual CPPU owners and consumes XChild through SDK headers. @returns Nothing. */ () => {
+  for (const target of ["cppu", "cppuhelper", "udkapi"]) {
+    expect(isForbiddenModuleEdge("sfx2", target)).toBe(false);
+    expect(isForbiddenModuleEdge(target, "sfx2")).toBe(true);
+  }
+  expect(getRuntimeOwnershipViolation("sfx2/source/doc/sfxbasemodel.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+  expect(
+    getRuntimeOwnershipViolation(
+      "sfx2/source/doc/sfxbasemodel.ts",
+      "vcl/browser/font-list.ts",
+      "../font-list",
+    ),
+  ).toMatch(/browser adapters/u);
+});

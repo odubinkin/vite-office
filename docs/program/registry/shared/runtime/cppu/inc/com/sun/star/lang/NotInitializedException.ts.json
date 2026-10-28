@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "model-component-ownership",
+    "capabilityIds": [
+      "CAP-e17ea6dd-076b-4b74-bd24-427bf514499f"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts",
+        "apps/office/src/sfx2/source/doc/native-model-child.test.ts",
+        "vendor/libreoffice-reference/udkapi/com/sun/star/lang/NotInitializedException.idl",
+        "vendor/libreoffice-reference/include/sfx2/sfxbasemodel.hxx#SfxBaseModel_Base"
+      ],
+      "justification": "J0Z0KF migrates the actual SfxBaseModel/ScModelObj object identity to the existing real WeakImplHelper with the fully implemented original XChild interface as its consumed declared subset, retaining the original first-interface order and same-identity SfxListener role. The full native SfxBaseModel_Base interface list remains unported; XModel and XMultiServiceFactory are not advertised or manufactured. Actual parent Reference assignment/copy, initialization-permitted setter and fully-alive getter use original ordered MethodEntryCheck disposed/initialized predicates and actual generated UNO exceptions with empty OUString and acquired self Context. Synchronous host calls inline the original guard entry check; no substitute mutex, native SolarMutex/thread or full SfxModelGuard parity is claimed. Existing weak-base zero-reference destruction dispatches to actual most-derived ScModelObj cleanup. Represented data/parent members are released before listener-base destruction, following C++ member/base order. Original SfxModelSubComponent borrows the actual model and forwards validation/refcounts without an independent model counter/provider. NotInitializedException reuses the actual shared RuntimeException/value/typelib owners; XChild retains original normal cached CPPUMaker metadata. Host Dispose remains an explicit destructor binding, not the unported UNO close/dispose workflow; disposed-branch tests observe that binding and do not claim C++ post-destruction calls. Controller locking/undo, complete XModel/factories/properties, FilterBase, workbook context and full DOCX/XLSX model/UI round trips remain pending. ABI, complete reflection, native threads and independently compiled SDK/model differential are unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "NotInitializedException",
+        "cppu_detail_getUnoType",
+        "getCppuType"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "udkapi/com/sun/star/lang/NotInitializedException.idl",
+      "upstreamSymbols": [
+        "NotInitializedException",
+        "RuntimeException"
+      ]
+    }
+  }
+}
