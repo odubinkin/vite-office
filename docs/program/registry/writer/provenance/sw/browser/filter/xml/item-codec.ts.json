@@ -48,6 +48,10 @@
         {
           "path": "apps/office/src/sw/source/uibase/shells/native-escapement.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.links.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ]
     },
@@ -73,7 +77,8 @@
     },
     "status": "local-only",
     "preservedResponsibilities": [
-      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported."
+      "TaskFSR9QK connects represented native optional page-number Any/member and XML handler contracts to lossless browser records. XML_NUMBER16_AUTO signed16 saturation/void/signed export are preserved;full descriptor/style/native services remain unported.",
+      "Native internet-item records now accept every original string URL, including empty values created by HTML HREF resolution failure or empty source-medium paths. Decode validates record shape and URL type, then restores all native strings and independent style IDs directly through the real item setters; no temporary fake nonempty URL or broad UI normalization exception is introduced. Optional-string/default-ZERO behavior and malformed record/style-ID checks remain at the existing browser boundary. Actual Worker round trips retain empty URL/name/target/style values."
     ]
   },
   "legacyOrder": 88

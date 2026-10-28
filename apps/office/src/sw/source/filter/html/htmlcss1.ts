@@ -4,6 +4,8 @@ import { cssAsciiLower } from "./svxcss1.properties";
 import { Css1ScriptFlags } from "./svxcss1.types";
 import { HtmlTokenId as T } from "../../../../svtools/inc/htmltokn";
 import { SwPoolFormatId as P } from "../../../inc/poolfmt";
+import type { SwCharFormat } from "../../../inc/charfmt";
+import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwHTMLParser } from "./swhtml";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -29,8 +31,73 @@ const namedStyles = new Map<T, string>([
   [T.INSERTEDTEXT_ON, "ins"],
   [T.DELETEDTEXT_ON, "del"],
 ]);
+/** Original SetCharFormatAttrs for represented character items. Native character brush/box Which values are outside the current core and are not replaced by highlight or paragraph items. @param format - Actual character style. @param items - Original mutable map-entry set. @returns Nothing. */
+function SetCharFormatAttrs(format: SwCharFormat, items: SfxItemSet): void {
+  for (const which of [
+    H.RES_CHRATR_FONTSIZE,
+    H.RES_CHRATR_CJK_FONTSIZE,
+    H.RES_CHRATR_CTL_FONTSIZE,
+  ]) {
+    const height = items.GetItemIfSet(which, false);
+    if (height instanceof SvxFontHeightItem && height.GetProp() !== 100) items.ClearItem(which);
+  }
+  format.SetFormatAttrSet(items);
+}
 /** Native Writer specialization over the actual CSS1 grammar/property receiver. */
 export class SwCSS1Parser extends SvxCSS1Parser {
+  private m_bLinkCharFormatsSet = false;
+  private m_bBodyLinkSet = false;
+  private m_bBodyVLinkSet = false;
+  /** Original link-color admission flag. @returns Native flag. */
+  IsBodyLinkSet(): boolean {
+    return this.m_bBodyLinkSet;
+  }
+  /** Original visited-link-color admission flag. @returns Native flag. */
+  IsBodyVLinkSet(): boolean {
+    return this.m_bBodyVLinkSet;
+  }
+  /** Original one-time A-tag style entry. @returns Nothing. */
+  SetATagStyles(): void {
+    if (!this.m_bLinkCharFormatsSet) this.SetLinkCharFormats();
+  }
+  /** Original A, A:link and A:visited style precedence over actual pool formats. @returns Nothing. */
+  private SetLinkCharFormats(): void {
+    let unvisited: SwCharFormat | undefined, visited: SwCharFormat | undefined;
+    const common = this.GetTag("a");
+    if (common) {
+      const items = common.GetItemSet();
+      const colorSet = items.GetItemIfSet(H.RES_CHRATR_COLOR, false) !== undefined;
+      unvisited = this.GetCharFormatFromPool(P.CHR_INET_NORMAL);
+      SetCharFormatAttrs(unvisited, items);
+      this.m_bBodyLinkSet ||= colorSet;
+      visited = this.GetCharFormatFromPool(P.CHR_INET_VISIT);
+      SetCharFormatAttrs(visited, items);
+      this.m_bBodyVLinkSet ||= colorSet;
+    }
+    const link = this.GetTag("a:link");
+    if (link) {
+      const items = link.GetItemSet();
+      const colorSet = items.GetItemIfSet(H.RES_CHRATR_COLOR, false) !== undefined;
+      unvisited ??= this.GetCharFormatFromPool(P.CHR_INET_NORMAL);
+      SetCharFormatAttrs(unvisited, items);
+      this.m_bBodyLinkSet ||= colorSet;
+    }
+    const visit = this.GetTag("a:visited");
+    if (visit) {
+      const items = visit.GetItemSet();
+      const colorSet = items.GetItemIfSet(H.RES_CHRATR_COLOR, false) !== undefined;
+      visited ??= this.GetCharFormatFromPool(P.CHR_INET_VISIT);
+      SetCharFormatAttrs(visited, items);
+      this.m_bBodyVLinkSet ||= colorSet;
+    }
+    this.m_bLinkCharFormatsSet = true;
+  }
+  /** Consumed native GetCharFormatFromPool wrapper for insertion into an existing document. @param id - Original pool identity. @returns Borrowed document style. */
+  private GetCharFormatFromPool(id: P): SwCharFormat {
+    const format = this.doc.GetCharFormatFromPool(id);
+    if (!format) throw new Error("assert(character format pool identity)");
+    return format;
+  }
   /** Borrows original document/parser and copies the supplied seven native configured heights. @param doc - Actual document. @param parser - Actual HTML parser. @param heights - HTML font configuration in twips. @param baseURL - Original base. @param newDoc - Native creation selector. @returns Parser. */
   constructor(
     private readonly doc: SwDoc,
@@ -99,16 +166,7 @@ export class SwCSS1Parser extends SvxCSS1Parser {
         format.SetAuto(false);
         const items = entry.GetItemSet().Clone();
         try {
-          for (const which of [
-            H.RES_CHRATR_FONTSIZE,
-            H.RES_CHRATR_CJK_FONTSIZE,
-            H.RES_CHRATR_CTL_FONTSIZE,
-          ]) {
-            const height = items.GetItemIfSet(which, false);
-            if (height instanceof SvxFontHeightItem && height.GetProp() !== 100)
-              items.ClearItem(which);
-          }
-          format.SetFormatAttrSet(items);
+          SetCharFormatAttrs(format, items);
         } finally {
           items.Dispose();
         }

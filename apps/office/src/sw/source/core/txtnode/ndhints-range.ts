@@ -143,7 +143,7 @@ export function NormalizeOwnedTextHints(hints: readonly RangedTextAttr[]): Range
       (hint) =>
         hint.end >= hint.start &&
         ((hint.format instanceof SwFormatAutoFormat && hint.format.GetStyleHandle().Count() > 0) ||
-          (hint.format instanceof SwFormatINetFormat && hint.format.GetValue().length > 0) ||
+          hint.format instanceof SwFormatINetFormat ||
           hint.format instanceof SwFormatCharFormat),
     )
     .sort(compareHints);

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 170
+revision: 173
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T15:19:37.643Z"
+  updated_at: "2026-10-28T15:39:48.164Z"
   updated_by: "CODER"
-  note: "Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verified: 200 URI and 618 Writer tests pass, final 74 URI-value tests pass, static/provenance/registry gates pass. Raw HTML HREF/style/insertion and full filter capability audit remain pending; goal stays active."
-  attempts: 21
+  note: "HTML HREF/native item transport checkpoint verified: 45 focused cases, 9669 related Writer/core/codec tests and 11 API caller tests pass; static/provenance/registry gates pass. Native HTML language/remaining properties/lists/tables and final RTF/current-core/UI audit keep original goal open."
+  attempts: 22
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -341,8 +344,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T15:39:48.164Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "HTML HREF/native item transport checkpoint verified: 45 focused cases, 9669 related Writer/core/codec tests and 11 API caller tests pass; static/provenance/registry gates pass. Native HTML language/remaining properties/lists/tables and final RTF/current-core/UI audit keep original goal open."
+  -
+    type: "status"
+    at: "2026-10-28T15:40:19.097Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T15:20:12.149Z"
+doc_updated_at: "2026-10-28T15:40:19.097Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -695,6 +711,36 @@ sections:
     Attempts: 21
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:19:36.795Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T15:39:48.164Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: HTML HREF/native item transport checkpoint verified: 45 focused cases, 9669 related Writer/core/codec tests and 11 API caller tests pass; static/provenance/registry gates pass. Native HTML language/remaining properties/lists/tables and final RTF/current-core/UI audit keep original goal open.
+    Attempts: 22
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:39:47.575Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1331,6 +1377,23 @@ sections:
     - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI/URIHelper/Markdown source and tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass after native File fallthrough was bound to a shared local block, an unused import was removed and callback JSDoc was attached to the function expression. Source size: URI object 970 lines (below hard gate), 3927 authored files scanned; JSDoc 3923; boundaries 1711 runtime sources/9033 imports/210 allowed edges; provenance 1712 modules. Logs: output/playwright/rtf-properties-native/html10-*.txt. Existing registry confidence/classification remains unverified; source-backed tests do not promote full format parity.
     - Remaining: connect raw HTML HREF using SmartRel2Abs and GetPartBeforeLastName, preserving actual SwFormatINetFormat insertion, CSS A-tag defaults/styles, existing context/range/metadata ownership and represented language/direction behavior. Then continue the original current-core TXT/RTF/Markdown capability audit. Do not interpret a completed native Markdown link resolver as complete raw HTML or format support. Goal/task remain active.
+
+    Native HTML HREF and complete native internet-item transport checkpoint:
+    - Implemented the represented NewAnchor HREF branch using actual SmartRel2Abs(base,href,null,false), original medium parent for empty HREF, original A-tag style entry, actual SwFormatINetFormat URL/target/name and pINetFormat/context insertion. Prior-anchor closure, first-option precedence, source class suffix admission, implicit-name filtering and separate ID point targets are retained. This supersedes the pending HREF URL/item producer notes; language and other represented embedded-HTML producers remain open.
+    - SwCSS1Parser SetATagStyles/SetLinkCharFormats retains one-shot A then A:link/A:visited map precedence, body-color flags, real pool style ownership and original map mutation removing percentage font heights. Existing character-class style creation shares the same SetCharFormatAttrs helper. Only current represented character fields and current Markdown existing-document insertion are claimed; standalone new-document encoding, absent character brush/box families, macros and foot/endnote service owners are not fabricated.
+    - Concrete core failure repaired: docfmt InsertPoolItem reconstructed INET from a portable hyperlink value, losing style IDs/mode and discarding an empty URL. It now calls existing native node InsertItem/MakeTextAttr/SwTextINetFormat. A real API test checks item copy/backlink, custom normal/visited pool identities, empty payload and DONTEXPAND. The existing facade is not a complete original content-operations manager certificate.
+    - Actual Worker round-trip initially exposed another legacy shim: NormalizeOwnedTextHints pruned empty native INET values. Native NewAnchor, MakeTextAttr and TryInsertHint admit these values. Removed only that URL-nonempty pruning predicate; native item decoding now admits empty URL strings while retaining exact optional-string/ZERO/style-ID validation behavior. The portable normalizeWriterHyperlink/UI blank-destination rejection remains unchanged. Corrected the old internet-item-defaults active-map pruning expectation from source. WRITER233 records the native HREF-presence versus URL-validity distinction in the required dedicated issues file.
+    - New swhtml.links.integration.test.ts has 9 actual-model cases: resolved URL/target/name/default style IDs; empty/invalid URL and Worker restoration; source-medium parent/fragment shortcut; nested anchor closure and adjacent range separation; first option/reserved name/ID behavior; full item/mode insertion; actual CSS map precedence/one-shot flags/percentage mutation; real Markdown HTML/Worker items; actual HTML link -> native RTF export/import. Existing bookmark cases remain green. Matrix checkpoint appended to docs/program/writer-native-text-filter-slice.md.
+    - Command: npm run test:writer -- swhtml.links.integration swhtml.bookmarks.integration internet-item-defaults writer-text-hint-codec
+      Result: pass, 45 tests/3 files after removing the observed empty-URL pruning. The first 21-case run found the Worker loss; the native insertion itself already retained all three items. No test expectation was weakened to discard that value.
+    - Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io sw/source/core/txtnode sw/source/core/doc sw/source/core/undo sw/browser/filter/xml
+      Result: pass, 9669 tests/196 files. This wider related-module run is justified by generic native item insertion, owned-map normalization and item-codec changes; it is not a full repository suite or a reason to repeat the full related set after documentation-only edits.
+    - Command: npm run test:writer -- native-import-core-lifetimes unocrsrhelper
+      Result: pass, 11 tests/2 files covering the additional existing API/facade callers.
+    - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed HTML/core/item-codec source/tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass after adding the native known-pool assertion at the CSS wrapper's optional local return type. Boundaries: 1711 sources/9039 imports/210 edges. Provenance: 1712 modules. JSDoc: 3924 authored sources. Existing registry classifications/confidence remain unchanged. Logs output/playwright/rtf-properties-native/html11-*.txt.
+    - Remaining actual format work: original LanguageTag fallback entry consumed by HTML LANG and resulting existing language heads, represented CSS paragraph border/background shorthand, native HTML lists/tables; then reconcile represented RTF rows with current code and complete cross-format/UI acceptance audit. Current parser has no alternate fake language, direction, macro or footnote producer. No full filter/core parity or goal completion is claimed.
+    - User-requested estimate: approximately 8-12 substantial work blocks after this HREF checkpoint, provisionally 3-4 embedded-HTML blocks, 3-5 remaining RTF scenario/audit blocks and 2-3 final matrix/UI/verification blocks. This is a low-confidence planning estimate, not a newly approved task graph or a count of existing executable task IDs. Historical matrix open notes must first be reconciled against current source/tests; unconsumed generic module completeness does not add closure gates.
 id_source: "generated"
 ---
 ## Summary
@@ -1694,6 +1757,36 @@ Note: Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verif
 Attempts: 21
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:19:36.795Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T15:39:48.164Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: HTML HREF/native item transport checkpoint verified: 45 focused cases, 9669 related Writer/core/codec tests and 11 API caller tests pass; static/provenance/registry gates pass. Native HTML language/remaining properties/lists/tables and final RTF/current-core/UI audit keep original goal open.
+Attempts: 22
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:39:47.575Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2334,3 +2427,20 @@ Native URI value/resolution and real Markdown caller checkpoint:
 - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI/URIHelper/Markdown source and tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass after native File fallthrough was bound to a shared local block, an unused import was removed and callback JSDoc was attached to the function expression. Source size: URI object 970 lines (below hard gate), 3927 authored files scanned; JSDoc 3923; boundaries 1711 runtime sources/9033 imports/210 allowed edges; provenance 1712 modules. Logs: output/playwright/rtf-properties-native/html10-*.txt. Existing registry confidence/classification remains unverified; source-backed tests do not promote full format parity.
 - Remaining: connect raw HTML HREF using SmartRel2Abs and GetPartBeforeLastName, preserving actual SwFormatINetFormat insertion, CSS A-tag defaults/styles, existing context/range/metadata ownership and represented language/direction behavior. Then continue the original current-core TXT/RTF/Markdown capability audit. Do not interpret a completed native Markdown link resolver as complete raw HTML or format support. Goal/task remain active.
+
+Native HTML HREF and complete native internet-item transport checkpoint:
+- Implemented the represented NewAnchor HREF branch using actual SmartRel2Abs(base,href,null,false), original medium parent for empty HREF, original A-tag style entry, actual SwFormatINetFormat URL/target/name and pINetFormat/context insertion. Prior-anchor closure, first-option precedence, source class suffix admission, implicit-name filtering and separate ID point targets are retained. This supersedes the pending HREF URL/item producer notes; language and other represented embedded-HTML producers remain open.
+- SwCSS1Parser SetATagStyles/SetLinkCharFormats retains one-shot A then A:link/A:visited map precedence, body-color flags, real pool style ownership and original map mutation removing percentage font heights. Existing character-class style creation shares the same SetCharFormatAttrs helper. Only current represented character fields and current Markdown existing-document insertion are claimed; standalone new-document encoding, absent character brush/box families, macros and foot/endnote service owners are not fabricated.
+- Concrete core failure repaired: docfmt InsertPoolItem reconstructed INET from a portable hyperlink value, losing style IDs/mode and discarding an empty URL. It now calls existing native node InsertItem/MakeTextAttr/SwTextINetFormat. A real API test checks item copy/backlink, custom normal/visited pool identities, empty payload and DONTEXPAND. The existing facade is not a complete original content-operations manager certificate.
+- Actual Worker round-trip initially exposed another legacy shim: NormalizeOwnedTextHints pruned empty native INET values. Native NewAnchor, MakeTextAttr and TryInsertHint admit these values. Removed only that URL-nonempty pruning predicate; native item decoding now admits empty URL strings while retaining exact optional-string/ZERO/style-ID validation behavior. The portable normalizeWriterHyperlink/UI blank-destination rejection remains unchanged. Corrected the old internet-item-defaults active-map pruning expectation from source. WRITER233 records the native HREF-presence versus URL-validity distinction in the required dedicated issues file.
+- New swhtml.links.integration.test.ts has 9 actual-model cases: resolved URL/target/name/default style IDs; empty/invalid URL and Worker restoration; source-medium parent/fragment shortcut; nested anchor closure and adjacent range separation; first option/reserved name/ID behavior; full item/mode insertion; actual CSS map precedence/one-shot flags/percentage mutation; real Markdown HTML/Worker items; actual HTML link -> native RTF export/import. Existing bookmark cases remain green. Matrix checkpoint appended to docs/program/writer-native-text-filter-slice.md.
+- Command: npm run test:writer -- swhtml.links.integration swhtml.bookmarks.integration internet-item-defaults writer-text-hint-codec
+  Result: pass, 45 tests/3 files after removing the observed empty-URL pruning. The first 21-case run found the Worker loss; the native insertion itself already retained all three items. No test expectation was weakened to discard that value.
+- Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io sw/source/core/txtnode sw/source/core/doc sw/source/core/undo sw/browser/filter/xml
+  Result: pass, 9669 tests/196 files. This wider related-module run is justified by generic native item insertion, owned-map normalization and item-codec changes; it is not a full repository suite or a reason to repeat the full related set after documentation-only edits.
+- Command: npm run test:writer -- native-import-core-lifetimes unocrsrhelper
+  Result: pass, 11 tests/2 files covering the additional existing API/facade callers.
+- Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed HTML/core/item-codec source/tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass after adding the native known-pool assertion at the CSS wrapper's optional local return type. Boundaries: 1711 sources/9039 imports/210 edges. Provenance: 1712 modules. JSDoc: 3924 authored sources. Existing registry classifications/confidence remain unchanged. Logs output/playwright/rtf-properties-native/html11-*.txt.
+- Remaining actual format work: original LanguageTag fallback entry consumed by HTML LANG and resulting existing language heads, represented CSS paragraph border/background shorthand, native HTML lists/tables; then reconcile represented RTF rows with current code and complete cross-format/UI acceptance audit. Current parser has no alternate fake language, direction, macro or footnote producer. No full filter/core parity or goal completion is claimed.
+- User-requested estimate: approximately 8-12 substantial work blocks after this HREF checkpoint, provisionally 3-4 embedded-HTML blocks, 3-5 remaining RTF scenario/audit blocks and 2-3 final matrix/UI/verification blocks. This is a low-confidence planning estimate, not a newly approved task graph or a count of existing executable task IDs. Historical matrix open notes must first be reconciled against current source/tests; unconsumed generic module completeness does not add closure gates.

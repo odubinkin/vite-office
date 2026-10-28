@@ -217,8 +217,7 @@ export function InsertPoolItem(
     const start = node === range.Start().GetNode() ? range.Start().GetContentIndex() : 0;
     const end = node === range.End().GetNode() ? range.End().GetContentIndex() : node.Len();
     if (item instanceof SwFormatCharFormat) node.InsertItem(item, start, end, mode);
-    else if (item instanceof SwFormatINetFormat)
-      node.SetHyperlink(start, end, item.GetValue() ? item.GetHyperlink() : undefined);
+    else if (item instanceof SwFormatINetFormat) node.InsertItem(item, start, end, mode);
     else if (item instanceof SwFormatAutoFormat) node.InsertItem(item, start, end, mode);
     else if (
       item.Which() < RES_CHRATR_END &&

@@ -14,12 +14,28 @@
         {
           "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.links.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx",
           "marker": "SwCSS1Parser::GetChrFormat"
+        },
+        {
+          "path": "sw/source/filter/html/htmlcss1.cxx",
+          "marker": "SwCSS1Parser::SetLinkCharFormats"
+        },
+        {
+          "path": "sw/source/filter/html/htmlcss1.cxx",
+          "marker": "SetCharFormatAttrs"
+        },
+        {
+          "path": "sw/source/filter/html/swcss1.hxx",
+          "marker": "SwCSS1Parser::SetATagStyles"
         }
       ]
     },
@@ -31,7 +47,8 @@
       "SwCSS1Parser::GetChrFormat"
     ],
     "preservedResponsibilities": [
-      "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified."
+      "Consumed native CSS grammar receiver, scalar property/map ownership and semantic character-style lookup connected to actual SwHTMLParser inline declaration and Markdown HTML insertion. Native sparse-pool absent families have no fabricated Which values. Only represented consumer paths are ported; full stylesheet, class/ID, border/background/font-family/language/whitespace and desktop configuration paths remain open. Source-derived actual-model evidence only; whole-module and compiled upstream parity remain unverified.",
+      "Consumed SetATagStyles/SetLinkCharFormats now retain one-shot A then A:link/A:visited map precedence, native body-color flags, actual document pool-format ownership and mutable map percentage-height removal through shared SetCharFormatAttrs. Existing GetChrFormat class clones use that same native helper. The current Markdown caller inserts into an existing document; standalone new-document font-encoding setup and unrepresented RES_CHRATR_BACKGROUND/RES_CHRATR_BOX conversions remain outside this implemented slice. No brush-to-highlight substitution or stylesheet/class production is added."
     ],
     "omittedResponsibilities": [
       "Only connected consumer paths are implemented; full CSS/HTML module and compiled differential parity are not claimed."

@@ -627,3 +627,41 @@ BR-position clamping and real Markdown/Worker and RTF paths. Language/direction,
 division/section-specific IDs, hyperlinks, borders/background shorthand, lists and
 tables and remaining represented RTF rows still require their real consumer work.
 No full HTML or whole-filter completion is claimed here.
+
+### Connected native URI resolution and HTML HREF items
+
+The consumed URI chain now includes the original INetURLObject scalar/escape,
+scheme/prefix, host, per-protocol path, strict/smart absolute and relative-value
+productions. Ordinary Markdown span callbacks call original GetAbsURL, including
+its default-only failed-conversion fallback. Embedded HTML HREF calls original
+SmartRel2Abs with the source null-handler/false arguments; an empty HREF instead
+uses the source medium's GetPartBeforeLastName. The two resolution contracts are
+kept distinct. These connected paths supersede the earlier URL-resolver and HREF
+pending notes above; compiled complete-URL/desktop equivalence is not certified.
+
+NewAnchor now inserts an actual SwFormatINetFormat through pINetFormat and the
+native context/deferred queue, retaining target, raw stored name, independent
+normal/visited style IDs and the previous-anchor close order. SetATagStyles
+consumes native A, A:link and A:visited map precedence once, with original body
+color flags and percentage-height removal from the owned map. The current
+Markdown HTML reader uses existing-document insertion; this does not add a
+standalone new-document HTML import profile or its encoding setup. Unsupported
+character background/box Which families are not replaced with other attributes.
+
+The existing document insertion facade now passes the concrete internet item to
+InsertItem/MakeTextAttr/SwTextINetFormat with its original mode. Its old portable
+SetHyperlink conversion lost native style IDs and treated an empty URL as a
+removal. Owned-map copying and the Worker item decoder also stopped discarding
+empty native internet values. WRITER233 records why HREF presence can produce a
+valid native attribute whose resolved URL is empty; UI-facing blank-link
+validation remains a separate boundary. Actual HTML, Markdown/Worker, nested and
+adjacent range, one-shot CSS-map and HTML-to-RTF tests cover these paths.
+
+Remaining applicable embedded-HTML consumers include native language options,
+represented paragraph-border/background shorthand properties, lists and tables.
+Direction, positioned fields, macros and foot/endnote owners must be assessed
+against the actual current model rather than added solely for generic HTML
+completeness. Remaining RTF rows still need a fresh current-state reconciliation;
+earlier historical pending notes are not independent proof that those paths are
+still missing. The overall TXT/RTF/Markdown goal remains open until that final
+capability and UI audit is complete.
