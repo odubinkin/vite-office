@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Original complete lexical final-stage orchestration dispatches on the real scanner category and shared automatic locals, preserves numeric zero early returns separately from branch completion and always destroys saved local strings. It calls original common validation/rebuild operations; no independent parsed-format owner or fallback is created.",
-      "Included in the 74396-observation unchanged-source scanner witness, across54 requested language IDs and three keyword policies. Full final scanning is compared for non-converting inputs; lexer/type conversion flags are also exercised. Native dependencies use declared scalar locale/provider/string-value fixtures, actual source integer conversion/formatting and original DigitGroupingIterator. Full native service-owner or cross-locale final-conversion equivalence is not claimed."
+      "Included in the 74396-observation unchanged-source scanner witness, across54 requested language IDs and three keyword policies. Full final scanning is compared for non-converting inputs; lexer/type conversion flags are also exercised. Native dependencies use declared scalar locale/provider/string-value fixtures, actual source integer conversion/formatting and original DigitGroupingIterator. Full native service-owner or cross-locale final-conversion equivalence is not claimed.",
+      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Remaining format constructor prefixes/conditions/NatNum/color, full builtin generation/output and public CSV recognition integration remain incomplete."
@@ -24,6 +25,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforscan.final.ts",
           "marker": "FinalScan"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

@@ -52,5 +52,14 @@
     "report": "apps/office/coverage/integration-oox/coverage-final.json",
     "reportSha256": "bfa40d53cc075a4baf4256cc79defe422a9120f1f8fc2e5f4675c7a39943a4fc"
   },
-  "remaining": "Close remaining runtime gaps; review genuinely unreachable cases individually. Integration push and reverse synchronization remain pending."
+  "remaining": "Close remaining runtime gaps; review genuinely unreachable cases individually. Integration push and reverse synchronization remain pending.",
+  "formatScan": {
+    "testFiles": 1,
+    "groupedTests": 54,
+    "nativeObservations": 23814,
+    "runtimeCodeChanged": false,
+    "report": "apps/office/coverage/integration-format-scan/coverage-final.json",
+    "reportSha256": "707c33e549b34b8811214bc9e329c08fc0a6fe34d22dc1db16b8d4594281ae65",
+    "scope": "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
+  }
 }

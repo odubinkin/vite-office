@@ -17,7 +17,8 @@
       "ImpSvNumberformatScan::FinalScan"
     ],
     "preservedResponsibilities": [
-      "Original temporal/text branches now participate in the complete original FinalScan/ScanFormat pipeline. Source TIME/DATETIME precision asymmetry is retained; original non-converting branches and full final output are included in the74396-case native witness. Actual owner language switching has focused resource-based tests; full native cross-locale conversion remains unverified."
+      "Original temporal/text branches now participate in the complete original FinalScan/ScanFormat pipeline. Source TIME/DATETIME precision asymmetry is retained; original non-converting branches and full final output are included in the74396-case native witness. Actual owner language switching has focused resource-based tests; full native cross-locale conversion remains unverified.",
+      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Format constructor/prefix/NatNum/output closure and CSV public auto-input integration remain pending."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforscan.final-date.ts",
           "marker": "FinalScanDate"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

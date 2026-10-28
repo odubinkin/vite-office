@@ -1,5 +1,6 @@
 /** @fileoverview Compares unchanged pinned zforscan.cxx keyword, lexical, ScanType, complete FinalScan, color and token-helper bodies, plus zformat.cxx quote and automatic-currency delimiter helpers, against the real local owners. Native fixtures supply scalar locale/currency/provider data, UTF16 string values and ICU-bound casing/letter classification; full UNO/SAL lifetime, complete format-constructor integration and arbitrary classifier/OOM behavior are outside this witness. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Color } from "../apps/office/src/tools/inc/color.ts";
@@ -18,7 +19,7 @@ import { FinalScan } from "../apps/office/src/svl/source/numbers/zforscan.final.
 import { FinalScanState } from "../apps/office/src/svl/source/numbers/zforscan.final-state.ts";
 import { FinalScanNumber } from "../apps/office/src/svl/source/numbers/zforscan.final-number.ts";
 import { FinalScanDateOrText } from "../apps/office/src/svl/source/numbers/zforscan.final-date.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   icu = resolve("vendor/icu-reference/source"),
   scan = readFileSync("vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx", "utf8"),
   format = readFileSync("vendor/libreoffice-reference/svl/source/numbers/zformat.cxx", "utf8"),
@@ -368,7 +369,8 @@ execFileSync(
   { stdio: "inherit" },
 );
 const inputs = [],
-  expected = [];
+  expected = [],
+  portableEntries = [];
 /** Encodes a complete UTF16 fixture value without interpreting it as shell or token syntax. @param value - Source text/view. @returns Native transport word. */
 function hex(value) {
   const s = typeof value === "string" ? value : text(value);
@@ -586,6 +588,16 @@ try {
                     cPrefix[4] = from;
                     cPrefix[5] = to;
                     inputs.push(["C", ...cPrefix.slice(1), hex(colorName)].join(" "));
+                    portableEntries.push([
+                      inputs.length - 1,
+                      requestedLanguage,
+                      mode,
+                      hex(colorName),
+                      "C",
+                      Number(convert),
+                      from,
+                      to,
+                    ]);
                     const colorValue = unicode(colorName),
                       calls = [];
                     colorCallback.SetColorLink(
@@ -707,6 +719,16 @@ try {
                     hex(pattern),
                   ].join(" "),
                 );
+                portableEntries.push([
+                  inputs.length - 1,
+                  requestedLanguage,
+                  mode,
+                  hex(pattern),
+                  "F",
+                  0,
+                  0x0409,
+                  0x041e,
+                ]);
                 const compiled = new OUString(value);
                 try {
                   const control = lexical
@@ -786,119 +808,174 @@ try {
 } finally {
   mapper.dispose();
 }
-for (const value of [
-  "",
-  '"x"',
-  'a"x"',
-  "abc",
-  'a\\"x"',
-  '"a""b"',
-  'a"USD"0',
-  'a"USD',
-  '\u0000"x"',
-]) {
-  const v = unicode(value);
-  try {
-    for (let position = -1; position <= value.length + 1; ++position) {
-      inputs.push(`Q ${hex(value)} ${position}`);
-      expected.push(String(GetQuoteEnd(v, position)));
-      if (position >= 0)
-        for (const [quote, inside, outside] of [
-          [34, 0, 92],
-          [34, 92, 92],
-          [39, 0, 92],
-          [34, 0, 0],
-        ]) {
-          inputs.push(`B ${hex(value)} ${position} ${quote} ${inside} ${outside}`);
-          expected.push(String(Number(IsInQuote(v, position, quote, inside, outside))));
-        }
+if (!process.argv.includes("--write-fixtures")) {
+  for (const value of [
+    "",
+    '"x"',
+    'a"x"',
+    "abc",
+    'a\\"x"',
+    '"a""b"',
+    'a"USD"0',
+    'a"USD',
+    '\u0000"x"',
+  ]) {
+    const v = unicode(value);
+    try {
+      for (let position = -1; position <= value.length + 1; ++position) {
+        inputs.push(`Q ${hex(value)} ${position}`);
+        expected.push(String(GetQuoteEnd(v, position)));
+        if (position >= 0)
+          for (const [quote, inside, outside] of [
+            [34, 0, 92],
+            [34, 92, 92],
+            [39, 0, 92],
+            [34, 0, 0],
+          ]) {
+            inputs.push(`B ${hex(value)} ${position} ${quote} ${inside} ${outside}`);
+            expected.push(String(Number(IsInQuote(v, position, quote, inside, outside))));
+          }
+      }
+    } finally {
+      v.dispose();
     }
+  }
+  for (const symbol of ["$", "USD", "€", "-", '"x-y]"', "", "\u0000", "\ud800"])
+    for (const suffix of ["", "-409", "-407", "-FFFF"])
+      for (const close of ["]"])
+        for (const prefix of ["", "0;", '"[$quoted]"', "\\"])
+          for (const tail of ["", "0.00", ";[$EUR-407]0"]) {
+            const source = `${prefix}[$${symbol}${suffix}${close}${tail}`,
+              value = unicode(source);
+            try {
+              const output = StripNewCurrencyDelimiters(value);
+              try {
+                inputs.push(`S ${hex(value)}`);
+                expected.push(hex(output));
+              } finally {
+                output.dispose();
+              }
+            } finally {
+              value.dispose();
+            }
+          }
+  const insertionMapper = new NumberFormatCodeMapper(),
+    insertionColorCallback = new SvNumberFormatter(0x0409),
+    insertionOwner = new SvNFLanguageData(insertionMapper, 0x0409, insertionColorCallback),
+    insertionScanner = insertionOwner.GetFormatScanner();
+  try {
+    for (const count of [0, 1, 3, 98, 99, 100])
+      for (const empty of [false, true])
+        for (const positionValue of [0, 1, 2, count, count + 1])
+          for (const sourceIndex of [-1, 0, 1, 2]) {
+            const position = [positionValue],
+              literal = unicode("insert"),
+              before = ["I", count, 65535, positionValue, sourceIndex, -7];
+            insertionScanner.Reset();
+            insertionScanner["nStringsCnt"] = count;
+            insertionScanner["nResultStringsCnt"] = 65535;
+            try {
+              for (let i = 0; i < 100; ++i) {
+                const value = unicode(`slot${i}`);
+                try {
+                  insertionScanner["sStrArray"][i].assign(value);
+                } finally {
+                  value.dispose();
+                }
+                insertionScanner["nTypeArray"][i] = empty && i === positionValue - 1 ? -10 : -1;
+                before.push(
+                  insertionScanner["nTypeArray"][i],
+                  hex(insertionScanner["sStrArray"][i]),
+                );
+              }
+              before.push(hex(literal));
+              const inserted = insertionScanner["InsertSymbol"](
+                  position,
+                  -7,
+                  sourceIndex < 0 ? literal : insertionScanner["sStrArray"][sourceIndex],
+                ),
+                out = [
+                  Number(inserted),
+                  position[0],
+                  insertionScanner["nStringsCnt"],
+                  insertionScanner["nResultStringsCnt"],
+                ];
+              for (let i = 0; i < 100; ++i)
+                out.push(insertionScanner["nTypeArray"][i], hex(insertionScanner["sStrArray"][i]));
+              inputs.push(before.join(" "));
+              expected.push(out.join(" "));
+            } finally {
+              literal.dispose();
+            }
+          }
   } finally {
-    v.dispose();
+    insertionOwner.dispose();
+    insertionColorCallback.dispose();
+    insertionMapper.dispose();
   }
 }
-for (const symbol of ["$", "USD", "€", "-", '"x-y]"', "", "\u0000", "\ud800"])
-  for (const suffix of ["", "-409", "-407", "-FFFF"])
-    for (const close of ["]"])
-      for (const prefix of ["", "0;", '"[$quoted]"', "\\"])
-        for (const tail of ["", "0.00", ";[$EUR-407]0"]) {
-          const source = `${prefix}[$${symbol}${suffix}${close}${tail}`,
-            value = unicode(source);
-          try {
-            const output = StripNewCurrencyDelimiters(value);
-            try {
-              inputs.push(`S ${hex(value)}`);
-              expected.push(hex(output));
-            } finally {
-              output.dispose();
-            }
-          } finally {
-            value.dispose();
-          }
-        }
-const insertionMapper = new NumberFormatCodeMapper(),
-  insertionColorCallback = new SvNumberFormatter(0x0409),
-  insertionOwner = new SvNFLanguageData(insertionMapper, 0x0409, insertionColorCallback),
-  insertionScanner = insertionOwner.GetFormatScanner();
-try {
-  for (const count of [0, 1, 3, 98, 99, 100])
-    for (const empty of [false, true])
-      for (const positionValue of [0, 1, 2, count, count + 1])
-        for (const sourceIndex of [-1, 0, 1, 2]) {
-          const position = [positionValue],
-            literal = unicode("insert"),
-            before = ["I", count, 65535, positionValue, sourceIndex, -7];
-          insertionScanner.Reset();
-          insertionScanner["nStringsCnt"] = count;
-          insertionScanner["nResultStringsCnt"] = 65535;
-          try {
-            for (let i = 0; i < 100; ++i) {
-              const value = unicode(`slot${i}`);
-              try {
-                insertionScanner["sStrArray"][i].assign(value);
-              } finally {
-                value.dispose();
-              }
-              insertionScanner["nTypeArray"][i] = empty && i === positionValue - 1 ? -10 : -1;
-              before.push(insertionScanner["nTypeArray"][i], hex(insertionScanner["sStrArray"][i]));
-            }
-            before.push(hex(literal));
-            const inserted = insertionScanner["InsertSymbol"](
-                position,
-                -7,
-                sourceIndex < 0 ? literal : insertionScanner["sStrArray"][sourceIndex],
-              ),
-              out = [
-                Number(inserted),
-                position[0],
-                insertionScanner["nStringsCnt"],
-                insertionScanner["nResultStringsCnt"],
-              ];
-            for (let i = 0; i < 100; ++i)
-              out.push(insertionScanner["nTypeArray"][i], hex(insertionScanner["sStrArray"][i]));
-            inputs.push(before.join(" "));
-            expected.push(out.join(" "));
-          } finally {
-            literal.dispose();
-          }
-        }
-} finally {
-  insertionOwner.dispose();
-  insertionColorCallback.dispose();
-  insertionMapper.dispose();
-}
+const nativeInputs = process.argv.includes("--write-fixtures")
+  ? portableEntries.map(
+      /** Selects the original public ScanFormat input pipeline only. @param entry - Native row/source setup. @returns Native query. */ (
+        entry,
+      ) => inputs[entry[0]],
+    )
+  : inputs;
+const nativeExpected = process.argv.includes("--write-fixtures")
+  ? portableEntries.map(
+      /** Selects independently compared local observations for the same public pipeline. @param entry - Native row/source setup. @returns Local observation. */ (
+        entry,
+      ) => expected[entry[0]],
+    )
+  : expected;
 const actual = execFileSync(`${build}/format-scan-witness`, [`${icu}/data/in`], {
-  input: inputs.join("\n") + "\n",
+  input: nativeInputs.join("\n") + "\n",
   encoding: "utf8",
   maxBuffer: 64e6,
 })
   .trimEnd()
   .split("\n");
-if (actual.length !== expected.length)
-  throw Error(`Scan length ${actual.length}/${expected.length}`);
+if (actual.length !== nativeExpected.length)
+  throw Error(`Scan length ${actual.length}/${nativeExpected.length}`);
 for (let i = 0; i < actual.length; ++i)
-  if (actual[i] !== expected[i])
-    throw Error(`Scan ${i}: ${inputs[i]}\nnative ${actual[i]}\nlocal ${expected[i]}`);
+  if (actual[i] !== nativeExpected[i])
+    throw Error(`Scan ${i}: ${nativeInputs[i]}\nnative ${actual[i]}\nlocal ${nativeExpected[i]}`);
 console.log(
-  `Matched ${actual.length} unchanged keyword/lexer/type/final/color/neighbor/quote/currency-strip method cases across ${requested.length} requested language IDs and all3 keyword policies.`,
+  process.argv.includes("--write-fixtures")
+    ? `Matched ${actual.length} original public scan/color cases across ${requested.length} requested language IDs and all3 keyword policies.`
+    : `Matched ${actual.length} unchanged keyword/lexer/type/final/color/neighbor/quote/currency-strip method cases across ${requested.length} requested language IDs and all3 keyword policies.`,
 );
+
+if (process.argv.includes("--write-fixtures"))
+  writeFileSync(
+    "apps/office/src/svl/source/numbers/format-scan.native-observations.json",
+    JSON.stringify(
+      {
+        baselineCommit: pin,
+        sourceHashes: {
+          "svl/source/numbers/zforscan.cxx": createHash("sha256").update(scan).digest("hex"),
+          "include/svl/nfkeytab.hxx": createHash("sha256").update(keywords).digest("hex"),
+        },
+        witnessSha256: createHash("sha256").update(fixture).digest("hex"),
+        scope:
+          "Original unchanged public ScanFormat/color pipeline bodies with explicit scalar locale/provider fixtures captured from real owners; not complete UNO/SAL/provider ABI or private-state insertion experiments. Portable replay constructs genuine formatter/language/scanner owners and never mutates private state.",
+        cases: portableEntries.map(
+          /** Persists original native output with exact actual-owner setup arguments. @param entry - Source input row and setup. @param index - Native output offset. @returns Portable observation. */ (
+            entry,
+            index,
+          ) => [
+            entry[1],
+            entry[2],
+            entry[3],
+            actual[index],
+            entry[4],
+            entry[5],
+            entry[6],
+            entry[7],
+          ],
+        ),
+      },
+      null,
+      2,
+    ) + "\n",
+  );

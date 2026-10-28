@@ -15,7 +15,8 @@
       "ImpSvNumberformatScan::InsertSymbol"
     ],
     "preservedResponsibilities": [
-      "Original type state machine retains month/minute ambiguity rewriting, date/time combination, automatic currency, ISO fractional-second conditions, bracket traversal and original control positions including zero on early returns. InsertSymbol retains preceding EMPTY reuse, original extra-slot shift, uint16 count narrowing and reading aliased rStr after shifting real slot contents. Included in the 32972-case unchanged native scanner witness with scalar fixture dependencies."
+      "Original type state machine retains month/minute ambiguity rewriting, date/time combination, automatic currency, ISO fractional-second conditions, bracket traversal and original control positions including zero on early returns. InsertSymbol retains preceding EMPTY reuse, original extra-slot shift, uint16 count narrowing and reading aliased rStr after shifting real slot contents. Included in the 32972-case unchanged native scanner witness with scalar fixture dependencies.",
+      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Full FinalScan, prefixes, complete builtin generation and public CSV auto-input remain pending."
@@ -25,6 +26,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforscan.type.ts",
           "marker": "ScanType"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

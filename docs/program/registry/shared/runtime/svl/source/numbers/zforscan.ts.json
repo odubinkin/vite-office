@@ -19,9 +19,10 @@
       "evidence": [
         "apps/office/src/svl/source/numbers/zforscan.ts",
         "apps/office/src/svl/source/numbers/zforscan.stages.test.ts",
-        "scripts/calc-format-scan-native-probe.mjs"
+        "scripts/calc-format-scan-native-probe.mjs",
+        "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts"
       ],
-      "justification": "Original public ScanFormat now runs Symbol_Division, ScanType and FinalScan in source order. The preexisting General/Boolean/Text-only admission and its unsupported-pattern exception are removed. Full non-converting streams match the unchanged source in the74396-case witness. Empty stream type follows original ScanType DEFINED1. Remaining constructor prefixes, generator/output and CSV public recognition are separate incomplete dependencies; the failing my-MM initial-standard test is retained as a required prefix-constructor gap. AQF9AG restores the original required formatter color reference in scanner construction, actual getColorCallback borrow, GetColor and standard-palette APIs. No optional/null stand-in supplier is admitted.",
+      "justification": "Original public ScanFormat now runs Symbol_Division, ScanType and FinalScan in source order. The preexisting General/Boolean/Text-only admission and its unsupported-pattern exception are removed. Full non-converting streams match the unchanged source in the74396-case witness. Empty stream type follows original ScanType DEFINED1. Remaining constructor prefixes, generator/output and CSV public recognition are separate incomplete dependencies; the failing my-MM initial-standard test is retained as a required prefix-constructor gap. AQF9AG restores the original required formatter color reference in scanner construction, actual getColorCallback borrow, GetColor and standard-palette APIs. No optional/null stand-in supplier is admitted. B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "extractStandardGeneralName",

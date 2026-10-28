@@ -18,9 +18,10 @@
       "divergenceClass": "B",
       "evidence": [
         "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
-        "scripts/calc-format-scan-native-probe.mjs"
+        "scripts/calc-format-scan-native-probe.mjs",
+        "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts"
       ],
-      "justification": "Original common FinalScan postprocessing retains scientific/fraction validation, Thai modifier handling, source ISO date-order preservation and target reordering, conversion-time keyword quoting, exact quote/escape rebuilding and currency-tail replacement over original slot/output offsets. Quote stripping and replacement move actual OUString owners. Full no-conversion final compilation is in the74396-case native witness; cross-locale final conversion still requires broader native validation. Format constructor/prefix/output closure and CSV auto-input integration remain pending.",
+      "justification": "Original common FinalScan postprocessing retains scientific/fraction validation, Thai modifier handling, source ISO date-order preservation and target reordering, conversion-time keyword quoting, exact quote/escape rebuilding and currency-tail replacement over original slot/output offsets. Quote stripping and replacement move actual OUString owners. Full no-conversion final compilation is in the74396-case native witness; cross-locale final conversion still requires broader native validation. Format constructor/prefix/output closure and CSV auto-input integration remain pending. B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged.",
       "knownViolations": [],
       "localSymbols": [
         "RemoveQuotes",

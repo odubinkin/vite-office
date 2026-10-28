@@ -17,7 +17,8 @@
       "ImpSvNumberformatScan::SwapArrayElements"
     ],
     "preservedResponsibilities": [
-      "Original FinalScanGetCalendar merges [~calendarID] token contents in place, retains error/success cursor and remaining-count mutation, and marks consumed slots EMPTY. Original IsDateFragment and move-based SwapArrayElements retain stable token member identities and data-pointer transfer, including self swaps. The unchanged source bodies match the combined 32972-case keyword/lexical/type/neighbor/quote/calendar/insertion witness. Complete FinalScan orchestration is not claimed."
+      "Original FinalScanGetCalendar merges [~calendarID] token contents in place, retains error/success cursor and remaining-count mutation, and marks consumed slots EMPTY. Original IsDateFragment and move-based SwapArrayElements retain stable token member identities and data-pointer transfer, including self swaps. The unchanged source bodies match the combined 32972-case keyword/lexical/type/neighbor/quote/calendar/insertion witness. Complete FinalScan orchestration is not claimed.",
+      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Complete FinalScan numeric/date/time/common branches, format prefixes and public CSV auto-input remain pending."
@@ -27,6 +28,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zforscan.calendar.ts",
           "marker": "FinalScanGetCalendar"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
