@@ -19,17 +19,26 @@
         {
           "path": "apps/office/src/sax/source/tools/fastattribs.ts",
           "marker": "FastAttributeList"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/attributelist.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sax/source/tools/fastattribs.cxx",
           "marker": "FastAttributeList::add"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/sax/fastattribs.hxx",
+          "marker": "getValueByIndex"
         }
       ]
     },
     "preservedResponsibilities": [
-      "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted."
+      "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted.",
+      "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation."
     ],
     "omittedResponsibilities": [
       "Complete native ABI/interfaces and full format orchestration remain unverified; see explicit admission scope."

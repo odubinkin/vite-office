@@ -4375,3 +4375,15 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Source: `sc/source/core/tool/rangeutl.cxx`, `ScRangeStringConverter::GetRangeFromString`, and `sc/source/core/tool/address.cxx`, local Excel A1 scanner; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Suspicion: the converter tests only ScRefFlags::VALID from ScRange::Parse, unlike ParseAny's additional second-endpoint flags. As in CALC-344, `B2:C0` succeeds and keeps the first row for the second endpoint, producing B2:C2. It never reaches the two-address fallback.
 - Preservation: retain the original VALID-only test, partial mutations and ordering; literal local actual-document tests cover this downstream result. No full native compiled range converter or XLSX roundtrip claim follows. Initial new test expectations incorrectly assumed failure and row zero; the tests were corrected after checking the pinned scanner contract, without changing production parsing.
+
+### CALC-351 — XString decoding conditionally truncates invalid surrogate tails
+
+- Source: `oox/source/helper/attributelist.cxx`, `AttributeConversion::decodeXString`, and `comphelper/source/misc/string.cxx`, `sanitizeStringSurrogates`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: strings shorter than seven units or without lowercase `_x` return unchanged, including any unpaired surrogate. Any lowercase `_x` marker in a long enough value enters the decode loop, then sanitizer truncates the entire value at its first unpaired surrogate. Even an invalid hex marker can trigger this truncation. The source does not replace invalid surrogates with U+FFFD.
+- Preservation: retain both fast paths, single-pass underscore escaping and conditional first-error truncation; direct actual SAL tests assert literal outputs without recursive decoding or Unicode repair. Full XLSX import/export and independently compiled native execution remain unverified.
+
+### CALC-352 — RichString stores xml:space preservation but does not read it
+
+- Source: `sc/source/filter/inc/richstring.hxx` and `sc/source/filter/oox/richstring.cxx`, `RichString::setAttributes` and `getStringContent`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: setAttributes makes mbPreserveSpace sticky for exact `preserve`, but the pinned RichString text/convert code never uses this flag. getStringContent appends every portion unchanged.
+- Preservation: retain private sticky state and unconditional content concatenation. The typed-language monotone assignment reads existing state while remaining equivalent to writing true; no invented public getter or whitespace trimming is added. Local tests exercise actual attributes and raw content; unused downstream flag semantics and whole rich-text/filter parity remain unverified.

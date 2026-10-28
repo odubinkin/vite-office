@@ -113,7 +113,8 @@ const allowedEdges = new Map([
   // Original XNumberFormatCode.idl uses the UDK lang.Locale value;generated headers depend on UDK API.
   ["offapi", new Set(["cppu", "sal", "udkapi"])],
   // XmlFilterBase/ZipStorage use shared ZIP/SAX/OFOPXML helpers and INetURLObject::decode (Library_oox).
-  ["oox", new Set(["comphelper", "package", "sax", "tools"])],
+  // Native attributelist.cxx/Library_oox.mk consume SAL Unicode conversion and buffers.
+  ["oox", new Set(["comphelper", "package", "sal", "sax", "tools"])],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
@@ -130,6 +131,8 @@ const allowedEdges = new Map([
   [
     "sc",
     new Set([
+      // Native richstring.cxx includes oox/helper/attributelist.hxx; Library_scfilt.mk links oox.
+      "oox",
       // Original Calc attrib.cxx exposes actual UNO Any member query/extraction.
       "cppu",
       "cui",

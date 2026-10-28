@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 13
 origin:
   system: "manual"
 depends_on:
@@ -20,11 +20,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "needs_rework"
-  updated_at: "2026-10-28T08:36:19.030Z"
+  state: "blocked_external"
+  updated_at: "2026-10-28T08:48:07.135Z"
   updated_by: "CODER"
-  note: "Native range-string checkpoint:133 focused tests and87 ODS/model-import regressions pass. Whole rangeutl/documen3 scoped100 passes S115/115 B81/81 F9/9 L106/106. Source blobs and commands in evidence/native-range-string-checkpoint.json; all bounded quality gates pass. Overall task incomplete: true workbook/filter/shell/UI XLSX and DOCX acceptance remains pending and earlier coverage gaps remain open. No full-suite/publication/task-completion claim."
-  attempts: 3
+  note: "Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim."
+  attempts: 4
 commit: null
 comments:
   -
@@ -56,8 +56,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Native range-string checkpoint:133 focused tests and87 ODS/model-import regressions pass. Whole rangeutl/documen3 scoped100 passes S115/115 B81/81 F9/9 L106/106. Source blobs and commands in evidence/native-range-string-checkpoint.json; all bounded quality gates pass. Overall task incomplete: true workbook/filter/shell/UI XLSX and DOCX acceptance remains pending and earlier coverage gaps remain open. No full-suite/publication/task-completion claim."
+  -
+    type: "verify"
+    at: "2026-10-28T08:48:07.135Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim."
 doc_version: 3
-doc_updated_at: "2026-10-28T08:36:19.081Z"
+doc_updated_at: "2026-10-28T08:48:07.188Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -162,6 +168,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-28T08:48:07.135Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim.
+    Attempts: 4
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:48:06.666Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -178,6 +214,10 @@ sections:
     - Observation: Command: scoped four-file rangeutl/documen3 coverage and targeted ODS/model-import regression; exact argv and blob-bound results in evidence/native-range-string-checkpoint.json. Result: pass133 tests/4files with S115/115 B81/81 F9/9 L106/106, plus87 related regression tests/16files. CALC-349/350 preserve reversed token-count arguments and VALID-only partial range acceptance.
       Impact: Actual ScRangeStringConverter now provides quote/token/offset/address/range/list parsing and actual ScDocument projects its stored grammar for the OOXML AddressConverter dependency. No fake parser or workbook provider introduced. Full XLSX/DOCX filter/model/UI acceptance remains incomplete.
       Resolution: Keep DOING/needs_rework; retain previous address/OUString/ScFormulaCell coverage gaps. Continue actual WorkbookHelper/AddressConverter/workbook/worksheet owners. Typecheck,static,lint,format,dependencies,docs,size,source-tree,resources,provenance,registry,doctor,routing,diff passed; hook warning unchanged.
+
+    - Observation: Command: scoped XString/attribute/rich-string/FastAttributeList coverage and shared SAX/OOXML/SAL regression; exact commands and blob-bound details in evidence/native-richstring-text-checkpoint.json. Result: pass37 tests/3files with whole four-owner S127/127 B60/60 F33/33 L120/120 and125 related tests/15files. CALC-351/352 preserve conditional surrogate truncation and unused native private preserve-space state.
+      Impact: Actual AttributeConversion, AttributeList, FastAttributeList Unicode queries, comphelper sanitizer and RichString text owners now support original XLSX string-value prerequisites. Native gbuild dependencies oox->sal and sc->oox are admitted. No full XLSX parsing/filter/formatting or UI claim follows from direct text/model tests.
+      Resolution: Keep DOING/needs_rework; continue original workbook/filter/context/font/shared-string/worksheet owners and shell/UI acceptance. Earlier coverage gaps remain open. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass; existing hook warning retained.
 id_source: "generated"
 ---
 ## Summary
@@ -292,6 +332,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-28T08:48:07.135Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim.
+Attempts: 4
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:48:06.666Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -312,3 +382,7 @@ DecisionContextRef:
 - Observation: Command: scoped four-file rangeutl/documen3 coverage and targeted ODS/model-import regression; exact argv and blob-bound results in evidence/native-range-string-checkpoint.json. Result: pass133 tests/4files with S115/115 B81/81 F9/9 L106/106, plus87 related regression tests/16files. CALC-349/350 preserve reversed token-count arguments and VALID-only partial range acceptance.
   Impact: Actual ScRangeStringConverter now provides quote/token/offset/address/range/list parsing and actual ScDocument projects its stored grammar for the OOXML AddressConverter dependency. No fake parser or workbook provider introduced. Full XLSX/DOCX filter/model/UI acceptance remains incomplete.
   Resolution: Keep DOING/needs_rework; retain previous address/OUString/ScFormulaCell coverage gaps. Continue actual WorkbookHelper/AddressConverter/workbook/worksheet owners. Typecheck,static,lint,format,dependencies,docs,size,source-tree,resources,provenance,registry,doctor,routing,diff passed; hook warning unchanged.
+
+- Observation: Command: scoped XString/attribute/rich-string/FastAttributeList coverage and shared SAX/OOXML/SAL regression; exact commands and blob-bound details in evidence/native-richstring-text-checkpoint.json. Result: pass37 tests/3files with whole four-owner S127/127 B60/60 F33/33 L120/120 and125 related tests/15files. CALC-351/352 preserve conditional surrogate truncation and unused native private preserve-space state.
+  Impact: Actual AttributeConversion, AttributeList, FastAttributeList Unicode queries, comphelper sanitizer and RichString text owners now support original XLSX string-value prerequisites. Native gbuild dependencies oox->sal and sc->oox are admitted. No full XLSX parsing/filter/formatting or UI claim follows from direct text/model tests.
+  Resolution: Keep DOING/needs_rework; continue original workbook/filter/context/font/shared-string/worksheet owners and shell/UI acceptance. Earlier coverage gaps remain open. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass; existing hook warning retained.

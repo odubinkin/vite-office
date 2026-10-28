@@ -1,4 +1,6 @@
-/** @fileoverview Native FastAttributeList export-side token/value chunk owner. UTF8 byte views bind native string_view/pointers; parser token conversion and UNO interfaces are not admitted here. */
+/** @fileoverview Native FastAttributeList token/value chunk owner and consumed Unicode value query. UTF8 byte views bind native string_view/pointers; parser token conversion and UNO interfaces are not admitted here. */
+import { OUString } from "../../../sal/inc/rtl/ustring";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
 /** Original contiguous NUL-terminated attribute storage and token vector. */
 export class FastAttributeList {
   private mnChunkLength = 58;
@@ -67,6 +69,11 @@ export class FastAttributeList {
   /** Original bounded string view preserves embedded NUL bytes. @param index - Attribute index. @returns Borrowed value bytes. */
   getAsViewByIndex(index: number): Uint8Array {
     return this.getFastAttributeValue(index).subarray(0, this.AttributeValueLength(index));
+  }
+  /** Original counted UTF8-to-Unicode conversion preserves embedded NUL. @param index - Valid native attribute index. @returns Owned actual Unicode value. */
+  getValueByIndex(index: number): OUString {
+    const view = this.getAsViewByIndex(index);
+    return new OUString(view, view.length, RTL_TEXTENCODING_UTF8);
   }
   /** Native first-match lookup preserves duplicate entries. @param token - Identity. @returns First index or minus one. */
   getAttributeIndex(token: number): number {

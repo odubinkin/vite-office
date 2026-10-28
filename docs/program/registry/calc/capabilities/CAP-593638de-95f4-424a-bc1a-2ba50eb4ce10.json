@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10",
+    "capabilityId": "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10",
+    "suite": "calc",
+    "subsystem": "xlsx-text-strings",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual UTF16/UTF8 attribute owners retain native XString and surrogate sanitation behavior.",
+      "RichString keeps original decoded text portions and concatenation in actual SAL owners."
+    ],
+    "capability": "Original OOXML XString attributes and rich-string text portions",
+    "gaps": [
+      "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "comphelper/source/misc/string.cxx",
+          "marker": "sanitizeStringSurrogates"
+        },
+        {
+          "path": "oox/source/helper/attributelist.cxx",
+          "marker": "AttributeConversion::decodeXString"
+        },
+        {
+          "path": "sc/source/filter/oox/richstring.cxx",
+          "marker": "RichString::getStringContent"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/subsequent_export_test.cxx",
+          "marker": "testRichTextCellFormatXLSX"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/source/filter/inc/richstring.hxx",
+          "marker": "getStringContent"
+        },
+        {
+          "path": "include/oox/helper/attributelist.hxx",
+          "marker": "decodeXString"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/string.ts",
+          "marker": "sanitizeStringSurrogates"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/attributelist.ts",
+          "marker": "AttributeConversion"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/richstring.ts",
+          "marker": "RichString"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/inc/richstring.ts",
+          "marker": "RichString"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/helper/attributelist.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sc/source/filter/oox/richstring.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-351"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation."
+    },
+    "scopeLimitations": [
+      "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation.",
+      "Referenced original rich-text export QA is an unported downstream acceptance, not a claimed import/export fixture witness."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "xlsx-rich-string-text-values"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/filter/inc/richstring.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "xlsx-text-strings",
+    "capabilityIds": [
+      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/filter/inc/richstring.ts",
+        "apps/office/src/sc/source/filter/oox/richstring.test.ts",
+        "vendor/libreoffice-reference/sc/source/filter/inc/richstring.hxx"
+      ],
+      "justification": "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation.",
+      "knownViolations": [],
+      "localSymbols": [],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/filter/inc/richstring.hxx",
+      "upstreamSymbols": [
+        "RichString",
+        "RichStringPortion"
+      ]
+    }
+  }
+}
