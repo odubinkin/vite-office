@@ -1,7 +1,7 @@
 {
   "md4cVersion": "0.5.3",
   "sourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
-  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse.",
+  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse. Six additional B8TCAE structured cases retain all three multiline title quote syntaxes, image titles and the63/64-byte email-domain label boundary.",
   "cases": [
     {
       "id": "reference-buckets-6",
@@ -6642,6 +6642,213 @@
             ],
             [[], 0, [0], [0, 0]],
             1
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-inline-title-double-multiline",
+      "text": "[a](url \"line\nnext\")",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          2,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [4, 0, [97]],
+        [
+          3,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-inline-title-single-multiline",
+      "text": "[a](url 'line\nnext')",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          2,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [4, 0, [97]],
+        [
+          3,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-inline-title-parenthetical-multiline",
+      "text": "[a](url (line\nnext))",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          2,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [4, 0, [97]],
+        [
+          3,
+          2,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]],
+            0
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-image-title-multiline",
+      "text": "![a](url \"line\nnext\")",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          2,
+          3,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]]
+          ]
+        ],
+        [4, 0, [97]],
+        [
+          3,
+          3,
+          [
+            [[117, 114, 108], 3, [0], [0, 3]],
+            [[108, 105, 110, 101, 10, 110, 101, 120, 116], 9, [0], [0, 9]]
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-email-label-limit-63",
+      "text": "<a@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.co>",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          2,
+          2,
+          [
+            [
+              [
+                109, 97, 105, 108, 116, 111, 58, 97, 64, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 46, 99, 111
+              ],
+              75,
+              [0],
+              [0, 75]
+            ],
+            [[], 0, [0], [0, 0]],
+            1
+          ]
+        ],
+        [
+          4,
+          0,
+          [
+            97, 64, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 46, 99, 111
+          ]
+        ],
+        [
+          3,
+          2,
+          [
+            [
+              [
+                109, 97, 105, 108, 116, 111, 58, 97, 64, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+                120, 120, 120, 120, 46, 99, 111
+              ],
+              75,
+              [0],
+              [0, 75]
+            ],
+            [[], 0, [0], [0, 0]],
+            1
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-structured-email-label-limit-64",
+      "text": "<a@xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.co>",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          4,
+          0,
+          [
+            60, 97, 64, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
+            120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 46, 99, 111,
+            62
           ]
         ],
         [1, 9, []],

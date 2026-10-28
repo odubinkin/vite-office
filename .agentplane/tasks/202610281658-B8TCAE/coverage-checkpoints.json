@@ -724,5 +724,53 @@
       "external/md4c/src/md4c.render.ts"
     ],
     "scope": "14 minimized legal public-input/flag cases with complete unchanged original native callback streams and existing block-consumer replay. Read-only diagnostic counter selection is removed from final tests; no counters, runtime sources, thresholds or exclusions changed. Native sources match exact original archive members."
+  },
+  "md4cStructuredTitlesAndLabels": {
+    "testFiles": 6,
+    "tests": 1860,
+    "newNativeInputs": 6,
+    "nativeEdgeInputsTotal": 103,
+    "newStatements": 3,
+    "newBranchArms": 2,
+    "exactMapsCompared": true,
+    "runtimeCodeChanged": false,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "report": "apps/office/coverage/integration-md4c-structured-final/coverage-final.json",
+    "reportSha256": "8e628e2440f0de3711b7f6d9ee48b0bf3ac2b3165ee8a726e74af64e9f712988",
+    "metrics": {
+      "lines": {
+        "total": 1918,
+        "covered": 1907,
+        "skipped": 0,
+        "pct": 99.42
+      },
+      "statements": {
+        "total": 2183,
+        "covered": 2152,
+        "skipped": 0,
+        "pct": 98.57
+      },
+      "functions": {
+        "total": 135,
+        "covered": 135,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1923,
+        "covered": 1878,
+        "skipped": 0,
+        "pct": 97.65
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "fixtureSha256": "bc4057c03eefe20199c048b1a6e4c9e1a4e17e09224484033e5f889963de68bc",
+    "scope": "Six small structured native-backed public-input cases cover title quote forms, images, actual title-pointer cleanup and63/64-byte email label admission. All103 final edge streams rechecked against unchanged native parser. No source/counter/threshold/exclusion changes."
   }
 }

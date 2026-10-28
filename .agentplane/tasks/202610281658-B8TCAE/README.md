@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 23
+revision: 24
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:29:55.105Z"
+doc_updated_at: "2026-10-28T20:37:40.961Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -115,6 +115,10 @@ sections:
     - Observation:14 minimized md4c public input/flag boundaries have complete callback streams regenerated from unchanged md4c0.5.3 archive members. Current6 suites1848 tests pass, including existing block-consumer and complete callback replay. Temporary diagnostics only read before/after counters to select inputs and were removed from final tests.
       Impact: Exact unchanged statement/function/branch maps show11 additional statements and19 branch arms covered in9 owners, without fake contexts, private writes, source changes, exclusions or altered counters. Full source-owner100 still fails and is recorded as such.
       Resolution: Retain small native-backed malformed/end-of-input regressions and continue remaining coverage; no broad final verifier or publication success is claimed.
+
+    - Observation: Six additional md4c structured native cases exercise multiline inline/image title quote forms and email-domain label63/64 admission. Current6 suites1860 tests pass and all103 final native edge streams are independently rechecked.
+      Impact: Exact same-source maps add3 statements and2 branch arms, including the real multiline-title stack and temporary-pointer cleanup. Native callback values are verified; physical allocation/free ABI and faults remain unverified. No source, counter or coverage-policy changes.
+      Resolution: Continue remaining full100 obligations and pending individual unreachable-branch decisions; preserve the active goal and unpublished repository state.
 id_source: "generated"
 ---
 ## Summary
@@ -210,3 +214,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation:14 minimized md4c public input/flag boundaries have complete callback streams regenerated from unchanged md4c0.5.3 archive members. Current6 suites1848 tests pass, including existing block-consumer and complete callback replay. Temporary diagnostics only read before/after counters to select inputs and were removed from final tests.
   Impact: Exact unchanged statement/function/branch maps show11 additional statements and19 branch arms covered in9 owners, without fake contexts, private writes, source changes, exclusions or altered counters. Full source-owner100 still fails and is recorded as such.
   Resolution: Retain small native-backed malformed/end-of-input regressions and continue remaining coverage; no broad final verifier or publication success is claimed.
+
+- Observation: Six additional md4c structured native cases exercise multiline inline/image title quote forms and email-domain label63/64 admission. Current6 suites1860 tests pass and all103 final native edge streams are independently rechecked.
+  Impact: Exact same-source maps add3 statements and2 branch arms, including the real multiline-title stack and temporary-pointer cleanup. Native callback values are verified; physical allocation/free ABI and faults remain unverified. No source, counter or coverage-policy changes.
+  Resolution: Continue remaining full100 obligations and pending individual unreachable-branch decisions; preserve the active goal and unpublished repository state.
