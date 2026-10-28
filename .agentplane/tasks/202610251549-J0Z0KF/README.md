@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "DOING"
+status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 14
+revision: 16
 origin:
   system: "manual"
 depends_on:
@@ -21,10 +21,10 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T08:48:07.135Z"
+  updated_at: "2026-10-28T09:00:46.514Z"
   updated_by: "CODER"
-  note: "Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim."
-  attempts: 4
+  note: "Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim."
+  attempts: 5
 commit: null
 comments:
   -
@@ -72,8 +72,14 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T09:00:46.514Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim."
 doc_version: 3
-doc_updated_at: "2026-10-28T08:49:45.656Z"
+doc_updated_at: "2026-10-28T09:00:46.566Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -208,6 +214,36 @@ sections:
     - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
     - risks: none
 
+    ### 2026-10-28T09:00:46.514Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim.
+    Attempts: 5
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:00:46.054Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251549-J0Z0KF
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -228,6 +264,10 @@ sections:
     - Observation: Command: scoped XString/attribute/rich-string/FastAttributeList coverage and shared SAX/OOXML/SAL regression; exact commands and blob-bound details in evidence/native-richstring-text-checkpoint.json. Result: pass37 tests/3files with whole four-owner S127/127 B60/60 F33/33 L120/120 and125 related tests/15files. CALC-351/352 preserve conditional surrogate truncation and unused native private preserve-space state.
       Impact: Actual AttributeConversion, AttributeList, FastAttributeList Unicode queries, comphelper sanitizer and RichString text owners now support original XLSX string-value prerequisites. Native gbuild dependencies oox->sal and sc->oox are admitted. No full XLSX parsing/filter/formatting or UI claim follows from direct text/model tests.
       Resolution: Keep DOING/needs_rework; continue original workbook/filter/context/font/shared-string/worksheet owners and shell/UI acceptance. Earlier coverage gaps remain open. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass; existing hook warning retained.
+
+    - Observation: Command: seven-file typed-attribute scoped coverage, shared numeric/XML/SAX, Calc string/value/range and boundary tests; exact commands and blob-bound results in evidence/native-typed-attribute-checkpoint.json. Result:93 scoped tests pass with whole four-owner S249/249 B202/202 F56/56 L220/220;175 related shared tests,80 Calc tests and47 boundary tests pass. CALC-353/354 preserve conversion/default asymmetries and the required-handler token-call precondition.
+      Impact: Actual FastTokenHandlerBase/FastTokenHandler now feed borrowed/copy-preserving native FastAttributeList token/numeric/view methods. AttributeList optional/defaulted bool/token/numeric values call actual existing SAL/o3tl parsers, including original byte-view toDouble. No fake value-token provider, null-handler witness or full workbook/filter/UI claim.
+      Resolution: Full task incomplete; keep original remaining XLSX/DOCX acceptance and earlier coverage gaps open. Corrected source QA location and updated exact paired original SAL/o3tl edge witnesses with retained negative boundary tests. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass. CLI previous rework-limit status normalization was resumed through its emitted approved start-ready route; no external blocker or goal pause inferred.
 id_source: "generated"
 ---
 ## Summary
@@ -372,6 +412,36 @@ DecisionContextRef:
 - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
 - risks: none
 
+### 2026-10-28T09:00:46.514Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim.
+Attempts: 5
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:00:46.054Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251549-J0Z0KF
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -396,3 +466,7 @@ DecisionContextRef:
 - Observation: Command: scoped XString/attribute/rich-string/FastAttributeList coverage and shared SAX/OOXML/SAL regression; exact commands and blob-bound details in evidence/native-richstring-text-checkpoint.json. Result: pass37 tests/3files with whole four-owner S127/127 B60/60 F33/33 L120/120 and125 related tests/15files. CALC-351/352 preserve conditional surrogate truncation and unused native private preserve-space state.
   Impact: Actual AttributeConversion, AttributeList, FastAttributeList Unicode queries, comphelper sanitizer and RichString text owners now support original XLSX string-value prerequisites. Native gbuild dependencies oox->sal and sc->oox are admitted. No full XLSX parsing/filter/formatting or UI claim follows from direct text/model tests.
   Resolution: Keep DOING/needs_rework; continue original workbook/filter/context/font/shared-string/worksheet owners and shell/UI acceptance. Earlier coverage gaps remain open. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass; existing hook warning retained.
+
+- Observation: Command: seven-file typed-attribute scoped coverage, shared numeric/XML/SAX, Calc string/value/range and boundary tests; exact commands and blob-bound results in evidence/native-typed-attribute-checkpoint.json. Result:93 scoped tests pass with whole four-owner S249/249 B202/202 F56/56 L220/220;175 related shared tests,80 Calc tests and47 boundary tests pass. CALC-353/354 preserve conversion/default asymmetries and the required-handler token-call precondition.
+  Impact: Actual FastTokenHandlerBase/FastTokenHandler now feed borrowed/copy-preserving native FastAttributeList token/numeric/view methods. AttributeList optional/defaulted bool/token/numeric values call actual existing SAL/o3tl parsers, including original byte-view toDouble. No fake value-token provider, null-handler witness or full workbook/filter/UI claim.
+  Resolution: Full task incomplete; keep original remaining XLSX/DOCX acceptance and earlier coverage gaps open. Corrected source QA location and updated exact paired original SAL/o3tl edge witnesses with retained negative boundary tests. Typecheck/static/lint/format/dependencies/docs/size/source-tree/resources/provenance/registry/doctor/routing/diff pass. CLI previous rework-limit status normalization was resumed through its emitted approved start-ready route; no external blocker or goal pause inferred.

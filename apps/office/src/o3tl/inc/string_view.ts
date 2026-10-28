@@ -3,6 +3,7 @@ import { rtl_str_toInt64_WithLength } from "../../sal/inc/rtl/string.h";
 import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";
 import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
 import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";
+import { rtl_math_stringToDouble } from "../../sal/inc/rtl/math.h";
 import { isHighSurrogate, isLowSurrogate, combineSurrogates } from "../../sal/inc/rtl/character";
 
 /** Original UTF16 codepoint iterator; caller keeps every requested step inside the view. @param string - Logical UTF16 view. @param indexUtf16 - Mutable code-unit position. @param incrementCodePoints - Signed number of codepoints. @returns Codepoint after negative steps and before positive steps. */
@@ -97,9 +98,11 @@ export function trim(str: Uint16Array): Uint16Array {
   return str.subarray(first, last + 1);
 }
 
-/** Original UTF16 decimal conversion without grouping,status or parsed-end outputs. @param str - Borrowed original view. @returns Native RTL binary64 result. */
-export function toDouble(str: Uint16Array): number {
-  return rtl_math_uStringToDouble(str, str.length, 46, 0, null, null);
+/** Original byte/UTF16 decimal overloads without grouping,status or parsed-end outputs. @param str - Borrowed original view. @returns Native RTL binary64 result. */
+export function toDouble(str: Uint16Array | Uint8Array): number {
+  return str instanceof Uint8Array
+    ? rtl_math_stringToDouble(str, str.length, 46, 0, null, null)
+    : rtl_math_uStringToDouble(str, str.length, 46, 0, null, null);
 }
 
 /** Original internal UTF16 space/control classifier, independent of locale and JS Unicode whitespace. @param c - Original unsigned16 unit. @returns Original whitespace result. */

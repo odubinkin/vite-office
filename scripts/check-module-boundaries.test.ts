@@ -840,7 +840,7 @@ it("distinguishes emitted imports from erased type syntax before runtime cycle d
     for (const owner of ["udkapi", "cppu", "offapi"])
       expect(isForbiddenModuleEdge(owner, module)).toBe(true);
 });
-it("admits only source-backed VCL variation and original UTF16 decimal header bindings", /** Preserves reverse/application edge rejection and exact shared SAL/o3tl named bindings. @returns Nothing. */ () => {
+it("admits only source-backed VCL variation and original byte/UTF16 decimal header bindings", /** Preserves reverse/application edge rejection and exact shared SAL/o3tl named bindings. @returns Nothing. */ () => {
   expect(isForbiddenModuleEdge("vcl", "o3tl")).toBe(false);
   expect(isForbiddenModuleEdge("o3tl", "vcl")).toBe(true);
   expect(isForbiddenModuleEdge("vcl", "sc")).toBe(true);
@@ -849,7 +849,7 @@ it("admits only source-backed VCL variation and original UTF16 decimal header bi
     isOriginalSalO3tlImport(
       "o3tl/inc/string_view.ts",
       "sal/inc/rtl/math.h.ts",
-      'import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";',
+      'import { rtl_math_stringToDouble, rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";',
       specifier,
     ),
   ).toBe(true);
@@ -857,7 +857,23 @@ it("admits only source-backed VCL variation and original UTF16 decimal header bi
     isOriginalSalO3tlImport(
       "o3tl/inc/string_view.ts",
       "sal/inc/rtl/math.h.ts",
+      'import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";',
+      specifier,
+    ),
+  ).toBe(false);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/rtl/math.h.ts",
       'import { rtl_math_stringToDouble } from "../../sal/inc/rtl/math.h";',
+      specifier,
+    ),
+  ).toBe(false);
+  expect(
+    isOriginalSalO3tlImport(
+      "o3tl/inc/string_view.ts",
+      "sal/inc/rtl/math.h.ts",
+      'import { rtl_math_round } from "../../sal/inc/rtl/math.h";',
       specifier,
     ),
   ).toBe(false);
@@ -976,7 +992,9 @@ it("admits only pinned character-handler value imports without widening module o
   ).toBe(false);
   expect(isForbiddenModuleEdge("xmloff", "cppu")).toBe(false);
   expect(isForbiddenModuleEdge("xmloff", "vcl")).toBe(true);
-  expect(isForbiddenModuleEdge("sax", "o3tl")).toBe(true);
+  // Original fastattribs.hxx now consumes the actual o3tl byte-view numeric conversions.
+  expect(isForbiddenModuleEdge("sax", "o3tl")).toBe(false);
+  expect(isForbiddenModuleEdge("o3tl", "sax")).toBe(true);
   expect(
     getRuntimeOwnershipViolation(
       "xmloff/source/style/postuhdl.ts",

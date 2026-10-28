@@ -114,7 +114,8 @@ const allowedEdges = new Map([
   ["offapi", new Set(["cppu", "sal", "udkapi"])],
   // XmlFilterBase/ZipStorage use shared ZIP/SAX/OFOPXML helpers and INetURLObject::decode (Library_oox).
   // Native attributelist.cxx/Library_oox.mk consume SAL Unicode conversion and buffers.
-  ["oox", new Set(["comphelper", "package", "sal", "sax", "tools"])],
+  // Original attributelist.cxx includes o3tl/string_view.hxx for numeric attribute conversions.
+  ["oox", new Set(["comphelper", "o3tl", "package", "sal", "sax", "tools"])],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],
@@ -122,7 +123,8 @@ const allowedEdges = new Map([
   ["salhelper", new Set(["sal"])],
   // Original saxwriter.cxx consumes SAL/OUString and published SAX IDL (Library_sax).
   // Native sax/Library_sax.mk links cppu; FastSaxParser throws its original typed IllegalArgumentException.
-  ["sax", new Set(["comphelper", "cppu", "offapi", "sal", "udkapi"])],
+  // Original sax/fastattribs.hxx includes o3tl/string_view.hxx for zero-allocation typed value queries.
+  ["sax", new Set(["comphelper", "cppu", "o3tl", "offapi", "sal", "udkapi"])],
   // Generic URI value/factory algorithms from stoc/source/uriproc have no cross-module runtime imports in this consumed binding.
   ["stoc", new Set()],
 
@@ -597,8 +599,11 @@ const originalSalO3tlBindings = new Map([
     "o3tl/inc/string_view.ts -> sal/inc/rtl/character.ts",
     ["isHighSurrogate", "isLowSurrogate", "combineSurrogates"],
   ],
-  // Original o3tl/string_view.hxx::toDouble calls rtl_math_uStringToDouble from rtl/math.h.
-  ["o3tl/inc/string_view.ts -> sal/inc/rtl/math.h.ts", ["rtl_math_uStringToDouble"]],
+  // Original o3tl/string_view.hxx::toDouble byte/UTF16 overloads call exactly these rtl/math.h functions.
+  [
+    "o3tl/inc/string_view.ts -> sal/inc/rtl/math.h.ts",
+    ["rtl_math_uStringToDouble", "rtl_math_stringToDouble"],
+  ],
   // Original unit_conversion.hxx uses these exact SAL signed64 bounds.
   ["o3tl/inc/unit_conversion.ts -> sal/inc/types.ts", ["SAL_MIN_INT64", "SAL_MAX_INT64"]],
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],

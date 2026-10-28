@@ -4387,3 +4387,15 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Source: `sc/source/filter/inc/richstring.hxx` and `sc/source/filter/oox/richstring.cxx`, `RichString::setAttributes` and `getStringContent`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
 - Suspicion: setAttributes makes mbPreserveSpace sticky for exact `preserve`, but the pinned RichString text/convert code never uses this flag. getStringContent appends every portion unchanged.
 - Preservation: retain private sticky state and unconditional content concatenation. The typed-language monotone assignment reads existing state while remaining equivalent to writing true; no invented public getter or whitespace trimming is added. Local tests exercise actual attributes and raw content; unused downstream flag semantics and whole rich-text/filter parity remain unverified.
+
+### CALC-353 — Typed numeric attribute defaults retain asymmetric invalid/overflow results
+
+- Source: `sax/source/tools/fastattribs.cxx`, `FastAttributeList::getAsInteger/getAsDouble`, `oox/source/helper/attributelist.cxx`, numeric optional/defaulted accessors and `decodeUnsigned_impl`, plus `include/o3tl/string_view.hxx`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: present malformed or empty integer/double attributes succeed as zero, so explicit defaults are ignored. Unsigned/hyper/hex accessors instead treat empty values as absent. Decimal unsigned values above UINT32_MAX saturate after signed64 parsing, while hexadecimal values above UINT32_MAX become zero; signed64 overflow also becomes zero before unsigned saturation. Present unknown token values retain INVALID even with an explicit token default.
+- Preservation: retain presence-only success, missing output resets, empty-view distinctions, clamp versus reject and missing-only token defaults. Literal tests use actual SAL/o3tl parsers and the actual FastTokenHandler; no fake provider supplies impossible value tokens. Full native compiled typed-attribute and workbook/UI parity remain unverified.
+
+### CALC-354 — FastAttributeList permits a null handler but token queries dereference it
+
+- Source: `include/sax/fastattribs.hxx`, `sax/source/tools/fastattribs.cxx`, `FastTokenHandlerBase::getTokenFromChars/getValueTokenByIndex`, and `sax/qa/cppunit/attributes.cxx`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: null-handler construction is valid for export attributes, but a present-value token query directly dereferences the handler. Native QA explicitly comments that enabling its null-handler token calls causes a segmentation fault. A missing optional token still returns its supplied default without dereferencing the handler.
+- Preservation: retain borrowed nullable construction and direct required-handler token dispatch, without a substitute token map, zero result or null-safe parser repair. Real token tests use the actual FastTokenHandler; no native null-pointer/undefined-behavior outcome or full UNO ABI is claimed.

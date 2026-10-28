@@ -1,0 +1,103 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-e4324520-446c-4d9a-bc92-ad10ea799707",
+    "capabilityId": "CAP-e4324520-446c-4d9a-bc92-ad10ea799707",
+    "suite": "calc",
+    "subsystem": "xlsx-attribute-values",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual FastAttributeList/FastTokenHandler owners preserve original optional/defaulted and direct lookup behavior.",
+      "Actual SAL/o3tl numeric parsers retain original signed/unsigned/hex/bool conversion asymmetries."
+    ],
+    "capability": "Original OOXML typed attribute values and native token-handler routing",
+    "gaps": [
+      "J0Z0KF connects original FastTokenHandlerBase direct lookup, borrowed handler/copy/clone propagation and actual FastTokenHandler to native FastAttributeList token/value/numeric/view queries. Optional/defaulted AttributeList token, integer/double/unsigned/hyper/hex/bool results delegate to these owners and existing real SAL/o3tl parsers. Original byte-view toDouble is added beside UTF16 without host parseFloat/Number replacement. Native missing output zeroing, untouched missing view, first duplicates, present unknown token retaining invalid despite default, present invalid/empty signed numeric zero, unsigned/hyper/hex empty absence, signed64-then-unsigned saturation, unsigned-hex signed cast and boolean exact/token/numeric fallbacks are retained. No fake token handler, injected result map, temporary parser facade, null-handler token-call witness or native null-pointer/ABI claim is introduced. Original FastTokenHandlerBase WeakImplHelper/XFastTokenHandler service registration, complete SAX/attribute APIs, independently compiled original numeric/attribute differential and complete workbook/filter/model/UI acceptance remain unported or unverified."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/o3tl/string_view.hxx",
+          "marker": "toDouble"
+        },
+        {
+          "path": "sax/source/tools/fastattribs.cxx",
+          "marker": "FastTokenHandlerBase::getTokenFromChars"
+        },
+        {
+          "path": "oox/source/core/fasttokenhandler.cxx",
+          "marker": "FastTokenHandler::getTokenDirect"
+        },
+        {
+          "path": "oox/source/helper/attributelist.cxx",
+          "marker": "AttributeList::getToken"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sax/qa/cppunit/attributes.cxx",
+          "marker": "FastAttributeList"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/helper/attributelist.hxx",
+          "marker": "getInteger"
+        },
+        {
+          "path": "include/sax/fastattribs.hxx",
+          "marker": "FastTokenHandlerBase"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/o3tl/inc/string_view.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sax/source/tools/fastattribs.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fasttokenhandler.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/attributelist.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/helper/attributelist-values.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-353"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF connects original FastTokenHandlerBase direct lookup, borrowed handler/copy/clone propagation and actual FastTokenHandler to native FastAttributeList token/value/numeric/view queries. Optional/defaulted AttributeList token, integer/double/unsigned/hyper/hex/bool results delegate to these owners and existing real SAL/o3tl parsers. Original byte-view toDouble is added beside UTF16 without host parseFloat/Number replacement. Native missing output zeroing, untouched missing view, first duplicates, present unknown token retaining invalid despite default, present invalid/empty signed numeric zero, unsigned/hyper/hex empty absence, signed64-then-unsigned saturation, unsigned-hex signed cast and boolean exact/token/numeric fallbacks are retained. No fake token handler, injected result map, temporary parser facade, null-handler token-call witness or native null-pointer/ABI claim is introduced. Original FastTokenHandlerBase WeakImplHelper/XFastTokenHandler service registration, complete SAX/attribute APIs, independently compiled original numeric/attribute differential and complete workbook/filter/model/UI acceptance remain unported or unverified."
+    },
+    "scopeLimitations": [
+      "J0Z0KF connects original FastTokenHandlerBase direct lookup, borrowed handler/copy/clone propagation and actual FastTokenHandler to native FastAttributeList token/value/numeric/view queries. Optional/defaulted AttributeList token, integer/double/unsigned/hyper/hex/bool results delegate to these owners and existing real SAL/o3tl parsers. Original byte-view toDouble is added beside UTF16 without host parseFloat/Number replacement. Native missing output zeroing, untouched missing view, first duplicates, present unknown token retaining invalid despite default, present invalid/empty signed numeric zero, unsigned/hyper/hex empty absence, signed64-then-unsigned saturation, unsigned-hex signed cast and boolean exact/token/numeric fallbacks are retained. No fake token handler, injected result map, temporary parser facade, null-handler token-call witness or native null-pointer/ABI claim is introduced. Original FastTokenHandlerBase WeakImplHelper/XFastTokenHandler service registration, complete SAX/attribute APIs, independently compiled original numeric/attribute differential and complete workbook/filter/model/UI acceptance remain unported or unverified.",
+      "Referenced native constructor/default and future workbook-context acceptance remain source evidence, not full local XLSX/compiled-native QA coverage."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "xlsx-typed-attribute-values"
+  }
+}

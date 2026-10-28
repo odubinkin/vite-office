@@ -9,7 +9,8 @@
     "subsystem": "ooxml-package",
     "capabilityIds": [
       "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708",
-      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10"
+      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10",
+      "CAP-e4324520-446c-4d9a-bc92-ad10ea799707"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -21,19 +22,27 @@
         "apps/office/src/sax/source/tools/fastattribs.test.ts",
         "vendor/libreoffice-reference/sax/source/tools/fastattribs.cxx",
         "apps/office/src/oox/source/helper/attributelist.test.ts",
-        "vendor/libreoffice-reference/include/sax/fastattribs.hxx#getValueByIndex"
+        "vendor/libreoffice-reference/include/sax/fastattribs.hxx#getValueByIndex",
+        "apps/office/src/oox/source/helper/attributelist-values.test.ts",
+        "vendor/libreoffice-reference/sax/source/tools/fastattribs.cxx"
       ],
-      "justification": "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted. J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation.",
+      "justification": "Native export-side FastAttributeList contiguous58byte initial chunk, original doubling/exact growth, NUL termination, offset count including initial zero, first-match lookup, duplicate tokens and independent copy/clone. UTF16 strings use existing UTF8 binding. Parser token conversion, unknown attributes, UNO and allocator ABI remain unported; only the null-handler export construction is admitted. J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation. J0Z0KF connects original FastTokenHandlerBase direct lookup, borrowed handler/copy/clone propagation and actual FastTokenHandler to native FastAttributeList token/value/numeric/view queries. Optional/defaulted AttributeList token, integer/double/unsigned/hyper/hex/bool results delegate to these owners and existing real SAL/o3tl parsers. Original byte-view toDouble is added beside UTF16 without host parseFloat/Number replacement. Native missing output zeroing, untouched missing view, first duplicates, present unknown token retaining invalid despite default, present invalid/empty signed numeric zero, unsigned/hyper/hex empty absence, signed64-then-unsigned saturation, unsigned-hex signed cast and boolean exact/token/numeric fallbacks are retained. No fake token handler, injected result map, temporary parser facade, null-handler token-call witness or native null-pointer/ABI claim is introduced. Original FastTokenHandlerBase WeakImplHelper/XFastTokenHandler service registration, complete SAX/attribute APIs, independently compiled original numeric/attribute differential and complete workbook/filter/model/UI acceptance remain unported or unverified.",
       "knownViolations": [],
       "localSymbols": [
-        "FastAttributeList"
+        "FastAttributeList",
+        "FastTokenHandlerBase"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sax/source/tools/fastattribs.cxx",
       "upstreamSymbols": [
         "FastAttributeList::add",
         "FastAttributeList::clear",
-        "FastAttributeList::createClone"
+        "FastAttributeList::createClone",
+        "FastTokenHandlerBase::getTokenFromChars",
+        "FastAttributeList::getAsInteger",
+        "FastAttributeList::getAsDouble",
+        "FastAttributeList::getAsView",
+        "FastAttributeList::getOptionalValueToken"
       ]
     }
   }
