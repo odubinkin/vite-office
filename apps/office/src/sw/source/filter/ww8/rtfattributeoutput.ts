@@ -3,7 +3,7 @@ import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import type { wwFont } from "./wrtw8sty";
 import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import type { RtfExport } from "./rtfexport";
-import { OutString } from "../../../../filter/source/msfilter/rtfutil";
+import { OutHex, OutString } from "../../../../filter/source/msfilter/rtfutil";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
 import { RTL_TEXTENCODING_DONTKNOW } from "../../../../sal/inc/rtl/textenc";
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
@@ -90,6 +90,59 @@ export class RtfAttributeOutput {
     );
   }
 
+  private m_nListId = 0;
+  /** Original concrete numbering instance. @param id - One-based abstract ID. @param rule - Unused in RTF. @returns Nothing. */
+  NumberingDefinition(id: number, rule: SwNumRule): void {
+    void rule;
+    this.exporter.Strm().WriteOString(`{\\listoverride\\listid${id}\\listoverridecount0\\ls${id}}`);
+  }
+  /** Original abstract list opening. @param id - One-based ID. @returns Nothing. */
+  StartAbstractNumbering(id: number): void {
+    this.m_nListId = id;
+    this.exporter.Strm().WriteOString(`{\\list\\listtemplateid${id}`);
+  }
+  /** Original abstract list terminator. @returns Nothing. */
+  EndAbstractNumbering(): void {
+    this.exporter.Strm().WriteOString(`\\listid${this.m_nListId}}\n`);
+  }
+  /** Original level serializer, with native scalar widths supplied by the common Word writer. The current core has no picture brush owner. @param level - Level. @param start - Start value. @param type - Numbering type. @param adjust - Alignment. @param positions - One-based placeholder positions. @param follow - Follow policy. @param font - Optional bullet font. @param items - Optional character items. @param indent - Text indent. @param firstLine - First line offset. @param listTab - Ignored by RTF. @param text - Native placeholder string. @param legal - Legal numbering flag. @returns Nothing. */
+  NumberingLevel(
+    level: number,
+    start: number,
+    type: SvxNumType,
+    adjust: SvxAdjust,
+    positions: Uint8Array,
+    follow: number,
+    font: wwFont | undefined,
+    items: SfxItemSet | undefined,
+    indent: number,
+    firstLine: number,
+    listTab: number,
+    text: string,
+    legal: boolean,
+  ): void {
+    void listTab;
+    let output = "\n";
+    if (level > 8) output += "\\*\\soutlvl";
+    output += `{\\listlevel\\levelnfc${toRtfNfc(type, items)}\\leveljc${adjust === SvxAdjust.Center ? 1 : adjust === SvxAdjust.Right ? 2 : 0}\\levelstartat${start}`;
+    if (legal) output += "\\levellegal";
+    output += `\\levelfollow${follow}{\\leveltext `;
+    if (type === SvxNumType.SVX_NUM_CHAR_SPECIAL || type === SvxNumType.SVX_NUM_BITMAP)
+      output += `\\'01\\u${(text.charCodeAt(0) << 16) >> 16} ?`;
+    else
+      output += `\\'${OutHex(text.length, 2)}${OutString(text, this.exporter.GetDefaultEncoding(), false)}`;
+    output += ";}{\\levelnumbers";
+    for (let index = 0; index <= level && positions[index]; ++index)
+      output += `\\'${OutHex(positions[index] as number, 2)}`;
+    output += ";}";
+    if (items !== undefined) {
+      if (font !== undefined) output += `\\f${this.fontIndex(font)}`;
+      output += this.WriteNativeCharacter(items, GetCharacterPropertiesMode.StyleDefinition);
+    }
+    output += `\\fi${firstLine}\\li${indent}}`;
+    if (level > 8) output += "}";
+    this.exporter.Strm().WriteOString(output);
+  }
   /** Original non-associated font output changes the document encoding; associated output only emits its slot. @param font - Native font item. @param assoc - Original association flag. @returns RTF controls. */
   public OutputCharFontAssoc(font: SvxFontItem, assoc: boolean): string {
     const result = `\\${assoc ? "af" : "f"}${this.fontIndex(font)}`;
@@ -418,26 +471,30 @@ export class RtfAttributeOutput {
     mode = GetCharacterPropertiesMode.StyleDefinition,
   ): string {
     const local = new SfxItemSet(items.GetPool(), WRITER_CHARACTER_WHICH_RANGES);
-    for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
-      for (let which: number = first; which <= last; ++which) {
-        const item = items.GetItemIfSet(which, true);
-        if (item !== undefined) local.Put(item);
-      }
-    const projected = projectWriterCharacterAttributes(local);
-    const general = { ...projected, underline: false };
-    Reflect.deleteProperty(general, "underlineStyle");
-    let result = this.WriteCharacter(general, false);
-    const underline = local.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
-    if (underline instanceof SvxUnderlineItem)
-      result += this.WriteUnderlineValue(
-        underline.GetLineStyle(),
-        projected.underlineWordMode ?? false,
-        projected.underlineColor,
-        true,
-      );
-    const kern = local.GetItemIfSet(RES_CHRATR_AUTOKERN, false) as SvxAutoKernItem | undefined;
-    if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
-    return result + this.associated.MoveProperties(local, mode);
+    try {
+      for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+        for (let which: number = first; which <= last; ++which) {
+          const item = items.GetItemIfSet(which, true);
+          if (item !== undefined) local.Put(item);
+        }
+      const projected = projectWriterCharacterAttributes(local);
+      const general = { ...projected, underline: false };
+      Reflect.deleteProperty(general, "underlineStyle");
+      let result = this.WriteCharacter(general, false);
+      const underline = local.GetItemIfSet(RES_CHRATR_UNDERLINE, false);
+      if (underline instanceof SvxUnderlineItem)
+        result += this.WriteUnderlineValue(
+          underline.GetLineStyle(),
+          projected.underlineWordMode ?? false,
+          projected.underlineColor,
+          true,
+        );
+      const kern = local.GetItemIfSet(RES_CHRATR_AUTOKERN, false) as SvxAutoKernItem | undefined;
+      if (kern !== undefined) result += `\\kerning${kern.GetValue() ? 1 : 0}`;
+      return result + this.associated.MoveProperties(local, mode);
+    } finally {
+      local.Dispose();
+    }
   }
 
   /** Source non-associated underline selection: four basic styles defer their keyword to associated groups but retain the shared color. @param underlineStyle - Actual line style. @param wordMode - Ancillary native word mode. @param color - Existing color-table value binding. @param deferBasic - Whether associated groups emit basic keywords. @returns Native underline/color controls. */
@@ -547,3 +604,76 @@ function rtfBorderStyle(
       return "brdrdashdd";
   }
 }
+
+/** Maps native number families and borrowed CJK language to the source RTF NFC. @param type - Number family. @param items - Optional native character items. @returns RTF NFC. */
+function toRtfNfc(type: SvxNumType, items: SfxItemSet | undefined): number {
+  switch (type) {
+    case SvxNumType.SVX_NUM_ROMAN_UPPER:
+      return 1;
+    case SvxNumType.SVX_NUM_ROMAN_LOWER:
+      return 2;
+    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER:
+    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N:
+      return 3;
+    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER:
+    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N:
+      return 4;
+    case SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC:
+      return 14;
+    case SvxNumType.SVX_NUM_CIRCLE_NUMBER:
+      return 18;
+    case SvxNumType.SVX_NUM_NUMBER_LOWER_ZH:
+      return (items?.Get(RES_CHRATR_CJK_LANGUAGE) as SvxLanguageItem | undefined)?.GetLanguage() ===
+        LANGUAGE_CHINESE_SIMPLIFIED
+        ? 39
+        : 35;
+    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH:
+      return 38;
+    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW:
+      return 34;
+    case SvxNumType.SVX_NUM_TIAN_GAN_ZH:
+      return 30;
+    case SvxNumType.SVX_NUM_DI_ZI_ZH:
+      return 31;
+    case SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA:
+      return 16;
+    case SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA:
+      return 20;
+    case SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA:
+      return 12;
+    case SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA:
+      return 21;
+    case SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA:
+      return 13;
+    case SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO:
+    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_SYLLABLE_KO:
+      return 24;
+    case SvxNumType.SVX_NUM_HANGUL_JAMO_KO:
+    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_JAMO_KO:
+      return 25;
+    case SvxNumType.SVX_NUM_NUMBER_HANGUL_KO:
+      return 42;
+    case NumberingType.NUMBER_DIGITAL_KO as SvxNumType:
+      return 41;
+    case NumberingType.NUMBER_DIGITAL2_KO as SvxNumType:
+      return 44;
+    case NumberingType.NUMBER_LEGAL_KO as SvxNumType:
+      return 43;
+    case SvxNumType.SVX_NUM_CHAR_SPECIAL:
+    case SvxNumType.SVX_NUM_BITMAP:
+      return 23;
+    case SvxNumType.SVX_NUM_NUMBER_NONE:
+      return 255;
+    case SvxNumType.SVX_NUM_ARABIC_ZERO:
+      return 22;
+    default:
+      return 0;
+  }
+}
+
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
+import type { SwNumRule } from "../../core/doc/number";
+import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
+import { RES_CHRATR_CJK_LANGUAGE } from "../../../inc/hintids";
+import { LANGUAGE_CHINESE_SIMPLIFIED } from "../../../../i18nlangtag/inc/lang";

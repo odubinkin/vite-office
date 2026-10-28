@@ -20,14 +20,18 @@ const tableNames = [
   "aSymbolNames",
 ];
 const tables = tableNames
-  .map((name) => {
-    const expression = new RegExp(
-      `(?:const sal_Unicode|ExtraTable const|constexpr OUString) ${name}\\[[^\\]]*\\]\\s*=`,
-    );
-    const marker = expression.exec(source)?.[0];
-    if (!marker) throw Error(`Missing pinned table ${name}`);
-    return definition(source, marker) + ";";
-  })
+  .map(
+    /** Extracts an unchanged pinned table. @param name - Source table. @returns C++ definition. */ (
+      name,
+    ) => {
+      const expression = new RegExp(
+        `(?:const sal_Unicode|ExtraTable const|constexpr OUString) ${name}\\[[^\\]]*\\]\\s*=`,
+      );
+      const marker = expression.exec(source)?.[0];
+      if (!marker) throw Error(`Missing pinned table ${name}`);
+      return definition(source, marker) + ";";
+    },
+  )
   .join("\n");
 const functions = [
   "StarSymbolToMSMultiFontImpl::StarSymbolToMSMultiFontImpl()",
@@ -35,7 +39,11 @@ const functions = [
   "OUString StarSymbolToMSMultiFontImpl::ConvertChar(",
   "StarSymbolToMSMultiFont *CreateStarSymbolToMSMultiFont()",
 ]
-  .map((marker) => definition(source, marker))
+  .map(
+    /** Extracts an unchanged pinned function. @param marker - Source signature. @returns C++ definition. */ (
+      marker,
+    ) => definition(source, marker),
+  )
   .join("\n");
 const driver = String.raw`
 #include <cstdint>

@@ -5,6 +5,7 @@ import type { SwPaM } from "../../core/crsr/pam";
 import { wwFont, wwFontHelper } from "./wrtw8sty";
 import {
   EnsureUsedNumberingTable,
+  GetNumberingId,
   GetNumberingLevelBulletStringAndFont,
   SubstituteBullet,
 } from "./wrtw8num";
@@ -32,6 +33,10 @@ export class MSWordExportBase {
   /** Original lazy numbering-table owner. @returns Nothing. */
   EnsureUsedNumberingTable(): void {
     EnsureUsedNumberingTable(this);
+  }
+  /** Original pointer-identity lookup in the lazy used table; missing rules retain SAL_MAX_UINT16. @param rule - Actual document rule. @returns Zero-based ID or 65535. */
+  GetNumberingId(rule: SwNumRule): number {
+    return GetNumberingId(this, rule);
   }
   /** Original prepared bullet string and owned font. @param format - Native bullet/bitmap level. @returns Original pair. */
   GetNumberingLevelBulletStringAndFont(format: ConstSwNumFormat): readonly [string, wwFont] {

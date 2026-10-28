@@ -1,5 +1,5 @@
 /** @fileoverview Implements the Writer SwDoc aggregate from pinned LibreOffice `sw/inc/doc.hxx` and `sw/source/core/doc/docnew.cxx`. */
-import { ForEachCharacterFontItem } from "./doc.items";
+import * as DocItems from "./doc.items";
 import type { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import {
   MakePageDesc,
@@ -395,7 +395,19 @@ export class SwDoc {
     ignoreAutoStyles: boolean,
     callback: (font: SvxFontItem) => boolean,
   ): void {
-    ForEachCharacterFontItem(this, which, ignoreAutoStyles, callback);
+    DocItems.ForEachCharacterFontItem(this, which, ignoreAutoStyles, callback);
+  }
+  /** Original character-color visitor. @param callback - Borrowed item visitor. @returns Nothing. */
+  public ForEachCharacterColorItem(
+    callback: Parameters<typeof DocItems.ForEachCharacterColorItem>[1],
+  ): void {
+    DocItems.ForEachCharacterColorItem(this, callback);
+  }
+  /** Original underline visitor. @param callback - Borrowed item visitor. @returns Nothing. */
+  public ForEachCharacterUnderlineItem(
+    callback: Parameters<typeof DocItems.ForEachCharacterUnderlineItem>[1],
+  ): void {
+    DocItems.ForEachCharacterUnderlineItem(this, callback);
   }
   /** Native node/style traversal for authored tab-stop items. @param callback - Original early-stop visitor. @returns Nothing. */
   public ForEachParaAtrTabStopItem(callback: (item: SvxTabStopItem) => boolean): void {
@@ -530,7 +542,6 @@ export class SwDoc {
   public GetTextFormatColl(id: WriterParagraphStyle): SwTextFormatColl {
     return this.stylePoolManager.GetTextFormatColl(id);
   }
-
   /** Creates and registers a named text collection like native docfmt.cxx. @param name - Display name. @param parent - Parent collection. @param id - Stable graph identity, defaulting to the name. @returns New document-owned collection. */
   public MakeTextFormatColl(
     name: string,
@@ -548,7 +559,6 @@ export class SwDoc {
     this.NotifyModelChange({ kind: "format-inheritance-changed", formatId: name });
     return collection;
   }
-
   /** Changes represented paragraph-format attributes with original ChgFormat history ownership. @param collection - Actual named format. @param set - Incoming direct items. @returns Nothing. */
   public ChgFormat(collection: SwTextFormatColl, set: SfxItemSet): void {
     ChgFormat(this, collection, set);

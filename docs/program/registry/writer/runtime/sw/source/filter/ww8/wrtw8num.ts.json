@@ -20,19 +20,29 @@
         "apps/office/src/sw/source/filter/ww8/rtf-font-table.test.ts",
         "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx"
       ],
-      "justification": "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged.",
+      "justification": "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged. S3HW1E RTF numbering-table integration: actual GetNumberingId pointer identity and the InitFontTable used-rule snapshot replace the separate name-keyed RTF list map. Original abstract/instance loops emit nine Word levels or one continuous level, including the actual outline owner. Source level preparation preserves ListFormat UTF16 placeholders, separator suppression, unsupported level10 handling, unsigned-byte positions and signed16 geometry; RtfAttributeOutput writes original NFC/CJK-language, alignment, start, legal, follow, font/character properties and destinations. The browser command-rule assembler now supplies level-specific ListFormat instead of creating deprecated patternless numeric levels. Original character color/underline visitors run before header serialization to admit numbering-style colors; native accumulated automatic-style vector order and shared-handle release are preserved. New owned item sets are disposed. WRITER198 records retained adjacent separators. Common numbering preparation is currently bound to the actual RTF virtual output; full common AttributeOutputBase/DOCX numbering, graphic brush ownership, paragraph numbering/restart temporary-rule lifetimes, character-style table/cache and complete OutColorTable responsibilities remain unverified. This source-bound focused integration does not certify full upstream parity or filter completeness.",
       "knownViolations": [],
       "localSymbols": [
         "EnsureUsedNumberingTable",
         "GetNumberingLevelBulletStringAndFont",
-        "SubstituteBullet"
+        "SubstituteBullet",
+        "AbstractNumberingDefinitions",
+        "NumberingDefinitions",
+        "NumberingLevel",
+        "GetWordFirstLineOffset",
+        "GetNumberingId"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/filter/ww8/wrtw8num.cxx",
       "upstreamSymbols": [
         "MSWordExportBase::EnsureUsedNumberingTable",
         "MSWordExportBase::GetNumberingLevelBulletStringAndFont",
-        "MSWordExportBase::SubstituteBullet"
+        "MSWordExportBase::SubstituteBullet",
+        "MSWordExportBase::AbstractNumberingDefinitions",
+        "MSWordExportBase::NumberingDefinitions",
+        "MSWordExportBase::NumberingLevel",
+        "GetWordFirstLineOffset",
+        "MSWordExportBase::GetNumberingId"
       ]
     }
   }

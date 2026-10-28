@@ -11,10 +11,10 @@ import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
 import { SvxBoxItem, SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
-import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { HoriOrientation } from "../../../../offapi/com/sun/star/text/HoriOrientation";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
 import {
+  COL_AUTO,
   COL_BLACK,
   COL_BLUE,
   COL_BROWN,
@@ -44,7 +44,7 @@ import type { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwTextFormatColl } from "../../core/doc/fmtcol";
-import { getWriterNumFormatKind } from "../../core/doc/number";
+import { type SwNumRule, getWriterNumFormatKind } from "../../core/doc/number";
 import { SwTableNode } from "../../core/docnode/node";
 import type { SwPageDesc } from "../../core/layout/pagedesc";
 import { equalWriterHyperlinks, type WriterHyperlink } from "../../core/txtnode/fmtatr2";
@@ -89,18 +89,6 @@ export class RtfExport extends MSWordExportBase {
     this,
   );
   private readonly colors = new Map<string, number>();
-  private readonly lists = new Map<
-    string,
-    {
-      id: number;
-      levels: readonly Readonly<{
-        kind: "bullet" | "numbered";
-        start: number;
-        bullet: number;
-        numberingType: SvxNumType;
-      }>[];
-    }
-  >();
   private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
 
   private readonly m_eDefaultEncoding = rtl_getTextEncodingFromWindowsCharset(
@@ -133,6 +121,29 @@ export class RtfExport extends MSWordExportBase {
     }
   }
 
+  /** Actual RTF implementation of the native attribute-output virtual. @returns Output owner. */
+  AttrOutput(): RtfAttributeOutput {
+    return this.attributeOutput;
+  }
+  /** Original reverse used-rule registration pass; GetNumberingId does not insert or prune rules. @returns Nothing. */
+  BuildNumbering(): void {
+    const outline = this.m_rDoc.GetOutlineNumRule();
+    if (IsExportNumRule(outline)) this.GetNumberingId(outline);
+    const rules = this.m_rDoc.GetNumRuleTable();
+    for (let index = rules.length; index;) {
+      const rule = rules[--index] as SwNumRule;
+      if (this.m_rDoc.IsUsed(rule) && IsExportNumRule(rule)) this.GetNumberingId(rule);
+    }
+  }
+  /** Writes the native abstract and concrete tables. Picture brushes are outside the admitted core model. @returns Nothing. */
+  WriteNumbering(): void {
+    if (this.m_pUsedNumTable === undefined) return;
+    this.Strm().WriteOString("{\\*\\listtable");
+    AbstractNumberingDefinitions(this);
+    this.Strm().WriteOString("}{\\listoverridetable");
+    NumberingDefinitions(this);
+    this.Strm().WriteChar("}");
+  }
   /** Original export stream getter. @returns Actual memory stream. */
   public Strm(): SvStream {
     return this.stream;
@@ -159,7 +170,6 @@ export class RtfExport extends MSWordExportBase {
     this.stream = new SvStream(new Uint8Array(), this.GetDefaultEncoding());
     this.colors.clear();
     for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
-    this.lists.clear();
     this.styles.clear();
     const styleTable = new MSWordStyles(document);
     for (const [index, style] of styleTable.GetStyles().entries())
@@ -175,25 +185,6 @@ export class RtfExport extends MSWordExportBase {
       }
       const paragraph = node as SwTextNode;
       this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
-      const rule = paragraph.GetNumRule();
-      if (rule !== undefined && !this.lists.has(rule.GetName())) {
-        const levels = Array.from(
-          { length: 10 },
-          /** Selects the native numbering kind at one level. @param _item - Array slot. @param level - List level. @returns Kind. */ (
-            _item,
-            level,
-          ) => {
-            const format = rule.Get(level);
-            return {
-              kind: getWriterNumFormatKind(format),
-              start: format.GetStart(),
-              bullet: format.GetBulletChar(),
-              numberingType: format.GetNumberingType(),
-            };
-          },
-        );
-        this.lists.set(rule.GetName(), { id: this.lists.size + 1, levels });
-      }
     }
     for (const { style } of this.styles.values()) {
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
@@ -211,6 +202,23 @@ export class RtfExport extends MSWordExportBase {
           if (box !== undefined) this.IndexBoxColors(box);
         }
     }
+    // Source OutColorTable visits native character items before attribute callbacks.
+    document.ForEachCharacterColorItem(
+      /** Registers native character colors before writing the header. @param item - Borrowed item. @returns Continue. */ (
+        item,
+      ) => {
+        if (!item.GetValue().equals(COL_AUTO)) this.IndexColor(rtfColorKey(item.GetValue()));
+        return true;
+      },
+    );
+    document.ForEachCharacterUnderlineItem(
+      /** Registers native underline colors before attribute output. @param item - Borrowed item. @returns Continue. */ (
+        item,
+      ) => {
+        if (!item.GetColor().equals(COL_AUTO)) this.IndexColor(rtfColorKey(item.GetColor()));
+        return true;
+      },
+    );
     const defaultFont = document
       .GetAttrPool()
       .GetUserOrPoolDefaultItem(RES_CHRATR_FONT) as SvxFontItem;
@@ -240,22 +248,10 @@ export class RtfExport extends MSWordExportBase {
       output += `{\\s${index}${base === 0x0fff ? "" : `\\sbasedon${base}`}\\snext${next}${paragraph}${character} ${OutString(styleTable.GetWWName(style), this.GetCurrentEncoding())};}`;
     }
     output += "}";
-    if (this.lists.size > 0) {
-      output += "{\\*\\listtable";
-      for (const list of this.lists.values()) {
-        output += `{\\list\\listtemplateid${list.id}\\listsimple0`;
-        for (const level of list.levels)
-          output +=
-            level.kind === "bullet"
-              ? `{\\listlevel\\levelnfc23\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'01\\u${(String.fromCodePoint(level.bullet).charCodeAt(0) << 16) >> 16} ?;}{\\levelnumbers;}}`
-              : `{\\listlevel\\levelnfc${toRtfNfc(level.numberingType)}\\levelstartat${level.start}\\levelfollow0{\\leveltext \\'02\\'00.;}{\\levelnumbers\\'01;}}`;
-        output += `{\\listname ;}\\listid${list.id}}`;
-      }
-      output += "}{\\*\\listoverridetable";
-      for (const list of this.lists.values())
-        output += `{\\listoverride\\listid${list.id}\\listoverridecount0\\ls${list.id}}`;
-      output += "}";
-    }
+    this.Strm().WriteOString(output);
+    output = "";
+    this.BuildNumbering();
+    this.WriteNumbering();
     const defaultTabs = document
       .GetTextFormatColl("default")
       .GetAttrSet()
@@ -565,8 +561,8 @@ export class RtfExport extends MSWordExportBase {
     if (style !== undefined) output += `\\s${style.index}`;
     const rule = paragraph.GetNumRule();
     if (rule !== undefined && paragraph.IsCountedInList()) {
-      const list = this.lists.get(rule.GetName());
-      if (list !== undefined) {
+      const id = this.GetNumberingId(rule);
+      if (id !== 0xffff) {
         const level = paragraph.GetAttrListLevel();
         const format = rule.Get(level);
         const label =
@@ -574,7 +570,7 @@ export class RtfExport extends MSWordExportBase {
             ? String.fromCodePoint(format.GetBulletChar())
             : paragraph.GetNumString();
         output += `{\\listtext\\pard\\plain ${OutString(label, this.GetDefaultEncoding())}\\tab}`;
-        output += `\\ilvl${Math.min(level, 8)}\\ls${list.id}`;
+        output += `\\ilvl${Math.min(level, 8)}\\ls${id + 1}`;
       }
     }
     output += " ";
@@ -768,68 +764,23 @@ function rtfColorKey(color: Readonly<Color>): string {
     .join("")}`;
 }
 
-/** Maps native numbering types to RTF levelnfc, retaining the source Arabic fallback.  @param type - Type. @returns The number result. */
-function toRtfNfc(type: SvxNumType): number {
-  switch (type) {
-    case SvxNumType.SVX_NUM_ROMAN_UPPER:
-      return 1;
-    case SvxNumType.SVX_NUM_ROMAN_LOWER:
-      return 2;
-    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER:
-    case SvxNumType.SVX_NUM_CHARS_UPPER_LETTER_N:
-      return 3;
-    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER:
-    case SvxNumType.SVX_NUM_CHARS_LOWER_LETTER_N:
-      return 4;
-    case SvxNumType.SVX_NUM_FULL_WIDTH_ARABIC:
-      return 14;
-    case SvxNumType.SVX_NUM_CIRCLE_NUMBER:
-      return 18;
-    case SvxNumType.SVX_NUM_NUMBER_LOWER_ZH:
-      return 35;
-    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH:
-      return 38;
-    case SvxNumType.SVX_NUM_NUMBER_UPPER_ZH_TW:
-      return 34;
-    case SvxNumType.SVX_NUM_TIAN_GAN_ZH:
-      return 30;
-    case SvxNumType.SVX_NUM_DI_ZI_ZH:
-      return 31;
-    case SvxNumType.SVX_NUM_NUMBER_TRADITIONAL_JA:
-      return 16;
-    case SvxNumType.SVX_NUM_AIU_FULLWIDTH_JA:
-      return 20;
-    case SvxNumType.SVX_NUM_AIU_HALFWIDTH_JA:
-      return 12;
-    case SvxNumType.SVX_NUM_IROHA_FULLWIDTH_JA:
-      return 21;
-    case SvxNumType.SVX_NUM_IROHA_HALFWIDTH_JA:
-      return 13;
-    case SvxNumType.SVX_NUM_HANGUL_SYLLABLE_KO:
-    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_SYLLABLE_KO:
-      return 24;
-    case SvxNumType.SVX_NUM_HANGUL_JAMO_KO:
-    case SvxNumType.SVX_NUM_HANGUL_CIRCLED_JAMO_KO:
-      return 25;
-    case SvxNumType.SVX_NUM_NUMBER_HANGUL_KO:
-      return 42;
-    case NumberingType.NUMBER_DIGITAL_KO as SvxNumType:
-      return 41;
-    case NumberingType.NUMBER_DIGITAL2_KO as SvxNumType:
-      return 44;
-    case NumberingType.NUMBER_LEGAL_KO as SvxNumType:
-      return 43;
-    case SvxNumType.SVX_NUM_CHAR_SPECIAL:
-    case SvxNumType.SVX_NUM_BITMAP:
-      return 23;
-    case SvxNumType.SVX_NUM_NUMBER_NONE:
-      return 255;
-    case SvxNumType.SVX_NUM_ARABIC_ZERO:
-      return 22;
-    default:
-      return 0;
-  }
-}
-
 import { MSWordExportBase } from "./wrtww8";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
+
+/** Native exportability scan stops at the last explicitly owned level. @param rule - Original rule. @returns Original gate. */
+function IsExportNumRule(rule: SwNumRule): boolean {
+  let end = 10;
+  while (end > 0 && rule.GetNumFormat(end - 1) === undefined) --end;
+  for (let level = 0; level < end; ++level) {
+    const format = rule.Get(level);
+    if (
+      format.GetNumberingType() !== SvxNumType.SVX_NUM_NUMBER_NONE ||
+      format.GetPrefix() !== "" ||
+      (format.GetSuffix() !== "" && format.GetSuffix() !== ".")
+    )
+      return true;
+  }
+  return false;
+}
+
+import { AbstractNumberingDefinitions, NumberingDefinitions } from "./wrtw8num";

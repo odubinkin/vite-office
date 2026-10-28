@@ -141,6 +141,7 @@ export function createWriterNumRule(
             ...rule.Get(level).GetPositionProperties(),
             bulletFont: format === "bullet" ? "OpenSymbol" : "",
             suffix: format === "numbered" ? "." : "",
+            ...(format === "numbered" ? { listFormat: `%${level + 1}%.` } : {}),
           },
         ),
       );

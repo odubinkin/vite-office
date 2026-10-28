@@ -1916,3 +1916,17 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `unotools/source/misc/fontcvt.cxx`, `StarSymbolToMSMultiFontImpl` inserts conservative and aggressive reverse tables into `std::multimap` in its stated preference order, but `ConvertChar` calls `find`, not `lower_bound`. Selection among equivalent keys is a standard-library binding detail rather than an explicit first-preference choice.
 - Observation: the unchanged locally compiled constructor/ConvertChar/factory selects Webdings for U+0020 rather than the first inserted Symbol entry. A simple first-entry JavaScript map port therefore disagreed at the first mapped unit. The browser binding now retains duplicate nodes and the measured red/black insertion/direct-lookup behavior; all 65536 UTF16 inputs match the unchanged native witness. This certifies the fixed input tables on that native runtime, not cross-standard-library identity or the SAL ABI.
 - Preservation: do not silently replace find with a first-preference lookup. RTF still keeps its original m_bSubstituteBullets=false branch, so its bullet strings and fonts bypass this conversion exactly as upstream does.
+
+
+### WRITER198 — Word numbering separator suppression can retain adjacent separators
+
+- Source: pinned `sw/source/filter/ww8/wrtw8num.cxx`, `MSWordExportBase::NumberingLevel`, `oEraseFrom` handling for unsupported forward references and `%10%`.
+- Observation: at level 2, `%3%/%9%/suffix` keeps the slash already appended before `%9%` and appends `/suffix` from the remembered suffix start. The resulting level string is U+0002 followed by `//suffix`. `%3%/%10%/end` similarly retains two slashes. This follows the source loop directly; it is not a compiled full-Writer or desktop defect confirmation.
+- Preservation: keep the original append/erase state and suffix restoration rather than normalizing separators. Focused actual-owner RTF tests assert both strings, the source nine-byte positions and their unsigned-byte overflow.
+
+
+### WRITER199 — Character-item visitors revisit accumulated automatic styles
+
+- Source: pinned `sw/source/core/doc/doc.cxx`, template `ForEachCharacterItem`; `svl/source/items/stylepool.cxx`, `StylePool::getAllStyles`; `sw/source/core/doc/swstylemanager.cxx`, family-to-pool routing.
+- Observation: the template allocates its vector outside the four-family loop, getAllStyles appends, and each iteration visits the entire accumulated vector. With one used character and one used non-character style, callbacks visit the character four times and the other style six times because RUBY/PARA/NOTXT share the paragraph pool. RTF color insertion deduplicates colors, but a different callback can observe the repeated visits. This is source-bound evidence, not a complete native runtime certification.
+- Preservation: retain append-only collection, repeated callback order and immediate false-stop behavior. Browser shared handles release every appended reference on completion, false return and callback exceptions; focused actual-owner tests check the order and reference counts.

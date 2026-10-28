@@ -126,3 +126,11 @@ it("preserves independent ListFormat state in owned clones and Worker transfer",
       decodeWriterDocument({ ...snapshot, swModelVersion: 15 }),
   ).toThrow("unsupported");
 });
+
+it("assembles command numbering with level-specific native ListFormat for Word export", /** Prevents the browser rule factory from creating deprecated patternless formats. @returns Nothing. */ () => {
+  const rule = createWriterNumRule("command", "numbered");
+  for (let level = 0; level < 10; ++level) {
+    expect(rule.Get(level).HasListFormat()).toBe(true);
+    expect(rule.Get(level).GetListFormat()).toBe(`%${level + 1}%.`);
+  }
+});

@@ -19,15 +19,19 @@
         "apps/office/src/sw/source/core/doc/native-font-item-enumeration.test.ts",
         "vendor/libreoffice-reference/sw/source/core/doc/doc.cxx#SwDoc::ForEachCharacterFontItem"
       ],
-      "justification": "Original named-character, paragraph, fixed-count content-node and used automatic-style traversal, inherited optional item lookup, false-stop contract and shared output-vector cleanup. Delegates to actual core format/node/style-access owners. Whole shared-owner graph closure, source font-table initialization and full Writer parity remain incomplete.",
+      "justification": "Original named-character, paragraph, fixed-count content-node and used automatic-style traversal, inherited optional item lookup, false-stop contract and shared output-vector cleanup. Delegates to actual core format/node/style-access owners. Whole shared-owner graph closure, source font-table initialization and full Writer parity remain incomplete. S3HW1E RTF numbering-table integration: actual GetNumberingId pointer identity and the InitFontTable used-rule snapshot replace the separate name-keyed RTF list map. Original abstract/instance loops emit nine Word levels or one continuous level, including the actual outline owner. Source level preparation preserves ListFormat UTF16 placeholders, separator suppression, unsupported level10 handling, unsigned-byte positions and signed16 geometry; RtfAttributeOutput writes original NFC/CJK-language, alignment, start, legal, follow, font/character properties and destinations. The browser command-rule assembler now supplies level-specific ListFormat instead of creating deprecated patternless numeric levels. Original character color/underline visitors run before header serialization to admit numbering-style colors; native accumulated automatic-style vector order and shared-handle release are preserved. New owned item sets are disposed. WRITER198 records retained adjacent separators. Common numbering preparation is currently bound to the actual RTF virtual output; full common AttributeOutputBase/DOCX numbering, graphic brush ownership, paragraph numbering/restart temporary-rule lifetimes, character-style table/cache and complete OutColorTable responsibilities remain unverified. This source-bound focused integration does not certify full upstream parity or filter completeness.",
       "knownViolations": [],
       "localSymbols": [
-        "ForEachCharacterFontItem"
+        "ForEachCharacterFontItem",
+        "ForEachCharacterColorItem",
+        "ForEachCharacterUnderlineItem"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "sw/source/core/doc/doc.cxx",
       "upstreamSymbols": [
-        "SwDoc::ForEachCharacterFontItem"
+        "SwDoc::ForEachCharacterFontItem",
+        "SwDoc::ForEachCharacterColorItem",
+        "SwDoc::ForEachCharacterUnderlineItem"
       ]
     }
   }

@@ -152,7 +152,9 @@ it.each([
       rule.Set(0, format);
       document.GetDocumentListsManager().InvalidateAllLists();
       const bytes = RtfExport.WriteDocument(document);
-      expect(new TextDecoder().decode(bytes)).toContain(`\\levelnfc${nfc}\\levelstartat1`);
+      expect(new TextDecoder().decode(bytes)).toContain(
+        `\\levelnfc${nfc}\\leveljc0\\levelstartat1`,
+      );
       const imported = new RtfDocumentImpl().ResolveBytes(bytes);
       try {
         const canonical = new Map<SvxNumType, SvxNumType>([

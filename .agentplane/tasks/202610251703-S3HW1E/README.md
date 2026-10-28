@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 105
+revision: 107
 origin:
   system: "manual"
 depends_on: []
@@ -17,11 +17,11 @@ plan_approval:
   updated_by: "ORCHESTRATOR"
   note: null
 verification:
-  state: "pending"
-  updated_at: null
-  updated_by: null
-  note: null
-  attempts: 0
+  state: "needs_rework"
+  updated_at: "2026-10-28T07:38:46.404Z"
+  updated_by: "CODER"
+  note: "RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings."
+  attempts: 1
 commit: null
 comments:
   -
@@ -35,8 +35,14 @@ events:
     from: "TODO"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T07:38:46.404Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings."
 doc_version: 3
-doc_updated_at: "2026-10-28T07:19:19.894Z"
+doc_updated_at: "2026-10-28T07:38:46.460Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -49,6 +55,36 @@ sections:
   Verify Steps: "1. Run focused Writer TXT, RTF, Markdown filter and document I/O tests; all pass. 2. Run TypeScript typecheck and ESLint/Prettier for changed source; all pass. 3. Run source-provenance, Writer registry and module-boundary checks; all pass. 4. Review the capability matrix against current SwDoc/SwTextNode/SwTable and pinned upstream sources, recording supported, format-inapplicable and unsupported cases with evidence. 5. Confirm git status has no unintended changes."
   Verification: |-
     <!-- BEGIN VERIFICATION RESULTS -->
+    ### 2026-10-28T07:38:46.404Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings.
+    Attempts: 1
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -392,6 +428,15 @@ sections:
     Result: pass. Evidence: graph1683 sources/8722 imports/210 edges; provenance1684 runtime modules/1472 mapped; both registry semanticViolationCount0. The new filter-to-unotools edge is backed by the exact util.cxx fontcvt/fontdefs includes and Library_msfilter.mk utl link; positive and reverse/application-negative boundary tests4/4 pass. No boundary/provenance verifier was weakened. TypeScript initially inferred the test helper's Which default as literal7; its native numeric parameter is now explicit. Provenance caught the removed IndexCharacterFonts evidence marker; it now points to the actual InitFontTable invocation. Full suite was not run; related modules only.
 
     Full goal remains active. The next RTF frontier is native list-table/level serialization consuming the prepared bullet string/font, used rule IDs and original bounds, followed by the remaining recorded filter/HTML/default/history/lifetime obligations. Current RTF list serialization still has an older body-rule map and simplified glyph-only records; do not confuse font-table completeness with complete native numbering export or whole-slice parity. Source status fields remain unverified and existing intentional browser open/save/recovery/autosave deviations remain unchanged.
+
+    RTF numbering-table checkpoint after InitFontTable (2026-10-28, CODER)
+    - Implemented: original pointer-identity GetNumberingId in wrtw8num with common base delegation; actual RTF AttrOutput owner; BuildNumbering, abstract/instance definitions and original nine/one traversal use the same used-rule snapshot as font initialization. Removed the name-keyed RTF table and ten fixed-format levels. Original ListFormat preparation, forward/level10 suppression, unsigned-byte positions, signed16 geometry, follow/start/legal/alignment/NFC/CJK-language and actual bullet/font/character output are preserved. Command numbering assembly now creates valid level-specific ListFormat. Character color/underline visitors admit level-style colors before header output and preserve native accumulated-vector traversal and shared-owner cleanup. Temporary character sets are disposed. WRITER198/199 and the capability slice document record the measured scope and residual dependencies. Native probe JSDoc omissions from the preceding checkpoint were also repaired without semantic changes.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md src/sw/source/core/doc/number src/sw/source/core/doc/DocumentListsManager src/sw/source/core/doc/list src/sw/source/core/doc/native-font-item-enumeration.test.ts --reporter=json --outputFile=../../output/playwright/rtf-numbering/writer-tests.json
+    - Result: pass; 534/534 tests. Additional focused numbering export/import set: 72/72 (subset of that run). Browser I/O, dialog and composition: 33/33. Evidence: output/playwright/rtf-numbering/{writer-tests,numbering-tests,ui-tests}.json.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+    - Result: pass. Dependencies1683runtime/8736imports/210edges; provenance1684modules/1472mapped; Writer/shared semanticViolationCount0. Evidence: output/playwright/rtf-numbering/{writer-parity,shared-parity,file-size,jsdoc}.txt and command output. No full suite: user-authorized focused-module cadence.
+    - Observation: initial source assertion exposed patternless numeric command formats, fixed at their actual assembly owner. Old adjacent NFC/start string expectations were updated to include the native leveljc control. A test initially applied legacy setters while remaining in alignment mode; fixture corrected. Provenance first placed GetNumberingId at wrtww8.cxx; implementation moved to its true wrtw8num source owner with a thin base delegate. Near-limit doc imports now share a source-unit namespace; file remains below1000 lines. Final focused checks pass.
+    - Scope: this is an implemented and verified table-writing checkpoint, not whole-format certification. Whole task remains DOING. Remaining original paragraph dispatch/temporary restart rules, character-style table/cache, complete OutColorTable, importer list pattern/font/geometry paths, graphics outside the admitted core, common virtual numbering/DOCX closure and other previously recorded goal gaps require further work. Source semantic statuses remain unverified. No permission pause, merge, push or external write.
 id_source: "generated"
 ---
 ## Summary
@@ -415,6 +460,36 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 ## Verification
 
 <!-- BEGIN VERIFICATION RESULTS -->
+### 2026-10-28T07:38:46.404Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings.
+Attempts: 1
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -762,3 +837,12 @@ Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Pr
 Result: pass. Evidence: graph1683 sources/8722 imports/210 edges; provenance1684 runtime modules/1472 mapped; both registry semanticViolationCount0. The new filter-to-unotools edge is backed by the exact util.cxx fontcvt/fontdefs includes and Library_msfilter.mk utl link; positive and reverse/application-negative boundary tests4/4 pass. No boundary/provenance verifier was weakened. TypeScript initially inferred the test helper's Which default as literal7; its native numeric parameter is now explicit. Provenance caught the removed IndexCharacterFonts evidence marker; it now points to the actual InitFontTable invocation. Full suite was not run; related modules only.
 
 Full goal remains active. The next RTF frontier is native list-table/level serialization consuming the prepared bullet string/font, used rule IDs and original bounds, followed by the remaining recorded filter/HTML/default/history/lifetime obligations. Current RTF list serialization still has an older body-rule map and simplified glyph-only records; do not confuse font-table completeness with complete native numbering export or whole-slice parity. Source status fields remain unverified and existing intentional browser open/save/recovery/autosave deviations remain unchanged.
+
+RTF numbering-table checkpoint after InitFontTable (2026-10-28, CODER)
+- Implemented: original pointer-identity GetNumberingId in wrtw8num with common base delegation; actual RTF AttrOutput owner; BuildNumbering, abstract/instance definitions and original nine/one traversal use the same used-rule snapshot as font initialization. Removed the name-keyed RTF table and ten fixed-format levels. Original ListFormat preparation, forward/level10 suppression, unsigned-byte positions, signed16 geometry, follow/start/legal/alignment/NFC/CJK-language and actual bullet/font/character output are preserved. Command numbering assembly now creates valid level-specific ListFormat. Character color/underline visitors admit level-style colors before header output and preserve native accumulated-vector traversal and shared-owner cleanup. Temporary character sets are disposed. WRITER198/199 and the capability slice document record the measured scope and residual dependencies. Native probe JSDoc omissions from the preceding checkpoint were also repaired without semantic changes.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md src/sw/source/core/doc/number src/sw/source/core/doc/DocumentListsManager src/sw/source/core/doc/list src/sw/source/core/doc/native-font-item-enumeration.test.ts --reporter=json --outputFile=../../output/playwright/rtf-numbering/writer-tests.json
+- Result: pass; 534/534 tests. Additional focused numbering export/import set: 72/72 (subset of that run). Browser I/O, dialog and composition: 33/33. Evidence: output/playwright/rtf-numbering/{writer-tests,numbering-tests,ui-tests}.json.
+- Command: npm run typecheck --workspace @vite-office/office; scoped ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+- Result: pass. Dependencies1683runtime/8736imports/210edges; provenance1684modules/1472mapped; Writer/shared semanticViolationCount0. Evidence: output/playwright/rtf-numbering/{writer-parity,shared-parity,file-size,jsdoc}.txt and command output. No full suite: user-authorized focused-module cadence.
+- Observation: initial source assertion exposed patternless numeric command formats, fixed at their actual assembly owner. Old adjacent NFC/start string expectations were updated to include the native leveljc control. A test initially applied legacy setters while remaining in alignment mode; fixture corrected. Provenance first placed GetNumberingId at wrtww8.cxx; implementation moved to its true wrtw8num source owner with a thin base delegate. Near-limit doc imports now share a source-unit namespace; file remains below1000 lines. Final focused checks pass.
+- Scope: this is an implemented and verified table-writing checkpoint, not whole-format certification. Whole task remains DOING. Remaining original paragraph dispatch/temporary restart rules, character-style table/cache, complete OutColorTable, importer list pattern/font/geometry paths, graphics outside the admitted core, common virtual numbering/DOCX closure and other previously recorded goal gaps require further work. Source semantic statuses remain unverified. No permission pause, merge, push or external write.

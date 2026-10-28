@@ -405,7 +405,9 @@ it.each([
     let imported;
     try {
       const bytes = RtfExport.WriteDocument(source);
-      expect(new TextDecoder().decode(bytes)).toContain(`\\levelnfc${nfc}\\levelstartat7`);
+      expect(new TextDecoder().decode(bytes)).toContain(
+        `\\levelnfc${nfc}\\leveljc0\\levelstartat7`,
+      );
       imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
       expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetStart()).toBe(7);
       expect(imported.paragraphs[0]?.GetNumRule()?.Get(0).GetNumberingType()).toBe(numberingType);
