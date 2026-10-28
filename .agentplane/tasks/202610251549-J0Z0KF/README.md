@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 38
+revision: 41
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T12:18:07.184Z"
+  updated_at: "2026-10-28T12:34:00.743Z"
   updated_by: "CODER"
-  note: "Bounded native sequence-stream prerequisite passes: 160 targeted tests; all seven executable new IO owners scope100 S208/208 B71/71 F42/42 L187/187; typecheck/static/build, scoped lint/format, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity and doctor/routing pass. Evidence: evidence/native-sequence-stream-checkpoint.json with32 source blobs and final logs. Corrected prior selection Any fixture lifetime. Full model/filter/package/SAX/DOCX/XLSX/UI scope remains incomplete; preserve prior model coverage gap. Continue approved direct implementation."
-  attempts: 12
+  note: "Bounded native binary stream transport checkpoint:79 targeted tests pass;9 focused tests pass but unchanged whole3-owner coverage100 fails S176/176 B82/83 F32/32 L163/163 at original SAL_MAX_INT64 copy-loop residual branch. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/invariants/parity/resources/doctor/routing pass. See evidence/native-binary-stream-checkpoint.json. Full model/filter/package/SAX and DOCX/XLSX worker/UI remain incomplete; continue approved local work."
+  attempts: 13
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -200,8 +203,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T12:34:00.743Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native binary stream transport checkpoint:79 targeted tests pass;9 focused tests pass but unchanged whole3-owner coverage100 fails S176/176 B82/83 F32/32 L163/163 at original SAL_MAX_INT64 copy-loop residual branch. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/invariants/parity/resources/doctor/routing pass. See evidence/native-binary-stream-checkpoint.json. Full model/filter/package/SAX and DOCX/XLSX worker/UI remain incomplete; continue approved local work."
+  -
+    type: "status"
+    at: "2026-10-28T12:34:05.663Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T12:18:12.852Z"
+doc_updated_at: "2026-10-28T12:34:05.663Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -576,6 +592,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T12:34:00.743Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native binary stream transport checkpoint:79 targeted tests pass;9 focused tests pass but unchanged whole3-owner coverage100 fails S176/176 B82/83 F32/32 L163/163 at original SAL_MAX_INT64 copy-loop residual branch. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/invariants/parity/resources/doctor/routing pass. See evidence/native-binary-stream-checkpoint.json. Full model/filter/package/SAX and DOCX/XLSX worker/UI remain incomplete; continue approved local work.
+    Attempts: 13
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:34:00.190Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -628,6 +674,10 @@ sections:
     - Observation: Native sequence stream prerequisite implemented: original memory/input/output owners, eight mapped production files, actual UNO exceptions and Sequence COW. New IO scope100 S208/208 B71/71 F42/42 L187/187; 160 targeted tests pass. Earlier selection fixture double Any destruction corrected to clear plus exactly one destructor, superseding its prior lifetime claim.
       Impact: Internal byte streams are available for both OOXML formats; package/SAX transport, full model/controller/factory admission and DOCX/XLSX UI round trips remain incomplete. Prior whole-model coverage gap remains open.
       Resolution: Command/result/evidence/scope: native-sequence-stream-checkpoint.json records final source blobs, raw coverage, checks and source limitations. CALC-359 / WRITER195 preserve native seek reopening. Initial lint and dependency failures corrected; actual upstream comphelper to cppuhelper edge has reverse/browser isolation coverage. Complete remaining native owners without fabricated services or providers.
+
+    - Observation: Native raw OOXML binary seek/input/output transport implemented with actual UNO Reference/Sequence owners. 79 targeted tests pass; whole3-owner unchanged100 gate FAILS S176/176 B82/83 F32/32 L163/163 at original near-SAL_MAX_INT64 copy branch. Source EOF/exception Context destruction order fixed and covered by reentrant actual component release.
+      Impact: Original false-autoclose input closure and already-EOF stale copy buffer retained as CALC-360/361 and WRITER197/198. ODF worker paths use saxes and selected worker regressions pass. Package/SAX/model/filter/OOXML worker/UI acceptance remains incomplete.
+      Resolution: Command/result/evidence/scope recorded in evidence/native-binary-stream-checkpoint.json with final raw profile/logs/34 source blobs. Typecheck/static/build/scoped lint/format/docs/size/dependencies/tree/provenance/registry/resources/doctor/routing pass after recorded corrections. Prior shared seek issue identifier corrected from duplicate WRITER195 to WRITER196, superseding only references; historical evidence preserved. Continue native package/SAX/model owners without fabricated services.
 id_source: "generated"
 ---
 ## Summary
@@ -1012,6 +1062,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T12:34:00.743Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native binary stream transport checkpoint:79 targeted tests pass;9 focused tests pass but unchanged whole3-owner coverage100 fails S176/176 B82/83 F32/32 L163/163 at original SAL_MAX_INT64 copy-loop residual branch. Typecheck/static/build/lint/format/dependencies/docs/size/tree/provenance/registry/invariants/parity/resources/doctor/routing pass. See evidence/native-binary-stream-checkpoint.json. Full model/filter/package/SAX and DOCX/XLSX worker/UI remain incomplete; continue approved local work.
+Attempts: 13
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:34:00.190Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1068,3 +1148,7 @@ DecisionContextRef:
 - Observation: Native sequence stream prerequisite implemented: original memory/input/output owners, eight mapped production files, actual UNO exceptions and Sequence COW. New IO scope100 S208/208 B71/71 F42/42 L187/187; 160 targeted tests pass. Earlier selection fixture double Any destruction corrected to clear plus exactly one destructor, superseding its prior lifetime claim.
   Impact: Internal byte streams are available for both OOXML formats; package/SAX transport, full model/controller/factory admission and DOCX/XLSX UI round trips remain incomplete. Prior whole-model coverage gap remains open.
   Resolution: Command/result/evidence/scope: native-sequence-stream-checkpoint.json records final source blobs, raw coverage, checks and source limitations. CALC-359 / WRITER195 preserve native seek reopening. Initial lint and dependency failures corrected; actual upstream comphelper to cppuhelper edge has reverse/browser isolation coverage. Complete remaining native owners without fabricated services or providers.
+
+- Observation: Native raw OOXML binary seek/input/output transport implemented with actual UNO Reference/Sequence owners. 79 targeted tests pass; whole3-owner unchanged100 gate FAILS S176/176 B82/83 F32/32 L163/163 at original near-SAL_MAX_INT64 copy branch. Source EOF/exception Context destruction order fixed and covered by reentrant actual component release.
+  Impact: Original false-autoclose input closure and already-EOF stale copy buffer retained as CALC-360/361 and WRITER197/198. ODF worker paths use saxes and selected worker regressions pass. Package/SAX/model/filter/OOXML worker/UI acceptance remains incomplete.
+  Resolution: Command/result/evidence/scope recorded in evidence/native-binary-stream-checkpoint.json with final raw profile/logs/34 source blobs. Typecheck/static/build/scoped lint/format/docs/size/dependencies/tree/provenance/registry/resources/doctor/routing pass after recorded corrections. Prior shared seek issue identifier corrected from duplicate WRITER195 to WRITER196, superseding only references; historical evidence preserved. Continue native package/SAX/model owners without fabricated services.

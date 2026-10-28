@@ -1,0 +1,297 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native OOXML raw stream transport checkpoint; full task incomplete; unchanged full new-owner coverage gate fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/oox/source/helper/binary-streams.test.ts": "d39840d29f06db191ece031fafefb08c0108c92f",
+    "apps/office/src/oox/source/helper/binaryinputstream.ts": "267653c60ab0bee1dc72eacb5eb8fa2d4d806b82",
+    "apps/office/src/oox/source/helper/binaryoutputstream.ts": "985999b234f55e09e43002113e477118499f4d98",
+    "apps/office/src/oox/source/helper/binarystreambase.ts": "3ad61ec2c2e700d128387114ffcf2ddf75ad1632",
+    "docs/program/calc-upstream-suspected-issues.md": "7176cff2c0672801eeae79f6d12aeae777ee5bfb",
+    "docs/program/native-binary-streams.md": "01c895970a487e1609a44ddbecc9ba9bba2319f2",
+    "docs/program/native-sequence-streams.md": "33e9a503f140b8bc529b09ee52bed85071ca0618",
+    "docs/program/registry/calc/capabilities/CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7.json": "aec2f65f94ed023379b74aacf04602049c5944c6",
+    "docs/program/registry/calc/capabilities/CAP-9bd3d4ef-51fa-409b-bcbf-22f30c6a1fed.json": "adb8ec2173e2c8fd546f191083d289ccf6fdee70",
+    "docs/program/registry/shared/provenance/comphelper/inc/bytereader.ts.json": "e0e8f60e294819b02acb1cba21178871f5e04c8a",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/seqstream.ts.json": "53dea13ab9fbe085ee7bfc8140865e3800eb3277",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json": "8e1ef6db3051abe310710ce7b79955fb5696e7c0",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/IOException.ts.json": "60157d321c73b157d9fd850b0a126f181f01e1d2",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/NotConnectedException.ts.json": "957fd713654e4c17c84e58cdc6d6132f3e8bda25",
+    "docs/program/registry/shared/provenance/oox/source/helper/binaryinputstream.ts.json": "01bfecc1cfbf0aa63733b7f8c594a4b6f2524287",
+    "docs/program/registry/shared/provenance/oox/source/helper/binaryoutputstream.ts.json": "c89d3c6c80fbe386e6e6289a346bb438987c2c4a",
+    "docs/program/registry/shared/provenance/oox/source/helper/binarystreambase.ts.json": "7fd2712dee632c53acc4f973bf4f024e35fe54dd",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XInputStream.ts.json": "d4869c4d619b8b8f005b593b1c2f4bf621d4ba71",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XOutputStream.ts.json": "d15474d135b5468f51f86e7855ca1bc2bc2adb00",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XSeekable.ts.json": "df399690f8335ff8ffbbe7f1ba735fa98cab292a",
+    "docs/program/registry/shared/runtime/comphelper/inc/bytereader.ts.json": "3c89ca6972cb8948199605c7460de365a96df0b0",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/seqstream.ts.json": "d976e959a01d3d3031f483b7ebcd84e18b5705f7",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json": "fcb4c339de61c7040cd223cdbc46cc88dcb21f49",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/IOException.ts.json": "42652760594c0ce64ef5eb40c1411330d2e542cd",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/NotConnectedException.ts.json": "f06c1e0573f977f383ad639f8335fd5dee1784d5",
+    "docs/program/registry/shared/runtime/oox/source/helper/binaryinputstream.ts.json": "9e0d1d4b7585e293dce719d556f3178f7c0107e7",
+    "docs/program/registry/shared/runtime/oox/source/helper/binaryoutputstream.ts.json": "29bc4447dbabb0787bcf564cb395df0bc2ab9bc9",
+    "docs/program/registry/shared/runtime/oox/source/helper/binarystreambase.ts.json": "3500c0570ccfe36ce64bc3be921823ae80b292e4",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XInputStream.ts.json": "3990ca05abbf1475cd75b370bdd89f400c097fd7",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XOutputStream.ts.json": "bdc0306a226854890bf92a56e9fa2f59066c97a0",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XSeekable.ts.json": "1ce43b2d4cd4a48fb145565806f32d7c511a5831",
+    "docs/program/writer-upstream-suspected-issues.md": "d10e9ddae91aa190843a36f4b18211a3ff6942b9",
+    "scripts/check-module-boundaries.mjs": "7874e9595fdd38da9e0c4c21f2f288723e3b80d0",
+    "scripts/native-binary-stream-boundary.test.ts": "89ae5f12c690c6e140ae012fc9b6cfbde2376c1a"
+  },
+  "scope": "Original shared binary seek/position/EOF/alignment and actual UNO input/output Reference/Sequence transport, native copy loop, 32KiB atom-aware buffers and exception lifetime ordering. Actual components and emitted SDK types supply data and queries. No fake service, factory or model is manufactured.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-0.log",
+      "sha256": "dbb35e5b707346c46d85030a27116f28d8276c29e92cccf2f532cf71c54579e8"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 1,
+      "log": "apps/office/coverage/binary-stream-check-1.log",
+      "sha256": "61ec7ce2191f4d0a58fb3c3ac1f776ac811b0e12cf0a6f92f5b192ad6d7c9275"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-2.log",
+      "sha256": "1dddc7420e8b7e1c7fd863ff22af8b9dd304b8e28abab90238369326f11ed92b"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-3.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-4.log",
+      "sha256": "1405b33b667c28b4539ebdeac1f8e15b2203cd3b7b106f24d791170ea7a8ac43"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-5.log",
+      "sha256": "491b3fb27a59714eaae3d6911b615b25d2f077e3d7b801b92972b19dea7d6bfb"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-6.log",
+      "sha256": "a3140cdf15ed62d280760ce97206faf38e20c84dcd613227dcc1c26504a5feb4"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-7.log",
+      "sha256": "1209dfd5784d65152bf97b989c63b93bc633f4e89b668ead6e6a46f5db0b08b2"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-8.log",
+      "sha256": "7a0b532dea7ee8de7af1b2d8ebe1d9dfa08a7da3d6f51af56dbccbcc043d1b57"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-9.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-10.log",
+      "sha256": "e2112e5f038b55802dca0f6d378ce5ece0e0d0ea83d8fed23054c47e8f6b2d69"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-11.log",
+      "sha256": "2a75c0f0d84b8193241be01b748f95f6a7da576c602e933da3330c231fc8337c"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-12.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-check-13.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx eslint apps/office/src/oox/source/helper/binarystreambase.ts apps/office/src/oox/source/helper/binaryinputstream.ts apps/office/src/oox/source/helper/binaryoutputstream.ts apps/office/src/oox/source/helper/binary-streams.test.ts scripts/check-module-boundaries.mjs scripts/native-binary-stream-boundary.test.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-finalcheck4-0.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/oox/source/helper/binarystreambase.ts apps/office/src/oox/source/helper/binaryinputstream.ts apps/office/src/oox/source/helper/binaryoutputstream.ts apps/office/src/oox/source/helper/binary-streams.test.ts scripts/check-module-boundaries.mjs scripts/native-binary-stream-boundary.test.ts docs/program/native-binary-streams.md docs/program/native-sequence-streams.md docs/program/calc-upstream-suspected-issues.md docs/program/writer-upstream-suspected-issues.md",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-finalcheck4-1.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-finalcheck4-2.log",
+      "sha256": "a9d5855954259f495dc81971aa2ed447a6df1b717d31400a277eb8c0a5c7cd6a"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-finalcheck4-3.log",
+      "sha256": "1dddc7420e8b7e1c7fd863ff22af8b9dd304b8e28abab90238369326f11ed92b"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-finalcheck4-4.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-registryfinal4-0.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-registryfinal4-1.log",
+      "sha256": "1405b33b667c28b4539ebdeac1f8e15b2203cd3b7b106f24d791170ea7a8ac43"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-registryfinal4-2.log",
+      "sha256": "be91c4fc28fafaa3dcb96334bb442c400df16fe8cac830d1efa3e89f4397603f"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-typecheckfinal4.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-staticfinal4.log",
+      "sha256": "26d1a1a8c4c49a6abe80402241dd5dee495dc1938abb5b13d784be2cedc19740"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 1,
+      "log": "apps/office/coverage/binary-stream-typecheck.log",
+      "sha256": "7704c452a67419bc1b5303887b34cc62ac69de47c5e295fd2c84efb039a8f519"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 1,
+      "log": "apps/office/coverage/binary-stream-static.log",
+      "sha256": "4d770b1fd61b14fb181a376d56c78d3b9837b5d90dc9587a443489a2a0ebf031"
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/oox/source/helper/binary-streams.test.ts --coverage.include=src/oox/source/helper/binarystreambase.ts --coverage.include=src/oox/source/helper/binaryinputstream.ts --coverage.include=src/oox/source/helper/binaryoutputstream.ts --coverage.reportsDirectory=coverage/native-binary-streams-final4",
+      "exitCode": 1,
+      "log": "apps/office/coverage/binary-stream-testsfinal4.log",
+      "sha256": "4211925e8b7d7ada3c2454cd880df4e40625e6958b643e781c0288303ae61504"
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/oox/source/helper/binary-streams.test.ts --coverage.include=src/oox/source/helper/binarystreambase.ts --coverage.include=src/oox/source/helper/binaryinputstream.ts --coverage.include=src/oox/source/helper/binaryoutputstream.ts --coverage.reportsDirectory=coverage/native-binary-streams-final3",
+      "exitCode": 1,
+      "log": "apps/office/coverage/binary-stream-testsfinal3.log",
+      "sha256": "a2d228f381fce1849463dd2e6197b49434801a7a6674d0eeb03e4ef1eaeb9d80"
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/streaming/seqstream.test.ts src/sc/browser/filter/xml/ods-worker-runtime.test.ts src/sc/browser/filter/xml/ods-worker-client.test.ts src/sc/browser/filter/xml/ods-worker-entry.test.ts src/sw/source/filter/xml/odt-worker-runtime.test.ts --maxWorkers=2 [cwd apps/office]",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-related.log",
+      "sha256": "38ab33a8d3784af4750da3a7400ab46c0195df829fc57b6fb580e9f63db5b02e"
+    },
+    {
+      "command": "npx vitest run scripts/native-binary-stream-boundary.test.ts scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts --maxWorkers=2",
+      "exitCode": 0,
+      "log": "apps/office/coverage/binary-stream-tooling.log",
+      "sha256": "894a4666d5ea7cd50077ca5edb09ecb0284b3ee30caa4c6a58359b02dfe515f9"
+    }
+  ],
+  "rawCoverage": {
+    "path": "apps/office/coverage/native-binary-streams-final4/coverage-final.json",
+    "sha256": "f740d2e79a441b4c2f650c466a8beafd21613e90ec91212722e34da9d434b1d4",
+    "files": {
+      "apps/office/src/oox/source/helper/binaryinputstream.ts": {
+        "s": {
+          "covered": 71,
+          "total": 71
+        },
+        "b": {
+          "covered": 28,
+          "total": 29
+        },
+        "f": {
+          "covered": 7,
+          "total": 7
+        }
+      },
+      "apps/office/src/oox/source/helper/binaryoutputstream.ts": {
+        "s": {
+          "covered": 50,
+          "total": 50
+        },
+        "b": {
+          "covered": 18,
+          "total": 18
+        },
+        "f": {
+          "covered": 5,
+          "total": 5
+        }
+      },
+      "apps/office/src/oox/source/helper/binarystreambase.ts": {
+        "s": {
+          "covered": 55,
+          "total": 55
+        },
+        "b": {
+          "covered": 36,
+          "total": 36
+        },
+        "f": {
+          "covered": 20,
+          "total": 20
+        }
+      }
+    },
+    "result": "FAIL S176/176 B82/83 F32/32 L163/163; one native copy request smaller than32KiB requires nearly SAL_MAX_INT64 bytes. Source loop, counters, thresholds and exclusions unchanged."
+  },
+  "tests": {
+    "focused": "9pass/1file;coverage command exits1 due unchanged branch100 threshold",
+    "relatedStreamsAndODFWorkers": "19pass/5files",
+    "tooling": "51pass/3files",
+    "uniqueTotal": 79
+  },
+  "corrections": [
+    "Initial source TypeScript constructor access/Reference.query binding and unused diagnostic field were corrected without alternate query providers. Initial fixture indexed-byte typing/unused callback parameters and missing abstract-method JSDoc were corrected; final typecheck/static/lint/format/docs pass.",
+    "New actual exception-Context release test caught EOF being set after thrown-value destruction in seek. Corrected read/skip/seek catch ordering to update EOF before actual exception disposal, matching native catch-body lifetime. Final9 tests pass and whole raw map is retained.",
+    "Earlier shared seek finding accidentally reused WRITER195, already assigned to numbering-rule lookup. Current issue/document/17 registry references corrected to WRITER196. Immutable prior checkpoint evidence is preserved."
+  ],
+  "sourceIssues": [
+    "CALC-360 / WRITER197: input close ignores false autoclose.",
+    "CALC-361 / WRITER198: copy of already-EOF input can write an untouched32KiB buffer."
+  ],
+  "limitations": [
+    "Raw BinaryInputStream/BinaryOutputStream classes expose only implemented raw protocols/copy. Numeric/array/string convenience templates and relative/Sequence binary input owners remain unported.",
+    "Physical ABI, native virtual pointer adjustment, native synchronization, allocation/constructor failure unwind, integer overflow/undefined atom sizes and independently compiled native stream differential remain unverified.",
+    "Existing ODF SAX driver uses saxes and existing Dedicated Worker runtime paths;19 related tests cover actual selected ODF worker modules and shared streams. This is not browser end-to-end or complete OOXML worker evidence.",
+    "Package/SAX encoding transport, concrete model/controller/factory, FilterBase/workbook and complete DOCX/XLSX import/export/reopen/UI/worker acceptance remain pending.",
+    "Prior whole-model coverage gap remains open. Full suites not run under approved ten-task cadence.",
+    "Doctor passed with existing managed pre-push readiness warning; no global hooks/settings were changed."
+  ],
+  "workingTree": "Only34 intentional source/test/docs/registry/tool paths plus task artifacts; verify all blobs and clean status after commit."
+}
