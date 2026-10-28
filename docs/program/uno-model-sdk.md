@@ -80,3 +80,28 @@ Only represented container members are destroyed at the host destructor boundary
 Full UNO close/dispose, event broadcasting and other model interfaces remain
 pending. Original mutex scopes are omitted by the synchronous binding; no fake
 mutex object or synchronization claim is supplied.
+
+## Current controller and selection ownership
+
+The model stores the original current-controller Reference and registered
+controller vector. getCurrentController returns an acquired current controller,
+otherwise the original first-registered/empty fallback. setCurrentController
+retains upstream's unchecked assignment despite the stricter IDL description
+(CALC-358). disconnectController preserves its empty-registry short circuit and
+original all-equal removal; actual nonempty registration/view-frame admission
+remains unported and unverified.
+
+getCurrentSelection queries the actual controller for XSelectionSupplier and
+extracts its actual Any into a root Reference. Owned controller/query/Any
+intermediates are released on return and propagation of the original exception.
+A selected object retains independent ownership even when current controller or
+selection state changes. getURL copies the original stored URL; attachResource
+is unported, and no URL is synthesized from browser medium names.
+
+XSelectionSupplier and XSelectionChangeListener retain complete original SDK
+method declarations, bases and actual normal CPPUMaker metadata. Tests use real
+model/document/shell owners and complete concrete caller controllers built on
+shared WeakImplHelper/Reference/Any machinery. They do not port or replace the
+native SfxBaseController/browser view, inject private registry state, or advertise
+a complete XModel/factory component. Strict full model coverage remains incomplete
+for preserved upstream branches and unported registered-controller callers.

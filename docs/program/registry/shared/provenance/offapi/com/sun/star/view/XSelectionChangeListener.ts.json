@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts",
+    "status": "mapped",
+    "upstreamPath": "offapi/com/sun/star/view/XSelectionChangeListener.idl",
+    "localSymbols": [
+      "XSelectionChangeListener",
+      "cppu_detail_getUnoType",
+      "getCppuType"
+    ],
+    "upstreamSymbols": [
+      "XSelectionChangeListener",
+      "selectionChanged"
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF ports original SfxBaseModel stored URL copy, current-first/first-registered controller selection, unchecked current-controller Reference assignment, disconnect empty-registry short circuit and std::erase lowering, and actual current-controller/XSelectionSupplier/Any-to-root-Reference extraction. Controller/query/Any temporaries retain native ownership on return, original supplier failure and reentrant current-controller replacement. Actual represented registered/current controller and URL members are destroyed in original member order. Two complete original selection SDK interfaces retain actual CPPUMaker-normal cached Type ownership and direct bases. CALC-358 records the source setter omitting the IDL registration validation and the empty-registry disconnect preserving that current pointer. The model still declares only implemented XChild/language-XEventListener interfaces; no complete XModel, controller registration/view-frame or service-factory implementation is advertised or manufactured. Tests use actual model/document/shell owners and complete concrete caller UNO controllers over shared WeakImplHelper/Reference/Any owners, not a claimed native SfxBaseController/browser-view port or fake query/type/model provider. No private controller registry injection is supplied. Current scope100 FAILS at S131/148 B49/58 F27/27 L123/135: CALC-357 source arm remains uncovered, and first-registered fallback/nonempty disconnect/registered-member cleanup awaits unported connectController/SfxViewFrame admission. Source logic, counters, thresholds and exclusions are unchanged. Native synchronization/ABI/complete reflection and independently compiled new differential are unverified. Complete model guards/controllers/factories/UNO close-dispose, FilterBase/workbook contexts, DOCX/XLSX import/export and current UI round trips remain pending. Existing browser file/autosave/recovery behavior is unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Actual nonempty controller registration/view-frame admission, full XModel/factories/filter/UI round trips and native threading/ABI remain unported or unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts",
+          "marker": "XSelectionChangeListener"
+        },
+        {
+          "path": "apps/office/src/sfx2/source/doc/native-model-selection.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/view/XSelectionChangeListener.idl",
+          "marker": "XSelectionChangeListener"
+        },
+        {
+          "path": "vendor/libreoffice-reference/offapi/com/sun/star/frame/XModel.idl",
+          "marker": "setCurrentController"
+        }
+      ]
+    }
+  }
+}

@@ -12,11 +12,14 @@ import { XEventListener } from "../../../udkapi/com/sun/star/lang/XEventListener
 import type { EventObject } from "../../../udkapi/com/sun/star/lang/EventObject";
 import { XModifyListener } from "../../../offapi/com/sun/star/util/XModifyListener";
 import { XEventListener as DocumentXEventListener } from "../../../offapi/com/sun/star/document/XEventListener";
+import type { XController } from "../../../offapi/com/sun/star/frame/XController";
+import { XSelectionSupplier } from "../../../offapi/com/sun/star/view/XSelectionSupplier";
 import type { SfxBroadcaster } from "../../../svl/source/notify/SfxBroadcaster";
 import { SfxHint, SfxHintId } from "../../../svl/inc/hint";
 import type { SfxObjectShell } from "./objsh";
 /** Original consumed shell/parent/listener container members; full controller/property and other event members remain unported. */
 class IMPL_SfxBaseModel_DataContainer {
+  readonly m_sURL = new OUString();
   readonly m_aEventListeners = new (OInterfaceContainerHelper3.specialize<XEventListener>(
     XEventListener,
   ))();
@@ -26,6 +29,8 @@ class IMPL_SfxBaseModel_DataContainer {
   readonly m_aDocumentEventListeners1 =
     new (OInterfaceContainerHelper3.specialize<DocumentXEventListener>(DocumentXEventListener))();
   readonly m_xParent = new Reference<XInterface>();
+  readonly m_xCurrent = new Reference<XController>();
+  readonly m_seqControllers: Reference<XController>[] = [];
   /** Stores the original shell owner. @param m_pObjectShell - Actual shell, optionally null. @returns Container. */
   constructor(readonly m_pObjectShell: SfxObjectShell | null) {}
 }
@@ -86,6 +91,76 @@ export class SfxBaseModel
   setParent(Parent: Reference<XInterface>): void {
     this.MethodEntryCheck(false);
     (this.m_pData as IMPL_SfxBaseModel_DataContainer).m_xParent.assign(Parent);
+  }
+  /** Original fully-alive resource URL query copies its actual stored string. attachResource remains unported; no URL is synthesized from browser medium names. @returns Owned original URL. */
+  getURL(): OUString {
+    this.MethodEntryCheck(true);
+    return new OUString((this.m_pData as IMPL_SfxBaseModel_DataContainer).m_sURL);
+  }
+  /** Original current-first, then first-registered controller selection. connectController/view-frame admission remains unported, so its nonempty registry path is preserved without a test-only setter. @returns Acquired controller or empty. */
+  getCurrentController(): Reference<XController> {
+    this.MethodEntryCheck(true);
+    const data = this.m_pData as IMPL_SfxBaseModel_DataContainer;
+    if (data.m_xCurrent.is()) return new Reference(data.m_xCurrent);
+    return new Reference(
+      data.m_seqControllers.length !== 0
+        ? (data.m_seqControllers[0] as Reference<XController>)
+        : data.m_xCurrent,
+    );
+  }
+  /** Original assignment deliberately does not validate registration or throw the exception documented by XModel.idl. @param controller - Borrowed controller. @returns Nothing. */
+  setCurrentController(controller: Reference<XController>): void {
+    this.MethodEntryCheck(true);
+    (this.m_pData as IMPL_SfxBaseModel_DataContainer).m_xCurrent.assign(controller);
+  }
+  /** Original disconnect short-circuits an empty registry before clearing the current pointer, then erases all equal registrations. @param controller - Borrowed controller. @returns Nothing. */
+  disconnectController(controller: Reference<XController>): void {
+    this.MethodEntryCheck(true);
+    const data = this.m_pData as IMPL_SfxBaseModel_DataContainer;
+    if (data.m_seqControllers.length === 0) return;
+    let output = 0;
+    for (let index = 0; index < data.m_seqControllers.length; ++index) {
+      const value = data.m_seqControllers[index] as Reference<XController>;
+      if (value.operatorEquals(controller)) continue;
+      if (output !== index)
+        (data.m_seqControllers[output] as Reference<XController>).moveAssign(value);
+      ++output;
+    }
+    for (let index = output; index < data.m_seqControllers.length; ++index)
+      (data.m_seqControllers[index] as Reference<XController>).dispose();
+    data.m_seqControllers.length = output;
+    if (controller.operatorEquals(data.m_xCurrent)) data.m_xCurrent.clear();
+  }
+  /** Original current controller -> XSelectionSupplier query -> Any extraction into an acquired root Reference. Failed extraction retains the default empty result. @returns Owned selection reference. */
+  getCurrentSelection(): Reference<XInterface> {
+    this.MethodEntryCheck(true);
+    const result = new Reference<XInterface>();
+    try {
+      const controller = this.getCurrentController();
+      try {
+        if (controller.is()) {
+          const view = Reference.query(controller, XSelectionSupplier.static_type);
+          try {
+            if (view.is()) {
+              const selection = (view.get() as XSelectionSupplier).getSelection();
+              try {
+                selection.extract(result.getAddress(), ["Reference", "XInterface"]);
+              } finally {
+                selection.dispose();
+              }
+            }
+          } finally {
+            view.dispose();
+          }
+        }
+      } finally {
+        controller.dispose();
+      }
+      return result;
+    } catch (error) {
+      result.dispose();
+      throw error;
+    }
   }
   /** Original language-event registration. @param listener - Borrowed listener. @returns Nothing. */
   addEventListener(listener: Reference<XEventListener>): void;
@@ -183,10 +258,13 @@ export class SfxBaseModel
   override Dispose(): void {
     const data = this.m_pData;
     this.m_pData = null;
+    if (data !== null) for (const controller of data.m_seqControllers) controller.dispose();
+    data?.m_xCurrent.dispose();
     data?.m_xParent.dispose();
     data?.m_aDocumentEventListeners1.dispose();
     data?.m_aModifyListeners.dispose();
     data?.m_aEventListeners.dispose();
+    data?.m_sURL.dispose();
     super.Dispose();
   }
 }
