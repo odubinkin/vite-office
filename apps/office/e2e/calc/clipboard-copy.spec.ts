@@ -445,12 +445,8 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(selectedFormat)).Code,
           ),
           localeData = new n.LocaleDataWrapper(locale),
-          scanner = new n.ImpSvNumberformatScan(
-            locale,
-            standardName,
-            n.KeywordLocalization.AllowEnglish,
-            localeData,
-          ),
+          scannerLanguage = new n.SvNFLanguageData(mapper, 0x0407),
+          scanner = new n.ImpSvNumberformatScan(scannerLanguage, mapper),
           code = n.unicode("general"),
           compiledCheck: [number] = [-1],
           compiled = new n.SvNumberformat(code, scanner, compiledCheck, [0x0407]),
@@ -554,6 +550,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         compiled.dispose();
         code.dispose();
         scanner.dispose();
+        scannerLanguage.dispose();
         localeData.dispose();
         standardName.dispose();
         decimal.dispose();

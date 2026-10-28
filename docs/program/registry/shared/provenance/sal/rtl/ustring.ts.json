@@ -49,7 +49,9 @@
       "rtl_ImplGetFastUTF8UnicodeLen",
       "rtl_string2UString_status",
       "rtl_string2UString",
-      "rtl_convertStringToUString"
+      "rtl_convertStringToUString",
+      "rtl_ustr_shortenedCompare_WithLength",
+      "rtl_uString_newConcat"
     ],
     "upstreamSymbols": [
       "StrLifecycle",
@@ -106,7 +108,9 @@
       "TaskK80KHH adds original rtl_ustr_valueOfFloat through actual valueOfFP Unicode/float/maxLen15 specialization and canonical macro15/header owners. Binary32 parameter narrowing precedes original checked null-buffer assertion. Consumed G7/period/no-group/trailing-zero-erasure preserves pre-round E/F selection,integer-significand half-up rounding,carry,three-digit signed exponents,NaN/INF/signedzero and full caller-buffer writes. Existing Automatic/Max and integer source function bodies remain unchanged. Host shortest binary64 text substitutes Dragonbox as an explicit stack binding;complete full original normal and ASan/UBSan SAL/CPPU observations compare37026binary32 input buffers including all256exponents/8mantissa patterns/bothsigns,decimal-boundary neighbors and32768deterministic full-bit samples. This is not exhaustive all2^32states,native ABI/lifetime,arbitrary malformed JS storage,general format modes or full VCL/Calc UI parity. Genuine cached dependencies are verified offline;no source stubs or network. VariationsToString/item/pool/UI integration remain pending.",
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
       "Task202610251549-V4DQJW: Adds the original NUL-terminated signed32 C wrapper over the actual shared SAL integral parser, with native signed16 radix. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
-      "Forward SAL string-wrapper checkpoint ports rtl_string2UString_status, its UTF8 estimate, checked/unchecked C wrappers, early old-target release, ASCII fast path/retry, FLUSH/null-context dispatch, +8-unit retries, shrink fallback and partial checked output. OStringToOUString now delegates to this native owner for octet encodings; the existing explicit UTF16 byte bridge remains a bounded application adaptation. A compiled unchanged native witness observes 524288 core byte-pair calls and 720 mixed/flag cases with allocator identities/sizes/free order under ASan/UBSan. Full registry/ABI and allocation failures are not certified by that witness. WRITER188 records original allocation-failure aliasing; WRITER181 records forward ISCII null-context mismatch. No whole SAL/filter parity promotion."
+      "Forward SAL string-wrapper checkpoint ports rtl_string2UString_status, its UTF8 estimate, checked/unchecked C wrappers, early old-target release, ASCII fast path/retry, FLUSH/null-context dispatch, +8-unit retries, shrink fallback and partial checked output. OStringToOUString now delegates to this native owner for octet encodings; the existing explicit UTF16 byte bridge remains a bounded application adaptation. A compiled unchanged native witness observes 524288 core byte-pair calls and 720 mixed/flag cases with allocator identities/sizes/free order under ASan/UBSan. Full registry/ABI and allocation failures are not certified by that witness. WRITER188 records original allocation-failure aliasing; WRITER181 records forward ISCII null-context mismatch. No whole SAL/filter parity promotion.",
+      "Original shortened Unicode C comparison forwards to the genuine shared template specialization. Native full-header/prefix witness matches 1662 cases including embedded NUL and alias output.",
+      "Original public Unicode newConcat forwards to the shared two-owner template specialization."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."

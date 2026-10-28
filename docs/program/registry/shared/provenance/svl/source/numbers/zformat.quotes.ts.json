@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "IsInQuote",
+      "GetQuoteEnd"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::IsInQuote",
+      "SvNumberformat::GetQuoteEnd"
+    ],
+    "preservedResponsibilities": [
+      "Original inclusive UTF16 quote state and end lookup preserve escape defaults, negative/out-of-range control values, unterminated length sentinel and CALC-349 nonzero-opening asymmetry. Real SvNumberformat static methods forward to these original source fragments. Both original native functions are included unchanged in the scanner witness."
+    ],
+    "omittedResponsibilities": [
+      "Native invalid pointer callers and full format constructor/prefix/output closure are uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+          "marker": "IsInQuote"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::IsInQuote"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+      "rationale": "Split the original large translation unit by scanner keyword, lexical, type and quote responsibilities while retaining original owners and contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

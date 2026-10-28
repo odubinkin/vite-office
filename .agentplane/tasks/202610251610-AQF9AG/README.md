@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 38
+revision: 40
 origin:
   system: "manual"
 depends_on: []
@@ -162,8 +162,11 @@ comments:
     body: "Verified calendar-service checkpoint:94 shared files/1014 tests,72 CSV tests,1 browser flow,47 boundary tests; unchanged native witnesses pass the documented calendar/factory/era/cache/temporal/resource cases. Build/typecheck/lint/docs/dependencies/resources/provenance/parity/routing pass. Full-suite cadence unchanged. Continue with formatter format selection, ParseString/setAutoInput and remaining CSV source paths; task and goal remain active. No pause or completion is requested or recorded. See Findings for exact commands, excluded native deadlock case and remaining scope."
   -
     author: "CODER"
+    body: "Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause."
+  -
+    author: "CODER"
     body: |-
-      Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause.
+      Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task.
 
 events:
   -
@@ -385,11 +388,16 @@ events:
     type: "comment"
     at: "2026-10-28T09:55:50.289Z"
     author: "CODER"
+    body: "Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause."
+  -
+    type: "comment"
+    at: "2026-10-28T10:55:40.713Z"
+    author: "CODER"
     body: |-
-      Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause.
+      Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task.
 
 doc_version: 3
-doc_updated_at: "2026-10-28T09:55:50.289Z"
+doc_updated_at: "2026-10-28T10:55:40.713Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -592,6 +600,33 @@ sections:
     Result: pass. Evidence:1720 mapped/runtime provenance records validated, no semantic parity violation and parityReady remains false. Scope: this index/default-selection block; full-suite cadence unchanged because AQF9AG remains the same open task.
 
     Next source dependency: replace the existing single-General/Boolean/Text scanner admission with original Symbol_Division, ScanType, FinalScan and their real keyword/scanner state before enabling the complete ImpGenerateFormats generator. Continue through SvNFEngine/SvNumberFormatter::IsNumberFormat, ParseString/setAutoInput, remaining CSV option paths and final UI/export audit. Goal remains active; no pause or completion is recorded.
+
+    Scanner ownership/keyword/lexical/calendar continuation (2026-10-28):
+
+    - Replaced externally prepared General-only scanner construction with the original reference to actual SvNFLanguageData and the prepared genuine XNumberFormatCode borrow. Input scanner is created before format scanner; locale/cache updates precede keyword invalidation. Removed obsolete prepareGeneralKeywords projection. Preserved original lazy fields, fixed owned token/keyword storage, reset, precision/null date, conversion fields and CopyInfo EMPTY skipping.
+    - Ported complete English keyword table, exact loaded-language localization selection and overrides, lazy special/Boolean/currency initialization, GetCompatibilityCurrency, GetKeyWord, Next_Symbol, Symbol_Division, all neighbor helpers, ScanType and InsertSymbol. Retained native control positions including early zero, fixed-capacity truncation and alias-after-shift insertion behavior. No unsupported-final-pattern error was introduced or expanded.
+    - Added source IsInQuote/GetQuoteEnd and calendar FinalScanGetCalendar/IsDateFragment/SwapArrayElements. Calendar text merges mutate actual slot contents; move swaps preserve member addresses. CALC-349 records and preserves native nonzero-opening-quote asymmetry.
+    - Ported required SAL shortened comparison, normal-build OUString match/startsWith, NoThrow two-owner Unicode concatenation, C binding and operator+=/internalAppend with actual temporary-data ownership. The remaining Throw/newConcat overloads are not claimed.
+
+    Command: npx tsx scripts/calc-format-scan-native-probe.mjs.
+    Result: pass. Evidence:32972 unchanged pinned C++ method observations across52 requested language IDs, all3 keyword localization policies, conversion flags, fixed token capacity, original helper/quote/control/cursor states, calendar merge/date-slot swaps and alias insertion. Scope: original scanner algorithms with explicit native UTF16 value/scalar locale/provider fixture dependencies and ICU casing/classification on this selected corpus; not a complete UNO/SAL/CharClass binary-equivalence claim. Pinned full source bytes are verified before extraction. The bulk corpus intentionally excludes incompatible ICU-versus-LibreOffice casing cases.
+
+    Command: npx tsx scripts/rtl-prefix-native-probe.mjs.
+    Result: pass. Evidence:1662 shortened/match/startsWith/append observations from complete original pinned OUString header and unchanged RTL ownership bodies, including logical lengths, embedded NUL, data sharing/refcounts, self-appends and source/prefix/rest aliasing. Scope: represented Unicode overloads and initialized ordinary allocations; OOM, exotic invalid pointers and other overloads are not certified.
+
+    Command: npm run test:shared -- --maxWorkers 2 src/svl/source/numbers src/sal/rtl src/unotools/source/i18n/charclass.test.ts.
+    Result: pass. Evidence:45 files,262 tests. Scope: actual shared format/scanner, SAL string and character-classifier owners. Validation iterations fixed witness-only missing C++ dependencies and an obsolete browser fixture constructor. An initially asserted sharp-s expansion failure was withdrawn after checking actual LibreOffice ToUpper mapping: it produces capital sharp-s rather than ICU's SS. Production case mapping was retained; the regression now asserts the real lexical string result. No suspected-issue record for that disproved premise remains.
+
+    Command: npm run test:calc -- --maxWorkers 2 src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts; npm run test:calc -- --maxWorkers 2 src/sc/browser/presentation/calc-files.test.tsx.
+    Result: pass. Evidence:66 core CSV tests plus6 existing UI tests. Scope: existing CSV option/import/export and file-dialog workflows. An initially mistyped additional UI filter selected no UI file; the actual UI file was then run explicitly.
+
+    Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc --workers=1.
+    Result: pass. Evidence:2 browser scenarios, including CSV import/ODS-save/CSV-export and the changed actual scanner fixture in Chromium and a DOM-free Worker.
+
+    Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run check:calc-resources; npm run check:source-tree; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check; prettier --check on changed source/registry/scripts/docs paths.
+    Result: pass. Evidence:1725 provenance/runtime modules, zero semantic inventory violations, source-tree/boundary/routing/build acceptance. Runtime local-symbol metadata now lists actual declarations rather than reexport-only header functions and the generator moved in the prior checkpoint; symbol ownership remains on its implementation fragments. Full-suite cadence remains unchanged: AQF9AG is the same open task, not a new tenth task.
+
+    Remaining: complete original FinalScan numeric/date/time/common branches and original ScanFormat orchestration, constructor/prefix/color/NatNum/output responsibilities, complete builtin generation and SvNFEngine/SvNumberFormatter::IsNumberFormat, then ScColumn::ParseString/ScDocumentImport::setAutoInput, remaining CSV option paths and final UI/export audit. Current public ScanFormat still has the preexisting General/Boolean/Text admitted path until the missing FinalScan stages are present. No heuristic interim formatter or fabricated keys are connected. This is a verified dependency checkpoint only; AQF9AG stays DOING and the goal stays active. Do not mark the overall task complete or pause the goal.
 id_source: "generated"
 ---
 ## Summary
@@ -807,3 +842,30 @@ Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; np
 Result: pass. Evidence:1720 mapped/runtime provenance records validated, no semantic parity violation and parityReady remains false. Scope: this index/default-selection block; full-suite cadence unchanged because AQF9AG remains the same open task.
 
 Next source dependency: replace the existing single-General/Boolean/Text scanner admission with original Symbol_Division, ScanType, FinalScan and their real keyword/scanner state before enabling the complete ImpGenerateFormats generator. Continue through SvNFEngine/SvNumberFormatter::IsNumberFormat, ParseString/setAutoInput, remaining CSV option paths and final UI/export audit. Goal remains active; no pause or completion is recorded.
+
+Scanner ownership/keyword/lexical/calendar continuation (2026-10-28):
+
+- Replaced externally prepared General-only scanner construction with the original reference to actual SvNFLanguageData and the prepared genuine XNumberFormatCode borrow. Input scanner is created before format scanner; locale/cache updates precede keyword invalidation. Removed obsolete prepareGeneralKeywords projection. Preserved original lazy fields, fixed owned token/keyword storage, reset, precision/null date, conversion fields and CopyInfo EMPTY skipping.
+- Ported complete English keyword table, exact loaded-language localization selection and overrides, lazy special/Boolean/currency initialization, GetCompatibilityCurrency, GetKeyWord, Next_Symbol, Symbol_Division, all neighbor helpers, ScanType and InsertSymbol. Retained native control positions including early zero, fixed-capacity truncation and alias-after-shift insertion behavior. No unsupported-final-pattern error was introduced or expanded.
+- Added source IsInQuote/GetQuoteEnd and calendar FinalScanGetCalendar/IsDateFragment/SwapArrayElements. Calendar text merges mutate actual slot contents; move swaps preserve member addresses. CALC-349 records and preserves native nonzero-opening-quote asymmetry.
+- Ported required SAL shortened comparison, normal-build OUString match/startsWith, NoThrow two-owner Unicode concatenation, C binding and operator+=/internalAppend with actual temporary-data ownership. The remaining Throw/newConcat overloads are not claimed.
+
+Command: npx tsx scripts/calc-format-scan-native-probe.mjs.
+Result: pass. Evidence:32972 unchanged pinned C++ method observations across52 requested language IDs, all3 keyword localization policies, conversion flags, fixed token capacity, original helper/quote/control/cursor states, calendar merge/date-slot swaps and alias insertion. Scope: original scanner algorithms with explicit native UTF16 value/scalar locale/provider fixture dependencies and ICU casing/classification on this selected corpus; not a complete UNO/SAL/CharClass binary-equivalence claim. Pinned full source bytes are verified before extraction. The bulk corpus intentionally excludes incompatible ICU-versus-LibreOffice casing cases.
+
+Command: npx tsx scripts/rtl-prefix-native-probe.mjs.
+Result: pass. Evidence:1662 shortened/match/startsWith/append observations from complete original pinned OUString header and unchanged RTL ownership bodies, including logical lengths, embedded NUL, data sharing/refcounts, self-appends and source/prefix/rest aliasing. Scope: represented Unicode overloads and initialized ordinary allocations; OOM, exotic invalid pointers and other overloads are not certified.
+
+Command: npm run test:shared -- --maxWorkers 2 src/svl/source/numbers src/sal/rtl src/unotools/source/i18n/charclass.test.ts.
+Result: pass. Evidence:45 files,262 tests. Scope: actual shared format/scanner, SAL string and character-classifier owners. Validation iterations fixed witness-only missing C++ dependencies and an obsolete browser fixture constructor. An initially asserted sharp-s expansion failure was withdrawn after checking actual LibreOffice ToUpper mapping: it produces capital sharp-s rather than ICU's SS. Production case mapping was retained; the regression now asserts the real lexical string result. No suspected-issue record for that disproved premise remains.
+
+Command: npm run test:calc -- --maxWorkers 2 src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts; npm run test:calc -- --maxWorkers 2 src/sc/browser/presentation/calc-files.test.tsx.
+Result: pass. Evidence:66 core CSV tests plus6 existing UI tests. Scope: existing CSV option/import/export and file-dialog workflows. An initially mistyped additional UI filter selected no UI file; the actual UI file was then run explicitly.
+
+Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc --workers=1.
+Result: pass. Evidence:2 browser scenarios, including CSV import/ODS-save/CSV-export and the changed actual scanner fixture in Chromium and a DOM-free Worker.
+
+Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run check:calc-resources; npm run check:source-tree; npm run inventory:parity:calc; node .agentplane/policy/check-routing.mjs; git diff --check; prettier --check on changed source/registry/scripts/docs paths.
+Result: pass. Evidence:1725 provenance/runtime modules, zero semantic inventory violations, source-tree/boundary/routing/build acceptance. Runtime local-symbol metadata now lists actual declarations rather than reexport-only header functions and the generator moved in the prior checkpoint; symbol ownership remains on its implementation fragments. Full-suite cadence remains unchanged: AQF9AG is the same open task, not a new tenth task.
+
+Remaining: complete original FinalScan numeric/date/time/common branches and original ScanFormat orchestration, constructor/prefix/color/NatNum/output responsibilities, complete builtin generation and SvNFEngine/SvNumberFormatter::IsNumberFormat, then ScColumn::ParseString/ScDocumentImport::setAutoInput, remaining CSV option paths and final UI/export audit. Current public ScanFormat still has the preexisting General/Boolean/Text admitted path until the missing FinalScan stages are present. No heuristic interim formatter or fabricated keys are connected. This is a verified dependency checkpoint only; AQF9AG stays DOING and the goal stays active. Do not mark the overall task complete or pause the goal.

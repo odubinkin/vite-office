@@ -4363,3 +4363,10 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: mCacheFormat captures rFormatCache by reference and writes to the supplied map. The separate mFindFormat lambda captures rFormatCache by value, alongside rFormatData by reference, and passes that copied map to FindFormatRO. Since DefaultFormatKeysMap is a std::map value, writes after policy construction do not update the lookup lambda's captured map. The actual format owner's cache remains preferred by FindFormatRO.
 - Suspected issue: entries cached during the lifetime of the readonly policy may remain invisible to its own subsequent find callback. This is a source capture/lifetime observation; no full multithreaded formatter failure or native policy binary test is claimed here.
 - Local behavior: preserve original standalone CacheFormatRO/FindFormatRO responsibilities. When porting GetROPolicy, retain the source lookup snapshot and writer reference rather than silently changing the lookup capture to a reference. The policy factory is not yet exposed by the current local slice.
+
+### CALC-349 — Quote-end lookup can return a nonzero opening quote itself
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::IsInQuote/GetQuoteEnd, and `include/svl/zformat.hxx`.
+- Observation: the header promises the matching closing quote for an opening position. IsInQuote includes the position itself, but GetQuoteEnd starts searching at that same position and accepts any quote whose pointer is greater than the string start. Thus GetQuoteEnd on position 1 of `a"abc"` returns 1; position 0 of `"abc"` returns 4. Unchanged native bodies reproduce both results in the scanner witness.
+- Suspected issue: opening-quote behavior depends on whether its position is zero, contrary to the header contract.
+- Local behavior: retain the original search start, string-start exclusion, escape comparisons and return positions. No extra opening-quote skip is introduced.

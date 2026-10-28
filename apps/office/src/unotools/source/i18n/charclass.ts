@@ -53,9 +53,14 @@ export class CharClass {
   getMyLocale(): Readonly<Locale> {
     return this.locale;
   }
-  /** Original whole-string uppercase overload. @param value - Input. @returns Uppercased value. */
-  uppercase(value: OUStringConstReference): OUString {
-    return uppercase(value, this.locale);
+  /** Original whole-string/range uppercase overloads. @param value - Input. @param range - Optional native position/count pair. @returns Uppercased value. */
+  uppercase(
+    value: OUStringConstReference,
+    ...range: [] | [position: number, count: number]
+  ): OUString {
+    return range.length === 0
+      ? uppercase(value, this.locale)
+      : uppercase(value, this.locale, range[0], range[1]);
   }
   /** Original classifier forwarding with catch-only-UNO-Exception zero fallback. @param value - Input. @param position - UTF-16 offset. @returns Native KCharacterType mask. */
   getCharacterType(value: OUStringConstReference, position: number): number {
@@ -87,6 +92,24 @@ export class CharClass {
         value.iterateCodePoints(position);
       }
       return true;
+    } catch (error) {
+      if (!(error instanceof Exception)) throw error;
+      return false;
+    }
+  }
+  /** Original single-position isLetter ASCII fast path and nCharClassLetterType mask. @param value - Native UTF16 string. @param position - Source offset. @returns Letter classification. */
+  isLetter(value: OUStringConstReference, position: number): boolean {
+    const unit = value.getStr()[position] as number;
+    if (unit < 128) return (unit >= 65 && unit <= 90) || (unit >= 97 && unit <= 122);
+    try {
+      return (
+        (getCharacterType(value, position) &
+          (KCharacterType.UPPER |
+            KCharacterType.LOWER |
+            KCharacterType.TITLE_CASE |
+            KCharacterType.LETTER)) !==
+        0
+      );
     } catch (error) {
       if (!(error instanceof Exception)) throw error;
       return false;

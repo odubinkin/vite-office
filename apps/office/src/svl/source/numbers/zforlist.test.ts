@@ -260,7 +260,7 @@ import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapp
 import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
 import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
 import { SvNumberformat } from "./zformat";
-import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+import { ImpSvNumberformatScan, extractStandardGeneralName } from "./zforscan";
 
 it("rejects an empty built-in Boolean code after the real scanner reports an empty format", /** Checks initialization cleanup through a service-code fixture while retaining the actual parser and format owners. @returns Nothing. */ () => {
   const values = tableValues();
@@ -296,7 +296,8 @@ function tableValues() {
     code = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(code.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = new SvNFLanguageData(mapper, 0x0407),
+    scanner = new ImpSvNumberformatScan(current, mapper),
     decimal = unicode(","),
     table = new SvNFFormatData();
   return {
@@ -311,6 +312,7 @@ function tableValues() {
     dispose() {
       table.dispose();
       scanner.dispose();
+      current.dispose();
       localeData.dispose();
       decimal.dispose();
       name.dispose();

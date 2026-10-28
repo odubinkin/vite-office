@@ -128,3 +128,6 @@ export const SvNumInputOptions = {
   NONE: 0,
   LAX_TIME: 1,
 } as const;
+
+/** Original zforlist.hxx fixed token capacity. */
+export const NF_MAX_FORMAT_SYMBOLS = 100;

@@ -45,7 +45,10 @@
       "unacquired",
       "view",
       "getDataAddress",
-      "toInt32"
+      "toInt32",
+      "match",
+      "startsWith",
+      "append"
     ],
     "upstreamSymbols": [
       "Concat",
@@ -88,7 +91,9 @@
       "Task178 implements actual plain ManifestImport namespace/validity scopes,fixed native property slots and real PropertyValue/Any output plus ManifestReader SAX-failure empty-result behavior. Existing SAL signed64 parser is reused through missing terminated C and const OUString entry points,including embedded-zero termination and exact overflow behavior. Source-owned plain ZipPackage metadata/MIME fallback/conflict and ZipPackageFolder consistency operate on actual ZipFile catalogs with real stream/folder properties;no storage/service class is fabricated. Preserve duplicate metadata application,first Version fallback,unknown namespace/invalid-parent leniency and recursive folder assignment CALC162..164;native unordered binary bucket order is not simulated. Writer uses the shared reader and native absent-stream early returns with actual SwDoc defaults;remove the noncanonical mandatory Standard-definition guard and adapt font existence checks to actual applied stream metadata. Retire the duplicated Writer-only shared manifest validator without a compatibility alias. Existing ZIP32,depth/declaration/XML-byte admission bounds remain explicit. Encryption,writable storage/full UNO parser/stream/component services,complete Calc document/UI/same-model ODS remain pending;physical memory/refcount/cache machinery is not added and broad parity stays unverified.",
       "TaskCMHQFZ introduces actual rtl/stringutils.hxx IsValidStrLen/ThrowIfInvalidStrLen and ConstCharArrayDetector::isValid responsibilities. Runtime number/bigint parameters bind original integral templates;native signed32 margin/default0 and maxLen bound,negative length and margin assertion,bad_alloc,final-zero/no-embedded-zero predicate are preserved. OUString reuses this exact predicate without changing its constructor ownership/exception expression. Full C++ SFINAE,constexpr/type enforcement/trait fields and unrelated stringutils services remain unported. Native source observations and checked boundary evidence are bounded,not full ABI/template certification.",
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
-      "Task202610251549-V4DQJW: Exposes original OUString::toInt32 and its const borrowed view through the real C wrapper; signed32 limits and embedded-NUL semantics are retained. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion."
+      "Task202610251549-V4DQJW: Exposes original OUString::toInt32 and its const borrowed view through the real C wrapper; signed32 limits and embedded-NUL semantics are retained. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
+      "Original normal-build match/fromIndex and startsWith no-output/non-null explicit-output overloads use the shared shortened C comparison and actual copied suffix assignment. Native complete pinned OUString header and unchanged RTL lifetime bodies match 1662 cases including original source/prefix/rest aliasing and embedded NUL. Const borrows expose both queries.",
+      "Original operator+=/internalAppend uses the real temporary C data slot, native allocation failure, assign/acquire/release and return-owner identity; source-pointer and empty/self alias cases match the 1662-case full native prefix/append witness."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."

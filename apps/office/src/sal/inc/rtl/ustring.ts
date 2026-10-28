@@ -19,8 +19,10 @@ import {
   rtl_ustr_lastIndexOfChar_WithLength,
   rtl_ustr_indexOfStr_WithLength,
   rtl_ustr_lastIndexOfStr_WithLength,
+  rtl_ustr_shortenedCompare_WithLength,
   rtl_ustr_lastIndexOfAscii_WithLength,
   rtl_uString_newFromSubString,
+  rtl_uString_newConcat,
 } from "./ustring.h";
 import type { rtl_uString, rtl_uStringSlot } from "./ustring.h";
 import { StringNumber, StringConcat, StringConcatMarker } from "./stringconcat";
@@ -83,6 +85,8 @@ export type OUStringConstReference = Readonly<
     | "lastIndexOfAsciiL"
     | "copy"
     | "subView"
+    | "match"
+    | "startsWith"
   > & { pData: rtl_uString | null }
 >;
 
@@ -168,6 +172,40 @@ export class OUString {
     }
   }
 
+  /** Original match uses the shortened Unicode C comparison and signed32 fromIndex assertion. @param prefix - Borrowed native string or UTF16 view. @param fromIndex - Signed32 start. @returns Whether the prefix matches. */
+  match(prefix: OUStringConstReference | Uint16Array, fromIndex = 0): boolean {
+    fromIndex |= 0;
+    if (fromIndex < 0) throw new Error("assert(fromIndex >= 0)");
+    const units = prefix instanceof Uint16Array ? prefix : prefix.getStr(),
+      length = prefix instanceof Uint16Array ? prefix.length : prefix.getLength();
+    return (
+      rtl_ustr_shortenedCompare_WithLength(
+        this.getStr().subarray(fromIndex),
+        this.getLength() - fromIndex,
+        units,
+        length,
+        length,
+      ) === 0
+    );
+  }
+  /** Original normal-build startsWith overloads preserve optional no-output and nonnull explicit-rest contracts. @param prefix - Native string/view. @param output - Optional existing output owner. @returns Whether matched. */
+  startsWith(
+    prefix: OUStringConstReference | Uint16Array,
+    ...output: [] | [OUString | null]
+  ): boolean {
+    if (output.length !== 0 && output[0] === null) throw new Error("assert(rest)");
+    const matched = this.match(prefix),
+      rest = output[0] ?? null;
+    if (matched && rest !== null) {
+      const suffix = this.copy(prefix instanceof Uint16Array ? prefix.length : prefix.getLength());
+      try {
+        rest.assign(suffix);
+      } finally {
+        suffix.dispose();
+      }
+    }
+    return matched;
+  }
   /** Original terminated-char createFromAscii overload, transferring actual C constructor ownership. The distinct string_view/literal overload remains a separate source responsibility. @param value - Borrowed terminated ASCII bytes or null. @returns Original no-acquire value owner. */
   static createFromAscii(value: Uint8Array | null): OUString {
     // The erased null pointer/buffer overloads differ: preserve the original no-acquire pointer result directly, including allocator failure.
@@ -216,6 +254,15 @@ export class OUString {
   /** Original copy assignment. @param source - Live source reference. @returns This owner. */
   assign(source: OUStringConstReference): this {
     rtl_uString_assign(this.slot, source.pData as rtl_uString);
+    return this;
+  }
+  /** Original operator+= through internalAppend preserves temporary data ownership, allocation failure and final assignment order. @param value - Borrowed string. @returns This owner. */
+  append(value: OUStringConstReference): this {
+    const slot: rtl_uStringSlot = [null];
+    rtl_uString_newConcat(slot, this.pData, value.pData as rtl_uString);
+    if (slot[0] === null) throw new Error("std::bad_alloc");
+    rtl_uString_assign(this.slot, slot[0]);
+    rtl_uString_release(slot[0]);
     return this;
   }
   /** Original move assignment swaps both pointers, including self assignment. @param source - Rvalue owner. @returns This owner. */

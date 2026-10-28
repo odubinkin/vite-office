@@ -56,7 +56,7 @@ import {
 import { ImpSvNumberInputScan } from "./zforfind";
 import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
 import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
-import { ImpSvNumberformatScan, prepareGeneralKeywords } from "./zforscan";
+import { ImpSvNumberformatScan } from "./zforscan";
 
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { CURRENCY } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
@@ -240,7 +240,7 @@ export class SvNFLanguageData {
     xTransliteration: OnDemandTransliterationWrapper;
     pLocaleData: LocaleDataWrapper;
     pCalendar: CalendarWrapper;
-    pFormatScanner: ImpSvNumberformatScan;
+    pFormatScanner: ImpSvNumberformatScan | null;
     aDecimalSep: OUString;
     aDecimalSepAlt: OUString;
     aThousandSep: OUString;
@@ -250,10 +250,7 @@ export class SvNFLanguageData {
   /** Original input scanner owned by this current-language state. */
   readonly pStringScanner: ImpSvNumberInputScan;
   /** Original constructor's represented language/cache/scanner path;the actual provider must outlive this borrowed service-field binding. @param mapper - Actual prepared XNumberFormatCode service field. @param language - Native initial language. @returns Owned language/scanner state. */
-  constructor(
-    private readonly mapper: XNumberFormatCode,
-    language: number,
-  ) {
+  constructor(mapper: XNumberFormatCode, language: number) {
     language &= 65535;
     const locale = convertLanguageToLocale(language, false),
       loadedLocale = getLoadedLocale(locale),
@@ -261,9 +258,8 @@ export class SvNFLanguageData {
       decimal = getNumDecimalSep(locale),
       alternate = getNumDecimalSepAlt(locale),
       thousand = getNumThousandSep(locale),
-      date = getDateSep(locale),
-      prepared = prepareGeneralKeywords(mapper, loadedLocale);
-    try {
+      date = getDateSep(locale);
+    {
       const charClass = new OnDemandCharClass();
       charClass.changeLocale(locale);
       const transliteration = new OnDemandTransliterationWrapper();
@@ -279,12 +275,7 @@ export class SvNFLanguageData {
         xTransliteration: transliteration,
         pLocaleData: localeData,
         pCalendar: calendar,
-        pFormatScanner: new ImpSvNumberformatScan(
-          locale,
-          prepared.standardName,
-          prepared.localization,
-          localeData,
-        ),
+        pFormatScanner: null,
         aDecimalSep: decimal,
         aDecimalSepAlt: alternate,
         aThousandSep: thousand,
@@ -292,8 +283,32 @@ export class SvNFLanguageData {
         eEvalDateFormat: NfEvalDateFormat.International,
       };
       this.pStringScanner = new ImpSvNumberInputScan(this);
-    } finally {
-      prepared.standardName.dispose();
+      this.fields.pFormatScanner = new ImpSvNumberformatScan(this, mapper);
+    }
+  }
+  /** Original compatibility currency selection, preferring UsedInCompatibleFormatCodes and retaining the native current-currency fallback. @param symbol - Existing output string. @param abbreviation - Existing output string. @returns Nothing. */
+  GetCompatibilityCurrency(symbol: OUString, abbreviation: OUString): void {
+    const data = this.GetLocaleData(),
+      currency = data
+        .getAllCurrencies()
+        .find(
+          /** Source compatibility flag predicate. @param row - Currency. @returns Whether selected. */ (
+            row,
+          ) => row.usedInCompatibleFormatCodes,
+        );
+    if (currency) {
+      const s = unicode(currency.symbol),
+        a = unicode(currency.bankSymbol);
+      try {
+        symbol.assign(s);
+        abbreviation.assign(a);
+      } finally {
+        a.dispose();
+        s.dispose();
+      }
+    } else {
+      symbol.assign(data.getCurrSymbol());
+      abbreviation.assign(data.getCurrBankSymbol());
     }
   }
   /** Original initial language remains unchanged after ChangeIntl. @returns Original uint16 language. */
@@ -339,7 +354,7 @@ export class SvNFLanguageData {
   }
   /** Original current format-scanner reference retains object identity across language changes. @returns Actual scanner. */
   GetFormatScanner(): ImpSvNumberformatScan {
-    return this.fields.pFormatScanner;
+    return this.fields.pFormatScanner as ImpSvNumberformatScan;
   }
   /** Original date evaluation setter. @param order - Original enum. @returns Nothing. */
   SetEvalDateFormat(order: number): void {
@@ -351,15 +366,15 @@ export class SvNFLanguageData {
   }
   /** Original GetNullDate borrows the format scanner's date; the input scanner owns its separate null date. @returns Actual format null date. */
   GetNullDate(): DateConstReference {
-    return this.fields.pFormatScanner.GetNullDate();
+    return this.GetFormatScanner().GetNullDate();
   }
   /** Original precision forwarding preserves scanner state and uint16 conversion. @param precision - Native short argument. @returns Nothing. */
   ChangeStandardPrec(precision: number): void {
-    this.fields.pFormatScanner.ChangeStandardPrec(precision);
+    this.GetFormatScanner().ChangeStandardPrec(precision);
   }
   /** Original precision query. @returns Current scanner precision. */
   GetStandardPrec(): number {
-    return this.fields.pFormatScanner.GetStandardPrec();
+    return this.GetFormatScanner().GetStandardPrec();
   }
   /** Original language-owned year expansion delegates only short years to the formatter's static boundary rule. @param year - Input year. @returns Expanded year. */
   ExpandTwoDigitYear(year: number): number {
@@ -381,8 +396,7 @@ export class SvNFLanguageData {
       decimal = getNumDecimalSep(locale),
       alternate = getNumDecimalSepAlt(locale),
       thousand = getNumThousandSep(locale),
-      date = getDateSep(locale),
-      prepared = prepareGeneralKeywords(this.mapper, loadedLocale);
+      date = getDateSep(locale);
     try {
       fields.locale = locale;
       fields.loadedLocale = loadedLocale;
@@ -394,10 +408,9 @@ export class SvNFLanguageData {
       fields.aDecimalSepAlt.assign(alternate);
       fields.aThousandSep.assign(thousand);
       fields.aDateSep.assign(date);
-      fields.pFormatScanner.ChangeIntl(locale, prepared.standardName, prepared.localization);
+      this.GetFormatScanner().ChangeIntl();
       this.pStringScanner.ChangeIntl();
     } finally {
-      prepared.standardName.dispose();
       date.dispose();
       thousand.dispose();
       alternate.dispose();
@@ -418,7 +431,7 @@ export class SvNFLanguageData {
     fields.pLocaleData.dispose();
     fields.xCharClass.dispose();
     fields.xTransliteration.dispose();
-    fields.pFormatScanner.dispose();
+    fields.pFormatScanner?.dispose();
     fields.loadedLocale.dispose();
     fields.locale.dispose();
   }

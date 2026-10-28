@@ -22,7 +22,8 @@
       "GetCurrencyEntry",
       "GetLegacyOnlyCurrencyEntry",
       "GetTransliteration",
-      "IsDecimalSep"
+      "IsDecimalSep",
+      "GetCompatibilityCurrency"
     ],
     "upstreamSymbols": [
       "SvNFFormatData::ImpGetFormatCodeIndex",
@@ -71,7 +72,8 @@
       "Task AQF9AG adds the source lazy IGNORE_CASE transliteration owner, locale invalidation and stable borrowed GetTransliteration accessor over the native transliteration module.",
       "Task AQF9AG adds source IsDecimalSep exact current/alternate cached separator comparison for the FRACTION preset branch of IsNumberFormatMain.",
       "Task AQF9AG generates standard Boolean and Text formats at native keys 48 and 49 immediately after General, following SvNFFormatData::ImpGenerateFormats. SvNFEngine dispatches numeric output to the owning SvNumberformat entry and string output to the native text entry when needed; missing string format keys fall back to standard Text. GetEntry returns null and GetType returns UNDEFINED for absent entries instead of throwing, while numeric output falls back to General. GetInputLineString changes standard precision only for numeric categories, as in the pinned source. Other builtin formats remain pending.",
-      "AQF9AG moves the initial standard generator into zforlist.generate.ts and connects the original complete builtin index/default/cache helpers from zforlist.index.ts. Boolean/Text runtime keys are99/100 rather than their48/49 enum ordinals; missing string-format fallback uses original Text key100. GetIndexTableOffset and the actual owner-cache query follow source. Full format generation/input/CSV integration remains pending."
+      "AQF9AG moves the initial standard generator into zforlist.generate.ts and connects the original complete builtin index/default/cache helpers from zforlist.index.ts. Boolean/Text runtime keys are99/100 rather than their48/49 enum ordinals; missing string-format fallback uses original Text key100. GetIndexTableOffset and the actual owner-cache query follow source. Full format generation/input/CSV integration remains pending.",
+      "Actual SvNFLanguageData constructs input scanner before format scanner, passes its own owner reference, retains pointer-empty initialization lifetime, updates locale fields before invalidating scanner keywords and selects first Currency2 UsedInCompatibleFormatCodes row with original fallback. The obsolete externally prepared General scanner projection is removed; complete final compilation and CSV auto-input remain pending."
     ],
     "omittedResponsibilities": [
       "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."

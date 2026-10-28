@@ -12,10 +12,12 @@
       "KeywordLocalization",
       "NF_KEY_GENERAL",
       "FLAG_STANDARD_IN_FORMAT",
-      "prepareGeneralKeywords",
       "GetTrueString",
       "GetFalseString",
-      "GetLoc"
+      "GetLoc",
+      "GetKeywords",
+      "SetDependentKeywords",
+      "InitCompatCur"
     ],
     "upstreamSymbols": [
       "lcl_extractStandardGeneralName",
@@ -30,15 +32,11 @@
       "ImpSvNumberformatScan::InitSpecialKeyword"
     ],
     "preservedResponsibilities": [
-      "Task76 ports Original UTF16 pointer walk extracts the locale standard name,including bracket modifiers,unbracketed semicolon termination and malformed/nested modifier behavior. It does not replace symbol scanning,type/final scanning or synthesize a parsed format entry. Tests include all284 source locale standard names. Full scanner,formatter ownership and document paste remain pending.",
-      "Task76 adds actual scanner state for admitted empty/single-General streams with native precision2,reset state,locale keyword precedence,AllowEnglish matching,locale-case preservation,English-to-local-name normalization,NUMBER type and FLAG_STANDARD_IN_FORMAT1000. Caller supplies the original prepared CharClass locale,extracted loaded-locale name and selected localization field explicitly;full SvNFLanguageData,SetDependentKeywords/service/date/color initialization is not fabricated. Actual CharClass uppercase and real OUString ownership are reused. CopyInfo fills actual resized subformat arrays;the admitted stream has no EMPTY tokens. Other pattern families throw at an explicit unported boundary. This is not a replacement full scanner or completed formatter/table owner.",
-      "Task76 prepares the General name and selected localization field from actual loaded LC_INFO Locale and actual XNumberFormatCode.getFormatCode0. The exact SetDependentKeywords language anyOf list is source-generated from zforscan.cxx/lang.h;EnglishOnly is selected for other languages while the locale General name remains localized. Scanner ChangeIntl accepts explicitly prepared fields and preserves identity,precision and existing parse result;complete lazy service/other-keyword initialization remains unported. Source initial/default ownership and CharClass Unicode mapping remain actual,without host Intl substitutes.",
-      "Actual owned tools Date default30/12/1899,borrowed const GetNullDate and original ChangeNullDate validation/normalization now use genuine shared date owners. Remaining invalid dates trigger the source assert-enabled precondition;after this assertion the final source validity guard is necessarily true and is erased with that proof. No JavaScript Date or alternative date/parser provider is introduced.",
-      "Task AQF9AG ports lazy localized TRUE/FALSE keyword initialization, uppercase conversion, English empty-word fallback and ChangeIntl cache invalidation.",
-      "Task AQF9AG admits the pinned source singleton @ token as TEXT and the localized BOOLEAN/LOGISCH keyword as LOGICAL, with source token types and German regional language IDs used by SetDependentKeywords. Other format-pattern families remain unported."
+      "Original actual SvNFLanguageData reference, prepared genuine XNumberFormatCode provider borrow, owned 100 string slots, Int16 token types, 53 owned keyword slots, null-date and precision defaults, reset, convert-mode fields, CopyInfo EMPTY skipping and lifetime cleanup. Complete loaded-locale lazy SetDependentKeywords retains native anyOf selection, actual code-zero General extraction, CharClass uppercase, Thai T, special/Boolean-equivalent strings, compatibility currency and original locale override tables. ChangeIntl only invalidates lazy fields and clears TRUE/FALSE; parse state and precision are retained. Obsolete externally prepared General scanner initialization is removed. Original Symbol_Division/ScanType/token helpers dispatch on this same actual owner and are compared with unchanged native functions by the 32972-case scanner witness.",
+      "The existing public ScanFormat caller still admits General/Boolean/Text only; remaining FinalScan source stages are required before full integration. Explicit unported final-pattern boundaries are not presented as native parse rejection. No approximate parser, fabricated format keys or service manager is introduced."
     ],
     "omittedResponsibilities": [
-      "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."
+      "Full FinalScan/color/prefix/NatNum services, complete builtin/output formatter and public CSV auto-input remain pending."
     ],
     "evidence": {
       "local": [
@@ -55,8 +53,8 @@
           "marker": "ImpSvNumberformatScan"
         },
         {
-          "path": "apps/office/src/svl/source/numbers/zforscan.ts",
-          "marker": "prepareGeneralKeywords"
+          "path": "apps/office/src/svl/source/numbers/zforscan.stages.test.ts",
+          "marker": "InsertSymbol"
         }
       ],
       "upstream": [

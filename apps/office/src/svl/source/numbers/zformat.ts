@@ -12,6 +12,7 @@ import { DateOrder } from "../../../unotools/source/i18n/localedatawrapper";
 import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { NfSymbolType } from "../../inc/nfsymbol";
 import { SvNumFormatType } from "../../inc/zforlist";
+import { IsInQuote, GetQuoteEnd } from "./zformat.quotes";
 import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
 import type { ImpSvNumberformatScan } from "./zforscan";
 
@@ -192,6 +193,25 @@ export class SvNumberformat {
   private eOp2 = 0;
   private readonly language: number;
   private readonly rScan: ImpSvNumberformatScan;
+  /** Original static quote-state helper. @param value - Native string. @param position - Offset. @param quote - Quote unit. @param escapeInside - Inside escape. @param escapeOutside - Outside escape. @returns Quote state. */
+  static IsInQuote(
+    value: OUStringConstReference,
+    position: number,
+    quote = 34,
+    escapeInside = 0,
+    escapeOutside = 92,
+  ): boolean {
+    return IsInQuote(value, position, quote, escapeInside, escapeOutside);
+  }
+  /** Original static closing-quote helper. @param value - Native string. @param position - Offset. @param quote - Quote unit. @param escapeInside - Inside escape. @returns Closing position or source sentinel. */
+  static GetQuoteEnd(
+    value: OUStringConstReference,
+    position: number,
+    quote = 34,
+    escapeInside = 0,
+  ): number {
+    return GetQuoteEnd(value, position, quote, escapeInside);
+  }
   /** Original General-only constructor responsibility:scan,Enlarge,CopyInfo,type assignment and normalized code. Input-number scanner/native-number supplier parameters are erased because this admitted path never consumes them;other constructor families must be ported before admission. @param args - Original admitted constructor/copy overload inputs. @returns Owned parsed entry. */
   constructor(
     ...args:

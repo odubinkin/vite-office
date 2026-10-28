@@ -116,6 +116,16 @@ export function rtl_ustr_compare_WithLength(
 ): number {
   return str.compare_WithLengths(first, firstLen, second, secondLen);
 }
+/** Original Unicode shortened-comparison C wrapper selects the known-length template specialization. @param first - First storage. @param firstLength - Signed32 length. @param second - Second storage. @param secondLength - Signed32 length. @param shortened - Signed32 bound. @returns Native comparison. */
+export function rtl_ustr_shortenedCompare_WithLength(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  return str.compare_ShortenedWithLengths(first, firstLength, second, secondLength, shortened);
+}
 /** Original C hash wrapper. @param data - Borrowed UTF16 input. @param length - Signed32 prefix length. @returns Original signed32 hash. */
 export function rtl_ustr_hashCode_WithLength(data: Uint16Array | null, length: number): number {
   return str.hashCode_WithLength(data, length);
@@ -482,4 +492,13 @@ export function rtl_convertStringToUString(
   const info: [number] = [0];
   rtl_string2UString_status(target, source, length, encoding & 0xffff, flags >>> 0, info);
   return (info[0] & cvt.RTL_TEXTTOUNICODE_INFO_ERROR) === 0;
+}
+
+/** Original public Unicode concatenation wrapper. @param destination - Native output slot. @param left - Borrowed source. @param right - Borrowed source. @returns Nothing. */
+export function rtl_uString_newConcat(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: rtl_uString | null,
+): void {
+  str.newConcat(destination, left, right);
 }

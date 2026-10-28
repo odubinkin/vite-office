@@ -95,6 +95,8 @@ import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { NfSymbolType } from "../../inc/nfsymbol";
 import { SvNumFormatType } from "../../inc/zforlist";
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
+import { SvNFLanguageData } from "./zforlist";
+import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
 
 it("finds source literal/currency tokens in either direction and checks edge minus signs", /** Checks finds source literal/currency tokens in either direction and checks edge minus signs. @returns Test completion or assertion result. */ () => {
@@ -103,7 +105,8 @@ it("finds source literal/currency tokens in either direction and checks edge min
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = new SvNFLanguageData(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(current, mapper),
     code = unicode("General"),
     format = new SvNumberformat(code, scanner, [0], [0x0409]),
     section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[1] as ImpSvNumFor,
@@ -138,6 +141,7 @@ it("finds source literal/currency tokens in either direction and checks edge min
     format.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -155,7 +159,8 @@ it("recognizes the source compiled minute-second token grammar", /** Checks reco
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = new SvNFLanguageData(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(current, mapper),
     code = unicode("general"),
     entry = new SvNumberformat(code, scanner, [0], [0x0409]);
   const first = (entry as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
@@ -210,6 +215,7 @@ it("recognizes the source compiled minute-second token grammar", /** Checks reco
     entry.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -230,7 +236,8 @@ it("derives original date order from compiled first-subformat tokens", /** Check
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = new SvNFLanguageData(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(current, mapper),
     code = unicode("general"),
     entry = new SvNumberformat(code, scanner, [0], [0x0409]);
   try {
@@ -249,6 +256,7 @@ it("derives original date order from compiled first-subformat tokens", /** Check
     entry.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -321,16 +329,13 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
-    otherScanner = new ImpSvNumberformatScan(
-      locale,
-      name,
-      KeywordLocalization.LocaleLegacy,
-      localeData,
-    ),
+    current = new SvNFLanguageData(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(current, mapper),
+    otherScanner = new ImpSvNumberformatScan(current, mapper),
     code = unicode("general"),
     out = unicode("previous"),
     check: [number] = [-1];
+  otherScanner.ChangeIntl(KeywordLocalization.LocaleLegacy);
   const entry = new SvNumberformat(code, scanner, check, [0x0407]);
   try {
     expect(check[0]).toBe(0);
@@ -381,6 +386,7 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     entry.dispose();
     otherScanner.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();

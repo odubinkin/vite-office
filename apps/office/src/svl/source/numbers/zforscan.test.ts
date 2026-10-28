@@ -55,6 +55,7 @@ it("extracts every registered locale's actual index-zero standard name", /** Onl
   expect(count).toBe(284);
 });
 
+import { SvNFLanguageData } from "./zforlist";
 import { ImpSvNumberformatScan, KeywordLocalization } from "./zforscan";
 import { ImpSvNumFor } from "./zformat";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
@@ -67,14 +68,17 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
     locale = new Locale(language, country, empty),
     name = unicode("Standard"),
     localeData = new LocaleDataWrapper(locale);
+  const mapper = new NumberFormatCodeMapper(),
+    current = new SvNFLanguageData(mapper, 0x0407);
   try {
     for (const mode of Object.values(KeywordLocalization)) {
-      const scanner = new ImpSvNumberformatScan(locale, name, mode, localeData),
+      const scanner = new ImpSvNumberformatScan(current, mapper),
         code = unicode("sTaNdArD"),
         english = unicode("GENERAL"),
         unsupported = unicode("0.00"),
         info = new ImpSvNumFor();
       try {
+        scanner.ChangeIntl(mode);
         expect(scanner.ScanFormat(code)).toBe(0);
         expect(text(code)).toBe("sTaNdArD");
         expect(scanner.GetResultStringsCnt()).toBe(1);
@@ -121,6 +125,8 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
       }
     }
   } finally {
+    current.dispose();
+    mapper.dispose();
     localeData.dispose();
     name.dispose();
     locale.dispose();
@@ -130,47 +136,4 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
   }
 });
 
-import { prepareGeneralKeywords } from "./zforscan";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
-import { getLoadedLocale } from "../../../unotools/source/i18n/localedatawrapper";
-
-it("prepares General from the actually loaded locale and native localization language list", /** Requested de-ZZ loads de-DE;EnglishOnly still retains the localized General name,as in SetDependentKeywords. @returns Nothing. */ () => {
-  const language = unicode("de"),
-    country = unicode("ZZ"),
-    empty = unicode(""),
-    requested = new Locale(language, country, empty),
-    loaded = getLoadedLocale(requested),
-    mapper = new NumberFormatCodeMapper();
-  try {
-    expect(text(loaded.Country)).toBe("DE");
-    for (const mode of Object.values(KeywordLocalization)) {
-      const prepared = prepareGeneralKeywords(mapper, loaded, mode);
-      try {
-        expect(prepared.localization).toBe(mode);
-        expect(text(prepared.standardName)).toBe("Standard");
-      } finally {
-        prepared.standardName.dispose();
-      }
-    }
-    const en = unicode("en"),
-      us = unicode("US"),
-      american = new Locale(en, us, empty),
-      prepared = prepareGeneralKeywords(mapper, american);
-    try {
-      expect(prepared.localization).toBe(KeywordLocalization.EnglishOnly);
-      expect(text(prepared.standardName)).toBe("General");
-    } finally {
-      prepared.standardName.dispose();
-      american.dispose();
-      us.dispose();
-      en.dispose();
-    }
-  } finally {
-    mapper.dispose();
-    loaded.dispose();
-    requested.dispose();
-    language.dispose();
-    country.dispose();
-    empty.dispose();
-  }
-});

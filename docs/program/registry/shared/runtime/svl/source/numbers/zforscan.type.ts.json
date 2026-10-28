@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforscan.type.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforscan.type.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
+      ],
+      "justification": "Original type state machine retains month/minute ambiguity rewriting, date/time combination, automatic currency, ISO fractional-second conditions, bracket traversal and original control positions including zero on early returns. InsertSymbol retains preceding EMPTY reuse, original extra-slot shift, uint16 count narrowing and reading aliased rStr after shifting real slot contents. Included in the 32972-case unchanged native scanner witness with scalar fixture dependencies. Full FinalScan, prefixes, complete builtin generation and public CSV auto-input remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ScanType",
+        "InsertSymbol"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforscan.cxx",
+      "upstreamSymbols": [
+        "ImpSvNumberformatScan::ScanType",
+        "ImpSvNumberformatScan::InsertSymbol"
+      ]
+    }
+  }
+}

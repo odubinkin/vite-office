@@ -543,3 +543,66 @@ export function stringbuffer_remove(
   data.length -= length;
   buffer[data.length] = 0;
 }
+
+/** Original known-length shortened comparison specialization truncates both spans before selecting the same-type no-shortening comparator. @param first - First storage. @param firstLength - First signed32 length. @param second - Second storage. @param secondLength - Second signed32 length. @param shortened - Signed32 comparison bound. @returns Native selected comparison. */
+export function compare_ShortenedWithLengths(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  firstLength |= 0;
+  secondLength |= 0;
+  shortened |= 0;
+  if (firstLength < 0 || secondLength < 0) throw new Error("assert(len >= 0)");
+  if (shortened < 0) throw new Error("assert(nShortenedLength >= 0)");
+  return compare_WithLengths(
+    first,
+    Math.min(firstLength, shortened),
+    second,
+    Math.min(secondLength, shortened),
+  );
+}
+
+/** Original NoThrow Unicode known-length newConcat specialization; allocation and release ordering retains caller buffer aliases. @param destination - Native output slot. @param left - Borrowed left units. @param leftLength - Signed32 left length. @param right - Borrowed right units. @param rightLength - Signed32 right length. @returns Nothing. */
+export function newConcat_WithLengths(
+  destination: rtl_uStringSlot | null,
+  left: Uint16Array | null,
+  leftLength: number,
+  right: Uint16Array | null,
+  rightLength: number,
+): void {
+  leftLength |= 0;
+  rightLength |= 0;
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (leftLength < 0) throw new Error("assert(nLeftLength >= 0)");
+  if (left === null && leftLength !== 0) throw new Error("assert(pLeft || nLeftLength == 0)");
+  if (rightLength < 0) throw new Error("assert(nRightLength >= 0)");
+  if (right === null && rightLength !== 0) throw new Error("assert(pRight || nRightLength == 0)");
+  const original = destination[0];
+  if (leftLength > 2147483647 - rightLength) destination[0] = null;
+  else {
+    const allocated = Alloc(leftLength + rightLength);
+    if (allocated === null) console.warn("OSL_ASSERT: pTempStr != nullptr");
+    destination[0] = allocated;
+    if (allocated !== null) {
+      if (leftLength) Copy(allocated.buffer, left as Uint16Array, leftLength);
+      if (rightLength)
+        Copy(allocated.buffer.subarray(leftLength), right as Uint16Array, rightLength);
+    }
+  }
+  if (original !== null) release(original);
+}
+/** Original two-owned-string newConcat overload retains empty/null source selection before NoThrow allocation. @param destination - Native output slot. @param left - Borrowed data. @param right - Borrowed data. @returns Nothing. */
+export function newConcat(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: rtl_uString | null,
+): void {
+  if (right === null || right.length === 0) {
+    if (left === null) throw new Error("assert(pLeft != nullptr)");
+    assign(destination, left);
+  } else if (left === null || left.length === 0) assign(destination, right);
+  else newConcat_WithLengths(destination, left.buffer, left.length, right.buffer, right.length);
+}

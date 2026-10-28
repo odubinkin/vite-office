@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
+      ],
+      "justification": "Original inclusive UTF16 quote state and end lookup preserve escape defaults, negative/out-of-range control values, unterminated length sentinel and CALC-349 nonzero-opening asymmetry. Real SvNumberformat static methods forward to these original source fragments. Both original native functions are included unchanged in the scanner witness. Native invalid pointer callers and full format constructor/prefix/output closure are uncertified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "IsInQuote",
+        "GetQuoteEnd"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "SvNumberformat::IsInQuote",
+        "SvNumberformat::GetQuoteEnd"
+      ]
+    }
+  }
+}

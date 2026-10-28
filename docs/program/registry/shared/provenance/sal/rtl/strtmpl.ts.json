@@ -44,7 +44,10 @@
       "stringbuffer_ensureCapacity",
       "stringbuffer_insert",
       "stringbuffer_remove",
-      "EmptyByteStringImpl"
+      "EmptyByteStringImpl",
+      "compare_ShortenedWithLengths",
+      "newConcat",
+      "newConcat_WithLengths"
     ],
     "upstreamSymbols": [
       "Alloc",
@@ -100,7 +103,9 @@
       "TaskRJ5DY8 implements actual Unicode stringbuffer template/C/header responsibilities on existing rtl_uString allocator/ref owners:16extra constructor units,copy capacity=max(request,length),growth=max(minimum,2*(length+1)),ordered checks,UTF16/ASCII/UTF32 insertion,overlap-safe native tail movement,null-source initialized-gap retention,remove clamp,acquired same-data return and no-copy makeStringAndClear transfer/reset/reuse. Native returns_nonnull requires initialized nonnull data for transfer;null-held transfer is outside the original public contract and not given a fake result. Original full normal/ASanUBSan SAL/CPPU graph objects are verified and reused,with complete initialized logical-unit/capacity/ref/identity observations and original assertions. No spare uninitialized-memory,invalid alias insertion or ABI/lifetime certification. Full OUStringBuffer/math-buffer append,VCL serializer,item/pool/model/UI integration remain pending;no broad parity promotion.",
       "WZ8225 extends the original single integral template body to byte char and unsigned64 specializations, preserving all existing UTF16 signed callers. Original HandleSignChar<T>/DivMod<T>/toInt<T> signedness/max limits, exact BigInt accumulation and source whitespace/overflow/prefix rules are retained. No second parser or numeric factory; source/portable tests do not promote native ABI/complete SAL parity.",
       "Task202610251549-V4DQJW: Native integral template binding now selects signed32 or signed64 limits before accumulation; existing unsigned64 and signed64 defaults remain unchanged. Signed32 height parsing uses its own overflow-to-zero bound, not a narrowing cast. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
-      "Common Alloc/acquire/release/new_/new_WithLength now bind the native byte specialization using an explicit runtime template witness while retaining the original Unicode specialization. Byte empty identity uses STATIC|1 without INTERN; byte release bypasses the Unicode intern branch. Both use the existing replaceable raw allocation slots. Native byte allocation and wrapper lifetime observations match the original witness; original Unicode ownership replay remains green. Thread/atomic ABI, native pointer representation and arbitrary uninitialized storage remain unverified."
+      "Common Alloc/acquire/release/new_/new_WithLength now bind the native byte specialization using an explicit runtime template witness while retaining the original Unicode specialization. Byte empty identity uses STATIC|1 without INTERN; byte release bypasses the Unicode intern branch. Both use the existing replaceable raw allocation slots. Native byte allocation and wrapper lifetime observations match the original witness; original Unicode ownership replay remains green. Thread/atomic ABI, native pointer representation and arbitrary uninitialized storage remain unverified.",
+      "Original compare(with_length, with_length, CompareNormal, signed32 shortening) validates original signed lengths before shortening, clamps both logical spans to the bound and dispatches the existing same-type UTF16 comparison. The full unchanged native OUString/C-prefix witness matches 1662 bounded/prefix/output-alias cases.",
+      "Original two-owner Unicode newConcat and its consumed NoThrow known-length specialization preserve empty/null selection, signed32 overflow-to-null, actual Alloc/Copy/release ordering and alias-safe delayed release. Other template Throw overloads remain unported."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."

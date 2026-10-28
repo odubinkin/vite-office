@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.calendar.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "FinalScanGetCalendar",
+      "IsDateFragment",
+      "SwapArrayElements"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::FinalScanGetCalendar",
+      "ImpSvNumberformatScan::IsDateFragment",
+      "ImpSvNumberformatScan::SwapArrayElements"
+    ],
+    "preservedResponsibilities": [
+      "Original FinalScanGetCalendar merges [~calendarID] token contents in place, retains error/success cursor and remaining-count mutation, and marks consumed slots EMPTY. Original IsDateFragment and move-based SwapArrayElements retain stable token member identities and data-pointer transfer, including self swaps. The unchanged source bodies match the combined 32972-case keyword/lexical/type/neighbor/quote/calendar/insertion witness. Complete FinalScan orchestration is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Complete FinalScan numeric/date/time/common branches, format prefixes and public CSV auto-input remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.calendar.ts",
+          "marker": "FinalScanGetCalendar"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::FinalScanGetCalendar"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.calendar.ts",
+      "rationale": "Split the original large translation unit by scanner keyword, lexical, type and quote responsibilities while retaining original owners and contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}
