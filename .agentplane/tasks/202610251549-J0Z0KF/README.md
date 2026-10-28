@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 13
+revision: 14
 origin:
   system: "manual"
 depends_on:
@@ -30,6 +30,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
 events:
   -
     type: "status"
@@ -62,8 +65,15 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Native rich-string text checkpoint:37 scoped tests and125 shared regressions pass; entire four-owner scoped100 S127/127 B60/60 F33/33 L120/120. Blob-bound evidence/native-richstring-text-checkpoint.json records commands, native module dependencies and limitations. All bounded quality gates pass. Full XLSX workbook/model/filter/shell/UI and Writer DOCX acceptance remain pending, earlier coverage gaps open; no task completion/publication claim."
+  -
+    type: "status"
+    at: "2026-10-28T08:49:45.656Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T08:48:07.188Z"
+doc_updated_at: "2026-10-28T08:49:45.656Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:

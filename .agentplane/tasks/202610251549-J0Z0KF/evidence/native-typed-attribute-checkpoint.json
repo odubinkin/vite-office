@@ -1,0 +1,134 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded typed-attribute prerequisite checkpoint; full task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Native direct-token handler and attribute token/numeric/view presence queries, optional/defaulted AttributeList numeric/bool/token queries, original byte-view o3tl::toDouble overload. Actual SAX/OOXML/SAL owners reused.",
+  "sourceBlobs": {
+    "apps/office/src/o3tl/inc/string_view.ts": "a971c698e076ef90954f0fb5c273d5604cee5d22",
+    "apps/office/src/oox/source/core/fasttokenhandler.ts": "eeda5c08c2cf1e3dd71b382807c9ed127c2c8970",
+    "apps/office/src/oox/source/helper/attributelist.ts": "febcd5deec493c146a5110aaf3a505354b930585",
+    "apps/office/src/sax/source/tools/fastattribs.ts": "07fca8f8630c83e2944066a0e0b835c7fe06358f",
+    "docs/program/calc-upstream-suspected-issues.md": "6068013fc59e346534a03daeaca5c15efd50f745",
+    "docs/program/registry/shared/provenance/o3tl/inc/string_view.ts.json": "074926639d1b9cffab61ec2f453172fba7ec2f68",
+    "docs/program/registry/shared/provenance/oox/source/core/fasttokenhandler.ts.json": "7b136fb32a5eedf748da2b093f993c24cde9c907",
+    "docs/program/registry/shared/provenance/oox/source/helper/attributelist.ts.json": "a4ce1fd508e6d5b9f2af21475f7787ac6627a016",
+    "docs/program/registry/shared/provenance/sax/source/tools/fastattribs.ts.json": "02ba725cf2e92c112d32db0c7c78bdc4ac62509a",
+    "docs/program/registry/shared/runtime/o3tl/inc/string_view.ts.json": "a966e9eb28511800abfba5553436de56da20e370",
+    "docs/program/registry/shared/runtime/oox/source/core/fasttokenhandler.ts.json": "ba3d084be705f8e13d9dea0015f65f31d9dcbe5f",
+    "docs/program/registry/shared/runtime/oox/source/helper/attributelist.ts.json": "ee5b4c7a81f340f9b0b91eb12b276d0f41dc3643",
+    "docs/program/registry/shared/runtime/sax/source/tools/fastattribs.ts.json": "738d05c1589f571772dc9e397b676ba80461e39e",
+    "scripts/check-module-boundaries.mjs": "93f63186661771059ed07c617a72f670ceee8ea0",
+    "scripts/check-module-boundaries.test.ts": "e3e12c27d5b5acb3333f9447b6ced3980587b335",
+    "apps/office/src/oox/source/helper/attributelist-values.test.ts": "7d6f165be2720f8c622135b299a806ec8eef3d7f",
+    "docs/program/registry/calc/capabilities/CAP-e4324520-446c-4d9a-bc92-ad10ea799707.json": "dd6b92b2ed5f7729c8ad9e62e5fec278a1ea9802"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/oox/source/helper/attributelist-values.test.ts src/oox/source/helper/attributelist.test.ts src/sax/source/tools/fastattribs.test.ts src/oox/source/token/tokenmap.test.ts src/o3tl/inc/string_view.test.ts src/o3tl/inc/string_view-views.test.ts src/o3tl/inc/string_view-codepoints.test.ts --coverage.include=src/oox/source/helper/attributelist.ts --coverage.include=src/sax/source/tools/fastattribs.ts --coverage.include=src/oox/source/core/fasttokenhandler.ts --coverage.include=src/o3tl/inc/string_view.ts --coverage.reportsDirectory=coverage/xlsx-attribute-final --maxWorkers=2",
+      "result": "pass93tests/7files; whole four-owner unchanged scoped100 S249/249 B202/202 F56/56 L220/220. No exclusions/threshold changes.",
+      "rawFile": "apps/office/coverage/xlsx-attribute-final/coverage-final.json",
+      "sha256": "31da90ed1318034f8465219739e472d3a773be83a7a233bceeec223a69cae1f9",
+      "files": {
+        "apps/office/src/o3tl/inc/string_view.ts": {
+          "s": {
+            "covered": 87,
+            "total": 87
+          },
+          "b": {
+            "covered": 87,
+            "total": 87
+          },
+          "f": {
+            "covered": 8,
+            "total": 8
+          }
+        },
+        "apps/office/src/oox/source/core/fasttokenhandler.ts": {
+          "s": {
+            "covered": 3,
+            "total": 3
+          },
+          "b": {
+            "covered": 0,
+            "total": 0
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/oox/source/helper/attributelist.ts": {
+          "s": {
+            "covered": 92,
+            "total": 92
+          },
+          "b": {
+            "covered": 93,
+            "total": 93
+          },
+          "f": {
+            "covered": 25,
+            "total": 25
+          }
+        },
+        "apps/office/src/sax/source/tools/fastattribs.ts": {
+          "s": {
+            "covered": 67,
+            "total": 67
+          },
+          "b": {
+            "covered": 22,
+            "total": 22
+          },
+          "f": {
+            "covered": 20,
+            "total": 20
+          }
+        }
+      }
+    },
+    "sharedRegression": {
+      "command": "npm run test:shared -- src/o3tl/inc/string_view src/sal/rtl/math.test.ts src/sax/source/ src/oox/source/ --maxWorkers=2",
+      "result": "pass175tests/19files, related shared parsers/XML/SAX only"
+    },
+    "calcRegression": {
+      "command": "npm run test:calc -- src/sc/source/filter/oox/ src/sc/source/filter/excel/ src/sc/source/core/tool/rangeutl.test.ts --maxWorkers=2",
+      "result": "pass80tests/3files"
+    },
+    "boundaryTests": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts --maxWorkers=2",
+      "result": "pass47tests/1file. Exact paired SAL named bindings and reverse/unsupported dependencies remain guarded."
+    },
+    "typecheck": "pass:npm run typecheck tools and app",
+    "static": "pass:npm run test:static",
+    "eslint": "pass:all five source/test TS paths plus boundary MJS and test TS max-warnings0",
+    "prettier": "pass:same seven paths",
+    "dependencies": "pass1691runtime sources/8748relative imports/212allowed edges; original sax->o3tl, oox->o3tl and byte/UTF16 RTL named bindings are source-backed",
+    "docs": "pass3891authored files",
+    "fileSize": "pass3895authored files, existing decomposition candidates retained",
+    "sourceTree": "pass115required paths/32retired roots",
+    "resources": "pass464commands/11menus/17dispositions",
+    "provenance": "pass1692runtime modules/1480mapped/182browser adaptations/30infrastructure",
+    "registry": "pass1692modules/351capabilities/34invariants/3798records; full parity false",
+    "doctor": "pass0errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-353:present numeric invalid/empty output, defaults, signed64 saturation, unsigned hex rejection and unknown token defaults remain asymmetric.",
+    "CALC-354:export-null handler remains a required nonnull caller precondition for present token queries, as explicit native QA comments warn."
+  ],
+  "resolvedValidationFindings": [
+    "Recorded actual native attributes.cxx QA instead of an initially wrong xmlimport.cxx marker; no unexecuted native QA execution claim.",
+    "Extended exact SAL/o3tl named-binding witness to the real original byte/UTF16 pair; migrated two old boundary expectations and retained unsupported/reverse rejection tests. Initial boundary checker/test failures were rerun successfully.",
+    "CLI task was automatically marked BLOCKED/blocked_external after the previous fourth rework checkpoint despite no external blocker. Followed the emitted approved start-ready route; implementation continues, no goal pause/block or verification-budget change."
+  ],
+  "limitations": [
+    "WorkbookGlobals/WorkbookHelper/AddressConverter, shared-string/worksheet/style/formula contexts, filter/model and shell/UI XLSX acceptance remain pending. Typed attributes are callable prerequisites, not complete workbook import/export.",
+    "FastTokenHandlerBase WeakImplHelper/XFastTokenHandler full service/UNO/pointer ABI, remaining SAX attributes, AttributeConversion::decodeToken and drawing/date/token-list APIs remain unported or unverified.",
+    "Actual native attrs QA is related unported full suite source evidence; local tests use real FastTokenHandler/TokenMap and native SAL/o3tl bindings, not an independently compiled whole native attributes differential. No null-pointer native behavior witness is fabricated.",
+    "Earlier address/OUString/ScFormulaCell coverage gaps remain open; this scoped100 does not certify or close those owners.",
+    "Writer DOCX model/filter/export/UI acceptance remains incomplete and unchanged in this checkpoint.",
+    "Full suite not due under approved ten-task cadence. No publication, merge or task-completion claim."
+  ]
+}
