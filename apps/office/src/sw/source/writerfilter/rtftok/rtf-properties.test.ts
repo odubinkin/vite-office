@@ -344,3 +344,75 @@ it("matches native copy/move assignment and the explicit CopyForWrite constructo
   expect(tree(a)).toEqual(native.cases.copyForWriteA);
   expect(tree(d)).toEqual(native.cases.copyForWriteB);
 });
+
+import { ReferencePointer, resolveReturnedReference } from "../inc/dmapper/resourcemodel";
+
+it("keeps borrowed stream properties live and releases nested pointer returns after mapper resolution", /** Real mapper nested queries must not retain COW owners after the full expression ends. @returns Nothing. */ () => {
+  const doc = createWriterDocument(),
+    model = new SwXTextDocument(doc),
+    mapper = new DomainMapper(model),
+    attrs = list(),
+    sprms = list();
+  put(sprms, N.LN_EG_RPrBase_color, N.LN_CT_Color_val, new RTFValue(0x123456));
+  const root = new ReferencePointer<Properties>(new RTFReferenceProperties(attrs, sprms));
+  const color = sprms.find(N.LN_EG_RPrBase_color);
+  const nested = color.operatorDereference().getProperties();
+  const nestedOwner = nested.operatorDereference();
+  const copy = new ReferencePointer(nested);
+  try {
+    expect(nestedOwner.GetRefCount()).toBe(2);
+    nested.clear();
+    expect(nestedOwner.GetRefCount()).toBe(1);
+    mapper.startCharacterGroup();
+    mapper.props(root);
+    expect(root.is()).toBe(true);
+    expect(root.operatorDereference().GetRefCount()).toBe(1);
+    resolveReturnedReference(copy, mapper);
+    expect(copy.is()).toBe(false);
+    expect(nestedOwner.GetRefCount()).toBe(1 << 30);
+    const changed = sprms.find(N.LN_EG_RPrBase_color, true, true);
+    try {
+      // The root deliberately shares the source list, so its write barrier still detaches.
+      expect(changed.operatorDereference()).not.toBe(color.operatorDereference());
+    } finally {
+      changed.clear();
+    }
+    mapper.endCharacterGroup();
+  } finally {
+    copy.clear();
+    nested.clear();
+    color.clear();
+    root.clear();
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
+
+it("releases a returned native property pointer when a resource callback throws", /** Pointer-return cleanup is a caller full-expression responsibility and must survive exceptional callbacks. @returns Nothing. */ () => {
+  const attrs = list(),
+    sprms = list();
+  sprms.set(N.LN_EG_RPrBase_b, new RTFValue(1));
+  const pointer = new ReferencePointer<Properties>(new RTFReferenceProperties(attrs, sprms)),
+    owner = pointer.operatorDereference();
+  const receiver: Properties = {
+    attribute: /** No attributes in this fixture. @returns Nothing. */ () => {},
+    sprm: /** Interrupts a real modifier callback. @returns Never. */ () => {
+      throw new Error("callback interrupted");
+    },
+  };
+  expect(
+    /** Calls the throwing resource owner. @returns Nothing. */ () =>
+      resolveReturnedReference(pointer, receiver),
+  ).toThrow("callback interrupted");
+  expect(pointer.is()).toBe(false);
+  expect(owner.GetRefCount()).toBe(1 << 30);
+  const existing = sprms.find(N.LN_EG_RPrBase_b);
+  const changed = sprms.find(N.LN_EG_RPrBase_b, true, true);
+  try {
+    expect(changed.operatorDereference()).toBe(existing.operatorDereference());
+  } finally {
+    changed.clear();
+    existing.clear();
+  }
+});

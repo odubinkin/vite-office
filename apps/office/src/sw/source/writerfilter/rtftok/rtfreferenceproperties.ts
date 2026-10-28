@@ -2,11 +2,12 @@
 import type { Properties, Reference } from "../inc/dmapper/resourcemodel";
 import { RTFSprm, RTFSprms } from "./rtfsprm";
 /** Original container copies by-value constructor arguments and sends attributes before modifiers. */
-export class RTFReferenceProperties implements Reference<Properties> {
+export class RTFReferenceProperties extends SvRefBase implements Reference<Properties> {
   private readonly m_aAttributes: RTFSprms;
   private readonly m_aSprms: RTFSprms;
   /** Original attributes/attributes+modifiers overloads; borrowed inputs retain their own list values. @param attributes - Attributes. @param sprms - Optional modifiers. @returns Reference. */
   constructor(attributes: RTFSprms, sprms?: RTFSprms) {
+    super();
     this.m_aAttributes = new RTFSprms(attributes);
     this.m_aSprms = sprms === undefined ? new RTFSprms() : new RTFSprms(sprms);
   }
@@ -29,4 +30,10 @@ export class RTFReferenceProperties implements Reference<Properties> {
     this.m_aAttributes.dispose();
     this.m_aSprms.dispose();
   }
+  /** Original virtual reference destructor releases its actual value-list members. @returns Nothing. */
+  protected override destroy(): void {
+    this.dispose();
+  }
 }
+
+import { SvRefBase } from "../../../../tools/inc/ref";

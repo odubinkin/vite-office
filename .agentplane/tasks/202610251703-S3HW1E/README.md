@@ -1,10 +1,10 @@
 ---
 id: "202610251703-S3HW1E"
 title: "Complete current Writer model slice across TXT RTF Markdown filters"
-status: "BLOCKED"
+status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 119
+revision: 124
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T10:20:57.797Z"
+  updated_at: "2026-10-28T10:49:40.793Z"
   updated_by: "CODER"
-  note: "Native RTF property-container checkpoint passed517 related filter tests,54 final property/style/Worker/UI tests,32 compiled source property-tree cases under ASan/UBSan and static/provenance/Writer/shared gates. Whole task remains incomplete; parser/mapper/reference transport, normalized property-presence insertion and earlier format obligations remain in Findings."
-  attempts: 6
+  note: "Related native property-presence checkpoint passes805 latest assertions and static/source checks. Broad current-slice filter task remains unfinished: native stylesheet application, parser-wide property families, replay and the remaining TXT/RTF/Markdown matrix still need implementation and audit."
+  attempts: 7
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -91,8 +97,28 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Native RTF property-container checkpoint passed517 related filter tests,54 final property/style/Worker/UI tests,32 compiled source property-tree cases under ASan/UBSan and static/provenance/Writer/shared gates. Whole task remains incomplete; parser/mapper/reference transport, normalized property-presence insertion and earlier format obligations remain in Findings."
+  -
+    type: "status"
+    at: "2026-10-28T10:22:22.702Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T10:49:40.793Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Related native property-presence checkpoint passes805 latest assertions and static/source checks. Broad current-slice filter task remains unfinished: native stylesheet application, parser-wide property families, replay and the remaining TXT/RTF/Markdown matrix still need implementation and audit."
+  -
+    type: "status"
+    at: "2026-10-28T10:50:00.412Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T10:20:57.998Z"
+doc_updated_at: "2026-10-28T10:50:00.412Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -104,165 +130,17 @@ sections:
   Plan: "Audit canonical Writer body and attribute model against pinned LibreOffice TXT RTF Markdown paths; repair all represented import and export gaps in current filter scope; add a capability matrix and targeted round-trip tests; run TypeScript, lint, provenance, registry and module-boundary checks. Keep browser save deviations intact; no full suite before tenth task."
   Verify Steps: "1. Run focused Writer TXT, RTF, Markdown filter and document I/O tests; all pass. 2. Run TypeScript typecheck and ESLint/Prettier for changed source; all pass. 3. Run source-provenance, Writer registry and module-boundary checks; all pass. 4. Review the capability matrix against current SwDoc/SwTextNode/SwTable and pinned upstream sources, recording supported, format-inapplicable and unsupported cases with evidence. 5. Confirm git status has no unintended changes."
   Verification: |-
+    Native RTF property-presence checkpoint: latest complete related-suite records contain 805 passed assertions across 60 suites after source-backed fixture corrections. Actual mapper insertion, raw versus materialized style references, native pointer ownership, parser/callback exception cleanup and existing document I/O/worker entry points are covered. Full npm run typecheck and final app typecheck pass; changed-source ESLint, Prettier, repository JSDoc, file-size, module-boundary, source-provenance, Writer/shared registry checks and git diff --check pass. Reports are under ignored output/playwright/rtf-properties-native/presence-*. Source audit and unresolved current-slice obligations are recorded in Findings and docs/program/writer-native-text-filter-slice.md. No full-project rerun; no complete task parity/finish claim.
+
     <!-- BEGIN VERIFICATION RESULTS -->
-    ### 2026-10-28T07:38:46.404Z — VERIFY — needs_rework
+    ### 2026-10-28T10:49:40.793Z — VERIFY — blocked_external
 
     By: CODER
 
-    Note: RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings.
-    Attempts: 1
+    Note: Related native property-presence checkpoint passes805 latest assertions and static/source checks. Broad current-slice filter task remains unfinished: native stylesheet application, parser-wide property families, replay and the remaining TXT/RTF/Markdown matrix still need implementation and audit.
+    Attempts: 7
 
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610251703-S3HW1E
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-28T07:57:43.879Z — VERIFY — needs_rework
-
-    By: CODER
-
-    Note: Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings.
-    Attempts: 2
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610251703-S3HW1E
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-28T08:46:02.669Z — VERIFY — needs_rework
-
-    By: CODER
-
-    Note: Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings.
-    Attempts: 3
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610251703-S3HW1E
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-28T09:35:48.938Z — VERIFY — blocked_external
-
-    By: CODER
-
-    Note: RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings.
-    Attempts: 4
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610251703-S3HW1E
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-28T09:53:01.740Z — VERIFY — blocked_external
-
-    By: CODER
-
-    Note: Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings.
-    Attempts: 5
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:53:00.976Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-    Details:
-
-    BlueprintSnapshotRef:
-    - state: current
-    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-    - route_changed: no
-    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-    DecisionContextRef:
-    - operator_action: run_exact_argv
-    - can_execute_now: true
-    - safe_command: agentplane task verify-show 202610251703-S3HW1E
-    - diagnostic_command: none
-    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-    - freshness: route=computed_local remote=remote_skipped
-    - repeat_allowed: false
-    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-    - risks: none
-
-    ### 2026-10-28T10:20:57.797Z — VERIFY — blocked_external
-
-    By: CODER
-
-    Note: Native RTF property-container checkpoint passed517 related filter tests,54 final property/style/Worker/UI tests,32 compiled source property-tree cases under ASan/UBSan and static/provenance/Writer/shared gates. Whole task remains incomplete; parser/mapper/reference transport, normalized property-presence insertion and earlier format obligations remain in Findings.
-    Attempts: 6
-
-    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:20:56.104Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:49:40.249Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -737,165 +615,17 @@ Audit canonical Writer body and attribute model against pinned LibreOffice TXT R
 
 ## Verification
 
+Native RTF property-presence checkpoint: latest complete related-suite records contain 805 passed assertions across 60 suites after source-backed fixture corrections. Actual mapper insertion, raw versus materialized style references, native pointer ownership, parser/callback exception cleanup and existing document I/O/worker entry points are covered. Full npm run typecheck and final app typecheck pass; changed-source ESLint, Prettier, repository JSDoc, file-size, module-boundary, source-provenance, Writer/shared registry checks and git diff --check pass. Reports are under ignored output/playwright/rtf-properties-native/presence-*. Source audit and unresolved current-slice obligations are recorded in Findings and docs/program/writer-native-text-filter-slice.md. No full-project rerun; no complete task parity/finish claim.
+
 <!-- BEGIN VERIFICATION RESULTS -->
-### 2026-10-28T07:38:46.404Z — VERIFY — needs_rework
+### 2026-10-28T10:49:40.793Z — VERIFY — blocked_external
 
 By: CODER
 
-Note: RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings.
-Attempts: 1
+Note: Related native property-presence checkpoint passes805 latest assertions and static/source checks. Broad current-slice filter task remains unfinished: native stylesheet application, parser-wide property families, replay and the remaining TXT/RTF/Markdown matrix still need implementation and audit.
+Attempts: 7
 
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610251703-S3HW1E
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-28T07:57:43.879Z — VERIFY — needs_rework
-
-By: CODER
-
-Note: Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings.
-Attempts: 2
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610251703-S3HW1E
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-28T08:46:02.669Z — VERIFY — needs_rework
-
-By: CODER
-
-Note: Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings.
-Attempts: 3
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610251703-S3HW1E
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-28T09:35:48.938Z — VERIFY — blocked_external
-
-By: CODER
-
-Note: RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings.
-Attempts: 4
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610251703-S3HW1E
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-28T09:53:01.740Z — VERIFY — blocked_external
-
-By: CODER
-
-Note: Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings.
-Attempts: 5
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:53:00.976Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
-
-Details:
-
-BlueprintSnapshotRef:
-- state: current
-- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
-- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
-- route_changed: no
-- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
-
-DecisionContextRef:
-- operator_action: run_exact_argv
-- can_execute_now: true
-- safe_command: agentplane task verify-show 202610251703-S3HW1E
-- diagnostic_command: none
-- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
-- freshness: route=computed_local remote=remote_skipped
-- repeat_allowed: false
-- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
-- risks: none
-
-### 2026-10-28T10:20:57.797Z — VERIFY — blocked_external
-
-By: CODER
-
-Note: Native RTF property-container checkpoint passed517 related filter tests,54 final property/style/Worker/UI tests,32 compiled source property-tree cases under ASan/UBSan and static/provenance/Writer/shared gates. Whole task remains incomplete; parser/mapper/reference transport, normalized property-presence insertion and earlier format obligations remain in Findings.
-Attempts: 6
-
-VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:20:56.104Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:49:40.249Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 

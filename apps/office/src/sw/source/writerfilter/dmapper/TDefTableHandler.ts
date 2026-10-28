@@ -603,7 +603,7 @@ export class TDefTableHandler implements Properties {
       );
       this.clearGrabBag();
     }
-    properties.resolve(this);
+    resolveReturnedReference(properties, this);
     const line = new BorderLine2();
     MakeBorderLine(this.m_nLineWidth, this.m_nLineType, this.m_nLineColor, line, true);
     const capture =
@@ -764,3 +764,5 @@ export class TDefTableHandler implements Properties {
     this.m_aInteropGrabBagName.dispose();
   }
 }
+
+import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";

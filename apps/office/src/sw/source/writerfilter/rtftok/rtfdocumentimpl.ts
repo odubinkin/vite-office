@@ -29,6 +29,12 @@ import { RtfTokenizer, type RtfToken } from "./rtftokenizer";
 
 /** Imports a represented RTF body without coupling the tokenizer to browser I/O. */
 export class RtfDocumentImpl {
+  protected m_pMapperStream: DomainMapper | undefined;
+  /** Original stream accessor for the actual current mapper. @returns Borrowed mapper. */
+  protected Mapper(): DomainMapper {
+    if (this.m_pMapperStream === undefined) throw new Error("assert(mapper stream initialized)");
+    return this.m_pMapperStream;
+  }
   protected readonly states: RtfState[] = [];
   protected readonly blocks: RtfBlock[] = [];
   protected readonly runs: RtfRun[] = [];
@@ -47,20 +53,14 @@ export class RtfDocumentImpl {
       numberingType: SvxNumType;
     }>[]
   >();
-  protected readonly styles = new Map<
-    number,
-    Readonly<{
-      name: string;
-      styleType: "paragraph" | "character";
-      character: WriterCharacterAttributes;
-      autoKerning?: boolean;
-      baselineHalfPoints?: number;
-      paragraph: RtfParagraphState;
-      controls: ReadonlySet<string>;
-      basedOnStyleIndex?: number;
-      nextStyleIndex?: number;
-    }>
-  >();
+  protected readonly styles = new Map<number, RtfStyleDefinition>();
+  protected readonly m_pStyleTableEntries = new Map<number, ReferencePointer<Properties>>();
+  protected readonly m_aStyleNames = new Map<number, string>();
+  /** Releases original raw style reference members at the existing atomic import boundary. @returns Nothing. */
+  protected ClearStyleTable(): void {
+    for (const pointer of this.m_pStyleTableEntries.values()) pointer.clear();
+    this.m_pStyleTableEntries.clear();
+  }
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
   protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
@@ -107,20 +107,28 @@ export class RtfDocumentImpl {
 
   /** Resolves source bytes with live group/font encoding feedback to the tokenizer.  @param bytes - Bytes. @param options - Options. @returns The SwDoc result. */
   public ResolveBytes(bytes: Uint8Array, options: SwDocOptions = {}): SwDoc {
-    new RtfTokenizer(bytes).Parse(
-      /** Computes the token result. @param token - Token. @returns The computed result. */ (
-        token,
-      ) => this.Dispatch(token),
-      /** Computes the callback result. @returns The computed result. */ () =>
-        this.states.at(-1)?.currentCodepage ?? this.defaultCodepage,
-    );
-    return this.Finish(options);
+    try {
+      new RtfTokenizer(bytes).Parse(
+        /** Computes the token result. @param token - Token. @returns The computed result. */ (
+          token,
+        ) => this.Dispatch(token),
+        /** Computes the callback result. @returns The computed result. */ () =>
+          this.states.at(-1)?.currentCodepage ?? this.defaultCodepage,
+      );
+      return this.Finish(options);
+    } finally {
+      this.ClearStyleTable();
+    }
   }
 
   /** Resolves already-lexed events into a fresh Writer document.  @param tokens - Tokens. @param options - Options. @returns The SwDoc result. */
   public Resolve(tokens: readonly RtfToken[], options: SwDocOptions = {}): SwDoc {
-    for (const token of tokens) this.Dispatch(token);
-    return this.Finish(options);
+    try {
+      for (const token of tokens) this.Dispatch(token);
+      return this.Finish(options);
+    } finally {
+      this.ClearStyleTable();
+    }
   }
 
   /** Materializes the parsed blocks only after the complete stream is valid.  @param options - Options. @returns The SwDoc result. */
@@ -175,6 +183,7 @@ export class RtfDocumentImpl {
       previous.autoKerning === state.autoKerning &&
       previous.baselineHalfPoints === state.baselineHalfPoints &&
       previous.characterStyleIndex === state.characterStyleIndex &&
+      previous.paragraphStyleIndex === state.paragraph.styleIndex &&
       previous.currentCharacterStyleIndex === state.currentCharacterStyleIndex &&
       equalCharacter(previous.attributes, state.character)
     )
@@ -183,6 +192,9 @@ export class RtfDocumentImpl {
       this.runs.push({
         text: value,
         attributes: { ...state.character },
+        ...(state.paragraph.styleIndex === undefined
+          ? {}
+          : { paragraphStyleIndex: state.paragraph.styleIndex }),
         ...(state.currentCharacterStyleIndex === undefined
           ? {}
           : { currentCharacterStyleIndex: state.currentCharacterStyleIndex }),
@@ -276,3 +288,8 @@ export class RtfDocumentImpl {
 }
 
 import type { SwCharFormat } from "../../../inc/charfmt";
+
+import type { DomainMapper } from "../dmapper/DomainMapper";
+
+import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel";
+import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";

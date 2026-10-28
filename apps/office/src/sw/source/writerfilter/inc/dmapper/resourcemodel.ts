@@ -49,3 +49,25 @@ export interface Stream {
   utext(data: Uint16Array, length: number): void;
   info(handle: string): void;
 }
+
+/** Original Reference<T>::Pointer_t transport, retaining the actual intrusive reference object. The resolve forwarder binds native pointer-arrow syntax; it does not consume the pointer. */
+export class ReferencePointer<T> extends SvRef<SvRefBase & Reference<T>> implements Reference<T> {
+  /** Native arrow resolution through a live owned reference. @param handler - Original handler. @returns Nothing. */
+  resolve(handler: T): void {
+    this.operatorDereference().resolve(handler);
+  }
+}
+/** Binds the end of an owned native pointer-return full expression. Existing host-owned OOXML reference objects retain their current transport and are not destroyed here. @param reference - Returned reference. @returns Nothing. */
+export function releaseReturnedReference<T>(reference: Reference<T> | null): void {
+  if (reference instanceof ReferencePointer) reference.clear();
+}
+/** Binds resolve followed by destruction of an owned pointer-return temporary, including exceptional callbacks. @param reference - Returned temporary. @param handler - Actual resource handler. @returns Nothing. */
+export function resolveReturnedReference<T>(reference: Reference<T> | null, handler: T): void {
+  try {
+    if (reference !== null && (!(reference instanceof ReferencePointer) || reference.is()))
+      reference.resolve(handler);
+  } finally {
+    releaseReturnedReference(reference);
+  }
+}
+import { SvRef, SvRefBase } from "../../../../../tools/inc/ref";

@@ -313,7 +313,7 @@ export class DomainMapper implements Properties {
         const properties = modifier.getProps();
         if (properties) {
           const handler = new ThemeColorHandler();
-          properties.resolve(handler);
+          resolveReturnedReference(properties, handler);
           this.insert(context, P.PROP_CHAR_COLOR, new Any([handler.mnColor], "sal_Int32"));
         }
         break;
@@ -391,9 +391,11 @@ export class DomainMapper implements Properties {
       case N.LN_CT_Style_rPr:
       case N.LN_CT_Style_pPr:
       case N.LN_CT_PPr_rPr: {
-        modifier.getProps()?.resolve(this);
+        resolveReturnedReference(modifier.getProps(), this);
         break;
       }
     }
   }
 }
+
+import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";

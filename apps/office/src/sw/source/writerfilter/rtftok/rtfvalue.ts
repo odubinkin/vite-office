@@ -56,8 +56,8 @@ export class RTFValue extends SvRefBase implements Value {
       : new Any([this.m_nValue], "sal_Int32");
   }
   /** Native properties query lazily creates both lists and returns a separate reference container. @returns Property reference. */
-  getProperties(): RTFReferenceProperties {
-    return new RTFReferenceProperties(this.getAttributes(), this.getSprms());
+  getProperties(): ReferencePointer<Properties> {
+    return new ReferencePointer(new RTFReferenceProperties(this.getAttributes(), this.getSprms()));
   }
   /** Original binary query is always null, including populated scalar/nested alternatives. @returns Native null. */
   getBinary(): null {
@@ -115,3 +115,5 @@ export class RTFValue extends SvRefBase implements Value {
     this.dispose();
   }
 }
+
+import { ReferencePointer, type Properties } from "../inc/dmapper/resourcemodel";

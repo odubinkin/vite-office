@@ -330,7 +330,7 @@ it("round trips represented paragraph styles through the RTF stylesheet", /** Ch
   }
 });
 
-it("round trips native RTF stylesheet parent and next links through reserved slots", /** Checks round trips native RTF stylesheet parent and next links through reserved slots. @returns Test completion or assertion result. */ () => {
+it("retains native backward parent and unresolved forward follow links through reserved slots", /** Source follow names are captured before the later style is declared (WRITER206). @returns Test completion or assertion result. */ () => {
   const source = createWriterDocument();
   source
     .GetDfltTextFormatColl()
@@ -351,7 +351,7 @@ it("round trips native RTF stylesheet parent and next links through reserved slo
     );
     const restoredChild = restored.FindTextFormatCollByName("Child");
     expect(restoredChild?.DerivedFrom()?.GetName()).toBe("Parent");
-    expect(restoredChild?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(restoredChild?.GetNextTextFormatColl()).toBe(restoredChild);
     expect(restored.paragraphs[0]?.GetTextFormatColl()).toBe(restoredChild);
     expect(
       (

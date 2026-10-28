@@ -51,6 +51,10 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
+      ...(previous?.basedOnStyleName === undefined
+        ? {}
+        : { basedOnStyleName: previous.basedOnStyleName }),
+      ...(previous?.nextStyleName === undefined ? {} : { nextStyleName: previous.nextStyleName }),
       ...(previous?.currentCharacterStyleIndex === undefined
         ? {}
         : { currentCharacterStyleIndex: previous.currentCharacterStyleIndex }),
@@ -82,9 +86,15 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       this["CommitFont"](previous);
     if (previous?.destination === "styleentry" && previous.styleIndex !== undefined) {
       const name = (previous.styleName.split(";")[0] as string).trim();
-      if (name.length > 0)
-        this["styles"].set(previous.styleIndex, {
+      if (name.length > 0) {
+        const definition: RtfStyleDefinition = {
           name,
+          ...(previous.basedOnStyleName === undefined
+            ? {}
+            : { basedOnStyleName: previous.basedOnStyleName }),
+          ...(previous.nextStyleName === undefined
+            ? {}
+            : { nextStyleName: previous.nextStyleName }),
           styleType: previous.styleType ?? "paragraph",
           character: { ...previous.character },
           ...(previous.baselineHalfPoints === undefined
@@ -99,7 +109,14 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
           ...(previous.nextStyleIndex === undefined
             ? {}
             : { nextStyleIndex: previous.nextStyleIndex }),
-        });
+        };
+        this["m_aStyleNames"].set(previous.styleIndex, name);
+        const properties = createRtfStyleProperties(definition);
+        if (!this["m_pStyleTableEntries"].has(previous.styleIndex)) {
+          this["m_pStyleTableEntries"].set(previous.styleIndex, properties);
+          this["styles"].set(previous.styleIndex, definition);
+        } else properties.clear();
+      }
     }
     if (previous?.destination === "bookmarkstart") {
       const name = previous.bookmarkName.trim();
@@ -247,15 +264,23 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.styleControls = new Set();
     delete state.basedOnStyleIndex;
     delete state.nextStyleIndex;
+    delete state.basedOnStyleName;
+    delete state.nextStyleName;
     return;
   }
   if (state.destination === "styleentry") {
     if (token.name === "sbasedon") {
-      if (token.parameter !== undefined) state.basedOnStyleIndex = token.parameter;
+      if (token.parameter !== undefined) {
+        state.basedOnStyleIndex = token.parameter;
+        state.basedOnStyleName = this["m_aStyleNames"].get(token.parameter) ?? "";
+      }
       return;
     }
     if (token.name === "snext") {
-      if (token.parameter !== undefined) state.nextStyleIndex = token.parameter;
+      if (token.parameter !== undefined) {
+        state.nextStyleIndex = token.parameter;
+        state.nextStyleName = this["m_aStyleNames"].get(token.parameter) ?? "";
+      }
       return;
     }
     if (STYLE_PROPERTY_CONTROLS.has(token.name)) {
@@ -838,3 +863,6 @@ export function DispatchBodyControl(
   else if (name === "slmult" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, lineMulti: parameter, lineSpacingSet: true };
 }
+
+import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
+import { createRtfStyleProperties } from "./rtfdocumentimpl.character";

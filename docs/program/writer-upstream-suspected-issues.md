@@ -1970,3 +1970,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `rtfsprm.cxx`, `cloneAndDeduplicateSprm` and `isSPRMChildrenExpected`.
 - Observation: for unequal parent values whose normalized children become empty, an expected-child modifier skips the replacement `set` call. The direct tree was already copied into the result, so its original modifier can remain unchanged; the guard does not explicitly erase it. This differs from the apparent reading of the nearby removal comment.
 - Preservation/evidence: retain the skipped replacement without inserting an erase. The compiled `emptyExpectedChildren` case and actual runtime property-tree test preserve the original scalar2 parent and first-line120 attribute. No broader desktop symptom is asserted.
+
+
+### WRITER206 — RTF parent and follow links capture unknown names before later declarations
+
+- Source: pinned `rtfdispatchvalue.cxx`, SBASEDON/SNEXT dispatch; `rtfdocumentimpl.cxx`, getStyleName and stylesheet insertion; `rtfvalue.cxx`, getString.
+- Observation: these commands immediately call getStyleName with the numeric index. An index whose name has not yet been read returns an empty OUString. The resulting non-forced RTFValue reports the string `"0"`; later style declarations do not rewrite the stored name. A forward link can therefore fail to select the later named style. This is an inference from the source owner chain, not a confirmed desktop-document result.
+- Preservation/evidence: capture the current name at control dispatch and preserve the original empty-string query semantics. Actual RTFValue tests already compare the empty non-forced value with `"0"`; native character-style tests distinguish backward parent/follow links from forward declarations. Do not introduce deferred numeric-index resolution to repair this behavior.

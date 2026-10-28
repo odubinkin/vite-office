@@ -37,7 +37,7 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",
-          "marker": "round trips native RTF stylesheet parent and next links"
+          "marker": "retains native backward parent and unresolved forward follow links"
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",

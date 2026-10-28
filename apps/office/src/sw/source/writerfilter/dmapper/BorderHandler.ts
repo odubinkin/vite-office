@@ -158,7 +158,7 @@ export class BorderHandler implements Properties {
         );
         this.clearGrabBag();
       }
-      properties.resolve(this);
+      resolveReturnedReference(properties, this);
       if (!this.m_aInteropGrabBagName.isEmpty()) {
         const name = OUString.createFromAscii(new TextEncoder().encode(edge + "\0"));
         try {
@@ -295,3 +295,5 @@ export class BorderHandler implements Properties {
     this.m_aInteropGrabBagName.dispose();
   }
 }
+
+import { resolveReturnedReference } from "../inc/dmapper/resourcemodel";

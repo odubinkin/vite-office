@@ -37,9 +37,9 @@ function named(doc: SwDoc) {
       ) ?? []
   );
 }
-it("creates distinct native character owners and resolves forward parent references", /** Character definitions never become paragraph collections; matching direct controls deduplicate to the real named style. @returns Nothing. */ () => {
+it("creates distinct character owners and retains direct properties absent from the raw child reference", /** Normalization reads the original child rPr, while the model separately owns its named parent. @returns Nothing. */ () => {
   const doc = read(
-    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs22\sbasedon21\i Child;}{\*\cs21\b Parent;}}\pard\cs22\b\i Styled}`,
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b Parent;}{\*\cs22\sbasedon21\i Child;}}\pard\cs22\b\i Styled}`,
   );
   const child = doc.FindCharFormatByName("Child"),
     parent = doc.FindCharFormatByName("Parent");
@@ -53,7 +53,7 @@ it("creates distinct native character owners and resolves forward parent referen
     italic: true,
   });
   parent.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
-  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(true);
 });
 it("exports the actual cs reference before repeated style properties and preserves identity on reopen", /** The source requires named character properties alongside their reference. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b Named;}}\cs21\b AB}`);
@@ -156,3 +156,111 @@ import {
   encodeWriterDocument,
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
+
+it("captures parent and follow names when their controls are parsed", /** Unknown names become the original non-forced empty RTFValue string, whose query returns zero; later definitions do not fix them up. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs22\sbasedon21 Child;}{\*\cs21\b Parent;}{\s2\snext3 Before;}{\s3 After;}{\s4\snext3 Backward;}}\cs22 Text}`,
+  );
+  expect(doc.FindCharFormatByName("Child")?.DerivedFrom()).toBe(doc.GetDfltCharFormat());
+  const before = doc.FindTextFormatCollByName("Before");
+  expect(before?.GetNextTextFormatColl()).toBe(before);
+  expect(doc.FindTextFormatCollByName("Backward")?.GetNextTextFormatColl()).toBe(
+    doc.FindTextFormatCollByName("After"),
+  );
+});
+
+it("preserves explicit normal weight across later paragraph-style changes", /** The actual mapper vector inserts an explicit range item even when its value equals the initial inherited value. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\stylesheet{\s0 Normal;}}\b0 Text}`);
+  doc.paragraphs[0]
+    ?.GetTextFormatColl()
+    .SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+});
+
+it("preserves synthesized normal weight across later named-style changes", /** Missing direct bold against a raw bold reference produces a real b0 range item. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b Named;}}\cs21 Text}`);
+  const style = doc.FindCharFormatByName("Named");
+  assert(style);
+  style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
+  style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  expect(named(doc)[0]?.style).toBe(style);
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+});
+
+it("keeps equal raw character properties inherited after native deduplication", /** An equal direct command disappears and later changes follow the actual named owner. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b Named;}}\cs21\b Text}`);
+  const style = doc.FindCharFormatByName("Named");
+  assert(style);
+  style.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_NORMAL, RES_CHRATR_WEIGHT));
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+});
+
+it("keeps the native mapper script scope for Western bold and font controls", /** Original b writes Western and CJK weights; rFonts/ascii writes only the Western font, and neither invents CTL values. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\fonttbl{\f0 Arial;}}\f0\b Text}`);
+  const items =
+    doc.paragraphs[0]
+      ?.GetpSwpHints()
+      ?.entries()
+      .flatMap(
+        /** Reads the actual inserted character item sets. @param hint - Native range hint. @returns Direct items. */ (
+          hint,
+        ) =>
+          hint.format instanceof SwFormatAutoFormat
+            ? [...hint.format.GetStyleHandle().entries()]
+            : [],
+      ) ?? [];
+  expect(
+    items.find(
+      /** Finds native CJK weight. @param item - Native item. @returns Match. */ (item) =>
+        item.Which() === RES_CHRATR_CJK_WEIGHT,
+    ),
+  ).toBeInstanceOf(SvxWeightItem);
+  expect(
+    items.some(
+      /** CTL is a separate native property. @param item - Native item. @returns Whether CTL. */ (
+        item,
+      ) => item.Which() === RES_CHRATR_CTL_WEIGHT,
+    ),
+  ).toBe(false);
+  expect(
+    items.some(
+      /** ASCII font does not set other script families. @param item - Native item. @returns Whether extra font. */ (
+        item,
+      ) => item.Which() === RES_CHRATR_CJK_FONT || item.Which() === RES_CHRATR_CTL_FONT,
+    ),
+  ).toBe(false);
+});
+import { SwFormatAutoFormat } from "../../core/txtnode/txatbase";
+import {
+  RES_CHRATR_CJK_WEIGHT,
+  RES_CHRATR_CTL_WEIGHT,
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CTL_FONT,
+} from "../../../inc/hintids";
+
+it("releases actual raw stylesheet owners when parsing fails before materialization", /** An invalid stream cannot retain native style references merely because no document was created. @returns Nothing. */ () => {
+  /** Observes genuine parser-owned reference destruction without replacing the resource owners. */
+  class ObservedReader extends RtfDocumentImpl {
+    readonly released: number[] = [];
+    /** Observes actual destructor counts after original cleanup. @returns Nothing. */
+    protected override ClearStyleTable(): void {
+      const owners = [...this.m_pStyleTableEntries.values()].map(
+        /** Borrows each actual native owner. @param pointer - Native pointer. @returns Borrowed owner. */ (
+          pointer,
+        ) => pointer.operatorDereference(),
+      );
+      super.ClearStyleTable();
+      for (const owner of owners) this.released.push(owner.GetRefCount());
+    }
+  }
+  const reader = new ObservedReader();
+  expect(
+    /** Parses an unclosed root after complete stylesheet entries. @returns Never. */ () =>
+      reader.ResolveBytes(
+        new TextEncoder().encode(
+          String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b Named;}}\cs21 Unclosed`,
+        ),
+      ),
+  ).toThrow();
+  expect(reader.released).toEqual([1 << 30, 1 << 30]);
+});

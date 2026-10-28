@@ -660,14 +660,14 @@ it("creates a document-owned collection for an external RTF paragraph style", /*
   }
 });
 
-it("resolves forward stylesheet based-on and next references after all styles exist", /** Checks resolves forward stylesheet based-on and next references after all styles exist. @returns Test completion or assertion result. */ () => {
+it("preserves source unresolved forward stylesheet parent and follow names", /** Source names are captured immediately without deferred numeric-index fixup (WRITER206). @returns Test completion or assertion result. */ () => {
   const document = read(
     "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2\\b Styled}",
   );
   try {
     const child = document.FindTextFormatCollByName("Child");
-    expect(child?.DerivedFrom()?.GetName()).toBe("Parent");
-    expect(child?.GetNextTextFormatColl().GetName()).toBe("Follow");
+    expect(child?.DerivedFrom()).toBe(document.GetDfltTextFormatColl());
+    expect(child?.GetNextTextFormatColl()).toBe(child);
     expect(document.paragraphs[0]?.GetTextFormatColl()).toBe(child);
     expect(projectWriterTextRuns(document.paragraphs[0])[0]?.attributes.bold).toBe(true);
   } finally {

@@ -91,6 +91,8 @@ export interface RtfState {
   styleName: string;
   basedOnStyleIndex?: number;
   nextStyleIndex?: number;
+  basedOnStyleName?: string;
+  nextStyleName?: string;
   styleControls: Set<string>;
   characterControls: Set<string>;
   bookmarkName: string;
@@ -104,6 +106,7 @@ export interface RtfParagraph {
 }
 /** Parsed RTF text plus controls explicitly active at that span. */
 export interface RtfRun extends WriterTextRun {
+  readonly paragraphStyleIndex?: number;
   readonly characterStyleIndex?: number;
   readonly currentCharacterStyleIndex?: number;
   readonly controls: ReadonlySet<string>;
@@ -550,3 +553,18 @@ export function fromRtfNfc(value: number): SvxNumType {
 }
 /** Original native owner used by its out-of-class implementation fragments; no state is copied. */
 export type RtfDocumentImplContext = RtfDocumentImpl;
+
+/** Existing style materialization boundary retains the source-captured names and remaining represented callbacks; native character-reference properties live in the original raw style table. */
+export interface RtfStyleDefinition {
+  readonly name: string;
+  readonly styleType: "paragraph" | "character";
+  readonly character: WriterCharacterAttributes;
+  readonly autoKerning?: boolean;
+  readonly baselineHalfPoints?: number;
+  readonly paragraph: RtfParagraphState;
+  readonly controls: ReadonlySet<string>;
+  readonly basedOnStyleIndex?: number;
+  readonly nextStyleIndex?: number;
+  readonly basedOnStyleName?: string;
+  readonly nextStyleName?: string;
+}
