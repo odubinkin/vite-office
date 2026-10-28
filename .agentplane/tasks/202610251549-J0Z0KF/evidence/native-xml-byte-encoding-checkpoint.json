@@ -1,0 +1,191 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded shared XML byte-owner/MIME prerequisite; full task incomplete; whole4-owner coverage fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/sal/inc/rtl/native-ostring.test.ts": "78ad217f0e49f6d5cda5e1182d90f0e3629f21b5",
+    "apps/office/src/sal/inc/rtl/string.h.ts": "432aae9902796348180d12964e4df3f1289122e3",
+    "apps/office/src/sal/inc/rtl/string.ts": "597235f46069ff2c08c1f33f78ed90c9f137250e",
+    "apps/office/src/sal/rtl/string.ts": "ef1e89b985b20034e4fb9b577a27102213aa6ba0",
+    "apps/office/src/sal/rtl/strtmpl.ts": "d547504ae3cd719ee2898ffca669614971d3cbbd",
+    "apps/office/src/sal/textenc/native-mime-charset.test.ts": "9490e6eee855ae6f216eb524efab0b844be61506",
+    "apps/office/src/sal/textenc/tencinfo.ts": "31fd54b98a474347cef0ea0f0f03ef71ff1d4769",
+    "docs/program/calc-upstream-suspected-issues.md": "04025de1aaa387e2a781f93dc81dfa315a0187a9",
+    "docs/program/native-xml-byte-encoding.md": "f03f3b4c38054d47579f5c569ebda09adc2bc0e7",
+    "docs/program/registry/calc/capabilities/CAP-59b1cb6d-6543-427c-b073-4833050033e0.json": "96c7cacd26b9066e9b0a2177657fc8b69b540c11",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/string.h.ts.json": "a4fdf22e42fd5e73e1104023661a622e492e0909",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/string.ts.json": "5d700186d4bd13a17dccedc361d0268f57706982",
+    "docs/program/registry/shared/provenance/sal/rtl/string.ts.json": "e4726d8ce8637d9a380231a270956b3502c20944",
+    "docs/program/registry/shared/provenance/sal/rtl/strtmpl.ts.json": "63941b7d0638a5b1827ebdbabbf2c44fac0fe926",
+    "docs/program/registry/shared/provenance/sal/textenc/tencinfo.ts.json": "c0401e2f6b6d5dbf690c1214836c25ca8d6b128a",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/string.h.ts.json": "cbc3632d71921a0f06b92d3c4cb8ce460bb23f56",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/string.ts.json": "60853f09229c9a422d789814809ae52903b4e1fe",
+    "docs/program/registry/shared/runtime/sal/rtl/string.ts.json": "30eab5f2622ae01a1f25ee871ac849b16e28cae0",
+    "docs/program/registry/shared/runtime/sal/rtl/strtmpl.ts.json": "5434d99d2aad1e87ddc54d398c047423ea75209f",
+    "docs/program/registry/shared/runtime/sal/textenc/tencinfo.ts.json": "e6902bdd19f757eb195b998aa6982c86d2dddce2",
+    "docs/program/writer-upstream-suspected-issues.md": "764335fd140af2989fe50c85f946c992a848929f"
+  },
+  "scope": "Original OStringLiteral/OString consumed byte lifetime, pointer, search, substring and actual SAL C/template owners. Full native40/184 MIME tables,30-byte ASCII C-string normalization, exact VIP then ordered prefix aliases. No browser encoding/value/allocator replacement.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-0.log",
+      "sha256": "68b79bc69219aba770a3298e9d318290024208bfa83e25a9317713c7aef2d986"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-1.log",
+      "sha256": "6bdeacc27204841b58783bce77e3737278d4122be6a3c15aa5eaa080c9d24bf7"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-2.log",
+      "sha256": "5fa533351bf09d27f7aa91a06a640ffb8911790bf1929463ead2536a1e518f79"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-3.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-4.log",
+      "sha256": "2659090a9b109b9842dae6637699cd1e1f1bc719ce4850cfdaa007362d95d528"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-5.log",
+      "sha256": "5a0f437633591e9847e9fc492f2685700c7fe9e8f88c788d2f3c153dfc32f36d"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-6.log",
+      "sha256": "49276f7040ec1da1c99cc57b41f9c0d2b469680a247e93e634eea7012282249a"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-7.log",
+      "sha256": "3f9bfd6723f73d2f1f7c600e519b94d369e392036e62f63594c9df662d6ac4ab"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-8.log",
+      "sha256": "ea131bc680fef4000da90fd4ff40c0563df14231fbf608f0f2280ab7286ed373"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-9.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-10.log",
+      "sha256": "e2112e5f038b55802dca0f6d378ce5ece0e0d0ea83d8fed23054c47e8f6b2d69"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-11.log",
+      "sha256": "5014f9ad6703bf0743ffbd8f6a5b97a5f6643f3e50f7f3a1b006043cb29584a6"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-12.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-check-13.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-static.log",
+      "sha256": "45e9c1d9b3f722546307d046f4c53b7b27ac8dfe1a8e93d0771db0b9204da3e9"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npx eslint apps/office/src/sal/inc/rtl/string.ts apps/office/src/sal/inc/rtl/string.h.ts apps/office/src/sal/rtl/string.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/inc/rtl/native-ostring.test.ts apps/office/src/sal/textenc/native-mime-charset.test.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-lintfinal.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/sal/inc/rtl/string.ts apps/office/src/sal/inc/rtl/string.h.ts apps/office/src/sal/rtl/string.ts apps/office/src/sal/rtl/strtmpl.ts apps/office/src/sal/textenc/tencinfo.ts apps/office/src/sal/inc/rtl/native-ostring.test.ts apps/office/src/sal/textenc/native-mime-charset.test.ts docs/program/native-xml-byte-encoding.md docs/program/calc-upstream-suspected-issues.md docs/program/writer-upstream-suspected-issues.md",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sal/rtl/approx.test.ts src/sal/rtl/ascii-create.test.ts src/sal/rtl/ascii-equality.test.ts src/sal/rtl/byte-integer.test.ts src/sal/rtl/conversion-allocation-failures.test.ts src/sal/rtl/double-format.test.ts src/sal/rtl/float-format.test.ts src/sal/rtl/integer-format.test.ts src/sal/rtl/math.test.ts src/sal/rtl/native-terminated-int64.test.ts src/sal/rtl/oustringbuffer.test.ts src/sal/rtl/rounding.test.ts src/sal/rtl/string-convert.test.ts src/sal/rtl/string-length-realms.test.ts src/sal/rtl/string-search.test.ts src/sal/rtl/string-subview.test.ts src/sal/rtl/stringbuffer.test.ts src/sal/rtl/stringconcat.test.ts src/sal/rtl/strtmpl.math.test.ts src/sal/rtl/ustring-convert.native.test.ts src/sal/rtl/ustring-convert.test.ts src/sal/rtl/ustring-ownership.test.ts src/sal/rtl/ustring-xlsx.test.ts src/sal/rtl/ustring.test.ts src/sal/inc/rtl/native-ostring.test.ts src/sal/textenc/native-mime-charset.test.ts src/sal/textenc/tencinfo.test.ts --coverage.include=src/sal/inc/rtl/string.ts --coverage.include=src/sal/textenc/tencinfo.ts --coverage.include=src/sal/rtl/strtmpl.ts --coverage.include=src/sal/rtl/string.ts --coverage.reportsDirectory=coverage/native-byte-encoding-final --maxWorkers=2",
+      "exitCode": 1,
+      "log": "apps/office/coverage/xml-encoding-testsfinal.log",
+      "sha256": "ec6ad07f0e1f4a101ec00c2b364d5576ca3cbdee6aaa90401256455ffed14526"
+    },
+    {
+      "command": "npx vitest run src/comphelper/source/streaming/seqstream.test.ts src/oox/source/helper/binary-streams.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --maxWorkers=2 [cwd apps/office]",
+      "exitCode": 0,
+      "log": "apps/office/coverage/xml-encoding-related.log",
+      "sha256": "26857ef3b03e99bf7f8033c7ca1b379244410ce58d33f8c9e9f82e4ad01e1fcb"
+    }
+  ],
+  "rawCoverage": {
+    "path": "apps/office/coverage/native-byte-encoding-final/coverage-final.json",
+    "sha256": "f99a504d00313dcf41e87133c26f3a9b7f0130c7be92e54c2b55be5573405279",
+    "result": "Full4-owner unchanged100 gate FAILS S524/610 B385/472 F76/79 L407/485. Existing Windows codepage/charset and shared legacy functions remain uncovered. No altered counters, lower thresholds or exclusions."
+  },
+  "wholeOwnerSupplementalGate": {
+    "path": "apps/office/coverage/xml-encoding-whole-owner-gate.json",
+    "sha256": "feadef3546b833455d51207c9ef9d50548213383193bffbc96ec5f1d79f8aec5",
+    "result": "Complete new OString and actual byte C file entries PASS configured four100 metrics S151/151 B81/81 F34/34 L127/127 in the same unedited raw map. This does not replace or promote the failed full4-owner profile. branchesTrue is not a configured threshold; its empty Unknown metric caused an initial helper-only rejection until the helper checked only the configured four gates."
+  },
+  "sourceTableAudit": {
+    "path": "apps/office/coverage/xml-encoding-table-audit.json",
+    "sha256": "4aa77c765a7c259877b408d2b698217456e7e9af85a7c3ccf5deb2d8e18f8f7b",
+    "result": "40 VIP and184 alias entries exactly match pinned source names/encoding constants in order, including duplicates; commented-out entries excluded as in original compilation. Table-source comparison is not independently compiled runtime differential."
+  },
+  "tests": {
+    "focusedAndSharedSAL": "138pass/27files;coverage command exits1 on full4-owner thresholds",
+    "relatedStreamsCalcODSCSV": "68pass/6files",
+    "uniqueTotal": 206
+  },
+  "sourceIssue": "CALC-362/WRITER199: native MIME alias prefix matching accepts suffixes while VIP names require equality. Preserve original table order and normalization.",
+  "corrections": [
+    "Initial TypeScript tuple narrowing and explicit numeric SAL_NO_ACQUIRE erasure binding corrected by native declared pointer shape; no value/type/provider guessing is supplied.",
+    "Original OString move construction and move assignment reset source through rtl_string_new; assignment releases destination rather than swapping its old data into source. Copy uses original local null C pointer followed by no-acquire value construction.",
+    "Shared byte specialization retains existing Unicode default and ASCII-to-Unicode checked Copy behavior; byte-to-byte copies retain high bytes and embedded zeros."
+  ],
+  "limitations": [
+    "XMLFile2UTFConverter, incremental scanning/encoding/declaration handling, actual SAX InputSource values and UNO byte parser admission remain pending. Existing host XML paths remain as previously recorded.",
+    "OString exposes only implemented lifetime/search/copy methods. Numeric/concat/format and further conveniences remain unported.",
+    "Native ABI, constant-expression evaluation, pointer undefined behavior, allocation exhaustion and threads remain unverified. Prior genuine native SAL evidence stays scoped to its original recorded APIs and observations.",
+    "Full model/controller/factory, FilterBase/workbook owners and complete DOCX/XLSX import/export/reopen/worker/UI acceptance remain incomplete. Prior model/binary copy coverage gaps remain open.",
+    "Full application suite not run under approved ten-agentplane-task cadence. Doctor passed with existing managed pre-push readiness warning; no global settings/hooks changed."
+  ],
+  "workingTree": "Only21 intentional source/test/docs/registry paths and canonical task artifacts; verify committed blobs and clean status after source commit."
+}
