@@ -1,0 +1,206 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded original model/controller/frame/window SDK prerequisite; full task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Thirteen complete IDL interface contracts with original direct bases and actual CPPUMaker-normal cached types; eight event/rectangle field declarations only; eight original FrameAction literal enumerators. Exact native InputEvent declaration/import/extends identifiers are distinguished from DOM globals without admitting constructor/global access.",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/awt/FocusEvent.ts": "284f8dd02681123c6fad484d760d777210154872",
+    "apps/office/src/offapi/com/sun/star/awt/InputEvent.ts": "f8b8d992ec8ffa9b4447d1b3c873b5fa9ea22b4d",
+    "apps/office/src/offapi/com/sun/star/awt/KeyEvent.ts": "08d3e18e577e89e253f8cb3c34b239419ec4c8e2",
+    "apps/office/src/offapi/com/sun/star/awt/MouseEvent.ts": "16a9120ede9153eafc025797986935922376f869",
+    "apps/office/src/offapi/com/sun/star/awt/PaintEvent.ts": "14456c8dcd9ca412c978fa08a1dd580ee33a0e84",
+    "apps/office/src/offapi/com/sun/star/awt/Rectangle.ts": "1157d1bf3b7c249ff1926102d582cf01d4969579",
+    "apps/office/src/offapi/com/sun/star/awt/WindowEvent.ts": "bf472a2c1078e78beb962a9a7f566ccb735ca7c7",
+    "apps/office/src/offapi/com/sun/star/awt/XFocusListener.ts": "ce8044cc344318ec18af8d8cfa3726eda1cc77e3",
+    "apps/office/src/offapi/com/sun/star/awt/XKeyListener.ts": "fba76b9b2904edb899b3845f161a07e728751c8d",
+    "apps/office/src/offapi/com/sun/star/awt/XMouseListener.ts": "992f29fea68f393be3c8c2e82c89350adb3c8627",
+    "apps/office/src/offapi/com/sun/star/awt/XMouseMotionListener.ts": "da249cfe4a5eef268129cb081d2a2ee87432799d",
+    "apps/office/src/offapi/com/sun/star/awt/XPaintListener.ts": "f3e27efd94ef7635132be35659b0b38ddfedfc44",
+    "apps/office/src/offapi/com/sun/star/awt/XWindow.ts": "8a4f84a7e131814a03f2b12ded9a2425867f1065",
+    "apps/office/src/offapi/com/sun/star/awt/XWindowListener.ts": "f1a712e570c536aab58a324b3aca141f21a7c11d",
+    "apps/office/src/offapi/com/sun/star/frame/FrameAction.ts": "5a248ee98df2ee61f113ced6a1e4e10b4a6f88c1",
+    "apps/office/src/offapi/com/sun/star/frame/FrameActionEvent.ts": "e8eb619c15bc949afd327ba7342277d2067ab5fa",
+    "apps/office/src/offapi/com/sun/star/frame/XController.ts": "6c5fe3cb296cd27d8edce5440e1a7f1cc23f0720",
+    "apps/office/src/offapi/com/sun/star/frame/XFrame.ts": "ca5ae31fbcb06b4f6ee8dc4f36b2b76e9e5cc1dd",
+    "apps/office/src/offapi/com/sun/star/frame/XFrameActionListener.ts": "562826108452ce2033123837bd750e8ca3b514ca",
+    "apps/office/src/offapi/com/sun/star/frame/XFrames.ts": "1862ce414ec9d57c1cc8798f491be77571bb4ca5",
+    "apps/office/src/offapi/com/sun/star/frame/XFramesSupplier.ts": "136834f339d36a1686eea7b1800b44494a998fe7",
+    "apps/office/src/offapi/com/sun/star/frame/XModel.ts": "b42c3aa9f745fa20961d68986ad9b07c58f72c1c",
+    "apps/office/src/offapi/com/sun/star/frame/native-model-interfaces.test.ts": "63c8d5fd6eec02918988bddc3e13490fddfca2be",
+    "docs/program/registry/calc/capabilities/CAP-d25115b5-c9e5-4d2c-8579-1ee1c12c92a0.json": "2c0cbca31847041fbb93e4fd304313b28bae4e7a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/FocusEvent.ts.json": "d0fee9c3d372db58b25ac65f2fc526c38358a177",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/InputEvent.ts.json": "693aded310d1bdad6ecb4598a9a2827a64754650",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/KeyEvent.ts.json": "f8be75a4ebc7cf2010a7fa582c81e0c9fd23b264",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/MouseEvent.ts.json": "91419162924156043d19cf7f9b7a5191f9bf9fde",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/PaintEvent.ts.json": "6d89b3b6ce43e20b4ddcb0c730cd4270a3e79e9d",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/Rectangle.ts.json": "91008bbfdd71f319770bb76660f92aaea7dd231c",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/WindowEvent.ts.json": "267897105670c82876907f13f84b1b2d9aa6c012",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XFocusListener.ts.json": "943338569ad9b270a97a8242626b037216680da0",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XKeyListener.ts.json": "07a83a8e4a5152ac50f8c6cdfbf41a9fec123b7a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XMouseListener.ts.json": "199eea93b93648fd3cf26ae189b1041aba383cb5",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XMouseMotionListener.ts.json": "65124b9265ae2740960cdac4596db1ac60c54d08",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XPaintListener.ts.json": "dc8716e687f7e07dc8354296d4122e1f5ca2f1dc",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XWindow.ts.json": "db0cee0bb08bbed133e966fef473208fab522c97",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/awt/XWindowListener.ts.json": "a9000d2d96c793e107fc9ac4e2fb819639a2e603",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/FrameAction.ts.json": "542c0aeaecc0531c04f750d5d76872b671d8591a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/FrameActionEvent.ts.json": "791b3b4d8b759852b6833d96afe9c9e583059028",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XController.ts.json": "1a77f37a9a0645a06472d115904e290a36840d60",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XFrame.ts.json": "3629bf66ede9dd603d953fe4454a330c9f18a57b",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XFrameActionListener.ts.json": "a4773e986286b6c68ba0b49e9d3dd68077504e9a",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XFrames.ts.json": "e7fa8deb8a3a692a9aaf512255920c44ea7cea7e",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XFramesSupplier.ts.json": "24b6a6e7d145f2728a681626131481299af969c4",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/frame/XModel.ts.json": "65df9b6356ba23b5a0e4289c56e520eb91fb0055",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/FocusEvent.ts.json": "87a3204e6e588183b65dfcc6f2d127acf02327dc",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/InputEvent.ts.json": "12af55764173b8c98fd532bb0b08206bebe39bde",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/KeyEvent.ts.json": "9530453d437120f1374db708384f9fd27a0814b1",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/MouseEvent.ts.json": "ea10bfd226e445b53e731a6832f5e5cf665d40cd",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/PaintEvent.ts.json": "7b444e060210ce7a55b59a4a36dbd75f9a0ad694",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/Rectangle.ts.json": "5cee5854b82d860e5d12e8c61b7b9bc49a24c261",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/WindowEvent.ts.json": "1bfd1478e84a8100c15cbbab051fba476a241306",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XFocusListener.ts.json": "118015f5e58f20be59566cce7e53a7da40b274e5",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XKeyListener.ts.json": "e003958754ac5d303d2ea0787d4d83f69be7fe12",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XMouseListener.ts.json": "db867a4c1e22dc63a75391bb9c827d8d2968b9bb",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XMouseMotionListener.ts.json": "781d7616fa7f0c901ccac6a5d3b5518ac3cb87db",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XPaintListener.ts.json": "089a5f1aa3fd3024e544a8418499e7ea6e03e22a",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XWindow.ts.json": "42848ef3245e7fcae14889b4a0366591fd5c61ad",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/awt/XWindowListener.ts.json": "43a8cadb66687b730c13e8d09d4af57ac3449382",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/FrameAction.ts.json": "cc3edc6d52e3317502f9f657f8eb534dd0c3c51f",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/FrameActionEvent.ts.json": "c2fc24a3ab30e178a392f4d25d8bf772c242a808",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XController.ts.json": "26b01985490c0f202a06759233f6594018704b2d",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XFrame.ts.json": "9f982876437e724ffa07a7149a7dfa2c107642be",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XFrameActionListener.ts.json": "dde5a9a0aa243ec451dc13e7a0764961a84861bc",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XFrames.ts.json": "c39498881977ce10cfba037e4b3837cbc7203348",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XFramesSupplier.ts.json": "a1734f4ccbb3085c9ffe37f985dec188ad628e91",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/frame/XModel.ts.json": "9a22023fc5747ca171dc6ecb7bef7d461d80277b",
+    "docs/program/uno-model-sdk.md": "f4a48053050d6e60cee27f07c40f3210b68f278e",
+    "scripts/check-module-boundaries.mjs": "37d00f395ad6f09953c6c835609f0b0c2f368219",
+    "scripts/module-boundaries/input-event-binding.mjs": "f64d3f9f51ca48238665b9eba88ba077e836cd86",
+    "scripts/native-input-event-boundary.test.ts": "90bd8b249415b1a9ebde786e99917be07604b962"
+  },
+  "checks": {
+    "typecheckfinal": {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-typecheckfinal.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "build": {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-build.log",
+      "sha256": "5ab81852b28a5b621589afa0cc31845177ae556fae06cfe8e13d588049e0b5f5"
+    },
+    "deps": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-deps.log",
+      "sha256": "78d5e0dc456ad93ce1f8ca7feb2f3a7f72ff124ecf8440a832dc4b1a899f18d6"
+    },
+    "docsfinal": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-docsfinal.log",
+      "sha256": "566084aae2b54d11084655dc2dc0e341f70c3ed132afdc596cabaa0ed812c451"
+    },
+    "sizefinal": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-sizefinal.log",
+      "sha256": "1a812eac2308c8493d3b509a9e51cd4a1d12454bc584df30c2f1c160d2d04124"
+    },
+    "tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-provenance.log",
+      "sha256": "9d5151a6769167207de881d4ea2591fcb79afc8299a9212328655a119981585b"
+    },
+    "registrycheck": {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-registrycheck.log",
+      "sha256": "8c7d3563c6c714835cd58be275f40f5ae2b7bada32abe971d1ac13c419e76bb2"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-doctor.log",
+      "sha256": "49b50497e1663cc4b6d7ef5d307710f9c2396ec5d844e362b03c47cbd69830d5"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "tooling": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/native-attribute-value-boundary.test.ts scripts/native-input-event-boundary.test.ts --maxWorkers 2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-tooling.log",
+      "sha256": "9de06826ce35719f9f845e9f019dc97aab66261b9a0e761f74c9cdd869ad8051"
+    },
+    "lintfinal": {
+      "command": "npx eslint <23 changed SDK/test paths and 3 changed tooling paths> --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-lintfinal.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check <23 changed SDK/test paths and 3 changed tooling paths>",
+      "result": "pass",
+      "log": "apps/office/coverage/model-sdk-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "coverage": {
+      "command": "src/offapi/com/sun/star/frame/native-model-interfaces.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts src/offapi/com/sun/star/text/native-text-interfaces.test.ts src/cppu/inc/unotype.test.ts src/cppu/inc/unotype-overloads.test.ts src/cppu/inc/com/sun/star/uno/generated-interfaces.test.ts src/cppu/inc/com/sun/star/container/generated-access-interfaces.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppu/source/typelib/typelib-interface-factories.test.ts --coverage.include=src/offapi/com/sun/star/frame/XModel.ts --coverage.include=src/offapi/com/sun/star/frame/XController.ts --coverage.include=src/offapi/com/sun/star/frame/XFrame.ts --coverage.include=src/offapi/com/sun/star/frame/XFrameActionListener.ts --coverage.include=src/offapi/com/sun/star/frame/FrameActionEvent.ts --coverage.include=src/offapi/com/sun/star/frame/FrameAction.ts --coverage.include=src/offapi/com/sun/star/awt/XWindow.ts --coverage.include=src/offapi/com/sun/star/awt/XPaintListener.ts --coverage.include=src/offapi/com/sun/star/awt/PaintEvent.ts --coverage.include=src/offapi/com/sun/star/awt/Rectangle.ts --coverage.include=src/offapi/com/sun/star/awt/XMouseMotionListener.ts --coverage.include=src/offapi/com/sun/star/awt/MouseEvent.ts --coverage.include=src/offapi/com/sun/star/awt/InputEvent.ts --coverage.include=src/offapi/com/sun/star/awt/XMouseListener.ts --coverage.include=src/offapi/com/sun/star/awt/XKeyListener.ts --coverage.include=src/offapi/com/sun/star/awt/KeyEvent.ts --coverage.include=src/offapi/com/sun/star/awt/XFocusListener.ts --coverage.include=src/offapi/com/sun/star/awt/FocusEvent.ts --coverage.include=src/offapi/com/sun/star/awt/XWindowListener.ts --coverage.include=src/offapi/com/sun/star/awt/WindowEvent.ts --coverage.include=src/offapi/com/sun/star/frame/XFramesSupplier.ts --coverage.include=src/offapi/com/sun/star/frame/XFrames.ts --coverage.reportsDirectory=coverage/model-sdk-final --maxWorkers=2",
+      "result": "pass68tests/9files, complete executable new SDK scope100; all22 new modules included, eight declaration-only modules supply no runtime value owners. No exclusions or threshold changes.",
+      "executableFiles": 14,
+      "totals": {
+        "s": {
+          "covered": 126,
+          "total": 126
+        },
+        "b": {
+          "covered": 26,
+          "total": 26
+        },
+        "f": {
+          "covered": 40,
+          "total": 40
+        }
+      },
+      "rawFile": "apps/office/coverage/model-sdk-final/coverage-final.json",
+      "sha256": "e4d4d3d34bae1b44314ec746235a362ac5fa568be32589df6c417468e416e599"
+    }
+  },
+  "relatedTests": {
+    "SDKandCPPU": "68pass/9files",
+    "moduleBoundaryTooling": "48pass/3files"
+  },
+  "initialCorrections": [
+    "Generated self import in XFrame was removed before final full typecheck/coverage.",
+    "The dependency guard initially rejected the actual UNO InputEvent spelling; exact AST/binding admission was added with DOM/global/neighbor/wrong-import regression coverage.",
+    "Registry validation required nonempty local docs and meaningful upstream method/field symbols; provenance keeps those textual symbols while runtime localSymbols retain only actual exported top-level owners.",
+    "Two heredoc logging commands had shell construction syntax errors and did not execute their checks; corrected commands completed with terminal exit0."
+  ],
+  "limitations": [
+    "Eight event/rectangle files are type declarations, not generated value constructors/copy/destructor/struct metadata implementations. FrameAction generated enum type metadata is unported.",
+    "No complete XModel/controller/window/listener/factory component is manufactured or instantiated by these tests. Model guard/controller locking and undo remain pending; original counter/guard bodies were inspected but not replaced by partial local behavior.",
+    "SfxBaseModel/ScModelObj complete UNO/factory ownership, FilterBase admission, workbook context, full DOCX/XLSX filter/core/UI reopen and native fixture acceptance remain pending. Full original task acceptance is not verified.",
+    "No independently compiled original SDK differential, full ABI/marshalling/reflection/thread or original QA port is claimed.",
+    "Full test suite not run at this prerequisite checkpoint under approved ten-agentplane-task cadence.",
+    "Doctor passed with the existing managed pre-push startup-readiness warning; no hooks/global settings were changed."
+  ],
+  "workingTreeBeforeCommit": "Only the72 intentional source/registry/docs/tooling paths and canonical task artifacts. Postcommit git status must be checked separately."
+}
