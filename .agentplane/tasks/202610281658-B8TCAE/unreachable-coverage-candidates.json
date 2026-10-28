@@ -1,0 +1,34 @@
+{
+  "status": "pending-user-decisions",
+  "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
+  "candidates": [
+    {
+      "id": "B8TCAE-U01",
+      "approval": "pending",
+      "path": "apps/office/src/external/icu/source/i18n/erarules.ts",
+      "branch": "createInstance: missing-start else branch at lines123..125",
+      "proof": "The local hasEnd variable starts true and the only later assignment is true. The original ICU erarules.cpp170/194/199 has the same invariant. No admitted input can select the else branch; no private-state mutation is allowed.",
+      "upstreamFinding": "CALC-371",
+      "sourceSha256": "d66134af740b5da9b3a72dd832f46de4bc68de8382875a09f24fadeefd64c39a",
+      "proposedScope": "Only the impossible no-end error alternative; keep the actual source guard and all other coverage obligations."
+    },
+    {
+      "id": "B8TCAE-U02",
+      "approval": "pending",
+      "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+      "branch": "getAllInstalledLocaleNames: missing identity throw at line246",
+      "proof": "Enumeration uses keys of the fixed generated currencies catalog. The private identity Map is built from fixed language-country-info data. All284 enumerated keys have identities; no caller input or permitted mutation changes either catalog. Triggering this guard would require a different/corrupted generated artifact, not a valid runtime input.",
+      "dataEvidence": {
+        "currencyKeys": 284,
+        "identityKeys": 284,
+        "missing": [],
+        "sha256": {
+          "apps/office/src/i18npool/source/localedata/data/currencies.json": "27406350e413b403c1ededd8947f5eeffaab0ef94ad817ca6bea6affad2461c1",
+          "apps/office/src/i18npool/source/localedata/data/language-country-info.json": "0739fe52b0031bd7255c660afdf8ef11dbd3fb99502b65891bb064768be1e91b"
+        }
+      },
+      "existingEvidence": "native-currencies.test.ts enumerates real installed locale values; resource/inventory checks retain the generated data contract.",
+      "proposedScope": "Only the missing-identity throw alternative in coverage; retain runtime integrity validation, catalog tests and the100% threshold."
+    }
+  ]
+}

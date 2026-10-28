@@ -3,7 +3,7 @@
   "finalFullVerifierPassed": false,
   "thresholdsChanged": false,
   "exceptionsApproved": false,
-  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps.",
+  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps. LocaleData maps also differ after removal of the duplicate argument-spread bridge; old LocaleData counters are historical.",
   "icu": {
     "testFiles": 9,
     "groupedTests": 70,
@@ -316,5 +316,54 @@
       }
     },
     "scope": "B8TCAE restores original swhtml.cxx LINEBREAK-in-PRE/NEWPARA shared control flow using grouped TypeScript case labels because compiler noFallthroughCasesInSwitch remains enabled. The extra raw TABCHAR insertion case has no original SwHTMLParser counterpart and is removed; real HTMLParser FilterPRE tab expansion remains covered by actual byte-stream input. Original soft-hyphen, repeated PRE break and existing block behavior are retained. Context API regressions use actual constructors/setters for default-only spacing, NONE search boundaries, PopStack, real node preconditions, paragraph-space restoration and interrupted real-token consumer lifetimes; no private parser fields or original operation results are fabricated. Seven suites119 assertions pass. Current HTML source maps differ from the initial integration run, so old HTML coverage is historical only; broad100% remains unfinished and semantic statuses are unchanged."
+  },
+  "calendarWrapperAndLocale": {
+    "testFiles": 10,
+    "tests": 48,
+    "newWrapperTests": 8,
+    "runtimeCodeChanged": [
+      "apps/office/src/i18npool/source/localedata/localedata.ts"
+    ],
+    "report": "apps/office/coverage/integration-calendar-wrapper/coverage-final.json",
+    "reportSha256": "68a424ffa4334034c645cbee718691a90620f89fd05a874b94ac64b5b282fa65",
+    "metrics": {
+      "lines": {
+        "total": 283,
+        "covered": 269,
+        "skipped": 0,
+        "pct": 95.05
+      },
+      "statements": {
+        "total": 314,
+        "covered": 281,
+        "skipped": 0,
+        "pct": 89.49
+      },
+      "functions": {
+        "total": 86,
+        "covered": 86,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 96,
+        "covered": 66,
+        "skipped": 0,
+        "pct": 68.75
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "additionalOwnershipCheck": {
+      "testFiles": 1,
+      "tests": 6,
+      "log": ".agentplane/tmp/coverage-format-transport-final.log",
+      "result": "passed"
+    },
+    "scope": "B8TCAE adds real CalendarWrapper/CalendarImpl integration over registered providers and pinned locale resources: pre-load UNO defaults, UTC forwarding, invalid field indices, failed-ID rollback, locale reload on the same calendar/timezone cache key, independent grammatical name owners, Hanja success and hanja_yoil resource rejection. Source en_US calendar order includes Gregorian and Jewish. Three200000-unit Locale field cases reproduced a JavaScript argument-spread RangeError; LocaleData field lookup now reuses the existing counted-UTF16 text bridge, preserving every input unit and existing direct/language/en_US fallback. No input cap, resource mutation, service replacement or full native UNO-wrapper ABI claim is introduced. Both convenience service loads and actual FormatElement Sequence ownership are checked; a copied General string retains its real sole logical reference after Sequence destruction. Coverage policy and semantic statuses remain unchanged."
   }
 }

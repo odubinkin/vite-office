@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 18
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T18:57:49.575Z"
+doc_updated_at: "2026-10-28T19:38:12.149Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -87,6 +87,14 @@ sections:
     - Observation: Original ICU witness now compares22892 protected-hook inputs, including324 consistent-time/base-cache field snapshots,864 large-month cycle cases and12 Hebrew checked cycle/year errors in addition to the28 prior checked normalization cases.
       Impact: All9 ICU suites70 grouped assertions pass against71217 independent native rows in total. Protected field calls use real public preparation and incoming error/warning status; no original method or private state is replaced.
       Resolution: Retain current raw profile and source hashes. ICU runtime code and coverage policy are unchanged; strict whole-project coverage, individual unreachable-branch review and final Git publication/sync remain pending.
+
+    - Observation: Two individual coverage candidates are recorded with proof in unreachable-coverage-candidates.json: U01 hasEnd always true in original EraRules; U02 missing LC_INFO identity is impossible for the fixed284-key generated catalogs, whose key sets and hashes were checked.
+      Impact: Both decisions remain pending. Runtime guards, thresholds, counters and exclusions are unchanged; static artifact corruption is distinguished from an admitted runtime input.
+      Resolution: Request explicit individual user approval only for the stated alternatives; continue other reachable coverage work independently.
+
+    - Observation: Three real200000-unit Locale field cases reproduced RangeError in the local argument-spread text conversion, including ignored non-qlt Variant. Reusing the existing counted UTF16 projection fixes the local binding while preserving all original units and lookup fallback.
+      Impact: Ten calendar/locale suites48 tests pass; all original wrapper/service/field functions in the profile are executed. Actual FormatElement Sequence copies retain strings after temporary destruction and a copied General value retains its real refcount1 after Sequence destruction (6 focused ownership tests pass).
+      Resolution: Record bounded integration/provenance and current maps, keep all coverage thresholds/exclusions unchanged, and request U02 separately for the remaining fixed-catalog identity failure alternative. No suspected upstream bug is inferred from this JavaScript binding failure.
 id_source: "generated"
 ---
 ## Summary
@@ -154,3 +162,11 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Original ICU witness now compares22892 protected-hook inputs, including324 consistent-time/base-cache field snapshots,864 large-month cycle cases and12 Hebrew checked cycle/year errors in addition to the28 prior checked normalization cases.
   Impact: All9 ICU suites70 grouped assertions pass against71217 independent native rows in total. Protected field calls use real public preparation and incoming error/warning status; no original method or private state is replaced.
   Resolution: Retain current raw profile and source hashes. ICU runtime code and coverage policy are unchanged; strict whole-project coverage, individual unreachable-branch review and final Git publication/sync remain pending.
+
+- Observation: Two individual coverage candidates are recorded with proof in unreachable-coverage-candidates.json: U01 hasEnd always true in original EraRules; U02 missing LC_INFO identity is impossible for the fixed284-key generated catalogs, whose key sets and hashes were checked.
+  Impact: Both decisions remain pending. Runtime guards, thresholds, counters and exclusions are unchanged; static artifact corruption is distinguished from an admitted runtime input.
+  Resolution: Request explicit individual user approval only for the stated alternatives; continue other reachable coverage work independently.
+
+- Observation: Three real200000-unit Locale field cases reproduced RangeError in the local argument-spread text conversion, including ignored non-qlt Variant. Reusing the existing counted UTF16 projection fixes the local binding while preserving all original units and lookup fallback.
+  Impact: Ten calendar/locale suites48 tests pass; all original wrapper/service/field functions in the profile are executed. Actual FormatElement Sequence copies retain strings after temporary destruction and a copied General value retains its real refcount1 after Sequence destruction (6 focused ownership tests pass).
+  Resolution: Record bounded integration/provenance and current maps, keep all coverage thresholds/exclusions unchanged, and request U02 separately for the remaining fixed-catalog identity failure alternative. No suspected upstream bug is inferred from this JavaScript binding failure.
