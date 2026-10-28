@@ -616,4 +616,4 @@ import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 
-import { resolveRtfCharacterStyleDefaults } from "./rtfsprm";
+import { resolveRtfCharacterStyleDefaults } from "./rtfdocumentimpl.character";

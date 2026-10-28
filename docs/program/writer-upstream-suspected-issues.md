@@ -1952,3 +1952,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Observation: for character normalization, an absent direct property can introduce an override over the flattened paragraph/character-style reference. The helper supplies bold/italic zero, underline none, 24 half-points, literal color zero and `Times New Roman` for the applicable font families. Thus a selected named style is not sufficient to inherit these values when the run omits their commands. Other families, including kerning, strikeout and highlight, have no default in this helper. The exporter explicitly comments that character style properties must accompany the run and repeats them. This may be intentional RTF normalization; the surprising hard-coded style override is recorded without classifying it as a confirmed upstream defect.
 - Preservation: retain the named `SwCharFormat` reference and produce native direct defaults for the represented families instead of flattening all style values into the text or assuming universal inheritance. Export the actual `\\cs` identifier before repeated effective properties. `\\plain` clears the direct kerning property; it does not invent a false override over an otherwise inherited style value.
 - Evidence: `scripts/rtf-style-defaults-native-probe.mjs` compiles unchanged pinned `getDefaultSPRM` and `getParagraphBorder` with original generated OOXML IDs, recognizing nine defaults among 35 queried tokens under ASan/UBSan. Scalar/nested value carriers do not prove the full `RTFValue`/`RTFSprms`, mapper or desktop Writer ABI. `rtf-character-styles.test.ts` covers actual browser owners, direct/default differences, named references, parent changes, group/plain behavior, unknown lookup and Worker/RTF round trips. No native desktop run is claimed.
+
+### WRITER203 — RTFValue equality ignores the force-string discriminator
+
+- Source: pinned `rtfvalue.cxx`, `RTFValue::equals`, `getString`, `getAny` and `Clone`.
+- Observation: an integer-default value and an empty forced-string value compare equal because the equality predicate checks integer/string contents and nested lists but omits `m_bForceString`. Their string/Any results differ. Style deduplication uses this predicate. No confirmed desktop-document symptom is claimed.
+- Preservation/evidence: keep the omitted flag comparison. Compiled unchanged scalar query/equality functions report `forceEquality=true`; actual owner tests retain distinct `"0"` and empty-string queries and clone the force flag. The witness's remaining value/string transport is explicitly bounded in `rtf-properties-native.json`.
+
+### WRITER204 — Nested RTF attribute erase can mutate a shared outer value
+
+- Source: pinned `rtfdocumentimpl.cxx`, `eraseNestedAttribute`; `rtfsprm.cxx`, `RTFSprms::find`, `ensureCopyBeforeWrite` and `deduplicateList`.
+- Observation: nested insertion uses `find(..., true, true)` to detach the outer shared payload. Nested erase instead performs a read lookup, then mutates the attribute list on the shared value object. Copying an outer RTFSprms followed by nested erase can therefore change both original and copy. Its use by invalid-list-indent deduplication retains this alias behavior.
+- Preservation/evidence: do not add an outer write barrier to erase. Unchanged compiled RTFSprms/nested-helper/SvRef algorithms and runtime owner tests match `nestedEraseA/B` and subsequent isolated `nestedWriteA/B` cases. These are source-container observations, not a complete Writer desktop round trip.
+
+### WRITER205 — Expected-child normalization can leave the original modifier intact
+
+- Source: pinned `rtfsprm.cxx`, `cloneAndDeduplicateSprm` and `isSPRMChildrenExpected`.
+- Observation: for unequal parent values whose normalized children become empty, an expected-child modifier skips the replacement `set` call. The direct tree was already copied into the result, so its original modifier can remain unchanged; the guard does not explicitly erase it. This differs from the apparent reading of the nearby removal comment.
+- Preservation/evidence: retain the skipped replacement without inserting an erase. The compiled `emptyExpectedChildren` case and actual runtime property-tree test preserve the original scalar2 parent and first-line120 attribute. No broader desktop symptom is asserted.
