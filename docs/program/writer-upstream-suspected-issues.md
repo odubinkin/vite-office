@@ -2065,3 +2065,9 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_text_indent LENGTH branch rounds/clamps to signed16, while the PIXLENGTH branch converts truncated pixels to twips then casts directly to short.
 - Observation: physically equivalent `text-indent: 2250pt` and `text-indent: 3000px` become 32767 and -20536 twips respectively. The pixel path can reverse the indent sign through signed16 narrowing. This is source-derived actual-model evidence; compiled LibreOffice differential behavior is unverified.
 - Preservation: retain both conversion branches and their distinct outcomes; do not unify them through browser CSS length conversion or a common clamp.
+
+### WRITER221 — HTML duplicate bookmark names depend on deferred queue flush boundaries
+
+- Source: pinned `sw/source/filter/html/htmlgrin.cxx`, InsertBookmark appends a filter-private HTMLAttr to m_aSetAttrTab; swhtml.cxx SetAttr_ walks that queue backward and suppresses only an existing original-name mark at the same point before makeMark allocates a unique name.
+- Observation: two same-name targets in one paragraph are created in reverse pending order, so the later target keeps the original name and the earlier gets a copy suffix. A paragraph boundary can flush the earlier target first, reversing which position receives the original name. This is source-derived actual-model behavior; no compiled LibreOffice defect is asserted.
+- Preservation: keep queued raw positions, reverse processing and exact name/position deduplication. Actual parser tests distinguish same-point suppression, within-paragraph allocation and cross-paragraph allocation; no eager bookmark creation or input-order normalization is introduced.

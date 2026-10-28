@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx"
+      ],
+      "justification": "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParseStyleOptions"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmlcss1.cxx",
+      "upstreamSymbols": [
+        "SwHTMLParser::ParseStyleOptions"
+      ]
+    }
+  }
+}

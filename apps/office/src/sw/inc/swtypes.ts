@@ -34,3 +34,6 @@ export enum PrepareHint {
 
 /** Native minimum ordinary frame size in twips. */
 export const MINLAY = 23;
+
+/** Native implicit jump-target separator from swtypes.hxx. */
+export const cMarkSeparator = "|";

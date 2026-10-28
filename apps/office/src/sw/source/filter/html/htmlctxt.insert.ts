@@ -111,4 +111,5 @@ export function InsertAttrs(
     const head = heads.get(item.Which());
     if (head) parser.InsertAttr(head, item, context);
   }
+  if (info.m_aId) parser.InsertBookmark(info.m_aId);
 }

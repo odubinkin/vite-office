@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+          "marker": "ParseStyleOptions"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlcss1.cxx",
+          "marker": "SwHTMLParser::ParseStyleOptions"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmlcss1.cxx",
+    "localSymbols": [
+      "ParseStyleOptions"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::ParseStyleOptions"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native HTML ID/class/inline-style order and deferred point bookmark production use actual CSS maps, property info, parser contexts, filter-private SfxStringItem/HTMLAttr and the real mark owner. No-head/table pending ownership, raw positions, queue-dependent duplicate handling and no-HREF named-anchor reserved target filtering are preserved. Consumed UTF8 Unambiguous decoding is source-derived, not a host URL substitute. Actual parser, Markdown/Worker and RTF tests cover this profile. General HREF URL/SmartRel2Abs, macro/footnote targets, division/section IDs and language/direction producers remain open; no whole-module or compiled upstream promotion."
+    ],
+    "omittedResponsibilities": [
+      "Full URL-bearing anchor, section, language/direction and unrepresented macro/footnote producer paths are not certified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+      "rationale": "Original ParseStyleOptions map/ID/declaration handling is split from the HTML/CSS aggregates while borrowing actual parser members to preserve the mandatory 1000-line ceiling and unchanged native call sequence.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

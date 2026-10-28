@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 158
+revision: 161
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:15:11.222Z"
+  updated_at: "2026-10-28T14:30:32.003Z"
   updated_by: "CODER"
-  note: "Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-UI path verified: 994 related tests, final63 HTML/UI tests, type/lint/format/source/registry gates pass. WRITER218-220 documented with preserved behavior. Remaining actual HTML/RTF consumers keep the task open."
-  attempts: 17
+  note: "Native HTML IDs/no-HREF names now create queued actual bookmarks; native Unambiguous decode connected, WRITER221 documented. 981 related,87 shared and12 final integration tests plus static/source gates pass. Remaining HREF/HTML/RTF consumer rows keep the full task open."
+  attempts: 18
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -277,8 +280,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:30:32.003Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native HTML IDs/no-HREF names now create queued actual bookmarks; native Unambiguous decode connected, WRITER221 documented. 981 related,87 shared and12 final integration tests plus static/source gates pass. Remaining HREF/HTML/RTF consumer rows keep the full task open."
+  -
+    type: "status"
+    at: "2026-10-28T14:30:45.737Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:15:28.785Z"
+doc_updated_at: "2026-10-28T14:30:45.737Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -511,6 +527,36 @@ sections:
     Attempts: 17
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:15:10.350Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T14:30:32.003Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native HTML IDs/no-HREF names now create queued actual bookmarks; native Unambiguous decode connected, WRITER221 documented. 981 related,87 shared and12 final integration tests plus static/source gates pass. Remaining HREF/HTML/RTF consumer rows keep the full task open.
+    Attempts: 18
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:30:31.420Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1092,6 +1138,23 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 over11 changed source files; npx prettier --check over all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
     - Result: pass; Evidence: final type/lint/format/whitespace clean; JSDoc3910 authored files, size3914 authored files, boundaries1703 sources/8990 imports/210 edges, provenance1704 runtime modules; both registry checks and source-tree115 paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html6-*.log (ignored local artifacts).
     - Remaining actual consumer work: background shorthand where current brush fields apply, borders, division-style application, language/bookmarks/hyperlinks, HTML lists/tables and reachable existing-style graph behavior; remaining represented RTF capability rows and final filter/UI capability audit. Background graphics/inline background and unrelated generic services are assessed against represented owners and actual callers, not inferred from shared type availability. Overall task remains DOING/rework and the goal remains active.
+
+    ### Native HTML point bookmark / named-anchor block
+
+    - Prior goal turn: progress, committed b019e54d8e72. Current preflight confirmed clean Writer checkout, direct approved CODER route and unchanged full current-model TXT/RTF/Markdown scope.
+    - Concrete caller: actual Markdown raw HTML IDs and named no-HREF anchors must create real current-model point bookmarks rather than losing those targets. Existing DocumentMarkAccess, unique-name cache, native HTMLAttr queue and Worker/RTF mark consumers are reused. No generic mark API/UNO/device/kernel service is introduced.
+    - Implementation: actual ParseStyleOptions class/ID/inline declaration order now carries ID through native property info to InsertAttrs/InsertBookmark. Real filter-private SfxStringItem174 is queued in HTMLAttr with null head/table ownership; it is not a new document-pool default. SetAttr_ preserves reverse pending admission, raw-position clamping, same-original-name/same-point suppression and real mark-owner allocation. Existing P/heading/quote/PRE, standard/semantic inline and legacy-font callers now consume ID-only options. No-HREF anchor opening closes the prior anchor context, retains exact stored spelling and filters implicit Writer targets. HREF names are not fabricated as standalone marks.
+    - Required small shared dependency: source INetURLObject::decode Unambiguous/UTF8 uses the same original escaped scalar loop as existing ToIUri, with the exact PART_UNAMBIGUOUS ASCII projection from aMustEncodeMap. Existing ToIUri output remains unchanged; controls/reserved separators and malformed UTF8 remain escaped. General URL/SmartRel2Abs parsing is not replaced by a host URL decoder. Corrected stale XML/package prose in the existing decoder provenance to describe the actual current URI-only module; no status/classification/parity promotion.
+    - Source evidence: pinned sw/source/filter/html/htmlgrin.cxx InsertBookmark/NewAnchor, htmlcss1.cxx ParseStyleOptions, htmlctxt.cxx InsertAttrs and swhtml.cxx SetAttr_; hintids.hxx filter-private range, swtypes.hxx cMarkSeparator; tools/source/fsys/urlobj.cxx decode/getUTF32/aMustEncodeMap. WRITER221 in docs/program/writer-upstream-suspected-issues.md preserves queue-flush-dependent duplicate-name allocation. No compiled native defect or broad module certificate is asserted.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/source/core/doc/bookmark-name.test.ts
+    - Result: pass; Evidence: 981 tests /73 suites; Scope: related filters, native mark-name owner and existing I/O. This run preceded two added BR-clamp/RTF integration cases; the implementation remained unchanged afterward.
+    - Command: npm run test:shared -- src/tools/source/fsys/urlobj.test.ts src/svtools/source/svhtml
+    - Result: pass; Evidence: 87 tests /4 suites; Scope: ToIUri regression, native Unambiguous ASCII categories, UTF8/malformed octets/one-layer escapes and shared HTML lexer.
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts
+    - Result: pass; Evidence: final12 actual-model cases; Scope: ID-only and connected tag producers, same-point suppression, paragraph-dependent name allocation, exact stored names, implicit suffix filtering, marked tail retention, trailing-BR clamping, actual Markdown/Worker and HTML->native RTF->SwDoc marks. Earlier combined HTML suite also passed63 cases.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 on12 changed source files; npx prettier --check on intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
+    - Result: pass; Evidence: type/lint/format/whitespace clean; JSDoc3914 authored files, size3918 authored files, boundaries1705 runtime sources/9009 imports/210 edges, WhichId79 native identities, provenance1706 modules; both registries and115 source paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html7-*.log, ignored local evidence.
+    - Remaining actual consumers: HREF URL/SmartRel2Abs and native hyperlink production, language/direction, division/section-specific IDs, borders/background shorthand, HTML list/table consumers and reachable style graph behavior; remaining represented RTF capability rows and final full filter/UI matrix audit. Macro/footnote and generic full URL class services are assessed against actual represented owners/callers. Overall task remains DOING/rework; goal stays active.
 id_source: "generated"
 ---
 ## Summary
@@ -1335,6 +1398,36 @@ Note: Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-
 Attempts: 17
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:15:10.350Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T14:30:32.003Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native HTML IDs/no-HREF names now create queued actual bookmarks; native Unambiguous decode connected, WRITER221 documented. 981 related,87 shared and12 final integration tests plus static/source gates pass. Remaining HREF/HTML/RTF consumer rows keep the full task open.
+Attempts: 18
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:30:31.420Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1920,3 +2013,20 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 over11 changed source files; npx prettier --check over all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
 - Result: pass; Evidence: final type/lint/format/whitespace clean; JSDoc3910 authored files, size3914 authored files, boundaries1703 sources/8990 imports/210 edges, provenance1704 runtime modules; both registry checks and source-tree115 paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html6-*.log (ignored local artifacts).
 - Remaining actual consumer work: background shorthand where current brush fields apply, borders, division-style application, language/bookmarks/hyperlinks, HTML lists/tables and reachable existing-style graph behavior; remaining represented RTF capability rows and final filter/UI capability audit. Background graphics/inline background and unrelated generic services are assessed against represented owners and actual callers, not inferred from shared type availability. Overall task remains DOING/rework and the goal remains active.
+
+### Native HTML point bookmark / named-anchor block
+
+- Prior goal turn: progress, committed b019e54d8e72. Current preflight confirmed clean Writer checkout, direct approved CODER route and unchanged full current-model TXT/RTF/Markdown scope.
+- Concrete caller: actual Markdown raw HTML IDs and named no-HREF anchors must create real current-model point bookmarks rather than losing those targets. Existing DocumentMarkAccess, unique-name cache, native HTMLAttr queue and Worker/RTF mark consumers are reused. No generic mark API/UNO/device/kernel service is introduced.
+- Implementation: actual ParseStyleOptions class/ID/inline declaration order now carries ID through native property info to InsertAttrs/InsertBookmark. Real filter-private SfxStringItem174 is queued in HTMLAttr with null head/table ownership; it is not a new document-pool default. SetAttr_ preserves reverse pending admission, raw-position clamping, same-original-name/same-point suppression and real mark-owner allocation. Existing P/heading/quote/PRE, standard/semantic inline and legacy-font callers now consume ID-only options. No-HREF anchor opening closes the prior anchor context, retains exact stored spelling and filters implicit Writer targets. HREF names are not fabricated as standalone marks.
+- Required small shared dependency: source INetURLObject::decode Unambiguous/UTF8 uses the same original escaped scalar loop as existing ToIUri, with the exact PART_UNAMBIGUOUS ASCII projection from aMustEncodeMap. Existing ToIUri output remains unchanged; controls/reserved separators and malformed UTF8 remain escaped. General URL/SmartRel2Abs parsing is not replaced by a host URL decoder. Corrected stale XML/package prose in the existing decoder provenance to describe the actual current URI-only module; no status/classification/parity promotion.
+- Source evidence: pinned sw/source/filter/html/htmlgrin.cxx InsertBookmark/NewAnchor, htmlcss1.cxx ParseStyleOptions, htmlctxt.cxx InsertAttrs and swhtml.cxx SetAttr_; hintids.hxx filter-private range, swtypes.hxx cMarkSeparator; tools/source/fsys/urlobj.cxx decode/getUTF32/aMustEncodeMap. WRITER221 in docs/program/writer-upstream-suspected-issues.md preserves queue-flush-dependent duplicate-name allocation. No compiled native defect or broad module certificate is asserted.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/source/core/doc/bookmark-name.test.ts
+- Result: pass; Evidence: 981 tests /73 suites; Scope: related filters, native mark-name owner and existing I/O. This run preceded two added BR-clamp/RTF integration cases; the implementation remained unchanged afterward.
+- Command: npm run test:shared -- src/tools/source/fsys/urlobj.test.ts src/svtools/source/svhtml
+- Result: pass; Evidence: 87 tests /4 suites; Scope: ToIUri regression, native Unambiguous ASCII categories, UTF8/malformed octets/one-layer escapes and shared HTML lexer.
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts
+- Result: pass; Evidence: final12 actual-model cases; Scope: ID-only and connected tag producers, same-point suppression, paragraph-dependent name allocation, exact stored names, implicit suffix filtering, marked tail retention, trailing-BR clamping, actual Markdown/Worker and HTML->native RTF->SwDoc marks. Earlier combined HTML suite also passed63 cases.
+- Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 on12 changed source files; npx prettier --check on intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
+- Result: pass; Evidence: type/lint/format/whitespace clean; JSDoc3914 authored files, size3918 authored files, boundaries1705 runtime sources/9009 imports/210 edges, WhichId79 native identities, provenance1706 modules; both registries and115 source paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html7-*.log, ignored local evidence.
+- Remaining actual consumers: HREF URL/SmartRel2Abs and native hyperlink production, language/direction, division/section-specific IDs, borders/background shorthand, HTML list/table consumers and reachable style graph behavior; remaining represented RTF capability rows and final full filter/UI matrix audit. Macro/footnote and generic full URL class services are assessed against actual represented owners/callers. Overall task remains DOING/rework; goal stays active.

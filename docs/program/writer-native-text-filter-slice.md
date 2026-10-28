@@ -600,3 +600,30 @@ or used as a reason to extend the model. Background images and shorthand URL
 resolution remain separate native producer work only where the current model
 represents them. Remaining borders, language/bookmarks/hyperlinks and HTML
 list/table consumers and RTF capability rows keep overall completion open.
+
+### Connected native HTML point bookmarks
+
+Actual ID-only options on the connected paragraph/heading/quotation/PRE,
+standard/semantic inline and legacy-font producers now follow native
+ParseStyleOptions -> property-info ID -> InsertAttrs -> InsertBookmark. The
+producer queues a real HTMLAttr with filter-private RES_FLTR_BOOKMARK, no head or
+table owner and raw source offsets. SetAttr_ consumes the original reverse queue,
+clamps positions after text cleanup, suppresses same-name/same-point duplicates
+and delegates unique-name allocation to the existing actual document mark owner.
+Empty trailing marked paragraphs remain document-owned. The filter-private Which
+is not registered as a new document attribute/default.
+
+The no-HREF named-anchor branch closes an earlier anchor context, preserves the
+stored exact name and filters native implicit Writer targets using the consumed
+INetURLObject::decode Unambiguous/UTF8 algorithm, its exact ASCII category and
+source ASCII-only suffix rules. General URL parsing/SmartRel2Abs and URL-bearing
+SwFormatINetFormat production remain open; a NAME on an HREF anchor is not
+incorrectly converted into a standalone mark. Macro/footnote target producers
+remain outside represented current-model owners.
+
+Actual-model tests cover ID producers, queue-dependent duplicate allocation
+(WRITER221), raw name spelling, implicit target filtering, tail preservation,
+BR-position clamping and real Markdown/Worker and RTF paths. Language/direction,
+division/section-specific IDs, hyperlinks, borders/background shorthand, lists and
+tables and remaining represented RTF rows still require their real consumer work.
+No full HTML or whole-filter completion is claimed here.

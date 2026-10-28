@@ -1,4 +1,6 @@
 /** @fileoverview Native SetAttr_ body-range/item application from swhtml.cxx over actual SwPaM and deferred HTMLAttr owners. */
+import { SfxStringItem } from "../../../../svl/source/items/stritem";
+import { SwTextNode } from "../../core/txtnode/ndtxt";
 import type { SwDoc } from "../../core/doc/doc";
 import { SwPaM, GoPreviousPos } from "../../core/crsr/pam";
 import { SwNodes } from "../../core/docnode/nodes";
@@ -89,6 +91,18 @@ export function SetAttr_(parser: SwHTMLSetAttrState, checkEnd: boolean, beforeTa
             const before = GoPreviousPos(range.GetPoint(), true);
             if (!before) continue;
             range.GetPoint().SetContent(before.Len());
+          }
+          if (which === H.RES_FLTR_BOOKMARK) {
+            const item = attr.GetItem();
+            if (!(item instanceof SfxStringItem)) throw new Error("assert(bookmark string item)");
+            const marks = parser.m_xDoc.GetIDocumentMarkAccess(),
+              existing = marks.FindMark(item.GetValue());
+            if (existing?.GetMarkPos().compare(range.GetPoint()) === 0) continue;
+            range.DeleteMark();
+            const node = range.GetPoint().GetNode();
+            if (!(node instanceof SwTextNode)) throw new Error("assert(bookmark content node)");
+            marks.MakeMark(node, range.GetPoint().GetContentIndex(), item.GetValue());
+            continue;
           }
           if (
             (which === H.RES_MARGIN_FIRSTLINE ||
