@@ -278,6 +278,10 @@ export class ScDocument {
   GetGrammar(): Grammar {
     return this.eGrammar;
   }
+  /** Original documen3 reference-convention query. @returns Stored grammar's reference convention. */
+  GetAddressConvention(): ReturnType<typeof documen3.GetAddressConvention> {
+    return documen3.GetAddressConvention.call(this);
+  }
   /** Original documen3 assignment. @param grammar - Convention. @returns Nothing. */
   SetGrammar(grammar: Grammar): void {
     this.eGrammar = grammar;

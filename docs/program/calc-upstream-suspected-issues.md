@@ -4363,3 +4363,15 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: exact LOGICAL format plus value equal to0.0 chooses type b, including IEEE negative zero. The original number(double) path preserves signbit and writes -0. A real group-formatted ScFormulaCell with a cached negative zero exercises this source combination.
 - Suspected issue: the emitted cache has boolean type but a signed-zero numeric spelling; the downstream consumer acceptance of that spelling is unverified here. This is source-based/local-owner evidence, not a complete XLSX roundtrip or standards claim.
 - Local behavior: preserve type b and value -0. Do not normalize the sign, force numeric type or change the cached core value.
+
+### CALC-349 — GetTokenCount passes separator and quote in reverse order
+
+- Source: `sc/source/core/tool/rangeutl.cxx`, `ScRangeStringConverter::GetTokenCount` and `GetTokenByOffset`; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: GetTokenCount calls GetTokenByOffset with apostrophe as the separator and the caller's separator as the quote. With default parameters, `A1 B2` counts as one token while `A1'B2` counts as two. This differs from direct default token iteration.
+- Preservation: keep original argument order and literal outputs; no automatic swapping or split-on-whitespace repair. Actual local Unicode owners verify these outputs, but independently compiled native execution and whole converter/UI parity remain unverified.
+
+### CALC-350 — Range-string conversion accepts a partially invalid second endpoint
+
+- Source: `sc/source/core/tool/rangeutl.cxx`, `ScRangeStringConverter::GetRangeFromString`, and `sc/source/core/tool/address.cxx`, local Excel A1 scanner; pinned baseline `9bc445578031fecf56086729d8e4940c77e14d65`.
+- Suspicion: the converter tests only ScRefFlags::VALID from ScRange::Parse, unlike ParseAny's additional second-endpoint flags. As in CALC-344, `B2:C0` succeeds and keeps the first row for the second endpoint, producing B2:C2. It never reaches the two-address fallback.
+- Preservation: retain the original VALID-only test, partial mutations and ordering; literal local actual-document tests cover this downstream result. No full native compiled range converter or XLSX roundtrip claim follows. Initial new test expectations incorrectly assumed failure and row zero; the tests were corrected after checking the pinned scanner contract, without changing production parsing.

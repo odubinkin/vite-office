@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/tool/rangeutl.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/tool/rangeutl.cxx",
+    "upstreamSymbols": [
+      "ScRangeStringConverter::IndexOf",
+      "ScRangeStringConverter::IndexOfDifferent",
+      "ScRangeStringConverter::GetTokenByOffset",
+      "ScRangeStringConverter::GetTokenCount",
+      "ScRangeStringConverter::GetAddressFromString",
+      "ScRangeStringConverter::GetRangeFromString",
+      "ScRangeStringConverter::GetRangeListFromString"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangeutl.ts",
+          "marker": "ScRangeStringConverter"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangeutl.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/tool/rangeutl.cxx",
+          "marker": "ScRangeStringConverter"
+        }
+      ]
+    },
+    "omittedResponsibilities": [
+      "Full name/API/formatting/converter/workbook/filter/UI and compiled-native parity remain unverified."
+    ],
+    "preservedResponsibilities": [
+      "J0Z0KF restores original ScRangeStringConverter quote searches, token/offset iteration, original GetTokenCount swapped arguments, address/range conversion and append-only range-list conversion. Actual SAL Unicode outputs, ScAddress/ScRange/ScRangeList, ScDocument grammar and FormulaGrammar extraction are reused. Partial endpoint mutation, end-offset length then -1, leading-dot removal, range-before-two-address fallback, requested-before-document grammar, short-circuit parsing and retaining valid list tokens after failures are preserved. UTF16 string views and number tuples bind native view/scalar references. Native sheet/external/R1C1 parsers remain incomplete in existing address owners and can throw; no dummy parser, catch-all repair, fallback grammar provider or whole-format claim is introduced. Independent compiled-native differential, full AddressConverter/WorkbookHelper/filter/model/UI acceptance and remaining converter/name/API/formatting members remain pending."
+    ],
+    "localSymbols": [
+      "ScRangeStringConverter"
+    ]
+  }
+}

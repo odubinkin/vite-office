@@ -1,0 +1,83 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-7563ff44-544f-463b-9ac0-f12ec35866d4",
+    "capabilityId": "CAP-7563ff44-544f-463b-9ac0-f12ec35866d4",
+    "suite": "calc",
+    "subsystem": "range-string-conversion",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original quote-aware token and offset contracts feed actual ScAddress/ScRange and append-only ScRangeList conversion.",
+      "Actual document reference convention derives from its stored grammar."
+    ],
+    "capability": "Original range tokenization and document grammar conversion",
+    "gaps": [
+      "J0Z0KF restores original ScRangeStringConverter quote searches, token/offset iteration, original GetTokenCount swapped arguments, address/range conversion and append-only range-list conversion. Actual SAL Unicode outputs, ScAddress/ScRange/ScRangeList, ScDocument grammar and FormulaGrammar extraction are reused. Partial endpoint mutation, end-offset length then -1, leading-dot removal, range-before-two-address fallback, requested-before-document grammar, short-circuit parsing and retaining valid list tokens after failures are preserved. UTF16 string views and number tuples bind native view/scalar references. Native sheet/external/R1C1 parsers remain incomplete in existing address owners and can throw; no dummy parser, catch-all repair, fallback grammar provider or whole-format claim is introduced. Independent compiled-native differential, full AddressConverter/WorkbookHelper/filter/model/UI acceptance and remaining converter/name/API/formatting members remain pending."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/tool/rangeutl.cxx",
+          "marker": "ScRangeStringConverter::GetRangeFromString"
+        },
+        {
+          "path": "sc/source/core/data/documen3.cxx",
+          "marker": "ScDocument::GetAddressConvention"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/helper/qahelper.cxx",
+          "marker": "ScRangeStringConverter::GetAddressFromString"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/rangeutl.hxx",
+          "marker": "GetTokenByOffset"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangeutl.ts",
+          "marker": "ScRangeStringConverter"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/documen3.ts",
+          "marker": "GetAddressConvention"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/rangeutl.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-349"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF restores original ScRangeStringConverter quote searches, token/offset iteration, original GetTokenCount swapped arguments, address/range conversion and append-only range-list conversion. Actual SAL Unicode outputs, ScAddress/ScRange/ScRangeList, ScDocument grammar and FormulaGrammar extraction are reused. Partial endpoint mutation, end-offset length then -1, leading-dot removal, range-before-two-address fallback, requested-before-document grammar, short-circuit parsing and retaining valid list tokens after failures are preserved. UTF16 string views and number tuples bind native view/scalar references. Native sheet/external/R1C1 parsers remain incomplete in existing address owners and can throw; no dummy parser, catch-all repair, fallback grammar provider or whole-format claim is introduced. Independent compiled-native differential, full AddressConverter/WorkbookHelper/filter/model/UI acceptance and remaining converter/name/API/formatting members remain pending."
+    },
+    "scopeLimitations": [
+      "J0Z0KF restores original ScRangeStringConverter quote searches, token/offset iteration, original GetTokenCount swapped arguments, address/range conversion and append-only range-list conversion. Actual SAL Unicode outputs, ScAddress/ScRange/ScRangeList, ScDocument grammar and FormulaGrammar extraction are reused. Partial endpoint mutation, end-offset length then -1, leading-dot removal, range-before-two-address fallback, requested-before-document grammar, short-circuit parsing and retaining valid list tokens after failures are preserved. UTF16 string views and number tuples bind native view/scalar references. Native sheet/external/R1C1 parsers remain incomplete in existing address owners and can throw; no dummy parser, catch-all repair, fallback grammar provider or whole-format claim is introduced. Independent compiled-native differential, full AddressConverter/WorkbookHelper/filter/model/UI acceptance and remaining converter/name/API/formatting members remain pending.",
+      "Native qahelper caller is source evidence, not a ported native QA suite or an independently compiled differential."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "range-token-reference-conversion"
+  }
+}
