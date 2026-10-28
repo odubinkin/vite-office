@@ -451,9 +451,18 @@ export class SwMarkdownParser {
     this.InsertHtmlData();
     this.m_htmlData = "";
   }
-  /** Native HTML filter insertion is supplied by its represented owner. @returns Nothing. */
+  /** Imports the raw HTML buffer through the native byte lexer and Writer token/attribute owner on this actual cursor. @returns Nothing. */
   public InsertHtmlData(): void {
-    throw new Error("Native Writer HTML reader is not yet implemented.");
+    const stream = new SvStream(
+      OUStringToOString(this.m_htmlData, RTL_TEXTENCODING_UTF8),
+      RTL_TEXTENCODING_UTF8,
+    );
+    const parser = new SwHTMLParser(this.m_xDoc, this.m_pPam, stream, "", "", false);
+    try {
+      parser.CallParser();
+    } finally {
+      parser.SourceDispose();
+    }
   }
   /** Clears unsupported graphic-node state without inserting image alt text into body text; graphics are outside the current model. @returns Nothing. */
   public InsertCurImage(): void {
@@ -463,3 +472,8 @@ export class SwMarkdownParser {
     this.m_aImg.link = "";
   }
 }
+
+import { SvStream } from "../../../../tools/source/stream/stream";
+import { OUStringToOString } from "../../../../sal/rtl/ustring-convert";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
+import { SwHTMLParser } from "../html/swhtml";

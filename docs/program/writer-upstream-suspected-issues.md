@@ -1643,7 +1643,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/filter/md/mdcallbcks.cxx`, `text_callback`, appends all `MD_TEXT_HTML` text to `m_htmlData`; only `SwMarkdownParser::EndHtmlBlock` invokes `InsertHtmlData` and clears the buffer.
 - Observation: inline HTML callbacks have no immediate native HTMLReader invocation. A later raw HTML block exit can consume that earlier buffered markup as well. This is a source-level trace; compiled Writer behavior remains unverified.
-- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text.
+- Preservation: retain the shared buffer and block-only flush point; do not immediately interpret inline tags around ordinary Markdown text. The connected native HTML/model integration test now confirms that an unclosed inline bold tag affects a later raw block while the earlier Markdown text remains plain; this is port evidence, not a compiled desktop differential.
 
 ### WRITER156 — SvParser's explicit UCS2 setter does not select the UTF-16 read branch
 
@@ -1998,3 +1998,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/ww8/rtfattributeoutput.cxx`, `RtfAttributeOutput::OutputCharEscapement`, writes a starred `updnprop` group carrying proportional height and an automatic-position flag before numeric `up`/`dn`. The pinned `sw/source/writerfilter/rtftok/rtftokenizer.cxx` keyword table has no updnprop entry; its dispatch/value/flag handlers consume position and vertAlign independently. The older editeng RTF importer is a different consumer.
 - Observation: the current writerfilter import path cannot recover that extension's height/automatic metadata through this keyword. For ordinary numeric displacement it uses the final font height and sets proportional height to 100. Thus the exporter and reader do not promise exact escapement item roundtrips. Desktop document differential behavior remains unverified.
 - Preservation/evidence: remove our custom pendingUpDn interpretation and preserve the actual unknown starred group handling. Tests exercise real exported bytes and actual document import, distinguish conventional super/sub from numeric position, and retain the native reader's height reduction. No compensating parser extension is introduced.
+
+
+### WRITER210 — Markdown HTML insertion passes an empty base URL
+
+- Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::InsertHtmlData`, constructs SwReader with two empty OUString arguments; the stream insertion constructor in `sw/source/filter/basflt/shellio.cxx` assigns the second string as its base URL.
+- Observation: the embedded native HTML reader receives an empty base URL even when the surrounding Markdown reader has a nonempty source base URL. Relative-resource behavior may therefore differ across Markdown and embedded HTML paths. This is a source-level finding; desktop differential behavior is unverified.
+- Preservation: the connected raw HTML path retains empty path/base URL arguments. No compensation using the Markdown parser's m_sBaseURL is introduced; link/font/CSS/table producers remain separately tracked work.

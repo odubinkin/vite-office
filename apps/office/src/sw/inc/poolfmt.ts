@@ -51,6 +51,10 @@ export enum SwPoolFormatId {
   COLL_GREETING = 2053,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_HEADER = 6145,
+  /** Native HTML quotation paragraph style. */
+  COLL_HTML_BLOCKQUOTE = 12288,
+  /** Native HTML preformatted paragraph style. */
+  COLL_HTML_PRE = 12289,
   /** Original paragraph pool identity consumed by Word style mapping. */
   COLL_HEADLINE1 = 10244,
   /** Original paragraph pool identity consumed by Word style mapping. */

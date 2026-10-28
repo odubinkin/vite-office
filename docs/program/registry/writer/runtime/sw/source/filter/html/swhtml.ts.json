@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/swhtml.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx"
+      ],
+      "justification": "Original constructor/destructor temporarily select and restore the actual document HTML_MODE setting for native pool-style defaults. Connected native HTMLParser tokens to actual Writer document/cursor, original HTMLAttrTable heads, HTMLAttrContext token search/removal and deferred attribute ownership. Consumed body/paragraph/division/center, heading, quotation/address/preformatted modes, text/entity/space handling, three-script bold/posture, strike/underline aliases and native80percent super/sub attributes retain original property defaults and queue ordering. AppendTextNode uses native script services and clone/previous-list precedence. Markdown supplies a blank paragraph at section EOF; the consumed empty-tail cleanup preserves real node/cursor owners. SwReader/SfxHTMLParser desktop/media orchestration and arbitrary mid-paragraph standalone HTML insertion are not ported or certified. Full CSS/named-semantic-character/font/link/list/table producers remain concrete HTML filter work. No DOM or clipboard conversion is used. Source-backed actual-model tests only; compiled desktop differential and whole-module parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SwHTMLParser",
+        "NewStdAttr",
+        "AppendTextNode",
+        "NewPara",
+        "EndPara",
+        "NewHeading",
+        "EndHeading"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/swhtml.cxx",
+      "upstreamSymbols": [
+        "SwHTMLParser::NewStdAttr",
+        "SwHTMLParser::AppendTextNode",
+        "SwHTMLParser::NewPara",
+        "SwHTMLParser::EndPara",
+        "SwHTMLParser::NewHeading",
+        "SwHTMLParser::EndHeading"
+      ]
+    }
+  }
+}

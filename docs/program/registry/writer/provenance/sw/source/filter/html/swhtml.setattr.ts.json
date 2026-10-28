@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+          "marker": "SetAttr_"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::SetAttr_"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/swhtml.cxx",
+    "localSymbols": [
+      "SetAttr_"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::SetAttr_"
+    ],
+    "preservedResponsibilities": [
+      "Original consumed pending-list admission, reverse queue order, previous-chain traversal, validity/empty-node checks, raw offset clamping, real SwPaM range creation, before-table range admission, direct single-node margins and native DONTREPLACE pool-item application. The shared state is borrowed from the actual parser, not reconstructed. Field/annotation/bookmark/background-fill producers and unrelated desktop branches are not implemented by this fragment; the currently connected HTML parser does not produce those unsupported pending families."
+    ],
+    "omittedResponsibilities": [
+      "This consumed fragment is not full native HTMLReader/Writer parity; the omitted producers above remain explicit task work."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+      "rationale": "The native SetAttr_ body consumer is split from SwHTMLParser while borrowing its original cursor, queue and document state.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

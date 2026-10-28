@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+        "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx"
+      ],
+      "justification": "Original consumed pending-list admission, reverse queue order, previous-chain traversal, validity/empty-node checks, raw offset clamping, real SwPaM range creation, before-table range admission, direct single-node margins and native DONTREPLACE pool-item application. The shared state is borrowed from the actual parser, not reconstructed. Field/annotation/bookmark/background-fill producers and unrelated desktop branches are not implemented by this fragment; the currently connected HTML parser does not produce those unsupported pending families. Source-backed actual-model tests only; compiled desktop differential and whole-module parity remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "SetAttr_"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/swhtml.cxx",
+      "upstreamSymbols": [
+        "SwHTMLParser::SetAttr_"
+      ]
+    }
+  }
+}

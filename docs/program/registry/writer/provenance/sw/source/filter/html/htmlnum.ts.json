@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/htmlnum.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/htmlnum.ts",
+          "marker": "SwHTMLNumRuleInfo"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/htmlnum.hxx",
+          "marker": "SwHTMLNumRuleInfo"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/htmlnum.hxx",
+    "localSymbols": [
+      "SwHTMLNumRuleInfo"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLNumRuleInfo"
+    ],
+    "preservedResponsibilities": [
+      "Original default numbering pointer/depth/restart/numbered fields and MAXLEVEL USHRT_MAX start sentinels; copied state retains real SwNumRule identity. The consumed parser uses this actual owner for SetAttr_ numbering admission. Node-based export construction and restart comparison are unconsumed and unported."
+    ],
+    "omittedResponsibilities": [
+      "This consumed fragment is not full native HTMLReader/Writer parity; the omitted producers above remain explicit task work."
+    ]
+  }
+}

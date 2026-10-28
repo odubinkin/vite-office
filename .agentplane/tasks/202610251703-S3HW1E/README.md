@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 142
+revision: 146
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T12:34:08.324Z"
+  updated_at: "2026-10-28T13:14:57.229Z"
   updated_by: "CODER"
-  note: "Native RTF position/vertAlign normalization connected; 855 related tests plus 27 final owner tests and static gates pass. Native Markdown HTML blocks, RTF languages and full current-model audit remain open."
-  attempts: 12
+  note: "Native Markdown HTML body/attribute path connected: 928 related Writer tests, 83 lexer tests and 14 final native integration cases pass with static gates. HTML CSS/named styles/fonts/links/lists/tables, RTF languages and full current-model audit remain open."
+  attempts: 13
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -197,8 +200,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T13:14:57.229Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native Markdown HTML body/attribute path connected: 928 related Writer tests, 83 lexer tests and 14 final native integration cases pass with static gates. HTML CSS/named styles/fonts/links/lists/tables, RTF languages and full current-model audit remain open."
+  -
+    type: "status"
+    at: "2026-10-28T13:18:45.705Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T12:34:20.386Z"
+doc_updated_at: "2026-10-28T13:18:45.705Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -281,6 +297,36 @@ sections:
     Attempts: 12
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:34:07.776Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T13:14:57.229Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native Markdown HTML body/attribute path connected: 928 related Writer tests, 83 lexer tests and 14 final native integration cases pass with static gates. HTML CSS/named styles/fonts/links/lists/tables, RTF languages and full current-model audit remain open.
+    Attempts: 13
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:14:56.644Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -772,6 +818,33 @@ sections:
     - Result: pass. Evidence: 1693 sources,8863 imports,210 allowed edges;3899 JSDoc sources; file-size exit0. Scope: existing static gates.
     - Observation: intermediate failures exposed an obsolete CharStyleName vector reapplication, unused imports after deleting the projection path, source-backed obsolete super/updnprop expectations, a wrong test assumption about native missing-font default insertion and fallback sign, and a provenance marker renamed with its source test. Corrected the actual atomic owner binding and source-backed fixtures/markers, then reran relevant tests and gates. ESLint's first path list included the deleted helper test; final list explicitly excludes deletions and includes the new integration test. No failed check is reported as passing.
     - Remaining: native Markdown raw HTML insertion and RTF language commands are concrete outstanding filter scenarios; full current-core capability audit remains incomplete. Keep original goal and task active; no unrelated API/ABI completeness gate is introduced. No new AgentPlane task was created and full-suite cadence remains unchanged.
+
+    ### Connected native Markdown HTML body/attribute path (2026-10-28)
+
+    - Previous goal turn: progress, committed native RTF position/vertAlign normalization 7c64ae11bdcf. This turn removes the concrete Markdown HTML insertion exception and connects actual native HTML lexer/document/attribute owners.
+    - Scope: SwMarkdownParser.InsertHtmlData retains the pinned SAL UTF16-to-UTF8 conversion, real SvStream, empty path/baseURL and ignored parser result, operating on its real private SwDoc/SwPaM. The actual Markdown caller starts on a blank paragraph at section EOF; generic SwReader/Sfx media orchestration and arbitrary standalone HTML insertion are not fabricated as prerequisite APIs. Those desktop/module branches are not certified.
+    - Implemented consumed native owners: SwHTMLParser contexts/token dispatch; real HTMLAttrTable heads and raw ranges; SwHTMLNumRuleInfo state for native numbering admission; SetAttr_ reverse pending-list and previous-chain application, validity checks, clamping, actual SwPaM and DONTREPLACE insertion. Paragraph appending splits open attributes by real native Latin/CJK/CTL script boundaries, retaining original queue precedence and spacing. Headings, quotation/address/preformatted styles, divisions/center, ordinary body/paragraph whitespace/entities/line breaks, bold/italic, strike/underline aliases and HTML80percent super/sub are connected. Native constructor/destructor temporarily enable/restore the existing HTML_MODE setting, preserving actual pool-default selection. HTMLAttr now explicitly disposes cloned items at source delete points; existing node-index identity wrappers retain no additional content-index destructor.
+    - Actual-model evidence: nested formatting across paragraphs, three-script real UNO item queries, explicit paragraph default survival after style edits, duplicate ALIGN precedence, raw boundary clamping after erasure, early/end queue admission, named paragraph pools, unchanged worker codec and file I/O. WRITER155 buffer timing remains unchanged and is now exercised through the actual reader. WRITER210 documents the pinned empty HTML base URL; no compensation is introduced.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+    - Result: pass. Evidence: 928 tests/71 suites in html2-verified-tests.log after the HTML_MODE correction. Scope: related native filters/mapper/pool owners, worker codec and document I/O.
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts
+    - Result: pass. Evidence: final14 native integration cases in html2-alignment-tests.log, including the subsequently added alignment/default-survival scenario. Scope: final actual HTML body/attribute model behavior.
+    - Command: npm run test:shared -- src/svtools/source/svhtml
+    - Result: pass. Evidence:83 tests/3 suites in html2-lexer-tests.log. Scope: original HTML scanner, options/entities and parser filtering.
+    - Command: npm run typecheck --workspace @vite-office/office
+    - Result: pass. Evidence: latest html2-alignment-types.log, tsc exit0. Scope: all office source types.
+    - Command: npx eslint apps/office/src/sw/source/filter/html/htmlnum.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.attr.ts apps/office/src/sw/source/filter/html/swhtml.setattr.ts apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts apps/office/src/sw/source/filter/md/swmd.ts apps/office/src/sw/source/filter/md/swmd.callbacks.integration.test.ts apps/office/src/sw/inc/poolfmt.ts --max-warnings 0
+    - Result: pass. Evidence: html2-mode-lint.log; final test-only edit also passes html2-alignment-lint.log. Scope: every changed/new TypeScript source.
+    - Command: npx prettier --check apps/office/src/sw/source/filter/html/htmlnum.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.attr.ts apps/office/src/sw/source/filter/html/swhtml.setattr.ts apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts apps/office/src/sw/source/filter/md/swmd.ts apps/office/src/sw/source/filter/md/swmd.callbacks.integration.test.ts apps/office/src/sw/inc/poolfmt.ts; git diff --name-only --diff-filter=ACM -z -- 'docs/program/registry/writer/**/*.json' | xargs -0 npx prettier --check; npx prettier --check docs/program/registry/writer/runtime/sw/source/filter/html/htmlnum.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.setattr.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/htmlnum.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.setattr.ts.json
+    - Result: pass. Evidence: html2-format-check.log; final test-only edit formatted before its passing test/type/lint checks. Scope: changed source and metadata.
+    - Command: npm run check:source-provenance && npm run check:source-tree
+    - Result: pass. Evidence:1697 runtime modules;115 required source paths/32 retired roots in final logs. Scope: source evidence/path consistency, not broad native parity promotion.
+    - Command: npm run inventory:parity:writer; npm run inventory:parity:shared
+    - Result: pass. Evidence: both registry commands exit0. Scope: paired module metadata consistency. All new native module semantic statuses remain unverified; partial native HTML composition is not a whole-format certificate.
+    - Command: npm run check:docs && npm run check:file-size && npm run check:dependencies
+    - Result: pass. Evidence: final3903 authored JSDoc sources, file-size exit0 and1696 runtime sources/8901 imports/210 allowed edges. Scope: existing static gates.
+    - Observation: initial compilation exposed wrong import paths, use of a nonexistent node-index Dispose/InsertItemSet facade, content-node narrowing and a prohibited switch fallthrough. Corrected the consumed native item path, real existing APIs and explicit PRE BR dispatch; unconsumed background/field producers remain explicitly outside this checkpoint. Replaced the obsolete unsupported-HTML fixture with actual import/buffer cleanup. An integration test initially passed a host string to the real UNO cursor API; corrected to actual OUString ownership. JSDoc requires comments on arrow expressions rather than variable declarations; final forms pass. Intermediate failures were followed by route refresh and targeted reruns; no required test is skipped.
+    - Remaining concrete goal work: current-model HTML CSS/named semantic character/font/link/bookmark/list/table producers and complete raw-HTML capability audit, plus RTF language commands. Keep the original full TXT/RTF/Markdown goal and task active. Whole unconsumed factory/UNO/ABI completeness does not independently block filter completion. No new AgentPlane task was created; full-suite cadence remains unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -865,6 +938,36 @@ Note: Native RTF position/vertAlign normalization connected; 855 related tests p
 Attempts: 12
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:34:07.776Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T13:14:57.229Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native Markdown HTML body/attribute path connected: 928 related Writer tests, 83 lexer tests and 14 final native integration cases pass with static gates. HTML CSS/named styles/fonts/links/lists/tables, RTF languages and full current-model audit remain open.
+Attempts: 13
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:14:56.644Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1360,3 +1463,30 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Result: pass. Evidence: 1693 sources,8863 imports,210 allowed edges;3899 JSDoc sources; file-size exit0. Scope: existing static gates.
 - Observation: intermediate failures exposed an obsolete CharStyleName vector reapplication, unused imports after deleting the projection path, source-backed obsolete super/updnprop expectations, a wrong test assumption about native missing-font default insertion and fallback sign, and a provenance marker renamed with its source test. Corrected the actual atomic owner binding and source-backed fixtures/markers, then reran relevant tests and gates. ESLint's first path list included the deleted helper test; final list explicitly excludes deletions and includes the new integration test. No failed check is reported as passing.
 - Remaining: native Markdown raw HTML insertion and RTF language commands are concrete outstanding filter scenarios; full current-core capability audit remains incomplete. Keep original goal and task active; no unrelated API/ABI completeness gate is introduced. No new AgentPlane task was created and full-suite cadence remains unchanged.
+
+### Connected native Markdown HTML body/attribute path (2026-10-28)
+
+- Previous goal turn: progress, committed native RTF position/vertAlign normalization 7c64ae11bdcf. This turn removes the concrete Markdown HTML insertion exception and connects actual native HTML lexer/document/attribute owners.
+- Scope: SwMarkdownParser.InsertHtmlData retains the pinned SAL UTF16-to-UTF8 conversion, real SvStream, empty path/baseURL and ignored parser result, operating on its real private SwDoc/SwPaM. The actual Markdown caller starts on a blank paragraph at section EOF; generic SwReader/Sfx media orchestration and arbitrary standalone HTML insertion are not fabricated as prerequisite APIs. Those desktop/module branches are not certified.
+- Implemented consumed native owners: SwHTMLParser contexts/token dispatch; real HTMLAttrTable heads and raw ranges; SwHTMLNumRuleInfo state for native numbering admission; SetAttr_ reverse pending-list and previous-chain application, validity checks, clamping, actual SwPaM and DONTREPLACE insertion. Paragraph appending splits open attributes by real native Latin/CJK/CTL script boundaries, retaining original queue precedence and spacing. Headings, quotation/address/preformatted styles, divisions/center, ordinary body/paragraph whitespace/entities/line breaks, bold/italic, strike/underline aliases and HTML80percent super/sub are connected. Native constructor/destructor temporarily enable/restore the existing HTML_MODE setting, preserving actual pool-default selection. HTMLAttr now explicitly disposes cloned items at source delete points; existing node-index identity wrappers retain no additional content-index destructor.
+- Actual-model evidence: nested formatting across paragraphs, three-script real UNO item queries, explicit paragraph default survival after style edits, duplicate ALIGN precedence, raw boundary clamping after erasure, early/end queue admission, named paragraph pools, unchanged worker codec and file I/O. WRITER155 buffer timing remains unchanged and is now exercised through the actual reader. WRITER210 documents the pinned empty HTML base URL; no compensation is introduced.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+- Result: pass. Evidence: 928 tests/71 suites in html2-verified-tests.log after the HTML_MODE correction. Scope: related native filters/mapper/pool owners, worker codec and document I/O.
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts
+- Result: pass. Evidence: final14 native integration cases in html2-alignment-tests.log, including the subsequently added alignment/default-survival scenario. Scope: final actual HTML body/attribute model behavior.
+- Command: npm run test:shared -- src/svtools/source/svhtml
+- Result: pass. Evidence:83 tests/3 suites in html2-lexer-tests.log. Scope: original HTML scanner, options/entities and parser filtering.
+- Command: npm run typecheck --workspace @vite-office/office
+- Result: pass. Evidence: latest html2-alignment-types.log, tsc exit0. Scope: all office source types.
+- Command: npx eslint apps/office/src/sw/source/filter/html/htmlnum.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.attr.ts apps/office/src/sw/source/filter/html/swhtml.setattr.ts apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts apps/office/src/sw/source/filter/md/swmd.ts apps/office/src/sw/source/filter/md/swmd.callbacks.integration.test.ts apps/office/src/sw/inc/poolfmt.ts --max-warnings 0
+- Result: pass. Evidence: html2-mode-lint.log; final test-only edit also passes html2-alignment-lint.log. Scope: every changed/new TypeScript source.
+- Command: npx prettier --check apps/office/src/sw/source/filter/html/htmlnum.ts apps/office/src/sw/source/filter/html/swhtml.ts apps/office/src/sw/source/filter/html/swhtml.attr.ts apps/office/src/sw/source/filter/html/swhtml.setattr.ts apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts apps/office/src/sw/source/filter/md/swmd.ts apps/office/src/sw/source/filter/md/swmd.callbacks.integration.test.ts apps/office/src/sw/inc/poolfmt.ts; git diff --name-only --diff-filter=ACM -z -- 'docs/program/registry/writer/**/*.json' | xargs -0 npx prettier --check; npx prettier --check docs/program/registry/writer/runtime/sw/source/filter/html/htmlnum.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/runtime/sw/source/filter/html/swhtml.setattr.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/htmlnum.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.ts.json docs/program/registry/writer/provenance/sw/source/filter/html/swhtml.setattr.ts.json
+- Result: pass. Evidence: html2-format-check.log; final test-only edit formatted before its passing test/type/lint checks. Scope: changed source and metadata.
+- Command: npm run check:source-provenance && npm run check:source-tree
+- Result: pass. Evidence:1697 runtime modules;115 required source paths/32 retired roots in final logs. Scope: source evidence/path consistency, not broad native parity promotion.
+- Command: npm run inventory:parity:writer; npm run inventory:parity:shared
+- Result: pass. Evidence: both registry commands exit0. Scope: paired module metadata consistency. All new native module semantic statuses remain unverified; partial native HTML composition is not a whole-format certificate.
+- Command: npm run check:docs && npm run check:file-size && npm run check:dependencies
+- Result: pass. Evidence: final3903 authored JSDoc sources, file-size exit0 and1696 runtime sources/8901 imports/210 allowed edges. Scope: existing static gates.
+- Observation: initial compilation exposed wrong import paths, use of a nonexistent node-index Dispose/InsertItemSet facade, content-node narrowing and a prohibited switch fallthrough. Corrected the consumed native item path, real existing APIs and explicit PRE BR dispatch; unconsumed background/field producers remain explicitly outside this checkpoint. Replaced the obsolete unsupported-HTML fixture with actual import/buffer cleanup. An integration test initially passed a host string to the real UNO cursor API; corrected to actual OUString ownership. JSDoc requires comments on arrow expressions rather than variable declarations; final forms pass. Intermediate failures were followed by route refresh and targeted reruns; no required test is skipped.
+- Remaining concrete goal work: current-model HTML CSS/named semantic character/font/link/bookmark/list/table producers and complete raw-HTML capability audit, plus RTF language commands. Keep the original full TXT/RTF/Markdown goal and task active. Whole unconsumed factory/UNO/ABI completeness does not independently block filter completion. No new AgentPlane task was created; full-suite cadence remains unchanged.

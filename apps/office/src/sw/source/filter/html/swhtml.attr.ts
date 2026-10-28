@@ -265,6 +265,10 @@ export class HTMLAttr {
     }
     tail.m_pPrev = previous;
   }
+  /** Original destructor releases this cloned item, never borrowed chain links; node indices use existing identity wrappers. @returns Nothing. */
+  public SourceDispose(): void {
+    this.m_pItem.Dispose();
+  }
   /** Clears the pending chain without touching its owners. @returns Nothing. */
   public ClearPrev(): void {
     this.m_pPrev = null;
@@ -334,6 +338,7 @@ export function DeleteAttr(parser: SwHTMLAttributeState, attr: HTMLAttr): void {
   }
   if (last !== null) last.m_pNext = next;
   else if (head !== null) head[0] = next;
+  attr.SourceDispose();
 }
 /** Moves all open lists into the saved native table and rebinds every open head.
  * @param parser - Borrowed native parser fields.
@@ -358,7 +363,7 @@ export function SaveAttrTab(parser: SwHTMLAttributeState, saved: HTMLAttrTable):
 }
 
 /** Source script-dependent item classification; script type stays zero for unrelated items. @param attr - Native attribute. @returns Script dependency and native ScriptType. */
-function lcl_swhtml_getItemInfo(attr: HTMLAttr): readonly [boolean, number] {
+export function lcl_swhtml_getItemInfo(attr: HTMLAttr): readonly [boolean, number] {
   switch (attr.GetItem().Which()) {
     case H.RES_CHRATR_FONT:
     case H.RES_CHRATR_FONTSIZE:
@@ -474,5 +479,6 @@ export function EndAttr(
   if (last !== null) last.m_pNext = next;
   else if (head !== null) head[0] = next;
   if (movedBack) moveAttributeBoundary(parser, false);
+  if (!insert) attr.SourceDispose();
   return result;
 }
