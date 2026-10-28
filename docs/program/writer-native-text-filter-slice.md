@@ -555,3 +555,22 @@ The existing shared browser font-family presentation adapter now converts native
 semicolon fallback separators to CSS comma separators. The document/Worker still
 retain the source list string; a mounted Writer paragraph test verifies valid CSS
 at the display boundary. Physical font matching/rendering is not certified.
+
+### Connected legacy HTML font consumers
+
+Native BASEFONT/FONT/BIG/SMALL paths now use the actual parser-owned base/font
+stacks, original context lookup and deferred native items. BASEFONT applies the
+source unsigned16 narrowing, default3 and 1..7 clamp. FONT relative sizes use the
+base stack rather than the enclosing FONT size; BIG/SMALL use the font-stack tail,
+with the native heading-start marker selecting adjacent heading style heights.
+FACE retains comma splitting, ASCII-space trimming, source semicolon storage and
+the current no-DocShell font-list branch. COLOR uses the existing native HTML
+option converter; inline CSS overrides seeded legacy items before insertion.
+
+WRITER215/216/217 record the retained shared-Western-head branch, missing-SIZE zero
+stack entry and unmatched-closer stack pop. Actual parser-state and selected-range
+tests verify the original wiring and all three script items without claiming a
+compiled desktop defect. Actual Markdown/Worker tests verify legacy font items
+reach the existing document/UI transport. Legacy font tags are no longer an open
+producer in this consumed profile; pending ID/bookmark/language/direction handling
+remains tracked separately from font value/stack behavior.

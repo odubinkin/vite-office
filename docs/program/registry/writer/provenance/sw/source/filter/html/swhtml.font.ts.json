@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/swhtml.font.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.font.ts",
+          "marker": "NewFontAttr"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/swhtml.cxx",
+          "marker": "SwHTMLParser::NewFontAttr"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/swhtml.cxx",
+    "localSymbols": [
+      "NewBasefontAttr",
+      "EndBasefontAttr",
+      "NewFontAttr",
+      "EndFontAttr"
+    ],
+    "upstreamSymbols": [
+      "SwHTMLParser::NewBasefontAttr",
+      "SwHTMLParser::EndBasefontAttr",
+      "SwHTMLParser::NewFontAttr",
+      "SwHTMLParser::EndFontAttr"
+    ],
+    "preservedResponsibilities": [
+      "Native consumed NewBasefontAttr/EndBasefontAttr/NewFontAttr/EndFontAttr operate over actual parser stacks and contexts, seven configured heights, base-relative signed-size arithmetic, heading-start sizing, native option color and no-DocShell family metadata. Legacy direct and style-seeded branches retain original script head wiring, zero-size stack entries and independent unmatched-closer pops (WRITER215-217). Actual model, selected Western/CJK/CTL ranges, parser state and real Markdown/Worker tests cover consumed behavior. ID/bookmark/language/direction, table stack minima transitions and device font-list branches remain unported where not yet consumed; whole HTML/filter and compiled upstream parity remain unverified."
+    ],
+    "omittedResponsibilities": [
+      "Full native HTMLReader, not-consumed desktop/font-list producers and other filter families are not certified."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/swhtml.font.ts",
+      "rationale": "Native legacy font attribute producers are split from swhtml.cxx into one borrowed-parser fragment to retain the mandatory 1000-line ceiling without changing stack/context ownership, attribute heads or native call order.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

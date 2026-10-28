@@ -9,6 +9,15 @@ import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SvParserState } from "../../../../svtools/inc/svparser";
 import { SwHTMLParser } from "./swhtml";
 import { MarkdownReader } from "../md/swmd";
+import { HtmlTokenId } from "../../../../svtools/inc/htmltokn";
+import {
+  RES_CHRATR_CJK_FONT,
+  RES_CHRATR_CTL_FONT,
+  RES_CHRATR_CJK_FONTSIZE,
+  RES_CHRATR_CTL_FONTSIZE,
+} from "../../../inc/hintids";
+import { RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
@@ -610,4 +619,215 @@ it("applies existing direct font items to headings and block-style contexts", /*
 it("consumes native white-space flags only at paragraph open", /** NewPara enables preservation and EndPara restores the source default. @returns Nothing. */ () => {
   const doc = html('<p style="white-space: pre">  A   B</p><p>  C   D</p>');
   expect(text(doc)).toEqual(["  A   B", "C D"]);
+});
+it("imports native FONT face/color/size and restores inherited text", /** Legacy attributes use existing native option conversion and actual item heads. @returns Nothing. */ () => {
+  const doc = html('<font face="  Example Font , , Other Font  " color="red" size="5">A</font>B');
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual source legacy values. @param run - Run. @returns Family/color/height. */ (
+        run,
+      ) => [
+        run.text,
+        run.attributes.fontFamily,
+        run.attributes.color,
+        run.attributes.fontSizeTwips,
+      ],
+    ),
+  ).toEqual([
+    ["A", "Example Font;Other Font", "#ff0000", 360],
+    ["B", undefined, undefined, undefined],
+  ]);
+});
+it("resolves relative FONT sizes against BASEFONT rather than the enclosing FONT", /** Native size arithmetic uses separate base/font stacks. @returns Nothing. */ () => {
+  const doc = html(
+    '<basefont size="4"><font size="7">A<font size="+1">B</font>C</font>D</basefont>E',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads exact seven-step sizes. @param run - Run. @returns Text/height. */ (run) => [
+        run.text,
+        run.attributes.fontSizeTwips,
+      ],
+    ),
+  ).toEqual([
+    ["A", 720],
+    ["B", 360],
+    ["C", 720],
+    ["D", 280],
+    ["E", undefined],
+  ]);
+});
+it("uses native BIG SMALL stack sizes and restores nesting", /** No browser relative-font units replace the configured seven-step table. @returns Nothing. */ () => {
+  const doc = html("<big>A<big>B</big><small>C</small>D</big>E");
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual font-item heights. @param run - Run. @returns Text/height. */ (run) => [
+        run.text,
+        run.attributes.fontSizeTwips,
+      ],
+    ),
+  ).toEqual([
+    ["A", 280],
+    ["B", 360],
+    ["C", 240],
+    ["D", 280],
+    ["E", undefined],
+  ]);
+});
+it("keeps native legacy size clamps and duplicate-option precedence", /** Reverse option iteration lets the first SIZE occurrence win. @returns Nothing. */ () => {
+  const doc = html(
+    '<font size="-999">A</font><font size="999">B</font><font size="2" size="7">C</font><basefont size="65536">D</basefont>',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads original narrowing and clamp. @param run - Run. @returns Text/height. */ (run) => [
+        run.text,
+        run.attributes.fontSizeTwips,
+      ],
+    ),
+  ).toEqual([
+    ["A", 140],
+    ["B", 720],
+    ["C", 200],
+    ["D", 140],
+  ]);
+});
+it("lets inline CSS replace legacy FONT and BASEFONT attributes", /** Native style-option branches seed real item sets before CSS declarations. @returns Nothing. */ () => {
+  const doc = html(
+    '<font face="Old Font" color="red" size="7" style="font: italic 18pt New Font; color: blue">A</font><basefont size="7" style="font-size: 10pt">B</basefont>',
+  );
+  const runs = projectWriterTextRuns(doc.paragraphs[0]);
+  expect(runs[0]?.attributes).toMatchObject({
+    fontFamily: "New Font",
+    fontSizeTwips: 360,
+    italic: true,
+    color: "#0000ff",
+  });
+  expect(runs[1]?.attributes.fontSizeTwips).toBe(200);
+});
+it("derives heading BIG SMALL sizes from the native heading styles", /** The heading stack marker selects adjacent heading styles before any legacy font nesting. @returns Nothing. */ () => {
+  const doc = html("<h2><big>A</big><small>B</small>C</h2>");
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual native heights. @param run - Run. @returns Height. */ (run) =>
+        run.attributes.fontSizeTwips,
+    ),
+  ).toEqual([
+    (
+      doc.GetTextFormatColl("heading-1").GetAttrSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
+    ).GetHeight(),
+    (
+      doc.GetTextFormatColl("heading-3").GetAttrSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
+    ).GetHeight(),
+    (
+      doc.GetTextFormatColl("heading-2").GetAttrSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
+    ).GetHeight(),
+  ]);
+});
+it("keeps the source zero-size stack entry for a FONT without SIZE", /** A face-only FONT is still pushed with zero size and affects a nested BIG. @returns Nothing. */ () => {
+  const doc = html('<font face="Example"><big>A</big></font>B');
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.fontSizeTwips).toBe(140);
+});
+it("pops the native size stack even when a font closing token has no matching context", /** EndFontAttr closes by token then independently removes the stack tail. @returns Nothing. */ () => {
+  const doc = html('<font size="5">A</big><big>B</big>C</font>D');
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads the resulting source stack behavior. @param run - Run. @returns Height. */ (
+        run,
+      ) => [run.text, run.attributes.fontSizeTwips],
+    ),
+  ).toEqual([
+    ["A", 360],
+    ["B", 280],
+    ["C", 360],
+    ["D", undefined],
+  ]);
+});
+it("imports legacy FONT through actual Markdown and Worker serialization", /** No DOM/clipboard path is used for Markdown raw HTML. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(
+    OUStringToOString(
+      '<div><font face="Example, Other" size="5" color="red">A</font></div>',
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  docs.push(doc);
+  const restored = decodeWriterDocument(encodeWriterDocument(doc));
+  docs.push(restored);
+  expect(projectWriterTextRuns(restored.paragraphs[0])[0]?.attributes).toMatchObject({
+    fontFamily: "Example;Other",
+    fontSizeTwips: 360,
+    color: "#ff0000",
+  });
+});
+it("applies legacy font metadata to actual Western CJK and CTL ranges", /** Native EndAttr script splitting must retain each represented font item. @returns Nothing. */ () => {
+  const doc = html('<font face="Example" size="5">A漢ب</font>'),
+    node = doc.paragraphs[0];
+  assert(node);
+  for (const [offset, which, heightWhich] of [
+    [0, RES_CHRATR_FONT, RES_CHRATR_FONTSIZE],
+    [1, RES_CHRATR_CJK_FONT, RES_CHRATR_CJK_FONTSIZE],
+    [2, RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE],
+  ]) {
+    assert(offset !== undefined && which !== undefined && heightWhich !== undefined);
+    const items = node.GetCharacterItemsAt(offset);
+    items.ClearItem();
+    node.GetParaAttr(items, offset, offset + 1);
+    try {
+      const font = items.Get(which),
+        height = items.Get(heightWhich);
+      assert(font instanceof SvxFontItem && height instanceof SvxFontHeightItem);
+      expect(font.GetFamilyName()).toBe("Example");
+      expect(height.GetHeight()).toBe(360);
+    } finally {
+      items.Dispose();
+    }
+  }
+});
+it("retains source legacy font-head wiring independently of CSS insertion", /** This native contract distinguishes shared Western heads from the CSS branch's separate script heads. @returns Nothing. */ () => {
+  const snapshots: number[][] = [];
+  /** Observes the actual native parser heads without replacing document or attribute owners. */
+  class TracedParser extends SwHTMLParser {
+    /** Observes actual token dispatch after native font attribute construction. @param token - Native token. @returns Nothing. */
+    protected override NextToken(token: HtmlTokenId): void {
+      super.NextToken(token);
+      if (token === HtmlTokenId.FONT_ON) {
+        const row: number[] = [];
+        for (let attr = this.m_xAttrTab.pFont[0]; attr; attr = attr.GetNext())
+          row.push(attr.GetItem().Which());
+        row.push(
+          this.m_xAttrTab.pFontCJK[0]?.GetItem().Which() ?? 0,
+          this.m_xAttrTab.pFontCTL[0]?.GetItem().Which() ?? 0,
+        );
+        snapshots.push(row);
+      }
+    }
+  }
+  const doc = new SwDoc();
+  docs.push(doc);
+  const node = doc.paragraphs[0];
+  assert(node);
+  const position = new SwPosition(node),
+    pam = new SwPaM(position);
+  position.Dispose();
+  const parser = new TracedParser(
+    doc,
+    pam,
+    new SvStream(
+      OUStringToOString(
+        '<font face="Example">A</font><font face="Example" style="color: red">B</font>',
+        RTL_TEXTENCODING_UTF8,
+      ),
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  try {
+    expect(parser.CallParser()).toBe(SvParserState.Accepted);
+  } finally {
+    parser.SourceDispose();
+    pam.Dispose();
+  }
+  expect(snapshots).toEqual([
+    [RES_CHRATR_CTL_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_FONT, 0, 0],
+    [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT],
+  ]);
 });

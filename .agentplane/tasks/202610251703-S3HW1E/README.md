@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 152
+revision: 155
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T13:51:19.372Z"
+  updated_at: "2026-10-28T14:00:12.550Z"
   updated_by: "CODER"
-  note: "Native font CSS, paragraph consumers and browser font lists verified: 949 related tests, 9 mounted UI tests, type/lint/format/source gates pass. Source proves stylesheet rules are inert for Markdown newDoc=false. Remaining actual HTML and RTF consumer rows keep the overall task open."
-  attempts: 15
+  note: "Connected native legacy HTML fonts, real stacks and heading sizing; documented WRITER215-217 as requested. 960 related tests and type/lint/format/source gates pass. Remaining actual HTML/RTF consumer rows keep the full format task open."
+  attempts: 16
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -245,8 +248,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:00:12.550Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Connected native legacy HTML fonts, real stacks and heading sizing; documented WRITER215-217 as requested. 960 related tests and type/lint/format/source gates pass. Remaining actual HTML/RTF consumer rows keep the full format task open."
+  -
+    type: "status"
+    at: "2026-10-28T14:00:20.002Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T13:51:26.637Z"
+doc_updated_at: "2026-10-28T14:00:20.002Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -419,6 +435,36 @@ sections:
     Attempts: 15
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:51:18.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T14:00:12.550Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Connected native legacy HTML fonts, real stacks and heading sizing; documented WRITER215-217 as requested. 960 related tests and type/lint/format/source gates pass. Remaining actual HTML/RTF consumer rows keep the full format task open.
+    Attempts: 16
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:00:11.565Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -971,6 +1017,19 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0 on six changed sources; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared
     - Result: pass; Evidence: type/lint/format/whitespace clean, JSDoc3907 authored files, boundaries1700 sources/8953 imports/210 allowed edges, provenance1701 modules, both registries pass. Scope: changed HTML/native-item browser presentation and source evidence. Logs: output/playwright/rtf-properties-native/html4-*.log (ignored local artifacts).
     - Remaining actual filter work: legacy HTML FONT/BIG/SMALL; background/borders/other represented paragraph CSS, language, hyperlinks/bookmarks, HTML lists/tables, existing-style lookup where reachable, and remaining represented RTF matrix rows. New-document stylesheet completeness, unrelated UNO operations, physical-font/device services and generic module completeness are not independent gates. Overall task remains DOING/rework; no full-suite repetition or goal-completion claim.
+
+    ### Native legacy HTML font block
+
+    - Prior goal turn: progress, committed c8c671860e8c; current turn preflight confirmed a clean Writer checkout. Approved task scope and current filter consumers are unchanged.
+    - Requirement: actual Markdown raw HTML must import represented legacy BASEFONT/FONT/BIG/SMALL family/color/height values and restore contexts. Native source: sw/source/filter/html/swhtml.cxx NewBasefontAttr/EndBasefontAttr/NewFontAttr/EndFontAttr, GetCurrFormatColl, heading marker updates; existing native HTMLOption numeric/color owners.
+    - Implementation: new swhtml.font.ts borrows the actual SwHTMLParser stacks, context APIs, CSS receiver and deferred heads to retain the 1000-line ceiling. Original base-relative signed-size arithmetic, uint16 BASEFONT narrowing, clamps, duplicate-option precedence, heading-adjacent style heights and stack minima are preserved. No new generic kernel service or substitute font provider is introduced. Existing native no-DocShell metadata path retains UTF8 encoding; other producers remain explicitly tracked.
+    - Source quirks: user reminder was applied directly to docs/program/writer-upstream-suspected-issues.md. WRITER215 documents all script FONT items using Western heads without style options; WRITER216 documents zero logical size for FONT without SIZE; WRITER217 documents independent size-stack pop on unmatched closing token. Runtime head snapshots, actual selected Western/CJK/CTL ranges and malformed-stack behavior verify preservation. No compiled LibreOffice defect confirmation is claimed.
+    - Verification corrections: a missing local enum endpoint was expressed as native COLL_HEADLINE1+5. The heading restoration assertion now compares the actual heading-2 font item because the existing run projection exposes inherited authored height. The first mixed-script fixture queried collapsed caret properties, which intentionally select the preceding attribute at boundaries; selected-range GetParaAttr queries now test the imported script characters. No kernel logic was changed to make these fixtures pass. Reverse duplicate option assignment was retained before evaluating the native HasStyleOptions branch.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+    - Result: pass; Evidence: 960 tests / 71 suites, including 45 actual native HTML integration cases; Scope: related filters, real Markdown raw HTML entry and Worker document transport. New cases include legacy font values, base-relative nesting, BIG/SMALL, clamps/narrowing, duplicate SIZE, CSS override, native heading sizing, zero-size/unmatched-closer behavior, actual three-script selected properties and original head wiring.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:source-tree
+    - Result: pass; Evidence: type/lint/format clean, JSDoc3908 authored sources, size3912 authored files, boundaries1701 sources/8967 imports/210 edges, provenance1702 modules, Writer registry and115 source-tree paths/32 retired roots pass. Logs output/playwright/rtf-properties-native/html5-*.log are ignored local artifacts. Initial missing test-subclass JSDoc was added and the affected lint/doc gates rerun successfully.
+    - Remaining filter work: native represented background/border/other paragraph CSS, ID/bookmark/language/direction, hyperlinks, HTML list/table paths, relevant existing-style lookup and remaining RTF capability rows. Table-specific font-stack minima transitions belong to the pending real table consumer; no standalone table-service expansion is claimed. Overall task remains DOING/rework and the full format goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -1154,6 +1213,36 @@ Note: Native font CSS, paragraph consumers and browser font lists verified: 949 
 Attempts: 15
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:51:18.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T14:00:12.550Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Connected native legacy HTML fonts, real stacks and heading sizing; documented WRITER215-217 as requested. 960 related tests and type/lint/format/source gates pass. Remaining actual HTML/RTF consumer rows keep the full format task open.
+Attempts: 16
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:00:11.565Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1710,3 +1799,16 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0 on six changed sources; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared
 - Result: pass; Evidence: type/lint/format/whitespace clean, JSDoc3907 authored files, boundaries1700 sources/8953 imports/210 allowed edges, provenance1701 modules, both registries pass. Scope: changed HTML/native-item browser presentation and source evidence. Logs: output/playwright/rtf-properties-native/html4-*.log (ignored local artifacts).
 - Remaining actual filter work: legacy HTML FONT/BIG/SMALL; background/borders/other represented paragraph CSS, language, hyperlinks/bookmarks, HTML lists/tables, existing-style lookup where reachable, and remaining represented RTF matrix rows. New-document stylesheet completeness, unrelated UNO operations, physical-font/device services and generic module completeness are not independent gates. Overall task remains DOING/rework; no full-suite repetition or goal-completion claim.
+
+### Native legacy HTML font block
+
+- Prior goal turn: progress, committed c8c671860e8c; current turn preflight confirmed a clean Writer checkout. Approved task scope and current filter consumers are unchanged.
+- Requirement: actual Markdown raw HTML must import represented legacy BASEFONT/FONT/BIG/SMALL family/color/height values and restore contexts. Native source: sw/source/filter/html/swhtml.cxx NewBasefontAttr/EndBasefontAttr/NewFontAttr/EndFontAttr, GetCurrFormatColl, heading marker updates; existing native HTMLOption numeric/color owners.
+- Implementation: new swhtml.font.ts borrows the actual SwHTMLParser stacks, context APIs, CSS receiver and deferred heads to retain the 1000-line ceiling. Original base-relative signed-size arithmetic, uint16 BASEFONT narrowing, clamps, duplicate-option precedence, heading-adjacent style heights and stack minima are preserved. No new generic kernel service or substitute font provider is introduced. Existing native no-DocShell metadata path retains UTF8 encoding; other producers remain explicitly tracked.
+- Source quirks: user reminder was applied directly to docs/program/writer-upstream-suspected-issues.md. WRITER215 documents all script FONT items using Western heads without style options; WRITER216 documents zero logical size for FONT without SIZE; WRITER217 documents independent size-stack pop on unmatched closing token. Runtime head snapshots, actual selected Western/CJK/CTL ranges and malformed-stack behavior verify preservation. No compiled LibreOffice defect confirmation is claimed.
+- Verification corrections: a missing local enum endpoint was expressed as native COLL_HEADLINE1+5. The heading restoration assertion now compares the actual heading-2 font item because the existing run projection exposes inherited authored height. The first mixed-script fixture queried collapsed caret properties, which intentionally select the preceding attribute at boundaries; selected-range GetParaAttr queries now test the imported script characters. No kernel logic was changed to make these fixtures pass. Reverse duplicate option assignment was retained before evaluating the native HasStyleOptions branch.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+- Result: pass; Evidence: 960 tests / 71 suites, including 45 actual native HTML integration cases; Scope: related filters, real Markdown raw HTML entry and Worker document transport. New cases include legacy font values, base-relative nesting, BIG/SMALL, clamps/narrowing, duplicate SIZE, CSS override, native heading sizing, zero-size/unmatched-closer behavior, actual three-script selected properties and original head wiring.
+- Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:source-tree
+- Result: pass; Evidence: type/lint/format clean, JSDoc3908 authored sources, size3912 authored files, boundaries1701 sources/8967 imports/210 edges, provenance1702 modules, Writer registry and115 source-tree paths/32 retired roots pass. Logs output/playwright/rtf-properties-native/html5-*.log are ignored local artifacts. Initial missing test-subclass JSDoc was added and the affected lint/doc gates rerun successfully.
+- Remaining filter work: native represented background/border/other paragraph CSS, ID/bookmark/language/direction, hyperlinks, HTML list/table paths, relevant existing-style lookup and remaining RTF capability rows. Table-specific font-stack minima transitions belong to the pending real table consumer; no standalone table-service expansion is claimed. Overall task remains DOING/rework and the full format goal remains active.

@@ -2029,3 +2029,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_font` writes posture/case/weight resets and font size before checking for the optional slash and font-family expression.
 - Observation: `font: 18pt` has no family, but can still reset weight/posture and set height. The declaration is not transactionally rejected after the missing family is found. This is source-level evidence, not compiled upstream differential behavior.
 - Preservation: actual native HTML attribute insertion keeps these partial writes, including explicit normal weight inside an outer bold span. Tests cover restoration after the closing span and real Markdown/Worker font-item transport.
+
+### WRITER215 — Legacy FONT uses Western attribute heads for all three scripts
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::NewFontAttr` branch without style options. All three height items are passed to `pFontHeight`, and all three font items to `pFont`; the CSS/InsertAttrs branch and NewBasefontAttr use separate Western/CJK/CTL heads.
+- Observation: script-specific items are linked through one shared Western head rather than their individual script heads. This can change deferred-chain ordering and interactions with nested font attributes. This is source-level evidence; no compiled desktop symptom is asserted. A simple mixed-script case still applies all three values after native range selection.
+- Preservation: retain the exact head selection. Actual parser-state tests distinguish the shared chain from the CSS branch, and actual selected-range tests cover Western, CJK and CTL family/height items. Do not normalize the head wiring merely because it looks like a copy/paste error.
+
+### WRITER216 — FONT without SIZE pushes a zero logical size affecting nested BIG
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::NewFontAttr` initializes `nSize=0`, changes it only for SIZE or BIG/SMALL, and unconditionally appends it to `m_aFontStack`. The next font element reads the stack tail masked with FONTSIZE_MASK.
+- Observation: a face-only FONT can cause a nested BIG to choose logical size 1 rather than enlarging the inherited logical size. In the consumed default configuration, `<font face="Example"><big>A</big></font>` produces the first configured height (7pt). This is source-derived actual-model behavior, not a compiled LibreOffice defect confirmation.
+- Preservation: retain the zero entry and original seven-step arithmetic. Do not infer a missing SIZE from the effective font item or replace it with the base logical size.
+
+### WRITER217 — Unmatched legacy font closing tags still pop the size stack
+
+- Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::EndFontAttr` calls EndTag and then independently removes the last size when above the stack minimum; it does not require a matching context to have been found.
+- Observation: in `<font size="5">A</big><big>B</big>C</font>D`, the unmatched BIG closer removes the size-5 stack entry while the FONT context remains open. The following BIG consequently uses base size 3 and emits logical size 4. Existing FONT attributes still cover A/C. This is source-derived actual-model evidence; compiled upstream differential behavior remains unverified.
+- Preservation: retain the independent token-context search and stack pop, including minimum guards. Do not make size removal conditional on context lookup success.

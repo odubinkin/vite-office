@@ -45,6 +45,7 @@ import { SwCSS1Parser } from "./htmlcss1";
 import { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { NewBasefontAttr, EndBasefontAttr, NewFontAttr, EndFontAttr } from "./swhtml.font";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
@@ -54,6 +55,11 @@ export class SwHTMLParser extends HTMLParser {
   readonly m_aSetAttrTab: HTMLAttr[] = [];
   readonly m_aContexts: HTMLAttrContext[] = [];
   readonly m_pCSS1Parser: SwCSS1Parser;
+  readonly m_aBaseFontStack: number[] = [];
+  readonly m_aFontStack: number[] = [];
+  m_nBaseFontStMin = 0;
+  m_nFontStMin = 0;
+  m_nFontStHeadStart = 0;
   private readonly m_pNumRuleInfo = new SwHTMLNumRuleInfo();
   private readonly breakIterator = new BreakIteratorImpl();
   private m_nOpenParaToken = T.NONE;
@@ -83,6 +89,10 @@ export class SwHTMLParser extends HTMLParser {
     m_pPam.DeleteMark();
     this.m_bOldIsHTMLMode = m_xDoc.GetDocumentSettingManager().get("HTML_MODE");
     m_xDoc.GetDocumentSettingManager().set("HTML_MODE", true);
+  }
+  /** Original GetCurrFormatColl borrows the cursor content node's actual collection. @returns Current format collection. */
+  GetCurrFormatColl() {
+    return this.GetTextNode().GetTextFormatColl();
   }
   /** Native current numbering state. @returns Actual owner. */
   GetNumInfo(): SwHTMLNumRuleInfo {
@@ -139,6 +149,7 @@ export class SwHTMLParser extends HTMLParser {
     }
     for (const attr of this.m_aSetAttrTab) release(attr);
     this.m_aSetAttrTab.length = this.m_aParaAttrs.length = this.m_aContexts.length = 0;
+    this.m_aBaseFontStack.length = this.m_aFontStack.length = 0;
   }
   /** Reads the represented original content node. @returns Actual text owner. */
   private GetTextNode(): SwTextNode {
@@ -471,6 +482,7 @@ export class SwHTMLParser extends HTMLParser {
     this.InsertAlignment(context);
     this.PushContext(context);
     this.SetTextCollAttrs();
+    this.m_nFontStHeadStart = this.m_aFontStack.length;
   }
   /** Original heading close finds the last heading regardless of the closing level. @returns Nothing. */
   EndHeading(): void {
@@ -491,6 +503,7 @@ export class SwHTMLParser extends HTMLParser {
       }
     }
     this.SetTextCollAttrs();
+    this.m_nFontStHeadStart = this.m_nFontStMin;
   }
   /** Original represented block-style transition. @param token - Opening token. @param pool - Native pool ID. @returns Nothing. */
   NewTextFormatColl(token: T, pool: number): void {
@@ -686,6 +699,22 @@ export class SwHTMLParser extends HTMLParser {
       case T.LISTING_OFF:
       case T.XMP_OFF:
         this.EndTextFormatColl(token);
+        break;
+      case T.BASEFONT_ON:
+        NewBasefontAttr(this);
+        break;
+      case T.BASEFONT_OFF:
+        EndBasefontAttr(this);
+        break;
+      case T.FONT_ON:
+      case T.BIGPRINT_ON:
+      case T.SMALLPRINT_ON:
+        NewFontAttr(this, token);
+        break;
+      case T.FONT_OFF:
+      case T.BIGPRINT_OFF:
+      case T.SMALLPRINT_OFF:
+        EndFontAttr(this, token);
         break;
       case T.EMPHASIS_ON:
       case T.CITATION_ON:
