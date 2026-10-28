@@ -204,3 +204,49 @@ export function rtl_convertUStringToString(
 ): boolean {
   return rtl_impl_convertUStringToString(target, source, length, encoding, flags, true);
 }
+
+import {
+  newFromStr_WithLength,
+  newFromSubString,
+  assign,
+  indexOfChar_WithLength,
+  indexOfStr_WithLength,
+} from "./strtmpl";
+/** Original byte template bounded copy instantiation. @param target - Inout byte pointer. @param source - Borrowed bytes. @param length - Logical length. @returns Nothing. */
+export function rtl_string_newFromStr_WithLength(
+  target: rtl_StringSlot | null,
+  source: Uint8Array | null,
+  length: number,
+): void {
+  newFromStr_WithLength(target, source, length, 0, Uint8Array);
+}
+/** Original byte assignment acquires before release, including aliasing. @param target - Inout pointer. @param source - Actual data. @returns Nothing. */
+export function rtl_string_assign(target: rtl_StringSlot | null, source: rtl_String): void {
+  assign(target, source);
+}
+/** Original byte substring full-range alias or bounded allocation. @param target - Inout pointer. @param source - Actual data. @param start - Beginning. @param count - Count. @returns Nothing. */
+export function rtl_string_newFromSubString(
+  target: rtl_StringSlot | null,
+  source: rtl_String,
+  start: number,
+  count: number,
+): void {
+  newFromSubString(target, source, start, count, Uint8Array);
+}
+/** Original byte bounded character search. @param source - Borrowed bytes. @param length - Count. @param character - Native signed char. @returns Index or -1. */
+export function rtl_str_indexOfChar_WithLength(
+  source: Uint8Array | null,
+  length: number,
+  character: number,
+): number {
+  return indexOfChar_WithLength(source, length, character & 255);
+}
+/** Original byte bounded substring search. @param source - Haystack. @param length - Haystack count. @param needle - Needle. @param needleLength - Needle count. @returns Index or -1. */
+export function rtl_str_indexOfStr_WithLength(
+  source: Uint8Array | null,
+  length: number,
+  needle: Uint8Array | null,
+  needleLength: number,
+): number {
+  return indexOfStr_WithLength(source, length, needle, needleLength);
+}

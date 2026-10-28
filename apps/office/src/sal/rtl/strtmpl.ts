@@ -15,14 +15,15 @@ import { RTL_STR_MIN_RADIX, RTL_STR_MAX_RADIX } from "../inc/rtl/string.h";
 import { SAL_MAX_INT32 } from "../inc/types";
 
 /** Adapts the original basic_string_view to the host's exact UTF16 search storage without normalization, termination scanning or code-point conversion. @param data - Borrowed original units, nullable for an empty view. @param length - Logical view length. @returns Same logical sequence of UTF16 units. */
-function stringView(data: Uint16Array | null, length: number): string {
+function stringView(data: Uint16Array | Uint8Array | null, length: number): string {
   let value = "";
-  for (let i = 0; i < length; i++) value += String.fromCharCode((data as Uint16Array)[i] as number);
+  for (let i = 0; i < length; i++)
+    value += String.fromCharCode((data as Uint16Array | Uint8Array)[i] as number);
   return value;
 }
 /** Original bounded character find; nonpositive lengths return before constructing the view. @param data - Borrowed units. @param length - Signed logical length. @param character - Original sal_Unicode value. @returns First unit offset or -1. */
 export function indexOfChar_WithLength(
-  data: Uint16Array | null,
+  data: Uint16Array | Uint8Array | null,
   length: number,
   character: number,
 ): number {
@@ -40,9 +41,9 @@ export function lastIndexOfChar_WithLength(
 }
 /** Original bounded UTF16 substring find, retaining the empty-needle exclusion and single-character dispatch. @param data - Borrowed haystack. @param length - Logical haystack length. @param needle - Borrowed needle. @param needleLength - Logical needle length. @returns First offset or -1. */
 export function indexOfStr_WithLength(
-  data: Uint16Array | null,
+  data: Uint16Array | Uint8Array | null,
   length: number,
-  needle: Uint16Array | null,
+  needle: Uint16Array | Uint8Array | null,
   needleLength: number,
 ): number {
   if (length < 0) throw new Error("assert(nStrLen >= 0)");
@@ -50,7 +51,7 @@ export function indexOfStr_WithLength(
   if (needleLength === 0) return -1;
   const view = stringView(data, length);
   return needleLength === 1
-    ? view.indexOf(String.fromCharCode((needle as Uint16Array)[0] as number))
+    ? view.indexOf(String.fromCharCode((needle as Uint16Array | Uint8Array)[0] as number))
     : view.indexOf(stringView(needle, needleLength));
 }
 /** Original bounded reverse UTF16 substring find. @param data - Borrowed haystack. @param length - Logical haystack length. @param needle - Borrowed needle. @param needleLength - Logical needle length. @returns Last offset or -1. */
@@ -252,11 +253,12 @@ export function new_WithLength(
 }
 /** Original same-type UTF16 std::copy and char-to-Unicode ASCII std::transform Copy overloads. @param destination - Allocated storage. @param source - Borrowed source. @param count - Native initialized unit count. @returns Nothing. */
 export function Copy(
-  destination: Uint16Array,
+  destination: Uint16Array | Uint8Array,
   source: Uint16Array | Uint8Array,
   count: number,
 ): void {
-  if (source.BYTES_PER_ELEMENT === 1) {
+  if (destination.BYTES_PER_ELEMENT === 1) destination.set(source.subarray(0, count));
+  else if (source.BYTES_PER_ELEMENT === 1) {
     for (let i = 0; i < count; i++) {
       const unit = source[i] as number;
       if (unit >= 0x80) throw new Error("assert(rtl::isAscii(static_cast<unsigned char>(c)))");
@@ -264,12 +266,13 @@ export function Copy(
     }
   } else destination.set(source.subarray(0, count));
 }
-/** Original buffer copy with optional spare allocation; the old owner is released last to preserve aliasing. @param ppThis - Destination slot. @param pCharStr - Borrowed source. @param nLen - Signed32 unit count. @param allocExtra - Original signed32 extra capacity. @returns Nothing. */
+/** Original buffer copy with optional spare allocation; the old owner is released last to preserve aliasing. @param ppThis - Destination slot. @param pCharStr - Borrowed source. @param nLen - Signed32 unit count. @param allocExtra - Original signed32 extra capacity. @param characterType - Erased native byte or UTF16 template declaration. @returns Nothing. */
 export function newFromStr_WithLength(
-  ppThis: rtl_uStringSlot | null,
+  ppThis: rtl_uStringSlot | rtl_StringSlot | null,
   pCharStr: Uint16Array | Uint8Array | null,
   nLen: number,
   allocExtra = 0,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): void {
   nLen |= 0;
   allocExtra |= 0;
@@ -277,9 +280,16 @@ export function newFromStr_WithLength(
   if (nLen < 0) throw new Error("assert(nLen >= 0)");
   if (pCharStr === null && nLen !== 0) throw new Error("assert(pCharStr || nLen == 0)");
   if (allocExtra < 0) throw new Error("assert(allocExtra >= 0)");
-  if (nLen + allocExtra === 0) return new_(ppThis);
+  if (nLen + allocExtra === 0) {
+    if (characterType.BYTES_PER_ELEMENT === 1) new_(ppThis as rtl_StringSlot, Uint8Array);
+    else new_(ppThis as rtl_uStringSlot);
+    return;
+  }
   const pOrg = ppThis[0];
-  ppThis[0] = Alloc(nLen + allocExtra);
+  ppThis[0] =
+    characterType.BYTES_PER_ELEMENT === 1
+      ? Alloc(nLen + allocExtra, Uint8Array)
+      : Alloc(nLen + allocExtra);
   if (ppThis[0] === null) throw new Error("assert(*ppThis != nullptr)");
   if (nLen > 0) Copy(ppThis[0].buffer, pCharStr as Uint16Array | Uint8Array, nLen);
   if (allocExtra > 0) {
@@ -308,24 +318,28 @@ export function newFromStr(ppThis: rtl_uStringSlot | null, pCharStr: Uint16Array
   newFromStr_WithLength(ppThis, pCharStr, getLength(pCharStr));
 }
 /** Original assignment acquires first even for selfassignment. @param ppThis - Destination slot. @param pStr - Live source. @returns Nothing. */
-export function assign(ppThis: rtl_uStringSlot | null, pStr: rtl_uString): void {
+export function assign(
+  ppThis: rtl_uStringSlot | rtl_StringSlot | null,
+  pStr: rtl_uString | rtl_String,
+): void {
   if (ppThis === null) throw new Error("assert(ppThis)");
   acquire(pStr);
   if (ppThis[0] !== null) release(ppThis[0]);
   ppThis[0] = pStr;
 }
-/** Original checked-build substring allocation: full range aliases through assign, other valid ranges use the actual string allocator. Invalid ranges are outside the public copy contract and stop at the original C assertion; the NDEBUG diagnostic fallback is not certified. @param ppThis - Inout owned slot. @param pFrom - Borrowed source. @param beginIndex - Original inclusive offset. @param count - Original count. @returns Nothing. */
+/** Original checked-build substring allocation: full range aliases through assign, other valid ranges use the actual string allocator. Invalid ranges are outside the public copy contract and stop at the original C assertion; the NDEBUG diagnostic fallback is not certified. @param ppThis - Inout owned slot. @param pFrom - Borrowed source. @param beginIndex - Original inclusive offset. @param count - Original count. @param characterType - Erased native character template. @returns Nothing. */
 export function newFromSubString(
-  ppThis: rtl_uStringSlot | null,
-  pFrom: rtl_uString,
+  ppThis: rtl_uStringSlot | rtl_StringSlot | null,
+  pFrom: rtl_uString | rtl_String,
   beginIndex: number,
   count: number,
+  characterType: typeof Uint8Array | typeof Uint16Array = Uint16Array,
 ): void {
   if (ppThis === null) throw new Error("assert(ppThis)");
   if (beginIndex === 0 && count === pFrom.length) return assign(ppThis, pFrom);
   if (count < 0 || beginIndex < 0 || beginIndex + count > pFrom.length)
     throw new Error("assert(false)");
-  newFromStr_WithLength(ppThis, pFrom.buffer.subarray(beginIndex), count);
+  newFromStr_WithLength(ppThis, pFrom.buffer.subarray(beginIndex), count, 0, characterType);
 }
 /** Original borrowed getStr boundary. @param pThis - Live data. @returns Original buffer identity. */
 export function getStr(pThis: rtl_uString | null): Uint16Array {

@@ -1,0 +1,40 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/string.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-xml-byte-encoding",
+    "capabilityIds": [
+      "CAP-59b1cb6d-6543-427c-b073-4833050033e0"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/string.ts",
+        "apps/office/src/sal/inc/rtl/native-ostring.test.ts",
+        "apps/office/src/sal/textenc/native-mime-charset.test.ts",
+        "vendor/libreoffice-reference/include/rtl/string.hxx"
+      ],
+      "justification": "Original internal OStringLiteral/OString consumed byte ownership, default/copy/adopt/move, stable pointer field/address, assignment, counted search and substring owners now use actual SAL C/template allocation and reference primitives. Shared Copy/newFromStr_WithLength/assign/newFromSubString instantiate native byte and original UTF16 roles; no replacement allocator/value/type provider is supplied. Original MIME lookup retains all40 exact VIP and184 ordered prefix aliases including duplicates, at most30 normalized ASCII alphanumerics, native equality/prefix order and DONTKNOW fallback. Direct source-table audit confirms exact ordered entries. CALC-362/WRITER199 records permissive alias suffix admission. New OString and whole byte C owner100 evidence is distinct from a retained failing whole4-owner profile; no counters/thresholds/exclusions change. Existing native SAL evidence stays limited to its recorded scopes. XMLFile2UTFConverter/InputSource/UNO parser transport, further OString conveniences, full model/filter/worker/DOCX/XLSX/UI remain pending. Physical ABI, compile-time evaluation, allocator exhaustion, pointer undefined behavior and native threads remain unverified. Existing file/autosave/recovery deviations are unchanged.",
+      "knownViolations": [],
+      "localSymbols": [
+        "OString",
+        "OStringLiteral",
+        "OStringConstReference"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/rtl/string.hxx",
+      "upstreamSymbols": [
+        "OString",
+        "indexOf",
+        "copy"
+      ]
+    }
+  }
+}

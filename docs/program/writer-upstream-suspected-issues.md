@@ -1919,3 +1919,7 @@ Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` alway
 ### WRITER198 — Shared OOXML copy can write an untouched buffer from an EOF input
 
 Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` allocates a32KiB Sequence and calls `writeData(aBuffer)` even when `readData()` returns zero without reallocating that Sequence. `BinaryXInputStream` in EOF does exactly that. Copying an initially absent input therefore writes32768 zero bytes to a valid output. This original behavior is preserved and exercised through actual comphelper input/output components; see CALC-361. Related original native package/SAX workflows are not certified by this bounded test.
+
+### WRITER199 — Shared MIME charset lookup uses permissive alias prefixes
+
+Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` checks exact VIP names before ordered prefix aliases after30-byte ASCII normalization. A trailing suffix rejects UTF-8 but can still select an ISO alias. The complete original40/184 tables, their duplicates and matching order are retained rather than replaced with browser alias rules. See CALC-362 and `sal/textenc/native-mime-charset.test.ts`. SAX encoding transport and complete DOCX model/filter/UI acceptance remain pending; this finding does not certify native ABI or all encoding conversion behavior.

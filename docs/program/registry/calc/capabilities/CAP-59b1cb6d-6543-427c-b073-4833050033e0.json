@@ -1,0 +1,90 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-59b1cb6d-6543-427c-b073-4833050033e0",
+    "capabilityId": "CAP-59b1cb6d-6543-427c-b073-4833050033e0",
+    "suite": "calc",
+    "subsystem": "native-xml-byte-encoding",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Byte strings use existing SAL C/template allocation, reference, static-empty and substring owners.",
+      "Complete original MIME lookup preserves40 VIP and184 ordered alias entries and native normalization/matching."
+    ],
+    "capability": "Original byte string owners and MIME encoding detection for XML transport",
+    "gaps": [
+      "Original internal OStringLiteral/OString consumed byte ownership, default/copy/adopt/move, stable pointer field/address, assignment, counted search and substring owners now use actual SAL C/template allocation and reference primitives. Shared Copy/newFromStr_WithLength/assign/newFromSubString instantiate native byte and original UTF16 roles; no replacement allocator/value/type provider is supplied. Original MIME lookup retains all40 exact VIP and184 ordered prefix aliases including duplicates, at most30 normalized ASCII alphanumerics, native equality/prefix order and DONTKNOW fallback. Direct source-table audit confirms exact ordered entries. CALC-362/WRITER199 records permissive alias suffix admission. New OString and whole byte C owner100 evidence is distinct from a retained failing whole4-owner profile; no counters/thresholds/exclusions change. Existing native SAL evidence stays limited to its recorded scopes. XMLFile2UTFConverter/InputSource/UNO parser transport, further OString conveniences, full model/filter/worker/DOCX/XLSX/UI remain pending. Physical ABI, compile-time evaluation, allocator exhaustion, pointer undefined behavior and native threads remain unverified. Existing file/autosave/recovery deviations are unchanged."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "include/rtl/string.hxx",
+          "marker": "OString"
+        },
+        {
+          "path": "sal/textenc/tencinfo.cxx",
+          "marker": "rtl_getTextEncodingFromMimeCharset"
+        },
+        {
+          "path": "sal/rtl/strtmpl.hxx",
+          "marker": "newFromStr_WithLength"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/rtl/textenc/rtl_tencinfo.cxx",
+          "marker": "rtl_getTextEncodingFromMimeCharset"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sax/inc/xml2utf.hxx",
+          "marker": "XMLFile2UTFConverter"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/string.ts",
+          "marker": "OString"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/tencinfo.ts",
+          "marker": "rtl_getTextEncodingFromMimeCharset"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/native-ostring.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/textenc/native-mime-charset.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-xml-byte-encoding.md",
+          "marker": "# Native XML byte encoding contracts"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original internal OStringLiteral/OString consumed byte ownership, default/copy/adopt/move, stable pointer field/address, assignment, counted search and substring owners now use actual SAL C/template allocation and reference primitives. Shared Copy/newFromStr_WithLength/assign/newFromSubString instantiate native byte and original UTF16 roles; no replacement allocator/value/type provider is supplied. Original MIME lookup retains all40 exact VIP and184 ordered prefix aliases including duplicates, at most30 normalized ASCII alphanumerics, native equality/prefix order and DONTKNOW fallback. Direct source-table audit confirms exact ordered entries. CALC-362/WRITER199 records permissive alias suffix admission. New OString and whole byte C owner100 evidence is distinct from a retained failing whole4-owner profile; no counters/thresholds/exclusions change. Existing native SAL evidence stays limited to its recorded scopes. XMLFile2UTFConverter/InputSource/UNO parser transport, further OString conveniences, full model/filter/worker/DOCX/XLSX/UI remain pending. Physical ABI, compile-time evaluation, allocator exhaustion, pointer undefined behavior and native threads remain unverified. Existing file/autosave/recovery deviations are unchanged."
+    },
+    "scopeLimitations": [
+      "Original internal OStringLiteral/OString consumed byte ownership, default/copy/adopt/move, stable pointer field/address, assignment, counted search and substring owners now use actual SAL C/template allocation and reference primitives. Shared Copy/newFromStr_WithLength/assign/newFromSubString instantiate native byte and original UTF16 roles; no replacement allocator/value/type provider is supplied. Original MIME lookup retains all40 exact VIP and184 ordered prefix aliases including duplicates, at most30 normalized ASCII alphanumerics, native equality/prefix order and DONTKNOW fallback. Direct source-table audit confirms exact ordered entries. CALC-362/WRITER199 records permissive alias suffix admission. New OString and whole byte C owner100 evidence is distinct from a retained failing whole4-owner profile; no counters/thresholds/exclusions change. Existing native SAL evidence stays limited to its recorded scopes. XMLFile2UTFConverter/InputSource/UNO parser transport, further OString conveniences, full model/filter/worker/DOCX/XLSX/UI remain pending. Physical ABI, compile-time evaluation, allocator exhaustion, pointer undefined behavior and native threads remain unverified. Existing file/autosave/recovery deviations are unchanged."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-byte-owner-and-mime-lookup"
+  }
+}

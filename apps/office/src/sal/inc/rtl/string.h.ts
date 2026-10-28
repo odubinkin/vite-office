@@ -45,3 +45,11 @@ export const OUSTRING_TO_OSTRING_CVTFLAGS =
   cvt.RTL_UNICODETOTEXT_FLAGS_INVALID_DEFAULT |
   cvt.RTL_UNICODETOTEXT_FLAGS_UNDEFINED_REPLACE |
   cvt.RTL_UNICODETOTEXT_FLAGS_PRIVATE_MAPTO0;
+
+export {
+  rtl_string_newFromStr_WithLength,
+  rtl_string_assign,
+  rtl_string_newFromSubString,
+  rtl_str_indexOfChar_WithLength,
+  rtl_str_indexOfStr_WithLength,
+} from "../../rtl/string";

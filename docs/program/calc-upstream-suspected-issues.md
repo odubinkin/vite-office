@@ -4438,3 +4438,7 @@ Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` uncon
 ### CALC-361 — BinaryInputStream copy writes the buffer even after a zero-byte read
 
 Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` always writes its current Sequence before inspecting the read count. If the input is already EOF, BinaryXInputStream::readData returns zero without resizing that Sequence. The fresh copy buffer therefore remains32768 bytes and is written as zeros. Actual null-input and comphelper-output owners reproduce this behavior without a fake read provider. Preserve the source loop and write ordering. Its remaining-count branch below32768 requires almost SAL_MAX_INT64 bytes and remains uncovered; thresholds/counters/source logic are unchanged. See WRITER198.
+
+### CALC-362 — MIME charset aliases accept suffixes while VIP names require equality
+
+Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` normalizes at most30 ASCII alphanumeric bytes, then checks exact names in aVIPMimeCharsetTab and prefix matches in aMimeCharsetTab. Thus UTF-8-suffix remains DONTKNOW, but ISO-8859-15-junk resolves to ISO_8859_15 and ISO-8859-1-win resolves to MS_1252. Table order, including longer ISO aliases and original duplicates, is significant. This permissive source lookup is preserved for the future XMLFile2UTFConverter path. All40 VIP and184 alias entries match the pinned source in order. See WRITER199; full XML/model/filter/UI and native ABI contracts remain unverified.
