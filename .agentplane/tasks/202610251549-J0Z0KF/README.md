@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 32
+revision: 35
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T10:57:52.172Z"
+  updated_at: "2026-10-28T11:33:39.263Z"
   updated_by: "CODER"
-  note: "Native listener/COW/model callback block:170 tests pass (22 focused,47 shared,51 Calc,50 tooling), but unchanged full five-owner coverage FAILS S241/242 B82/83 F71/71 L223/224 for original unreachable document-removal arm CALC-357. Real COW/container whole entries in the same raw map100 S148 B43 F49 L135; no map/threshold/exclusion changes. Typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-listeners-checkpoint.json binds26 source paths and preserves failing gate evidence. Full model/filter/DOCX/XLSX UI acceptance remains incomplete; no full verification or completion claimed."
-  attempts: 10
+  note: "Native current controller/selection block:111 tests pass (18 focused,42 shared UNO/Any/SDK,51 Calc ODS/CSV). Unchanged100 coverage FAILS S131/148 B49/58 F27/27 L123/135 for retained CALC-357 and unported registered-controller callers. CALC-358 documents original unchecked current assignment/empty-registry disconnect. No malformed query provider, private registry injection, threshold or exclusion changes. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-selection-checkpoint.json binds13 source paths. Complete model/factory/controller/view-frame/filter and DOCX/XLSX UI acceptance remains incomplete."
+  attempts: 11
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -168,8 +171,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T11:33:39.263Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native current controller/selection block:111 tests pass (18 focused,42 shared UNO/Any/SDK,51 Calc ODS/CSV). Unchanged100 coverage FAILS S131/148 B49/58 F27/27 L123/135 for retained CALC-357 and unported registered-controller callers. CALC-358 documents original unchecked current assignment/empty-registry disconnect. No malformed query provider, private registry injection, threshold or exclusion changes. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-selection-checkpoint.json binds13 source paths. Complete model/factory/controller/view-frame/filter and DOCX/XLSX UI acceptance remains incomplete."
+  -
+    type: "status"
+    at: "2026-10-28T11:35:14.041Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T10:59:05.997Z"
+doc_updated_at: "2026-10-28T11:35:14.041Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -484,6 +500,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T11:33:39.263Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native current controller/selection block:111 tests pass (18 focused,42 shared UNO/Any/SDK,51 Calc ODS/CSV). Unchanged100 coverage FAILS S131/148 B49/58 F27/27 L123/135 for retained CALC-357 and unported registered-controller callers. CALC-358 documents original unchecked current assignment/empty-registry disconnect. No malformed query provider, private registry injection, threshold or exclusion changes. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-selection-checkpoint.json binds13 source paths. Complete model/factory/controller/view-frame/filter and DOCX/XLSX UI acceptance remains incomplete.
+    Attempts: 11
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T11:33:37.396Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -528,6 +574,10 @@ sections:
     - Observation: Native listener ownership block: ported consumed cow_wrapper ownership/refcount policies and original OInterfaceContainerHelper3/iterator with actual Reference values, plus model language/document/modify registration and original disposing queries/priority. Model now declares actual language XEventListener alongside XChild; no full XModel/factory is synthesized.
       Impact: Command: current five-owner targeted coverage; Result:22 tests/5files pass, but unchanged100 gate FAILS at S241/242 B82/83 F71/71 L223/224. The sole uncovered SfxBaseModel document-removal arm is unreachable for a conforming document listener because its language base query succeeds first; CALC-357 records and preserves this source logic. The two complete current COW/container entries in that same raw map pass100 S148/148 B43/43 F49/49 L135/135 without changing counters. Related shared47/6files, Calc ODS/CSV51/4files, tooling50/4files pass. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass.
       Resolution: Retain the original arm and current coverage failure; no malformed query witness, coverage exclusion or threshold change is authorized or introduced. Native mutex/shared-object/thread/ABI/static-shutdown contracts, unconsumed COW value constructors/comparisons, generated document event runtime values and complete model close/dispose/broadcast/factory/controller/undo/filter/UI workflows remain unported or unverified. Explicit declaration tokens bind erased C++ language/document overloads instead of runtime interface guessing. Store native-model-listeners-checkpoint.json and continue the full DOCX/XLSX objective with task acceptance incomplete.
+
+    - Observation: Native controller/selection block: original stored URL copy, current-first/first-registered controller getter, unchecked current assignment, disconnect empty-registry/erase flow, actual XSelectionSupplier query and Any-to-root Reference extraction are implemented on the actual model. Two original selection SDK interfaces use real normal CPPUMaker metadata. CALC-358 preserves the setter/IDL registration mismatch.
+      Impact: Command: focused three-owner coverage; Result:18 tests/4files pass, but unchanged100 gate FAILS S131/148 B49/58 F27/27 L123/135. Retained CALC-357 and unported registered-controller/view-frame callers leave first-registered fallback/nonempty disconnect/registered-member destruction uncovered. Command: related shared UNO/Any/SDK regressions; Result:42pass/6files. Command: Calc ODS/CSV regressions; Result:51pass/4files. Full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. No private registry setter, fake query/type/model provider, threshold change or exclusion was introduced.
+      Resolution: Record native-model-selection-checkpoint.json and keep full task incomplete. Complete concrete caller controllers exercise actual interface/refcount/Any ownership, failed extraction, source exception propagation, independent selection lifetime and reentrant current-controller replacement; they are not a native SfxBaseController/browser-view port. The new callback fixture initially omitted invoking its hook and was corrected without changing production logic. Full controller registration, model/factory admission, FilterBase/workbook and DOCX/XLSX UI round trips remain pending; source branches are retained for those genuine callers.
 id_source: "generated"
 ---
 ## Summary
@@ -852,6 +902,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T11:33:39.263Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native current controller/selection block:111 tests pass (18 focused,42 shared UNO/Any/SDK,51 Calc ODS/CSV). Unchanged100 coverage FAILS S131/148 B49/58 F27/27 L123/135 for retained CALC-357 and unported registered-controller callers. CALC-358 documents original unchecked current assignment/empty-registry disconnect. No malformed query provider, private registry injection, threshold or exclusion changes. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-selection-checkpoint.json binds13 source paths. Complete model/factory/controller/view-frame/filter and DOCX/XLSX UI acceptance remains incomplete.
+Attempts: 11
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T11:33:37.396Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -900,3 +980,7 @@ DecisionContextRef:
 - Observation: Native listener ownership block: ported consumed cow_wrapper ownership/refcount policies and original OInterfaceContainerHelper3/iterator with actual Reference values, plus model language/document/modify registration and original disposing queries/priority. Model now declares actual language XEventListener alongside XChild; no full XModel/factory is synthesized.
   Impact: Command: current five-owner targeted coverage; Result:22 tests/5files pass, but unchanged100 gate FAILS at S241/242 B82/83 F71/71 L223/224. The sole uncovered SfxBaseModel document-removal arm is unreachable for a conforming document listener because its language base query succeeds first; CALC-357 records and preserves this source logic. The two complete current COW/container entries in that same raw map pass100 S148/148 B43/43 F49/49 L135/135 without changing counters. Related shared47/6files, Calc ODS/CSV51/4files, tooling50/4files pass. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass.
   Resolution: Retain the original arm and current coverage failure; no malformed query witness, coverage exclusion or threshold change is authorized or introduced. Native mutex/shared-object/thread/ABI/static-shutdown contracts, unconsumed COW value constructors/comparisons, generated document event runtime values and complete model close/dispose/broadcast/factory/controller/undo/filter/UI workflows remain unported or unverified. Explicit declaration tokens bind erased C++ language/document overloads instead of runtime interface guessing. Store native-model-listeners-checkpoint.json and continue the full DOCX/XLSX objective with task acceptance incomplete.
+
+- Observation: Native controller/selection block: original stored URL copy, current-first/first-registered controller getter, unchecked current assignment, disconnect empty-registry/erase flow, actual XSelectionSupplier query and Any-to-root Reference extraction are implemented on the actual model. Two original selection SDK interfaces use real normal CPPUMaker metadata. CALC-358 preserves the setter/IDL registration mismatch.
+  Impact: Command: focused three-owner coverage; Result:18 tests/4files pass, but unchanged100 gate FAILS S131/148 B49/58 F27/27 L123/135. Retained CALC-357 and unported registered-controller/view-frame callers leave first-registered fallback/nonempty disconnect/registered-member destruction uncovered. Command: related shared UNO/Any/SDK regressions; Result:42pass/6files. Command: Calc ODS/CSV regressions; Result:51pass/4files. Full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. No private registry setter, fake query/type/model provider, threshold change or exclusion was introduced.
+  Resolution: Record native-model-selection-checkpoint.json and keep full task incomplete. Complete concrete caller controllers exercise actual interface/refcount/Any ownership, failed extraction, source exception propagation, independent selection lifetime and reentrant current-controller replacement; they are not a native SfxBaseController/browser-view port. The new callback fixture initially omitted invoking its hook and was corrected without changing production logic. Full controller registration, model/factory admission, FilterBase/workbook and DOCX/XLSX UI round trips remain pending; source branches are retained for those genuine callers.

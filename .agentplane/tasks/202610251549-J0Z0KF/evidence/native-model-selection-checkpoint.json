@@ -1,0 +1,193 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native controller/selection owner block; full task incomplete and full model coverage fails",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts": "af95036f5bb36c487308fa49fc207dd5d14400eb",
+    "apps/office/src/offapi/com/sun/star/view/XSelectionSupplier.ts": "267f0581560daa017b5a131e6bb7bcc2838be1a2",
+    "apps/office/src/sfx2/source/doc/native-model-selection.test.ts": "2999a0a9fc2fbd54269d6cd614b416775bad7d3e",
+    "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": "5b830245cb91e362f38e05c7d3ba4ff47b7c7a16",
+    "docs/program/calc-upstream-suspected-issues.md": "2077b486a979389b822ff4ab8c48073fd43354f2",
+    "docs/program/registry/calc/capabilities/CAP-3cd08a4a-92f7-4a15-bbdc-539e7a22a9de.json": "df0c39c004f2401562582f933194a290193ee66f",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/view/XSelectionChangeListener.ts.json": "f710493e25579009a6cf6f4f4f63025e6e934f29",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/view/XSelectionSupplier.ts.json": "d1e25d1cb5e2eb34ef36652ec9af03d52cb924b5",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/sfxbasemodel.ts.json": "a8c7e0b5837b149810544941dd126e7a51ffd786",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/view/XSelectionChangeListener.ts.json": "4a8d14da8b0dd3ea4dce8a2e1297e26473b3f304",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/view/XSelectionSupplier.ts.json": "7c97b082efb508bff379ec7fc8a66cf0f9581c80",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/sfxbasemodel.ts.json": "5c1d694f4841a45298bdb0ba01d0df2aa71db52e",
+    "docs/program/uno-model-sdk.md": "1a9d7bd9cb89551172f4beca52e207e06e803e05"
+  },
+  "scope": "Original stored URL copy, current/registered controller Reference members and getter, unchecked current assignment, disconnect early-return/erase flow and actual XSelectionSupplier/Any/root Reference extraction. Selection SDK interfaces retain normal original cached CPPU metadata. No complete XModel/factory or native controller/view-frame service is manufactured.",
+  "checks": {
+    "testsfinal": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sfx2/source/doc/native-model-selection.test.ts src/sfx2/source/doc/native-model-listeners.test.ts src/sfx2/source/doc/native-model-child.test.ts src/sc/source/ui/unoobj/docuno.test.ts --coverage.include=src/sfx2/source/doc/sfxbasemodel.ts --coverage.include=src/offapi/com/sun/star/view/XSelectionSupplier.ts --coverage.include=src/offapi/com/sun/star/view/XSelectionChangeListener.ts --coverage.reportsDirectory=coverage/model-selection-final --maxWorkers=2",
+      "result": "fail unchanged100 gate;18tests/4files pass",
+      "log": "apps/office/coverage/model-selection-testsfinal.log",
+      "sha256": "757cda8390fd611e1254aeb8aadfe88ed66f186bbc5261064f67e45ddf2252cc"
+    },
+    "related": {
+      "command": "npm run test:shared -- src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/cppu/inc/com/sun/star/uno/Any-data.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/offapi/com/sun/star/frame/native-model-interfaces.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-related.log",
+      "sha256": "f01f27c6a067ccecb651236e51b7eba72e73ae685275f43e5a5e79288a9a0ae6"
+    },
+    "calc": {
+      "command": "npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-calc.log",
+      "sha256": "40bbf3725d288d42b384a5afacf943c4580faf8db808d1ddafc5cd34f6ec446e"
+    },
+    "typecheckfinal": {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-typecheckfinal.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "build": {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-build.log",
+      "sha256": "63de06398bb914a0daaddbabebbc2eff800fad31811a9f4f980f112d8c182651"
+    },
+    "deps": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-deps.log",
+      "sha256": "52e9132c67c9b85a2b0c39507bfbbbc8995d3bd680e4df6158643bd58986986e"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-docs.log",
+      "sha256": "0f44da08438f1037403f5f8e5133f1eeed2633dbf08d2ca7e85ea1642a1f3373"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-size.log",
+      "sha256": "196c1dc0e21f07831a69873ef931828576daba953cbde262e8ceb5a6f1a47e62"
+    },
+    "tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-provenance.log",
+      "sha256": "b492ce38479491dc55b040c0a9b2a92c0a2881650dda169844a765b013331e95"
+    },
+    "registrycheck": {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-registrycheck.log",
+      "sha256": "6a774d90d8f83a085e743a1c4aac8aa25c8f0f9db5fa25ad885eee6d07db692a"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-doctor.log",
+      "sha256": "c8820b16ef3be859077d5331be15dbb845b46898028dbf8174b36cc912a625d8"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "lintfinal": {
+      "command": "npx eslint apps/office/src/sfx2/source/doc/sfxbasemodel.ts apps/office/src/sfx2/source/doc/native-model-selection.test.ts apps/office/src/offapi/com/sun/star/view/XSelectionSupplier.ts apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-lintfinal.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check apps/office/src/sfx2/source/doc/sfxbasemodel.ts apps/office/src/sfx2/source/doc/native-model-selection.test.ts apps/office/src/offapi/com/sun/star/view/XSelectionSupplier.ts apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/model-selection-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    }
+  },
+  "rawCoverage": {
+    "path": "apps/office/coverage/model-selection-final/coverage-final.json",
+    "sha256": "f9f833b86b03fbcc47ed14eb754d9f447634b455379753f981c9465cb8195912",
+    "files": {
+      "apps/office/src/offapi/com/sun/star/view/XSelectionChangeListener.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/offapi/com/sun/star/view/XSelectionSupplier.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": {
+        "s": {
+          "covered": 113,
+          "total": 130
+        },
+        "b": {
+          "covered": 45,
+          "total": 54
+        },
+        "f": {
+          "covered": 21,
+          "total": 21
+        }
+      }
+    },
+    "result": "FAIL S131/148 B49/58 F27/27 L123/135; both complete new SDK entries100, actual model incomplete. Counters/thresholds/exclusions unmodified.",
+    "uncovered": [
+      "Prior CALC-357 original document-listener removal arm.",
+      "Original first-registered controller fallback and nonempty disconnect/registered-member cleanup await genuine connectController/SfxViewFrame lifecycle. No private registry injection is supplied."
+    ]
+  },
+  "tests": {
+    "focused": "18pass/4files; coverage command exits1",
+    "relatedUNOAnySDK": "42pass/6files",
+    "CalcODSCSV": "51pass/4files",
+    "uniqueTotal": 111
+  },
+  "sourceIssue": "CALC-358: native setCurrentController does not perform the IDL-promised unregistered-controller check; empty registered vector also returns from disconnect before clearing current. Original behavior preserved.",
+  "initialCorrections": [
+    "The reentrant caller test initially assigned a callback without invoking it in the caller getSelection body. Corrected the test hook and explicit returned-reference cleanup; production logic did not change for this correction.",
+    "std::erase lowering uses compaction followed by tail Reference destruction and vector resizing; nonempty registry callers remain unported/unverified rather than fabricated in tests."
+  ],
+  "limitations": [
+    "Current model declares only implemented XChild and language XEventListener. Full XModel/controller registration/factory/property/broadcast/UNO close-dispose/filter/workbook/UI routes remain incomplete.",
+    "Concrete caller controllers implement actual declared interfaces with real WeakImplHelper/Reference/Any/container owners; they are QA callers, not a claimed native SfxBaseController/browser view port or alternate type/query/model provider.",
+    "No synthetic URL derives from browser medium names; attachResource remains unported and the represented URL starts with its original empty default.",
+    "Native thread synchronization, binary ABI, complete reflection and independently compiled new model/SDK differential remain unverified.",
+    "Host Dispose remains the explicit destructor binding. Existing browser save/open/autosave/recovery choices are unchanged.",
+    "Full test suite not run at this checkpoint under the approved ten-agentplane-task cadence.",
+    "Doctor passed with the existing managed pre-push readiness warning; no global hooks/settings changed."
+  ],
+  "workingTree": "Only13 intentional source/registry/docs/test paths and canonical task artifacts; check clean status after commit."
+}
