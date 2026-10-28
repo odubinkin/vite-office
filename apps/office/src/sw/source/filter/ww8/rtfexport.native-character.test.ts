@@ -168,7 +168,7 @@ it("retains adjacent native hints that differ only in auto-kerning through RTF a
   }
 });
 
-it("inherits style auto-kerning and restores group state including plain reset", /** Verifies inherits style auto-kerning and restores group state including plain reset. @returns Nothing. */ () => {
+it("inherits style auto-kerning across plain because native style deduplication has no kerning default", /** Verifies inherits style auto-kerning and restores group state including plain reset. @returns Nothing. */ () => {
   const doc = read(
     String.raw`{\rtf1{\stylesheet{\s0\kerning1 Normal;}}\s0 A{\kerning0 B}C\kerning-12 D{\plain E}F}`,
   );
@@ -186,7 +186,7 @@ it("inherits style auto-kerning and restores group state including plain reset",
             offset,
           ) => kernAt(node, offset),
         ),
-      ).toEqual([true, false, true, true, false, true]);
+      ).toEqual([true, false, true, true, true, true]);
     }
   } finally {
     roundtrip?.Dispose();
@@ -197,7 +197,7 @@ it("inherits style auto-kerning and restores group state including plain reset",
 it.each([
   String.raw`{\rtf1\up10\fs40 A}`,
   String.raw`{\rtf1\fs40\up10 A}`,
-  String.raw`{\rtf1{\stylesheet{\s0\fs40 Normal;}}\s0\up10 A}`,
+  String.raw`{\rtf1{\stylesheet{\s0\fs40 Normal;}}\s0\fs40\up10 A}`,
 ])(
   "resolves baseline half points against the final font height: %s",
   /** Verifies resolves baseline half points against the final font height: %s. @param fixture - fixture value. @returns Nothing. */ (

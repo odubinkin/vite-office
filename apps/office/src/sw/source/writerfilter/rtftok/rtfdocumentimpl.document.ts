@@ -43,7 +43,7 @@ import {
 } from "../../../inc/poolfmt";
 import { SwFormatPageDesc } from "../../core/attr/fmtpdsc";
 import { SwDoc, type SwDocOptions } from "../../core/doc/doc";
-import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { applyWriterParagraphList } from "../../core/doc/list";
 import { SwNumFormat } from "../../core/doc/number";
 import { SwpHints } from "../../core/txtnode/ndhints";
@@ -128,9 +128,18 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     document.GetAttrPool().SetUserDefaultItem(defaultTabs);
   }
   this["importedStyles"].clear();
+  this["importedCharacterStyles"].clear();
   this["importedStyles"].set(0, document.GetDfltTextFormatColl());
   for (const [index, definition] of this["styles"]) {
     const [name] = StyleSheetTable.ConvertStyleName(definition.name);
+    if (definition.styleType === "character") {
+      this["importedCharacterStyles"].set(
+        index,
+        document.FindCharFormatByName(name) ??
+          document.MakeCharFormat(name, document.GetDfltCharFormat()),
+      );
+      continue;
+    }
     const id = getWriterParagraphStyleId(name);
     let identity = id || name;
     let suffix = 1;
@@ -144,12 +153,18 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     this["importedStyles"].set(index, collection);
   }
   for (const [index, definition] of this["styles"]) {
-    // The preceding loop created a collection for every key in this unchanged styles map.
-    const collection = this["importedStyles"].get(index) as SwTextFormatColl;
-    const parent = this["importedStyles"].get(definition.basedOnStyleIndex ?? -1);
-    if (parent !== undefined && parent !== collection) collection.SetDerivedFrom(parent);
-    const next = this["importedStyles"].get(definition.nextStyleIndex ?? -1);
-    if (next !== undefined) collection.SetNextTextFormatColl(next);
+    const collection =
+      this["importedStyles"].get(index) ?? this["importedCharacterStyles"].get(index);
+    const parent =
+      collection instanceof SwTextFormatColl
+        ? this["importedStyles"].get(definition.basedOnStyleIndex ?? -1)
+        : this["importedCharacterStyles"].get(definition.basedOnStyleIndex ?? -1);
+    if (collection !== undefined && parent !== undefined && parent !== collection)
+      collection.SetDerivedFrom(parent);
+    if (collection instanceof SwTextFormatColl) {
+      const next = this["importedStyles"].get(definition.nextStyleIndex ?? -1);
+      if (next !== undefined) collection.SetNextTextFormatColl(next);
+    }
   }
   const appliedStyles = new Set<number>();
   for (const index of this["styles"].keys()) {
@@ -163,7 +178,8 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     }
     for (const slot of ancestry.reverse()) {
       const definition = this["styles"].get(slot);
-      const collection = this["importedStyles"].get(slot);
+      const collection =
+        this["importedStyles"].get(slot) ?? this["importedCharacterStyles"].get(slot);
       if (definition !== undefined && collection !== undefined)
         this["ApplyStyleDefinition"](collection, definition);
       appliedStyles.add(slot);
@@ -316,7 +332,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
 /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
 export function ApplyStyleDefinition(
   this: RtfDocumentImplContext,
-  collection: SwTextFormatColl,
+  collection: SwTextFormatColl | SwCharFormat,
   definition: {
     character: WriterCharacterAttributes;
     autoKerning?: boolean;
@@ -357,7 +373,7 @@ export function ApplyStyleDefinition(
     target = {
       ...target,
       escapement:
-        position > 0
+        position > 0 && collection instanceof SwTextFormatColl
           ? { offset: DFLT_ESC_AUTO_SUPER, height: DFLT_ESC_PROP }
           : {
               offset: resolveRtfBaseline(
@@ -371,14 +387,19 @@ export function ApplyStyleDefinition(
             },
     };
   }
-  const items = createSwFormatAutoFormat(
+  const characterFormat = createSwFormatAutoFormat(
     collection.GetAttrSet().GetDoc().GetAttrPool(),
     target,
     current,
-  ).GetStyleHandle();
-  for (const item of items.entries()) collection.SetFormatAttr(item);
+  );
+  try {
+    for (const item of characterFormat.GetStyleHandle().entries()) collection.SetFormatAttr(item);
+  } finally {
+    characterFormat.Dispose();
+  }
   if (definition.autoKerning !== undefined)
     collection.SetFormatAttr(new SvxAutoKernItem(definition.autoKerning, RES_CHRATR_AUTOKERN));
+  if (!(collection instanceof SwTextFormatColl)) return;
   const paragraph = definition.paragraph;
   if (
     ["ql", "qc", "qr", "qj", "qd"].some(
@@ -452,14 +473,49 @@ export function ApplyParagraph(
   if (paragraph.state.borders?.has("between"))
     node.SetAttr(new SfxBoolItem(RES_PARATR_CONNECT_BORDER, false));
   this["previousParagraphs"].set(section, node);
-  const inherited = projectWriterCharacterAttributes(node.GetSwAttrSet());
   const runs = paragraph.runs.map(
-    /** Computes the run result. @param run - Run. @returns The computed result. */ (run) => ({
-      text: run.text,
-      ...(run.autoKerning === undefined ? {} : { autoKerning: run.autoKerning }),
-      ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
-      attributes: resolveRtfRunAttributes(run, inherited),
-    }),
+    /** Resolves actual paragraph/character style inheritance before applying direct controls. @param run - Parsed run. @returns Resolved native owners and formatting values. */ (
+      run,
+    ) => {
+      const characterStyle =
+        run.characterStyleIndex === undefined
+          ? undefined
+          : this["importedCharacterStyles"].get(run.characterStyleIndex);
+      const inheritedItems = new SfxItemSet(
+        node.GetDoc().GetAttrPool(),
+        WRITER_CHARACTER_WHICH_RANGES,
+      );
+      inheritedItems.SetParent(node.GetSwAttrSet());
+      try {
+        if (characterStyle !== undefined) {
+          for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
+            for (let which = first; which <= last; ++which) {
+              const item = characterStyle.GetAttrSet().GetItemIfSet(which, true);
+              if (item !== undefined) inheritedItems.Put(item);
+            }
+        }
+        const effective = projectWriterCharacterAttributes(inheritedItems, node.GetSwAttrSet());
+        return {
+          text: run.text,
+          characterStyle,
+          inherited: effective,
+          ...(run.autoKerning === undefined ? {} : { autoKerning: run.autoKerning }),
+          ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
+          attributes: resolveRtfRunAttributes(
+            run,
+            resolveRtfCharacterStyleDefaults(
+              run,
+              run.currentCharacterStyleIndex === run.characterStyleIndex
+                ? inheritedItems
+                : node.GetSwAttrSet(),
+              effective,
+            ),
+          ),
+        };
+      } finally {
+        inheritedItems.Dispose();
+      }
+    },
   );
   node.SetText(
     runs
@@ -475,11 +531,28 @@ export function ApplyParagraph(
     const start = offset;
     offset += run.text.length;
     if (offset === start) continue;
-    const format = createSwFormatAutoFormat(node.GetDoc().GetAttrPool(), run.attributes, inherited);
+    if (run.characterStyle !== undefined) {
+      const item = new SwFormatCharFormat(run.characterStyle);
+      try {
+        hints.Insert(MakeTextAttr(node.GetDoc(), item, start, offset));
+      } finally {
+        item.Dispose();
+      }
+    }
+    const format = createSwFormatAutoFormat(
+      node.GetDoc().GetAttrPool(),
+      run.attributes,
+      run.inherited,
+    );
     const items = format.GetStyleHandle().Clone();
     if (run.autoKerning !== undefined)
       items.Put(new SvxAutoKernItem(run.autoKerning, RES_CHRATR_AUTOKERN));
-    if (items.Count() > 0) hints.Insert(MakeTextAttr(node.GetDoc(), items, start, offset));
+    try {
+      if (items.Count() > 0) hints.Insert(MakeTextAttr(node.GetDoc(), items, start, offset));
+    } finally {
+      items.Dispose();
+      format.Dispose();
+    }
     if (run.hyperlink !== undefined)
       hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(run.hyperlink), start, offset));
   }
@@ -537,3 +610,10 @@ export function ApplyParagraph(
     }
   }
 }
+
+import type { SwCharFormat } from "../../../inc/charfmt";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
+
+import { resolveRtfCharacterStyleDefaults } from "./rtfsprm";

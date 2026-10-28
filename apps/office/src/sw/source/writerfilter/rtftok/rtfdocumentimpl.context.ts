@@ -85,6 +85,9 @@ export interface RtfState {
   field?: { instruction: string; hyperlink?: WriterHyperlink };
   hyperlink?: WriterHyperlink;
   styleIndex?: number;
+  styleType?: "paragraph" | "character";
+  characterStyleIndex?: number;
+  currentCharacterStyleIndex?: number;
   styleName: string;
   basedOnStyleIndex?: number;
   nextStyleIndex?: number;
@@ -101,6 +104,8 @@ export interface RtfParagraph {
 }
 /** Parsed RTF text plus controls explicitly active at that span. */
 export interface RtfRun extends WriterTextRun {
+  readonly characterStyleIndex?: number;
+  readonly currentCharacterStyleIndex?: number;
   readonly controls: ReadonlySet<string>;
   readonly autoKerning?: boolean;
   readonly baselineHalfPoints?: number;

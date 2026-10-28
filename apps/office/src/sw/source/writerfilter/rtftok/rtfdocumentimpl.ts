@@ -51,6 +51,7 @@ export class RtfDocumentImpl {
     number,
     Readonly<{
       name: string;
+      styleType: "paragraph" | "character";
       character: WriterCharacterAttributes;
       autoKerning?: boolean;
       baselineHalfPoints?: number;
@@ -61,6 +62,7 @@ export class RtfDocumentImpl {
     }>
   >();
   protected readonly importedStyles = new Map<number, SwTextFormatColl>();
+  protected readonly importedCharacterStyles = new Map<number, SwCharFormat>();
   protected readonly previousParagraphs = new Map<SwStartNode, SwTextNode>();
   protected readonly listOverrides = new Map<number, number>();
   protected currentListId = 0;
@@ -128,7 +130,7 @@ export class RtfDocumentImpl {
 
   /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing. */
   protected ApplyStyleDefinition(
-    collection: SwTextFormatColl,
+    collection: SwTextFormatColl | SwCharFormat,
     definition: {
       character: WriterCharacterAttributes;
       autoKerning?: boolean;
@@ -172,6 +174,8 @@ export class RtfDocumentImpl {
       equalControls(previous.controls, state.characterControls) &&
       previous.autoKerning === state.autoKerning &&
       previous.baselineHalfPoints === state.baselineHalfPoints &&
+      previous.characterStyleIndex === state.characterStyleIndex &&
+      previous.currentCharacterStyleIndex === state.currentCharacterStyleIndex &&
       equalCharacter(previous.attributes, state.character)
     )
       this.runs[this.runs.length - 1] = { ...previous, text: previous.text + value };
@@ -179,6 +183,12 @@ export class RtfDocumentImpl {
       this.runs.push({
         text: value,
         attributes: { ...state.character },
+        ...(state.currentCharacterStyleIndex === undefined
+          ? {}
+          : { currentCharacterStyleIndex: state.currentCharacterStyleIndex }),
+        ...(state.characterStyleIndex === undefined
+          ? {}
+          : { characterStyleIndex: state.characterStyleIndex }),
         ...(state.baselineHalfPoints === undefined
           ? {}
           : { baselineHalfPoints: state.baselineHalfPoints }),
@@ -264,3 +274,5 @@ export class RtfDocumentImpl {
       }
   }
 }
+
+import type { SwCharFormat } from "../../../inc/charfmt";

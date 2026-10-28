@@ -605,7 +605,7 @@ export class RtfExport extends MSWordExportBase {
     let markIndex = 0;
     let activeLink: WriterHyperlink | undefined;
     const writeRun = /** Implements write Run. @param run - Run. @returns Nothing. */ (
-      run: WriterTextRun & { items: SfxItemSet },
+      run: RtfTextRun,
     ): void => {
       if (run.text.length === 0) return;
       if (!equalWriterHyperlinks(activeLink, run.hyperlink)) {
@@ -656,7 +656,7 @@ export class RtfExport extends MSWordExportBase {
   }
 
   /** Visits native hint boundaries before any UI run coalescing. @param paragraph - Native text owner. @returns Effective item runs. */
-  private GetTextRuns(paragraph: SwTextNode): readonly (WriterTextRun & { items: SfxItemSet })[] {
+  private *GetTextRuns(paragraph: SwTextNode): Generator<RtfTextRun> {
     const text = paragraph.GetText();
     const hints = paragraph.GetpSwpHints()?.entries() ?? [];
     const boundaries = new Set([0, text.length]);
@@ -671,7 +671,6 @@ export class RtfExport extends MSWordExportBase {
         right,
       ) => left - right,
     );
-    const runs: (WriterTextRun & { items: SfxItemSet })[] = [];
     for (let index = 0; index + 1 < ordered.length; index++) {
       const start = ordered[index] as number;
       const end = ordered[index + 1] as number;
@@ -698,25 +697,37 @@ export class RtfExport extends MSWordExportBase {
           /** Applies find to hint. @param hint - hint value. @returns Callback result. */ (hint) =>
             hint.format instanceof SwFormatINetFormat,
         );
-      runs.push({
-        text: text.slice(start, end),
-        items,
-        attributes: projectWriterCharacterAttributes(items, items.GetParent()),
-        ...(inet?.format instanceof SwFormatINetFormat
-          ? { hyperlink: inet.format.GetHyperlink() }
-          : {}),
-      });
+      const named = [...active]
+        .reverse()
+        .find(
+          /** Selects the active original character-format item. @param hint - Active native hint. @returns Whether it names a character style. */ (
+            hint,
+          ) => hint.format instanceof SwFormatCharFormat,
+        );
+      try {
+        yield {
+          ...(named?.format instanceof SwFormatCharFormat ? { charFormat: named.format } : {}),
+          text: text.slice(start, end),
+          items,
+          attributes: projectWriterCharacterAttributes(items, items.GetParent()),
+          ...(inet?.format instanceof SwFormatINetFormat
+            ? { hyperlink: inet.format.GetHyperlink() }
+            : {}),
+        };
+      } finally {
+        items.Dispose();
+      }
     }
-    return runs;
   }
 
   /** Emits one native text run without crossing a bookmark position.  @param run - Run. @returns The string result. */
-  private WriteRun(run: WriterTextRun & { items: SfxItemSet }): string {
+  private WriteRun(run: RtfTextRun): string {
     // The paragraph writer admits only nonempty slices before calling this private method.
-    const controls = this.attributeOutput.WriteNativeCharacter(
-      run.items,
-      GetCharacterPropertiesMode.ForRun,
-    );
+    const controls =
+      (run.charFormat === undefined
+        ? ""
+        : this.attributeOutput.OutputTextCharFormat(run.charFormat)) +
+      this.attributeOutput.WriteNativeCharacter(run.items, GetCharacterPropertiesMode.ForRun);
     return (
       "{" +
       controls +
@@ -797,3 +808,7 @@ function IsExportNumRule(rule: SwNumRule): boolean {
 import { AbstractNumberingDefinitions, NumberingDefinitions } from "./wrtw8num";
 
 import { StyleType } from "./attributeoutputbase";
+
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
+/** The real run items and optional borrowed native named-style item for the existing RTF string sink. */
+type RtfTextRun = WriterTextRun & { items: SfxItemSet; charFormat?: SwFormatCharFormat };

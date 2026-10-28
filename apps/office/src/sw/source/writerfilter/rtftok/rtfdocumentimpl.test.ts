@@ -53,7 +53,7 @@ it("imports every pinned RTF underline value into the native line-style item", /
   }
 });
 
-it("inherits native underline style from the RTF stylesheet and applies direct override", /** Checks source character-style ancestry and group restoration. @returns Nothing. */ () => {
+it("uses the native missing underline default over stylesheet decoration and keeps direct overrides", /** Checks source character-style ancestry and group restoration. @returns Nothing. */ () => {
   const document = read(
     String.raw`{\rtf1{\stylesheet{\s1\uldb Decorated;}}\s1 inherited {\uldash direct}{\ulnone off} inherited}`,
   );
@@ -68,13 +68,12 @@ it("inherits native underline style from the RTF stylesheet and applies direct o
         ) => [run.text, run.attributes.underlineStyle],
       ),
     ).toEqual([
-      ["inherited ", FontLineStyle.LINESTYLE_DOUBLE],
+      ["inherited ", FontLineStyle.LINESTYLE_NONE],
       ["direct", FontLineStyle.LINESTYLE_DASH],
-      ["off", FontLineStyle.LINESTYLE_NONE],
-      [" inherited", FontLineStyle.LINESTYLE_DOUBLE],
+      ["off inherited", FontLineStyle.LINESTYLE_NONE],
     ]);
-    expect(new TextDecoder().decode(RtfExport.WriteDocument(document))).toContain(
-      "\\ulc0\\ulnone off",
+    expect(new TextDecoder().decode(RtfExport.WriteDocument(document))).toMatch(
+      /\\ulnone[^{}]* off/u,
     );
   } finally {
     document.Dispose();

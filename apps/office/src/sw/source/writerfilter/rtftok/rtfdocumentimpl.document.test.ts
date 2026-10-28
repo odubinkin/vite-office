@@ -635,7 +635,7 @@ it("maps stylesheet paragraph controls to available Writer styles", /** Checks m
 
 it("creates a document-owned collection for an external RTF paragraph style", /** Checks creates a document-owned collection for an external RTF paragraph style. @returns Test completion or assertion result. */ () => {
   const document = read(
-    "{\\rtf1{\\stylesheet{\\s42\\b\\fs28\\qc\\li180 Custom Note;}}\\pard\\s42 Styled}",
+    "{\\rtf1{\\stylesheet{\\s42\\b\\fs28\\qc\\li180 Custom Note;}}\\pard\\s42\\b\\fs28 Styled}",
   );
   let reopened;
   try {
@@ -662,7 +662,7 @@ it("creates a document-owned collection for an external RTF paragraph style", /*
 
 it("resolves forward stylesheet based-on and next references after all styles exist", /** Checks resolves forward stylesheet based-on and next references after all styles exist. @returns Test completion or assertion result. */ () => {
   const document = read(
-    "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2 Styled}",
+    "{\\rtf1{\\stylesheet{\\s2\\sbasedon5\\snext7 Child;}{\\s7 Follow;}{\\s5\\b Parent;}}\\pard\\s2\\b Styled}",
   );
   try {
     const child = document.FindTextFormatCollByName("Child");
@@ -745,7 +745,7 @@ it("keeps qd distributed-last-line alignment in styles and direct overrides", /*
   }
 });
 
-it("inherits RTF style characters until an explicit run control overrides them", /** Checks inherits RTF style characters until an explicit run control overrides them. @returns Test completion or assertion result. */ () => {
+it("retains style definitions while native missing run-property defaults override their appearance", /** Checks inherits RTF style characters until an explicit run control overrides them. @returns Test completion or assertion result. */ () => {
   const document = read("{\\rtf1{\\stylesheet{\\s3\\b Strong Note;}}\\pard\\s3 Yes {\\b0 No} Yes}");
   try {
     expect(
@@ -754,11 +754,7 @@ it("inherits RTF style characters until an explicit run control overrides them",
           run,
         ) => [run.text, run.attributes.bold],
       ),
-    ).toEqual([
-      ["Yes ", true],
-      ["No", false],
-      [" Yes", true],
-    ]);
+    ).toEqual([["Yes No Yes", false]]);
   } finally {
     document.Dispose();
   }

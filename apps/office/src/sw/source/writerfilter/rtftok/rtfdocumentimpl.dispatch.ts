@@ -51,6 +51,13 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         : { paragraphBorder: previous.paragraphBorder }),
       // Destination text buffers begin empty in every group; the old optional buffers did likewise.
       styleName: "",
+      ...(previous?.currentCharacterStyleIndex === undefined
+        ? {}
+        : { currentCharacterStyleIndex: previous.currentCharacterStyleIndex }),
+      ...(previous?.styleType === undefined ? {} : { styleType: previous.styleType }),
+      ...(previous?.characterStyleIndex === undefined
+        ? {}
+        : { characterStyleIndex: previous.characterStyleIndex }),
       bookmarkName: "",
       levelText: "",
       ...(previous?.field === undefined ? {} : { field: previous.field }),
@@ -78,6 +85,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
       if (name.length > 0)
         this["styles"].set(previous.styleIndex, {
           name,
+          styleType: previous.styleType ?? "paragraph",
           character: { ...previous.character },
           ...(previous.baselineHalfPoints === undefined
             ? {}
@@ -230,7 +238,9 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     state.starred = false;
     return;
   }
-  if (state.destination === "stylesheet" && token.name === "s") {
+  if (state.destination === "stylesheet" && (token.name === "s" || token.name === "cs")) {
+    state.starred = false;
+    state.styleType = token.name === "cs" ? "character" : "paragraph";
     state.destination = "styleentry";
     state.styleIndex = token.parameter ?? 0;
     state.styleName = "";
@@ -642,7 +652,9 @@ export function DispatchBodyControl(
   }
   if (name === "plain") {
     delete state.baselineHalfPoints;
-    state.autoKerning = false;
+    delete state.characterStyleIndex;
+    delete state.currentCharacterStyleIndex;
+    delete state.autoKerning;
     state.character = { ...DEFAULT_CHARACTER };
     state.characterControls.clear();
     state.currentCodepage =
@@ -725,7 +737,10 @@ export function DispatchBodyControl(
     this["pendingUpDn"] = undefined;
   } else if (name === "ls" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listOverride: parameter };
-  else if (name === "s" && parameter !== undefined)
+  else if (name === "cs" && parameter !== undefined) {
+    state.currentCharacterStyleIndex = parameter;
+    if (this["styles"].has(parameter)) state.characterStyleIndex = parameter;
+  } else if (name === "s" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
   else if (name === "ilvl" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listLevel: Math.max(0, Math.min(9, parameter)) };

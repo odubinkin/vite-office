@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "BLOCKED"
 priority: "med"
 owner: "CODER"
-revision: 113
+revision: 116
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T09:35:48.938Z"
+  updated_at: "2026-10-28T09:53:01.740Z"
   updated_by: "CODER"
-  note: "RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings."
-  attempts: 4
+  note: "Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings."
+  attempts: 5
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -59,8 +62,21 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "RTF paragraph-numbering checkpoint passed496 related filter tests,33 browser I/O tests and33 final paragraph/rule owner tests plus typecheck, lint, formatting, boundaries, provenance, size, JSDoc and Writer/shared registry gates. Native numbering-first item order and inherited style tab handling are connected. Whole text-filter task remains incomplete; source-profile and importer/property obligations are recorded in Findings."
+  -
+    type: "status"
+    at: "2026-10-28T09:36:26.921Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T09:53:01.740Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings."
 doc_version: 3
-doc_updated_at: "2026-10-28T09:35:49.006Z"
+doc_updated_at: "2026-10-28T09:53:01.810Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -171,6 +187,36 @@ sections:
     Attempts: 4
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T09:53:01.740Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings.
+    Attempts: 5
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:53:00.976Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -582,6 +628,26 @@ sections:
     - Static evidence: output/playwright/rtf-paragraph-numbering contains typecheck.log, eslint.log/eslint-final.log, format.log, provenance.log, dependencies.log, jsdoc.log, size.log, parity-writer.log and parity-shared.log. Provenance covers1688 runtime modules/1476 mapped, boundaries1687 runtime/8774 imports/210 edges, JSDoc3889 sources; Writer/shared semanticViolationCount0. Final source typecheck/lint/format are recorded after the final test addition. No full test-suite run: same continuing AgentPlane task, user requested related suites and full run once per10 tasks.
     - Failures/remediation: early typecheck found required explicit SvxFontUnitMetrics constructor and unused callback arguments; corrected actual typed owners/argument names. Native-order change invalidated the old exact concatenation expectation; retained real roundtrip assertions and checked native control groups in native order. Legacy tab fixture wrongly assumed no shipped default stops; now compares all original stored positions. An initial test path selected only307 cases; bounded fallback used the actual writerfilter/rtftok path and reached496. Registry checks exposed facade re-exports and fields listed as local declarations; declaration evidence now points to actual styles.ts/ww8atr.ts owners, preserving header re-export contracts. Static helper definition provenance belongs to ww8atr.cxx rather than wrtww8.cxx; corrected mapping.
     - Residual obligations: NOT whole-task completion. The common dispatch here admits the real current RTF/non-DOCX derived owner; native DOCX override-list machinery is not synthesized. Writer frame-direction/layout owners are absent from the represented Writer pool/model; preparation is explicitly the represented non-RTL profile, with no fake direction provider. Full native OutputFormat/item-buffer ABI and style property traversal, complete color collectors, character-style import, bidi/script iteration and the previously recorded filter/current-core gaps remain open. The current Standard-first/hidden-default style-table binding remains unverified. WRITER096 now references actual local restart tests without claiming a native desktop run. All semantic parity statuses stay unverified; no full RTF parity claim.
+
+    ### Named RTF character-style owners and native run defaults checkpoint (2026-10-28)
+
+    - Scope/result: real imported cs definitions now materialize SwCharFormat owners in their own family, retain forward same-family parents, and produce actual SwFormatCharFormat/SwTextCharFormat range hints. Source currentCharacterStyleIndex and selected rStyle are kept distinct when an unknown cs changes the former without changing the latter. Group restoration and plain clear/reference behavior are preserved. Export emits source OutputTextCharFormat cs controls before repeated effective character properties, retaining named identity on reopen. Source character-style positive baseline percentages are distinct from the existing paragraph-style automatic superscript branch. Worker serialization preserves the actual named-style/parent graph.
+    - Source-backed correction: RTFDocumentImpl::getProperties flattens active style references, then RTFSprms::cloneAndDeduplicate/getDefaultSPRM can replace absent direct bold/italic/underline/font/size/color properties with native defaults. The earlier unconditional-inheritance shortcut was wrong. The consumed Western run projection now uses these original default decisions; style definitions and hint identity remain intact. Missing strikeout/highlight/escapement/kerning have no such default. Plain clears direct kerning without fabricating false. Existing contrary expectations were migrated to source behavior, or their fixtures now explicitly repeat intended bold/font-size commands. Native defaults are recorded as WRITER202 without asserting a confirmed desktop defect.
+    - Ownership: import temporary automatic-style handles/cloned sets are released after interning hints; RTF GetTextRuns now yields real item sets with deterministic generator-scope disposal. No independent format DTO owner, fake native direction provider or new UI save/recovery behavior is added.
+    - Command: node scripts/rtf-style-defaults-native-probe.mjs
+      Result: pass. Evidence: unchanged pinned getDefaultSPRM/getParagraphBorder, original OOXML resourceids.py/model.xml-generated IDs, nine character defaults among35 queries, ASan/UBSan; fixture rtf-style-defaults-native.json records source hashes. Scope: helper scalar/nested ownership carriers only; not full RTFValue/RTFSprms or mapper ABI.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-character-styles/tests.json
+      Result: pass;504 tests. Scope: Word/RTF export and import, existing TXT/Markdown integration, named/default/direct style behavior and earlier numbering/font contracts.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-character-styles/ui-tests.json
+      Result: pass;41 tests including final8 named-style/native Worker cases and33 existing UI cases.
+    - Command: npm run typecheck --workspace @vite-office/office
+      Result: pass. Evidence: output/playwright/rtf-character-styles/typecheck-final.log. Scope: final complete Office TypeScript graph.
+    - Command: node_modules/.bin/eslint apps/office/src/sw/source/filter/ww8/{rtfattributeoutput,rtfexport,rtfexport.native-character.test}.ts apps/office/src/sw/source/writerfilter/rtftok/{rtfsprm,rtfdocumentimpl,rtfdocumentimpl.context,rtfdocumentimpl.dispatch,rtfdocumentimpl.document,rtfdocumentimpl.document.test,rtfdocumentimpl.test,rtf-character-styles.test}.ts scripts/rtf-style-defaults-native-probe.mjs --max-warnings 0
+      Result: pass. Evidence: output/playwright/rtf-character-styles/eslint.log. Scope: all changed authored source and probe script; matching Prettier check passed in format.log.
+    - Commands: npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
+      Result: pass. Evidence: corresponding output/playwright/rtf-character-styles logs. Scope:1689 provenance modules/1477 mapped,1688 dependency runtime sources/8788 imports/210 allowed edges,3892 JSDoc sources, size limits, Writer/shared semanticViolationCount0. All module parity statuses remain unverified.
+    - Failures/remediation: source-default integration invalidated old unconditional-style-inheritance and plain-kerning expectations; fixture/expectation changes are tied to the inspected native helper and exporter comment, not loosened assertions. The new provenance record initially copied the context fragment filenameDivergence entry; removed this unrelated fragment metadata because rtfsprm.ts matches its actual upstream filename. Refreshing the route kept execution inside the approved Writer checkout.
+    - Remaining work: whole task NOT complete. This closes named cs character styles for the admitted Western character-property/run projection, not complete native RTFValue/RTFSprms property graph or mapper replay contracts. Original duplicate-index style name/property tables, cross-family s/cs style behavior, linked styles, full paragraph style-property traversal/defaults, CJK/CTL import association, script/bidi production, full native OutputFormat/buffer ownership and the existing broader TXT/RTF/Markdown gaps remain explicit. No complete RTF or current-core-slice parity claim. Existing browser UI/open/save/autosave/recovery deviations remain unchanged. No full-suite replay; this is the same continuing task and user directs related checks with full run once per10 AgentPlane tasks.
 id_source: "generated"
 ---
 ## Summary
@@ -703,6 +769,36 @@ Note: RTF paragraph-numbering checkpoint passed496 related filter tests,33 brows
 Attempts: 4
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:35:40.580Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T09:53:01.740Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Named RTF character-style checkpoint passed504 related filter tests and41 final style/Worker/UI tests, unchanged compiled native style-default helper under ASan/UBSan and all static/provenance/Writer/shared gates. Whole text-filter task remains incomplete; property graph, style edge cases, script import and prior scope gaps are recorded in Findings.
+Attempts: 5
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T09:53:00.976Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1118,3 +1214,23 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Static evidence: output/playwright/rtf-paragraph-numbering contains typecheck.log, eslint.log/eslint-final.log, format.log, provenance.log, dependencies.log, jsdoc.log, size.log, parity-writer.log and parity-shared.log. Provenance covers1688 runtime modules/1476 mapped, boundaries1687 runtime/8774 imports/210 edges, JSDoc3889 sources; Writer/shared semanticViolationCount0. Final source typecheck/lint/format are recorded after the final test addition. No full test-suite run: same continuing AgentPlane task, user requested related suites and full run once per10 tasks.
 - Failures/remediation: early typecheck found required explicit SvxFontUnitMetrics constructor and unused callback arguments; corrected actual typed owners/argument names. Native-order change invalidated the old exact concatenation expectation; retained real roundtrip assertions and checked native control groups in native order. Legacy tab fixture wrongly assumed no shipped default stops; now compares all original stored positions. An initial test path selected only307 cases; bounded fallback used the actual writerfilter/rtftok path and reached496. Registry checks exposed facade re-exports and fields listed as local declarations; declaration evidence now points to actual styles.ts/ww8atr.ts owners, preserving header re-export contracts. Static helper definition provenance belongs to ww8atr.cxx rather than wrtww8.cxx; corrected mapping.
 - Residual obligations: NOT whole-task completion. The common dispatch here admits the real current RTF/non-DOCX derived owner; native DOCX override-list machinery is not synthesized. Writer frame-direction/layout owners are absent from the represented Writer pool/model; preparation is explicitly the represented non-RTL profile, with no fake direction provider. Full native OutputFormat/item-buffer ABI and style property traversal, complete color collectors, character-style import, bidi/script iteration and the previously recorded filter/current-core gaps remain open. The current Standard-first/hidden-default style-table binding remains unverified. WRITER096 now references actual local restart tests without claiming a native desktop run. All semantic parity statuses stay unverified; no full RTF parity claim.
+
+### Named RTF character-style owners and native run defaults checkpoint (2026-10-28)
+
+- Scope/result: real imported cs definitions now materialize SwCharFormat owners in their own family, retain forward same-family parents, and produce actual SwFormatCharFormat/SwTextCharFormat range hints. Source currentCharacterStyleIndex and selected rStyle are kept distinct when an unknown cs changes the former without changing the latter. Group restoration and plain clear/reference behavior are preserved. Export emits source OutputTextCharFormat cs controls before repeated effective character properties, retaining named identity on reopen. Source character-style positive baseline percentages are distinct from the existing paragraph-style automatic superscript branch. Worker serialization preserves the actual named-style/parent graph.
+- Source-backed correction: RTFDocumentImpl::getProperties flattens active style references, then RTFSprms::cloneAndDeduplicate/getDefaultSPRM can replace absent direct bold/italic/underline/font/size/color properties with native defaults. The earlier unconditional-inheritance shortcut was wrong. The consumed Western run projection now uses these original default decisions; style definitions and hint identity remain intact. Missing strikeout/highlight/escapement/kerning have no such default. Plain clears direct kerning without fabricating false. Existing contrary expectations were migrated to source behavior, or their fixtures now explicitly repeat intended bold/font-size commands. Native defaults are recorded as WRITER202 without asserting a confirmed desktop defect.
+- Ownership: import temporary automatic-style handles/cloned sets are released after interning hints; RTF GetTextRuns now yields real item sets with deterministic generator-scope disposal. No independent format DTO owner, fake native direction provider or new UI save/recovery behavior is added.
+- Command: node scripts/rtf-style-defaults-native-probe.mjs
+  Result: pass. Evidence: unchanged pinned getDefaultSPRM/getParagraphBorder, original OOXML resourceids.py/model.xml-generated IDs, nine character defaults among35 queries, ASan/UBSan; fixture rtf-style-defaults-native.json records source hashes. Scope: helper scalar/nested ownership carriers only; not full RTFValue/RTFSprms or mapper ABI.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-character-styles/tests.json
+  Result: pass;504 tests. Scope: Word/RTF export and import, existing TXT/Markdown integration, named/default/direct style behavior and earlier numbering/font contracts.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-character-styles/ui-tests.json
+  Result: pass;41 tests including final8 named-style/native Worker cases and33 existing UI cases.
+- Command: npm run typecheck --workspace @vite-office/office
+  Result: pass. Evidence: output/playwright/rtf-character-styles/typecheck-final.log. Scope: final complete Office TypeScript graph.
+- Command: node_modules/.bin/eslint apps/office/src/sw/source/filter/ww8/{rtfattributeoutput,rtfexport,rtfexport.native-character.test}.ts apps/office/src/sw/source/writerfilter/rtftok/{rtfsprm,rtfdocumentimpl,rtfdocumentimpl.context,rtfdocumentimpl.dispatch,rtfdocumentimpl.document,rtfdocumentimpl.document.test,rtfdocumentimpl.test,rtf-character-styles.test}.ts scripts/rtf-style-defaults-native-probe.mjs --max-warnings 0
+  Result: pass. Evidence: output/playwright/rtf-character-styles/eslint.log. Scope: all changed authored source and probe script; matching Prettier check passed in format.log.
+- Commands: npm run check:source-provenance; npm run check:dependencies; npm run check:docs; npm run check:file-size; npm run inventory:parity:writer; npm run inventory:parity:shared
+  Result: pass. Evidence: corresponding output/playwright/rtf-character-styles logs. Scope:1689 provenance modules/1477 mapped,1688 dependency runtime sources/8788 imports/210 allowed edges,3892 JSDoc sources, size limits, Writer/shared semanticViolationCount0. All module parity statuses remain unverified.
+- Failures/remediation: source-default integration invalidated old unconditional-style-inheritance and plain-kerning expectations; fixture/expectation changes are tied to the inspected native helper and exporter comment, not loosened assertions. The new provenance record initially copied the context fragment filenameDivergence entry; removed this unrelated fragment metadata because rtfsprm.ts matches its actual upstream filename. Refreshing the route kept execution inside the approved Writer checkout.
+- Remaining work: whole task NOT complete. This closes named cs character styles for the admitted Western character-property/run projection, not complete native RTFValue/RTFSprms property graph or mapper replay contracts. Original duplicate-index style name/property tables, cross-family s/cs style behavior, linked styles, full paragraph style-property traversal/defaults, CJK/CTL import association, script/bidi production, full native OutputFormat/buffer ownership and the existing broader TXT/RTF/Markdown gaps remain explicit. No complete RTF or current-core-slice parity claim. Existing browser UI/open/save/autosave/recovery deviations remain unchanged. No full-suite replay; this is the same continuing task and user directs related checks with full run once per10 AgentPlane tasks.

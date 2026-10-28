@@ -121,6 +121,10 @@ export class RtfAttributeOutput extends AttributeOutputBase {
     output += `\\ls${this.exporter.GetNumberingId(rule) + 1} `;
     return output + this.FormatFirstLineIndent(firstLine) + this.FormatTextLeftMargin(left);
   }
+  /** Original named character style control precedes other character properties. @param item - Borrowed actual style-reference item. @returns RTF control. */
+  OutputTextCharFormat(item: SwFormatCharFormat): string {
+    return `\\cs${this.exporter.GetId(item.GetCharFormat())}`;
+  }
   /** Original first-line margin output resolves with empty metrics. @param item - Actual copied margin. @returns Controls. */
   FormatFirstLineIndent(item: SvxFirstLineIndentItem): string {
     return `\\fi${item.ResolveTextFirstLineOffset()}`;
@@ -868,3 +872,5 @@ import { PrepareParagraphNumbering } from "./wrtw8nds";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_PARATR_NUMRULE } from "../../../inc/hintids";
 import type { SwNumRuleItem } from "../../core/para/paratr";
+
+import type { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
