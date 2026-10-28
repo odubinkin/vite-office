@@ -19,20 +19,36 @@
         "apps/office/src/tools/source/fsys/urlobj.ts#decodeToIUri",
         "vendor/libreoffice-reference/tools/source/fsys/urlobj.cxx#INetURLObject::decode",
         "apps/office/src/tools/source/fsys/urlobj.test.ts",
-        "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts"
+        "apps/office/src/sw/source/filter/html/swhtml.bookmarks.integration.test.ts",
+        "apps/office/src/tools/source/fsys/urlobj.lexical.test.ts"
       ],
-      "justification": "Consumed native INetURLObject::decode ToIUri and Unambiguous UTF8 branches share original escaped scalar validation, invalid octet preservation and uppercase escapes. Unambiguous uses the exact PART_UNAMBIGUOUS ASCII bit projection from aMustEncodeMap; raw spelling and nonrecursive percent handling remain distinct. Actual HTML named-target filtering consumes it, with shared decoder and real Markdown parser tests. General URL/smart-relative parsing, non-UTF8 charsets and other decode modes remain unported; whole-module and compiled native equivalence are unverified.",
+      "justification": "Native URI scalar/escape owner now serves actual ToIUri and Unambiguous production callers. getUTF32 retains code-unit bounds, surrogate handling, WasEncoded charset branches, NotCanonical octets and invalid UTF8 continuation rollback. Exact 128-entry admission masks and original appendUCS4/legacy UCS4 escape branches are retained. Source generic scheme, filesystem delimiter vote, domain and bracket-reference scanners are ported as prerequisites of the pending native HREF resolver; they do not yet certify whole URL parsing. URI lexical tests and existing shared/filter tests cover this bounded slice. Full INetURLObject parsing, SmartRel2Abs, general decode modes and compiled desktop equivalence remain pending; no parity promotion.",
       "knownViolations": [],
       "localSymbols": [
         "decodeToIUri",
         "decodeUnambiguous",
-        "decodeEscapedUtf8"
+        "decodeEscapedUtf8",
+        "getUTF32",
+        "mustEncode",
+        "appendEscape",
+        "appendUCS4Escape",
+        "appendUCS4",
+        "parseScheme",
+        "scanDomain",
+        "scanIPv6reference",
+        "guessFSysStyleByCounting"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "tools/source/fsys/urlobj.cxx",
       "upstreamSymbols": [
         "INetURLObject::decode",
-        "INetURLObject::getUTF32"
+        "INetURLObject::getUTF32",
+        "INetURLObject::appendUCS4",
+        "INetURLObject::appendUCS4Escape",
+        "INetURLObject::scanDomain",
+        "INetURLObject::scanIPv6reference",
+        "parseScheme",
+        "guessFSysStyleByCounting"
       ]
     }
   }

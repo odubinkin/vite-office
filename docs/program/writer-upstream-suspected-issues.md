@@ -2071,3 +2071,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/htmlgrin.cxx`, InsertBookmark appends a filter-private HTMLAttr to m_aSetAttrTab; swhtml.cxx SetAttr_ walks that queue backward and suppresses only an existing original-name mark at the same point before makeMark allocates a unique name.
 - Observation: two same-name targets in one paragraph are created in reverse pending order, so the later target keeps the original name and the earlier gets a copy suffix. A paragraph boundary can flush the earlier target first, reversing which position receives the original name. This is source-derived actual-model behavior; no compiled LibreOffice defect is asserted.
 - Preservation: keep queued raw positions, reverse processing and exact name/position deduplication. Actual parser tests distinguish same-point suppression, within-paragraph allocation and cross-paragraph allocation; no eager bookmark creation or input-order normalization is introduced.
+
+### WRITER222 — URI domain scanning admits underscores despite its domain grammar
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::scanDomain`, accepts `_` alongside ASCII alphanumeric characters in its Dot, Label and Hyphen states. The surrounding source grammar describes labels using alphanumeric characters and hyphens.
+- Observation: the lexical scanner admits underscore-containing labels, including labels beginning or ending with an underscore. This is a source-level grammar/implementation discrepancy; acceptance by the complete URL parser and a visible Writer symptom are not established.
+- Preservation: retain the scanner's character tests when porting the native URI path required by HTML HREF. Do not substitute browser hostname validation or infer that this scanner alone certifies a complete URL. The local scanner port is covered by `urlobj.lexical.test.ts`; complete native HREF resolver/filter integration remains pending.
+
+### WRITER223 — URI IPv6-reference scanner leaves address validation as a TODO
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::scanIPv6reference`, explicitly contains `TODO: check for valid IPv6address (RFC 2373)` and scans only hexadecimal digits, colons and dots between brackets.
+- Observation: the lexical scanner can recognize `[]` and `[:]` as bracketed references. This does not establish that the complete URL parser accepts them: the separate host parser has additional validation. This is a source-level finding, not a confirmed LibreOffice document defect.
+- Preservation: retain the scanner's recognition and cursor-advance rules when porting the consumed native URI path; preserve downstream host validation separately. Do not silently strengthen the scanner or weaken the complete parser. The local scanner port is covered by `urlobj.lexical.test.ts`; complete native HREF resolver/filter integration remains pending.
+
+### WRITER224 — URI UCS4 escape output includes sequences rejected by its scalar decoder
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::appendUCS4Escape` supports values below 0x80000000 with up to six escaped bytes and has no surrogate exclusion. `INetURLObject::getUTF32` accepts escaped UTF8 only through lead byte 0xF4, requires a Unicode scalar and rejects overlong encodings.
+- Observation: the low-level writer can emit `%ED%A0%80` for an isolated surrogate or five/six-byte sequences for values beyond Unicode, while the decoder preserves these as escaped octets rather than reconstructing the input value. This is a source-level asymmetry, not proof that Writer's complete URL path generates every such input or a confirmed desktop defect.
+- Preservation: retain the distinct writer and decoder ranges rather than replacing both with a browser TextEncoder/TextDecoder pair. Native lexical tests cover raw surrogate input, rejected escaped surrogates, the Unicode upper bound and the legacy output branch boundaries; full native HREF integration remains pending.

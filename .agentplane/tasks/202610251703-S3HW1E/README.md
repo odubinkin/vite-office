@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 161
+revision: 164
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:30:32.003Z"
+  updated_at: "2026-10-28T14:47:14.469Z"
   updated_by: "CODER"
-  note: "Native HTML IDs/no-HREF names now create queued actual bookmarks; native Unambiguous decode connected, WRITER221 documented. 981 related,87 shared and12 final integration tests plus static/source gates pass. Remaining HREF/HTML/RTF consumer rows keep the full task open."
-  attempts: 18
+  note: "URI lexical checkpoint verified: 146 related shared and 617 Writer tests pass; static/provenance/registry gates pass. Native HREF resolver and overall filter capability audit remain incomplete; goal remains active."
+  attempts: 19
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -293,8 +296,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:47:14.469Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "URI lexical checkpoint verified: 146 related shared and 617 Writer tests pass; static/provenance/registry gates pass. Native HREF resolver and overall filter capability audit remain incomplete; goal remains active."
+  -
+    type: "status"
+    at: "2026-10-28T14:47:25.509Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:30:45.737Z"
+doc_updated_at: "2026-10-28T14:47:25.509Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -557,6 +573,36 @@ sections:
     Attempts: 18
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:30:31.420Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T14:47:14.469Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: URI lexical checkpoint verified: 146 related shared and 617 Writer tests pass; static/provenance/registry gates pass. Native HREF resolver and overall filter capability audit remain incomplete; goal remains active.
+    Attempts: 19
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:47:13.682Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1155,6 +1201,17 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 on12 changed source files; npx prettier --check on intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
     - Result: pass; Evidence: type/lint/format/whitespace clean; JSDoc3914 authored files, size3918 authored files, boundaries1705 runtime sources/9009 imports/210 edges, WhichId79 native identities, provenance1706 modules; both registries and115 source paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html7-*.log, ignored local evidence.
     - Remaining actual consumers: HREF URL/SmartRel2Abs and native hyperlink production, language/direction, division/section-specific IDs, borders/background shorthand, HTML list/table consumers and reachable style graph behavior; remaining represented RTF capability rows and final full filter/UI matrix audit. Macro/footnote and generic full URL class services are assessed against actual represented owners/callers. Overall task remains DOING/rework; goal stays active.
+
+    Native HTML HREF prerequisite checkpoint (URI scalar and lexical owner):
+    - Changed scope: tools/inc/urlobj.ts declares native filesystem/encoding/escape/Part values. Existing tools/source/fsys/urlobj.ts now owns original getUTF32, exact 128-entry mustEncode table, appendEscape/appendUCS4/appendUCS4Escape, parseScheme, scanDomain, scanIPv6reference and filesystem delimiter voting. Actual Markdown ToIUri and HTML bookmark Unambiguous production decoding now call the shared getUTF32 owner. No browser URL substitution or fake INetURLObject/SmartRel2Abs was added.
+    - Evidence: pinned tools/source/fsys/urlobj.cxx and include/tools/urlobj.hxx; urlobj.lexical.test.ts adds 59 cases of source pointer bounds, escape/charset distinctions, invalid UTF8 rollback, scalar/legacy UTF8 output boundaries, domain eager rollback, bracket lexer recognition, scheme and filesystem style rules. WRITER222-224 in docs/program/writer-upstream-suspected-issues.md distinguish low-level source findings from complete URL/parser or compiled desktop claims. Shared provenance remains unverified, with bounded responsibility recorded and actual mutation-helper inventory updated.
+    - Command: npm run test:shared -- src/tools/source/fsys/urlobj.test.ts src/tools/source/fsys/urlobj.lexical.test.ts src/svtools/source/svhtml
+      Result: pass, 146 tests/5 files, including 59 new URI cases. Initial root-config invocation found no tests; corrected to workspace entrypoint. One initial expected domain offset was corrected from 7 to source-derived 6.
+    - Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+      Result: pass, 617 tests/40 files. Native decoder change covered by actual existing Markdown/filter/bookmark cases. No full suite was run; this is another checkpoint of the same approved task.
+    - Commands: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/tools/inc/urlobj.ts apps/office/src/tools/source/fsys/urlobj.ts apps/office/src/tools/source/fsys/urlobj.lexical.test.ts; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass after resolving strict indexed-access typing, required callback JSDoc and mutation-helper inventory order. Evidence: output/playwright/rtf-properties-native/html8-*.txt. Boundaries: 1706 runtime sources/9011 imports/210 edges; provenance: 1707 modules. Header declares only current filesystem/escape/admission enums; full protocol/class owners are pending.
+    - Remaining: full native absolute/relative URL parsing and URIHelper::SmartRel2Abs, then real HREF attribute/style insertion. Lexical prerequisites do not satisfy that requirement by themselves. Overall TXT/RTF/Markdown capability audit and full goal remain open; no format/module parity promotion or task completion is claimed.
 id_source: "generated"
 ---
 ## Summary
@@ -1428,6 +1485,36 @@ Note: Native HTML IDs/no-HREF names now create queued actual bookmarks; native U
 Attempts: 18
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:30:31.420Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T14:47:14.469Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: URI lexical checkpoint verified: 146 related shared and 617 Writer tests pass; static/provenance/registry gates pass. Native HREF resolver and overall filter capability audit remain incomplete; goal remains active.
+Attempts: 19
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:47:13.682Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2030,3 +2117,14 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 on12 changed source files; npx prettier --check on intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:writer-hintids; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
 - Result: pass; Evidence: type/lint/format/whitespace clean; JSDoc3914 authored files, size3918 authored files, boundaries1705 runtime sources/9009 imports/210 edges, WhichId79 native identities, provenance1706 modules; both registries and115 source paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html7-*.log, ignored local evidence.
 - Remaining actual consumers: HREF URL/SmartRel2Abs and native hyperlink production, language/direction, division/section-specific IDs, borders/background shorthand, HTML list/table consumers and reachable style graph behavior; remaining represented RTF capability rows and final full filter/UI matrix audit. Macro/footnote and generic full URL class services are assessed against actual represented owners/callers. Overall task remains DOING/rework; goal stays active.
+
+Native HTML HREF prerequisite checkpoint (URI scalar and lexical owner):
+- Changed scope: tools/inc/urlobj.ts declares native filesystem/encoding/escape/Part values. Existing tools/source/fsys/urlobj.ts now owns original getUTF32, exact 128-entry mustEncode table, appendEscape/appendUCS4/appendUCS4Escape, parseScheme, scanDomain, scanIPv6reference and filesystem delimiter voting. Actual Markdown ToIUri and HTML bookmark Unambiguous production decoding now call the shared getUTF32 owner. No browser URL substitution or fake INetURLObject/SmartRel2Abs was added.
+- Evidence: pinned tools/source/fsys/urlobj.cxx and include/tools/urlobj.hxx; urlobj.lexical.test.ts adds 59 cases of source pointer bounds, escape/charset distinctions, invalid UTF8 rollback, scalar/legacy UTF8 output boundaries, domain eager rollback, bracket lexer recognition, scheme and filesystem style rules. WRITER222-224 in docs/program/writer-upstream-suspected-issues.md distinguish low-level source findings from complete URL/parser or compiled desktop claims. Shared provenance remains unverified, with bounded responsibility recorded and actual mutation-helper inventory updated.
+- Command: npm run test:shared -- src/tools/source/fsys/urlobj.test.ts src/tools/source/fsys/urlobj.lexical.test.ts src/svtools/source/svhtml
+  Result: pass, 146 tests/5 files, including 59 new URI cases. Initial root-config invocation found no tests; corrected to workspace entrypoint. One initial expected domain offset was corrected from 7 to source-derived 6.
+- Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+  Result: pass, 617 tests/40 files. Native decoder change covered by actual existing Markdown/filter/bookmark cases. No full suite was run; this is another checkpoint of the same approved task.
+- Commands: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/tools/inc/urlobj.ts apps/office/src/tools/source/fsys/urlobj.ts apps/office/src/tools/source/fsys/urlobj.lexical.test.ts; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass after resolving strict indexed-access typing, required callback JSDoc and mutation-helper inventory order. Evidence: output/playwright/rtf-properties-native/html8-*.txt. Boundaries: 1706 runtime sources/9011 imports/210 edges; provenance: 1707 modules. Header declares only current filesystem/escape/admission enums; full protocol/class owners are pending.
+- Remaining: full native absolute/relative URL parsing and URIHelper::SmartRel2Abs, then real HREF attribute/style insertion. Lexical prerequisites do not satisfy that requirement by themselves. Overall TXT/RTF/Markdown capability audit and full goal remain open; no format/module parity promotion or task completion is claimed.

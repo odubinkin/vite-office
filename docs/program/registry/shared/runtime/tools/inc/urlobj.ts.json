@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/inc/urlobj.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "ooxml-package",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/inc/urlobj.ts",
+        "apps/office/src/tools/source/fsys/urlobj.lexical.test.ts",
+        "vendor/libreoffice-reference/include/tools/urlobj.hxx"
+      ],
+      "justification": "Native URI filesystem flags, escape mechanism/type enums and admission bit values consumed by the shared scalar/escape owner. TS enum declarations adapt nested C++ enum ownership; full INetURLObject and compiled native ABI remain unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FSysStyle",
+        "EncodeMechanism",
+        "DecodeMechanism",
+        "EscapeType",
+        "Part"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/tools/urlobj.hxx",
+      "upstreamSymbols": [
+        "FSysStyle",
+        "EncodeMechanism",
+        "DecodeMechanism",
+        "EscapeType",
+        "Part"
+      ]
+    }
+  }
+}
