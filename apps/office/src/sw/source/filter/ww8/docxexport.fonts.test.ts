@@ -2,6 +2,7 @@
 import { readOwnedXml } from "../../../../test/oox-input";
 import { expect, it } from "vitest";
 import { DocxExport } from "./docxexport";
+import { MSWordExportFormat } from "./wrtww8";
 import { SwDoc } from "../../core/doc/doc";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 import { FragmentHandler } from "../../../../oox/source/core/fragmenthandler";
@@ -46,6 +47,7 @@ it("connects actual exporter, shared font registration, collected rFonts and fon
     serializer = a.GetSerializer(),
     w = token("w");
   expect(a.GetExport()).toBe(o.exporter);
+  expect(o.exporter.GetExportFormat()).toBe(MSWordExportFormat.DOCX);
   expect(o.exporter.GetFilter()).toBe(o.filter);
   expect(o.exporter.AttrOutput()).toBe(a);
   const baseline = o.doc.GetNodes().entries().slice();

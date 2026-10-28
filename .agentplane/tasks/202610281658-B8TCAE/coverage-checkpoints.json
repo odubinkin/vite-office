@@ -969,5 +969,30 @@
     "productionSourcesChanged": false,
     "coverageExceptionsApplied": false,
     "finalFullVerifierPassed": false
+  },
+  "publicOwnerViews": {
+    "reports": [
+      "apps/office/coverage/integration-writer-public-views",
+      "apps/office/coverage/integration-icu-public-views"
+    ],
+    "testFiles": 4,
+    "tests": 38,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "strictCoveragePassed": false,
+    "compatibleCurrentDiagnosticUnion": {
+      "statementsCovered": 117867,
+      "statementsTotal": 119458,
+      "branchArmsCovered": 72544,
+      "branchArmsTotal": 74581,
+      "functionsCovered": 18403,
+      "functionsTotal": 18420,
+      "linesCovered": 107108,
+      "linesTotal": 108118,
+      "remainingOwners": 232,
+      "remainingFunctions": 17
+    },
+    "finalFullVerifierPassed": false
   }
 }

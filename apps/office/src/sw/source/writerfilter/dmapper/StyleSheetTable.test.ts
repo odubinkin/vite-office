@@ -286,6 +286,16 @@ it("preserves native sorted property duplicates and independent Sequence return 
   }
   const names = sorted.getNames(),
     values = sorted.getValues();
+  const borrowed = sorted.getProperties();
+  expect(borrowed).toHaveLength(4);
+  expect(
+    borrowed.map(
+      /** Observes the original const vector order before destruction. @param property - Actual copied property. @returns Name. */ (
+        property,
+      ) => text(property.Name),
+    ),
+  ).toEqual(["A", "A", "M", "Z"]);
+  expect(sorted.getProperties()).toBe(borrowed);
   sorted.dispose();
   try {
     const actual: unknown[] = [];

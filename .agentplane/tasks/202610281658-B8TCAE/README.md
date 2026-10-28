@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 34
+revision: 35
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:07:51.547Z"
+doc_updated_at: "2026-10-28T22:10:45.998Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -147,6 +147,8 @@ sections:
     - Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.
 
     - Observation: Twelve real calendar minimum-week settings checks and17 RTF property tests pass. Nested RTF helper owner reaches strict100% for35 statements21 branch arms7 functions34 lines. Additional scenarios check borrowed last-modifier attributes and true absent-parent fallbacks without forging internal list state. Current-code coverage remains incomplete; no threshold/exclusion change or exception.
+
+    - Observation: Additional actual owner/view checks pass38 tests in4 files: concrete DOCX export identity, original sorted property-vector borrow, resource-ordered deferred text position, real SharedCalendar final release with independent clone, and current Japanese era. Current compatible union leaves17 missing functions and232 incomplete owners. Production sources, coverage thresholds and exceptions remain unchanged; final full npm run verify and publication/reverse merges are still pending.
 id_source: "generated"
 ---
 ## Summary
@@ -274,3 +276,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.
 
 - Observation: Twelve real calendar minimum-week settings checks and17 RTF property tests pass. Nested RTF helper owner reaches strict100% for35 statements21 branch arms7 functions34 lines. Additional scenarios check borrowed last-modifier attributes and true absent-parent fallbacks without forging internal list state. Current-code coverage remains incomplete; no threshold/exclusion change or exception.
+
+- Observation: Additional actual owner/view checks pass38 tests in4 files: concrete DOCX export identity, original sorted property-vector borrow, resource-ordered deferred text position, real SharedCalendar final release with independent clone, and current Japanese era. Current compatible union leaves17 missing functions and232 incomplete owners. Production sources, coverage thresholds and exceptions remain unchanged; final full npm run verify and publication/reverse merges are still pending.

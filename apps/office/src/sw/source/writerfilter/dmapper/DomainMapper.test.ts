@@ -534,3 +534,31 @@ it("retains native zero-font position fallback and the no-op of a zero resource 
   }
 });
 import { StyleSheetEntry, StyleType } from "./StyleSheetTable";
+
+it("processes deferred position in resource-ID order while ignoring unrelated resource values", /** The actual character context and public deferred map contain independent owned Any values; no mapper callback or result is replaced. @returns Nothing. */ () => {
+  const { doc, model, mapper } = session(),
+    position = new Any([10], "sal_Int32"),
+    unrelated = new Any([123], "sal_Int32");
+  try {
+    mapper.startCharacterGroup();
+    mapper.sprm(sprm(N.LN_EG_RPrBase_sz, V.createInteger(40)));
+    mapper.processDeferredCharacterProperties(
+      new Map([
+        [N.LN_EG_RPrBase_position, position],
+        [N.LN_EG_RPrBase_sz, unrelated],
+      ]),
+      true,
+    );
+    const context = mapper.impl.GetTopContext();
+    assert(context);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT)).toBe(25);
+    expect(scalar(context, P.PROP_CHAR_ESCAPEMENT_HEIGHT)).toBe(100);
+    mapper.endCharacterGroup();
+  } finally {
+    position.dispose();
+    unrelated.dispose();
+    mapper.dispose();
+    model.dispose();
+    doc.Dispose();
+  }
+});
