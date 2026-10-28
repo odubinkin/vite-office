@@ -1,0 +1,60 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "BracketFormatSymbolType",
+      "SvNumberformatLimitOps",
+      "ImpNextSymbol",
+      "ImpGetNumber",
+      "IsCombiningSymbol",
+      "lcl_matchKeywordAndGetNumber",
+      "lcl_SvNumberformat_IsBracketedPrefix"
+    ],
+    "upstreamSymbols": [
+      "BracketFormatSymbolType",
+      "SvNumberformat::ImpNextSymbol",
+      "SvNumberformat::ImpGetNumber",
+      "IsCombiningSymbol",
+      "lcl_matchKeywordAndGetNumber",
+      "lcl_SvNumberformat_IsBracketedPrefix"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the complete original bracket-prefix/subformat lexer and condition-number/combining helpers. Source token values, locale-owned H/MI/S classification, mutable ASCII blank removal, literal quoting, combining-unit parity, NatNum0..19 and DBNum1..9 classification and cursor behavior are retained. Keyword numeric conversion uses the actual bounded o3tl/SAL integer implementation, without JavaScript numeric parsing. The original constructor still needs integration of these stages and the required prefix metadata; this fragment alone does not fix CSV recognition or the my-MM constructor regression."
+    ],
+    "omittedResponsibilities": [
+      "Full constructor integration, NatNum metadata, colors, locale-prefix application and reachable formatted CSV output remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+          "marker": "ImpNextSymbol"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.prefix.test.ts",
+          "marker": "original"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpNextSymbol"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "SvNumberformatLimitOps"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+      "rationale": "Keep the original zformat constructor-prefix responsibility together while splitting the large native translation unit into source-responsibility fragments.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -1,15 +1,32 @@
 /** @fileoverview CSV stream conversion owner from sc/source/ui/docshell/impex.cxx. */
 import { UEastAsianWidth, UProperty } from "../../../../external/icu/source/common/unicode/uchar";
 import { u_getIntPropertyValue } from "../../../../external/icu/source/common/uprops";
-import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
+import { LANGUAGE_ENGLISH_US } from "../../../../i18nlangtag/inc/lang";
+import { SvNumFormatType } from "../../../../svl/inc/zforlist";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+import { ScPatternAttr } from "../../../inc/patattr";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import { convertLanguageToLocale } from "../../../../i18nlangtag/source/isolang/mslangid";
+import { TransliterationFlags } from "../../../../i18nutil/inc/transliteration";
+import { TransliterationWrapper } from "../../../../unotools/source/i18n/transliterationwrapper";
+import { CalendarWrapper } from "../../../../unotools/source/i18n/calendarwrapper";
+import { PutDate } from "./impex.date";
 import { SvNumberFormatter } from "../../../../svl/source/numbers/zforlist";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { MAXCOLCOUNT, ScAddress } from "../../../inc/address";
 import type { ScDocument } from "../../../inc/document";
 import { ScDocumentImport } from "../../../inc/documentimport";
-import { ScStringUtil } from "../../../inc/stringutil";
-import { SC_COL_SKIP, SC_COL_TEXT, ScAsciiOptions } from "../dbgui/asciiopt";
+import { Converter } from "../../../../sax/source/tools/converter";
+import { DateTime as UnoDateTime } from "../../../../offapi/com/sun/star/util/DateTime";
+import { ScSetStringParam, ScStringUtil } from "../../../inc/stringutil";
+import {
+  SC_COL_STANDARD,
+  SC_COL_SKIP,
+  SC_COL_TEXT,
+  SC_COL_ENGLISH,
+  ScAsciiOptions,
+} from "../dbgui/asciiopt";
 
 /** One logical CSV field, including the native quoted-field signal. */
 interface CsvField {
@@ -187,7 +204,7 @@ function scanQuotedString(
   return { value, next };
 }
 
-/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing.  @param formatter - Formatter. */
+/** Implements the consumed scalar branches of source lcl_PutString. @param document - Actual document. @param pos - Cell. @param field - Parsed field. @param format - Column format. @param options - Filter options. @returns Nothing. @param formatter - Actual import formatter. @param transliteration - Primary wrapper. @param calendar - Primary calendar. @param secondTransliteration - Optional second wrapper. @param secondCalendar - Optional second calendar. */
 function lcl_PutString(
   docImport: ScDocumentImport,
   pos: ScAddress,
@@ -195,17 +212,46 @@ function lcl_PutString(
   format: number,
   options: ScAsciiOptions,
   formatter: SvNumberFormatter,
+  transliteration: TransliterationWrapper,
+  calendar: CalendarWrapper,
+  secondTransliteration: TransliterationWrapper | null,
+  secondCalendar: CalendarWrapper | null,
 ): void {
   const document = docImport.getDoc();
   const value = field.value;
   if (!value) {
-    if (!options.bSkipEmptyCells) document.SetEmptyCell(pos);
+    if (!options.bSkipEmptyCells) {
+      const empty = unicode(value);
+      try {
+        docImport.setAutoInput(pos, empty);
+      } finally {
+        empty.dispose();
+      }
+    }
     return;
   }
   const literal = format === SC_COL_TEXT || (!options.bEvaluateFormulas && value.startsWith("="));
   if (literal) {
     const string = unicode(value);
     try {
+      const documentFormatter = document.GetFormatTable(),
+        key: [number] = [0],
+        dummy: [number] = [0];
+      if (
+        (!options.bEvaluateFormulas && value.startsWith("=")) ||
+        documentFormatter.IsNumberFormat(string, key, dummy)
+      ) {
+        const textFormat = documentFormatter.GetStandardFormat(SvNumFormatType.TEXT),
+          pattern = new ScPatternAttr(document.getCellAttributeHelper()),
+          item = new SfxUInt32Item(ATTR_VALUE_FORMAT, textFormat);
+        try {
+          pattern.ItemSetPut(item);
+          document.ApplyPattern(pos.Col(), pos.Row(), pos.Tab(), pattern);
+        } finally {
+          item.Dispose();
+          pattern.Dispose();
+        }
+      }
       if (ScStringUtil.isMultiline(string)) {
         document.SetTextCell(pos, string);
         docImport.invalidateBlockPositionSet(pos.Tab());
@@ -214,6 +260,40 @@ function lcl_PutString(
       string.dispose();
     }
     return;
+  }
+  if (format === SC_COL_ENGLISH) {
+    const documentFormatter = document.GetFormatTable(),
+      key: [number] = [documentFormatter.GetStandardIndex(LANGUAGE_ENGLISH_US)],
+      numeric: [number] = [0],
+      input = unicode(value);
+    try {
+      if (documentFormatter.IsNumberFormat(input, key, numeric)) {
+        docImport.setNumericCell(pos, numeric[0]);
+        return;
+      }
+    } finally {
+      input.dispose();
+    }
+  } else if (format !== SC_COL_STANDARD) {
+    const input = unicode(value);
+    try {
+      if (
+        PutDate(
+          docImport,
+          pos,
+          input,
+          format,
+          formatter,
+          transliteration,
+          calendar,
+          secondTransliteration,
+          secondCalendar,
+        )
+      )
+        return;
+    } finally {
+      input.dispose();
+    }
   }
   if (value.includes("\n")) {
     const string = unicode(value);
@@ -225,48 +305,40 @@ function lcl_PutString(
     }
     return;
   }
-  if (options.bEvaluateFormulas && value.length > 1 && value.startsWith("=")) {
-    const formula = unicode(value);
-    try {
-      docImport.setFormulaCell(pos, formula, FormulaGrammar.Grammar.GRAM_NATIVE);
-    } finally {
-      formula.dispose();
-    }
-    return;
-  }
-  {
-    const numeric = unicode(value),
-      result: [number] = [0];
-    try {
-      const locale = formatter.GetLocaleData(),
-        decimal = locale.getNumDecimalSep(),
-        group = locale.getNumThousandSep(),
-        alternate = locale.getNumDecimalSepAlt();
-      if (
-        decimal.getLength() === 1 &&
-        group.getLength() === 1 &&
-        alternate.getLength() <= 1 &&
-        ScStringUtil.parseSimpleNumber(
-          numeric,
-          decimal.getStr()[0] as number,
-          group.getStr()[0] as number,
-          alternate.getLength() ? (alternate.getStr()[0] as number) : 0,
-          result,
-          options.bDetectScientificNumber,
-        )
-      ) {
-        docImport.setNumericCell(pos, result[0]);
-        return;
-      }
-    } finally {
-      numeric.dispose();
-    }
-  }
-  const string = unicode(value);
+  const input = unicode(value);
   try {
-    docImport.setStringCell(pos, string);
+    if (!options.bDetectSpecialNumber && format === SC_COL_STANDARD) {
+      do {
+        if (input.getLength() < 10) break;
+        const first = input.indexOf(45, 1);
+        if (first < 4) break;
+        const second = input.indexOf(45, first + 1);
+        if (second < 7 || first + 3 < second) break;
+        const datetime = new UnoDateTime();
+        if (!Converter.parseDateTime(datetime, value)) break;
+        const documentFormatter = document.GetFormatTable(),
+          key: [number] = [0],
+          numeric: [number] = [0];
+        if (
+          documentFormatter.IsNumberFormat(input, key, numeric) &&
+          documentFormatter.GetType(key[0]) & SvNumFormatType.DATE
+        ) {
+          docImport.setNumericCell(pos, numeric[0]);
+          document.SetNumberFormat(pos, key[0]);
+          return;
+        }
+      } while (false); // eslint-disable-line no-constant-condition -- Preserve original source single-pass block and break paths.
+    }
+    const parameter = new ScSetStringParam();
+    parameter.mpNumFormatter = formatter;
+    parameter.mbDetectNumberFormat = options.bDetectSpecialNumber;
+    parameter.mbDetectScientificNumberFormat = options.bDetectScientificNumber;
+    parameter.meSetTextNumFormat = ScSetStringParam.SpecialNumberOnly;
+    parameter.mbHandleApostrophe = false;
+    parameter.mbCheckLinkFormula = true;
+    docImport.setAutoInput(pos, input, parameter);
   } finally {
-    string.dispose();
+    input.dispose();
   }
 }
 
@@ -360,10 +432,32 @@ export class ScImportExport {
     const readLine = /** Implements read Line. @returns The string result. */ (): string =>
       ReadCsvLine(stream, !options.bFixedLen, separators, options.cTextSep, detectSeparator);
     const formatter = new SvNumberFormatter(options.eLang),
-      docImport = new ScDocumentImport(this.document);
+      docImport = new ScDocumentImport(this.document),
+      transliteration = new TransliterationWrapper(TransliterationFlags.IGNORE_CASE),
+      calendar = new CalendarWrapper();
+    let secondTransliteration: TransliterationWrapper | null = null,
+      secondCalendar: CalendarWrapper | null = null;
     let row = 0,
       endCol = 0;
     try {
+      transliteration.loadModuleIfNeeded(options.eLang);
+      const locale = convertLanguageToLocale(options.eLang, false);
+      try {
+        calendar.loadDefaultCalendar(locale);
+      } finally {
+        locale.dispose();
+      }
+      if (options.eLang !== LANGUAGE_ENGLISH_US) {
+        secondTransliteration = new TransliterationWrapper(TransliterationFlags.IGNORE_CASE);
+        transliteration.loadModuleIfNeeded(LANGUAGE_ENGLISH_US);
+        secondCalendar = new CalendarWrapper();
+        const english = convertLanguageToLocale(LANGUAGE_ENGLISH_US, false);
+        try {
+          secondCalendar.loadDefaultCalendar(english);
+        } finally {
+          english.dispose();
+        }
+      }
       let skipLines = options.nStartRow;
       while (--skipLines > 0) {
         readLine();
@@ -396,7 +490,7 @@ export class ScImportExport {
                 (options.mvColStart[source + 1] as number) - (options.mvColStart[source] as number),
               );
             else nextIndex[0] = line.length;
-            const format = options.mvColFormat[source] ?? 0;
+            const format = options.mvColFormat[source] ?? SC_COL_STANDARD;
             if (format !== SC_COL_SKIP) {
               if (column > this.document.MaxCol()) this.overflowCol = true;
               else {
@@ -408,6 +502,10 @@ export class ScImportExport {
                   field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
                   options,
                   formatter,
+                  transliteration,
+                  calendar,
+                  secondTransliteration,
+                  secondCalendar,
                 );
               }
               column++;
@@ -430,10 +528,10 @@ export class ScImportExport {
               cellOverflow,
             );
             next = scanned.next;
-            let format = 0;
+            let format = SC_COL_STANDARD;
             for (let i = infoStart; i < options.mvColStart.length; i++)
               if (options.mvColStart[i] === source + 1) {
-                format = options.mvColFormat[i] ?? 0;
+                format = options.mvColFormat[i] ?? SC_COL_STANDARD;
                 infoStart = i + 1;
                 break;
               }
@@ -450,6 +548,10 @@ export class ScImportExport {
                   field.quoted && options.bQuotedFieldAsText ? SC_COL_TEXT : format,
                   options,
                   formatter,
+                  transliteration,
+                  calendar,
+                  secondTransliteration,
+                  secondCalendar,
                 );
               }
               column++;
@@ -467,6 +569,10 @@ export class ScImportExport {
       }
       docImport.finalize();
     } finally {
+      secondCalendar?.dispose();
+      secondTransliteration?.dispose();
+      calendar.dispose();
+      transliteration.dispose();
       formatter.dispose();
     }
     return true;

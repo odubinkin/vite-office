@@ -1,4 +1,5 @@
 /** @fileoverview Native time conversion overflow, AM/PM and minute-second format boundaries. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -6,12 +7,12 @@ import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
 import { SvNumFormatType, SvNumInputOptions } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
 it("retains converted output and source failure flags for invalid clock components", /** Checks actual stored numeric fragments, including signed32 overflow and noncanonical zero strings. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     GetTimeRef(output: [number], first: number, count: number, options: number): boolean;
@@ -62,9 +63,16 @@ it("retains converted output and source failure flags for invalid clock componen
 
 it("uses a native compiled minute-second format instead of treating its first number as hours", /** Checks original token recognition and time conversion on the same format/scanner owners. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   format.SetType(SvNumFormatType.TIME);
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   first.Enlarge(3);

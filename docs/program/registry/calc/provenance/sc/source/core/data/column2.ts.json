@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/column2.cxx",
     "localSymbols": [
-      "lcl_GetAttribHeight"
+      "lcl_GetAttribHeight",
+      "SetNumberFormat"
     ],
     "upstreamSymbols": [
-      "lcl_GetAttribHeight"
+      "lcl_GetAttribHeight",
+      "ScColumn::SetNumberFormat"
     ],
     "preservedResponsibilities": [
-      "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified."
+      "TaskGKVVR7 connects source standard automatic row-height arithmetic and genuine compressed geometry/flags to current FontHeight UI and attribute Undo/Redo. Original contiguous pool defaults extend through ATTR_MARGIN143. Standard uniform-script unwrapped/unrotated rows use native 256-twip startup minimum,23-twip correction,margin/emphasis and pixel-change conditions. Selected sheets retain one original shared context. React uses actual row segments and bounded physical scrolling; ODS row styles apply to real sheet storage. Device-based initialization/script scanning,rich/wrapped/rotated/merged layout,drawing/hidden rows and standalone height dialogs remain unported. Nonstandard represented attribute profiles decline adjustment;unrepresented foreign layout properties,mixed-script text and device layout remain unverified. Writer primary saving/no-recovery/visible-content policy is retained; broad parity remains unverified.",
+      "AQF9AG ports original single-cell SetNumberFormat document/table/column dispatch and pooled ATTR_VALUE_FORMAT application for CSV date and text recognition. Table validation, absent-sheet behavior and temporary SfxUInt32Item lifetime are retained. Native threaded-group calculation is not represented in this single-threaded owner; no substitute state is introduced."
     ],
     "omittedResponsibilities": [
       "Only the consumed responsibilities are represented; full original constructors, UNO/property-map graph, VCL/device/layout and native dialogs remain unverified."
@@ -23,12 +26,20 @@
         {
           "path": "apps/office/src/sc/source/core/data/column2.ts",
           "marker": "lcl_GetAttribHeight"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/column2.ts",
+          "marker": "SetNumberFormat"
         }
       ],
       "upstream": [
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
           "marker": "lcl_GetAttribHeight"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column2.cxx",
+          "marker": "ScColumn::SetNumberFormat"
         }
       ]
     }

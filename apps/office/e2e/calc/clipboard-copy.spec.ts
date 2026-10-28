@@ -445,11 +445,19 @@ test("copies sparse clipboard blocks and completes real dependency notifications
             n.NumberFormatCode.borrowed(mappedSequence.operatorIndex(selectedFormat)).Code,
           ),
           localeData = new n.LocaleDataWrapper(locale),
-          scannerLanguage = new n.SvNFLanguageData(mapper, 0x0407),
-          scanner = new n.ImpSvNumberformatScan(scannerLanguage, mapper),
+          colorCallback = new n.SvNumberFormatter(0x0407),
+          scannerLanguage = new n.SvNFLanguageData(mapper, 0x0407, colorCallback),
+          scanner = new n.ImpSvNumberformatScan(scannerLanguage, colorCallback, mapper),
           code = n.unicode("general"),
           compiledCheck: [number] = [-1],
-          compiled = new n.SvNumberformat(code, scanner, compiledCheck, [0x0407]),
+          compiled = new n.SvNumberformat(
+            code,
+            scanner,
+            scanner.GetCurrentLanguageData().pStringScanner,
+            scanner.getColorCallback().GetNatNum(),
+            compiledCheck,
+            [0x0407],
+          ),
           compiledOut = n.unicode("");
         compiled.SetStandard();
         compiled.GetOutputString(0.125, compiledOut, [null], 65535, 44);
@@ -460,7 +468,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         if (!tableEntry) throw Error("Missing actual generated General entry");
         tableEntry.GetOutputString(12.5, compiledOut, [null], 65535, 44);
         const tableOutput = n.text(compiledOut);
-        const languageData = new n.SvNFLanguageData(mapper, 0x0407),
+        const languageData = new n.SvNFLanguageData(mapper, 0x0407, colorCallback),
           originalScanner = languageData.GetFormatScanner(),
           languageTable = new n.SvNFFormatData();
         languageData.ChangeStandardPrec(65535);
@@ -551,6 +559,7 @@ test("copies sparse clipboard blocks and completes real dependency notifications
         code.dispose();
         scanner.dispose();
         scannerLanguage.dispose();
+        colorCallback.dispose();
         localeData.dispose();
         standardName.dispose();
         decimal.dispose();

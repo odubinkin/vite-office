@@ -866,3 +866,16 @@ export function RenameTab(
   for (const current of this["maTabs"]) current?.SetStreamValid(false);
   return true;
 }
+
+/** Original existing pattern-area dispatch, moved intact from the document facade. @param this - Actual document. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Actual pattern. @returns Whether changed. */
+export function ApplyPatternAreaTab(
+  this: ScDocument,
+  startCol: number,
+  startRow: number,
+  endCol: number,
+  endRow: number,
+  tab: number,
+  delta: import("../../../inc/patattr").ScPatternAttr,
+): boolean {
+  return this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false;
+}

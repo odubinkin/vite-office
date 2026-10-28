@@ -64,3 +64,53 @@ it("retains compatible General runs and applies only incompatible clipped runs a
   sparse.Dispose();
   doc.Dispose();
 });
+
+it("assigns a single-cell formatter key through the actual document/table/column attributes", /** Original dispatch preserves neighboring formats and other pooled items. @returns Nothing. */ () => {
+  const doc = new ScDocument();
+  const name = unicode("Formats");
+  try {
+    doc.InsertTab(0, name);
+    const cell = new ScAddress(7, 12, 0);
+    const pattern = new ScPatternAttr(doc.getCellAttributeHelper());
+    try {
+      pattern.ItemSetPut(new SvxFontHeightItem(330, 100, 101));
+      doc.ApplyPattern(7, 12, 0, pattern);
+    } finally {
+      pattern.Dispose();
+    }
+    const format =
+      /** Reads the real pooled format key. @param col - Column. @param row - Row. @returns Formatter key. */ (
+        col: number,
+        row: number,
+      ): number =>
+        (doc.GetPattern(new ScAddress(col, row, 0)) as ScPatternAttr).GetNumberFormat(
+          doc.GetFormatTable(),
+        );
+    doc.SetNumberFormat(cell, 100);
+    expect(format(7, 12)).toBe(100);
+    expect(doc.GetFormatTable().GetType(format(7, 12))).toBe(SvNumFormatType.TEXT);
+    expect([format(7, 11), format(7, 13), format(6, 12), format(8, 12)]).toEqual([0, 0, 0, 0]);
+    expect(height(doc, 7, 12)).toBe(330);
+    doc.SetNumberFormat(cell, 99);
+    expect(format(7, 12)).toBe(99);
+    doc.SetNumberFormat(cell, 0);
+    expect(format(7, 12)).toBe(0);
+    expect(height(doc, 7, 12)).toBe(330);
+    const table = doc.FetchTable(0);
+    if (!table) throw new Error("Inserted sheet is missing");
+    const count = table.GetAllocatedColumnsCount();
+    doc.SetNumberFormat(new ScAddress(9, 12, 3), 100);
+    table.SetNumberFormat(doc.MaxCol() + 1, 12, 100);
+    table.SetNumberFormat(12, doc.MaxRow() + 1, 100);
+    table.SetNumberFormat(-1, 12, 100);
+    table.SetNumberFormat(12, -1, 100);
+    expect(table.GetAllocatedColumnsCount()).toBe(count);
+    expect(format(7, 12)).toBe(0);
+    table.SetNumberFormat(count + 2, 4, 100);
+    expect(table.GetAllocatedColumnsCount()).toBeGreaterThan(count);
+    expect(format(count + 2, 4)).toBe(100);
+  } finally {
+    name.dispose();
+    doc.Dispose();
+  }
+});

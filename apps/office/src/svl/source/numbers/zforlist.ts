@@ -21,7 +21,20 @@ import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustr
 import type { Color } from "../../../tools/inc/color";
 import type { DateConstReference } from "../../../tools/source/datetime/tdate";
 import type { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import { generateStandardNumberFormat } from "./zforlist.generate";
+import * as Policy from "./zforlist.policy";
+import * as Edit from "./zforlist.edit";
+import * as Standard from "./zforlist.standard";
+import { IsNumberFormat } from "./zforlist.recognition";
+import type { LocaleCurrency } from "../../../unotools/source/i18n/localedatawrapper";
+import { GetLangDecimalSep } from "./zforlist.language";
+import {
+  ImpGenerateCL,
+  PutEntry,
+  ImpGetDefaultCurrencyFormat,
+  ImpGetDefaultSystemCurrencyFormat,
+} from "./zforlist.table-entry";
+import { GetCurrencyFormatStrings } from "./zforlist.currency-patterns";
+import { ImpGenerateFormats } from "./zforlist.generate-formats";
 export { generateStandardNumberFormat } from "./zforlist.generate";
 import {
   FindCachedDefaultFormat,
@@ -31,7 +44,6 @@ import {
   FindFormatRW,
   CacheFormatRO,
   FindFormatRO,
-  ZF_STANDARD_TEXT,
 } from "./zforlist.index";
 import { CalendarWrapper } from "../../../unotools/source/i18n/calendarwrapper";
 import { CharClass } from "../../../unotools/source/i18n/charclass";
@@ -45,7 +57,12 @@ import {
   LocaleDataWrapper,
 } from "../../../unotools/source/i18n/localedatawrapper";
 import type { TransliterationWrapper } from "../../../unotools/source/i18n/transliterationwrapper";
-import { OnDemandCharClass, OnDemandTransliterationWrapper } from "../../inc/ondemand";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
+import {
+  OnDemandNativeNumberWrapper,
+  OnDemandCharClass,
+  OnDemandTransliterationWrapper,
+} from "../../inc/ondemand";
 import {
   NfEvalDateFormat,
   NUMBERFORMAT_ENTRY_NOT_FOUND,
@@ -54,7 +71,7 @@ import {
   SvNumFormatType,
 } from "../../inc/zforlist";
 import { ImpSvNumberInputScan } from "./zforfind";
-import { INPUTSTRING_PRECISION } from "./zforlist.defaults";
+import { GetOutputString, GetInputLineString } from "./zforlist.output";
 import { SvNumberformat, type SvNumberformatConstReference } from "./zformat";
 import { ImpSvNumberformatScan } from "./zforscan";
 
@@ -62,102 +79,14 @@ import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.table
 import { CURRENCY } from "../../../offapi/com/sun/star/i18n/KNumberFormatUsage";
 import type { NumberFormatCodeConstReference } from "../../../offapi/com/sun/star/i18n/NumberFormatCode";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
-import type { LocaleCurrency } from "../../../unotools/source/i18n/localedatawrapper";
-
-/** Original language/country currency value used by SvNumberFormatter's ordered currency tables. */
-export class NfCurrencyEntry {
-  private readonly symbol: OUString;
-  private readonly bankSymbol: OUString;
-  private language: number;
-  private readonly positiveFormat: number;
-  private readonly negativeFormat: number;
-  private readonly digits: number;
-  /** Initializes the source wrapper fallback or Currency2 row, preserving the row's own digits. @param first - Wrapper or currency row. @param second - Language or wrapper. @param third - Row language.  @returns Constructed instance. */
-  constructor(wrapper: LocaleDataWrapper, language: number);
-  /** Computes the currency result. @param currency - Currency. @param wrapper - Wrapper. @param language - Language. @returns Constructed instance. */ constructor(
-    currency: LocaleCurrency,
-    wrapper: LocaleDataWrapper,
-    language: number,
-  );
-  /** Computes the first result. @param first - First. @param second - Second. @param third - Third. @returns Constructed instance. */ constructor(
-    first: LocaleDataWrapper | LocaleCurrency,
-    second: number | LocaleDataWrapper,
-    third?: number,
-  ) {
-    const wrapper = typeof second === "number" ? (first as LocaleDataWrapper) : second;
-    const currency = typeof second === "number" ? null : (first as LocaleCurrency);
-    this.symbol = currency ? unicode(currency.symbol) : new OUString(wrapper.getCurrSymbol());
-    this.bankSymbol = currency
-      ? unicode(currency.bankSymbol)
-      : new OUString(wrapper.getCurrBankSymbol());
-    this.language = typeof second === "number" ? second : (third as number);
-    this.positiveFormat = wrapper.getCurrPositiveFormat();
-    this.negativeFormat = wrapper.getCurrNegativeFormat();
-    this.digits = currency ? currency.decimalPlaces : wrapper.getCurrDigits();
-  }
-  /** Source identity compares only the symbol, bank symbol and language. @param other - Currency entry. @returns Identity. */
-  equals(other: NfCurrencyEntry): boolean {
-    return (
-      this.symbol.equals(other.symbol) &&
-      this.bankSymbol.equals(other.bankSymbol) &&
-      this.language === other.language
-    );
-  }
-  /** Original borrowed symbol. @returns Symbol. */
-  GetSymbol(): OUString {
-    return this.symbol;
-  }
-  /** Original borrowed bank symbol. @returns Bank symbol. */
-  GetBankSymbol(): OUString {
-    return this.bankSymbol;
-  }
-  /** Original language. @returns Native language ID. */
-  GetLanguage(): number {
-    return this.language;
-  }
-  /** Original positive placement. @returns Format ID. */
-  GetPositiveFormat(): number {
-    return this.positiveFormat;
-  }
-  /** Original negative placement. @returns Format ID. */
-  GetNegativeFormat(): number {
-    return this.negativeFormat;
-  }
-  /** Original currency precision. @returns Digits. */
-  GetDigits(): number {
-    return this.digits;
-  }
-  /** Source system-currency list language adjustment. @param language - Native language ID. @returns Nothing. */
-  SetLanguage(language: number): void {
-    this.language = language;
-  }
-  /** Original [$symbol-language] or [$bank] syntax, quoting symbols containing hyphen or closing bracket. @param bank - Use ISO bank symbol. @param withoutExtension - Omit language suffix. @returns Owned code. */
-  BuildSymbolString(bank: boolean, withoutExtension = false): OUString {
-    let value = "[$";
-    if (bank) value += text(this.bankSymbol);
-    else {
-      const symbol = text(this.symbol);
-      value += symbol.includes("-") || symbol.includes("]") ? `"${symbol}"` : symbol;
-      if (
-        !withoutExtension &&
-        this.language !== LANGUAGE_DONTKNOW &&
-        this.language !== LANGUAGE_SYSTEM
-      )
-        value += `-${(this.language & 0xffff).toString(16).toUpperCase()}`;
-    }
-    return unicode(value + "]");
-  }
-  /** Releases owned source string values. @returns Nothing. */
-  dispose(): void {
-    this.symbol.dispose();
-    this.bankSymbol.dispose();
-  }
-}
+import { NfCurrencyEntry } from "./zforlist.currency-entry";
+export { NfCurrencyEntry } from "./zforlist.currency-entry";
 
 /** Original process-wide source currency tables: ordinary entries start with SYSTEM, legacy-only entries are separate. */
 let currencyTable: NfCurrencyEntry[] | null = null;
 let legacyOnlyCurrencyTable: NfCurrencyEntry[] = [];
 let systemCurrencyPosition = 0;
+const theInstalledLocales = new Set<number>();
 
 /** Original declared initializer-list/sequence specialization. */
 const Codes = Sequence.specialize<NumberFormatCodeAddress>(
@@ -249,8 +178,8 @@ export class SvNFLanguageData {
   };
   /** Original input scanner owned by this current-language state. */
   readonly pStringScanner: ImpSvNumberInputScan;
-  /** Original constructor's represented language/cache/scanner path;the actual provider must outlive this borrowed service-field binding. @param mapper - Actual prepared XNumberFormatCode service field. @param language - Native initial language. @returns Owned language/scanner state. */
-  constructor(mapper: XNumberFormatCode, language: number) {
+  /** Original constructor's represented language/cache/scanner path;the actual provider must outlive this borrowed service-field binding. @param mapper - Actual prepared XNumberFormatCode service field. @param language - Native initial language. @param colorCallback - Original actual formatter reference. @returns Owned language/scanner state. */
+  constructor(mapper: XNumberFormatCode, language: number, colorCallback: SvNumberFormatter) {
     language &= 65535;
     const locale = convertLanguageToLocale(language, false),
       loadedLocale = getLoadedLocale(locale),
@@ -283,7 +212,7 @@ export class SvNFLanguageData {
         eEvalDateFormat: NfEvalDateFormat.International,
       };
       this.pStringScanner = new ImpSvNumberInputScan(this);
-      this.fields.pFormatScanner = new ImpSvNumberformatScan(this, mapper);
+      this.fields.pFormatScanner = new ImpSvNumberformatScan(this, colorCallback, mapper);
     }
   }
   /** Original compatibility currency selection, preferring UsedInCompatibleFormatCodes and retaining the native current-currency fallback. @param symbol - Existing output string. @param abbreviation - Existing output string. @returns Nothing. */
@@ -383,6 +312,18 @@ export class SvNFLanguageData {
       ? SvNumberFormatter.ExpandTwoDigitYear(year, this.pStringScanner.GetYear2000())
       : year;
   }
+  /** Original locale-data decimal query. @param language - Native language ID. @returns Owned separator. */
+  GetLangDecimalSep(language: number): OUString {
+    return GetLangDecimalSep.call(this, language);
+  }
+  /** Original unknown-language resolution. @param language - Requested language. @returns Initial language for UNKNOWN only. */
+  ImpResolveLanguage(language: number): number {
+    return (language & 65535) === LANGUAGE_DONTKNOW ? this.fields.IniLnge : language & 65535;
+  }
+  /** Original currency-format vector generation. @param formats - Actual owned vector. @param currency - Actual currency value. @param bank - Bank mode. @returns Default index. */
+  GetCurrencyFormatStrings(formats: OUString[], currency: NfCurrencyEntry, bank: boolean): number {
+    return GetCurrencyFormatStrings(this, formats, currency, bank);
+  }
   /** Original no-op for the current language,otherwise locale/cache updates precede scanner ChangeIntl. Unrepresented language/service wrappers are explicit projections,not substitute providers. @param language - Native uint16 current language. @returns Nothing. */
   ChangeIntl(language: number): void {
     language &= 65535;
@@ -443,9 +384,51 @@ export class SvNFFormatData {
     aFTable: new Map<number, SvNumberformat>(),
     aDefaultFormatKeys: new Map<number, number>(),
     MaxCLOffset: 0,
-    nDefaultSystemCurrencyFormat: NUMBERFORMAT_ENTRY_NOT_FOUND,
+    nDefaultSystemCurrencyFormat: [NUMBERFORMAT_ENTRY_NOT_FOUND] as [number],
     bNoZero: false,
   };
+  /** Original complete builtin generation dispatch. @param current - Actual language owner. @param native - Actual native-number provider. @param offset - Locale block. @param noAdditional - Source changing-system flag. @returns Nothing. */
+  ImpGenerateFormats(
+    current: SvNFLanguageData,
+    native: NativeNumberWrapper,
+    offset: number,
+    noAdditional: boolean,
+  ): void {
+    ImpGenerateFormats(this, current, native, offset, noAdditional);
+  }
+  /** Original locale-block creation dispatch. @param current - Language owner. @param native - Native-number service. @param language - Requested language. @returns Locale block. */
+  ImpGenerateCL(current: SvNFLanguageData, native: NativeNumberWrapper, language: number): number {
+    return ImpGenerateCL(this, current, native, language);
+  }
+  /** Original compiled entry insertion. @param current - Language owner. @param native - Native-number service. @param code - Mutable code. @param check - Error position. @param type - Output type. @param key - Output key. @param language - Requested language. @param replaceBoolean - Boolean replacement. @returns New insertion flag. */
+  PutEntry(
+    current: SvNFLanguageData,
+    native: NativeNumberWrapper,
+    code: OUString,
+    check: [number],
+    type: [number],
+    key: [number],
+    language: number,
+    replaceBoolean = true,
+  ): boolean {
+    return PutEntry(this, current, native, code, check, type, key, language, replaceBoolean);
+  }
+  /** Original system currency default. @param current - Language owner. @param native - Native-number service. @returns Actual format key. */
+  ImpGetDefaultSystemCurrencyFormat(
+    current: SvNFLanguageData,
+    native: NativeNumberWrapper,
+  ): number {
+    return ImpGetDefaultSystemCurrencyFormat(this, current, native);
+  }
+  /** Original currency default. @param current - Language owner. @param native - Native-number service. @param offset - Locale block. @param language - Currency language. @returns Actual format key. */
+  ImpGetDefaultCurrencyFormat(
+    current: SvNFLanguageData,
+    native: NativeNumberWrapper,
+    offset: number,
+    language: number,
+  ): number {
+    return ImpGetDefaultCurrencyFormat(this, current, native, offset, language);
+  }
   /** Original owner-cache query. @param search - Native uint32 search key. @returns Cached key or missing sentinel. */
   FindCachedDefaultFormat(search: number): number {
     return FindCachedDefaultFormat(this.fields.aDefaultFormatKeys, search);
@@ -514,12 +497,13 @@ export class SvNFFormatData {
     }
     return NUMBERFORMAT_ENTRY_NOT_FOUND;
   }
-  /** Original ImpInsertFormat General/NatNum0 path and additional-code duplicate check over actual compiled entries. Prepared scanner/ActLnge fields replace only their original language-data member access. Currency delimiter stripping,other pattern families and diagnostic-only checks are not admitted here. Native-number/input-number services are unconsumed on this path. @param scanner - Actual scanner. @param language - Original ActLnge in/out field. @param code - Borrowed generated struct. @param position - Original uint32 map key. @returns Borrowed inserted entry or null. */
+  /** Original ImpInsertFormat automatic-currency stripping, normal compilation and additional-code duplicate checks over actual owners. Prepared scanner/ActLnge fields bind the original language-data access; diagnostics remain unrepresented. @param scanner - Actual scanner. @param language - Original ActLnge in/out field. @param code - Borrowed generated struct. @param position - Original uint32 map key. @param native - Actual native-number provider. @returns Borrowed inserted entry or null. */
   ImpInsertFormat(
     scanner: ImpSvNumberformatScan,
     language: [number],
     code: NumberFormatCodeConstReference,
     position: number,
+    native: NativeNumberWrapper = scanner.getColorCallback().GetNatNum(),
   ): SvNumberformat | null {
     position >>>= 0;
     if (
@@ -527,17 +511,31 @@ export class SvNFFormatData {
       code.Index < Offset.NF_INDEX_TABLE_ENTRIES
     )
       throw new Error("reserved formatIndex assertion");
-    if (
-      code.Index < Offset.NF_INDEX_TABLE_RESERVED_START &&
-      code.Usage === CURRENCY &&
-      code.Index !== Offset.NF_CURRENCY_1000DEC2_CCC
-    )
-      throw new Error("Automatic currency format insertion is not implemented");
     const codeString = new OUString(code.Code),
       check: [number] = [0];
     let format: SvNumberformat;
     try {
-      format = new SvNumberformat(codeString, scanner, check, language);
+      if (
+        code.Index < Offset.NF_INDEX_TABLE_RESERVED_START &&
+        code.Usage === CURRENCY &&
+        code.Index !== Offset.NF_CURRENCY_1000DEC2_CCC &&
+        codeString.indexOf(Uint16Array.of(91, 36)) >= 0
+      ) {
+        const stripped = SvNumberformat.StripNewCurrencyDelimiters(codeString);
+        try {
+          codeString.assign(stripped);
+        } finally {
+          stripped.dispose();
+        }
+      }
+      format = new SvNumberformat(
+        codeString,
+        scanner,
+        scanner.GetCurrentLanguageData().pStringScanner,
+        native,
+        check,
+        language,
+      );
     } finally {
       codeString.dispose();
     }
@@ -574,6 +572,10 @@ export class SvNFFormatData {
 
 /** Original static-only engine namespace after erasing C++ class syntax,with no instance state. General, Boolean and Text standard formatting is represented. Date/time substitution, other pattern output and full read/write policies remain unported. */
 export const SvNFEngine = {
+  ...Policy,
+  ...Standard,
+  ...Edit,
+  IsNumberFormat,
   ImpGetDefaultFormat,
   CacheFormatRW,
   FindFormatRW,
@@ -584,84 +586,17 @@ export const SvNFEngine = {
     current.GetFormatScanner().ChangeNullDate(day, month, year);
     current.pStringScanner.ChangeNullDate(day, month, year);
   },
-  /** Original numeric/string engine dispatch: missing numeric keys use General and missing string keys use Text; entries with text sections receive string input. @param current - Actual language/cache/scanner owner. @param table - Actual owned format table. @param value - Native numeric/string overload. @param key - Native unsigned32 format key. @param output - Actual mutable output. @param color - Actual color pointer output. @returns Nothing. */
-  GetOutputString(
-    current: SvNFLanguageData,
-    table: SvNFFormatData,
-    value: number | OUStringConstReference,
-    key: number,
-    output: OUString,
-    color: [Color | null],
-  ): void {
-    if (typeof value === "number" && table.GetNoZero() && value === 0) {
-      output.clear();
-      return;
-    }
-    if (typeof value === "number") {
-      const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(0);
-      if (!format) throw new Error("Required native standard format0 is absent");
-      current.ChangeIntl(format.GetLanguage());
-      format.GetOutputString(
-        value,
-        output,
-        color,
-        current.GetStandardPrec(),
-        current.GetNumDecimalSep().getStr()[0] as number,
-        current.GetFormatScanner(),
-      );
-    } else {
-      const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(ZF_STANDARD_TEXT);
-      if (!format) throw new Error("Required native standard text format is absent");
-      if (!format.IsTextFormat() && !format.HasTextFormat()) {
-        color[0] = null;
-        output.assign(value);
-      } else {
-        current.ChangeIntl(format.GetLanguage());
-        format.GetOutputString(value, output, color);
-      }
-    }
-  },
-  /** Original GetInputLineString General branch changes the formatter's standard precision for input text and restores it after formatting. @param current - Actual language state. @param table - Actual format table. @param value - Cell number. @param key - Format key. @param _filtering - Source filter flag. @param _forceSystemLocale - Source locale flag. @returns Owned input string. */
-  GetInputLineString(
-    current: SvNFLanguageData,
-    table: SvNFFormatData,
-    value: number,
-    key: number,
-    _filtering = false,
-    _forceSystemLocale = false,
-  ): OUString {
-    void _filtering;
-    void _forceSystemLocale;
-    const format = table.GetFormatEntry(key) ?? table.GetFormatEntry(0);
-    if (!format) throw new Error("Required native standard format0 is absent");
-    current.ChangeIntl(format.GetLanguage());
-    const oldPrecision = current.GetStandardPrec();
-    if (format.GetMaskedType() === SvNumFormatType.NUMBER)
-      current.ChangeStandardPrec(INPUTSTRING_PRECISION);
-    const result = new OUString(),
-      color: [Color | null] = [null];
-    try {
-      format.GetOutputString(
-        value,
-        result,
-        color,
-        current.GetStandardPrec(),
-        current.GetNumDecimalSep().getStr()[0] as number,
-        current.GetFormatScanner(),
-      );
-      return result;
-    } catch (error) {
-      result.dispose();
-      throw error;
-    } finally {
-      if (format.GetMaskedType() === SvNumFormatType.NUMBER)
-        current.ChangeStandardPrec(oldPrecision);
-    }
-  },
+  GetOutputString,
+  GetInputLineString,
 };
 
 /** Original SvNumberFormatter owner for the admitted General, Boolean and Text standard slice. Real provider, language, scanner and parsed table owners are composed through the source initialization phase. Remaining builtin generation is pending; missing keys retain source lookup/output fallback contracts. Context lookup is bound to actual providers; UNO ABI, global registry and mutex scheduling are not claimed. */
 export class SvNumberFormatter {
+  /** Original installed-locale set is initialized by currency table creation. @param language - Native uint16 ID. @returns Whether locale data is installed. */
+  static IsLocaleInstalled(language: number): boolean {
+    this.GetTheCurrencyTable();
+    return theInstalledLocales.has(language & 65535);
+  }
   /** Original reset invalidates both currency tables and the selected system entry. @returns Nothing. */
   static resetTheCurrencyTable(): void {
     for (const entry of currencyTable ?? []) entry.dispose();
@@ -693,6 +628,7 @@ export class SvNumberFormatter {
       for (const locale of installed) {
         const language = convertLocaleToLanguage(locale),
           wrapper = new LocaleDataWrapper(locale);
+        theInstalledLocales.add(language);
         try {
           const currencies = wrapper.getAllCurrencies(),
             defaultIndex = currencies.findIndex(
@@ -831,35 +767,132 @@ export class SvNumberFormatter {
         return false;
     }
   }
+  private aColorLink: ((index: number) => Color | null) | null = null;
+  /** Original Link assignment; a nullable bound function adapts the consumed Link thunk/instance pair. @param callback - Actual user color-table callback. @returns Nothing. */
+  SetColorLink(callback: ((index: number) => Color | null) | null): void {
+    this.aColorLink = callback;
+  }
+  /** Original unset-Link null result and uint16 callback argument. @param index - Zero-based user color. @returns Borrowed callback color or null. */
+  GetUserDefColor(index: number): Color | null {
+    const callback = this.aColorLink;
+    return callback ? callback(index & 65535) : null;
+  }
+  private readonly m_xNatNum = new OnDemandNativeNumberWrapper();
+  /** Original actual native-number wrapper borrow. @returns On-demand service owner. */
+  GetNatNum(): NativeNumberWrapper {
+    return this.m_xNatNum.get();
+  }
   private readonly IniLnge: number;
   private readonly mapper = createNumberFormatCodeMapper();
   private readonly m_aFormatData = new SvNFFormatData();
+  private readonly m_aRWPolicy = Policy.GetRWPolicy(this.m_aFormatData);
   private readonly m_aCurrentLanguage: SvNFLanguageData;
-  /** Original represented constructor path creates actual language/table owners and General entry. Separate real provider lifetimes retain native scanner-service versus local generation-service roles. @param language - Original native language;UNKNOWN substitutes US as in source. @returns Formatter owner for admitted General entries. */
+  /** Original constructor path creates actual language/table owners and invokes the complete builtin-generation sequence. Separate real provider lifetimes retain native scanner-service versus generation-service roles. @param language - Original native language;UNKNOWN substitutes US as in source. @returns Formatter owner with compiled builtin entries. */
   constructor(language: number) {
     language &= 65535;
     this.IniLnge = language !== LANGUAGE_DONTKNOW ? language : LANGUAGE_ENGLISH_US;
-    this.m_aCurrentLanguage = new SvNFLanguageData(this.mapper, this.IniLnge);
-    const generator = createNumberFormatCodeMapper(),
-      current = this.m_aCurrentLanguage;
+    this.m_aCurrentLanguage = new SvNFLanguageData(this.mapper, this.IniLnge, this);
+    const current = this.m_aCurrentLanguage;
     try {
-      generateStandardNumberFormat(
-        this.m_aFormatData,
-        generator,
-        current.fields.locale,
-        current.GetFormatScanner(),
-        current.fields.ActLnge,
-        current.GetNumDecimalSep(),
-        0,
-      );
+      this.m_aFormatData.ImpGenerateFormats(current, this.GetNatNum(), 0, false);
     } catch (error) {
       this.m_aFormatData.dispose();
       current.dispose();
       this.mapper.dispose();
       throw error;
-    } finally {
-      generator.dispose();
     }
+  }
+
+  /** Original builtin-format selection. @param index - Source index. @param language - Requested language. @returns Actual format key. */
+  GetFormatIndex(index: number, language = LANGUAGE_DONTKNOW): number {
+    return SvNFEngine.GetFormatIndex(
+      this.m_aCurrentLanguage,
+      this.m_aRWPolicy,
+      this.GetNatNum(),
+      index,
+      language,
+    );
+  }
+  /** Original General standard key. @param language - Requested language. @returns Actual General key. */
+  GetStandardIndex(language = LANGUAGE_DONTKNOW): number {
+    return SvNFEngine.GetStandardIndex(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      language,
+    );
+  }
+  /** Original standard-selection overloads. @param args - Type/language, key/type/language or value/key/type/language. @returns Actual selected key. */
+  GetStandardFormat(
+    ...args:
+      | [type: number, language?: number | undefined]
+      | [key: number, type: number, language: number]
+      | [value: number, key: number, type: number, language: number]
+  ): number {
+    const actual =
+      args.length <= 2
+        ? ([args[0], args[1] === undefined ? LANGUAGE_DONTKNOW : args[1]] as [number, number])
+        : (args as [number, number] | [number, number, number] | [number, number, number, number]);
+    return SvNFEngine.GetStandardFormat(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      ...actual,
+    );
+  }
+  /** Original public number recognition. @param value - Cell input. @param key - In/out format key. @param output - Numeric output. @param options - Original scanner flags. @returns Recognition result. */
+  IsNumberFormat(
+    value: OUStringConstReference,
+    key: [number],
+    output: [number],
+    options = 0,
+  ): boolean {
+    return SvNFEngine.IsNumberFormat(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      value,
+      key,
+      output,
+      options,
+    );
+  }
+  /** Original edit-format dispatch. @param number - Numeric cell value. @param key - Display key. @param type - Display category. @param format - Actual entry. @param locale - Requested edit locale. @returns Edit key. */
+  GetEditFormat(
+    number: number,
+    key: number,
+    type: number,
+    format: SvNumberformatConstReference | null,
+    locale = LANGUAGE_DONTKNOW,
+  ): number {
+    return SvNFEngine.GetEditFormat(
+      this.m_aCurrentLanguage,
+      this.m_aFormatData,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      number,
+      key,
+      type,
+      format,
+      locale,
+    );
+  }
+  /** Original builtin-language remapping. @param key - Input key. @param language - Target language. @returns Actual remapped key. */
+  GetFormatForLanguageIfBuiltIn(key: number, language: number): number {
+    return SvNFEngine.GetFormatForLanguageIfBuiltIn(
+      this.m_aCurrentLanguage,
+      this.GetNatNum(),
+      this.m_aRWPolicy,
+      key,
+      language,
+    );
+  }
+  /** Original current date-evaluation policy. @returns Native policy. */
+  GetEvalDateFormat(): number {
+    return this.m_aCurrentLanguage.GetEvalDateFormat();
   }
   /** Original static runtime-key to builtin-index conversion. @param format - Native uint32 format key. @returns Source index or entries sentinel. */
   static GetIndexTableOffset(format: number): number {

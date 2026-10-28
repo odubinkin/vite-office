@@ -1,14 +1,15 @@
 /** @fileoverview Source numeric input classification across punctuation and requested native format types. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { SvNumFormatType } from "../../inc/zforlist";
-import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
+import { SvNumberFormatter } from "./zforlist";
 
 it("classifies complete native input shapes before value conversion", /** Checks source punctuation dispatch without applying host number parsing. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     IsNumberFormatMain(value: OUString, format: null): boolean;
   };
@@ -88,7 +89,7 @@ it("classifies complete native input shapes before value conversion", /** Checks
 
 it("retains requested fraction classification for integer and mixed-number shapes", /** Checks the caller's fraction type across native one, two and three numeric-fragment dispatch. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     IsNumberFormatMain(value: OUString, format: null): boolean;
   };

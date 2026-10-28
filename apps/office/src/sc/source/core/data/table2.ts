@@ -592,3 +592,9 @@ export function ApplyPatternIfNumberformatIncompatible(
       type,
     );
 }
+
+/** Original table2.cxx validated single-cell format assignment. @param this - Actual sheet. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
+export function SetNumberFormat(this: ScTable, col: number, row: number, key: number): void {
+  if (!this.GetDoc().ValidColRow(col, row)) return;
+  this.CreateColumnIfNotExists(col).SetNumberFormat(row, key);
+}

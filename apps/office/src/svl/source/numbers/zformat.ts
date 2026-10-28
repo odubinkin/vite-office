@@ -1,4 +1,7 @@
-/** @fileoverview Native General, Boolean and Text compiled standard formats and their output paths; other format families remain unported. */
+/** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text output; remaining output families are unported. */
+import { Construct } from "./zformat.construct";
+import type { ImpSvNumberInputScan } from "./zforfind";
+import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { approxEqual, round } from "../../../sal/inc/rtl/math";
 import {
   rtl_math_StringFormat as Format,
@@ -12,8 +15,13 @@ import { DateOrder } from "../../../unotools/source/i18n/localedatawrapper";
 import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { NfSymbolType } from "../../inc/nfsymbol";
 import { SvNumFormatType } from "../../inc/zforlist";
+import { IsIso8601 } from "./zformat.iso";
 import { IsInQuote, GetQuoteEnd } from "./zformat.quotes";
+import { StripNewCurrencyDelimiters } from "./zformat.currency";
 import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
+import { LANGUAGE_SYSTEM } from "../../../i18nlangtag/inc/lang";
+import { LocaleType, Substitute } from "./zformat.locale";
+import { SvNumberNatNum, type SvNumberNatNumConstReference } from "./zformat.natnum";
 import type { ImpSvNumberformatScan } from "./zforscan";
 
 /** Original zero output creates a real owned string. @returns Native zero string. */
@@ -113,10 +121,13 @@ export class ImpSvNumberformatInfo {
   }
 }
 
-/** Original subformat token/info owner. Color and NatNum prefix services are not admitted by the current General/NatNum0 constructor path. */
+/** Original subformat token/info owner. Color pointers/names and NatNum metadata retain their original subformat ownership. */
 export class ImpSvNumFor {
   private readonly aI = new ImpSvNumberformatInfo();
   private nStringsCnt = 0;
+  private readonly aNatNum = new SvNumberNatNum();
+  private readonly sColorName = new OUString();
+  private pColor: Color | null = null;
   /** Original constructor initializes the info scalars while both token vectors remain empty. @returns Subformat. */
   constructor() {
     this.aI.eScannedType = SvNumFormatType.UNDEFINED;
@@ -145,6 +156,39 @@ export class ImpSvNumFor {
   GetCount(): number {
     return this.nStringsCnt;
   }
+  /** Original borrowed color pointer. @returns Color or null. */
+  GetColor(): Color | null {
+    return this.pColor;
+  }
+  /** Original color pointer and owned-name assignment. @param color - Borrowed pointer. @param name - Actual color name. @returns Nothing. */
+  SetColor(color: Color | null, name: OUStringConstReference): void {
+    this.pColor = color;
+    this.sColorName.assign(name);
+  }
+  /** Original const color-name borrow. @returns Actual string owner. */
+  GetColorName(): OUStringConstReference {
+    return this.sColorName;
+  }
+  /** Original modifier assignment. @param number - Native uint8 modifier. @param dbNum - DBNum interpretation. @returns Nothing. */
+  SetNatNumNum(number: number, dbNum: boolean): void {
+    this.aNatNum.SetNum(number, dbNum);
+  }
+  /** Original modifier language assignment. @param language - Native language ID. @returns Nothing. */
+  SetNatNumLang(language: number): void {
+    this.aNatNum.SetLang(language);
+  }
+  /** Original modifier date context. @param date - Context. @returns Nothing. */
+  SetNatNumDate(date: boolean): void {
+    this.aNatNum.SetDate(date);
+  }
+  /** Original owned parameter assignment. @param params - Native string. @returns Nothing. */
+  SetNatNumParams(params: OUStringConstReference): void {
+    this.aNatNum.SetParams(params);
+  }
+  /** Original const metadata borrow. @returns Actual subformat-owned metadata. */
+  GetNatNum(): SvNumberNatNumConstReference {
+    return this.aNatNum;
+  }
   /** Original token scan for an explicit new-currency symbol. @returns Presence. */
   HasNewCurrency(): boolean {
     for (let index = 0; index < this.nStringsCnt; index++)
@@ -163,19 +207,24 @@ export class ImpSvNumFor {
     }
     return false;
   }
-  /** Original represented token/info copy. Color rebinding is a separate unported responsibility. @param source - Native General/NatNum0 subformat. @returns Nothing. */
-  Copy(source: ImpSvNumFor): void {
+  /** Original token/info, color and native-number metadata copy. @param source - Actual source subformat. @param scanner - Destination scanner for cross-owner color rebinding. @returns Nothing. */
+  Copy(source: ImpSvNumFor, scanner: ImpSvNumberformatScan | null): void {
     this.Enlarge(source.nStringsCnt);
     this.aI.Copy(source.aI, this.nStringsCnt);
+    this.sColorName.assign(source.sColorName);
+    this.pColor = scanner ? scanner.GetColor(this.sColorName) : source.pColor;
+    this.aNatNum.assign(source.aNatNum);
   }
-  /** Original vector member destruction. @returns Nothing. */
+  /** Original vector and native-number metadata member destruction. @returns Nothing. */
   dispose(): void {
+    this.aNatNum.dispose();
+    this.sColorName.dispose();
     for (let index = this.aI.sStrArray.length - 1; index >= 0; --index)
       (this.aI.sStrArray[index] as OUString).dispose();
   }
 }
 
-/** Original SvNumberformat compiled-entry owner for the admitted single General/NatNum0 subformat path. Conditions,other patterns,prefixes and nonstandard output remain explicit unported boundaries. No synthetic parsed entry or formatter service is supplied. */
+/** Original SvNumberformat compiled-entry owner with actual four-section prefix/condition/scanner construction and value-copy lifetimes. Remaining formatted output and standard-table generation are separate incomplete responsibilities. */
 export class SvNumberformat {
   private readonly NumFor = [
     new ImpSvNumFor(),
@@ -186,12 +235,13 @@ export class SvNumberformat {
   private readonly sFormatstring = new OUString();
   private readonly sComment = new OUString();
   private bStandard = false;
+  private bAdditionalBuiltin = false;
   private eType: number = SvNumFormatType.DEFINED;
   private fLimit1 = 0;
   private fLimit2 = 0;
   private eOp1 = 0;
   private eOp2 = 0;
-  private readonly language: number;
+  private readonly maLocale = new LocaleType();
   private readonly rScan: ImpSvNumberformatScan;
   /** Original static quote-state helper. @param value - Native string. @param position - Offset. @param quote - Quote unit. @param escapeInside - Inside escape. @param escapeOutside - Outside escape. @returns Quote state. */
   static IsInQuote(
@@ -212,48 +262,82 @@ export class SvNumberformat {
   ): number {
     return GetQuoteEnd(value, position, quote, escapeInside);
   }
-  /** Original General-only constructor responsibility:scan,Enlarge,CopyInfo,type assignment and normalized code. Input-number scanner/native-number supplier parameters are erased because this admitted path never consumes them;other constructor families must be ported before admission. @param args - Original admitted constructor/copy overload inputs. @returns Owned parsed entry. */
+  /** Original automatic-currency code conversion used by builtin insertion. @param value - Native format code. @returns Owned stripped code. */
+  static StripNewCurrencyDelimiters(value: OUStringConstReference): OUString {
+    return StripNewCurrencyDelimiters(value);
+  }
+  /** Original normal and copy constructor overloads. Normal construction consumes the actual format scanner, input scanner and native-number provider, preserving the original Boolean replacement default. @param args - Original constructor/copy inputs. @returns Owned parsed entry. */
   constructor(
     ...args:
-      | [code: OUString, scanner: ImpSvNumberformatScan, checkPos: [number], language: [number]]
+      | [
+          code: OUString,
+          scanner: ImpSvNumberformatScan,
+          input: ImpSvNumberInputScan,
+          native: NativeNumberWrapper,
+          checkPos: [number],
+          language: [number],
+          replaceBoolean?: boolean,
+        ]
       | [source: SvNumberformat]
       | [source: SvNumberformat, scanner: ImpSvNumberformatScan]
   ) {
-    if (args[0] instanceof SvNumberformat) {
-      const source = args[0];
-      this.rScan = args.length === 2 ? args[1] : source.rScan;
-      this.language = source.language;
-      this.sFormatstring.assign(source.sFormatstring);
-      this.sComment.assign(source.sComment);
-      this.eType = source.eType;
-      this.bStandard = source.bStandard;
-      this.fLimit1 = source.fLimit1;
-      this.fLimit2 = source.fLimit2;
-      this.eOp1 = source.eOp1;
-      this.eOp2 = source.eOp2;
-      for (let index = 0; index < 4; ++index)
-        (this.NumFor[index] as ImpSvNumFor).Copy(source.NumFor[index] as ImpSvNumFor);
-    } else {
-      const [code, scanner, checkPos, language] = args as [
-        OUString,
-        ImpSvNumberformatScan,
-        [number],
-        [number],
-      ];
-      this.rScan = scanner;
-      this.language = language[0] & 65535;
-      checkPos[0] = scanner.ScanFormat(code);
-      const count = scanner.GetResultStringsCnt();
-      // In the admitted empty/General scanner paths ScanFormat returns zero;other families throw at admission.
-      if (count === 0) checkPos[0] = 1;
-      if (checkPos[0] === 0) {
-        const first = this.NumFor[0] as ImpSvNumFor;
-        first.Enlarge(count);
-        scanner.CopyInfo(first.Info(), count);
-        this.eType = first.Info().eScannedType;
+    try {
+      if (args[0] instanceof SvNumberformat) {
+        const source = args[0];
+        this.rScan = args.length === 2 ? args[1] : source.rScan;
+        this.maLocale.assign(source.maLocale);
+        this.sFormatstring.assign(source.sFormatstring);
+        this.sComment.assign(source.sComment);
+        this.eType = source.eType;
+        this.bStandard = source.bStandard;
+        this.bAdditionalBuiltin = source.bAdditionalBuiltin;
+        this.fLimit1 = source.fLimit1;
+        this.fLimit2 = source.fLimit2;
+        this.eOp1 = source.eOp1;
+        this.eOp2 = source.eOp2;
+        for (let index = 0; index < 4; ++index)
+          (this.NumFor[index] as ImpSvNumFor).Copy(
+            source.NumFor[index] as ImpSvNumFor,
+            this.rScan !== source.rScan ? this.rScan : null,
+          );
+      } else {
+        const [code, scanner, input, native, checkPos, language, replaceBoolean = true] = args as [
+          OUString,
+          ImpSvNumberformatScan,
+          ImpSvNumberInputScan,
+          NativeNumberWrapper,
+          [number],
+          [number],
+          boolean?,
+        ];
+        this.rScan = scanner;
+        Construct.call(this, code, input, native, checkPos, language, replaceBoolean);
       }
-      this.sFormatstring.assign(code);
+    } catch (error) {
+      this.dispose();
+      throw error;
     }
+  }
+  /** Original parsed ISO date-layout query. @param index - Native subformat. @returns Source flag. */
+  IsIso8601(index: number): boolean {
+    return IsIso8601(this, index);
+  }
+  /** Original locale substitution presence. @returns Substituted format. */
+  IsSubstituted(): boolean {
+    return this.maLocale.meSubstitute !== Substitute.NONE;
+  }
+  /** Original system-time substitution query. @returns System time format. */
+  IsSystemTimeFormat(): boolean {
+    return (
+      this.maLocale.meSubstitute === Substitute.TIME && this.maLocale.meLanguage === LANGUAGE_SYSTEM
+    );
+  }
+  /** Original system-long-date substitution query. @returns System long date format. */
+  IsSystemLongDateFormat(): boolean {
+    return (
+      this.maLocale.meSubstitute === Substitute.LONGDATE &&
+      this.maLocale.meLanguage === LANGUAGE_SYSTEM
+    );
   }
   /** Original built-in generation marks the compiled standard entry after successful insertion. @returns Nothing. */
   SetStandard(): void {
@@ -386,6 +470,14 @@ export class SvNumberformat {
   /** Original standard-entry flag. @returns Native standard status. */
   IsStandard(): boolean {
     return this.bStandard;
+  }
+  /** Original additional-builtin flag assignment. @returns Nothing. */
+  SetAdditionalBuiltin(): void {
+    this.bAdditionalBuiltin = true;
+  }
+  /** Original additional-builtin field query. @returns Actual flag. */
+  IsAdditionalBuiltin(): boolean {
+    return this.bAdditionalBuiltin;
   }
   /** Original comment assignment preserves the owned member identity. @param comment - Original format name/comment. @returns Nothing. */
   SetComment(comment: OUStringConstReference): void {
@@ -547,7 +639,7 @@ export class SvNumberformat {
   }
   /** Original entry language. @returns Native uint16 language. */
   GetLanguage(): number {
-    return this.language;
+    return this.maLocale.meLanguage;
   }
   /** Original subformat-order currency symbol lookup, clearing both outputs only after all sections fail. @param symbol - Mutable symbol. @param extension - Mutable extension. @returns Found. */
   GetNewCurrencySymbol(symbol: OUString, extension: OUString): boolean {
@@ -668,7 +760,9 @@ export type SvNumberformatConstReference = Pick<
   | "IsMinuteSecondFormat"
   | "GetLanguage"
   | "GetNewCurrencySymbol"
+  | "IsIso8601"
   | "IsStandard"
+  | "IsAdditionalBuiltin"
   | "GetComment"
   | "GetFormatstring"
   | "GetOutputString"

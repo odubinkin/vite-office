@@ -602,7 +602,11 @@ const originalSalO3tlBindings = new Map([
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
   // Original sal/rtl/ustring.cxx uses exactly o3tl::iterateCodePoints.
   ["sal/rtl/ustring.ts -> o3tl/inc/string_view.ts", ["iterateCodePoints"]],
-  ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
+  // Original toInt32 and matchIgnoreAsciiCase call exactly these Unicode C entries.
+  [
+    "o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts",
+    ["rtl_ustr_toInt64_WithLength", "rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength"],
+  ],
   // Original byte view overloads call the SAL byte signed64 entry point.
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/string.h.ts", ["rtl_str_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],

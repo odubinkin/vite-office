@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/comphelper/source/misc/string.ts",
+    "status": "mapped",
+    "upstreamPath": "comphelper/source/misc/string.cxx",
+    "localSymbols": [
+      "strip"
+    ],
+    "upstreamSymbols": [
+      "strip",
+      "tmpl_stripString"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports the consumed original OUString strip overload and exact tmpl_stripString algorithm over actual SAL ownership. Empty input shares the original value; leading/trailing removal compares only the requested UTF16 unit. No JavaScript trim/Unicode-space heuristic or string-owner substitute is introduced. Other string utilities/overloads remain unported."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are covered; complete native module/ABI, formatter constructor/output and CSV recognition remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/comphelper/source/misc/string.ts",
+          "marker": "strip"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/comphelper/source/misc/string.cxx",
+          "marker": "strip"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+        "apps/office/src/svl/source/numbers/zforlist.generate-formats.test.ts"
+      ],
+      "justification": "Original two additional-builtin passes use actual COW Sequence/NumberFormatCode storage, current locale snapshot, bounded locale-block allocation, source temporary currency index/default changes, duplicate-aware actual insertion, additional flags and General last-insert key. Diagnostic-only changing-system arguments are erased; native initializer differential closure and complete CSV recognition/output remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ImpGenerateAdditionalFormats"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFFormatData::ImpGenerateAdditionalFormats"
+      ]
+    }
+  }
+}

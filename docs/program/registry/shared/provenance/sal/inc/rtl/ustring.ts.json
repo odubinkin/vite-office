@@ -48,7 +48,8 @@
       "toInt32",
       "match",
       "startsWith",
-      "append"
+      "append",
+      "replaceAt"
     ],
     "upstreamSymbols": [
       "Concat",
@@ -93,7 +94,9 @@
       "Adds original rtl_uString_iterateCodePoints C declaration/implementation and OUString forwarding over the complete logical UTF16 value,delegating to the existing o3tl iterator without terminator storage. Codepoint behavior does not require new memory/lifetime machinery;the user requires native JavaScript memory and lifetime behavior.",
       "Task202610251549-V4DQJW: Exposes original OUString::toInt32 and its const borrowed view through the real C wrapper; signed32 limits and embedded-NUL semantics are retained. Full TablePropertiesHandler/TblStylePrHandler, StyleSheetTable parsing/application, model orchestration and production DOCX/XLSX UI admission remain incomplete. Native diagnostics, ABI/interface lifetime and whole-module parity remain unverified; no capability or default-status promotion.",
       "Original normal-build match/fromIndex and startsWith no-output/non-null explicit-output overloads use the shared shortened C comparison and actual copied suffix assignment. Native complete pinned OUString header and unchanged RTL lifetime bodies match 1662 cases including original source/prefix/rest aliasing and embedded NUL. Const borrows expose both queries.",
-      "Original operator+=/internalAppend uses the real temporary C data slot, native allocation failure, assign/acquire/release and return-owner identity; source-pointer and empty/self alias cases match the 1662-case full native prefix/append witness."
+      "Original operator+=/internalAppend uses the real temporary C data slot, native allocation failure, assign/acquire/release and return-owner identity; source-pointer and empty/self alias cases match the 1662-case full native prefix/append witness.",
+      "Original owned-string replaceAt adopts the C result without acquiring or inventing a null-to-empty fallback; normal-build raw-view append uses the direct C overload. The2586-case full pinned OUString/RTL witness compares payload, sharing and initialized counts. No physical OOM/ABI parity is claimed.",
+      "AQF9AG restores original internal view replaceAll with real C no-acquire adoption and the checked operator[] binding. No-match returns source-shared data; no empty-format syntax error is fabricated."
     ],
     "omittedResponsibilities": [
       "Complete OUString algorithms, original compile-time/const enforcement/native ABI/thread and downstream Calc storage/document/UI remain unverified; no fabricated replacement."

@@ -85,7 +85,7 @@ it("accepts only the original SAL/o3tl source paths and named value imports", /*
     isOriginalSalO3tlImport(
       "o3tl/inc/string_view.ts",
       "sal/inc/rtl/ustring.h",
-      'import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";',
+      'import { rtl_ustr_toInt64_WithLength, rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength } from "../../sal/inc/rtl/ustring.h";',
       "../../sal/inc/rtl/ustring.h",
     ),
   ).toBe(true);

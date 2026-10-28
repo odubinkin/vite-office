@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.table-entry.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "ImpGenerateCL",
+      "PutEntry",
+      "ImpGetDefaultSystemCurrencyFormat",
+      "ImpGetDefaultCurrencyFormat"
+    ],
+    "upstreamSymbols": [
+      "SvNFFormatData::ImpGenerateCL",
+      "SvNFFormatData::PutEntry",
+      "SvNFFormatData::ImpGetDefaultSystemCurrencyFormat",
+      "SvNFFormatData::ImpGetDefaultCurrencyFormat"
+    ],
+    "preservedResponsibilities": [
+      "Original language-block generation, actual compiled-entry insertion/duplicate behavior and default currency cache/search/generation. System currency output aliases its actual owning field through a mutable scalar reference; no guessed key or unsupported currency error is substituted."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.table-entry.ts",
+          "marker": "ImpGenerateCL"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFFormatData::ImpGenerateCL"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.table-entry.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

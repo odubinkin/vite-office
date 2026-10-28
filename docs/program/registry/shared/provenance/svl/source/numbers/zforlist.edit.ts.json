@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GetEditFormat",
+      "GetFormatForLanguageIfBuiltIn"
+    ],
+    "upstreamSymbols": [
+      "SvNFEngine::GetEditFormat",
+      "SvNFEngine::GetFormatForLanguageIfBuiltIn"
+    ],
+    "preservedResponsibilities": [
+      "Original edit-format dispatch preserves ISO variants, fractional date values, source duration threshold, requested locale and source default-format dispatch. Builtin language remapping retains custom-key and initial-locale guards and invokes the actual policy/locale-block owner."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+          "marker": "GetEditFormat"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GetEditFormat"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+      "rationale": "Split the original large translation unit by input, formula joins, frame, ISO or edit-format responsibilities while retaining original owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

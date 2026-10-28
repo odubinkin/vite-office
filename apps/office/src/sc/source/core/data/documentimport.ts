@@ -1,4 +1,7 @@
 /** @fileoverview ScDocumentImport block-position writes and post-import formula/text-attribute initialization. */
+import { ScCellValue } from "../../../inc/cellvalue";
+import { CellType } from "../../../inc/global";
+import type { ScSetStringParam } from "../../../inc/stringutil";
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import { double_element_callbacks } from "../../../../external/mdds/include/mdds/multi_type_vector/standard_element_blocks";
 import type { base_element_block } from "../../../../external/mdds/include/mdds/multi_type_vector/types";
@@ -68,6 +71,74 @@ export class ScDocumentImport {
   /** Invalidates one existing sheet's cached iterators. @param tab - Sheet. @returns Nothing. */
   invalidateBlockPositionSet(tab: number): void {
     this.impl.blockPositions[tab]?.invalidate();
+  }
+  /** Original ParseString-based automatic cell input and direct typed-store transfer. @param pos - Cell position. @param value - Input text. @param parameter - Optional native policy. @returns Nothing. */
+  setAutoInput(
+    pos: ScAddress,
+    value: OUStringConstReference,
+    parameter: ScSetStringParam | null = null,
+  ): void {
+    const document = this.getDoc(),
+      table = document.FetchTable(pos.Tab());
+    if (!table) return;
+    const block = this.impl.getBlockPosition(pos.Tab(), pos.Col());
+    if (!block) return;
+    if (parameter && !parameter.mbCheckLinkFormula)
+      throw new Error("assert(!pStringParam || pStringParam->mbCheckLinkFormula)");
+    const cell = new ScCellValue(),
+      column = table.CreateColumnIfNotExists(pos.Col()),
+      store = column.GetCellStore();
+    try {
+      column.ParseString(
+        cell,
+        pos.Row(),
+        pos.Tab(),
+        value,
+        document.GetAddressConvention(),
+        parameter,
+      );
+      const cursor = block.miCellPos as NonNullable<ColumnBlockPosition["miCellPos"]>;
+      switch (cell.getType()) {
+        case CellType.CELLTYPE_STRING:
+          block.miCellPos = store.set(
+            cursor,
+            pos.Row(),
+            cell.getSharedString(),
+            string_element_callbacks,
+          );
+          break;
+        case CellType.CELLTYPE_EDIT:
+          block.miCellPos = store.set(
+            cursor,
+            pos.Row(),
+            cell.releaseEditText(),
+            edittext_element_callbacks,
+          );
+          break;
+        case CellType.CELLTYPE_VALUE:
+          block.miCellPos = store.set(
+            cursor,
+            pos.Row(),
+            cell.getDouble(),
+            double_element_callbacks,
+          );
+          break;
+        case CellType.CELLTYPE_FORMULA:
+          if (!parameter)
+            document.CheckLinkFormulaNeedingCheck((cell.getFormula() as ScFormulaCell).GetCode());
+          block.miCellPos = store.set(
+            cursor,
+            pos.Row(),
+            cell.releaseFormula(),
+            formula_element_callbacks,
+          );
+          break;
+        default:
+          block.miCellPos = store.set_empty(cursor, pos.Row(), pos.Row());
+      }
+    } finally {
+      cell.clear();
+    }
   }
   /** Writes numeric content without a second import model. @param pos - Position. @param value - Number. @returns Nothing. */
   setNumericCell(pos: ScAddress, value: number): void {

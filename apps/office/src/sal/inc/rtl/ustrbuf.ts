@@ -6,6 +6,7 @@ import {
   rtl_uString_alloc,
   rtl_uString_release,
   rtl_ustr_valueOfInt32,
+  rtl_ustr_indexOfChar_WithLength,
   rtl_ustr_valueOfInt64,
   RTL_USTR_MAX_VALUEOFINT32,
   RTL_USTR_MAX_VALUEOFINT64,
@@ -302,6 +303,33 @@ export class OUStringBuffer {
     const offset = this.getLength();
     buffer.rtl_uStringbuffer_insert(this.data, this.capacity, offset, null, length);
     return this.getMutableStr().subarray(offset);
+  }
+  /** Original bounded UTF16 character search. @param character - Native unit. @param fromIndex - Inclusive starting offset. @returns Native index or -1. */
+  indexOf(character: number, fromIndex = 0): number {
+    fromIndex |= 0;
+    if (fromIndex < 0 || fromIndex > this.getLength())
+      throw new Error("assert(fromIndex >= 0 && fromIndex <= pData->length)");
+    const result = rtl_ustr_indexOfChar_WithLength(
+      this.getStr().subarray(fromIndex),
+      this.getLength() - fromIndex,
+      character & 65535,
+    );
+    return result < 0 ? result : result + fromIndex;
+  }
+  /** Original character replacement revisits the matched position, including the native equal-character nontermination behavior. @param oldChar - Searched unit. @param newChar - Replacement unit. @returns This owner. */
+  replace(oldChar: number, newChar: number): this {
+    let index = 0;
+    while ((index = this.indexOf(oldChar, index)) >= 0)
+      this.getMutableStr()[index] = newChar & 65535;
+    return this;
+  }
+  /** Original leading-character removal. @param character - UTF16 unit, default ASCII space. @returns Number of removed units. */
+  stripStart(character = 32): number {
+    character &= 65535;
+    let index = 0;
+    for (; index < this.getLength(); ++index) if (this.getStr()[index] !== character) break;
+    if (index) this.remove(0, index);
+    return index;
   }
   /** Original removal. @param start - Position. @param length - Native count. @returns This owner. */
   remove(start: number, length: number): this {

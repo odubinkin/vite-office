@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.output.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.output.ts",
+        "apps/office/src/svl/source/numbers/zforlist.test.ts",
+        "apps/office/src/svl/source/numbers/zformat.test.ts"
+      ],
+      "justification": "AQF9AG moves the existing engine output/input-line bodies unchanged into their source output responsibility fragment to keep the main class source below the hard size limit. The actual SvNFEngine namespace reexports these same functions. Existing General/Boolean/Text output and input-line precision lifetimes remain represented; nonstandard output and complete filter/edit-format behavior remain incomplete, with no broad parity promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetOutputString",
+        "GetInputLineString"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFEngine::GetOutputString",
+        "SvNFEngine::GetInputLineString"
+      ]
+    }
+  }
+}

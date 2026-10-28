@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforscan.color.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforscan.color.ts",
+        "apps/office/src/svl/source/numbers/zforscan.color.test.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
+      ],
+      "justification": "AQF9AG ports original complete GetColor, native palette values/order, German-only localization/AllowEnglish fallback, source conversion directions, original comphelper strip, strict ASCII numeric gate and original COLOR1..64 -> zero-based actual formatter callback. Palette elements are actual copied Color values, not references to the global initializer constants. The scanner borrows its actual SvNumberFormatter supplier. The full native scanner witness includes unchanged GetColor, palette initializers, strip and ASCII-digit classifier bodies with explicit scalar/provider/callback fixtures; whole constructor/UNO/SAL ABI parity remains unverified.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetColor",
+        "StandardColor",
+        "NF_MAX_DEFAULT_COLORS"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforscan.cxx",
+      "upstreamSymbols": [
+        "ImpSvNumberformatScan::GetColor",
+        "ImpSvNumberformatScan::StandardColor"
+      ]
+    }
+  }
+}

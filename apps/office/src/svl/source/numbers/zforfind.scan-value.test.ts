@@ -1,10 +1,11 @@
 /** @fileoverview Source numeric-result conversion over real scanner classifications and RTL conversion. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { SvNumFormatType } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 import { CheckScannedNumber, ConvertScannedNumber } from "./zforfind.scan-value";
 
 it.each([
@@ -22,7 +23,7 @@ it.each([
     sign,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, 0x0409),
+      language = createNumberFormatLanguage(mapper, 0x0409),
       scanner = language.pStringScanner,
       value = unicode(input);
     try {
@@ -65,7 +66,7 @@ it.each([
     expected,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, 0x0409),
+      language = createNumberFormatLanguage(mapper, 0x0409),
       scanner = language.pStringScanner,
       value = unicode(input);
     try {
@@ -90,7 +91,7 @@ it.each([
 
 it("keeps source exponent overflow's early return before applying the input sign", /** Checks the source early-return outputs and retained scanner state. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner;
   try {
     for (const [input, expected] of [
@@ -124,7 +125,7 @@ it("keeps source exponent overflow's early return before applying the input sign
 
 it("converts a zero-denominator fraction to source failure outputs", /** Checks source failure outputs after an actual fraction classification. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner,
     value = unicode("1/0");
   try {

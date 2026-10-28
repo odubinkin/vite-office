@@ -1,16 +1,17 @@
 /** @fileoverview Native ISO clock and dotted day/month-name admission across locale separators. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { SvNumFormatType as Type } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
 it("admits ISO colons independently of the Finnish locale clock separator", /** Checks complete native classification including fractional seconds and signed years. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x040b);
+  const language = createNumberFormatLanguage(mapper, 0x040b);
   const scanner = language.pStringScanner as unknown as {
     IsNumberFormatMain(value: OUString, format: null): boolean;
   };
@@ -38,9 +39,16 @@ it("admits ISO colons independently of the Finnish locale clock separator", /** 
 
 it("uses a compiled day-month-year order to admit a dotted day before a month name", /** Checks original compiled tokens and separator rollback after decimal scanning, without an alternate format parser. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   first.Enlarge(3);
   for (const [index, kind] of [NfKeywordIndex.D, NfKeywordIndex.MMM, NfKeywordIndex.YYYY].entries())

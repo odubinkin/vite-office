@@ -1,4 +1,5 @@
 /** @fileoverview Pinned source input-fragment division, including capacity and grouping boundaries. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -14,8 +15,8 @@ import { ImpSvNumFor, SvNumberformat } from "./zformat";
 it("follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate", /** Checks follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
     nativeNumber = new NativeNumberWrapper(),
-    japanese = new SvNFLanguageData(mapper, 0x0411),
-    english = new SvNFLanguageData(mapper, 0x0409),
+    japanese = createNumberFormatLanguage(mapper, 0x0411),
+    english = createNumberFormatLanguage(mapper, 0x0409),
     local = unicode("１２３"),
     foreign = unicode("１２３"),
     ascii = unicode("123");
@@ -38,7 +39,7 @@ it("follows source TransformInput's non-ASCII digit gate and NATNUM0 locale gate
 
 it("uses source GetTimeRef duration, clock and leap-second boundaries", /** Checks uses source GetTimeRef duration, clock and leap-second boundaries. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       GetTimeRef(out: [number], first: number, count: number, options: number): boolean;
     },
@@ -74,9 +75,16 @@ it("uses source GetTimeRef duration, clock and leap-second boundaries", /** Chec
 
 it("matches source literal tokens across subformats, then the remaining input suffix", /** Checks matches source literal tokens across subformats, then the remaining input suffix. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     code = unicode("General"),
-    format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]),
+    format = new SvNumberformat(
+      code,
+      language.GetFormatScanner(),
+      language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+      language.GetFormatScanner().getColorCallback().GetNatNum(),
+      [0],
+      [0x0409],
+    ),
     sections = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor,
     scanner = language.pStringScanner as unknown as {
       ScanStringNumFor(
@@ -109,7 +117,7 @@ it("matches source literal tokens across subformats, then the remaining input su
 
 it("classifies source start fragments through sign, decimal, currency and month owners", /** Checks classifies source start fragments through sign, decimal, currency and month owners. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       ScanStartString(input: OUString): boolean;
@@ -146,7 +154,7 @@ it("classifies source start fragments through sign, decimal, currency and month 
 
 it("classifies source end fragments through percent, currency, decimal and format fallback", /** Checks classifies source end fragments through percent, currency, decimal and format fallback. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       ScanEndString(input: OUString): boolean;
@@ -177,7 +185,7 @@ it("classifies source end fragments through percent, currency, decimal and forma
 
 it("classifies source middle fragments through decimal, exponent and time separators", /** Checks classifies source middle fragments through decimal, exponent and time separators. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       ScanMidString(input: OUString, position: number, numericCount: number): boolean;
@@ -207,7 +215,7 @@ it("classifies source middle fragments through decimal, exponent and time separa
 
 it("dispatches source fragment counts and reconciles final input types", /** Checks dispatches source fragment counts and reconciles final input types. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       IsNumberFormatMain(input: OUString, format: null): boolean;
     };
@@ -237,7 +245,7 @@ it("dispatches source fragment counts and reconciles final input types", /** Che
 /** Runs source-private division against the real current-language owner. @param source - Input. @returns Scanner fragments and counters. */
 function divide(source: string) {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0407);
+  const language = createNumberFormatLanguage(mapper, 0x0407);
   const input = unicode(source);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
@@ -272,7 +280,7 @@ it("alternates contiguous ASCII digits and other UTF-16 characters", /** Checks 
 
 it("matches the source currency-table symbol and invalidates its cache after a locale switch", /** Checks matches the source currency-table symbol and invalidates its cache after a locale switch. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       GetCurrency(value: OUString, position: [number]): boolean;
     };
@@ -323,7 +331,7 @@ it("preserves upstream embedded-NUL capacity behavior", /** Checks preserves ups
 
 it("uses source ISO and named-month fragment shapes before date-format acceptance", /** Checks uses source ISO and named-month fragment shapes before date-format acceptance. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -366,7 +374,7 @@ it("uses source ISO and named-month fragment shapes before date-format acceptanc
 
 it("uses source day and year fragment bounds and two-digit-year expansion", /** Checks uses source day and year fragment bounds and two-digit-year expansion. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -410,7 +418,7 @@ it("uses source day and year fragment bounds and two-digit-year expansion", /** 
 });
 
 it("uses calendar month bounds and the source invalid-month sentinel", /** Checks uses calendar month bounds and the source invalid-month sentinel. @returns Test completion or assertion result. */ () => {
-  const language = new SvNFLanguageData(new NumberFormatCodeMapper(), 0x0409),
+  const language = createNumberFormatLanguage(new NumberFormatCodeMapper(), 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -437,7 +445,7 @@ it("uses calendar month bounds and the source invalid-month sentinel", /** Check
 it("selects the source long-date order for a middle month", /** Checks selects the source long-date order for a middle month. @returns Test completion or assertion result. */ () => {
   /** Runs the source fragment scanner and long-order selection. @param languageId - Locale language. @param source - Date input. @param dateOrder - Evaluated short order. @returns Native long date order. */
   function order(languageId: number, source: string, dateOrder: DateOrder): LongDateOrder {
-    const language = new SvNFLanguageData(new NumberFormatCodeMapper(), languageId),
+    const language = createNumberFormatLanguage(new NumberFormatCodeMapper(), languageId),
       scanner = language.pStringScanner as unknown as {
         Reset(): void;
         NumberStringDivision(value: OUString): void;
@@ -465,7 +473,7 @@ it("selects the source long-date order for a middle month", /** Checks selects t
 
 it("marks only substantive source format-string matches as returned", /** Checks marks only substantive source format-string matches as returned. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as { MatchedReturn(): boolean },
     state = language.pStringScanner.fields;
   try {
@@ -483,7 +491,7 @@ it("matches source calendar month and weekday names with original alternate orde
   /** Queries one source name and mutable cursor. @param languageId - Locale language ID. @param source - Already uppercase scan input. @param kind - Month or weekday. @returns Signed calendar index and consumed length. */
   function scan(languageId: number, source: string, kind: "month" | "day") {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, languageId),
+      language = createNumberFormatLanguage(mapper, languageId),
       scanner = language.pStringScanner as unknown as {
         GetMonth(value: OUString, position: [number]): number;
         GetDayOfWeek(value: OUString, position: [number]): number;
@@ -514,7 +522,7 @@ it("matches generated locale date patterns in source order and rejects implausib
   /** Runs the source fragment division followed by the cached pattern matcher. @param languageId - Locale. @param source - Input. @returns Native match state. */
   function match(languageId: number, source: string) {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, languageId),
+      language = createNumberFormatLanguage(mapper, languageId),
       scanner = language.pStringScanner as unknown as {
         Reset(): void;
         NumberStringDivision(value: OUString): void;
@@ -572,7 +580,7 @@ it("matches generated locale date patterns in source order and rejects implausib
 
 it("converts native time parts while preserving strict duration, AM/PM, fractional and leap-second rules", /** Checks converts native time parts while preserving strict duration, AM/PM, fractional and leap-second rules. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -622,7 +630,7 @@ it("converts native time parts while preserving strict duration, AM/PM, fraction
 
 it("recognizes whole localized logical words through the source format-scanner cache", /** Checks recognizes whole localized logical words through the source format-scanner cache. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0407),
+    language = createNumberFormatLanguage(mapper, 0x0407),
     scanner = language.pStringScanner as unknown as { GetLogical(value: OUString): number };
   try {
     for (const [word, expected] of [
@@ -670,7 +678,7 @@ it("recognizes whole localized logical words through the source format-scanner c
 
 it("uses source date-word boundaries and the three native blank characters", /** Checks uses source date-word boundaries and the three native blank characters. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0407);
+  const language = createNumberFormatLanguage(mapper, 0x0407);
   const scanner = language.pStringScanner as unknown as {
     StringContainsWord(what: OUString, value: OUString, position: number): boolean;
     SkipChar(code: number, value: OUString, position: [number]): boolean;
@@ -715,7 +723,7 @@ it("consumes the source locale decimal separator without treating grouping as de
     [0x0409, ".", ","],
   ] as const) {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, languageId),
+      language = createNumberFormatLanguage(mapper, languageId),
       scanner = language.pStringScanner as unknown as {
         GetDecSep(value: OUString, position: [number]): boolean;
       },
@@ -737,7 +745,7 @@ it("consumes the source locale decimal separator without treating grouping as de
 
 it("retains the source distinction between leading and exponent signs", /** Checks retains the source distinction between leading and exponent signs. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       GetSign(value: OUString, position: [number]): number;
@@ -770,7 +778,7 @@ it("retains the source distinction between leading and exponent signs", /** Chec
 
 it("advances source numeric fragment counters only on numeric slots", /** Checks advances source numeric fragment counters only on numeric slots. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0409),
+    language = createNumberFormatLanguage(mapper, 0x0409),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -797,7 +805,7 @@ it("advances source numeric fragment counters only on numeric slots", /** Checks
 
 it("accepts only source grouping widths and the merged near-capacity slot", /** Checks accepts only source grouping widths and the merged near-capacity slot. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x0407),
+    language = createNumberFormatLanguage(mapper, 0x0407),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -839,7 +847,7 @@ it("accepts only source grouping widths and the merged near-capacity slot", /** 
 
 it("retains both source group widths for the Indian digit-grouping sequence", /** Checks retains both source group widths for the Indian digit-grouping sequence. @returns Test completion or assertion result. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    language = new SvNFLanguageData(mapper, 0x4009),
+    language = createNumberFormatLanguage(mapper, 0x4009),
     scanner = language.pStringScanner as unknown as {
       Reset(): void;
       NumberStringDivision(value: OUString): void;
@@ -875,7 +883,7 @@ it("uses generated locale AM/PM and fractional-second fields during input scanni
     [0x0407, "VORM.", "NACHM.", ",", "."],
   ] as const) {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, languageId),
+      language = createNumberFormatLanguage(mapper, languageId),
       scanner = language.pStringScanner as unknown as {
         Reset(): void;
         GetTimeAmPm(value: OUString, position: [number]): boolean;

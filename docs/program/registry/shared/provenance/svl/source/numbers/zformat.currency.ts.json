@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.currency.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "StripNewCurrencyDelimiters"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::StripNewCurrencyDelimiters"
+    ],
+    "preservedResponsibilities": [
+      "Original StripNewCurrencyDelimiters removes automatic-currency wrappers using the actual bounded UTF16 strings, quote helpers and buffer owner; builtin insertion preserves the bank-code exclusion and input struct ownership. An unchanged native function is included in the scanner witness for384 valid-bracket cases. CALC-357 preserves the source missing-bracket checked failure. Full constructor/output and SAL ABI closure are not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full constructor/output, native SAL ABI and unchecked malformed-code outcomes remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.currency.ts",
+          "marker": "StripNewCurrencyDelimiters"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::StripNewCurrencyDelimiters"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.currency.ts",
+      "rationale": "Split the original large zformat.cxx by the automatic-currency delimiter responsibility, retaining the original owner and builtin insertion caller.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

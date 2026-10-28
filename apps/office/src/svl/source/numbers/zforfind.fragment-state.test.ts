@@ -1,14 +1,15 @@
 /** @fileoverview Native scanner fragment admission preserves previous decimal, date, currency and time state. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { SvNumFormatType as Type } from "../../inc/zforlist";
-import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
+import { SvNumberFormatter } from "./zforlist";
 
 it("rejects middle separators that contradict an already classified fragment", /** Checks native state transitions, including repeated decimals and incompatible exponent or clock suffixes. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     ScanMidString(value: OUString, position: number, numericCount: number): boolean;
@@ -88,7 +89,7 @@ it("rejects middle separators that contradict an already classified fragment", /
 
 it("admits trailing signs, currency and clock markers only in compatible native state", /** Checks native trailing-fragment transitions and source early exits. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     ScanEndString(value: OUString): boolean;

@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GetFormatIndex",
+      "ImpGetStandardFormat",
+      "GetTimeFormat",
+      "GetStandardFormat",
+      "GetStandardIndex"
+    ],
+    "upstreamSymbols": [
+      "SvNFEngine::GetFormatIndex",
+      "SvNFEngine::ImpGetStandardFormat",
+      "SvNFEngine::GetTimeFormat",
+      "SvNFEngine::GetStandardFormat",
+      "SvNFEngine::GetStandardIndex"
+    ],
+    "preservedResponsibilities": [
+      "Original standard-selection overloads, cache query/write order, unknown-language resolution, actual writable/readonly policy calls and time/duration/fractional-second key preservation. Actual builtin tables are generated through the original owner initializer."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+          "marker": "GetFormatIndex"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GetFormatIndex"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

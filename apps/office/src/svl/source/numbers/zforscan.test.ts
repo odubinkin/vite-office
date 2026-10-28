@@ -1,4 +1,5 @@
 /** @fileoverview Original pointer-walk General name extraction includes malformed source modifier inputs. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { extractStandardGeneralName } from "./zforscan";
@@ -55,13 +56,12 @@ it("extracts every registered locale's actual index-zero standard name", /** Onl
   expect(count).toBe(284);
 });
 
-import { SvNFLanguageData } from "./zforlist";
 import { ImpSvNumberformatScan, KeywordLocalization } from "./zforscan";
 import { ImpSvNumFor } from "./zformat";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 
-it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These are original General paths;other token families remain explicit admission failures. @returns Nothing. */ () => {
+it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These original General paths now run through full lexical/type/final scanning. @returns Nothing. */ () => {
   const language = unicode("de"),
     country = unicode("DE"),
     empty = unicode(""),
@@ -69,10 +69,14 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
     name = unicode("Standard"),
     localeData = new LocaleDataWrapper(locale);
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0407);
+    current = createNumberFormatLanguage(mapper, 0x0407);
   try {
     for (const mode of Object.values(KeywordLocalization)) {
-      const scanner = new ImpSvNumberformatScan(current, mapper),
+      const scanner = new ImpSvNumberformatScan(
+          current,
+          current.GetFormatScanner().getColorCallback(),
+          mapper,
+        ),
         code = unicode("sTaNdArD"),
         english = unicode("GENERAL"),
         unsupported = unicode("0.00"),
@@ -99,18 +103,15 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
         if (mode === KeywordLocalization.AllowEnglish) {
           expect(scanner.ScanFormat(english)).toBe(0);
           expect(text(english)).toBe("Standard");
-        } else
-          expect(
-            /** Enforces the prepared native keyword policy. @returns Control position. */ () =>
-              scanner.ScanFormat(english),
-          ).toThrow(/not implemented/);
-        expect(
-          /** Rejects an unported pattern family without a fabricated syntax error. @returns Control position. */ () =>
-            scanner.ScanFormat(unsupported),
-        ).toThrow(/not implemented/);
+        } else {
+          expect(scanner.ScanFormat(english)).toBe(0);
+          expect(text(english)).toBe("GENERAL");
+        }
+        expect(scanner.ScanFormat(unsupported)).toBe(0);
+        expect(scanner.GetScannedType()).toBe(16);
         expect(scanner.ScanFormat(empty)).toBe(0);
         expect(scanner.GetResultStringsCnt()).toBe(0);
-        expect(scanner.GetScannedType()).toBe(2048);
+        expect(scanner.GetScannedType()).toBe(1);
         info.Enlarge(0);
         scanner.CopyInfo(info.Info(), 0);
         expect(info.Info().nThousand).toBe(0);

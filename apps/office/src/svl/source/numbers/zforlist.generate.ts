@@ -49,11 +49,14 @@ export function generateStandardNumberFormat(
           key === ZF_STANDARD_TEXT ? unicode("@") : new OUString(scanner.GetBooleanString()),
         check: [number] = [0];
       try {
-        const format = new SvNumberformat(code, scanner, check, language);
-        if (check[0] !== 0) {
-          format.dispose();
-          throw new Error("Built-in format scan failed");
-        }
+        const format = new SvNumberformat(
+          code,
+          scanner,
+          scanner.GetCurrentLanguageData().pStringScanner,
+          scanner.getColorCallback().GetNatNum(),
+          check,
+          language,
+        );
         format.SetType(type);
         format.SetStandard();
         table.InsertStandardFormat((offset + key) >>> 0, format);

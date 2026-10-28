@@ -1,8 +1,8 @@
-/** @fileoverview Original format-scanner ownership, loaded-locale keyword/currency initialization and lexical/type state. Complete final pattern compilation remains pending beyond the existing General/Boolean/Text caller path. */
+/** @fileoverview Original format-scanner ownership, loaded-locale keyword/currency initialization and lexical/type state. Complete lexical/type/final format scanning preserves the original pipeline; remaining format constructor/output/generator closure is separate. */
 import { LANGUAGE_DONTKNOW, LANGUAGE_THAI } from "../../../i18nlangtag/inc/lang";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import type { CharClass } from "../../../unotools/source/i18n/charclass";
-import type { SvNFLanguageData } from "./zforlist";
+import type { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
 import { sEnglishKeyword, SetDependentKeywordOverrides } from "./zforscan.keywords";
 import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 import type { XNumberFormatCode } from "../../../offapi/com/sun/star/i18n/XNumberFormatCode";
@@ -28,6 +28,10 @@ import {
   IsLastBlankBeforeFrac,
   Is100SecZero,
 } from "./zforscan.lex";
+import { GetColor, StandardColor, NF_MAX_DEFAULT_COLORS } from "./zforscan.color";
+import type { Color } from "../../../tools/inc/color";
+import { FinalScan } from "./zforscan.final";
+import { RemoveQuotes } from "./zforscan.final-common";
 import { FinalScanGetCalendar, IsDateFragment, SwapArrayElements } from "./zforscan.calendar";
 import { ScanType, InsertSymbol } from "./zforscan.type";
 import localizedKeywordLanguages from "./data/keyword-localization.json" with { type: "json" };
@@ -80,7 +84,7 @@ export function extractStandardGeneralName(code: OUStringConstReference): OUStri
     : new OUString();
 }
 
-/** Original scanner owner, fixed token arrays and current-language reference. General/Boolean/Text final compilation remains the admitted caller path while remaining lexical/type/final stages are ported in source fragments. The prepared XNumberFormatCode binding is the actual provider, not a replacement service manager. */
+/** Original scanner owner, fixed token arrays and current-language reference. The full original lexical/type/final scanning pipeline uses source responsibility fragments. The prepared XNumberFormatCode binding is the actual provider, not a replacement service manager. */
 export class ImpSvNumberformatScan {
   protected readonly sKeyword = Array.from(
     { length: NfKeywordIndex.KEYWORD_ENTRIES_COUNT },
@@ -124,14 +128,35 @@ export class ImpSvNumberformatScan {
   protected meKeywordLocalization: number = KeywordLocalization.AllowEnglish;
   private nStandardPrec = 2;
   private readonly maNullDate: ToolsDate;
-  /** Original reference-owned language state, provider field and optional copied null date. The unconsumed native color callback is not supplied by a stand-in. @param mrCurrentLanguageData - Actual owner. @param xNFC - Actual prepared service binding. @param nullDate - Native date default. @returns Scanner owner. */
+  /** Original reference-owned language state, provider field and optional copied null date. The native color supplier is the actual formatter reference. @param mrCurrentLanguageData - Actual owner. @param mrColorCallback - Actual formatter color supplier. @param xNFC - Actual prepared service binding. @param nullDate - Native date default. @returns Scanner owner. */
   constructor(
     protected readonly mrCurrentLanguageData: SvNFLanguageData,
+    protected readonly mrColorCallback: SvNumberFormatter,
     protected readonly xNFC: XNumberFormatCode,
     nullDate: DateConstReference = new ToolsDate(30, 12, 1899),
   ) {
     this.maNullDate = new ToolsDate(nullDate);
     this.Reset();
+  }
+  /** Original borrowed color callback supplier. @returns Actual formatter. */
+  getColorCallback(): SvNumberFormatter {
+    return this.mrColorCallback;
+  }
+  /** Original color prefix lookup. @param name - Mutable prefix. @returns Borrowed color or null. */
+  GetColor(name: OUString): Color | null {
+    return GetColor.call(this, name);
+  }
+  /** Original const color-vector borrow. @returns Actual palette. */
+  static GetStandardColors(): readonly Color[] {
+    return StandardColor;
+  }
+  /** Original standard color count. @returns Native bound. */
+  static GetStandardColorCount(): number {
+    return NF_MAX_DEFAULT_COLORS;
+  }
+  /** Original standard red color borrow. @returns Palette red. */
+  static GetRedColor(): Color {
+    return StandardColor[4] as Color;
   }
   /** Original current-language classifier borrow. @returns Actual classifier. */
   GetChrCls(): CharClass {
@@ -387,6 +412,19 @@ export class ImpSvNumberformatScan {
   SetNatNumModifier(value: number): void {
     this.nNatNumModifier = value & 255;
   }
+  /** Original quote-removal dispatch. @param value - In/out owned string. @returns Removed UTF16 units. */
+  protected RemoveQuotes(value: OUString): number {
+    return RemoveQuotes(value);
+  }
+  /** Original exact Boolean-equivalent replacement after lazy keyword initialization. @param value - In/out source code. @returns Whether replaced. */
+  ReplaceBooleanEquivalent(value: OUString): boolean {
+    this.InitKeywords();
+    if (value.equals(this.sBooleanEquivalent1) || value.equals(this.sBooleanEquivalent2)) {
+      value.assign(this.GetKeywords()[NfKeywordIndex.BOOLEAN] as OUStringConstReference);
+      return true;
+    }
+    return false;
+  }
   /** Original calendar final-scan helper dispatch. @param position - Native error cursor. @param index - Native token cursor. @param resultCount - Native remaining count. @returns Native status. */
   protected FinalScanGetCalendar(
     position: [number],
@@ -472,48 +510,16 @@ export class ImpSvNumberformatScan {
   protected Is100SecZero(index: number, hadDecimal: boolean): boolean {
     return Is100SecZero.call(this, index, hadDecimal);
   }
-  /** Existing admitted final compilation uses the original initialized keywords; complete Symbol_Division/ScanType/FinalScan integration follows once their source stages are present. @param code - Source in/out code. @returns Control position. */
+  /** Original final-stage dispatch. @param code - In/out native format code. @returns Native control position. */
+  protected FinalScan(code: OUString): number {
+    return FinalScan.call(this, code);
+  }
+  /** Original ScanFormat runs lexical analysis, type recognition and final compilation in order, preserving zero control semantics at each source boundary. @param code - In/out source format. @returns Native control position; zero denotes success. */
   ScanFormat(code: OUString): number {
-    this.Reset();
-    if (code.isEmpty()) return 0;
-    const keywords = this.GetKeywords(),
-      upper = this.GetChrCls().uppercase(code),
-      symbol = this.sStrArray[0] as OUString;
-    let type: number = NF_KEY_GENERAL;
-    try {
-      let english = false;
-      if (code.getLength() === 1 && code.getStr()[0] === 64) {
-        symbol.assign(code);
-        this.eScannedType = SvNumFormatType.TEXT;
-        type = NfSymbolType.DEL;
-      } else if (upper.equals(keywords[NfKeywordIndex.BOOLEAN] as OUString)) {
-        symbol.assign(code);
-        this.eScannedType = SvNumFormatType.LOGICAL;
-        type = NfKeywordIndex.BOOLEAN;
-      } else if (!upper.equals(keywords[NfKeywordIndex.GENERAL] as OUString)) {
-        if (
-          this.meKeywordLocalization === KeywordLocalization.AllowEnglish &&
-          upper.equals(sEnglishKeyword[NfKeywordIndex.GENERAL] as OUString)
-        )
-          english = true;
-        else
-          throw new Error(
-            "Number-format patterns other than single General, BOOLEAN or @ are not implemented",
-          );
-      }
-      if (this.eScannedType === SvNumFormatType.UNDEFINED) {
-        symbol.assign(english ? this.sNameStandardFormat : code);
-        this.eScannedType = SvNumFormatType.NUMBER;
-        this.nThousand = FLAG_STANDARD_IN_FORMAT;
-      }
-      code.assign(symbol);
-      this.nTypeArray[0] = type;
-      this.nStringsCnt = 1;
-      this.nResultStringsCnt = 1;
-      return 0;
-    } finally {
-      upper.dispose();
-    }
+    let result = this.Symbol_Division(code);
+    if (!result) result = this.ScanType();
+    if (!result) result = this.FinalScan(code);
+    return result;
   }
   /** Original CopyInfo skips EMPTY tokens and copies actual scalar results. @param info - Enlarged destination. @param count - Native uint16 count. @returns Nothing. */
   CopyInfo(info: ImpSvNumberformatInfo, count: number): void {

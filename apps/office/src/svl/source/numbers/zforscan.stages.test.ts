@@ -1,16 +1,17 @@
 /** @fileoverview Source-backed scanner stages are tested on the real language/locale/string owners. Native witness compares these observations with unchanged zforscan.cxx bodies. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { OUString } from "../../../sal/inc/rtl/ustring";
-import { SvNFLanguageData } from "./zforlist";
+
 import { KeywordLocalization as L } from "./zforscan";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
 
 it("retains native month/minute rewrites, brackets, fixed capacity and zero control positions", /** Each stage result is an unchanged-source native witness observation, not a public FinalScan claim. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0409),
+    current = createNumberFormatLanguage(mapper, 0x0409),
     scanner = current.GetFormatScanner();
   try {
     for (const [pattern, lexical, typed, category, types] of [
@@ -63,7 +64,7 @@ it("retains native month/minute rewrites, brackets, fixed capacity and zero cont
 
 it("invalidates lazy keyword/currency data without resetting parse state or precision", /** The actual same scanner follows native ChangeIntl across languages and localization policies. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0407),
+    current = createNumberFormatLanguage(mapper, 0x0407),
     scanner = current.GetFormatScanner();
   try {
     expect(scanner["bKeywordsNeedInit"]).toBe(true);
@@ -104,7 +105,7 @@ it("invalidates lazy keyword/currency data without resetting parse state or prec
 
 it("preserves slot identities and reads an aliased inserted value after the source shift", /** InsertSymbol aliases the string member itself; retaining a pre-shift text snapshot would change the result. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0409),
+    current = createNumberFormatLanguage(mapper, 0x0409),
     scanner = current.GetFormatScanner(),
     values = [unicode("a"), unicode("b"), unicode("c"), unicode("insert")];
   try {
@@ -152,7 +153,7 @@ it("preserves slot identities and reads an aliased inserted value after the sour
 
 it("merges calendar IDs into the original string slot and swaps date slots without changing their addresses", /** This is the source final-calendar helper, not complete FinalScan integration. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0409),
+    current = createNumberFormatLanguage(mapper, 0x0409),
     scanner = current.GetFormatScanner(),
     source = unicode("[~jewish]YYYY");
   try {

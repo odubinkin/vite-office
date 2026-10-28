@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.locale-calendar.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "ImpObtainCalendarAndNumerals"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpObtainCalendarAndNumerals"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-353. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending."
+    ],
+    "omittedResponsibilities": [
+      "Complete constructor dispatch and standard-format initialization, formatted output and CSV recognition remain incomplete; bounded native value witnesses do not certify full SAL/UNO ABI."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.locale-calendar.ts",
+          "marker": "ImpObtainCalendarAndNumerals"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpObtainCalendarAndNumerals"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "struct SAL_DLLPRIVATE LocaleType"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.locale-calendar.ts",
+      "rationale": "Keep original compiled-format locale metadata and extended calendar/numeral selection in focused fragments of zformat translation-unit responsibilities.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

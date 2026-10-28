@@ -17,3 +17,10 @@ export function UpdateReference(
   for (let tab = context.maRange.aStart.Tab(); tab <= last; ++tab)
     this.FetchTable(tab)?.UpdateReference(context, undo, includeDraw, updateNoteCaptionPos);
 }
+
+/** Original document language scalar field reads. @param this - Actual document. @param latin - Latin output. @param cjk - CJK output. @param ctl - CTL output. @returns Nothing. */
+export function GetLanguage(this: ScDocument, latin: [number], cjk: [number], ctl: [number]): void {
+  latin[0] = this["languageFields"].eLanguage;
+  cjk[0] = this["languageFields"].eCjkLanguage;
+  ctl[0] = this["languageFields"].eCtlLanguage;
+}

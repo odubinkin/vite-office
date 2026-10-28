@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.iso.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "IsIso8601"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::ImpIsIso8601"
+    ],
+    "preservedResponsibilities": [
+      "Original subformat uint16 bound and Y-M-D token-state query preserve source acceptance of single-width month/day and two-digit year and stop after a recognized date prefix. Actual compiled subformat owners supply the tokens; no string-pattern heuristic is substituted."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.iso.ts",
+          "marker": "IsIso8601"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::ImpIsIso8601"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.iso.ts",
+      "rationale": "Split the original large translation unit by input, formula joins, frame, ISO or edit-format responsibilities while retaining original owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

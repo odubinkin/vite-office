@@ -1,10 +1,11 @@
 /** @fileoverview Public number-input scanner integration with the real LibreOffice calendar service and date/time result dispatch. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
 import { SvNumFormatType as T } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 it.each([
   [0x0409, "2024-02-29", true, T.DATE, 45351],
   [0x0409, "2023-02-29", false, T.TEXT, 0],
@@ -27,7 +28,7 @@ it.each([
     serial,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, locale),
+      language = createNumberFormatLanguage(mapper, locale),
       value = unicode(input),
       type: [number] = [T.NUMBER],
       output: [number] = [99];

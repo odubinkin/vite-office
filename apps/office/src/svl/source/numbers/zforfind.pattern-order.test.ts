@@ -1,16 +1,17 @@
 /** @fileoverview Native date acceptance patterns and their original packed order interpretation. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NfEvalDateFormat } from "../../inc/zforlist";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { DateOrder } from "../../../unotools/source/i18n/localedatawrapper";
-import { SvNFLanguageData } from "./zforlist";
+
 import { SvNumberformat } from "./zformat";
 
 it("evaluates full, partial and unusual source date orders after actual pattern matching", /** Checks D/M/Y ordinal extraction and source fallback without a host date parser. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     NumberStringDivision(value: OUString): void;
@@ -85,12 +86,19 @@ it("evaluates full, partial and unusual source date orders after actual pattern 
 
 it("orders initial and format-language date patterns according to the native evaluation mode", /** Checks locale switching and restoration on the actual language-owned scanner. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const initial = language.GetLocaleData().getDateAcceptancePatterns().map(text);
   language.ChangeIntl(0x0407);
   const current = language.GetLocaleData().getDateAcceptancePatterns().map(text);
   const code = unicode("Standard");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0407]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0407],
+  );
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     NumberStringDivision(value: OUString): void;
@@ -129,7 +137,7 @@ it("orders initial and format-language date patterns according to the native eva
 
 it("checks source month and day ranges, signed years and multi-character separators", /** Checks actual fragment recognition and separator cursor updates. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     NumberStringDivision(value: OUString): void;

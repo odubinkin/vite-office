@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.recognition.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "ImpSubstituteEntry",
+      "IsNumberFormat"
+    ],
+    "upstreamSymbols": [
+      "ImpSubstituteEntry",
+      "SvNFEngine::IsNumberFormat"
+    ],
+    "preservedResponsibilities": [
+      "Original system-format substitution, initial-locale General fast path, preset-Text refusal, native input scanner and compatibility/ISO/date/time result-key dispatch. Actual scanner/provider/format owners are retained; complete CSV date/auto-input/export callers and native full-wrapper differential remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.recognition.ts",
+          "marker": "ImpSubstituteEntry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "ImpSubstituteEntry"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.recognition.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

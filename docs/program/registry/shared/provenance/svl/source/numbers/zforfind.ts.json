@@ -90,7 +90,8 @@
       "ImpSvNumberInputScan::IsNumberFormatMain"
     ],
     "preservedResponsibilities": [
-      "Original scanner state, locale/text invalidation, input-date ownership and source helper dispatch. Public IsNumberFormat now preserves input length0/over308 rejection, uppercase and native-number conversion, source category/count gates, actual calendar/date/time and numeric result dispatch and final Text/zero failure outputs. Date-order retries retain source THE_FUTURE calendar switching disabled."
+      "Original scanner state, locale/text invalidation, input-date ownership and source helper dispatch. Public IsNumberFormat now preserves input length0/over308 rejection, uppercase and native-number conversion, source category/count gates, actual calendar/date/time and numeric result dispatch and final Text/zero failure outputs. Date-order retries retain source THE_FUTURE calendar switching disabled.",
+      "AQF9AG restores the original public CanForceToIso8601 access and inline HasIso8601Tsep field query consumed by SvNFEngine::IsNumberFormat. Recognition state and detection logic are unchanged."
     ],
     "omittedResponsibilities": [
       "Complete formatter index selection and Calc column/importer auto-input integration remain pending. Native whole-LibreOffice scanner binary comparison and full unsupported/unconsumed API surfaces remain unverified."

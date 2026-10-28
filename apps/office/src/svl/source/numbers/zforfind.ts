@@ -392,7 +392,7 @@ export class ImpSvNumberInputScan {
     return GetMiddleMonthLongDateOrder.call(this, formatTurn, locale, dateOrder);
   }
   /** Original ISO override decision for the cached three-part numeric date shape. @param order - Evaluated date order or Invalid. @returns Whether ISO order is forced. */
-  protected CanForceToIso8601(order: DateOrder): boolean {
+  CanForceToIso8601(order: DateOrder): boolean {
     return CanForceToIso8601.call(this, order);
   }
   /** Original format/date-evaluation policy for an ISO candidate. @returns Whether the ISO candidate is acceptable. */
@@ -432,6 +432,10 @@ export class ImpSvNumberInputScan {
   /** Original two-digit-year threshold query. @returns Year threshold. */
   GetYear2000(): number {
     return this.fields.nYear2000;
+  }
+  /** Original ISO8601 literal T-separator flag. @returns Actual recognition flag. */
+  HasIso8601Tsep(): boolean {
+    return this.fields.bIso8601Tsep;
   }
   /** Original public provisional decimal-fragment position query. @returns One-based position. */
   GetDecPos(): number {

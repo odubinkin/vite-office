@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+        "apps/office/src/svl/source/numbers/zforlist.recognition.test.ts"
+      ],
+      "justification": "Original complete four-callback writable/readonly accessor factories capture real table and caller-owned temporary cache values. RO checks preserve missing locale/currency preconditions and never generate fallback state. Thread scheduling/UNO ABI remain unrepresented. AQF9AG corrects the initial local GetROPolicy capture deviation to original CALC-348: mCacheFormat writes the caller map by reference while mFindFormat reads a construction-time map snapshot, with owner-cache precedence unchanged. No upstream cache repair is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetCLOffsetRW",
+        "GetCLOffsetRO",
+        "DefaultCurrencyRW",
+        "DefaultCurrencyRO",
+        "GetRWPolicy",
+        "GetROPolicy"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFEngine::GetCLOffsetRW",
+        "SvNFEngine::GetCLOffsetRO",
+        "SvNFEngine::DefaultCurrencyRW",
+        "SvNFEngine::DefaultCurrencyRO",
+        "SvNFEngine::GetRWPolicy"
+      ]
+    }
+  }
+}

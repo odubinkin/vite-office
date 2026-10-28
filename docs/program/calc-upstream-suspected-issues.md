@@ -4362,7 +4362,7 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Upstream: LibreOffice `svl/source/numbers/zforlist.cxx`, SvNFEngine::GetROPolicy.
 - Observation: mCacheFormat captures rFormatCache by reference and writes to the supplied map. The separate mFindFormat lambda captures rFormatCache by value, alongside rFormatData by reference, and passes that copied map to FindFormatRO. Since DefaultFormatKeysMap is a std::map value, writes after policy construction do not update the lookup lambda's captured map. The actual format owner's cache remains preferred by FindFormatRO.
 - Suspected issue: entries cached during the lifetime of the readonly policy may remain invisible to its own subsequent find callback. This is a source capture/lifetime observation; no full multithreaded formatter failure or native policy binary test is claimed here.
-- Local behavior: preserve original standalone CacheFormatRO/FindFormatRO responsibilities. When porting GetROPolicy, retain the source lookup snapshot and writer reference rather than silently changing the lookup capture to a reference. The policy factory is not yet exposed by the current local slice.
+- Local behavior: preserve original standalone CacheFormatRO/FindFormatRO responsibilities. When porting GetROPolicy, retain the source lookup snapshot and writer reference rather than silently changing the lookup capture to a reference. The now-connected policy factory retains the original lookup snapshot; its writer still references the caller map.
 
 ### CALC-349 — Quote-end lookup can return a nonzero opening quote itself
 
@@ -4370,3 +4370,73 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: the header promises the matching closing quote for an opening position. IsInQuote includes the position itself, but GetQuoteEnd starts searching at that same position and accepts any quote whose pointer is greater than the string start. Thus GetQuoteEnd on position 1 of `a"abc"` returns 1; position 0 of `"abc"` returns 4. Unchanged native bodies reproduce both results in the scanner witness.
 - Suspected issue: opening-quote behavior depends on whether its position is zero, contrary to the header contract.
 - Local behavior: retain the original search start, string-start exclusion, escape comparisons and return positions. No extra opening-quote skip is introduced.
+
+### CALC-350 — Time-only and date-time scanner branches use different fractional-second bounds
+
+- Upstream: LibreOffice `svl/source/numbers/zforscan.cxx`, FinalScan TIME and DATETIME branches; MaxCntPost is declared20 with the comment that rtl_math_round allows at most that count.
+- Observation: DATETIME checks nCounter against MaxCntPost before and during zero merging, while TIME increments without that bound. Unchanged native full-scanner functions accept HH:MM:SS followed by21 fractional zeros with nCntPost21; the corresponding YYYY-MM-DD HH:MM:SS format returns the source control position40 while processing the21st zero.
+- Suspected issue: equivalent time precision is accepted differently depending on a date part. Later output may impose separate limits; no full formatter output failure is claimed by these scanner observations.
+- Local behavior: retain the original distinct branches and counters. No shared cap or stricter time-only validation is added.
+
+### CALC-351 — NatNum prefix tokenization does not require a numeric suffix
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, lcl_matchKeywordAndGetNumber, SvNumberformat::ImpNextSymbol and the constructor NatNum prefix branch.
+- Observation: the helper requires a case-insensitive keyword match and at least one following unit, then calls o3tl::toInt32 without a parsed-end check. A nonnumeric suffix converts to zero. Thus the lexer classifies `[NatNumfoo]` as BRACKET_SYMBOLTYPE_NATNUM0 and returns `NatNumfoo` as its payload. The constructor's corresponding branch derives the modifier from the token and rewrites the prefix to NatNum0; it does not independently validate the numeric suffix. The local lexer regression retains this classification. Native comparison and integer-conversion dependencies have separate bounded evidence; an unchanged full native constructor witness for this malformed format has not been run.
+- Suspected issue: misspelled native-number modifiers can be classified as the valid zero modifier rather than rejected. This is a source-level observation about prefix handling, not a claim that every enclosing malformed format is accepted or that the behavior causes a CSV failure.
+- Local behavior: preserve keyword matching, native conversion-to-zero, token classification and source constructor normalization. Do not add a numeric-suffix heuristic or a new rejection.
+
+### CALC-352 — Korean nondate DBNum and NatNum tables are not inverse for modifier4
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, tblDBNumToNatNum, tblNatNumToDBNum, SvNumberNatNum::MapDBNumToNatNum/MapNatNumToDBNum.
+- Observation: in Korean nondate context, DBNum4 maps to NatNum10. The reverse function only indexes NatNum1 through9; it maps NatNum9 to DBNum4 and NatNum10 to0. In date context NatNum10 does map back to DBNum4. Unchanged native tables/functions and MsLangId resolution reproduce these values in the bounded metadata witness.
+- Suspected issue: a nondate DBNum4 -> NatNum -> DBNum round trip loses the modifier, while the reverse table assigns DBNum4 to a different NatNum. The tables may reflect compatibility distinctions; no full export or rendering failure is claimed here.
+- Local behavior: retain both original tables, the nine-entry reverse bound and the separate date rules. Do not repair the apparent inverse mismatch.
+
+### CALC-353 — Eastern-Arabic numeral selection tests the temporary Punjabi-Arabic language with inequality
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, ImpObtainCalendarAndNumerals, numeral ID0x02.
+- Observation: when the current language is neither Arabic-primary nor Punjabi-Arabic, the temporary-language predicate is `primary(nTmpLocaleLang) == LANGUAGE_ARABIC_PRIMARY_ONLY || nTmpLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO`. Thus an English current language and English temporary locale retain English while inserting `[NatNum1]`; a Punjabi-Arabic temporary locale instead reaches the Arabic reference fallback. Unchanged native code reproduces these selection outputs in the locale-prefix witness.
+- Suspected issue: the inequality makes most non-Arabic temporary languages pass this supposed Eastern-Arabic compatibility condition, and excludes the explicitly named Punjabi-Arabic case. No complete formatting/CSV output failure is inferred from these locale-selection observations.
+- Local behavior: preserve the original inequality, branch order, selected locale and modifier insertion. Do not infer a replacement language or correct the predicate.
+
+### CALC-354 — Locale hex decoding handles a closing bracket differently after the eighth digit
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::ImpGetLocaleType.
+- Observation: the loop reads at most eight units and tests the last read unit for a closing bracket. `10010409` decodes to language0x0409 with its extended fields, but `10010409]` returns default unknown metadata at cursor8; a shorter hex value followed by `]` succeeds. Unchanged native code reproduces this boundary.
+- Suspected issue: closing-bracket acceptance depends on hex width even though the decoded32-bit value fits. The currently identified constructor caller passes prefix contents with the closing bracket already removed, so these observations do not establish a constructor or CSV defect.
+- Local behavior: retain the eight-unit bound, last-unit/end predicate and exact returned cursor; no extra closing-bracket lookahead is added.
+
+### CALC-355 — OUStringBuffer character replacement revisits an unchanged match
+
+- Upstream: LibreOffice `include/rtl/ustrbuf.hxx`, OUStringBuffer::replace(sal_Unicode,sal_Unicode).
+- Observation: each iteration searches at the previous match position, writes the replacement there and does not advance the index. If oldChar equals newChar and occurs in the buffer, the next search finds the same position again. This is a direct source-control-flow observation; no intentionally unbounded native process was run.
+- Suspected issue: replacing a present character with itself does not terminate. The number-format constructor uses distinct NBSP/NNBSP and ASCII-space values, so this observation does not establish a CSV constructor failure.
+- Local behavior: preserve the original search/write loop and same-position search. No equality shortcut or added index increment is introduced.
+
+### CALC-356 — Empty format construction reaches a negative checked string index
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat normal constructor trailing-subformat check; `include/rtl/ustring.hxx`, OUString::operator[].
+- Observation: an empty input produces an empty first subformat, then reaches `nIndex < 3 && rString[rString.getLength()-1] == ';'`. The string access has index-1. The original header explicitly asserts that an index is nonnegative and below the logical length. This is source-level checked-build evidence; a release-build result after disabling assertions is not defined or claimed, and no native aborting process was run.
+- Suspected issue: empty input can violate the checked string-access precondition inside the constructor instead of returning a syntax position. Existing fake-empty-provider tests previously expected a locally invented checkPos1; those assertions now retain the actual checked-index failure and cleanup behavior.
+- Local behavior: use the original checked string-index binding and preserve the failing precondition. Do not substitute a success, guessed format type, special empty-input heuristic or fabricated syntax-position result. Normal CSV empty cell values do not compile an empty format code.
+
+### CALC-357 — Missing currency closing bracket advances the next search beyond the string
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::StripNewCurrencyDelimiters; `include/rtl/ustring.hxx`, indexOf; `sal/rtl/strtmpl.hxx`, indexOfStr_WithLength.
+- Observation: for `[$USD-409`, the missing-bracket fallback sets nClose to the string length, then sets nStartPos to nClose+1. The next loop search passes length-fromIndex=-1 to the bounded search, whose original implementation asserts a nonnegative length. This is checked-build source-control-flow evidence; no native aborting process or release-build outcome is claimed.
+- Suspected issue: the explicitly conservative missing-bracket branch violates the next search precondition. Valid builtin currency codes are not shown to trigger this condition.
+- Local behavior: preserve the source fallback, increment and failing checked precondition; do not clamp the cursor, infer a closing bracket or return a fabricated successful format. Differential currency-helper cases cover valid closing brackets separately.
+
+### CALC-358 — CSV English fallback setup reloads the primary transliterator
+
+- Upstream: LibreOffice `sc/source/ui/docshell/impex.cxx`, ScImportExport::ExtText2Doc date-recognition initialization.
+- Observation: for an import language other than English-US, the code creates pEnglishTransliteration but calls aTransliteration.loadModuleIfNeeded(LANGUAGE_ENGLISH_US), targeting the primary wrapper. The second calendar is explicitly loaded in English; the newly created second transliterator retains its constructor/first-call locale behavior. This is source-level call/receiver evidence, not a demonstrated end-to-end locale recognition failure.
+- Suspected issue: the initialization appears intended for the English fallback wrapper but changes the primary wrapper instead. The resulting language-sensitive behavior must not be corrected by inference.
+- Local behavior: preserve the receiver, call order and uninitialized second-wrapper module state. No guessed locale normalization or alternate fallback is added.
+
+### CALC-359 — Explicit YMD timezone colon falls into calendar fractional-second parsing
+
+- Upstream: LibreOffice `sc/source/ui/docshell/impex.cxx`, lcl_PutString date-part scan and subsequent non-ISO calendar branch.
+- Observation: for `2024-12-31T12:34:56+02:00`, the plus after seconds is accepted for ISO, then offset02 becomes part7. The following colon disables bIso because its nFound is7, and the loop stops before the final00 because seven parts have been found. The non-ISO calendar branch then uses part7 as fractional seconds, producing the date/time with .02 seconds. The nearby comment says timezone input should remain Text, but this path bypasses formatter rejection. This is source-control-flow evidence and a local integration reproduction; no complete native lcl_PutString differential execution is claimed.
+- Suspected issue: a timezone with a colon is misclassified as fractional seconds, while Z or a compact offset can reach the intended Text fallback. Original source predicates and the seven-part bound explain the difference.
+- Local behavior: preserve the original part bound, ISO-state transition, field selection and .02-second calendar result. No timezone heuristic, rejection rule or replacement timezone parser is added.

@@ -1,14 +1,15 @@
 /** @fileoverview Native leading-fragment admission retains currency, decimal and calendar ambiguity rules. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { SvNumFormatType as Type } from "../../inc/zforlist";
-import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
+import { SvNumberFormatter } from "./zforlist";
 
 it("rejects incomplete month prefixes and decimal blanks while retaining valid source fragments", /** Checks actual leading scanner stages with their numeric-fragment counts. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     ScanStartString(value: OUString): boolean;
@@ -66,7 +67,7 @@ it("rejects incomplete month prefixes and decimal blanks while retaining valid s
 
 it("leaves malformed thousands tails for the subsequent source scanner", /** Checks complete-group compaction, malformed digits and the original cursor rollback. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     SkipThousands(input: OUString, position: [number], symbol: OUString): boolean;
     StringPtrContainsImpl(needle: OUString, units: Uint16Array, position: number): boolean;

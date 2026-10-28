@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "text-csv-filter",
+    "capabilityIds": [
+      "CAP-5f0f5ed3-9c6d-4ac7-b9fb-250a1f2497ea"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+        "apps/office/src/sc/source/ui/docshell/impex.date.test.ts",
+        "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts"
+      ],
+      "justification": "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-359 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "PutDate"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sc/source/ui/docshell/impex.cxx",
+      "upstreamSymbols": [
+        "lcl_PutString"
+      ]
+    }
+  }
+}

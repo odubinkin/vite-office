@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.final-date.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "FinalScanDate",
+      "FinalScanTime",
+      "FinalScanDateTime",
+      "FinalScanText",
+      "FinalScanDateOrText"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::FinalScan"
+    ],
+    "preservedResponsibilities": [
+      "Original temporal/text branches now participate in the complete original FinalScan/ScanFormat pipeline. Source TIME/DATETIME precision asymmetry is retained; original non-converting branches and full final output are included in the74396-case native witness. Actual owner language switching has focused resource-based tests; full native cross-locale conversion remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Format constructor/prefix/NatNum/output closure and CSV public auto-input integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.final-date.ts",
+          "marker": "FinalScanDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::FinalScan"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.final-date.ts",
+      "rationale": "Partition original FinalScan automatic lifetime, temporal/text cases and common quote operations while retaining actual scanner/locale/token ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/docshell/impex.cxx",
+    "localSymbols": [
+      "PutDate"
+    ],
+    "upstreamSymbols": [
+      "lcl_PutString"
+    ],
+    "preservedResponsibilities": [
+      "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-359 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending."
+    ],
+    "omittedResponsibilities": [
+      "Full native date-branch differential, remaining auto-input/special-number fallback and full CSV import/export acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+          "marker": "PutDate"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/docshell/impex.cxx",
+          "marker": "static bool lcl_PutString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+      "rationale": "Split the original impex.cxx explicit-date responsibility while retaining its actual import/document/calendar/transliteration owners and caller control flow.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

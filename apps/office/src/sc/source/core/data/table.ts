@@ -50,7 +50,7 @@ import {
   GetErrCode as getFormulaError,
   SetFormula as SetFormulaFragment,
 } from "./table.formula-admission";
-import { SetOptimalHeightsToRows, SetStreamValid, UpdateReference } from "./table1";
+import { GetDataArea, SetOptimalHeightsToRows, SetStreamValid, UpdateReference } from "./table1";
 import * as table2 from "./table2";
 import * as table5 from "./table5";
 import * as table7 from "./table7";
@@ -398,6 +398,10 @@ export class ScTable {
     if (this.rDocument.ValidColRow(col, row))
       this.CreateColumnIfNotExists(col).ApplyAttr(row, attr);
   }
+  /** Original table2 number-format assignment with native cell validation. @param col - Column. @param row - Row. @param key - Formatter key. @returns Nothing. */
+  SetNumberFormat(col: number, row: number, key: number): void {
+    table2.SetNumberFormat.call(this, col, row, key);
+  }
   /** Original table.hxx allocated-column validity. @param col - Column. @returns Allocated native column. */
   IsColValid(col: number): boolean {
     return col >= 0 && col < this.aCol.length;
@@ -445,83 +449,7 @@ export class ScTable {
     includeOld: boolean,
     onlyDown: boolean,
   ): void {
-    firstCol[0] = Math.min(firstCol[0], this.aCol.length - 1);
-    lastCol[0] = Math.min(lastCol[0], this.aCol.length - 1);
-    let left = false,
-      right = false,
-      top = false,
-      bottom = false,
-      changed: boolean;
-    do {
-      changed = false;
-      if (!onlyDown) {
-        let start = firstRow[0],
-          end = lastRow[0];
-        if (start > 0) --start;
-        if (end < this.rDocument.MaxRow()) ++end;
-        if (
-          lastCol[0] < this.aCol.length - 1 &&
-          !(this.aCol[lastCol[0] + 1] as ScColumn).IsEmptyData(start, end)
-        ) {
-          ++lastCol[0];
-          changed = true;
-          right = true;
-        }
-        if (firstCol[0] > 0 && !(this.aCol[firstCol[0] - 1] as ScColumn).IsEmptyData(start, end)) {
-          --firstCol[0];
-          changed = true;
-          left = true;
-        }
-        if (firstRow[0] > 0) {
-          let extend = false;
-          for (let col = firstCol[0]; col <= lastCol[0] && !extend; col++)
-            if ((this.aCol[col] as ScColumn).HasDataAt(firstRow[0] - 1)) extend = true;
-          if (extend) {
-            --firstRow[0];
-            changed = true;
-            top = true;
-          }
-        }
-      }
-      if (lastRow[0] < this.rDocument.MaxRow()) {
-        let extend = false;
-        for (let col = firstCol[0]; col <= lastCol[0] && !extend; col++)
-          if ((this.aCol[col] as ScColumn).HasDataAt(lastRow[0] + 1)) extend = true;
-        if (extend) {
-          ++lastRow[0];
-          changed = true;
-          bottom = true;
-        }
-      }
-    } while (changed);
-    if (!includeOld && !onlyDown) {
-      if (!left)
-        while (
-          firstCol[0] < lastCol[0] &&
-          firstCol[0] < this.aCol.length - 1 &&
-          (this.aCol[firstCol[0]] as ScColumn).IsEmptyData(firstRow[0], lastRow[0])
-        )
-          ++firstCol[0];
-      if (!right)
-        while (
-          lastCol[0] > 0 &&
-          firstCol[0] < lastCol[0] &&
-          (this.aCol[lastCol[0]] as ScColumn).IsEmptyData(firstRow[0], lastRow[0])
-        )
-          --lastCol[0];
-      if (!top && firstRow[0] < this.rDocument.MaxRow() && firstRow[0] < lastRow[0]) {
-        let shrink = true;
-        do {
-          for (let col = firstCol[0]; col <= lastCol[0] && shrink; col++)
-            if ((this.aCol[col] as ScColumn).HasDataAt(firstRow[0])) shrink = false;
-          if (shrink) ++firstRow[0];
-        } while (shrink && firstRow[0] < this.rDocument.MaxRow() && firstRow[0] < lastRow[0]);
-      }
-    }
-    if (!includeOld && !bottom && lastRow[0] > 0 && firstRow[0] < lastRow[0]) {
-      const last = this.GetLastDataRow(firstCol[0], lastCol[0], lastRow[0]);
-      if (last < lastRow[0]) lastRow[0] = Math.max(firstRow[0], last);
-    }
+    GetDataArea.call(this, firstCol, firstRow, lastCol, lastRow, includeOld, onlyDown);
   }
   /** Original bounded last-data-row aggregation. @param first - First allocated column. @param last - Final valid column. @param row - Inclusive row bound. @returns Row or native invalid-column sentinel. */
   GetLastDataRow(first: number, last: number, row: number): number {

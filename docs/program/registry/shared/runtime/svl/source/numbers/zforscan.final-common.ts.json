@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
+      ],
+      "justification": "Original common FinalScan postprocessing retains scientific/fraction validation, Thai modifier handling, source ISO date-order preservation and target reordering, conversion-time keyword quoting, exact quote/escape rebuilding and currency-tail replacement over original slot/output offsets. Quote stripping and replacement move actual OUString owners. Full no-conversion final compilation is in the74396-case native witness; cross-locale final conversion still requires broader native validation. Format constructor/prefix/output closure and CSV auto-input integration remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "RemoveQuotes",
+        "FinalScanConvert",
+        "FinalScanRebuild",
+        "FinalScanComplete"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforscan.cxx",
+      "upstreamSymbols": [
+        "ImpSvNumberformatScan::RemoveQuotes"
+      ]
+    }
+  }
+}

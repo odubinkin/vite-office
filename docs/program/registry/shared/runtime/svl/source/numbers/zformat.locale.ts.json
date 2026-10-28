@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.locale.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.locale.ts",
+        "apps/office/src/svl/source/numbers/zformat.locale.test.ts",
+        "scripts/calc-format-locale-native-probe.mjs"
+      ],
+      "justification": "AQF9AG restores original compiled-entry LocaleType, raw32 language/substitution/calendar/numeral decoding, source disabled extended-code output, uppercase hex without leading zeros, exact eight-unit parser/cursor behavior and compiler-generated metadata assignment. Actual SvNumberformat now owns and copies this original metadata and reads its language/substitution flags. No invented locale normalization or source-prefix parsing shortcut is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "LocaleType",
+        "Substitute",
+        "ImpGetLocaleType"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "SvNumberformat::LocaleType::generateCode",
+        "SvNumberformat::ImpGetLocaleType"
+      ]
+    }
+  }
+}

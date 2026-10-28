@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.output.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GetOutputString",
+      "GetInputLineString"
+    ],
+    "upstreamSymbols": [
+      "SvNFEngine::GetOutputString",
+      "SvNFEngine::GetInputLineString"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG moves the existing engine output/input-line bodies unchanged into their source output responsibility fragment to keep the main class source below the hard size limit. The actual SvNFEngine namespace reexports these same functions. Existing General/Boolean/Text output and input-line precision lifetimes remain represented; nonstandard output and complete filter/edit-format behavior remain incomplete, with no broad parity promotion."
+    ],
+    "omittedResponsibilities": [
+      "Complete table initialization, formatted export/CSV caller closure and full native constructor/service/ABI equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.output.ts",
+          "marker": "GetOutputString"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GetOutputString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.output.ts",
+      "rationale": "Split the original large translation unit by constructor/language/output responsibility while retaining actual source owners and original callable contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

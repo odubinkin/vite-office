@@ -1,4 +1,5 @@
 /** @fileoverview Source OnDemandCharClass two-locale cache from include/svl/ondemand.hxx. */
+import { NativeNumberWrapper } from "../../unotools/source/i18n/nativenumberwrapper";
 import { LANGUAGE_SYSTEM } from "../../i18nlangtag/inc/lang";
 import { TransliterationFlags } from "../../i18nutil/inc/transliteration";
 import type { LocaleConstReference } from "../../udkapi/com/sun/star/lang/Locale";
@@ -86,5 +87,15 @@ export class OnDemandCharClass {
     this.second?.dispose();
     this.first = this.second = null;
     this.current = -1;
+  }
+}
+
+/** Original on-demand native-number service owner. Context binding is provided by the actual NativeNumberWrapper supplier path. */
+export class OnDemandNativeNumberWrapper {
+  private moNativeNumber: NativeNumberWrapper | null = null;
+  /** Original lazy emplace and same-instance borrow. @returns Actual native-number wrapper. */
+  get(): NativeNumberWrapper {
+    if (!this.moNativeNumber) this.moNativeNumber = new NativeNumberWrapper();
+    return this.moNativeNumber;
   }
 }

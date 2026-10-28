@@ -7,13 +7,16 @@
     "status": "mapped",
     "upstreamPath": "sc/source/core/data/documen3.cxx",
     "localSymbols": [
-      "UpdateReference"
+      "UpdateReference",
+      "GetLanguage"
     ],
     "upstreamSymbols": [
-      "UpdateReference"
+      "UpdateReference",
+      "ScDocument::GetLanguage"
     ],
     "preservedResponsibilities": [
-      "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified."
+      "Task76 adds original copy-reference context values, insertion-only global-name normalization, sparse column sets, ScFormulaCell copy-update/compile metadata and actual document/table/column copy traversal with boundary group joins. Compiled references remain owned by the existing token arrays; no formula-source reparse is used to relocate references. Native false returns, oldest on-move undo formula and optional block-position borrowing are retained. Non-copy shift/move engines and absent names/drawing/printing/validation/embedded/UNO/formatter services remain unrepresented. This prerequisite does not complete document CopyFromClip, paste history, EnterBlock or AutoSum acceptance; whole-module behavior/contract/default parity stays unverified.",
+      "AQF9AG adds original document-language field reads over actual owner fields initialized by the represented source constructor state. No language inference from import options or formatter current language is added."
     ],
     "omittedResponsibilities": [
       "Non-copy reference engines, full document copy/paste undo orchestration and absent native service families remain unported."

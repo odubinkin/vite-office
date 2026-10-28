@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/column3.input.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/column3.cxx",
+    "localSymbols": [
+      "ParseString"
+    ],
+    "upstreamSymbols": [
+      "ScColumn::ParseString",
+      "applyTextNumFormat"
+    ],
+    "preservedResponsibilities": [
+      "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column3.input.ts",
+          "marker": "ParseString"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::ParseString"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/column3.input.ts",
+      "rationale": "Split the original large translation unit by input, formula joins, frame, ISO or edit-format responsibilities while retaining original owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

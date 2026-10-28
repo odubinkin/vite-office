@@ -3,13 +3,7 @@ import { HardRecalcState, ScDocumentMode } from "./document.modes";
 
 import type { EditTextObject } from "../../../../editeng/inc/editobj";
 import type { SvxBorderLine } from "../../../../editeng/source/items/borderline";
-import {
-  SvxBoxItemLine as Edge,
-  SvxBoxInfoItemLine as InnerEdge,
-  SvxBoxInfoItem,
-  SvxBoxItem,
-  SvxBoxInfoItemValidFlags as Valid,
-} from "../../../../editeng/source/items/frmitems";
+import { SvxBoxInfoItem, SvxBoxItem } from "../../../../editeng/source/items/frmitems";
 import { FormulaError } from "../../../../formula/inc/errorcodes";
 import { FormulaGrammar, type Grammar } from "../../../../formula/inc/grammar";
 import { MsLangId } from "../../../../i18nlangtag/inc/mslangid";
@@ -44,7 +38,6 @@ import { CellType, InsertDeleteFlags, ScGlobal, type HasAttrFlags } from "../../
 import { ScInterpreterContext } from "../../../inc/interpretercontext";
 import type { ScMarkData } from "../../../inc/markdata";
 import { CellAttributeHelper, CellAttributeHolder, ScPatternAttr } from "../../../inc/patattr";
-import { ScRangeList } from "../../../inc/rangelst";
 import { SetFormulaDirtyContext } from "../../../inc/refupdatecontext";
 import { ScSheetLimits } from "../../../inc/sheetlimits";
 import type { ScStyleSheetPool } from "../../../inc/stlpool";
@@ -55,6 +48,8 @@ import type { ScPoolHelper } from "../inc/poolhelp";
 import { ScScriptTypeData, type ScScriptServiceFactory } from "../inc/scrdata";
 import type { ScDocumentPool } from "./docpool";
 import * as documen2 from "./documen2";
+import * as documentFrame from "./document.frame";
+import * as documen8 from "./documen8";
 import * as documen3 from "./documen3";
 import { GetStringScriptType as classifyString } from "./documen6";
 import * as documen7 from "./documen7";
@@ -282,6 +277,25 @@ export class ScDocument {
   SetGrammar(grammar: Grammar): void {
     this.eGrammar = grammar;
   }
+  /** Original packed grammar address convention. @returns Native convention. */
+  GetAddressConvention(): import("../../../../formula/inc/grammar").AddressConvention {
+    return FormulaGrammar.extractRefConvention(
+      this.eGrammar,
+    ) as import("../../../../formula/inc/grammar").AddressConvention;
+  }
+  private bLinkFormulaNeedingCheck = false;
+  /** Original link-formula check flag. @returns Native flag. */
+  HasLinkFormulaNeedingCheck(): boolean {
+    return this.bLinkFormulaNeedingCheck;
+  }
+  /** Original link-formula flag assignment. @param value - Native flag. @returns Nothing. */
+  SetLinkFormulaNeedingCheck(value: boolean): void {
+    this.bLinkFormulaNeedingCheck = value;
+  }
+  /** Original compiled-token link check. @param code - Actual token array. @returns Nothing. */
+  CheckLinkFormulaNeedingCheck(code: import("../../../inc/tokenarray").ScTokenArray): void {
+    documen8.CheckLinkFormulaNeedingCheck.call(this, code);
+  }
   /** Original block emptiness on the same document. @param args - Native coordinates and sheet. @returns Empty block. */
   IsBlockEmpty(...args: Parameters<typeof document10.IsBlockEmpty>): boolean {
     return document10.IsBlockEmpty.apply(this, args);
@@ -363,91 +377,9 @@ export class ScDocument {
   }
   /** Original marked selection frames and adjacent-envelope border removal. @param marks - Actual native marks. @param outer - Requested outer lines. @param inner - Requested inner lines and validity. @returns Nothing. */
   ApplySelectionFrame(marks: ScMarkData, outer: SvxBoxItem, inner: SvxBoxInfoItem): void {
-    const ranges = new ScRangeList();
-    marks.FillRangeListWithMarks(ranges, false);
-    for (const tab of marks.GetSelectedTabs()) {
-      if (tab >= this.GetTableCount()) break;
-      const table = this.FetchTable(tab);
-      if (table)
-        for (const range of ranges)
-          table.ApplyBlockFrame(
-            outer,
-            inner,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-    }
-    if (!outer.IsRemoveAdjacentCellBorder()) return;
-    const blank = new SvxBoxItem(outer);
-    for (const edge of [Edge.TOP, Edge.BOTTOM, Edge.LEFT, Edge.RIGHT])
-      blank.SetLine(undefined, edge);
-    const left = new SvxBoxItem(blank),
-      right = new SvxBoxItem(blank),
-      top = new SvxBoxItem(blank),
-      bottom = new SvxBoxItem(blank),
-      base = new SvxBoxInfoItem(inner);
-    base.SetTable(false);
-    base.SetLine(undefined, InnerEdge.HORI);
-    base.SetLine(undefined, InnerEdge.VERT);
-    base.SetValid(Valid.ALL, false);
-    base.SetValid(Valid.DISTANCE);
-    const leftInfo = new SvxBoxInfoItem(base),
-      rightInfo = new SvxBoxInfoItem(base),
-      topInfo = new SvxBoxInfoItem(base),
-      bottomInfo = new SvxBoxInfoItem(base);
-    if (inner.IsValid(Valid.TOP) && !outer.GetTop()) topInfo.SetValid(Valid.BOTTOM);
-    if (inner.IsValid(Valid.BOTTOM) && !outer.GetBottom()) bottomInfo.SetValid(Valid.TOP);
-    if (inner.IsValid(Valid.LEFT) && !outer.GetLeft()) leftInfo.SetValid(Valid.RIGHT);
-    if (inner.IsValid(Valid.RIGHT) && !outer.GetRight()) rightInfo.SetValid(Valid.LEFT);
-    const topRanges = marks.GetTopEnvelope(),
-      bottomRanges = marks.GetBottomEnvelope(),
-      leftRanges = marks.GetLeftEnvelope(),
-      rightRanges = marks.GetRightEnvelope();
-    for (const tab of marks.GetSelectedTabs()) {
-      if (tab >= this.GetTableCount()) break;
-      const table = this.FetchTable(tab);
-      if (table) {
-        for (const range of topRanges)
-          table.ApplyBlockFrame(
-            top,
-            topInfo,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-        for (const range of bottomRanges)
-          table.ApplyBlockFrame(
-            bottom,
-            bottomInfo,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-        for (const range of leftRanges)
-          table.ApplyBlockFrame(
-            left,
-            leftInfo,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-        for (const range of rightRanges)
-          table.ApplyBlockFrame(
-            right,
-            rightInfo,
-            range.aStart.Col(),
-            range.aStart.Row(),
-            range.aEnd.Col(),
-            range.aEnd.Row(),
-          );
-      }
-    }
+    documentFrame.ApplySelectionFrame.call(this, marks, outer, inner);
   }
+
   /** Original selected-sheet indentation with removed-tab boundary. @param increment - Direction. @param marks - Real marks. @returns Nothing. */
   ChangeSelectionIndent(increment: boolean, marks: ScMarkData): void {
     for (const tab of marks.GetSelectedTabs()) {
@@ -641,6 +573,11 @@ export class ScDocument {
   private mbTrackFormulasPending = false;
   private mbFinalTrackFormulas = false;
   private bExpandRefs = false;
+  protected readonly languageFields = { eLanguage: 0, eCjkLanguage: 0, eCtlLanguage: 0 };
+  /** Original document language outputs initialized to ScGlobal::eLnge (SYSTEM). @param latin - Latin output. @param cjk - CJK output. @param ctl - CTL output. @returns Nothing. */
+  GetLanguage(latin: [number], cjk: [number], ctl: [number]): void {
+    documen3.GetLanguage.call(this, latin, cjk, ctl);
+  }
   protected readonly locale = MsLangId.Conversion.convertLanguageToLocale(0, false);
   declare private mpCellStringPool: SharedStringPool;
   /** Constructs native document-mode resources and an independent shared string pool. @param mode - Native construction mode. @returns Document. */
@@ -699,6 +636,10 @@ export class ScDocument {
   IsMerged(position: ScAddress): boolean {
     return document10.IsMerged.call(this, position);
   }
+  /** Native document.cxx single-cell number-format dispatch. @param position - Cell. @param key - Formatter key. @returns Nothing. */
+  SetNumberFormat(position: ScAddress, key: number): void {
+    this.FetchTable(position.Tab())?.SetNumberFormat(position.Col(), position.Row(), key);
+  }
   /** Original single-item dispatch. @param args - Coordinates and actual item. @returns Nothing. */
   ApplyAttr(...args: Parameters<typeof document10.ApplyAttr>): void {
     document10.ApplyAttr.apply(this, args);
@@ -711,19 +652,11 @@ export class ScDocument {
   ApplyPattern(col: number, row: number, tab: number, pattern: ScPatternAttr): void {
     this.FetchTable(tab)?.ApplyPattern(col, row, pattern);
   }
-  /** Applies an actual source pattern delta on a single sheet. @param startCol - First column. @param startRow - First row. @param endCol - Last column. @param endRow - Last row. @param tab - Sheet. @param delta - Pattern delta. @returns Whether changed. */
-  ApplyPatternAreaTab(
-    startCol: number,
-    startRow: number,
-    endCol: number,
-    endRow: number,
-    tab: number,
-    delta: ScPatternAttr,
-  ): boolean {
-    return (
-      this.FetchTable(tab)?.ApplyPatternArea(startCol, startRow, endCol, endRow, delta) ?? false
-    );
+  /** Original pattern-area dispatch through the actual sheet owner. @param args - Native coordinates and pattern delta. @returns Whether changed. */
+  ApplyPatternAreaTab(...args: Parameters<typeof document10.ApplyPatternAreaTab>): boolean {
+    return document10.ApplyPatternAreaTab.apply(this, args);
   }
+
   /** Original document.cxx simple-area or selected-cache dispatch over actual canonical pattern owners. @param delta - Source pattern. @param marks - Actual simple/multi selection. @returns Stored attribute change. */
   ApplySelectionPattern(delta: ScPatternAttr, marks: ScMarkData): boolean {
     return documen7.ApplySelectionPattern.call(this, delta, marks);

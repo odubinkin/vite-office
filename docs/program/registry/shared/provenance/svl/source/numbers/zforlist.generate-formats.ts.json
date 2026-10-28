@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.generate-formats.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "ImpGenerateFormats"
+    ],
+    "upstreamSymbols": [
+      "SvNFFormatData::ImpGenerateFormats"
+    ],
+    "preservedResponsibilities": [
+      "Original complete builtin initialization sequence composes the actual mapper, locale value, current language, scanner/native-number owners and table. Preserve General/Boolean/Text initialization, source usage/index insertion order, currency default clearing, generated ISO/fraction/week codes, comments, optional additional generation and conversion-mode save/restore. Complete-entry tests exercise eight actual locale providers; full original-initializer native differential closure remains pending. No format key or parsed state is fabricated."
+    ],
+    "omittedResponsibilities": [
+      "Full native initializer differential closure, complete CSV recognition/cell-dispatch and formatted-output acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.generate-formats.ts",
+          "marker": "ImpGenerateFormats"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFFormatData::ImpGenerateFormats"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.generate-formats.ts",
+      "rationale": "Split the large original zforlist.cxx by builtin initialization and additional-format generation responsibilities, keeping actual source owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

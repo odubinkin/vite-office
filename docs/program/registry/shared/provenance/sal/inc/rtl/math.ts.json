@@ -12,7 +12,8 @@
       "round",
       "approxFloor",
       "approxCeil",
-      "approxValue"
+      "approxValue",
+      "stringToDouble"
     ],
     "upstreamSymbols": [
       "approxAdd",
@@ -21,11 +22,13 @@
       "round",
       "approxFloor",
       "approxCeil",
-      "approxValue"
+      "approxValue",
+      "stringToDouble"
     ],
     "preservedResponsibilities": [
       "Task200 adds consumed native RTL approxEqual/approxAdd/approxSub to the existing common math owner. Sign/zero/nonfinite thresholds, decimal-power constants and the representable-integer exception follow sal/rtl/math.cxx and include/rtl/math.hxx; existing C numeric parser is reused unchanged. Native binary64 JavaScript arithmetic and decimal conversion replace native allocation/ABI details. Pinned SAL QA values and boundary tests provide bounded evidence; full RTL math and universal libm last-bit equivalence are not claimed.",
-      "Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence."
+      "Task76 native General-format dependency:ports original RTL round across all8selectors and approxValue with actual binary64 exponent/significand inspection,original decimal-literal powers,corrected approximation,signed zero,precision clamps and overflow restoration. JS lacks fenv,so HalfEven uses the original native fallback;release unknown-selector behavior remains unchanged. Guards proven unreachable in the defined consumed binary64 domain are erased:nonpositive precision count after the below2^52 guard,underflow of a nonnegative decimal power,precision-clamped scale overflow,and approxValue negative scaling/final overflow after its integer/fraction-bit guards. There is no coverage ignore or threshold change. Pinned SAL test_round regressions and independent direction/tie/subnormal/magnitude vectors provide bounded evidence,not universal host-libm or native ABI equivalence.",
+      "AQF9AG restores the original logical UTF16 view/OUString stringToDouble wrapper over the actual existing bounded C parser, preserving status and parsed-end forwarding. CSV uses it for fractional seconds, with no JavaScript numeric parser or decimal heuristic."
     ],
     "omittedResponsibilities": [
       "All services outside the explicitly represented numeric formula/arithmetic subset remain unsupported; no broad parity claim."

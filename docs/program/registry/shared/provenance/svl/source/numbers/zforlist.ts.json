@@ -17,7 +17,6 @@
       "IsCompatible",
       "ExpandTwoDigitYear",
       "GetCalendar",
-      "NfCurrencyEntry",
       "GetTheCurrencyTable",
       "GetCurrencyEntry",
       "GetLegacyOnlyCurrencyEntry",
@@ -56,7 +55,12 @@
       "SvNumberFormatter::GetCurrencyEntry",
       "SvNumberFormatter::GetLegacyOnlyCurrencyEntry",
       "SvNFLanguageData::GetTransliteration",
-      "SvNFLanguageData::IsDecimalSep"
+      "SvNFLanguageData::IsDecimalSep",
+      "SvNumberFormatter::SetColorLink",
+      "SvNumberFormatter::GetUserDefColor",
+      "SvNumberFormatter::GetNatNum",
+      "SvNumberFormatter::IsLocaleInstalled",
+      "SvNFLanguageData::GetLangDecimalSep"
     ],
     "preservedResponsibilities": [
       "Task AQF9AG ports static SvNumberFormatter::ExpandTwoDigitYear and its language/formatter instance forwarding for input-scanner year fragments; complete input classification remains unported.",
@@ -73,7 +77,14 @@
       "Task AQF9AG adds source IsDecimalSep exact current/alternate cached separator comparison for the FRACTION preset branch of IsNumberFormatMain.",
       "Task AQF9AG generates standard Boolean and Text formats at native keys 48 and 49 immediately after General, following SvNFFormatData::ImpGenerateFormats. SvNFEngine dispatches numeric output to the owning SvNumberformat entry and string output to the native text entry when needed; missing string format keys fall back to standard Text. GetEntry returns null and GetType returns UNDEFINED for absent entries instead of throwing, while numeric output falls back to General. GetInputLineString changes standard precision only for numeric categories, as in the pinned source. Other builtin formats remain pending.",
       "AQF9AG moves the initial standard generator into zforlist.generate.ts and connects the original complete builtin index/default/cache helpers from zforlist.index.ts. Boolean/Text runtime keys are99/100 rather than their48/49 enum ordinals; missing string-format fallback uses original Text key100. GetIndexTableOffset and the actual owner-cache query follow source. Full format generation/input/CSV integration remains pending.",
-      "Actual SvNFLanguageData constructs input scanner before format scanner, passes its own owner reference, retains pointer-empty initialization lifetime, updates locale fields before invalidating scanner keywords and selects first Currency2 UsedInCompatibleFormatCodes row with original fallback. The obsolete externally prepared General scanner projection is removed; complete final compilation and CSV auto-input remain pending."
+      "Actual SvNFLanguageData constructs input scanner before format scanner, passes its own owner reference, retains pointer-empty initialization lifetime, updates locale fields before invalidating scanner keywords and selects first Currency2 UsedInCompatibleFormatCodes row with original fallback. The obsolete externally prepared General scanner projection is removed; complete final compilation and CSV auto-input remain pending.",
+      "AQF9AG restores the original required actual formatter color reference through SvNFLanguageData construction. The real SvNumberFormatter owns the original color Link setting; its consumed bound thunk/instance pair is represented by a nullable bound JS function. Unset callbacks return native null, indices retain uint16 binding and callback results remain borrowed. Tests instantiate real formatter suppliers rather than mock services; owner references are restored before consuming color-prefixed standard codes.",
+      "AQF9AG owns the original lazy native-number wrapper and restores GetNatNum. Original installed-locale IDs are collected as a side effect of existing real currency-table initialization and IsLocaleInstalled queries exactly that set, without substituting successful locale fallback for installation.",
+      "AQF9AG forwards the actual language decimal query and preserves the original formatter engine export identity after responsibility splitting. Compiled-entry insertion now passes actual scanner/input/native provider arguments to the source constructor.",
+      "AQF9AG connects original automatic-currency delimiter stripping during ImpInsertFormat, preserving NF_CURRENCY_1000DEC2_CCC exclusion and compiling through the actual normal constructor. The prior local unsupported-currency exception is removed; complete builtin initialization remains pending.",
+      "AQF9AG now invokes the complete original builtin-generation sequence from the formatter constructor, including both additional-format passes. SvNumberformat stores/copies the source additional-builtin flag; General last-insert metadata advances according to real successful locale insertions. The earlier General-only helper remains an isolated source initialization fragment used by existing focused tests, not the production initializer. Full native initializer differential closure and CSV recognition/output remain pending.",
+      "AQF9AG restores public standard/builtin selection and IsNumberFormat through the complete original accessor/policy, actual locale-block generation, actual currency-default insertion and existing input scanner. Currency values are declared in zforlist.currency-entry.ts and reexported here. Text and English CSV branches now consume these public document-formatter contracts; original explicit-date and auto-input callers remain pending.",
+      "AQF9AG exposes original GetEditFormat, GetFormatForLanguageIfBuiltIn and GetEvalDateFormat consumed by ParseString, forwarding to actual engine/policy owners."
     ],
     "omittedResponsibilities": [
       "Full language/formatter construction,remaining builtin generator/currency/prefix services,NatNum,document paste/history and task74 remain unported or pending final acceptance."

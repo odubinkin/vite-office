@@ -1,6 +1,10 @@
 /** @fileoverview Native rich-text cell snapshots clone across document commit, release and replacement. */
 import { assert, expect, it } from "vitest";
-import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
+import {
+  type EditTextObject,
+  EditTextObjectImpl,
+  TextRotation,
+} from "../../../../editeng/inc/editobj";
 import { text, unicode } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { SvtScriptType } from "../../../../svl/inc/languageoptions";
 import { MapUnit } from "../../../../tools/inc/mapunit";
@@ -32,7 +36,7 @@ it("keeps rich-text snapshots independent across copy, commit and release", /** 
     const secondText = unicode("Second paragraph");
     source.CreateAndInsertContent().SetText(secondText);
     secondText.dispose();
-    expect(owned.getEditText().GetParagraphCount()).toBe(1);
+    expect((owned.getEditText() as EditTextObject).GetParagraphCount()).toBe(1);
     copy.commit(doc, new ScAddress());
     const committed = doc.GetRefCellValue(new ScAddress()).getEditText();
     assert(committed);
@@ -41,15 +45,15 @@ it("keeps rich-text snapshots independent across copy, commit and release", /** 
     expect(text(committed.GetText(0))).toBe("Rich text");
     snapshot.assign(doc, new ScAddress());
     doc.SetEmptyCell(new ScAddress());
-    expect(text(snapshot.getEditText().GetText(0))).toBe("Rich text");
+    expect(text((snapshot.getEditText() as EditTextObject).GetText(0))).toBe("Rich text");
     owned.set(source);
-    expect(owned.getEditText().GetParagraphCount()).toBe(2);
+    expect((owned.getEditText() as EditTextObject).GetParagraphCount()).toBe(2);
     owned.release(doc, new ScAddress(1, 0, 0));
     expect(owned.isEmpty()).toBe(true);
     const released = new ScCellValue(new ScRefCellValue(doc, new ScAddress(1, 0, 0)));
     try {
-      expect(released.getEditText().GetParagraphCount()).toBe(2);
-      expect(text(released.getEditText().GetText(1))).toBe("Second paragraph");
+      expect((released.getEditText() as EditTextObject).GetParagraphCount()).toBe(2);
+      expect(text((released.getEditText() as EditTextObject).GetText(1))).toBe("Second paragraph");
     } finally {
       released.clear();
     }

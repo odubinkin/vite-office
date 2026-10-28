@@ -22,17 +22,19 @@
         "vendor/libreoffice-reference/include/svl/ondemand.hxx",
         "apps/office/src/svl/inc/ondemand.ts#OnDemandTransliterationWrapper"
       ],
-      "justification": "Task AQF9AG ports the source OnDemandCharClass two-slot cache: matching locales reuse their classifier, an unseen locale replaces the slot opposite the current one, and GetCharClass borrows the selected classifier. Prepared Locale values stand for source LanguageTag/service construction; full LanguageTag and UNO provider ABI are still unported. Task AQF9AG adds the source lazy IGNORE_CASE transliteration owner with current-language invalidation and stable borrowed GetTransliteration accessor.",
+      "justification": "Task AQF9AG ports the source OnDemandCharClass two-slot cache: matching locales reuse their classifier, an unseen locale replaces the slot opposite the current one, and GetCharClass borrows the selected classifier. Prepared Locale values stand for source LanguageTag/service construction; full LanguageTag and UNO provider ABI are still unported. Task AQF9AG adds the source lazy IGNORE_CASE transliteration owner with current-language invalidation and stable borrowed GetTransliteration accessor. AQF9AG adds original on-demand NativeNumberWrapper emplace and same-owner get lifetime. Component-context lookup remains bound through the existing actual wrapper/provider path; no stand-in service/context is supplied.",
       "knownViolations": [],
       "localSymbols": [
         "OnDemandCharClass",
-        "OnDemandTransliterationWrapper"
+        "OnDemandTransliterationWrapper",
+        "OnDemandNativeNumberWrapper"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "include/svl/ondemand.hxx",
       "upstreamSymbols": [
         "OnDemandCharClass",
-        "OnDemandTransliterationWrapper"
+        "OnDemandTransliterationWrapper",
+        "OnDemandNativeNumberWrapper"
       ]
     }
   }

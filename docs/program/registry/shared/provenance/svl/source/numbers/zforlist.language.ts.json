@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.language.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GetLangDecimalSep"
+    ],
+    "upstreamSymbols": [
+      "SvNFLanguageData::GetLangDecimalSep"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG restores the original owned decimal-separator query over the actual language owner and prepared LocaleDataWrapper field. ActLnge, scanners and the prior locale-data context remain unchanged on the normal return path. The current core binds the original on-demand locale field through its existing actual mutable wrapper; complete native process-wide/on-demand cache identity and ABI remain unverified, and no substitute locale provider or heuristic decimal inference is used."
+    ],
+    "omittedResponsibilities": [
+      "Complete table initialization, formatted export/CSV caller closure and full native constructor/service/ABI equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.language.ts",
+          "marker": "GetLangDecimalSep"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFLanguageData::GetLangDecimalSep"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.language.ts",
+      "rationale": "Split the original large translation unit by constructor/language/output responsibility while retaining actual source owners and original callable contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

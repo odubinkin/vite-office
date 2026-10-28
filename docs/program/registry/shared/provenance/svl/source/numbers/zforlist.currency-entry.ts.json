@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "NfCurrencyEntry"
+    ],
+    "upstreamSymbols": [
+      "NfCurrencyEntry::NfCurrencyEntry",
+      "NfCurrencyEntry::BuildPositiveFormatString",
+      "NfCurrencyEntry::BuildNegativeFormatString"
+    ],
+    "preservedResponsibilities": [
+      "Extracts the existing original currency value unchanged and restores zero-character storage and original positive/negative format entry points. Actual locale/currency fields and original code owners remain in use."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
+          "marker": "NfCurrencyEntry"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "NfCurrencyEntry::NfCurrencyEntry"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.currency-entry.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

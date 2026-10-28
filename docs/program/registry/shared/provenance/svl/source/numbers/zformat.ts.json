@@ -45,7 +45,8 @@
       "SvNumberformat::GetNumForString",
       "SvNumberformat::IsNegativeWithoutSign",
       "SvNumberformat::HasStringNegativeSign",
-      "SvNumberformat::ImpGetNumForStringElementCount"
+      "SvNumberformat::ImpGetNumForStringElementCount",
+      "SvNumberformat::StripNewCurrencyDelimiters"
     ],
     "preservedResponsibilities": [
       "Task76 ports the actual General/standard NUMBER branches of SvNumberformat output over the existing genuine SAL Unicode conversion and RTL rounding owners. Preserve native unlimited/input-line precision65535/65534,small-value fixed-versus-E2 choice,nine-exponent/approxEqual checks,Automatic exponent widths,finite precision14/300 clamps,locale first-decimal unit and minus-zero suppression. The native NatNum0 path needs no transliteration. Actual precision/decimal scalar fields are explicit parameters of this consumed responsibility;no SvNumberFormatter facade,synthetic parsed format or alternate numeric model is introduced. Full number-format constructor/scanner/table/merge,other format types,NatNum and connected document paste/history remain pending.",
@@ -58,7 +59,14 @@
       "Task AQF9AG ports source GetNumForString forward/backward token search, second-section real-negative condition defaults, negative-without-sign check and edge-minus predicate for input recognition.",
       "Task AQF9AG ports the source compiled-subformat literal count and scanned-type queries used by IsNumberFormatMain, including its first complete-count shortcut.",
       "Task AQF9AG admits the source numeric standard Boolean and Text output branches in SvNumberformat::GetOutputString: matching Boolean keyword selects the locale's uppercase TRUE/FALSE word, while Text uses ImpGetOutputStandard before the numeric standard-format precision switch, including its 300-decimal cap for both special precision sentinels. The text overload selects the TEXT/4th section and substitutes the input at @ or General tokens; IsTextFormat and HasTextFormat retain source type and section tests.",
-      "Original static quote-helper methods forward to the source responsibility fragment; inclusive quote state, escape defaults, length sentinels and CALC-349 asymmetry remain unchanged."
+      "Original static quote-helper methods forward to the source responsibility fragment; inclusive quote state, escape defaults, length sentinels and CALC-349 asymmetry remain unchanged.",
+      "AQF9AG adds the original subformat-owned SvNumberNatNum, const metadata accessors and memberwise parameter/counter/date/language copying and destruction. Color/scanner rebinding and full constructor integration remain pending.",
+      "AQF9AG restores original color-name ownership/borrowed pointers, explicit required destination scanner argument in ImpSvNumFor::Copy, original actual-scanner GetColor rebinding when copying across formatter owners and full color/NatNum/token member destruction. Compiled-entry copy selects null only when both actual scanner references are identical. Constructor prefix integration and output closure remain pending.",
+      "AQF9AG replaces the old scalar language field with actual LocaleType ownership/copy, original GetLanguage and exact IsSubstituted/IsSystemTimeFormat/IsSystemLongDateFormat predicates, including the required SYSTEM guard.",
+      "AQF9AG restores original normal constructor arguments including actual input scanner/native provider and defaulttrue Boolean replacement. Copies retain actual scanner/color/locale/natnum owners. Normal/copy exceptions destroy original owned members before propagation rather than leaking partially built C-string owners. Remaining output/generator responsibilities are incomplete.",
+      "AQF9AG connects original automatic-currency delimiter stripping during ImpInsertFormat, preserving NF_CURRENCY_1000DEC2_CCC exclusion and compiling through the actual normal constructor. The prior local unsupported-currency exception is removed; complete builtin initialization remains pending.",
+      "AQF9AG now invokes the complete original builtin-generation sequence from the formatter constructor, including both additional-format passes. SvNumberformat stores/copies the source additional-builtin flag; General last-insert metadata advances according to real successful locale insertions. The earlier General-only helper remains an isolated source initialization fragment used by existing focused tests, not the production initializer. Full native initializer differential closure and CSV recognition/output remain pending.",
+      "AQF9AG adds original IsIso8601 section/token query for edit-format selection over actual compiled subformats."
     ],
     "omittedResponsibilities": [
       "Full language/scanner service initialization,conditions,prefixes,other pattern families,NatNum suppliers,nonstandard output,formatter/table generation and document paste/UI integration remain unported."

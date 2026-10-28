@@ -4,7 +4,7 @@ title: "Implement Calc CSV import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 40
+revision: 51
 origin:
   system: "manual"
 depends_on: []
@@ -165,9 +165,7 @@ comments:
     body: "Verified builtin runtime-key/default-selection block: corrected Boolean/Text keys99/100, complete enum/index table and source default/cache methods;32184 unchanged-C++ kernel cases,139 shared tests,72 CSV tests,1 browser flow and required static/build checks pass. Full scanner/pattern compilation and remaining formatter/column/CSV integration are pending; continue implementation. Same task and active goal, no full-suite cadence increment or pause."
   -
     author: "CODER"
-    body: |-
-      Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task.
-
+    body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
 events:
   -
     type: "status"
@@ -393,11 +391,9 @@ events:
     type: "comment"
     at: "2026-10-28T10:55:40.713Z"
     author: "CODER"
-    body: |-
-      Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task.
-
+    body: "Verified dependency checkpoint: actual language-owned lazy scanner, complete keyword/lexical/type stages and calendar token helpers. Native scanner32972 and full RTL1662 observations; shared45files262 tests, CSV72, browser2, build/typecheck/lint/provenance1725 and required checks pass. Remaining FinalScan/formatter/auto-input/CSV audit stays on AQF9AG; task DOING and goal active. No full-suite run due on the unchanged open task."
 doc_version: 3
-doc_updated_at: "2026-10-28T10:55:40.713Z"
+doc_updated_at: "2026-10-28T15:45:24.020Z"
 doc_updated_by: "CODER"
 description: "Port upstream Calc ASCII options and import/export owners into the current Calc core slice; route CSV through ScDocShell and existing browser file UI while preserving intentional browser save/autosave/recovery differences; document suspicious upstream behavior and validate changed modules."
 sections:
@@ -627,6 +623,242 @@ sections:
     Result: pass. Evidence:1725 provenance/runtime modules, zero semantic inventory violations, source-tree/boundary/routing/build acceptance. Runtime local-symbol metadata now lists actual declarations rather than reexport-only header functions and the generator moved in the prior checkpoint; symbol ownership remains on its implementation fragments. Full-suite cadence remains unchanged: AQF9AG is the same open task, not a new tenth task.
 
     Remaining: complete original FinalScan numeric/date/time/common branches and original ScanFormat orchestration, constructor/prefix/color/NatNum/output responsibilities, complete builtin generation and SvNFEngine/SvNumberFormatter::IsNumberFormat, then ScColumn::ParseString/ScDocumentImport::setAutoInput, remaining CSV option paths and final UI/export audit. Current public ScanFormat still has the preexisting General/Boolean/Text admitted path until the missing FinalScan stages are present. No heuristic interim formatter or fabricated keys are connected. This is a verified dependency checkpoint only; AQF9AG stays DOING and the goal stays active. Do not mark the overall task complete or pause the goal.
+
+    ### CSV single-cell number-format dispatch, 2026-10-28
+
+    Scope: pinned document.cxx ScDocument::SetNumberFormat -> table2.cxx ScTable::SetNumberFormat -> column2.cxx ScColumn::SetNumberFormat. Actual document owners, native missing-sheet and invalid-cell guards, actual SfxUInt32Item/ApplyAttr pooling and temporary-item lifetime are retained. The existing GetDataArea body moved without behavior changes to its original table1 responsibility to keep class source files below the hard size limit. Source and runtime registry evidence updated. No CSV recognition path is claimed complete by this prerequisite.
+
+    - Command: npm run test:calc -- src/sc/source/core/data/block-number-format.test.ts src/sc/source/core/data/connected-area.test.ts src/sc/source/ui/docshell/impex.test.ts
+      Result: pass. Evidence: 3 files, 45 tests. Scope: actual single-cell format assignment, preserved font attributes and neighboring cells, invalid/sparse sheet and column behavior, connected-area traversal and existing CSV parser regression cases.
+    - Command: npm run typecheck
+      Result: pass. Evidence: tools and office TypeScript checks. Scope: current implementation and tests.
+    - Command: npm run check:source-provenance
+      Result: pass after correcting the ScColumn class-level primary-file symbol list; method-specific evidence correctly points to column2.cxx. Evidence: 1732 runtime modules, 1520 mapped, 182 browser adaptations, 30 infrastructure.
+    - Command: npm run check:dependencies
+      Result: pass. Evidence: 1731 runtime sources, 8999 relative imports, 209 permitted cross-module edges.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: 3946 authored files inspected, no hard-limit violation.
+    - Command: npx eslint apps/office/src/sc/source/core/data/{document,table,table1,table2,column,column2,block-number-format.test}.ts --max-warnings 0
+      Result: pass after replacing the test non-null assertion with an explicit inserted-sheet check.
+    - Command: npm run check:docs
+      Result: pass after documenting test and existing native-probe callbacks. Evidence: 3942 authored source files.
+    - Command: git diff --check
+      Result: pass. Scope: current worktree whitespace.
+    - Command: npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts
+      Result: fail, expected pending implementation. Evidence: all 7 cases fail on missing native CSV recognition/format attributes. Scope: native external Standard1/Text2 codes plus actual Text format, explicit DMY/MDY/YMD dates, English columns and both special-number flag states. The setter prerequisite does not yet connect these caller paths. Tests remain strict and enabled; document cleanup now runs even on failed assertions. These are implementation gaps, not an external blocker.
+
+    Full suite not run: this is the same open Agentplane task; the user requires one full run per ten tasks. Existing my-MM required-initializer test remains a separate unresolved native NatNum-prefix constructor dependency. Overall task and goal remain active; no overall successful verification or completion is recorded.
+
+    ### Required format-constructor prefix lexer, 2026-10-28
+
+    Scope: the real my-MM General initializer contains NatNum1. Before connecting its required constructor branch, port the complete pinned bracket-prefix/subformat lexer, not a NatNum-only stripping workaround. New zformat.prefix.ts preserves original bracket token values, conditions, localized H/MI/S duration discrimination, color/locale/DBNum/NatNum tokenization, quoted/combined semicolons, mutable ASCII-space removal, condition-value cursor and native bounded integer conversion. This is an implementation stage: it is not yet called by the actual SvNumberformat constructor, and the my-MM initialization and CSV recognition gaps remain unresolved.
+
+    Required shared primitives: original OUStringBuffer::stripStart; original o3tl UTF16 matchIgnoreAsciiCase -> SAL shortened IgnoreAsciiCase C wrapper -> original known-length generic comparison specialization. The scalar case conversion uses the existing original rtl/character helper, not Unicode folding. Source registry records added/updated without promoting module parity. CALC-351 documents source lexer conversion of a nonnumeric NatNum suffix to modifier0, with explicit limits on full-constructor witness coverage.
+
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.prefix.test.ts src/svl/source/numbers/zformat.test.ts src/sal/rtl/oustringbuffer.test.ts
+      Result: pass. Evidence: 3 files, 34 tests. Scope: actual language/scanner/SAL owners, source prefix classes and cursor behavior, original constructor/output regressions and existing native-buffer fixtures. An initial test incorrectly counted the NatNum19 closing-bracket position as24; source token length is25 and the expected cursor was corrected.
+    - Command: npx tsx scripts/rtl-prefix-native-probe.mjs
+      Result: pass. Evidence: 4998 cases against unchanged pinned native full-header RTL scopes, including the added ASCII-insensitive shortened comparison. Scope: initialized UTF16 payload, exact differences, length boundaries, embedded zeros, aliases and existing replacement/append ownership observations. This does not certify the entire native format constructor or lexer; the lexer tests are local source-contract regressions.
+    - Command: npm run typecheck
+      Result: pass after replacing the nonexistent OUString.view call with its real subView overload. Scope: current tools and application implementation/tests.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: 1733 runtime modules, 1521 mapped, 182 browser adaptations, 30 infrastructure.
+    - Command: npm run check:dependencies
+      Result: pass after adding only the pinned source matchIgnoreAsciiCase C binding to the exact existing SAL/o3tl witness list. Evidence: 1732 runtime sources, 9005 imports, 209 permitted edges. Existing two-owner cycle policy and all other named-import restrictions remain intact.
+    - Command: npx vitest run --maxWorkers 2 scripts/check-module-boundaries.test.ts
+      Result: pass. Evidence: 47 tests, including original named SAL/o3tl import acceptance and forbidden variants.
+    - Command: npx eslint apps/office/src/svl/source/numbers/zformat.prefix{,.test}.ts apps/office/src/sal/rtl/{ustring,strtmpl}.ts apps/office/src/sal/inc/rtl/{ustring.h,ustrbuf}.ts apps/office/src/o3tl/inc/string_view.ts scripts/rtl-prefix-native-probe.mjs scripts/check-module-boundaries.mjs scripts/check-module-boundaries.test.ts --max-warnings 0
+      Result: pass.
+    - Command: npm run check:docs
+      Result: pass after attaching local arrow-function JSDoc to the actual function expressions. Evidence: 3944 authored source files.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: 3948 authored files; updated boundary scripts remain931/992lines. Scope: repository hard authored-file limits.
+    - Command: git diff --check
+      Result: pass.
+
+    No full-suite run: same active Agentplane task and user cadence of one run per ten tasks. No overall verify-ok or task/goal completion is claimed. Next required work is the original constructor prefix metadata/dispatch and required standard-entry initialization, followed by actual CSV auto-input/date/English/special-number callers and reachable export formatting.
+
+    ### Required native-number subformat metadata, 2026-10-28
+
+    Direct dependency: the original SvNumberformat constructor consumes NumFor.GetNatNum/SetNatNumNum/SetNatNumLang/SetNatNumDate/SetNatNumParams when parsing standard locale codes, including the unresolved my-MM NatNum1 General initializer. This block restores the original SvNumberNatNum owner and both complete source conversion tables. Actual ImpSvNumFor owns and copies the metadata and owned OUString parameters and destroys them in native member order. Explicit NatNum0 differs from an unset modifier, stored language is not eagerly resolved, and native uint8/uint16 parameter conversions remain in place. Pinned Chinese/simplified, Japanese and Korean identities were added to the existing language header boundary. Full prefix/constructor dispatch and color/scanner rebinding remain incomplete; no CSV acceptance claim is made.
+
+    - Command: npx tsx scripts/calc-natnum-native-probe.mjs
+      Result: pass. Evidence: 9216 native rows spanning all256 modifier values, both date contexts, CJK/other/unknown/system/UI language identities, static maps and metadata getters/default completeness. Complete original metadata declarations, maps and MsLangId simplify/getRealLanguage bodies are compiled unchanged from verified pinned bytes. The native fixture supplies explicit configured locale values, scalar language tags and std::u16string values; full SAL lifetime/ABI, formatter construction/output and arbitrary locale configuration are outside this witness.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.natnum.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zformat.prefix.test.ts
+      Result: pass. Evidence: 3 files, 34 tests. Scope: source modifier defaults, actual subformat metadata copy/parameter retention after source mutation/destruction, existing compiled-entry/output regressions and original prefix token/cursor cases.
+    - Command: npm run typecheck
+      Result: pass. Scope: current tools and application.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: 1734 runtime modules, 1522 mapped, 182 browser adaptations, 30 infrastructure. New metadata fragment and consumed language identities mapped; no broad parity status promotion.
+    - Command: npm run check:dependencies
+      Result: pass. Evidence: 1733 runtime sources, 9009 imports, 209 permitted module edges.
+    - Command: npm run check:docs
+      Result: pass. Evidence: 3947 authored source files.
+    - Command: npx eslint apps/office/src/i18nlangtag/inc/lang.ts apps/office/src/svl/source/numbers/zformat{,.natnum,.natnum.test}.ts scripts/calc-natnum-native-probe.mjs --max-warnings 0
+      Result: pass.
+    - Command: git diff --check
+      Result: pass.
+
+    CALC-352 records the native Korean nondate DBNum4 -> NatNum10 -> DBNum0 asymmetry and the reverse table's NatNum9 -> DBNum4 mapping. Both original tables and the separate date rules are retained. No full export/rendering failure is inferred from that table observation. Same open Agentplane task, so no full-suite run under the user's one-per-ten-tasks cadence. Goal and task remain active; the required constructor, actual CSV callers, export formatting and final option/UI audit are unfinished.
+
+    ### Required scanner color supplier and subformat copying, 2026-10-28
+
+    Direct dependency: the pinned SvNumberformat constructor consumes GetColor while compiling color-prefixed standard format codes. Restore the original required actual SvNumberFormatter reference in SvNFLanguageData and ImpSvNumberformatScan construction before consuming this branch. The formatter owns the original unset/set color Link behavior; the consumed bound Link thunk/instance value is represented by a nullable bound function, preserving assignment, null result, uint16 argument and borrowed pointer return. No optional or stand-in formatter supplier is used. Isolated language tests now supply genuine formatters that outlive their borrowed scanner states; the browser fixture supplies its actual formatter explicitly.
+
+    Port complete original GetColor, copied static palette vector, German legacy and AllowEnglish names, conversion direction, original comphelper string strip and strict ASCII numeric user-color gate. Actual ImpSvNumFor now owns color names and borrows pointers. Copy takes the original explicit scanner/null argument; SvNumberformat copy uses reference identity to select rebinding through the destination scanner. Same-scanner copying does not invoke a user color callback. Source native behavior is retained when a callback is absent (null), rather than fabricating user colors.
+
+    - Command: npx tsx scripts/calc-format-scan-native-probe.mjs
+      Result: pass. Evidence: 88976 unchanged-source native scanner cases, including 14580 GetColor cases across54 requested language IDs, all3 keyword policies, conversion states/directions, standard names, valid/invalid user-color ordinals and returned callback indices. The unchanged source GetColor, palette declarations, strip and ASCII classifier are compiled with explicit scalar/provider/callback fixtures and initialized string values. Native SAL/UNO ABI and arbitrary classifier/OOM or full constructor behavior remain outside the witness. All additional original dependency blobs, including the prior integer/grouping sources, are now verified byte-for-byte against the pinned Git revision before compiling.
+    - Command: npm run test:shared -- src/svl/source/numbers/zforscan.color.test.ts
+      Result: pass. Evidence: 15 tests. Scope: real formatter callback ownership, native palette identity, German/English localization and conversion, exact COLOR1..64 gate/normalization, callback reset/default, same-scanner copy avoiding callback calls and cross-owner compiled-entry color rebinding.
+    - Command: npm run test:shared -- src/svl/source/numbers
+      Result: fail with the existing required initializer gap only. Evidence: 25 files, 183passed/1failed of184; my-MM GetType(0) remains UNDEFINED instead of NUMBER because the actual constructor prefix stage is not integrated yet. All other related number-module scenarios pass after restoring the original mandatory formatter constructor reference. This is an implementation gap, not an external blocker; the assertion remains enabled and strict.
+    - Command: npm run typecheck
+      Result: pass after updating the affected browser fixture to the restored required color supplier. Scope: tools and complete application/test types. An intermediate automated test-import edit produced a syntax error; that edit was repaired without reverting the preexisting strict my-MM assertion or other work.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: 1736 runtime modules, 1524mapped/182browser/30infrastructure. New original scanner-color and comphelper-strip fragments mapped without promoting full module parity.
+    - Command: npm run check:dependencies
+      Result: pass. Evidence: 1735 runtime sources, 9023 imports, 209 permitted module edges.
+    - Command: npx eslint apps/office/src/svl/source/numbers/*.test.ts apps/office/src/svl/source/numbers/{zforlist,zformat,zforscan,zforscan.color}.ts apps/office/src/test/number-format-language.ts apps/office/src/comphelper/source/misc/string.ts scripts/calc-format-scan-native-probe.mjs apps/office/e2e/calc/clipboard-copy.spec.ts --max-warnings 0
+      Result: pass. The final edited native-probe/color-test files were rechecked separately and pass.
+    - Command: npm run check:file-size
+      Result: pass; source boundary classes and native witness remain below the hard1000line limit. Final clipboard browser fixture959lines, native witness882lines.
+    - Command: npm run build
+      Result: pass. Scope: production static app and Worker bundling after restoring callback ownership.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc
+      Result: pass. Evidence: 2 browser tests. Scope: basic CSV UI import -> primary ODS save -> active-sheet CSV export and actual sparse native clipboard/dependency notifications in Chromium and DOM-free Worker. An initial CLI invocation placed filenames after the variadic project flag and was rejected before tests; the corrected explicit project form above ran both tests. This is not full option/date/special-number CSV acceptance.
+    - Command: git diff --check
+      Result: pass.
+
+    No full suite under the user's same-task one-per-ten-task cadence. Required constructor/prefix integration, my-MM standard entry, real CSV date/English/special-number/format-attribute callers, reachable formatted export and complete UI/option audit remain unfinished. No overall verify-ok or task/goal completion is recorded.
+
+    ### Required compiled-format LocaleType and extended locale prefixes, 2026-10-28
+
+    Direct dependency: the original constructor's locale-prefix branch consumes LocaleType, ImpGetLocaleType, ImpObtainCalendarAndNumerals and installed-locale/native-number providers. Replace the old scalar SvNumberformat language field with the actual original LocaleType owner and memberwise copying. GetLanguage and substitution queries now read that owner and preserve the required SYSTEM predicate. Port the complete raw32 locale decoder, active source serialization (the upstream extended numeral/calendar output block remains disabled), exact eight-unit hex/cursor rule and full original calendar/numeral selection and insertion algorithm. Reference-language IDs are copied from pinned lang.h; no host-locale inference is used.
+
+    Restore original OnDemandNativeNumberWrapper and actual formatter GetNatNum. IsLocaleInstalled queries the original set populated as a side effect of existing real currency-table initialization; successful locale fallback is not treated as installation. The original full constructor dispatch still has not been connected to these modules. The my-MM standard-entry/CSV recognition failures are not claimed resolved by these prerequisites.
+
+    - Command: npx tsx scripts/calc-format-locale-native-probe.mjs
+      Result: pass. Evidence: 104083 unchanged-source native observations for raw locale fields/active serialization, malformed/truncated/closing-bracket hex inputs and cursor offsets, calendar/numeral ID selection and real language-reference/code mutations. Complete original locale methods, reference tables/selection function, MsLangId resolution and numeric hex primitive are compiled from byte-verified pinned sources. Fixtures supply language-tag compiler types, configured locale scalar values and value strings/buffers. Full SAL/UNO ABI, constructor/output and arbitrary locale configuration are outside the witness.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.locale.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zforscan.color.test.ts
+      Result: pass. Evidence: 3 files, 28 tests. Scope: source hex boundaries, extended calendar/language mutation on actual compiled-entry metadata, required SYSTEM substitution guards, value-copy independence, actual lazy formatter native-number provider and installation state, existing compiled output/color regressions. An initial test wrongly expected NATNUM0 digit conversion in en-US; source and existing input tests establish its unsupported-language identity gate. The test now exercises the actual Japanese/fullwidth conversion path without changing production behavior.
+    - Command: npm run typecheck
+      Result: pass. Scope: tools and current application/tests.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: 1738 runtime modules, 1526mapped/182browser/30infrastructure; original locale fragments and consumed language/header ownership mapped, no broad parity promotion.
+    - Command: npm run check:dependencies
+      Result: pass. Evidence: 1737 runtime sources, 9038 imports, 209 permitted cross-module edges.
+    - Command: npm run check:docs
+      Result: pass. Evidence: 3955 authored source files.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: 3959 authored files; zforlist992lines and locale calendar fragment349lines remain within the hard source limit.
+    - Command: npx eslint apps/office/src/svl/source/numbers/zformat{,.locale,.locale-calendar,.locale.test}.ts apps/office/src/svl/source/numbers/zforlist.ts apps/office/src/svl/inc/ondemand.ts apps/office/src/i18nlangtag/inc/lang.ts scripts/calc-format-locale-native-probe.mjs --max-warnings 0
+      Result: pass after removing a blank separating consecutive empty CJK case labels, preserving the original control flow.
+    - Command: git diff --check
+      Result: pass.
+
+    CALC-353 records the native Eastern-Arabic temporary-language inequality; CALC-354 records the eight-digit closing-bracket helper boundary and explicitly notes that the identified constructor caller removes the bracket. Both source behaviors remain unchanged. Same open Agentplane task, so no full-suite run under the user's one-per-ten-task cadence. No overall verification/completion is claimed. Remaining constructor prerequisites include its consumed decimal-separator query and string operations, then the full original constructor control flow/native input-number arguments must be connected; actual CSV date/English/special-number/format attributes, reachable export formatting and complete UI/option audit remain open.
+
+    ### Connected normal format constructor, 2026-10-28
+
+    This block connects the original SvNumberformat normal-constructor control flow to the actual format scanner, original prefix lexer, all four real subformats, color/natnum/LocaleType owners, actual input-number scanner and real native-number provider. Restore the original normal constructor arguments and defaulttrue Boolean replacement at all consumed callers, including the browser fixture. Conditions, source invalid-number normalization, all prefix categories, calendar/numeral insertion, trailing empty/text sections, default General sections, source type/error positions and negative-section defaults now run through the original owner. Normal/copy exceptions release original owned members before propagation.
+
+    The previously strict my-MM initializer regression now passes: the actual NatNum1 prefix is compiled and real standard key0 has NUMBER type. That proves compilation/storage, not complete native-number display output or all standard-entry generation. The CSV integration scope document was updated accordingly. The full standalone native constructor differential witness is still pending; source review, live integration tests and separately bounded native scanner/string/locale witnesses are the current evidence.
+
+    Required primitives: exact OUStringBuffer character indexOf/replace; original bounded UTF16 replace-all C/template and no-acquire adoption; original checked string operator[] binding. GetLangDecimalSep uses the real language owner/locale-data field and preserves normal-return context. Its complete original on-demand/process-wide cache identity remains unverified in this existing projected core slice; no fake locale service or inferred decimal separator is supplied. Existing output/input-line engine bodies moved unchanged into zforlist.output.ts and are reexported through the same SvNFEngine owner to respect the hard file limit.
+
+    - Command: npm run test:shared -- src/svl/source/numbers
+      Result: pass. Evidence: 27 files, 193 tests, including the original strict my-MM NUMBER key assertion.
+    - Command: npm run test:shared -- src/svl/source/numbers/zformat.construct.test.ts
+      Result: pass. Evidence: 5 actual-owner integration cases: inherited trailing text versus explicit empty subformat; real palette pointer/canonical color name; NatNum12 CURRENCY argument using the actual bank-symbol field; numeric condition parsing/decimal conversion with the actual input scanner and language owners.
+    - Diagnostic finding: the new NatNum12 integration case initially stalled synchronously. Exact test/source tracing located a local wrong-overload call: a nonterminated bounded UTF16 view was passed to the existing NUL-pointer OUString constructor. Fix those constructor call sites to use the original view/count binding explicitly, including NatNum12 default literals and lazy helper single-view materialization. No terminator guess or production fallback was added. Known test processes were interrupted before reruns; temporary source/test diagnostics and spies were restored/removed, and the clean test/module suite passes. This is a local implementation correction, not an upstream issue.
+    - Command: npx tsx scripts/rtl-prefix-native-probe.mjs
+      Result: pass. Evidence: 7488 unchanged pinned full-header RTL observations, now including bounded replace-all values, no-match sharing, refcounts and source/replacement-view cases. Full native fatal OOM/ABI and arbitrary alias states remain outside the bounded witness.
+    - Command: npm run typecheck
+      Result: pass. Scope: tools and complete application/test types after constructor API restoration and explicit bounded-view fixes.
+    - Command: npm run check:source-provenance
+      Result: pass. Evidence: 1741 runtime modules, 1529mapped/182browser/30infrastructure. New constructor/language/output fragments and consumed SAL responsibilities mapped without promoting broad parity.
+    - Command: npm run check:dependencies
+      Result: pass. Evidence: 1740 runtime sources, 9067 imports, 209 permitted cross-module edges.
+    - Command: npm run check:docs
+      Result: pass. Evidence: 3959 authored source files after attaching the constructor operand-type documentation.
+    - Command: npm run check:file-size
+      Result: pass. Evidence: 3963 authored files; the main format-list unit was reduced through source-responsibility splitting rather than compressing code to bypass the limit.
+    - Command: npx eslint apps/office/src/svl/source/numbers/zformat{,.construct,.construct.test,.test}.ts apps/office/src/svl/source/numbers/zforlist{,.language,.output,.generate,.test}.ts apps/office/src/sal/rtl/{strtmpl,ustring}.ts apps/office/src/sal/inc/rtl/{ustring,ustring.h,ustrbuf}.ts scripts/rtl-prefix-native-probe.mjs apps/office/e2e/calc/clipboard-copy.spec.ts --max-warnings 0
+      Result: pass.
+    - Command: npm run build
+      Result: pass after removing temporary diagnostics and fixing bounded view calls. Scope: production app and Worker bundle.
+    - Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc
+      Result: pass. Evidence: 2 tests, basic CSV UI roundtrip/primary ODS save and actual core clipboard/dependency behavior in Chromium and DOM-free Worker. This does not establish date/special-number/all-options CSV acceptance.
+    - Command: git diff --check
+      Result: pass.
+
+    CALC-355 documents source replace(oldChar,newChar) nontermination when the same present unit is written repeatedly; the native loop is retained. CALC-356 documents the empty-format constructor negative checked index. The three former local checkPos1/null-on-empty expectations now retain the original checked-index failure; no invented syntax result is substituted, and cleanup/table preservation remain asserted. No aborting or unbounded native process was run to infer release behavior.
+
+    Same active Agentplane task, so no full-suite run under the user's one-per-ten-task cadence. Overall verify-ok/completion is not recorded. Remaining work: native constructor differential closure, complete required standard-format generation, formatter IsNumberFormat/standard selection, actual CSV date/English/special-number/format-attribute callers, reachable native-number/date/time/other formatted export and complete UI/option audit. The goal remains active.
+
+    ### Automatic-currency builtin insertion, 2026-10-28
+
+    - CSV dependency: native English/date/special-number recognition uses the document formatter and its standard-format initializer. That initializer calls ImpInsertFormat for currency builtins too; the prior local automatic-currency exception blocked completing this required initializer.
+    - Ported unchanged StripNewCurrencyDelimiters control flow into the original SvNumberformat owner/source fragment. ImpInsertFormat now strips automatic currency wrappers before normal compilation, preserves the NF_CURRENCY_1000DEC2_CCC exemption, leaves source NumberFormatCode storage unchanged and retains duplicate/default/comment ownership behavior. No CSV-specific recognition or guessed format key was added.
+    - Command: `npx tsx scripts/calc-format-scan-native-probe.mjs`. Result: pass, 89,360 comparisons, including384 new valid-bracket currency-strip cases against the unchanged original C++ function. Native string-value fixtures do not prove SAL ABI/ownership or complete constructor/output parity. The function body and quote helpers are byte-verified against the pinned source.
+    - Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,28 files196 tests. New integration cases compile all six actual de-DE currency builtins, exercise automatic versus excluded explicit delimiters and preserve input-code ownership. Existing strict my-MM constructor/standard-entry tests stay enabled.
+    - Initial verification corrections: the bank-code builtin legitimately contains CCC rather than a bracketed currency token; the test now asserts its actual source code. A fabricated bare USD code was not a valid substitute for the source automatic currency symbol; the caller-exemption test now uses a valid bracketed dollar code. Production parser logic was not changed to accommodate either mistaken test assumption.
+    - CALC-357 documents the source missing-close fallback advancing beyond the logical input and violating the next checked search-length precondition. Local guard behavior remains; native valid-bracket comparisons do not claim unchecked malformed-code outcomes.
+    - Commands: `npm run typecheck`, focused ESLint for the changed core/tests/native witness, `npm run check:docs`, `npm run check:file-size`, `npm run check:dependencies`, `npm run check:source-provenance`, `git diff --check`. Results: pass. This is the same open Agentplane task; the full-suite cadence has not advanced.
+    - Remaining CSV work is unchanged: complete required builtin initialization/standard selection, formatter recognition, original ScColumn::ParseString and ScDocumentImport::setAutoInput, explicit-date/English/special-number imports, reachable formatted export and full option/UI acceptance. This checkpoint is not whole-task verification or completion.
+
+    ### Connected complete builtin initialization sequence, 2026-10-28
+
+    - CSV dependency: document/import formatter recognition and standard-format selection require original generated entries. Production SvNumberFormatter construction now calls SvNFFormatData::ImpGenerateFormats instead of the previous General/Boolean/Text-only phase.
+    - Implemented original ordered generation for all builtin groups: number, Boolean/Text, percent, automatic currency with default clearing, dates, time, date-time, keyword-generated ISO variants/comments, scientific, fractions and week. Preserve source runtime-key mapping and source week-code Usage inheritance, no fabricated keys or selected-family omissions. The original changing-system no-additional flag and conversion-mode suspension/restoration are retained.
+    - Both original additional-format passes now use actual Sequence/NumberFormatCode COW storage, temporary currency index/default changes, duplicate-aware successful insertion, locale-block bounds and General last-insert bookkeeping. The additional pass takes a fresh current-language locale value as in source, rather than reusing the initial generator locale snapshot. Actual SvNumberformat stores/copies bAdditionalBuiltin and exposes the original const query.
+    - Existing General-only helper remains an isolated original source phase used by focused historical tests; production no longer uses it. Removed its unsupported extra Boolean/Text scan-error exception, which upstream does not check at this point.
+    - Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,29 files205 tests. Eight actual locales (en-US,de-DE,ja-JP,ko-KR,Arabic,Farsi,Thai,my-MM) generate all62 source builtin keys with original types, currency defaults, ISO comments and additional flags. A separate real table verifies no-additional behavior and restoration of existing conversion mode. Strict my-MM entry test stays enabled. de-DE General last-insert key now113 from actual additional allocation; the old100 expectation and missing builtin1 expectation were updated to connected source initialization. Currency-exemption test uses its own real empty table so existing builtin keys are not mistaken for admission failures.
+    - Command: `npx tsx scripts/calc-format-scan-native-probe.mjs`. Result: pass,89,360 unchanged scanner/quote/currency-helper comparisons; its real callback formatters now initialize through the connected generator. This witness does not compare the full generator's control flow/table snapshots or certify complete constructor/output parity. Dedicated original-initializer differential closure remains required.
+    - Commands: `npm run typecheck`, focused ESLint, `npm run check:docs`, `npm run check:file-size`, `npm run check:dependencies`, `npm run check:source-provenance`, `npm run build`, `git diff --check`. Results: pass. Typechecking initially exposed a missing IsAdditionalBuiltin const-reference method; the original const query is now included. Source provenance:1744 runtime modules; docs:3964 authored sources.
+    - Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, including actual CSV import/primary ODS save/active-sheet export and sparse dependency/Worker integration. This is basic existing UI acceptance, not all CSV options/date/special-number acceptance.
+    - Scope remains the actual CSV caller dependency chain. Still required: standard-format selection/policy, public formatter recognition, original ParseString/setAutoInput and CSV explicit-date/English/special-number callers, formatted export, full option/UI audit. Goal/task remain active; this is not whole-task verification or completion. Full-suite cadence remains one run per ten Agentplane tasks; this is the same open task.
+
+    ### Public recognition and initial CSV caller integration, 2026-10-28
+
+    - Added original ImpGenerateCL, standard/builtin selection overloads, GetTimeFormat, complete four-callback read/write and readonly Accessor policies, separate substitution and SvNFEngine::IsNumberFormat. The public SvNumberFormatter now forwards GetStandardIndex/GetFormatIndex/GetStandardFormat/IsNumberFormat to those actual owners. UNKNOWN resolves only to initial language; General fast paths, preset Text refusal, compatibility, ISO/date/time key choices and readonly cache/precondition behavior follow the source.
+    - Currency is a real branch of standard-format selection. Added actual currency pattern/list generation (including enabled fixed bank placement and original parenthesis-sign merge), actual PutEntry compilation/insertion/duplicate semantics and source system/locale default caches. System currency output binds directly to its owning scalar reference. No currency branch is replaced by a guessed format key, heuristic or unsupported-option error. Existing NfCurrencyEntry declaration moved into its own zforlist source fragment and retains source symbol/bank/language fields; its original zero-character field is now represented for generated patterns.
+    - Connected original CSV Text/force-formula-text path to document IsNumberFormat, standard TEXT format and actual ScPatternAttr/SfxUInt32Item/ApplyPattern. Connected SC_COL_ENGLISH to document GetStandardIndex(EN_US)/IsNumberFormat, then numeric insertion without applying an English cell format. The separate actual import formatter remains for the native fallback path.
+    - Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,30 files225 tests. New public recognition cases cover numbers, percentages, Boolean, ISO dates, ISO/space date-times, duration, preset Text, actual locale-block generation, special-time key preservation, readonly cache/preconditions, real standard currency creation and eight locale currency lists/defaults, plus empty/duplicate/new PutEntry results. A final targeted rerun of zforlist.recognition.test.ts passes20 tests, including explicit undefined/default-language binding.
+    - Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts`. Result: incomplete scope,2 pass/5 fail. Newly passing: external Standard1/Text2 with actual Text attribute, and English column under German import locale. Remaining three explicit-date and two special-number cases fail because the source date and ParseString/setAutoInput caller paths are still absent. Assertions were not removed, skipped or weakened.
+    - Command: `npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts`. Result: pass,3 files61 tests.
+    - Commands: typecheck, focused ESLint, check:docs, check:file-size, check:dependencies, check:source-provenance, build, git diff --check. Results: pass. Current typecheck passes after completing the TypeScript optional tuple binding for default language; source defaults and SYSTEM0 remain distinct. Provenance1751 runtime modules; docs3972 authored sources; module boundaries1750 runtime sources/9145 imports/209 allowed cross edges. No broad boundary allowance was added.
+    - Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, including actual CSV import/primary ODS save/export and Chromium/DOM-free Worker sparse dependency integration.
+    - Evidence limits: new full public-wrapper/currency pattern and default-generation paths have source comparison and real-owner tests but still require dedicated original-native differential verification. Existing scanner/locale/string witnesses are not promoted into proof of these entire new paths. Native std::function/SAL/UNO ABI, allocation-failure and scheduling parity are not claimed.
+    - Remaining work: source explicit CSV date conversion, ScColumn::ParseString/ScDocumentImport::setAutoInput and special-number import, reachable formatted export, complete option/UI acceptance and native differential closure. Goal/task remain active; no whole-task verification/finish is recorded. Same Agentplane task, so full-suite cadence remains unchanged.
+
+    ### Connected original CSV explicit-date branch, 2026-10-28
+
+    - CSV now creates original primary import-language calendar/IGNORE_CASE transliterator and optional second calendar/transliterator pair per import. Both fixed-width and delimited field loops pass actual service owners into the extracted lcl_PutString date responsibility. CALC-358 preserves the original primary-wrapper English reload instead of silently repairing the apparent receiver typo.
+    - Original date scanning preserves seven-part limit, ASCII-digit/month-letter rules, YMD ISO state predicates, formatter delegation, compact5..8-digit widths, native unsigned/signed integer casts, actual primary/secondary month names and SEP handling, two-digit-year expansion, actual calendar validation, explicit zero clock/milliseconds, fractional seconds through the real bounded RTL parser and AM/PM checks. Real document language/default selection and actual SetNumberFormat apply the date/datetime format to the numeric cell. No JS Date parser, inferred format key or locale heuristic is added.
+    - Required owner bindings: ScGlobal global classifier queries the actual lazy shared system-locale CharClass field; ScDocument reads its actual initialized Latin/CJK/CTL language fields (SYSTEM0) through original GetLanguage; the existing pattern-area body moves intact into its document source fragment to retain the strict file budget. Full SvtSysLocale configuration broadcaster/lifetime integration and ScDocument::SetLanguage font/drawing updates remain unported and are not simulated. RTL stringToDouble restores the source logical-view/status/parsed-end wrapper over the existing real C parser.
+    - Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts`. Result:5 pass/2 fail. All three existing strict DMY/MDY/YMD cases now pass with actual numeric date values and actual date-format attributes. Text and English cases remain green. The two special-number/auto-input cases still fail because native ParseString/setAutoInput remains unconnected; assertions are not removed, weakened or skipped.
+    - Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts`. Result: pass,4 files78 tests. The17 new date cases include compact dates, localized/English month names, SEP, two-digit year, AM/PM, fractional seconds, ISO and invalid/timezone fallback behavior.
+    - Initial timezone expectation was corrected from a source comment to actual source control flow: offset+02:00 fills part7 and its colon disables ISO before the final00. The source calendar branch then consumes02 as fractional seconds. CALC-359 records this suspected issue; the local .02-second numeric result is retained and tested. No full native lcl_PutString differential execution is claimed for this observation.
+    - Command: `npm run test:shared -- src/sal/rtl/math.test.ts src/sal/rtl/strtmpl.math.test.ts src/tools/source/datetime/datetime.test.ts src/unotools/source/i18n/native-charclass.test.ts src/unotools/source/i18n/calendarwrapper.test.ts`. Result: pass,5 files15 tests.
+    - Command: `npm run test:calc -- src/sc/source/core/data/block-number-format.test.ts src/sc/source/core/data/patattr.test.ts`. Result: pass,2 files10 tests.
+    - Commands: typecheck, focused ESLint, check:docs, check:dependencies, check:file-size, check:source-provenance, build, git diff --check. Results: pass. Source provenance1752 runtime modules, docs3974 authored sources; document facade995 lines. Source mapping records actual document.cxx origin for moved ApplyPatternAreaTab as existing additional-origin evidence rather than claiming it belongs to document10.cxx.
+    - Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, basic actual CSV import/primary ODS save/export and Chromium/DOM-free Worker dependency integration. This does not prove a complete date-option UI surface or native full date-branch differential closure.
+    - Remaining: original ParseString/setAutoInput/special-number CSV fallback, multiline edit path/finalization audit, reachable formatted export and complete option/UI/native differential acceptance. Goal and task remain active; no whole-task verify/finish/goal completion. Same Agentplane task; full-suite cadence unchanged.
+
+    ### Automatic-input checkpoint and requested merge pause, 2026-10-28
+
+    - Implemented original ScColumn::ParseString and ScDocumentImport::setAutoInput owner/caller flow. CSV now passes original ScSetStringParam flags/SpecialNumberOnly and uses the original strict ISO precheck with the actual SAX Converter. The local formula/simple-number shortcut is removed; empty fields use the original automatic empty-store path. Native preset Text, apostrophe, scientific/special detection, date edit policy restoration, compatible format retention and overwrite exceptions are preserved.
+    - Added required original edit-format/ISO token query and builtin-language remapping. The original compiled-token link check and address convention are restored on the actual document. Pointer releases retain native EDIT/FORMULA variant tags with null pointers; storage receives the actual transferred owner and clear safely releases null. Existing copy/adoption clients retain their native nonnull preconditions through explicit types, not behavioral fallback.
+    - Existing neighboring formula join and selection-frame bodies move intact into source-responsibility fragments to keep column/document facades within the hard1000-line gate. Frame and ownership regressions pass. No border/formula-join algorithm is changed.
+    - Corrected a local deviation in the previously added GetROPolicy: the original reader lambda captures a snapshot while the writer captures the caller map by reference (CALC-348). The source snapshot behavior is now retained and tested rather than repairing the upstream cache behavior.
+    - Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts`. Result: pass,5 files85 tests, including all7 previously strict recognition cases. No pending recognition failures or weakened assertions remain in that set.
+    - Command: `npm run test:calc -- src/sc/source/core/data/column3.input.test.ts src/sc/source/core/data/cellvalue-edit.test.ts src/sc/source/core/data/cellvalue-owning-formula.test.ts src/sc/source/core/data/documentimport.test.ts src/sc/source/core/data/border-frame.test.ts`. Result: pass,5 files24 tests. New8 cases exercise actual automatic input, format overwrite, apostrophe policy, date editing, formula adoption/link checks, readonly snapshot and released formula lifetime as applicable to their modules. Link-check fixture uses actual public AddToken/FormulaByteToken construction rather than extending unrelated restricted AddOpCode handling.
+    - Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,30 files225 tests, including the source readonly snapshot assertion. Dedicated full native new-input/edit/recognition/currency differential closure remains pending; prior lower-stage witnesses are not promoted into proof of all new branches.
+    - Commands: typecheck; ESLint over105 intentional changed source/test/script paths; check:docs; check:dependencies; check:file-size; check:source-provenance; build; git diff --check. Results: pass. Provenance1758 runtime modules; docs3981 authored sources; boundaries1757 runtime sources/9222 imports/209 allowed edges. Single-pass do/while(false) blocks retain narrowly justified lint annotations matching the source control structure.
+    - Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 browser tests covering actual CSV import/primary ODS save/export and sparse dependency ownership in Chromium/DOM-free Worker.
+    - The user explicitly requested pausing the goal after this block and tests for merging parallel branches. Save a task-scoped local checkpoint commit, then pause the active goal. Do not mark the whole CSV task/goal complete. Remaining large blocks: import option/multiline/native audit, reachable numeric/date formatted export, UI/options acceptance and final upstream/integration verification. Estimated remaining work is about5 large tasks, range4..7, with export formatting the main uncertainty. Full-suite cadence unchanged: this is the same open Agentplane task, not a tenth new task.
 id_source: "generated"
 ---
 ## Summary
@@ -869,3 +1101,239 @@ Commands: npm run build; npm run typecheck; npm run lint; npm run check:docs; np
 Result: pass. Evidence:1725 provenance/runtime modules, zero semantic inventory violations, source-tree/boundary/routing/build acceptance. Runtime local-symbol metadata now lists actual declarations rather than reexport-only header functions and the generator moved in the prior checkpoint; symbol ownership remains on its implementation fragments. Full-suite cadence remains unchanged: AQF9AG is the same open task, not a new tenth task.
 
 Remaining: complete original FinalScan numeric/date/time/common branches and original ScanFormat orchestration, constructor/prefix/color/NatNum/output responsibilities, complete builtin generation and SvNFEngine/SvNumberFormatter::IsNumberFormat, then ScColumn::ParseString/ScDocumentImport::setAutoInput, remaining CSV option paths and final UI/export audit. Current public ScanFormat still has the preexisting General/Boolean/Text admitted path until the missing FinalScan stages are present. No heuristic interim formatter or fabricated keys are connected. This is a verified dependency checkpoint only; AQF9AG stays DOING and the goal stays active. Do not mark the overall task complete or pause the goal.
+
+### CSV single-cell number-format dispatch, 2026-10-28
+
+Scope: pinned document.cxx ScDocument::SetNumberFormat -> table2.cxx ScTable::SetNumberFormat -> column2.cxx ScColumn::SetNumberFormat. Actual document owners, native missing-sheet and invalid-cell guards, actual SfxUInt32Item/ApplyAttr pooling and temporary-item lifetime are retained. The existing GetDataArea body moved without behavior changes to its original table1 responsibility to keep class source files below the hard size limit. Source and runtime registry evidence updated. No CSV recognition path is claimed complete by this prerequisite.
+
+- Command: npm run test:calc -- src/sc/source/core/data/block-number-format.test.ts src/sc/source/core/data/connected-area.test.ts src/sc/source/ui/docshell/impex.test.ts
+  Result: pass. Evidence: 3 files, 45 tests. Scope: actual single-cell format assignment, preserved font attributes and neighboring cells, invalid/sparse sheet and column behavior, connected-area traversal and existing CSV parser regression cases.
+- Command: npm run typecheck
+  Result: pass. Evidence: tools and office TypeScript checks. Scope: current implementation and tests.
+- Command: npm run check:source-provenance
+  Result: pass after correcting the ScColumn class-level primary-file symbol list; method-specific evidence correctly points to column2.cxx. Evidence: 1732 runtime modules, 1520 mapped, 182 browser adaptations, 30 infrastructure.
+- Command: npm run check:dependencies
+  Result: pass. Evidence: 1731 runtime sources, 8999 relative imports, 209 permitted cross-module edges.
+- Command: npm run check:file-size
+  Result: pass. Evidence: 3946 authored files inspected, no hard-limit violation.
+- Command: npx eslint apps/office/src/sc/source/core/data/{document,table,table1,table2,column,column2,block-number-format.test}.ts --max-warnings 0
+  Result: pass after replacing the test non-null assertion with an explicit inserted-sheet check.
+- Command: npm run check:docs
+  Result: pass after documenting test and existing native-probe callbacks. Evidence: 3942 authored source files.
+- Command: git diff --check
+  Result: pass. Scope: current worktree whitespace.
+- Command: npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts
+  Result: fail, expected pending implementation. Evidence: all 7 cases fail on missing native CSV recognition/format attributes. Scope: native external Standard1/Text2 codes plus actual Text format, explicit DMY/MDY/YMD dates, English columns and both special-number flag states. The setter prerequisite does not yet connect these caller paths. Tests remain strict and enabled; document cleanup now runs even on failed assertions. These are implementation gaps, not an external blocker.
+
+Full suite not run: this is the same open Agentplane task; the user requires one full run per ten tasks. Existing my-MM required-initializer test remains a separate unresolved native NatNum-prefix constructor dependency. Overall task and goal remain active; no overall successful verification or completion is recorded.
+
+### Required format-constructor prefix lexer, 2026-10-28
+
+Scope: the real my-MM General initializer contains NatNum1. Before connecting its required constructor branch, port the complete pinned bracket-prefix/subformat lexer, not a NatNum-only stripping workaround. New zformat.prefix.ts preserves original bracket token values, conditions, localized H/MI/S duration discrimination, color/locale/DBNum/NatNum tokenization, quoted/combined semicolons, mutable ASCII-space removal, condition-value cursor and native bounded integer conversion. This is an implementation stage: it is not yet called by the actual SvNumberformat constructor, and the my-MM initialization and CSV recognition gaps remain unresolved.
+
+Required shared primitives: original OUStringBuffer::stripStart; original o3tl UTF16 matchIgnoreAsciiCase -> SAL shortened IgnoreAsciiCase C wrapper -> original known-length generic comparison specialization. The scalar case conversion uses the existing original rtl/character helper, not Unicode folding. Source registry records added/updated without promoting module parity. CALC-351 documents source lexer conversion of a nonnumeric NatNum suffix to modifier0, with explicit limits on full-constructor witness coverage.
+
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.prefix.test.ts src/svl/source/numbers/zformat.test.ts src/sal/rtl/oustringbuffer.test.ts
+  Result: pass. Evidence: 3 files, 34 tests. Scope: actual language/scanner/SAL owners, source prefix classes and cursor behavior, original constructor/output regressions and existing native-buffer fixtures. An initial test incorrectly counted the NatNum19 closing-bracket position as24; source token length is25 and the expected cursor was corrected.
+- Command: npx tsx scripts/rtl-prefix-native-probe.mjs
+  Result: pass. Evidence: 4998 cases against unchanged pinned native full-header RTL scopes, including the added ASCII-insensitive shortened comparison. Scope: initialized UTF16 payload, exact differences, length boundaries, embedded zeros, aliases and existing replacement/append ownership observations. This does not certify the entire native format constructor or lexer; the lexer tests are local source-contract regressions.
+- Command: npm run typecheck
+  Result: pass after replacing the nonexistent OUString.view call with its real subView overload. Scope: current tools and application implementation/tests.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: 1733 runtime modules, 1521 mapped, 182 browser adaptations, 30 infrastructure.
+- Command: npm run check:dependencies
+  Result: pass after adding only the pinned source matchIgnoreAsciiCase C binding to the exact existing SAL/o3tl witness list. Evidence: 1732 runtime sources, 9005 imports, 209 permitted edges. Existing two-owner cycle policy and all other named-import restrictions remain intact.
+- Command: npx vitest run --maxWorkers 2 scripts/check-module-boundaries.test.ts
+  Result: pass. Evidence: 47 tests, including original named SAL/o3tl import acceptance and forbidden variants.
+- Command: npx eslint apps/office/src/svl/source/numbers/zformat.prefix{,.test}.ts apps/office/src/sal/rtl/{ustring,strtmpl}.ts apps/office/src/sal/inc/rtl/{ustring.h,ustrbuf}.ts apps/office/src/o3tl/inc/string_view.ts scripts/rtl-prefix-native-probe.mjs scripts/check-module-boundaries.mjs scripts/check-module-boundaries.test.ts --max-warnings 0
+  Result: pass.
+- Command: npm run check:docs
+  Result: pass after attaching local arrow-function JSDoc to the actual function expressions. Evidence: 3944 authored source files.
+- Command: npm run check:file-size
+  Result: pass. Evidence: 3948 authored files; updated boundary scripts remain931/992lines. Scope: repository hard authored-file limits.
+- Command: git diff --check
+  Result: pass.
+
+No full-suite run: same active Agentplane task and user cadence of one run per ten tasks. No overall verify-ok or task/goal completion is claimed. Next required work is the original constructor prefix metadata/dispatch and required standard-entry initialization, followed by actual CSV auto-input/date/English/special-number callers and reachable export formatting.
+
+### Required native-number subformat metadata, 2026-10-28
+
+Direct dependency: the original SvNumberformat constructor consumes NumFor.GetNatNum/SetNatNumNum/SetNatNumLang/SetNatNumDate/SetNatNumParams when parsing standard locale codes, including the unresolved my-MM NatNum1 General initializer. This block restores the original SvNumberNatNum owner and both complete source conversion tables. Actual ImpSvNumFor owns and copies the metadata and owned OUString parameters and destroys them in native member order. Explicit NatNum0 differs from an unset modifier, stored language is not eagerly resolved, and native uint8/uint16 parameter conversions remain in place. Pinned Chinese/simplified, Japanese and Korean identities were added to the existing language header boundary. Full prefix/constructor dispatch and color/scanner rebinding remain incomplete; no CSV acceptance claim is made.
+
+- Command: npx tsx scripts/calc-natnum-native-probe.mjs
+  Result: pass. Evidence: 9216 native rows spanning all256 modifier values, both date contexts, CJK/other/unknown/system/UI language identities, static maps and metadata getters/default completeness. Complete original metadata declarations, maps and MsLangId simplify/getRealLanguage bodies are compiled unchanged from verified pinned bytes. The native fixture supplies explicit configured locale values, scalar language tags and std::u16string values; full SAL lifetime/ABI, formatter construction/output and arbitrary locale configuration are outside this witness.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.natnum.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zformat.prefix.test.ts
+  Result: pass. Evidence: 3 files, 34 tests. Scope: source modifier defaults, actual subformat metadata copy/parameter retention after source mutation/destruction, existing compiled-entry/output regressions and original prefix token/cursor cases.
+- Command: npm run typecheck
+  Result: pass. Scope: current tools and application.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: 1734 runtime modules, 1522 mapped, 182 browser adaptations, 30 infrastructure. New metadata fragment and consumed language identities mapped; no broad parity status promotion.
+- Command: npm run check:dependencies
+  Result: pass. Evidence: 1733 runtime sources, 9009 imports, 209 permitted module edges.
+- Command: npm run check:docs
+  Result: pass. Evidence: 3947 authored source files.
+- Command: npx eslint apps/office/src/i18nlangtag/inc/lang.ts apps/office/src/svl/source/numbers/zformat{,.natnum,.natnum.test}.ts scripts/calc-natnum-native-probe.mjs --max-warnings 0
+  Result: pass.
+- Command: git diff --check
+  Result: pass.
+
+CALC-352 records the native Korean nondate DBNum4 -> NatNum10 -> DBNum0 asymmetry and the reverse table's NatNum9 -> DBNum4 mapping. Both original tables and the separate date rules are retained. No full export/rendering failure is inferred from that table observation. Same open Agentplane task, so no full-suite run under the user's one-per-ten-tasks cadence. Goal and task remain active; the required constructor, actual CSV callers, export formatting and final option/UI audit are unfinished.
+
+### Required scanner color supplier and subformat copying, 2026-10-28
+
+Direct dependency: the pinned SvNumberformat constructor consumes GetColor while compiling color-prefixed standard format codes. Restore the original required actual SvNumberFormatter reference in SvNFLanguageData and ImpSvNumberformatScan construction before consuming this branch. The formatter owns the original unset/set color Link behavior; the consumed bound Link thunk/instance value is represented by a nullable bound function, preserving assignment, null result, uint16 argument and borrowed pointer return. No optional or stand-in formatter supplier is used. Isolated language tests now supply genuine formatters that outlive their borrowed scanner states; the browser fixture supplies its actual formatter explicitly.
+
+Port complete original GetColor, copied static palette vector, German legacy and AllowEnglish names, conversion direction, original comphelper string strip and strict ASCII numeric user-color gate. Actual ImpSvNumFor now owns color names and borrows pointers. Copy takes the original explicit scanner/null argument; SvNumberformat copy uses reference identity to select rebinding through the destination scanner. Same-scanner copying does not invoke a user color callback. Source native behavior is retained when a callback is absent (null), rather than fabricating user colors.
+
+- Command: npx tsx scripts/calc-format-scan-native-probe.mjs
+  Result: pass. Evidence: 88976 unchanged-source native scanner cases, including 14580 GetColor cases across54 requested language IDs, all3 keyword policies, conversion states/directions, standard names, valid/invalid user-color ordinals and returned callback indices. The unchanged source GetColor, palette declarations, strip and ASCII classifier are compiled with explicit scalar/provider/callback fixtures and initialized string values. Native SAL/UNO ABI and arbitrary classifier/OOM or full constructor behavior remain outside the witness. All additional original dependency blobs, including the prior integer/grouping sources, are now verified byte-for-byte against the pinned Git revision before compiling.
+- Command: npm run test:shared -- src/svl/source/numbers/zforscan.color.test.ts
+  Result: pass. Evidence: 15 tests. Scope: real formatter callback ownership, native palette identity, German/English localization and conversion, exact COLOR1..64 gate/normalization, callback reset/default, same-scanner copy avoiding callback calls and cross-owner compiled-entry color rebinding.
+- Command: npm run test:shared -- src/svl/source/numbers
+  Result: fail with the existing required initializer gap only. Evidence: 25 files, 183passed/1failed of184; my-MM GetType(0) remains UNDEFINED instead of NUMBER because the actual constructor prefix stage is not integrated yet. All other related number-module scenarios pass after restoring the original mandatory formatter constructor reference. This is an implementation gap, not an external blocker; the assertion remains enabled and strict.
+- Command: npm run typecheck
+  Result: pass after updating the affected browser fixture to the restored required color supplier. Scope: tools and complete application/test types. An intermediate automated test-import edit produced a syntax error; that edit was repaired without reverting the preexisting strict my-MM assertion or other work.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: 1736 runtime modules, 1524mapped/182browser/30infrastructure. New original scanner-color and comphelper-strip fragments mapped without promoting full module parity.
+- Command: npm run check:dependencies
+  Result: pass. Evidence: 1735 runtime sources, 9023 imports, 209 permitted module edges.
+- Command: npx eslint apps/office/src/svl/source/numbers/*.test.ts apps/office/src/svl/source/numbers/{zforlist,zformat,zforscan,zforscan.color}.ts apps/office/src/test/number-format-language.ts apps/office/src/comphelper/source/misc/string.ts scripts/calc-format-scan-native-probe.mjs apps/office/e2e/calc/clipboard-copy.spec.ts --max-warnings 0
+  Result: pass. The final edited native-probe/color-test files were rechecked separately and pass.
+- Command: npm run check:file-size
+  Result: pass; source boundary classes and native witness remain below the hard1000line limit. Final clipboard browser fixture959lines, native witness882lines.
+- Command: npm run build
+  Result: pass. Scope: production static app and Worker bundling after restoring callback ownership.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc
+  Result: pass. Evidence: 2 browser tests. Scope: basic CSV UI import -> primary ODS save -> active-sheet CSV export and actual sparse native clipboard/dependency notifications in Chromium and DOM-free Worker. An initial CLI invocation placed filenames after the variadic project flag and was rejected before tests; the corrected explicit project form above ran both tests. This is not full option/date/special-number CSV acceptance.
+- Command: git diff --check
+  Result: pass.
+
+No full suite under the user's same-task one-per-ten-task cadence. Required constructor/prefix integration, my-MM standard entry, real CSV date/English/special-number/format-attribute callers, reachable formatted export and complete UI/option audit remain unfinished. No overall verify-ok or task/goal completion is recorded.
+
+### Required compiled-format LocaleType and extended locale prefixes, 2026-10-28
+
+Direct dependency: the original constructor's locale-prefix branch consumes LocaleType, ImpGetLocaleType, ImpObtainCalendarAndNumerals and installed-locale/native-number providers. Replace the old scalar SvNumberformat language field with the actual original LocaleType owner and memberwise copying. GetLanguage and substitution queries now read that owner and preserve the required SYSTEM predicate. Port the complete raw32 locale decoder, active source serialization (the upstream extended numeral/calendar output block remains disabled), exact eight-unit hex/cursor rule and full original calendar/numeral selection and insertion algorithm. Reference-language IDs are copied from pinned lang.h; no host-locale inference is used.
+
+Restore original OnDemandNativeNumberWrapper and actual formatter GetNatNum. IsLocaleInstalled queries the original set populated as a side effect of existing real currency-table initialization; successful locale fallback is not treated as installation. The original full constructor dispatch still has not been connected to these modules. The my-MM standard-entry/CSV recognition failures are not claimed resolved by these prerequisites.
+
+- Command: npx tsx scripts/calc-format-locale-native-probe.mjs
+  Result: pass. Evidence: 104083 unchanged-source native observations for raw locale fields/active serialization, malformed/truncated/closing-bracket hex inputs and cursor offsets, calendar/numeral ID selection and real language-reference/code mutations. Complete original locale methods, reference tables/selection function, MsLangId resolution and numeric hex primitive are compiled from byte-verified pinned sources. Fixtures supply language-tag compiler types, configured locale scalar values and value strings/buffers. Full SAL/UNO ABI, constructor/output and arbitrary locale configuration are outside the witness.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.locale.test.ts src/svl/source/numbers/zformat.test.ts src/svl/source/numbers/zforscan.color.test.ts
+  Result: pass. Evidence: 3 files, 28 tests. Scope: source hex boundaries, extended calendar/language mutation on actual compiled-entry metadata, required SYSTEM substitution guards, value-copy independence, actual lazy formatter native-number provider and installation state, existing compiled output/color regressions. An initial test wrongly expected NATNUM0 digit conversion in en-US; source and existing input tests establish its unsupported-language identity gate. The test now exercises the actual Japanese/fullwidth conversion path without changing production behavior.
+- Command: npm run typecheck
+  Result: pass. Scope: tools and current application/tests.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: 1738 runtime modules, 1526mapped/182browser/30infrastructure; original locale fragments and consumed language/header ownership mapped, no broad parity promotion.
+- Command: npm run check:dependencies
+  Result: pass. Evidence: 1737 runtime sources, 9038 imports, 209 permitted cross-module edges.
+- Command: npm run check:docs
+  Result: pass. Evidence: 3955 authored source files.
+- Command: npm run check:file-size
+  Result: pass. Evidence: 3959 authored files; zforlist992lines and locale calendar fragment349lines remain within the hard source limit.
+- Command: npx eslint apps/office/src/svl/source/numbers/zformat{,.locale,.locale-calendar,.locale.test}.ts apps/office/src/svl/source/numbers/zforlist.ts apps/office/src/svl/inc/ondemand.ts apps/office/src/i18nlangtag/inc/lang.ts scripts/calc-format-locale-native-probe.mjs --max-warnings 0
+  Result: pass after removing a blank separating consecutive empty CJK case labels, preserving the original control flow.
+- Command: git diff --check
+  Result: pass.
+
+CALC-353 records the native Eastern-Arabic temporary-language inequality; CALC-354 records the eight-digit closing-bracket helper boundary and explicitly notes that the identified constructor caller removes the bracket. Both source behaviors remain unchanged. Same open Agentplane task, so no full-suite run under the user's one-per-ten-task cadence. No overall verification/completion is claimed. Remaining constructor prerequisites include its consumed decimal-separator query and string operations, then the full original constructor control flow/native input-number arguments must be connected; actual CSV date/English/special-number/format attributes, reachable export formatting and complete UI/option audit remain open.
+
+### Connected normal format constructor, 2026-10-28
+
+This block connects the original SvNumberformat normal-constructor control flow to the actual format scanner, original prefix lexer, all four real subformats, color/natnum/LocaleType owners, actual input-number scanner and real native-number provider. Restore the original normal constructor arguments and defaulttrue Boolean replacement at all consumed callers, including the browser fixture. Conditions, source invalid-number normalization, all prefix categories, calendar/numeral insertion, trailing empty/text sections, default General sections, source type/error positions and negative-section defaults now run through the original owner. Normal/copy exceptions release original owned members before propagation.
+
+The previously strict my-MM initializer regression now passes: the actual NatNum1 prefix is compiled and real standard key0 has NUMBER type. That proves compilation/storage, not complete native-number display output or all standard-entry generation. The CSV integration scope document was updated accordingly. The full standalone native constructor differential witness is still pending; source review, live integration tests and separately bounded native scanner/string/locale witnesses are the current evidence.
+
+Required primitives: exact OUStringBuffer character indexOf/replace; original bounded UTF16 replace-all C/template and no-acquire adoption; original checked string operator[] binding. GetLangDecimalSep uses the real language owner/locale-data field and preserves normal-return context. Its complete original on-demand/process-wide cache identity remains unverified in this existing projected core slice; no fake locale service or inferred decimal separator is supplied. Existing output/input-line engine bodies moved unchanged into zforlist.output.ts and are reexported through the same SvNFEngine owner to respect the hard file limit.
+
+- Command: npm run test:shared -- src/svl/source/numbers
+  Result: pass. Evidence: 27 files, 193 tests, including the original strict my-MM NUMBER key assertion.
+- Command: npm run test:shared -- src/svl/source/numbers/zformat.construct.test.ts
+  Result: pass. Evidence: 5 actual-owner integration cases: inherited trailing text versus explicit empty subformat; real palette pointer/canonical color name; NatNum12 CURRENCY argument using the actual bank-symbol field; numeric condition parsing/decimal conversion with the actual input scanner and language owners.
+- Diagnostic finding: the new NatNum12 integration case initially stalled synchronously. Exact test/source tracing located a local wrong-overload call: a nonterminated bounded UTF16 view was passed to the existing NUL-pointer OUString constructor. Fix those constructor call sites to use the original view/count binding explicitly, including NatNum12 default literals and lazy helper single-view materialization. No terminator guess or production fallback was added. Known test processes were interrupted before reruns; temporary source/test diagnostics and spies were restored/removed, and the clean test/module suite passes. This is a local implementation correction, not an upstream issue.
+- Command: npx tsx scripts/rtl-prefix-native-probe.mjs
+  Result: pass. Evidence: 7488 unchanged pinned full-header RTL observations, now including bounded replace-all values, no-match sharing, refcounts and source/replacement-view cases. Full native fatal OOM/ABI and arbitrary alias states remain outside the bounded witness.
+- Command: npm run typecheck
+  Result: pass. Scope: tools and complete application/test types after constructor API restoration and explicit bounded-view fixes.
+- Command: npm run check:source-provenance
+  Result: pass. Evidence: 1741 runtime modules, 1529mapped/182browser/30infrastructure. New constructor/language/output fragments and consumed SAL responsibilities mapped without promoting broad parity.
+- Command: npm run check:dependencies
+  Result: pass. Evidence: 1740 runtime sources, 9067 imports, 209 permitted cross-module edges.
+- Command: npm run check:docs
+  Result: pass. Evidence: 3959 authored source files after attaching the constructor operand-type documentation.
+- Command: npm run check:file-size
+  Result: pass. Evidence: 3963 authored files; the main format-list unit was reduced through source-responsibility splitting rather than compressing code to bypass the limit.
+- Command: npx eslint apps/office/src/svl/source/numbers/zformat{,.construct,.construct.test,.test}.ts apps/office/src/svl/source/numbers/zforlist{,.language,.output,.generate,.test}.ts apps/office/src/sal/rtl/{strtmpl,ustring}.ts apps/office/src/sal/inc/rtl/{ustring,ustring.h,ustrbuf}.ts scripts/rtl-prefix-native-probe.mjs apps/office/e2e/calc/clipboard-copy.spec.ts --max-warnings 0
+  Result: pass.
+- Command: npm run build
+  Result: pass after removing temporary diagnostics and fixing bounded view calls. Scope: production app and Worker bundle.
+- Command: npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc
+  Result: pass. Evidence: 2 tests, basic CSV UI roundtrip/primary ODS save and actual core clipboard/dependency behavior in Chromium and DOM-free Worker. This does not establish date/special-number/all-options CSV acceptance.
+- Command: git diff --check
+  Result: pass.
+
+CALC-355 documents source replace(oldChar,newChar) nontermination when the same present unit is written repeatedly; the native loop is retained. CALC-356 documents the empty-format constructor negative checked index. The three former local checkPos1/null-on-empty expectations now retain the original checked-index failure; no invented syntax result is substituted, and cleanup/table preservation remain asserted. No aborting or unbounded native process was run to infer release behavior.
+
+Same active Agentplane task, so no full-suite run under the user's one-per-ten-task cadence. Overall verify-ok/completion is not recorded. Remaining work: native constructor differential closure, complete required standard-format generation, formatter IsNumberFormat/standard selection, actual CSV date/English/special-number/format-attribute callers, reachable native-number/date/time/other formatted export and complete UI/option audit. The goal remains active.
+
+### Automatic-currency builtin insertion, 2026-10-28
+
+- CSV dependency: native English/date/special-number recognition uses the document formatter and its standard-format initializer. That initializer calls ImpInsertFormat for currency builtins too; the prior local automatic-currency exception blocked completing this required initializer.
+- Ported unchanged StripNewCurrencyDelimiters control flow into the original SvNumberformat owner/source fragment. ImpInsertFormat now strips automatic currency wrappers before normal compilation, preserves the NF_CURRENCY_1000DEC2_CCC exemption, leaves source NumberFormatCode storage unchanged and retains duplicate/default/comment ownership behavior. No CSV-specific recognition or guessed format key was added.
+- Command: `npx tsx scripts/calc-format-scan-native-probe.mjs`. Result: pass, 89,360 comparisons, including384 new valid-bracket currency-strip cases against the unchanged original C++ function. Native string-value fixtures do not prove SAL ABI/ownership or complete constructor/output parity. The function body and quote helpers are byte-verified against the pinned source.
+- Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,28 files196 tests. New integration cases compile all six actual de-DE currency builtins, exercise automatic versus excluded explicit delimiters and preserve input-code ownership. Existing strict my-MM constructor/standard-entry tests stay enabled.
+- Initial verification corrections: the bank-code builtin legitimately contains CCC rather than a bracketed currency token; the test now asserts its actual source code. A fabricated bare USD code was not a valid substitute for the source automatic currency symbol; the caller-exemption test now uses a valid bracketed dollar code. Production parser logic was not changed to accommodate either mistaken test assumption.
+- CALC-357 documents the source missing-close fallback advancing beyond the logical input and violating the next checked search-length precondition. Local guard behavior remains; native valid-bracket comparisons do not claim unchecked malformed-code outcomes.
+- Commands: `npm run typecheck`, focused ESLint for the changed core/tests/native witness, `npm run check:docs`, `npm run check:file-size`, `npm run check:dependencies`, `npm run check:source-provenance`, `git diff --check`. Results: pass. This is the same open Agentplane task; the full-suite cadence has not advanced.
+- Remaining CSV work is unchanged: complete required builtin initialization/standard selection, formatter recognition, original ScColumn::ParseString and ScDocumentImport::setAutoInput, explicit-date/English/special-number imports, reachable formatted export and full option/UI acceptance. This checkpoint is not whole-task verification or completion.
+
+### Connected complete builtin initialization sequence, 2026-10-28
+
+- CSV dependency: document/import formatter recognition and standard-format selection require original generated entries. Production SvNumberFormatter construction now calls SvNFFormatData::ImpGenerateFormats instead of the previous General/Boolean/Text-only phase.
+- Implemented original ordered generation for all builtin groups: number, Boolean/Text, percent, automatic currency with default clearing, dates, time, date-time, keyword-generated ISO variants/comments, scientific, fractions and week. Preserve source runtime-key mapping and source week-code Usage inheritance, no fabricated keys or selected-family omissions. The original changing-system no-additional flag and conversion-mode suspension/restoration are retained.
+- Both original additional-format passes now use actual Sequence/NumberFormatCode COW storage, temporary currency index/default changes, duplicate-aware successful insertion, locale-block bounds and General last-insert bookkeeping. The additional pass takes a fresh current-language locale value as in source, rather than reusing the initial generator locale snapshot. Actual SvNumberformat stores/copies bAdditionalBuiltin and exposes the original const query.
+- Existing General-only helper remains an isolated original source phase used by focused historical tests; production no longer uses it. Removed its unsupported extra Boolean/Text scan-error exception, which upstream does not check at this point.
+- Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,29 files205 tests. Eight actual locales (en-US,de-DE,ja-JP,ko-KR,Arabic,Farsi,Thai,my-MM) generate all62 source builtin keys with original types, currency defaults, ISO comments and additional flags. A separate real table verifies no-additional behavior and restoration of existing conversion mode. Strict my-MM entry test stays enabled. de-DE General last-insert key now113 from actual additional allocation; the old100 expectation and missing builtin1 expectation were updated to connected source initialization. Currency-exemption test uses its own real empty table so existing builtin keys are not mistaken for admission failures.
+- Command: `npx tsx scripts/calc-format-scan-native-probe.mjs`. Result: pass,89,360 unchanged scanner/quote/currency-helper comparisons; its real callback formatters now initialize through the connected generator. This witness does not compare the full generator's control flow/table snapshots or certify complete constructor/output parity. Dedicated original-initializer differential closure remains required.
+- Commands: `npm run typecheck`, focused ESLint, `npm run check:docs`, `npm run check:file-size`, `npm run check:dependencies`, `npm run check:source-provenance`, `npm run build`, `git diff --check`. Results: pass. Typechecking initially exposed a missing IsAdditionalBuiltin const-reference method; the original const query is now included. Source provenance:1744 runtime modules; docs:3964 authored sources.
+- Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, including actual CSV import/primary ODS save/active-sheet export and sparse dependency/Worker integration. This is basic existing UI acceptance, not all CSV options/date/special-number acceptance.
+- Scope remains the actual CSV caller dependency chain. Still required: standard-format selection/policy, public formatter recognition, original ParseString/setAutoInput and CSV explicit-date/English/special-number callers, formatted export, full option/UI audit. Goal/task remain active; this is not whole-task verification or completion. Full-suite cadence remains one run per ten Agentplane tasks; this is the same open task.
+
+### Public recognition and initial CSV caller integration, 2026-10-28
+
+- Added original ImpGenerateCL, standard/builtin selection overloads, GetTimeFormat, complete four-callback read/write and readonly Accessor policies, separate substitution and SvNFEngine::IsNumberFormat. The public SvNumberFormatter now forwards GetStandardIndex/GetFormatIndex/GetStandardFormat/IsNumberFormat to those actual owners. UNKNOWN resolves only to initial language; General fast paths, preset Text refusal, compatibility, ISO/date/time key choices and readonly cache/precondition behavior follow the source.
+- Currency is a real branch of standard-format selection. Added actual currency pattern/list generation (including enabled fixed bank placement and original parenthesis-sign merge), actual PutEntry compilation/insertion/duplicate semantics and source system/locale default caches. System currency output binds directly to its owning scalar reference. No currency branch is replaced by a guessed format key, heuristic or unsupported-option error. Existing NfCurrencyEntry declaration moved into its own zforlist source fragment and retains source symbol/bank/language fields; its original zero-character field is now represented for generated patterns.
+- Connected original CSV Text/force-formula-text path to document IsNumberFormat, standard TEXT format and actual ScPatternAttr/SfxUInt32Item/ApplyPattern. Connected SC_COL_ENGLISH to document GetStandardIndex(EN_US)/IsNumberFormat, then numeric insertion without applying an English cell format. The separate actual import formatter remains for the native fallback path.
+- Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,30 files225 tests. New public recognition cases cover numbers, percentages, Boolean, ISO dates, ISO/space date-times, duration, preset Text, actual locale-block generation, special-time key preservation, readonly cache/preconditions, real standard currency creation and eight locale currency lists/defaults, plus empty/duplicate/new PutEntry results. A final targeted rerun of zforlist.recognition.test.ts passes20 tests, including explicit undefined/default-language binding.
+- Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts`. Result: incomplete scope,2 pass/5 fail. Newly passing: external Standard1/Text2 with actual Text attribute, and English column under German import locale. Remaining three explicit-date and two special-number cases fail because the source date and ParseString/setAutoInput caller paths are still absent. Assertions were not removed, skipped or weakened.
+- Command: `npm run test:calc -- src/sc/source/ui/dbgui/asciiopt.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts`. Result: pass,3 files61 tests.
+- Commands: typecheck, focused ESLint, check:docs, check:file-size, check:dependencies, check:source-provenance, build, git diff --check. Results: pass. Current typecheck passes after completing the TypeScript optional tuple binding for default language; source defaults and SYSTEM0 remain distinct. Provenance1751 runtime modules; docs3972 authored sources; module boundaries1750 runtime sources/9145 imports/209 allowed cross edges. No broad boundary allowance was added.
+- Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, including actual CSV import/primary ODS save/export and Chromium/DOM-free Worker sparse dependency integration.
+- Evidence limits: new full public-wrapper/currency pattern and default-generation paths have source comparison and real-owner tests but still require dedicated original-native differential verification. Existing scanner/locale/string witnesses are not promoted into proof of these entire new paths. Native std::function/SAL/UNO ABI, allocation-failure and scheduling parity are not claimed.
+- Remaining work: source explicit CSV date conversion, ScColumn::ParseString/ScDocumentImport::setAutoInput and special-number import, reachable formatted export, complete option/UI acceptance and native differential closure. Goal/task remain active; no whole-task verification/finish is recorded. Same Agentplane task, so full-suite cadence remains unchanged.
+
+### Connected original CSV explicit-date branch, 2026-10-28
+
+- CSV now creates original primary import-language calendar/IGNORE_CASE transliterator and optional second calendar/transliterator pair per import. Both fixed-width and delimited field loops pass actual service owners into the extracted lcl_PutString date responsibility. CALC-358 preserves the original primary-wrapper English reload instead of silently repairing the apparent receiver typo.
+- Original date scanning preserves seven-part limit, ASCII-digit/month-letter rules, YMD ISO state predicates, formatter delegation, compact5..8-digit widths, native unsigned/signed integer casts, actual primary/secondary month names and SEP handling, two-digit-year expansion, actual calendar validation, explicit zero clock/milliseconds, fractional seconds through the real bounded RTL parser and AM/PM checks. Real document language/default selection and actual SetNumberFormat apply the date/datetime format to the numeric cell. No JS Date parser, inferred format key or locale heuristic is added.
+- Required owner bindings: ScGlobal global classifier queries the actual lazy shared system-locale CharClass field; ScDocument reads its actual initialized Latin/CJK/CTL language fields (SYSTEM0) through original GetLanguage; the existing pattern-area body moves intact into its document source fragment to retain the strict file budget. Full SvtSysLocale configuration broadcaster/lifetime integration and ScDocument::SetLanguage font/drawing updates remain unported and are not simulated. RTL stringToDouble restores the source logical-view/status/parsed-end wrapper over the existing real C parser.
+- Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts`. Result:5 pass/2 fail. All three existing strict DMY/MDY/YMD cases now pass with actual numeric date values and actual date-format attributes. Text and English cases remain green. The two special-number/auto-input cases still fail because native ParseString/setAutoInput remains unconnected; assertions are not removed, weakened or skipped.
+- Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts`. Result: pass,4 files78 tests. The17 new date cases include compact dates, localized/English month names, SEP, two-digit year, AM/PM, fractional seconds, ISO and invalid/timezone fallback behavior.
+- Initial timezone expectation was corrected from a source comment to actual source control flow: offset+02:00 fills part7 and its colon disables ISO before the final00. The source calendar branch then consumes02 as fractional seconds. CALC-359 records this suspected issue; the local .02-second numeric result is retained and tested. No full native lcl_PutString differential execution is claimed for this observation.
+- Command: `npm run test:shared -- src/sal/rtl/math.test.ts src/sal/rtl/strtmpl.math.test.ts src/tools/source/datetime/datetime.test.ts src/unotools/source/i18n/native-charclass.test.ts src/unotools/source/i18n/calendarwrapper.test.ts`. Result: pass,5 files15 tests.
+- Command: `npm run test:calc -- src/sc/source/core/data/block-number-format.test.ts src/sc/source/core/data/patattr.test.ts`. Result: pass,2 files10 tests.
+- Commands: typecheck, focused ESLint, check:docs, check:dependencies, check:file-size, check:source-provenance, build, git diff --check. Results: pass. Source provenance1752 runtime modules, docs3974 authored sources; document facade995 lines. Source mapping records actual document.cxx origin for moved ApplyPatternAreaTab as existing additional-origin evidence rather than claiming it belongs to document10.cxx.
+- Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 tests, basic actual CSV import/primary ODS save/export and Chromium/DOM-free Worker dependency integration. This does not prove a complete date-option UI surface or native full date-branch differential closure.
+- Remaining: original ParseString/setAutoInput/special-number CSV fallback, multiline edit path/finalization audit, reachable formatted export and complete option/UI/native differential acceptance. Goal and task remain active; no whole-task verify/finish/goal completion. Same Agentplane task; full-suite cadence unchanged.
+
+### Automatic-input checkpoint and requested merge pause, 2026-10-28
+
+- Implemented original ScColumn::ParseString and ScDocumentImport::setAutoInput owner/caller flow. CSV now passes original ScSetStringParam flags/SpecialNumberOnly and uses the original strict ISO precheck with the actual SAX Converter. The local formula/simple-number shortcut is removed; empty fields use the original automatic empty-store path. Native preset Text, apostrophe, scientific/special detection, date edit policy restoration, compatible format retention and overwrite exceptions are preserved.
+- Added required original edit-format/ISO token query and builtin-language remapping. The original compiled-token link check and address convention are restored on the actual document. Pointer releases retain native EDIT/FORMULA variant tags with null pointers; storage receives the actual transferred owner and clear safely releases null. Existing copy/adoption clients retain their native nonnull preconditions through explicit types, not behavioral fallback.
+- Existing neighboring formula join and selection-frame bodies move intact into source-responsibility fragments to keep column/document facades within the hard1000-line gate. Frame and ownership regressions pass. No border/formula-join algorithm is changed.
+- Corrected a local deviation in the previously added GetROPolicy: the original reader lambda captures a snapshot while the writer captures the caller map by reference (CALC-348). The source snapshot behavior is now retained and tested rather than repairing the upstream cache behavior.
+- Command: `npm run test:calc -- src/sc/source/ui/docshell/impex.recognition.test.ts src/sc/source/ui/docshell/impex.date.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts src/sc/source/ui/dbgui/asciiopt.test.ts`. Result: pass,5 files85 tests, including all7 previously strict recognition cases. No pending recognition failures or weakened assertions remain in that set.
+- Command: `npm run test:calc -- src/sc/source/core/data/column3.input.test.ts src/sc/source/core/data/cellvalue-edit.test.ts src/sc/source/core/data/cellvalue-owning-formula.test.ts src/sc/source/core/data/documentimport.test.ts src/sc/source/core/data/border-frame.test.ts`. Result: pass,5 files24 tests. New8 cases exercise actual automatic input, format overwrite, apostrophe policy, date editing, formula adoption/link checks, readonly snapshot and released formula lifetime as applicable to their modules. Link-check fixture uses actual public AddToken/FormulaByteToken construction rather than extending unrelated restricted AddOpCode handling.
+- Command: `npm run test:shared -- src/svl/source/numbers`. Result: pass,30 files225 tests, including the source readonly snapshot assertion. Dedicated full native new-input/edit/recognition/currency differential closure remains pending; prior lower-stage witnesses are not promoted into proof of all new branches.
+- Commands: typecheck; ESLint over105 intentional changed source/test/script paths; check:docs; check:dependencies; check:file-size; check:source-provenance; build; git diff --check. Results: pass. Provenance1758 runtime modules; docs3981 authored sources; boundaries1757 runtime sources/9222 imports/209 allowed edges. Single-pass do/while(false) blocks retain narrowly justified lint annotations matching the source control structure.
+- Command: `npx playwright test apps/office/e2e/calc/csv.spec.ts apps/office/e2e/calc/clipboard-copy.spec.ts --config apps/office/playwright.config.ts --project=calc`. Result: pass,2 browser tests covering actual CSV import/primary ODS save/export and sparse dependency ownership in Chromium/DOM-free Worker.
+- The user explicitly requested pausing the goal after this block and tests for merging parallel branches. Save a task-scoped local checkpoint commit, then pause the active goal. Do not mark the whole CSV task/goal complete. Remaining large blocks: import option/multiline/native audit, reachable numeric/date formatted export, UI/options acceptance and final upstream/integration verification. Estimated remaining work is about5 large tasks, range4..7, with export formatting the main uncertainty. Full-suite cadence unchanged: this is the same open Agentplane task, not a tenth new task.

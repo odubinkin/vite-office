@@ -21,7 +21,7 @@
         "apps/office/src/svl/source/numbers/zforscan.stages.test.ts",
         "scripts/calc-format-scan-native-probe.mjs"
       ],
-      "justification": "Original actual SvNFLanguageData reference, prepared genuine XNumberFormatCode provider borrow, owned 100 string slots, Int16 token types, 53 owned keyword slots, null-date and precision defaults, reset, convert-mode fields, CopyInfo EMPTY skipping and lifetime cleanup. Complete loaded-locale lazy SetDependentKeywords retains native anyOf selection, actual code-zero General extraction, CharClass uppercase, Thai T, special/Boolean-equivalent strings, compatibility currency and original locale override tables. ChangeIntl only invalidates lazy fields and clears TRUE/FALSE; parse state and precision are retained. Obsolete externally prepared General scanner initialization is removed. Original Symbol_Division/ScanType/token helpers dispatch on this same actual owner and are compared with unchanged native functions by the 32972-case scanner witness. The existing public ScanFormat caller still admits General/Boolean/Text only; remaining FinalScan source stages are required before full integration. Explicit unported final-pattern boundaries are not presented as native parse rejection. No approximate parser, fabricated format keys or service manager is introduced. Full FinalScan/color/prefix/NatNum services, complete builtin/output formatter and public CSV auto-input remain pending.",
+      "justification": "Original public ScanFormat now runs Symbol_Division, ScanType and FinalScan in source order. The preexisting General/Boolean/Text-only admission and its unsupported-pattern exception are removed. Full non-converting streams match the unchanged source in the74396-case witness. Empty stream type follows original ScanType DEFINED1. Remaining constructor prefixes, generator/output and CSV public recognition are separate incomplete dependencies; the failing my-MM initial-standard test is retained as a required prefix-constructor gap. AQF9AG restores the original required formatter color reference in scanner construction, actual getColorCallback borrow, GetColor and standard-palette APIs. No optional/null stand-in supplier is admitted.",
       "knownViolations": [],
       "localSymbols": [
         "extractStandardGeneralName",
@@ -34,7 +34,9 @@
         "GetLoc",
         "GetKeywords",
         "SetDependentKeywords",
-        "InitCompatCur"
+        "InitCompatCur",
+        "ReplaceBooleanEquivalent",
+        "RemoveQuotes"
       ],
       "sourceResponsibility": "divergent",
       "upstreamFile": "svl/source/numbers/zforscan.cxx",
@@ -48,7 +50,8 @@
         "ImpSvNumberformatScan::SetDependentKeywords",
         "ImpSvNumberformatScan::ChangeIntl",
         "ImpSvNumberformatScan::ChangeNullDate",
-        "ImpSvNumberformatScan::InitSpecialKeyword"
+        "ImpSvNumberformatScan::InitSpecialKeyword",
+        "ImpSvNumberformatScan::GetColor"
       ]
     }
   }

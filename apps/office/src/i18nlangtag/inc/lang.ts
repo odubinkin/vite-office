@@ -158,3 +158,99 @@ export const LANGUAGE_SPANISH_PUERTO_RICO = LanguageType(0x500a);
 
 /** Original lang.h identity consumed by localized number-format keywords. */
 export const LANGUAGE_THAI = LanguageType(0x041e);
+
+/** Original simplified Chinese identity used by native-number format metadata. */
+export const LANGUAGE_CHINESE_SIMPLIFIED = LanguageType(0x0804);
+/** Original Chinese compatibility alias. */
+export const LANGUAGE_CHINESE = LANGUAGE_CHINESE_SIMPLIFIED;
+/** Original Japanese identity. */
+export const LANGUAGE_JAPANESE = LanguageType(0x0411);
+/** Original Korean identity. */
+export const LANGUAGE_KOREAN = LanguageType(0x0412);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_ARABIC_PRIMARY_ONLY = LanguageType(0x0001);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_BENGALI = LanguageType(0x0445);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_BURMESE = LanguageType(0x0455);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_CHINESE_HONGKONG = LanguageType(0x0c04);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_CHINESE_LSO = LanguageType(0x7804);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_CHINESE_MACAU = LanguageType(0x1404);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_CHINESE_SINGAPORE = LanguageType(0x1004);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_CHINESE_TRADITIONAL = LanguageType(0x0404);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_FARSI = LanguageType(0x0429);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_GUJARATI = LanguageType(0x0447);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_HINDI = LanguageType(0x0439);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_KANNADA = LanguageType(0x044b);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_KHMER = LanguageType(0x0453);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_LAO = LanguageType(0x0454);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_MALAYALAM = LanguageType(0x044c);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_MARATHI = LanguageType(0x044e);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_MONGOLIAN_MONGOLIAN_CHINA = LanguageType(0x0850);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_MONGOLIAN_MONGOLIAN_LSO = LanguageType(0x7c50);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_MONGOLIAN_MONGOLIAN_MONGOLIA = LanguageType(0x0c50);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_NEPALI = LanguageType(0x0461);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_ODIA = LanguageType(0x0448);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_PUNJABI = LanguageType(0x0446);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_PUNJABI_ARABIC_LSO = LanguageType(0x7c46);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_TAMIL = LanguageType(0x0449);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_TELUGU = LanguageType(0x044a);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_TIBETAN = LanguageType(0x0451);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_TIGRIGNA_ETHIOPIA = LanguageType(0x0473);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_NF_SYSTEM_TIME = LanguageType(0xf400);
+
+/** Original lang.h identity consumed by format locale/calendar prefixes. */
+export const LANGUAGE_NF_SYSTEM_DATE = LanguageType(0xf800);
