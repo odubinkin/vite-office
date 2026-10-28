@@ -1236,5 +1236,20 @@
     "diagnosticBranchArmsTotal": 74579,
     "remainingOwners": 225,
     "finalFullVerifierPassed": false
+  },
+  "publicCompiledInputLiterals": {
+    "report": "apps/office/coverage/integration-compiled-input-literals",
+    "tests": 29,
+    "testFiles": 1,
+    "assertionsPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "suspectedIssue": "CALC-388",
+    "diagnosticStatementsCovered": 118067,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72666,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 225,
+    "finalFullVerifierPassed": false
   }
 }

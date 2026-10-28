@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 43
+revision: 44
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T23:47:02.980Z"
+doc_updated_at: "2026-10-28T23:50:33.293Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -165,6 +165,8 @@ sections:
     Five suites/72 tests pass for actual date/time parsing, optional character-style persistence, nullable ICU pointer release, invalid table position ownership and child-only named ODF tab styles. Runtime sources unchanged. Date expectations use independent Gregorian serials and minute fractions. Two incorrect initial date hypotheses were corrected from original source contracts (month names are locale-bound; short invalid day fragments can select a year). Typecheck, lint and JSDoc pass. Compatible-map diagnostic union now covers118034/119511 statements,72641/74579 arms and all18429 functions;225 owners incomplete. No exception applied and no final full verification or publication claimed.
 
     Two suites/91 tests pass for locale conversion and29970 native original scanner/color observations, adding486 and preserving all prior29484 rows with an identical witness source hash. CALC-387 documents a source/native-confirmed legacy currency quote-offset mismatch; original algorithm preserved. Typecheck passes; strict focused thresholds still fail because remaining FinalScan common arms are not covered. Compatible-map diagnostic union covers118061/119511 statements,72659/74579 arms and all18429 functions;225 owners incomplete. No exception, final full verification or publication claimed.
+
+    One suite/29 public compiled-input tests pass for real literal formats, negative sections, contradictory markers and zero denominators. CALC-388 documents a source-derived leading-decimal path that accepts but drops a later matched numeric fragment; no original algorithm changed or native input-scanner parity inferred. Compatible-map diagnostic union now covers118067/119511 statements and72666/74579 arms, all18429 functions,225 incomplete owners. No coverage exception or final full verification applied.
 id_source: "generated"
 ---
 ## Summary
@@ -310,3 +312,5 @@ Compiled unchanged ICU abstract-key SDK clients cover two additional default con
 Five suites/72 tests pass for actual date/time parsing, optional character-style persistence, nullable ICU pointer release, invalid table position ownership and child-only named ODF tab styles. Runtime sources unchanged. Date expectations use independent Gregorian serials and minute fractions. Two incorrect initial date hypotheses were corrected from original source contracts (month names are locale-bound; short invalid day fragments can select a year). Typecheck, lint and JSDoc pass. Compatible-map diagnostic union now covers118034/119511 statements,72641/74579 arms and all18429 functions;225 owners incomplete. No exception applied and no final full verification or publication claimed.
 
 Two suites/91 tests pass for locale conversion and29970 native original scanner/color observations, adding486 and preserving all prior29484 rows with an identical witness source hash. CALC-387 documents a source/native-confirmed legacy currency quote-offset mismatch; original algorithm preserved. Typecheck passes; strict focused thresholds still fail because remaining FinalScan common arms are not covered. Compatible-map diagnostic union covers118061/119511 statements,72659/74579 arms and all18429 functions;225 owners incomplete. No exception, final full verification or publication claimed.
+
+One suite/29 public compiled-input tests pass for real literal formats, negative sections, contradictory markers and zero denominators. CALC-388 documents a source-derived leading-decimal path that accepts but drops a later matched numeric fragment; no original algorithm changed or native input-scanner parity inferred. Compatible-map diagnostic union now covers118067/119511 statements and72666/74579 arms, all18429 functions,225 incomplete owners. No coverage exception or final full verification applied.
