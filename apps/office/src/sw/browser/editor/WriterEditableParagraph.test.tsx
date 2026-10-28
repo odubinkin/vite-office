@@ -4,6 +4,12 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import type { WriterParagraphProjection } from "../presentation/writer-view-projection";
+import { MarkdownReader } from "../../source/filter/md/swmd";
+import { OUStringToOString } from "../../../sal/rtl/ustring-convert";
+import { RTL_TEXTENCODING_UTF8 } from "../../../sal/inc/rtl/textenc";
+import { SwPaM, SwPosition } from "../../source/core/crsr/pam";
+import { WriterViewProjection } from "../presentation/writer-view-projection";
+import { createDocument } from "../../../sfx2/source/doc/objsh";
 import { WriterEditableParagraph } from "./WriterEditableParagraph";
 
 /** Creates one minimal immutable paragraph projection. @param color - Paragraph color. @param highlight - Paragraph highlight. @returns Projection. */
@@ -148,6 +154,44 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
     expect(screen.getByText("native font list")).toHaveStyle({
       fontFamily: "Noto Sans, Liberation Sans, serif",
     });
+  });
+  it("renders the native Markdown paragraph brush independently of text highlight", /** Actual Markdown, native items and the existing presentation projection feed mounted CSS. @returns Nothing. */ () => {
+    const doc = new MarkdownReader().Read(
+      OUStringToOString(
+        '<p style="background-color: #123456; margin-left: 12pt">Native background</p>',
+        RTL_TEXTENCODING_UTF8,
+      ),
+    );
+    const node = doc.paragraphs[0];
+    if (!node) throw new Error("Missing native paragraph");
+    const position = new SwPosition(node),
+      cursor = new SwPaM(position);
+    position.Dispose();
+    try {
+      const state = new WriterViewProjection().Project(
+        doc,
+        node,
+        cursor,
+        createDocument({ id: "native-background", suiteId: "writer", title: "Native background" }),
+      );
+      expect(state.activeParagraph.computedStyle.backgroundColor).toBe("#123456");
+      render(
+        <WriterEditableParagraph
+          index={0}
+          isActive
+          listMarker={undefined}
+          paragraph={state.activeParagraph}
+          retainElement={/** Ignores the fixture element. @returns Nothing. */ () => undefined}
+        />,
+      );
+      expect(screen.getByRole("textbox").closest("[data-active]")).toHaveStyle({
+        backgroundColor: "#123456",
+      });
+      expect(state.activeParagraph.computedStyle.highlight).toBeUndefined();
+    } finally {
+      cursor.Dispose();
+      doc.Dispose();
+    }
   });
   it("positions list markers from the paragraph or list style according to ODT precedence", /** Checks both tdf114287 indentation routes. @returns Nothing. */ () => {
     const source = paragraph();

@@ -1,0 +1,45 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/html/svxcss1.paragraph.ts",
+    "status": "mapped",
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/html/svxcss1.paragraph.ts",
+          "marker": "ParseCSS1ParagraphProperty"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/html/svxcss1.cxx",
+          "marker": "ParseCSS1_margin"
+        }
+      ]
+    },
+    "upstreamPath": "sw/source/filter/html/svxcss1.cxx",
+    "localSymbols": [
+      "ParseCSS1ParagraphProperty"
+    ],
+    "upstreamSymbols": [
+      "ParseCSS1_margin"
+    ],
+    "preservedResponsibilities": [
+      "Consumed native CSS paragraph margin/indent/spacing/background handlers and actual HTML context insertion operate on existing document-pool items, original signed flags, nearest context lookup and pending paragraph margin owners. No browser CSS parser or new kernel value family is substituted. Block RES_BACKGROUND is represented; distinct inline RES_CHRATR_BACKGROUND remains absent and is not mapped to highlight. Native token/narrowing/shorthand quirks are retained. Actual model, Markdown/Worker and mounted paragraph UI evidence covers these callers. Generic positioning/style-graph/table/background-image and unconsumed branches remain unverified; no whole-filter or compiled upstream promotion."
+    ],
+    "omittedResponsibilities": [
+      "This consumed fragment is not a full CSS/HTML or generic style/positioning module certificate."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sw/source/filter/html/svxcss1.paragraph.ts",
+      "rationale": "Native paragraph CSS handlers and borrowed-context insertion are split from their original source aggregates to preserve the mandatory 1000-line limit while retaining original parser/context/item ownership and call order.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

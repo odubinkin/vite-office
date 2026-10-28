@@ -115,6 +115,7 @@ export function WriterEditableParagraph({
       className="relative shrink-0"
       data-active={isActive}
       style={{
+        backgroundColor: paragraph.computedStyle.backgroundColor,
         marginBlockStart: `${topSpacingPt ?? (cellPosition === undefined ? 0 : paragraph.computedStyle.upperSpacingPt)}pt`,
         marginBlockEnd:
           cellPosition === undefined ? undefined : `${paragraph.computedStyle.lowerSpacingPt}pt`,

@@ -58,7 +58,8 @@
       "Task6764KT adds original contour10012,shadowed10010,relief10920,overline11568 and emphasis10899 slots consumed by SetupEntry decoration lookup. Their declaration does not imply that every Writer Which/default/import/export route is implemented;current Writer underline/strikeout slots are covered through the real paragraph style owner.",
       "V4DQJW adds original native slots10011 and10067 for word-only decoration and automatic pair kerning, without renumbering existing slots.",
       "Adds original Latin/CJK/CTL language slot identities from editids.hrc.",
-      "S3HW1E adds source slot constants consumed by the native CSS item receiver. Missing current-model item families remain absent; no new native value owner or model capability is implied."
+      "S3HW1E adds source slot constants consumed by the native CSS item receiver. Missing current-model item families remain absent; no new native value owner or model capability is implied.",
+      "S3HW1E adds source SID_ATTR_BRUSH slot10001 for the already represented paragraph brush consumed by native CSS; no new value owner or model family is introduced."
     ],
     "omittedResponsibilities": [
       "Full native component and framework services remain unported;no whole-component parity claim."

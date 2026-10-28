@@ -44,7 +44,13 @@ import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SwCSS1Parser } from "./htmlcss1";
 import { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { InsertAttrs } from "./htmlctxt.insert";
+import {
+  SvxFirstLineIndentItem,
+  SvxTextLeftMarginItem,
+  SvxRightMarginItem,
+  SvxIndentValue,
+} from "../../../../editeng/inc/lrspitem";
 import { NewBasefontAttr, EndBasefontAttr, NewFontAttr, EndFontAttr } from "./swhtml.font";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
@@ -184,6 +190,10 @@ export class SwHTMLParser extends HTMLParser {
   InsertAttr(head: HTMLAttrHead, item: SfxPoolItem, context: HTMLAttrContext): void {
     if (NewAttr(this, this.m_xAttrTab, head, item) && head[0]) context.GetAttrs().push(head[0]);
   }
+  /** Original parser-owned attribute close delegates to the shared native implementation and script service. @param attr - Actual open attribute. @param checkEmpty - Native empty-range policy. @returns Original close result. */
+  EndAttr(attr: HTMLAttr, checkEmpty = true): boolean {
+    return EndAttr(this, attr, checkEmpty, this.breakIterator);
+  }
   /** Original context attribute close order. @param context - Removed context. @returns Nothing. */
   EndContextAttrs(context: HTMLAttrContext): void {
     for (const attr of context.GetAttrs()) EndAttr(this, attr, true, this.breakIterator);
@@ -216,7 +226,7 @@ export class SwHTMLParser extends HTMLParser {
           for (const [, item] of items) set.Put(item);
           const info = new SvxCSS1PropertyInfo();
           this.m_pCSS1Parser.ParseStyleOption(style, set, info);
-          this.InsertAttrs(set, info, context);
+          this.InsertAttrs(set, info, context, true);
         } finally {
           set.Dispose();
         }
@@ -233,34 +243,49 @@ export class SwHTMLParser extends HTMLParser {
       if (option.GetToken() === id) result = option.GetString();
     return result;
   }
-  /** Consumed native InsertAttrs paths; percentage heights are deliberately not applied. @param items - Native declarations. @param info - Native property flags. @param context - Actual attribute context. @returns Nothing. */
-  InsertAttrs(items: SfxItemSet, info: SvxCSS1PropertyInfo, context: HTMLAttrContext): void {
-    void info;
-    const tab = this.m_xAttrTab;
-    const heads = new Map<number, HTMLAttrHead>([
-      [H.RES_CHRATR_WEIGHT, tab.pBold],
-      [H.RES_CHRATR_CJK_WEIGHT, tab.pBoldCJK],
-      [H.RES_CHRATR_CTL_WEIGHT, tab.pBoldCTL],
-      [H.RES_CHRATR_POSTURE, tab.pItalic],
-      [H.RES_CHRATR_CJK_POSTURE, tab.pItalicCJK],
-      [H.RES_CHRATR_CTL_POSTURE, tab.pItalicCTL],
-      [H.RES_CHRATR_FONTSIZE, tab.pFontHeight],
-      [H.RES_CHRATR_CJK_FONTSIZE, tab.pFontHeightCJK],
-      [H.RES_CHRATR_CTL_FONTSIZE, tab.pFontHeightCTL],
-      [H.RES_CHRATR_FONT, tab.pFont],
-      [H.RES_CHRATR_CJK_FONT, tab.pFontCJK],
-      [H.RES_CHRATR_CTL_FONT, tab.pFontCTL],
-      [H.RES_PARATR_LINESPACING, tab.pLineSpacing],
-      [H.RES_CHRATR_UNDERLINE, tab.pUnderline],
-      [H.RES_CHRATR_COLOR, tab.pFontColor],
-      [H.RES_CHRATR_CROSSEDOUT, tab.pStrike],
-      [H.RES_PARATR_ADJUST, tab.pAdjust],
-    ]);
-    for (const item of items.entries()) {
-      if (item instanceof SvxFontHeightItem && item.GetProp() !== 100) continue;
-      const head = heads.get(item.Which());
-      if (head) this.InsertAttr(head, item, context);
+  /** Native consumed attribute/context insertion. @param items - Declarations. @param info - Flags. @param context - Actual context. @param charLevel - Original inline selector. @returns Nothing. */
+  InsertAttrs(
+    items: SfxItemSet,
+    info: SvxCSS1PropertyInfo,
+    context: HTMLAttrContext,
+    charLevel = false,
+  ): void {
+    InsertAttrs(this, items, info, context, charLevel);
+  }
+  /** Original reverse nearest-margin lookup leaves supplied outputs unchanged if no context owns them. @param left - Output. @param right - Output. @param indent - Output. @param ignoreTop - Skip top context. @returns Nothing. */
+  GetMarginsFromContext(
+    left: [number],
+    right: [number],
+    indent: [number],
+    ignoreTop = false,
+  ): void {
+    for (let index = this.m_aContexts.length - (ignoreTop ? 1 : 0); index;) {
+      const context = this.m_aContexts[--index];
+      if (context?.IsLRSpaceChanged()) {
+        context.GetMargins(left, right, indent);
+        return;
+      }
     }
+  }
+  /** Native spacing lookup takes the nearest changed context or the default body paragraph style. @param upper - Output. @param lower - Output. @returns Nothing. */
+  GetULSpaceFromContext(upper: [number], lower: [number]): void {
+    let pool = SwPoolFormatId.ZERO as number;
+    for (let index = this.m_aContexts.length; index;) {
+      const context = this.m_aContexts[--index];
+      if (context?.IsULSpaceChanged()) {
+        context.GetULSpace(upper, lower);
+        return;
+      }
+      if (!pool && context?.GetDefaultTextFormatColl()) pool = context.GetDefaultTextFormatColl();
+    }
+    const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
+      /** Resolves the original default pool. @param item - Metadata. @returns Match. */ (item) =>
+        item.poolId === (pool || SwPoolFormatId.COLL_TEXT),
+    );
+    if (!entry) throw new Error("assert(default HTML paragraph style)");
+    const spacing = this.m_xDoc.GetTextFormatColl(entry.id).GetULSpace();
+    upper[0] = spacing.GetUpper();
+    lower[0] = spacing.GetLower();
   }
   /** Native semantic tags retain a separate character-format stack beneath direct CSS attributes. @param token - Native opening token. @returns Nothing. */
   NewCharFormat(token: T): void {
@@ -272,7 +297,7 @@ export class SwHTMLParser extends HTMLParser {
       try {
         const info = new SvxCSS1PropertyInfo();
         this.m_pCSS1Parser.ParseStyleOption(style, items, info);
-        this.InsertAttrs(items, info, context);
+        this.InsertAttrs(items, info, context, true);
       } finally {
         items.Dispose();
       }
@@ -291,18 +316,80 @@ export class SwHTMLParser extends HTMLParser {
   SetAttr(checkEnd = true, beforeTable = false): void {
     SetAttr_(this, checkEnd, beforeTable);
   }
-  /** Original paragraph style selection over the consumed context pool IDs. @returns Nothing. */
-  SetTextCollAttrs(): void {
+  /** Original paragraph style selection and consumed context margin contributions. @param topContext - Newly opened explicit style context. @returns Nothing. */
+  SetTextCollAttrs(topContext?: HTMLAttrContext): void {
+    let explicit = false;
     let pool = SwPoolFormatId.COLL_TEXT as number;
     for (const context of this.m_aContexts)
-      if (context.GetTextFormatColl()) pool = context.GetTextFormatColl();
+      if (context.GetTextFormatColl()) {
+        pool = context.GetTextFormatColl();
+        explicit = true;
+      }
     const entry = WRITER_PARAGRAPH_STYLE_POOL.find(
       /** Matches original pool identity. @param value - Native pool metadata. @returns Identity match. */ (
         value,
       ) => value.poolId === pool,
     );
     if (!entry) throw new Error("HTML paragraph pool identity is not represented.");
-    setTextFormatCollAtNode(this.GetTextNode(), this.m_xDoc.GetTextFormatColl(entry.id), false);
+    const style = this.m_xDoc.GetTextFormatColl(entry.id);
+    const left: [number] = [0],
+      right: [number] = [0],
+      indent: [number] = [0];
+    this.GetMarginsFromContext(left, right, indent);
+    const set = style.GetAttrSet(),
+      first = set.Get(H.RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem,
+      leftItem = set.Get(H.RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem,
+      rightItem = set.Get(H.RES_MARGIN_RIGHT) as SvxRightMarginItem;
+    if (topContext?.GetTextFormatColl()) {
+      if (
+        set.GetItemIfSet(H.RES_MARGIN_FIRSTLINE) ||
+        set.GetItemIfSet(H.RES_MARGIN_TEXTLEFT) ||
+        set.GetItemIfSet(H.RES_MARGIN_RIGHT)
+      ) {
+        left[0] = (left[0] + leftItem.ResolveTextLeft()) & 0xffff;
+        right[0] = (right[0] + rightItem.ResolveRight()) & 0xffff;
+        indent[0] = first.ResolveTextFirstLineOffset();
+        topContext.SetMargins(left[0], right[0], indent[0]);
+      }
+      const spacing = set.GetItemIfSet(H.RES_UL_SPACE);
+      if (spacing instanceof SvxULSpaceItem)
+        topContext.SetULSpace(spacing.GetUpper(), spacing.GetLower());
+    }
+    if (!explicit) {
+      if (!left[0]) left[0] = leftItem.ResolveTextLeft() & 0xffff;
+      if (!right[0]) right[0] = rightItem.ResolveRight() & 0xffff;
+      if (!indent[0]) indent[0] = first.ResolveTextFirstLineOffset();
+    }
+    for (const attr of this.m_aParaAttrs) attr.Invalidate();
+    this.m_aParaAttrs.length = 0;
+    setTextFormatCollAtNode(this.GetTextNode(), style, false);
+    if (
+      left[0] !== leftItem.ResolveTextLeft() ||
+      right[0] !== rightItem.ResolveRight() ||
+      indent[0] !== first.ResolveTextFirstLineOffset()
+    ) {
+      const firstLine = first.Clone(),
+        leftMargin = leftItem.Clone(),
+        rightMargin = rightItem.Clone();
+      firstLine.SetTextFirstLineOffset(SvxIndentValue.twips(indent[0]));
+      leftMargin.SetTextLeft(SvxIndentValue.twips(left[0]));
+      rightMargin.SetRight(SvxIndentValue.twips(right[0]));
+      for (const [head, item] of [
+        [this.m_xAttrTab.pFirstLineIndent, firstLine],
+        [this.m_xAttrTab.pTextLeftMargin, leftMargin],
+        [this.m_xAttrTab.pRightMargin, rightMargin],
+      ] as readonly (readonly [HTMLAttrHead, SfxPoolItem])[]) {
+        try {
+          if (NewAttr(this, this.m_xAttrTab, head, item) && head[0]) {
+            head[0].SetLikePara();
+            this.m_aParaAttrs.push(head[0]);
+            EndAttr(this, head[0], false, this.breakIterator);
+          }
+        } finally {
+          item.Dispose();
+        }
+      }
+    }
   }
   /** Removes at most two trailing hard linefeeds through the real content owner. @returns Removed count. */
   StripTrailingLF(): number {
@@ -481,7 +568,7 @@ export class SwHTMLParser extends HTMLParser {
     }
     this.InsertAlignment(context);
     this.PushContext(context);
-    this.SetTextCollAttrs();
+    this.SetTextCollAttrs(context);
     this.m_nFontStHeadStart = this.m_aFontStack.length;
   }
   /** Original heading close finds the last heading regardless of the closing level. @returns Nothing. */
@@ -523,7 +610,7 @@ export class SwHTMLParser extends HTMLParser {
       }
     }
     this.PushContext(context);
-    this.SetTextCollAttrs();
+    this.SetTextCollAttrs(context);
   }
   /** Original block close applies its append policy before ending context attributes. @param token - Original opening or closing token. @returns Nothing. */
   EndTextFormatColl(token: T): void {

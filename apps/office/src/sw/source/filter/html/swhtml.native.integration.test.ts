@@ -18,6 +18,20 @@ import {
 } from "../../../inc/hintids";
 import { RES_CHRATR_FONTSIZE } from "../../../inc/hintids";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SvxULSpaceItem } from "../../../../editeng/inc/ulspitem";
+import {
+  SvxTextLeftMarginItem,
+  SvxRightMarginItem,
+  SvxFirstLineIndentItem,
+} from "../../../../editeng/inc/lrspitem";
+import { SvxBrushItem } from "../../../../editeng/source/items/frmitems.brush";
+import {
+  RES_MARGIN_FIRSTLINE,
+  RES_MARGIN_TEXTLEFT,
+  RES_MARGIN_RIGHT,
+  RES_UL_SPACE,
+  RES_BACKGROUND,
+} from "../../../inc/hintids";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
@@ -41,9 +55,8 @@ afterEach(
     for (const doc of docs.splice(0)) doc.Dispose();
   },
 );
-/** Reads HTML into the same blank paragraph insertion profile used by Markdown. @param html - Native UTF16 source. @returns Actual document. */
-function html(html: string): SwDoc {
-  const doc = new SwDoc();
+/** Reads HTML into the same blank paragraph insertion profile used by Markdown. @param html - Native UTF16 source. @param doc - Optional actual insertion document. @returns Actual document. */
+function html(html: string, doc = new SwDoc()): SwDoc {
   docs.push(doc);
   const node = doc.paragraphs[0];
   assert(node);
@@ -830,4 +843,108 @@ it("retains source legacy font-head wiring independently of CSS insertion", /** 
     [RES_CHRATR_CTL_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_FONT, 0, 0],
     [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT],
   ]);
+});
+it("imports native paragraph margins, first-line indent and background color", /** CSS declarations become original paragraph items without browser layout parsing. @returns Nothing. */ () => {
+  const doc = html(
+      '<p style="margin: 1pt 2pt 3pt 4pt; text-indent: -2pt; background-color: red">A</p><p>B</p>',
+    ),
+    node = doc.paragraphs[0];
+  assert(node);
+  expect([
+    node.GetParagraphTextLeftMargin(),
+    node.GetParagraphRightMargin(),
+    node.GetParagraphFirstLineIndent(),
+  ]).toEqual([80, 40, -40]);
+  const spacing = node.GetAttr(RES_UL_SPACE);
+  assert(spacing instanceof SvxULSpaceItem);
+  expect([spacing.GetUpper(), spacing.GetLower()]).toEqual([20, 60]);
+  const brush = node.GetAttr(RES_BACKGROUND);
+  assert(brush instanceof SvxBrushItem);
+  expect(brush.GetColor().toUInt32()).toBe(0xff0000);
+  expect(doc.paragraphs[1]?.GetParagraphTextLeftMargin()).toBe(0);
+});
+it("accumulates native nested margins and clamps negative contributions at zero", /** Context flags retain signed contributions separately from unsigned margin items. @returns Nothing. */ () => {
+  const doc = html(
+    '<blockquote style="margin-left: 10pt"><p style="margin-left: -3pt; margin-right: 5pt">A</p><p style="margin-left: -999pt">B</p></blockquote>',
+  );
+  const base = (
+    doc
+      .GetTextFormatColl("quotations")
+      .GetAttrSet()
+      .Get(RES_MARGIN_TEXTLEFT) as SvxTextLeftMarginItem
+  ).ResolveTextLeft();
+  expect(doc.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(base + 200 - 60);
+  expect(doc.paragraphs[0]?.GetParagraphRightMargin()).toBe(
+    (
+      doc.GetTextFormatColl("quotations").GetAttrSet().Get(RES_MARGIN_RIGHT) as SvxRightMarginItem
+    ).ResolveRight() + 100,
+  );
+  expect(doc.paragraphs[1]?.GetParagraphTextLeftMargin()).toBe(0);
+});
+it("preserves the opposite native spacing side when only one CSS margin is present", /** Native GetULSpaceFromContext supplies unspecified top/bottom values. @returns Nothing. */ () => {
+  const doc = html('<p style="margin-top: 2pt">A</p><p style="margin-bottom: 3pt">B</p>');
+  const body = doc.GetTextFormatColl("text-body").GetULSpace();
+  const first = doc.paragraphs[0]?.GetAttr(RES_UL_SPACE),
+    second = doc.paragraphs[1]?.GetAttr(RES_UL_SPACE);
+  assert(first instanceof SvxULSpaceItem && second instanceof SvxULSpaceItem);
+  expect([first.GetUpper(), first.GetLower()]).toEqual([40, body.GetLower()]);
+  expect([second.GetUpper(), second.GetLower()]).toEqual([body.GetUpper(), 60]);
+});
+it("retains native margin shorthand partial application and ignored bare zero", /** Unsupported tokens consume a shorthand position but do not roll back earlier sides. @returns Nothing. */ () => {
+  const doc = html('<p style="margin: 1pt auto 3pt; margin-left: 0">A</p>'),
+    node = doc.paragraphs[0];
+  assert(node);
+  expect(node.GetParagraphTextLeftMargin()).toBe(20);
+  expect(node.GetParagraphRightMargin()).toBe(20);
+  const spacing = node.GetAttr(RES_UL_SPACE);
+  assert(spacing instanceof SvxULSpaceItem);
+  expect([spacing.GetUpper(), spacing.GetLower()]).toEqual([20, 60]);
+});
+it("restores native paragraph background and keeps text highlight separate", /** Paragraph brush and character highlight are distinct source Which families. @returns Nothing. */ () => {
+  const doc = html('<p style="background-color: blue; background-color: transparent">A</p>');
+  const brush = doc.paragraphs[0]?.GetAttr(RES_BACKGROUND);
+  assert(brush instanceof SvxBrushItem);
+  expect(brush.GetColor().toUInt32() >>> 24).toBe(255);
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.highlight).toBeUndefined();
+});
+it("transports actual Markdown paragraph layout and brush through Worker snapshots", /** Production Markdown HTML insertion uses existing native items and the existing codec. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(
+    OUStringToOString(
+      '<p style="margin-left: 12pt; margin-bottom: 4pt; background-color: #123456">A</p>',
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  docs.push(doc);
+  const restored = decodeWriterDocument(encodeWriterDocument(doc));
+  docs.push(restored);
+  expect(restored.paragraphs[0]?.GetParagraphTextLeftMargin()).toBe(240);
+  const brush = restored.paragraphs[0]?.GetAttr(RES_BACKGROUND);
+  assert(brush instanceof SvxBrushItem);
+  expect(brush.GetColor().toUInt32()).toBe(0x123456);
+});
+
+it("retains native inherited automatic first-line state when CSS changes other margins", /** SetTextCollAttrs copies the style items before adjusting their metric fields. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    first = new SvxFirstLineIndentItem(RES_MARGIN_FIRSTLINE);
+  first.SetAutoFirst(true);
+  try {
+    doc.GetTextFormatColl("text-body").SetFormatAttr(first);
+  } finally {
+    first.Dispose();
+  }
+  html('<p style="margin-left: 5pt">A</p>', doc);
+  const item = doc.paragraphs[0]?.GetAttr(RES_MARGIN_FIRSTLINE);
+  assert(item instanceof SvxFirstLineIndentItem);
+  expect(item.IsAutoFirst()).toBe(true);
+});
+it("retains source text-indent length clamping versus pixel signed narrowing", /** Equivalent physical lengths take different native conversion branches. @returns Nothing. */ () => {
+  const doc = html('<p style="text-indent: 2250pt">A</p><p style="text-indent: 3000px">B</p>');
+  expect(
+    doc.paragraphs.map(
+      /** Reads original signed first-line items. @param node - Native paragraph. @returns Signed twips. */ (
+        node,
+      ) =>
+        (node.GetAttr(RES_MARGIN_FIRSTLINE) as SvxFirstLineIndentItem).ResolveTextFirstLineOffset(),
+    ),
+  ).toEqual([32767, -20536]);
 });

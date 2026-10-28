@@ -2047,3 +2047,21 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/swhtml.cxx`, `SwHTMLParser::EndFontAttr` calls EndTag and then independently removes the last size when above the stack minimum; it does not require a matching context to have been found.
 - Observation: in `<font size="5">A</big><big>B</big>C</font>D`, the unmatched BIG closer removes the size-5 stack entry while the FONT context remains open. The following BIG consequently uses base size 3 and emits logical size 4. Existing FONT attributes still cover A/C. This is source-derived actual-model evidence; compiled upstream differential behavior remains unverified.
 - Preservation: retain the independent token-context search and stack pop, including minimum guards. Do not make size removal conditional on context lookup success.
+
+### WRITER218 — CSS margin and text-indent handlers ignore bare zero
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_margin_left/right/top/bottom, ParseCSS1_margin and ParseCSS1_text_indent switch on LENGTH/PIXLENGTH, with no NUMBER-zero branch.
+- Observation: `margin-left: 0` does not reset an earlier authored margin, although `margin-left: 0pt` does. Unsupported shorthand tokens still consume their positional index; earlier sides remain applied rather than rolling back the declaration. This is source-level evidence, not a compiled desktop defect confirmation.
+- Preservation: actual HTML insertion retains both behaviors. A shorthand `margin: 1pt auto 3pt` keeps 1pt on both horizontal sides and 3pt below; a later bare-zero left margin leaves that value intact.
+
+### WRITER219 — CSS auto margin recognition uses a case-sensitive string comparison
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_margin_left/right compare `pExpr->GetString() == "auto"` rather than an ASCII-insensitive CSS keyword comparison.
+- Observation: lowercase `auto` sets the margin flag/type without producing a numeric margin item; differently cased spellings do not enter that branch. Other recognized CSS property handlers use ASCII-insensitive lookup. This is a source-level finding; a compiled document/layout effect is not established.
+- Preservation: retain the literal comparison and source flag/type state. Do not substitute a browser CSS declaration normalizer.
+
+### WRITER220 — CSS text-indent clamps absolute lengths but wraps pixel lengths
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, ParseCSS1_text_indent LENGTH branch rounds/clamps to signed16, while the PIXLENGTH branch converts truncated pixels to twips then casts directly to short.
+- Observation: physically equivalent `text-indent: 2250pt` and `text-indent: 3000px` become 32767 and -20536 twips respectively. The pixel path can reverse the indent sign through signed16 narrowing. This is source-derived actual-model evidence; compiled LibreOffice differential behavior is unverified.
+- Preservation: retain both conversion branches and their distinct outcomes; do not unify them through browser CSS length conversion or a common clamp.

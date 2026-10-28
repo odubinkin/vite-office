@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sw/source/filter/html/htmlctxt.insert.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "writer",
+    "subsystem": "document-filters",
+    "capabilityIds": [
+      "CAP-ba76bd42-4b00-4278-9f8f-3970be0c5fa6"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "none",
+      "evidence": [
+        "apps/office/src/sw/source/filter/html/htmlctxt.insert.ts",
+        "apps/office/src/sw/source/filter/html/swhtml.native.integration.test.ts",
+        "apps/office/src/sw/browser/editor/WriterEditableParagraph.test.tsx",
+        "vendor/libreoffice-reference/sw/source/filter/html/htmlctxt.cxx"
+      ],
+      "justification": "Consumed native CSS paragraph margin/indent/spacing/background handlers and actual HTML context insertion operate on existing document-pool items, original signed flags, nearest context lookup and pending paragraph margin owners. No browser CSS parser or new kernel value family is substituted. Block RES_BACKGROUND is represented; distinct inline RES_CHRATR_BACKGROUND remains absent and is not mapped to highlight. Native token/narrowing/shorthand quirks are retained. Actual model, Markdown/Worker and mounted paragraph UI evidence covers these callers. Generic positioning/style-graph/table/background-image and unconsumed branches remain unverified; no whole-filter or compiled upstream promotion.",
+      "knownViolations": [],
+      "localSymbols": [
+        "InsertAttrs"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "sw/source/filter/html/htmlctxt.cxx",
+      "upstreamSymbols": [
+        "SwHTMLParser::InsertAttrs"
+      ]
+    }
+  }
+}

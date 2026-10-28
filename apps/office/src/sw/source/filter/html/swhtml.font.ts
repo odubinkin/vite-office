@@ -151,7 +151,7 @@ export function NewFontAttr(parser: SwHTMLParser, token: T): void {
         for (const item of items) set.Put(item);
         const info = new SvxCSS1PropertyInfo();
         if (style) parser.m_pCSS1Parser.ParseStyleOption(style, set, info);
-        parser.InsertAttrs(set, info, context);
+        parser.InsertAttrs(set, info, context, true);
       } finally {
         set.Dispose();
       }

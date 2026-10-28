@@ -35,6 +35,7 @@ export const aItemIds = {
   nULSpace: 0,
   nDirection: 0,
   nLineSpacing: 0,
+  nBrush: 0,
 };
 /** Native consumed property receiver; no DOM or browser CSS cascade is substituted. */
 export class SvxCSS1Parser extends CSS1Parser {
@@ -81,6 +82,7 @@ export class SvxCSS1Parser extends CSS1Parser {
       nULSpace: S.SID_ATTR_ULSPACE,
       nDirection: S.SID_ATTR_FRAMEDIRECTION,
       nLineSpacing: S.SID_ATTR_PARA_LINESPACE,
+      nBrush: S.SID_ATTR_BRUSH,
     };
     for (const key of Object.keys(slots) as (keyof typeof slots)[]) {
       aItemIds[key] = pool.GetTrueWhichIDFromSlotID(slots[key], false);

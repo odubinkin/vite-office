@@ -25,6 +25,7 @@ import {
   FontStrikeout as S,
 } from "../../../../tools/inc/fontenum";
 import { SvxCaseMap as C, SvxAdjust as A } from "../../../../editeng/inc/svxenum";
+import { ParseCSS1ParagraphProperty } from "./svxcss1.paragraph";
 import { Color } from "../../../../tools/inc/color";
 /** Original ASCII case folding; no Unicode/browser normalization is added. @param value - Native string. @returns Folded string. */
 export function cssAsciiLower(value: string): string {
@@ -166,6 +167,7 @@ export function ParseCSS1Property(
 ): void {
   const type = expression.GetType(),
     value = cssAsciiLower(expression.GetString());
+  if (ParseCSS1ParagraphProperty(cssAsciiLower(property), expression, set, info)) return;
   switch (cssAsciiLower(property)) {
     case "font-family":
       fontFamily(expression, set, parser);

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 155
+revision: 158
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:00:12.550Z"
+  updated_at: "2026-10-28T14:15:11.222Z"
   updated_by: "CODER"
-  note: "Connected native legacy HTML fonts, real stacks and heading sizing; documented WRITER215-217 as requested. 960 related tests and type/lint/format/source gates pass. Remaining actual HTML/RTF consumer rows keep the full format task open."
-  attempts: 16
+  note: "Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-UI path verified: 994 related tests, final63 HTML/UI tests, type/lint/format/source/registry gates pass. WRITER218-220 documented with preserved behavior. Remaining actual HTML/RTF consumers keep the task open."
+  attempts: 17
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -261,8 +264,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:15:11.222Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-UI path verified: 994 related tests, final63 HTML/UI tests, type/lint/format/source/registry gates pass. WRITER218-220 documented with preserved behavior. Remaining actual HTML/RTF consumers keep the task open."
+  -
+    type: "status"
+    at: "2026-10-28T14:15:28.785Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:00:20.002Z"
+doc_updated_at: "2026-10-28T14:15:28.785Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -465,6 +481,36 @@ sections:
     Attempts: 16
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:00:11.565Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T14:15:11.222Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-UI path verified: 994 related tests, final63 HTML/UI tests, type/lint/format/source/registry gates pass. WRITER218-220 documented with preserved behavior. Remaining actual HTML/RTF consumers keep the task open.
+    Attempts: 17
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:15:10.350Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1030,6 +1076,22 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:source-tree
     - Result: pass; Evidence: type/lint/format clean, JSDoc3908 authored sources, size3912 authored files, boundaries1701 sources/8967 imports/210 edges, provenance1702 modules, Writer registry and115 source-tree paths/32 retired roots pass. Logs output/playwright/rtf-properties-native/html5-*.log are ignored local artifacts. Initial missing test-subclass JSDoc was added and the affected lint/doc gates rerun successfully.
     - Remaining filter work: native represented background/border/other paragraph CSS, ID/bookmark/language/direction, hyperlinks, HTML list/table paths, relevant existing-style lookup and remaining RTF capability rows. Table-specific font-stack minima transitions belong to the pending real table consumer; no standalone table-service expansion is claimed. Overall task remains DOING/rework and the full format goal remains active.
+
+    ### Native CSS paragraph margins, spacing and brush/UI checkpoint
+
+    - Prior goal turn: progress, committed c1fed4b5f0db; clean Writer checkout confirmed before this block. Approved full current-model TXT/RTF/Markdown objective remains unchanged.
+    - Concrete caller: actual Markdown raw HTML P/heading/quotation/address/PRE insertion required represented CSS margin/text-indent/background-color values to become native paragraph items and reach the UI. Existing RES_BACKGROUND, LR/first-line and UL spacing items are reused; no generic kernel module or new core value family is added.
+    - Source implementation: svxcss1.paragraph.ts ports original margin/text-indent/background-color token admission, signed property state, unsigned/narrowing item state, partial shorthand writes and independent spacing side updates. htmlctxt.insert.ts borrows the actual parser for native context margins, spacing, empty-range margin insertion and original item heads. SwHTMLParser restores native GetMarginsFromContext/GetULSpaceFromContext, consumed SetTextCollAttrs margin contributions, original pending-paragraph invalidation, a native owner EndAttr method and the inline-versus-block InsertAttrs flag. Style items are copied before metric updates to preserve native automatic first-line state. Full generic style graph and positioning branches remain unverified.
+    - Background boundary: paragraph brush is present in the current pool and existing Worker codec. The distinct RES_CHRATR_BACKGROUND has no current model owner and is not mapped to text highlight. WriterViewProjection reads actual paragraph brush color; WriterEditableParagraph paints the wrapper independently of text highlight. Actual Markdown -> SwDoc -> view projection -> mounted DOM test verifies the import/UI path.
+    - Source evidence: pinned sw/source/filter/html/svxcss1.cxx, htmlctxt.cxx, htmlcss1.cxx nearest context lookups, swhtml.cxx SetTextCollAttrs; existing real SfxItemSet, HTMLAttrTable/Context, margin/spacing/brush items and Worker owners. Added WRITER218 ignored bare zero/partial shorthand, WRITER219 case-sensitive auto margin and WRITER220 text-indent length clamp versus pixel signed16 wrap to docs/program/writer-upstream-suspected-issues.md. Behavior is preserved, not repaired. No compiled desktop defect or broad parity certificate is asserted.
+    - Verification corrections: nested quotation margins include both original style sides; fixture now expects the existing right style offset plus CSS. Transparency test reads the actual packed native Color value. Typecheck exposed the script-service argument required by the shared EndAttr function; the restored native SwHTMLParser.EndAttr method supplies the original existing service. No fallback parser/provider or kernel behavior patch was introduced for fixtures.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/browser/editor/WriterEditableParagraph.test.tsx src/sw/browser/presentation/writer-view.test.tsx
+    - Result: pass; Evidence: 994 tests / 73 suites; Scope: related filters, I/O and touched browser presentation. This run preceded the final source item-copy preservation adjustment and two added regression cases.
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/browser/editor/WriterEditableParagraph.test.tsx
+    - Result: pass; Evidence: final63 tests /2 suites, including53 actual HTML cases and10 mounted paragraph cases; Scope: current final HTML/context/style-copy/background pipeline, Worker transport, accumulated/negative margins, opposite-side spacing, preserved auto-first state and signed text-indent overflow difference. A second broad replay was unnecessary after these scoped final checks; no mandatory check was skipped.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 over11 changed source files; npx prettier --check over all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
+    - Result: pass; Evidence: final type/lint/format/whitespace clean; JSDoc3910 authored files, size3914 authored files, boundaries1703 sources/8990 imports/210 edges, provenance1704 runtime modules; both registry checks and source-tree115 paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html6-*.log (ignored local artifacts).
+    - Remaining actual consumer work: background shorthand where current brush fields apply, borders, division-style application, language/bookmarks/hyperlinks, HTML lists/tables and reachable existing-style graph behavior; remaining represented RTF capability rows and final filter/UI capability audit. Background graphics/inline background and unrelated generic services are assessed against represented owners and actual callers, not inferred from shared type availability. Overall task remains DOING/rework and the goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -1243,6 +1305,36 @@ Note: Connected native legacy HTML fonts, real stacks and heading sizing; docume
 Attempts: 16
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:00:11.565Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T14:15:11.222Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native CSS margins/spacing/paragraph brush and actual Markdown-to-mounted-UI path verified: 994 related tests, final63 HTML/UI tests, type/lint/format/source/registry gates pass. WRITER218-220 documented with preserved behavior. Remaining actual HTML/RTF consumers keep the task open.
+Attempts: 17
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:15:10.350Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1812,3 +1904,19 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run check:source-tree
 - Result: pass; Evidence: type/lint/format clean, JSDoc3908 authored sources, size3912 authored files, boundaries1701 sources/8967 imports/210 edges, provenance1702 modules, Writer registry and115 source-tree paths/32 retired roots pass. Logs output/playwright/rtf-properties-native/html5-*.log are ignored local artifacts. Initial missing test-subclass JSDoc was added and the affected lint/doc gates rerun successfully.
 - Remaining filter work: native represented background/border/other paragraph CSS, ID/bookmark/language/direction, hyperlinks, HTML list/table paths, relevant existing-style lookup and remaining RTF capability rows. Table-specific font-stack minima transitions belong to the pending real table consumer; no standalone table-service expansion is claimed. Overall task remains DOING/rework and the full format goal remains active.
+
+### Native CSS paragraph margins, spacing and brush/UI checkpoint
+
+- Prior goal turn: progress, committed c1fed4b5f0db; clean Writer checkout confirmed before this block. Approved full current-model TXT/RTF/Markdown objective remains unchanged.
+- Concrete caller: actual Markdown raw HTML P/heading/quotation/address/PRE insertion required represented CSS margin/text-indent/background-color values to become native paragraph items and reach the UI. Existing RES_BACKGROUND, LR/first-line and UL spacing items are reused; no generic kernel module or new core value family is added.
+- Source implementation: svxcss1.paragraph.ts ports original margin/text-indent/background-color token admission, signed property state, unsigned/narrowing item state, partial shorthand writes and independent spacing side updates. htmlctxt.insert.ts borrows the actual parser for native context margins, spacing, empty-range margin insertion and original item heads. SwHTMLParser restores native GetMarginsFromContext/GetULSpaceFromContext, consumed SetTextCollAttrs margin contributions, original pending-paragraph invalidation, a native owner EndAttr method and the inline-versus-block InsertAttrs flag. Style items are copied before metric updates to preserve native automatic first-line state. Full generic style graph and positioning branches remain unverified.
+- Background boundary: paragraph brush is present in the current pool and existing Worker codec. The distinct RES_CHRATR_BACKGROUND has no current model owner and is not mapped to text highlight. WriterViewProjection reads actual paragraph brush color; WriterEditableParagraph paints the wrapper independently of text highlight. Actual Markdown -> SwDoc -> view projection -> mounted DOM test verifies the import/UI path.
+- Source evidence: pinned sw/source/filter/html/svxcss1.cxx, htmlctxt.cxx, htmlcss1.cxx nearest context lookups, swhtml.cxx SetTextCollAttrs; existing real SfxItemSet, HTMLAttrTable/Context, margin/spacing/brush items and Worker owners. Added WRITER218 ignored bare zero/partial shorthand, WRITER219 case-sensitive auto margin and WRITER220 text-indent length clamp versus pixel signed16 wrap to docs/program/writer-upstream-suspected-issues.md. Behavior is preserved, not repaired. No compiled desktop defect or broad parity certificate is asserted.
+- Verification corrections: nested quotation margins include both original style sides; fixture now expects the existing right style offset plus CSS. Transparency test reads the actual packed native Color value. Typecheck exposed the script-service argument required by the shared EndAttr function; the restored native SwHTMLParser.EndAttr method supplies the original existing service. No fallback parser/provider or kernel behavior patch was introduced for fixtures.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/browser/editor/WriterEditableParagraph.test.tsx src/sw/browser/presentation/writer-view.test.tsx
+- Result: pass; Evidence: 994 tests / 73 suites; Scope: related filters, I/O and touched browser presentation. This run preceded the final source item-copy preservation adjustment and two added regression cases.
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts src/sw/browser/editor/WriterEditableParagraph.test.tsx
+- Result: pass; Evidence: final63 tests /2 suites, including53 actual HTML cases and10 mounted paragraph cases; Scope: current final HTML/context/style-copy/background pipeline, Worker transport, accumulated/negative margins, opposite-side spacing, preserved auto-first state and signed text-indent overflow difference. A second broad replay was unnecessary after these scoped final checks; no mandatory check was skipped.
+- Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings0 over11 changed source files; npx prettier --check over all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:source-tree
+- Result: pass; Evidence: final type/lint/format/whitespace clean; JSDoc3910 authored files, size3914 authored files, boundaries1703 sources/8990 imports/210 edges, provenance1704 runtime modules; both registry checks and source-tree115 paths/32 retired roots pass. Logs: output/playwright/rtf-properties-native/html6-*.log (ignored local artifacts).
+- Remaining actual consumer work: background shorthand where current brush fields apply, borders, division-style application, language/bookmarks/hyperlinks, HTML lists/tables and reachable existing-style graph behavior; remaining represented RTF capability rows and final filter/UI capability audit. Background graphics/inline background and unrelated generic services are assessed against represented owners and actual callers, not inferred from shared type availability. Overall task remains DOING/rework and the goal remains active.

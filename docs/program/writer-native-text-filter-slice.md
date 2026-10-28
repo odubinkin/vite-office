@@ -574,3 +574,29 @@ compiled desktop defect. Actual Markdown/Worker tests verify legacy font items
 reach the existing document/UI transport. Legacy font tags are no longer an open
 producer in this consumed profile; pending ID/bookmark/language/direction handling
 remains tracked separately from font value/stack behavior.
+
+### Connected native CSS paragraph spacing, margins and background color
+
+Native CSS margin/text-indent/background-color handlers now supply actual existing
+SvxFirstLineIndentItem, SvxTextLeftMarginItem, SvxRightMarginItem, SvxULSpaceItem and
+SvxBrushItem values. Native context lookup retains signed contributions separately
+from unsigned item measures, clamps a negative contribution against accumulated
+context margins and preserves 16-bit narrowing. Text-indent uses the source
+length clamp versus pixel narrowing. Single-side spacing borrows the other side
+from native context/body-style lookup. Paragraph style changes retain the consumed
+native context margin contributions and original pending paragraph invalidation.
+This is not certification of the remaining generic style-graph/positioning paths.
+WRITER218/219 record ignored bare zero, partial shorthand writes and case-sensitive
+auto-margin recognition; no browser CSS grammar is substituted.
+
+Paragraph RES_BACKGROUND is already represented by the current core. Native
+background-color now feeds that brush for block contexts and survives the existing
+Worker codec. The browser projection reads the actual paragraph brush and paints
+the paragraph wrapper independently of character highlight. A real Markdown ->
+SwDoc -> WriterViewProjection -> mounted WriterEditableParagraph test covers the
+path. The distinct RES_CHRATR_BACKGROUND family has no current value owner or
+registered Which in this slice; inline background is not translated to highlight
+or used as a reason to extend the model. Background images and shorthand URL
+resolution remain separate native producer work only where the current model
+represents them. Remaining borders, language/bookmarks/hyperlinks and HTML
+list/table consumers and RTF capability rows keep overall completion open.
