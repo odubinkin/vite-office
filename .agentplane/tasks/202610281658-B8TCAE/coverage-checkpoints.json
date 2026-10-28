@@ -365,5 +365,174 @@
       "result": "passed"
     },
     "scope": "B8TCAE adds real CalendarWrapper/CalendarImpl integration over registered providers and pinned locale resources: pre-load UNO defaults, UTC forwarding, invalid field indices, failed-ID rollback, locale reload on the same calendar/timezone cache key, independent grammatical name owners, Hanja success and hanja_yoil resource rejection. Source en_US calendar order includes Gregorian and Jewish. Three200000-unit Locale field cases reproduced a JavaScript argument-spread RangeError; LocaleData field lookup now reuses the existing counted-UTF16 text bridge, preserving every input unit and existing direct/language/en_US fallback. No input cap, resource mutation, service replacement or full native UNO-wrapper ABI claim is introduced. Both convenience service loads and actual FormatElement Sequence ownership are checked; a copied General string retains its real sole logical reference after Sequence destruction. Coverage policy and semantic statuses remain unchanged."
+  },
+  "constructorAndRtlAndCalcContracts": {
+    "scope": "Current source-owner diagnostic profiles; a narrowed profile is not a final full-project verifier. All100% thresholds remain unchanged; no exception has been applied. The broad36-file454-test number-format run preceded three final scanner-error propagation cases, which pass in the final focused2-file91-test run. The90-file394-test Calc data run preceded three final auto-input tests, which pass in the focused2-file11-test import run.",
+    "profiles": {
+      "numberFormatConstructor": {
+        "testFiles": 2,
+        "tests": 91,
+        "assertionsPassed": true,
+        "strictCoveragePassed": false,
+        "runtimeCodeChanged": false,
+        "report": "apps/office/coverage/integration-construct-prefixes/coverage-final.json",
+        "reportSha256": "3fea3bb27d14261e9d75a57a31701d18f5d16cdb4106315a1181dba46fbc126b",
+        "metrics": {
+          "lines": {
+            "total": 335,
+            "covered": 330,
+            "skipped": 0,
+            "pct": 98.5
+          },
+          "statements": {
+            "total": 363,
+            "covered": 353,
+            "skipped": 0,
+            "pct": 97.24
+          },
+          "functions": {
+            "total": 4,
+            "covered": 4,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 275,
+            "covered": 251,
+            "skipped": 0,
+            "pct": 91.27
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "rtlStringTemplates": {
+        "testFiles": 27,
+        "tests": 173,
+        "assertionsPassed": true,
+        "strictCoveragePassed": false,
+        "runtimeCodeChanged": false,
+        "report": "apps/office/coverage/integration-strtmpl-current/coverage-final.json",
+        "reportSha256": "caa0dc9dab1026ecce28a2d9f9dcadaf91677af8ba628c946f6be3a8ded5e310",
+        "metrics": {
+          "lines": {
+            "total": 353,
+            "covered": 349,
+            "skipped": 0,
+            "pct": 98.86
+          },
+          "statements": {
+            "total": 479,
+            "covered": 466,
+            "skipped": 0,
+            "pct": 97.28
+          },
+          "functions": {
+            "total": 46,
+            "covered": 46,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 393,
+            "covered": 373,
+            "skipped": 0,
+            "pct": 94.91
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "calcCellValues": {
+        "testFiles": 90,
+        "tests": 394,
+        "assertionsPassed": true,
+        "strictCoveragePassed": false,
+        "runtimeCodeChanged": false,
+        "report": "apps/office/coverage/integration-cellvalue-current/coverage-final.json",
+        "reportSha256": "df852325b2ca2cc964efad5a9a3b31f3cbbe6ff6e409b032b5f81ddef2707dd1",
+        "metrics": {
+          "lines": {
+            "total": 122,
+            "covered": 114,
+            "skipped": 0,
+            "pct": 93.44
+          },
+          "statements": {
+            "total": 133,
+            "covered": 124,
+            "skipped": 0,
+            "pct": 93.23
+          },
+          "functions": {
+            "total": 30,
+            "covered": 29,
+            "skipped": 0,
+            "pct": 96.66
+          },
+          "branches": {
+            "total": 78,
+            "covered": 69,
+            "skipped": 0,
+            "pct": 88.46
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      },
+      "calcDocumentImport": {
+        "testFiles": 2,
+        "tests": 11,
+        "assertionsPassed": true,
+        "strictCoveragePassed": false,
+        "runtimeCodeChanged": false,
+        "report": "apps/office/coverage/integration-documentimport/coverage-final.json",
+        "reportSha256": "d8e6adefabd224cbe95853ff85bedef0c56e0198188e87b5768bf3662aa12ab9",
+        "metrics": {
+          "lines": {
+            "total": 107,
+            "covered": 103,
+            "skipped": 0,
+            "pct": 96.26
+          },
+          "statements": {
+            "total": 128,
+            "covered": 123,
+            "skipped": 0,
+            "pct": 96.09
+          },
+          "functions": {
+            "total": 14,
+            "covered": 14,
+            "skipped": 0,
+            "pct": 100
+          },
+          "branches": {
+            "total": 50,
+            "covered": 47,
+            "skipped": 0,
+            "pct": 94
+          },
+          "branchesTrue": {
+            "total": 0,
+            "covered": 0,
+            "skipped": 0,
+            "pct": "Unknown"
+          }
+        }
+      }
+    }
   }
 }

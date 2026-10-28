@@ -10,6 +10,7 @@ import { ScDocumentImport } from "../../../inc/documentimport";
 import { ScDocument, ScDocumentMode } from "../../../inc/document";
 import { CellType } from "../../../inc/global";
 import { ScDocShell } from "../../ui/docshell/docsh";
+import { ScSetStringParam } from "../../../inc/stringutil";
 
 it("releases transferred edit text for missing sheets and invalid columns without writing other cells", /** Checks native admission before a column store or formula owner is allocated. @returns Nothing. */ () => {
   const shell = new ScDocShell();
@@ -44,6 +45,62 @@ it("releases transferred edit text for missing sheets and invalid columns withou
     shell.Close();
   }
 });
+
+it("checks auto-input admission and link policy before changing stored content", /** Invalid sheets/columns return before parsing; a supplied policy must explicitly admit original link checking. @returns Nothing. */ () => {
+  const shell = new ScDocShell(),
+    doc = shell.GetDocument(),
+    importer = new ScDocumentImport(doc),
+    position = new ScAddress(),
+    input = unicode("123"),
+    empty = unicode("");
+  doc.SetValue(position, 42);
+  try {
+    importer.setAutoInput(new ScAddress(0, 0, 99), input);
+    importer.setAutoInput(new ScAddress(doc.MaxCol() + 1, 0, 0), input);
+    expect(doc.GetValue(position)).toBe(42);
+    const policy = new ScSetStringParam();
+    expect(
+      /** Calls the actual assertion with a default policy that disables link checking. @returns Nothing. */ () =>
+        importer.setAutoInput(position, input, policy),
+    ).toThrow("assert(!pStringParam || pStringParam->mbCheckLinkFormula)");
+    expect(doc.GetValue(position)).toBe(42);
+    policy.mbCheckLinkFormula = true;
+    importer.setAutoInput(position, input, policy);
+    expect(doc.GetCellType(position)).toBe(CellType.CELLTYPE_VALUE);
+    expect(doc.GetValue(position)).toBe(123);
+    importer.setAutoInput(position, empty, policy);
+    expect(doc.GetCellType(position)).toBe(CellType.CELLTYPE_NONE);
+  } finally {
+    empty.dispose();
+    input.dispose();
+    shell.Close();
+  }
+});
+
+it.each([false, true])(
+  "imports a real formula with explicit link policy %s",
+  /** A real compiled formula is transferred from ScCellValue into the typed store with either original link-check route. @param explicit - Whether the caller supplies its own enabled checking policy. @returns Nothing. */ (
+    explicit,
+  ) => {
+    const shell = new ScDocShell(),
+      doc = shell.GetDocument(),
+      importer = new ScDocumentImport(doc),
+      formula = unicode("=1+2"),
+      position = new ScAddress(),
+      policy = new ScSetStringParam();
+    policy.mbCheckLinkFormula = true;
+    try {
+      importer.setAutoInput(position, formula, explicit ? policy : null);
+      expect(doc.GetCellType(position)).toBe(CellType.CELLTYPE_FORMULA);
+      assert(doc.GetFormulaCell(position));
+      importer.finalize();
+      expect(doc.GetValue(position)).toBe(3);
+    } finally {
+      formula.dispose();
+      shell.Close();
+    }
+  },
+);
 
 it("finalizes a sparse native clipboard while preserving absent source sheet slots", /** Checks real ResetClip holes and post-import metadata without creating placeholder tables. @returns Nothing. */ () => {
   const source = new ScDocument();

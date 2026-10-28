@@ -13,7 +13,8 @@
       "SvNumberformat::SvNumberformat"
     ],
     "preservedResponsibilities": [
-      "AQF9AG connects original full normal-constructor control flow to actual four subformats, prefix lexer, color/natnum/locale owners, input-number scanner and real formatter native-number provider. Preserve Boolean-equivalent replacement default, NBSP normalization, conditions/default General sections, all prefix classes, native locale/calendar/numeral choices, trailing empty/text sections, original metadata/type/error positions and negative-section defaults. No format keys, parsed entries or provider stand-ins are fabricated. Source checked-empty failure is retained as CALC-381. Full native constructor differential closure is still pending; related module tests cover the integration, and lower scanner/string/locale stages have their stated separate native witnesses."
+      "AQF9AG connects original full normal-constructor control flow to actual four subformats, prefix lexer, color/natnum/locale owners, input-number scanner and real formatter native-number provider. Preserve Boolean-equivalent replacement default, NBSP normalization, conditions/default General sections, all prefix classes, native locale/calendar/numeral choices, trailing empty/text sections, original metadata/type/error positions and negative-section defaults. No format keys, parsed entries or provider stand-ins are fabricated. Source checked-empty failure is retained as CALC-381. Full native constructor differential closure is still pending; related module tests cover the integration, and lower scanner/string/locale stages have their stated separate native witnesses.",
+      "B8TCAE adds real normal-constructor regressions for all20 NatNum and9 DBNum modifiers, isolated NatNum12 currency parameters, actual decimal condition conversion and General fallbacks, installed/unavailable/extended locales, Thai shorthand, system substitution token requirements, repeated/invalid prefixes and mixed/trailing sections. Existing scanner/provider owners execute without private-state injection. This is source-contract integration evidence, not full native constructor or ABI equivalence; runtime source remains unchanged."
     ],
     "omittedResponsibilities": [
       "Complete table initialization, formatted export/CSV caller closure and full native constructor/service/ABI equivalence remain unverified."
@@ -23,6 +24,10 @@
         {
           "path": "apps/office/src/svl/source/numbers/zformat.construct.ts",
           "marker": "Construct"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.construct-prefixes.integration.test.ts",
+          "marker": "compiled"
         }
       ],
       "upstream": [

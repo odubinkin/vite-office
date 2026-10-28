@@ -115,7 +115,8 @@
       "Original two-owner Unicode newConcat and its consumed NoThrow known-length specialization preserve empty/null selection, signed32 overflow-to-null, actual Alloc/Copy/release ordering and alias-safe delayed release. Other template Throw overloads remain unported.",
       "Original owned Unicode replacement overload and consumed interior-span specialization preserve source assertions, full-range sharing, no-op assignment, append dispatch, allocator/copy/release order and replacement/source aliases. Unicode raw-view append selects original Throw overflow behavior and empty-span assignment; the prior NoThrow owner overload remains unchanged. The2586-case full native RTL witness includes replacement output identities/refcounts and raw-view append.",
       "AQF9AG: Original CompareIgnoreAsciiCase known-length shortened specialization preserves exact mismatch subtraction, embedded-zero traversal, ASCII-only folding and generic end ordering. Native RTL probe covers the added bounded comparison; broad module parity remains unverified.",
-      "AQF9AG ports exact bounded UTF16 replace-all capacity growth, source search loop, no-match sharing and alias-safe final release. Bounded full-header RTL witness covers initialized values, refcounts and source/replacement views; native fatal OOM/ABI behavior remains outside the witness."
+      "AQF9AG ports exact bounded UTF16 replace-all capacity growth, source search loop, no-match sharing and alias-safe final release. Bounded full-header RTL witness covers initialized values, refcounts and source/replacement views; native fatal OOM/ABI behavior remains outside the witness.",
+      "B8TCAE adds real RTL slot regressions for Unicode concatenation and source/output aliases, empty/null-side sharing, counted raw spans and embedded nulls, prefix/interior/suffix/full replacement, replace-all start offsets/nonoverlap/no-match sharing, signed-length assertions and shortened ASCII-insensitive comparisons. Assertions inspect actual values, allocation terminators, ownership identities and refcounts without counter mutation or allocator substitution. Literal expected results are bounded source contracts; existing native ownership witnesses retain their separate scope, and full native ABI/OOM equivalence is not claimed."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -189,6 +190,10 @@
         {
           "path": "apps/office/src/sal/textenc/native-mime-charset.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/strtmpl.assembly.test.ts",
+          "marker": "newConcat"
         }
       ],
       "upstream": [

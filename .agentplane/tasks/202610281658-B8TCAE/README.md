@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 18
+revision: 19
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T19:38:12.149Z"
+doc_updated_at: "2026-10-28T20:06:32.358Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -95,6 +95,10 @@ sections:
     - Observation: Three real200000-unit Locale field cases reproduced RangeError in the local argument-spread text conversion, including ignored non-qlt Variant. Reusing the existing counted UTF16 projection fixes the local binding while preserving all original units and lookup fallback.
       Impact: Ten calendar/locale suites48 tests pass; all original wrapper/service/field functions in the profile are executed. Actual FormatElement Sequence copies retain strings after temporary destruction and a copied General value retains its real refcount1 after Sequence destruction (6 focused ownership tests pass).
       Resolution: Record bounded integration/provenance and current maps, keep all coverage thresholds/exclusions unchanged, and request U02 separately for the remaining fixed-catalog identity failure alternative. No suspected upstream bug is inferred from this JavaScript binding failure.
+
+    - Observation: B8TCAE adds86 normal-constructor prefix/condition/locale tests,34 actual RTL assembly/comparison tests,2 rich-text release tests and3 automatic-input admission/formula tests. Final focused constructor2files91tests, RTL27files173tests, Calc data90files394tests and document import2files11tests pass their assertions; raw diagnostic report hashes and unchanged thresholds are retained.
+      Impact: These profiles close actual legal runtime paths without source mutation, manufactured provider returns, private-field writes, exclusions or coverage-counter edits. Constructor remaining guards include source fixed-state/EOF/locale alternatives and require further audit; narrow coverage failures remain failures. Cached calendar timezone failure reuse is documented as conditional source evidence in CALC-386; no normal unknown-zone failure is claimed.
+      Resolution: Continue remaining full100 coverage work and individual unreachable-branch reviews. U01/U02 remain pending, main publication/reverse merges and final full verifier are still outstanding.
 id_source: "generated"
 ---
 ## Summary
@@ -170,3 +174,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Three real200000-unit Locale field cases reproduced RangeError in the local argument-spread text conversion, including ignored non-qlt Variant. Reusing the existing counted UTF16 projection fixes the local binding while preserving all original units and lookup fallback.
   Impact: Ten calendar/locale suites48 tests pass; all original wrapper/service/field functions in the profile are executed. Actual FormatElement Sequence copies retain strings after temporary destruction and a copied General value retains its real refcount1 after Sequence destruction (6 focused ownership tests pass).
   Resolution: Record bounded integration/provenance and current maps, keep all coverage thresholds/exclusions unchanged, and request U02 separately for the remaining fixed-catalog identity failure alternative. No suspected upstream bug is inferred from this JavaScript binding failure.
+
+- Observation: B8TCAE adds86 normal-constructor prefix/condition/locale tests,34 actual RTL assembly/comparison tests,2 rich-text release tests and3 automatic-input admission/formula tests. Final focused constructor2files91tests, RTL27files173tests, Calc data90files394tests and document import2files11tests pass their assertions; raw diagnostic report hashes and unchanged thresholds are retained.
+  Impact: These profiles close actual legal runtime paths without source mutation, manufactured provider returns, private-field writes, exclusions or coverage-counter edits. Constructor remaining guards include source fixed-state/EOF/locale alternatives and require further audit; narrow coverage failures remain failures. Cached calendar timezone failure reuse is documented as conditional source evidence in CALC-386; no normal unknown-zone failure is claimed.
+  Resolution: Continue remaining full100 coverage work and individual unreachable-branch reviews. U01/U02 remain pending, main publication/reverse merges and final full verifier are still outstanding.

@@ -69,3 +69,53 @@ it("keeps rich-text snapshots independent across copy, commit and release", /** 
     shell.Close();
   }
 });
+
+it("transfers the exact rich-text owner while retaining the original null EDIT alternative", /** sc/inc/cellvalue.hxx releaseEditText assigns a null EditTextObject pointer to the variant; the caller owns the returned object and may clear the null cell independently. @returns Nothing. */ () => {
+  const source = new EditTextObjectImpl(
+      null,
+      MapUnit.Map100thMM,
+      false,
+      TextRotation.NONE,
+      SvtScriptType.LATIN,
+    ),
+    content = unicode("Retained after release");
+  source.CreateAndInsertContent().SetText(content);
+  content.dispose();
+  const cell = new ScCellValue(source),
+    retained = cell.getEditText();
+  assert(retained);
+  try {
+    expect(retained).not.toBe(source);
+    expect(cell.releaseEditText()).toBe(retained);
+    expect(cell.getType()).toBe(CellType.CELLTYPE_EDIT);
+    expect(cell.isEmpty()).toBe(false);
+    expect(cell.getEditText()).toBeNull();
+    expect(cell.releaseEditText()).toBeNull();
+    cell.clear();
+    const releasedText = retained.GetText(0);
+    try {
+      expect(text(releasedText)).toBe("Retained after release");
+    } finally {
+      releasedText.dispose();
+    }
+    expect(cell.isEmpty()).toBe(true);
+  } finally {
+    retained.dispose();
+    cell.clear();
+    source.dispose();
+  }
+});
+
+it("preserves a scalar cell when releaseEditText encounters the wrong variant", /** The original std::get throws before assigning its null EDIT pointer. @returns Nothing. */ () => {
+  const cell = new ScCellValue(42);
+  try {
+    expect(
+      /** Calls the actual wrong-variant accessor. @returns Released owner if validation unexpectedly succeeds. */ () =>
+        cell.releaseEditText(),
+    ).toThrow("bad_variant_access");
+    expect(cell.getType()).toBe(CellType.CELLTYPE_VALUE);
+    expect(cell.getDouble()).toBe(42);
+  } finally {
+    cell.clear();
+  }
+});
