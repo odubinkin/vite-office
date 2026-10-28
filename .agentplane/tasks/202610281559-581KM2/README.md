@@ -4,10 +4,11 @@ title: "Integrate Writer and Calc and synchronize development branches"
 status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
-depends_on: []
+depends_on:
+  - "202610281658-B8TCAE"
 tags:
   - "code"
 verify: []
@@ -68,7 +69,7 @@ events:
     to: "BLOCKED"
     note: "Blocked: Await the user coverage-scope decision before publishing integrated main and synchronizing writer and calc; all known assertion failures are repaired."
 doc_version: 3
-doc_updated_at: "2026-10-28T16:56:50.811Z"
+doc_updated_at: "2026-10-28T17:37:46.016Z"
 doc_updated_by: "CODER"
 description: "Push current Writer and Calc branches, merge both into main, resolve conflicts, run full verification and repair failures, document suspected upstream issues, push main and merge it back into both development branches. User explicitly authorized network pushes and all three repositories."
 sections:
@@ -129,6 +130,10 @@ sections:
     - Observation: Final current-code focused validation:15 suites147 tests passed, including both originally failing suites. Actual new ImpGetNumberOutput body has29/29 executed statements and12/12 branch arms in the focused Istanbul report. The selected two-source-file diagnostic still does not meet whole-file100 thresholds and is not a global final-code certificate.
       Impact: All known failing assertions are repaired and new integration regressions are covered. The initial full run still establishes255 files with broad pre-existing/development coverage gaps, so the repository strict100 gate is not satisfied.
       Resolution: Preserve initial-coverage-gaps.json and unchanged coverage guards. Await explicit user scope decision: accept remaining coverage gaps for integration, or expand work to full coverage with separate treatment of unreachable native branches. Do not claim verification success or publish main before that decision.
+
+    - Observation: User explicitly chose expansion to100 percent coverage on2026-10-28 Asia/Bangkok. New executable dependency B8TCAE owns remaining runtime coverage work; publication remains pending its completion.
+      Impact: The earlier coverage acceptance request is superseded by the approved expanded work. No global exception or threshold reduction has been approved.
+      Resolution: Continue B8TCAE. Its original OOX helper restoration already reaches genuine strict100 for the utility and three stream owners, so the formerly discussed inline-boundary exception is no longer needed. Preserve final full-verifier requirement before publication.
 id_source: "generated"
 ---
 ## Summary
@@ -205,3 +210,7 @@ Resolved merge conflicts preserving both feature sets and registry evidence. New
 - Observation: Final current-code focused validation:15 suites147 tests passed, including both originally failing suites. Actual new ImpGetNumberOutput body has29/29 executed statements and12/12 branch arms in the focused Istanbul report. The selected two-source-file diagnostic still does not meet whole-file100 thresholds and is not a global final-code certificate.
   Impact: All known failing assertions are repaired and new integration regressions are covered. The initial full run still establishes255 files with broad pre-existing/development coverage gaps, so the repository strict100 gate is not satisfied.
   Resolution: Preserve initial-coverage-gaps.json and unchanged coverage guards. Await explicit user scope decision: accept remaining coverage gaps for integration, or expand work to full coverage with separate treatment of unreachable native branches. Do not claim verification success or publish main before that decision.
+
+- Observation: User explicitly chose expansion to100 percent coverage on2026-10-28 Asia/Bangkok. New executable dependency B8TCAE owns remaining runtime coverage work; publication remains pending its completion.
+  Impact: The earlier coverage acceptance request is superseded by the approved expanded work. No global exception or threshold reduction has been approved.
+  Resolution: Continue B8TCAE. Its original OOX helper restoration already reaches genuine strict100 for the utility and three stream owners, so the formerly discussed inline-boundary exception is no longer needed. Preserve final full-verifier requirement before publication.
