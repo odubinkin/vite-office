@@ -14,7 +14,8 @@
     ],
     "preservedResponsibilities": [
       "Original LibreOffice Calendar_hijri temporal mapping and Meeus new-moon calculation. This is the source's Gregorian-backed service, distinct from ICU Islamic calendars.",
-      "Unchanged extracted LibreOffice temporal method bodies linked against unchanged ICU78.3 match2226 field/era/offset/validation cases across seven temporal providers and six zones. Minimal UNO declarations and integral-millisecond RTL round binding isolate this witness; full UNO service registration/display/fractional rounding are not claimed."
+      "Unchanged extracted LibreOffice temporal method bodies linked against unchanged ICU78.3 match2226 field/era/offset/validation cases across seven temporal providers and six zones. Minimal UNO declarations and integral-millisecond RTL round binding isolate this witness; full UNO service registration/display/fractional rounding are not claimed.",
+      "B8TCAE adds portable replay of2226 independently compiled unchanged original temporal-service observations for7 actual Gregorian/era/Hijri/Jewish service classes,6 timezones, signed dates, pending field order, offsets and invalid normalized dates. Public APIs supply all state; validity, both time forms and all17 source fields are native expectations. The witness uses minimal UNO scalar declarations and an integral-millisecond round binding with original ICU78.3 archives; full UNO ABI, locale-data registration, fractional rounding and display remain unverified. Existing semantic status is unchanged."
     ],
     "omittedResponsibilities": [
       "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
@@ -24,6 +25,10 @@
         {
           "path": "apps/office/src/i18npool/source/calendar/calendar_hijri.ts",
           "marker": "Calendar_hijri"
+        },
+        {
+          "path": "apps/office/src/i18npool/source/calendar/temporal.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [

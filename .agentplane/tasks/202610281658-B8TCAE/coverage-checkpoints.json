@@ -10,7 +10,16 @@
     "nativeObservations": 69989,
     "runtimeCodeChanged": false,
     "report": "apps/office/coverage/integration-icu-final/coverage-final.json",
-    "reportSha256": "019532a6ae21767fbfe0305b9f52642aeefd059a92adfb0b89fd6c2e024e294b"
+    "reportSha256": "019532a6ae21767fbfe0305b9f52642aeefd059a92adfb0b89fd6c2e024e294b",
+    "additionalCheckedNormalization": {
+      "nativeObservations": 28,
+      "hookObservationsTotal": 21692,
+      "testFiles": 1,
+      "groupedTests": 18,
+      "report": "apps/office/coverage/integration-icu-overflow/coverage-final.json",
+      "reportSha256": "d60cfc19d993f262697fff59014eb51f957853bb7704ce45ba68c955aef225e3",
+      "note": "Persian, Indian and5 Islamic month/year signed32 normalization error pairs are independently compiled original protected-hook observations; no large astronomical iteration or manufactured state."
+    }
   },
   "oox": {
     "testFiles": 2,
@@ -54,12 +63,29 @@
   },
   "remaining": "Close remaining runtime gaps; review genuinely unreachable cases individually. Integration push and reverse synchronization remain pending.",
   "formatScan": {
-    "testFiles": 1,
-    "groupedTests": 54,
-    "nativeObservations": 23814,
+    "testFiles": 2,
+    "groupedTests": 77,
+    "nativeObservations": 29484,
     "runtimeCodeChanged": false,
-    "report": "apps/office/coverage/integration-format-scan/coverage-final.json",
-    "reportSha256": "707c33e549b34b8811214bc9e329c08fc0a6fe34d22dc1db16b8d4594281ae65",
-    "scope": "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
-  }
+    "report": "apps/office/coverage/integration-format-combined/coverage-final.json",
+    "reportSha256": "fb4b146f652772f1debe67a1a5f270024dd8fee8f390e34b1a6a486b20e716c7",
+    "scope": "B8TCAE adds portable replay of29484 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged. Additionally23 independently specified public conversion regressions cover date-order, keyword/separator and fractional-second localization, unusual date arrangements and original incomplete-date trailing-separator behavior (CALC-385)."
+  },
+  "libreOfficeTemporal": {
+    "testFiles": 1,
+    "groupedTests": 7,
+    "nativeObservations": 2226,
+    "runtimeCodeChanged": false,
+    "report": "apps/office/coverage/integration-lo-calendar/coverage-final.json",
+    "reportSha256": "e7f717dffa83c434f8f6d6a414a364d3e7415dbe440818282afd886f8590e43d",
+    "scope": "B8TCAE adds portable replay of2226 independently compiled unchanged original temporal-service observations for7 actual Gregorian/era/Hijri/Jewish service classes,6 timezones, signed dates, pending field order, offsets and invalid normalized dates. Public APIs supply all state; validity, both time forms and all17 source fields are native expectations. The witness uses minimal UNO scalar declarations and an integral-millisecond round binding with original ICU78.3 archives; full UNO ABI, locale-data registration, fractional rounding and display remain unverified. Existing semantic status is unchanged."
+  },
+  "dateInput": {
+    "testFiles": 1,
+    "tests": 36,
+    "report": "apps/office/coverage/integration-date-input/coverage-final.json",
+    "reportSha256": "4726412096aad61709c9993cf89d7532e6513c29830ef93e2f157e5ed426462c",
+    "scope": "B8TCAE adds36 public number-input integration regressions using actual compiled SvNumberformat, language, native-number and calendar owners. Independent civil-date epoch arithmetic checks full/named/incomplete dates, two-digit pivot1950 and original date-evaluation policies; caller-supplied quoted literals test custom-order admission without manufactured token arrays. Ordinary DATESEP patterns and month-only input retain original acceptance gates. The fixed SYSTEM clock supplies2024-06-15 for incomplete dates; no full native input-scanner/UNO ABI parity is claimed."
+  },
+  "targetedCoverageNote": "Partial profiles pass their assertion suites but intentionally fail configured global100% coverage while work remains. They are incremental evidence only, never final verification success."
 }

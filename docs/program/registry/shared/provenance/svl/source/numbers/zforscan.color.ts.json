@@ -17,7 +17,7 @@
     ],
     "preservedResponsibilities": [
       "AQF9AG ports original complete GetColor, native palette values/order, German-only localization/AllowEnglish fallback, source conversion directions, original comphelper strip, strict ASCII numeric gate and original COLOR1..64 -> zero-based actual formatter callback. Palette elements are actual copied Color values, not references to the global initializer constants. The scanner borrows its actual SvNumberFormatter supplier. The full native scanner witness includes unchanged GetColor, palette initializers, strip and ASCII-digit classifier bodies with explicit scalar/provider/callback fixtures; whole constructor/UNO/SAL ABI parity remains unverified.",
-      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
+      "B8TCAE adds portable replay of29484 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Only the stated consumed source responsibilities are covered; complete native module/ABI, formatter constructor/output and CSV recognition remain unverified."
@@ -30,6 +30,10 @@
         },
         {
           "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.conversion.integration.test.ts",
           "marker": "@fileoverview"
         }
       ],

@@ -14,7 +14,7 @@
     ],
     "preservedResponsibilities": [
       "Original automatic local lifetime participates in the full final-stage pipeline and releases initialized saved strings on constructor failure. Actual language/cache owners are switched in original order; native full-final comparisons currently cover non-converting inputs.",
-      "B8TCAE adds portable replay of23814 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
+      "B8TCAE adds portable replay of29484 independently compiled unchanged original scanner/color observations across54 requested language IDs and all3 keyword policies. Public ScanFormat/GetColor run through actual SvNFLanguageData/SvNumberFormatter owners with actual SetColorLink application palette data; token/counter state is observed without injection. Native locale/provider inputs are bounded scalar snapshots, not whole UNO/provider/SAL ABI evidence. Existing semantic status and coverage policy remain unchanged."
     ],
     "omittedResponsibilities": [
       "Format constructor/prefix/NatNum/output closure and CSV public auto-input integration remain pending."
@@ -27,6 +27,10 @@
         },
         {
           "path": "apps/office/src/svl/source/numbers/format-scan.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.conversion.integration.test.ts",
           "marker": "@fileoverview"
         }
       ],

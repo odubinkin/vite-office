@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
+import { additionalFormatScanInputs } from "./format-scan-native-inputs.mjs";
 import { Color } from "../apps/office/src/tools/inc/color.ts";
 import { OUString } from "../apps/office/src/sal/inc/rtl/ustring.ts";
 import {
@@ -379,6 +380,7 @@ function hex(value) {
   return result || "-";
 }
 const patterns = [
+  ...additionalFormatScanInputs,
   "",
   "General",
   "GENERAL",

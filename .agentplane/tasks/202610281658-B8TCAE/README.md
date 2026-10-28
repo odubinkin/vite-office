@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 9
+revision: 11
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T17:39:35.883Z"
+doc_updated_at: "2026-10-28T18:01:50.420Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -59,6 +59,14 @@ sections:
     - Observation: The original OOX copy loop calls getLimitedValue<sal_Int32,sal_Int64> from helper.hxx; the prior port had flattened that original helper into copy/seek conditionals. Exact unchanged-template C++20 observations cover102 signed64/clamp/signed32 boundaries.
       Impact: The theoretical final stream request still needs281474976710655 full reads, but the original shared utility exposes its boundary cases directly. This source-owner restoration eliminates the need to waive that helper comparison while leaving the original loop bound and transport order unchanged.
       Resolution: Restore the actual header owner and source call sites, not a new test seam. Current helper plus three full stream owners pass strict100:177/177 statements,81/81 branch arms,33/33 functions,164/164 lines across10 tests. Runtime provenance1862 modules, dependency boundaries and typecheck pass. Update native-binary-streams documentation; remaining project coverage gaps still require work.
+
+    - Observation: Public scanner conversion tests expose original incomplete-date trailing separator TODO; German TT.MM. becomes English MM/DD/.
+      Impact: New CALC-385 documents source-level suspected upstream behavior without altering scanner contracts; targeted conversion coverage remains in progress.
+      Resolution: Retain original output and independently specified regression expectations; continue strict coverage expansion.
+
+    - Observation: Incremental source-backed regression suites now add29484 scanner/color native rows,23 actual locale conversions,2226 LibreOffice temporal native rows,28 ICU checked month-normalization rows and27 public date-input cases.
+      Impact: Assertions pass; partial coverage profiles still correctly fail mandatory global100. No coverage exclusions or thresholds changed. CALC-385 records original trailing-separator TODO.
+      Resolution: Retain exact-source map diagnostic merging and final full-current-code verification requirement; continue remaining gaps and await individual EraRules exception decision.
 id_source: "generated"
 ---
 ## Summary
@@ -98,3 +106,11 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: The original OOX copy loop calls getLimitedValue<sal_Int32,sal_Int64> from helper.hxx; the prior port had flattened that original helper into copy/seek conditionals. Exact unchanged-template C++20 observations cover102 signed64/clamp/signed32 boundaries.
   Impact: The theoretical final stream request still needs281474976710655 full reads, but the original shared utility exposes its boundary cases directly. This source-owner restoration eliminates the need to waive that helper comparison while leaving the original loop bound and transport order unchanged.
   Resolution: Restore the actual header owner and source call sites, not a new test seam. Current helper plus three full stream owners pass strict100:177/177 statements,81/81 branch arms,33/33 functions,164/164 lines across10 tests. Runtime provenance1862 modules, dependency boundaries and typecheck pass. Update native-binary-streams documentation; remaining project coverage gaps still require work.
+
+- Observation: Public scanner conversion tests expose original incomplete-date trailing separator TODO; German TT.MM. becomes English MM/DD/.
+  Impact: New CALC-385 documents source-level suspected upstream behavior without altering scanner contracts; targeted conversion coverage remains in progress.
+  Resolution: Retain original output and independently specified regression expectations; continue strict coverage expansion.
+
+- Observation: Incremental source-backed regression suites now add29484 scanner/color native rows,23 actual locale conversions,2226 LibreOffice temporal native rows,28 ICU checked month-normalization rows and27 public date-input cases.
+  Impact: Assertions pass; partial coverage profiles still correctly fail mandatory global100. No coverage exclusions or thresholds changed. CALC-385 records original trailing-separator TODO.
+  Resolution: Retain exact-source map diagnostic merging and final full-current-code verification requirement; continue remaining gaps and await individual EraRules exception decision.

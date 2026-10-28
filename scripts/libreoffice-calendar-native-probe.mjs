@@ -1,5 +1,6 @@
 /** @fileoverview Compares LibreOffice temporal service method bodies extracted unchanged from the pinned source with the local providers, linked against unchanged ICU78.3. Minimal UNO scalar declarations and a round binding isolate integral-millisecond temporal/field cases; locale-data service registration, native ABI/display and fractional rounding are outside this witness. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import * as G from "../apps/office/src/i18npool/source/calendar/calendar_gregorian.ts";
@@ -7,12 +8,26 @@ import { Calendar_hijri } from "../apps/office/src/i18npool/source/calendar/cale
 import { Calendar_jewish } from "../apps/office/src/i18npool/source/calendar/calendar_jewish.ts";
 import * as C from "../apps/office/src/offapi/com/sun/star/i18n/CalendarFieldIndex.ts";
 import { unicode } from "../apps/office/src/i18nlangtag/source/isolang/isolang.tables.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   icu = resolve("vendor/icu-reference/source"),
   lo = resolve("vendor/libreoffice-reference/i18npool/source/calendar");
 const g = readFileSync(`${lo}/calendar_gregorian.cxx`, "utf8"),
   h = readFileSync(`${lo}/calendar_hijri.cxx`, "utf8"),
   j = readFileSync(`${lo}/calendar_jewish.cxx`, "utf8");
+const pin = "9bc445578031fecf56086729d8e4940c77e14d65";
+for (const [name, source] of [
+  ["calendar_gregorian", g],
+  ["calendar_hijri", h],
+  ["calendar_jewish", j],
+])
+  if (
+    execFileSync(
+      "git",
+      ["-C", "vendor/libreoffice-reference", "show", `${pin}:i18npool/source/calendar/${name}.cxx`],
+      { encoding: "utf8", maxBuffer: 4e6 },
+    ) !== source
+  )
+    throw Error(`Modified pinned calendar source ${name}`);
 /** Extracts an exact source slice, failing if either anchor is absent. @param text - Original file. @param first - Start anchor. @param last - End anchor. @returns Unchanged source substring. */
 function slice(text, first, last) {
   const a = text.indexOf(first),
@@ -224,3 +239,39 @@ for (let i = 0; i < actual.length; ++i) {
 console.log(
   `Matched ${actual.length} LibreOffice temporal service cases using extracted unchanged method bodies and ICU78.3.`,
 );
+if (process.argv.includes("--write-fixtures")) {
+  /** Identifies original source and native dependency bytes. @param path - Evidence file. @returns SHA256. */
+  function hash(path) {
+    return createHash("sha256").update(readFileSync(path)).digest("hex");
+  }
+  writeFileSync(
+    "apps/office/src/i18npool/source/calendar/temporal.native-observations.json",
+    JSON.stringify(
+      {
+        baselineCommit: pin,
+        icuVersion: "78.3",
+        sourceHashes: Object.fromEntries(
+          ["calendar_gregorian", "calendar_hijri", "calendar_jewish"].map(
+            /** Records unchanged native owner identity. @param name - Original owner. @returns Hash entry. */
+            (name) => [name + ".cxx", hash(`${lo}/${name}.cxx`)],
+          ),
+        ),
+        libraryHashes: Object.fromEntries(
+          ["lib/libicui18n.a", "lib/libicuuc.a", "stubdata/libicudata.a"].map(
+            /** Records actual ICU archive identity. @param name - Library. @returns Hash entry. */
+            (name) => [name, hash(`${build}/${name}`)],
+          ),
+        ),
+        witnessSha256: hash(`${build}/lo-calendar-witness.cc`),
+        scope:
+          "Unchanged extracted original temporal service bodies with minimal UNO scalar declarations, integral-millisecond round binding and unchanged ICU78.3 archives. Full UNO ABI, locale-data registration, fractional rounding and display remain outside this witness.",
+        cases: inputs.map(
+          /** Stores exclusively compiled native outputs after complete comparison. @param query - Ordered public input. @param index - Native output row. @returns Independent observation. */
+          (query, index) => [query, actual[index]],
+        ),
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+}

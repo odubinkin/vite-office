@@ -138,6 +138,13 @@ for (let type = 0; type < classes.length; ++type) {
         for (const status of [0, -128, 1]) add("D", type, year, month, 1, status, [[0, era]]);
 }
 // Japanese era validation and checked year addition are original protected hook responsibilities.
+// These month/year pairs fail original checked normalization before astronomical work.
+for (const type of [7, 8, 11, 12, 13, 14, 15])
+  for (const [year, month] of [
+    [2147483647, 12],
+    [-2147483648, -1],
+  ])
+    for (const use of [0, 1]) add("M", type, year, month, use, 0);
 for (const era of [-1, 237, 2147483647])
   for (const status of [0, 1]) add("D", 10, 2019, 4, 1, status, [[0, era]]);
 for (const era of [235, 236])

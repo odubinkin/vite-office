@@ -41,7 +41,9 @@ it.each(
         row,
       ) => Number((row[0] as string).split(" ")[1]) === type,
     );
-    expect(rows.length).toBe(type === 10 ? 1213 : 1203);
+    expect(rows.length).toBe(
+      type === 10 ? 1213 : [7, 8, 11, 12, 13, 14, 15].includes(type) ? 1207 : 1203,
+    );
     for (const [query, output] of rows)
       expect(observeCalendarHook(query as string), query).toBe(output);
   },
