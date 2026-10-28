@@ -1,5 +1,9 @@
 /** @fileoverview Additional public scanner inputs cover escape rebuilding, precision validation and quoted currency tails; original native methods supply every expected observation. */
 export const additionalFormatScanInputs = [
+  // Quoted legacy currency occurrences use different token/output offsets (CALC-387).
+  '"$"0 $',
+  '"DM"0 DM',
+  'DM0"DM""DM"',
   "0\\+0",
   "0\\-0",
   "0\\ 0",

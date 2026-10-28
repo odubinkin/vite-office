@@ -1215,5 +1215,26 @@
     "lintPassed": true,
     "jsdocPassed": true,
     "finalFullVerifierPassed": false
+  },
+  "legacyCurrencyQuoteOffsets": {
+    "reports": [
+      "apps/office/coverage/integration-locale-date-currency-conversion"
+    ],
+    "testFiles": 2,
+    "tests": 91,
+    "assertionsPassed": true,
+    "nativeOriginalCases": 29970,
+    "nativeAddedCases": 486,
+    "oldNativeObservationsPreserved": 29484,
+    "witnessSourceHashUnchanged": true,
+    "suspectedIssue": "CALC-387",
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "diagnosticStatementsCovered": 118061,
+    "diagnosticStatementsTotal": 119511,
+    "diagnosticBranchArmsCovered": 72659,
+    "diagnosticBranchArmsTotal": 74579,
+    "remainingOwners": 225,
+    "finalFullVerifierPassed": false
   }
 }
