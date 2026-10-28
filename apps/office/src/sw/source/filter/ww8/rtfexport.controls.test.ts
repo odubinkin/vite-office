@@ -33,7 +33,7 @@ it("indexes named-style colors and escapes soft lines, tabs and end bookmarks", 
     paragraph.ChgFormatColl(style);
     paragraph.SetText("A\nB\tC");
     document.GetIDocumentMarkAccess().MakeMark(paragraph, paragraph.Len(), "End");
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(rtf).toContain("\\red18\\green52\\blue86;");
     expect(rtf).toContain("\\red101\\green67\\blue33;");
     expect(rtf).toContain("A\\line B\\tab C");
@@ -61,7 +61,7 @@ it("sorts native soft boundaries and stops splitting at a self-following page st
     document.ChgPageDesc({ ...follow.GetValue(), width: 15000 }, "Follow");
     follow.SetFollow(follow);
     document.GetPageDesc().SetFollow(follow);
-    const imported = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(document));
+    const imported = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
     try {
       expect(
         imported.paragraphs.map(
@@ -89,7 +89,7 @@ it("ends the RTF hyperlink field before the following plain run", /** Checks the
     ]);
     paragraph.SetText(fragment.text);
     paragraph.SetTextHints(fragment.hints);
-    const imported = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(document));
+    const imported = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(document));
     try {
       const restored = imported.paragraphs[0];
       assert(restored);
@@ -151,7 +151,7 @@ it.each([
       format.SetNumberingType(type);
       rule.Set(0, format);
       document.GetDocumentListsManager().InvalidateAllLists();
-      const bytes = new RtfExport().ExportDocument(document);
+      const bytes = RtfExport.WriteDocument(document);
       expect(new TextDecoder().decode(bytes)).toContain(`\\levelnfc${nfc}\\levelstartat1`);
       const imported = new RtfDocumentImpl().ResolveBytes(bytes);
       try {
@@ -209,7 +209,7 @@ it.each([
       const border = box.GetBox();
       border.SetLine(new SvxBorderLine(new Color(0x123456), 60, style), SvxBoxItemLine.TOP);
       box.ClaimFrameFormat().SetFormatAttr(border);
-      const bytes = new RtfExport().ExportDocument(document);
+      const bytes = RtfExport.WriteDocument(document);
       expect(new TextDecoder().decode(bytes)).toContain(`\\clbrdrt\\${control}\\brdrw`);
       const imported = new RtfDocumentImpl().ResolveBytes(bytes);
       try {
@@ -258,9 +258,7 @@ it.each([
       const orientation = table.GetFrameFormat().GetHoriOrient().Clone();
       orientation.SetHoriOrient(alignment);
       table.GetFrameFormat().SetFormatAttr(orientation);
-      expect(new TextDecoder().decode(new RtfExport().ExportDocument(document))).toContain(
-        `\\${control}`,
-      );
+      expect(new TextDecoder().decode(RtfExport.WriteDocument(document))).toContain(`\\${control}`);
     } finally {
       document.Dispose();
     }

@@ -13,7 +13,7 @@ import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { SwWW8AttrIter } from "./wrtw8nds";
 
 it("uses original font charset state only for non-associated font controls", /** Verifies uses original font charset state only for non-associated font controls. @returns Nothing. */ () => {
-  const exporter = new RtfExport();
+  const exporter = createRtfExport();
   const output = new RtfAttributeOutput(
     /** Verifies uses original font charset state only for non-associated font controls. @returns Callback result. */ () =>
       7,
@@ -62,7 +62,7 @@ it("exports represented text through native snippet and byte fallback emission",
     const node = document.paragraphs[0];
     assert(node);
     node.SetText("é\nA\u2011B\u00adC\u00a0😀");
-    const text = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+    const text = new TextDecoder().decode(RtfExport.WriteDocument(document));
     expect(text).toContain("\\u233\\'e9\\line A\\_B\\-C\\~\\uc0 \\u-10179\\uc1 \\u-8704\\'3f");
   } finally {
     document.Dispose();
@@ -70,7 +70,7 @@ it("exports represented text through native snippet and byte fallback emission",
 });
 
 it("writes complete native font groups with legacy names, alternate names and encoding reset", /** Verifies writes complete native font groups with legacy names, alternate names and encoding reset. @returns Nothing. */ () => {
-  const exporter = new RtfExport();
+  const exporter = createRtfExport();
   const fonts = new wwFontHelper();
   const output = new RtfAttributeOutput(
     /** Verifies writes complete native font groups with legacy names, alternate names and encoding reset. @param font - font value. @returns Callback result. */ (
@@ -119,9 +119,9 @@ it("preserves distinct native FFN identities for equal family names in the real 
         RES_CHRATR_CJK_FONT,
       ),
     );
-    const text = new TextDecoder().decode(new RtfExport().ExportDocument(document));
-    expect(text).toContain("{\\f0\\froman\\fprq1\\fcharset0 Same Native;}");
-    expect(text).toContain("{\\f1\\fswiss\\fprq2\\fcharset128 Same Native;}");
+    const text = new TextDecoder().decode(RtfExport.WriteDocument(document));
+    expect(text).toContain("{\\f5\\froman\\fprq1\\fcharset0 Same Native;}");
+    expect(text).toContain("{\\f6\\fswiss\\fprq2\\fcharset128 Same Native;}");
   } finally {
     document.Dispose();
   }
@@ -142,10 +142,12 @@ it("retains original numbering-level first-code-unit emission for non-BMP and ze
       const format = new SwNumFormat(rule.Get(0));
       format.SetBulletChar(bullet);
       rule.Set(0, format);
-      const text = new TextDecoder().decode(new RtfExport().ExportDocument(document));
+      const text = new TextDecoder().decode(RtfExport.WriteDocument(document));
       expect(text).toContain("{\\leveltext \\'01" + control + ";}");
     } finally {
       document.Dispose();
     }
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

@@ -187,16 +187,16 @@ it("exports named-style CJK/CTL fonts and languages through the actual native hi
     );
     named.SetFormatAttrSet(set);
     node.InsertItem(new SwFormatCharFormat(named), 0, node.Len());
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(doc));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(doc));
     expect(rtf).toContain("Asian Script Font;");
     expect(rtf).toContain("Complex Script Font;");
     expect(rtf).toContain(
-      "\\rtlch\\af1\\alang1025\\ltrch\\hich\\alang1033\\dbch\\af0\\langfe1041\\loch\\lang1033 Native",
+      "\\rtlch\\af6\\alang1025\\ltrch\\hich\\alang1033\\dbch\\af5\\langfe1041\\loch\\lang1033 Native",
     );
     const output = new RtfAttributeOutput(
       /** Current font sink. @returns Slot. */ () => 0,
       /** Current color sink. @returns Slot. */ () => 0,
-      new RtfExport(),
+      createRtfExport(),
     );
     output.RTLAndCJKState(true, S.COMPLEX);
     expect(output.WriteNativeCharacter(set, M.ForRun).endsWith("\\rtlch\\f0\\lang1025")).toBe(true);
@@ -222,3 +222,5 @@ it("borrows word-line mode from the ancillary parent while excluding its languag
     doc.Dispose();
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

@@ -22,7 +22,8 @@
       "MSWordStyles::BuildWwNames",
       "wwFont::WriteDocx",
       "wwFont::WriteRtf",
-      "wwFontHelper::WriteFontTable"
+      "wwFontHelper::WriteFontTable",
+      "wwFontHelper::InitFontTable"
     ],
     "evidence": {
       "local": [
@@ -41,6 +42,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
           "marker": "WriteDocx"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-font-table.test.ts",
+          "marker": "registers source seeds"
         }
       ],
       "upstream": [
@@ -67,6 +72,14 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
           "marker": "wwFont::WriteDocx"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "void wwFontHelper::InitFontTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "void MSWordExportBase::EnsureUsedNumberingTable"
         }
       ]
     },
@@ -76,7 +89,8 @@
       "Maps the represented built-in pool identities to their source Word style names, strips the source (WW) suffix for user styles and allocates unique ASCII-case-insensitive names with builtin names first.",
       "V4DQJW connects wwFont.WriteDocx and wwFontHelper.WriteFontTable to actual DocxAttributeOutput. Preserve empty-family omission, alternate-name admission, charset/family/pitch element order and ID-ordered font traversal. Only native font metadata is admitted for the current kernel without embedding; EmbedFont/doc-setting/native font-access responsibilities are unported and not replaced by dummy services. Existing shared RTF MSWordStyles behavior is unchanged.",
       "Native wwFont FFN identity and implicit copy preserve primary/alternate mapping,65unit limit, byte narrowing, pitch/family flags, legacy weight400 and charset. Original memcmp+UTF16-name ordering defines map identity. wwFontHelper copies inserted map keys, assigns narrowed insertion IDs and materializes vectors by ID rather than sorted order. No font DTO/provider or invented ID callback. Font-table initialization through MSWordExportBase, DOCX/XML/embedding, binary output, actual DocxExport association and complete format orchestration remain pending.",
-      "Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending."
+      "Native wwFont.WriteRtf and wwFontHelper.WriteFontTable now write actual registered fonts in ID order through RtfAttributeOutput. Full family/pitch/charset, primary and optional alternate legacy-only font names, original charset selection and EndFont encoding reset are preserved. Font table initialization and native document/style usage enumeration remain pending.",
+      "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Full native framework/ABI and complete format orchestration are not certified; see admission.",

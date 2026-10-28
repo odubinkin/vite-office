@@ -1,4 +1,4 @@
-/** @fileoverview Native wwFont FFN identity and wwFontHelper registration/vector owners. Font-table initialization/export association, binary output and DOCX embedding remain in their respective unported responsibilities. */
+/** @fileoverview Native wwFont FFN identity and wwFontHelper registration/vector owners. Native initialization consumes the real shared export context; binary output, full document orchestration and DOCX embedding remain separate obligations. */
 import type { DocxAttributeOutput } from "./docxattributeoutput";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { rtl_TextEncoding } from "../../../../sal/inc/rtl/textenc";
@@ -125,6 +125,65 @@ export function wwFontLess(left: wwFont, right: wwFont): boolean {
 /** Native ordered font map retains insertion IDs independently of map order. */
 export class wwFontHelper {
   private readonly maFonts: { font: wwFont; id: number }[] = [];
+  public m_bLoadAllFonts = false;
+  /** Original seed/global/user-default, three-script document traversal and used-list bullet-font registration order. @param owner - Actual Word exporter. @returns Nothing. */
+  InitFontTable(owner: MSWordExportBase): void {
+    this.GetId(
+      new wwFont(
+        "Times New Roman",
+        FontPitch.PITCH_VARIABLE,
+        FontFamily.FAMILY_ROMAN,
+        RTL_TEXTENCODING_MS_1252,
+      ),
+    );
+    this.GetId(
+      new wwFont(
+        "Symbol",
+        FontPitch.PITCH_VARIABLE,
+        FontFamily.FAMILY_ROMAN,
+        RTL_TEXTENCODING_SYMBOL,
+      ),
+    );
+    this.GetId(
+      new wwFont(
+        "Arial",
+        FontPitch.PITCH_VARIABLE,
+        FontFamily.FAMILY_SWISS,
+        RTL_TEXTENCODING_MS_1252,
+      ),
+    );
+    this.GetId(GetDfltAttr(RES_CHRATR_FONT) as SvxFontItem);
+    const userFont = owner.m_rDoc.GetAttrPool().GetUserDefaultItem(RES_CHRATR_FONT);
+    if (userFont instanceof SvxFontItem) this.GetId(userFont);
+    if (!this.m_bLoadAllFonts) return;
+    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
+      owner.m_rDoc.ForEachCharacterFontItem(
+        which,
+        false,
+        /** Borrows one actual native item and continues traversal. @param font - Original item. @returns Continue. */ (
+          font,
+        ) => {
+          this.GetId(font);
+          return true;
+        },
+      );
+    }
+    owner.EnsureUsedNumberingTable();
+    for (const rule of owner.m_pUsedNumTable as SwNumRule[]) {
+      // Original WW8ListManager limits are 1 and 9, even though Writer admits ten levels.
+      const count = rule.IsContinusNum() ? 1 : 9;
+      for (let level = 0; level < count; ++level) {
+        const format = rule.Get(level);
+        if (
+          format.GetNumberingType() === SvxNumType.SVX_NUM_CHAR_SPECIAL ||
+          format.GetNumberingType() === SvxNumType.SVX_NUM_BITMAP
+        ) {
+          const [, font] = owner.GetNumberingLevelBulletStringAndFont(format);
+          this.GetId(font);
+        }
+      }
+    }
+  }
   /** Native font/item overload preserves original equivalence and sal_uInt16 ID narrowing. @param item - Actual font or shared font item. @returns Font ID. */
   GetId(item: wwFont | SvxFontItem): number {
     const font =
@@ -276,3 +335,10 @@ export class MSWordStyles {
     return this.names.get(collection) ?? collection.GetName();
   }
 }
+
+import type { MSWordExportBase } from "./wrtww8";
+import type { SwNumRule } from "../../core/doc/number";
+import { SvxNumType } from "../../../../editeng/inc/svxenum";
+import { GetDfltAttr } from "../../core/attr/hints";
+import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";

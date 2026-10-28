@@ -17,6 +17,10 @@
         {
           "path": "apps/office/src/sw/source/filter/ww8/wrtww8.ts",
           "marker": "MSWordExportBase"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-font-table.test.ts",
+          "marker": "registers source seeds"
         }
       ],
       "upstream": [
@@ -27,11 +31,20 @@
         {
           "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtww8.hxx",
           "marker": "GetId"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8sty.cxx",
+          "marker": "void wwFontHelper::InitFontTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "void MSWordExportBase::EnsureUsedNumberingTable"
         }
       ]
     },
     "preservedResponsibilities": [
-      "Native common Word exporter owns the actual SwDoc, current/original SwPaM and font helper. Preserve consumed range node indices and original GetId item-return/value-void overloads. Actual SwPaM binds only the consumed base of native SwUnoCursor; cursor overrides/reference-count framework, complete export fields, traversal/default-font initialization and original base responsibilities are not yet admitted. No generic exporter callback or document DTO replaces this owner."
+      "Native common Word exporter owns the actual SwDoc, current/original SwPaM and font helper. Preserve consumed range node indices and original GetId item-return/value-void overloads. Actual SwPaM binds only the consumed base of native SwUnoCursor; cursor overrides/reference-count framework, complete export fields, traversal/default-font initialization and original base responsibilities are not yet admitted. No generic exporter callback or document DTO replaces this owner.",
+      "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged."
     ],
     "omittedResponsibilities": [
       "Only the explicitly admitted native responsibilities are ported; framework/ABI/full application export are not certified."

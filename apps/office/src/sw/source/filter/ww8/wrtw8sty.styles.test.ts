@@ -37,7 +37,7 @@ it("retains the native 4091-slot bound and missing-style sentinel", /** Checks a
     expect(styles.GetSlot(overflow)).toBe(0x0fff);
     expect(styles.GetSlot(undefined)).toBe(0x0fff);
     expect(styles.GetWWName(overflow)).toBe("Overflow style");
-    const rtf = new TextDecoder().decode(new RtfExport().ExportDocument(doc));
+    const rtf = new TextDecoder().decode(RtfExport.WriteDocument(doc));
     expect(rtf).not.toContain(" Overflow style;");
     const body = rtf.slice(rtf.lastIndexOf("\\pard"));
     expect(body).toContain("Overflow paragraph");

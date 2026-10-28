@@ -649,7 +649,7 @@ it("creates a document-owned collection for an external RTF paragraph style", /*
       fontSizeTwips: 280,
     });
     reopened = new RtfDocumentImpl().Resolve(
-      new RtfTokenizer(new RtfExport().ExportDocument(document)).Tokenize(),
+      new RtfTokenizer(RtfExport.WriteDocument(document)).Tokenize(),
     );
     expect(reopened.paragraphs[0]?.GetParagraphStyle()).toBe("custom-note");
     expect(reopened.paragraphs[0]?.GetParagraphAlignment()).toBe("center");

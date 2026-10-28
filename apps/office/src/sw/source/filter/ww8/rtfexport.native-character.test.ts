@@ -65,7 +65,7 @@ it.each([
           0,
         /** Verifies uses exact source weight comparison for native weight %s. @returns Callback result. */ () =>
           0,
-        new RtfExport(),
+        createRtfExport(),
       ).WriteNativeCharacter(node.GetSwAttrSet());
       expect(output).toMatch(weight === FontWeight.WEIGHT_BOLD ? /\\b(?!0)/ : /\\b0/);
     } finally {
@@ -94,7 +94,7 @@ it.each([
           0,
         /** Verifies uses source non-NONE posture comparison for native posture %s. @returns Callback result. */ () =>
           0,
-        new RtfExport(),
+        createRtfExport(),
       ).WriteNativeCharacter(node.GetSwAttrSet());
       expect(output).toMatch(posture === FontItalic.ITALIC_NONE ? /\\i0/ : /\\i(?!0)/);
     } finally {
@@ -111,7 +111,7 @@ it("truncates native font height to half points in paragraphs and style definiti
     assert(node);
     node.SetText("Odd");
     node.GetTextFormatColl().SetFormatAttr(new SvxFontHeightItem(245, 100, RES_CHRATR_FONTSIZE));
-    const bytes = new RtfExport().ExportDocument(doc);
+    const bytes = RtfExport.WriteDocument(doc);
     const text = new TextDecoder().decode(bytes);
     expect(text).toContain("\\fs24");
     expect(text).not.toContain("\\fs25");
@@ -149,7 +149,7 @@ it("retains adjacent native hints that differ only in auto-kerning through RTF a
     }
     node.SetTextHints(hints);
     expect(projectWriterTextRuns(node)).toHaveLength(1);
-    const bytes = new RtfExport().ExportDocument(doc);
+    const bytes = RtfExport.WriteDocument(doc);
     expect(new TextDecoder().decode(bytes)).toMatch(
       /\\kerning1[^{}]* A\}\{[^{}]*\\kerning0[^{}]* B/,
     );
@@ -174,7 +174,7 @@ it("inherits style auto-kerning and restores group state including plain reset",
   );
   let roundtrip: SwDoc | undefined;
   try {
-    roundtrip = new RtfDocumentImpl().ResolveBytes(new RtfExport().ExportDocument(doc));
+    roundtrip = new RtfDocumentImpl().ResolveBytes(RtfExport.WriteDocument(doc));
     for (const document of [doc, roundtrip]) {
       const node = document.paragraphs[0];
       assert(node);
@@ -303,3 +303,5 @@ it("ignores a zero baseline value as the pinned DomainMapper does", /** Verifies
     doc.Dispose();
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

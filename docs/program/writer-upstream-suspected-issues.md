@@ -1903,3 +1903,16 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/doc/docnum.cxx`, `SwDoc::AddNumRule`, appends the transferred rule to the table and assigns `maNumRuleMap[pRule->GetName()]` without rejecting an existing name. `DocumentListsManager::createListForListStyle` in its corresponding `.cxx` returns after a nonfatal diagnostic when the style already has a default list.
 - Observation: both rule objects remain in table order; name lookup resolves the newly appended rule while the existing default-list mapping still refers to its previous list. A fresh duplicate can retain an empty DefaultListId. This is a source control-flow trace and an actual local owner test, not a complete compiled Writer witness.
 - Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.
+
+
+### WRITER196 — InitFontTable does not visit Writer's tenth list level
+
+- Source: pinned `sw/source/filter/ww8/wrtw8sty.cxx`, `wwFontHelper::InitFontTable`, uses `WW8ListManager::nMinLevel` for continuous rules and `nMaxLevel` otherwise. The pinned `sw/source/filter/ww8/ww8par.hxx` defines those bounds as 1 and 9, while SwNumRule supports ten levels.
+- Observation: a bullet font referenced only at zero-based level 9 is absent from this initialization traversal, even when the rule is used. Continuous rules contribute only level 0. This is exact source-bound evidence and a real RTF integration test, not a complete compiled Writer witness.
+- Preservation: retain the original bounds instead of expanding the Word exporter to ten levels. The used-numbering table still includes the actual outline owner independently of its use.
+
+### WRITER197 — StarSymbol duplicate-key font preference depends on the standard multimap find
+
+- Source: pinned `unotools/source/misc/fontcvt.cxx`, `StarSymbolToMSMultiFontImpl` inserts conservative and aggressive reverse tables into `std::multimap` in its stated preference order, but `ConvertChar` calls `find`, not `lower_bound`. Selection among equivalent keys is a standard-library binding detail rather than an explicit first-preference choice.
+- Observation: the unchanged locally compiled constructor/ConvertChar/factory selects Webdings for U+0020 rather than the first inserted Symbol entry. A simple first-entry JavaScript map port therefore disagreed at the first mapped unit. The browser binding now retains duplicate nodes and the measured red/black insertion/direct-lookup behavior; all 65536 UTF16 inputs match the unchanged native witness. This certifies the fixed input tables on that native runtime, not cross-standard-library identity or the SAL ABI.
+- Preservation: do not silently replace find with a first-preference lookup. RTF still keeps its original m_bSubstituteBullets=false branch, so its bullet strings and fonts bypass this conversion exactly as upstream does.

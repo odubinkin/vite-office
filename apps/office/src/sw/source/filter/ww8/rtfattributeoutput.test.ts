@@ -17,7 +17,6 @@ import {
 } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_ADJUST, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import { createWriterDocument } from "../../core/doc/doc";
-import { RtfExport } from "./rtfexport";
 import { RtfAttributeOutput } from "./rtfattributeoutput";
 import { wwFont } from "./wrtw8sty";
 import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
@@ -27,7 +26,7 @@ function output(): RtfAttributeOutput {
   return new RtfAttributeOutput(
     /** Returns the represented font slot. @returns Slot zero. */ () => 0,
     /** Returns the represented color slot. @returns Slot zero. */ () => 0,
-    new RtfExport(),
+    createRtfExport(),
   );
 }
 
@@ -115,7 +114,7 @@ it("writes all native font family classification controls", /** Verifies all FFN
     [FontFamily.FAMILY_SCRIPT, "fscript"],
     [FontFamily.FAMILY_DECORATIVE, "fdecor"],
   ] as const) {
-    const exporter = new RtfExport(),
+    const exporter = createRtfExport(),
       attributes = new RtfAttributeOutput(
         /** Returns font table slot. @returns Font ID. */ () => 3,
         /** Returns color table slot. @returns Color ID. */ () => 0,
@@ -128,3 +127,5 @@ it("writes all native font family classification controls", /** Verifies all FFN
     expect(new TextDecoder().decode(exporter.Strm().GetData())).toBe("{\\f3\\" + control);
   }
 });
+
+import { createRtfExport } from "../../../../test/writer-rtf-export";

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sw/source/filter/ww8/wrtw8num.ts",
+    "status": "mapped",
+    "upstreamPath": "sw/source/filter/ww8/wrtw8num.cxx",
+    "localSymbols": [
+      "EnsureUsedNumberingTable",
+      "GetNumberingLevelBulletStringAndFont",
+      "SubstituteBullet"
+    ],
+    "upstreamSymbols": [
+      "MSWordExportBase::EnsureUsedNumberingTable",
+      "MSWordExportBase::GetNumberingLevelBulletStringAndFont",
+      "MSWordExportBase::SubstituteBullet"
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/wrtw8num.ts",
+          "marker": "EnsureUsedNumberingTable"
+        },
+        {
+          "path": "apps/office/src/sw/source/filter/ww8/rtf-font-table.test.ts",
+          "marker": "keeps the native lazy used-rule snapshot"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "MSWordExportBase::EnsureUsedNumberingTable"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "MSWordExportBase::GetNumberingLevelBulletStringAndFont"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sw/source/filter/ww8/wrtw8num.cxx",
+          "marker": "MSWordExportBase::SubstituteBullet"
+        }
+      ]
+    },
+    "preservedResponsibilities": [
+      "S3HW1E InitFontTable integration: RtfExport now derives from the actual shared MSWordExportBase with real document/current/original range owners, sets original m_bLoadAllFonts=true and m_bSubstituteBullets=false, and initializes its genuine font helper before serialization. Original seeds/global western default/document western user default, western/CJK/CTL ForEachCharacterFontItem(false) order and used-list bullet/bitmap font collection replace the RTF run/style pre-registration loop. Native lazy used numbering snapshots keep document order and append the actual unused outline pointer. Native bullet preparation copies VCL values before MaybeAskConfig, preserves family before substitution and uses original nine-level/continuous-one bounds (WRITER196). Original RTF header uses the effective default-font ID and adeflang1025 instead of hard-coded deff0; redundant non-source ansicpg1252 was removed. Existing complete-body callers and shell retain an explicit WriteDocument bridge that creates/releases genuine temporary SwPaM/SwPosition owners; no synthetic document DTO or optional uninitialized native context is added. Original enabled MS bullet conversion is implemented through StarSymbolToMSMultiFont, while RTF keeps its no-op branch. The fixed native converter constructor/tables/find/factory match all65536 UTF16 inputs under ASan/UBSan; duplicate-node tree lookup follows the measured native standard-library binding (WRITER197), not a first-preference correction. This does not certify the full SAL/VCL/Writer ABI, cross-standard-library selection identity, complete export traversal, binary/DOCX output, or remaining filter/default/HTML/history obligations. Registered browser file UI/autosave/recovery deviations are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Other wrtw8num.cxx responsibilities, complete Word numbering serialization, picture numbering and the full native Writer/SAL/VCL ABI remain unverified."
+    ]
+  }
+}

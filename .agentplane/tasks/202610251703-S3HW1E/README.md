@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 104
+revision: 105
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-27T02:34:03.767Z"
+doc_updated_at: "2026-10-28T07:19:19.894Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -365,6 +365,33 @@ sections:
     Result: pass. Evidence: module graph1559 sources/8061 imports/204 edges; provenance1560 runtime modules/1350 mapped; Writer registry semanticViolationCount0. The file-size gate caught expansion of odt-roundtrip.test.ts to1000+ lines; its repeated expected list fields now use a shared explicit expected value, and the gate passes. No validator was weakened.
 
     Pre-existing Markdown source/tests and associated registry/operation WIP remain deliberately uncommitted. They were not edited in this block and are not included in the merge checkpoint. The live tests are terminal; no background goal work should continue during the user's merge pause. Full current-core TXT/RTF/Markdown closure, upstream parity certification, native font-table orchestration and the previously recorded HTML/CSS/history/default gaps remain unfinished.
+
+    ### InitFontTable connected to the actual RTF exporter after the merge
+
+    The user confirmed the merge and resumed the full goal, explicitly selecting native InitFontTable integration next. Preflight showed a clean writer checkout at656e2fcaa. Reused the approved DOING task and its direct continue_direct route; no network, outside-repository access, subagents or new approval gate were used. This checkpoint completes the requested font-table connection, not the whole filter slice.
+
+    RtfExport now derives from the merged MSWordExportBase and receives genuine document/current/original SwPaM owners. The old document argument to a default-constructed exporter is replaced at callers by an explicit complete-document WriteDocument bridge, which releases every temporary SwPosition/SwPaM registration. Attribute-output tests use genuine test document/range owners with range-before-document cleanup. Native m_aFontHelper remains the shared original owner; RTF sets m_bLoadAllFonts=true and m_bSubstituteBullets=false. InitFontTable implements original Times New Roman/Symbol/Arial seeds, global western default and western user default, then the three-script ForEachCharacterFontItem(false) traversal and used-numbering bullet/bitmap font collection. It replaces IndexCharacterFonts run/style pre-registration. Header deff now uses the effective actual default-font slot and original adeflang1025; the old extra ansicpg1252 control was removed to match ExportDocument_Impl.
+
+    New original wrtw8num responsibility owns lazy used-rule snapshots, reverse filtering through SwDoc.IsUsed, actual outline pointer placement, bullet-font preparation and SubstituteBullet. Font preparation copies optional/default VCL fonts before MaybeAskConfig, preserves the pre-substitution family and original fallback name behavior. Original WW8 bounds1/9 are retained (WRITER196). Enabled shared substitution uses the actual native StarSymbol factory and original bestFitOpenSymbolToMSFont branches; the RTF-disabled branch returns without conversion. All seven224-slot conservative tables, four aggressive tables and eight names are extracted reproducibly from the pinned fontcvt.cxx. No SDK or grammar replacement is introduced.
+
+    The initial first-equivalent map implementation failed the native differential at U+0020. The unchanged compiled std::multimap constructor/find selected Webdings instead of first-inserted Symbol. Retained duplicate nodes and measured red/black insertion/direct lookup now match all65536 original input units (1568 mapped keys; all absent keys preserve their units). WRITER197 records this source preference/standard-library issue. This is a fixed-table native-runtime witness with an explicit immutable UTF16 name carrier, not a SAL allocation, cross-standard-library, VCL or full Writer ABI certificate. The first private-area fallback test mistakenly used U+F8FF, which the native table actually maps to MT Extra; the genuine unmapped private U+E7FF now tests the intended fallback without changing production behavior.
+
+    Command: node scripts/star-symbol-export-native-probe.mjs
+    Result: pass. Evidence: unchanged original enum/entry/class declarations, all consumed tables, constructor, ConvertChar, name helper and factory compiled with ASan/UBSan; full65536-unit domain verified. Fixture apps/office/src/unotools/source/misc/star-symbol-export.native.json; native driver under ignored output/playwright/star-symbol-export-native.
+    Command: python3 scripts/extract-symbol-font-export-data.py --check
+    Result: pass. Evidence:7 conservative tables/4 aggressive tables/8 names match pinned source data.
+    Command: npm run test:writer -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-font-table/writer-tests.json
+    Result: pass,474/474. Scope: real RTF export/import, common Word/DOCX font parts and adjacent TXT/Markdown filters. The initial400-test run exposed two stale font-ID expectations; they now reflect the native seed/default ordering while retaining exact FFN metadata and associated-script controls.
+    Command: npm run test:writer -- src/sw/source/filter/ww8/rtf-font-table.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-font-table/ui-tests.json
+    Result: pass,39/39. Scope: native font setup, full-document shell/UI consumers and temporary content-index ownership.
+    Command: npm run test:writer -- src/sw/source/filter/ww8/rtf-font-table.test.ts --reporter=json --outputFile=../../output/playwright/rtf-font-table/font-table-tests.json
+    Result: pass,6/6 after adding bitmap/default-font-copy assertions and independently checking that every serialized font reference has a declared table slot.
+    Command: npm run test:shared -- src/unotools/source/misc/star-symbol-export.test.ts src/filter/source/msfilter/util.test.ts src/filter/source/msfilter/rtfutil.test.ts src/xmloff/source/style/native-legacy-bullet-symbol.test.ts --reporter=json --outputFile=../../output/playwright/rtf-font-table/shared-tests.json
+    Result: pass,10/10, including the full native converter domain and existing legacy import/color/RTF utilities.
+    Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Prettier; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:file-size; git diff --check.
+    Result: pass. Evidence: graph1683 sources/8722 imports/210 edges; provenance1684 runtime modules/1472 mapped; both registry semanticViolationCount0. The new filter-to-unotools edge is backed by the exact util.cxx fontcvt/fontdefs includes and Library_msfilter.mk utl link; positive and reverse/application-negative boundary tests4/4 pass. No boundary/provenance verifier was weakened. TypeScript initially inferred the test helper's Which default as literal7; its native numeric parameter is now explicit. Provenance caught the removed IndexCharacterFonts evidence marker; it now points to the actual InitFontTable invocation. Full suite was not run; related modules only.
+
+    Full goal remains active. The next RTF frontier is native list-table/level serialization consuming the prepared bullet string/font, used rule IDs and original bounds, followed by the remaining recorded filter/HTML/default/history/lifetime obligations. Current RTF list serialization still has an older body-rule map and simplified glyph-only records; do not confuse font-table completeness with complete native numbering export or whole-slice parity. Source status fields remain unverified and existing intentional browser open/save/recovery/autosave deviations remain unchanged.
 id_source: "generated"
 ---
 ## Summary
@@ -708,3 +735,30 @@ Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Pr
 Result: pass. Evidence: module graph1559 sources/8061 imports/204 edges; provenance1560 runtime modules/1350 mapped; Writer registry semanticViolationCount0. The file-size gate caught expansion of odt-roundtrip.test.ts to1000+ lines; its repeated expected list fields now use a shared explicit expected value, and the gate passes. No validator was weakened.
 
 Pre-existing Markdown source/tests and associated registry/operation WIP remain deliberately uncommitted. They were not edited in this block and are not included in the merge checkpoint. The live tests are terminal; no background goal work should continue during the user's merge pause. Full current-core TXT/RTF/Markdown closure, upstream parity certification, native font-table orchestration and the previously recorded HTML/CSS/history/default gaps remain unfinished.
+
+### InitFontTable connected to the actual RTF exporter after the merge
+
+The user confirmed the merge and resumed the full goal, explicitly selecting native InitFontTable integration next. Preflight showed a clean writer checkout at656e2fcaa. Reused the approved DOING task and its direct continue_direct route; no network, outside-repository access, subagents or new approval gate were used. This checkpoint completes the requested font-table connection, not the whole filter slice.
+
+RtfExport now derives from the merged MSWordExportBase and receives genuine document/current/original SwPaM owners. The old document argument to a default-constructed exporter is replaced at callers by an explicit complete-document WriteDocument bridge, which releases every temporary SwPosition/SwPaM registration. Attribute-output tests use genuine test document/range owners with range-before-document cleanup. Native m_aFontHelper remains the shared original owner; RTF sets m_bLoadAllFonts=true and m_bSubstituteBullets=false. InitFontTable implements original Times New Roman/Symbol/Arial seeds, global western default and western user default, then the three-script ForEachCharacterFontItem(false) traversal and used-numbering bullet/bitmap font collection. It replaces IndexCharacterFonts run/style pre-registration. Header deff now uses the effective actual default-font slot and original adeflang1025; the old extra ansicpg1252 control was removed to match ExportDocument_Impl.
+
+New original wrtw8num responsibility owns lazy used-rule snapshots, reverse filtering through SwDoc.IsUsed, actual outline pointer placement, bullet-font preparation and SubstituteBullet. Font preparation copies optional/default VCL fonts before MaybeAskConfig, preserves the pre-substitution family and original fallback name behavior. Original WW8 bounds1/9 are retained (WRITER196). Enabled shared substitution uses the actual native StarSymbol factory and original bestFitOpenSymbolToMSFont branches; the RTF-disabled branch returns without conversion. All seven224-slot conservative tables, four aggressive tables and eight names are extracted reproducibly from the pinned fontcvt.cxx. No SDK or grammar replacement is introduced.
+
+The initial first-equivalent map implementation failed the native differential at U+0020. The unchanged compiled std::multimap constructor/find selected Webdings instead of first-inserted Symbol. Retained duplicate nodes and measured red/black insertion/direct lookup now match all65536 original input units (1568 mapped keys; all absent keys preserve their units). WRITER197 records this source preference/standard-library issue. This is a fixed-table native-runtime witness with an explicit immutable UTF16 name carrier, not a SAL allocation, cross-standard-library, VCL or full Writer ABI certificate. The first private-area fallback test mistakenly used U+F8FF, which the native table actually maps to MT Extra; the genuine unmapped private U+E7FF now tests the intended fallback without changing production behavior.
+
+Command: node scripts/star-symbol-export-native-probe.mjs
+Result: pass. Evidence: unchanged original enum/entry/class declarations, all consumed tables, constructor, ConvertChar, name helper and factory compiled with ASan/UBSan; full65536-unit domain verified. Fixture apps/office/src/unotools/source/misc/star-symbol-export.native.json; native driver under ignored output/playwright/star-symbol-export-native.
+Command: python3 scripts/extract-symbol-font-export-data.py --check
+Result: pass. Evidence:7 conservative tables/4 aggressive tables/8 names match pinned source data.
+Command: npm run test:writer -- src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/filter/ascii src/sw/source/filter/md --reporter=json --outputFile=../../output/playwright/rtf-font-table/writer-tests.json
+Result: pass,474/474. Scope: real RTF export/import, common Word/DOCX font parts and adjacent TXT/Markdown filters. The initial400-test run exposed two stale font-ID expectations; they now reflect the native seed/default ordering while retaining exact FFN metadata and associated-script controls.
+Command: npm run test:writer -- src/sw/source/filter/ww8/rtf-font-table.test.ts src/sw/browser/workflows/writer-odt-io.test.ts src/sw/browser/presentation/WriterFileDialog.test.tsx src/sw/browser/composition/writer-module.test.tsx --reporter=json --outputFile=../../output/playwright/rtf-font-table/ui-tests.json
+Result: pass,39/39. Scope: native font setup, full-document shell/UI consumers and temporary content-index ownership.
+Command: npm run test:writer -- src/sw/source/filter/ww8/rtf-font-table.test.ts --reporter=json --outputFile=../../output/playwright/rtf-font-table/font-table-tests.json
+Result: pass,6/6 after adding bitmap/default-font-copy assertions and independently checking that every serialized font reference has a declared table slot.
+Command: npm run test:shared -- src/unotools/source/misc/star-symbol-export.test.ts src/filter/source/msfilter/util.test.ts src/filter/source/msfilter/rtfutil.test.ts src/xmloff/source/style/native-legacy-bullet-symbol.test.ts --reporter=json --outputFile=../../output/playwright/rtf-font-table/shared-tests.json
+Result: pass,10/10, including the full native converter domain and existing legacy import/color/RTF utilities.
+Command: npm run typecheck --workspace @vite-office/office; scoped ESLint and Prettier; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared; npm run check:file-size; git diff --check.
+Result: pass. Evidence: graph1683 sources/8722 imports/210 edges; provenance1684 runtime modules/1472 mapped; both registry semanticViolationCount0. The new filter-to-unotools edge is backed by the exact util.cxx fontcvt/fontdefs includes and Library_msfilter.mk utl link; positive and reverse/application-negative boundary tests4/4 pass. No boundary/provenance verifier was weakened. TypeScript initially inferred the test helper's Which default as literal7; its native numeric parameter is now explicit. Provenance caught the removed IndexCharacterFonts evidence marker; it now points to the actual InitFontTable invocation. Full suite was not run; related modules only.
+
+Full goal remains active. The next RTF frontier is native list-table/level serialization consuming the prepared bullet string/font, used rule IDs and original bounds, followed by the remaining recorded filter/HTML/default/history/lifetime obligations. Current RTF list serialization still has an older body-rule map and simplified glyph-only records; do not confuse font-table completeness with complete native numbering export or whole-slice parity. Source status fields remain unverified and existing intentional browser open/save/recovery/autosave deviations remain unchanged.

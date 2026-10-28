@@ -4,7 +4,7 @@ import { RTL_TEXTENCODING_ASCII_US, type rtl_TextEncoding } from "../../../../sa
 import { rtl_getTextEncodingFromWindowsCharset } from "../../../../sal/textenc/tencinfo";
 import { rtl_TextEncodingToWinCharset } from "./writerwordglue";
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
-import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
+import { RES_CHRATR_FONT } from "../../../inc/hintids";
 import { CharFormat } from "../../core/text/atrstck";
 import { SwAttrIter } from "../../core/text/itratr";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
@@ -56,7 +56,7 @@ import type { WriterTextRun } from "../basflt/writer-transfer";
 import { GetCharacterPropertiesMode, RtfAttributeOutput } from "./rtfattributeoutput";
 import { SvStream } from "../../../../tools/source/stream/stream";
 import { SwWW8AttrIter } from "./wrtw8nds";
-import { MSWordStyles, wwFontHelper, type wwFont } from "./wrtw8sty";
+import { MSWordStyles, type wwFont } from "./wrtw8sty";
 
 /** Source `OutColorTable` seeds the 16 MS Word colors before document-owned colors. */
 const RTF_DEFAULT_COLORS = [
@@ -79,7 +79,7 @@ const RTF_DEFAULT_COLORS = [
 ] as const;
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
-export class RtfExport {
+export class RtfExport extends MSWordExportBase {
   private readonly attributeOutput = new RtfAttributeOutput(
     /** Computes the family result. @param family - Family. @returns The computed result. */ (
       family,
@@ -88,7 +88,6 @@ export class RtfExport {
       this.IndexColor(color),
     this,
   );
-  private fonts = new wwFontHelper();
   private readonly colors = new Map<string, number>();
   private readonly lists = new Map<
     string,
@@ -110,6 +109,30 @@ export class RtfExport {
   private m_eCurrentEncoding = this.m_eDefaultEncoding;
   private stream = new SvStream(new Uint8Array(), this.m_eDefaultEncoding);
 
+  /** Native consumed constructor uses the common document/range owners and original RTF font flags. @param document - Actual document. @param current - Current selection binding. @param original - Original selection. @returns RTF exporter. */
+  constructor(document: SwDoc, current: SwPaM, original: SwPaM) {
+    super(document, current, original);
+    this.m_bSubstituteBullets = false;
+    this.m_aFontHelper.m_bLoadAllFonts = true;
+  }
+
+  /** Existing browser full-document bridge owns and releases the actual temporary selections around the source exporter. @param document - Actual document. @returns RTF bytes. */
+  static WriteDocument(document: SwDoc): Uint8Array {
+    const nodes = document.GetNodes().getTextNodes();
+    const first = nodes[0] ?? document.GetNodes().GetEndOfContent();
+    const last = nodes.at(-1) ?? first;
+    const point = new SwPosition(first);
+    const mark = new SwPosition(last, last.IsTextNode() ? (last as SwTextNode).Len() : 0);
+    const range = new SwPaM(point, mark);
+    point.Dispose();
+    mark.Dispose();
+    try {
+      return new RtfExport(document, range, range).ExportDocument();
+    } finally {
+      range.Dispose();
+    }
+  }
+
   /** Original export stream getter. @returns Actual memory stream. */
   public Strm(): SvStream {
     return this.stream;
@@ -128,10 +151,11 @@ export class RtfExport {
     this.m_eCurrentEncoding = encoding & 0xffff;
   }
 
-  /** Exports a complete Writer document. @param document - Native model. @returns RTF bytes. */
-  public ExportDocument(document: SwDoc): Uint8Array {
+  /** Exports the complete represented document from the actual native owner. @returns RTF bytes. */
+  public ExportDocument(): Uint8Array {
+    const document = this.m_rDoc;
     this.SetCurrentEncoding(this.GetDefaultEncoding());
-    this.fonts = new wwFontHelper();
+    this.m_aFontHelper.InitFontTable(this);
     this.stream = new SvStream(new Uint8Array(), this.GetDefaultEncoding());
     this.colors.clear();
     for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
@@ -144,7 +168,6 @@ export class RtfExport {
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
       for (const run of this.GetTextRuns(node as SwTextNode)) {
-        this.IndexCharacterFonts(run.items);
         if (run.attributes.color !== undefined && run.attributes.color !== "auto")
           this.IndexColor(run.attributes.color);
         if (run.attributes.underlineColor !== undefined && run.attributes.underlineColor !== "auto")
@@ -175,7 +198,6 @@ export class RtfExport {
     for (const { style } of this.styles.values()) {
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
-      this.IndexCharacterFonts(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
         this.IndexColor(attributes.color);
       if (attributes.underlineColor !== undefined && attributes.underlineColor !== "auto")
@@ -189,9 +211,14 @@ export class RtfExport {
           if (box !== undefined) this.IndexBoxColors(box);
         }
     }
-    this.Strm().WriteOString("{\\rtf1\\ansi\\ansicpg1252\\deff0");
+    const defaultFont = document
+      .GetAttrPool()
+      .GetUserOrPoolDefaultItem(RES_CHRATR_FONT) as SvxFontItem;
+    this.Strm().WriteOString(
+      `{\\rtf1\\ansi\\deff${this.m_aFontHelper.GetId(defaultFont)}\\adeflang1025`,
+    );
     this.Strm().WriteOString("{\\fonttbl");
-    this.fonts.WriteFontTable(this.attributeOutput);
+    this.m_aFontHelper.WriteFontTable(this.attributeOutput);
     this.Strm().WriteChar("}");
     let output = "";
     // The fixed Word highlight palette is registered at the beginning of every export.
@@ -709,17 +736,9 @@ export class RtfExport {
     }
   }
 
-  /** Registers all represented script-font values before the font table is serialized. @param items - Actual effective character owner. @returns Nothing. */
-  private IndexCharacterFonts(items: SfxItemSet): void {
-    for (const which of [RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT]) {
-      const item = items.GetItemIfSet(which, true);
-      if (item instanceof SvxFontItem) this.IndexFont(item);
-    }
-  }
-
   /** Registers the actual source font value, preserving FFN identity and metadata. @param font - Native font or font item. @returns Font ID. */
   private IndexFont(font: SvxFontItem | wwFont): number {
-    return this.fonts.GetId(font);
+    return this.m_aFontHelper.GetId(font);
   }
 
   /** Assigns a stable one-based RTF color index. @param color - CSS RGB color. @returns Index. */
@@ -811,3 +830,6 @@ function toRtfNfc(type: SvxNumType): number {
       return 0;
   }
 }
+
+import { MSWordExportBase } from "./wrtww8";
+import { SwPaM, SwPosition } from "../../core/crsr/pam";

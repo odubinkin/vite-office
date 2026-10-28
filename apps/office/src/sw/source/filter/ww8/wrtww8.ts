@@ -3,9 +3,21 @@ import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwPaM } from "../../core/crsr/pam";
 import { wwFont, wwFontHelper } from "./wrtw8sty";
+import {
+  EnsureUsedNumberingTable,
+  GetNumberingLevelBulletStringAndFont,
+  SubstituteBullet,
+} from "./wrtw8num";
+import type { SwNumRule, ConstSwNumFormat } from "../../core/doc/number";
+import type {
+  SymbolExportEncoding,
+  SymbolExportFontName,
+} from "../../../../filter/source/msfilter/util";
 /** Native common Word export owner for the currently consumed context. */
 export class MSWordExportBase {
-  protected readonly m_aFontHelper = new wwFontHelper();
+  readonly m_aFontHelper = new wwFontHelper();
+  public m_pUsedNumTable: SwNumRule[] | undefined;
+  public m_bSubstituteBullets = true;
   protected readonly m_nCurStart: number;
   protected readonly m_nCurEnd: number;
   /** Original consumed constructor stores the real document and selection owners. @param m_rDoc - Actual document. @param m_pCurPam - Actual current range base binding. @param m_pOrigPam - Actual original range. @returns Export context. */
@@ -16,6 +28,22 @@ export class MSWordExportBase {
   ) {
     this.m_nCurStart = m_pCurPam.GetPoint().GetNodeIndex();
     this.m_nCurEnd = m_pCurPam.GetMark().GetNodeIndex();
+  }
+  /** Original lazy numbering-table owner. @returns Nothing. */
+  EnsureUsedNumberingTable(): void {
+    EnsureUsedNumberingTable(this);
+  }
+  /** Original prepared bullet string and owned font. @param format - Native bullet/bitmap level. @returns Original pair. */
+  GetNumberingLevelBulletStringAndFont(format: ConstSwNumFormat): readonly [string, wwFont] {
+    return GetNumberingLevelBulletStringAndFont(this, format);
+  }
+  /** Original first-unit symbol substitution. @param text - Mutable bullet. @param encoding - Mutable charset. @param family - Mutable family. @returns Nothing. */
+  SubstituteBullet(
+    text: SymbolExportFontName,
+    encoding: SymbolExportEncoding,
+    family: SymbolExportFontName,
+  ): void {
+    SubstituteBullet(this, text, encoding, family);
   }
   /** Original item overload returns the registered numeric font ID. @param font - Actual shared item. @returns ID. */
   GetId(font: SvxFontItem): number;

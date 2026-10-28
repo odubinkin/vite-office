@@ -94,7 +94,7 @@ it("preserves the source thick-border export flag and its ignored import behavio
   node.SetAttr(borders);
   let restored: SwDoc | undefined;
   try {
-    const bytes = new RtfExport().ExportDocument(document);
+    const bytes = RtfExport.WriteDocument(document);
     expect(new TextDecoder().decode(bytes)).toContain("\\brdrb\\brdrs\\brdrth\\brdrw150");
     restored = new RtfDocumentImpl().ResolveBytes(bytes);
     expect(box(restored).GetBottom()?.GetWidth()).toBe(150);
@@ -130,7 +130,7 @@ it("exports explicit border clearing over an inherited paragraph style", /** Che
   node.SetAttr(new SvxBoxItem(RES_BOX));
   let restored: SwDoc | undefined;
   try {
-    const bytes = new RtfExport().ExportDocument(document);
+    const bytes = RtfExport.WriteDocument(document);
     expect(new TextDecoder().decode(bytes)).toContain(
       "\\brdrt\\brdrnone\\brdrl\\brdrnone\\brdrb\\brdrnone\\brdrr\\brdrnone",
     );
@@ -178,7 +178,7 @@ it.each([
     node.SetAttr(borders);
     let restored: SwDoc | undefined;
     try {
-      const bytes = new RtfExport().ExportDocument(document);
+      const bytes = RtfExport.WriteDocument(document);
       expect(new TextDecoder().decode(bytes)).toContain("\\box\\brdr");
       restored = new RtfDocumentImpl().ResolveBytes(bytes);
       for (const edge of [Edge.TOP, Edge.LEFT, Edge.BOTTOM, Edge.RIGHT]) {
