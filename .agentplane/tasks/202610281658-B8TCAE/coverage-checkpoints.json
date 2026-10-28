@@ -87,5 +87,86 @@
     "reportSha256": "4726412096aad61709c9993cf89d7532e6513c29830ef93e2f157e5ed426462c",
     "scope": "B8TCAE adds36 public number-input integration regressions using actual compiled SvNumberformat, language, native-number and calendar owners. Independent civil-date epoch arithmetic checks full/named/incomplete dates, two-digit pivot1950 and original date-evaluation policies; caller-supplied quoted literals test custom-order admission without manufactured token arrays. Ordinary DATESEP patterns and month-only input retain original acceptance gates. The fixed SYSTEM clock supplies2024-06-15 for incomplete dates; no full native input-scanner/UNO ABI parity is claimed."
   },
-  "targetedCoverageNote": "Partial profiles pass their assertion suites but intentionally fail configured global100% coverage while work remains. They are incremental evidence only, never final verification success."
+  "targetedCoverageNote": "Partial profiles pass their assertion suites but intentionally fail configured global100% coverage while work remains. They are incremental evidence only, never final verification success.",
+  "urlHost": {
+    "nativeObservations": 6110,
+    "testFiles": 5,
+    "tests": 202,
+    "report": "apps/office/coverage/integration-url-host/coverage-final.json",
+    "reportSha256": "7e7a437ebaf380100ea37fa260c78bde533557bb434175f3329097fcc1d24078",
+    "metrics": {
+      "lines": {
+        "total": 248,
+        "covered": 248,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 263,
+        "covered": 263,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 195,
+        "covered": 195,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "scope": "B8TCAE adds6110 independently compiled unchanged original parseHost observations with exact original ASCII/hex classifiers, valid bounded UTF16 ranges and standard decimal/lowercase-hex value bindings. Both pointer offsets cover host/DNS/IPv4/IPv6, mixed addresses, malformed units and delimiters; native output-buffer rollback retains an initial prefix. Existing URL/NetBIOS tests plus native replay pass202 assertions at strict100% statements/branches/functions/lines for this owner. Full URL, NetBIOS encoding, SAL lifetime and ABI parity remain outside the native witness; semantic statuses are unchanged."
+  },
+  "formatLocale": {
+    "nativeComparedRows": 182059,
+    "nativeReplayedRows": 17804,
+    "testFiles": 2,
+    "report": "apps/office/coverage/integration-format-locale-final/coverage-final.json",
+    "reportSha256": "0efebfca07d21577c8eaed62b6251fef4554a6d4a90f58c40c014d18d3899e36",
+    "scope": "B8TCAE compares182059 unchanged extracted original locale/parser/calendar/numeral calls and replays17804 native observations across metadata/parser cases and separate numeral/calendar axes. Actual LocaleType/OUString/OUStringBuffer owners receive original arguments; configured data-language input is applied through its existing setter and restored. All calendar selection case labels are exercised. Scalar string/numeric/configured-language bindings do not establish full constructor, output, UNO/SAL lifetime or ABI parity; existing semantic statuses remain unchanged. The original checked stringbuffer_insert offset invariant is also exercised through actual LocaleType/OUStringBuffer owners, without replacing an allocator or method. The TS assertion binding throws Error; no native C++ exception-on-assertion claim is made. Together with existing metadata/compiled-owner regressions,26 tests pass strict100% statement/branch/function/line coverage for both locale owners.",
+    "tests": 26,
+    "metrics": {
+      "lines": {
+        "total": 140,
+        "covered": 140,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 145,
+        "covered": 145,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 8,
+        "covered": 8,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 167,
+        "covered": 167,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    }
+  }
 }

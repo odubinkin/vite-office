@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 11
+revision: 12
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T18:01:50.420Z"
+doc_updated_at: "2026-10-28T18:11:25.055Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -67,6 +67,10 @@ sections:
     - Observation: Incremental source-backed regression suites now add29484 scanner/color native rows,23 actual locale conversions,2226 LibreOffice temporal native rows,28 ICU checked month-normalization rows and27 public date-input cases.
       Impact: Assertions pass; partial coverage profiles still correctly fail mandatory global100. No coverage exclusions or thresholds changed. CALC-385 records original trailing-separator TODO.
       Resolution: Retain exact-source map diagnostic merging and final full-current-code verification requirement; continue remaining gaps and await individual EraRules exception decision.
+
+    - Observation: Original host parser6110 native observations plus existing URL tests pass202 tests with strict100% for urlobj.host.ts. Original format locale182059 comparisons/17804 portable rows plus existing value and real checked-boundary tests pass26 tests at strict100% for zformat.locale.ts and zformat.locale-calendar.ts.
+      Impact: Three more runtime owners reach all required coverage metrics without runtime changes or exclusions. Native scalar-context scope and the distinction between TS assertion Error and native assertion abort are explicit.
+      Resolution: Preserve independent native fixtures/provenance; continue remaining whole-project coverage work. Final full verifier and Git publication/backmerges remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -114,3 +118,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Incremental source-backed regression suites now add29484 scanner/color native rows,23 actual locale conversions,2226 LibreOffice temporal native rows,28 ICU checked month-normalization rows and27 public date-input cases.
   Impact: Assertions pass; partial coverage profiles still correctly fail mandatory global100. No coverage exclusions or thresholds changed. CALC-385 records original trailing-separator TODO.
   Resolution: Retain exact-source map diagnostic merging and final full-current-code verification requirement; continue remaining gaps and await individual EraRules exception decision.
+
+- Observation: Original host parser6110 native observations plus existing URL tests pass202 tests with strict100% for urlobj.host.ts. Original format locale182059 comparisons/17804 portable rows plus existing value and real checked-boundary tests pass26 tests at strict100% for zformat.locale.ts and zformat.locale-calendar.ts.
+  Impact: Three more runtime owners reach all required coverage metrics without runtime changes or exclusions. Native scalar-context scope and the distinction between TS assertion Error and native assertion abort are explicit.
+  Resolution: Preserve independent native fixtures/provenance; continue remaining whole-project coverage work. Final full verifier and Git publication/backmerges remain pending.

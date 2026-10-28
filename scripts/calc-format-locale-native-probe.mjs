@@ -1,5 +1,6 @@
 /** @fileoverview Original compiled-format locale decoding, serialization and calendar/numeral insertion witness. Fixtures supply value strings, language tags and configured locale values; no full formatter constructor/ABI claim. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { readFileSync, writeFileSync } from "node:fs";
 import { pin, scope } from "./rtl-ustring-native-sources.mjs";
 import {
@@ -11,7 +12,7 @@ import { getRealLanguage } from "../apps/office/src/i18nlangtag/source/isolang/m
 import { unicode } from "../apps/office/src/i18nlangtag/source/isolang/isolang.tables.ts";
 import { OUStringBuffer } from "../apps/office/src/sal/inc/rtl/ustrbuf.ts";
 const root = "vendor/libreoffice-reference",
-  target = "output/native/AQF9AG-icu-grego/format-locale";
+  target = `${process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"}/format-locale`;
 const paths = [
   "include/svl/zformat.hxx",
   "svl/source/numbers/zformat.cxx",
@@ -179,7 +180,7 @@ for (const current of languages)
       0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 0x1b, 0x1c, 0x1d, 0x1e,
       0x1f, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26, 0x27, 0x80, 0x82, 0xff,
     ])
-      for (const calendar of [0, 3, 5, 6, 7, 8, 0x17, 0x83]) {
+      for (const calendar of [0, 3, 5, 6, 7, 8, 0x0e, 0x0f, 0x10, 0x11, 0x12, 0x13, 0x17, 0x83]) {
         const raw = ((numeral << 24) | (calendar << 16) | temporary) >>> 0,
           locale = new LocaleType(),
           targetLocale = new LocaleType(raw),
@@ -214,3 +215,42 @@ for (let index = 0; index < actual.length; ++index)
 process.stdout.write(
   `Matched ${expected.length} original locale/hex/calendar/numeral observations.\n`,
 );
+if (process.argv.includes("--write-fixtures")) {
+  /** Hashes exact native source or compiled-caller bytes. @param path - Evidence path. @returns SHA256. */
+  function hash(path) {
+    return createHash("sha256").update(readFileSync(path)).digest("hex");
+  }
+  const cases = inputs.slice(1).flatMap(
+    /** Keeps every metadata/parser input and independent numeral-only/calendar-only axes after full native comparison. @param query - Native query. @param index - Native output offset. @returns Selected original observation. */
+    (query, index) => {
+      const fields = query.split(" "),
+        raw = Number(fields[2]);
+      return fields[0] !== "C" || ((raw >>> 16) & 255) === 0 || raw >>> 24 === 0
+        ? [[query, actual[index]]]
+        : [];
+    },
+  );
+  writeFileSync(
+    "apps/office/src/svl/source/numbers/format-locale.native-observations.json",
+    JSON.stringify(
+      {
+        baselineCommit: pin,
+        sourceHashes: Object.fromEntries(
+          paths.map(
+            /** Retains each verified original source identity. @param path - Original responsibility. @returns Hash pair. */
+            (path) => [path, hash(`${root}/${path}`)],
+          ),
+        ),
+        witnessSha256: hash(`${target}.cpp`),
+        configuredLanguages: inputs[0],
+        nativeComparedRows: actual.length,
+        scope:
+          "Unchanged extracted original locale metadata, parser and calendar/numeral insertion functions with scalar string/configured-language bindings. Full constructor, UNO/SAL ABI and formatting output remain unverified. Portable replay selects complete metadata/parser inputs and separate calendar/numeral axes after the complete differential product passes.",
+        cases,
+      },
+      null,
+      2,
+    ) + "\n",
+  );
+  console.log(`Stored ${cases.length} native metadata/parser/calendar/numeral observations`);
+}
