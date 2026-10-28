@@ -1,5 +1,6 @@
 /** @fileoverview Actual committed ZIP TrackChange XML attributes through native SAX actions and TrackChangesHandler; downstream document redline creation remains separate. */
-import { expect, it } from "vitest";
+import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
+import { expect, it, afterEach } from "vitest";
 import { OOXMLStreamImpl } from "./OOXMLStreamImpl";
 import { OOXMLDocument } from "./OOXMLDocumentImpl";
 import { OOXMLFastDocumentHandler } from "./OOXMLFastDocumentHandler";
@@ -15,6 +16,14 @@ import { WriteRelationsInfoSequence } from "../../../../comphelper/source/xml/of
 import { readNumberingProperty } from "../../core/unocore/unosett-properties";
 import { unicode, text } from "../../core/unocore/unocrsrhelper";
 import type { Stream, Reference, Properties } from "../inc/dmapper/resourcemodel";
+
+const ownedStreams: OOXMLStreamImpl[] = [];
+afterEach(
+  /** Keeps real streams alive through every document assertion, then destroys each wrapper once. @returns Nothing. */ () => {
+    for (const stream of ownedStreams.reverse()) stream.dispose();
+    ownedStreams.length = 0;
+  },
+);
 
 it.each([
   [
@@ -112,9 +121,16 @@ it.each([
       parser = main.getFastParser();
     parser.setFastDocumentHandler(new OOXMLFastDocumentHandler(output, document, 0));
     parser.setTokenHandler(main.getFastTokenHandler());
-    const xml = main.getDocumentXml();
-    if (!xml) throw new Error("Missing committed document XML");
-    parser.parseStream(xml);
+    const input = main.getDocumentStream(),
+      source = new InputSource();
+    try {
+      ownedStreams.push(main);
+      source.aInputStream = input;
+      parser.parseStream(source);
+    } finally {
+      source.dispose();
+      input.dispose();
+    }
     const definition = Object.entries(defines).find(
       /** Selects the actual native paragraph definition. @param entry - Generated entry. @returns Match. */ (
         entry,

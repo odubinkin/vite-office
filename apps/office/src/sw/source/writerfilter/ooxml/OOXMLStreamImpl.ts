@@ -13,6 +13,10 @@ import {
 } from "../../../../stoc/source/uriproc/UriReferenceFactory";
 import { StreamType_t as T } from "../inc/ooxml/OOXMLDocument";
 
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XInputStream } from "../../../../udkapi/com/sun/star/io/XInputStream";
+import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
+
 /** Original stream type suffixes; Microsoft extension relationships have identical strict variants. */
 const suffixes: Readonly<Record<number, string>> = {
   [T.DOCUMENT]: "officeDocument",
@@ -39,21 +43,12 @@ const transitional = "http://schemas.openxmlformats.org/officeDocument/2006/rela
 const strict = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
 const uriFactory = new UriReferenceFactory();
 
-/** XML byte decoding follows SAX UTF8/UTF16 BOM and signature admission. @param bytes - XML bytes. @returns XML. */
-function decode(bytes: Uint8Array): string {
-  const little = (bytes[0] === 0xff && bytes[1] === 0xfe) || (bytes[0] === 0x3c && bytes[1] === 0);
-  const big = (bytes[0] === 0xfe && bytes[1] === 0xff) || (bytes[0] === 0 && bytes[1] === 0x3c);
-  return new TextDecoder(little ? "utf-16le" : big ? "utf-16be" : "utf-8", { fatal: true }).decode(
-    bytes,
-  );
-}
-
 /** Native stream owns its external-relation cache and package-relative source directory. */
 export class OOXMLStreamImpl {
   private readonly maIdCache = new Map<string, string>();
   private msPath = "";
   private msTarget = "";
-  private document: Uint8Array | null = null;
+  private readonly document = new Reference<XInputStream>();
   private fastTokenHandler: FastTokenHandler | null = null;
   private fastParser: FastSaxParser | null = null;
   private relationships: readonly (readonly StringPair[])[] = [];
@@ -66,7 +61,11 @@ export class OOXMLStreamImpl {
   ): Promise<OOXMLStreamImpl> {
     if (type === T.VBADATA && source instanceof OOXMLStreamImpl) {
       const project = await OOXMLStreamImpl.createStream(source, T.VBAPROJECT);
-      return OOXMLStreamImpl.fromParent(project, type);
+      try {
+        return await OOXMLStreamImpl.fromParent(project, type);
+      } finally {
+        project.dispose();
+      }
     }
     return OOXMLStreamImpl.fromParent(source, type);
   }
@@ -76,7 +75,7 @@ export class OOXMLStreamImpl {
     type: T | string,
   ): Promise<OOXMLStreamImpl> {
     const parent = source instanceof OOXMLStreamImpl ? source : null;
-    if (parent && parent.document === null)
+    if (parent && !parent.document.is())
       throw new Error("OOXML parent document stream is missing.");
     const result = new OOXMLStreamImpl(parent ? parent.storage : (source as ZipStorage));
     result.msPath = parent?.msPath ?? "";
@@ -90,11 +89,18 @@ export class OOXMLStreamImpl {
       result.msTarget = target;
       const lastSlash = target.lastIndexOf("/");
       if (lastSlash >= 0) result.msPath = target.slice(0, lastSlash + 1);
-      result.document = await result.storage.openInputStream(target);
-      if (result.document === null)
+      const input = await result.storage.openInputStream(target);
+      result.document.moveAssign(input);
+      input.dispose();
+      if (!result.document.is())
         throw new Error("OOXML relationship target stream is missing: " + target);
       result.maIdCache.clear();
-      result.relationships = await result.readRelations(target);
+      try {
+        result.relationships = await result.readRelations(target);
+      } catch (error) {
+        result.dispose();
+        throw error;
+      }
     }
     return result;
   }
@@ -103,8 +109,16 @@ export class OOXMLStreamImpl {
     const slash = target.lastIndexOf("/"),
       directory = target.slice(0, slash + 1),
       basename = target.slice(slash + 1);
-    const bytes = await this.storage.openInputStream(directory + "_rels/" + basename + ".rels");
-    return bytes === null ? [] : ReadRelationsInfoSequence(decode(bytes));
+    const input = await this.storage.openInputStream(directory + "_rels/" + basename + ".rels");
+    const source = new InputSource();
+    try {
+      if (!input.is()) return [];
+      source.aInputStream = input;
+      return ReadRelationsInfoSequence(source);
+    } finally {
+      source.dispose();
+      input.dispose();
+    }
   }
   /** Original lexical target getter. @returns Target. */ getTarget(): string {
     return this.msTarget;
@@ -122,12 +136,14 @@ export class OOXMLStreamImpl {
     }
     return this.fastParser;
   }
-  /** Borrows the immutable opened input part. @returns Bytes or missing stream. */ getDocumentStream(): Uint8Array | null {
-    return this.document;
+  /** Original input reference return shares the current stream position; it is not an independent byte copy. @returns Owned input reference, possibly empty. */
+  getDocumentStream(): Reference<XInputStream> {
+    return new Reference(this.document);
   }
-  /** Decodes XML when the caller consumes the document SAX stream. @returns XML or null. */ getDocumentXml():
-    string | null {
-    return this.document === null ? null : decode(this.document);
+  /** Releases parser/locator then input ownership; no XStream or relationship service identity is manufactured by this package binding. @returns Nothing. */
+  dispose(): void {
+    this.fastParser?.dispose();
+    this.document.dispose();
   }
   /** Original ID lookup is relative to the opened stream's relationships. @param id - Relationship ID. @returns Target or empty. */
   getTargetForId(id: string): string {

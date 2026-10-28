@@ -53,15 +53,24 @@ export interface FastXmlHandler {
   close(): void;
 }
 
-/** Drives SAX callbacks with bounded resources. @param xml - Decoded XML. @param handler - Import event receiver. @param options - Limits and cancellation. @param afterChunk - Optional native16KiB input checkpoint and current host locator. @param onParser - Active host lexical context binding. @param allowEmpty - Original byte-input empty-source behavior. @returns Nothing. */
+/** Drives SAX callbacks with bounded resources. @param xml - Decoded XML chunks or an actual native input source. @param handler - Import event receiver. @param options - Limits and cancellation. @param afterChunk - Optional native16KiB input checkpoint and current host locator. @param onParser - Active host lexical context binding. @param allowEmpty - Original byte-input empty-source behavior. @returns Nothing. */
 export function parseFastXmlStream(
-  xml: string | Iterable<string>,
+  xml: string | Iterable<string> | InputSource,
   handler: FastXmlHandler,
   options: FastXmlParseOptions = {},
   afterChunk?: (line: number, column: number, error?: unknown) => void,
   onParser?: (parser: SaxesParser<{ xmlns: true }>) => void,
   allowEmpty = false,
 ): void {
+  if (xml instanceof InputSource) {
+    const entity = new Entity(xml);
+    try {
+      parseFastXmlStream(decodedChunks(entity), handler, options, afterChunk, onParser, true);
+    } finally {
+      entity.dispose();
+    }
+    return;
+  }
   const limits = { ...DEFAULT_FAST_XML_LIMITS, ...options.limits };
   for (const [name, value] of Object.entries(limits))
     if (!Number.isInteger(value) || value < 1) throw new Error(`ODF XML ${name} limit is invalid.`);

@@ -1,0 +1,125 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-49e7031a-e716-4127-b398-a34ff0f1f08d",
+    "capabilityId": "CAP-49e7031a-e716-4127-b398-a34ff0f1f08d",
+    "suite": "calc",
+    "subsystem": "oox-package-input",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Actual package input References feed shared XML conversion and native Writer context/resource parsing."
+    ],
+    "capability": "Actual OOXML package input references through shared SAX and Writer resource parsing",
+    "gaps": [
+      "Package input now returns actual Reference<XInputStream> values over the existing genuine SequenceInputStream and signed Sequence storage, with empty Reference for absent parts. Fragment input ownership, basename fallback and actual resolved-path InputSource feed native XMLFile2UTFConverter through the existing expanded-name SAX backend. OFOPXMLHelper accepts real InputSource. Writer document input returns Reference copies sharing position; local byte-to-XML decoder/getDocumentXml are removed, and parser/input/VBA intermediate/failure owners unwind explicitly. Actual UNO read exceptions caught by XmlFilterBase are destroyed. Short-prefix EOF loss CALC-363/WRITER200 is preserved and directly tested. ZIP remains a browser byte/package binding: complete XStorage/XStream/XRelationshipAccess, input-disconnection lifecycle, generated token/UNO fragment/StringPair services, StorageBase hierarchy, libxml2 parity, native ABI/thread/allocation unwind and full DOCX/XLSX model/filter/worker/UI acceptance remain incomplete. Existing open/save/autosave/recovery policy is preserved."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "comphelper/source/xml/ofopxmlhelper.cxx",
+          "marker": "ReadContentTypeSequence"
+        },
+        {
+          "path": "oox/source/core/fragmenthandler.cxx",
+          "marker": "FragmentHandler::createFastChildContext"
+        },
+        {
+          "path": "oox/source/core/xmlfilterbase.cxx",
+          "marker": "XmlFilterBase::importFragment"
+        },
+        {
+          "path": "oox/source/helper/zipstorage.cxx",
+          "marker": "ZipStorage::implOpenInputStream"
+        },
+        {
+          "path": "sax/source/fastparser/fastparser.cxx",
+          "marker": "FastSaxParserImpl"
+        },
+        {
+          "path": "sw/source/writerfilter/ooxml/OOXMLStreamImpl.cxx",
+          "marker": "OOXMLStreamImpl::lcl_getTarget"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sax/qa/cppunit/parser.cxx",
+          "marker": "ParserTest"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/oox/helper/storagebase.hxx",
+          "marker": "openInputStream"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/comphelper/source/xml/ofopxmlhelper.ts",
+          "marker": "StringPair"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fragmenthandler.ts",
+          "marker": "FragmentFilter"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.ts",
+          "marker": "XmlFilterBase"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/zipstorage.ts",
+          "marker": "ZipFragmentStream"
+        },
+        {
+          "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+          "marker": "DEFAULT_FAST_XML_LIMITS"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.ts",
+          "marker": "OOXMLStreamImpl"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/oox/source/core/xmlfilterbase.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLStreamImpl.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLTrackChanges.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLFastContextHandlerTable.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-oox-package-input.md",
+          "marker": "# Native OOXML package input"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Package input now returns actual Reference<XInputStream> values over the existing genuine SequenceInputStream and signed Sequence storage, with empty Reference for absent parts. Fragment input ownership, basename fallback and actual resolved-path InputSource feed native XMLFile2UTFConverter through the existing expanded-name SAX backend. OFOPXMLHelper accepts real InputSource. Writer document input returns Reference copies sharing position; local byte-to-XML decoder/getDocumentXml are removed, and parser/input/VBA intermediate/failure owners unwind explicitly. Actual UNO read exceptions caught by XmlFilterBase are destroyed. Short-prefix EOF loss CALC-363/WRITER200 is preserved and directly tested. ZIP remains a browser byte/package binding: complete XStorage/XStream/XRelationshipAccess, input-disconnection lifecycle, generated token/UNO fragment/StringPair services, StorageBase hierarchy, libxml2 parity, native ABI/thread/allocation unwind and full DOCX/XLSX model/filter/worker/UI acceptance remain incomplete. Existing open/save/autosave/recovery policy is preserved."
+    },
+    "scopeLimitations": [
+      "Package input now returns actual Reference<XInputStream> values over the existing genuine SequenceInputStream and signed Sequence storage, with empty Reference for absent parts. Fragment input ownership, basename fallback and actual resolved-path InputSource feed native XMLFile2UTFConverter through the existing expanded-name SAX backend. OFOPXMLHelper accepts real InputSource. Writer document input returns Reference copies sharing position; local byte-to-XML decoder/getDocumentXml are removed, and parser/input/VBA intermediate/failure owners unwind explicitly. Actual UNO read exceptions caught by XmlFilterBase are destroyed. Short-prefix EOF loss CALC-363/WRITER200 is preserved and directly tested. ZIP remains a browser byte/package binding: complete XStorage/XStream/XRelationshipAccess, input-disconnection lifecycle, generated token/UNO fragment/StringPair services, StorageBase hierarchy, libxml2 parity, native ABI/thread/allocation unwind and full DOCX/XLSX model/filter/worker/UI acceptance remain incomplete. Existing open/save/autosave/recovery policy is preserved."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-stream-encoding-conversion"
+  }
+}

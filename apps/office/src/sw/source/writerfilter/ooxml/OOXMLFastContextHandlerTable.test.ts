@@ -1,4 +1,5 @@
 /** @fileoverview Native resource-table and property-table contexts through real DOCX ZIP input, SAX factories, value tables and ordered reference callbacks. */
+import { InputSource } from "../../../../offapi/com/sun/star/xml/sax/InputSource";
 import { BorderHandler } from "../dmapper/BorderHandler";
 import { TDefTableHandler } from "../dmapper/TDefTableHandler";
 import { TablePropertyMap } from "../dmapper/PropertyMap";
@@ -15,7 +16,7 @@ import { SequenceAsHashMap } from "../../../../comphelper/source/misc/sequenceas
 import { ThemeColorType } from "../../../../docmodel/inc/theme/ThemeColorType";
 import { LatentStyleHandler } from "../dmapper/LatentStyleHandler";
 import { SizeType } from "../../../../offapi/com/sun/star/text/SizeType";
-import { expect, it } from "vitest";
+import { expect, it, afterEach } from "vitest";
 import {
   OOXMLFastContextHandler as Base,
   OOXMLFastContextHandlerProperties as PropertiesContext,
@@ -129,6 +130,14 @@ function put(storage: ZipStorage, path: string, xml: string): void {
   storage.openOutputStream(path, "application/xml").writeBytes(new TextEncoder().encode(xml));
 }
 
+const ownedStreams: OOXMLStreamImpl[] = [];
+afterEach(
+  /** Keeps real streams alive through every document assertion, then destroys each wrapper once. @returns Nothing. */ () => {
+    for (const stream of ownedStreams.reverse()) stream.dispose();
+    ownedStreams.length = 0;
+  },
+);
+
 it.each([
   [
     "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
@@ -191,9 +200,16 @@ it.each([
     expect(document.getTargetForId("missing")).toBe("");
     parser.setFastDocumentHandler(new OOXMLFastDocumentHandler(output.stream, document, 7));
     parser.setTokenHandler(part.getFastTokenHandler());
-    const xml = part.getDocumentXml();
-    if (xml === null) throw new Error("Missing real styles part");
-    parser.parseStream(xml);
+    const input = part.getDocumentStream(),
+      source = new InputSource();
+    try {
+      ownedStreams.push(part);
+      source.aInputStream = input;
+      parser.parseStream(source);
+    } finally {
+      source.dispose();
+      input.dispose();
+    }
     expect(document.getXNoteId()).toBe(7);
     expect(part.getTarget()).toBe("styles/data.xml");
     expect(output.tables).toHaveLength(1);

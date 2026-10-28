@@ -1,4 +1,5 @@
 /** @fileoverview Real Writer export context, font metadata fragment routing and committed OOXML ZIP relationships. No text-graph traversal or whole-DOCX readiness is inferred from this part test. */
+import { readOwnedXml } from "../../../../test/oox-input";
 import { expect, it } from "vitest";
 import { DocxExport } from "./docxexport";
 import { SwDoc } from "../../core/doc/doc";
@@ -36,8 +37,8 @@ function finish(owners: ReturnType<typeof setup>): Uint8Array {
 /** Read an actual committed ZIP fragment. @param storage - Reopened storage. @param path - Part. @returns Decoded XML. */
 async function xml(storage: ZipStorage, path: string): Promise<string> {
   const bytes = await storage.openInputStream(path);
-  expect(bytes).not.toBeNull();
-  return new TextDecoder().decode(bytes as Uint8Array);
+  expect(bytes.is()).toBe(true);
+  return readOwnedXml(bytes) as string;
 }
 it("connects actual exporter, shared font registration, collected rFonts and fontTable routing", /** Native part contract is tested through real ZIP commit/reopen. @returns Completion. */ async () => {
   const o = setup(),

@@ -1,4 +1,5 @@
 /** @fileoverview Ports consumed OFOPXMLHelper content-type and relationship sequence XML contracts; primitive StringPair fields bind UTF16 XML values, without claiming UNO service identity. */
+import type { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
 import { parseFastXmlStream } from "../../../sax/source/fastparser/fastparser";
 import { XmlStringDocumentHandler } from "../../../sax/source/expatwrap/saxwriter";
 import { OUString } from "../../../sal/inc/rtl/ustring";
@@ -13,7 +14,9 @@ export interface StringPair {
 export type ContentTypeSequence = readonly [readonly StringPair[], readonly StringPair[]];
 
 /** Reads the native relationship sequence without the stricter oox::Relations admission rules. @param xml - Relationship XML. @returns Ordered attributes and entries. */
-export function ReadRelationsInfoSequence(xml: string): readonly (readonly StringPair[])[] {
+export function ReadRelationsInfoSequence(
+  xml: string | InputSource,
+): readonly (readonly StringPair[])[] {
   const result: StringPair[][] = [];
   let depth = 0;
   parseFastXmlStream(xml, {
@@ -55,7 +58,7 @@ function native(value: string): OUString {
 }
 
 /** Reads the original qualified-name/depth/required-attribute content sequence contract. @param xml - Content types XML. @returns Defaults and overrides in source order. */
-export function ReadContentTypeSequence(xml: string): ContentTypeSequence {
+export function ReadContentTypeSequence(xml: string | InputSource): ContentTypeSequence {
   const defaults: StringPair[] = [],
     overrides: StringPair[] = [];
   let depth = 0;

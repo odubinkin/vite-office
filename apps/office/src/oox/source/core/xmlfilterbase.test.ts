@@ -1,4 +1,8 @@
 /** @fileoverview Actual OOXML package/fragment import and output ownership; no application model or ODF conversion stands in for native package contracts. */
+import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
+import { NotConnectedException } from "../../../cppu/inc/com/sun/star/io/NotConnectedException";
+import { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { readOwnedInput, readOwnedXml } from "../../../test/oox-input";
 import { expect, it, vi } from "vitest";
 import type { SaxesTagNS } from "saxes";
 import { ZipFile } from "../../../package/source/zipapi/ZipFile";
@@ -119,7 +123,7 @@ it("delivers context events, ignores rejected subtrees and retains native option
       zip({
         "word/document.xml":
           '<root xmlns="urn:test">A<ignore><child>hidden</child></ignore><child>B</child></root>',
-        "bad.xml": "<root>",
+        "bad.xml": "<root>unclosed",
         "doctype.xml": "<!DOCTYPE root><root/>",
       }),
     ),
@@ -149,7 +153,7 @@ it("delivers context events, ignores rejected subtrees and retains native option
   inert.startFastElement({} as SaxesTagNS, []);
   inert.endFastElement({} as SaxesTagNS);
   inert.characters("text");
-  const cancelled = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<root/>" })), {
+  const cancelled = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<document/>" })), {
     isCancelled: /** Simulates actual cooperative cancellation. @returns True. */ () => true,
   });
   expect(await cancelled.importFragment(new FragmentHandler(cancelled, "root.xml"))).toBe(false);
@@ -164,7 +168,7 @@ it.each(["utf-8", "utf-16le", "utf-16be"])(
   /** Exercises XML encoding before SAX. @param encoding - Encoding. @returns Completion. */ async (
     encoding,
   ) => {
-    const xml = "<root>é😀</root>";
+    const xml = "<?xml version='1.0'?><root>é😀</root>";
     const bytes =
       encoding === "utf-8" ? new TextEncoder().encode(xml) : new Uint8Array(2 + xml.length * 2);
     if (encoding !== "utf-8") {
@@ -186,7 +190,7 @@ it("exports a real package, independent native part counters, metadata and escap
   const storage = new ZipStorage(),
     filter = new XmlFilterBase(storage);
   expect(storage.isReadOnly()).toBe(false);
-  expect(await storage.openInputStream("missing")).toBeNull();
+  expect(readOwnedInput(await storage.openInputStream("missing"))).toBeNull();
   const main = filter.openFragmentStream(
     "word/document.xml",
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml",
@@ -213,9 +217,7 @@ it("exports a real package, independent native part counters, metadata and escap
     .openFragmentStream("[Content_Types].xml", "ignored")
     .writeBytes(new TextEncoder().encode("stale"));
   expect(storage.getElementNames()).toContain("word/document.xml");
-  expect(
-    new TextDecoder().decode((await storage.openInputStream("word/document.xml")) as Uint8Array),
-  ).toBe("<root/>");
+  expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBe("<root/>");
   expect(filter.addRelation(O + "officeDocument", "word/document.xml")).toBe("rId1");
   expect(filter.addRelation(O + "coreProperties", "docProps/core.xml")).toBe("rId2");
   expect(filter.addRelation(main, O + "styles", "styles.xml", false)).toBe("rId1");
@@ -240,7 +242,7 @@ it("exports a real package, independent native part counters, metadata and escap
   const input = new ZipStorage(bytes);
   expect(input.isReadOnly()).toBe(true);
   expect(input.getElementNames()).toEqual(archive.getEntryNames());
-  expect(await input.openInputStream("missing")).toBeNull();
+  expect(readOwnedInput(await input.openInputStream("missing"))).toBeNull();
   expect(
     /** Executes the actual failing operation. @returns Value or throws. */ () =>
       input.openOutputStream("a", "b"),
@@ -269,4 +271,89 @@ it("replaces an owning output stream without carrying its old relationship colle
   expect((await input.importRelations("part.xml")).getInternalTargetFromRelId("rId1")).toBe("new");
   expect((await input.importRelations("part.xml")).size()).toBe(1);
   expect(new Relations("").size()).toBe(0);
+});
+it("retains the original converter short-prefix EOF behavior for package input", /** This is CALC-363/WRITER200 propagated through actual package streams, not malformed-XML recovery. @returns Completion. */ async () => {
+  for (const xml of ["", "<a/>", "<root>"]) {
+    const filter = new XmlFilterBase(new ZipStorage(zip({ "short.xml": xml }))),
+      handler = new Recording(filter, "short.xml");
+    expect(await filter.importFragment(handler)).toBe(true);
+    expect(handler.events).toEqual(["document", "done"]);
+  }
+});
+it("imports legacy and UTF32 package XML through the actual source converter", /** The filter no longer has a separate UTF8/UTF16-only string decoder. @returns Completion. */ async () => {
+  const legacy = [
+    ...new TextEncoder().encode("<?xml version='1.0' encoding='windows-1251'?><root>"),
+    0xc6,
+    ...new TextEncoder().encode("</root>"),
+  ];
+  const utf32: number[] = [0, 0, 254, 255];
+  for (const c of "<?xml version='1.0'?><root>Ж😀</root>") {
+    const n = c.codePointAt(0) as number;
+    utf32.push((n >>> 24) & 255, (n >>> 16) & 255, (n >>> 8) & 255, n & 255);
+  }
+  for (const [bytes, expected] of [
+    [Uint8Array.from(legacy), "Ж"],
+    [Uint8Array.from(utf32), "Ж😀"],
+  ] as const) {
+    const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": bytes }))),
+      handler = new Recording(filter, "root.xml");
+    expect(await filter.importFragment(handler)).toBe(true);
+    expect(handler.events).toContain(expected);
+  }
+});
+it("returns independent native input owners for separate opens and retains old part contents after truncation", /** Actual SequenceInputStream construction shares no mutable host byte array with later output. @returns Completion. */ async () => {
+  const storage = new ZipStorage();
+  storage
+    .openOutputStream("part.xml", "application/xml")
+    .writeBytes(new TextEncoder().encode("<original/>"));
+  const first = await storage.openInputStream("part.xml"),
+    second = await storage.openInputStream("part.xml");
+  expect(first.get()).not.toBe(second.get());
+  storage
+    .openOutputStream("part.xml", "application/xml")
+    .writeBytes(new TextEncoder().encode("<new/>"));
+  expect(readOwnedXml(first)).toBe("<original/>");
+  expect(readOwnedXml(second)).toBe("<original/>");
+  expect(readOwnedXml(await storage.openInputStream("part.xml"))).toBe("<new/>");
+});
+
+it("unwinds actual UNO read exceptions from a specialized fragment stream", /** A closed native component produces the real NotConnectedException; its caught owner is destroyed once. @returns Completion. */ async () => {
+  /** Actual native stream specialization used by the original virtual fragment hook. */
+  class Closed extends FragmentHandler {
+    /** Original virtual stream hook may preprocess its actual input. @returns Owned closed stream reference. */
+    override async openFragmentStream() {
+      const input = await super.openFragmentStream();
+      (input.get() as XInputStream).closeInput();
+      return input;
+    }
+  }
+  const filter = new XmlFilterBase(new ZipStorage(zip({ "root.xml": "<document/>" }))),
+    cleanup = vi.spyOn(NotConnectedException.prototype, "dispose");
+  try {
+    expect(await filter.importFragment(new Closed(filter, "root.xml"))).toBe(false);
+    expect(cleanup).toHaveBeenCalledTimes(1);
+  } finally {
+    cleanup.mockRestore();
+  }
+});
+
+it("reads actual content-type input through the same native source path", /** Metadata accepts the package stream contract without a second decoder. @returns Completion. */ async () => {
+  const storage = new ZipStorage();
+  storage
+    .openOutputStream("part.xml", "application/xml")
+    .writeBytes(new TextEncoder().encode("<document/>"));
+  const reopened = new ZipStorage(storage.commit()),
+    input = await reopened.openInputStream("[Content_Types].xml"),
+    source = new InputSource();
+  try {
+    source.aInputStream = input;
+    const [defaults, overrides] = ReadContentTypeSequence(source);
+    expect([...defaults, ...overrides]).toContainEqual({
+      First: "xml",
+      Second: "application/xml",
+    });
+  } finally {
+    source.dispose();
+    input.dispose();
+  }
 });

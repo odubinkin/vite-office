@@ -17,14 +17,11 @@ import { OFFICE_DOCUMENT_RELATION, STRICT_OFFICE_DOCUMENT_RELATION, Relations } 
 import { RelationsFragment, getRelationsPath } from "./relationshandler";
 import { decodeToIUri } from "../../../tools/source/fsys/urlobj";
 
-/** XML decoder selects native UTF8/UTF16 BOM/signature forms before SAX delivery. @param bytes - XML bytes. @returns Decoded XML. */
-function decodeXml(bytes: Uint8Array): string {
-  const little = (bytes[0] === 0xff && bytes[1] === 0xfe) || (bytes[0] === 0x3c && bytes[1] === 0);
-  const big = (bytes[0] === 0xfe && bytes[1] === 0xff) || (bytes[0] === 0 && bytes[1] === 0x3c);
-  return new TextDecoder(little ? "utf-16le" : big ? "utf-16be" : "utf-8", { fatal: true }).decode(
-    bytes,
-  );
-}
+import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { InputSource } from "../../../offapi/com/sun/star/xml/sax/InputSource";
+import { OUString } from "../../../sal/inc/rtl/ustring";
 
 /** Native filter base owns package-scoped and per-fragment relationship collections. */
 export class XmlFilterBase {
@@ -43,32 +40,50 @@ export class XmlFilterBase {
   getNamespaceURL(namespace: number): string {
     return StaticNamespaceMap().maTransitionalNamespaceMap.get(namespace) ?? "";
   }
-  /** Borrows an exact input fragment without imposing ODF requirements. @param path - Fragment path. @returns Bytes or null. */
-  openInputStream(path: string): Promise<Uint8Array | null> {
+  /** Opens an exact input fragment without imposing ODF requirements. @param path - Fragment path. @returns Owned native input reference. */
+  openInputStream(path: string): Promise<Reference<XInputStream>> {
     return this.storage.openInputStream(path);
   }
   /** Ports the native SAX overload's false-on-missing/parse-error behavior and basename lowercase fallback. @param handler - Fragment handler. @returns Successful parse. */
   async importFragment(handler: FragmentHandler | null): Promise<boolean> {
     if (!handler || handler.getFragmentPath() === "") return false;
-    const path = handler.getFragmentPath();
+    let path = handler.getFragmentPath();
     // Binary record fragments need their own RecordParser; this XML slice does not claim XLSB support.
     if (path.endsWith(".bin")) return false;
+    let stream: Reference<XInputStream> | null = null;
+    const source = new InputSource();
     try {
-      let bytes = await handler.openFragmentStream();
-      if (bytes === null) {
+      stream = await handler.openFragmentStream();
+      if (!stream.is()) {
         const length = path.lastIndexOf("/") + 1,
           file = path.slice(length);
         const lower = file.replace(
           /[A-Z]/g,
           /** Native ASCII lower. @param c - Capital. @returns Lowercase. */ (c) => c.toLowerCase(),
         );
-        if (file !== lower) bytes = await this.openInputStream(path.slice(0, length) + lower);
+        if (file !== lower) {
+          path = path.slice(0, length) + lower;
+          const fallback = await this.openInputStream(path);
+          stream.moveAssign(fallback);
+          fallback.dispose();
+        }
       }
-      if (bytes === null) return false;
+      if (!stream.is()) return false;
+      source.aInputStream = stream;
+      const systemId = new OUString(
+        Uint16Array.from(
+          path.split(""),
+          /** Preserves original UTF16 path units. @param c - Unit. @returns Code. */ (c) =>
+            c.charCodeAt(0),
+        ),
+        path.length,
+      );
+      source.sSystemId = systemId;
+      systemId.dispose();
       const stack: { context: FragmentContext | null; tag: SaxesTagNS }[] = [];
       handler.startDocument();
       parseFastXmlStream(
-        decodeXml(bytes),
+        source,
         {
           /** Resolves one child context; a rejected subtree receives no callbacks. @param tag - Expanded tag. @param attributes - Attributes. @returns Nothing. */
           open(tag, attributes) {
@@ -94,8 +109,12 @@ export class XmlFilterBase {
       );
       handler.endDocument();
       return true;
-    } catch {
+    } catch (error) {
+      if (error instanceof Exception) error.dispose();
       return false;
+    } finally {
+      source.dispose();
+      stream?.dispose();
     }
   }
   /** Caches even missing/partially parsed native relation collections. @param path - Owning fragment. @returns Shared collection. */

@@ -1,5 +1,7 @@
 /** @fileoverview Source-backed Writer stream relationship traversal against real ZIP storage, with native duplicate ordering, strict types, external caching and URI behavior. */
-import { expect, it, vi } from "vitest";
+import { readOwnedInput, readOwnedXml } from "../../../../test/oox-input";
+import { Reference } from "../../../../cppu/inc/com/sun/star/uno/Reference";
+import { expect, it, vi, afterEach } from "vitest";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { OOXMLStreamImpl as Stream, streamTargets } from "./OOXMLStreamImpl";
@@ -10,6 +12,19 @@ import {
   WriteRelationsInfoSequence,
   type StringPair,
 } from "../../../../comphelper/source/xml/ofopxmlhelper";
+const streams: Stream[] = [];
+/** Tracks actual successfully constructed owners for native destructor cleanup. @param args - Original factory arguments. @returns Actual stream. */
+async function createStream(...args: Parameters<typeof Stream.createStream>): Promise<Stream> {
+  const stream = await Stream.createStream(...args);
+  streams.push(stream);
+  return stream;
+}
+afterEach(
+  /** Destroys every actual wrapper once after each fixture. @returns Nothing. */ () => {
+    for (const stream of streams.reverse()) stream.dispose();
+    streams.length = 0;
+  },
+);
 const transitional = "http://schemas.openxmlformats.org/officeDocument/2006/relationships/";
 const strict = "http://purl.oclc.org/ooxml/officeDocument/relationships/";
 
@@ -53,10 +68,12 @@ it("preserves Writer ordered type matching, first internal match, last duplicate
     relation("relative", "unknown", "../docProps/core.xml"),
   ]);
   put(storage, "word/styles.xml", "<styles/>");
-  const doc = await Stream.createStream(new ZipStorage(storage.commit()));
+  const doc = await createStream(new ZipStorage(storage.commit()));
   expect(doc.getTarget()).toBe("word/document.xml");
-  expect(doc.getDocumentXml()).toBe("<document/>");
-  expect(doc.getDocumentStream()).toBeInstanceOf(Uint8Array);
+  expect(readOwnedXml(doc.getDocumentStream())).toBe("<document/>");
+  const reference = doc.getDocumentStream();
+  expect(reference).toBeInstanceOf(Reference);
+  reference.dispose();
   expect(doc.getFastTokenHandler()).toBe(doc.getFastTokenHandler());
   expect(doc.getFastParser()).toBe(doc.getFastParser());
   expect(doc.getFastTokenHandler().getTokenDirect("val")).toBeGreaterThanOrEqual(0);
@@ -65,13 +82,13 @@ it("preserves Writer ordered type matching, first internal match, last duplicate
   expect(doc.getTargetForId("path")).toBe("absolute.xml");
   expect(doc.getTargetForId("relative")).toBe("docProps/core.xml");
   expect(doc.getTargetForId("missing")).toBe("");
-  const styles = await Stream.createStream(doc, T.STYLES);
+  const styles = await createStream(doc, T.STYLES);
   expect(styles.getTarget()).toBe("word/styles.xml");
   expect(styles.getFastTokenHandler()).not.toBe(doc.getFastTokenHandler());
   expect(styles.getFastParser()).not.toBe(doc.getFastParser());
-  expect(styles.getDocumentXml()).toBe("<styles/>");
-  expect((await Stream.createStream(doc, "10")).getTarget()).toBe("word/styles.xml");
-  expect((await Stream.createStream(doc, T.NUMBERING)).getDocumentStream()).toBeNull();
+  expect(readOwnedXml(styles.getDocumentStream())).toBe("<styles/>");
+  expect((await createStream(doc, "10")).getTarget()).toBe("word/styles.xml");
+  expect(readOwnedInput((await createStream(doc, T.NUMBERING)).getDocumentStream())).toBeNull();
 });
 
 it.each([
@@ -102,10 +119,10 @@ it.each([
       const storage = packageOf([relation("part", prefix + suffix, "part.xml")]);
       put(storage, "word/part.xml", "<part/>");
       streamTargets.customTarget = "part.xml";
-      const doc = await Stream.createStream(storage),
-        part = await Stream.createStream(doc, type);
+      const doc = await createStream(storage),
+        part = await createStream(doc, type);
       expect(part.getTarget()).toBe("word/part.xml");
-      expect(part.getDocumentXml()).toBe("<part/>");
+      expect(readOwnedXml(part.getDocumentStream())).toBe("<part/>");
       if (type === T.EMBEDDINGS) expect(streamTargets.embeddingsTarget).toBe("word/part.xml");
     }
     streamTargets.customTarget = "";
@@ -147,36 +164,34 @@ it("retains custom target filtering, extension relationship types, OLE package f
       ),
     ]),
   );
-  const doc = await Stream.createStream(storage);
+  const doc = await createStream(storage);
   streamTargets.customTarget = "wanted.xml";
-  expect((await Stream.createStream(doc, T.CUSTOMXML)).getTarget()).toBe("word/wanted.xml");
-  expect((await Stream.createStream(doc, T.COMMENTS_EXTENDED)).getTarget()).toBe(
-    "word/extension.xml",
-  );
-  expect((await Stream.createStream(doc, T.VBADATA)).getTarget()).toBe("word/vba/data.xml");
-  expect((await Stream.createStream(doc, T.EMBEDDINGS)).getTarget()).toBe("word/ole.bin");
+  expect((await createStream(doc, T.CUSTOMXML)).getTarget()).toBe("word/wanted.xml");
+  expect((await createStream(doc, T.COMMENTS_EXTENDED)).getTarget()).toBe("word/extension.xml");
+  expect((await createStream(doc, T.VBADATA)).getTarget()).toBe("word/vba/data.xml");
+  expect((await createStream(doc, T.EMBEDDINGS)).getTarget()).toBe("word/ole.bin");
   streamTargets.customTarget = "";
 });
 
 it("keeps absent optional parts distinct from invalid targets and missing parent stream access", /** Checks actual native storage failure boundaries. @returns Nothing. */ async () => {
-  const empty = await Stream.createStream(new ZipStorage());
+  const empty = await createStream(new ZipStorage());
   expect(empty.getTarget()).toBe("");
-  expect(empty.getDocumentStream()).toBeNull();
-  expect(empty.getDocumentXml()).toBeNull();
-  await expect(Stream.createStream(empty, T.STYLES)).rejects.toThrow("parent document stream");
+  expect(readOwnedInput(empty.getDocumentStream())).toBeNull();
+  expect(readOwnedXml(empty.getDocumentStream())).toBeNull();
+  await expect(createStream(empty, T.STYLES)).rejects.toThrow("parent document stream");
   const storage = packageOf([relation("missing", transitional + "styles", "missing.xml")]);
-  const doc = await Stream.createStream(storage);
-  await expect(Stream.createStream(doc, T.STYLES)).rejects.toThrow("target stream is missing");
+  const doc = await createStream(storage);
+  await expect(createStream(doc, T.STYLES)).rejects.toThrow("target stream is missing");
   const externalStorage = packageOf([
     relation("external", transitional + "styles", "https://external.test/styles.xml", "External"),
   ]);
-  const externalDoc = await Stream.createStream(externalStorage);
-  await expect(Stream.createStream(externalDoc, T.STYLES)).rejects.toThrow(
+  const externalDoc = await createStream(externalStorage);
+  await expect(createStream(externalDoc, T.STYLES)).rejects.toThrow(
     "https://external.test/styles.xml",
   );
   const failure = vi.spyOn(UriReferenceFactory.prototype, "makeAbsolute").mockReturnValueOnce(null);
   try {
-    expect((await Stream.createStream(storage)).getDocumentStream()).toBeNull();
+    expect(readOwnedInput((await createStream(storage)).getDocumentStream())).toBeNull();
   } finally {
     failure.mockRestore();
   }
@@ -205,8 +220,8 @@ it("decodes UTF16 metadata and document parts through the actual input stream", 
         view.setUint16(offset + i * 2, text.charCodeAt(i), little);
       storage.openOutputStream(path, "application/xml").writeBytes(bytes);
     }
-    const doc = await Stream.createStream(storage);
-    expect(doc.getDocumentXml()).toBe("<doc>日本😀</doc>");
+    const doc = await createStream(storage);
+    expect(readOwnedXml(doc.getDocumentStream())).toBe("<doc>日本😀</doc>");
   }
 });
 
@@ -218,10 +233,32 @@ it("opens pinned native strict and transitional DOCX corpus streams", /** Uses a
   for (const name of ["strict.docx", "tdf82065_Ind_start_strict.docx", "hello.docx"]) {
     const path = resolve(root, name);
     if (!existsSync(path)) continue;
-    const doc = await Stream.createStream(new ZipStorage(new Uint8Array(readFileSync(path))));
+    const doc = await createStream(new ZipStorage(new Uint8Array(readFileSync(path))));
     expect(doc.getTarget()).toBe("word/document.xml");
-    expect(doc.getDocumentXml()).toContain("document");
-    const styles = await Stream.createStream(doc, T.STYLES);
-    expect(styles.getDocumentXml()).toContain("styles");
+    expect(readOwnedXml(doc.getDocumentStream())).toContain("document");
+    const styles = await createStream(doc, T.STYLES);
+    expect(readOwnedXml(styles.getDocumentStream())).toContain("styles");
   }
+});
+it("returns value-owned references sharing the original document input position", /** Releasing one returned Reference does not destroy another retained input owner. @returns Completion. */ async () => {
+  const stream = await createStream(packageOf([])),
+    first = stream.getDocumentStream(),
+    second = stream.getDocumentStream();
+  expect(first.get()).toBe(second.get());
+  first.dispose();
+  expect(readOwnedXml(second)).toBe("<document/>");
+  expect(readOwnedXml(stream.getDocumentStream())).toBe("");
+});
+it("releases initialized input ownership when a relationship stream fails to parse", /** Uses actual malformed side XML and a subsequent independent open, without injected component factories. @returns Completion. */ async () => {
+  const storage = packageOf([]);
+  put(storage, "word/_rels/document.xml.rels", "<Relationships><broken>");
+  await expect(createStream(storage)).rejects.toThrow();
+  expect(readOwnedXml(await storage.openInputStream("word/document.xml"))).toBe("<document/>");
+});
+
+it("keeps a returned input alive after its Writer wrapper is destroyed", /** Native return-by-value Reference ownership outlives the releasing caller wrapper. @returns Completion. */ async () => {
+  const stream = await Stream.createStream(packageOf([])),
+    input = stream.getDocumentStream();
+  stream.dispose();
+  expect(readOwnedXml(input)).toBe("<document/>");
 });

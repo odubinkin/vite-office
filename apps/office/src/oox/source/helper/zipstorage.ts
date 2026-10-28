@@ -8,6 +8,12 @@ import { ZipOutputStream } from "../../../package/source/zipapi/ZipOutputStream"
 import { WriteContentTypes } from "../../../package/source/zippackage/ZipPackage";
 import { createManifestProperty } from "../../../package/source/manifest/ManifestWriter";
 
+import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
+import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
+import { SequenceInputStream } from "../../../comphelper/source/streaming/seqstream";
+const Bytes = Sequence.specialize<number>("sal_Int8", 1);
+
 /** Bounded XOutputStream binding; each stream owns the native RelId counter. */
 export class ZipFragmentStream {
   private readonly chunks: Uint8Array[] = [];
@@ -67,11 +73,23 @@ export class ZipStorage {
   getElementNames(): readonly string[] {
     return this.input?.getEntryNames() ?? [...this.streams.keys()];
   }
-  /** Opens one exact input stream, returning null if absent. @param path - Storage path. @returns Copied bytes or null. */
-  async openInputStream(path: string): Promise<Uint8Array | null> {
-    if (this.input)
-      return this.input.getEntryNames().includes(path) ? this.input.readEntry(path) : null;
-    return this.streams.get(path)?.getBytes() ?? null;
+  /** Opens one exact native input reference; absent parts return an empty Reference. The existing ZIP byte binding initializes actual signed Sequence cells at this package boundary. @param path - Storage path. @returns Owned input reference. */
+  async openInputStream(path: string): Promise<Reference<XInputStream>> {
+    const bytes = this.input
+      ? this.input.getEntryNames().includes(path)
+        ? await this.input.readEntry(path)
+        : null
+      : (this.streams.get(path)?.getBytes() ?? null);
+    if (bytes === null) return new Reference<XInputStream>();
+    const data = new Bytes(bytes.length);
+    try {
+      const pointer = data.getArray() as SequenceElements;
+      for (let i = 0; i < bytes.length; ++i)
+        (pointer.get(i) as [number])[0] = ((bytes[i] as number) << 24) >> 24;
+      return new Reference<XInputStream>(new SequenceInputStream(data));
+    } finally {
+      data.dispose();
+    }
   }
   /** Opens/truncates a writable stream, retaining the owning stream's relationship counter. @param path - Safe archive path. @param mediaType - MIME property. @returns Stream. */
   openOutputStream(path: string, mediaType: string): ZipFragmentStream {

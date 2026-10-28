@@ -1,4 +1,5 @@
 /** @fileoverview Native serializer byte escaping, cache boundaries and mark ordering over actual ZIP fragment streams and native OOXML token IDs. */
+import { readOwnedInput } from "../../../test/oox-input";
 import { expect, it } from "vitest";
 import { FastSerializerHelper, FSNS, MergeMarks as M } from "../../inc/fshelper";
 import { FastSaxSerializer, TokenValue, invalidChar } from "./fastserializer";
@@ -253,16 +254,18 @@ it("opens original OOXML XML/VML/no-header serializers through XmlFilterBase and
     fragment.singleElement(token("p"));
     fragment.endDocument();
     const bytes = await storage.openInputStream(name);
-    expect(bytes).not.toBeNull();
-    expect(decoder.decode(bytes ?? undefined).startsWith("<?xml")).toBe(expected);
+    expect(bytes.is()).toBe(true);
+    expect(decoder.decode(readOwnedInput(bytes) ?? undefined).startsWith("<?xml")).toBe(expected);
   }
   const reopened = new ZipStorage(filter.commitStorage()),
     xml = await reopened.openInputStream("word/document.xml"),
     contentTypes = await reopened.openInputStream("[Content_Types].xml");
-  expect(decoder.decode(xml ?? undefined)).toContain(
+  expect(decoder.decode(readOwnedInput(xml) ?? undefined)).toContain(
     '<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"></w:document>',
   );
-  expect(decoder.decode(contentTypes ?? undefined)).toContain("wordprocessingml.document.main+xml");
+  expect(decoder.decode(readOwnedInput(contentTypes) ?? undefined)).toContain(
+    "wordprocessingml.document.main+xml",
+  );
 });
 
 it("retains native invalidChar XML10 admission for whitespace in diagnostic and escaped byte paths", /** The original file-local predicate is tested directly as well as through output. @returns Nothing. */ () => {

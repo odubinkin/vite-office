@@ -4447,6 +4447,8 @@ Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` normalizes 
 
 Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` retains initial chunks until isEncodingRecognizable succeeds. If the next read returns zero, it enters the nonempty-prefix branch but does not concatenate seqStart back into seq because that operation is inside the nRead guard. It then marks started and returns the empty latest read. A four-byte `<a/>` input is therefore lost, as is an unterminated XML declaration. Preserve this source flow; actual fragmented SequenceInputStream callers reproduce it. See WRITER200. Full parser/filter/document acceptance is not certified by these byte-owner tests.
 
+Package-input follow-up: actual OOXML ZIP parts now pass through this converter. Empty input and short `<a/>`/`<root>` fragments consequently finish document callbacks without a parsed root and can return successful optional-fragment import. Tests preserve this behavior explicitly. Cancellation and malformed-input tests use recognized inputs to exercise their intended error paths independently of prefix loss.
+
 ### CALC-364 — XML encoding quote choice treats an absent single quote as earlier
 
 Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::scanForEncoding` and removeEncoding select single quotes when `indexOf(singleQuote) < nStart`, even when that index is -1. A double-quoted encoding declaration with no later single quote therefore is neither captured nor removed; adding a later single quote can select the double-quoted branch instead. The first-line limit and exact space-plus-encoding match are also retained. Source algorithms remain unchanged; see WRITER201 and the actual OString/Sequence converter tests.

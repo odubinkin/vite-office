@@ -1,11 +1,13 @@
 /** @fileoverview Ports consumed FragmentHandler callbacks and fragment/relationship ownership; expanded XML names replace generated C++ token integers at the SAX binding. */
 import type { SaxesAttributeNS, SaxesTagNS } from "saxes";
+import type { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
+import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
 import type { Relations } from "./relations";
 
 /** Consumed filter contract avoids a runtime import cycle between filter and fragment handlers. */
 export interface FragmentFilter {
   importRelations(path: string): Promise<Relations>;
-  openInputStream(path: string): Promise<Uint8Array | null>;
+  openInputStream(path: string): Promise<Reference<XInputStream>>;
 }
 
 /** Native XFastContextHandler callback subset consumed by XML fragments. */
@@ -35,8 +37,8 @@ export class FragmentHandler implements FragmentContext {
   async getRelations(): Promise<Relations> {
     return this.relations ?? this.filter.importRelations(this.path);
   }
-  /** Opens this fragment through its filter. @returns Bytes or null. */
-  openFragmentStream(): Promise<Uint8Array | null> {
+  /** Opens this fragment through its filter. @returns Owned native input reference. */
+  openFragmentStream(): Promise<Reference<XInputStream>> {
     return this.filter.openInputStream(this.path);
   }
   /** Original inert document callback. @returns Nothing. */ startDocument(): void {}

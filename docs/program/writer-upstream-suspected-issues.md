@@ -1928,6 +1928,8 @@ Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` checks exac
 
 Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` concatenates buffered prefix bytes only when the latest read is nonzero. EOF before recognition therefore loses accumulated input, including a four-byte `<a/>`. Preserve this flow, as exercised by actual fragmented SequenceInputStream callers; see CALC-363. Complete SAX parser and DOCX model/filter/UI acceptance remain pending.
 
+Package-input follow-up: actual OOXML ZIP parts now pass through this converter. Empty input and short `<a/>`/`<root>` fragments consequently finish document callbacks without a parsed root and can return successful optional-fragment import. Tests preserve this behavior explicitly. Cancellation and malformed-input tests use recognized inputs to exercise their intended error paths independently of prefix loss.
+
 ### WRITER201 — Shared XML declaration quote selection prefers an absent single quote
 
 Pinned XMLFile2UTFConverter scanForEncoding/removeEncoding compare the single-quote index directly with the double-quote index, allowing -1 to win. A double-quoted encoding with no later single quote is not captured or removed. Preserve exact quote ordering, lexical matching and first-line scanning; see CALC-364. Tests use actual OString values and source byte owners.

@@ -21,3 +21,11 @@ it("admits the original oox FastParser InputSource SDK edge without reverse or b
     /presentation package/u,
   );
 });
+
+it("admits original OFOPXMLHelper InputSource ownership without reverse or presentation edges", /** The original comphelper helper constructs SAX InputSource. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("comphelper", "offapi")).toBe(false);
+  expect(isForbiddenModuleEdge("offapi", "comphelper")).toBe(true);
+  expect(
+    getRuntimeOwnershipViolation("comphelper/source/xml/ofopxmlhelper.ts", "", "react"),
+  ).toMatch(/presentation package/u);
+});

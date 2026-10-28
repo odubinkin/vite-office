@@ -1,4 +1,5 @@
 /** @fileoverview XLSX cached-result and XML value primitives through real Calc cells, SAL values, fragment serializers and committed ZIP parts. Whole workbook/UI export remains separate. */
+import { readOwnedXml } from "../../../../test/oox-input";
 import { assert, expect, it } from "vitest";
 import { XclXmlUtils as X } from "./xestream";
 import { XclTools } from "./xltools";
@@ -272,7 +273,7 @@ it("writes real cached values to a committed worksheet part and reopens XML", /*
     const storage = new ZipStorage(filter.commitStorage()),
       bytes = await storage.openInputStream(text(name));
     assert(bytes);
-    expect(new TextDecoder().decode(bytes)).toContain('<c r="A1" t="n"><f>3.5*2</f><v>7</v></c>');
+    expect(readOwnedXml(bytes)).toContain('<c r="A1" t="n"><f>3.5*2</f><v>7</v></c>');
     const reader = new XmlFilterBase(storage);
     expect(await reader.importFragment(new FragmentHandler(reader, text(name)))).toBe(true);
   } finally {
