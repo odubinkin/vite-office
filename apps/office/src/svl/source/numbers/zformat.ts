@@ -1,4 +1,4 @@
-/** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text output; remaining output families are unported. */
+/** @fileoverview Native compiled-format constructor and subformat ownership, with represented General/Boolean/Text and ungrouped integer output; remaining output families are unported. */
 import { Construct } from "./zformat.construct";
 import type { ImpSvNumberInputScan } from "./zforfind";
 import type { NativeNumberWrapper } from "../../../unotools/source/i18n/nativenumberwrapper";
@@ -722,6 +722,25 @@ export class SvNumberformat {
       output.assign(value ? scanner.GetTrueString() : scanner.GetFalseString());
       return false;
     }
+    const section = this.NumFor[0] as ImpSvNumFor,
+      info = section.Info();
+    // Original nonstandard NUMBER dispatch, restricted to the represented ungrouped integer digit production.
+    if (
+      this.GetMaskedType() === SvNumFormatType.NUMBER &&
+      this.eOp1 === 0 &&
+      this.eOp2 === 0 &&
+      section.GetCount() === 1 &&
+      info.nTypeArray[0] === NfSymbolType.DIGIT &&
+      info.nCntPost === 0 &&
+      info.nThousand === 0 &&
+      !info.bThousand &&
+      section.GetNatNum().GetNatNum() === 0 &&
+      Number.isFinite(value)
+    ) {
+      color[0] = section.GetColor();
+      this.ImpGetNumberOutput(value, section, output);
+      return false;
+    }
     if (
       this.eType !== SvNumFormatType.TEXT &&
       (!this.bStandard || this.eType !== SvNumFormatType.NUMBER)
@@ -738,6 +757,40 @@ export class SvNumberformat {
       result.dispose();
     }
     return false;
+  }
+  /** Original ImpGetNumberOutput/ImpDecimalFill/ImpNumberFillWithThousands digit-only integer path. Caller admits one ungrouped digit token, no conditions, no decimals/scaling and NatNum0. Native ROUND correction precedes F conversion; the original backwards placeholder fill and rounded-zero sign suppression are retained. Other output productions remain unported. @param value - Finite native number. @param section - Actual compiled subformat. @param outputString - Actual owned output. @returns Nothing. */
+  private ImpGetNumberOutput(value: number, section: ImpSvNumFor, outputString: OUString): void {
+    let sign = value < 0;
+    value = round(Math.abs(value), 0);
+    const buffer = new OUStringBuffer();
+    try {
+      if (value !== 0) {
+        const digits = output(value, Format.rtl_math_StringFormat_F, 0, 46);
+        try {
+          buffer.append(digits);
+        } finally {
+          digits.dispose();
+        }
+        buffer.stripStart(48);
+      }
+      if (buffer.isEmpty()) sign = false;
+      let position = buffer.getLength();
+      const pattern = section.Info().sStrArray[0] as OUString;
+      for (let index = pattern.getLength() - 1; index >= 0; --index) {
+        if (position > 0) --position;
+        else if (pattern.getStr()[index] === 48) buffer.insertChar(0, 48);
+        else if (pattern.getStr()[index] === 63) buffer.insertChar(0, 0x2007);
+      }
+      if (sign) buffer.insertChar(0, 45);
+      const result = buffer.makeStringAndClear();
+      try {
+        outputString.assign(result);
+      } finally {
+        result.dispose();
+      }
+    } finally {
+      buffer.dispose();
+    }
   }
   /** Original compiled entry member destruction. @returns Nothing. */
   dispose(): void {
