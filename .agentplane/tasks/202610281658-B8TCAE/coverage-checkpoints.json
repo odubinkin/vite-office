@@ -939,5 +939,18 @@
     "strictCoveragePassed": false,
     "productionSourcesChanged": false,
     "coverageExceptionsApplied": false
+  },
+  "icuYearMonthAndActualDate": {
+    "nativeObservations": 23309,
+    "additionalNativeObservations": 417,
+    "nativeDifferentialPassed": true,
+    "tests": 18,
+    "testFiles": 1,
+    "assertionsPassed": true,
+    "report": "apps/office/coverage/integration-icu-starts-limits",
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "strictCoveragePassed": false,
+    "scope": "Existing protected Islamic year/month hooks and bounded DATE actual-maximum fragment over actual owners. Native allocation-failure clone-null arm is not forced."
   }
 }

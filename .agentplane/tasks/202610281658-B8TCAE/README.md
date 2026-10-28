@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 32
+revision: 33
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:01:19.845Z"
+doc_updated_at: "2026-10-28T22:04:48.577Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -143,6 +143,8 @@ sections:
     - Observation: Seven additional CSS source-contract tests pass on actual Writer and EditEngine pools. Scalar property copy/merge/Clear, all three owned maps and independent margin sides are verified. Real EditEngine direction registration closes the previously untested cleanup arm without replacing a mapper or owner. Focused coverage is189/190 statements77/78 branch arms30/30 functions168/168 lines; only the protected inactive-context assertion remains. No coverage exception or runtime change.
 
     - Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.
+
+    - Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.
 id_source: "generated"
 ---
 ## Summary
@@ -266,3 +268,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Seven additional CSS source-contract tests pass on actual Writer and EditEngine pools. Scalar property copy/merge/Clear, all three owned maps and independent margin sides are verified. Real EditEngine direction registration closes the previously untested cleanup arm without replacing a mapper or owner. Focused coverage is189/190 statements77/78 branch arms30/30 functions168/168 lines; only the protected inactive-context assertion remains. No coverage exception or runtime change.
 
 - Observation: Registered portable replay of1580 original ICU calendar-type native observations. Native differential and Vitest replay pass, closing both missing type-query functions; focused owner has100% functions and lines,67/69 statements21/26 branch arms. No native Calendar creation or ABI parity claim. The probe now accepts the existing native-build environment variable and writes exclusively compiled native rows with source/archive/witness hashes.
+
+- Observation: Expanded original native calendar witness passes23309 complete rows (+417): original Islamic protected year/month starts, checked overflow and actual-maximum DATE on all18 real calendar classes. Portable18-case replay passes; runtime source unchanged. Current compatible diagnostic union has117851/119458 statements72533/74581 branch arms18394/18420 functions107094/108118 lines;235 owners still incomplete. No clone failure/private field was fabricated and no exception applied.

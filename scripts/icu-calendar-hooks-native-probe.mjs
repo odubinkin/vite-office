@@ -43,7 +43,8 @@ writeFileSync(
   `${build}/calendar-hooks-witness.cc`,
   headers +
     String.raw`
-template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
+#include <type_traits>
+template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='A')std::cout<<this->getActualMaximum(UCAL_DATE,s);else if(kind=='I'||kind=='Q'){if constexpr(std::is_base_of<IslamicCalendar,C>::value){if(kind=='I')std::cout<<this->yearStart(a,s);else std::cout<<this->monthStart(a,b,s);}else std::abort();}else if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
 template<class C>void run(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;Witness<C>c(Locale("en_US"),s);c.observe(kind,a,b,use,incoming,count);}
 int main(int argc,char**argv){u_setDataDirectory(argv[1]);UErrorCode s=U_ZERO_ERROR;uloc_setDefault("en_US",&s);TimeZone::adoptDefault(new SimpleTimeZone(0,UnicodeString(u"UTC")));char kind;int type,a,b,use,incoming,count;while(std::cin>>kind>>type>>a>>b>>use>>incoming>>count){switch(type){
 ` +
@@ -143,6 +144,28 @@ for (let type = 0; type < classes.length; ++type) {
       for (const month of [0, 4, 5])
         for (const status of [0, -128, 1]) add("D", type, year, month, 1, status, [[0, era]]);
 }
+// Actual-maximum DATE uses the original public API on valid field-built owners.
+for (let type = 0; type < classes.length; ++type)
+  for (const month of [0, 1, 6, 11])
+    for (const status of [0, 1])
+      add("A", type, 0, 0, 1, status, [
+        [19, 2024],
+        [2, month],
+        [5, 30],
+      ]);
+// Original Islamic protected year/month starts are valid derived-caller contracts.
+for (const type of [11, 12, 13, 14, 15])
+  for (const year of [1, 1445, 2024])
+    for (const status of [0, -128, 1]) {
+      add("I", type, year, 0, 1, status);
+      for (const month of [-1, 0, 1, 11, 12]) add("Q", type, year, month, 1, status);
+    }
+for (const [year, month] of [
+  [-2147483648, 0],
+  [2147483647, 0],
+  [178956971, 20],
+])
+  add("Q", 11, year, month, 1, 0);
 // Japanese era validation and checked year addition are original protected hook responsibilities.
 // These month/year pairs fail original checked normalization before astronomical work.
 for (const type of [7, 8, 11, 12, 13, 14, 15])

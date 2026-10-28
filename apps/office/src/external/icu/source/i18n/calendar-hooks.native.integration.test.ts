@@ -44,7 +44,10 @@ it.each(
     expect(rows.length).toBe(
       (type === 10 ? 1213 : [7, 8, 11, 12, 13, 14, 15].includes(type) ? 1207 : 1203) +
         66 +
-        (type === 9 ? 12 : 0),
+        (type === 9 ? 12 : 0) +
+        8 +
+        ([11, 12, 13, 14, 15].includes(type) ? 54 : 0) +
+        (type === 11 ? 3 : 0),
     );
     for (const [query, output] of rows)
       expect(observeCalendarHook(query as string), query).toBe(output);

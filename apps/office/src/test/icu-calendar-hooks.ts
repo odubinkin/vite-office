@@ -1,4 +1,6 @@
 /** @fileoverview Original protected Calendar test-caller protocol; invokes actual owners without replacing methods or manufacturing private state. */
+import { getActualMaximumDate } from "../external/icu/source/i18n/calendar.limits";
+import { IslamicCalendar } from "../external/icu/source/i18n/islamcal";
 import { standardCalendarClasses } from "./icu-calendar-owners";
 import { Locale } from "../external/icu/source/common/locid";
 import { SimpleTimeZone } from "../external/icu/source/i18n/simpletz";
@@ -27,7 +29,11 @@ export function observeCalendarHook(query: string): string {
     return snapshot.join(" ");
   }
   let result: number | bigint;
-  if (kind === "M")
+  if (kind === "A") result = getActualMaximumDate.call(value, status);
+  else if (kind === "I") result = (value as IslamicCalendar)["yearStart"](Number(a), status);
+  else if (kind === "Q")
+    result = (value as IslamicCalendar)["monthStart"](Number(a), Number(b), status);
+  else if (kind === "M")
     result = value["handleComputeMonthStart"](
       Number(a),
       Number(b),
