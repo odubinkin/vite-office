@@ -120,7 +120,10 @@ const allowedEdges = new Map([
   // Native attributelist.cxx/Library_oox.mk consume SAL Unicode conversion and buffers.
   // Original attributelist.cxx includes o3tl/string_view.hxx for numeric attribute conversions.
   // Original binary*stream headers include UNO Reference/Sequence and io XInputStream/XOutputStream/XSeekable.
-  ["oox", new Set(["comphelper", "cppu", "o3tl", "package", "sal", "sax", "tools", "udkapi"])],
+  [
+    "oox",
+    new Set(["comphelper", "cppu", "o3tl", "offapi", "package", "sal", "sax", "tools", "udkapi"]),
+  ],
   // Original ManifestExport includes SAL,PropertyValue and comphelper::AttributeList;ManifestWriter consumes SAX Writer (Library_package2).
   ["package", new Set(["comphelper", "sal", "sax", "udkapi"])],
   ["sal", new Set(["o3tl"])],

@@ -1,0 +1,38 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/oox/source/core/fastparser.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "oox-fast-parser",
+    "capabilityIds": [
+      "CAP-25ba1973-71f6-456d-9164-48f1704f3a61"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/oox/source/core/fastparser.ts",
+        "apps/office/src/oox/source/core/fastparser.test.ts",
+        "vendor/libreoffice-reference/oox/source/core/fastparser.cxx"
+      ],
+      "justification": "Original FastParser wraps the actual existing SAX parser/token owner, transitional/strict namespace maps, genuine InputSource and Reference stream owners. InputStreamCloseGuard retains the original input before callbacks; default false preserves open streams, explicit true closes during success/unwind, catches and destroys only actual UNO Exception values and releases its retained Reference afterwards. Input/name forwarding retains the original false default and system ID. Complete native UNO handler/token services, genuine StorageBase overload and package migration remain pending; no fake model/storage/query/service provider is introduced. Native unreachable null-parser guards, ABI/threading/constructor-failure unwind and native termination semantics for unrelated host errors remain unverified. Complete DOCX/XLSX filter/model/worker/UI integration remains incomplete.",
+      "knownViolations": [],
+      "localSymbols": [
+        "FastParser",
+        "InputStreamCloseGuard"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "oox/source/core/fastparser.cxx",
+      "upstreamSymbols": [
+        "FastParser::parseStream",
+        "FastParser::registerNamespace",
+        "InputStreamCloseGuard::~InputStreamCloseGuard"
+      ]
+    }
+  }
+}

@@ -14,3 +14,10 @@ it("admits Library_sax cppuhelper linkage without reverse or browser edges", /**
     );
   }
 });
+it("admits the original oox FastParser InputSource SDK edge without reverse or browser dependencies", /** Native fastparser.hxx and fastparser.cxx consume SAX SDK InputSource. @returns Nothing. */ () => {
+  expect(isForbiddenModuleEdge("oox", "offapi")).toBe(false);
+  expect(isForbiddenModuleEdge("offapi", "oox")).toBe(true);
+  expect(getRuntimeOwnershipViolation("oox/source/core/fastparser.ts", "", "react")).toMatch(
+    /presentation package/u,
+  );
+});

@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/source/core/fastparser.ts",
+    "status": "mapped",
+    "upstreamPath": "oox/source/core/fastparser.cxx",
+    "localSymbols": [
+      "FastParser",
+      "InputStreamCloseGuard"
+    ],
+    "upstreamSymbols": [
+      "FastParser::parseStream",
+      "FastParser::registerNamespace",
+      "InputStreamCloseGuard::~InputStreamCloseGuard"
+    ],
+    "preservedResponsibilities": [
+      "Original FastParser wraps the actual existing SAX parser/token owner, transitional/strict namespace maps, genuine InputSource and Reference stream owners. InputStreamCloseGuard retains the original input before callbacks; default false preserves open streams, explicit true closes during success/unwind, catches and destroys only actual UNO Exception values and releases its retained Reference afterwards. Input/name forwarding retains the original false default and system ID. Complete native UNO handler/token services, genuine StorageBase overload and package migration remain pending; no fake model/storage/query/service provider is introduced. Native unreachable null-parser guards, ABI/threading/constructor-failure unwind and native termination semantics for unrelated host errors remain unverified. Complete DOCX/XLSX filter/model/worker/UI integration remains incomplete."
+    ],
+    "omittedResponsibilities": [
+      "Genuine StorageBase overload, complete UNO handler components, native null-parser/ABI/thread/constructor unwind and full DOCX/XLSX package/model/filter/UI remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/source/core/fastparser.ts",
+          "marker": "FastParser"
+        },
+        {
+          "path": "apps/office/src/oox/source/core/fastparser.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/oox/source/core/fastparser.cxx",
+          "marker": "FastParser::parseStream"
+        },
+        {
+          "path": "vendor/libreoffice-reference/include/oox/core/fastparser.hxx",
+          "marker": "bCloseStream = false"
+        }
+      ]
+    },
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original FastParser wraps the actual existing SAX parser/token owner, transitional/strict namespace maps, genuine InputSource and Reference stream owners. InputStreamCloseGuard retains the original input before callbacks; default false preserves open streams, explicit true closes during success/unwind, catches and destroys only actual UNO Exception values and releases its retained Reference afterwards. Input/name forwarding retains the original false default and system ID. Complete native UNO handler/token services, genuine StorageBase overload and package migration remain pending; no fake model/storage/query/service provider is introduced. Native unreachable null-parser guards, ABI/threading/constructor-failure unwind and native termination semantics for unrelated host errors remain unverified. Complete DOCX/XLSX filter/model/worker/UI integration remains incomplete."
+    }
+  }
+}
