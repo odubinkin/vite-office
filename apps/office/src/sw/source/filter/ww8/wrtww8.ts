@@ -6,6 +6,8 @@ import { wwFont, wwFontHelper } from "./wrtw8sty";
 import {
   EnsureUsedNumberingTable,
   GetNumberingId,
+  DuplicateNumRuleImpl,
+  DuplicateNumRule,
   GetNumberingLevelBulletStringAndFont,
   SubstituteBullet,
 } from "./wrtw8num";
@@ -19,6 +21,7 @@ export class MSWordExportBase {
   readonly m_aFontHelper = new wwFontHelper();
   public m_pUsedNumTable: SwNumRule[] | undefined;
   public m_bSubstituteBullets = true;
+  public m_nUniqueList = 0;
   protected readonly m_nCurStart: number;
   protected readonly m_nCurEnd: number;
   /** Original consumed constructor stores the real document and selection owners. @param m_rDoc - Actual document. @param m_pCurPam - Actual current range base binding. @param m_pOrigPam - Actual original range. @returns Export context. */
@@ -29,6 +32,22 @@ export class MSWordExportBase {
   ) {
     this.m_nCurStart = m_pCurPam.GetPoint().GetNodeIndex();
     this.m_nCurEnd = m_pCurPam.GetMark().GetNodeIndex();
+  }
+  /** Logical native destructor discards borrowed document entries before destroying the temporary owned tail. @returns Nothing. */
+  Dispose(): void {
+    if (this.m_pUsedNumTable !== undefined) {
+      this.m_pUsedNumTable.splice(0, this.m_pUsedNumTable.length - this.m_nUniqueList);
+      for (const rule of this.m_pUsedNumTable) rule.Dispose();
+      this.m_pUsedNumTable = undefined;
+    }
+  }
+  /** Native temporary-rule copy, kept outside the document table. @param rule - Original rule. @returns Export-owned rule. */
+  DuplicateNumRuleImpl(rule: SwNumRule): SwNumRule {
+    return DuplicateNumRuleImpl(this, rule);
+  }
+  /** Native restart copy changes only the requested level's start. @param rule - Original rule. @param level - Writer level before Word clamping. @param start - Unsigned16 restart. @returns Zero-based table ID. */
+  DuplicateNumRule(rule: SwNumRule, level: number, start: number): number {
+    return DuplicateNumRule(this, rule, level, start);
   }
   /** Original lazy numbering-table owner. @returns Nothing. */
   EnsureUsedNumberingTable(): void {

@@ -114,9 +114,11 @@ export class RtfExport extends MSWordExportBase {
     const range = new SwPaM(point, mark);
     point.Dispose();
     mark.Dispose();
+    const exporter = new RtfExport(document, range, range);
     try {
-      return new RtfExport(document, range, range).ExportDocument();
+      return exporter.ExportDocument();
     } finally {
+      exporter.Dispose();
       range.Dispose();
     }
   }

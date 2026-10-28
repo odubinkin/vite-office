@@ -3,10 +3,11 @@ import { afterEach } from "vitest";
 import { SwDoc } from "../sw/source/core/doc/doc";
 import { SwPaM, SwPosition } from "../sw/source/core/crsr/pam";
 import { RtfExport } from "../sw/source/filter/ww8/rtfexport";
-const contexts: { document: SwDoc | undefined; range: SwPaM }[] = [];
+const contexts: { document: SwDoc | undefined; range: SwPaM; exporter: RtfExport }[] = [];
 afterEach(
   /** Releases range registrations before their document owners. @returns Nothing. */ () => {
     for (const context of contexts.splice(0)) {
+      context.exporter.Dispose();
       context.range.Dispose();
       context.document?.Dispose();
     }
@@ -18,6 +19,7 @@ export function createRtfExport(document?: SwDoc): RtfExport {
   const position = new SwPosition(owner.GetNodes().GetEndOfContent());
   const range = new SwPaM(position);
   position.Dispose();
-  contexts.push({ document: document === undefined ? owner : undefined, range });
-  return new RtfExport(owner, range, range);
+  const exporter = new RtfExport(owner, range, range);
+  contexts.push({ document: document === undefined ? owner : undefined, range, exporter });
+  return exporter;
 }

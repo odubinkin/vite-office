@@ -27,11 +27,20 @@ export class DocumentListsManager {
     if (this.numRules.length >= 65534) throw new Error("SwDoc::AddNumRule: table full.");
     this.numRules.push(rule);
     this.numRuleMap.set(rule.GetName(), rule);
+    rule.SetNumRuleMap(this.numRuleMap);
     this.CreateListForListStyle(rule.GetName());
     this.stateManager.NotifyModelChange({ kind: "numbering-changed", ruleName: rule.GetName() });
     return rule;
   }
 
+  /** Native owning rule-table teardown, bound here to the document aggregate destructor. Lists are destroyed after nodes have detached. @returns Nothing. */
+  public Dispose(): void {
+    this.lists.clear();
+    this.listStyleLists.clear();
+    for (const rule of this.numRules) rule.Dispose();
+    this.numRules.length = 0;
+    this.numRuleMap.clear();
+  }
   /** Finds a rule by its Writer name. @param name - Rule name. @returns Matching rule. */
   public FindNumRulePtr(name: string): SwNumRule | undefined {
     return this.numRuleMap.get(name);

@@ -1,6 +1,6 @@
 /** @fileoverview Native used-numbering table and bullet-font preparation from wrtw8num.cxx. */
 import type { MSWordExportBase } from "./wrtww8";
-import type { SwNumRule, ConstSwNumFormat } from "../../core/doc/number";
+import { SwNumRule, SwNumFormat, type ConstSwNumFormat } from "../../core/doc/number";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { Font } from "../../../../vcl/source/font/font";
 import { GetDefBulletFont } from "../../core/doc/number-bullet";
@@ -219,4 +219,35 @@ export function GetNumberingId(owner: MSWordExportBase, rule: SwNumRule): number
   owner.EnsureUsedNumberingTable();
   const position = (owner.m_pUsedNumTable as SwNumRule[]).indexOf(rule);
   return position < 0 ? 0xffff : position & 0xffff;
+}
+
+/** Original temporary rule constructor copies effective levels, not rule metadata, and uses the native post-increment unsigned16 counter. The used table must already exist, as in the native caller. @param owner - Actual exporter. @param rule - Actual source rule. @returns Export-owned rule. */
+export function DuplicateNumRuleImpl(owner: MSWordExportBase, rule: SwNumRule): SwNumRule {
+  const prefix = "WW8TempExport" + owner.m_nUniqueList;
+  owner.m_nUniqueList = (owner.m_nUniqueList + 1) & 0xffff;
+  const copy = new SwNumRule(owner.m_rDoc.GetUniqueNumRuleName(prefix), "label-width-and-position");
+  if (owner.m_pUsedNumTable === undefined) {
+    copy.Dispose();
+    throw new Error("assert(used numbering table initialized)");
+  }
+  owner.m_pUsedNumTable.push(copy);
+  for (let level = 0; level < 10; ++level) copy.Set(level, rule.Get(level));
+  return copy;
+}
+/** Original restart copy uses a temporary SwNumFormat whose client registration is released after Set copies it. @param owner - Actual exporter. @param rule - Actual rule. @param level - Unsigned8 Writer level. @param start - Unsigned16 value. @returns Zero-based numbering ID. */
+export function DuplicateNumRule(
+  owner: MSWordExportBase,
+  rule: SwNumRule,
+  level: number,
+  start: number,
+): number {
+  const copy = owner.DuplicateNumRuleImpl(rule);
+  const format = new SwNumFormat(copy.Get(level & 0xff));
+  try {
+    format.SetStart(start & 0xffff);
+    copy.Set(level & 0xff, format);
+  } finally {
+    format.Dispose();
+  }
+  return owner.GetNumberingId(copy);
 }

@@ -92,16 +92,37 @@ export function OutlineUpDown(document: SwDoc, range: SwPaM, offset: number): bo
   );
 }
 
-/** Native default automatic-name branch, using browser RNG in place of the platform RNG and the same smallest-unused positive suffix. Mail merge and environment-selected stable export remain outside this caller. @param document - Canonical rule table owner. @returns Unique automatic name. */
-export function GetUniqueNumRuleName(document: SwDoc): string {
+/** Native automatic-name overload consumes the optional preferred name, the original random prefix, bounded flags and smallest unused suffix. Browser RNG replaces the platform generator; mail merge and environment-selected stable export have no admitted owner. @param document - Actual document. @param checkName - Native optional preferred name. @returns Source automatic name. */
+export function GetUniqueNumRuleName(document: SwDoc, checkName?: string): string {
   const base = String(crypto.getRandomValues(new Uint32Array(1))[0]);
-  const used = new Set<number>();
-  for (const rule of document.GetNumRuleTable()) {
+  if (checkName === "") checkName = undefined;
+  const rules = document.GetNumRuleTable();
+  const flagSize = (Math.trunc(rules.length / 8) + 2) & 0xffff;
+  const flags = new Uint8Array(flagSize);
+  let number = 0;
+  for (const rule of rules) {
     const name = rule.GetName();
-    if (name.startsWith(base) && /^\d+$/u.test(name.slice(base.length)))
-      used.add(Number(name.slice(base.length)) & 0xffff);
+    if (name.startsWith(base) && name.length > base.length) {
+      number = toInt32(name.slice(base.length)) & 0xffff;
+      if (number !== 0 && --number < rules.length)
+        flags[number >> 3] = (flags[number >> 3] as number) | (1 << (number & 7));
+    }
+    if (checkName === name) checkName = undefined;
   }
-  let suffix = 1;
-  while (used.has(suffix)) suffix++;
-  return base + suffix;
+  if (checkName === undefined) {
+    number = rules.length & 0xffff;
+    for (let index = 0; index < flagSize; ++index) {
+      let value = flags[index] as number;
+      if (value !== 0xff) {
+        number = (index * 8) & 0xffff;
+        while (value & 1) {
+          number = (number + 1) & 0xffff;
+          value >>= 1;
+        }
+        break;
+      }
+    }
+  }
+  return checkName !== undefined && checkName !== "" ? checkName : base + ((number + 1) & 0xffff);
 }
+import { toInt32 } from "../../../../o3tl/inc/string_view";

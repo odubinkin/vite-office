@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 107
+revision: 109
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-10-28T07:38:46.404Z"
+  updated_at: "2026-10-28T07:57:43.879Z"
   updated_by: "CODER"
-  note: "RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings."
-  attempts: 1
+  note: "Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings."
+  attempts: 2
 commit: null
 comments:
   -
@@ -41,8 +41,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33 browser I/O tests plus typecheck, lint, formatting, provenance, boundaries, size, JSDoc and Writer/shared registry checks. Whole native text-filter task remains incomplete; original paragraph/restart/style/importer and prior goal gaps are recorded in Findings."
+  -
+    type: "verify"
+    at: "2026-10-28T07:57:43.879Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings."
 doc_version: 3
-doc_updated_at: "2026-10-28T07:38:46.460Z"
+doc_updated_at: "2026-10-28T07:57:43.939Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -63,6 +69,36 @@ sections:
     Attempts: 1
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T07:57:43.879Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings.
+    Attempts: 2
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -437,6 +473,16 @@ sections:
     - Result: pass. Dependencies1683runtime/8736imports/210edges; provenance1684modules/1472mapped; Writer/shared semanticViolationCount0. Evidence: output/playwright/rtf-numbering/{writer-parity,shared-parity,file-size,jsdoc}.txt and command output. No full suite: user-authorized focused-module cadence.
     - Observation: initial source assertion exposed patternless numeric command formats, fixed at their actual assembly owner. Old adjacent NFC/start string expectations were updated to include the native leveljc control. A test initially applied legacy setters while remaining in alignment mode; fixture corrected. Provenance first placed GetNumberingId at wrtww8.cxx; implementation moved to its true wrtw8num source owner with a thin base delegate. Near-limit doc imports now share a source-unit namespace; file remains below1000 lines. Final focused checks pass.
     - Scope: this is an implemented and verified table-writing checkpoint, not whole-format certification. Whole task remains DOING. Remaining original paragraph dispatch/temporary restart rules, character-style table/cache, complete OutColorTable, importer list pattern/font/geometry paths, graphics outside the admitted core, common virtual numbering/DOCX closure and other previously recorded goal gaps require further work. Source semantic statuses remain unverified. No permission pause, merge, push or external write.
+
+    RTF temporary-numbering ownership checkpoint (2026-10-28, CODER)
+    - Implemented: original DuplicateNumRuleImpl/ DuplicateNumRule in wrtw8num with real common-export delegates. Fresh temporary rules keep source constructor defaults, legacy mode and NUM_RULE classification; copy all10 effective levels; narrow counter/start; retain source preferred-name/collision behavior; stay outside SwDoc. The native base destructor drops borrowed entries and destroys the export-owned tail. RTF full-document and direct-test bridges invoke this destructor before their genuine ranges/documents.
+    - Implemented prerequisites: actual SwNumFormat client destruction and disposal of replaced/null-pointer levels; rule name-map binding/current-name erase; owned-level and client-container teardown; original first/last-rule shared-table lifecycle, source initialization/destruction order, unsigned16 counter, source GetBulletChar and protected shared const reads. SwDoc teardown now releases its rule table through the existing aggregate/list-manager binding. Browser invalid-name validation happens before allocation/accounting. Native default automatic-name logic now accepts the optional preferred name, retains RNG consumption and uses original bounded parsed-prefix flags. Source nonautomatic/mail-merge/environment-stable branches have no admitted caller and are not fabricated.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/core/doc src/sw/source/core/unocore/unosett src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/html src/sw/source/filter/xml src/sw/source/writerfilter/rtftok src/sw/browser/filter/xml/writer-document-codec --reporter=json --outputFile=../../output/playwright/rtf-numbering-lifetime/writer-tests.json
+    - Result: pass; 1399/1399 related document/filter/codec/native-rule differential tests. Browser I/O/dialog/composition33/33. Final ownership rerun after source table-order review6/6. Evidence: output/playwright/rtf-numbering-lifetime/{writer-tests,ui-tests,ownership-tests}.json.
+    - Command: npm run typecheck --workspace @vite-office/office; changed-source ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+    - Result: pass; boundaries1683runtime/8738imports/210edges; provenance1684runtime/1472mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-numbering-lifetime/{writer-parity,shared-parity,file-size,jsdoc}.txt. No full suite under the user-approved related-module cadence. Source-wide behavior/contract/default statuses remain unverified.
+    - Observation: the JSDoc gate initially found one missing annotation on a forced const-destructor rejection callback; annotation added and gate passed. Source review corrected shared-base creation/deletion family order; final ownership checks passed afterwards. No semantic test failure, network action, merge or external publication.
+    - Scope: this completes the temporary-rule/lifetime prerequisite, not paragraph restart integration. ParaNumRule still needs to consume it; character-style slot/table/cache, original paragraph list output, importer metadata, complete color/common-output paths and prior goal gaps remain open. Existing browser aggregate location for rule-table storage and wider document lifecycle/ABI remain uncertified. WRITER200 documents retained native unsigned16 counter hazards. Task remains DOING; goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -468,6 +514,36 @@ Note: RTF used-numbering/level-table checkpoint passed 534 focused Writer and 33
 Attempts: 1
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:38:45.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T07:57:43.879Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings.
+Attempts: 2
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -846,3 +922,13 @@ RTF numbering-table checkpoint after InitFontTable (2026-10-28, CODER)
 - Result: pass. Dependencies1683runtime/8736imports/210edges; provenance1684modules/1472mapped; Writer/shared semanticViolationCount0. Evidence: output/playwright/rtf-numbering/{writer-parity,shared-parity,file-size,jsdoc}.txt and command output. No full suite: user-authorized focused-module cadence.
 - Observation: initial source assertion exposed patternless numeric command formats, fixed at their actual assembly owner. Old adjacent NFC/start string expectations were updated to include the native leveljc control. A test initially applied legacy setters while remaining in alignment mode; fixture corrected. Provenance first placed GetNumberingId at wrtww8.cxx; implementation moved to its true wrtw8num source owner with a thin base delegate. Near-limit doc imports now share a source-unit namespace; file remains below1000 lines. Final focused checks pass.
 - Scope: this is an implemented and verified table-writing checkpoint, not whole-format certification. Whole task remains DOING. Remaining original paragraph dispatch/temporary restart rules, character-style table/cache, complete OutColorTable, importer list pattern/font/geometry paths, graphics outside the admitted core, common virtual numbering/DOCX closure and other previously recorded goal gaps require further work. Source semantic statuses remain unverified. No permission pause, merge, push or external write.
+
+RTF temporary-numbering ownership checkpoint (2026-10-28, CODER)
+- Implemented: original DuplicateNumRuleImpl/ DuplicateNumRule in wrtw8num with real common-export delegates. Fresh temporary rules keep source constructor defaults, legacy mode and NUM_RULE classification; copy all10 effective levels; narrow counter/start; retain source preferred-name/collision behavior; stay outside SwDoc. The native base destructor drops borrowed entries and destroys the export-owned tail. RTF full-document and direct-test bridges invoke this destructor before their genuine ranges/documents.
+- Implemented prerequisites: actual SwNumFormat client destruction and disposal of replaced/null-pointer levels; rule name-map binding/current-name erase; owned-level and client-container teardown; original first/last-rule shared-table lifecycle, source initialization/destruction order, unsigned16 counter, source GetBulletChar and protected shared const reads. SwDoc teardown now releases its rule table through the existing aggregate/list-manager binding. Browser invalid-name validation happens before allocation/accounting. Native default automatic-name logic now accepts the optional preferred name, retains RNG consumption and uses original bounded parsed-prefix flags. Source nonautomatic/mail-merge/environment-stable branches have no admitted caller and are not fabricated.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/core/doc src/sw/source/core/unocore/unosett src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/html src/sw/source/filter/xml src/sw/source/writerfilter/rtftok src/sw/browser/filter/xml/writer-document-codec --reporter=json --outputFile=../../output/playwright/rtf-numbering-lifetime/writer-tests.json
+- Result: pass; 1399/1399 related document/filter/codec/native-rule differential tests. Browser I/O/dialog/composition33/33. Final ownership rerun after source table-order review6/6. Evidence: output/playwright/rtf-numbering-lifetime/{writer-tests,ui-tests,ownership-tests}.json.
+- Command: npm run typecheck --workspace @vite-office/office; changed-source ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+- Result: pass; boundaries1683runtime/8738imports/210edges; provenance1684runtime/1472mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-numbering-lifetime/{writer-parity,shared-parity,file-size,jsdoc}.txt. No full suite under the user-approved related-module cadence. Source-wide behavior/contract/default statuses remain unverified.
+- Observation: the JSDoc gate initially found one missing annotation on a forced const-destructor rejection callback; annotation added and gate passed. Source review corrected shared-base creation/deletion family order; final ownership checks passed afterwards. No semantic test failure, network action, merge or external publication.
+- Scope: this completes the temporary-rule/lifetime prerequisite, not paragraph restart integration. ParaNumRule still needs to consume it; character-style slot/table/cache, original paragraph list output, importer metadata, complete color/common-output paths and prior goal gaps remain open. Existing browser aggregate location for rule-table storage and wider document lifecycle/ABI remain uncertified. WRITER200 documents retained native unsigned16 counter hazards. Task remains DOING; goal remains active.

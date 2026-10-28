@@ -578,9 +578,9 @@ export class SwDoc {
   public CopyTextColl(source: SwTextFormatColl): SwTextFormatColl {
     return CopyTextColl(this, source);
   }
-  /** Adds a numbering rule. @param rule - Source rule. @returns Stored rule. */
-  public GetUniqueNumRuleName(): string {
-    return GetUniqueNumRuleName(this);
+  /** Native automatic rule-name overload. @param checkName - Optional caller-preferred name. @returns Unique name. */
+  public GetUniqueNumRuleName(checkName?: string): string {
+    return GetUniqueNumRuleName(this, checkName);
   }
 
   /** Returns the actual document-owned outline rule created during docnew initialization. @returns Borrowed outline owner. */
@@ -983,6 +983,7 @@ export class SwDoc {
     for (const node of this.nodes.entries())
       if (node instanceof SwTextNode) node.GetpSwpHints()?.Dispose();
     this.styleAccess.Dispose();
+    this.GetDocumentListsManager().Dispose();
     this.stateManager.Dispose();
   }
 }
