@@ -116,6 +116,16 @@ export function rtl_ustr_compare_WithLength(
 ): number {
   return str.compare_WithLengths(first, firstLen, second, secondLen);
 }
+/** Original Unicode shortened-comparison C wrapper selects the known-length template specialization. @param first - First storage. @param firstLength - Signed32 length. @param second - Second storage. @param secondLength - Signed32 length. @param shortened - Signed32 bound. @returns Native comparison. */
+export function rtl_ustr_shortenedCompare_WithLength(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  return str.compare_ShortenedWithLengths(first, firstLength, second, secondLength, shortened);
+}
 /** Original C hash wrapper. @param data - Borrowed UTF16 input. @param length - Signed32 prefix length. @returns Original signed32 hash. */
 export function rtl_ustr_hashCode_WithLength(data: Uint16Array | null, length: number): number {
   return str.hashCode_WithLength(data, length);
@@ -482,4 +492,64 @@ export function rtl_convertStringToUString(
   const info: [number] = [0];
   rtl_string2UString_status(target, source, length, encoding & 0xffff, flags >>> 0, info);
   return (info[0] & cvt.RTL_TEXTTOUNICODE_INFO_ERROR) === 0;
+}
+
+/** Original public Unicode concatenation wrapper. @param destination - Native output slot. @param left - Borrowed source. @param right - Borrowed source. @returns Nothing. */
+export function rtl_uString_newConcat(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: rtl_uString | null,
+): void {
+  str.newConcat(destination, left, right);
+}
+
+/** Original C owned-string replacement wrapper. @param destination - Output slot. @param original - Borrowed source. @param index - Signed32 offset. @param count - Signed32 length. @param replacement - Borrowed replacement. @returns Nothing. */
+export function rtl_uString_newReplaceStrAt(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  index: number,
+  count: number,
+  replacement: rtl_uString | null,
+): void {
+  str.newReplaceStrAt(destination, original, index, count, replacement);
+}
+
+/** Original raw UTF16 append C boundary. @param destination - Native slot. @param left - Borrowed left data. @param right - Borrowed span. @param length - Signed32 count. @returns Nothing. */
+export function rtl_uString_newConcatUtf16L(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: Uint16Array | null,
+  length: number,
+): void {
+  str.newConcat_Utf16(destination, left, right, length);
+}
+
+/** Original bounded ASCII-case-insensitive Unicode comparison C wrapper. @param first - First storage. @param firstLength - First length. @param second - Second storage. @param secondLength - Second length. @param shortened - Comparison bound. @returns Native comparison result. */
+export function rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  return str.compare_ShortenedIgnoreAsciiCaseWithLengths(
+    first,
+    firstLength,
+    second,
+    secondLength,
+    shortened,
+  );
+}
+
+/** Original bounded UTF16 replace-all C boundary. @param destination - Result slot. @param original - Borrowed input. @param from - Search units. @param fromLength - Search length. @param to - Replacement units. @param toLength - Replacement length. @param fromIndex - Initial offset. @returns Nothing. */
+export function rtl_uString_newReplaceAllFromIndexUtf16LUtf16L(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  from: Uint16Array | null,
+  fromLength: number,
+  to: Uint16Array | null,
+  toLength: number,
+  fromIndex: number,
+): void {
+  str.newReplaceAllFromIndex(destination, original, from, fromLength, to, toLength, fromIndex);
 }

@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.keywords.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "sEnglishKeyword",
+      "SetDependentKeywordOverrides"
+    ],
+    "upstreamSymbols": [
+      "sEnglishKeyword",
+      "ImpSvNumberformatScan::SetDependentKeywords"
+    ],
+    "preservedResponsibilities": [
+      "Complete original 53-entry English keyword table and all native loaded-language locale override branches, including German colors, exact LanguageType families, date/hour/era replacements and source precedence. Actual scanner-owned OUString members are assigned; no approximate locale grouping."
+    ],
+    "omittedResponsibilities": [
+      "General/special/currency initialization remains on the real scanner owner; full final/prefix format compilation and public CSV auto-input remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.keywords.ts",
+          "marker": "sEnglishKeyword"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "sEnglishKeyword"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.keywords.ts",
+      "rationale": "Split the original large translation unit by scanner keyword, lexical, type and quote responsibilities while retaining original owners and contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

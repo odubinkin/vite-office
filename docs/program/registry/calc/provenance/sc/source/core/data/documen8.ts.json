@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/documen8.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/documen8.cxx",
+    "localSymbols": [
+      "CheckLinkFormulaNeedingCheck"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::CheckLinkFormulaNeedingCheck"
+    ],
+    "preservedResponsibilities": [
+      "Original existing-flag fast path, RPN-first opcode search and tokenized fallback set the actual document link-check flag for DDE/Webservice. Empty-code logging is diagnostic only; no network/evaluator service is fabricated or invoked."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/documen8.ts",
+          "marker": "CheckLinkFormulaNeedingCheck"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/documen8.cxx",
+          "marker": "ScDocument::CheckLinkFormulaNeedingCheck"
+        }
+      ]
+    }
+  }
+}

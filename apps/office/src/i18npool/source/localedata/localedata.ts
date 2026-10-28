@@ -13,7 +13,7 @@ import {
 import { OUString } from "../../../sal/inc/rtl/ustring";
 import type { LocaleConstReference } from "../../../udkapi/com/sun/star/lang/Locale";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
-import calendarItems from "./data/calendar-items.json" with { type: "json" };
+import calendars from "./data/calendars.json" with { type: "json" };
 import currencies from "./data/currencies.json" with { type: "json" };
 import dateAcceptancePatterns from "./data/date-acceptance-patterns.json" with { type: "json" };
 import dateSeparators from "./data/date-separators.json" with { type: "json" };
@@ -49,7 +49,7 @@ const numberFormatResources = new Map<string, readonly LocaleFormatElement[]>(
   Object.entries(numberFormats),
 );
 /** Original default LC_CALENDAR name arrays with generated section refs resolved. */
-const calendarResources = new Map<string, LocaleCalendarItems>(Object.entries(calendarItems));
+const calendarResources = new Map<string, readonly LocaleCalendarData[]>(Object.entries(calendars));
 /** Original generated getDateAcceptancePatterns_ arrays in source order. */
 const dateAcceptanceResources = new Map<string, readonly string[]>(
   Object.entries(dateAcceptancePatterns),
@@ -89,6 +89,23 @@ export interface LocaleCalendarItems {
   readonly genitiveMonths: readonly LocaleCalendarItem[];
   readonly partitiveMonths: readonly LocaleCalendarItem[];
   readonly days: readonly LocaleCalendarItem[];
+}
+/** Original CalendarItem2 scalar fields decoded from generated locale resources. */
+export interface LocaleCalendarItemData extends LocaleCalendarItem {
+  readonly id: string;
+  readonly narrow: string;
+}
+/** Original Calendar2 resource fields in source calendar order; service owners copy scalar state before mutation. */
+export interface LocaleCalendarData {
+  readonly id: string;
+  readonly isDefault: boolean;
+  readonly startOfWeek: string;
+  readonly minimumDays: number;
+  readonly days: readonly LocaleCalendarItemData[];
+  readonly months: readonly LocaleCalendarItemData[];
+  readonly genitiveMonths: readonly LocaleCalendarItemData[];
+  readonly partitiveMonths: readonly LocaleCalendarItemData[];
+  readonly eras: readonly LocaleCalendarItemData[];
 }
 /** Actual embedded decimal resource values;no current Intl data is substituted. */
 const resources = new Map<string, string>(Object.entries(separators));
@@ -175,30 +192,37 @@ export function getLocaleLanguageCountryInfo(
 }
 /** Returns source-ordered default-calendar names using the native locale service fallback. @param locale - Requested locale. @returns Pinned LC_CALENDAR name sections. */
 export function getLocaleCalendarItems(locale: LocaleConstReference): LocaleCalendarItems {
-  const source = getLocaleDataField(locale, calendarResources);
+  const source = getLocaleCalendars(locale).find(
+    /** Original default-calendar selection. @param calendar - Source row. @returns Default flag. */
+    (calendar) => calendar.isDefault,
+  ) as LocaleCalendarData;
   return {
     id: source.id,
     months: source.months.map(
       /** Computes the item result. @param item - Item. @returns The computed result. */ (
         item,
-      ) => ({ ...item }),
+      ) => ({ full: item.full, abbreviated: item.abbreviated }),
     ),
     genitiveMonths: source.genitiveMonths.map(
       /** Computes the item result. @param item - Item. @returns The computed result. */ (
         item,
-      ) => ({ ...item }),
+      ) => ({ full: item.full, abbreviated: item.abbreviated }),
     ),
     partitiveMonths: source.partitiveMonths.map(
       /** Computes the item result. @param item - Item. @returns The computed result. */ (
         item,
-      ) => ({ ...item }),
+      ) => ({ full: item.full, abbreviated: item.abbreviated }),
     ),
     days: source.days.map(
       /** Computes the item result. @param item - Item. @returns The computed result. */ (
         item,
-      ) => ({ ...item }),
+      ) => ({ full: item.full, abbreviated: item.abbreviated }),
     ),
   };
+}
+/** Original getAllCalendars2 resource lookup through the existing locale-service fallback. Arrays and rows are immutable decoded input for the actual calendar service. @param locale - Requested locale. @returns Ordered source calendar data. */
+export function getLocaleCalendars(locale: LocaleConstReference): readonly LocaleCalendarData[] {
+  return getLocaleDataField(locale, calendarResources);
 }
 /** Original generated date acceptance patterns, including those derived from the edit format. @param locale - Requested locale. @returns Independent ordered pattern values. */
 export function getLocaleDateAcceptancePatterns(locale: LocaleConstReference): string[] {

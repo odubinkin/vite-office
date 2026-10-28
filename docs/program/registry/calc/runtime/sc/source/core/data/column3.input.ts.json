@@ -1,0 +1,35 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sc/source/core/data/column3.input.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "calc",
+    "subsystem": "local-reference-tracking",
+    "capabilityIds": [
+      "CAP-1a127bda-0ad3-4ab0-84fc-1e8f22f87678"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sc/source/core/data/column3.input.ts",
+        "apps/office/src/sc/source/core/data/column3.input.test.ts"
+      ],
+      "justification": "Original ParseString default/copy policy, actual cell/formula/shared-string construction, apostrophe handling, preset Text, original date-edit locale/evaluation handling, original type compatibility and overwrite rules, simple/scientific input flags and SpecialNumberOnly text formatting. Uses actual formatter/pattern/pool/cell owners, not CSV heuristics. Full native differential, ABI and broader CSV output acceptance remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ParseString"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "sc/source/core/data/column3.cxx",
+      "upstreamSymbols": [
+        "ScColumn::ParseString",
+        "applyTextNumFormat"
+      ]
+    }
+  }
+}

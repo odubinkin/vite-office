@@ -1,0 +1,50 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.natnum.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "SvNumberNatNum"
+    ],
+    "upstreamSymbols": [
+      "SvNumberNatNum::MapDBNumToNatNum",
+      "SvNumberNatNum::MapNatNumToDBNum"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original SvNumberNatNum metadata and both original DBNum/NatNum maps, including unknown/unset versus explicit NatNum0, stored-language semantics, actual MsLangId resolution, date-specific branches and uint8/uint16 conversions. ImpSvNumFor owns this real metadata and copies its original memberwise values and OUString parameters. No synthetic modifier entry or heuristic digit conversion is introduced. The native witness uses unchanged original metadata/maps and MsLangId resolution with explicit configured-language value fixtures; native string values are std::u16string, so full SAL ownership/ABI and the format constructor/output are not claimed. Actual local ownership/copy lifetime is tested separately."
+    ],
+    "omittedResponsibilities": [
+      "Full formatter constructor/prefix integration, native-number output/transliteration and CSV recognition remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.natnum.ts",
+          "marker": "SvNumberNatNum"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.natnum.test.ts",
+          "marker": "copies actual"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/zformat.hxx",
+          "marker": "class SvNumberNatNum"
+        },
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberNatNum::MapDBNumToNatNum"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.natnum.ts",
+      "rationale": "Keep original native-number subformat metadata and its zformat conversion tables in one responsibility fragment.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

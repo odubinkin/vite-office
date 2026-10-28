@@ -1,4 +1,5 @@
 /** @fileoverview Original pointer-walk General name extraction includes malformed source modifier inputs. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode, text } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { extractStandardGeneralName } from "./zforscan";
@@ -60,21 +61,28 @@ import { ImpSvNumFor } from "./zformat";
 import { Locale } from "../../../udkapi/com/sun/star/lang/Locale";
 import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapper";
 
-it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These are original General paths;other token families remain explicit admission failures. @returns Nothing. */ () => {
+it("keeps locale-keyword case,English normalization,localization policy and reset state", /** These original General paths now run through full lexical/type/final scanning. @returns Nothing. */ () => {
   const language = unicode("de"),
     country = unicode("DE"),
     empty = unicode(""),
     locale = new Locale(language, country, empty),
     name = unicode("Standard"),
     localeData = new LocaleDataWrapper(locale);
+  const mapper = new NumberFormatCodeMapper(),
+    current = createNumberFormatLanguage(mapper, 0x0407);
   try {
     for (const mode of Object.values(KeywordLocalization)) {
-      const scanner = new ImpSvNumberformatScan(locale, name, mode, localeData),
+      const scanner = new ImpSvNumberformatScan(
+          current,
+          current.GetFormatScanner().getColorCallback(),
+          mapper,
+        ),
         code = unicode("sTaNdArD"),
         english = unicode("GENERAL"),
         unsupported = unicode("0.00"),
         info = new ImpSvNumFor();
       try {
+        scanner.ChangeIntl(mode);
         expect(scanner.ScanFormat(code)).toBe(0);
         expect(text(code)).toBe("sTaNdArD");
         expect(scanner.GetResultStringsCnt()).toBe(1);
@@ -95,18 +103,15 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
         if (mode === KeywordLocalization.AllowEnglish) {
           expect(scanner.ScanFormat(english)).toBe(0);
           expect(text(english)).toBe("Standard");
-        } else
-          expect(
-            /** Enforces the prepared native keyword policy. @returns Control position. */ () =>
-              scanner.ScanFormat(english),
-          ).toThrow(/not implemented/);
-        expect(
-          /** Rejects an unported pattern family without a fabricated syntax error. @returns Control position. */ () =>
-            scanner.ScanFormat(unsupported),
-        ).toThrow(/not implemented/);
+        } else {
+          expect(scanner.ScanFormat(english)).toBe(0);
+          expect(text(english)).toBe("GENERAL");
+        }
+        expect(scanner.ScanFormat(unsupported)).toBe(0);
+        expect(scanner.GetScannedType()).toBe(16);
         expect(scanner.ScanFormat(empty)).toBe(0);
         expect(scanner.GetResultStringsCnt()).toBe(0);
-        expect(scanner.GetScannedType()).toBe(2048);
+        expect(scanner.GetScannedType()).toBe(1);
         info.Enlarge(0);
         scanner.CopyInfo(info.Info(), 0);
         expect(info.Info().nThousand).toBe(0);
@@ -121,6 +126,8 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
       }
     }
   } finally {
+    current.dispose();
+    mapper.dispose();
     localeData.dispose();
     name.dispose();
     locale.dispose();
@@ -130,47 +137,4 @@ it("keeps locale-keyword case,English normalization,localization policy and rese
   }
 });
 
-import { prepareGeneralKeywords } from "./zforscan";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
-import { getLoadedLocale } from "../../../unotools/source/i18n/localedatawrapper";
-
-it("prepares General from the actually loaded locale and native localization language list", /** Requested de-ZZ loads de-DE;EnglishOnly still retains the localized General name,as in SetDependentKeywords. @returns Nothing. */ () => {
-  const language = unicode("de"),
-    country = unicode("ZZ"),
-    empty = unicode(""),
-    requested = new Locale(language, country, empty),
-    loaded = getLoadedLocale(requested),
-    mapper = new NumberFormatCodeMapper();
-  try {
-    expect(text(loaded.Country)).toBe("DE");
-    for (const mode of Object.values(KeywordLocalization)) {
-      const prepared = prepareGeneralKeywords(mapper, loaded, mode);
-      try {
-        expect(prepared.localization).toBe(mode);
-        expect(text(prepared.standardName)).toBe("Standard");
-      } finally {
-        prepared.standardName.dispose();
-      }
-    }
-    const en = unicode("en"),
-      us = unicode("US"),
-      american = new Locale(en, us, empty),
-      prepared = prepareGeneralKeywords(mapper, american);
-    try {
-      expect(prepared.localization).toBe(KeywordLocalization.EnglishOnly);
-      expect(text(prepared.standardName)).toBe("General");
-    } finally {
-      prepared.standardName.dispose();
-      american.dispose();
-      us.dispose();
-      en.dispose();
-    }
-  } finally {
-    mapper.dispose();
-    loaded.dispose();
-    requested.dispose();
-    language.dispose();
-    country.dispose();
-    empty.dispose();
-  }
-});

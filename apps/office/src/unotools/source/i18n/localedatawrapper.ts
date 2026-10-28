@@ -415,6 +415,10 @@ export class LocaleDataWrapper {
     );
     this.grouping = loadDigitGrouping(locale);
   }
+  /** Original getMyLocale borrowed locale projection of the wrapper's language-tag state. @returns Borrowed locale. */
+  getMyLocale(): LocaleConstReference {
+    return this.myLocale;
+  }
   /** Borrows the source decimal separator. @returns Decimal separator. */
   getNumDecimalSep(): OUString {
     return this.decimal;

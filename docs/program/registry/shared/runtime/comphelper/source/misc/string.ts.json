@@ -8,7 +8,9 @@
     "suite": "shared",
     "subsystem": "xlsx-text-strings",
     "capabilityIds": [
-      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10"
+      "CAP-593638de-95f4-424a-bc1a-2ba50eb4ce10",
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
     ],
     "semantic": {
       "behaviorStatus": "unverified",
@@ -18,17 +20,22 @@
       "evidence": [
         "apps/office/src/comphelper/source/misc/string.ts",
         "apps/office/src/oox/source/helper/attributelist.test.ts",
-        "vendor/libreoffice-reference/comphelper/source/misc/string.cxx"
+        "vendor/libreoffice-reference/comphelper/source/misc/string.cxx",
+        "apps/office/src/svl/source/numbers/zforscan.color.test.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
       ],
-      "justification": "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation.",
+      "justification": "J0Z0KF ports original AttributeConversion::decodeXString, its literal/hex pointer scan and comphelper::string::sanitizeStringSurrogates, plus actual FastAttributeList counted UTF8 Unicode values and optional/defaulted AttributeList string/XString queries. RichStringPortion owns decoded actual SAL Unicode text; RichString preserves ordered text/run portions, attributes and concatenation. Native lowercase-x and four-hex-unit recognition, one-pass underscore escaping, no-marker COW fast paths, marker-triggered first-invalid-surrogate truncation, first-duplicate attributes, missing versus empty and undecoded fallback defaults are retained. Private preserve-space state uses a monotone boolean assignment equivalent to setting true; its unused downstream native role is not repaired with whitespace trimming or a new public getter. Font/phonetic/binary/UNO/edit-engine conversion and finalization, RichStringContext/SharedStringsBuffer, workbook helpers/filter and shell/UI acceptance remain unported. Local direct model-write tests do not claim XLSX parse/import, shared-string lookup, rich formatting, XML context orchestration or independent native compilation. AQF9AG ports the consumed original OUString strip overload and exact tmpl_stripString algorithm over actual SAL ownership. Empty input shares the original value; leading/trailing removal compares only the requested UTF16 unit. No JavaScript trim/Unicode-space heuristic or string-owner substitute is introduced. Other string utilities/overloads remain unported.",
       "knownViolations": [],
       "localSymbols": [
-        "sanitizeStringSurrogates"
+        "sanitizeStringSurrogates",
+        "strip"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "comphelper/source/misc/string.cxx",
       "upstreamSymbols": [
-        "sanitizeStringSurrogates"
+        "sanitizeStringSurrogates",
+        "strip",
+        "tmpl_stripString"
       ]
     }
   }

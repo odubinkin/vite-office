@@ -1,0 +1,34 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/datetime/systemdatetime.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/datetime/systemdatetime.ts"
+      ],
+      "justification": "Original GetSystemDateTime date-output branch. The browser host supplies system_clock/localtime through numeric Date construction and local field getters; text date parsing and calendar arithmetic are not delegated to it. Native nanosecond time output is not exposed by this binding. Only the original date-output branch is exposed. The browser host supplies numeric system-clock/local-date fields; nanosecond clock output and native platform failure/ABI behavior remain unverified. Text parsing and calendar arithmetic are not delegated to the host.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetSystemDateTime"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "tools/source/datetime/systemdatetime.cxx",
+      "upstreamSymbols": [
+        "GetSystemDateTime"
+      ]
+    }
+  }
+}

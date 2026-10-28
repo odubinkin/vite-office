@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/astro.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/astro.cpp",
+    "localSymbols": [
+      "Equatorial",
+      "MoonAge",
+      "AngleFunc",
+      "CalendarAstronomer"
+    ],
+    "upstreamSymbols": [
+      "CalendarAstronomer::getSunLongitude"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 CalendarAstronomer solar/lunar algorithms and event solver from astro.cpp. Constants, operation order, convergence thresholds and original recursive divergence retry are retained."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/astro.ts",
+          "marker": "Equatorial"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/astro.cpp",
+          "marker": "CalendarAstronomer::getSunLongitude"
+        }
+      ]
+    }
+  }
+}

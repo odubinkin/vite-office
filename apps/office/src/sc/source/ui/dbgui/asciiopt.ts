@@ -9,10 +9,15 @@ import { SfxObjectShell } from "../../../../sfx2/source/doc/objsh";
 import type { SvStream } from "../../../../tools/source/stream/stream";
 import { ScGlobal } from "../../../inc/global";
 
-/** Native column import formats used by the text filter. */
-export const SC_COL_STANDARD = 0;
-export const SC_COL_TEXT = 1;
-export const SC_COL_SKIP = 9;
+export {
+  SC_COL_STANDARD,
+  SC_COL_TEXT,
+  SC_COL_MDY,
+  SC_COL_DMY,
+  SC_COL_YMD,
+  SC_COL_SKIP,
+  SC_COL_ENGLISH,
+} from "../inc/csvcontrol";
 
 /** Source-compatible comma-token filter options; fields follow the original owner. */
 export class ScAsciiOptions {

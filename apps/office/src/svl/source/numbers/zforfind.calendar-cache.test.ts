@@ -1,13 +1,13 @@
 /** @fileoverview Native calendar-name scanning across grammatical cases and locale cache changes. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
-import { SvNFLanguageData } from "./zforlist";
 
 it("refreshes native month caches and accepts grammatical and regional alternatives", /** Checks real generated calendars through one language owner, including disposal and rebuilding of its previous caches. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     GetMonth(value: OUString, position: [number]): number;
   };

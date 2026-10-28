@@ -1,0 +1,36 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/inc/nfengine.ts",
+    "status": "mapped",
+    "upstreamPath": "include/svl/nfengine.hxx",
+    "localSymbols": [
+      "Accessor"
+    ],
+    "upstreamSymbols": [
+      "Accessor"
+    ],
+    "preservedResponsibilities": [
+      "Original complete four-member callback contract; actual engine factories bind real table/cache owners."
+    ],
+    "omittedResponsibilities": [
+      "Native std::function ABI and threading are unrepresented."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/inc/nfengine.ts",
+          "marker": "Accessor"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/svl/nfengine.hxx",
+          "marker": "struct Accessor"
+        }
+      ]
+    }
+  }
+}

@@ -1,4 +1,5 @@
 /** @fileoverview Original SAL shared byte/Unicode ownership templates and represented Unicode/string algorithms. */
+import { compareIgnoreAsciiCase } from "../inc/rtl/character";
 import { isAsciiLowerCase, toAsciiUpperCase } from "../inc/rtl/character";
 import type { rtl_String, rtl_StringSlot } from "../inc/rtl/string.h";
 import type { rtl_uString, rtl_uStringSlot } from "../inc/rtl/ustring.h";
@@ -556,4 +557,247 @@ export function stringbuffer_remove(
   if (tail !== 0) Copy(buffer.subarray(start), buffer.subarray(start + length), tail);
   data.length -= length;
   buffer[data.length] = 0;
+}
+
+/** Original known-length shortened comparison specialization truncates both spans before selecting the same-type no-shortening comparator. @param first - First storage. @param firstLength - First signed32 length. @param second - Second storage. @param secondLength - Second signed32 length. @param shortened - Signed32 comparison bound. @returns Native selected comparison. */
+export function compare_ShortenedWithLengths(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  firstLength |= 0;
+  secondLength |= 0;
+  shortened |= 0;
+  if (firstLength < 0 || secondLength < 0) throw new Error("assert(len >= 0)");
+  if (shortened < 0) throw new Error("assert(nShortenedLength >= 0)");
+  return compare_WithLengths(
+    first,
+    Math.min(firstLength, shortened),
+    second,
+    Math.min(secondLength, shortened),
+  );
+}
+
+/** Original Unicode known-length newConcat specialization with erased ThrowPolicy; allocation and release ordering retains caller buffer aliases. @param destination - Native output slot. @param left - Borrowed left units. @param leftLength - Signed32 left length. @param right - Borrowed right units. @param rightLength - Signed32 right length. @param throwOnOverflow - Original Throw versus NoThrow template argument. @returns Nothing. */
+export function newConcat_WithLengths(
+  destination: rtl_uStringSlot | null,
+  left: Uint16Array | null,
+  leftLength: number,
+  right: Uint16Array | null,
+  rightLength: number,
+  throwOnOverflow = false,
+): void {
+  leftLength |= 0;
+  rightLength |= 0;
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (leftLength < 0) throw new Error("assert(nLeftLength >= 0)");
+  if (left === null && leftLength !== 0) throw new Error("assert(pLeft || nLeftLength == 0)");
+  if (rightLength < 0) throw new Error("assert(nRightLength >= 0)");
+  if (right === null && rightLength !== 0) throw new Error("assert(pRight || nRightLength == 0)");
+  const original = destination[0];
+  if (leftLength > 2147483647 - rightLength) {
+    if (throwOnOverflow) throw new RangeError("newConcat");
+    destination[0] = null;
+  } else {
+    const allocated = Alloc(leftLength + rightLength);
+    if (allocated === null) console.warn("OSL_ASSERT: pTempStr != nullptr");
+    destination[0] = allocated;
+    if (allocated !== null) {
+      if (leftLength) Copy(allocated.buffer, left as Uint16Array, leftLength);
+      if (rightLength)
+        Copy(allocated.buffer.subarray(leftLength), right as Uint16Array, rightLength);
+    }
+  }
+  if (original !== null) release(original);
+}
+/** Original two-owned-string newConcat overload retains empty/null source selection before NoThrow allocation. @param destination - Native output slot. @param left - Borrowed data. @param right - Borrowed data. @returns Nothing. */
+export function newConcat(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: rtl_uString | null,
+): void {
+  if (right === null || right.length === 0) {
+    if (left === null) throw new Error("assert(pLeft != nullptr)");
+    assign(destination, left);
+  } else if (left === null || left.length === 0) assign(destination, right);
+  else newConcat_WithLengths(destination, left.buffer, left.length, right.buffer, right.length);
+}
+
+/** Original owned-string newReplaceStrAt overload and its consumed interior-span specialization. The raw-view append overload is not exposed by this slice. @param destination - In/out C slot. @param original - Borrowed original. @param index - Signed32 offset. @param count - Signed32 removal count. @param replacement - Borrowed replacement or null deletion. @returns Nothing. */
+export function newReplaceStrAt(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  index: number,
+  count: number,
+  replacement: rtl_uString | null,
+): void {
+  index |= 0;
+  count |= 0;
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (index < 0 || index > original.length)
+    throw new Error("assert(nIndex >= 0 && nIndex <= pStr->length)");
+  if (count < 0) throw new Error("assert(nCount >= 0)");
+  if (count > original.length - index) throw new Error("assert(nCount <= pStr->length - nIndex)");
+  if (index >= original.length) {
+    newConcat(destination, original, replacement);
+    return;
+  }
+  if (count >= original.length - index) {
+    if (index === 0) {
+      if (replacement === null) new_(destination);
+      else assign(destination, replacement);
+      return;
+    }
+    count = original.length - index;
+  }
+  const replacementUnits = replacement === null ? null : replacement.buffer,
+    replacementLength = replacement === null ? 0 : replacement.length;
+  // The source raw-span append arm is unreachable here: the owned overload already handled index >= length.
+  if (count >= original.length - index) {
+    if (index === 0) {
+      newFromStr_WithLength(destination, replacementUnits, replacementLength);
+      return;
+    }
+    count = original.length - index;
+  }
+  if (!count && !replacementLength) {
+    assign(destination, original);
+    return;
+  }
+  const previous = destination[0];
+  destination[0] = Alloc(original.length - count + replacementLength);
+  if (destination[0] === null) throw new Error("assert(*ppThis != nullptr)");
+  const buffer = destination[0].buffer;
+  let offset = 0;
+  if (index) {
+    Copy(buffer, original.buffer, index);
+    offset += index;
+  }
+  if (replacementLength) {
+    Copy(buffer.subarray(offset), replacementUnits as Uint16Array, replacementLength);
+    offset += replacementLength;
+  }
+  Copy(
+    buffer.subarray(offset),
+    original.buffer.subarray(index + count),
+    original.length - index - count,
+  );
+  if (previous !== null) release(previous);
+}
+
+/** Original Unicode raw-span newConcat overload selects Throw and preserves the empty-span assignment fast path. @param destination - Native output slot. @param left - Actual left data. @param right - Borrowed units. @param length - Signed32 logical length. @returns Nothing. */
+export function newConcat_Utf16(
+  destination: rtl_uStringSlot | null,
+  left: rtl_uString | null,
+  right: Uint16Array | null,
+  length: number,
+): void {
+  if (left === null) throw new Error("assert(pLeft != nullptr)");
+  length |= 0;
+  if (length === 0) assign(destination, left);
+  else newConcat_WithLengths(destination, left.buffer, left.length, right, length, true);
+}
+
+/** Original known-length shortened CompareIgnoreAsciiCase specialization followed by generic no-shortening traversal. @param first - First storage. @param firstLength - First length. @param second - Second storage. @param secondLength - Second length. @param shortened - Comparison bound. @returns Original exact comparator result. */
+export function compare_ShortenedIgnoreAsciiCaseWithLengths(
+  first: Uint16Array | null,
+  firstLength: number,
+  second: Uint16Array | null,
+  secondLength: number,
+  shortened: number,
+): number {
+  firstLength |= 0;
+  secondLength |= 0;
+  shortened |= 0;
+  if (firstLength < 0 || secondLength < 0) throw new Error("assert(len >= 0)");
+  if (shortened < 0) throw new Error("assert(nShortenedLength >= 0)");
+  const end1 = Math.min(firstLength, shortened),
+    end2 = Math.min(secondLength, shortened);
+  for (let index = 0; ; ++index) {
+    if (index === end2) return index === end1 ? 0 : 1;
+    if (index === end1) return -1;
+    const result = compareIgnoreAsciiCase(
+      (first as Uint16Array)[index] as number,
+      (second as Uint16Array)[index] as number,
+    );
+    if (result !== 0) return result;
+  }
+}
+
+/** Original bounded UTF16 newReplaceAllFromIndex specialization; preserve capacity growth, no-match sharing and final release ordering. @param destination - Actual result slot. @param original - Borrowed original. @param from - Borrowed search units. @param fromLength - Search length. @param to - Borrowed replacement units. @param toLength - Replacement length. @param fromIndex - Initial offset. @returns Nothing. */
+export function newReplaceAllFromIndex(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  from: Uint16Array | null,
+  fromLength: number,
+  to: Uint16Array | null,
+  toLength: number,
+  fromIndex: number,
+): void {
+  fromLength |= 0;
+  toLength |= 0;
+  fromIndex |= 0;
+  if (destination === null) throw new Error("assert(s != nullptr)");
+  if (original === null) throw new Error("assert(s1 != nullptr)");
+  if (fromLength < 0) throw new Error("assert(fromLength >= 0)");
+  if (from === null && fromLength !== 0)
+    throw new Error("assert(from != nullptr || fromLength == 0)");
+  if (toLength < 0) throw new Error("assert(toLength >= 0)");
+  if (to === null && toLength !== 0) throw new Error("assert(to != nullptr || toLength == 0)");
+  if (fromIndex < 0 || fromIndex > original.length)
+    throw new Error("assert(fromIndex >= 0 && fromIndex <= s1->length)");
+  let index = indexOfStr_WithLength(
+    original.buffer.subarray(fromIndex),
+    original.length - fromIndex,
+    from,
+    fromLength,
+  );
+  if (index >= 0) {
+    if (original.length - fromLength > SAL_MAX_INT32 - toLength) throw new Error("std::abort");
+    index += fromIndex;
+    const capacity: [number] = [original.length + (toLength - fromLength)];
+    if (fromLength < toLength) {
+      const maxMoreFinds = Math.trunc((original.length - index - fromLength) / fromLength),
+        increase = toLength - fromLength;
+      capacity[0] +=
+        Math.min(maxMoreFinds, Math.trunc((SAL_MAX_INT32 - capacity[0]) / increase), 16) * increase;
+    }
+    const previous = destination[0];
+    destination[0] = Alloc(capacity[0]);
+    (destination[0] as rtl_uString).length = 0;
+    fromIndex = 0;
+    do {
+      stringbuffer_insert(
+        destination,
+        capacity,
+        (destination[0] as rtl_uString).length,
+        original.buffer.subarray(fromIndex),
+        index,
+      );
+      stringbuffer_insert(
+        destination,
+        capacity,
+        (destination[0] as rtl_uString).length,
+        to,
+        toLength,
+      );
+      fromIndex += index + fromLength;
+      index = indexOfStr_WithLength(
+        original.buffer.subarray(fromIndex),
+        original.length - fromIndex,
+        from,
+        fromLength,
+      );
+    } while (index >= 0);
+    stringbuffer_insert(
+      destination,
+      capacity,
+      (destination[0] as rtl_uString).length,
+      original.buffer.subarray(fromIndex),
+      original.length - fromIndex,
+    );
+    if (previous) release(previous);
+  } else assign(destination, original);
 }

@@ -1,0 +1,52 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/ui/inc/csvcontrol.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/ui/inc/csvcontrol.hxx",
+    "localSymbols": [
+      "SC_COL_STANDARD",
+      "SC_COL_TEXT",
+      "SC_COL_MDY",
+      "SC_COL_DMY",
+      "SC_COL_YMD",
+      "SC_COL_SKIP",
+      "SC_COL_ENGLISH"
+    ],
+    "upstreamSymbols": [
+      "SC_COL_STANDARD",
+      "SC_COL_TEXT",
+      "SC_COL_MDY",
+      "SC_COL_DMY",
+      "SC_COL_YMD",
+      "SC_COL_SKIP",
+      "SC_COL_ENGLISH"
+    ],
+    "preservedResponsibilities": [
+      "Original external CSV column codes Standard1/Text2/MDY3/DMY4/YMD5/Skip9/English10 are kept distinct from zero-based grid indices. Moves the existing misplaced local constants to the original csvcontrol header boundary and corrects Standard0/Text1, which contradicted the pinned external filter-option contract. No native grid/control implementation or full recognition parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Native ScCsvControl/ScCsvGrid widgets and remaining CSV recognition/formatting integration are unported."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/ui/inc/csvcontrol.ts",
+          "marker": "SC_COL_STANDARD"
+        },
+        {
+          "path": "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts",
+          "marker": "external Standard1/Text2"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/ui/inc/csvcontrol.hxx",
+          "marker": "SC_COL_STANDARD"
+        }
+      ]
+    }
+  }
+}

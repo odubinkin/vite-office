@@ -1,18 +1,26 @@
 /** @fileoverview Native compiled-format literal matching retains sign reconciliation and remaining-suffix rules. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import type { OUString } from "../../../sal/inc/rtl/ustring";
 import { NfSymbolType } from "../../inc/nfsymbol";
 import { SvNumFormatType as Type } from "../../inc/zforlist";
-import { SvNFLanguageData, SvNumberFormatter } from "./zforlist";
+import { SvNumberFormatter } from "./zforlist";
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
 it("reconciles negative subformat literals with already scanned signs", /** Checks the original compiled token owner and source-private matching stage without creating another formatter. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const negative = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[1] as ImpSvNumFor;
   negative.Enlarge(1);
   negative.Info().nTypeArray[0] = NfSymbolType.STRING;
@@ -78,7 +86,7 @@ it("reconciles negative subformat literals with already scanned signs", /** Chec
 
 it("matches leading, middle and trailing literals through complete compiled-format dispatch", /** Checks original compiled token owners directly because arbitrary pattern parsing is not yet ported. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     IsNumberFormatMain(value: OUString, format: SvNumberformat): boolean;
   };
@@ -104,7 +112,14 @@ it("matches leading, middle and trailing literals through complete compiled-form
       const code = unicode("General");
       const input = unicode(source);
       const error: [number] = [0];
-      const format = new SvNumberformat(code, language.GetFormatScanner(), error, [0x0409]);
+      const format = new SvNumberformat(
+        code,
+        language.GetFormatScanner(),
+        language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+        language.GetFormatScanner().getColorCallback().GetNatNum(),
+        error,
+        [0x0409],
+      );
       try {
         expect(error[0]).toBe(0);
         const section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
@@ -138,9 +153,16 @@ it("matches leading, middle and trailing literals through complete compiled-form
 
 it("falls back from the locale currency to the explicit compiled currency symbol", /** Checks native currency tokens and symbol-length admission against the current source owner. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   first.Enlarge(1);
   first.Info().nTypeArray[0] = NfSymbolType.CURRENCY;

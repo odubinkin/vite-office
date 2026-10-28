@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/i18n/calendar.type.ts",
+    "upstreamPath": "vendor/icu-reference/source/i18n/calendar.cpp",
+    "localSymbols": [
+      "getCalendarType",
+      "isStandardSupportedKeyword",
+      "getCalendarTypeForLocale"
+    ],
+    "upstreamSymbols": [
+      "getCalendarTypeForLocale"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 calendar.cpp type table and locale calendar selection, including legacy canonicalization, calendar keyword and supplemental territory preferences. This is selection only, not a replacement Calendar factory.",
+      "Full unchanged calendar.cpp source selector matches1580 cases including1502 locale names over complete pinned resources."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar.type.ts",
+          "marker": "getCalendarType"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/i18n/calendar.cpp",
+          "marker": "getCalendarTypeForLocale"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/external/icu/source/i18n/calendar.type.ts",
+      "rationale": "Split the original source responsibility into a TypeScript fragment while retaining the actual source owner, to satisfy file-size and ESM initialization constraints.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

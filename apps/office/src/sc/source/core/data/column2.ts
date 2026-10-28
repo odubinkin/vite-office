@@ -52,3 +52,16 @@ export function lcl_GetAttribHeight(
   if (height < minHeight) height = minHeight;
   return height;
 }
+
+import type { ScColumn } from "../../../inc/column";
+import { ATTR_VALUE_FORMAT } from "../../../inc/scitems";
+import { SfxUInt32Item } from "../../../../svl/source/items/intitem";
+/** Original column2.cxx applies the format through the real pooled attribute path. @param this - Actual column. @param row - Row. @param key - Formatter key. @returns Nothing. */
+export function SetNumberFormat(this: ScColumn, row: number, key: number): void {
+  const item = new SfxUInt32Item(ATTR_VALUE_FORMAT, key);
+  try {
+    this.ApplyAttr(row, item);
+  } finally {
+    item.Dispose();
+  }
+}

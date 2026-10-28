@@ -48,7 +48,7 @@ it("copies native empty,numeric,string and formula alternatives and commits real
   const formula = doc.GetFormulaCell(pos) as ScFormulaCell;
   snapshot.assign(doc, pos);
   expect(snapshot.getFormula()).not.toBe(formula);
-  expect(snapshot.getFormula().GetCode().GetArray()?.[0]).not.toBe(
+  expect((snapshot.getFormula() as ScFormulaCell).GetCode().GetArray()?.[0]).not.toBe(
     formula.GetCode().GetArray()?.[0],
   );
   const copy = new ScCellValue(snapshot);
@@ -66,7 +66,7 @@ it("copies native empty,numeric,string and formula alternatives and commits real
   snapshot.clear();
   const adopted = new ScCellValue();
   adopted.set(new ScFormulaCell(doc, pos, unicode("=8"), FormulaGrammar.Grammar.GRAM_NATIVE));
-  expect(adopted.getFormula().GetValue()).toBe(8);
+  expect((adopted.getFormula() as ScFormulaCell).GetValue()).toBe(8);
   adopted.clear();
   expect(/** Wrong native variant. @returns Nothing. */ () => adopted.getFormula()).toThrow(
     "bad_variant_access",

@@ -1,4 +1,5 @@
 /** @fileoverview Native compiled-format token boundaries independent of the unported arbitrary format parser. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -7,7 +8,7 @@ import { DateOrder } from "../../../unotools/source/i18n/localedatawrapper";
 import { NfKeywordIndex as K } from "../../inc/nfkeytab";
 import { NfSymbolType as S } from "../../inc/nfsymbol";
 import { SvNumFormatType as Type } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
 /** Assigns actual compiled token owners without adding a format-code parser. @param section - Native owner. @param tokens - Explicit token fixture. @returns Nothing. */
@@ -26,9 +27,16 @@ function tokens(section: ImpSvNumFor, tokens: readonly (readonly [number, string
 
 it("accepts complete minute-second token sequences and rejects misplaced delimiters or digits", /** Checks original bracket and separator state using actual native compiled token storage. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   const minute = [K.MI, "M"] as const,
     second = [K.S, "S"] as const,
@@ -72,9 +80,16 @@ it("accepts complete minute-second token sequences and rejects misplaced delimit
 
 it("retains every native date-token alias and ignores literal tokens in packed date order", /** Checks compiled aliases without translating them into a separate date engine. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   try {
     format.SetType(Type.DATE);
@@ -105,9 +120,16 @@ it("retains every native date-token alias and ignores literal tokens in packed d
 
 it("retains fourth-subformat text literals while ignoring star and blank modifiers", /** Checks original text rendering, absent text sections and non-text section admission. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[3] as ImpSvNumFor;
   const input = unicode("Value"),
     output = unicode("unchanged");
@@ -139,9 +161,16 @@ it("retains fourth-subformat text literals while ignoring star and blank modifie
 
 it("rejects out-of-range literal sections and recognizes only edge negative signs", /** Checks native token-search failure and source edge-space handling. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   const first = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   try {
     tokens(first, [[S.DIGIT, "0"]]);

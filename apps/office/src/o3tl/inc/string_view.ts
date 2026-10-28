@@ -1,6 +1,9 @@
 /** @fileoverview Original UTF16 token/trim/decimal views,whitespace predicate and bounded toInt32 from include/o3tl/string_view.hxx. */
 import { rtl_str_toInt64_WithLength } from "../../sal/inc/rtl/string.h";
-import { rtl_ustr_toInt64_WithLength } from "../../sal/inc/rtl/ustring.h";
+import {
+  rtl_ustr_toInt64_WithLength,
+  rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength,
+} from "../../sal/inc/rtl/ustring.h";
 import { SAL_MIN_INT32, SAL_MAX_INT32 } from "../../sal/inc/types";
 import { rtl_math_uStringToDouble } from "../../sal/inc/rtl/math.h";
 import { rtl_math_stringToDouble } from "../../sal/inc/rtl/math.h";
@@ -136,4 +139,22 @@ export function toUInt32(str: Uint16Array | Uint8Array, radix = 10): number {
   let n = toInt64(str, radix);
   if (n < 0n || n > 0xffffffffn) n = 0n;
   return Number(n);
+}
+
+/** Original UTF16 string-view ASCII-insensitive prefix comparison. @param first - First view. @param second - Prefix view. @param fromIndex - Native offset. @returns Whether the prefix matches. */
+export function matchIgnoreAsciiCase(
+  first: Uint16Array,
+  second: Uint16Array,
+  fromIndex = 0,
+): boolean {
+  fromIndex |= 0;
+  return (
+    rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength(
+      first.subarray(fromIndex),
+      first.length - fromIndex,
+      second,
+      second.length,
+      second.length,
+    ) === 0
+  );
 }

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/document.frame.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/document.cxx",
+    "localSymbols": [
+      "ApplySelectionFrame"
+    ],
+    "upstreamSymbols": [
+      "ScDocument::ApplySelectionFrame"
+    ],
+    "preservedResponsibilities": [
+      "Existing selection-frame/envelope body moves intact from the document facade to retain original document.cxx ownership and the hard source-file budget; no frame behavior is altered."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/document.frame.ts",
+          "marker": "ApplySelectionFrame"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/document.cxx",
+          "marker": "ScDocument::ApplySelectionFrame"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/document.frame.ts",
+      "rationale": "Split the original large translation unit by input, formula joins, frame, ISO or edit-format responsibilities while retaining original owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

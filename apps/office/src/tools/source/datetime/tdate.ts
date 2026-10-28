@@ -1,4 +1,4 @@
-/** @fileoverview Original tools::Date packed value,DMY/copy construction,validity, normalization and normalized-day counting over the actual shared comphelper date algorithms. System clock,UNO conversion and other operations remain unported. */
+/** @fileoverview Original tools::Date packed value,DMY/copy construction,validity, normalization and normalized-day counting over the actual shared comphelper date algorithms. System-clock date construction uses the actual platform local-date boundary; UNO conversion and other operations remain unported. */
 import {
   convertDateToDays,
   convertDaysToDate,
@@ -6,6 +6,9 @@ import {
   normalize,
   type DateFields,
 } from "../../../comphelper/source/misc/date";
+import { GetSystemDateTime } from "./systemdatetime";
+/** Original DateInitSystem constructor tag; numeric packed dates remain a distinct overload. */
+const SYSTEM = Symbol("DateInitSystem");
 /** Original borrowed const Date value contract,with no new lifetime owner. */
 export interface DateConstReference {
   /** Original raw packed field. @returns Signed32 date. */
@@ -25,13 +28,22 @@ export interface DateConstReference {
 }
 /** Original packed signed32 date value;no JavaScript Date or alternate calendar backend is used. */
 export class Date implements DateConstReference {
+  static readonly SYSTEM: typeof SYSTEM = SYSTEM;
   private mnDate: number;
-  /** Original raw signed32/copy/DMY constructors. Numeric0 also represents the original EMPTY tag;SYSTEM clock construction is not represented. @param args - Original admitted overload inputs. @returns Date value. */
+  /** Original raw signed32/copy/DMY constructors. Numeric0 also represents the original EMPTY tag;SYSTEM requests the original local clock branch. @param args - Original admitted overload inputs. @returns Date value. */
   constructor(
-    ...args: [packed: number | DateConstReference] | [day: number, month: number, year: number]
+    ...args:
+      | [packed: number | DateConstReference | typeof SYSTEM]
+      | [day: number, month: number, year: number]
   ) {
-    if (args.length === 1)
-      this.mnDate = typeof args[0] === "number" ? args[0] | 0 : args[0].GetDate();
+    if (args.length === 1 && args[0] === SYSTEM) {
+      const value: [number] = [0];
+      this.mnDate = 0;
+      if (GetSystemDateTime(value, null)) this.mnDate = value[0];
+      else this.setDateFromDMY(1, 1, 1900);
+    } else if (args.length === 1)
+      this.mnDate =
+        typeof args[0] === "number" ? args[0] | 0 : (args[0] as DateConstReference).GetDate();
     else {
       this.mnDate = 0;
       this.setDateFromDMY(...args);

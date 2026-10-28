@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/i18npool/source/calendar/calendar_gregorian.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/i18npool/source/calendar/calendar_gregorian.ts",
+        "scripts/libreoffice-calendar-native-probe.mjs"
+      ],
+      "justification": "Original LibreOffice Calendar_gregorian temporal service state and ICU interaction. Root Gregorian construction, system timezone, pending signed16 fields, offset remainders, era mapping and validation follow the pinned source. Display/native-number formatting is a separate unconsumed responsibility. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced. Unchanged extracted LibreOffice temporal method bodies linked against unchanged ICU78.3 match2226 field/era/offset/validation cases across seven temporal providers and six zones. Minimal UNO declarations and integral-millisecond RTL round binding isolate this witness; full UNO service registration/display/fractional rounding are not claimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "Era",
+        "Calendar_gregorian",
+        "Calendar_gengou",
+        "Calendar_ROC",
+        "Calendar_dangi",
+        "Calendar_buddhist",
+        "Calendar_hanja",
+        "Calendar_hanja_yoil"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "i18npool/source/calendar/calendar_gregorian.cxx",
+      "upstreamSymbols": [
+        "Calendar_gregorian::setDateTime"
+      ]
+    }
+  }
+}

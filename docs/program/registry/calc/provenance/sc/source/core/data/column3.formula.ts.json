@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sc/source/core/data/column3.formula.ts",
+    "status": "mapped",
+    "upstreamPath": "sc/source/core/data/column3.cxx",
+    "localSymbols": [
+      "JoinNewFormulaCell"
+    ],
+    "upstreamSymbols": [
+      "ScColumn::JoinNewFormulaCell"
+    ],
+    "preservedResponsibilities": [
+      "Existing original neighboring formula join body moves intact from the column facade to retain source responsibility and the hard file-size gate; actual typed-store positions and shared formula owners are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Full native differential closure and complete CSV import/export/UI acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sc/source/core/data/column3.formula.ts",
+          "marker": "JoinNewFormulaCell"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/column3.cxx",
+          "marker": "ScColumn::JoinNewFormulaCell"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/sc/source/core/data/column3.formula.ts",
+      "rationale": "Split the original large translation unit by input, formula joins, frame, ISO or edit-format responsibilities while retaining original owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "ImpGenerateAdditionalFormats"
+    ],
+    "upstreamSymbols": [
+      "SvNFFormatData::ImpGenerateAdditionalFormats"
+    ],
+    "preservedResponsibilities": [
+      "Original two additional-builtin passes use actual COW Sequence/NumberFormatCode storage, current locale snapshot, bounded locale-block allocation, source temporary currency index/default changes, duplicate-aware actual insertion, additional flags and General last-insert key. Diagnostic-only changing-system arguments are erased; native initializer differential closure and complete CSV recognition/output remain pending."
+    ],
+    "omittedResponsibilities": [
+      "Full native initializer differential closure, complete CSV recognition/cell-dispatch and formatted-output acceptance remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+          "marker": "ImpGenerateAdditionalFormats"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFFormatData::ImpGenerateAdditionalFormats"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+      "rationale": "Split the large original zforlist.cxx by builtin initialization and additional-format generation responsibilities, keeping actual source owners and caller contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

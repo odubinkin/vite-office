@@ -1,0 +1,53 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "GetKeyWord",
+      "Next_Symbol",
+      "Symbol_Division",
+      "SkipStrings",
+      "PreviousKeyword",
+      "NextKeyword",
+      "PreviousType",
+      "PreviousChar",
+      "NextChar",
+      "IsLastBlankBeforeFrac",
+      "Is100SecZero"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::GetKeyWord",
+      "ImpSvNumberformatScan::Next_Symbol",
+      "ImpSvNumberformatScan::Symbol_Division"
+    ],
+    "preservedResponsibilities": [
+      "Original longest-first localized/English keyword lookup, sticky English flag, quote/escape/star/blank lexical state machine, original currency exclusion and fixed 100-token capacity, source neighbor and fractional-second predicates. Operates on actual scanner/CharClass/LocaleDataWrapper/OUString owners. Unchanged native source bodies match 32972 combined keyword/lexical/type/neighbor/quote/insertion observations across 52 requested languages, all localization policies and conversion flags. Scalar native provider/locale and string-value fixtures are explicit; full UNO/SAL lifetime equivalence is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full FinalScan, prefixes, complete builtin generation and public CSV auto-input remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+          "marker": "GetKeyWord"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::GetKeyWord"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+      "rationale": "Split the original large translation unit by scanner keyword, lexical, type and quote responsibilities while retaining original owners and contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

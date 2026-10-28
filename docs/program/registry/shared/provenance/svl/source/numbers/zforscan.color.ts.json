@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.color.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "GetColor",
+      "StandardColor",
+      "NF_MAX_DEFAULT_COLORS"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::GetColor",
+      "ImpSvNumberformatScan::StandardColor"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG ports original complete GetColor, native palette values/order, German-only localization/AllowEnglish fallback, source conversion directions, original comphelper strip, strict ASCII numeric gate and original COLOR1..64 -> zero-based actual formatter callback. Palette elements are actual copied Color values, not references to the global initializer constants. The scanner borrows its actual SvNumberFormatter supplier. The full native scanner witness includes unchanged GetColor, palette initializers, strip and ASCII-digit classifier bodies with explicit scalar/provider/callback fixtures; whole constructor/UNO/SAL ABI parity remains unverified."
+    ],
+    "omittedResponsibilities": [
+      "Only the stated consumed source responsibilities are covered; complete native module/ABI, formatter constructor/output and CSV recognition remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.color.ts",
+          "marker": "GetColor"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::GetColor"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.color.ts",
+      "rationale": "Keep original scanner color recognition and palette responsibility together as a fragment of the native large translation unit.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

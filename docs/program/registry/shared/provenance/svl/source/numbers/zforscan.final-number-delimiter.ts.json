@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.final-number-delimiter.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "FinalScanNumberDelimiter",
+      "FinalScanSeparator"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::FinalScan"
+    ],
+    "preservedResponsibilities": [
+      "Original numeric delimiter switch and separator arm preserve fixed string-slot aliases while the cursor advances, decimal/grouping ambiguity, source dash/currency handling, fraction and bracket transitions, EMPTY counts and arms that deliberately revisit a retyped slot.",
+      "Included in the 74396-observation unchanged-source scanner witness, across54 requested language IDs and three keyword policies. Full final scanning is compared for non-converting inputs; lexer/type conversion flags are also exercised. Native dependencies use declared scalar locale/provider/string-value fixtures, actual source integer conversion/formatting and original DigitGroupingIterator. Full native service-owner or cross-locale final-conversion equivalence is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Remaining format constructor prefixes/conditions/NatNum/color, full builtin generation/output and public CSV recognition integration remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.final-number-delimiter.ts",
+          "marker": "FinalScanNumberDelimiter"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::FinalScan"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.final-number-delimiter.ts",
+      "rationale": "Partition original FinalScan automatic lifetime, temporal/text cases and common quote operations while retaining actual scanner/locale/token ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

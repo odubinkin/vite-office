@@ -90,25 +90,11 @@
       "ImpSvNumberInputScan::IsNumberFormatMain"
     ],
     "preservedResponsibilities": [
-      "Task AQF9AG replaces projected input-date/year fields with the actual language-owned ImpSvNumberInputScan instance. Its source defaults, twenty fragment slots, parse-state reset, cached-separator locale invalidation, raw null-date assignment and two-digit-year accessors are represented. The exact source ASCII-digit/non-digit division, near-capacity complete-thousands-group collapse, substring skips, native blank characters, date-word boundaries, locale decimal and grouping separators, leading/exponent signs and numeric-fragment step are represented, including the source embedded-NUL cursor behavior. IsNumberFormat and its classification/conversion stages remain unported; no heuristic substitute is claimed.",
-      "Task AQF9AG ports source AM/PM matching and fractional-second separator recognition, including ISO dot/comma acceptance and locale fallback.",
-      "Task AQF9AG ports source time-part conversion, AM/PM adjustment, duration/lax bounds, leap second and fractional seconds; output is written even for rejected times.",
-      "Task AQF9AG ports whole-input logical-word comparison against the native format-scanner keywords.",
-      "Task AQF9AG ports source cached ISO and named-month date-shape checks, bounded day and year numeric-fragment conversion, and the matched-string return marker. Complete date acceptance and value conversion remain unported.",
-      "Task AQF9AG ports InitText, GetMonth and GetDayOfWeek over source default-calendar names, preserving full/abbreviated/genitive/partitive order and source German and September alternate spellings.",
-      "Task AQF9AG ports IsAcceptedDatePattern over source-generated locale sequences, including source pattern priority, decimal-separator ambiguity, signed year separators, month/day plausibility, trailing spaces and evaluation-order combination. The dependent SkipDatePatternSeparator/GetDatePatternNumbers/IsDatePatternNumberOfType/GetDatePatternOrder methods retain the accepted-pattern cache.",
-      "Task AQF9AG ports the native accepted-pattern/locale/compiled-format date order and ISO forcing policy, including ambiguous two-digit years.",
-      "Task AQF9AG ports source zero-based numeric month conversion with its calendar-count invalid sentinel and middle-month long-date ordering from named-month shape, exact format, locale order and day validity.",
-      "Task AQF9AG ports GetCurrency's active-language currency table lookup, uppercase symbol cache, source cursor advancement and explicit compiled-format currency-token fallback.",
-      "Task AQF9AG ports source compiled-format literal/currency token selection, negative sign/condition tests and input scanner ScanStringNumFor with native case-ignore comparison across subformats and suffixes.",
-      "Task AQF9AG ports ScanStartString over source sign, decimal, currency, month/day-name, date-pattern and compiled-literal owners, retaining matched-string flags and early-return ordering.",
-      "Task AQF9AG ports source ScanEndString trailing sign, decimal, percent, currency, date/time, AM/PM, weekday and compiled-literal control flow, retaining the disabled ISO timezone branch.",
-      "Task AQF9AG ports source ScanMidString decimal, fraction, grouping, date/time, month, exponent and compiled-format matching order over the existing scanner fields; NF_RECOGNIZE_ISO8601_TIMEZONES remains disabled as pinned upstream.",
-      "Task AQF9AG ports source IsNumberFormatMain fragment-count dispatch, logical keyword branch, preset FRACTION branches, format-literal count reconciliation and final scanned type selection. Numeric value conversion in IsNumberFormat remains separate.",
-      "Task AQF9AG ports TransformInput's non-ASCII digit gate and NATNUM0 forwarding to the source native-number wrapper, using the current language's Locale."
+      "Original scanner state, locale/text invalidation, input-date ownership and source helper dispatch. Public IsNumberFormat now preserves input length0/over308 rejection, uppercase and native-number conversion, source category/count gates, actual calendar/date/time and numeric result dispatch and final Text/zero failure outputs. Date-order retries retain source THE_FUTURE calendar switching disabled.",
+      "AQF9AG restores the original public CanForceToIso8601 access and inline HasIso8601Tsep field query consumed by SvNFEngine::IsNumberFormat. Recognition state and detection logic are unchanged."
     ],
     "omittedResponsibilities": [
-      "Input number classification and conversion and native-number transliteration remain unported; GetCurrency is ready but not yet called by the main classification path."
+      "Complete formatter index selection and Calc column/importer auto-input integration remain pending. Native whole-LibreOffice scanner binary comparison and full unsupported/unconsumed API surfaces remain unverified."
     ],
     "evidence": {
       "local": [

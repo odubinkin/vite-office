@@ -213,7 +213,9 @@ export function CopyOneCellFromClip(
     attr = context.getSingleCellAttr(offset),
     length = row2 - row1 + 1;
   if (source.getType() === CellType.CELLTYPE_FORMULA) {
-    this.CloneFormulaCell(block, source.getFormula(), attr, [new RowSpan(row1, row2)]);
+    this.CloneFormulaCell(block, source.getFormula() as ScFormulaCell, attr, [
+      new RowSpan(row1, row2),
+    ]);
     return;
   }
   if (source.getType() === CellType.CELLTYPE_NONE) return;

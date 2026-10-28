@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "GetCLOffsetRW",
+      "GetCLOffsetRO",
+      "DefaultCurrencyRW",
+      "DefaultCurrencyRO",
+      "GetRWPolicy",
+      "GetROPolicy"
+    ],
+    "upstreamSymbols": [
+      "SvNFEngine::GetCLOffsetRW",
+      "SvNFEngine::GetCLOffsetRO",
+      "SvNFEngine::DefaultCurrencyRW",
+      "SvNFEngine::DefaultCurrencyRO",
+      "SvNFEngine::GetRWPolicy"
+    ],
+    "preservedResponsibilities": [
+      "Original complete four-callback writable/readonly accessor factories capture real table and caller-owned temporary cache values. RO checks preserve missing locale/currency preconditions and never generate fallback state. Thread scheduling/UNO ABI remain unrepresented.",
+      "AQF9AG corrects the initial local GetROPolicy capture deviation to original CALC-348: mCacheFormat writes the caller map by reference while mFindFormat reads a construction-time map snapshot, with owner-cache precedence unchanged. No upstream cache repair is introduced."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+          "marker": "GetCLOffsetRW"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "SvNFEngine::GetCLOffsetRW"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

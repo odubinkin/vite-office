@@ -1,8 +1,9 @@
 /** @fileoverview Native friend-level result admission rejects inconsistent classified numeric counts. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
 import { SvNumFormatType as T } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
+
 import { CheckScannedNumber } from "./zforfind.scan-value";
 
 it.each([
@@ -34,7 +35,7 @@ it.each([
     normalized,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, 0x0409),
+      language = createNumberFormatLanguage(mapper, 0x0409),
       scanner = language.pStringScanner;
     try {
       Object.assign(scanner.fields, {
@@ -73,7 +74,7 @@ it.each([
     accepted,
   ) => {
     const mapper = new NumberFormatCodeMapper(),
-      language = new SvNFLanguageData(mapper, 0x0409),
+      language = createNumberFormatLanguage(mapper, 0x0409),
       scanner = language.pStringScanner;
     try {
       Object.assign(scanner.fields, {

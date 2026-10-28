@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+        "apps/office/src/svl/source/numbers/zforlist.recognition.test.ts"
+      ],
+      "justification": "Original standard-selection overloads, cache query/write order, unknown-language resolution, actual writable/readonly policy calls and time/duration/fractional-second key preservation. Actual builtin tables are generated through the original owner initializer.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetFormatIndex",
+        "ImpGetStandardFormat",
+        "GetTimeFormat",
+        "GetStandardFormat",
+        "GetStandardIndex"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFEngine::GetFormatIndex",
+        "SvNFEngine::ImpGetStandardFormat",
+        "SvNFEngine::GetTimeFormat",
+        "SvNFEngine::GetStandardFormat",
+        "SvNFEngine::GetStandardIndex"
+      ]
+    }
+  }
+}

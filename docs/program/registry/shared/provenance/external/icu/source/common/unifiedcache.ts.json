@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "status": "mapped",
+    "localPath": "apps/office/src/external/icu/source/common/unifiedcache.ts",
+    "upstreamPath": "vendor/icu-reference/source/common/unifiedcache.cpp",
+    "localSymbols": [
+      "UnifiedCache"
+    ],
+    "upstreamSymbols": [
+      "UnifiedCache::UnifiedCache"
+    ],
+    "preservedResponsibilities": [
+      "Original ICU78.3 UnifiedCache creation/status, reference ownership and incremental eviction over the actual UHashtable. Synchronous realm execution replaces native mutex boundaries; in-progress same-key recursion retains the native nontermination contract.",
+      "Unchanged ICU78.3 libraries match2445 cache/status/refcount/alias/eviction cases with842 value lifetimes. Dependent-value destruction under the native mutex is explicitly excluded after observing CALC-344 deadlock; no native concurrency claim is made."
+    ],
+    "omittedResponsibilities": [
+      "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/external/icu/source/common/unifiedcache.ts",
+          "marker": "UnifiedCache"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/icu-reference/source/common/unifiedcache.cpp",
+          "marker": "UnifiedCache::UnifiedCache"
+        }
+      ]
+    }
+  }
+}

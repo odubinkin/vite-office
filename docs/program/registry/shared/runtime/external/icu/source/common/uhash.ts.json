@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/common/uhash.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/common/uhash.ts"
+      ],
+      "justification": "Original ICU78.3 pointer-key/value UHashtable operations consumed by UnifiedCache. Native prime capacities, double hashing, tombstones, reverse rehash and slot-order iteration are retained; allocation/union ABI is projected to owned JS objects. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced.",
+      "knownViolations": [],
+      "localSymbols": [
+        "UHashElement",
+        "UHashtable",
+        "uhash_open",
+        "uhash_setKeyDeleter",
+        "uhash_find",
+        "uhash_put",
+        "uhash_removeElement",
+        "uhash_nextElement",
+        "uhash_count",
+        "uhash_openSize",
+        "uhash_igeti",
+        "uhash_iputi",
+        "uhash_close"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/common/uhash.cpp",
+      "upstreamSymbols": [
+        "uhash_open"
+      ]
+    }
+  }
+}

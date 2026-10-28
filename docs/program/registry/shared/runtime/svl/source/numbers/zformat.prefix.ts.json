@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+        "apps/office/src/svl/source/numbers/zformat.prefix.test.ts"
+      ],
+      "justification": "AQF9AG ports the complete original bracket-prefix/subformat lexer and condition-number/combining helpers. Source token values, locale-owned H/MI/S classification, mutable ASCII blank removal, literal quoting, combining-unit parity, NatNum0..19 and DBNum1..9 classification and cursor behavior are retained. Keyword numeric conversion uses the actual bounded o3tl/SAL integer implementation, without JavaScript numeric parsing. The original constructor still needs integration of these stages and the required prefix metadata; this fragment alone does not fix CSV recognition or the my-MM constructor regression.",
+      "knownViolations": [],
+      "localSymbols": [
+        "BracketFormatSymbolType",
+        "SvNumberformatLimitOps",
+        "ImpNextSymbol",
+        "ImpGetNumber",
+        "IsCombiningSymbol",
+        "lcl_matchKeywordAndGetNumber",
+        "lcl_SvNumberformat_IsBracketedPrefix"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zformat.cxx",
+      "upstreamSymbols": [
+        "BracketFormatSymbolType",
+        "SvNumberformat::ImpNextSymbol",
+        "SvNumberformat::ImpGetNumber",
+        "IsCombiningSymbol",
+        "lcl_matchKeywordAndGetNumber",
+        "lcl_SvNumberformat_IsBracketedPrefix"
+      ]
+    }
+  }
+}

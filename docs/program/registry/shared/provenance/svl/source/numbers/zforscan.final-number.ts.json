@@ -1,0 +1,43 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.final-number.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "FinalScanNumber",
+      "StringEqualsChar"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::FinalScan"
+    ],
+    "preservedResponsibilities": [
+      "Original numeric-category FinalScan loop, exact scientific/fraction counter transitions, canonical fixed-divisor comparison through the real o3tl bounded integer converter and SAL integer formatter, source grouping reinsertion using actual DigitGroupingIterator and InsertSymbol, and digit-token merging. The original cursor/control semantics, including zero early returns and postdecrement narrowing, are retained.",
+      "Included in the 74396-observation unchanged-source scanner witness, across54 requested language IDs and three keyword policies. Full final scanning is compared for non-converting inputs; lexer/type conversion flags are also exercised. Native dependencies use declared scalar locale/provider/string-value fixtures, actual source integer conversion/formatting and original DigitGroupingIterator. Full native service-owner or cross-locale final-conversion equivalence is not claimed."
+    ],
+    "omittedResponsibilities": [
+      "Remaining format constructor prefixes/conditions/NatNum/color, full builtin generation/output and public CSV recognition integration remain incomplete."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.final-number.ts",
+          "marker": "FinalScanNumber"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::FinalScan"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.final-number.ts",
+      "rationale": "Partition original FinalScan automatic lifetime, temporal/text cases and common quote operations while retaining actual scanner/locale/token ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

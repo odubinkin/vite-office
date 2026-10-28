@@ -109,7 +109,8 @@ const allowedEdges = new Map([
   // Original localedata.cxx uses LanguageTag/MsLangId and the actual generated Locale triplet.
   // Original Library_i18npool links cppu and uses SDK API headers;numberformatcode.hxx/cxx consumes
   // real Sequence and NumberFormatCode/FormatElement/selector IDL values,alongside SAL/locale owners.
-  ["i18npool", new Set(["cppu", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
+  // Native Library_i18npool links ICU i18n/common; calendar_gregorian uses its real Calendar/TimeZone factories.
+  ["i18npool", new Set(["cppu", "external", "i18nlangtag", "i18nutil", "offapi", "sal", "udkapi"])],
   // Original casefolding.cxx includes the generated RuntimeException.hpp API owned by CPPU.
   // Original paper.cxx includes o3tl/unit_conversion.hxx for physical paper constants.
   ["i18nutil", new Set(["cppu", "external", "o3tl", "offapi", "sal", "udkapi"])],
@@ -628,7 +629,11 @@ const originalSalO3tlBindings = new Map([
   ["sal/rtl/strtmpl.ts -> o3tl/inc/string_view.ts", ["implIsWhitespace"]],
   // Original sal/rtl/ustring.cxx uses exactly o3tl::iterateCodePoints.
   ["sal/rtl/ustring.ts -> o3tl/inc/string_view.ts", ["iterateCodePoints"]],
-  ["o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts", ["rtl_ustr_toInt64_WithLength"]],
+  // Original toInt32 and matchIgnoreAsciiCase call exactly these Unicode C entries.
+  [
+    "o3tl/inc/string_view.ts -> sal/inc/rtl/ustring.h.ts",
+    ["rtl_ustr_toInt64_WithLength", "rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength"],
+  ],
   // Original byte view overloads call the SAL byte signed64 entry point.
   ["o3tl/inc/string_view.ts -> sal/inc/rtl/string.h.ts", ["rtl_str_toInt64_WithLength"]],
   ["o3tl/inc/string_view.ts -> sal/inc/types.ts", ["SAL_MIN_INT32", "SAL_MAX_INT32"]],

@@ -1,4 +1,5 @@
 /** @fileoverview Native ISO override and compiled-format date-order policy over original scanner state. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
 import { NumberFormatCodeMapper } from "../../../i18npool/inc/numberformatcode";
@@ -10,12 +11,12 @@ import {
 } from "../../../unotools/source/i18n/localedatawrapper";
 import { NfEvalDateFormat, SvNumFormatType } from "../../inc/zforlist";
 import { NfKeywordIndex } from "../../inc/nfkeytab";
-import { SvNFLanguageData } from "./zforlist";
+
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
 
 it("forces ambiguous short ISO years only when native date-order policy permits", /** Checks literal ISO fragments against an actual accepted Y-M-D pattern. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const scanner = language.pStringScanner as unknown as {
     Reset(): void;
     NumberStringDivision(value: OUString): void;
@@ -65,9 +66,16 @@ it("forces ambiguous short ISO years only when native date-order policy permits"
 
 it("compares actual format order with pattern order in all four date evaluation modes", /** Checks native DATE format admission rather than replacing GetDateOrder with a test implementation. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper();
-  const language = new SvNFLanguageData(mapper, 0x0409);
+  const language = createNumberFormatLanguage(mapper, 0x0409);
   const code = unicode("General");
-  const format = new SvNumberformat(code, language.GetFormatScanner(), [0], [0x0409]);
+  const format = new SvNumberformat(
+    code,
+    language.GetFormatScanner(),
+    language.GetFormatScanner().GetCurrentLanguageData().pStringScanner,
+    language.GetFormatScanner().getColorCallback().GetNatNum(),
+    [0],
+    [0x0409],
+  );
   format.SetType(SvNumFormatType.DATE);
   const section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   section.Enlarge(3);

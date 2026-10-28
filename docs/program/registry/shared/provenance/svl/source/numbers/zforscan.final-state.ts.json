@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.final-state.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "FinalScanState"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::FinalScan"
+    ],
+    "preservedResponsibilities": [
+      "Original automatic local lifetime participates in the full final-stage pipeline and releases initialized saved strings on constructor failure. Actual language/cache owners are switched in original order; native full-final comparisons currently cover non-converting inputs."
+    ],
+    "omittedResponsibilities": [
+      "Format constructor/prefix/NatNum/output closure and CSV public auto-input integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.final-state.ts",
+          "marker": "FinalScanState"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::FinalScan"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.final-state.ts",
+      "rationale": "Partition original FinalScan automatic lifetime, temporal/text cases and common quote operations while retaining actual scanner/locale/token ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

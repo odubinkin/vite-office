@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zformat.construct.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zformat.cxx",
+    "localSymbols": [
+      "Construct"
+    ],
+    "upstreamSymbols": [
+      "SvNumberformat::SvNumberformat"
+    ],
+    "preservedResponsibilities": [
+      "AQF9AG connects original full normal-constructor control flow to actual four subformats, prefix lexer, color/natnum/locale owners, input-number scanner and real formatter native-number provider. Preserve Boolean-equivalent replacement default, NBSP normalization, conditions/default General sections, all prefix classes, native locale/calendar/numeral choices, trailing empty/text sections, original metadata/type/error positions and negative-section defaults. No format keys, parsed entries or provider stand-ins are fabricated. Source checked-empty failure is retained as CALC-356. Full native constructor differential closure is still pending; related module tests cover the integration, and lower scanner/string/locale stages have their stated separate native witnesses."
+    ],
+    "omittedResponsibilities": [
+      "Complete table initialization, formatted export/CSV caller closure and full native constructor/service/ABI equivalence remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zformat.construct.ts",
+          "marker": "Construct"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zformat.cxx",
+          "marker": "SvNumberformat::SvNumberformat"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zformat.construct.ts",
+      "rationale": "Split the original large translation unit by constructor/language/output responsibility while retaining actual source owners and original callable contracts.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

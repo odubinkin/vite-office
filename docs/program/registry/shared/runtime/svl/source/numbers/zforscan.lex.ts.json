@@ -1,0 +1,47 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+        "scripts/calc-format-scan-native-probe.mjs"
+      ],
+      "justification": "Original longest-first localized/English keyword lookup, sticky English flag, quote/escape/star/blank lexical state machine, original currency exclusion and fixed 100-token capacity, source neighbor and fractional-second predicates. Operates on actual scanner/CharClass/LocaleDataWrapper/OUString owners. Unchanged native source bodies match 32972 combined keyword/lexical/type/neighbor/quote/insertion observations across 52 requested languages, all localization policies and conversion flags. Scalar native provider/locale and string-value fixtures are explicit; full UNO/SAL lifetime equivalence is not claimed. Full FinalScan, prefixes, complete builtin generation and public CSV auto-input remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetKeyWord",
+        "Next_Symbol",
+        "Symbol_Division",
+        "SkipStrings",
+        "PreviousKeyword",
+        "NextKeyword",
+        "PreviousType",
+        "PreviousChar",
+        "NextChar",
+        "IsLastBlankBeforeFrac",
+        "Is100SecZero"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforscan.cxx",
+      "upstreamSymbols": [
+        "ImpSvNumberformatScan::GetKeyWord",
+        "ImpSvNumberformatScan::Next_Symbol",
+        "ImpSvNumberformatScan::Symbol_Division"
+      ]
+    }
+  }
+}

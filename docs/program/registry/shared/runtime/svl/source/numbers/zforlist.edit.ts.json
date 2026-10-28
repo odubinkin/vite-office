@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "number-formatting",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+        "apps/office/src/sc/source/core/data/column3.input.test.ts"
+      ],
+      "justification": "Original edit-format dispatch preserves ISO variants, fractional date values, source duration threshold, requested locale and source default-format dispatch. Builtin language remapping retains custom-key and initial-locale guards and invokes the actual policy/locale-block owner. Full native differential, ABI and broader CSV output acceptance remain pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "GetEditFormat",
+        "GetFormatForLanguageIfBuiltIn"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "svl/source/numbers/zforlist.cxx",
+      "upstreamSymbols": [
+        "SvNFEngine::GetEditFormat",
+        "SvNFEngine::GetFormatForLanguageIfBuiltIn"
+      ]
+    }
+  }
+}

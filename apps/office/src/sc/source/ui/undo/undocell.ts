@@ -6,6 +6,7 @@ import { AdjustBlockHeight } from "../view/viewfun2";
 import { SfxUndoAction } from "../../../../svl/source/undo/undo";
 import type { ScDocShell } from "../docshell/docsh";
 import { ScAddress, ScRange } from "../../../inc/address";
+import type { ScFormulaCell } from "../../../inc/formulacell";
 import { ScCellValue } from "../../../inc/cellvalue";
 import { CellType } from "../../../inc/global";
 /** Original typed cell action over actual native values and the owning document shell. */
@@ -55,7 +56,7 @@ export class ScUndoSetCell extends SfxUndoAction<ScDocShell> {
         doc.SetTextCell(this.maPos, rVal.getSharedString().getString());
         break;
       case CellType.CELLTYPE_FORMULA:
-        doc.SetFormulaCell(this.maPos, rVal.getFormula().Clone());
+        doc.SetFormulaCell(this.maPos, (rVal.getFormula() as ScFormulaCell).Clone());
         break;
     }
   }

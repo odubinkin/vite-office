@@ -1,4 +1,5 @@
 /** @fileoverview Native selection/default policies over actual generated compound values and shared UNO COW. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it, vi } from "vitest";
 import { Sequence, type SequenceElements } from "../../../cppu/inc/com/sun/star/uno/Sequence";
 import { text, unicode } from "../../../i18nlangtag/source/isolang/isolang.tables";
@@ -260,9 +261,9 @@ import { LocaleDataWrapper } from "../../../unotools/source/i18n/localedatawrapp
 import { NUMBERFORMAT_ENTRY_NOT_FOUND, SvNumFormatType } from "../../inc/zforlist";
 import { SvNFFormatData, generateStandardNumberFormat } from "./zforlist";
 import { SvNumberformat } from "./zformat";
-import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
+import { ImpSvNumberformatScan, extractStandardGeneralName } from "./zforscan";
 
-it("rejects an empty built-in Boolean code after the real scanner reports an empty format", /** Checks initialization cleanup through a service-code fixture while retaining the actual parser and format owners. @returns Nothing. */ () => {
+it("retains the original checked-string assertion for an empty built-in Boolean code", /** Checks initialization cleanup through a service-code fixture while retaining the actual parser and format owners. @returns Nothing. */ () => {
   const values = tableValues();
   const empty = unicode("");
   const code = vi.spyOn(values.scanner, "GetBooleanString").mockReturnValue(empty);
@@ -278,7 +279,7 @@ it("rejects an empty built-in Boolean code after the real scanner reports an emp
           values.decimal,
           0,
         ),
-    ).toThrow("Built-in format scan failed");
+    ).toThrow(/assert\(index >= 0/);
     expect(values.table.GetEntry(0)).not.toBeNull();
   } finally {
     code.mockRestore();
@@ -296,7 +297,12 @@ function tableValues() {
     code = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(code.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = createNumberFormatLanguage(mapper, 0x0407),
+    scanner = new ImpSvNumberformatScan(
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
+    ),
     decimal = unicode(","),
     table = new SvNFFormatData();
   return {
@@ -311,6 +317,7 @@ function tableValues() {
     dispose() {
       table.dispose();
       scanner.dispose();
+      current.dispose();
       localeData.dispose();
       decimal.dispose();
       name.dispose();
@@ -410,7 +417,11 @@ it("keeps insertion,duplicate,reserved-index and failure ownership contracts", /
     extra.Index = 62;
     expect(values.table.ImpInsertFormat(values.scanner, values.language, extra, 101)).toBeNull();
     emptyCode.Code = empty;
-    expect(values.table.ImpInsertFormat(values.scanner, values.language, emptyCode, 5)).toBeNull();
+    expect(
+      /** Original constructor reaches an invalid trailing-character index on empty code. @returns Insertion result or native guard. */ () =>
+        values.table.ImpInsertFormat(values.scanner, values.language, emptyCode, 5),
+    ).toThrow(/assert\(index >= 0/);
+    expect(values.table.GetEntry(5)).toBeNull();
     extra.Index = 51;
     expect(
       /** Original reserved-index assertion. @returns Insertion result. */ () =>
@@ -418,10 +429,7 @@ it("keeps insertion,duplicate,reserved-index and failure ownership contracts", /
     ).toThrow(/reserved/);
     extra.Index = 12;
     extra.Usage = 8;
-    expect(
-      /** Explicit unported currency admission. @returns Insertion result. */ () =>
-        values.table.ImpInsertFormat(values.scanner, values.language, extra, 5),
-    ).toThrow(/currency/);
+    expect(values.table.ImpInsertFormat(values.scanner, values.language, extra, 5)).not.toBeNull();
     extra.Index = 62;
     extra.Usage = 4;
     expect(
@@ -469,11 +477,10 @@ it("searches the exact start key in numeric order and stops at a different langu
 });
 
 import { NfEvalDateFormat } from "../../inc/zforlist";
-import { SvNFLanguageData } from "./zforlist";
 
 it("owns native language/cache/scanner state and preserves scanner/precision on ChangeIntl", /** Actual service and resources populate the real owner;no fake language data or mapper is used. @returns Nothing. */ () => {
   const mapper = new NumberFormatCodeMapper(),
-    current = new SvNFLanguageData(mapper, 0x0407),
+    current = createNumberFormatLanguage(mapper, 0x0407),
     table = new SvNFFormatData(),
     input = unicode("general");
   try {
@@ -589,27 +596,27 @@ it("generates and dispatches the source Boolean and Text standard formats", /** 
     literal = unicode("CSV text"),
     color: [Color | null] = [null];
   try {
-    expect(text((formatter.GetEntry(48) as SvNumberformat).GetFormatstring())).toBe("LOGISCH");
-    expect(text((formatter.GetEntry(49) as SvNumberformat).GetFormatstring())).toBe("@");
-    expect(formatter.GetType(48)).toBe(SvNumFormatType.LOGICAL);
-    expect(formatter.GetType(49)).toBe(SvNumFormatType.TEXT);
-    formatter.GetOutputString(1, 48, output, color);
+    expect(text((formatter.GetEntry(99) as SvNumberformat).GetFormatstring())).toBe("LOGISCH");
+    expect(text((formatter.GetEntry(100) as SvNumberformat).GetFormatstring())).toBe("@");
+    expect(formatter.GetType(99)).toBe(SvNumFormatType.LOGICAL);
+    expect(formatter.GetType(100)).toBe(SvNumFormatType.TEXT);
+    formatter.GetOutputString(1, 99, output, color);
     expect(text(output)).toBe("WAHR");
-    formatter.GetOutputString(0, 48, output, color);
+    formatter.GetOutputString(0, 99, output, color);
     expect(text(output)).toBe("FALSCH");
-    formatter.GetOutputString(1.2345, 49, output, color);
+    formatter.GetOutputString(1.2345, 100, output, color);
     expect(text(output)).toBe("1,23");
     formatter.ChangeStandardPrec(65535);
-    formatter.GetOutputString(1e-10, 49, output, color);
+    formatter.GetOutputString(1e-10, 100, output, color);
     expect(text(output)).toBe("0,0000000001");
     formatter.ChangeStandardPrec(2);
-    formatter.GetOutputString(literal, 49, output, color);
+    formatter.GetOutputString(literal, 100, output, color);
     expect(text(output)).toBe("CSV text");
     color[0] = new Color(0x123456);
     formatter.GetOutputString(literal, 404, output, color);
     expect(text(output)).toBe("CSV text");
     expect(color[0]).toBeNull();
-    const input = formatter.GetInputLineString(1.2345, 49);
+    const input = formatter.GetInputLineString(1.2345, 100);
     try {
       expect(text(input)).toBe("1,23");
     } finally {
@@ -632,7 +639,7 @@ it("composes actual formatter providers,language,parsed table,settings and numer
   try {
     const entry = formatter.GetEntry(0) as SvNumberformat;
     expect(text(entry.GetFormatstring())).toBe("Standard");
-    expect(entry.GetLastInsertKey()).toBe(100);
+    expect(entry.GetLastInsertKey()).toBe(113);
     expect(formatter.GetType(0x100000000)).toBe(16);
     expect(formatter.GetStandardPrec()).toBe(2);
     formatter.GetOutputString(1.2345, 0, out, color);
@@ -671,8 +678,8 @@ it("composes actual formatter providers,language,parsed table,settings and numer
         formatter.ChangeNullDate(0, 0, 0),
     ).toThrow(/valid null/);
     expect(formatter.GetNullDate().GetDate()).toBe(20000101);
-    expect(formatter.GetEntry(1)).toBeNull();
-    expect(formatter.GetType(1)).toBe(SvNumFormatType.UNDEFINED);
+    expect(text((formatter.GetEntry(1) as SvNumberformat).GetFormatstring())).toBe("0");
+    expect(formatter.GetType(1)).toBe(SvNumFormatType.NUMBER);
     fallback.ChangeStandardPrec(65535);
     fallback.GetOutputString(1.25, 0, out, color);
     expect(text(out)).toBe("1.25");
@@ -682,15 +689,19 @@ it("composes actual formatter providers,language,parsed table,settings and numer
     out.dispose();
     literal.dispose();
   }
-  expect(
-    /** Real prefix admission failure executes native-owner cleanup. @returns Owned formatter. */ () =>
-      new SvNumberFormatter(0x0455),
-  ).toThrow(/not implemented/);
+  // The original constructor accepts the valid my-MM NatNum1 default. Full prefix metadata/output remains a separate responsibility from this scanner/table initialization check.
+  const burmese = new SvNumberFormatter(0x0455);
+  try {
+    expect(burmese.GetType(0)).toBe(SvNumFormatType.NUMBER);
+    expect(burmese.GetStandardPrec()).toBe(2);
+  } finally {
+    burmese.dispose();
+  }
 });
 
 it("keeps real engine fallback and separately represented input/format null-date fields", /** Invalid/default table states are real native owners,not formatter service test doubles. @returns Nothing. */ () => {
   const values = tableValues(),
-    current = new SvNFLanguageData(values.mapper, 0x0407),
+    current = createNumberFormatLanguage(values.mapper, 0x0407),
     out = unicode(""),
     textValue = unicode("literal"),
     color: [Color | null] = [null];
@@ -736,6 +747,29 @@ it("keeps real engine fallback and separately represented input/format null-date
     current.dispose();
     out.dispose();
     textValue.dispose();
+    values.dispose();
+  }
+});
+
+it("compiles actual locale automatic currency codes and retains the bank-symbol format", /** Original builtin insertion strips automatic delimiters but excludes NF_CURRENCY_1000DEC2_CCC. @returns Nothing. */ () => {
+  const values = tableValues();
+  try {
+    for (const index of [12, 13, 14, 15, 16, 17]) {
+      const code = values.mapper.getFormatCode(index, values.locale);
+      try {
+        const source = text(code.Code);
+        if (index !== 16) expect(source).toContain("[$");
+        const format = values.table.ImpInsertFormat(values.scanner, values.language, code, index);
+        expect(format).not.toBeNull();
+        expect(format?.GetMaskedType()).toBe(8);
+        if (index === 16) expect(text((format as SvNumberformat).GetFormatstring())).toBe(source);
+        else expect(text((format as SvNumberformat).GetFormatstring())).not.toContain("[$");
+        expect(text(code.Code)).toBe(source);
+      } finally {
+        code.dispose();
+      }
+    }
+  } finally {
     values.dispose();
   }
 });

@@ -6,7 +6,10 @@ import {
   type CellStoreNode,
 } from "../../../inc/mtvfunctions";
 import { SingleColumnSpanSet, type ColumnSpanSet } from "../../../inc/columnspanset";
+import * as column2 from "./column2";
 import * as column3 from "./column3";
+import * as columnInput from "./column3.input";
+import * as columnFormula from "./column3.formula";
 import * as column4 from "./column4";
 import { SharedFormulaUtil } from "../../../inc/sharedformula";
 import {
@@ -367,23 +370,9 @@ export class ScColumn extends ScColumnData {
   }
   /** Original neighboring joins inspect only this actual formula block. @param position - New cell's actual position. @param cell - New formula. @returns Nothing. */
   JoinNewFormulaCell(position: ReturnType<CellStoreType["position"]>, cell: ScFormulaCell): void {
-    const node = position.first.get(),
-      data = node.data as base_element_block;
-    if (node.type === element_type_formula && position.second > 0) {
-      const previous = formula_block.at(data, position.second - 1) as ScFormulaCell;
-      SharedFormulaUtil.joinFormulaCells(
-        { first: position.first, second: position.second - 1 },
-        previous,
-        cell,
-      );
-    }
-    if (node.type === element_type_formula && position.second + 1 < node.size)
-      SharedFormulaUtil.joinFormulaCells(
-        position,
-        cell,
-        formula_block.at(data, position.second + 1) as ScFormulaCell,
-      );
+    columnFormula.JoinNewFormulaCell.call(this, position, cell);
   }
+
   /** Original affected upper/lower spans restart using one actual shared cursor set. Actual native delay admission batches adjacent surviving spans. @param rows - Zero,two or four inclusive endpoints. @returns Nothing. */
   StartListeningUnshared(rows: readonly number[]): void {
     if (!rows.length || this.rDocument.IsDelayedFormulaGrouping()) return;
@@ -468,6 +457,10 @@ export class ScColumn extends ScColumnData {
         target,
       );
     } else column3.CopyToColumn.apply(this, args as Parameters<typeof column3.CopyToColumn>);
+  }
+  /** Native single-cell number-format assignment. @param row - Row. @param key - Formatter key. @returns Nothing. */
+  SetNumberFormat(row: number, key: number): void {
+    column2.SetNumberFormat.call(this, row, key);
   }
   /** Original single-item pattern assignment. @param args - Row and actual item. @returns Nothing. */
   ApplyAttr(...args: Parameters<typeof column3.ApplyAttr>): void {
@@ -797,6 +790,10 @@ export class ScColumn extends ScColumnData {
   /** Performs native default-context dirty marking and tree membership without tracking broadcasts. @param context - Dirty context. @returns Nothing. */
   SetAllFormulasDirty(context: SetFormulaDirtyContext): void {
     column3.SetAllFormulasDirty.call(this, context);
+  }
+  /** Original string parser operating on an actual owning cell value. @param args - Native cell,row,tab,string,convention and policy. @returns Whether number format changed. */
+  ParseString(...args: Parameters<typeof columnInput.ParseString>): boolean {
+    return columnInput.ParseString.apply(this, args);
   }
   /** Borrows actual numeric/string/formula cell content without a second model. @param row - Valid row. @returns Cell view. */
   GetCellValue(row: number): ScRefCellValue {

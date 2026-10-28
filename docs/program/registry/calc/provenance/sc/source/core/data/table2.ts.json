@@ -22,7 +22,8 @@
       "ApplyFlags",
       "RemoveFlags",
       "ApplyPatternIfNumberformatIncompatible",
-      "StartListeners"
+      "StartListeners",
+      "SetNumberFormat"
     ],
     "upstreamSymbols": [
       "ScTable::CopyFromClip",
@@ -35,7 +36,8 @@
       "ScTable::ApplyFlags",
       "ScTable::RemoveFlags",
       "ScTable::ApplyPatternIfNumberformatIncompatible",
-      "ScTable::StartListeners"
+      "ScTable::StartListeners",
+      "ScTable::SetNumberFormat"
     ],
     "preservedResponsibilities": [
       "Task76 general-copy progress ports original CopyCellsFromClipHandler and CopyTextAttrsFromClipHandler with real typed source blocks,two content/metadata passes,independent native cursor values,context writeback and foreign string re-interning. ScColumn scalar/hinted SetValue/SetRawString/SetFormulaCell overloads retain native defaults,return contracts,broadcast controls and actual group/listener owners. Table2 CopyFromClip validates/clamps the destination and dispatches actual source columns;CONTENTS preserves destination patterns and geometry. ParseBlock now represents its actual container-event template and borrowed node fields;bounded ProcessFormula dispatches real formula pointers and separate non-formula spans. Original column/table/document SetDirtyFromClip,rectangular individual/area BroadcastCells and deferred BroadcastAction use existing bulk owners and actual subscriptions;cached formula results are dirtied only in completion. Matrix,foreign-pool formulas,number-format inheritance,full formatter/notes/edit/drawing services,group-compute cache invalidation and shell/UNO stream notifications remain unrepresented. Native general document/reference orchestration,paste undo/redo and EnterBlock/UI acceptance remain pending;this is not full task76 acceptance or full parity.",
@@ -48,7 +50,8 @@
       "Native editable.hxx/ScEditableTester block factory,default true/true state and cumulative failure behavior consume actual document/table/column owners. IsBlockEditable preserves existing-table/missing-table defaults and native end-coordinate validation for the admitted default unprotected/unlocked nonscenario document profile;read-only shell,protection,scenario and lock services remain unrepresented without fake getters/state/providers. GetBlockMatrixEdges scans actual typed blocks,returns original Nothing for genuine NONE-mode cells and explicitly rejects the unported positive matrix-edge family. HasBlockMatrixFragment preserves native allocated-column clamp and left/right/body/top/bottom visit order;positive edge decisions are unreachable because real column queries return Nothing or reject. For every admitted false document outcome,the native matrix outparameter is false,so TestBlock conditional flag clearing reduces to the same assignment;no fabricated matrix result is used. MatrixEdge values remain native0/1/2/4/8/16/32. Existing ApplyPattern/DeleteTab bodies partition unchanged for1000-line bounds. PasteFromClip/EnterBlock and final74 acceptance remain incomplete.",
       "Native ApplyFlags/RemoveFlags preserve canonical attribute runs,split/merge ownership,bitwise flags,post-mutation re-search and source changed booleans. Sheet dispatch validates endpoints;addition allocates addressed columns while removal clamps to allocated storage. Native ExtendMerge refresh reconstructs horizontal,vertical and combined overlap flags and re-searches mutated runs. Document refresh retains original validation,sparse-sheet defaults and orphan Auto flag removal for the represented profile without named/anonymous database ranges;positive database reconstruction remains unported without fabricated collection owners. IsBlockEmpty body partitions unchanged to the same-instance document10 definitions for the1000-line facade bound. PasteFromClip/EnterBlock and final74 acceptance remain pending.",
       "Native default-content PasteFromClip/EnterBlock/EnterAutoSum now use one genuine clipboard formula,original context/store cloning,actual marks,CONTENT/ATTRIB/NOCAPTIONS normalization,real Undo documents,merge refresh,row-height and shared Sfx list/paste history. No repeated EnterData fill,formula reparse,alternate workbook or fake provider is used. Current active normal-sheet enabled-Undo profile preserves source defaults;cut,multi-range paste,positive matrix/merged-source unmerge,filtered paste,nondefault arithmetic/link/transpose/insert,rich input,drawings/UNO/OLE and dialog families remain explicit unavailable boundaries. Source single-cell multi-mark fallback is implemented. Native first-used-sheet HasClipFilteredRows uses actual compressed segments,including all-filtered one-cell ranges that dimension differences cannot detect. Numeric compatibility retains actual General formatter and canonical cached run application;native pure IsCompatible includes same-type equality,so the redundant side-effect-free caller equality test is erased without changing results. Pattern formatter/context overloads admit original default-language branch;nondefault language conversion stays unported. Native ErrorMessage uses pinned resolved English resources and the active browser host for real EndPointer/error presentation,including document replacement;no VCL/gettext service is simulated. Existing SetAllFormulasDirty/getCellAttributeHelper bodies partition unchanged for strict source-size gates. Native rectangular references,styles,Undo/Redo,ODS reopen,full-axis empty content and actual Chromium/Worker execution are tested. Task76 final verification and task74 visible availability/UI acceptance remain pending;no complete parity claim.",
-      "AQF9AG ports ScTable::StartListeners: null ColumnSet visits every allocated column; a present set visits sorted recorded columns only for matching sheets and skips negative/unallocated coordinates. It forwards the original all flag without substituting range-listening behavior."
+      "AQF9AG ports ScTable::StartListeners: null ColumnSet visits every allocated column; a present set visits sorted recorded columns only for matching sheets and skips negative/unallocated coordinates. It forwards the original all flag without substituting range-listening behavior.",
+      "AQF9AG ports original single-cell SetNumberFormat document/table/column dispatch and pooled ATTR_VALUE_FORMAT application for CSV date and text recognition. Table validation, absent-sheet behavior and temporary SfxUInt32Item lifetime are retained. Native threaded-group calculation is not represented in this single-threaded owner; no substitute state is introduced."
     ],
     "omittedResponsibilities": [
       "Range-dependent conditional-format visual entry families and their deduplication predicate,foreign style-pool copying,names/database/outline/sparkline/caption owners and complete table services remain unported. Full document paste/history/EnterBlock and AutoSum acceptance remain pending."
@@ -94,6 +97,10 @@
         {
           "path": "apps/office/src/sc/source/ui/view/paste-block.test.ts",
           "marker": "fills relative formulas over a rectangle"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/data/table2.ts",
+          "marker": "SetNumberFormat"
         }
       ],
       "upstream": [
@@ -140,6 +147,10 @@
         {
           "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
           "marker": "ScTable::ApplyPatternIfNumberformatIncompatible"
+        },
+        {
+          "path": "vendor/libreoffice-reference/sc/source/core/data/table2.cxx",
+          "marker": "ScTable::SetNumberFormat"
         }
       ]
     }

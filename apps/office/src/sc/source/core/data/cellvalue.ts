@@ -11,8 +11,8 @@ type CellData =
   | { readonly index: 0 }
   | { readonly index: 1; readonly value: number }
   | { readonly index: 2; readonly value: SharedString }
-  | { readonly index: 3; readonly value: EditTextObject }
-  | { readonly index: 4; readonly value: ScFormulaCell };
+  | { readonly index: 3; readonly value: EditTextObject | null }
+  | { readonly index: 4; readonly value: ScFormulaCell | null };
 
 /** Original owning cell value; scalar construction/set copies string values, logical moves empty their source. */
 export class ScCellValue {
@@ -62,8 +62,8 @@ export class ScCellValue {
   /** Original noexcept clear resets the variant and its existing shared value boundary. @returns Nothing. */
   clear(): void {
     if (this.maData.index === 2) this.maData.value.dispose();
-    if (this.maData.index === 3) this.maData.value.dispose();
-    if (this.maData.index === 4) this.maData.value.Dispose();
+    if (this.maData.index === 3) this.maData.value?.dispose();
+    if (this.maData.index === 4) this.maData.value?.Dispose();
     this.reset_to_empty();
   }
   /** Original scalar set first clears then assigns/copies the new value. @param value - Scalar value. @returns Nothing. */
@@ -104,14 +104,26 @@ export class ScCellValue {
     return this.maData.value;
   }
   /** Borrows the owned edit object. @returns Edit text. */
-  getEditText(): EditTextObject {
+  getEditText(): EditTextObject | null {
     if (this.maData.index !== 3) throw new TypeError("bad_variant_access");
     return this.maData.value;
   }
   /** Original formula variant getter;wrong alternatives follow the existing bad_variant_access boundary. @returns Actual owned formula. */
-  getFormula(): ScFormulaCell {
+  getFormula(): ScFormulaCell | null {
     if (this.maData.index !== 4) throw new TypeError("bad_variant_access");
     return this.maData.value;
+  }
+  /** Original pointer release retains the EDIT variant with a null pointer. @returns Released owner or null. */
+  releaseEditText(): EditTextObject | null {
+    const value = this.getEditText();
+    this.maData = { index: 3, value: null };
+    return value;
+  }
+  /** Original pointer release retains the FORMULA variant with a null pointer. @returns Released owner or null. */
+  releaseFormula(): ScFormulaCell | null {
+    const value = this.getFormula();
+    this.maData = { index: 4, value: null };
+    return value;
   }
   /** Original document assignment clears then copies current real content;formula cells are cloned and remain detached. @param rDoc - Source document. @param rPos - Source cell. @returns Nothing. */
   assign(rDoc: ScDocument, rPos: ScAddress): void {
@@ -127,13 +139,13 @@ export class ScCellValue {
         rDoc.SetTextCell(rPos, this.getSharedString().getString());
         break;
       case CellType.CELLTYPE_EDIT:
-        rDoc.SetEditText(rPos, this.getEditText().Clone());
+        rDoc.SetEditText(rPos, (this.getEditText() as EditTextObject).Clone());
         break;
       case CellType.CELLTYPE_VALUE:
         rDoc.SetValue(rPos, this.getDouble());
         break;
       case CellType.CELLTYPE_FORMULA:
-        rDoc.SetFormulaCell(rPos, this.getFormula().Clone());
+        rDoc.SetFormulaCell(rPos, (this.getFormula() as ScFormulaCell).Clone());
         break;
       default:
         rDoc.SetEmptyCell(rPos);
@@ -146,19 +158,19 @@ export class ScCellValue {
         rDoc.SetTextCell(rPos, this.getSharedString().getString());
         break;
       case CellType.CELLTYPE_EDIT:
-        rDoc.SetEditText(rPos, this.getEditText().Clone());
+        rDoc.SetEditText(rPos, (this.getEditText() as EditTextObject).Clone());
         break;
       case CellType.CELLTYPE_VALUE:
         rDoc.SetValue(rPos, this.getDouble());
         break;
       case CellType.CELLTYPE_FORMULA:
-        rDoc.SetFormulaCell(rPos, this.getFormula());
+        rDoc.SetFormulaCell(rPos, this.getFormula() as ScFormulaCell);
         break;
       default:
         rDoc.SetEmptyCell(rPos);
     }
     if (this.maData.index === 2) this.maData.value.dispose();
-    if (this.maData.index === 3) this.maData.value.dispose();
+    if (this.maData.index === 3) this.maData.value?.dispose();
     this.reset_to_empty();
   }
   /** Original emptiness depends on the variant tag, not string content or numeric value. @returns Empty-cell predicate. */

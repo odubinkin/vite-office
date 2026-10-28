@@ -1,4 +1,5 @@
 /** @fileoverview Native General NUMBER notation,precision and locale separator boundaries over real SAL conversion and rounding. */
+import { createNumberFormatLanguage } from "../../../test/number-format-language";
 import { expect, it } from "vitest";
 import { INPUTSTRING_PRECISION, UNLIMITED_PRECISION } from "./zforlist.defaults";
 import { formatStandardNumber } from "./zformat";
@@ -95,6 +96,8 @@ import { NfKeywordIndex } from "../../inc/nfkeytab";
 import { NfSymbolType } from "../../inc/nfsymbol";
 import { SvNumFormatType } from "../../inc/zforlist";
 import { ImpSvNumFor, SvNumberformat } from "./zformat";
+
+import { convertLocaleToLanguage } from "../../../i18nlangtag/source/isolang/mslangid";
 import { ImpSvNumberformatScan, KeywordLocalization, extractStandardGeneralName } from "./zforscan";
 
 it("finds source literal/currency tokens in either direction and checks edge minus signs", /** Checks finds source literal/currency tokens in either direction and checks edge minus signs. @returns Test completion or assertion result. */ () => {
@@ -103,9 +106,21 @@ it("finds source literal/currency tokens in either direction and checks edge min
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = createNumberFormatLanguage(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
+    ),
     code = unicode("General"),
-    format = new SvNumberformat(code, scanner, [0], [0x0409]),
+    format = new SvNumberformat(
+      code,
+      scanner,
+      scanner.GetCurrentLanguageData().pStringScanner,
+      scanner.getColorCallback().GetNatNum(),
+      [0],
+      [0x0409],
+    ),
     section = (format as unknown as { NumFor: ImpSvNumFor[] }).NumFor[1] as ImpSvNumFor,
     word = unicode(" - "),
     currency = unicode("USD"),
@@ -138,6 +153,7 @@ it("finds source literal/currency tokens in either direction and checks edge min
     format.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -155,9 +171,21 @@ it("recognizes the source compiled minute-second token grammar", /** Checks reco
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = createNumberFormatLanguage(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
+    ),
     code = unicode("general"),
-    entry = new SvNumberformat(code, scanner, [0], [0x0409]);
+    entry = new SvNumberformat(
+      code,
+      scanner,
+      scanner.GetCurrentLanguageData().pStringScanner,
+      scanner.getColorCallback().GetNatNum(),
+      [0],
+      [0x0409],
+    );
   const first = (entry as unknown as { NumFor: ImpSvNumFor[] }).NumFor[0] as ImpSvNumFor;
   /** Loads actual compiled token slots, as the format scanner does before the source predicate is called. @param tokens - Native token types and text. @returns Nothing. */
   function load(tokens: readonly (readonly [number, string])[]): void {
@@ -210,6 +238,7 @@ it("recognizes the source compiled minute-second token grammar", /** Checks reco
     entry.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -230,9 +259,21 @@ it("derives original date order from compiled first-subformat tokens", /** Check
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = createNumberFormatLanguage(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
+    ),
     code = unicode("general"),
-    entry = new SvNumberformat(code, scanner, [0], [0x0409]);
+    entry = new SvNumberformat(
+      code,
+      scanner,
+      scanner.GetCurrentLanguageData().pStringScanner,
+      scanner.getColorCallback().GetNatNum(),
+      [0],
+      [0x0409],
+    );
   try {
     expect(entry.GetDateOrder()).toBe(DateOrder.MDY);
     expect(entry.GetExactDateOrder()).toBe(0);
@@ -249,6 +290,7 @@ it("derives original date order from compiled first-subformat tokens", /** Check
     entry.dispose();
     code.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();
@@ -287,7 +329,7 @@ it("owns compiled subformat tokens with original resize,copy and scalar defaults
     source.Info().nCntPost = 3;
     source.Info().nCntExp = 4;
     source.Info().bThousand = true;
-    copy.Copy(source);
+    copy.Copy(source, null);
     expect(copy.Info().sStrArray[0]).not.toBe(first);
     expect(text(copy.Info().sStrArray[0] as import("../../../sal/inc/rtl/ustring").OUString)).toBe(
       "Standard",
@@ -321,17 +363,29 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
     mapped = mapper.getFormatCode(0, locale),
     name = extractStandardGeneralName(mapped.Code),
     localeData = new LocaleDataWrapper(locale),
-    scanner = new ImpSvNumberformatScan(locale, name, KeywordLocalization.AllowEnglish, localeData),
+    current = createNumberFormatLanguage(mapper, convertLocaleToLanguage(locale)),
+    scanner = new ImpSvNumberformatScan(
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
+    ),
     otherScanner = new ImpSvNumberformatScan(
-      locale,
-      name,
-      KeywordLocalization.LocaleLegacy,
-      localeData,
+      current,
+      current.GetFormatScanner().getColorCallback(),
+      mapper,
     ),
     code = unicode("general"),
     out = unicode("previous"),
     check: [number] = [-1];
-  const entry = new SvNumberformat(code, scanner, check, [0x0407]);
+  otherScanner.ChangeIntl(KeywordLocalization.LocaleLegacy);
+  const entry = new SvNumberformat(
+    code,
+    scanner,
+    scanner.GetCurrentLanguageData().pStringScanner,
+    scanner.getColorCallback().GetNatNum(),
+    check,
+    [0x0407],
+  );
   try {
     expect(check[0]).toBe(0);
     expect(text(code)).toBe("Standard");
@@ -365,22 +419,22 @@ it("compiles the actual mapper General entry before standard NUMBER output and c
       exchanged.dispose();
       copy.dispose();
     }
-    const invalid = new SvNumberformat(empty, scanner, check, [0x10407]);
-    try {
-      expect(check[0]).toBe(1);
-      expect(invalid.GetMaskedType()).toBe(0);
-      invalid.SetStandard();
-      expect(
-        /** Calls an empty invalid entry. @returns Native return or explicit unported error. */ () =>
-          invalid.GetOutputString(1, out, [null], 65535, 44),
-      ).toThrow(/nonstandard/);
-    } finally {
-      invalid.dispose();
-    }
+    expect(
+      /** Empty source code reaches the original negative checked string index; no invented checkPos1 result is substituted. @returns Constructor result or native guard. */ () =>
+        new SvNumberformat(
+          empty,
+          scanner,
+          scanner.GetCurrentLanguageData().pStringScanner,
+          scanner.getColorCallback().GetNatNum(),
+          check,
+          [0x10407],
+        ),
+    ).toThrow(/assert\(index >= 0/);
   } finally {
     entry.dispose();
     otherScanner.dispose();
     scanner.dispose();
+    current.dispose();
     localeData.dispose();
     name.dispose();
     mapped.dispose();

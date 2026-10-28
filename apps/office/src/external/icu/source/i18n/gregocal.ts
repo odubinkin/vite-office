@@ -273,7 +273,11 @@ export class GregorianCalendar extends Calendar {
     return julianDay;
   }
   /** Original month length ignores incoming status and normalizes month before selecting the YEAR-based leap policy. @param extendedYear - Extended year. @param month - Zero-based month. @param _status - Source ignored status reference. @returns Length. */
-  protected handleGetMonthLength(extendedYear: number, month: number, _status: [number]): number {
+  protected override handleGetMonthLength(
+    extendedYear: number,
+    month: number,
+    _status: [number],
+  ): number {
     void _status;
     extendedYear |= 0;
     month |= 0;
@@ -285,7 +289,7 @@ export class GregorianCalendar extends Calendar {
     return (this.isLeapYear(extendedYear) ? kLeapMonthLength : kMonthLength)[month] as number;
   }
   /** Original year length respects sticky failure. @param eyear - Extended year. @param status - ICU status. @returns Length or zero. */
-  protected handleGetYearLength(eyear: number, status: [number]): number {
+  protected override handleGetYearLength(eyear: number, status: [number]): number {
     return U_FAILURE(status[0]) ? 0 : this.isLeapYear(eyear) ? 366 : 365;
   }
   /** Original yearLength uses era YEAR rather than EXTENDED_YEAR. @returns Length. */

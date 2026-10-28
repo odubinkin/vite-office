@@ -38,7 +38,8 @@ it("resolves default-calendar section refs in original weekday/month order", /**
 it("keeps locale-specific names and grammatical month sections from source XML", /** Checks keeps locale-specific names and grammatical month sections from source XML. @returns Test completion or assertion result. */ () => {
   expect(names("de", "AT").months[0]?.full).toBe("Jänner");
   expect(names("ru", "RU").genitiveMonths).toHaveLength(12);
-  expect(names("en", "US").genitiveMonths).toHaveLength(0);
+  expect(names("en", "US").genitiveMonths).toEqual(names("en", "US").months);
+  expect(names("en", "US").partitiveMonths).toEqual(names("en", "US").genitiveMonths);
   expect(names("fa", "IR").id).toBe("persian");
 });
 

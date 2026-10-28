@@ -1,0 +1,39 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "calendar-arithmetic",
+    "capabilityIds": [
+      "CAP-ba65d1e2-0718-4c50-a1ab-31be6773a0b2",
+      "CAP-df5573ca-0907-47d8-a385-6cd7af847f1d"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+        "scripts/icu-calendar-factory-native-probe.mjs"
+      ],
+      "justification": "Original ICU78.3 unregistered-service Calendar factory path from calendar.cpp. All18 standard type branches are present. Static C++ functions live outside Calendar to avoid an ESM base/derived initialization cycle, as with the TimeZone factory split. Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced. Unchanged ICU78.3 libraries match15600 factory/default/locale/adopt/null/reference/cache type-buffer cases, over the pinned locale catalog; native SharedCalendar RTTI name is verified. Positive capacities preserve strncpy partial outputs and warning/error behavior. Service registration/OOM remain unclaimed.",
+      "knownViolations": [],
+      "localSymbols": [
+        "createStandardCalendar",
+        "makeInstance",
+        "createInstance",
+        "createInstanceFromZoneReference",
+        "getCalendarTypeFromLocale"
+      ],
+      "sourceResponsibility": "divergent",
+      "upstreamFile": "vendor/icu-reference/source/i18n/calendar.cpp",
+      "upstreamSymbols": [
+        "Calendar::createInstance"
+      ]
+    }
+  }
+}

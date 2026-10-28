@@ -1,0 +1,59 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.index.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "indexTable",
+      "ImpGetFormatIndex",
+      "GetIndexTableOffset",
+      "ImpGetSearchOffset",
+      "ImpGetDefaultFormat",
+      "FindCachedDefaultFormat",
+      "CacheFormatRW",
+      "FindFormatRW",
+      "CacheFormatRO",
+      "FindFormatRO"
+    ],
+    "upstreamSymbols": [
+      "indexTable",
+      "ImpGetFormatIndex",
+      "SvNumberFormatter::GetIndexTableOffset",
+      "SvNFEngine::ImpGetDefaultFormat",
+      "SvNFEngine::CacheFormatRW",
+      "SvNFEngine::FindFormatRO"
+    ],
+    "preservedResponsibilities": [
+      "Original complete builtin runtime-key table, exact enum-to-key and inverse conversions, category search offsets, uncached find(CLOffset)-based standard/default search and original fallback keys, plus mutable and readonly owner/external-map cache operations. Helpers operate on actual SvNFFormatData/SvNumberformat owners. Native uint32 argument/addition boundaries and cached zero versus missing are retained. Native unchanged source bodies match32184 index/search/default cases with explicit scalar metadata fixture declarations; no format parser/locale-generator binary equivalence is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Remaining Accessor policy factories, cached default-selection overload, locale generation, currency defaults and public formatter/CSV recognition remain pending. Native invalid negative enum indexing is undefined and uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.index.ts",
+          "marker": "indexTable"
+        },
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.index.test.ts",
+          "marker": "runtime keys"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "indexTable"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.index.ts",
+      "rationale": "Split the original large zforlist.cxx by builtin index/default lookup and standard-entry generation responsibilities while keeping the same actual table, language and compiled-entry owners.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

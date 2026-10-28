@@ -1,0 +1,46 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforlist.cxx",
+    "localSymbols": [
+      "BuildCurrencyFormat",
+      "GetCurrencyFormatStrings"
+    ],
+    "upstreamSymbols": [
+      "NfCurrencyEntry::Impl_BuildFormatStringNumChars",
+      "NfCurrencyEntry::GetEffectiveNegativeFormat",
+      "NfCurrencyEntry::CompletePositiveFormatString",
+      "NfCurrencyEntry::CompleteNegativeFormatString",
+      "SvNFLanguageData::GetCurrencyFormatStrings"
+    ],
+    "preservedResponsibilities": [
+      "Original currency numeric pattern, enabled fixed bank placement, negative-parenthesis merge, mixed/bank format list order, duplicate retention and default index. Materialized concatenations use actual UTF16 owners. Full native currency-pattern differential and SAL allocation/lifetime parity remain uncertified."
+    ],
+    "omittedResponsibilities": [
+      "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
+          "marker": "BuildCurrencyFormat"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforlist.cxx",
+          "marker": "NfCurrencyEntry::Impl_BuildFormatStringNumChars"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
+      "rationale": "Split the original large zforlist.cxx by currency value/pattern, table ownership, policy, standard selection and recognition responsibilities; source owners/caller boundaries remain intact.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

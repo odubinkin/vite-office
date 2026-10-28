@@ -1,0 +1,44 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+    "status": "mapped",
+    "upstreamPath": "svl/source/numbers/zforscan.cxx",
+    "localSymbols": [
+      "RemoveQuotes",
+      "FinalScanConvert",
+      "FinalScanRebuild",
+      "FinalScanComplete"
+    ],
+    "upstreamSymbols": [
+      "ImpSvNumberformatScan::RemoveQuotes"
+    ],
+    "preservedResponsibilities": [
+      "Original common FinalScan postprocessing retains scientific/fraction validation, Thai modifier handling, source ISO date-order preservation and target reordering, conversion-time keyword quoting, exact quote/escape rebuilding and currency-tail replacement over original slot/output offsets. Quote stripping and replacement move actual OUString owners. Full no-conversion final compilation is in the74396-case native witness; cross-locale final conversion still requires broader native validation."
+    ],
+    "omittedResponsibilities": [
+      "Format constructor/prefix/NatNum/output closure and CSV public auto-input integration remain pending."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+          "marker": "RemoveQuotes"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/svl/source/numbers/zforscan.cxx",
+          "marker": "ImpSvNumberformatScan::RemoveQuotes"
+        }
+      ]
+    },
+    "filenameDivergence": {
+      "localPath": "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+      "rationale": "Partition original FinalScan automatic lifetime, temporal/text cases and common quote operations while retaining actual scanner/locale/token ownership.",
+      "stackNecessity": "responsibility-split"
+    }
+  }
+}

@@ -4433,38 +4433,150 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 
 ### CALC-360 — BinaryXInputStream closes inputs even when autoclose is false
 
-Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` unconditionally invokes a present input's `closeInput()`. The `mbAutoClose` flag only participates in `OSL_ENSURE`, while `include/oox/helper/binaryinputstream.hxx` documents closure conditional on that flag. Explicit close and destruction both retain this source behavior. Actual SequenceInputStream/Reference tests prove that a false-autoclose wrapper still closes its input. See WRITER197; native ABI/thread/service/filter/UI contracts remain unverified.
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryXInputStream::close` unconditionally invokes a present input's `closeInput()`. The `mbAutoClose` flag only participates in `OSL_ENSURE`, while `include/oox/helper/binaryinputstream.hxx` documents closure conditional on that flag. Explicit close and destruction both retain this source behavior. Actual SequenceInputStream/Reference tests prove that a false-autoclose wrapper still closes its input. See WRITER235; native ABI/thread/service/filter/UI contracts remain unverified.
 
 ### CALC-361 — BinaryInputStream copy writes the buffer even after a zero-byte read
 
-Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` always writes its current Sequence before inspecting the read count. If the input is already EOF, BinaryXInputStream::readData returns zero without resizing that Sequence. The fresh copy buffer therefore remains32768 bytes and is written as zeros. Actual null-input and comphelper-output owners reproduce this behavior without a fake read provider. Preserve the source loop and write ordering. Its remaining-count branch below32768 requires almost SAL_MAX_INT64 bytes and remains uncovered; thresholds/counters/source logic are unchanged. See WRITER198.
+Pinned `oox/source/helper/binaryinputstream.cxx#BinaryInputStream::copyToStream` always writes its current Sequence before inspecting the read count. If the input is already EOF, BinaryXInputStream::readData returns zero without resizing that Sequence. The fresh copy buffer therefore remains32768 bytes and is written as zeros. Actual null-input and comphelper-output owners reproduce this behavior without a fake read provider. Preserve the source loop and write ordering. Its remaining-count branch below32768 requires almost SAL_MAX_INT64 bytes and remains uncovered; thresholds/counters/source logic are unchanged. See WRITER236.
 
 ### CALC-362 — MIME charset aliases accept suffixes while VIP names require equality
 
-Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` normalizes at most30 ASCII alphanumeric bytes, then checks exact names in aVIPMimeCharsetTab and prefix matches in aMimeCharsetTab. Thus UTF-8-suffix remains DONTKNOW, but ISO-8859-15-junk resolves to ISO_8859_15 and ISO-8859-1-win resolves to MS_1252. Table order, including longer ISO aliases and original duplicates, is significant. This permissive source lookup is preserved for the future XMLFile2UTFConverter path. All40 VIP and184 alias entries match the pinned source in order. See WRITER199; full XML/model/filter/UI and native ABI contracts remain unverified.
+Pinned `sal/textenc/tencinfo.cxx#rtl_getTextEncodingFromMimeCharset` normalizes at most30 ASCII alphanumeric bytes, then checks exact names in aVIPMimeCharsetTab and prefix matches in aMimeCharsetTab. Thus UTF-8-suffix remains DONTKNOW, but ISO-8859-15-junk resolves to ISO_8859_15 and ISO-8859-1-win resolves to MS_1252. Table order, including longer ISO aliases and original duplicates, is significant. This permissive source lookup is preserved for the future XMLFile2UTFConverter path. All40 VIP and184 alias entries match the pinned source in order. See WRITER237; full XML/model/filter/UI and native ABI contracts remain unverified.
 
 ### CALC-363 — XML converter discards an accumulated short prefix at source EOF
 
-Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` retains initial chunks until isEncodingRecognizable succeeds. If the next read returns zero, it enters the nonempty-prefix branch but does not concatenate seqStart back into seq because that operation is inside the nRead guard. It then marks started and returns the empty latest read. A four-byte `<a/>` input is therefore lost, as is an unterminated XML declaration. Preserve this source flow; actual fragmented SequenceInputStream callers reproduce it. See WRITER200. Full parser/filter/document acceptance is not certified by these byte-owner tests.
+Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::readAndConvert` retains initial chunks until isEncodingRecognizable succeeds. If the next read returns zero, it enters the nonempty-prefix branch but does not concatenate seqStart back into seq because that operation is inside the nRead guard. It then marks started and returns the empty latest read. A four-byte `<a/>` input is therefore lost, as is an unterminated XML declaration. Preserve this source flow; actual fragmented SequenceInputStream callers reproduce it. See WRITER238. Full parser/filter/document acceptance is not certified by these byte-owner tests.
 
 Package-input follow-up: actual OOXML ZIP parts now pass through this converter. Empty input and short `<a/>`/`<root>` fragments consequently finish document callbacks without a parsed root and can return successful optional-fragment import. Tests preserve this behavior explicitly. Cancellation and malformed-input tests use recognized inputs to exercise their intended error paths independently of prefix loss.
 
 ### CALC-364 — XML encoding quote choice treats an absent single quote as earlier
 
-Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::scanForEncoding` and removeEncoding select single quotes when `indexOf(singleQuote) < nStart`, even when that index is -1. A double-quoted encoding declaration with no later single quote therefore is neither captured nor removed; adding a later single quote can select the double-quoted branch instead. The first-line limit and exact space-plus-encoding match are also retained. Source algorithms remain unchanged; see WRITER201 and the actual OString/Sequence converter tests.
+Pinned `sax/source/expatwrap/xml2utf.cxx#XMLFile2UTFConverter::scanForEncoding` and removeEncoding select single quotes when `indexOf(singleQuote) < nStart`, even when that index is -1. A double-quoted encoding declaration with no later single quote therefore is neither captured nor removed; adding a later single quote can select the double-quoted branch instead. The first-line limit and exact space-plus-encoding match are also retained. Source algorithms remain unchanged; see WRITER239 and the actual OString/Sequence converter tests.
 
 ### CALC-365 — SAX Unicode-to-text wrapper replaces split UTF16 surrogate halves
 
-Pinned `sax/source/expatwrap/xml2utf.cxx#Unicode2TextConverter::convert` passes UNDEFINED_DEFAULT and INVALID_DEFAULT without FLUSH to rtl_convertUnicodeToText. In pinned `sal/textenc/tcvtutf8.cxx`, a trailing high surrogate without FLUSH is processed as bad input, producing `?` under these defaults and clearing the pending high surrogate. Two separate calls with a valid pair's halves therefore produce two question marks, while one call with the full pair produces correct four-byte UTF8. Preserve these original flags and source behavior; see WRITER202. No private pending-state injection or changed flags are used to manufacture a different result.
+Pinned `sax/source/expatwrap/xml2utf.cxx#Unicode2TextConverter::convert` passes UNDEFINED_DEFAULT and INVALID_DEFAULT without FLUSH to rtl_convertUnicodeToText. In pinned `sal/textenc/tcvtutf8.cxx`, a trailing high surrogate without FLUSH is processed as bad input, producing `?` under these defaults and clearing the pending high surrogate. Two separate calls with a valid pair's halves therefore produce two question marks, while one call with the full pair produces correct four-byte UTF8. Preserve these original flags and source behavior; see WRITER240. No private pending-state injection or changed flags are used to manufacture a different result.
 
 ### CALC-366 — Native Shift-JIS deliberately uses the MS-compatible fullwidth wave mapping
 
-Pinned `sal/textenc/tcvtjp1.tab` explicitly maps byte pair8160 to U+FF5E across SJIS/MS932/Apple-Japanese for Microsoft compatibility, rather than canonical Shift-JIS U+301C. The SJIS descriptor's original lead/reverse tables are preserved separately from MS932 extension tables, while its EUDC pointer is genuinely shared. Both256-entry tables exactly match original numeric fields and symbolic pointers. Compiled original DBCS bodies confirm the new descriptor's reverse digest over all BMP units and the extended151032-case round-trip profile. See WRITER203; this does not certify arbitrary undefined native table accesses or all SAL/service behavior.
+Pinned `sal/textenc/tcvtjp1.tab` explicitly maps byte pair8160 to U+FF5E across SJIS/MS932/Apple-Japanese for Microsoft compatibility, rather than canonical Shift-JIS U+301C. The SJIS descriptor's original lead/reverse tables are preserved separately from MS932 extension tables, while its EUDC pointer is genuinely shared. Both256-entry tables exactly match original numeric fields and symbolic pointers. Compiled original DBCS bodies confirm the new descriptor's reverse digest over all BMP units and the extended151032-case round-trip profile. See WRITER241; this does not certify arbitrary undefined native table accesses or all SAL/service behavior.
 
 ### CALC-367 — Empty SAL ByteSequence COW does not release its old reference
 
-Pinned `sal/rtl/byteseq.cxx#rtl_byte_sequence_reference2One` decrements the old sequence only inside its nonzero-element branch. When a shared zero-length sequence is detached, it allocates a new header but leaves the old reference count unchanged. Preserve this source flow. The compiled unchanged C/C++ bodies reproduce a zero old-count delta across empty getArray, and the actual SAL/UNO owner tests retain it. See WRITER204. Native allocation failure and physical resource lifetime beyond the initialized witness domain remain unverified.
+Pinned `sal/rtl/byteseq.cxx#rtl_byte_sequence_reference2One` decrements the old sequence only inside its nonzero-element branch. When a shared zero-length sequence is detached, it allocates a new header but leaves the old reference count unchanged. Preserve this source flow. The compiled unchanged C/C++ bodies reproduce a zero old-count delta across empty getArray, and the actual SAL/UNO owner tests retain it. See WRITER242. Native allocation failure and physical resource lifetime beyond the initialized witness domain remain unverified.
 
 ### CALC-368 — Serializer cache can bypass COW for a retaining output sink
 
-Pinned `sax/source/tools/CachedOutputStream.hxx` stores pSeq from its const ByteSequence once, writes through that raw pointer and mutates nElements on flush. The flush converts the same allocation through `toUnoSequence`; a sink that retains a Sequence value can therefore share both header and bytes while later cache writes bypass ByteSequence/Sequence getArray COW. This is a suspected conditional aliasing contract, not an observed full serializer-service failure. Preserve the original cache pointer flow when connecting genuine output owners; do not insert a defensive copy to hide it. See WRITER205. Complete output sink/service integration and its witness remain pending.
+Pinned `sax/source/tools/CachedOutputStream.hxx` stores pSeq from its const ByteSequence once, writes through that raw pointer and mutates nElements on flush. The flush converts the same allocation through `toUnoSequence`; a sink that retains a Sequence value can therefore share both header and bytes while later cache writes bypass ByteSequence/Sequence getArray COW. This is a suspected conditional aliasing contract, not an observed full serializer-service failure. Preserve the original cache pointer flow when connecting genuine output owners; do not insert a defensive copy to hide it. See WRITER243. Complete output sink/service integration and its witness remain pending.
+
+### CALC-369 — Cached-value destruction can reenter the same UnifiedCache mutex
+
+- Upstream: ICU78.3 `source/common/unifiedcache.cpp`, UnifiedCache::flush/_flush/removeSoftRef/handleUnreferencedObject; `source/common/sharedobject.cpp`, SharedObject::removeRef.
+- Observation: flush holds gCacheMutex while final soft-reference release deletes a cached value. If that value's destructor releases the last hard reference to another cached value, SharedObject::removeRef calls handleUnreferencedObject, which attempts to lock the same nonrecursive std::mutex. An unchanged native-library witness with a value owning another cached value stopped in this path; a sampled stack showed flush -> _flush -> value destructor -> handleUnreferencedObject -> std::mutex::lock. The process was explicitly terminated after this stack established the blocked operation.
+- Suspected issue: the flush fixed-point loop explicitly anticipates values owning hard references to other values, but synchronous destructor release can deadlock before the next pass. This finding does not assert that every ICU value graph reaches the condition.
+- Local behavior: retain original release/callback order and reference bookkeeping. The single-realm JavaScript binding does not simulate native mutexes or claim native concurrency equivalence. The native comparison excludes dependent-value destruction under the cache lock; it must not be reported as a passing lifetime/mutex test. No unlock-before-delete correction is applied to upstream logic.
+
+### CALC-370 — EraRules decodes its minimum-year sentinel as -1
+
+- Upstream: ICU78.3 `source/i18n/erarules.cpp`, MIN_INT32, decodeDate and compareEncodedDateWithYMD.
+- Observation: MIN_INT32 is initialized with `0xFFFFFFFF`, whose signed32 value is -1. Decoding MIN_ENCODED_START returns year -1 rather than INT32_MIN; the out-of-packed-range comparison also uses this -1 constant. Unchanged ICU libraries match16302 pinned EraRules lookup cases, including sentinel, negative/extreme years, sparse and invalid era codes.
+- Suspected issue: the constant name and the surrounding minimum-year handling suggest INT32_MIN, while the literal represents -1. This finding does not infer a replacement value.
+- Local behavior: retain -1, the exact encoded sentinel and the original comparison branches. Do not correct the constant or reinterpret the era boundary.
+
+### CALC-371 — EraRules starts its end-presence flag true
+
+- Upstream: ICU78.3 `source/i18n/erarules.cpp`, EraRules::createInstance.
+- Observation: hasEnd starts true; encountering an end resource sets it true again. Consequently the no-start branch treats any missing start as an end-only era, including a hypothetical row lacking both start and end. Later special-era placement checks still apply. The pinned immutable resources do not supply a demonstrated malformed missing-both public case; this is a source-control-flow finding.
+- Suspected issue: initializing the presence flag true makes its apparent missing-end validation unreachable.
+- Local behavior: retain the true initialization, explicit end assignment and subsequent validation. No stricter resource rejection is added.
+
+### CALC-372 — Defined Persian locale data loads the Gregorian service
+
+- Upstream: LibreOffice `i18npool/util/i18npool.component`, `i18npool/source/calendar/calendarImpl.cxx`, and `i18npool/source/localedata/data/fa_IR.xml`.
+- Observation: fa_IR marks persian as its default Calendar2 ID. The component registers no Calendar_persian implementation. CalendarImpl::loadCalendarTZ explicitly falls back to Calendar_gregorian when a requested service is absent but its calendar ID is defined in locale data. The loaded ID/names remain persian; the temporal body is the Gregorian service. ICU's PersianCalendar exists but is not selected by this LibreOffice service-manager branch.
+- Suspected issue: the resource identity and temporal calendar can disagree. No additional native full-UNO-service binary result is claimed; the registration, resource and fallback source contracts establish the branch.
+- Local behavior: retain the original service lookup and defined-ID Gregorian fallback. Do not substitute ICU PersianCalendar or add an unsupported-calendar error.
+
+### CALC-373 — Read-only format policy captures a cache snapshot for lookup
+
+- Upstream: LibreOffice `svl/source/numbers/zforlist.cxx`, SvNFEngine::GetROPolicy.
+- Observation: mCacheFormat captures rFormatCache by reference and writes to the supplied map. The separate mFindFormat lambda captures rFormatCache by value, alongside rFormatData by reference, and passes that copied map to FindFormatRO. Since DefaultFormatKeysMap is a std::map value, writes after policy construction do not update the lookup lambda's captured map. The actual format owner's cache remains preferred by FindFormatRO.
+- Suspected issue: entries cached during the lifetime of the readonly policy may remain invisible to its own subsequent find callback. This is a source capture/lifetime observation; no full multithreaded formatter failure or native policy binary test is claimed here.
+- Local behavior: preserve original standalone CacheFormatRO/FindFormatRO responsibilities. When porting GetROPolicy, retain the source lookup snapshot and writer reference rather than silently changing the lookup capture to a reference. The now-connected policy factory retains the original lookup snapshot; its writer still references the caller map.
+
+### CALC-374 — Quote-end lookup can return a nonzero opening quote itself
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::IsInQuote/GetQuoteEnd, and `include/svl/zformat.hxx`.
+- Observation: the header promises the matching closing quote for an opening position. IsInQuote includes the position itself, but GetQuoteEnd starts searching at that same position and accepts any quote whose pointer is greater than the string start. Thus GetQuoteEnd on position 1 of `a"abc"` returns 1; position 0 of `"abc"` returns 4. Unchanged native bodies reproduce both results in the scanner witness.
+- Suspected issue: opening-quote behavior depends on whether its position is zero, contrary to the header contract.
+- Local behavior: retain the original search start, string-start exclusion, escape comparisons and return positions. No extra opening-quote skip is introduced.
+
+### CALC-375 — Time-only and date-time scanner branches use different fractional-second bounds
+
+- Upstream: LibreOffice `svl/source/numbers/zforscan.cxx`, FinalScan TIME and DATETIME branches; MaxCntPost is declared20 with the comment that rtl_math_round allows at most that count.
+- Observation: DATETIME checks nCounter against MaxCntPost before and during zero merging, while TIME increments without that bound. Unchanged native full-scanner functions accept HH:MM:SS followed by21 fractional zeros with nCntPost21; the corresponding YYYY-MM-DD HH:MM:SS format returns the source control position40 while processing the21st zero.
+- Suspected issue: equivalent time precision is accepted differently depending on a date part. Later output may impose separate limits; no full formatter output failure is claimed by these scanner observations.
+- Local behavior: retain the original distinct branches and counters. No shared cap or stricter time-only validation is added.
+
+### CALC-376 — NatNum prefix tokenization does not require a numeric suffix
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, lcl_matchKeywordAndGetNumber, SvNumberformat::ImpNextSymbol and the constructor NatNum prefix branch.
+- Observation: the helper requires a case-insensitive keyword match and at least one following unit, then calls o3tl::toInt32 without a parsed-end check. A nonnumeric suffix converts to zero. Thus the lexer classifies `[NatNumfoo]` as BRACKET_SYMBOLTYPE_NATNUM0 and returns `NatNumfoo` as its payload. The constructor's corresponding branch derives the modifier from the token and rewrites the prefix to NatNum0; it does not independently validate the numeric suffix. The local lexer regression retains this classification. Native comparison and integer-conversion dependencies have separate bounded evidence; an unchanged full native constructor witness for this malformed format has not been run.
+- Suspected issue: misspelled native-number modifiers can be classified as the valid zero modifier rather than rejected. This is a source-level observation about prefix handling, not a claim that every enclosing malformed format is accepted or that the behavior causes a CSV failure.
+- Local behavior: preserve keyword matching, native conversion-to-zero, token classification and source constructor normalization. Do not add a numeric-suffix heuristic or a new rejection.
+
+### CALC-377 — Korean nondate DBNum and NatNum tables are not inverse for modifier4
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, tblDBNumToNatNum, tblNatNumToDBNum, SvNumberNatNum::MapDBNumToNatNum/MapNatNumToDBNum.
+- Observation: in Korean nondate context, DBNum4 maps to NatNum10. The reverse function only indexes NatNum1 through9; it maps NatNum9 to DBNum4 and NatNum10 to0. In date context NatNum10 does map back to DBNum4. Unchanged native tables/functions and MsLangId resolution reproduce these values in the bounded metadata witness.
+- Suspected issue: a nondate DBNum4 -> NatNum -> DBNum round trip loses the modifier, while the reverse table assigns DBNum4 to a different NatNum. The tables may reflect compatibility distinctions; no full export or rendering failure is claimed here.
+- Local behavior: retain both original tables, the nine-entry reverse bound and the separate date rules. Do not repair the apparent inverse mismatch.
+
+### CALC-378 — Eastern-Arabic numeral selection tests the temporary Punjabi-Arabic language with inequality
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, ImpObtainCalendarAndNumerals, numeral ID0x02.
+- Observation: when the current language is neither Arabic-primary nor Punjabi-Arabic, the temporary-language predicate is `primary(nTmpLocaleLang) == LANGUAGE_ARABIC_PRIMARY_ONLY || nTmpLocaleLang != LANGUAGE_PUNJABI_ARABIC_LSO`. Thus an English current language and English temporary locale retain English while inserting `[NatNum1]`; a Punjabi-Arabic temporary locale instead reaches the Arabic reference fallback. Unchanged native code reproduces these selection outputs in the locale-prefix witness.
+- Suspected issue: the inequality makes most non-Arabic temporary languages pass this supposed Eastern-Arabic compatibility condition, and excludes the explicitly named Punjabi-Arabic case. No complete formatting/CSV output failure is inferred from these locale-selection observations.
+- Local behavior: preserve the original inequality, branch order, selected locale and modifier insertion. Do not infer a replacement language or correct the predicate.
+
+### CALC-379 — Locale hex decoding handles a closing bracket differently after the eighth digit
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::ImpGetLocaleType.
+- Observation: the loop reads at most eight units and tests the last read unit for a closing bracket. `10010409` decodes to language0x0409 with its extended fields, but `10010409]` returns default unknown metadata at cursor8; a shorter hex value followed by `]` succeeds. Unchanged native code reproduces this boundary.
+- Suspected issue: closing-bracket acceptance depends on hex width even though the decoded32-bit value fits. The currently identified constructor caller passes prefix contents with the closing bracket already removed, so these observations do not establish a constructor or CSV defect.
+- Local behavior: retain the eight-unit bound, last-unit/end predicate and exact returned cursor; no extra closing-bracket lookahead is added.
+
+### CALC-380 — OUStringBuffer character replacement revisits an unchanged match
+
+- Upstream: LibreOffice `include/rtl/ustrbuf.hxx`, OUStringBuffer::replace(sal_Unicode,sal_Unicode).
+- Observation: each iteration searches at the previous match position, writes the replacement there and does not advance the index. If oldChar equals newChar and occurs in the buffer, the next search finds the same position again. This is a direct source-control-flow observation; no intentionally unbounded native process was run.
+- Suspected issue: replacing a present character with itself does not terminate. The number-format constructor uses distinct NBSP/NNBSP and ASCII-space values, so this observation does not establish a CSV constructor failure.
+- Local behavior: preserve the original search/write loop and same-position search. No equality shortcut or added index increment is introduced.
+
+### CALC-381 — Empty format construction reaches a negative checked string index
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat normal constructor trailing-subformat check; `include/rtl/ustring.hxx`, OUString::operator[].
+- Observation: an empty input produces an empty first subformat, then reaches `nIndex < 3 && rString[rString.getLength()-1] == ';'`. The string access has index-1. The original header explicitly asserts that an index is nonnegative and below the logical length. This is source-level checked-build evidence; a release-build result after disabling assertions is not defined or claimed, and no native aborting process was run.
+- Suspected issue: empty input can violate the checked string-access precondition inside the constructor instead of returning a syntax position. Existing fake-empty-provider tests previously expected a locally invented checkPos1; those assertions now retain the actual checked-index failure and cleanup behavior.
+- Local behavior: use the original checked string-index binding and preserve the failing precondition. Do not substitute a success, guessed format type, special empty-input heuristic or fabricated syntax-position result. Normal CSV empty cell values do not compile an empty format code.
+
+### CALC-382 — Missing currency closing bracket advances the next search beyond the string
+
+- Upstream: LibreOffice `svl/source/numbers/zformat.cxx`, SvNumberformat::StripNewCurrencyDelimiters; `include/rtl/ustring.hxx`, indexOf; `sal/rtl/strtmpl.hxx`, indexOfStr_WithLength.
+- Observation: for `[$USD-409`, the missing-bracket fallback sets nClose to the string length, then sets nStartPos to nClose+1. The next loop search passes length-fromIndex=-1 to the bounded search, whose original implementation asserts a nonnegative length. This is checked-build source-control-flow evidence; no native aborting process or release-build outcome is claimed.
+- Suspected issue: the explicitly conservative missing-bracket branch violates the next search precondition. Valid builtin currency codes are not shown to trigger this condition.
+- Local behavior: preserve the source fallback, increment and failing checked precondition; do not clamp the cursor, infer a closing bracket or return a fabricated successful format. Differential currency-helper cases cover valid closing brackets separately.
+
+### CALC-383 — CSV English fallback setup reloads the primary transliterator
+
+- Upstream: LibreOffice `sc/source/ui/docshell/impex.cxx`, ScImportExport::ExtText2Doc date-recognition initialization.
+- Observation: for an import language other than English-US, the code creates pEnglishTransliteration but calls aTransliteration.loadModuleIfNeeded(LANGUAGE_ENGLISH_US), targeting the primary wrapper. The second calendar is explicitly loaded in English; the newly created second transliterator retains its constructor/first-call locale behavior. This is source-level call/receiver evidence, not a demonstrated end-to-end locale recognition failure.
+- Suspected issue: the initialization appears intended for the English fallback wrapper but changes the primary wrapper instead. The resulting language-sensitive behavior must not be corrected by inference.
+- Local behavior: preserve the receiver, call order and uninitialized second-wrapper module state. No guessed locale normalization or alternate fallback is added.
+
+### CALC-384 — Explicit YMD timezone colon falls into calendar fractional-second parsing
+
+- Upstream: LibreOffice `sc/source/ui/docshell/impex.cxx`, lcl_PutString date-part scan and subsequent non-ISO calendar branch.
+- Observation: for `2024-12-31T12:34:56+02:00`, the plus after seconds is accepted for ISO, then offset02 becomes part7. The following colon disables bIso because its nFound is7, and the loop stops before the final00 because seven parts have been found. The non-ISO calendar branch then uses part7 as fractional seconds, producing the date/time with .02 seconds. The nearby comment says timezone input should remain Text, but this path bypasses formatter rejection. This is source-control-flow evidence and a local integration reproduction; no complete native lcl_PutString differential execution is claimed.
+- Suspected issue: a timezone with a colon is misclassified as fractional seconds, while Z or a compact offset can reach the intended Text fallback. Original source predicates and the seven-part bound explain the difference.
+- Local behavior: preserve the original part bound, ISO-state transition, field selection and .02-second calendar result. No timezone heuristic, rejection rule or replacement timezone parser is added.
