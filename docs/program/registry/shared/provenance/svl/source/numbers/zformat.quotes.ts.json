@@ -15,7 +15,7 @@
       "SvNumberformat::GetQuoteEnd"
     ],
     "preservedResponsibilities": [
-      "Original inclusive UTF16 quote state and end lookup preserve escape defaults, negative/out-of-range control values, unterminated length sentinel and CALC-349 nonzero-opening asymmetry. Real SvNumberformat static methods forward to these original source fragments. Both original native functions are included unchanged in the scanner witness."
+      "Original inclusive UTF16 quote state and end lookup preserve escape defaults, negative/out-of-range control values, unterminated length sentinel and CALC-374 nonzero-opening asymmetry. Real SvNumberformat static methods forward to these original source fragments. Both original native functions are included unchanged in the scanner witness."
     ],
     "omittedResponsibilities": [
       "Native invalid pointer callers and full format constructor/prefix/output closure are uncertified."

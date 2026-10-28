@@ -21,7 +21,7 @@
         "apps/office/src/svl/source/numbers/zformat.locale.test.ts",
         "scripts/calc-format-locale-native-probe.mjs"
       ],
-      "justification": "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-353. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending.",
+      "justification": "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-378. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending.",
       "knownViolations": [],
       "localSymbols": [
         "ImpObtainCalendarAndNumerals"

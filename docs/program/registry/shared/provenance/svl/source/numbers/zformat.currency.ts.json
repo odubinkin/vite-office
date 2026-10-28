@@ -13,7 +13,7 @@
       "SvNumberformat::StripNewCurrencyDelimiters"
     ],
     "preservedResponsibilities": [
-      "Original StripNewCurrencyDelimiters removes automatic-currency wrappers using the actual bounded UTF16 strings, quote helpers and buffer owner; builtin insertion preserves the bank-code exclusion and input struct ownership. An unchanged native function is included in the scanner witness for384 valid-bracket cases. CALC-357 preserves the source missing-bracket checked failure. Full constructor/output and SAL ABI closure are not claimed."
+      "Original StripNewCurrencyDelimiters removes automatic-currency wrappers using the actual bounded UTF16 strings, quote helpers and buffer owner; builtin insertion preserves the bank-code exclusion and input struct ownership. An unchanged native function is included in the scanner witness for384 valid-bracket cases. CALC-382 preserves the source missing-bracket checked failure. Full constructor/output and SAL ABI closure are not claimed."
     ],
     "omittedResponsibilities": [
       "Full constructor/output, native SAL ABI and unchecked malformed-code outcomes remain uncertified."

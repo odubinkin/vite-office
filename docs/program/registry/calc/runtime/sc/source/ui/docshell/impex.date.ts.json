@@ -20,7 +20,7 @@
         "apps/office/src/sc/source/ui/docshell/impex.date.test.ts",
         "apps/office/src/sc/source/ui/docshell/impex.recognition.test.ts"
       ],
-      "justification": "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-359 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending.",
+      "justification": "Original lcl_PutString explicit-date branch preserves seven-part scanning, ASCII/month classifier distinction, ISO qualification/delegation, compact field widths and native casts, primary/secondary month matching and SEP exception, null-date/year expansion, calendar validity, fractional seconds, AM/PM, real numeric insertion and original document-language format selection. Actual calendar/transliterator/document owners are used; CALC-384 source timezone-colon behavior is preserved. Dedicated full native branch differential verification remains pending.",
       "knownViolations": [],
       "localSymbols": [
         "PutDate"

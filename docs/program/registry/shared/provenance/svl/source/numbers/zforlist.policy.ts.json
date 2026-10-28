@@ -23,7 +23,7 @@
     ],
     "preservedResponsibilities": [
       "Original complete four-callback writable/readonly accessor factories capture real table and caller-owned temporary cache values. RO checks preserve missing locale/currency preconditions and never generate fallback state. Thread scheduling/UNO ABI remain unrepresented.",
-      "AQF9AG corrects the initial local GetROPolicy capture deviation to original CALC-348: mCacheFormat writes the caller map by reference while mFindFormat reads a construction-time map snapshot, with owner-cache precedence unchanged. No upstream cache repair is introduced."
+      "AQF9AG corrects the initial local GetROPolicy capture deviation to original CALC-373: mCacheFormat writes the caller map by reference while mFindFormat reads a construction-time map snapshot, with owner-cache precedence unchanged. No upstream cache repair is introduced."
     ],
     "omittedResponsibilities": [
       "Full native wrapper/currency differential closure, complete CSV callers/output and ABI/concurrency parity remain uncertified."

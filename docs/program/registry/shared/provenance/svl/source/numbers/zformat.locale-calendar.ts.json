@@ -13,7 +13,7 @@
       "SvNumberformat::ImpObtainCalendarAndNumerals"
     ],
     "preservedResponsibilities": [
-      "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-353. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending."
+      "AQF9AG ports complete original extended-locale calendar/numeral selection over borrowed actual LocaleType and mutable SAL code owners. Original language predicates, reference-language table, seven-bit masks, CJK fallthrough, NatNum insertion and return/calendar/language outputs are retained, including CALC-378. Calendar/numeral choice is not inferred from input shape or host locale. Constructor call-site integration remains pending."
     ],
     "omittedResponsibilities": [
       "Complete constructor dispatch and standard-format initialization, formatted output and CSV recognition remain incomplete; bounded native value witnesses do not certify full SAL/UNO ABI."

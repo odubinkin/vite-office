@@ -14,7 +14,7 @@
     ],
     "preservedResponsibilities": [
       "Original ICU78.3 UnifiedCache creation/status, reference ownership and incremental eviction over the actual UHashtable. Synchronous realm execution replaces native mutex boundaries; in-progress same-key recursion retains the native nontermination contract.",
-      "Unchanged ICU78.3 libraries match2445 cache/status/refcount/alias/eviction cases with842 value lifetimes. Dependent-value destruction under the native mutex is explicitly excluded after observing CALC-344 deadlock; no native concurrency claim is made."
+      "Unchanged ICU78.3 libraries match2445 cache/status/refcount/alias/eviction cases with842 value lifetimes. Dependent-value destruction under the native mutex is explicitly excluded after observing CALC-369 deadlock; no native concurrency claim is made."
     ],
     "omittedResponsibilities": [
       "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
