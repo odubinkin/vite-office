@@ -580,5 +580,48 @@
     },
     "fixtureSha256": "acfbfbece9635d570d69efc5b2aa14f8a6ae3e6bbeea4f2b2a65ba31c123c49f",
     "change": "Restore original independent raw-span newReplaceStrAt and C rtl_uString_newReplaceStrAtUtf16L boundary; existing owning overload delegates after its original fast paths. No weakened loop, fake provider, counter edit, exclusion or threshold change. Full ABI/OOM/threading parity remains unverified."
+  },
+  "urlHostAndPathCurrent": {
+    "testFiles": 6,
+    "tests": 230,
+    "newPathTests": 28,
+    "nativeHostObservations": 6110,
+    "runtimeCodeChanged": false,
+    "strictCoveragePassed": true,
+    "report": "apps/office/coverage/integration-url-current/coverage-final.json",
+    "reportSha256": "5702654380123808cc19ea9a6fff3edbe15fc1a930e2630301b20e3a96f7e0f0",
+    "metrics": {
+      "lines": {
+        "total": 324,
+        "covered": 324,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 349,
+        "covered": 349,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 329,
+        "covered": 329,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "scope": "Both unchanged original host/path owners reach100 in the current6-file230-test URL suite. Path additions are bounded source-contract cases; original6110 host observations retain their separate native witness scope. No coverage exceptions."
   }
 }

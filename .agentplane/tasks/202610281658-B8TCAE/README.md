@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 20
+revision: 21
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:12:49.965Z"
+doc_updated_at: "2026-10-28T20:17:00.924Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -103,6 +103,10 @@ sections:
     - Observation: The previous RTL port flattened the original raw-span replacement into its owning overload, leaving a full-range raw branch inaccessible and omitting its C entry point. B8TCAE restores the original overload boundary and rtl_uString_newReplaceStrAtUtf16L. Unchanged original C++ regeneration/check and portable replay agree on2304 complete initialized value/terminator/sharing/refcount observations, including acquired destination aliases.
       Impact: The raw replacement full-range/append cases now execute through the original public API, without an exception or artificial test seam. Current28 RTL suites176tests and focused3suites42tests pass. Broad partial coverage still fails100; historical strtmpl/ustring maps must not be merged with these current owners.
       Resolution: Preserve source/C wrapper contracts and native scope limitations. Continue actual remaining coverage and pending individual U01/U02 decisions; no full-project success or publication is recorded.
+
+    - Observation: B8TCAE adds28 original URL path-admission/delimiter/cursor cases, including the real Windows drive-bar before backslash production. Current6suites230tests cover both unchanged host/path owners at strict100:349statements,329branch arms,3functions,324lines, without exceptions.
+      Impact: The remaining alternate-delimiter path was reachable and is now tested, rather than waived. Host6110 native observations retain their bounded scope; these path literals are source-contract evidence and do not claim a full native URL ABI witness.
+      Resolution: Preserve thresholds and continue remaining project coverage; final full verification/publication/reverse merges remain pending.
 id_source: "generated"
 ---
 ## Summary
@@ -186,3 +190,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: The previous RTL port flattened the original raw-span replacement into its owning overload, leaving a full-range raw branch inaccessible and omitting its C entry point. B8TCAE restores the original overload boundary and rtl_uString_newReplaceStrAtUtf16L. Unchanged original C++ regeneration/check and portable replay agree on2304 complete initialized value/terminator/sharing/refcount observations, including acquired destination aliases.
   Impact: The raw replacement full-range/append cases now execute through the original public API, without an exception or artificial test seam. Current28 RTL suites176tests and focused3suites42tests pass. Broad partial coverage still fails100; historical strtmpl/ustring maps must not be merged with these current owners.
   Resolution: Preserve source/C wrapper contracts and native scope limitations. Continue actual remaining coverage and pending individual U01/U02 decisions; no full-project success or publication is recorded.
+
+- Observation: B8TCAE adds28 original URL path-admission/delimiter/cursor cases, including the real Windows drive-bar before backslash production. Current6suites230tests cover both unchanged host/path owners at strict100:349statements,329branch arms,3functions,324lines, without exceptions.
+  Impact: The remaining alternate-delimiter path was reachable and is now tested, rather than waived. Host6110 native observations retain their bounded scope; these path literals are source-contract evidence and do not claim a full native URL ABI witness.
+  Resolution: Preserve thresholds and continue remaining project coverage; final full verification/publication/reverse merges remain pending.
