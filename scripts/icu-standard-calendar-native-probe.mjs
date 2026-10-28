@@ -1,5 +1,6 @@
 /** @fileoverview Compares real ICU78.3 standard calendar owners and inherited public field/time paths, before assembling the general Calendar factory. Explicit type constructors in this witness are test inputs, not production fallback dispatch. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Locale } from "../apps/office/src/external/icu/source/common/locid.ts";
@@ -28,7 +29,7 @@ import { HebrewCalendar } from "../apps/office/src/external/icu/source/i18n/hebr
 import { SimpleTimeZone } from "../apps/office/src/external/icu/source/i18n/simpletz.ts";
 import { adoptDefault } from "../apps/office/src/external/icu/source/i18n/timezone.default.ts";
 import { UnicodeString } from "../apps/office/src/external/icu/source/common/unistr.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   source = resolve("vendor/icu-reference/source");
 writeFileSync(
   `${build}/standard-calendar-witness.cc`,
@@ -204,6 +205,40 @@ for (let type = 0; type < classes.length; ++type) {
   ])
     add(type, "en_US", fields, 0, 1);
 }
+// Original public ordinal-month and leap-month inputs exercise the consumed Chinese roll production.
+for (const type of [16, 17])
+  for (const year of [2023, 2024, 2025, 4660, 4661, 4662, 5783, 5784]) {
+    for (const month of [-14, -1, 0, 1, 5, 6, 10, 11, 12, 13, 25])
+      for (const day of [1, 30])
+        for (const strict of [0, 1])
+          add(
+            type,
+            "en_US",
+            [
+              [19, year],
+              [23, month],
+              [5, day],
+            ],
+            0,
+            strict,
+          );
+    for (let month = 0; month < 12; ++month)
+      for (const leap of [0, 1])
+        for (const day of [1, 30])
+          for (const strict of [0, 1])
+            add(
+              type,
+              "en_US",
+              [
+                [19, year],
+                [2, month],
+                [22, leap],
+                [5, day],
+              ],
+              0,
+              strict,
+            );
+  }
 const rows = execFileSync(`${build}/standard-calendar-witness`, [`${source}/data/in`], {
   input: input.join("\n") + "\n",
   encoding: "utf8",
@@ -241,3 +276,23 @@ writeFileSync(
   ) + "\n",
 );
 process.stdout.write(`Matched ${input.length} standard calendar cases\n`);
+
+writeIcuObservations("standard-calendar", input, rows, build, source, [
+  "i18n/calendar.cpp",
+  "i18n/gregocal.cpp",
+  "i18n/islamcal.cpp",
+  "i18n/chnsecal.cpp",
+  "i18n/astro.cpp",
+  "i18n/hebrwcal.cpp",
+  "i18n/japancal.cpp",
+  "i18n/erarules.cpp",
+  "i18n/indiancal.cpp",
+  "i18n/persncal.cpp",
+  "i18n/cecal.cpp",
+  "i18n/coptccal.cpp",
+  "i18n/ethpccal.cpp",
+  "i18n/buddhcal.cpp",
+  "i18n/taiwncal.cpp",
+  "i18n/iso8601cal.cpp",
+  "i18n/dangical.cpp",
+]);

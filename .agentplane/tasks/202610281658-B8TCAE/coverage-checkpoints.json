@@ -1,0 +1,56 @@
+{
+  "status": "in_progress",
+  "finalFullVerifierPassed": false,
+  "thresholdsChanged": false,
+  "exceptionsApproved": false,
+  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required.",
+  "icu": {
+    "testFiles": 9,
+    "groupedTests": 70,
+    "nativeObservations": 69989,
+    "runtimeCodeChanged": false,
+    "report": "apps/office/coverage/integration-icu-final/coverage-final.json",
+    "reportSha256": "019532a6ae21767fbfe0305b9f52642aeefd059a92adfb0b89fd6c2e024e294b"
+  },
+  "oox": {
+    "testFiles": 2,
+    "tests": 10,
+    "nativeUtilityObservations": 102,
+    "change": "Restore original helper.hxx getLimitedValue specialization and original copy/seek call sites; no loop-bound, read/write, counter or exclusion changes.",
+    "metrics": {
+      "lines": {
+        "total": 164,
+        "covered": 164,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 177,
+        "covered": 177,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 33,
+        "covered": 33,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 81,
+        "covered": 81,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "report": "apps/office/coverage/integration-oox/coverage-final.json",
+    "reportSha256": "bfa40d53cc075a4baf4256cc79defe422a9120f1f8fc2e5f4675c7a39943a4fc"
+  },
+  "remaining": "Close remaining runtime gaps; review genuinely unreachable cases individually. Integration push and reverse synchronization remain pending."
+}

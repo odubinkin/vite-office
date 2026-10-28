@@ -1,10 +1,11 @@
 /** @fileoverview Native ICU78.3 EraRules resource/index/sentinel/start-date comparison on the pinned package. The original clock determines current-era queries in both processes; custom/malformed resource injection is outside this witness. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { EraRules } from "../apps/office/src/external/icu/source/i18n/erarules.ts";
 import { gCalTypes } from "../apps/office/src/external/icu/source/i18n/calendar.type.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   source = resolve("vendor/icu-reference/source");
 writeFileSync(
   `${build}/era-witness.cc`,
@@ -105,3 +106,9 @@ for (let i = 0; i < actual.length; ++i)
 console.log(
   `Matched ${actual.length} EraRules resource, sentinel, sparse-index and public lookup cases.`,
 );
+
+writeIcuObservations("era", inputs, actual, build, source, [
+  "i18n/erarules.cpp",
+  "common/uresbund.cpp",
+  "common/uresdata.cpp",
+]);

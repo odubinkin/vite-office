@@ -1,4 +1,5 @@
 /** @fileoverview Original oox binary stream position/EOF/alignment and UNO seekable ownership; explicit dispose binds native destruction, synchronous host calls do not certify native ABI or threads. */
+import { getLimitedValue } from "../../inc/helper/helper";
 import { Reference } from "../../../cppu/inc/com/sun/star/uno/Reference";
 import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import type { Sequence } from "../../../cppu/inc/com/sun/star/uno/Sequence";
@@ -131,7 +132,7 @@ export class SequenceSeekableStream extends BinaryStreamBase {
   ): void {
     if (this.mpData) {
       const max = BigInt(this.mpData.getLength());
-      this.mnPos = Number(nPos < 0n ? 0n : nPos > max ? max : nPos);
+      this.mnPos = getLimitedValue(nPos, 0n, max);
       this.mbEof = BigInt(this.mnPos) !== nPos;
     }
   }

@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 6
+revision: 9
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T16:59:17.464Z"
+doc_updated_at: "2026-10-28T17:39:35.883Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -47,9 +47,18 @@ sections:
     1. Run targeted Vitest/Istanbul profiles for changed runtime owners and meaningful regression cases; retain raw counters and report any unresolved source-domain branches.
     2. Keep coverage thresholds and discovery unchanged; obtain explicit user decision before any unreachable-branch exception.
     3. Run npm run verify on final code, plus ap doctor and policy routing; record exact results. No broad success claim from a narrowed profile.
-  Verification: "Pending. Initial integration report:255 files,4303 statements and4050 branch arms uncovered, including documented native edge paths. Both prior failing integration assertions were repaired and147 focused tests pass. All537 browser plus5 final-build Calc checks pass."
+  Verification: "In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication."
   Rollback Plan: "Keep test and source changes in traceable commits. Revert a faulty change through a new commit; never rewrite published history. Preserve existing Calc untracked output."
-  Findings: "The BinaryInputStream smaller remaining-count arm is theoretically reachable after281474976710655 full32768-byte reads; EOF before that terminates the loop. No exception has been approved. User asked for explanation and explicitly chose to expand coverage work. Integration task202610281559-581KM2 awaits this deliverable."
+  Findings: |-
+    The BinaryInputStream smaller remaining-count arm is theoretically reachable after281474976710655 full32768-byte reads; EOF before that terminates the loop. No exception has been approved. User asked for explanation and explicitly chose to expand coverage work. Integration task202610281559-581KM2 awaits this deliverable.
+
+    - Observation: Portable native fixture replay now covers69989 original ICU observations:8666 standard calendar,21664 protected-hook,16302 EraRules,5312 rule-based timezone,2445 cache and15600 Calendar factory cases. Nine current suites70 grouped tests pass. Native source/archive/witness hashes are retained. Additional direct cases use actual SharedObject/CalendarCache/astronomer owners. A fixture initially omitted RuleBasedTimeZone.complete; fixed from original rbtz.h precondition, without changing core behavior.
+      Impact: Same-map raw coverage aggregation with the initial baseline closes1654 statements and257 functions before OOX restoration; broad global100 remains incomplete. Initial raw baseline includes prior integration source changes, so this is diagnostic progress rather than a final-current-code certificate.
+      Resolution: Continue remaining runtime gap closure. Preserve unchanged thresholds/source contracts and individually review genuinely unreachable branches; no exceptions approved.
+
+    - Observation: The original OOX copy loop calls getLimitedValue<sal_Int32,sal_Int64> from helper.hxx; the prior port had flattened that original helper into copy/seek conditionals. Exact unchanged-template C++20 observations cover102 signed64/clamp/signed32 boundaries.
+      Impact: The theoretical final stream request still needs281474976710655 full reads, but the original shared utility exposes its boundary cases directly. This source-owner restoration eliminates the need to waive that helper comparison while leaving the original loop bound and transport order unchanged.
+      Resolution: Restore the actual header owner and source call sites, not a new test seam. Current helper plus three full stream owners pass strict100:177/177 statements,81/81 branch arms,33/33 functions,164/164 lines across10 tests. Runtime provenance1862 modules, dependency boundaries and typecheck pass. Update native-binary-streams documentation; remaining project coverage gaps still require work.
 id_source: "generated"
 ---
 ## Summary
@@ -72,7 +81,7 @@ Execute the user-approved full coverage expansion across the255-file gap set usi
 
 ## Verification
 
-Pending. Initial integration report:255 files,4303 statements and4050 branch arms uncovered, including documented native edge paths. Both prior failing integration assertions were repaired and147 focused tests pass. All537 browser plus5 final-build Calc checks pass.
+In progress; final complete verifier still required. Current source:9 ICU suites70 grouped tests pass, replaying69989 original native observations plus real owner lifecycle tests. Source/archives/witness hashes are in portable fixtures; no native build is needed for ordinary replay. OOX utility and3 full stream owners pass strict100 (177/177 statements,81/81 branch arms,33/33 functions,164/164 lines) across10 tests, including102 unchanged-template C++20 observations. Source provenance1862 modules,deps1861sources/10030imports,full typecheck,changed-file lint,JSDoc4159files,size,discovery,invariants/parity pass. Earlier fixture omitted RuleBasedTimeZone.complete and was corrected from native precondition. Generated witness/build artifacts are under ignored test-results/native; existing Calc native output was read only. Same-map baseline+ICU aggregation is diagnostic,not a final current-code global certificate; remaining runtime coverage gaps still prevent publication.
 
 ## Rollback Plan
 
@@ -81,3 +90,11 @@ Keep test and source changes in traceable commits. Revert a faulty change throug
 ## Findings
 
 The BinaryInputStream smaller remaining-count arm is theoretically reachable after281474976710655 full32768-byte reads; EOF before that terminates the loop. No exception has been approved. User asked for explanation and explicitly chose to expand coverage work. Integration task202610281559-581KM2 awaits this deliverable.
+
+- Observation: Portable native fixture replay now covers69989 original ICU observations:8666 standard calendar,21664 protected-hook,16302 EraRules,5312 rule-based timezone,2445 cache and15600 Calendar factory cases. Nine current suites70 grouped tests pass. Native source/archive/witness hashes are retained. Additional direct cases use actual SharedObject/CalendarCache/astronomer owners. A fixture initially omitted RuleBasedTimeZone.complete; fixed from original rbtz.h precondition, without changing core behavior.
+  Impact: Same-map raw coverage aggregation with the initial baseline closes1654 statements and257 functions before OOX restoration; broad global100 remains incomplete. Initial raw baseline includes prior integration source changes, so this is diagnostic progress rather than a final-current-code certificate.
+  Resolution: Continue remaining runtime gap closure. Preserve unchanged thresholds/source contracts and individually review genuinely unreachable branches; no exceptions approved.
+
+- Observation: The original OOX copy loop calls getLimitedValue<sal_Int32,sal_Int64> from helper.hxx; the prior port had flattened that original helper into copy/seek conditionals. Exact unchanged-template C++20 observations cover102 signed64/clamp/signed32 boundaries.
+  Impact: The theoretical final stream request still needs281474976710655 full reads, but the original shared utility exposes its boundary cases directly. This source-owner restoration eliminates the need to waive that helper comparison while leaving the original loop bound and transport order unchanged.
+  Resolution: Restore the actual header owner and source call sites, not a new test seam. Current helper plus three full stream owners pass strict100:177/177 statements,81/81 branch arms,33/33 functions,164/164 lines across10 tests. Runtime provenance1862 modules, dependency boundaries and typecheck pass. Update native-binary-streams documentation; remaining project coverage gaps still require work.

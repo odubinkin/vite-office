@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/oox/inc/helper/helper.ts",
+    "status": "mapped",
+    "upstreamPath": "include/oox/helper/helper.hxx",
+    "localSymbols": [
+      "getLimitedValue"
+    ],
+    "upstreamSymbols": [
+      "getLimitedValue",
+      "std::clamp"
+    ],
+    "preservedResponsibilities": [
+      "B8TCAE restores the actual original getLimitedValue<sal_Int32,sal_Int64> owner from include/oox/helper/helper.hxx. BigInt represents the exact signed64 argument domain; ordered clamp comparisons precede original signed32 return conversion. BinaryInputStream.copyToStream and SequenceSeekableStream.seek now call that shared original utility rather than duplicate its expression. The SAL_MAX_INT64 loop bound, read/write order, position/EOF semantics and source contracts are unchanged. An unchanged extracted original template compiled with exact-width integral arguments under C++20 supplies102 independent clamp/narrowing cases, including32767/32768 and signed64 limits. This tests the original helper directly; no claim of exabyte-scale stream execution, invalid-bound behavior, native ABI or full filter parity is made. Coverage thresholds, maps and exclusions are unchanged."
+    ],
+    "omittedResponsibilities": [
+      "Other helper.hxx constants/templates, invalid ordered-bound preconditions, physical ABI and full OOXML/model/filter acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/oox/inc/helper/helper.ts",
+          "marker": "getLimitedValue"
+        },
+        {
+          "path": "apps/office/src/oox/source/helper/limited-value.native.integration.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/oox/helper/helper.hxx",
+          "marker": "inline ReturnType getLimitedValue"
+        }
+      ]
+    }
+  }
+}

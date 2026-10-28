@@ -19,9 +19,18 @@ errors are swallowed without changing EOF. Copying an already-EOF input can
 write an untouched32KiB buffer (CALC-361 / WRITER236). These source behaviors are
 preserved rather than corrected.
 
-All9 targeted scenarios pass. The whole three-owner profile is
-S176/176 B82/83 F32/32 L163/163 and FAILS the unchanged100 branch threshold:
-the source copy loop selects a sub32KiB request only after almost2^63 bytes.
+All10 targeted scenarios pass. The original shared
+`getLimitedValue<sal_Int32,sal_Int64>` utility now belongs to
+`oox/inc/helper/helper.ts`, matching `include/oox/helper/helper.hxx`.
+Both the copy loop and Sequence seek call this actual original owner instead
+of duplicating its comparisons.102 observations from the unchanged original
+template verify clamp/narrowing boundaries, including32767/32768 and signed64
+limits. The helper and all three stream owners reach S177/177 B81/81 F33/33
+L164/164 under unchanged strict100 gates.
+
+The copy loop still requires almost2^63 bytes before its final sub32KiB request.
+The utility's boundary behavior is tested directly, as permitted by its original
+header interface; this is not a claim that the stream loop ran to exhaustion.
 No synthetic private state, altered counters, lower threshold or exclusion is used.
 
 Numeric/array/string convenience templates, relative/Sequence binary input

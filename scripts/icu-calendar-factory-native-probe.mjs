@@ -1,5 +1,6 @@
 /** @fileoverview Compares ICU Calendar factory/cache type identity, default/locale/adopt/reference overloads and bounded type-buffer writes against unchanged ICU78.3 libraries. Service registration and allocation failures remain outside this witness. Run with npx tsx. */
 import { execFileSync } from "node:child_process";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import { writeFileSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
@@ -12,7 +13,7 @@ import { Locale } from "../apps/office/src/external/icu/source/common/locid.ts";
 import { SimpleTimeZone } from "../apps/office/src/external/icu/source/i18n/simpletz.ts";
 import { adoptDefault } from "../apps/office/src/external/icu/source/i18n/timezone.default.ts";
 import { UnicodeString } from "../apps/office/src/external/icu/source/common/unistr.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   source = resolve("vendor/icu-reference/source");
 writeFileSync(
   `${build}/factory-witness.cc`,
@@ -145,3 +146,10 @@ for (let i = 0; i < rows.length; ++i)
 console.log(
   `Matched ${rows.length} native Calendar factory/cache/positive-capacity type-buffer cases; RTTI ${typeName}.`,
 );
+
+writeIcuObservations("factory", inputs, rows, build, source, [
+  "i18n/calendar.cpp",
+  "i18n/sharedcalendar.h",
+  "common/unifiedcache.cpp",
+  "common/unifiedcache.h",
+]);

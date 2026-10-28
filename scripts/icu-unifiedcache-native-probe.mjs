@@ -1,5 +1,6 @@
 /** @fileoverview Compares original UnifiedCache/SharedObject/UHashtable code with the local actual owners, including cached warnings/errors, alias keys, hard/soft counts, flush and incremental eviction. Run with npx tsx against the existing ICU78.3 native build. */
 import { execFileSync } from "node:child_process";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { SharedObject } from "../apps/office/src/external/icu/source/common/sharedobject.ts";
@@ -7,7 +8,7 @@ import {
   UnifiedCache,
   CacheKey,
 } from "../apps/office/src/external/icu/source/common/unifiedcache.ts";
-const build = resolve("output/native/AQF9AG-icu-grego"),
+const build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego"),
   source = resolve("vendor/icu-reference/source");
 writeFileSync(
   `${build}/unifiedcache-witness.cc`,
@@ -188,3 +189,19 @@ writeFileSync(
   ) + "\n",
 );
 process.stdout.write(readFileSync(`${build}/unifiedcache-comparison.json`, "utf8"));
+
+writeIcuObservations(
+  "unifiedcache",
+  input,
+  actual,
+  build,
+  source,
+  [
+    "common/unifiedcache.cpp",
+    "common/sharedobject.cpp",
+    "common/uhash.cpp",
+    "common/unifiedcache.h",
+    "common/sharedobject.h",
+  ],
+  "common",
+);

@@ -10,6 +10,7 @@ import { Exception } from "../../../cppu/inc/com/sun/star/uno/Exception";
 import type { XInputStream } from "../../../udkapi/com/sun/star/io/XInputStream";
 import { XSeekable } from "../../../udkapi/com/sun/star/io/XSeekable";
 import type { BinaryOutputStream } from "./binaryoutputstream";
+import { getLimitedValue } from "../../inc/helper/helper";
 const INPUTSTREAM_BUFFERSIZE = 0x8000;
 const Bytes = Sequence.specialize<number>("sal_Int8", 1);
 /** Original raw input operations and copy-to-output body; convenience templates are not claimed. */
@@ -26,9 +27,7 @@ export abstract class BinaryInputStream extends BinaryStreamBase {
     const aBuffer = new Bytes(INPUTSTREAM_BUFFERSIZE);
     try {
       while (nBytes > 0n) {
-        const nReadSize = Number(
-          nBytes < BigInt(INPUTSTREAM_BUFFERSIZE) ? nBytes : BigInt(INPUTSTREAM_BUFFERSIZE),
-        );
+        const nReadSize = getLimitedValue(nBytes, 0n, BigInt(INPUTSTREAM_BUFFERSIZE));
         const nBytesRead = this.readData(aBuffer, nReadSize);
         rOutStrm.writeData(aBuffer);
         if (nReadSize === nBytesRead) nBytes -= BigInt(nReadSize);

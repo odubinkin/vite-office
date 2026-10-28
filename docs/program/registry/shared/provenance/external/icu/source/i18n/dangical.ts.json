@@ -13,7 +13,8 @@
       "DangiCalendar::DangiCalendar"
     ],
     "preservedResponsibilities": [
-      "Original ICU78.3 DangiCalendar and its rule-based astronomical timezone from dangical.cpp. Original approximate transition epochs and the 1897 offset exception are retained."
+      "Original ICU78.3 DangiCalendar and its rule-based astronomical timezone from dangical.cpp. Original approximate transition epochs and the 1897 offset exception are retained.",
+      "B8TCAE adds portable actual-owner regression evidence from unchanged ICU78.3 compiled witnesses, retaining pinned source/archive/witness SHA256 values in native-observation fixtures. Public constructor/clone/field/time/limit and original protected-hook callers cover all18 calendar owners; actual RuleBasedTimeZone rule graphs include gap/fold enum options; EraRules uses genuine immutable resources; Calendar factory overloads use real cache/locale/timezone owners. Concrete native-derived cache clients verify reference counts, aliases, cached warnings/errors, eviction and destructor order. Only the host Date clock/default locale/timezone are controlled for reproducible native current-era observations; no core method, allocator, service or registry is replaced. This is bounded test evidence, not full native ABI/thread/allocator/whole-module parity. Runtime code and all broad semantic status fields remain unchanged; unresolved100 coverage gaps remain explicit."
     ],
     "omittedResponsibilities": [
       "Unconsumed APIs, native ABI/mutex/allocator and undefined-input behavior, complete UNO/display formatting, formatter/column auto-input and final CSV integration remain outside the evidence for this module. No alternate calendar selection or unsupported-known-type error is introduced."
@@ -23,6 +24,26 @@
         {
           "path": "apps/office/src/external/icu/source/i18n/dangical.ts",
           "marker": "DangiCalendar"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/standard-calendar.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/calendar-hooks.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/era.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/rbtz.native.integration.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/external/icu/source/i18n/factory.native.integration.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
