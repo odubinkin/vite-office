@@ -1,4 +1,4 @@
-/** @fileoverview Original comphelper string surrogate sanitizer; other string utilities remain unported. */
+/** @fileoverview Original comphelper surrogate sanitizer and UTF16 strip; other string utilities remain unported. */
 import { OUString, type OUStringConstReference } from "../../../sal/inc/rtl/ustring";
 import { isHighSurrogate, isLowSurrogate } from "../../../sal/inc/rtl/character";
 /** Original first-invalid-surrogate truncation, retaining COW sharing when valid. Nonthrowing native diagnostics have no model mutation. @param value - Actual Unicode input. @returns Owned prefix or shared value copy. */

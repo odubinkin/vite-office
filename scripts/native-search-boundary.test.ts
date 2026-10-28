@@ -54,7 +54,9 @@ it("admits only native search and character classification value edges", /** Pre
   // Native number-format API owners use published offapi values and cppu Sequence.
   expect(isForbiddenModuleEdge("i18npool", "offapi")).toBe(false);
   expect(isForbiddenModuleEdge("i18npool", "cppu")).toBe(false);
-  expect(isForbiddenModuleEdge("i18npool", "external")).toBe(true);
+  // Original Library_i18npool links icui18n/icuuc; native calendar owners consume ICU.
+  expect(isForbiddenModuleEdge("i18npool", "external")).toBe(false);
+  expect(isForbiddenModuleEdge("i18npool", "sw")).toBe(true);
   // Generated API structs retain the original UDK Locale dependency.
   expect(isForbiddenModuleEdge("offapi", "udkapi")).toBe(false);
 });

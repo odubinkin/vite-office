@@ -29,7 +29,7 @@ source hashes remain unchanged, and the new digest and151032-case aggregate
 round-trip result come from actual compiled source. Native out-of-array reverse
 lookups remain classified outside the witness's defined domain.
 
-CALC-363 through CALC-366 and WRITER200 through WRITER203 document retained source
+CALC-363 through CALC-366 and WRITER238 through WRITER241 document retained source
 quirks: short-prefix loss at EOF, absent-quote ordering, split-surrogate default
 replacement and MS-compatible Shift-JIS wave mapping. These are source behavior,
 not corrections to the original algorithms.

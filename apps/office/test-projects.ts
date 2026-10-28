@@ -24,6 +24,7 @@ const writerIntegrationTests = [
 
 /** Calc integration cases colocated with their shared locale and item owners. */
 const calcIntegrationTests = [
+  "src/sfx2/source/doc/native-model-{child,listeners,selection}.test.ts",
   "src/i18nlangtag/source/isolang/{isolang,mslangid}.test.ts",
   "src/svl/source/items/native-target-which.test.ts",
 ];

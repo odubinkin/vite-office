@@ -13,7 +13,7 @@ clamping, negative-count validation before closed-state checks, original typed
 exception Context and seek bounds. Sequence input retains an actual shallow
 Sequence copy around its borrowed const data, so caller mutation detaches through
 the existing COW engine. Valid seek deliberately reopens the source closed
-sentinel (CALC-359 / WRITER196).
+sentinel (CALC-359 / WRITER234).
 
 Sequence output borrows the caller's mutable Sequence, starts its logical cursor
 at zero, and preserves the original 1.3 growth factor, minimum128 growth, doubled

@@ -31,8 +31,8 @@ initialized-domain trace records input source hashes and matches actual runtime
 counts, byte values, copy/COW and moves. It is not a full native UNO, allocation
 failure, ABI, threading or service certificate.
 
-CALC-367 / WRITER204 preserve the original zero-length COW branch that omits old
-reference decrement. CALC-368 / WRITER205 record a conditional retaining-sink
+CALC-367 / WRITER242 preserve the original zero-length COW branch that omits old
+reference decrement. CALC-368 / WRITER243 record a conditional retaining-sink
 aliasing concern in the original serializer cache; that source observation is
 separate from this byte-owner witness. Connecting the real cache and
 XOutputStream/package output owners remains pending, as do complete DOCX/XLSX

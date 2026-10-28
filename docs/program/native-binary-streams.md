@@ -13,10 +13,10 @@ before input/output member and seekable-base member cleanup. Caught actual UNO
 exception values are destroyed at catch exit; unrelated JavaScript failures
 propagate. Original diagnostic-only assertions are not executed.
 
-Input closure deliberately ignores its autoclose flag (CALC-360 / WRITER197).
+Input closure deliberately ignores its autoclose flag (CALC-360 / WRITER235).
 Output flushes first and closes only when autoclose is enabled. Output write
 errors are swallowed without changing EOF. Copying an already-EOF input can
-write an untouched32KiB buffer (CALC-361 / WRITER198). These source behaviors are
+write an untouched32KiB buffer (CALC-361 / WRITER236). These source behaviors are
 preserved rather than corrected.
 
 All9 targeted scenarios pass. The whole three-owner profile is
@@ -37,7 +37,7 @@ It does not depend on DOMParser or a main-thread-only XML engine. Full OOXML
 filter/model transfer still needs its own verified worker integration; live UNO
 objects are not structured-clone payloads.
 
-The shared seek finding is WRITER196. The earlier checkpoint accidentally reused
+The shared seek finding is WRITER234. The earlier checkpoint accidentally reused
 WRITER195, which already belongs to numbering-rule lookup. Current documentation
 and registry references correct that identifier; immutable historical evidence
 remains unchanged.

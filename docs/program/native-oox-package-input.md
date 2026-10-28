@@ -30,7 +30,7 @@ legacy descriptors. Full libxml2 alias/diagnostic behavior is unverified. UTF16
 signature fixtures now include an XML declaration for BOMless input instead of
 relying on the removed permissive local decoder. Malformed-input/cancellation
 fixtures contain enough bytes to reach native converter recognition. Explicit
-short-prefix tests separately preserve CALC-363 / WRITER200: short accumulated
+short-prefix tests separately preserve CALC-363 / WRITER238: short accumulated
 input can be discarded at EOF and the fragment can report success without a root.
 This source behavior remains unchanged.
 

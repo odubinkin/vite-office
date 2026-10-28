@@ -16,31 +16,10 @@
     "cowDetached": 1,
     "movedNull": 1,
     "moveAssignedNull": 1,
-    "source": [
-      1,
-      2,
-      -128,
-      -1
-    ],
-    "detached": [
-      1,
-      9,
-      -128,
-      -1
-    ],
-    "sharedGrowth": [
-      1,
-      2,
-      -128,
-      -1,
-      0,
-      0
-    ],
-    "initializedUniqueGrowth": [
-      1,
-      2,
-      7
-    ]
+    "source": [1, 2, -128, -1],
+    "detached": [1, 9, -128, -1],
+    "sharedGrowth": [1, 2, -128, -1, 0, 0],
+    "initializedUniqueGrowth": [1, 2, 7]
   },
   "limits": "Small initialized byte/count/COW/move cases only. Native resource failure, undefined bytes/pointers, complete UNO/ABI/thread/service behavior and serializer/package/UI integration remain unverified."
 }

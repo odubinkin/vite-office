@@ -16,7 +16,7 @@ only ASCII capitals, checks exact VIP names and then ordered alias prefixes.
 Names such as utf-16 and ucs-4 retain the original DONTKNOW result: they are not
 silently supplied through browser encoding aliases.
 
-CALC-362 / WRITER199 records prefix aliases accepting suffixes while exact VIP
+CALC-362 / WRITER237 records prefix aliases accepting suffixes while exact VIP
 names do not. This native behavior is preserved. OString move assignment releases
 the destination and resets the source through rtl_string_new, rather than
 swapping the old destination into the source.

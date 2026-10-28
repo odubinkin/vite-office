@@ -141,7 +141,14 @@ try {
               check = [0];
             let entry;
             try {
-              entry = new SvNumberformat(code, original["rScan"], original["rScan"].GetCurrentLanguageData().pStringScanner, original["rScan"].getColorCallback().GetNatNum(), check, [0x0409]);
+              entry = new SvNumberformat(
+                code,
+                original["rScan"],
+                original["rScan"].GetCurrentLanguageData().pStringScanner,
+                original["rScan"].getColorCallback().GetNatNum(),
+                check,
+                [0x0409],
+              );
               if (check[0] !== 0) throw Error("General fixture did not compile");
             } finally {
               code.dispose();

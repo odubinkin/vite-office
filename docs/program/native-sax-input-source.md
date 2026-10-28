@@ -13,7 +13,7 @@ Entity copies the source before callbacks, retains its XMLFile2UTFConverter and
 reads converted bytes in original sixteen-KiB blocks. Input is never closed by
 this owner. The current document and token receivers are snapshotted as in native
 ParserData; changing them during callbacks applies to the next parse. The short
-initial-prefix EOF behavior documented in CALC-363 / WRITER200 remains intact.
+initial-prefix EOF behavior documented in CALC-363 / WRITER238 remains intact.
 
 The existing saxes backend now accepts incrementally decoded bytes without DOM.
 UTF8/UTF16 use the host byte decoder, UTF32 uses explicit scalar/order handling,
