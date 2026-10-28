@@ -1,0 +1,102 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-f840e100-47eb-4b22-8cf0-ec0b1fe13ce1",
+    "capabilityId": "CAP-f840e100-47eb-4b22-8cf0-ec0b1fe13ce1",
+    "suite": "calc",
+    "subsystem": "native-byte-sequence",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "SAL and UNO byte owners retain actual shared headers, byte lvalues and one native count.",
+      "Compiled unchanged SAL source trace corroborates initialized C/C++ copy/COW/move behavior."
+    ],
+    "capability": "Native SAL ByteSequence and shared UNO byte Sequence ownership",
+    "gaps": [
+      "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sal/rtl/byteseq.cxx",
+          "marker": "rtl_byte_sequence_reference2One"
+        },
+        {
+          "path": "include/rtl/byteseq.hxx",
+          "marker": "ByteSequence::ByteSequence"
+        },
+        {
+          "path": "include/rtl/byteseq.h",
+          "marker": "ByteSequence"
+        },
+        {
+          "path": "include/com/sun/star/uno/Sequence.hxx",
+          "marker": "toUnoSequence"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sal/qa/ByteSequence/ByteSequence.cxx",
+          "marker": "ByteSequence"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/rtl/byteseq.h",
+          "marker": "ByteSequence"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sal/rtl/byteseq.ts",
+          "marker": "rtl_byte_sequence_reference2One"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/byteseq.ts",
+          "marker": "ByteSequence"
+        },
+        {
+          "path": "apps/office/src/sal/inc/rtl/byteseq.h.ts",
+          "marker": "__ByteSequence_NoDefault"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/uno/Sequence.ts",
+          "marker": "toUnoSequence"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sal/rtl/byteseq.test.ts",
+          "marker": "@fileoverview"
+        },
+        {
+          "path": "scripts/sal-byteseq-native-probe.mjs",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-byte-sequence.md",
+          "marker": "# Native SAL ByteSequence"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved."
+    },
+    "scopeLimitations": [
+      "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-xml-stream-encoding-conversion"
+  }
+}

@@ -219,3 +219,13 @@ export function asNonConstRange<E>(sequence: Sequence<E>): SequenceRange<E> {
     (sequence.constructor as SequenceConstructor<E>).ElementSize,
   );
 }
+
+/** Original toUnoSequence reinterpret-view copy, lowered through real count acquisition and the original adopt constructor without a new type/data provider. @param bytes - Actual SAL byte owner. @returns Owned UNO byte Sequence sharing the same record and elements. */
+export function toUnoSequence(
+  bytes: import("../../../../../../sal/inc/rtl/byteseq").ByteSequence,
+): Sequence<number> {
+  const handle = bytes.get() as uno_Sequence;
+  osl_atomic_increment(sequenceCountAddress(handle));
+  const Bytes = Sequence.specialize<number>("sal_Int8", 1);
+  return new Bytes(handle, SAL_NO_ACQUIRE_ARGUMENT);
+}

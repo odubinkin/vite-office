@@ -1941,3 +1941,11 @@ Pinned Unicode2TextConverter passes its original no-FLUSH default flags to RTL. 
 ### WRITER203 — Shared Shift-JIS retains upstream MS-compatible wave mapping
 
 Pinned `sal/textenc/tcvtjp1.tab` intentionally uses U+FF5E for8160 in Shift-JIS for Microsoft compatibility. The complete original SJIS descriptor is now wired separately from MS932, reusing actual original forward/reverse payload tables and the same EUDC object. All512 pointer/range entries match source. Compiled original reverse conversion over all BMP units and the extended151032-case profile confirm the represented defined scope; see CALC-366. Native undefined reads, ABI and full document services remain unverified.
+
+### WRITER204 — Shared empty ByteSequence COW leaves the old count unchanged
+
+Pinned `sal/rtl/byteseq.cxx#rtl_byte_sequence_reference2One` omits old-count decrement in its zero-element allocation branch. Preserve this behavior; actual owner tests and compiled unchanged SAL C/C++ bodies reproduce it. See CALC-367. Allocation failure and native resource lifetime outside the witness domain remain unverified.
+
+### WRITER205 — Shared serializer cache writes can bypass retained Sequence COW
+
+Pinned `sax/source/tools/CachedOutputStream.hxx` writes through a cached original pSeq and changes its nElements while `toUnoSequence` can expose that same header/storage to a retaining output sink. This conditional aliasing is suspected from source; full sink/service reproduction remains pending. Preserve the raw-pointer flow rather than adding a defensive copy during output migration. See CALC-368.

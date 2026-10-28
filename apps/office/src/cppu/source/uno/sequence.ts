@@ -19,29 +19,11 @@ import {
   icopyConstructFromElements,
 } from "./sequence-elements";
 import { g_emptySeq, emptySequenceCountAddress } from "./data";
-/** Native field-address views retain exactly one signed32 count for each actual sequence record. */
-const counts = new WeakMap<uno_Sequence, Int32Array>();
-/** Adapts address-of the original count; the static empty count reuses its existing owner. No sequence allocation or lifetime operation is performed. @param sequence - Caller-owned native logical record. @returns Actual live signed32 field address. */
+import { salSequenceCountAddress } from "../../../sal/inc/types";
+/** Original address-of binding shares the actual SAL field for interoperability with rtl::ByteSequence. @param sequence - Caller-owned initialized record. @returns Live signed32 field address. */
 export function sequenceCountAddress(sequence: uno_Sequence): Int32Array {
   if (sequence === g_emptySeq) return emptySequenceCountAddress();
-  let count = counts.get(sequence);
-  if (count === undefined) {
-    count = new Int32Array([sequence.nRefCount]);
-    const address = count;
-    Object.defineProperty(sequence, "nRefCount", {
-      enumerable: true,
-      /** Reads the same original count field. @returns Current signed32 value. */
-      get(): number {
-        return Atomics.load(address, 0);
-      },
-      /** Writes the same original count field. @param value - Source signed32 value. @returns Nothing. */
-      set(value: number): void {
-        Atomics.store(address, 0, value);
-      },
-    });
-    counts.set(sequence, count);
-  }
-  return count;
+  return salSequenceCountAddress(sequence);
 }
 /** Original C boundary destroys an already zero-count sequence. @param sequence - Zero-count record. @param type - Real sequence type. @param release - Caller callback. @returns Nothing. */
 export function uno_type_sequence_destroy(

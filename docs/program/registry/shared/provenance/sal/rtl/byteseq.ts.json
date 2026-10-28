@@ -1,0 +1,51 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/rtl/byteseq.ts",
+    "status": "mapped",
+    "upstreamPath": "sal/rtl/byteseq.cxx",
+    "localSymbols": [
+      "rtl_byte_sequence_reference2One",
+      "rtl_byte_sequence_realloc",
+      "rtl_byte_sequence_acquire",
+      "rtl_byte_sequence_release",
+      "rtl_byte_sequence_construct",
+      "rtl_byte_sequence_constructNoDefault",
+      "rtl_byte_sequence_constructFromArray",
+      "rtl_byte_sequence_assign",
+      "rtl_byte_sequence_equals",
+      "rtl_byte_sequence_getConstArray",
+      "rtl_byte_sequence_getLength"
+    ],
+    "upstreamSymbols": [
+      "rtl_byte_sequence_reference2One",
+      "rtl_byte_sequence_realloc"
+    ],
+    "preservedResponsibilities": [
+      "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Native allocation/ABI/undefined bytes/pointers, threads, actual cache/output/package and complete DOCX/XLSX model/filter/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/rtl/byteseq.ts",
+          "marker": "rtl_byte_sequence_reference2One"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/byteseq.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/sal/rtl/byteseq.cxx",
+          "marker": "rtl_byte_sequence_reference2One"
+        }
+      ]
+    }
+  }
+}

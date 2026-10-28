@@ -1,0 +1,37 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/sal/inc/rtl/byteseq.ts",
+    "classification": "upstream-mechanism",
+    "state": "foundation",
+    "suite": "shared",
+    "subsystem": "native-byte-sequence",
+    "capabilityIds": [
+      "CAP-f840e100-47eb-4b22-8cf0-ec0b1fe13ce1"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/sal/inc/rtl/byteseq.ts",
+        "apps/office/src/sal/rtl/byteseq.test.ts",
+        "apps/office/src/sal/rtl/byteseq.native.json",
+        "vendor/libreoffice-reference/include/rtl/byteseq.hxx"
+      ],
+      "justification": "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved.",
+      "knownViolations": [],
+      "localSymbols": [
+        "ByteSequence"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "include/rtl/byteseq.hxx",
+      "upstreamSymbols": [
+        "ByteSequence::ByteSequence",
+        "ByteSequence::operator ="
+      ]
+    }
+  }
+}

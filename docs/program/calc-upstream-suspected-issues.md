@@ -4460,3 +4460,11 @@ Pinned `sax/source/expatwrap/xml2utf.cxx#Unicode2TextConverter::convert` passes 
 ### CALC-366 — Native Shift-JIS deliberately uses the MS-compatible fullwidth wave mapping
 
 Pinned `sal/textenc/tcvtjp1.tab` explicitly maps byte pair8160 to U+FF5E across SJIS/MS932/Apple-Japanese for Microsoft compatibility, rather than canonical Shift-JIS U+301C. The SJIS descriptor's original lead/reverse tables are preserved separately from MS932 extension tables, while its EUDC pointer is genuinely shared. Both256-entry tables exactly match original numeric fields and symbolic pointers. Compiled original DBCS bodies confirm the new descriptor's reverse digest over all BMP units and the extended151032-case round-trip profile. See WRITER203; this does not certify arbitrary undefined native table accesses or all SAL/service behavior.
+
+### CALC-367 — Empty SAL ByteSequence COW does not release its old reference
+
+Pinned `sal/rtl/byteseq.cxx#rtl_byte_sequence_reference2One` decrements the old sequence only inside its nonzero-element branch. When a shared zero-length sequence is detached, it allocates a new header but leaves the old reference count unchanged. Preserve this source flow. The compiled unchanged C/C++ bodies reproduce a zero old-count delta across empty getArray, and the actual SAL/UNO owner tests retain it. See WRITER204. Native allocation failure and physical resource lifetime beyond the initialized witness domain remain unverified.
+
+### CALC-368 — Serializer cache can bypass COW for a retaining output sink
+
+Pinned `sax/source/tools/CachedOutputStream.hxx` stores pSeq from its const ByteSequence once, writes through that raw pointer and mutates nElements on flush. The flush converts the same allocation through `toUnoSequence`; a sink that retains a Sequence value can therefore share both header and bytes while later cache writes bypass ByteSequence/Sequence getArray COW. This is a suspected conditional aliasing contract, not an observed full serializer-service failure. Preserve the original cache pointer flow when connecting genuine output owners; do not insert a defensive copy to hide it. See WRITER205. Complete output sink/service integration and its witness remain pending.

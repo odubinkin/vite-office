@@ -1,0 +1,41 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/sal/inc/rtl/byteseq.ts",
+    "status": "mapped",
+    "upstreamPath": "include/rtl/byteseq.hxx",
+    "localSymbols": [
+      "ByteSequence"
+    ],
+    "upstreamSymbols": [
+      "ByteSequence::ByteSequence",
+      "ByteSequence::operator ="
+    ],
+    "preservedResponsibilities": [
+      "Original SAL ByteSequence C operations and wrapper retain actual sal_Sequence records, original separate static empty, initialized byte/COW/equality/resize/copy/adopt/move rules and retained bad-allocation checks. One compiler field-address binding now serves SAL/CPPU counts including the genuine existing g_emptySeq initializer; no new sequence/count/default/UNO provider is introduced. Original toUnoSequence uses actual OSL count acquisition and the existing Sequence adopt constructor to retain the same header/elements. Compiled unchanged SAL C/C++/allocator/GCC-builtin atomic bodies provide a source-hashed initialized-domain copy/COW/move trace. CALC-367/WRITER204 preserve empty COW missing decrement; CALC-368/WRITER205 document a separate conditional cache retaining-sink aliasing concern, whose full witness remains pending. Native resource allocation failure, physical realloc/pointer/indeterminate bytes, ABI/thread/service and complete cache/XOutputStream/package/DOCX/XLSX model/filter/worker/UI acceptance remain unverified. Existing file/autosave/recovery choices are preserved."
+    ],
+    "omittedResponsibilities": [
+      "Native allocation/ABI/undefined bytes/pointers, threads, actual cache/output/package and complete DOCX/XLSX model/filter/UI acceptance remain unverified."
+    ],
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/sal/inc/rtl/byteseq.ts",
+          "marker": "ByteSequence"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/byteseq.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "vendor/libreoffice-reference/include/rtl/byteseq.hxx",
+          "marker": "ByteSequence::ByteSequence"
+        }
+      ]
+    }
+  }
+}

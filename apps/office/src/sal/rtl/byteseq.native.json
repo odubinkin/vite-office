@@ -1,0 +1,46 @@
+{
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceHashes": {
+    "include/sal/types.h": "fa5c543603b8dece9bde68a517e63c43a7f849a56395d2b3e5c020fe58c83ad0",
+    "sal/osl/unx/interlck.cxx": "84fd6dab68b2c646278b945b4e905108ac8e093a7ac11508359a1f3b90f9097b",
+    "sal/rtl/alloc_global.cxx": "d47bf231ea3d19cc021692d8b01346d77b216fd4c6467871d5637c3c0d1242bb",
+    "include/rtl/byteseq.h": "d64a5786a5b2362af3e613c50e954930689b4eac010c33a687a492ef9f3ca7cc",
+    "include/rtl/byteseq.hxx": "3db4ea39faeb376f897536a7e2ead51187b2a43404f4ef60860dbadefe3104c2",
+    "sal/rtl/byteseq.cxx": "21ff490921f0d02e59fba1e6f2fdd27e5506703bae2028c80099cf4a0825ec1a"
+  },
+  "result": {
+    "emptyShared": 1,
+    "noDefaultZeroIndependent": 1,
+    "emptyCowOldCountDelta": 0,
+    "copyShared": 1,
+    "cowDetached": 1,
+    "movedNull": 1,
+    "moveAssignedNull": 1,
+    "source": [
+      1,
+      2,
+      -128,
+      -1
+    ],
+    "detached": [
+      1,
+      9,
+      -128,
+      -1
+    ],
+    "sharedGrowth": [
+      1,
+      2,
+      -128,
+      -1,
+      0,
+      0
+    ],
+    "initializedUniqueGrowth": [
+      1,
+      2,
+      7
+    ]
+  },
+  "limits": "Small initialized byte/count/COW/move cases only. Native resource failure, undefined bytes/pointers, complete UNO/ABI/thread/service behavior and serializer/package/UI integration remain unverified."
+}

@@ -30,21 +30,15 @@ import { _equalSequence } from "./eq-sequence";
 import { _assignStruct, _assignData } from "./assign";
 import { _release } from "./prim";
 import { typelib_typedescriptionreference_isAssignableFrom } from "../../inc/typelib/typedescription";
-/** Intrinsic storage for the addressed original signed32 sequence count. */
-const emptyCount = new Int32Array([1]);
-/** Original static empty sequence initializer {1,0,{0}}, reusing the SAL record and keeping its live count. */
+import { salSequenceCountAddress } from "../../../sal/inc/types";
+/** Original static empty sequence initializer {1,0,{0}}, reusing the SAL record. */
 export const g_emptySeq: uno_Sequence & { elements: Int8Array } = {
-  /** Original field read. @returns Current signed32 count. */
-  get nRefCount(): number {
-    return emptyCount[0] as number;
-  },
-  /** Original field write through addressed count storage. @param value - Source-defined signed32 field value. @returns Nothing. */
-  set nRefCount(value: number) {
-    emptyCount[0] = value;
-  },
+  nRefCount: 1,
   nElements: 0,
   elements: new Int8Array([0]),
 };
+/** The existing static initializer owns its single count address; SAL and UNO share this same field. */
+const emptyCount = salSequenceCountAddress(g_emptySeq);
 /** Original mutable global reference pointer, initially nullptr; a one-pointer cell adapts cross-module writable C storage. */
 export const g_pVoidType: [R | null] = [null];
 /** Native address-of g_emptySeq.nRefCount intrinsic for the shared OSL atomic operation, without a second count or new counter implementation. @returns The actual live count address. */
