@@ -1,0 +1,362 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded shared internal sequence-stream prerequisite; full DOCX/XLSX task incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/comphelper/inc/bytereader.ts": "61be3bea9c6865eaf1794d6de32cf1c157d92c99",
+    "apps/office/src/comphelper/source/streaming/seqstream.test.ts": "583117c83d94f49dd76bf3012dc637ab383a11f8",
+    "apps/office/src/comphelper/source/streaming/seqstream.ts": "32bb0a6764058acce5901aae3298c298556ecd69",
+    "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts": "dd009815402fde6850393a84a3c036392b43cacf",
+    "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts": "b17a1011cd8d90ab2f8b7dd324fc40de6758c475",
+    "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts": "0e2f3c8d12099447a8febf83e2d4027dc057b923",
+    "apps/office/src/sfx2/source/doc/native-model-selection.test.ts": "3e23f151aa0fba10f8788f2dd535116e9daeb4c2",
+    "apps/office/src/udkapi/com/sun/star/io/XInputStream.ts": "919dbfef1b336f6b5dd90c5602eb0ec4b81bf3ee",
+    "apps/office/src/udkapi/com/sun/star/io/XOutputStream.ts": "dc4bd4582c1821a27a6d2f14181def7d924fa415",
+    "apps/office/src/udkapi/com/sun/star/io/XSeekable.ts": "518fccbdeaf5257ed896617c41f96f476adc8179",
+    "docs/program/calc-upstream-suspected-issues.md": "de73d49ebc25244f15d13001ff2d8ce9bb9b7f38",
+    "docs/program/native-sequence-streams.md": "af60c072e64335584d1fb3c5c3575e7946d92de6",
+    "docs/program/registry/calc/capabilities/CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7.json": "6d38b87ffa25d47d93c1e23b2f1f2e82af1f5134",
+    "docs/program/registry/shared/provenance/comphelper/inc/bytereader.ts.json": "e200b651a74554e1d94878c715e96cfe1dc4f94a",
+    "docs/program/registry/shared/provenance/comphelper/source/streaming/seqstream.ts.json": "dc5828188e96ccb030cd483d966bd35164edc952",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json": "a8714f79a2e5df956ffb088a11d699f0e2e44840",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/IOException.ts.json": "8127962fc1a0d12b98bd9e00c6963648b2283974",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/io/NotConnectedException.ts.json": "d0a0584e3c989df8bf6681be61db34efeb17bf6e",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XInputStream.ts.json": "028889b85f9dd560b56ff6c38ad8da6283932c6a",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XOutputStream.ts.json": "baab018e0bf78bdf8f6566193e86f88d294b7c91",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/io/XSeekable.ts.json": "7fe66a16c9b10a50ddc4a7a4916803eba938109f",
+    "docs/program/registry/shared/runtime/comphelper/inc/bytereader.ts.json": "eaa2427c86301a3e5b151d2f17fcd43c9e3a8c07",
+    "docs/program/registry/shared/runtime/comphelper/source/streaming/seqstream.ts.json": "b7fabf3c6c85dc894465afde7c74d15f3e49ee81",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts.json": "8b7b31acab242dc893d1a7b0c05243efbd46dfa8",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/IOException.ts.json": "a750d0057d0f6303f94a390d8b2b032201096112",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/io/NotConnectedException.ts.json": "2558f2a64dae953e256f94e459c5f93f301d30ba",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XInputStream.ts.json": "bf3e8a2016859eb543a9a5f6f8e9152d7cad69a5",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XOutputStream.ts.json": "bafb0556799387f74344562df0409a27b6320dbd",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/io/XSeekable.ts.json": "88b05875ff0448ceb71438ef5a359b95e94c9871",
+    "docs/program/writer-upstream-suspected-issues.md": "e8d1b09bb0b0f0a4168e70e929a3cf3bc1a9434f",
+    "scripts/check-module-boundaries.mjs": "56cf4646b5176f8d53a1fafd449242167bc204d2",
+    "scripts/native-model-listener-boundary.test.ts": "e6704a4605dd6f8ce2f09d120a74e6ff88022def"
+  },
+  "scope": "Original comphelper MemoryInputStream, SequenceInputStream and OSequenceOutputStream with actual CPPU Sequence/Reference/WeakImplHelper, generated IO exceptions, complete original input/output/seek SDK signatures and declaration-only ByteReader/ByteWriter. No service factory or complete filter/model/UI admission is manufactured.",
+  "checks": [
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 1,
+      "log": "apps/office/coverage/native-seqstream-check-0.log",
+      "sha256": "e8e04423b117d31a4450d4d6d7de42f579a114d378560bbcf0011d8c0774801c"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-1.log",
+      "sha256": "8a9cb87e864a7a424c1dd93ba54e634291c426d80b2a427266ca8dbd2d3b756c"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-2.log",
+      "sha256": "3e91c362815a075abdfac07c965ca18c9e28b802a7a900233e9172348cc31bf6"
+    },
+    {
+      "command": "npm run check:source-tree",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-3.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": "npm run check:source-provenance",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-4.log",
+      "sha256": "8e2d7567076f449dbb0f3399c58f437785538a3b7867f6cc1bcc383ebb8c6f48"
+    },
+    {
+      "command": "npm run inventory:registry:check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-5.log",
+      "sha256": "d27b9c24967b653654fd952ed8114e90bd93f762a97a3d4411883bbb719b98e8"
+    },
+    {
+      "command": "npm run inventory:invariants",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-6.log",
+      "sha256": "598f64e5c891ddc366dd2d566513fc30888eeda703451bad861130ee44cf1359"
+    },
+    {
+      "command": "npm run inventory:parity",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-7.log",
+      "sha256": "eeab42e4603f8259842cfbc5a61631a056c7454d17c72d4ca699c9acf679bdc4"
+    },
+    {
+      "command": "npm run check:writer-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-8.log",
+      "sha256": "b44889ac63079caa02bf2facc301e06e51d40649227a7ca71658ce187dec585d"
+    },
+    {
+      "command": "npm run check:calc-resources",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-9.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": "npm run check:writer-hintids",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-10.log",
+      "sha256": "e2112e5f038b55802dca0f6d378ce5ece0e0d0ea83d8fed23054c47e8f6b2d69"
+    },
+    {
+      "command": "ap doctor",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-11.log",
+      "sha256": "7ec80027221dca77a9f0569bab6a3b32d0b386d6c1d53823770d83f72567a0f3"
+    },
+    {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-12.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-check-13.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run typecheck",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    {
+      "command": "npm run test:static",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-static.log",
+      "sha256": "a274e54dde9a602653480d7f14aafdfd8617f987aab7fc7d6e937caf3bb9a781"
+    },
+    {
+      "command": "npm run inventory:registry:build",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-registry-build.log",
+      "sha256": "f941feea056f9f9125ac8a96978ff0fda711beef74563b36c553fc89490f0209"
+    },
+    {
+      "command": "npx eslint apps/office/src/comphelper/inc/bytereader.ts apps/office/src/comphelper/source/streaming/seqstream.test.ts apps/office/src/comphelper/source/streaming/seqstream.ts apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts apps/office/src/cppu/inc/com/sun/star/io/IOException.ts apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts apps/office/src/sfx2/source/doc/native-model-selection.test.ts apps/office/src/udkapi/com/sun/star/io/XInputStream.ts apps/office/src/udkapi/com/sun/star/io/XOutputStream.ts apps/office/src/udkapi/com/sun/star/io/XSeekable.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-lint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx eslint scripts/check-module-boundaries.mjs scripts/native-model-listener-boundary.test.ts --max-warnings 0",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-toolslint.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npx prettier --check apps/office/src/comphelper/inc/bytereader.ts apps/office/src/comphelper/source/streaming/seqstream.test.ts apps/office/src/comphelper/source/streaming/seqstream.ts apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts apps/office/src/cppu/inc/com/sun/star/io/IOException.ts apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts apps/office/src/sfx2/source/doc/native-model-selection.test.ts apps/office/src/udkapi/com/sun/star/io/XInputStream.ts apps/office/src/udkapi/com/sun/star/io/XOutputStream.ts apps/office/src/udkapi/com/sun/star/io/XSeekable.ts docs/program/calc-upstream-suspected-issues.md docs/program/native-sequence-streams.md docs/program/writer-upstream-suspected-issues.md",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npx prettier --check scripts/check-module-boundaries.mjs scripts/native-model-listener-boundary.test.ts",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-toolsformat.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": "npm run check:dependencies",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-depsfinal.log",
+      "sha256": "030079bac5860dda3aa9a1828436166370afc4bbb3cd8df5c2d4b9609db7e430"
+    },
+    {
+      "command": "npx vitest run scripts/native-model-listener-boundary.test.ts scripts/check-module-boundaries.test.ts scripts/check-source-provenance.test.ts --maxWorkers=2",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-tooling.log",
+      "sha256": "ecd84cff322c8e8631cf003fcbae87fb5238edeb782d5192134c14c5c3380394"
+    },
+    {
+      "command": "npm run check:docs",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-finalcheck-0.log",
+      "sha256": "8a9cb87e864a7a424c1dd93ba54e634291c426d80b2a427266ca8dbd2d3b756c"
+    },
+    {
+      "command": "npm run check:file-size",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-finalcheck-1.log",
+      "sha256": "b51d3223d1202dd7866c308cc86db59641518db9452b4907276c1e4118811e89"
+    },
+    {
+      "command": "git diff --check",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-finalcheck-2.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/comphelper/source/streaming/seqstream.test.ts src/sfx2/source/doc/native-model-selection.test.ts --coverage.include=src/comphelper/source/streaming/seqstream.ts --coverage.include=src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts --coverage.include=src/cppu/inc/com/sun/star/io/IOException.ts --coverage.include=src/cppu/inc/com/sun/star/io/NotConnectedException.ts --coverage.include=src/udkapi/com/sun/star/io/XInputStream.ts --coverage.include=src/udkapi/com/sun/star/io/XOutputStream.ts --coverage.include=src/udkapi/com/sun/star/io/XSeekable.ts --coverage.reportsDirectory=coverage/native-seqstream-final --maxWorkers=2",
+      "cwd": ".",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-testsfinal.log",
+      "sha256": "ae7ee3ea12acaccadc4719a9c5894867e1abefebf028433937c828bce596daf0"
+    },
+    {
+      "command": "npx vitest run src/cppu/inc/com/sun/star/uno/Sequence.test.ts src/cppu/source/uno/sequence-engine.test.ts src/cppu/inc/com/sun/star/uno/Any-ownership.test.ts src/cppuhelper/source/native-weak-object.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-related.log",
+      "sha256": "97b929a64181ce36adaade5d0b8b40a01a630ed5cdc01e70da60502019967243"
+    },
+    {
+      "command": "npx vitest run src/sc/source/filter/xml/ods.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/ui/docshell/impex.test.ts src/sc/source/ui/docshell/impex.admission.test.ts --maxWorkers=2",
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/native-seqstream-calc.log",
+      "sha256": "6f5afef6069232671c334041ec46888a5bc0a786c5aab2fa92903d7b7638227d"
+    }
+  ],
+  "rawCoverage": {
+    "path": "apps/office/coverage/native-seqstream-final/coverage-final.json",
+    "sha256": "e78ee755922600ea8ffcc51d5770cbc239a6c6ba1cfb458470a13c94156db1fd",
+    "files": {
+      "apps/office/src/comphelper/source/streaming/seqstream.ts": {
+        "s": {
+          "covered": 118,
+          "total": 118
+        },
+        "b": {
+          "covered": 41,
+          "total": 41
+        },
+        "f": {
+          "covered": 18,
+          "total": 18
+        }
+      },
+      "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts": {
+        "s": {
+          "covered": 21,
+          "total": 21
+        },
+        "b": {
+          "covered": 8,
+          "total": 8
+        },
+        "f": {
+          "covered": 5,
+          "total": 5
+        }
+      },
+      "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts": {
+        "s": {
+          "covered": 21,
+          "total": 21
+        },
+        "b": {
+          "covered": 8,
+          "total": 8
+        },
+        "f": {
+          "covered": 5,
+          "total": 5
+        }
+      },
+      "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts": {
+        "s": {
+          "covered": 21,
+          "total": 21
+        },
+        "b": {
+          "covered": 8,
+          "total": 8
+        },
+        "f": {
+          "covered": 5,
+          "total": 5
+        }
+      },
+      "apps/office/src/udkapi/com/sun/star/io/XInputStream.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/udkapi/com/sun/star/io/XOutputStream.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      },
+      "apps/office/src/udkapi/com/sun/star/io/XSeekable.ts": {
+        "s": {
+          "covered": 9,
+          "total": 9
+        },
+        "b": {
+          "covered": 2,
+          "total": 2
+        },
+        "f": {
+          "covered": 3,
+          "total": 3
+        }
+      }
+    },
+    "totals": {
+      "s": [
+        208,
+        208
+      ],
+      "b": [
+        71,
+        71
+      ],
+      "f": [
+        42,
+        42
+      ]
+    },
+    "result": "PASS S208/208 B71/71 F42/42 L187/187 over all seven newly executable owners; thresholds/exclusions unchanged."
+  },
+  "tests": {
+    "focused": "13pass/2files including corrected native selection fixture",
+    "relatedSequenceAnyWeakSDK": "28pass/5files",
+    "CalcODSCSV": "68pass/4files",
+    "tooling": "51pass/3files",
+    "uniqueTotal": 160
+  },
+  "corrections": [
+    "Initial ESLint unified-signatures failure corrected by one union signature retaining both original pointer/Sequence contracts; final coverage was rerun against final source.",
+    "Initial dependency check rejected new comphelper -> cppuhelper edge. Original include/comphelper/seqstream.hxx uses cppuhelper/implbase.hxx and Library_comphelper.mk links cppuhelper. Added that original edge and tested reverse/browser isolation; final dependency check passed.",
+    "Earlier committed native-model-selection.test.ts destroyed the same Any twice. The first disposal is now clear(), followed by exactly one final destructor. This supersedes prior native-model-selection-checkpoint.json fixture lifetime evidence; old evidence is preserved unchanged. Production model behavior is unchanged."
+  ],
+  "sourceIssues": [
+    "CALC-359 / WRITER195 preserve original valid seek reopening the closed input position sentinel."
+  ],
+  "limitations": [
+    "Logical byte cells lower native memcpy; synchronous host calls omit original mutex scopes. ABI/crosscasts/native threads/pointer undefined behavior/overflow/allocator failure remain unverified.",
+    "Original Python service QA remains unported. Tests directly exercise actual internal components, not a registered SequenceInputStream/SequenceOutputStream service or getWrittenBytes implementation.",
+    "Package and SAX InputSource transport, complete concrete model/controller/factory owners, FilterBase/workbook contexts and full DOCX/XLSX import/export/reopen and mounted UI acceptance remain pending.",
+    "Prior whole-model scoped100 failure remains open; this seven-owner IO profile does not certify the model.",
+    "Full test suite not run under approved ten-agentplane-task cadence.",
+    "Doctor passed with existing managed pre-push readiness warning; no global hooks/settings changed."
+  ],
+  "workingTree": "32 intentional source/test/registry/docs/tool paths plus canonical task evidence; verify clean after source commit."
+}

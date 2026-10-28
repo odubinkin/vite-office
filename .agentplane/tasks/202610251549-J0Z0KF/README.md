@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 35
+revision: 38
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T11:33:39.263Z"
+  updated_at: "2026-10-28T12:18:07.184Z"
   updated_by: "CODER"
-  note: "Native current controller/selection block:111 tests pass (18 focused,42 shared UNO/Any/SDK,51 Calc ODS/CSV). Unchanged100 coverage FAILS S131/148 B49/58 F27/27 L123/135 for retained CALC-357 and unported registered-controller callers. CALC-358 documents original unchecked current assignment/empty-registry disconnect. No malformed query provider, private registry injection, threshold or exclusion changes. Typecheck/static build/scoped lint/format/deps/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. native-model-selection-checkpoint.json binds13 source paths. Complete model/factory/controller/view-frame/filter and DOCX/XLSX UI acceptance remains incomplete."
-  attempts: 11
+  note: "Bounded native sequence-stream prerequisite passes: 160 targeted tests; all seven executable new IO owners scope100 S208/208 B71/71 F42/42 L187/187; typecheck/static/build, scoped lint/format, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity and doctor/routing pass. Evidence: evidence/native-sequence-stream-checkpoint.json with32 source blobs and final logs. Corrected prior selection Any fixture lifetime. Full model/filter/package/SAX/DOCX/XLSX/UI scope remains incomplete; preserve prior model coverage gap. Continue approved direct implementation."
+  attempts: 12
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -184,8 +187,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T12:18:07.184Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Bounded native sequence-stream prerequisite passes: 160 targeted tests; all seven executable new IO owners scope100 S208/208 B71/71 F42/42 L187/187; typecheck/static/build, scoped lint/format, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity and doctor/routing pass. Evidence: evidence/native-sequence-stream-checkpoint.json with32 source blobs and final logs. Corrected prior selection Any fixture lifetime. Full model/filter/package/SAX/DOCX/XLSX/UI scope remains incomplete; preserve prior model coverage gap. Continue approved direct implementation."
+  -
+    type: "status"
+    at: "2026-10-28T12:18:12.852Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T11:35:14.041Z"
+doc_updated_at: "2026-10-28T12:18:12.852Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -530,6 +546,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T12:18:07.184Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Bounded native sequence-stream prerequisite passes: 160 targeted tests; all seven executable new IO owners scope100 S208/208 B71/71 F42/42 L187/187; typecheck/static/build, scoped lint/format, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity and doctor/routing pass. Evidence: evidence/native-sequence-stream-checkpoint.json with32 source blobs and final logs. Corrected prior selection Any fixture lifetime. Full model/filter/package/SAX/DOCX/XLSX/UI scope remains incomplete; preserve prior model coverage gap. Continue approved direct implementation.
+    Attempts: 12
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:17:52.353Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -578,6 +624,10 @@ sections:
     - Observation: Native controller/selection block: original stored URL copy, current-first/first-registered controller getter, unchecked current assignment, disconnect empty-registry/erase flow, actual XSelectionSupplier query and Any-to-root Reference extraction are implemented on the actual model. Two original selection SDK interfaces use real normal CPPUMaker metadata. CALC-358 preserves the setter/IDL registration mismatch.
       Impact: Command: focused three-owner coverage; Result:18 tests/4files pass, but unchanged100 gate FAILS S131/148 B49/58 F27/27 L123/135. Retained CALC-357 and unported registered-controller/view-frame callers leave first-registered fallback/nonempty disconnect/registered-member destruction uncovered. Command: related shared UNO/Any/SDK regressions; Result:42pass/6files. Command: Calc ODS/CSV regressions; Result:51pass/4files. Full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. No private registry setter, fake query/type/model provider, threshold change or exclusion was introduced.
       Resolution: Record native-model-selection-checkpoint.json and keep full task incomplete. Complete concrete caller controllers exercise actual interface/refcount/Any ownership, failed extraction, source exception propagation, independent selection lifetime and reentrant current-controller replacement; they are not a native SfxBaseController/browser-view port. The new callback fixture initially omitted invoking its hook and was corrected without changing production logic. Full controller registration, model/factory admission, FilterBase/workbook and DOCX/XLSX UI round trips remain pending; source branches are retained for those genuine callers.
+
+    - Observation: Native sequence stream prerequisite implemented: original memory/input/output owners, eight mapped production files, actual UNO exceptions and Sequence COW. New IO scope100 S208/208 B71/71 F42/42 L187/187; 160 targeted tests pass. Earlier selection fixture double Any destruction corrected to clear plus exactly one destructor, superseding its prior lifetime claim.
+      Impact: Internal byte streams are available for both OOXML formats; package/SAX transport, full model/controller/factory admission and DOCX/XLSX UI round trips remain incomplete. Prior whole-model coverage gap remains open.
+      Resolution: Command/result/evidence/scope: native-sequence-stream-checkpoint.json records final source blobs, raw coverage, checks and source limitations. CALC-359 / WRITER195 preserve native seek reopening. Initial lint and dependency failures corrected; actual upstream comphelper to cppuhelper edge has reverse/browser isolation coverage. Complete remaining native owners without fabricated services or providers.
 id_source: "generated"
 ---
 ## Summary
@@ -932,6 +982,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T12:18:07.184Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Bounded native sequence-stream prerequisite passes: 160 targeted tests; all seven executable new IO owners scope100 S208/208 B71/71 F42/42 L187/187; typecheck/static/build, scoped lint/format, dependencies/resources/docs/size/tree/provenance/registry/invariants/parity and doctor/routing pass. Evidence: evidence/native-sequence-stream-checkpoint.json with32 source blobs and final logs. Corrected prior selection Any fixture lifetime. Full model/filter/package/SAX/DOCX/XLSX/UI scope remains incomplete; preserve prior model coverage gap. Continue approved direct implementation.
+Attempts: 12
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:17:52.353Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -984,3 +1064,7 @@ DecisionContextRef:
 - Observation: Native controller/selection block: original stored URL copy, current-first/first-registered controller getter, unchecked current assignment, disconnect empty-registry/erase flow, actual XSelectionSupplier query and Any-to-root Reference extraction are implemented on the actual model. Two original selection SDK interfaces use real normal CPPUMaker metadata. CALC-358 preserves the setter/IDL registration mismatch.
   Impact: Command: focused three-owner coverage; Result:18 tests/4files pass, but unchanged100 gate FAILS S131/148 B49/58 F27/27 L123/135. Retained CALC-357 and unported registered-controller/view-frame callers leave first-registered fallback/nonempty disconnect/registered-member destruction uncovered. Command: related shared UNO/Any/SDK regressions; Result:42pass/6files. Command: Calc ODS/CSV regressions; Result:51pass/4files. Full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff pass. No private registry setter, fake query/type/model provider, threshold change or exclusion was introduced.
   Resolution: Record native-model-selection-checkpoint.json and keep full task incomplete. Complete concrete caller controllers exercise actual interface/refcount/Any ownership, failed extraction, source exception propagation, independent selection lifetime and reentrant current-controller replacement; they are not a native SfxBaseController/browser-view port. The new callback fixture initially omitted invoking its hook and was corrected without changing production logic. Full controller registration, model/factory admission, FilterBase/workbook and DOCX/XLSX UI round trips remain pending; source branches are retained for those genuine callers.
+
+- Observation: Native sequence stream prerequisite implemented: original memory/input/output owners, eight mapped production files, actual UNO exceptions and Sequence COW. New IO scope100 S208/208 B71/71 F42/42 L187/187; 160 targeted tests pass. Earlier selection fixture double Any destruction corrected to clear plus exactly one destructor, superseding its prior lifetime claim.
+  Impact: Internal byte streams are available for both OOXML formats; package/SAX transport, full model/controller/factory admission and DOCX/XLSX UI round trips remain incomplete. Prior whole-model coverage gap remains open.
+  Resolution: Command/result/evidence/scope: native-sequence-stream-checkpoint.json records final source blobs, raw coverage, checks and source limitations. CALC-359 / WRITER195 preserve native seek reopening. Initial lint and dependency failures corrected; actual upstream comphelper to cppuhelper edge has reverse/browser isolation coverage. Complete remaining native owners without fabricated services or providers.
