@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 164
+revision: 167
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:47:14.469Z"
+  updated_at: "2026-10-28T14:58:41.996Z"
   updated_by: "CODER"
-  note: "URI lexical checkpoint verified: 146 related shared and 617 Writer tests pass; static/provenance/registry gates pass. Native HREF resolver and overall filter capability audit remain incomplete; goal remains active."
-  attempts: 19
+  note: "Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer tests, 13749 unchanged-C++ host differential cases and static/provenance/registry checks. Absolute/relative class assembly, SmartRel2Abs and HREF integration remain pending; full filter goal is active."
+  attempts: 20
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -309,8 +312,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T14:58:41.996Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer tests, 13749 unchanged-C++ host differential cases and static/provenance/registry checks. Absolute/relative class assembly, SmartRel2Abs and HREF integration remain pending; full filter goal is active."
+  -
+    type: "status"
+    at: "2026-10-28T14:58:53.709Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:47:25.509Z"
+doc_updated_at: "2026-10-28T14:58:53.709Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -603,6 +619,36 @@ sections:
     Attempts: 19
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:47:13.682Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T14:58:41.996Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer tests, 13749 unchanged-C++ host differential cases and static/provenance/registry checks. Absolute/relative class assembly, SmartRel2Abs and HREF integration remain pending; full filter goal is active.
+    Attempts: 20
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:58:41.403Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1212,6 +1258,19 @@ sections:
     - Commands: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/tools/inc/urlobj.ts apps/office/src/tools/source/fsys/urlobj.ts apps/office/src/tools/source/fsys/urlobj.lexical.test.ts; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass after resolving strict indexed-access typing, required callback JSDoc and mutation-helper inventory order. Evidence: output/playwright/rtf-properties-native/html8-*.txt. Boundaries: 1706 runtime sources/9011 imports/210 edges; provenance: 1707 modules. Header declares only current filesystem/escape/admission enums; full protocol/class owners are pending.
     - Remaining: full native absolute/relative URL parsing and URIHelper::SmartRel2Abs, then real HREF attribute/style insertion. Lexical prerequisites do not satisfy that requirement by themselves. Overall TXT/RTF/Markdown capability audit and full goal remain open; no format/module parity promotion or task completion is claimed.
+
+    Native URI authority/path prerequisite checkpoint:
+    - Scope: native INetProtocol enum order/LAST alias; all 29 SchemeInfo entries; sorted 46-entry PrefixInfo table (45 real entries plus dummy); original getPrefix pointer-narrowing/longest previous match; original parseHost hostname/IPv4/IPv6 state machine and parseHostOrNetBiosName fallback; all original initialized-protocol parsePath branches. Original scalar/escape owner remains shared. Host/path returns bind the native canonical output buffers to immutable strings without a parallel URL owner or browser URL normalization. These components are prerequisites of the approved real HTML HREF caller, not unrelated kernel/service completeness.
+    - Evidence: pinned tools/source/fsys/urlobj.cxx and include/tools/urlobj.hxx. New urlobj.components.test.ts has 63 cases covering complete-host versus file fallback, cursor commits/rollback, aliases/longest prefix/range bounds, scheme flags, protocol-specific delimiter/escape/default-slash rules, file drive-bar/raw versus escaped delimiter treatment and Generic/Sftp whole-buffer empty admission. WRITER225-228 record confirmed isolated/source-level anomalies in the required dedicated document. Runtime/provenance split records remain foundation/unverified and explicitly keep actual class/filter integration pending.
+    - Command: python3 output/playwright/rtf-properties-native/html9-host-probe.py; clang++ -std=c++17 -fsanitize=address,undefined -o output/playwright/rtf-properties-native/html9-host-probe output/playwright/rtf-properties-native/html9-host-probe.cpp; npx tsx output/playwright/rtf-properties-native/html9-host-probe-run.ts.
+      Result: pass, 13749 cases, zero mismatches and no sanitizer findings. The compiled function body is unchanged pinned parseHost; explicit UTF16 buffer/ASCII predicate/number-output shims isolate the same source input/canonical-buffer/pointer results, including nonzero starting bounds. Source SHA-256: 629c4aeacd5b1621c510da27cd48732c5b1853c4a2222752648dd86bac60288d. Report: output/playwright/rtf-properties-native/html9-host-probe-report.json. This is not a complete URL class, path, ABI or desktop differential certificate.
+    - Command: npm run test:shared -- src/tools/source/fsys/urlobj
+      Result: pass, 126 tests/3 files. Initial two handwritten expected cursor offsets were corrected to the actual source-string lengths (20); native production behavior was unchanged. The generator's initial table-count assertion was corrected from 45 to 46 including the native dummy entry before writing the data module.
+    - Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+      Result: pass, 617 tests/40 files. No full regression replay; same approved task and required cadence retained.
+    - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI sources/test; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass. Initial lint findings were resolved by removing discarded local-buffer assignments and an unnecessary quote escape, and retaining the original LAST alias under a documented single-line rule exception. JSDoc: 3920 source files; boundaries: 1709 runtime sources/9022 imports/210 edges; provenance: 1710 modules. Logs: output/playwright/rtf-properties-native/html9-*.txt.
+    - Remaining: INetURLObject absolute/relative assembly and native URIHelper::SmartRel2Abs are still required before HTML HREF wiring. Source setAbsURIRef and convertRelToAbs have now been read together with their private host/path/table dependencies. No provisional browser URL or keep-input resolver was introduced; pending production consumers are explicitly not described as complete. Full current-core TXT/RTF/Markdown audit and goal remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -1515,6 +1574,36 @@ Note: URI lexical checkpoint verified: 146 related shared and 617 Writer tests p
 Attempts: 19
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:47:13.682Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T14:58:41.996Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer tests, 13749 unchanged-C++ host differential cases and static/provenance/registry checks. Absolute/relative class assembly, SmartRel2Abs and HREF integration remain pending; full filter goal is active.
+Attempts: 20
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:58:41.403Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2128,3 +2217,16 @@ Native HTML HREF prerequisite checkpoint (URI scalar and lexical owner):
 - Commands: npm run typecheck --workspace @vite-office/office; npx eslint apps/office/src/tools/inc/urlobj.ts apps/office/src/tools/source/fsys/urlobj.ts apps/office/src/tools/source/fsys/urlobj.lexical.test.ts; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass after resolving strict indexed-access typing, required callback JSDoc and mutation-helper inventory order. Evidence: output/playwright/rtf-properties-native/html8-*.txt. Boundaries: 1706 runtime sources/9011 imports/210 edges; provenance: 1707 modules. Header declares only current filesystem/escape/admission enums; full protocol/class owners are pending.
 - Remaining: full native absolute/relative URL parsing and URIHelper::SmartRel2Abs, then real HREF attribute/style insertion. Lexical prerequisites do not satisfy that requirement by themselves. Overall TXT/RTF/Markdown capability audit and full goal remain open; no format/module parity promotion or task completion is claimed.
+
+Native URI authority/path prerequisite checkpoint:
+- Scope: native INetProtocol enum order/LAST alias; all 29 SchemeInfo entries; sorted 46-entry PrefixInfo table (45 real entries plus dummy); original getPrefix pointer-narrowing/longest previous match; original parseHost hostname/IPv4/IPv6 state machine and parseHostOrNetBiosName fallback; all original initialized-protocol parsePath branches. Original scalar/escape owner remains shared. Host/path returns bind the native canonical output buffers to immutable strings without a parallel URL owner or browser URL normalization. These components are prerequisites of the approved real HTML HREF caller, not unrelated kernel/service completeness.
+- Evidence: pinned tools/source/fsys/urlobj.cxx and include/tools/urlobj.hxx. New urlobj.components.test.ts has 63 cases covering complete-host versus file fallback, cursor commits/rollback, aliases/longest prefix/range bounds, scheme flags, protocol-specific delimiter/escape/default-slash rules, file drive-bar/raw versus escaped delimiter treatment and Generic/Sftp whole-buffer empty admission. WRITER225-228 record confirmed isolated/source-level anomalies in the required dedicated document. Runtime/provenance split records remain foundation/unverified and explicitly keep actual class/filter integration pending.
+- Command: python3 output/playwright/rtf-properties-native/html9-host-probe.py; clang++ -std=c++17 -fsanitize=address,undefined -o output/playwright/rtf-properties-native/html9-host-probe output/playwright/rtf-properties-native/html9-host-probe.cpp; npx tsx output/playwright/rtf-properties-native/html9-host-probe-run.ts.
+  Result: pass, 13749 cases, zero mismatches and no sanitizer findings. The compiled function body is unchanged pinned parseHost; explicit UTF16 buffer/ASCII predicate/number-output shims isolate the same source input/canonical-buffer/pointer results, including nonzero starting bounds. Source SHA-256: 629c4aeacd5b1621c510da27cd48732c5b1853c4a2222752648dd86bac60288d. Report: output/playwright/rtf-properties-native/html9-host-probe-report.json. This is not a complete URL class, path, ABI or desktop differential certificate.
+- Command: npm run test:shared -- src/tools/source/fsys/urlobj
+  Result: pass, 126 tests/3 files. Initial two handwritten expected cursor offsets were corrected to the actual source-string lengths (20); native production behavior was unchanged. The generator's initial table-count assertion was corrected from 45 to 46 including the native dummy entry before writing the data module.
+- Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+  Result: pass, 617 tests/40 files. No full regression replay; same approved task and required cadence retained.
+- Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI sources/test; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass. Initial lint findings were resolved by removing discarded local-buffer assignments and an unnecessary quote escape, and retaining the original LAST alias under a documented single-line rule exception. JSDoc: 3920 source files; boundaries: 1709 runtime sources/9022 imports/210 edges; provenance: 1710 modules. Logs: output/playwright/rtf-properties-native/html9-*.txt.
+- Remaining: INetURLObject absolute/relative assembly and native URIHelper::SmartRel2Abs are still required before HTML HREF wiring. Source setAbsURIRef and convertRelToAbs have now been read together with their private host/path/table dependencies. No provisional browser URL or keep-input resolver was introduced; pending production consumers are explicitly not described as complete. Full current-core TXT/RTF/Markdown audit and goal remain active.

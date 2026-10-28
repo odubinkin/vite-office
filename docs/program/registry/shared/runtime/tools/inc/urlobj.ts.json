@@ -18,16 +18,18 @@
       "evidence": [
         "apps/office/src/tools/inc/urlobj.ts",
         "apps/office/src/tools/source/fsys/urlobj.lexical.test.ts",
-        "vendor/libreoffice-reference/include/tools/urlobj.hxx"
+        "vendor/libreoffice-reference/include/tools/urlobj.hxx",
+        "apps/office/src/tools/source/fsys/urlobj.components.test.ts"
       ],
-      "justification": "Native URI filesystem flags, escape mechanism/type enums and admission bit values consumed by the shared scalar/escape owner. TS enum declarations adapt nested C++ enum ownership; full INetURLObject and compiled native ABI remain unverified.",
+      "justification": "Native URI filesystem flags, escape mechanism/type enums and admission bit values consumed by the shared scalar/escape owner. TS enum declarations adapt nested C++ enum ownership; full INetURLObject and compiled native ABI remain unverified. Original full INetProtocol declaration now retains native enumarray order, NotValid/Generic values and LAST=Cmis. SchemeInfo and all protocol path cases consume these values; full INetURLObject implementation remains pending.",
       "knownViolations": [],
       "localSymbols": [
         "FSysStyle",
         "EncodeMechanism",
         "DecodeMechanism",
         "EscapeType",
-        "Part"
+        "Part",
+        "INetProtocol"
       ],
       "sourceResponsibility": "unverified",
       "upstreamFile": "include/tools/urlobj.hxx",
@@ -36,7 +38,8 @@
         "EncodeMechanism",
         "DecodeMechanism",
         "EscapeType",
-        "Part"
+        "Part",
+        "INetProtocol"
       ]
     }
   }

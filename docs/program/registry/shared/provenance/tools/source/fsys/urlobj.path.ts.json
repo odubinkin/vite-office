@@ -1,0 +1,49 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "classification": "upstream-mechanism",
+    "localPath": "apps/office/src/tools/source/fsys/urlobj.path.ts",
+    "status": "mapped",
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Immutable host UTF16 strings and explicit scalar iteration represent the original native Unicode value/escape loop; native pointer and buffer allocation ABI is not certified."
+    },
+    "evidence": {
+      "local": [
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.path.ts",
+          "marker": "parsePath"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.components.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "upstream": [
+        {
+          "path": "tools/source/fsys/urlobj.cxx",
+          "marker": "INetURLObject::parsePath"
+        }
+      ]
+    },
+    "upstreamPath": "tools/source/fsys/urlobj.cxx",
+    "localSymbols": [
+      "parsePath"
+    ],
+    "upstreamSymbols": [
+      "INetURLObject::parsePath"
+    ],
+    "preservedResponsibilities": [
+      "All original initialized protocol path productions, raw-versus-escaped delimiter rules, query/fragment stopping, file drive-bar conversion, per-part escape masks, default slash rules and source failure rollback. The returned full string represents the original mutable URI buffer, preserving Generic/Sftp whole-buffer emptiness admission. Actual absolute/relative class and HREF insertion consumers remain pending; no full URL/filter parity is claimed."
+    ],
+    "omittedResponsibilities": [
+      "Full INetURLObject absolute/relative parsing, URIHelper SmartRel2Abs and HTML HREF insertion remain pending; tests do not certify compiled complete-class/native ABI equivalence."
+    ],
+    "filenameDivergence": {
+      "localPath": "apps/office/src/tools/source/fsys/urlobj.path.ts",
+      "stackNecessity": "responsibility-split",
+      "rationale": "Native URI path responsibility is split from the large original tools/source/fsys/urlobj.cxx while retaining original protocol/escape/pointer decisions; whole URL class integration remains pending."
+    }
+  }
+}

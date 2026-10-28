@@ -44,3 +44,38 @@ export enum Part {
   PART_URIC_NO_SLASH = 0x10000,
   PART_HTTP_QUERY = 0x20000,
 }
+
+/** Original protocol order used by the native SchemeInfo enumarray. */
+export enum INetProtocol {
+  NotValid,
+  Ftp,
+  Http,
+  File,
+  Mailto,
+  VndSunStarWebdav,
+  PrivSoffice,
+  VndSunStarHelp,
+  Https,
+  Slot,
+  Macro,
+  Javascript,
+  Data,
+  Cid,
+  VndSunStarHier,
+  Uno,
+  Component,
+  VndSunStarPkg,
+  Ldap,
+  Db,
+  VndSunStarCmd,
+  Telnet,
+  VndSunStarExpand,
+  VndSunStarTdoc,
+  Generic,
+  Smb,
+  Hid,
+  Sftp,
+  Cmis,
+  // eslint-disable-next-line @typescript-eslint/prefer-literal-enum-member -- Preserve the original enumarray range alias.
+  LAST = Cmis,
+}

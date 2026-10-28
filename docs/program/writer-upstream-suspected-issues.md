@@ -2089,3 +2089,27 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::appendUCS4Escape` supports values below 0x80000000 with up to six escaped bytes and has no surrogate exclusion. `INetURLObject::getUTF32` accepts escaped UTF8 only through lead byte 0xF4, requires a Unicode scalar and rejects overlong encodings.
 - Observation: the low-level writer can emit `%ED%A0%80` for an isolated surrogate or five/six-byte sequences for values beyond Unicode, while the decoder preserves these as escaped octets rather than reconstructing the input value. This is a source-level asymmetry, not proof that Writer's complete URL path generates every such input or a confirmed desktop defect.
 - Preservation: retain the distinct writer and decoder ranges rather than replacing both with a browser TextEncoder/TextDecoder pair. Native lexical tests cover raw surrogate input, rejected escaped surrogates, the Unicode upper bound and the legacy output branch boundaries; full native HREF integration remains pending.
+
+### WRITER225 — URI host IPv4 components have no 255 upper bound
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parseHost`, STATE_IP4 and STATE_IP6_IP4 accumulate up to three decimal digits per component without checking the value against 255; the embedded IPv4 ambiguity branches likewise convert decimal digits without a range check.
+- Observation: the host parser admits `999.888.777.666` and corresponding embedded numeric components, and canonicalizes leading zeros. This is confirmed against the unchanged extracted native host function under ASan/UBSan; complete LibreOffice URL/filter/UI behavior is not certified by that isolated probe.
+- Preservation: keep source digit-count and state admission rather than applying browser IP-address validation. `urlobj.components.test.ts` pins canonical output and caller cursor behavior. Complete native HREF integration remains pending.
+
+### WRITER226 — URI host IPv6 state machine does not enforce the total group count
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parseHost`, STATE_IP6_HEXSEQ1/STATE_IP6_HEXSEQ2 accept a closing bracket without counting total groups; colon transitions do not track an eight-group maximum.
+- Observation: the isolated host function admits `[a]` and `[1:2:3:4:5:6:7:8:9]`. It still rejects other invalid transitions such as `[1::2::3]`, so replacing it with the separate permissive bracket lexer would also change behavior. Extracted native differential evidence establishes the host-function result, not complete document/UI behavior.
+- Preservation: retain the exact native state machine, numeric normalization and pointer commits. Host tests distinguish admitted and rejected forms; no browser IPv6 validator or silent group-count repair is introduced.
+
+### WRITER227 — Generic and SFTP path emptiness checks include the existing URI prefix
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::parsePath`, the Generic/Sftp branch checks `rSynPath.isEmpty()` rather than the change from `nSynPathBeforeLen`. Other branches explicitly compare the appended path length.
+- Observation: an empty path succeeds when the caller already populated the output buffer with a scheme/authority, but fails with an empty output buffer. This is a source-level dependency on buffer state; it is not a compiled complete-parser or desktop defect confirmation.
+- Preservation: the local path function retains the full initial output string and that exact emptiness check. A focused test distinguishes empty and populated buffer calls; do not normalize the branch to a path-length check or add a default slash.
+
+### WRITER228 — SFTP path scanning consumes the query delimiter despite its scheme flag
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, SchemeInfo marks Sftp as supporting a query, but `INetURLObject::parsePath` handles it with Generic and stops only at the fragment delimiter. The later `setAbsURIRef` query branch can only run if the path parser stopped at `?`.
+- Observation: the SFTP path production consumes `/a?q` as its path, whereas the HTTP path production stops before `?`. The resulting URL spelling can conceal the internal path/query difference. This is source-level evidence and a local path-function result; complete LibreOffice URL/filter behavior remains unverified.
+- Preservation: retain the scheme flag and path stop condition independently. A focused path test pins the source cursor/output, and no browser query splitter or HTTP-path substitution is introduced.
