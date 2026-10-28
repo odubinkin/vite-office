@@ -1,0 +1,158 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native cached-result/XML prerequisite checkpoint; task remains DOING/needs_rework",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Original ScFormulaCell::GetResult, SAL encoded byte constructor and number(double), Excel error mappings and consumed XclXmlUtils cached-value/name/string/color/range/XML primitive members. No complete workbook filter or UI routing.",
+  "sourceBlobs": {
+    "apps/office/src/sal/inc/rtl/ustring.ts": "28b1bbb6a94176e8a2a4843c8edd11a63bd73138",
+    "apps/office/src/sc/source/core/data/formulacell.ts": "9cdbd85db9718a3fef7802aebb2fa2da71debf90",
+    "docs/program/calc-upstream-suspected-issues.md": "ea18c017a52098470cb9d1ba8e1d9c7ddc756f42",
+    "docs/program/registry/calc/provenance/sc/source/core/data/formulacell.ts.json": "020d66b9b5aa1b78c886b992d7c264493c727d7f",
+    "docs/program/registry/calc/runtime/sc/source/core/data/formulacell.ts.json": "f05177956e695e8579169d6c3eeabbf533e28501",
+    "docs/program/registry/shared/provenance/sal/inc/rtl/ustring.ts.json": "976fc6be84bf2b0bf2ca636f9498598caa09c9a1",
+    "docs/program/registry/shared/runtime/sal/inc/rtl/ustring.ts.json": "fb02a3a3bd3c7afe8529e0db4b87be439c2552ba",
+    "apps/office/src/sal/rtl/ustring-xlsx.test.ts": "3e9ddea9c1e10a1123bac23051ae72cb467abd2b",
+    "apps/office/src/sc/source/filter/excel/xestream.test.ts": "d32a21cf88ed41016724f291c69500b79a73eee9",
+    "apps/office/src/sc/source/filter/excel/xestream.ts": "54ee82dfc0359a6cbac69a641de4399444916605",
+    "apps/office/src/sc/source/filter/excel/xltools.ts": "62ca8c7e6fb0757cd2f7fc011306a8b58c57b6b8",
+    "apps/office/src/sc/source/filter/inc/xlconst.ts": "584fa1d90c3eb6c28632123bc8478d7aa4338638",
+    "docs/program/registry/calc/capabilities/CAP-3433dbbb-6122-4137-823f-fad19a8405ab.json": "c692554cb51bbf0560af1a1b0e91e553326b2481",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xestream.ts.json": "1e4f33d0d617d79263862688beb6ea578a741d1c",
+    "docs/program/registry/calc/provenance/sc/source/filter/excel/xltools.ts.json": "11d4a434c10848648c80dc0ff9d538a35129e108",
+    "docs/program/registry/calc/provenance/sc/source/filter/inc/xlconst.ts.json": "41c47c9287eff12632482d31506ed9b6781dbcbd",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xestream.ts.json": "d4abcf5ddedd3dbd8cffc05c00cb2115ee082609",
+    "docs/program/registry/calc/runtime/sc/source/filter/excel/xltools.ts.json": "e1a7c670406b840b0cd2b103af589bb1a389ed15",
+    "docs/program/registry/calc/runtime/sc/source/filter/inc/xlconst.ts.json": "eb6f99a7e6764025dabf95dfbe21054ad7cf62d5"
+  },
+  "checks": {
+    "focused": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sc/source/filter/excel/xestream.test.ts src/sal/rtl/ustring-xlsx.test.ts src/sc/source/core/tool/formularesult-state.test.ts src/sc/source/core/tool/numeric-formula.test.ts --coverage.include=src/sc/source/filter/excel/xltools.ts --coverage.include=src/sc/source/filter/excel/xestream.ts --coverage.include=src/sc/source/filter/inc/xlconst.ts --coverage.include=src/sc/source/core/data/formulacell.ts --coverage.reportsDirectory=coverage/xlsx-value-final --maxWorkers=2",
+      "result": "55 tests/4 files pass; overall unchanged whole-file coverage gate FAIL. All three new filter owners individually 100%.",
+      "coverage": {
+        "rawFile": "apps/office/coverage/xlsx-value-final/coverage-final.json",
+        "sha256": "918356a6374200c69ffb3df60974ea4f6db20e09bd28b29a7cbb06091a048c40",
+        "files": {
+          "apps/office/src/sc/source/core/data/formulacell.ts": {
+            "s": {
+              "covered": 144,
+              "total": 463
+            },
+            "b": {
+              "covered": 65,
+              "total": 370
+            },
+            "f": {
+              "covered": 31,
+              "total": 63
+            }
+          },
+          "apps/office/src/sc/source/filter/excel/xestream.ts": {
+            "s": {
+              "covered": 69,
+              "total": 69
+            },
+            "b": {
+              "covered": 40,
+              "total": 40
+            },
+            "f": {
+              "covered": 8,
+              "total": 8
+            }
+          },
+          "apps/office/src/sc/source/filter/excel/xltools.ts": {
+            "s": {
+              "covered": 24,
+              "total": 24
+            },
+            "b": {
+              "covered": 27,
+              "total": 27
+            },
+            "f": {
+              "covered": 3,
+              "total": 3
+            }
+          },
+          "apps/office/src/sc/source/filter/inc/xlconst.ts": {
+            "s": {
+              "covered": 8,
+              "total": 8
+            },
+            "b": {
+              "covered": 0,
+              "total": 0
+            },
+            "f": {
+              "covered": 0,
+              "total": 0
+            }
+          }
+        }
+      }
+    },
+    "shared": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sal/rtl/ustring-xlsx.test.ts src/sal/rtl/ustring.test.ts src/sal/rtl/ustring-ownership.test.ts src/sal/rtl/ascii-equality.test.ts src/sal/rtl/string-search.test.ts src/sal/rtl/string-subview.test.ts src/sal/rtl/stringconcat.test.ts src/sal/rtl/oustringbuffer.test.ts src/svl/source/misc/sharedstring.test.ts src/svl/source/misc/sharedstringpool.test.ts src/sc/source/filter/excel/xestream.test.ts src/sc/source/core/tool/numeric-formula.test.ts --coverage.include=src/sal/inc/rtl/ustring.ts --coverage.reportsDirectory=coverage/xlsx-ustring --maxWorkers=2",
+      "result": "76 tests/12 files pass; whole OUString coverage gate FAIL, including retained numberDouble allocation-null guard. No threshold or exclusion changed.",
+      "coverage": {
+        "rawFile": "apps/office/coverage/xlsx-ustring/coverage-final.json",
+        "sha256": "e672e0fa1bb4aa5291689321e39d0b861b867d5f67f9e8d47b59b4574b96abbd",
+        "files": {
+          "apps/office/src/sal/inc/rtl/ustring.ts": {
+            "s": {
+              "covered": 110,
+              "total": 127
+            },
+            "b": {
+              "covered": 70,
+              "total": 79
+            },
+            "f": {
+              "covered": 33,
+              "total": 39
+            }
+          }
+        }
+      }
+    },
+    "regression": {
+      "command": "npm run test:calc -- src/sc/source/core/data/ src/sc/source/core/tool/ src/sc/source/filter/xml/ --maxWorkers=2",
+      "result": "pass:749 tests/152 files; related Calc/ODS only, not full suite"
+    },
+    "nativeFormat": {
+      "command": "npm run test:shared -- src/sal/rtl/double-format.test.ts --maxWorkers=2",
+      "result": "pass:2 tests/1 file over committed native captures. No new independent compiled native wrapper run."
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "static": "pass:npm run test:static",
+    "eslint": "pass:all seven changed/new production and test TS files, max-warnings 0",
+    "prettier": "pass:same seven TS paths",
+    "dependencies": "pass:1685 runtime sources/8720 relative imports/209 allowed cross-module edges",
+    "docs": "pass:npm run check:docs; final repeat exited0",
+    "fileSize": "pass:3885 authored files; existing decomposition review candidates retained",
+    "sourceTree": "pass:115 required paths/32 retired roots",
+    "resources": "pass:464 commands/11 top menus/17 policy dispositions",
+    "provenance": "pass:1686 modules/1474 mapped/182 browser adaptations/30 infrastructure",
+    "registry": "pass:1686 modules/348 capabilities/34 invariants/3783 records; broad parity remains false",
+    "doctor": "pass:0 errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "resolvedValidationFindings": [
+    "Corrected an initially overprecise test expectation for one third to original formatter rounding; production formatter unchanged.",
+    "Erased deleted-constructor static utilities as member objects after namespace lint rejection; no lint rule disabled."
+  ],
+  "upstreamFindings": [
+    "CALC-346:invalid cached result -> inlineStr and second GetString, original TODO retained.",
+    "CALC-347:number(double) requests 17 significant digits while ordinary fractional formatting retains native 15-digit rounding.",
+    "CALC-348:LOGICAL -0 exports b/-0; no sign normalization."
+  ],
+  "limitations": [
+    "Full XLSX workbook/worksheet/style/shared-string/formula filter owners, shell routing and mounted/browser UI acceptance remain pending.",
+    "Writer DOCX model/export/filter/UI path remains pending; no Writer source changed in this checkpoint.",
+    "Native OString/OStringBuffer ownership, remaining XclXmlUtils overloads, XclExpXmlStream/root and full formula destructor parity are unported. Existing UTF8 byte-value binding is explicitly classified.",
+    "Native subsequent_export_test2.cxx testSpillErrorRoundtripXLSX is related unported source QA, not a claimed roundtrip witness. ZIP test covers only a real document-owned formula cell and one XML part.",
+    "Whole-file ScFormulaCell and OUString coverage profiles fail the unchanged scoped100 gate; earlier address branch gap remains open. No approved skip or closure inferred.",
+    "Full test suite not due under approved ten-task cadence; no merge, push or publication performed."
+  ]
+}
