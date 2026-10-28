@@ -1,0 +1,189 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native model ownership prerequisite checkpoint; full task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Actual SfxBaseModel/ScModelObj shell/document getters and represented listener ownership; actual document UNO broadcaster lazy registration, serial removal, original null initialization/destructor order. Native-file script-service decomposition and header parameter declaration preserve existing behavior; focused boundary test extraction fixes a previous checkpoint size failure.",
+  "sourceBlobs": {
+    "apps/office/src/sc/inc/document.ts": "b4507eeaddf9124d65eb0ad05316cb7ab2eafd50",
+    "apps/office/src/sc/source/core/data/documen2.ts": "eb6d857ff54b6c4f86f19363676778d9f27cbd6d",
+    "apps/office/src/sc/source/core/data/documen3.ts": "26f4ce88ca0941a80b431135dce20a0be0af5411",
+    "apps/office/src/sc/source/core/data/documen6.ts": "a123accb01be1353f5e0fcd1dcc2c6056c3be57b",
+    "apps/office/src/sc/source/core/data/document.ts": "b6ed01ca2641fe0b35b568996cf9633597943c42",
+    "apps/office/src/sc/source/core/data/script-type.test.ts": "d4943568cb843b35ea5b185a772daf18b0521dab",
+    "docs/program/calc-upstream-suspected-issues.md": "4b79cd342eebb60409d8613b75974cc8d001b3c0",
+    "docs/program/registry/calc/provenance/sc/inc/document.ts.json": "b45348f0e58f678a00fd65055f10692df6742aca",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen2.ts.json": "4bfec00453116d837318962eb697cb6695696f36",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen3.ts.json": "2a033a963f855586395269e1cadbea8547b57ab5",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen6.ts.json": "8ac103d8a01808a3effa1c1e3f7c7b45801010b2",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json": "046c13d78a1a5031714fdb7728acabad80aabc36",
+    "docs/program/registry/calc/runtime/sc/inc/document.ts.json": "73eac31c98a8925e80f9fceb13a071380ba17e92",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen2.ts.json": "f186c69e58e97b2cbdb22993cb4f7c085a91a1c6",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen3.ts.json": "9ae136bbde1bfd54bca75887ecf8b7f335924c2c",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen6.ts.json": "bd3a40784ea0553c48e42080f03a1640b8506a87",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json": "fce8c5f6c58aed45311e590fb229d1d9f03be51b",
+    "scripts/check-module-boundaries.test.ts": "ae344c5ab9eb88a4e252014252b103cee0eba94c",
+    "apps/office/src/sc/inc/docuno.ts": "aedd972cd947703ff66e75ae25b0fe4b61ac24f5",
+    "apps/office/src/sc/source/ui/unoobj/docuno.test.ts": "575e3bf145570eb4b1981d056682c12e3b51ff45",
+    "apps/office/src/sc/source/ui/unoobj/docuno.ts": "206d1eb137a26b1b74ed2c1dbb6c9c53e8534e7b",
+    "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": "add945cacfabdbcf0d55957a5966aac66b9cd71e",
+    "docs/program/registry/calc/capabilities/CAP-4dc9be05-d644-4470-af83-b28d4da3de3b.json": "6aab4a46853ff51ca27ae6c801fb9956108524d9",
+    "docs/program/registry/calc/provenance/sc/inc/docuno.ts.json": "2d65992309d9b89ae2ab4daf1e3bd3fc965f7d9f",
+    "docs/program/registry/calc/provenance/sc/source/ui/unoobj/docuno.ts.json": "6b07908068d305534622e59fbeee3b307af1d6c1",
+    "docs/program/registry/calc/runtime/sc/inc/docuno.ts.json": "efe2a0ba002348994cca1f8926343fa31e254417",
+    "docs/program/registry/calc/runtime/sc/source/ui/unoobj/docuno.ts.json": "d4bd97ab5908f30405ccd6c00d538d195ac17621",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/sfxbasemodel.ts.json": "b4e155313ad3b4465debc59cdb9e946d922953d8",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/sfxbasemodel.ts.json": "36a4d998b788b5bab49950939936a900cbea8fe1",
+    "scripts/native-attribute-value-boundary.test.ts": "87f21a8d0068b325c638676c25ea4c83b872fb10"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sc/source/ui/unoobj/docuno.test.ts src/sc/source/core/data/script-type.test.ts src/sc/source/core/data/text-size-context.test.ts src/sc/source/core/data/clipboard-reference.test.ts src/sc/source/core/tool/rangeutl.test.ts src/sc/source/core/data/xml-attributes.test.ts src/sc/source/core/data/clipboard-attribute-copy.test.ts --coverage.include=src/sfx2/source/doc/sfxbasemodel.ts --coverage.include=src/sc/source/ui/unoobj/docuno.ts --coverage.include=src/sc/source/core/data/document.ts --coverage.include=src/sc/source/core/data/documen2.ts --coverage.include=src/sc/source/core/data/documen3.ts --coverage.include=src/sc/source/core/data/documen6.ts --coverage.reportsDirectory=coverage/xlsx-model-final --maxWorkers=2",
+      "result": "70 tests/7 files pass; entire-profile coverage FAIL unchanged100 threshold due whole existing document.ts/documen2.ts. New model/base-model and whole documen3/documen6 individually100. No threshold/exclusion/counter changes.",
+      "rawFile": "apps/office/coverage/xlsx-model-final/coverage-final.json",
+      "sha256": "ba8b791d7747369feca48a25dec5fcc822faf3b9fadd48ef58f03cabd534334a",
+      "files": {
+        "apps/office/src/sc/source/core/data/documen2.ts": {
+          "s": {
+            "covered": 52,
+            "total": 69
+          },
+          "b": {
+            "covered": 13,
+            "total": 25
+          },
+          "f": {
+            "covered": 7,
+            "total": 8
+          }
+        },
+        "apps/office/src/sc/source/core/data/documen3.ts": {
+          "s": {
+            "covered": 14,
+            "total": 14
+          },
+          "b": {
+            "covered": 11,
+            "total": 11
+          },
+          "f": {
+            "covered": 4,
+            "total": 4
+          }
+        },
+        "apps/office/src/sc/source/core/data/documen6.ts": {
+          "s": {
+            "covered": 19,
+            "total": 19
+          },
+          "b": {
+            "covered": 13,
+            "total": 13
+          },
+          "f": {
+            "covered": 3,
+            "total": 3
+          }
+        },
+        "apps/office/src/sc/source/core/data/document.ts": {
+          "s": {
+            "covered": 141,
+            "total": 319
+          },
+          "b": {
+            "covered": 36,
+            "total": 114
+          },
+          "f": {
+            "covered": 81,
+            "total": 185
+          }
+        },
+        "apps/office/src/sc/source/ui/unoobj/docuno.ts": {
+          "s": {
+            "covered": 14,
+            "total": 14
+          },
+          "b": {
+            "covered": 10,
+            "total": 10
+          },
+          "f": {
+            "covered": 5,
+            "total": 5
+          }
+        },
+        "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": {
+          "s": {
+            "covered": 15,
+            "total": 15
+          },
+          "b": {
+            "covered": 18,
+            "total": 18
+          },
+          "f": {
+            "covered": 6,
+            "total": 6
+          }
+        }
+      }
+    },
+    "initialModels": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sc/source/ui/unoobj/docuno.test.ts --coverage.include=src/sfx2/source/doc/sfxbasemodel.ts --coverage.include=src/sc/source/ui/unoobj/docuno.ts --coverage.reportsDirectory=coverage/xlsx-model --maxWorkers=2",
+      "result": "pass5tests/1file, two new owners S29/29 B28/28 F11/11 L23/23; final six-owner profile above supersedes broader scope claims"
+    },
+    "regressionBeforeDecomposition": {
+      "command": "npm run test:calc -- src/sc/source/core/data/ src/sc/source/ui/docshell/docsh.test.ts src/sc/source/filter/xml/ --maxWorkers=2",
+      "result": "pass461tests/103files before subsequent method/header/test decomposition; bounded real Calc/ODS/shell regression, not a full suite or final-source whole-core coverage"
+    },
+    "decompositionRegression": {
+      "command": "npm run test:calc -- src/sc/source/ui/unoobj/docuno.test.ts src/sc/source/core/data/script-type.test.ts src/sc/source/core/data/text-size-context.test.ts src/sc/source/core/data/documentimport.test.ts src/sc/source/ui/docshell/docsh.test.ts src/sc/source/core/data/attribute --maxWorkers=2",
+      "result": "pass39tests/5files after decomposition, plus final70tests/7files above"
+    },
+    "boundaryTests": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/native-attribute-value-boundary.test.ts --maxWorkers=2",
+      "result": "pass47tests/2files; source-supported assertions moved unchanged, no module gate weakened"
+    },
+    "typecheck": "pass:npm run typecheck tools and app",
+    "static": "pass:npm run test:static after final code relocation",
+    "eslint": "pass:all twelve changed/new TS source/test paths max-warnings0",
+    "prettier": "pass:same twelve paths",
+    "dependencies": "pass1694runtime sources/8766relative imports/212allowed edges; no new dependency exceptions",
+    "docs": "pass3896authored source files",
+    "fileSize": "pass3900authored files, independently rerun with exit0 after fixes; existing strict1000line threshold unchanged. ScDocument998lines plus trailing newline counts999; old general boundary test964lines plus newline counts965.",
+    "sourceTree": "pass115required paths/32retired roots",
+    "resources": "pass464commands/11menus/17dispositions",
+    "provenance": "pass1695runtime modules/1483mapped/182browser adaptations/30infrastructure",
+    "registry": "pass1695modules/352capabilities/34invariants/3805records; full parity false",
+    "doctor": "pass0errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-355:Calc Dying clears its pDocShell independently of the model base shell reference; broader native disposal safety is unverified."
+  ],
+  "correctionToPriorEvidence": {
+    "path": ".agentplane/tasks/202610251549-J0Z0KF/evidence/native-typed-attribute-checkpoint.json",
+    "field": "checks.fileSize",
+    "previousClaim": "pass3895authored files",
+    "actualResult": "FAIL: scripts/check-module-boundaries.test.ts was1011lines under the unchanged size checker. Its preceding report summary read only the log header and missed this failure; that pass claim was incorrect.",
+    "rawEvidence": "apps/office/coverage/xlsx-attribute-size.log",
+    "rawSha256": "7beb53c24c8bdf4810e9c515a44f701935a7594bed990f15ac9f7b17c8b84377",
+    "resolution": "Extracted the coherent byte/UTF16 header-binding test unchanged into scripts/native-attribute-value-boundary.test.ts; both tooling test files pass47cases, and actual final size check exits0. Previous committed evidence is retained for traceability; this correction supersedes its size pass claim. User was explicitly informed in commentary."
+  },
+  "resolvedValidationFindings": [
+    "Initial typed class fields used only from out-of-class implementations triggered unused-private validation. Native header-style declare fields and actual original constructor/member implementation files retain private ownership without public getters, suppression or fake provider.",
+    "Moved existing script classification/service owner methods into original documen6 and migrated its direct helper test to actual ScDocument/BreakIteratorImpl; original empty/service/run behavior is unchanged.",
+    "Moved only ApplyPatternAreaTab parameter types to its original sc/inc/document header boundary; existing local bool return is unchanged/unverified, no algorithm refactor or threshold raising.",
+    "Fixed two missing JSDoc callback comments. Initial size/docs failures were rerun successfully."
+  ],
+  "limitations": [
+    "These are represented owner/registration methods, not a full SfxBaseModel/ScModelObj spreadsheet UNO implementation. Full WeakImplHelper/service factories/shell installation/controller/property/storage/event/render/calculate/aggregation and intrusive native reference/thread lifetime remain pending.",
+    "Service-dependent model Notify paths explicitly throw on unsupported local admission. These throws are local guards, not preserved original notification behavior or native equivalence witnesses. Models are not installed into existing file UI or advertised as full filter-ready components.",
+    "RemoveUnoObject covers original serial/no-active-BroadcastUno caller paths only. Full BroadcastUno/deferred listeners/SolarMutex/finalizer waiting are unported; no native cross-thread behavior witness or fake mutex is supplied.",
+    "Actual native qahelper model callers are source evidence, not a ported native suite or compiled lifetime differential. Post-Dispose local queries certify only the explicit host destructor binding, not C++ access after destruction.",
+    "WorkbookGlobals/WorkbookHelper/AddressConverter and complete XLSX import/export/filter/model/shell/UI acceptance remain pending. Writer DOCX acceptance remains incomplete and unchanged.",
+    "Whole existing document.ts/documen2.ts coverage profiles and earlier address/OUString/ScFormulaCell gaps remain open. This checkpoint cannot close the task or certify whole-format/model parity.",
+    "Full suite not due under approved ten-task cadence. No merge, push, publication or task-completion claim."
+  ]
+}

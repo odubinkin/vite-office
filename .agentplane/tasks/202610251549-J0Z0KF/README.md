@@ -1,10 +1,10 @@
 ---
 id: "202610251549-J0Z0KF"
 title: "Implement Calc XLSX import export and existing file UI integration"
-status: "BLOCKED"
+status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 16
+revision: 17
 origin:
   system: "manual"
 depends_on:
@@ -30,6 +30,9 @@ comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -78,8 +81,15 @@ events:
     author: "CODER"
     state: "blocked_external"
     note: "Bounded typed-attribute checkpoint:93 scoped tests and175 shared/80 Calc/47 boundary tests pass. Entire four-owner scoped100 S249/249 B202/202 F56/56 L220/220. Exact commands/source blobs in evidence/native-typed-attribute-checkpoint.json. All bounded quality gates pass; native numeric/default/null-handler rules retained. Full workbook/filter/model/shell/UI XLSX and DOCX acceptance and older coverage gaps remain incomplete. No external blocker, task completion, publication or full-suite claim."
+  -
+    type: "status"
+    at: "2026-10-28T09:07:18.967Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T09:00:46.566Z"
+doc_updated_at: "2026-10-28T09:07:18.967Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
