@@ -4,7 +4,7 @@
   "record": {
     "path": "apps/office/src/tools/source/fsys/urlobj.data.ts",
     "classification": "upstream-mechanism",
-    "state": "foundation",
+    "state": "active",
     "suite": "shared",
     "subsystem": "uri-reference",
     "capabilityIds": [
@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/tools/source/fsys/urlobj.data.ts",
         "apps/office/src/tools/source/fsys/urlobj.components.test.ts",
-        "vendor/libreoffice-reference/tools/source/fsys/urlobj.cxx"
+        "vendor/libreoffice-reference/tools/source/fsys/urlobj.cxx",
+        "apps/office/src/tools/source/fsys/urlobj.object.test.ts"
       ],
-      "justification": "Original protocol-ordered 29-row SchemeInfo table and sorted 46-row prefix table, including dummy entry, official/internal/external aliases and original pointer-narrowing recognition with longest previous match rollback. Actual absolute/relative URI parser consumers are pending; this is a prerequisite within the approved native HTML HREF chain, not a completed URL class.",
+      "justification": "Original protocol-ordered 29-row SchemeInfo table and sorted 46-row prefix table, including dummy entry, official/internal/external aliases and original pointer-narrowing recognition with longest previous match rollback. Actual absolute/relative URI parser consumers are pending; this is a prerequisite within the approved native HTML HREF chain, not a completed URL class. Actual INetURLObject strict/smart absolute parser and relative converter now call this native component, and URIHelper::SmartRel2Abs consumes that value. This supersedes prior class-assembly-pending notes; real HTML HREF insertion and compiled complete-URL equivalence remain pending.",
       "knownViolations": [],
       "localSymbols": [
         "getSchemeInfo",

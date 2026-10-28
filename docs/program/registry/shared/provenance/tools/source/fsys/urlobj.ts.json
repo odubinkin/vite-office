@@ -26,6 +26,10 @@
         {
           "path": "apps/office/src/tools/source/fsys/urlobj.lexical.test.ts",
           "marker": "@fileoverview"
+        },
+        {
+          "path": "apps/office/src/tools/source/fsys/urlobj.object.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -43,7 +47,7 @@
     "localSymbols": [
       "decodeToIUri",
       "decodeUnambiguous",
-      "decodeEscapedUtf8",
+      "decode",
       "getUTF32",
       "mustEncode",
       "appendEscape",
@@ -65,10 +69,11 @@
       "guessFSysStyleByCounting"
     ],
     "preservedResponsibilities": [
-      "Native URI scalar/escape owner now serves actual ToIUri and Unambiguous production callers. getUTF32 retains code-unit bounds, surrogate handling, WasEncoded charset branches, NotCanonical octets and invalid UTF8 continuation rollback. Exact 128-entry admission masks and original appendUCS4/legacy UCS4 escape branches are retained. Source generic scheme, filesystem delimiter vote, domain and bracket-reference scanners are ported as prerequisites of the pending native HREF resolver; they do not yet certify whole URL parsing. URI lexical tests and existing shared/filter tests cover this bounded slice. Full INetURLObject parsing, SmartRel2Abs, general decode modes and compiled desktop equivalence remain pending; no parity promotion."
+      "Native URI scalar/escape owner now serves actual ToIUri and Unambiguous production callers. getUTF32 retains code-unit bounds, surrogate handling, WasEncoded charset branches, NotCanonical octets and invalid UTF8 continuation rollback. Exact 128-entry admission masks and original appendUCS4/legacy UCS4 escape branches are retained. Source generic scheme, filesystem delimiter vote, domain and bracket-reference scanners are ported as prerequisites of the pending native HREF resolver; they do not yet certify whole URL parsing. URI lexical tests and existing shared/filter tests cover this bounded slice. Full INetURLObject parsing, SmartRel2Abs, general decode modes and compiled desktop equivalence remain pending; no parity promotion.",
+      "Native decode now supports NONE/ToIUri/WithCharset/Unambiguous with original ToIUri UTF8 forcing and supplied charset handling in other modes, consumed by the actual INetURLObject URI value. Existing Markdown and bookmark entrypoints delegate to this same decode loop. Full absolute/relative assembly is represented in urlobj.object.ts; HTML HREF insertion and compiled complete-class equivalence remain pending."
     ],
     "omittedResponsibilities": [
-      "Full URL parsing, SmartRel2Abs and general decode modes remain pending; native ABI/desktop parity is unverified."
+      "Native string/buffer allocation ABI, complete URL services and compiled complete-class equivalence are not certified. HTML HREF production integration is pending."
     ]
   }
 }

@@ -2113,3 +2113,27 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `tools/source/fsys/urlobj.cxx`, SchemeInfo marks Sftp as supporting a query, but `INetURLObject::parsePath` handles it with Generic and stops only at the fragment delimiter. The later `setAbsURIRef` query branch can only run if the path parser stopped at `?`.
 - Observation: the SFTP path production consumes `/a?q` as its path, whereas the HTTP path production stops before `?`. The resulting URL spelling can conceal the internal path/query difference. This is source-level evidence and a local path-function result; complete LibreOffice URL/filter behavior remains unverified.
 - Preservation: retain the scheme flag and path stop condition independently. A focused path test pins the source cursor/output, and no browser query splitter or HTTP-path substitution is introduced.
+
+### WRITER229 — A query-only relative URI is resolved against the base directory
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, `INetURLObject::convertRelToAbs`, STATE_AUTH treats an initial query delimiter as STATE_REL_PATH; that branch first copies the base path only through its last slash, then appends the new query.
+- Observation: resolving `?q` against `http://host/dir/file` produces `http://host/dir/?q`, dropping the base filename. Empty and leading-fragment inputs take a different path and retain the full base path. This is source-derived local-value behavior, not a compiled complete-LibreOffice differential certificate.
+- Preservation: retain the state selection and base-directory copy. `urlobj.object.test.ts` checks query-only, empty and fragment-only cases separately; no browser URL query-resolution rule is substituted.
+
+### WRITER230 — HTTP and HTTPS authority flags reject user information
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, getSchemeInfo marks Http/Https with m_bUser=false; setAbsURIRef consequently passes the entire authority containing an unescaped `@` to the host parser, whose complete-consumption check fails.
+- Observation: `http://user@host/` is rejected by this native path rather than parsed into user and host fields, although FTP/SFTP admit user information through separate flags. This is a source-derived local parser result; intentional policy versus defect and compiled desktop behavior remain unverified.
+- Preservation: keep the original flags and host admission. URI-value tests check rejection and full invalidation rather than adopting browser user-info parsing.
+
+### WRITER231 — Extended UNC relative detection retains the pre-prefix delimiter distance
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, convertRelToAbs computes `n` from q after the initial double backslash, then can advance q past `?\\` and `UNC\\` while constructing qe from the original `q + n` distance.
+- Observation: the tentative host range can describe only the first host character after an extended UNC prefix instead of the full server name. A later smart absolute parse still validates the resulting reference; this finding alone does not prove acceptance of an invalid full URL. Native OUString's terminating NUL also matters when the tentative range extends through the terminator. This is source-level evidence, not a compiled defect confirmation.
+- Preservation: retain the original distance reuse and native terminating-NUL view in the relative-value port. Original Windows long-drive and extended-UNC CppUnit cases are represented in URI-value tests; no opportunistic range recalculation is introduced.
+
+### WRITER232 — Recognized private sub-prefixes are stored outside the path range
+
+- Source: pinned `tools/source/fsys/urlobj.cxx`, getPrefix recognizes `private:factory/` and similar longer internal prefixes; setAbsURIRef appends that entire prefix before recording the later m_aPath start offset.
+- Observation: `private:factory/swriter` retains that complete main URL, but GetURLPath(NONE) returns only `swriter`. A reference admitted through the shorter `private:` prefix records a different path boundary. This is source-derived local coordinate behavior; downstream desktop effects and whether the split is intentional remain unverified.
+- Preservation: retain longest-prefix selection and original path-start timing rather than reconstructing a browser-style scheme/path split. URI-value tests assert the native path substring alongside complete main-URL checks.

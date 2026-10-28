@@ -1,0 +1,42 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "path": "apps/office/src/tools/source/fsys/urlobj.object.ts",
+    "classification": "upstream-mechanism",
+    "state": "active",
+    "suite": "shared",
+    "subsystem": "uri-reference",
+    "capabilityIds": [
+      "CAP-808cfb34-25ac-4f6c-8c1e-641dc3af5708"
+    ],
+    "semantic": {
+      "behaviorStatus": "unverified",
+      "contractStatus": "unverified",
+      "defaultStatus": "unverified",
+      "divergenceClass": "B",
+      "evidence": [
+        "apps/office/src/tools/source/fsys/urlobj.object.ts",
+        "apps/office/src/tools/source/fsys/urlobj.object.test.ts",
+        "vendor/libreoffice-reference/tools/source/fsys/urlobj.cxx",
+        "vendor/libreoffice-reference/tools/qa/cppunit/test_urlobj.cxx",
+        "apps/office/src/sw/source/filter/md/swmd.test.ts",
+        "vendor/libreoffice-reference/include/tools/urlobj.hxx"
+      ],
+      "justification": "Original coordinate-bearing URI value with strict/smart absolute scheme inference, all native authority branches, user/password parsing, port/raw-host rules, per-protocol path insertion, query/fragment coordinates, invalidation preserving smart protocol, copied value state, native relative state machine and parent extraction through original LAST_SEGMENT,false rules. Shared native scheme/host/path/scalar owners are consumed directly. Strings bind original UTF16 buffers and returned values bind C++ output objects; native File fallthrough is a shared local block because the TypeScript compiler rejects switch fallthrough. Tests adapt consumed tools CppUnit smart, long-path, file WebDAV and CMIS cases and source-derived edge cases. Nonconsumed full URL mutation/data/service/presentation APIs and native allocation/ABI are not fabricated; compiled complete-class equivalence and actual HTML HREF insertion remain pending. The native GetAbsURL static entry now directly serves actual Markdown link callbacks. Its strict-relative mode and default-only failure fallback remain distinct from SmartRel2Abs. Actual SwDoc hyperlink tests cover this production integration; raw HTML HREF wiring remains pending.",
+      "knownViolations": [],
+      "localSymbols": [
+        "INetURLObject"
+      ],
+      "sourceResponsibility": "unverified",
+      "upstreamFile": "tools/source/fsys/urlobj.cxx",
+      "upstreamSymbols": [
+        "INetURLObject::setAbsURIRef",
+        "INetURLObject::convertRelToAbs",
+        "INetURLObject::GetPartBeforeLastName",
+        "INetURLObject::setPath",
+        "INetURLObject::GetAbsURL"
+      ]
+    }
+  }
+}

@@ -1,5 +1,5 @@
-/** @fileoverview Native INetURLObject URI scalar scanning, escaping and consumed presentation modes. General URL and relative-reference parsing remain pending. */
-import { EncodeMechanism, EscapeType, FSysStyle, Part } from "../../inc/urlobj";
+/** @fileoverview Native INetURLObject URI scalar scanning, escaping and consumed presentation modes. URI value assembly is owned by the separate urlobj.object port. */
+import { DecodeMechanism, EncodeMechanism, EscapeType, FSysStyle, Part } from "../../inc/urlobj";
 import {
   RTL_TEXTENCODING_UTF8,
   RTL_TEXTENCODING_ISO_8859_1,
@@ -152,22 +152,31 @@ export function appendUCS4(
 }
 /** Ports consumed native decode ToIUri/UTF8 presentation. @param target - URI reference. @returns Internationalized URI reference. */
 export function decodeToIUri(target: string): string {
-  return decodeEscapedUtf8(target, false);
+  return decode(target, DecodeMechanism.ToIUri);
 }
 /** Ports consumed native decode Unambiguous/UTF8 presentation. @param target - Escaped text. @returns Unambiguously decoded text. */
 export function decodeUnambiguous(target: string): string {
-  return decodeEscapedUtf8(target, true);
+  return decode(target, DecodeMechanism.Unambiguous);
 }
-/** Actual shared scalar owner for both production decoding callers. @param target - Source text. @param unambiguous - Native presentation choice. @returns Decoded text. */
-function decodeEscapedUtf8(target: string, unambiguous: boolean): string {
+/** Original decode loop over every native presentation mode. ToIUri forces UTF8; other modes retain their supplied charset. @param target - Source text. @param mechanism - Native presentation choice. @param charset - Source charset. @returns Decoded text. */
+export function decode(
+  target: string,
+  mechanism: DecodeMechanism,
+  charset: rtl_TextEncoding = RTL_TEXTENCODING_UTF8,
+): string {
+  if (mechanism === DecodeMechanism.NONE) return target;
+  if (mechanism === DecodeMechanism.ToIUri) charset = RTL_TEXTENCODING_UTF8;
   const cursor: UriCursor = { text: target, index: 0, end: target.length };
   let result = "";
   while (cursor.index < cursor.end) {
-    const { value, escape } = getUTF32(cursor, EncodeMechanism.WasEncoded, RTL_TEXTENCODING_UTF8);
+    const { value, escape } = getUTF32(cursor, EncodeMechanism.WasEncoded, charset);
     if (
       escape === EscapeType.NONE ||
       (escape === EscapeType.Utf32 &&
-        (value >= 128 || (unambiguous && !mustEncode(value, Part.PART_UNAMBIGUOUS))))
+        (value >= 128 ||
+          (mechanism !== DecodeMechanism.ToIUri &&
+            (mechanism !== DecodeMechanism.Unambiguous ||
+              !mustEncode(value, Part.PART_UNAMBIGUOUS)))))
     )
       result += String.fromCodePoint(value);
     else result += appendEscape(value);

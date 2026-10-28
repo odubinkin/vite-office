@@ -1,4 +1,5 @@
 /** @fileoverview Writer md4c callbacks from pinned sw/source/filter/md/mdcallbcks.cxx. */
+import { INetURLObject } from "../../../../tools/source/fsys/urlobj.object";
 import * as M from "../../../../external/md4c/src/md4c.h";
 import {
   SvxPostureItem,
@@ -27,14 +28,9 @@ import type { SwMarkdownParser } from "./swmd";
 export function decodeMarkdownText(bytes: Uint8Array): string {
   return OStringToOUString(bytes, RTL_TEXTENCODING_UTF8);
 }
-/** Resolves native source-medium relative destinations. @param base - Medium URL. @param target - Raw attribute. @returns Absolute or original URL. */
+/** Original GetAbsURL path for Markdown source-medium destinations. @param base - Medium URL. @param target - Raw attribute. @returns Native absolute or original default-mode fallback URL. */
 export function resolveMarkdownLink(base: string, target: string): string {
-  if (target === "" || target.startsWith("#")) return target;
-  try {
-    return new URL(target, base || undefined).href;
-  } catch {
-    return target;
-  }
+  return INetURLObject.GetAbsURL(base, target);
 }
 /** Native block entry dispatch. @param type - md4c kind. @param detail - md4c detail. @param parser - Original userdata. @returns Zero. */
 export function enter_block_callback(

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 167
+revision: 170
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T14:58:41.996Z"
+  updated_at: "2026-10-28T15:19:37.643Z"
   updated_by: "CODER"
-  note: "Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer tests, 13749 unchanged-C++ host differential cases and static/provenance/registry checks. Absolute/relative class assembly, SmartRel2Abs and HREF integration remain pending; full filter goal is active."
-  attempts: 20
+  note: "Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verified: 200 URI and 618 Writer tests pass, final 74 URI-value tests pass, static/provenance/registry gates pass. Raw HTML HREF/style/insertion and full filter capability audit remain pending; goal stays active."
+  attempts: 21
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -325,8 +328,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T15:19:37.643Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verified: 200 URI and 618 Writer tests pass, final 74 URI-value tests pass, static/provenance/registry gates pass. Raw HTML HREF/style/insertion and full filter capability audit remain pending; goal stays active."
+  -
+    type: "status"
+    at: "2026-10-28T15:20:12.149Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T14:58:53.709Z"
+doc_updated_at: "2026-10-28T15:20:12.149Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -649,6 +665,36 @@ sections:
     Attempts: 20
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:58:41.403Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T15:19:37.643Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verified: 200 URI and 618 Writer tests pass, final 74 URI-value tests pass, static/provenance/registry gates pass. Raw HTML HREF/style/insertion and full filter capability audit remain pending; goal stays active.
+    Attempts: 21
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:19:36.795Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -1271,6 +1317,20 @@ sections:
     - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI sources/test; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
       Result: pass. Initial lint findings were resolved by removing discarded local-buffer assignments and an unnecessary quote escape, and retaining the original LAST alias under a documented single-line rule exception. JSDoc: 3920 source files; boundaries: 1709 runtime sources/9022 imports/210 edges; provenance: 1710 modules. Logs: output/playwright/rtf-properties-native/html9-*.txt.
     - Remaining: INetURLObject absolute/relative assembly and native URIHelper::SmartRel2Abs are still required before HTML HREF wiring. Source setAbsURIRef and convertRelToAbs have now been read together with their private host/path/table dependencies. No provisional browser URL or keep-input resolver was introduced; pending production consumers are explicitly not described as complete. Full current-core TXT/RTF/Markdown audit and goal remain active.
+
+    Native URI value/resolution and real Markdown caller checkpoint:
+    - Implemented original coordinate-bearing INetURLObject value with copied SubString coordinates, strict/smart absolute parsing, native scheme/filesystem inference, all source authority cases, host/port/user/password behavior, path/query/fragment recording, invalidation retaining smart protocol, source relative-conversion state machine, GetPartBeforeLastName sequence and GetAbsURL. Existing shared scheme/host/path/scalar ports are now actual class consumers. Native File fallthrough shares one local authority block because TypeScript's noFallthroughCasesInSwitch gate forbids literal fallthrough. UTF16 strings/returned URI values bind native buffer/output arguments; no browser URL or extra URL/DTO owner was introduced. The relative pointer view retains native OUString's terminating NUL for original extended-UNC range behavior.
+    - Native decode now handles NONE/ToIUri/WithCharset/Unambiguous, preserving original charset forcing/defaults. URIHelper::SmartRel2Abs retains leading-fragment compatibility, invalid-base smart conversion, valid-base relative conversion, optional non-file preference, defaults and mutable-local-string callback semantics. It does not use an OS/browser resolver.
+    - Actual production caller: Markdown enter-span callback now uses original INetURLObject::GetAbsURL through resolveMarkdownLink, replacing browser new URL. Source mdcallbcks.cxx explicitly calls GetAbsURL rather than SmartRel2Abs; distinct native failure fallbacks remain intact. Actual MarkdownReader/SwDoc hyperlink assertions cover host/00080 spelling, absolute-path dot segments, query-only directory resolution and raw invalid-numeric/Unicode-host default fallback. Raw HTML HREF remains a separate pending producer.
+    - Native source evidence: pinned tools/source/fsys/urlobj.cxx, include/tools/urlobj.hxx, svl/source/misc/urihelper.cxx, include/svl/urihelper.hxx, original tools/qa/cppunit/test_urlobj.cxx smart/extended-Windows/CMIS/file-WebDAV cases, plus the native INetMIME IMAP atom bitmap projection for the existing AUTH guard. Source helper/absolute/relative/getter contracts are mapped but compiled complete-class/native ABI parity is not claimed. Nonconsumed URL services, global URIHelper service/factory APIs and native lifetime ABI are not expanded as a completion prerequisite.
+    - Dedicated findings WRITER229-232 preserve source query-only base-directory behavior, HTTP user-info rejection, extended-UNC tentative-range distance reuse and private sub-prefix path-coordinate split. These records explicitly separate source/local-value evidence from compiled complete-LibreOffice behavior.
+    - Command: npm run test:shared -- src/tools/source/fsys/urlobj
+      Result: pass, 200 tests/4 files, including 74 new URI-value/URIHelper tests. Final new coordinate assertion: npm run test:shared -- src/tools/source/fsys/urlobj.object.test.ts passes 74/1. An initial parent expectation for a URL ending in slash was corrected to source removeSegment(LAST_SEGMENT,false) followed by setFinalSlash, retaining the original directory; production code was unchanged for that fixture correction.
+    - Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+      Result: pass, 618 tests/40 files, including the new actual Markdown hyperlink case. No full regression run; same approved task/full-suite cadence retained.
+    - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI/URIHelper/Markdown source and tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+      Result: pass after native File fallthrough was bound to a shared local block, an unused import was removed and callback JSDoc was attached to the function expression. Source size: URI object 970 lines (below hard gate), 3927 authored files scanned; JSDoc 3923; boundaries 1711 runtime sources/9033 imports/210 allowed edges; provenance 1712 modules. Logs: output/playwright/rtf-properties-native/html10-*.txt. Existing registry confidence/classification remains unverified; source-backed tests do not promote full format parity.
+    - Remaining: connect raw HTML HREF using SmartRel2Abs and GetPartBeforeLastName, preserving actual SwFormatINetFormat insertion, CSS A-tag defaults/styles, existing context/range/metadata ownership and represented language/direction behavior. Then continue the original current-core TXT/RTF/Markdown capability audit. Do not interpret a completed native Markdown link resolver as complete raw HTML or format support. Goal/task remain active.
 id_source: "generated"
 ---
 ## Summary
@@ -1604,6 +1664,36 @@ Note: Native URI host/path/prefix checkpoint passes 126 URI tests, 617 Writer te
 Attempts: 20
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T14:58:41.403Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T15:19:37.643Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native INetURLObject/SmartRel2Abs and real Markdown GetAbsURL caller verified: 200 URI and 618 Writer tests pass, final 74 URI-value tests pass, static/provenance/registry gates pass. Raw HTML HREF/style/insertion and full filter capability audit remain pending; goal stays active.
+Attempts: 21
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:19:36.795Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -2230,3 +2320,17 @@ Native URI authority/path prerequisite checkpoint:
 - Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI sources/test; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
   Result: pass. Initial lint findings were resolved by removing discarded local-buffer assignments and an unnecessary quote escape, and retaining the original LAST alias under a documented single-line rule exception. JSDoc: 3920 source files; boundaries: 1709 runtime sources/9022 imports/210 edges; provenance: 1710 modules. Logs: output/playwright/rtf-properties-native/html9-*.txt.
 - Remaining: INetURLObject absolute/relative assembly and native URIHelper::SmartRel2Abs are still required before HTML HREF wiring. Source setAbsURIRef and convertRelToAbs have now been read together with their private host/path/table dependencies. No provisional browser URL or keep-input resolver was introduced; pending production consumers are explicitly not described as complete. Full current-core TXT/RTF/Markdown audit and goal remain active.
+
+Native URI value/resolution and real Markdown caller checkpoint:
+- Implemented original coordinate-bearing INetURLObject value with copied SubString coordinates, strict/smart absolute parsing, native scheme/filesystem inference, all source authority cases, host/port/user/password behavior, path/query/fragment recording, invalidation retaining smart protocol, source relative-conversion state machine, GetPartBeforeLastName sequence and GetAbsURL. Existing shared scheme/host/path/scalar ports are now actual class consumers. Native File fallthrough shares one local authority block because TypeScript's noFallthroughCasesInSwitch gate forbids literal fallthrough. UTF16 strings/returned URI values bind native buffer/output arguments; no browser URL or extra URL/DTO owner was introduced. The relative pointer view retains native OUString's terminating NUL for original extended-UNC range behavior.
+- Native decode now handles NONE/ToIUri/WithCharset/Unambiguous, preserving original charset forcing/defaults. URIHelper::SmartRel2Abs retains leading-fragment compatibility, invalid-base smart conversion, valid-base relative conversion, optional non-file preference, defaults and mutable-local-string callback semantics. It does not use an OS/browser resolver.
+- Actual production caller: Markdown enter-span callback now uses original INetURLObject::GetAbsURL through resolveMarkdownLink, replacing browser new URL. Source mdcallbcks.cxx explicitly calls GetAbsURL rather than SmartRel2Abs; distinct native failure fallbacks remain intact. Actual MarkdownReader/SwDoc hyperlink assertions cover host/00080 spelling, absolute-path dot segments, query-only directory resolution and raw invalid-numeric/Unicode-host default fallback. Raw HTML HREF remains a separate pending producer.
+- Native source evidence: pinned tools/source/fsys/urlobj.cxx, include/tools/urlobj.hxx, svl/source/misc/urihelper.cxx, include/svl/urihelper.hxx, original tools/qa/cppunit/test_urlobj.cxx smart/extended-Windows/CMIS/file-WebDAV cases, plus the native INetMIME IMAP atom bitmap projection for the existing AUTH guard. Source helper/absolute/relative/getter contracts are mapped but compiled complete-class/native ABI parity is not claimed. Nonconsumed URL services, global URIHelper service/factory APIs and native lifetime ABI are not expanded as a completion prerequisite.
+- Dedicated findings WRITER229-232 preserve source query-only base-directory behavior, HTTP user-info rejection, extended-UNC tentative-range distance reuse and private sub-prefix path-coordinate split. These records explicitly separate source/local-value evidence from compiled complete-LibreOffice behavior.
+- Command: npm run test:shared -- src/tools/source/fsys/urlobj
+  Result: pass, 200 tests/4 files, including 74 new URI-value/URIHelper tests. Final new coordinate assertion: npm run test:shared -- src/tools/source/fsys/urlobj.object.test.ts passes 74/1. An initial parent expectation for a URL ending in slash was corrected to source removeSegment(LAST_SEGMENT,false) followed by setFinalSlash, retaining the original directory; production code was unchanged for that fixture correction.
+- Command: npm run test:writer -- rtf sw/source/filter/ascii sw/source/filter/md sw/source/filter/html document-io
+  Result: pass, 618 tests/40 files, including the new actual Markdown hyperlink case. No full regression run; same approved task/full-suite cadence retained.
+- Commands: npm run typecheck --workspace @vite-office/office; targeted npx eslint for changed URI/URIHelper/Markdown source and tests; targeted npx prettier --check; node scripts/check-jsdoc.mjs; node scripts/check-file-size.mjs; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:shared; npm run inventory:parity:writer; npm run check:source-tree; node .agentplane/policy/check-routing.mjs; git diff --check.
+  Result: pass after native File fallthrough was bound to a shared local block, an unused import was removed and callback JSDoc was attached to the function expression. Source size: URI object 970 lines (below hard gate), 3927 authored files scanned; JSDoc 3923; boundaries 1711 runtime sources/9033 imports/210 allowed edges; provenance 1712 modules. Logs: output/playwright/rtf-properties-native/html10-*.txt. Existing registry confidence/classification remains unverified; source-backed tests do not promote full format parity.
+- Remaining: connect raw HTML HREF using SmartRel2Abs and GetPartBeforeLastName, preserving actual SwFormatINetFormat insertion, CSS A-tag defaults/styles, existing context/range/metadata ownership and represented language/direction behavior. Then continue the original current-core TXT/RTF/Markdown capability audit. Do not interpret a completed native Markdown link resolver as complete raw HTML or format support. Goal/task remain active.
