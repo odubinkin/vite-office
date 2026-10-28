@@ -43,7 +43,7 @@ writeFileSync(
   `${build}/calendar-hooks-witness.cc`,
   headers +
     String.raw`
-template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(0,s);this->clear();for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
+template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
 template<class C>void run(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;Witness<C>c(Locale("en_US"),s);c.observe(kind,a,b,use,incoming,count);}
 int main(int argc,char**argv){u_setDataDirectory(argv[1]);UErrorCode s=U_ZERO_ERROR;uloc_setDefault("en_US",&s);TimeZone::adoptDefault(new SimpleTimeZone(0,UnicodeString(u"UTC")));char kind;int type,a,b,use,incoming,count;while(std::cin>>kind>>type>>a>>b>>use>>incoming>>count){switch(type){
 ` +
@@ -81,6 +81,12 @@ function add(kind, type, a, b, use, status, fields = []) {
   inputs.push([kind, type, a, b, use, status, fields.length, ...fields.flat()].join(" "));
 }
 for (let type = 0; type < classes.length; ++type) {
+  // Original protected field hooks receive consistent time/base caches prepared by public APIs.
+  for (const day of [1948440, 2299160, 2299161, 2440588, 2451545, 2460370])
+    for (const status of [0, -128, 1]) add("F", type, day, 0, 1, status);
+  for (const year of [1, 2024, 5784])
+    for (const month of [-1000, -470, -236, -235, 235, 236, 470, 1000])
+      for (const use of [0, 1]) add("M", type, year, month, use, 0);
   for (const year of [-1000, -1, 0, 1, 78, 1582, 1900, 2000, 2024, 5783, 5784])
     for (const status of [0, -128, 1]) {
       add("Y", type, year, 0, 1, status);
@@ -145,6 +151,16 @@ for (const type of [7, 8, 11, 12, 13, 14, 15])
     [-2147483648, -1],
   ])
     for (const use of [0, 1]) add("M", type, year, month, use, 0);
+// Hebrew cycle/adjacent-year overflow and checked year-start range failures are bounded original errors.
+for (const [year, month] of [
+  [2147483647, 235],
+  [-2147483648, -235],
+  [-2147483648, -1],
+  [2147483647, 13],
+])
+  for (const use of [0, 1]) add("M", 9, year, month, use, 0);
+for (const kind of ["M", "L", "Y"]) add(kind, 9, 10000000, 1, 1, 0);
+add("M", 9, 2147483647, 0, 1, 0);
 for (const era of [-1, 237, 2147483647])
   for (const status of [0, 1]) add("D", 10, 2019, 4, 1, status, [[0, era]]);
 for (const era of [235, 236])

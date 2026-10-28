@@ -19,6 +19,19 @@
       "report": "apps/office/coverage/integration-icu-overflow/coverage-final.json",
       "reportSha256": "d60cfc19d993f262697fff59014eb51f957853bb7704ce45ba68c955aef225e3",
       "note": "Persian, Indian and5 Islamic month/year signed32 normalization error pairs are independently compiled original protected-hook observations; no large astronomical iteration or manufactured state."
+    },
+    "currentRegression": {
+      "testFiles": 9,
+      "groupedTests": 70,
+      "nativeObservations": 71217,
+      "hookObservations": 22892,
+      "addedFieldSnapshots": 324,
+      "addedLargeMonthCycles": 864,
+      "addedHebrewCheckedErrors": 12,
+      "runtimeCodeChanged": false,
+      "report": "apps/office/coverage/integration-icu-current/coverage-final.json",
+      "reportSha256": "6f7459cb379a695ca42c5dea41d5b839a2c52e8ef625a7b3856b0bc376029e14",
+      "scope": "B8TCAE expands the unchanged original protected-hook witness from21664 to22892 observations:324 field/status snapshots,864 large-month cycle cases,28 checked normalization cases and12 Hebrew checked cycle/adjacent-year/year-start errors. Field hooks receive consistent UTC time and base Gregorian caches prepared by public setTime/get APIs before direct protected invocation; complete field snapshots are native output. Actual constructors, setters and protected methods run without private-state injection or method replacement. Integer-error inputs are checked before unbounded astronomical work; no full ABI, allocator or arbitrary-overflow behavior is claimed. Current9 ICU suites70 grouped tests replay71217 native rows in total, with coverage policy and semantic status unchanged."
     }
   },
   "oox": {

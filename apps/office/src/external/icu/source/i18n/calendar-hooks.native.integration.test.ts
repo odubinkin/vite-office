@@ -1,4 +1,4 @@
-/** @fileoverview Checks protected calendar hooks against independently compiled original ICU78.3, including normalization, status guards and era defaults. */
+/** @fileoverview Checks protected calendar hooks against independently compiled original ICU78.3, including normalization, field snapshots, status guards and era defaults. */
 import { afterAll, beforeAll, expect, it, vi } from "vitest";
 import observations from "./calendar-hooks.native-observations.json";
 import { observeCalendarHook } from "../../../../test/icu-calendar-hooks";
@@ -42,7 +42,9 @@ it.each(
       ) => Number((row[0] as string).split(" ")[1]) === type,
     );
     expect(rows.length).toBe(
-      type === 10 ? 1213 : [7, 8, 11, 12, 13, 14, 15].includes(type) ? 1207 : 1203,
+      (type === 10 ? 1213 : [7, 8, 11, 12, 13, 14, 15].includes(type) ? 1207 : 1203) +
+        66 +
+        (type === 9 ? 12 : 0),
     );
     for (const [query, output] of rows)
       expect(observeCalendarHook(query as string), query).toBe(output);
