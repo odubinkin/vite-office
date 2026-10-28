@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 24
+revision: 25
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:37:40.961Z"
+doc_updated_at: "2026-10-28T20:43:59.963Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -119,6 +119,10 @@ sections:
     - Observation: Six additional md4c structured native cases exercise multiline inline/image title quote forms and email-domain label63/64 admission. Current6 suites1860 tests pass and all103 final native edge streams are independently rechecked.
       Impact: Exact same-source maps add3 statements and2 branch arms, including the real multiline-title stack and temporary-pointer cleanup. Native callback values are verified; physical allocation/free ABI and faults remain unverified. No source, counter or coverage-policy changes.
       Resolution: Continue remaining full100 obligations and pending individual unreachable-branch decisions; preserve the active goal and unpublished repository state.
+
+    - Observation: Five additional small public md4c cases exercise a missing reference in a genuine complex hash bucket and repeated unclosed HTML comment/processing/CDATA/declaration spans. Current6 suites1870 tests pass; all108 final edge callback streams match unchanged native output.
+      Impact: Two more statements and2 branch arms close by exact same-source comparison, without manufactured private context/table states or exceptions. Writer/calc tracked repositories remain clean on their originally pushed778a24dd3/251c2997b branch tips; main publication and reverse merges remain pending.
+      Resolution: Refresh complete current-code coverage at a stable application snapshot before further runtime/test edits, then continue remaining coverage and individual unreachable decisions. No final full verifier success is recorded.
 id_source: "generated"
 ---
 ## Summary
@@ -218,3 +222,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Six additional md4c structured native cases exercise multiline inline/image title quote forms and email-domain label63/64 admission. Current6 suites1860 tests pass and all103 final native edge streams are independently rechecked.
   Impact: Exact same-source maps add3 statements and2 branch arms, including the real multiline-title stack and temporary-pointer cleanup. Native callback values are verified; physical allocation/free ABI and faults remain unverified. No source, counter or coverage-policy changes.
   Resolution: Continue remaining full100 obligations and pending individual unreachable-branch decisions; preserve the active goal and unpublished repository state.
+
+- Observation: Five additional small public md4c cases exercise a missing reference in a genuine complex hash bucket and repeated unclosed HTML comment/processing/CDATA/declaration spans. Current6 suites1870 tests pass; all108 final edge callback streams match unchanged native output.
+  Impact: Two more statements and2 branch arms close by exact same-source comparison, without manufactured private context/table states or exceptions. Writer/calc tracked repositories remain clean on their originally pushed778a24dd3/251c2997b branch tips; main publication and reverse merges remain pending.
+  Resolution: Refresh complete current-code coverage at a stable application snapshot before further runtime/test edits, then continue remaining coverage and individual unreachable decisions. No final full verifier success is recorded.

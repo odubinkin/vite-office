@@ -772,5 +772,53 @@
     },
     "fixtureSha256": "bc4057c03eefe20199c048b1a6e4c9e1a4e17e09224484033e5f889963de68bc",
     "scope": "Six small structured native-backed public-input cases cover title quote forms, images, actual title-pointer cleanup and63/64-byte email label admission. All103 final edge streams rechecked against unchanged native parser. No source/counter/threshold/exclusion changes."
+  },
+  "md4cReferencesAndHtmlHorizons": {
+    "testFiles": 6,
+    "tests": 1870,
+    "newNativeInputs": 5,
+    "nativeEdgeInputsTotal": 108,
+    "newStatements": 2,
+    "newBranchArms": 2,
+    "exactMapsCompared": true,
+    "runtimeCodeChanged": false,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "report": "apps/office/coverage/integration-md4c-ref-html-final/coverage-final.json",
+    "reportSha256": "f3ca28c0fa3fcac7ef3c398cd8afa42f4338c039b0f9ac25bbce7f634722d562",
+    "metrics": {
+      "lines": {
+        "total": 1918,
+        "covered": 1908,
+        "skipped": 0,
+        "pct": 99.47
+      },
+      "statements": {
+        "total": 2183,
+        "covered": 2154,
+        "skipped": 0,
+        "pct": 98.67
+      },
+      "functions": {
+        "total": 135,
+        "covered": 135,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 1923,
+        "covered": 1880,
+        "skipped": 0,
+        "pct": 97.76
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "fixtureSha256": "f00ac2c4556724d24b7fa05cd62d6fac162ce01c7048a261a5738ae396118788",
+    "scope": "Five actual public input regressions and all108 native edge callbacks rechecked. No fake hashtable/context injection, source/counter/exclusion/threshold changes. Native memory/ABI/fault equivalence remains unverified."
   }
 }

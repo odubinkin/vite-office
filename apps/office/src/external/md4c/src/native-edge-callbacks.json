@@ -1,7 +1,7 @@
 {
   "md4cVersion": "0.5.3",
   "sourceSha256": "f12907817a17ae7d0f6c8d18770df839f187cad5649dd36a475dba0675c5c1f8",
-  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse. Six additional B8TCAE structured cases retain all three multiline title quote syntaxes, image titles and the63/64-byte email-domain label boundary.",
+  "corpus": "Native md_parse observations for integration reference collisions, malformed inputs and callback boundaries. B8TCAE adds14 minimized public-input boundary regressions selected from deterministic diagnostic inputs; all callback expectations are regenerated from unchanged pinned native md_parse. Six additional B8TCAE structured cases retain all three multiline title quote syntaxes, image titles and the63/64-byte email-domain label boundary. Five further B8TCAE cases cover missing reference lookup in a real complex hash bucket and repeated unclosed comment/processing/CDATA/declaration spans.",
   "cases": [
     {
       "id": "reference-buckets-6",
@@ -6849,6 +6849,92 @@
             120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120,
             120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 120, 46, 99, 111,
             62
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-missing-reference-collision-buckets",
+      "text": "[a]: /one\n[c]: /two\n\n[e]",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [4, 0, [91, 101, 93]],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-repeated-unclosed-html-comments",
+      "text": "a <!-- first <!-- second",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          4,
+          0,
+          [
+            97, 32, 60, 33, 45, 45, 32, 102, 105, 114, 115, 116, 32, 60, 33, 45, 45, 32, 115, 101,
+            99, 111, 110, 100
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-repeated-unclosed-html-processing",
+      "text": "a <?first <?second",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [4, 0, [97, 32, 60, 63, 102, 105, 114, 115, 116, 32, 60, 63, 115, 101, 99, 111, 110, 100]],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-repeated-unclosed-html-cdata",
+      "text": "a <![CDATA[first <![CDATA[second",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          4,
+          0,
+          [
+            97, 32, 60, 33, 91, 67, 68, 65, 84, 65, 91, 102, 105, 114, 115, 116, 32, 60, 33, 91, 67,
+            68, 65, 84, 65, 91, 115, 101, 99, 111, 110, 100
+          ]
+        ],
+        [1, 9, []],
+        [1, 0, []]
+      ],
+      "result": 0
+    },
+    {
+      "id": "B8TCAE-repeated-unclosed-html-declarations",
+      "text": "a <!FIRST first <!SECOND second",
+      "flags": 0,
+      "events": [
+        [0, 0, []],
+        [0, 9, []],
+        [
+          4,
+          0,
+          [
+            97, 32, 60, 33, 70, 73, 82, 83, 84, 32, 102, 105, 114, 115, 116, 32, 60, 33, 83, 69, 67,
+            79, 78, 68, 32, 115, 101, 99, 111, 110, 100
           ]
         ],
         [1, 9, []],
