@@ -264,3 +264,69 @@ it("releases actual raw stylesheet owners when parsing fails before materializat
   ).toThrow();
   expect(reader.released).toEqual([1 << 30, 1 << 30]);
 });
+
+it("retains explicit paragraph-style normal weight through a later parent edit", /** Paragraph style deduplication retains equal character item values, and UNO insertion must preserve that direct presence. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\s1\b0 Parent;}{\s2\sbasedon1\b0 Child;}}\s2 Text}`,
+  );
+  const parent = doc.FindTextFormatCollByName("Parent"),
+    child = doc.FindTextFormatCollByName("Child");
+  assert(parent);
+  assert(child);
+  expect(child.GetAttrSet().GetItemIfSet(RES_CHRATR_WEIGHT, false)).toBeDefined();
+  parent.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+});
+
+it("deduplicates character style properties against raw parent content before model insertion", /** An equal b0 disappears when a distinct italic child keeps rPr nonempty; the raw table still remains the run normalization reference. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\b0 Parent;}{\*\cs22\sbasedon21\b0\i Child;}}\cs22\b0\i Text}`,
+  );
+  const parent = doc.FindCharFormatByName("Parent"),
+    child = doc.FindCharFormatByName("Child");
+  assert(parent);
+  assert(child);
+  expect(child.GetAttrSet().GetItemIfSet(RES_CHRATR_WEIGHT, false)).toBeUndefined();
+  parent.SetFormatAttr(new SvxWeightItem(FontWeight.WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(true);
+});
+
+it("applies raw style font and weight controls with original independent script scopes", /** Styles use the same real mapper property vector as runs instead of the legacy all-script difference projection. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\fonttbl{\f0 Arial;}}{\stylesheet{\s0 Normal;}{\*\cs21\f0\b Named;}}\cs21\f0\b Text}`,
+  );
+  const style = doc.FindCharFormatByName("Named");
+  assert(style);
+  expect(style.GetAttrSet().GetItemIfSet(RES_CHRATR_CJK_WEIGHT, false)).toBeDefined();
+  expect(style.GetAttrSet().GetItemIfSet(RES_CHRATR_CTL_WEIGHT, false)).toBeUndefined();
+  expect(style.GetAttrSet().GetItemIfSet(RES_CHRATR_CJK_FONT, false)).toBeUndefined();
+  expect(style.GetAttrSet().GetItemIfSet(RES_CHRATR_CTL_FONT, false)).toBeUndefined();
+});
+
+it("resolves native built-in character style aliases and resets existing pool properties", /** Imported sparse definitions replace direct built-in values via SetPropertiesToDefault before the actual mapper applies their properties. @returns Nothing. */ () => {
+  const doc = read(
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21 Hyperlink;}{\*\cs22 Emphasis;}}\cs21 Link\cs22 Text}`,
+  );
+  expect(doc.FindCharFormatByName("Internet link")).toBeUndefined();
+  const hyperlink = doc.GetCharFormatFromPool(SwPoolFormatId.CHR_INET_NORMAL);
+  expect(named(doc)[0]?.style).toBe(hyperlink);
+  const emphasis = doc.FindCharFormatByName("Emphasis");
+  assert(emphasis);
+  expect(emphasis.GetAttrSet().GetItemIfSet(RES_CHRATR_POSTURE, false)).toBeUndefined();
+});
+import { SwPoolFormatId } from "../../../inc/poolfmt";
+import { RES_CHRATR_POSTURE } from "../../../inc/hintids";
+
+it("keeps an original character style at index zero separate from the paragraph fallback", /** The source raw table permits character type at0 and EnsureDefaultStyle never replaces that entry. @returns Nothing. */ () => {
+  const doc = read(String.raw`{\rtf1{\stylesheet{\*\cs0\b Zero character;}}\cs0\b Text}`);
+  const style = doc.FindCharFormatByName("Zero character");
+  assert(style);
+  expect((style.GetAttrSet().Get(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight()).toBe(
+    FontWeight.WEIGHT_BOLD,
+  );
+  expect(
+    doc.GetDfltTextFormatColl().GetAttrSet().GetItemIfSet(RES_CHRATR_WEIGHT, false),
+  ).toBeUndefined();
+  expect(named(doc)[0]?.style).toBe(style);
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(true);
+});

@@ -38,13 +38,14 @@ import { UseOnPage } from "../layout/pagedesc";
 import { SvxPageItem, SvxPageUsage } from "../../../../svx/inc/pageitem";
 import { MID_PAGE_LAYOUT } from "../../../../svx/inc/unomid";
 import { cppu_detail_getUnoType_PageStyleLayout as pageLayoutType } from "../../../../offapi/com/sun/star/style/PageStyleLayout";
-/** Represented native style families. Character/table/conditional styles require their unported core owners. */
-export type SwStyleFamily = "ParagraphStyles" | "PageStyles" | "NumberingStyles";
+/** Represented native style families over actual document formats; frame/table/conditional family suppliers remain unported. */
+export type SwStyleFamily =
+  "CharacterStyles" | "ParagraphStyles" | "PageStyles" | "NumberingStyles";
 /** A style descriptor owns pending properties only until insertByName attaches its canonical format. */
 export class SwXStyle {
   private pending = new Map<string, Any>();
   private parentName = "";
-  private owner: SwTextFormatColl | SwPageDesc | SwNumRule | undefined;
+  private owner: SwTextFormatColl | SwCharFormat | SwPageDesc | SwNumRule | undefined;
   /** Native wrapper destruction releases pending descriptor Any values; the attached document format is borrowed. @returns Nothing. */
   dispose(): void {
     for (const value of this.pending.values()) value.dispose();
@@ -54,12 +55,14 @@ export class SwXStyle {
   constructor(
     readonly doc: SwDoc,
     readonly family: SwStyleFamily,
-    owner?: SwTextFormatColl | SwPageDesc | SwNumRule,
+    owner?: SwTextFormatColl | SwCharFormat | SwPageDesc | SwNumRule,
   ) {
     this.owner = owner;
   }
   /** Publishes the supported native property descriptors. @returns The represented native operation result. */
   getPropertySetInfo(): ReturnType<typeof createPropertySetInfo> {
+    if (this.family === "CharacterStyles")
+      return createPropertySetInfo([], true, SwUnoCharStylePropertyMap);
     if (this.family === "NumberingStyles")
       return createPropertySetInfo([["NumberingRules", ["Reference", indexReplaceType]]], false);
     if (this.family === "PageStyles")
@@ -88,7 +91,7 @@ export class SwXStyle {
   /** Reads direct versus inherited native property state. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyState(name: OUStringConstReference): PropertyState {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown(n);
+    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
     if (!this.owner)
       return this.pending.has(n) ? PropertyState.DIRECT_VALUE : PropertyState.DEFAULT_VALUE;
     if (this.family === "PageStyles" && SwUnoPageStylePropertyMap.has(n)) {
@@ -100,11 +103,13 @@ export class SwXStyle {
         ? PropertyState.DIRECT_VALUE
         : PropertyState.DEFAULT_VALUE;
     }
-    if (this.family !== "ParagraphStyles") return PropertyState.DIRECT_VALUE;
+    if (this.family !== "ParagraphStyles" && this.family !== "CharacterStyles")
+      return PropertyState.DIRECT_VALUE;
     if (n === "FollowStyle") return PropertyState.DIRECT_VALUE;
     const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
-    return (this.owner as SwTextFormatColl).GetAttrSet().GetItemState(entry.which, false) ===
-      SfxItemState.SET
+    return (this.owner as SwTextFormatColl | SwCharFormat)
+      .GetAttrSet()
+      .GetItemState(entry.which, false) === SfxItemState.SET
       ? PropertyState.DIRECT_VALUE
       : PropertyState.DEFAULT_VALUE;
   }
@@ -118,7 +123,7 @@ export class SwXStyle {
   /** Removes the supported direct property delta. @param name - Native property or element name. @returns Nothing. */
   setPropertyToDefault(name: OUStringConstReference): void {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown(n);
+    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
     if (!this.owner) {
       this.pending.get(n)?.dispose();
       this.pending.delete(n);
@@ -153,8 +158,8 @@ export class SwXStyle {
       return;
     }
     const entry = SwUnoPropertyMap.get(n);
-    if (!entry) unknown(n);
-    (this.owner as SwTextFormatColl).ResetFormatAttr(entry.which);
+    if (!entry) unknown("Unknown property: " + n);
+    (this.owner as SwTextFormatColl | SwCharFormat).ResetFormatAttr(entry.which);
   }
   /** Implements the represented native getName operation. @returns The represented native operation result. */
   getName(): OUString {
@@ -164,24 +169,50 @@ export class SwXStyle {
   setName(name: OUStringConstReference): void {
     if (!this.owner) invalid("Style descriptor is detached");
     if (this.owner instanceof SwNumRule) illegal("Numbering style rename is unrepresented");
-    if (this.family === "ParagraphStyles")
-      (this.owner as SwTextFormatColl).SetFormatName(text(name));
+    if (this.family === "ParagraphStyles" || this.family === "CharacterStyles")
+      (this.owner as SwTextFormatColl | SwCharFormat).SetFormatName(
+        this.family === "CharacterStyles"
+          ? SwStyleNameMapper.FillUIName(text(name), SwGetPoolIdFromName.ChrFmt)
+          : text(name),
+      );
     else illegal("Page style rename is unrepresented");
   }
   /** Implements the represented native isUserDefined operation. @returns The represented native operation result. */
   isUserDefined(): boolean {
+    if (this.family === "CharacterStyles")
+      return (
+        this.owner instanceof SwCharFormat &&
+        this.owner !== this.doc.GetDfltCharFormat() &&
+        !WRITER_CHARACTER_STYLE_POOL.some(
+          /** Uses original pool identity rather than a colliding user name. @param entry - Native entry. @returns Pool identity match. */ (
+            entry,
+          ) => entry.poolId === (this.owner as SwCharFormat).GetPoolFormatId(),
+        )
+      );
     return (
       this.owner !== undefined &&
       programmaticStyleName(this.owner) !== "Standard" &&
       !WRITER_AVAILABLE_PARAGRAPH_STYLE_POOL.some(
         /** Processes one ordered native value at this boundary. @param s - Original s input. @returns The represented native operation result. */
         (s) =>
-          s.name === programmaticStyleName(this.owner as SwTextFormatColl | SwPageDesc | SwNumRule),
+          s.name ===
+          programmaticStyleName(
+            this.owner as SwTextFormatColl | SwCharFormat | SwPageDesc | SwNumRule,
+          ),
       )
     );
   }
   /** Implements the represented native getParentStyle operation. @returns The represented native operation result. */
-  getParentStyle(): OUStringConstReference {
+  getParentStyle(): OUString {
+    if (this.family === "CharacterStyles") {
+      if (this.owner === undefined) return unicode(this.parentName);
+      const parent = (this.owner as SwCharFormat).DerivedFrom();
+      return unicode(
+        parent === undefined || parent === this.doc.GetDfltCharFormat()
+          ? ""
+          : programmaticStyleName(parent as SwCharFormat),
+      );
+    }
     const parent =
       this.family === "ParagraphStyles"
         ? (this.owner as SwTextFormatColl | undefined)?.DerivedFrom()
@@ -197,12 +228,19 @@ export class SwXStyle {
   /** Implements the represented native setParentStyle operation. @param name - Native property or element name. @returns Nothing. */
   setParentStyle(name: OUStringConstReference): void {
     const value = text(name);
-    if (this.family !== "ParagraphStyles") return;
+    if (this.family !== "ParagraphStyles" && this.family !== "CharacterStyles") return;
     if (!this.owner) {
       this.parentName = value;
       return;
     }
-    const parent = value ? findParagraphStyle(this.doc, value) : this.doc.GetDfltTextFormatColl();
+    const parent =
+      this.family === "CharacterStyles"
+        ? value
+          ? findCharacterStyle(this.doc, value)
+          : this.doc.GetDfltCharFormat()
+        : value
+          ? findParagraphStyle(this.doc, value)
+          : this.doc.GetDfltTextFormatColl();
     if (!parent) illegal("Unknown parent style");
     for (
       let ancestor: import("../attr/format").SwFormat | undefined = parent;
@@ -210,12 +248,23 @@ export class SwXStyle {
       ancestor = ancestor.DerivedFrom()
     )
       if (ancestor === this.owner && parent !== this.owner) illegal("Cyclic parent style");
-    (this.owner as SwTextFormatColl).SetDerivedFrom(parent === this.owner ? undefined : parent);
+    (this.owner as SwTextFormatColl | SwCharFormat).SetDerivedFrom(
+      parent === this.owner ? undefined : parent,
+    );
   }
   /** Attaches the descriptor once; its pending state is then released. @param name - Native property or element name. @returns The represented native operation result. */
   Attach(name: string): void {
     if (this.owner) invalid("Style is already attached");
-    if (this.family === "ParagraphStyles") {
+    if (this.family === "CharacterStyles") {
+      const parent = this.parentName
+        ? findCharacterStyle(this.doc, this.parentName)
+        : this.doc.GetDfltCharFormat();
+      if (!parent) illegal("Unknown parent style");
+      this.owner = this.doc.MakeCharFormat(
+        SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.ChrFmt),
+        parent,
+      );
+    } else if (this.family === "ParagraphStyles") {
       const parent = this.parentName
         ? findParagraphStyle(this.doc, this.parentName)
         : this.doc.GetDfltTextFormatColl();
@@ -226,6 +275,34 @@ export class SwXStyle {
       const rule = new SwNumRule(name, "label-alignment");
       rule.SetAutoRule(false);
       this.owner = this.doc.AddNumRule(rule);
+    }
+    if (this.family === "CharacterStyles") {
+      const pending = [...this.pending].sort(
+        /** Native std::map iterates UTF16 names in lexical order. @param a - First entry. @param b - Second entry. @returns Name order. */ (
+          a,
+          b,
+        ) => (a[0] < b[0] ? -1 : a[0] > b[0] ? 1 : 0),
+      );
+      const names = pending.map(
+        /** Creates the source argument sequence's string values. @param entry - Native cached property. @returns Owned name. */ (
+          entry,
+        ) => unicode(entry[0]),
+      );
+      try {
+        this.SetCharacterPropertyValues(
+          names,
+          pending.map(
+            /** Borrows descriptor Any values. @param entry - Original cached entry. @returns Borrowed value. */ (
+              entry,
+            ) => entry[1],
+          ),
+        );
+      } finally {
+        for (const name of names) name.dispose();
+        for (const value of this.pending.values()) value.dispose();
+        this.pending.clear();
+      }
+      return;
     }
     for (const [key, value] of this.pending) {
       const n = unicode(key);
@@ -241,6 +318,7 @@ export class SwXStyle {
   /** Queries the current native property value. @param name - Native property or element name. @returns The represented native operation result. */
   getPropertyValue(name: OUStringConstReference): Any {
     const n = text(name);
+    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
     if (!this.owner)
       return this.pending.has(n) ? new UnoAny(this.pending.get(n) as Any) : this.defaultValue(n);
     if (n === "NumberingRules" && this.family === "NumberingStyles")
@@ -256,17 +334,20 @@ export class SwXStyle {
       );
     if (this.family === "PageStyles") return this.pageValue(n);
     const entry = SwUnoPropertyMap.get(n);
-    if (!entry) unknown(n);
-    return queryItem((this.owner as SwTextFormatColl).GetAttrSet().Get(entry.which), entry);
+    if (!entry) unknown("Unknown property: " + n);
+    return queryItem(
+      (this.owner as SwTextFormatColl | SwCharFormat).GetAttrSet().Get(entry.which),
+      entry,
+    );
   }
   /** Applies a typed native property without duplicating model state. @param name - Native property or element name. @param value - Declared native value. @returns Nothing. */
   setPropertyValue(name: OUStringConstReference, value: Any): void {
     const n = text(name);
-    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown(n);
+    if (!this.getPropertySetInfo().hasPropertyByName(name)) unknown("Unknown property: " + n);
     if (!this.owner) {
       const entry =
         this.family === "PageStyles" ? SwUnoPageStylePropertyMap.get(n) : SwUnoPropertyMap.get(n);
-      if (entry)
+      if (entry && this.family !== "CharacterStyles")
         putItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(entry.which), entry, value);
       else if (n === "FollowStyle") stringValue(value);
       else if (n === "IsLandscape") scalar(value, "bool");
@@ -308,21 +389,93 @@ export class SwXStyle {
       this.setPageValue(n, value);
       return;
     }
+    if (this.family === "CharacterStyles") {
+      this.SetCharacterPropertyValues([name], [value]);
+      return;
+    }
     const entry = SwUnoPropertyMap.get(n) as SwUnoPropertyEntry;
-    const owner = this.owner as SwTextFormatColl;
+    const owner = this.owner as SwTextFormatColl | SwCharFormat;
     owner.SetFormatAttr(putItem(owner.GetAttrSet().Get(entry.which), entry, value));
   }
+  /** Original native sequence argument form. @param names - Original name sequence. @param values - Original Any sequence. @returns Nothing. */
+  setPropertyValues(names: Sequence<OUString>, values: Sequence<Any>): void;
+  /** Existing borrowed array binding for the original span call sites. @param names - Original names. @param values - Original values. @returns Nothing. */
+  setPropertyValues(names: readonly OUStringConstReference[], values: readonly Any[]): void;
   /** Applies the ordered native property sequence. @param names - Original names input. @param values - Original values input. @returns Nothing. */
-  setPropertyValues(names: readonly OUStringConstReference[], values: readonly Any[]): void {
-    if (names.length !== values.length) illegal("Property name/value count differs");
-    for (let i = 0; i < names.length; i++)
-      this.setPropertyValue(names[i] as OUStringConstReference, values[i] as Any);
+  setPropertyValues(
+    names: readonly OUStringConstReference[] | Sequence<OUString>,
+    values: readonly Any[] | Sequence<Any>,
+  ): void {
+    const nameList =
+      names instanceof Sequence
+        ? Array.from(
+            { length: names.getLength() },
+            /** Borrows original native sequence elements at their logical byte addresses. @param _unused - Unused array initializer. @param index - Original index. @returns Borrowed string. */ (
+              _unused,
+              index,
+            ) =>
+              OUString.unacquired(
+                (names.getConstArray() as SequenceElements).get(index * 8) as rtl_uStringSlot,
+              ),
+          )
+        : names;
+    const valueList =
+      values instanceof Sequence
+        ? Array.from(
+            { length: values.getLength() },
+            /** Copies native Any values from the erased sequence element addresses for this existing typed API boundary. @param _unused - Unused initializer. @param index - Original index. @returns Owned Any copy. */ (
+              _unused,
+              index,
+            ) => new UnoAny((values.getConstArray() as SequenceElements).get(index * 24) as Any),
+          )
+        : values;
+    try {
+      if (nameList.length !== valueList.length) illegal("Property name/value count differs");
+      if (this.family === "CharacterStyles" && this.owner !== undefined) {
+        this.SetCharacterPropertyValues(nameList, valueList);
+        return;
+      }
+      for (let i = 0; i < nameList.length; i++)
+        this.setPropertyValue(nameList[i] as OUStringConstReference, valueList[i] as Any);
+    } catch (error) {
+      if (!(error instanceof UnknownPropertyException)) throw error;
+      const target = new UnoAny(error, unknownPropertyType);
+      const wrapped = new WrappedTargetException();
+      try {
+        wrapped.TargetException = target;
+      } finally {
+        target.dispose();
+        error.dispose();
+      }
+      throw wrapped;
+    } finally {
+      if (values instanceof Sequence) for (const value of valueList) value.dispose();
+    }
+  }
+  /** Original attached character SetPropertyValues_Impl item-set staging: combine item members before one actual format commit. @param names - Original names. @param values - Original Any values. @returns Nothing. */
+  private SetCharacterPropertyValues(
+    names: readonly OUStringConstReference[],
+    values: readonly Any[],
+  ): void {
+    const owner = this.owner as SwCharFormat;
+    const set = owner.GetAttrSet().Clone();
+    try {
+      for (let index = 0; index < names.length; ++index) {
+        const name = text(names[index] as OUStringConstReference);
+        const entry = SwUnoCharStylePropertyMap.get(name);
+        if (entry === undefined) unknown("Unknown property: " + name);
+        set.Put(putItem(set.Get(entry.which), entry, values[index] as Any));
+      }
+      owner.SetFormatAttrSet(set);
+    } finally {
+      set.Dispose();
+    }
   }
   /** Implements the represented native defaultValue operation. @param n - Original n input. @returns The represented native operation result. */
   private defaultValue(n: string): Any {
     if (this.family === "PageStyles") return this.pageValue(n);
     const e = SwUnoPropertyMap.get(n);
-    if (!e) unknown(n);
+    if (!e) unknown("Unknown property: " + n);
     return queryItem(this.doc.GetAttrPool().GetUserOrPoolDefaultItem(e.which), e);
   }
   /** Implements the represented native pageValue operation. @param n - Original n input. @returns The represented native operation result. */
@@ -349,7 +502,7 @@ export class SwXStyle {
     if (n === "IsLandscape") out.insert([value.landscape], "bool");
     else {
       const key = pageFields[n];
-      if (!key) unknown(n);
+      if (!key) unknown("Unknown property: " + n);
       out.insert([Number(convertTwipToMm100(BigInt(value[key])))], "sal_Int32");
     }
     return out;
@@ -419,11 +572,30 @@ function findParagraphStyle(doc: SwDoc, name: string): SwTextFormatColl | undefi
     ? doc.GetTextFormatColl(definition.id)
     : undefined;
 }
+/** Resolves original character programmatic names on the real document table and lazy pool. @param doc - Actual document. @param name - Programmatic name. @returns Canonical owner. */
+function findCharacterStyle(doc: SwDoc, name: string): SwCharFormat | undefined {
+  if (name === "Standard") return doc.GetDfltCharFormat();
+  const uiName = SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.ChrFmt);
+  const existing = doc.FindCharFormatByName(uiName);
+  if (existing !== undefined) return existing;
+  const entry = WRITER_CHARACTER_STYLE_POOL.find(
+    /** Finds original pool UI identity. @param value - Native pool entry. @returns Match. */ (
+      value,
+    ) => value.uiName === uiName,
+  );
+  return entry === undefined ? undefined : doc.GetCharFormatFromPool(entry.poolId);
+}
 /** Exposes native pool names at the UNO boundary while retaining custom and page/rule identities. @param owner - Actual style owner. @returns Programmatic name. */
-function programmaticStyleName(owner: SwTextFormatColl | SwPageDesc | SwNumRule): string {
-  return owner instanceof SwTextFormatColl
-    ? SwStyleNameMapper.GetProgName(owner.poolId, owner.GetName())
-    : owner.GetName();
+function programmaticStyleName(
+  owner: SwTextFormatColl | SwCharFormat | SwPageDesc | SwNumRule,
+): string {
+  return owner instanceof SwCharFormat
+    ? owner === owner.GetAttrSet().GetDoc().GetDfltCharFormat()
+      ? "Standard"
+      : SwStyleNameMapper.FillProgName(owner.GetName(), SwGetPoolIdFromName.ChrFmt)
+    : owner instanceof SwTextFormatColl
+      ? SwStyleNameMapper.GetProgName(owner.poolId, owner.GetName())
+      : owner.GetName();
 }
 /** Name access resolves canonical formats afresh, retaining no parallel style catalog. */
 export class SwXStyleFamily {
@@ -434,6 +606,24 @@ export class SwXStyleFamily {
   ) {}
   /** Implements the represented native getElementNames operation. @returns The represented native operation result. */
   getElementNames(): string[] {
+    if (this.family === "CharacterStyles")
+      return [
+        ...new Set([
+          "Standard",
+          ...WRITER_CHARACTER_STYLE_POOL.map(
+            /** Publishes the source programmatic pool names. @param entry - Native entry. @returns Programmatic name. */ (
+              entry,
+            ) => entry.name,
+          ),
+          ...this.doc
+            .GetCharFormats()
+            .map(
+              /** Reads actual custom owner identity. @param owner - Native format. @returns Programmatic name. */ (
+                owner,
+              ) => programmaticStyleName(owner),
+            ),
+        ]),
+      ];
     return this.family === "NumberingStyles"
       ? this.doc
           .GetNumRuleTable()
@@ -471,21 +661,40 @@ export class SwXStyleFamily {
   }
   /** Implements the represented native hasByName operation. @param name - Native property or element name. @returns The represented native operation result. */
   hasByName(name: OUStringConstReference): boolean {
+    if (this.family === "CharacterStyles") {
+      const n = text(name);
+      if (n === "Standard") return true;
+      const uiName = SwStyleNameMapper.FillUIName(n, SwGetPoolIdFromName.ChrFmt);
+      return (
+        this.doc.FindCharFormatByName(uiName) !== undefined ||
+        WRITER_CHARACTER_STYLE_POOL.some(
+          /** Pool lookup includes original unmaterialized built-in styles. @param entry - Native pool entry. @returns UI identity match. */ (
+            entry,
+          ) => entry.uiName === uiName,
+        )
+      );
+    }
     return this.getElementNames().includes(text(name));
   }
   /** Implements the represented native getByName operation. @param name - Native property or element name. @returns The represented native operation result. */
   getByName(name: OUStringConstReference): SwXStyle {
     const n = text(name),
       owner =
-        this.family === "NumberingStyles"
-          ? this.doc.FindNumRulePtr(n)
-          : this.family === "ParagraphStyles"
-            ? findParagraphStyle(this.doc, n)
-            : this.doc.FindPageDesc(n);
+        this.family === "CharacterStyles"
+          ? findCharacterStyle(this.doc, n)
+          : this.family === "NumberingStyles"
+            ? this.doc.FindNumRulePtr(n)
+            : this.family === "ParagraphStyles"
+              ? findParagraphStyle(this.doc, n)
+              : this.doc.FindPageDesc(n);
     if (!owner) noSuchElement();
     return this.family === "PageStyles"
       ? new SwXPageStyle(this.doc, owner as SwPageDesc)
       : new SwXStyle(this.doc, this.family, owner);
+  }
+  /** Original typed style lookup shares the same actual document family. @param name - Programmatic name. @returns Style wrapper. */
+  getStyleByName(name: OUStringConstReference): SwXStyle {
+    return this.getByName(name);
   }
   /** Original typed page lookup uses the same native style lookup and requires a page family. @param name - Programmatic name. @returns Actual page-style wrapper. */
   getPageStyleByName(name: OUStringConstReference): SwXPageStyle {
@@ -509,6 +718,10 @@ export class SwXStyleFamily {
 export class SwXStyleFamilies {
   /** Binds the represented native owner and its declared inputs. @param doc - Canonical document owner. @returns Nothing. */
   constructor(private readonly doc: SwDoc) {}
+  /** Original typed character-family supplier. @returns Character family. */
+  GetCharacterStyles(): SwXStyleFamily {
+    return new SwXStyleFamily(this.doc, "CharacterStyles");
+  }
   /** Original typed page-family supplier uses the actual document family owner. @returns Page family. */
   GetPageStyles(): SwXStyleFamily {
     return new SwXStyleFamily(this.doc, "PageStyles");
@@ -519,7 +732,7 @@ export class SwXStyleFamilies {
   }
   /** Implements the represented native getElementNames operation. @returns The represented native operation result. */
   getElementNames(): string[] {
-    return ["ParagraphStyles", "PageStyles", "NumberingStyles"];
+    return ["CharacterStyles", "ParagraphStyles", "PageStyles", "NumberingStyles"];
   }
   /** Implements the represented native hasByName operation. @param name - Native property or element name. @returns The represented native operation result. */
   hasByName(name: OUStringConstReference): boolean {
@@ -528,7 +741,27 @@ export class SwXStyleFamilies {
   /** Implements the represented native getByName operation. @param name - Native property or element name. @returns The represented native operation result. */
   getByName(name: OUStringConstReference): SwXStyleFamily {
     const n = text(name);
-    if (n !== "ParagraphStyles" && n !== "PageStyles" && n !== "NumberingStyles") noSuchElement();
+    if (
+      n !== "CharacterStyles" &&
+      n !== "ParagraphStyles" &&
+      n !== "PageStyles" &&
+      n !== "NumberingStyles"
+    )
+      noSuchElement();
     return new SwXStyleFamily(this.doc, n);
   }
 }
+
+import { SwCharFormat } from "../../../inc/charfmt";
+import { WRITER_CHARACTER_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
+import { SwUnoCharStylePropertyMap } from "./unomap";
+
+import { Sequence, type SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+import {
+  UnknownPropertyException,
+  cppu_detail_getUnoType as unknownPropertyType,
+} from "../../../../cppu/inc/com/sun/star/beans/UnknownPropertyException";
+import { WrappedTargetException } from "../../../../cppu/inc/com/sun/star/lang/WrappedTargetException";
+
+import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";

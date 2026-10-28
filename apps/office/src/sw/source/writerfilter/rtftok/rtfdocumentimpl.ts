@@ -136,7 +136,7 @@ export class RtfDocumentImpl {
     return Finish.call(this, options);
   }
 
-  /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing. */
+  /** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @param properties - Original deduplicated native style properties. @returns Nothing. */
   protected ApplyStyleDefinition(
     collection: SwTextFormatColl | SwCharFormat,
     definition: {
@@ -147,8 +147,9 @@ export class RtfDocumentImpl {
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
     },
+    properties: ReferencePointer<Properties>,
   ): void {
-    return ApplyStyleDefinition.call(this, collection, definition);
+    return ApplyStyleDefinition.call(this, collection, definition, properties);
   }
 
   /** Applies parsed values through native text and item-set owners. @param node - Target paragraph. @param paragraph - Parsed values.  @returns Nothing. */

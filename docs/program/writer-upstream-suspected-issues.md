@@ -1977,3 +1977,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `rtfdispatchvalue.cxx`, SBASEDON/SNEXT dispatch; `rtfdocumentimpl.cxx`, getStyleName and stylesheet insertion; `rtfvalue.cxx`, getString.
 - Observation: these commands immediately call getStyleName with the numeric index. An index whose name has not yet been read returns an empty OUString. The resulting non-forced RTFValue reports the string `"0"`; later style declarations do not rewrite the stored name. A forward link can therefore fail to select the later named style. This is an inference from the source owner chain, not a confirmed desktop-document result.
 - Preservation/evidence: capture the current name at control dispatch and preserve the original empty-string query semantics. Actual RTFValue tests already compare the empty non-forced value with `"0"`; native character-style tests distinguish backward parent/follow links from forward declarations. Do not introduce deferred numeric-index resolution to repair this behavior.
+
+
+### WRITER207 — Style-name suffix removal requires more than one prefix character
+
+- Source: pinned `SwStyleNameMapper.cxx`, lcl_SuffixIsUser, lcl_CheckSuffixAndDelete and character-family FillProgName/FillUIName.
+- Observation: the shared suffix predicate requires total UTF16 length greater than8 before recognizing the seven-unit ` (user)` suffix. Thus `A (user)` remains unchanged, while `AB (user)` can lose its suffix. The upstream comment itself questions the one-character-prefix exclusion and records its historical origin.
+- Preservation/evidence: retain the strict greater-than8 guard in both admitted character-name directions. Actual character-family tests compare zero-, one- and two-character prefixes, programmatic/UI hyperlink aliases and collision lookup. This is source-contract evidence, not a desktop-document certification.

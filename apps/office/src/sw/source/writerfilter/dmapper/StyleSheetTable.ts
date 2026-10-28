@@ -680,6 +680,33 @@ export class StyleSheetTable {
   private readonly m_pDefaultCharProps = new PropertyMap();
   private m_sDefaultParaStyleName = "Normal";
   private m_pCurrentEntry: StyleSheetEntry | null = null;
+  /** Original existing-style reset examines every represented direct property before imported values are applied. @param style - Actual UNO style. @returns Nothing. */
+  static SetPropertiesToDefault(style: SwXStyle): void {
+    const properties = style.getPropertySetInfo().getProperties();
+    try {
+      const states = style.getPropertyStates(
+        properties.map(
+          /** Borrows each actual property name. @param property - Native descriptor. @returns Name. */ (
+            property,
+          ) => property.Name,
+        ),
+      );
+      for (let index = 0; index < states.length; ++index) {
+        if (states[index] !== PropertyState.DIRECT_VALUE) continue;
+        try {
+          style.setPropertyToDefault((properties[index] as Property).Name);
+        } catch (error) {
+          if (!(error instanceof Exception)) throw error;
+          error.dispose();
+        }
+      }
+    } finally {
+      for (const property of properties) {
+        property.Type.dispose();
+        property.Name.dispose();
+      }
+    }
+  }
   /** Original constructor seeds only three 10pt heights and disabled auto-kerning. @returns Table. */
   constructor() {
     const height = new Any([10], "double"),
@@ -768,3 +795,62 @@ export class StyleSheetTable {
     this.m_pDefaultCharProps.dispose();
   }
 }
+
+/** Original anonymous-namespace PropValVector: stable lexical insertion retains duplicate names and copied PropertyValue owners. */
+export class PropValVector {
+  private readonly m_aValues: PropertyValue[] = [];
+  /** Original insertion stops at the first strictly greater name. @param value - Borrowed property. @returns Nothing. */
+  Insert(value: PropertyValue): void {
+    const index = this.m_aValues.findIndex(
+      /** Original OUString comparison uses UTF16 units. @param entry - Existing native value. @returns Whether greater. */ (
+        entry,
+      ) => entry.Name.compareTo(value.Name) > 0,
+    );
+    this.m_aValues.splice(
+      index === -1 ? this.m_aValues.length : index,
+      0,
+      new PropertyValue(value),
+    );
+  }
+  /** Original by-value Sequence<Any> return, using the actual UNO sequence and Any copy owners. @returns Owned native sequence. */
+  getValues(): Sequence<Any> {
+    return new AnyValues(
+      {
+        /** Borrows the original vector value at a source logical address. @param offset - Byte offset. @returns Actual Any member. */ get: (
+          offset: number,
+        ) => this.m_aValues[offset / 24]?.Value,
+      },
+      this.m_aValues.length,
+    );
+  }
+  /** Original by-value Sequence<OUString> return. @returns Owned native sequence. */
+  getNames(): Sequence<OUString> {
+    return new StringValues(
+      {
+        /** Borrows source string values at original logical addresses. @param offset - Byte offset. @returns Actual name. */ get: (
+          offset: number,
+        ) => this.m_aValues[offset / 8]?.Name.getDataAddress(),
+      },
+      this.m_aValues.length,
+    );
+  }
+  /** Original const vector view. @returns Borrowed original copied values. */
+  getProperties(): readonly PropertyValue[] {
+    return this.m_aValues;
+  }
+  /** Original vector/member destructor. @returns Nothing. */
+  dispose(): void {
+    for (const value of this.m_aValues) {
+      value.Value.dispose();
+      value.Name.dispose();
+    }
+    this.m_aValues.length = 0;
+  }
+}
+const AnyValues = Sequence.specialize<Any>("Any", 24);
+const StringValues = Sequence.specialize<OUString>("OUString", 8);
+
+import type { SwXStyle } from "../../core/unocore/unostyle";
+import type { Property } from "../../../../udkapi/com/sun/star/beans/Property";
+import { PropertyState } from "../../../../udkapi/com/sun/star/beans/PropertyState";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";

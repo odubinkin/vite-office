@@ -373,3 +373,153 @@ import { SetPropertyValues } from "../../core/unocore/unocrsrhelper";
 import { SetAttrMode } from "../../../inc/swtypes";
 
 import type { RtfStyleDefinition } from "./rtfdocumentimpl.context";
+
+/** Original deduplicateStyleTable returns a second owned table; raw source entries remain the run-reference input. @param table - Original first-entry table. @returns Owned deduplicated table. */
+export function deduplicateRtfStyleTable(
+  table: ReadonlyMap<number, ReferencePointer<Properties>>,
+): Map<number, ReferencePointer<Properties>> {
+  const result = new Map<number, ReferencePointer<Properties>>();
+  const entries = [...table].sort(
+    /** Native std::map key order. @param a - First entry. @param b - Second entry. @returns Numeric order. */ (
+      a,
+      b,
+    ) => a[0] - b[0],
+  );
+  try {
+    for (const [id, pointer] of entries) {
+      result.set(id, new ReferencePointer(pointer));
+      const properties = pointer.operatorDereference();
+      if (!(properties instanceof RTFReferenceProperties))
+        throw new Error("assert(RTFReferenceProperties)");
+      const base = properties.getSprms().find(N.LN_CT_Style_basedOn);
+      const name = properties.getSprms().find(N.LN_CT_Style_name);
+      try {
+        if (!base.is() || !name.is()) continue;
+        const baseName = base.operatorDereference().getString();
+        const ownName = name.operatorDereference().getString();
+        let parent: RTFReferenceProperties | undefined;
+        try {
+          for (const [, candidatePointer] of entries) {
+            const candidate = candidatePointer.operatorDereference();
+            if (!(candidate instanceof RTFReferenceProperties))
+              throw new Error("assert(RTFReferenceProperties)");
+            const candidateName = candidate.getSprms().find(N.LN_CT_Style_name);
+            try {
+              if (!candidateName.is()) continue;
+              const value = candidateName.operatorDereference().getString();
+              try {
+                if (value.equals(baseName) && !value.equals(ownName)) {
+                  parent = candidate;
+                  break;
+                }
+              } finally {
+                value.dispose();
+              }
+            } finally {
+              candidateName.clear();
+            }
+          }
+        } finally {
+          baseName.dispose();
+          ownName.dispose();
+        }
+        if (parent === undefined) continue;
+        const type = properties.getAttributes().find(N.LN_CT_Style_type);
+        try {
+          if (!type.is()) throw new Error("assert(style type)");
+          const sprms = properties
+            .getSprms()
+            .cloneAndDeduplicate(parent.getSprms(), type.operatorDereference().getInt());
+          const attrs = properties
+            .getAttributes()
+            .cloneAndDeduplicate(parent.getAttributes(), type.operatorDereference().getInt());
+          try {
+            const replacement = new ReferencePointer<Properties>(
+              new RTFReferenceProperties(attrs, sprms),
+            );
+            result.get(id)?.clear();
+            result.set(id, replacement);
+          } finally {
+            sprms.dispose();
+            attrs.dispose();
+          }
+        } finally {
+          type.clear();
+        }
+      } finally {
+        base.clear();
+        name.clear();
+      }
+    }
+    return result;
+  } catch (error) {
+    for (const pointer of result.values()) pointer.clear();
+    throw error;
+  }
+}
+
+/** Applies admitted native style properties through the real stylesheet context, stable sorted vector and UNO style owner. @param mapper - Actual mapper. @param collection - Actual document style. @param properties - Borrowed deduplicated native reference. @returns Nothing. */
+export function ApplyRtfCharacterStyleProperties(
+  mapper: DomainMapper,
+  collection: SwTextFormatColl | SwCharFormat,
+  properties: ReferencePointer<Properties>,
+): void {
+  const entry = new StyleSheetEntry();
+  entry.m_nStyleTypeCode =
+    collection instanceof SwCharFormat ? StyleType.Character : StyleType.Paragraph;
+  const table = mapper.impl.GetStyleSheetTable(),
+    previous = table.GetCurrentEntry();
+  const sorted = new PropValVector();
+  const style = new SwXStyle(
+    collection.GetAttrSet().GetDoc(),
+    collection instanceof SwCharFormat ? "CharacterStyles" : "ParagraphStyles",
+    collection,
+  );
+  mapper.impl.SetStyleSheetImport(true);
+  table.SetCurrentEntry(entry);
+  mapper.impl.PushStyleProperties(entry.m_pProperties);
+  try {
+    mapper.props(properties);
+    for (const value of entry.m_pProperties.GetPropertyValues()) {
+      const name = textValue(value.Name);
+      if (name !== "ParaStyleName" && name !== "CharStyleName") sorted.Insert(value);
+    }
+    const names = sorted.getNames(),
+      values = sorted.getValues();
+    try {
+      try {
+        style.setPropertyValues(names, values);
+      } catch (error) {
+        if (!(error instanceof Exception)) throw error;
+        try {
+          for (const value of sorted.getProperties()) {
+            try {
+              style.setPropertyValue(value.Name, value.Value);
+            } catch (failure) {
+              if (!(failure instanceof Exception)) throw failure;
+              failure.dispose();
+            }
+          }
+        } finally {
+          error.dispose();
+        }
+      }
+    } finally {
+      names.dispose();
+      values.dispose();
+    }
+  } finally {
+    mapper.impl.PopProperties(ContextType.CONTEXT_STYLESHEET);
+    table.SetCurrentEntry(previous);
+    mapper.impl.SetStyleSheetImport(false);
+    entry.dispose();
+    sorted.dispose();
+    style.dispose();
+  }
+}
+import { SwXStyle } from "../../core/unocore/unostyle";
+import { SwCharFormat } from "../../../inc/charfmt";
+import { SwTextFormatColl } from "../../core/doc/fmtcol";
+import { StyleSheetEntry, StyleType, PropValVector } from "../dmapper/StyleSheetTable";
+import { ContextType } from "../dmapper/DomainMapper_Impl";
+import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";

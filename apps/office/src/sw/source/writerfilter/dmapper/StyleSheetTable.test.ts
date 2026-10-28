@@ -261,3 +261,62 @@ it.each([
     expect(Table.ConvertStyleName(name)).toEqual([converted, recognized]);
   },
 );
+
+it("preserves native sorted property duplicates and independent Sequence return lifetimes", /** Actual PropertyValue, OUString, Any and Sequence owners retain their copied content after source values and vector are destroyed. @returns Nothing. */ () => {
+  const sorted = new PropValVector();
+  for (const [name, number] of [
+    ["Z", 1],
+    ["A", 2],
+    ["A", 3],
+    ["M", 4],
+  ] as const) {
+    const key = unicode(name),
+      value = new Any([number], "sal_Int32");
+    const property = new PropertyValue();
+    try {
+      property.Name = key;
+      property.Value = value;
+      sorted.Insert(property);
+    } finally {
+      property.Value.dispose();
+      property.Name.dispose();
+      key.dispose();
+      value.dispose();
+    }
+  }
+  const names = sorted.getNames(),
+    values = sorted.getValues();
+  sorted.dispose();
+  try {
+    const actual: unknown[] = [];
+    for (let index = 0; index < names.getLength(); ++index) {
+      const name = OUString.unacquired(
+        (names.getConstArray() as SequenceElements).get(index * 8) as rtl_uStringSlot,
+      );
+      const value = new Any((values.getConstArray() as SequenceElements).get(index * 24) as Any);
+      const n: [number] = [0];
+      try {
+        expect(value.extract(n, "sal_Int32")).toBe(true);
+        actual.push([text(name), n[0]]);
+      } finally {
+        value.dispose();
+      }
+    }
+    expect(actual).toEqual([
+      ["A", 2],
+      ["A", 3],
+      ["M", 4],
+      ["Z", 1],
+    ]);
+  } finally {
+    names.dispose();
+    values.dispose();
+  }
+});
+import { PropValVector } from "./StyleSheetTable";
+import { unicode, text } from "../../core/unocore/unocrsrhelper";
+import { PropertyValue } from "../../../../udkapi/com/sun/star/beans/PropertyValue";
+import { OUString } from "../../../../sal/inc/rtl/ustring";
+import type { SequenceElements } from "../../../../cppu/inc/com/sun/star/uno/Sequence";
+
+import type { rtl_uStringSlot } from "../../../../sal/inc/rtl/ustring.h";

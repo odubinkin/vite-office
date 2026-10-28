@@ -1,7 +1,6 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
 import { DFLT_ESC_AUTO_SUPER, DFLT_ESC_PROP } from "../../../../editeng/inc/escapementitem";
-import { SvxAutoKernItem } from "../../../../editeng/inc/autokernitem";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
@@ -23,7 +22,6 @@ import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
   RES_CHRATR_FONTSIZE,
-  RES_CHRATR_AUTOKERN,
   RES_BREAK,
   RES_BOX,
   RES_PARATR_CONNECT_BORDER,
@@ -58,7 +56,6 @@ import { StyleSheetTable } from "../dmapper/StyleSheetTable";
 import {
   createRtfLineSpacing,
   createRtfTabStops,
-  hasRtfUnderlineControl,
   resolveRtfRunAttributes,
   resolveRtfBaseline,
   type RtfDocumentImplContext,
@@ -112,7 +109,9 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     mapper = new DomainMapper(model);
   this["m_pMapperStream"] = mapper;
   let complete = false;
+  let nativeStyles: Map<number, ReferencePointer<Properties>> | undefined;
   try {
+    nativeStyles = deduplicateRtfStyleTable(this["m_pStyleTableEntries"]);
     const defaultPage = { ...document.GetPageDesc().GetValue(), ...this["defaultSectionPage"] };
     document.ChgPageDesc({ ...defaultPage, ...this["sectionPages"][0] });
     // DomainMapper sets this for a newly imported Word/RTF document: \tx is absolute.
@@ -143,11 +142,35 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     )) {
       const [name] = StyleSheetTable.ConvertStyleName(definition.name);
       if (definition.styleType === "character") {
-        this["importedCharacterStyles"].set(
-          index,
-          document.FindCharFormatByName(name) ??
-            document.MakeCharFormat(name, document.GetDfltCharFormat()),
-        );
+        const family = model.getStyleFamilies().GetCharacterStyles();
+        const key = unicode(name);
+        try {
+          if (family.hasByName(key)) {
+            const style = family.getStyleByName(key);
+            try {
+              StyleSheetTable.SetPropertiesToDefault(style);
+            } finally {
+              style.dispose();
+            }
+          } else {
+            const descriptor = model.createCharacterStyle();
+            try {
+              family.insertStyleByName(key, descriptor);
+            } finally {
+              descriptor.dispose();
+            }
+          }
+          const collection =
+            name === "Standard"
+              ? document.GetDfltCharFormat()
+              : document.FindCharFormatByName(
+                  SwStyleNameMapper.FillUIName(name, SwGetPoolIdFromName.ChrFmt),
+                );
+          if (collection === undefined) throw new Error("assert(inserted character style)");
+          this["importedCharacterStyles"].set(index, collection);
+        } finally {
+          key.dispose();
+        }
         continue;
       }
       const id = getWriterParagraphStyleId(name);
@@ -169,7 +192,9 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       ) => a[0] - b[0],
     )) {
       const collection =
-        this["importedStyles"].get(index) ?? this["importedCharacterStyles"].get(index);
+        definition.styleType === "character"
+          ? this["importedCharacterStyles"].get(index)
+          : this["importedStyles"].get(index);
       const parent =
         definition.basedOnStyleName === undefined
           ? undefined
@@ -178,7 +203,10 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
                 StyleSheetTable.ConvertStyleName(definition.basedOnStyleName || "0")[0],
               )
             : document.FindCharFormatByName(
-                StyleSheetTable.ConvertStyleName(definition.basedOnStyleName || "0")[0],
+                SwStyleNameMapper.FillUIName(
+                  StyleSheetTable.ConvertStyleName(definition.basedOnStyleName || "0")[0],
+                  SwGetPoolIdFromName.ChrFmt,
+                ),
               );
       if (collection !== undefined && parent !== undefined && parent !== collection)
         collection.SetDerivedFrom(parent);
@@ -216,9 +244,15 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
       for (const slot of ancestry.reverse()) {
         const definition = this["styles"].get(slot);
         const collection =
-          this["importedStyles"].get(slot) ?? this["importedCharacterStyles"].get(slot);
+          definition?.styleType === "character"
+            ? this["importedCharacterStyles"].get(slot)
+            : this["importedStyles"].get(slot);
         if (definition !== undefined && collection !== undefined)
-          this["ApplyStyleDefinition"](collection, definition);
+          this["ApplyStyleDefinition"](
+            collection,
+            definition,
+            nativeStyles.get(slot) as ReferencePointer<Properties>,
+          );
         appliedStyles.add(slot);
       }
     }
@@ -366,6 +400,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
     complete = true;
     return document;
   } finally {
+    for (const pointer of nativeStyles?.values() ?? []) pointer.clear();
     this["m_pMapperStream"] = undefined;
     mapper.dispose();
     model.dispose();
@@ -373,7 +408,7 @@ export function Finish(this: RtfDocumentImplContext, options: SwDocOptions): SwD
   }
 }
 
-/** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
+/** Installs represented RTF stylesheet properties on the document-owned collection.  @param collection - Collection. @param definition - Definition. @param properties - Original deduplicated native style properties. @returns Nothing.  @param this - Original native owner shared by its implementation fragments. */
 export function ApplyStyleDefinition(
   this: RtfDocumentImplContext,
   collection: SwTextFormatColl | SwCharFormat,
@@ -385,30 +420,19 @@ export function ApplyStyleDefinition(
     controls: ReadonlySet<string>;
     basedOnStyleIndex?: number;
   },
+  properties: ReferencePointer<Properties>,
 ): void {
+  ApplyRtfCharacterStyleProperties(this["Mapper"](), collection, properties);
   const controls = definition.controls;
   const current = projectWriterCharacterAttributes(collection.GetAttrSet());
   let target: WriterCharacterAttributes = {
     ...current,
-    ...(controls.has("b") ? { bold: definition.character.bold } : {}),
-    ...(controls.has("i") ? { italic: definition.character.italic } : {}),
-    ...(hasRtfUnderlineControl(controls)
-      ? {
-          underline: definition.character.underline,
-          underlineStyle: definition.character.underlineStyle,
-          underlineWordMode: definition.character.underlineWordMode ?? current.underlineWordMode,
-        }
-      : {}),
-    ...(controls.has("ulc") ? { underlineColor: definition.character.underlineColor } : {}),
     ...(controls.has("strike") || controls.has("striked")
       ? { strikeout: definition.character.strikeout }
       : {}),
     ...(controls.has("super") || controls.has("sub") || controls.has("up") || controls.has("dn")
       ? { escapement: definition.character.escapement }
       : {}),
-    ...(controls.has("f") ? { fontFamily: definition.character.fontFamily } : {}),
-    ...(controls.has("fs") ? { fontSizeTwips: definition.character.fontSizeTwips } : {}),
-    ...(controls.has("cf") ? { color: definition.character.color } : {}),
     ...(controls.has("highlight") ? { highlight: definition.character.highlight } : {}),
   };
   if (definition.baselineHalfPoints !== undefined) {
@@ -441,8 +465,6 @@ export function ApplyStyleDefinition(
   } finally {
     characterFormat.Dispose();
   }
-  if (definition.autoKerning !== undefined)
-    collection.SetFormatAttr(new SvxAutoKernItem(definition.autoKerning, RES_CHRATR_AUTOKERN));
   if (!(collection instanceof SwTextFormatColl)) return;
   const paragraph = definition.paragraph;
   if (
@@ -686,3 +708,12 @@ import {
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { DomainMapper } from "../dmapper/DomainMapper";
 import type { ReferencePointer, Properties } from "../inc/dmapper/resourcemodel";
+
+import {
+  ApplyRtfCharacterStyleProperties,
+  deduplicateRtfStyleTable,
+} from "./rtfdocumentimpl.character";
+
+import { unicode } from "../../core/unocore/unocrsrhelper";
+import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";
+import { SwGetPoolIdFromName } from "../../../inc/SwGetPoolIdFromName";
