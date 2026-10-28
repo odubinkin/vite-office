@@ -4,7 +4,7 @@ import { expect, it } from "vitest";
 
 import { SvxAdjustItem } from "../../../../editeng/inc/adjustitem";
 
-import { DFLT_ESC_PROP, DFLT_ESC_SUPER } from "../../../../editeng/inc/escapementitem";
+import { DFLT_ESC_PROP, DFLT_ESC_AUTO_SUPER } from "../../../../editeng/inc/escapementitem";
 
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 
@@ -799,7 +799,7 @@ it("imports first-line indentation, strikeout, superscript and hyperlink field r
         ) => run.text === "raised",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_SUPER,
+      offset: DFLT_ESC_AUTO_SUPER,
       height: DFLT_ESC_PROP,
     });
     expect(

@@ -49,7 +49,7 @@
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.table-list.test.ts",
-          "marker": "round trips native decoration"
+          "marker": "preserves native RTF decoration"
         },
         {
           "path": "apps/office/src/sw/source/filter/ww8/rtfexport.test.ts",

@@ -419,7 +419,7 @@ it.each([
   },
 );
 
-it("round trips native decoration, hyperlink and first-line paragraph items", /** Checks source RTF controls through writer and mapper. @returns Nothing. */ () => {
+it("preserves native RTF decoration, hyperlink, indentation and escapement reductions", /** Checks source RTF controls through writer and mapper. @returns Nothing. */ () => {
   const source = createWriterDocument();
   const node = source.paragraphs[0];
   if (node === undefined) throw new Error("Missing paragraph.");
@@ -444,7 +444,7 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
   node.SetText(
     runs
       .map(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text,
       )
@@ -457,6 +457,9 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
   let imported;
   try {
     const bytes = RtfExport.WriteDocument(source);
+    // Source emits this legacy extension, which current writerfilter deliberately does not consume.
+    expect(new TextDecoder().decode(bytes)).toContain(String.raw`{\*\updnprop7000}\up10`);
+    expect(new TextDecoder().decode(bytes)).toContain(String.raw`{\*\updnprop7101}\up6`);
     imported = new RtfDocumentImpl().Resolve(new RtfTokenizer(bytes).Tokenize());
     const restored = imported.paragraphs[0];
     expect(restored?.GetParagraphFirstLineIndent()).toBe(-180);
@@ -464,40 +467,41 @@ it("round trips native decoration, hyperlink and first-line paragraph items", /*
     const projected = projectWriterTextRuns(restored);
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "struck",
       )?.attributes.strikeout,
     ).toBe(FontStrikeout.STRIKEOUT_DOUBLE);
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === " raised ",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_SUPER,
+      offset: DFLT_ESC_AUTO_SUPER,
       height: DFLT_ESC_PROP,
     });
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "lift ",
       )?.attributes.escapement,
     ).toEqual({
       offset: 25,
-      height: 70,
+      height: 100,
     });
     expect(
       projected.find(
-        /** Checks round trips native decoration, hyperlink and first-line paragraph items. @param run - Run. @returns Test completion or assertion result. */ (
+        /** Checks preserves native RTF decoration, hyperlink, indentation and escapement reductions. @param run - Run. @returns Test completion or assertion result. */ (
           run,
         ) => run.text === "auto ",
       )?.attributes.escapement,
     ).toEqual({
-      offset: DFLT_ESC_AUTO_SUPER,
-      height: 71,
+      // The retained native stylesheet/default lookup yields 10pt: 6 / 2 / 10 * 100.
+      offset: 30,
+      height: 100,
     });
     expect(
       projected.find(

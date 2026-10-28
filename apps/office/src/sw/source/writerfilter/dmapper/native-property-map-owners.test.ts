@@ -1,4 +1,5 @@
 /** @fileoverview Native paragraph/stylesheet/table property-map ownership, exact frame defaults/reset and independent table-value merge semantics on actual Writer contexts. */
+import { DomainMapper } from "./DomainMapper";
 import { expect, it } from "vitest";
 import {
   ParagraphProperties,
@@ -12,7 +13,7 @@ import {
   WW_OUTLINE_MIN,
 } from "./PropertyMap";
 import { StyleSheetEntry } from "./StyleSheetTable";
-import { DomainMapper_Impl, ContextType as C } from "./DomainMapper_Impl";
+import { ContextType as C } from "./DomainMapper_Impl";
 import { SwDoc } from "../../core/doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
 import { Any } from "../../../../cppu/inc/com/sun/star/uno/Any";
@@ -172,7 +173,7 @@ it("keeps native frame defaults including the wrap sentinel and separates list/n
 it("uses native derived property owners for actual paragraph contexts and style entries without sharing components", /** Refactors the real producer rather than constructing a test-only owner graph. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML).impl,
     entry = new StyleSheetEntry();
   const paragraph = mapper.PushProperties(C.CONTEXT_PARAGRAPH);
   expect(paragraph).toBeInstanceOf(ParagraphPropertyMap);

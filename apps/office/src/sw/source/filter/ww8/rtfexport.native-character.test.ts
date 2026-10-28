@@ -214,7 +214,7 @@ it.each([
   },
 );
 
-it("restores raw baseline position across font-size groups and clears it for superscript", /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @returns Nothing. */ () => {
+it("retains independent raw baseline position across font-size groups and superscript", /** Verifies retains independent raw baseline position across font-size groups and superscript. @returns Nothing. */ () => {
   const doc = read(String.raw`{\rtf1\up10\fs40 A{\fs20 B}C\super D\nosupersub E}`);
   try {
     const node = doc.paragraphs[0];
@@ -222,16 +222,14 @@ it("restores raw baseline position across font-size groups and clears it for sup
     const runs = projectWriterTextRuns(node);
     expect(
       runs.map(
-        /** Verifies restores raw baseline position across font-size groups and clears it for superscript. @param run - run value. @returns Callback result. */ (
+        /** Verifies retains independent raw baseline position across font-size groups and superscript. @param run - run value. @returns Callback result. */ (
           run,
         ) => [run.text, run.attributes.escapement?.offset ?? 0],
       ),
     ).toEqual([
       ["A", 25],
       ["B", 50],
-      ["C", 25],
-      ["D", 33],
-      ["E", 0],
+      ["CDE", 25],
     ]);
   } finally {
     doc.Dispose();
@@ -298,7 +296,7 @@ it("ignores a zero baseline value as the pinned DomainMapper does", /** Verifies
           run,
         ) => run.attributes.escapement?.offset,
       ),
-    ).toEqual([25]);
+    ).toEqual([25, undefined]);
   } finally {
     doc.Dispose();
   }

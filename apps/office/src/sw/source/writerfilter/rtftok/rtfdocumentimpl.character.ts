@@ -1,14 +1,13 @@
 /** @fileoverview RTFDocumentImpl::getProperties character-reference normalization at the existing Writer run boundary, using actual native RTFValue/RTFSprms containers. Other mapper property families retain their separate consumers. */
 import { OUString } from "../../../../sal/inc/rtl/ustring";
 import { FontLineStyle as L } from "../../../../tools/inc/fontenum";
-import { COL_AUTO } from "../../../../tools/inc/color";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
 import type { RtfRun } from "./rtfdocumentimpl.context";
 import { hasRtfUnderlineControl } from "./rtfdocumentimpl.context";
 import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
-import { putNestedAttribute, getNestedAttribute } from "./rtfdocumentimpl.properties";
+import { putNestedAttribute } from "./rtfdocumentimpl.properties";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import {
   RES_CHRATR_WEIGHT,
@@ -39,7 +38,7 @@ const underline = new Map<number, number>([
   [L.LINESTYLE_DOUBLEWAVE, N.LN_Value_ST_Underline_wavyDouble],
 ]);
 /** Copies a real host UTF16 boundary value into the native string constructor. @param value - Character value. @returns Unacquired value pointer. */
-function stringValue(value: string): RTFValue {
+export function stringValue(value: string): RTFValue {
   const text = new OUString(
     Uint16Array.from(
       value.split(""),
@@ -270,69 +269,6 @@ function lcl_copyFlatten(
   }
   for (const [id, value] of properties.getAttributes()) attributes.set(id, value);
 }
-/** Projects the native normalization result only for the remaining legacy character callbacks; the actual native tree is retained for model insertion. @param properties - Actual native pointer. @param inherited - Style values. @returns Effective projected values. */
-export function resolveRtfCharacterStyleValues(
-  properties: ReferencePointer<Properties>,
-  inherited: WriterCharacterAttributes,
-): WriterCharacterAttributes {
-  const reference = properties.operatorDereference();
-  if (!(reference instanceof RTFReferenceProperties))
-    throw new Error("assert(RTFReferenceProperties)");
-  const normalized = reference.getSprms();
-  const result = { ...inherited };
-  for (const [id, referenceValue] of normalized) {
-    const value = referenceValue.operatorDereference();
-    if (id === N.LN_EG_RPrBase_b) result.bold = value.getInt() !== 0;
-    else if (id === N.LN_EG_RPrBase_i) result.italic = value.getInt() !== 0;
-    else if (id === N.LN_EG_RPrBase_sz) result.fontSizeTwips = value.getInt() * 10;
-  }
-  const font = getNestedAttribute(normalized, N.LN_EG_RPrBase_rFonts, N.LN_CT_Fonts_ascii);
-  try {
-    if (font.is()) {
-      const text = font.operatorDereference().getString();
-      try {
-        result.fontFamily = textValue(text);
-      } finally {
-        text.dispose();
-      }
-    }
-  } finally {
-    font.dispose();
-  }
-  const color = getNestedAttribute(normalized, N.LN_EG_RPrBase_color, N.LN_CT_Color_val);
-  try {
-    if (color.is()) {
-      const value = color.operatorDereference().getInt();
-      result.color =
-        value === COL_AUTO.toInt32()
-          ? "auto"
-          : `#${(value & 0xffffff).toString(16).padStart(6, "0")}`;
-    }
-  } finally {
-    color.dispose();
-  }
-  const line = getNestedAttribute(normalized, N.LN_EG_RPrBase_u, N.LN_CT_Underline_val);
-  try {
-    if (line.is()) {
-      const value = line.operatorDereference().getInt();
-      const style =
-        value === N.LN_Value_ST_Underline_words
-          ? L.LINESTYLE_SINGLE
-          : ([...underline].find(
-              /** Finds the native line-style value. @param entry - Mapping. @returns Token match. */ (
-                entry,
-              ) => entry[1] === value,
-            )?.[0] ?? L.LINESTYLE_NONE);
-      result.underline = style !== L.LINESTYLE_NONE;
-      result.underlineStyle = style;
-      result.underlineWordMode = value === N.LN_Value_ST_Underline_words;
-    }
-  } finally {
-    line.dispose();
-  }
-  return result;
-}
-
 /** Copies native UTF16 units across the existing host run boundary without Unicode scalar replacement. @param value - Borrowed actual native string. @returns Host text. */
 function textValue(value: OUString): string {
   let result = "";
@@ -359,10 +295,24 @@ export function ApplyRtfCharacterProperties(
   mark.Dispose();
   mapper.startCharacterGroup();
   try {
+    const paragraphStyle = node.GetTextFormatColl();
+    mapper.impl.SetCurrentParaStyleName(
+      SwStyleNameMapper.GetProgName(paragraphStyle.poolId, paragraphStyle.GetName()),
+    );
     mapper.props(properties);
+    mapper.impl.processDeferredCharacterProperties();
     const context = mapper.impl.GetTopContext();
     if (context === null) throw new Error("assert(character context)");
-    SetPropertyValues(range, context.GetPropertyValues(), SetAttrMode.NOFORMATATTR);
+    // This atomic binding has already installed the actual named SwFormatCharFormat hint.
+    // Keep its mapper property for final-height lookup without applying the reference twice.
+    SetPropertyValues(
+      range,
+      context.GetPropertyValues().filter(
+        /** Leaves named-style insertion with the existing actual hint owner. @param property - Mapper value. @returns Direct-property admission. */
+        (property) => textValue(property.Name) !== "CharStyleName",
+      ),
+      SetAttrMode.NOFORMATATTR,
+    );
   } finally {
     mapper.endCharacterGroup();
     range.Dispose();
@@ -472,6 +422,28 @@ export function ApplyRtfCharacterStyleProperties(
     collection instanceof SwCharFormat ? StyleType.Character : StyleType.Paragraph;
   const table = mapper.impl.GetStyleSheetTable(),
     previous = table.GetCurrentEntry();
+  const reference = properties.operatorDereference();
+  if (!(reference instanceof RTFReferenceProperties))
+    throw new Error("assert(RTFReferenceProperties)");
+  for (const [id, target] of [
+    [N.LN_CT_Style_name, "m_sStyleName"],
+    [N.LN_CT_Style_basedOn, "m_sBaseStyleIdentifier"],
+  ] as const) {
+    const pointer = reference.getSprms().find(id);
+    try {
+      if (pointer.is()) {
+        const name = pointer.operatorDereference().getString();
+        try {
+          entry[target] = textValue(name);
+        } finally {
+          name.dispose();
+        }
+      }
+    } finally {
+      pointer.dispose();
+    }
+  }
+  entry.m_sStyleIdentifierD = entry.m_sStyleName;
   const sorted = new PropValVector();
   const style = new SwXStyle(
     collection.GetAttrSet().GetDoc(),
@@ -481,8 +453,10 @@ export function ApplyRtfCharacterStyleProperties(
   mapper.impl.SetStyleSheetImport(true);
   table.SetCurrentEntry(entry);
   mapper.impl.PushStyleProperties(entry.m_pProperties);
+  let retained = false;
   try {
     mapper.props(properties);
+    mapper.ProcessDeferredStyleCharacterProperties();
     for (const value of entry.m_pProperties.GetPropertyValues()) {
       const name = textValue(value.Name);
       if (name !== "ParaStyleName" && name !== "CharStyleName") sorted.Insert(value);
@@ -511,11 +485,13 @@ export function ApplyRtfCharacterStyleProperties(
       names.dispose();
       values.dispose();
     }
+    table.AppendEntry(entry);
+    retained = true;
   } finally {
     mapper.impl.PopProperties(ContextType.CONTEXT_STYLESHEET);
     table.SetCurrentEntry(previous);
     mapper.impl.SetStyleSheetImport(false);
-    entry.dispose();
+    if (!retained) entry.dispose();
     sorted.dispose();
     style.dispose();
   }
@@ -526,3 +502,5 @@ import { SwTextFormatColl } from "../../core/doc/fmtcol";
 import { StyleSheetEntry, StyleType, PropValVector } from "../dmapper/StyleSheetTable";
 import { ContextType } from "../dmapper/DomainMapper_Impl";
 import { Exception } from "../../../../cppu/inc/com/sun/star/uno/Exception";
+
+import { SwStyleNameMapper } from "../../core/doc/SwStyleNameMapper";

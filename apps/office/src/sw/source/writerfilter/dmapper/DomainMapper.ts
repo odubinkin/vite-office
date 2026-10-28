@@ -17,6 +17,9 @@ import {
 } from "../../../../offapi/com/sun/star/style/BreakType";
 import {
   DFLT_ESC_PROP,
+  DFLT_ESC_SUPER,
+  DFLT_ESC_SUB,
+  MAX_ESC_POS,
   DFLT_ESC_AUTO_SUPER,
   DFLT_ESC_AUTO_SUB,
 } from "../../../../editeng/inc/escapementitem";
@@ -68,7 +71,7 @@ export class DomainMapper implements Properties {
     readonly model: SwXTextDocument,
     documentType: SourceDocumentType,
   ) {
-    this.impl = new DomainMapper_Impl(model, documentType);
+    this.impl = new DomainMapper_Impl(this, model, documentType);
   }
   /** Original source-format trait. @returns Whether RTF. */
   IsRTFImport(): boolean {
@@ -229,6 +232,50 @@ export class DomainMapper implements Properties {
         break;
     }
   }
+  /** Original deferred stylesheet boundary. @returns Nothing. */
+  ProcessDeferredStyleCharacterProperties(): void {
+    if (this.impl.GetTopContextType() !== C.CONTEXT_STYLESHEET)
+      throw new Error("assert(CONTEXT_STYLESHEET)");
+    this.impl.processDeferredCharacterProperties(false);
+  }
+  /** Original position calculation uses final native height, round-away-from-zero and source limits. @param properties - Current stream's deferred map. @param charContext - Whether the native caller requires a character context. @returns Nothing. */
+  processDeferredCharacterProperties(
+    properties: ReadonlyMap<number, Any>,
+    charContext: boolean,
+  ): void {
+    if (charContext && this.impl.GetTopContextType() !== C.CONTEXT_CHARACTER)
+      throw new Error("assert(CONTEXT_CHARACTER)");
+    const context = this.impl.GetTopContext();
+    if (!context) throw new Error("assert(context)");
+    for (const [id, value] of [...properties].sort(
+      /** Retains the native resource map order. @param a - First entry. @param b - Second entry. @returns Numeric comparison. */ (
+        a,
+        b,
+      ) => a[0] - b[0],
+    )) {
+      if (id !== N.LN_EG_RPrBase_position) continue;
+      const n: [number] = [0];
+      value.extract(n, "sal_Int32");
+      let position = 0;
+      if (n[0]) {
+        const height = this.impl.GetAnyProperty(P.PROP_CHAR_HEIGHT, context),
+          size: [number] = [0];
+        try {
+          height.extract(size, "double");
+        } finally {
+          height.dispose();
+        }
+        position = size[0]
+          ? Math.sign(n[0]) * Math.round(Math.abs((n[0] / 2 / size[0]) * 100))
+          : n[0] > 0
+            ? DFLT_ESC_SUPER
+            : DFLT_ESC_SUB;
+      }
+      position = Math.max(-MAX_ESC_POS, Math.min(MAX_ESC_POS, position));
+      this.insert(context, P.PROP_CHAR_ESCAPEMENT, new Any([position], "sal_Int16"));
+      this.insert(context, P.PROP_CHAR_ESCAPEMENT_HEIGHT, new Any([n[0] ? 100 : 0], "sal_Int8"));
+    }
+  }
   /** Native consumed modifier handlers preserve script families and typed UNO values. @param modifier - Modifier. @returns Nothing. */
   sprm(modifier: Sprm): void {
     const context = this.impl.GetTopContext();
@@ -338,6 +385,56 @@ export class DomainMapper implements Properties {
         }
         break;
       }
+      case N.LN_EG_RPrBase_rStyle: {
+        const name = value?.getString();
+        if (!name) break;
+        try {
+          const table = this.impl.GetStyleSheetTable(),
+            converted = table.ConvertStyleNameExt(text(name));
+          if (
+            table.FindStyleSheetByConvertedStyleName(converted)?.m_nStyleTypeCode ===
+            StyleType.Character
+          ) {
+            this.insert(context, P.PROP_CHAR_STYLE_NAME, stringAny(converted));
+          }
+        } finally {
+          name.dispose();
+        }
+        break;
+      }
+      case N.LN_EG_RPrBase_position:
+        if (n) {
+          if (!this.impl.IsStyleSheetImport() && this.impl.GetTopContextType() !== C.CONTEXT_LIST) {
+            const position = new Any([n], "sal_Int32");
+            try {
+              this.impl.deferCharacterProperty(id, position);
+            } finally {
+              position.dispose();
+            }
+          } else if (!this.impl.IsDocDefaultsImport()) {
+            const entry = this.impl.GetStyleSheetTable().GetCurrentEntry();
+            if (entry?.m_nStyleTypeCode === StyleType.Paragraph && n < 0) {
+              const position = new Any([n], "sal_Int32");
+              try {
+                this.impl.deferCharacterProperty(id, position);
+              } finally {
+                position.dispose();
+              }
+            } else {
+              this.insert(
+                context,
+                P.PROP_CHAR_ESCAPEMENT,
+                new Any([n > 0 ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB], "sal_Int16"),
+              );
+              this.insert(
+                context,
+                P.PROP_CHAR_ESCAPEMENT_HEIGHT,
+                new Any([DFLT_ESC_PROP], "sal_Int8"),
+              );
+            }
+          }
+        }
+        break;
       case N.LN_EG_RPrBase_vertAlign: {
         const string = value?.getString();
         const alignment = string ? text(string) : "";

@@ -127,7 +127,6 @@ export class RtfDocumentImpl {
   protected nextCellPaddings = new Map<SvxBoxItemLine, number>();
   protected rowDefaultPaddings = new Map<SvxBoxItemLine, number>();
   protected inTable = false;
-  protected pendingUpDn: { height: number; automatic: boolean } | undefined;
   protected defaultTabStop = 720;
   protected firstRun = true;
   protected pendingPageBreak = false;
@@ -175,7 +174,7 @@ export class RtfDocumentImpl {
     definition: {
       character: WriterCharacterAttributes;
       autoKerning?: boolean;
-      baselineHalfPoints?: number;
+
       paragraph: RtfParagraphState;
       controls: ReadonlySet<string>;
       basedOnStyleIndex?: number;
@@ -216,7 +215,6 @@ export class RtfDocumentImpl {
       equalControls(previous.controls, state.characterControls) &&
       previous.characterSprms.equals(state.characterSprms) &&
       previous.autoKerning === state.autoKerning &&
-      previous.baselineHalfPoints === state.baselineHalfPoints &&
       previous.characterStyleIndex === state.characterStyleIndex &&
       previous.paragraphStyleIndex === state.paragraph.styleIndex &&
       previous.currentCharacterStyleIndex === state.currentCharacterStyleIndex &&
@@ -237,9 +235,7 @@ export class RtfDocumentImpl {
         ...(state.characterStyleIndex === undefined
           ? {}
           : { characterStyleIndex: state.characterStyleIndex }),
-        ...(state.baselineHalfPoints === undefined
-          ? {}
-          : { baselineHalfPoints: state.baselineHalfPoints }),
+
         ...(state.autoKerning === undefined ? {} : { autoKerning: state.autoKerning }),
         controls: new Set(state.characterControls),
         ...(state.hyperlink === undefined ? {} : { hyperlink: state.hyperlink }),

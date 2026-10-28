@@ -1,11 +1,4 @@
 /** @fileoverview RtfDocumentImpl dispatch implementation, called with the original native owner as this. */
-import {
-  DFLT_ESC_AUTO_SUB,
-  DFLT_ESC_AUTO_SUPER,
-  DFLT_ESC_PROP,
-  DFLT_ESC_SUB,
-  DFLT_ESC_SUPER,
-} from "../../../../editeng/inc/escapementitem";
 import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
@@ -39,9 +32,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
         previous === undefined ? new RTFSprms() : new RTFSprms(previous.characterSprms),
       starred: false,
       character: { ...(previous?.character ?? DEFAULT_CHARACTER) },
-      ...(previous?.baselineHalfPoints === undefined
-        ? {}
-        : { baselineHalfPoints: previous.baselineHalfPoints }),
+
       ...(previous?.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
       paragraph: { ...(previous?.paragraph ?? DEFAULT_PARAGRAPH) },
       fontIndex: previous?.fontIndex ?? 0,
@@ -100,9 +91,7 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
               : { nextStyleName: previous.nextStyleName }),
             styleType: previous.styleType ?? "paragraph",
             character: { ...previous.character },
-            ...(previous.baselineHalfPoints === undefined
-              ? {}
-              : { baselineHalfPoints: previous.baselineHalfPoints }),
+
             ...(previous.autoKerning === undefined ? {} : { autoKerning: previous.autoKerning }),
             paragraph: { ...previous.paragraph },
             controls: new Set(previous.styleControls),
@@ -236,14 +225,6 @@ export function Dispatch(this: RtfDocumentImplContext, token: RtfToken): void {
     else Reflect.deleteProperty(state, "hyperlink");
     return;
   }
-  if (token.name === "updnprop" && token.parameter !== undefined && state.starred) {
-    this["pendingUpDn"] = {
-      height: Math.floor(token.parameter / 100),
-      automatic: token.parameter % 100 === 1,
-    };
-    state.starred = false;
-    return;
-  }
   if (state.destination === "body" && (token.name === "bkmkstart" || token.name === "bkmkend")) {
     state.destination = token.name === "bkmkstart" ? "bookmarkstart" : "bookmarkend";
     state.bookmarkName = "";
@@ -374,7 +355,6 @@ export function DispatchBodyControl(
   parameter: number | undefined,
   state: RtfState,
 ): void {
-  if ((name === "up" || name === "dn") && parameter === 0) return;
   if (CHARACTER_PROPERTY_CONTROLS.has(name)) state.characterControls.add(name);
   if (name === "sect") {
     if (this["runs"].length > 0) this["CommitParagraph"](state);
@@ -682,7 +662,6 @@ export function DispatchBodyControl(
     return;
   }
   if (name === "plain") {
-    delete state.baselineHalfPoints;
     state.characterSprms.clear();
     delete state.characterStyleIndex;
     delete state.currentCharacterStyleIndex;
@@ -743,39 +722,26 @@ export function DispatchBodyControl(
             : FontStrikeout.STRIKEOUT_SINGLE,
     };
   } else if (name === "super" || name === "sub") {
-    delete state.baselineHalfPoints;
-    state.character = {
-      ...state.character,
-      escapement: {
-        offset: name === "super" ? DFLT_ESC_SUPER : DFLT_ESC_SUB,
-        height: DFLT_ESC_PROP,
-      },
-    };
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_vertAlign,
+      stringValue(name === "super" ? "superscript" : "subscript"),
+    );
   } else if (name === "nosupersub") {
-    delete state.baselineHalfPoints;
-    const character = { ...state.character };
-    Reflect.deleteProperty(character, "escapement");
-    state.character = character;
-  } else if ((name === "up" || name === "dn") && parameter !== undefined) {
-    const up = name === "up",
-      fontHeight = state.character.fontSizeTwips ?? 240;
-    if (this["pendingUpDn"]?.automatic) delete state.baselineHalfPoints;
-    else state.baselineHalfPoints = parameter * (up ? 1 : -1);
-    const offset = this["pendingUpDn"]?.automatic
-      ? up
-        ? DFLT_ESC_AUTO_SUPER
-        : DFLT_ESC_AUTO_SUB
-      : Math.round(((parameter * 1000) / fontHeight) * (up ? 1 : -1));
-    state.character = {
-      ...state.character,
-      escapement: { offset, height: this["pendingUpDn"]?.height ?? 100 },
-    };
-    this["pendingUpDn"] = undefined;
+    state.characterSprms.erase(N.LN_EG_RPrBase_vertAlign);
+  } else if (name === "up" || name === "dn") {
+    state.characterSprms.set(
+      N.LN_EG_RPrBase_position,
+      new RTFValue((parameter ?? 6) * (name === "up" ? 1 : -1)),
+    );
   } else if (name === "ls" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, listOverride: parameter };
   else if (name === "cs" && parameter !== undefined) {
     state.currentCharacterStyleIndex = parameter;
-    if (this["styles"].has(parameter)) state.characterStyleIndex = parameter;
+    if (this["styles"].has(parameter)) {
+      state.characterStyleIndex = parameter;
+      const name = this["m_aStyleNames"].get(parameter);
+      if (name) state.characterSprms.set(N.LN_EG_RPrBase_rStyle, stringValue(name));
+    }
   } else if (name === "s" && parameter !== undefined)
     state.paragraph = { ...state.paragraph, styleIndex: parameter };
   else if (name === "ilvl" && parameter !== undefined)
@@ -886,3 +852,5 @@ import { RTFSprms } from "./rtfsprm";
 import { RTFValue } from "./rtfvalue";
 import { NS_ooxml as N } from "../inc/ooxml/resourceids";
 import { writerColorFromPrimitive } from "../../core/attr/swatrset";
+
+import { stringValue } from "./rtfdocumentimpl.character";

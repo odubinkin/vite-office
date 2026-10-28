@@ -1,12 +1,11 @@
 /** @fileoverview Internal declaration view of RtfDocumentImpl; all fragments operate on the original owner and retain its state. */
-import { DFLT_ESC_SUPER, DFLT_ESC_SUB, MAX_ESC_POS } from "../../../../editeng/inc/escapementitem";
 import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
 import { SvxLineSpaceRule, SvxNumType } from "../../../../editeng/inc/svxenum";
 import { SvxTabAdjust, SvxTabStop, SvxTabStopItem } from "../../../../editeng/inc/tstpitem";
 import { SvxBoxItemLine } from "../../../../editeng/source/items/frmitems";
 import * as NumberingType from "../../../../offapi/com/sun/star/style/NumberingType";
 import { VertOrientation } from "../../../../offapi/com/sun/star/text/VertOrientation";
-import { FontLineStyle, FontStrikeout } from "../../../../tools/inc/fontenum";
+import { FontLineStyle } from "../../../../tools/inc/fontenum";
 import { RES_PARATR_LINESPACING, RES_PARATR_TABSTOP } from "../../../inc/hintids";
 import type { WriterPageDescriptorValue } from "../../core/layout/pagedesc";
 import { type WriterHyperlink } from "../../core/txtnode/fmtatr2";
@@ -76,7 +75,7 @@ export interface RtfState {
   starred: boolean;
   character: WriterCharacterAttributes;
   autoKerning?: boolean;
-  baselineHalfPoints?: number;
+
   paragraph: RtfParagraphState;
   fontIndex: number;
   currentCodepage: number;
@@ -113,7 +112,6 @@ export interface RtfRun extends WriterTextRun {
   readonly currentCharacterStyleIndex?: number;
   readonly controls: ReadonlySet<string>;
   readonly autoKerning?: boolean;
-  readonly baselineHalfPoints?: number;
 }
 /** Ordered body content with native rows and cell paragraphs. */
 export type RtfBlock =
@@ -329,94 +327,6 @@ export function equalCharacter(
     a.escapement?.height === b.escapement?.height
   );
 }
-/** Resolves the deferred OOXML position with native rounding and clamping. @param position - Signed half points. @param fontHeight - Final font height in twips. @returns Percentage offset. */
-export function resolveRtfBaseline(position: number, fontHeight: number): number {
-  const value =
-    fontHeight === 0
-      ? position > 0
-        ? DFLT_ESC_SUPER
-        : DFLT_ESC_SUB
-      : Math.sign(position) * Math.round(Math.abs((position * 1000) / fontHeight));
-  return Math.max(-MAX_ESC_POS, Math.min(MAX_ESC_POS, value));
-}
-/** Keeps absent RTF direct controls inherited from the selected paragraph style.  @param run - Run. @param inherited - Inherited. @returns The WriterCharacterAttributes result. */
-export function resolveRtfRunAttributes(
-  run: Omit<RtfRun, "characterSprms">,
-  inherited: WriterCharacterAttributes,
-): WriterCharacterAttributes {
-  const controls = run.controls;
-  const has = /** Implements has. @param names - Names. @returns The computed result. */ (
-    ...names: string[]
-  ) =>
-    names.some(
-      /** Tests one original RTF control name. @param name - Control keyword. @returns Whether the run declares it. */ (
-        name,
-      ) => controls.has(name),
-    );
-  return {
-    bold: has("b") ? run.attributes.bold : inherited.bold,
-    italic: has("i") ? run.attributes.italic : inherited.italic,
-    underline: hasRtfUnderlineControl(controls) ? run.attributes.underline : inherited.underline,
-    ...(hasRtfUnderlineControl(controls)
-      ? { underlineStyle: run.attributes.underlineStyle }
-      : inherited.underlineStyle === undefined
-        ? {}
-        : { underlineStyle: inherited.underlineStyle }),
-    ...(controls.has("ulc")
-      ? { underlineColor: run.attributes.underlineColor ?? "auto" }
-      : inherited.underlineColor === undefined
-        ? {}
-        : { underlineColor: inherited.underlineColor }),
-    ...((run.attributes.underlineWordMode ?? inherited.underlineWordMode) === undefined
-      ? {}
-      : { underlineWordMode: run.attributes.underlineWordMode ?? inherited.underlineWordMode }),
-    ...(has("f")
-      ? run.attributes.fontFamily === undefined
-        ? {}
-        : { fontFamily: run.attributes.fontFamily }
-      : inherited.fontFamily === undefined
-        ? {}
-        : { fontFamily: inherited.fontFamily }),
-    ...(has("fs")
-      ? run.attributes.fontSizeTwips === undefined
-        ? {}
-        : { fontSizeTwips: run.attributes.fontSizeTwips }
-      : inherited.fontSizeTwips === undefined
-        ? {}
-        : { fontSizeTwips: inherited.fontSizeTwips }),
-    ...(has("cf")
-      ? { color: run.attributes.color ?? "auto" }
-      : inherited.color === undefined
-        ? {}
-        : { color: inherited.color }),
-    ...(has("highlight")
-      ? { highlight: run.attributes.highlight ?? "transparent" }
-      : inherited.highlight === undefined
-        ? {}
-        : { highlight: inherited.highlight }),
-    ...(has("strike", "striked")
-      ? { strikeout: run.attributes.strikeout ?? FontStrikeout.STRIKEOUT_NONE }
-      : inherited.strikeout === undefined
-        ? {}
-        : { strikeout: inherited.strikeout }),
-    ...(has("super", "sub", "up", "dn", "nosupersub")
-      ? {
-          escapement:
-            run.baselineHalfPoints === undefined
-              ? (run.attributes.escapement ?? { offset: 0, height: 100 })
-              : {
-                  offset: resolveRtfBaseline(
-                    run.baselineHalfPoints,
-                    (has("fs") ? run.attributes.fontSizeTwips : inherited.fontSizeTwips) ?? 240,
-                  ),
-                  height: run.attributes.escapement?.height ?? 100,
-                },
-        }
-      : inherited.escapement === undefined
-        ? {}
-        : { escapement: inherited.escapement }),
-  };
-}
 /** Compares explicit-control sets before adjacent RTF runs are coalesced.  @param left - Left. @param right - Right. @returns The boolean result. */
 export function equalControls(left: ReadonlySet<string>, right: ReadonlySet<string>): boolean {
   return (
@@ -562,7 +472,7 @@ export interface RtfStyleDefinition {
   readonly styleType: "paragraph" | "character";
   readonly character: WriterCharacterAttributes;
   readonly autoKerning?: boolean;
-  readonly baselineHalfPoints?: number;
+
   readonly paragraph: RtfParagraphState;
   readonly controls: ReadonlySet<string>;
   readonly basedOnStyleIndex?: number;

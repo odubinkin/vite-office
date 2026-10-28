@@ -1,10 +1,4 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
-import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import {
-  DFLT_ESC_AUTO_SUPER,
-  DFLT_ESC_AUTO_SUB,
-  DFLT_ESC_PROP,
-} from "../../../../editeng/inc/escapementitem";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
@@ -25,7 +19,6 @@ import { SfxInt16Item } from "../../../../svl/source/items/intitem";
 import { SwFrameSize } from "../../../inc/fmtfsize";
 import { SwFormatRowSplit } from "../../../inc/fmtrowsplt";
 import {
-  RES_CHRATR_FONTSIZE,
   RES_BREAK,
   RES_BOX,
   RES_PARATR_CONNECT_BORDER,
@@ -52,16 +45,10 @@ import { SwpHints } from "../../core/txtnode/ndhints";
 import type { SwTextNode } from "../../core/txtnode/ndtxt";
 import { getSvxAdjust } from "../../core/txtnode/ndtxt-hints";
 import type { WriterCharacterAttributes } from "../../core/txtnode/txatbase";
-import {
-  createSwFormatAutoFormat,
-  projectWriterCharacterAttributes,
-} from "../../core/txtnode/txatbase";
 import { StyleSheetTable } from "../dmapper/StyleSheetTable";
 import {
   createRtfLineSpacing,
   createRtfTabStops,
-  resolveRtfRunAttributes,
-  resolveRtfBaseline,
   type RtfDocumentImplContext,
   type RtfParagraph,
   type RtfParagraphState,
@@ -419,7 +406,7 @@ export function ApplyStyleDefinition(
   definition: {
     character: WriterCharacterAttributes;
     autoKerning?: boolean;
-    baselineHalfPoints?: number;
+
     paragraph: RtfParagraphState;
     controls: ReadonlySet<string>;
     basedOnStyleIndex?: number;
@@ -428,48 +415,6 @@ export function ApplyStyleDefinition(
 ): void {
   ApplyRtfCharacterStyleProperties(this["Mapper"](), collection, properties);
   const controls = definition.controls;
-  const current = projectWriterCharacterAttributes(collection.GetAttrSet());
-  let target: WriterCharacterAttributes = {
-    ...current,
-
-    ...(controls.has("super") || controls.has("sub") || controls.has("up") || controls.has("dn")
-      ? { escapement: definition.character.escapement }
-      : {}),
-  };
-  if (definition.baselineHalfPoints !== undefined) {
-    const position = definition.baselineHalfPoints;
-    // DomainMapper deliberately uses automatic positions for character styles of either sign
-    // and positive paragraph-style positions; negative paragraph positions remain deferred.
-    target = {
-      ...target,
-      escapement:
-        position !== 0 && (position > 0 || collection instanceof SwCharFormat)
-          ? {
-              offset: position > 0 ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB,
-              height: DFLT_ESC_PROP,
-            }
-          : {
-              offset: resolveRtfBaseline(
-                position,
-                target.fontSizeTwips ??
-                  (
-                    collection.GetAttrSet().Get(RES_CHRATR_FONTSIZE) as SvxFontHeightItem
-                  ).GetHeight(),
-              ),
-              height: target.escapement?.height ?? 100,
-            },
-    };
-  }
-  const characterFormat = createSwFormatAutoFormat(
-    collection.GetAttrSet().GetDoc().GetAttrPool(),
-    target,
-    current,
-  );
-  try {
-    for (const item of characterFormat.GetStyleHandle().entries()) collection.SetFormatAttr(item);
-  } finally {
-    characterFormat.Dispose();
-  }
   if (!(collection instanceof SwTextFormatColl)) return;
   const paragraph = definition.paragraph;
   if (
@@ -554,36 +499,14 @@ export function ApplyParagraph(
           run.characterStyleIndex === undefined
             ? undefined
             : this["importedCharacterStyles"].get(run.characterStyleIndex);
-        const inheritedItems = new SfxItemSet(
-          node.GetDoc().GetAttrPool(),
-          WRITER_CHARACTER_WHICH_RANGES,
-        );
-        inheritedItems.SetParent(node.GetSwAttrSet());
-        try {
-          if (characterStyle !== undefined) {
-            for (const [first, last] of WRITER_CHARACTER_WHICH_RANGES)
-              for (let which = first; which <= last; ++which) {
-                const item = characterStyle.GetAttrSet().GetItemIfSet(which, true);
-                if (item !== undefined) inheritedItems.Put(item);
-              }
-          }
-          const effective = projectWriterCharacterAttributes(inheritedItems, node.GetSwAttrSet());
-          const properties = getRtfCharacterProperties(run, this["m_pStyleTableEntries"]);
-          propertyPointers.push(properties);
-          return {
-            text: run.text,
-            characterStyle,
-            properties,
-            inherited: effective,
-            ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
-            attributes: resolveRtfRunAttributes(
-              run,
-              resolveRtfCharacterStyleValues(properties, effective),
-            ),
-          };
-        } finally {
-          inheritedItems.Dispose();
-        }
+        const properties = getRtfCharacterProperties(run, this["m_pStyleTableEntries"]);
+        propertyPointers.push(properties);
+        return {
+          text: run.text,
+          characterStyle,
+          properties,
+          ...(run.hyperlink === undefined ? {} : { hyperlink: run.hyperlink }),
+        };
       },
     );
     node.SetText(
@@ -607,24 +530,6 @@ export function ApplyParagraph(
         } finally {
           item.Dispose();
         }
-      }
-      const format = createSwFormatAutoFormat(
-        node.GetDoc().GetAttrPool(),
-        {
-          ...run.inherited,
-
-          ...(run.attributes.escapement === undefined
-            ? {}
-            : { escapement: run.attributes.escapement }),
-        },
-        run.inherited,
-      );
-      const items = format.GetStyleHandle().Clone();
-      try {
-        if (items.Count() > 0) hints.Insert(MakeTextAttr(node.GetDoc(), items, start, offset));
-      } finally {
-        items.Dispose();
-        format.Dispose();
       }
       if (run.hyperlink !== undefined)
         hints.Insert(new SwTextINetFormat(new SwFormatINetFormat(run.hyperlink), start, offset));
@@ -694,14 +599,11 @@ export function ApplyParagraph(
   }
 }
 
-import { SwCharFormat } from "../../../inc/charfmt";
+import type { SwCharFormat } from "../../../inc/charfmt";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
-import { SfxItemSet } from "../../../../svl/source/items/itemset";
-import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
 
 import {
   getRtfCharacterProperties,
-  resolveRtfCharacterStyleValues,
   ApplyRtfCharacterProperties,
 } from "./rtfdocumentimpl.character";
 

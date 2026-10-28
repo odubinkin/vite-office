@@ -1,7 +1,8 @@
 /** @fileoverview Native section defaults, typed page-style attachment and bag application use the actual Writer document graph and UNO values. */
+import { DomainMapper } from "./DomainMapper";
 import { afterEach, expect, it, vi } from "vitest";
 import { SectionPropertyMap, GrabBagType as G } from "./PropertyMap";
-import { DomainMapper_Impl, ContextType as C } from "./DomainMapper_Impl";
+import { ContextType as C } from "./DomainMapper_Impl";
 import { PropertyIds as P } from "./PropertyIds";
 import { SwDoc } from "../../core/doc/doc";
 import { SwXTextDocument } from "../../uibase/uno/unotxdoc";
@@ -35,7 +36,7 @@ function insert(map: SectionPropertyMap, id: P, value: number, grab = G.NO_GRAB_
 it("constructs first and later native section contexts with Letter defaults independent of document locale", /** Checks exact UNO types, default values and the actual page descriptor. @returns Nothing. */ () => {
   const doc = new SwDoc({ locale: "de-DE" }),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML);
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML).impl;
   try {
     expect(doc.GetPageDesc().GetValue().width).not.toBe(Number(toTwips(21590n, Length.mm100)));
     const first = mapper.PushProperties(C.CONTEXT_SECTION) as SectionPropertyMap;
@@ -93,7 +94,7 @@ it("constructs first and later native section contexts with Letter defaults inde
 it("scans original signed32 Converted prefixes once and continues its cache without rescanning", /** Uses actual document names, including native numeric prefix and overflow behavior. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML);
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML).impl;
   try {
     for (const name of [
       "Converted2",
@@ -122,7 +123,7 @@ it("scans original signed32 Converted prefixes once and continues its cache with
 it("unwraps character then paragraph bags after ordinary properties and omits section-only protection", /** Checks original application order and concrete page-grid items. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML).impl,
     section = new SectionPropertyMap(true);
   try {
     insert(section, P.PROP_GRID_BASE_HEIGHT, 720, G.CHAR_GRAB_BAG);
@@ -160,7 +161,7 @@ it("unwraps character then paragraph bags after ordinary properties and omits se
 it("retains native UNO catch boundaries and the reserved name after failed creation", /** Observes original failure admission over actual owners, without a replacement model. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     model = new SwXTextDocument(doc),
-    mapper = new DomainMapper_Impl(model, SourceDocumentType.OOXML),
+    mapper = new DomainMapper(model, SourceDocumentType.OOXML).impl,
     section = new SectionPropertyMap(false);
   try {
     vi.spyOn(model, "createPageStyle").mockImplementationOnce(
