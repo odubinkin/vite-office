@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 19
+revision: 20
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T20:06:32.358Z"
+doc_updated_at: "2026-10-28T20:12:49.965Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -99,6 +99,10 @@ sections:
     - Observation: B8TCAE adds86 normal-constructor prefix/condition/locale tests,34 actual RTL assembly/comparison tests,2 rich-text release tests and3 automatic-input admission/formula tests. Final focused constructor2files91tests, RTL27files173tests, Calc data90files394tests and document import2files11tests pass their assertions; raw diagnostic report hashes and unchanged thresholds are retained.
       Impact: These profiles close actual legal runtime paths without source mutation, manufactured provider returns, private-field writes, exclusions or coverage-counter edits. Constructor remaining guards include source fixed-state/EOF/locale alternatives and require further audit; narrow coverage failures remain failures. Cached calendar timezone failure reuse is documented as conditional source evidence in CALC-386; no normal unknown-zone failure is claimed.
       Resolution: Continue remaining full100 coverage work and individual unreachable-branch reviews. U01/U02 remain pending, main publication/reverse merges and final full verifier are still outstanding.
+
+    - Observation: The previous RTL port flattened the original raw-span replacement into its owning overload, leaving a full-range raw branch inaccessible and omitting its C entry point. B8TCAE restores the original overload boundary and rtl_uString_newReplaceStrAtUtf16L. Unchanged original C++ regeneration/check and portable replay agree on2304 complete initialized value/terminator/sharing/refcount observations, including acquired destination aliases.
+      Impact: The raw replacement full-range/append cases now execute through the original public API, without an exception or artificial test seam. Current28 RTL suites176tests and focused3suites42tests pass. Broad partial coverage still fails100; historical strtmpl/ustring maps must not be merged with these current owners.
+      Resolution: Preserve source/C wrapper contracts and native scope limitations. Continue actual remaining coverage and pending individual U01/U02 decisions; no full-project success or publication is recorded.
 id_source: "generated"
 ---
 ## Summary
@@ -178,3 +182,7 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: B8TCAE adds86 normal-constructor prefix/condition/locale tests,34 actual RTL assembly/comparison tests,2 rich-text release tests and3 automatic-input admission/formula tests. Final focused constructor2files91tests, RTL27files173tests, Calc data90files394tests and document import2files11tests pass their assertions; raw diagnostic report hashes and unchanged thresholds are retained.
   Impact: These profiles close actual legal runtime paths without source mutation, manufactured provider returns, private-field writes, exclusions or coverage-counter edits. Constructor remaining guards include source fixed-state/EOF/locale alternatives and require further audit; narrow coverage failures remain failures. Cached calendar timezone failure reuse is documented as conditional source evidence in CALC-386; no normal unknown-zone failure is claimed.
   Resolution: Continue remaining full100 coverage work and individual unreachable-branch reviews. U01/U02 remain pending, main publication/reverse merges and final full verifier are still outstanding.
+
+- Observation: The previous RTL port flattened the original raw-span replacement into its owning overload, leaving a full-range raw branch inaccessible and omitting its C entry point. B8TCAE restores the original overload boundary and rtl_uString_newReplaceStrAtUtf16L. Unchanged original C++ regeneration/check and portable replay agree on2304 complete initialized value/terminator/sharing/refcount observations, including acquired destination aliases.
+  Impact: The raw replacement full-range/append cases now execute through the original public API, without an exception or artificial test seam. Current28 RTL suites176tests and focused3suites42tests pass. Broad partial coverage still fails100; historical strtmpl/ustring maps must not be merged with these current owners.
+  Resolution: Preserve source/C wrapper contracts and native scope limitations. Continue actual remaining coverage and pending individual U01/U02 decisions; no full-project success or publication is recorded.

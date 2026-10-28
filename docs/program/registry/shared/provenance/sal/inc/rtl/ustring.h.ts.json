@@ -37,7 +37,8 @@
       "OSTRING_TO_OUSTRING_CVTFLAGS",
       "rtl_ustr_toInt32",
       "rtl_ustr_shortenedCompare_WithLength",
-      "rtl_uString_newConcat"
+      "rtl_uString_newConcat",
+      "rtl_uString_newReplaceStrAtUtf16L"
     ],
     "upstreamSymbols": [
       "RTL_USTR_MAX_VALUEOFINT32",
@@ -98,7 +99,8 @@
       "Forward SAL string-wrapper checkpoint ports rtl_string2UString_status, its UTF8 estimate, checked/unchecked C wrappers, early old-target release, ASCII fast path/retry, FLUSH/null-context dispatch, +8-unit retries, shrink fallback and partial checked output. OStringToOUString now delegates to this native owner for octet encodings; the existing explicit UTF16 byte bridge remains a bounded application adaptation. A compiled unchanged native witness observes 524288 core byte-pair calls and 720 mixed/flag cases with allocator identities/sizes/free order under ASan/UBSan. Full registry/ABI and allocation failures are not certified by that witness. WRITER188 records original allocation-failure aliasing; WRITER181 records forward ISCII null-context mismatch. No whole SAL/filter parity promotion.",
       "Exports the original shortened Unicode comparison declaration binding.",
       "Exports the native Unicode concatenation declaration.",
-      "Exports original Unicode owned replacement and raw-view append declarations. Reexport-only names remain outside the runtime local-declaration list."
+      "Exports original Unicode owned replacement and raw-view append declarations. Reexport-only names remain outside the runtime local-declaration list.",
+      "B8TCAE restores the independent original raw UTF16 newReplaceStrAt overload and rtl_uString_newReplaceStrAtUtf16L C boundary. The owning overload delegates after its own append/full-range sharing paths, matching pinned strtmpl.hxx1001/1055 and ustring.cxx1198. The previous flattened interior-only body made the raw full-range branch unreachable and omitted raw append admission. Independent unchanged original C++ observations cover2304 owned/raw calls, all legal removal spans, empty/null replacement, embedded nulls/surrogate units and independently acquired output aliases, comparing complete initialized data/terminators, sharing identities and refcounts. Native source/witness hashes and portable replay are retained; no allocator replacement, private counter writes, exclusions or threshold changes. Full ABI/OOM/threading behavior remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -164,6 +166,10 @@
         {
           "path": "apps/office/src/sal/rtl/ustring-convert.native.json",
           "marker": "baselineCommit"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-replacement.native.test.ts",
+          "marker": "rtl_uString_newReplaceStrAtUtf16L"
         }
       ],
       "upstream": [

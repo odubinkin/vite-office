@@ -3,7 +3,7 @@
   "finalFullVerifierPassed": false,
   "thresholdsChanged": false,
   "exceptionsApproved": false,
-  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps. LocaleData maps also differ after removal of the duplicate argument-spread bridge; old LocaleData counters are historical.",
+  "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps. LocaleData maps also differ after removal of the duplicate argument-spread bridge; old LocaleData counters are historical. RTL strtmpl.ts/ustring.ts maps also differ after restoring the separate original raw replacement overload and C wrapper; old RTL counters must not be merged with the current maps.",
   "icu": {
     "testFiles": 9,
     "groupedTests": 70,
@@ -534,5 +534,51 @@
         }
       }
     }
+  },
+  "rtlRawReplacementRestoration": {
+    "nativeObservations": 2304,
+    "nativeRegenerationCheckPassed": true,
+    "focusedTestFiles": 3,
+    "focusedTests": 42,
+    "currentRtlTestFiles": 28,
+    "currentRtlTests": 176,
+    "assertionsPassed": true,
+    "strictCoveragePassed": false,
+    "report": "apps/office/coverage/integration-rtl-replacement-current/coverage-final.json",
+    "reportSha256": "23257fce3b135608439013e7fe5e52c276d07e4ccdfa95fb301ec5f688a2b251",
+    "metrics": {
+      "lines": {
+        "total": 537,
+        "covered": 522,
+        "skipped": 0,
+        "pct": 97.2
+      },
+      "statements": {
+        "total": 698,
+        "covered": 669,
+        "skipped": 0,
+        "pct": 95.84
+      },
+      "functions": {
+        "total": 96,
+        "covered": 90,
+        "skipped": 0,
+        "pct": 93.75
+      },
+      "branches": {
+        "total": 519,
+        "covered": 489,
+        "skipped": 0,
+        "pct": 94.21
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "fixtureSha256": "acfbfbece9635d570d69efc5b2aa14f8a6ae3e6bbeea4f2b2a65ba31c123c49f",
+    "change": "Restore original independent raw-span newReplaceStrAt and C rtl_uString_newReplaceStrAtUtf16L boundary; existing owning overload delegates after its original fast paths. No weakened loop, fake provider, counter edit, exclusion or threshold change. Full ABI/OOM/threading parity remains unverified."
   }
 }

@@ -514,6 +514,18 @@ export function rtl_uString_newReplaceStrAt(
   str.newReplaceStrAt(destination, original, index, count, replacement);
 }
 
+/** Original C counted-UTF16 replacement wrapper from sal/rtl/ustring.cxx. @param destination - Output slot. @param original - Borrowed original. @param index - Signed32 offset. @param count - Removed units. @param replacement - Borrowed raw units. @param length - Signed32 replacement length. @returns Nothing. */
+export function rtl_uString_newReplaceStrAtUtf16L(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  index: number,
+  count: number,
+  replacement: Uint16Array | null,
+  length: number,
+): void {
+  str.newReplaceStrAt_Utf16(destination, original, index, count, replacement, length);
+}
+
 /** Original raw UTF16 append C boundary. @param destination - Native slot. @param left - Borrowed left data. @param right - Borrowed span. @param length - Signed32 count. @returns Nothing. */
 export function rtl_uString_newConcatUtf16L(
   destination: rtl_uStringSlot | null,

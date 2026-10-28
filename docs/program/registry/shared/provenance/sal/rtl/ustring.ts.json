@@ -55,7 +55,8 @@
       "rtl_uString_newReplaceStrAt",
       "rtl_uString_newConcatUtf16L",
       "rtl_ustr_shortenedCompareIgnoreAsciiCase_WithLength",
-      "rtl_uString_newReplaceAllFromIndexUtf16LUtf16L"
+      "rtl_uString_newReplaceAllFromIndexUtf16LUtf16L",
+      "rtl_uString_newReplaceStrAtUtf16L"
     ],
     "upstreamSymbols": [
       "StrLifecycle",
@@ -119,7 +120,8 @@
       "Original public Unicode newConcat forwards to the shared two-owner template specialization.",
       "Original Unicode C replacement and raw-view append forward to the genuine string-template owner.",
       "AQF9AG: Original ASCII-insensitive shortened Unicode C comparison forwards to the source known-length template specialization. Native RTL probe covers the added bounded comparison; broad module parity remains unverified.",
-      "AQF9AG adds the exact bounded replace-all C wrapper used by original constructor NatNum12 currency arguments."
+      "AQF9AG adds the exact bounded replace-all C wrapper used by original constructor NatNum12 currency arguments.",
+      "B8TCAE restores the independent original raw UTF16 newReplaceStrAt overload and rtl_uString_newReplaceStrAtUtf16L C boundary. The owning overload delegates after its own append/full-range sharing paths, matching pinned strtmpl.hxx1001/1055 and ustring.cxx1198. The previous flattened interior-only body made the raw full-range branch unreachable and omitted raw append admission. Independent unchanged original C++ observations cover2304 owned/raw calls, all legal removal spans, empty/null replacement, embedded nulls/surrogate units and independently acquired output aliases, comparing complete initialized data/terminators, sharing identities and refcounts. Native source/witness hashes and portable replay are retained; no allocator replacement, private counter writes, exclusions or threshold changes. Full ABI/OOM/threading behavior remains unverified."
     ],
     "omittedResponsibilities": [
       "Complete RTL/C++ value-owner/native ABI/thread/storage/document/UI responsibility remains unverified; no synthetic string/document owner substituted."
@@ -181,6 +183,10 @@
         {
           "path": "apps/office/src/sal/rtl/ustring-convert.native.json",
           "marker": "baselineCommit"
+        },
+        {
+          "path": "apps/office/src/sal/rtl/ustring-replacement.native.test.ts",
+          "marker": "rtl_uString_newReplaceStrAtUtf16L"
         }
       ],
       "upstream": [

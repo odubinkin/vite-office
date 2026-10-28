@@ -36,6 +36,7 @@ export {
   rtl_uString_newConcat,
   rtl_uString_newConcatUtf16L,
   rtl_uString_newReplaceStrAt,
+  rtl_uString_newReplaceStrAtUtf16L,
   rtl_uString_newReplaceAllFromIndexUtf16LUtf16L,
   rtl_ustr_compare,
   rtl_ustr_compare_WithLength,

@@ -625,7 +625,7 @@ export function newConcat(
   else newConcat_WithLengths(destination, left.buffer, left.length, right.buffer, right.length);
 }
 
-/** Original owned-string newReplaceStrAt overload and its consumed interior-span specialization. The raw-view append overload is not exposed by this slice. @param destination - In/out C slot. @param original - Borrowed original. @param index - Signed32 offset. @param count - Signed32 removal count. @param replacement - Borrowed replacement or null deletion. @returns Nothing. */
+/** Original owned-string newReplaceStrAt overload delegates to the original UTF16-span specialization after its owning fast paths. @param destination - In/out C slot. @param original - Borrowed original. @param index - Signed32 offset. @param count - Signed32 removal count. @param replacement - Borrowed replacement or null deletion. @returns Nothing. */
 export function newReplaceStrAt(
   destination: rtl_uStringSlot | null,
   original: rtl_uString,
@@ -652,9 +652,40 @@ export function newReplaceStrAt(
     }
     count = original.length - index;
   }
-  const replacementUnits = replacement === null ? null : replacement.buffer,
-    replacementLength = replacement === null ? 0 : replacement.length;
-  // The source raw-span append arm is unreachable here: the owned overload already handled index >= length.
+  newReplaceStrAt_Utf16(
+    destination,
+    original,
+    index,
+    count,
+    replacement === null ? null : replacement.buffer,
+    replacement === null ? 0 : replacement.length,
+  );
+}
+
+/** Original Unicode raw-span newReplaceStrAt specialization, with its independent append/full-range paths and delayed output release. @param destination - Output slot. @param original - Borrowed original. @param index - Signed32 offset. @param count - Signed32 removal count. @param replacementUnits - Borrowed replacement span. @param replacementLength - Signed32 replacement length. @returns Nothing. */
+export function newReplaceStrAt_Utf16(
+  destination: rtl_uStringSlot | null,
+  original: rtl_uString,
+  index: number,
+  count: number,
+  replacementUnits: Uint16Array | null,
+  replacementLength: number,
+): void {
+  index |= 0;
+  count |= 0;
+  replacementLength |= 0;
+  if (destination === null) throw new Error("assert(ppThis)");
+  if (index < 0 || index > original.length)
+    throw new Error("assert(nIndex >= 0 && nIndex <= pStr->length)");
+  if (count < 0) throw new Error("assert(nCount >= 0)");
+  if (count > original.length - index) throw new Error("assert(nCount <= pStr->length - nIndex)");
+  if (replacementUnits === null && replacementLength !== 0)
+    throw new Error("assert(pNewSubStr != nullptr || nNewSubStrLen == 0)");
+  if (replacementLength < 0) throw new Error("assert(nNewSubStrLen >= 0)");
+  if (index >= original.length) {
+    newConcat_Utf16(destination, original, replacementUnits, replacementLength);
+    return;
+  }
   if (count >= original.length - index) {
     if (index === 0) {
       newFromStr_WithLength(destination, replacementUnits, replacementLength);
