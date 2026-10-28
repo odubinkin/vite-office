@@ -1,0 +1,69 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "native local-address prerequisite checkpoint; task remains DOING/needs_rework",
+  "scope": "Admit local Excel A1/OOXML scanning and serialization to actual ScAddress/ScRange owners, original ParseAny, native flags/partial coordinates and whole-axis notation. Current full XLSX filter/model/UI acceptance remains incomplete.",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/sc/source/core/tool/address.ts": "ae3d0249fb972137b37b789af2430e6dfc293cdf",
+    "apps/office/src/sc/source/core/tool/address.xl-a1.test.ts": "ccf38706d872398d9a6c06f92de820df8f338ee9",
+    "apps/office/src/sc/source/core/data/reference-protocol.test.ts": "ea92c32bfe53d0a105f7326e0096660287f041ab",
+    "apps/office/src/sc/source/core/tool/range-formula.test.ts": "b3204e938799b89d02952733b95f841361e3a8b9",
+    "apps/office/src/sc/source/ui/view/reference-input.test.ts": "f82b736bb27b5ad16c1a063d9466fe00c96988c3",
+    "docs/program/calc-upstream-suspected-issues.md": "206d72314154f17d1336f3df53d3912f0ad46d25",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/address.ts.json": "8fcc7e68c127fc448adf623f2183107a6af6687f",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/address.ts.json": "cb6c8cfd877e6e5fd3d37678152698cc9463dcfb",
+    "docs/program/registry/calc/capabilities/CAP-71654b39-0e3c-4254-ba64-337faf420d55.json": "24f1dafad80d5e751f2f4815762f0056801df002"
+  },
+  "checks": {
+    "tests": "pass:322tests/52files; initial focused119tests/5files also passed",
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sc/source/core/tool/ src/sc/source/core/data/reference-protocol.test.ts src/sc/source/ui/view/reference-input.test.ts --coverage.include=src/sc/source/core/tool/address.ts --coverage.reportsDirectory=coverage/xlsx-a1-final --maxWorkers=2",
+      "result": "fail:unchanged100 branch threshold; two retained source singleton alternatives remain uncovered",
+      "s": {
+        "covered": 429,
+        "total": 429
+      },
+      "b": {
+        "covered": 420,
+        "total": 422
+      },
+      "f": {
+        "covered": 53,
+        "total": 53
+      },
+      "coverageSha256": "2e67418f3750d2a783e16ebb849b7bfe016021579c3a4d0e0b9da54c02e0a73f",
+      "rawFile": "apps/office/coverage/xlsx-a1-final/coverage-final.json",
+      "scope": "Whole canonical address.ts, including existing coordinate owners and all newly implemented local Excel parsing/formatting/ParseAny. No exclusion or threshold changed."
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "static": "pass:npm run test:static after canonical owner consolidation",
+    "eslint": "pass:changed source plus four test files, max-warnings0",
+    "prettier": "pass:same five source/test paths",
+    "dependencies": "Module boundary check passed: 1682 runtime sources, 8698 relative imports, 209 allowed cross-module edges.",
+    "docs": "pass:3876authored source files",
+    "size": "pass:canonical address.ts797lines; no new filename divergence",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:Calc464commands/11menus/17dispositions",
+    "provenance": "pass:1683modules/1471mapped/182browser adaptations/30local infrastructure",
+    "registry": "pass:1683modules/347capabilities/34invariants/3776records",
+    "doctor": "pass:0errors; existing managed hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-344:incomplete second-row range keeps first VALID flags; ParseAny then rejects it.",
+    "CALC-345:opposite singleton alternatives lack a local/no-error-token witness; preserve both decisions and report coverage failure."
+  ],
+  "resolvedValidationFindings": [
+    "Corrected a new test default-parameter literal type to the real AddressConvention type and supplied two missing callback JSDoc comments.",
+    "Consolidated scanners into canonical address.ts; no new mapped basename or filename-divergence exception remains. The earlier temporary-file provenance/registry failures were rerun successfully."
+  ],
+  "limitations": [
+    "Sheet/external headers, error-token injection and R1C1 remain explicitly unsupported; existing OOO/ODF partial parsing is retained.",
+    "Native AddressConverter/WorkbookHelper and package/worksheet/style/shared-string/formula import/export owners and existing shell/UI routing remain pending.",
+    "Writer DOCX full model/export/UI paths and its public LanguageTag dependency also remain pending; no Writer source changed in this checkpoint.",
+    "Source-backed actual-model tests are not an independently compiled full-native parser/QA witness. The referenced native OOO range QA is related source evidence, not a claimed ported Excel suite.",
+    "Unchanged scoped100 branch threshold is unmet; no approval to skip or lower it is inferred. This checkpoint must not close the task.",
+    "Full suite not due under approved ten-task cadence. No publication or merge performed."
+  ]
+}
