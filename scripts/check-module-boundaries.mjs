@@ -55,7 +55,8 @@ const allowedEdges = new Map([
   // Original attributelist.hxx/cxx also owns actual OUString values.
   // Original OFOPXMLHelper uses the native SAX parser/writer services.
   // Original interfacecontainer3.hxx owns its vector through o3tl::cow_wrapper.
-  ["comphelper", new Set(["cppu", "o3tl", "sal", "sax", "udkapi"])],
+  // Original seqstream.hxx uses cppuhelper/implbase; Library_comphelper links cppuhelper.
+  ["comphelper", new Set(["cppu", "cppuhelper", "o3tl", "sal", "sax", "udkapi"])],
   // Original configuration nodes use SAL/UNO values and TypeClass IDL; shared SortedVector adapts config_map ordering.
   ["configmgr", new Set(["cppu", "o3tl", "sal", "udkapi"])],
   ["cppu", new Set(["sal", "o3tl", "udkapi"])],

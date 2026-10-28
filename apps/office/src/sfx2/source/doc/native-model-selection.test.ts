@@ -225,7 +225,7 @@ it("uses the actual selection interface and Any extraction while retaining indep
     expect(changeType()).toBe(XSelectionChangeListener.static_type());
     expect(changeType(null)).toBe(XSelectionChangeListener.static_type(null));
     controller.select(selection);
-    selection.dispose();
+    selection.clear();
     objectOwner.dispose();
     model.setCurrentController(cr);
     const selected = model.getCurrentSelection();

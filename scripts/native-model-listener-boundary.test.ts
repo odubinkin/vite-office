@@ -4,6 +4,7 @@ import { isForbiddenModuleEdge, getRuntimeOwnershipViolation } from "./check-mod
 it("admits original interfacecontainer3 and SfxBaseModel SDK dependencies without reverse or browser edges", /** Original headers consume o3tl/comphelper and published document/util listener declarations. @returns Nothing. */ () => {
   for (const [source, target] of [
     ["comphelper", "o3tl"],
+    ["comphelper", "cppuhelper"],
     ["sfx2", "comphelper"],
     ["sfx2", "offapi"],
   ]) {
@@ -12,6 +13,7 @@ it("admits original interfacecontainer3 and SfxBaseModel SDK dependencies withou
   }
   for (const source of [
     "comphelper/inc/interfacecontainer3.ts",
+    "comphelper/source/streaming/seqstream.ts",
     "o3tl/inc/cow_wrapper.ts",
     "sfx2/source/doc/sfxbasemodel.ts",
   ]) {

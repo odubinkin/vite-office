@@ -1,0 +1,134 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7",
+    "capabilityId": "CAP-14bd1607-f7e0-4f5c-8826-7d361d244ff7",
+    "suite": "calc",
+    "subsystem": "native-sequence-streams",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Complete original internal byte input/output algorithms retain actual Sequence ownership and cached SDK types.",
+      "Original count validation, typed Context, seek sentinel and output growth/finalization are retained."
+    ],
+    "capability": "Original internal UNO memory and sequence streams",
+    "gaps": [
+      "Original internal MemoryInputStream, SequenceInputStream and OSequenceOutputStream algorithms use actual CPPU WeakImplHelper/Reference/Sequence owners, complete cached XInputStream/XOutputStream/XSeekable bindings and generated IOException inheritance. ByteReader/ByteWriter retain original pointer method contracts through existing logical storage. Reads, signed bytes, EOF/skip, count validation, Context, closed sentinel, seek reopening, Sequence COW and original output growth/flush/finalize are exercised without fake metadata, query, allocation or service providers. CALC-359 and WRITER195 preserve suspicious native seek reopening. New executable scope passes S208/208 B71/71 F42/42 L187/187. Original mutex scopes are not implemented in synchronous host calls. Native ABI/crosscasts/threads, pointer UB/overflow, allocator failure, complete reflection and service registration remain unverified. Package/SAX transport, full model/controller/factory and DOCX/XLSX core/UI round trips remain pending. Earlier selection fixture double Any destruction is corrected to clear plus one final destruction; previous fixture lifetime evidence is superseded."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "udkapi/com/sun/star/io/XInputStream.idl",
+          "marker": "XInputStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XOutputStream.idl",
+          "marker": "XOutputStream"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/XSeekable.idl",
+          "marker": "XSeekable"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/IOException.idl",
+          "marker": "IOException"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/NotConnectedException.idl",
+          "marker": "NotConnectedException"
+        },
+        {
+          "path": "udkapi/com/sun/star/io/BufferSizeExceededException.idl",
+          "marker": "BufferSizeExceededException"
+        },
+        {
+          "path": "include/comphelper/bytereader.hxx",
+          "marker": "ByteReader"
+        },
+        {
+          "path": "comphelper/source/streaming/seqstream.cxx",
+          "marker": "MemoryInputStream::readBytes"
+        }
+      ],
+      "tests": [
+        {
+          "path": "comphelper/qa/python/test_sequence_output_stream.py",
+          "marker": "test_stream"
+        }
+      ],
+      "docs": [
+        {
+          "path": "include/comphelper/seqstream.hxx",
+          "marker": "MemoryInputStream"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XInputStream.ts",
+          "marker": "XInputStream"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XOutputStream.ts",
+          "marker": "XOutputStream"
+        },
+        {
+          "path": "apps/office/src/udkapi/com/sun/star/io/XSeekable.ts",
+          "marker": "XSeekable"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/io/IOException.ts",
+          "marker": "IOException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/io/NotConnectedException.ts",
+          "marker": "NotConnectedException"
+        },
+        {
+          "path": "apps/office/src/cppu/inc/com/sun/star/io/BufferSizeExceededException.ts",
+          "marker": "BufferSizeExceededException"
+        },
+        {
+          "path": "apps/office/src/comphelper/inc/bytereader.ts",
+          "marker": "ByteReader"
+        },
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seqstream.ts",
+          "marker": "MemoryInputStream"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/comphelper/source/streaming/seqstream.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/native-sequence-streams.md",
+          "marker": "# Native sequence streams"
+        },
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-359"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "Original internal MemoryInputStream, SequenceInputStream and OSequenceOutputStream algorithms use actual CPPU WeakImplHelper/Reference/Sequence owners, complete cached XInputStream/XOutputStream/XSeekable bindings and generated IOException inheritance. ByteReader/ByteWriter retain original pointer method contracts through existing logical storage. Reads, signed bytes, EOF/skip, count validation, Context, closed sentinel, seek reopening, Sequence COW and original output growth/flush/finalize are exercised without fake metadata, query, allocation or service providers. CALC-359 and WRITER195 preserve suspicious native seek reopening. New executable scope passes S208/208 B71/71 F42/42 L187/187. Original mutex scopes are not implemented in synchronous host calls. Native ABI/crosscasts/threads, pointer UB/overflow, allocator failure, complete reflection and service registration remain unverified. Package/SAX transport, full model/controller/factory and DOCX/XLSX core/UI round trips remain pending. Earlier selection fixture double Any destruction is corrected to clear plus one final destruction; previous fixture lifetime evidence is superseded."
+    },
+    "scopeLimitations": [
+      "Original internal MemoryInputStream, SequenceInputStream and OSequenceOutputStream algorithms use actual CPPU WeakImplHelper/Reference/Sequence owners, complete cached XInputStream/XOutputStream/XSeekable bindings and generated IOException inheritance. ByteReader/ByteWriter retain original pointer method contracts through existing logical storage. Reads, signed bytes, EOF/skip, count validation, Context, closed sentinel, seek reopening, Sequence COW and original output growth/flush/finalize are exercised without fake metadata, query, allocation or service providers. CALC-359 and WRITER195 preserve suspicious native seek reopening. New executable scope passes S208/208 B71/71 F42/42 L187/187. Original mutex scopes are not implemented in synchronous host calls. Native ABI/crosscasts/threads, pointer UB/overflow, allocator failure, complete reflection and service registration remain unverified. Package/SAX transport, full model/controller/factory and DOCX/XLSX core/UI round trips remain pending. Earlier selection fixture double Any destruction is corrected to clear plus one final destruction; previous fixture lifetime evidence is superseded."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "native-memory-and-sequence-stream-io"
+  }
+}

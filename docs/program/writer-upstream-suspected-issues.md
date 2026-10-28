@@ -1903,3 +1903,10 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/core/doc/docnum.cxx`, `SwDoc::AddNumRule`, appends the transferred rule to the table and assigns `maNumRuleMap[pRule->GetName()]` without rejecting an existing name. `DocumentListsManager::createListForListStyle` in its corresponding `.cxx` returns after a nonfatal diagnostic when the style already has a default list.
 - Observation: both rule objects remain in table order; name lookup resolves the newly appended rule while the existing default-list mapping still refers to its previous list. A fresh duplicate can retain an empty DefaultListId. This is a source control-flow trace and an actual local owner test, not a complete compiled Writer witness.
 - Preservation: remove the old port's duplicate-name exception and implicit clone. Retain actual transferred identities, table insertion, last-name lookup and the existing default-list mapping.
+
+
+### WRITER195 — Shared MemoryInputStream can be reopened by seeking after closure
+
+- Source: pinned `comphelper/source/streaming/seqstream.cxx`, `MemoryInputStream::closeInput/seek/avail/getPosition/getLength`.
+- Observation: closeInput stores -1 in the position, while an in-range seek replaces that value without a closure check. Later reads succeed again; closed position/length queries remain readable. This is shared stream source/local-value evidence, not a claim about full DOCX/stream-service/native-thread behavior.
+- Preservation: retain the exact sentinel, validation and seek behavior. Use real Sequence/Reference/exception owners in tests rather than adding a second closed flag. The shared finding is also recorded as CALC-359; existing browser document workflows are unchanged.
