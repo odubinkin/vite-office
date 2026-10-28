@@ -14,6 +14,10 @@
         {
           "path": "apps/office/src/sw/source/core/undo/native-ranged-attribute-history.test.ts",
           "marker": "source"
+        },
+        {
+          "path": "apps/office/src/sw/source/core/txtnode/character-style-hints.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -39,7 +43,8 @@
     "preservedResponsibilities": [
       "Native automatic/character portion boundaries, replacement policy, named-style membership, paragraph-item reduction, reuse decisions and NOHINTADJUST sort numbers for the represented families. Existing shell/history snapshot owners remain independent; no native allocator or pointer ABI is simulated.",
       "S3HW1E: Original BuildPortions old/new history calls surround each existing endpoint change; split and replacement insertions record resets and deletion records old values through actual SwpHints. No fragment/text replacement is used for these native mutations.",
-      "S3HW1E releases replaced/unused portion owners, reduced-style temporary handles and temporary merged item sets. Actual retained hint identities and original portion ordering remain intact. Whole callback/exception/undo lifetime closure remains unverified."
+      "S3HW1E releases replaced/unused portion owners, reduced-style temporary handles and temporary merged item sets. Actual retained hint identities and original portion ordering remain intact. Whole callback/exception/undo lifetime closure remains unverified.",
+      "B8TCAE adds bounded source-contract/native evidence: Original thints.cxx XML import behavior preserves the existing character-format layer and assigns the next real sort number; normal post-import insertion replaces prior layers. Effective attribute iteration independently checks the retained visual values."
     ],
     "omittedResponsibilities": [
       "Full compiled Writer model/UNO/layout parity, unregistered fields and external document loading remain unverified."

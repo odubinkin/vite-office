@@ -23,6 +23,18 @@ import { projectWriterTextRuns } from "../../core/txtnode/ndtxt";
 const lists: RTFSprms[] = [],
   refs: SvRef<RTFValue>[] = [];
 
+it("rejects untyped host attempts to bypass deleted native value assignment", /** C++ deletes this operator at compile time. The erased host guard must leave both actual retained values unchanged; no native exception or invalid C++ assignment is claimed. @returns Nothing. */ () => {
+  const first = own(new RTFValue(42)),
+    second = own(new RTFValue(7)),
+    value = first.operatorDereference();
+  expect(
+    /** Reflects an untyped host call at the local checked boundary. @returns Never. */ () =>
+      Reflect.apply(value.assign, value, [second.operatorDereference()]),
+  ).toThrow("RTFValue::operator= is deleted");
+  expect(value.getInt()).toBe(42);
+  expect(second.operatorDereference().getInt()).toBe(7);
+});
+
 it("borrows the final nested border attributes while preserving separate modifiers", /** Source helpers select the last modifier's actual attribute list and fall back to the outer list for absent or empty parents. @returns Nothing. */ () => {
   const outer = list(),
     parentId = N.LN_CT_PrBase_pBdr;

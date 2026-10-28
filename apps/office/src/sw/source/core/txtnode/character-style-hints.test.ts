@@ -28,6 +28,77 @@ import {
   decodeWriterDocument,
 } from "../../../browser/filter/xml/writer-document-codec";
 
+it.each([false, true])(
+  "preserves overlapping native character-style layers during XML import=%s",
+  /** Original thints.cxx keeps existing character-format hints during XML import and restores normal replacement after that public phase flag is cleared. @param importing - Actual document import phase. @returns Nothing. */ (
+    importing,
+  ) => {
+    const doc = new SwDoc(),
+      node = doc.paragraphs[0];
+    assert(node);
+    node.SetText("abcdef");
+    const first = new SwPosition(node, 1),
+      last = new SwPosition(node, 5),
+      range = new SwPaM(last, first);
+    try {
+      const strong = doc.GetCharFormatFromPool(P.CHR_HTML_STRONG),
+        emphasis = doc.GetCharFormatFromPool(P.CHR_HTML_EMPHASIS);
+      assert(strong && emphasis);
+      doc.SetInXMLImport(importing);
+      doc.InsertPoolItem(range, new SwFormatCharFormat(strong));
+      doc.InsertPoolItem(range, new SwFormatCharFormat(emphasis));
+      const hints = node.GetpSwpHints();
+      assert(hints);
+      expect(
+        hints
+          .entries()
+          .map(
+            /** Reads real retained style layers and source ordering. @param hint - Actual hint. @returns Style state. */ (
+              hint,
+            ) => [
+              hint.GetStart(),
+              hint.GetEnd(),
+              hint.format.QueryValue(),
+              hint instanceof SwTextCharFormat ? hint.GetSortNumber() : -1,
+            ],
+          ),
+      ).toEqual(
+        importing
+          ? [
+              [1, 5, "Strong Emphasis", 0],
+              [1, 5, "Emphasis", 1],
+            ]
+          : [[1, 5, "Emphasis", 0]],
+      );
+      const iterator = new SwAttrIter(node);
+      iterator.Seek(2);
+      expect(
+        (iterator.GetAttrHandler().ReadItem(RES_CHRATR_POSTURE) as SvxPostureItem).GetPosture(),
+      ).toBe(FontItalic.ITALIC_NORMAL);
+      expect(
+        (iterator.GetAttrHandler().ReadItem(RES_CHRATR_WEIGHT) as SvxWeightItem).GetWeight(),
+      ).toBe(importing ? FontWeight.WEIGHT_BOLD : FontWeight.WEIGHT_NORMAL);
+      doc.SetInXMLImport(false);
+      doc.InsertPoolItem(range, new SwFormatCharFormat(strong));
+      expect(
+        hints
+          .entries()
+          .map(
+            /** Reads the normal post-import replacement owner. @param hint - Actual remaining hint. @returns Name. */ (
+              hint,
+            ) => hint.format.QueryValue(),
+          ),
+      ).toEqual(["Strong Emphasis"]);
+    } finally {
+      doc.SetInXMLImport(false);
+      range.Dispose();
+      first.Dispose();
+      last.Dispose();
+      doc.Dispose();
+    }
+  },
+);
+
 it("builds native shared boundaries and style order, and merges complete replacement portions", /** Exercises real document insertion, controls and formatter stacks without run-to-style reconstruction. @returns Nothing. */ () => {
   const doc = new SwDoc(),
     node = doc.paragraphs[0];

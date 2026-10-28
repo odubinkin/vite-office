@@ -82,6 +82,8 @@ it("retains native metadata copies, uint16 fields, default tags and original def
   expect(dynamic.getItem()).toBe(dynamicItem);
   pkg.replace(0, null);
   expect(info.getItem()).toBeNull();
+  // Close the original logical package scope after its static entry is detached.
+  pkg.Dispose();
 });
 it("shares original EMPTY metadata and caches only a nonempty slot map", /** Zero-slot rescans preserve the actual source empty-map condition. @returns Nothing. */ () => {
   const a = new TestPackage([

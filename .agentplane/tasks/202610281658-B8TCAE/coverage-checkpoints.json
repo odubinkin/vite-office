@@ -1136,5 +1136,33 @@
     "diagnosticRemainingOwners": 231,
     "diagnosticRemainingFunctions": 6,
     "finalFullVerifierPassed": false
+  },
+  "xmlRtfPackageAndKeyDiagnostics": {
+    "reports": [
+      "apps/office/coverage/integration-xml-rtf-boundaries",
+      "apps/office/coverage/integration-item-package-lifetime",
+      "apps/office/coverage/integration-cache-key-description"
+    ],
+    "testFiles": 4,
+    "tests": 30,
+    "assertionsPassed": true,
+    "nativeKeyObservations": 96,
+    "nativeKeyCheckPassed": true,
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "diagnosticUnion": {
+      "statementsCovered": 117986,
+      "statementsTotal": 119511,
+      "branchArmsCovered": 72607,
+      "branchArmsTotal": 74579,
+      "functionsCovered": 18429,
+      "functionsTotal": 18429,
+      "functions100": true,
+      "linesCovered": 107224,
+      "linesTotal": 108171,
+      "remainingOwners": 230
+    },
+    "scope": "Native compiled key diagnostics plus real XML phase/source contracts and explicit local deleted-assignment host guard. Diagnostic union is not a fresh full npm run verify.",
+    "finalFullVerifierPassed": false
   }
 }

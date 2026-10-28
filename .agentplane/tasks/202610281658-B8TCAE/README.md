@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 39
+revision: 40
 origin:
   system: "manual"
 depends_on: []
@@ -36,7 +36,7 @@ events:
     to: "DOING"
     note: "Start: Close the user-approved integrated runtime coverage gaps while preserving upstream behavior and strict verification gates."
 doc_version: 3
-doc_updated_at: "2026-10-28T22:57:00.349Z"
+doc_updated_at: "2026-10-28T23:17:21.698Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -157,6 +157,8 @@ sections:
     - Observation: Original public static and instance currency completions are restored, with source buffer mutation order and lazy concatenation.3402 unchanged original C++ observations replay6804 portable raw/owned-view comparisons of full capacity/length/live-refcount/code-unit/terminator state. All40 consumer suites495 tests pass; the two owners have204/205 statements113/113 branches29/29 functions197/198 lines. Only the A04 defensive return remains, and its question is pending with no exception. Current diagnostic union uses newly recollected owner maps and leaves7 functions232 owners incomplete. Existing ICU JSON reformatting preserves every parsed native value/metadata. Final full verifier and branch publication/synchronization remain pending.
 
     - Observation: Missing naming-list callback revealed an actual local port bug: custom styles carry UNKNOWN65535, while the dialog checked poolId===0. The concrete existing-user-style test fails before correction and passes after reusing original IsPoolUserFormat. User names are offered for overwrite and native builtin names remain reserved. All3 related owner/UI suites77 tests pass with strict100% coverage for123 statements96 branches27 functions110 lines. Third changed owner has fresh maps; current diagnostic gaps are231 owners6 functions. Upstream classification is correct; no suspected upstream issue or coverage exception is introduced.
+
+    - Observation: Actual XML phase/style layering, local deleted-assignment host guard, logical package release and96 original key-buffer diagnostics pass30 tests in4 files. No production code or private state is replaced. The compatible diagnostic union now covers all18429 functions, while other metrics remain below100:117986/119511 statements72607/74579 branches107224/108171 lines;230 owners are incomplete. This milestone is not final full verification. Native key outputs compare actual compiled headers/libraries with real Calendar-factory keys; source-contract/host boundaries are explicitly distinguished from native ABI/failure parity.
 id_source: "generated"
 ---
 ## Summary
@@ -294,3 +296,5 @@ The BinaryInputStream smaller remaining-count arm is theoretically reachable aft
 - Observation: Original public static and instance currency completions are restored, with source buffer mutation order and lazy concatenation.3402 unchanged original C++ observations replay6804 portable raw/owned-view comparisons of full capacity/length/live-refcount/code-unit/terminator state. All40 consumer suites495 tests pass; the two owners have204/205 statements113/113 branches29/29 functions197/198 lines. Only the A04 defensive return remains, and its question is pending with no exception. Current diagnostic union uses newly recollected owner maps and leaves7 functions232 owners incomplete. Existing ICU JSON reformatting preserves every parsed native value/metadata. Final full verifier and branch publication/synchronization remain pending.
 
 - Observation: Missing naming-list callback revealed an actual local port bug: custom styles carry UNKNOWN65535, while the dialog checked poolId===0. The concrete existing-user-style test fails before correction and passes after reusing original IsPoolUserFormat. User names are offered for overwrite and native builtin names remain reserved. All3 related owner/UI suites77 tests pass with strict100% coverage for123 statements96 branches27 functions110 lines. Third changed owner has fresh maps; current diagnostic gaps are231 owners6 functions. Upstream classification is correct; no suspected upstream issue or coverage exception is introduced.
+
+- Observation: Actual XML phase/style layering, local deleted-assignment host guard, logical package release and96 original key-buffer diagnostics pass30 tests in4 files. No production code or private state is replaced. The compatible diagnostic union now covers all18429 functions, while other metrics remain below100:117986/119511 statements72607/74579 branches107224/108171 lines;230 owners are incomplete. This milestone is not final full verification. Native key outputs compare actual compiled headers/libraries with real Calendar-factory keys; source-contract/host boundaries are explicitly distinguished from native ABI/failure parity.
