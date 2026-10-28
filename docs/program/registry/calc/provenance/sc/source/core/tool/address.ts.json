@@ -28,6 +28,10 @@
         {
           "path": "apps/office/src/sc/source/core/tool/range-formula.test.ts",
           "marker": "native"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.xl-a1.test.ts",
+          "marker": "@fileoverview"
         }
       ],
       "upstream": [
@@ -54,7 +58,14 @@
       "IncEndRowSticky",
       "IncColIfNotLessThan",
       "IncRowIfNotLessThan",
-      "ScAddressDetails"
+      "ScAddressDetails",
+      "ParseAny",
+      "parseLocalExcelA1",
+      "alpha",
+      "spaces",
+      "column",
+      "row",
+      "singleton"
     ],
     "omittedResponsibilities": [
       "Full reference parsing/formatting, external links, native hashes and range subtraction remain outside this module implementation.",
@@ -67,7 +78,8 @@
       "Native differential acceptance proves all 768 configured sticky result/error outputs against unchanged extracted C++ definitions; ASan/UBSan clean and full source/body hashes recorded.",
       "Task201 implements valid same-sheet ODFF A1 references through actual ScSingleRefData/ScSingleRefToken/RPN, borrowed document/formula cell views and numeric/empty/direct-text results. Actual shared Svt observers, typed broadcaster stores and native logical FormulaTrack/FormulaTree queues propagate edits and remove subscriptions on replacement/clear. Default dirty context is -1/-1/false; normal noniterative cycles return522; forced/manual modes and inserted-sheet positions are represented. Broad native constructor/service parity remains unverified. JS GC owns physical lifetime; Dispose closes semantic subscriptions/queues only. Cross-sheet/external/range/named references, functions, locale string-to-number conversion, area/group/iteration/deep-recursion services, full context/formatting, formula serialization, ODS and UI remain unsupported. These are bounded implementation slices, not broad native parity.",
       "Block73 extends the prior bounded slices with native local/ODFF rectangular and whole-axis double references,shared RangeLine compilation,default scalar intersection,range aggregate execution over actual typed stores,and ordinary area-slot dependency ownership. Native logarithmic slot geometry,shared identity,bulk/deferred erasure,reference-update chaining,sheet shifts and semantic destruction are consumed without individual-cell listener expansion. ScValueIterator and RangeColumnSpanSet use actual document/column stores;portable array accumulation retains original four-stream Kahan order. Typed double out-references preserve encoded NaN payload storage. Earlier exclusions of these specific services are superseded here. Group/3D/external/named-reference expressions,matrix evaluation,nondefault subtotal/text-zero and number-format services remain unsupported;broader parity remains unverified. CALC250-252 record retained upstream edge behavior and limits on numerical evidence.",
-      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. Original local OOO A1 Format retains absolute/valid flags and full-axis endpoint notation;nonlocal and alternate formatting conventions reject explicitly."
+      "Task77 adds normal unmerged local-reference mouse input using actual ScInputHandler selected UTF16 text,ScModule ordered dispatch,ScViewData reference start/end and ScTabView block/function-set owners. Browser formula pointing precedes Commit and preserves the edit origin;ordinary cell dragging retains the active anchor while headers move their native cursor endpoint. Shift extends;Ctrl adds/subtracts native ScMarkData/ScMultiSel selections. This is bounded source-backed foundation work,not full Calc parity. Merged cells,fill/transfer/move,protected/alternate/split views,reference dialogs,external/3D/matrix calculation,EditEngine and complete VCL painting remain unported. Original local OOO A1 Format retains absolute/valid flags and full-axis endpoint notation;nonlocal and alternate formatting conventions reject explicitly.",
+      "J0Z0KF admits original local Excel A1/OOXML scanning and formatting through actual ScAddress/ScRange and ScDocument limits. Preserve signed64 row conversion, optional signs, native partial coordinate/absolute-flag mutations, whole-axis ranges, unsorted endpoints, ParseAny fallback and native full-address-notation control. Qualifying sheet/external headers, injected error-token services and R1C1 remain explicitly unsupported; no replacement resolver or global workbook service is supplied. Existing OOO/ODF parsing and UI callers remain on their prior route. Source-backed tests use actual native-model owners; no full native differential, full parser parity or XLSX/UI readiness follows. Coverage retains original singleton branches and the unchanged100 gate; two local-domain branches remain uncovered rather than being deleted or excluded."
     ],
     "status": "mapped",
     "upstreamPath": "sc/source/core/tool/address.cxx",
@@ -83,7 +95,15 @@
       "ScRange::IncColIfNotLessThan",
       "ScRange::IncRowIfNotLessThan",
       "ScAddress::Format",
-      "ScRange::Format"
+      "ScRange::Format",
+      "ScAddress::Parse",
+      "ScRange::ParseAny",
+      "ScRange::Format",
+      "lcl_ScRange_Parse_XL_A1",
+      "lcl_a1_get_col",
+      "lcl_a1_get_row",
+      "sal_Unicode_strtol",
+      "isValidSingleton"
     ]
   }
 }

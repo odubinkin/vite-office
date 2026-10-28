@@ -60,8 +60,8 @@ it("preserves local A1 details, absolute flags, bounds and unsupported parser fa
         a.Parse(unicode(source), doc, byAddress),
     ).toThrow(/implemented/);
   expect(
-    /** Refuses the missing Excel convention. @returns Flags. */ () =>
-      a.Parse(unicode("A1"), doc, new ScAddress.Details(conv.CONV_XL_A1)),
+    /** Refuses the missing R1C1 convention. @returns Flags. */ () =>
+      a.Parse(unicode("A1"), doc, new ScAddress.Details(conv.CONV_XL_R1C1)),
   ).toThrow(/implemented/);
   const compiler = new ScCompiler(doc, a, grammar);
   for (const source of ["=[.A1", "=[Sheet.A1]", "=[.]", "=[Sheet.A1:.A2]"])

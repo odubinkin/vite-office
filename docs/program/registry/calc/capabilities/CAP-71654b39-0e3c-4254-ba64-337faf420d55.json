@@ -1,0 +1,87 @@
+{
+  "baselineCommit": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "baselineTag": "libreoffice-26.8.0.2",
+  "record": {
+    "id": "CAP-71654b39-0e3c-4254-ba64-337faf420d55",
+    "capabilityId": "CAP-71654b39-0e3c-4254-ba64-337faf420d55",
+    "suite": "calc",
+    "subsystem": "coordinate-model",
+    "type": "model",
+    "maturity": "implemented",
+    "assertions": [
+      "Original local Excel A1 address/range parsing and formatting feed actual ScAddress/ScRange owners without a second spreadsheet model.",
+      "Native partial mutation, absolute flags, full-axis ranges and ParseAny fallback remain source-shaped."
+    ],
+    "capability": "Local Excel A1 and OOXML coordinate parsing and serialization",
+    "gaps": [
+      "J0Z0KF admits original local Excel A1/OOXML scanning and formatting through actual ScAddress/ScRange and ScDocument limits. Preserve signed64 row conversion, optional signs, native partial coordinate/absolute-flag mutations, whole-axis ranges, unsorted endpoints, ParseAny fallback and native full-address-notation control. Qualifying sheet/external headers, injected error-token services and R1C1 remain explicitly unsupported; no replacement resolver or global workbook service is supplied. Existing OOO/ODF parsing and UI callers remain on their prior route. Source-backed tests use actual native-model owners; no full native differential, full parser parity or XLSX/UI readiness follows. Coverage retains original singleton branches and the unchanged100 gate; two local-domain branches remain uncovered rather than being deleted or excluded."
+    ],
+    "upstream": {
+      "implementation": [
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "lcl_ScRange_Parse_XL_A1"
+        },
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "ScRange::ParseAny"
+        },
+        {
+          "path": "sc/source/core/tool/address.cxx",
+          "marker": "ScRange::Format"
+        }
+      ],
+      "tests": [
+        {
+          "path": "sc/qa/unit/ucalc_range.cxx",
+          "marker": "testRangeParsing"
+        }
+      ],
+      "docs": [
+        {
+          "path": "sc/inc/address.hxx",
+          "marker": "ParseAny"
+        }
+      ]
+    },
+    "local": {
+      "implementation": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "ParseAny"
+        },
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.ts",
+          "marker": "parseLocalExcelA1"
+        }
+      ],
+      "tests": [
+        {
+          "path": "apps/office/src/sc/source/core/tool/address.xl-a1.test.ts",
+          "marker": "@fileoverview"
+        }
+      ],
+      "docs": [
+        {
+          "path": "docs/program/calc-upstream-suspected-issues.md",
+          "marker": "CALC-344"
+        }
+      ]
+    },
+    "implemented": true,
+    "contractParity": false,
+    "behaviorParity": false,
+    "defaultParity": false,
+    "verified": false,
+    "stackDivergence": {
+      "kind": "browser-adaptation",
+      "rationale": "J0Z0KF admits original local Excel A1/OOXML scanning and formatting through actual ScAddress/ScRange and ScDocument limits. Preserve signed64 row conversion, optional signs, native partial coordinate/absolute-flag mutations, whole-axis ranges, unsorted endpoints, ParseAny fallback and native full-address-notation control. Qualifying sheet/external headers, injected error-token services and R1C1 remain explicitly unsupported; no replacement resolver or global workbook service is supplied. Existing OOO/ODF parsing and UI callers remain on their prior route. Source-backed tests use actual native-model owners; no full native differential, full parser parity or XLSX/UI readiness follows. Coverage retains original singleton branches and the unchanged100 gate; two local-domain branches remain uncovered rather than being deleted or excluded."
+    },
+    "scopeLimitations": [
+      "J0Z0KF admits original local Excel A1/OOXML scanning and formatting through actual ScAddress/ScRange and ScDocument limits. Preserve signed64 row conversion, optional signs, native partial coordinate/absolute-flag mutations, whole-axis ranges, unsorted endpoints, ParseAny fallback and native full-address-notation control. Qualifying sheet/external headers, injected error-token services and R1C1 remain explicitly unsupported; no replacement resolver or global workbook service is supplied. Existing OOO/ODF parsing and UI callers remain on their prior route. Source-backed tests use actual native-model owners; no full native differential, full parser parity or XLSX/UI readiness follows. Coverage retains original singleton branches and the unchanged100 gate; two local-domain branches remain uncovered rather than being deleted or excluded.",
+      "Native testRangeParsing is related OOO source QA, not a claimed ported Excel suite or compiled differential. Local tests exercise the represented Excel branches."
+    ],
+    "aspect": "model-operation",
+    "atomicOperation": "local-excel-a1-coordinate-conversion"
+  }
+}

@@ -51,7 +51,7 @@ it("formats native local address flags and full-axis endpoint ranges", /** Uses 
       new ScAddress().Format(
         ScRefFlags.VALID,
         null,
-        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_A1),
+        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1),
       ),
   ).toThrow(/Nonlocal/);
   expect(

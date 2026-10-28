@@ -4328,3 +4328,17 @@ Pinned ICU78.3 `source/i18n/calendar.cpp`, `Calendar::orphanTimeZone`, replaces 
 - Observation: copy construction copies fGregorianCutover, fCutoverJulianDay, fGregorianCutoverYear, fIsGregorian and fInvertGregorian. Assignment delegates to Calendar::operator= and copies only the three cutover fields, in cutover/time, year, Julian-day order. The two resolver flags retain their destination values. The unchanged native witness distinguishes these operations with controlled boolean flag states.
 - Suspected issue: copy construction and assignment produce different internal resolver state. These are working flags that subsequent calculations can overwrite; this finding does not claim an observed incorrect public date result.
 - Local behavior: preserve the three assignment writes and their order, retaining destination flags. Copy construction and clone retain the original five-field copy behavior.
+
+### CALC-344 — Excel A1 range parser retains VALID for an incomplete second row
+
+- Upstream: `sc/source/core/tool/address.cxx`, `lcl_ScRange_Parse_XL_A1` and `isValidSingleton`.
+- Observation: after parsing the complete first cell in A1:B or A1:B0, the second column succeeds and the second row fails. The singleton predicate sees a matching column-valid bit and no matching second row-valid bit, so it returns the first flags, including VALID, without setting second-endpoint validity. The represented source branch produces 0x8700 and the already written endpoints; ParseAny subsequently rejects the missing second flags, tries a single address and returns invalid.
+- Suspected issue: the range parser accepts a partially specified second cell as a valid one-axis singleton although its first endpoint was a complete cell. This is source analysis plus local actual-owner acceptance, not an independent compiled-native result.
+- Local behavior: retain the predicate, flags, partial coordinates and distinct ParseAny behavior. Do not promote missing endpoint validity, reject the range early or sort it.
+
+### CALC-345 — Excel local parser singleton alternatives have no local-input witness
+
+- Upstream: `sc/source/core/tool/address.cxx`, the two `isValidSingleton(nFlags,nFlags2)` returns in `lcl_ScRange_Parse_XL_A1`.
+- Observation: in the admitted local/no-error-token path, failure to scan a second column leaves both second-axis valid bits absent; the first return takes its invalid alternative. A successful second column followed by a failed second row takes the valid alternative. The opposite alternatives are not reached by local lexical inputs. The first alternative appears unreachable more broadly from the initialized source flags; error-token/header services have not been independently compiled or certified here.
+- Suspected issue: the first conditional appears to retain an impossible singleton-success path, while the second also serves unported invalid/error-token states. This is a control-flow finding, not proof that either branch may safely be removed from upstream.
+- Local behavior: keep both original decisions and helper. Report the resulting scoped branch-coverage gap under the unchanged100 threshold; do not manufacture flags in tests, drop source branches or add exclusions.

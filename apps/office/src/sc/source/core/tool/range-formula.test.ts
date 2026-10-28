@@ -427,11 +427,11 @@ it("retains range endpoint flags,reversed axes,whole-axis sticky rules and untou
   expect(initial.GetVars()).toEqual(before);
   expect(initial.Parse(unicode("A1:"), d, details)).toBe(ScRefFlags.ZERO);
   expect(
-    /** Rejects the missing Excel parser service. @returns Flags. */ () =>
+    /** Rejects the missing R1C1 parser service. @returns Flags. */ () =>
       initial.Parse(
         unicode("A1:B2"),
         d,
-        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_A1),
+        new ScAddress.Details(FormulaGrammar.AddressConvention.CONV_XL_R1C1),
       ),
   ).toThrow(/not implemented/);
   d.Dispose();

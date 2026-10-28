@@ -42,14 +42,16 @@ export class ScAddress {
   static readonly detailsOOOa1: Readonly<ScAddressDetails> = new ScAddressDetails(
     FormulaGrammar.AddressConvention.CONV_OOO,
   );
-  /** Original local OOO A1 Format,including absolute flags and partial-valid axes. Sheet-qualified and alternate output conventions remain unported. @param flags - Native reference flags. @param doc - Optional document bounds. @param details - Output convention. @returns Owned UTF16 reference. */
+  /** Original local OOO/Excel A1 Format, including absolute flags and partial-valid axes. Sheet-qualified and R1C1 conventions remain unported. @param flags - Native reference flags. @param doc - Optional document bounds. @param details - Output convention. @returns Owned UTF16 reference. */
   Format(
     flags: ScRefFlags,
     doc: ScAddressDocument | null = null,
     details: Readonly<ScAddressDetails> = ScAddress.detailsOOOa1,
   ): OUString {
     if (
-      details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO ||
+      (details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
+        details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_A1 &&
+        details.eConv !== FormulaGrammar.AddressConvention.CONV_XL_OOX) ||
       flags & (ScRefFlags.TAB_3D | ScRefFlags.FORCE_DOC)
     )
       throw new Error("Nonlocal address formatting is not implemented");
@@ -79,12 +81,21 @@ export class ScAddress {
     for (let index = 0; index < output.length; ++index) units[index] = output.charCodeAt(index);
     return new OUString(units, units.length);
   }
-  /** Implements the valid local A1 subset of native Parse; other conventions, sheet/external/name/error fallbacks are explicit missing APIs. @param value - Unwrapped local A1 address. @param doc - Limits owner. @param details - Convention/base. @returns Native valid/absolute flags. */
+  /** Native local Excel dispatch and existing OOO/ODF A1 subset. Sheet/external/name/error-token services remain explicit missing APIs. @param value - Unwrapped local A1 address. @param doc - Limits owner. @param details - Convention/base. @returns Native valid/absolute flags. */
   Parse(
     value: OUStringConstReference,
     doc: ScAddressDocument,
     details: Readonly<ScAddressDetails>,
   ): ScRefFlags {
+    if (
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
+    ) {
+      const range = new ScRange(this),
+        flags = parseLocalExcelA1(range, text(value), doc, true);
+      this.assign(range.aStart);
+      return flags;
+    }
     if (
       details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
       details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
@@ -231,6 +242,11 @@ export class ScRange {
     details: Readonly<ScAddressDetails>,
   ): ScRefFlags {
     if (
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
+    )
+      return parseLocalExcelA1(this, text(value), doc, false);
+    if (
       details.eConv !== FormulaGrammar.AddressConvention.CONV_OOO &&
       details.eConv !== FormulaGrammar.AddressConvention.CONV_ODF
     )
@@ -315,16 +331,80 @@ export class ScRange {
     }
     return applyStartToEndFlags(flags1, flags2 & ScRefFlags.BITS) | (flags2 & ScRefFlags.VALID);
   }
+  /** Original ParseAny falls back to address parsing unless all second-endpoint valid bits are set. @param value - Native reference. @param doc - Actual document. @param details - Convention. @returns Native flags, retaining failed-parse mutations. */
+  ParseAny(
+    value: OUStringConstReference,
+    doc: ScAddressDocument,
+    details: Readonly<ScAddressDetails>,
+  ): ScRefFlags {
+    let result = this.Parse(value, doc, details);
+    const valid =
+      ScRefFlags.VALID | ScRefFlags.COL2_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.TAB2_VALID;
+    if ((result & valid) !== valid) {
+      const address = new ScAddress(this.aStart);
+      result = address.Parse(value, doc, details);
+      if (result & ScRefFlags.VALID) {
+        this.aStart.assign(address);
+        this.aEnd.assign(address);
+      }
+    }
+    return result;
+  }
   public readonly aStart: ScAddress;
   public readonly aEnd: ScAddress;
 
-  /** Original OOO range Format uses endpoint flags and retains full-axis endpoint notation. @param doc - Document. @param flags - Native flags. @param details - Convention. @returns Owned UTF16 reference. */
+  /** Original OOO and local Excel range Format retain endpoint flags and native whole-axis notation. @param doc - Document. @param flags - Native flags. @param details - Convention. @param fullAddressNotation - Original Excel flag suppressing whole-axis abbreviation. @returns Owned UTF16 reference. */
   Format(
     doc: ScAddressDocument,
     flags: ScRefFlags,
     details: Readonly<ScAddressDetails> = ScAddress.detailsOOOa1,
+    fullAddressNotation = false,
   ): OUString {
     if (!(flags & ScRefFlags.VALID)) return new OUString(new Uint16Array([35, 82, 69, 70, 33]), 5);
+    if (
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_A1 ||
+      details.eConv === FormulaGrammar.AddressConvention.CONV_XL_OOX
+    ) {
+      if (flags & ScRefFlags.TAB_3D)
+        throw new Error("Excel sheet and external reference headers are not implemented");
+      const wholeRows =
+          this.aStart.Col() === 0 && this.aEnd.Col() >= doc.MaxCol() && !fullAddressNotation,
+        wholeCols =
+          !wholeRows &&
+          this.aStart.Row() === 0 &&
+          this.aEnd.Row() >= doc.MaxRow() &&
+          !fullAddressNotation,
+        axes = wholeRows
+          ? ScRefFlags.ROW_VALID
+          : wholeCols
+            ? ScRefFlags.COL_VALID
+            : ScRefFlags.ROW_VALID | ScRefFlags.COL_VALID,
+        first = this.aStart.Format(
+          (flags & (ScRefFlags.COL_ABS | ScRefFlags.ROW_ABS)) | axes,
+          null,
+          details,
+        );
+      if (
+        !wholeRows &&
+        !wholeCols &&
+        this.aStart.Col() === this.aEnd.Col() &&
+        this.aStart.Row() === this.aEnd.Row() &&
+        Boolean(flags & ScRefFlags.COL_ABS) === Boolean(flags & ScRefFlags.COL2_ABS) &&
+        Boolean(flags & ScRefFlags.ROW_ABS) === Boolean(flags & ScRefFlags.ROW2_ABS)
+      )
+        return first;
+      const second = this.aEnd.Format(
+        ((flags >> 4) & (ScRefFlags.COL_ABS | ScRefFlags.ROW_ABS)) | axes,
+        null,
+        details,
+      );
+      try {
+        return unicode(text(first) + ":" + text(second));
+      } finally {
+        first.dispose();
+        second.dispose();
+      }
+    }
     if (this.aStart.Tab() !== this.aEnd.Tab()) flags |= ScRefFlags.TAB_3D;
     const first = this.aStart.Format(flags, doc, details);
     if (
@@ -570,4 +650,148 @@ export class ScRange {
     if (row < maxRow) this.aEnd.SetRow(Math.min((row + delta) | 0, maxRow));
     else this.aEnd.IncRow(delta);
   }
+}
+
+/** Original ASCII alpha predicate over a NUL-terminated UTF16 view. @param input - Text. @param pos - Native pointer offset. @returns Whether alphabetic. */
+function alpha(input: string, pos: number): boolean {
+  const code = input.charCodeAt(pos);
+  return (code >= 65 && code <= 90) || (code >= 97 && code <= 122);
+}
+/** Original ASCII space-only eater. @param input - Text. @param pos - Nullable native pointer. @returns Advanced pointer or null. */
+function spaces(input: string, pos: number | null): number | null {
+  if (pos !== null) while (input[pos] === " ") ++pos;
+  return pos;
+}
+/** Original lcl_a1_get_col for the no-error-token invocation. Failed scans preserve their partial flag mutations. @param doc - Actual bounds. @param input - Text. @param pos - Pointer. @param address - Recipient. @param flags - Mutable flags. @returns End pointer or null. */
+function column(
+  doc: ScAddressDocument,
+  input: string,
+  pos: number,
+  address: ScAddress,
+  flags: [ScRefFlags],
+): number | null {
+  if (input[pos] === "$") {
+    flags[0] |= ScRefFlags.COL_ABS;
+    ++pos;
+  }
+  if (!alpha(input, pos)) return null;
+  let col = (input.charCodeAt(pos++) & ~32) - 65;
+  const max = doc.MaxCol();
+  while (col <= max && alpha(input, pos))
+    col = (col + 1) * 26 + (input.charCodeAt(pos++) & ~32) - 65;
+  if (col > max || col < 0 || alpha(input, pos)) return null;
+  flags[0] |= ScRefFlags.COL_VALID;
+  address.SetCol(col);
+  return pos;
+}
+/** Original sal_Unicode_strtol plus lcl_a1_get_row, including signed64 overflow and optional sign. @param doc - Actual bounds. @param input - Text. @param pos - Pointer. @param address - Recipient. @param flags - Mutable flags. @returns End pointer or null. */
+function row(
+  doc: ScAddressDocument,
+  input: string,
+  pos: number,
+  address: ScAddress,
+  flags: [ScRefFlags],
+): number | null {
+  if (input[pos] === "$") {
+    flags[0] |= ScRefFlags.ROW_ABS;
+    ++pos;
+  }
+  const start = pos;
+  let negative = false;
+  if (input[pos] === "-") {
+    negative = true;
+    ++pos;
+  } else if (input[pos] === "+") ++pos;
+  let accum = 0n;
+  const cutoff = negative ? -9223372036854775808n / 10n : -(9223372036854775807n / 10n),
+    cutlim = negative ? -(-9223372036854775808n % 10n) : 9223372036854775807n % 10n;
+  while (input.charCodeAt(pos) >= 48 && input.charCodeAt(pos) <= 57) {
+    const digit = BigInt(input.charCodeAt(pos) - 48);
+    if (accum < cutoff || (accum === cutoff && digit > cutlim)) return null;
+    accum = accum * 10n - digit;
+    ++pos;
+  }
+  let value = negative ? accum : -accum;
+  if (pos === start || value < 1n) return null;
+  --value;
+  if (value > BigInt(doc.MaxRow())) return null;
+  flags[0] |= ScRefFlags.ROW_VALID;
+  address.SetRow(Number(value));
+  return pos;
+}
+/** Original isValidSingleton XOR over both coordinate flags. @param flags - First flags. @param other - Second flags. @returns One-axis singleton validity. */
+function singleton(flags: ScRefFlags, other: ScRefFlags): boolean {
+  const cols =
+      Boolean(flags & ScRefFlags.COL_VALID) &&
+      Boolean(flags & ScRefFlags.COL2_VALID || other & ScRefFlags.COL_VALID),
+    rows =
+      Boolean(flags & ScRefFlags.ROW_VALID) &&
+      Boolean(flags & ScRefFlags.ROW2_VALID || other & ScRefFlags.ROW_VALID);
+  return cols !== rows;
+}
+/** Local-header path of lcl_ScRange_Parse_XL_A1, preserving original mutation/order/invalid-flag behavior. Qualified/external references require the unported native header owner; they never get reinterpreted as local cells. @param range - Actual recipient. @param source - UTF16 text. @param doc - Actual document bounds. @param onlySingle - Original address versus range dispatch. @returns Native flags. */
+function parseLocalExcelA1(
+  range: ScRange,
+  source: string,
+  doc: ScAddressDocument,
+  onlySingle: boolean,
+): ScRefFlags {
+  const input = source.split("\0", 1)[0] as string;
+  if (!input) return ScRefFlags.ZERO;
+  if (input.includes("!") || input.includes("'") || input.includes("["))
+    throw new Error("Excel sheet and external reference headers are not implemented");
+  const flags: [ScRefFlags] = [ScRefFlags.VALID | ScRefFlags.TAB_VALID],
+    other: [ScRefFlags] = [ScRefFlags.TAB_VALID];
+  let first = column(doc, input, 0, range.aStart, flags),
+    second: number | null;
+  if (first === null) {
+    if (onlySingle) return ScRefFlags.ZERO;
+    first = spaces(input, row(doc, input, 0, range.aStart, flags));
+    if (first === null || input[first++] !== ":") return ScRefFlags.ZERO;
+    first = spaces(input, first) as number;
+    second = row(doc, input, first, range.aEnd, other);
+    if (second === null || second !== input.length) return ScRefFlags.ZERO;
+    range.aStart.SetCol(0);
+    range.aEnd.SetCol(doc.MaxCol());
+    flags[0] |=
+      ScRefFlags.COL_VALID | ScRefFlags.COL2_VALID | ScRefFlags.COL_ABS | ScRefFlags.COL2_ABS;
+    return applyStartToEndFlags(flags[0], other[0]);
+  }
+  second = row(doc, input, first, range.aStart, flags);
+  if (second === null) {
+    if (onlySingle) return ScRefFlags.ZERO;
+    first = spaces(input, first) as number;
+    if (input[first++] !== ":") return ScRefFlags.ZERO;
+    first = spaces(input, first) as number;
+    second = column(doc, input, first, range.aEnd, other);
+    if (second === null || second !== input.length) return ScRefFlags.ZERO;
+    range.aStart.SetRow(0);
+    range.aEnd.SetRow(doc.MaxRow());
+    flags[0] |=
+      ScRefFlags.ROW_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.ROW_ABS | ScRefFlags.ROW2_ABS;
+    return applyStartToEndFlags(flags[0], other[0]);
+  }
+  range.aEnd.SetCol(range.aStart.Col());
+  range.aEnd.SetRow(range.aStart.Row());
+  const invalid =
+    ScRefFlags.VALID | ScRefFlags.COL_VALID | ScRefFlags.ROW_VALID | ScRefFlags.TAB_VALID;
+  if (onlySingle) return second === input.length ? flags[0] : flags[0] & ~invalid;
+  second = spaces(input, second) as number;
+  if (input[second] !== ":")
+    return (
+      flags[0] & ~(invalid | ScRefFlags.COL2_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.TAB2_VALID)
+    );
+  const pos = spaces(input, second + 1) as number;
+  first = column(doc, input, pos, range.aEnd, other);
+  // The local input domain has no trailing sheet name to resolve here.
+  if (first === null)
+    return singleton(flags[0], other[0]) ? flags[0] : flags[0] & ~ScRefFlags.VALID;
+  second = row(doc, input, first, range.aEnd, other);
+  if (second === null)
+    return singleton(flags[0], other[0]) ? flags[0] : flags[0] & ~ScRefFlags.VALID;
+  if (second !== input.length)
+    return (
+      flags[0] & ~(invalid | ScRefFlags.COL2_VALID | ScRefFlags.ROW2_VALID | ScRefFlags.TAB2_VALID)
+    );
+  return applyStartToEndFlags(flags[0], other[0]);
 }
