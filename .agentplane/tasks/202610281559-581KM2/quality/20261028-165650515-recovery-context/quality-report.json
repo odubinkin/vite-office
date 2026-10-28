@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "202610281559-581KM2",
+  "evaluator_id": "recovery-context",
+  "evaluator_profile": "EVALUATOR",
+  "generated_at": "2026-10-28T16:56:50.515Z",
+  "verdict": "human_review",
+  "summary": "Integration implementation and assertion repairs are ready; strict coverage exception or expanded coverage scope requires user decision before main publication.",
+  "evaluated_sha": "a874f4b95cb78beec19b3789c346046c68ff350d",
+  "blueprint_digest": "f3404d8ee3d42cf16ad8ab8e1bfbf11af93dcd4727f1b4f391cabd81ed008208",
+  "findings": [
+    "Initial full run26091 tests had2 failures,both repaired and current-code147-test rerun passes. Global coverage gaps span255 files and include source-preserved practically unreachable branches. No thresholds/exclusions changed. Main push and reverse branch synchronization remain pending."
+  ],
+  "evidence_refs": [
+    ".agentplane/tasks/202610281559-581KM2/README.md",
+    ".agentplane/tasks/202610281559-581KM2/initial-coverage-gaps.json"
+  ],
+  "missing_tests": [],
+  "hidden_assumptions": [],
+  "residual_risks": []
+}

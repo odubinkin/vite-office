@@ -1,0 +1,1830 @@
+{
+  "kind": "initial-full-integration-coverage",
+  "note": "The full run started before the formatter repair and both stale-fixture corrections. These are diagnostic baseline gaps, not a final-current-source certificate. All actual test failures were rerun successfully after repairs. Coverage thresholds and exclusions remain unchanged.",
+  "initialMergedCommit": "dcfd3c8f1",
+  "initialTests": {
+    "total": 26091,
+    "passed": 26089,
+    "failed": 2
+  },
+  "summarySha256": "c758c104098be6c27a6039f936e484df6a716c30e2630637fb35d1ff234d4dbf",
+  "totals": {
+    "lines": {
+      "total": 108117,
+      "covered": 104713,
+      "skipped": 0,
+      "pct": 96.85
+    },
+    "statements": {
+      "total": 119457,
+      "covered": 115154,
+      "skipped": 0,
+      "pct": 96.39
+    },
+    "functions": {
+      "total": 18420,
+      "covered": 18075,
+      "skipped": 0,
+      "pct": 98.12
+    },
+    "branches": {
+      "total": 74569,
+      "covered": 70519,
+      "skipped": 0,
+      "pct": 94.56
+    },
+    "branchesTrue": {
+      "total": 0,
+      "covered": 0,
+      "skipped": 0,
+      "pct": 100
+    }
+  },
+  "files": [
+    {
+      "path": "apps/office/src/external/icu/source/i18n/rbtz.ts",
+      "s": 349,
+      "b": 284,
+      "f": 28,
+      "l": 295
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/islamcal.ts",
+      "s": 215,
+      "b": 133,
+      "f": 39,
+      "l": 186
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/chnsecal.ts",
+      "s": 186,
+      "b": 124,
+      "f": 15,
+      "l": 159
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-date-value.ts",
+      "s": 175,
+      "b": 115,
+      "f": 0,
+      "l": 172
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/chnsecal.astronomy.ts",
+      "s": 172,
+      "b": 130,
+      "f": 11,
+      "l": 133
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/erarules.ts",
+      "s": 170,
+      "b": 110,
+      "f": 12,
+      "l": 147
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/hebrwcal.ts",
+      "s": 157,
+      "b": 127,
+      "f": 16,
+      "l": 133
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.construct.ts",
+      "s": 120,
+      "b": 114,
+      "f": 0,
+      "l": 107
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final-common.ts",
+      "s": 112,
+      "b": 113,
+      "f": 0,
+      "l": 106
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/astro.ts",
+      "s": 105,
+      "b": 17,
+      "f": 25,
+      "l": 104
+    },
+    {
+      "path": "apps/office/src/i18npool/source/calendar/calendar_hijri.ts",
+      "s": 87,
+      "b": 42,
+      "f": 9,
+      "l": 77
+    },
+    {
+      "path": "apps/office/src/tools/source/fsys/urlobj.host.ts",
+      "s": 78,
+      "b": 63,
+      "f": 0,
+      "l": 71
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unifiedcache.ts",
+      "s": 77,
+      "b": 52,
+      "f": 10,
+      "l": 54
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final-number-delimiter.ts",
+      "s": 75,
+      "b": 47,
+      "f": 0,
+      "l": 68
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/swhtml.ts",
+      "s": 75,
+      "b": 95,
+      "f": 0,
+      "l": 51
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/indiancal.ts",
+      "s": 72,
+      "b": 52,
+      "f": 11,
+      "l": 67
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/persncal.ts",
+      "s": 62,
+      "b": 51,
+      "f": 12,
+      "l": 57
+    },
+    {
+      "path": "apps/office/src/unotools/source/i18n/calendarwrapper.ts",
+      "s": 60,
+      "b": 33,
+      "f": 6,
+      "l": 42
+    },
+    {
+      "path": "apps/office/src/i18npool/source/calendar/calendar_gregorian.ts",
+      "s": 59,
+      "b": 43,
+      "f": 7,
+      "l": 45
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/japancal.ts",
+      "s": 58,
+      "b": 50,
+      "f": 11,
+      "l": 49
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uhash.ts",
+      "s": 57,
+      "b": 57,
+      "f": 6,
+      "l": 42
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.locale-calendar.ts",
+      "s": 55,
+      "b": 117,
+      "f": 1,
+      "l": 55
+    },
+    {
+      "path": "apps/office/src/sal/rtl/strtmpl.ts",
+      "s": 48,
+      "b": 53,
+      "f": 1,
+      "l": 19
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.factory.ts",
+      "s": 47,
+      "b": 42,
+      "f": 2,
+      "l": 35
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final-date.ts",
+      "s": 41,
+      "b": 43,
+      "f": 0,
+      "l": 27
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.ts",
+      "s": 40,
+      "b": 42,
+      "f": 2,
+      "l": 21
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.ts",
+      "s": 37,
+      "b": 17,
+      "f": 8,
+      "l": 31
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/cecal.ts",
+      "s": 36,
+      "b": 10,
+      "f": 4,
+      "l": 35
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-numeric.ts",
+      "s": 36,
+      "b": 63,
+      "f": 0,
+      "l": 22
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.lex.ts",
+      "s": 35,
+      "b": 43,
+      "f": 0,
+      "l": 32
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.properties.ts",
+      "s": 35,
+      "b": 61,
+      "f": 0,
+      "l": 30
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.ts",
+      "s": 34,
+      "b": 27,
+      "f": 2,
+      "l": 28
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.entries.ts",
+      "s": 32,
+      "b": 32,
+      "f": 0,
+      "l": 17
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.currency-patterns.ts",
+      "s": 32,
+      "b": 51,
+      "f": 1,
+      "l": 32
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfsprm.ts",
+      "s": 32,
+      "b": 23,
+      "f": 0,
+      "l": 25
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.type.ts",
+      "s": 30,
+      "b": 22,
+      "f": 2,
+      "l": 25
+    },
+    {
+      "path": "apps/office/src/i18npool/source/calendar/calendar_jewish.ts",
+      "s": 30,
+      "b": 17,
+      "f": 4,
+      "l": 26
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.ts",
+      "s": 29,
+      "b": 41,
+      "f": 0,
+      "l": 15
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/ethpccal.ts",
+      "s": 28,
+      "b": 18,
+      "f": 15,
+      "l": 25
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.type.ts",
+      "s": 27,
+      "b": 34,
+      "f": 0,
+      "l": 17
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.character.ts",
+      "s": 27,
+      "b": 23,
+      "f": 0,
+      "l": 19
+    },
+    {
+      "path": "apps/office/src/tools/source/fsys/urlobj.object.ts",
+      "s": 27,
+      "b": 72,
+      "f": 0,
+      "l": 16
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/astro.cache.ts",
+      "s": 26,
+      "b": 16,
+      "f": 7,
+      "l": 22
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.alias.ts",
+      "s": 25,
+      "b": 32,
+      "f": 0,
+      "l": 21
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.iso.ts",
+      "s": 24,
+      "b": 30,
+      "f": 1,
+      "l": 21
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final-number.ts",
+      "s": 24,
+      "b": 34,
+      "f": 0,
+      "l": 12
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/dangical.ts",
+      "s": 23,
+      "b": 8,
+      "f": 5,
+      "l": 20
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/taiwncal.ts",
+      "s": 23,
+      "b": 26,
+      "f": 6,
+      "l": 21
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/streaminput.ts",
+      "s": 23,
+      "b": 43,
+      "f": 0,
+      "l": 6
+    },
+    {
+      "path": "apps/office/src/i18npool/source/calendar/calendarImpl.ts",
+      "s": 22,
+      "b": 12,
+      "f": 4,
+      "l": 22
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-value.ts",
+      "s": 21,
+      "b": 24,
+      "f": 0,
+      "l": 14
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.types.ts",
+      "s": 21,
+      "b": 16,
+      "f": 1,
+      "l": 13
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/swhtml.setattr.ts",
+      "s": 21,
+      "b": 26,
+      "f": 0,
+      "l": 14
+    },
+    {
+      "path": "apps/office/src/sax/source/expatwrap/xml2utf.ts",
+      "s": 19,
+      "b": 5,
+      "f": 0,
+      "l": 18
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.table-entry.ts",
+      "s": 18,
+      "b": 10,
+      "f": 1,
+      "l": 13
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlcss1.ts",
+      "s": 18,
+      "b": 23,
+      "f": 0,
+      "l": 13
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlnum.ts",
+      "s": 18,
+      "b": 7,
+      "f": 10,
+      "l": 17
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc_tag.convert.ts",
+      "s": 17,
+      "b": 19,
+      "f": 0,
+      "l": 12
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/buddhcal.ts",
+      "s": 17,
+      "b": 10,
+      "f": 6,
+      "l": 16
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/coptccal.ts",
+      "s": 17,
+      "b": 12,
+      "f": 7,
+      "l": 14
+    },
+    {
+      "path": "apps/office/src/sfx2/source/doc/sfxbasemodel.ts",
+      "s": 17,
+      "b": 9,
+      "f": 0,
+      "l": 12
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/loclikelysubtags.ts",
+      "s": 16,
+      "b": 21,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/loclikelysubtags.data.ts",
+      "s": 15,
+      "b": 15,
+      "f": 0,
+      "l": 7
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-date.ts",
+      "s": 15,
+      "b": 31,
+      "f": 0,
+      "l": 12
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.edit.ts",
+      "s": 15,
+      "b": 29,
+      "f": 0,
+      "l": 15
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/impex.ts",
+      "s": 14,
+      "b": 24,
+      "f": 0,
+      "l": 11
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.prefix.ts",
+      "s": 14,
+      "b": 5,
+      "f": 0,
+      "l": 14
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.ts",
+      "s": 14,
+      "b": 10,
+      "f": 6,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.ts",
+      "s": 13,
+      "b": 16,
+      "f": 0,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.recognition.ts",
+      "s": 13,
+      "b": 19,
+      "f": 0,
+      "l": 10
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-setattr.ts",
+      "s": 12,
+      "b": 13,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.limits.ts",
+      "s": 11,
+      "b": 6,
+      "f": 1,
+      "l": 10
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/iso8601cal.ts",
+      "s": 11,
+      "b": 8,
+      "f": 3,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.keywords.ts",
+      "s": 11,
+      "b": 5,
+      "f": 0,
+      "l": 11
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/unifiedcache.key.ts",
+      "s": 10,
+      "b": 6,
+      "f": 4,
+      "l": 7
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/impex.date.ts",
+      "s": 10,
+      "b": 21,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.locale.ts",
+      "s": 10,
+      "b": 10,
+      "f": 1,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-insert.ts",
+      "s": 10,
+      "b": 10,
+      "f": 0,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/sw/source/core/unocore/unostyle.ts",
+      "s": 10,
+      "b": 16,
+      "f": 3,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sc/source/ui/docshell/docsh.ts",
+      "s": 9,
+      "b": 25,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.ts",
+      "s": 9,
+      "b": 5,
+      "f": 1,
+      "l": 9
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.properties.ts",
+      "s": 9,
+      "b": 10,
+      "f": 3,
+      "l": 8
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/loclikely.ts",
+      "s": 8,
+      "b": 7,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc_tag.ts",
+      "s": 8,
+      "b": 7,
+      "f": 0,
+      "l": 7
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.natnum.ts",
+      "s": 8,
+      "b": 16,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/wrtw8num.ts",
+      "s": 8,
+      "b": 11,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/sharedobject.ts",
+      "s": 7,
+      "b": 9,
+      "f": 5,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.time.ts",
+      "s": 7,
+      "b": 11,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/olsontz.ts",
+      "s": 7,
+      "b": 9,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.mark.link.ts",
+      "s": 7,
+      "b": 8,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.ref.ts",
+      "s": 7,
+      "b": 7,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sax/source/fastparser/fastparser.ts",
+      "s": 7,
+      "b": 8,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-language.ts",
+      "s": 7,
+      "b": 10,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/swhtml.font.ts",
+      "s": 7,
+      "b": 12,
+      "f": 0,
+      "l": 6
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper_Impl.ts",
+      "s": 7,
+      "b": 8,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/locid.ts",
+      "s": 6,
+      "b": 8,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/ustrcase.ts",
+      "s": 6,
+      "b": 9,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustring.ts",
+      "s": 6,
+      "b": 5,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sal/textenc/tcvtmb.ts",
+      "s": 6,
+      "b": 6,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column3.input.ts",
+      "s": 6,
+      "b": 17,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.standard.ts",
+      "s": 6,
+      "b": 11,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/svxcss1.paragraph.ts",
+      "s": 6,
+      "b": 11,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/DomainMapper.ts",
+      "s": 6,
+      "b": 9,
+      "f": 1,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.lookup.ts",
+      "s": 5,
+      "b": 8,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/gregocal.ts",
+      "s": 5,
+      "b": 8,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/byteseq.ts",
+      "s": 5,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sal/textenc/convertiso2022jp.ts",
+      "s": 5,
+      "b": 4,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documentimport.ts",
+      "s": 5,
+      "b": 4,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.index.ts",
+      "s": 5,
+      "b": 3,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.dispatch.ts",
+      "s": 5,
+      "b": 15,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/tools/source/fsys/urlobj.path.ts",
+      "s": 5,
+      "b": 11,
+      "f": 0,
+      "l": 5
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/simpletz.ts",
+      "s": 4,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.block.line.ts",
+      "s": 4,
+      "b": 5,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.block.scan.ts",
+      "s": 4,
+      "b": 8,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/i18npool/source/nativenumber/nativenumbersupplier.ts",
+      "s": 4,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sal/textenc/convertiso2022kr.ts",
+      "s": 4,
+      "b": 4,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sax/source/tools/converter.ts",
+      "s": 4,
+      "b": 3,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/svl/source/items/stylepool.ts",
+      "s": 4,
+      "b": 15,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.generate-formats.ts",
+      "s": 4,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.language.ts",
+      "s": 4,
+      "b": 2,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/svtools/source/svhtml/parhtml.text.ts",
+      "s": 4,
+      "b": 6,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/svtools/source/svhtml/parhtml.ts",
+      "s": 4,
+      "b": 10,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.items.ts",
+      "s": 4,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docfmt.ts",
+      "s": 4,
+      "b": 13,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-portions.ts",
+      "s": 4,
+      "b": 10,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlgrin.ts",
+      "s": 4,
+      "b": 3,
+      "f": 0,
+      "l": 4
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/dmapper/StyleSheetTable.ts",
+      "s": 4,
+      "b": 2,
+      "f": 1,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts",
+      "s": 4,
+      "b": 25,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.ts",
+      "s": 4,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfvalue.ts",
+      "s": 4,
+      "b": 4,
+      "f": 1,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.fallback.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.lifecycle.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresdata.package.ts",
+      "s": 3,
+      "b": 2,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.autolink.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.link.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "s": 3,
+      "b": 3,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/cellvalue.ts",
+      "s": 3,
+      "b": 0,
+      "f": 1,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.generate-additional.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.currency.ts",
+      "s": 3,
+      "b": 2,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-character-style-codec.ts",
+      "s": 3,
+      "b": 3,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-nesting.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/rolbck.ts",
+      "s": 3,
+      "b": 7,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/undo/unattr.ts",
+      "s": 3,
+      "b": 6,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlcss1.options.ts",
+      "s": 3,
+      "b": 2,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/swhtml.attr.ts",
+      "s": 3,
+      "b": 5,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/md/swmd.ts",
+      "s": 3,
+      "b": 4,
+      "f": 0,
+      "l": 3
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/ooxml/OOXMLDocumentImpl.ts",
+      "s": 3,
+      "b": 5,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/unotools/source/i18n/charclass.ts",
+      "s": 3,
+      "b": 2,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/comphelper/inc/sequence.ts",
+      "s": 2,
+      "b": 0,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/cstring.ts",
+      "s": 2,
+      "b": 1,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc.keywordvalue.ts",
+      "s": 2,
+      "b": 0,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/timezone.resources.ts",
+      "s": 2,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.autolink.scan.ts",
+      "s": 2,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.block.build.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.html.ts",
+      "s": 2,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "s": 2,
+      "b": 4,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.mark.collect.ts",
+      "s": 2,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.scan.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/ustrbuf.ts",
+      "s": 2,
+      "b": 5,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/documen8.ts",
+      "s": 2,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/svl/source/items/globalpool.ts",
+      "s": 2,
+      "b": 1,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.context.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.calendar.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final-state.ts",
+      "s": 2,
+      "b": 0,
+      "f": 0,
+      "l": 2
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtatr2.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/wrtww8.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp-fill.ts",
+      "s": 2,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/comphelper/source/misc/string.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/browser/putil-tz.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc.normalize.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc.subtags.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.weekend.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/gregoimp.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/olsontz.offset.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/sharedcalendar.ts",
+      "s": 1,
+      "b": 0,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/timezone.default.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/zonemeta.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.mark.analyze.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/filter/source/msfilter/rtfutil.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/filter/source/msfilter/util.ts",
+      "s": 1,
+      "b": 0,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/i18npool/source/localedata/localedata.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sal/rtl/ustring.ts",
+      "s": 1,
+      "b": 0,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sal/textenc/textcvt.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/browser/filter/xml/calc-document-codec.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/column3.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/interpretercontext.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/svl/source/items/itempool.ts",
+      "s": 1,
+      "b": 3,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.scan-start.ts",
+      "s": 1,
+      "b": 11,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforlist.policy.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.final.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentContentOperationsManager.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/DocumentStylePoolManager.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/SwStyleNameMapper.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/doc.ts",
+      "s": 1,
+      "b": 0,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/edit/edatmisc.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndhints.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt-format-change.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/ndtxt.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints-merge.ts",
+      "s": 1,
+      "b": 2,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/thints.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txtedt-reset.ts",
+      "s": 1,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ascii/wrtasc.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/md/wrtmd.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxexport.ts",
+      "s": 1,
+      "b": 0,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/rtfexport.ts",
+      "s": 1,
+      "b": 9,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/writerwordglue.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/wrtw8nds.ts",
+      "s": 1,
+      "b": 6,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/wrtw8sty.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/ww8atr.ts",
+      "s": 1,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docst.ts",
+      "s": 1,
+      "b": 1,
+      "f": 1,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/uno/unotxdoc.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.border.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/tools/source/datetime/systemdatetime.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/tools/source/datetime/tdate.ts",
+      "s": 1,
+      "b": 1,
+      "f": 0,
+      "l": 1
+    },
+    {
+      "path": "apps/office/src/tools/source/fsys/urlobj.data.ts",
+      "s": 1,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/browser/putil-locale.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/locid.default.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/ucase.ts",
+      "s": 0,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uloc.keywords.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresbund.path.ts",
+      "s": 0,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/common/uresdata.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/calendar.locale.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/icu/source/i18n/olsontz.transitions.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.codespan.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.context.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/external/md4c/src/md4c.mark.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/oox/source/helper/binaryinputstream.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sal/inc/rtl/math.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sal/rtl/byteseq.ts",
+      "s": 0,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sal/textenc/tcvtutf8.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/core/data/table2.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/core/tool/address.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sc/source/filter/xml/xmlexprt.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/misc/urihelper.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforfind.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zformat.quotes.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svl/source/numbers/zforscan.color.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svtools/source/svhtml/parhtml.raw.ts",
+      "s": 0,
+      "b": 4,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/svtools/source/svrtf/svparser.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/browser/filter/xml/writer-text-hint-codec.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/attr/swatrset.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/bastyp/breakit.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/doc/docnum.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/docnode/ndtbl.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/text/atrstck.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/core/txtnode/txatbase.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/html/htmlctxt.insert.ts",
+      "s": 0,
+      "b": 5,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/ww8/rtfattributeoutput.assoc.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/filter/xml/xmlexp.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/uibase/app/docsh.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.context.ts",
+      "s": 0,
+      "b": 1,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/tools/source/fsys/urlobj.ts",
+      "s": 0,
+      "b": 3,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/tools/source/stream/stream.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    },
+    {
+      "path": "apps/office/src/unotools/source/i18n/localedatawrapper.ts",
+      "s": 0,
+      "b": 2,
+      "f": 0,
+      "l": 0
+    }
+  ]
+}
