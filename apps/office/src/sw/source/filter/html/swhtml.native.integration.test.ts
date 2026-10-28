@@ -9,6 +9,12 @@ import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SvParserState } from "../../../../svtools/inc/svparser";
 import { SwHTMLParser } from "./swhtml";
 import { MarkdownReader } from "../md/swmd";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
+import { RES_CHRATR_FONT, RES_PARATR_LINESPACING } from "../../../inc/hintids";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
 import { FontStrikeout, FontWeight } from "../../../../tools/inc/fontenum";
 import {
   RES_CHRATR_WEIGHT,
@@ -448,4 +454,160 @@ it("preserves the native unknown text-decoration underline fallback", /** No bro
     ["A", true],
     ["B", false],
   ]);
+});
+it("imports native CSS family lists without browser family substitution", /** Family, pitch and charset live on original pooled font items. @returns Nothing. */ () => {
+  const doc = html(
+    '<span style="font-family: Times New Roman, &quot;Noto Sans&quot;, serif">A</span>B',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads source font names and restoration. @param run - Run. @returns Font names. */ (
+        run,
+      ) => [run.text, run.attributes.fontFamily],
+    ),
+  ).toEqual([
+    ["A", "Times New Roman;Noto Sans;serif"],
+    ["B", undefined],
+  ]);
+  const item = doc.paragraphs[0]?.GetCharacterItemsAt(0).Get(RES_CHRATR_FONT);
+  assert(item instanceof SvxFontItem);
+  expect([item.GetFamily(), item.GetPitch(), item.GetStyleName(), item.GetCharSet()]).toEqual([
+    FontFamily.FAMILY_DONTKNOW,
+    FontPitch.PITCH_DONTKNOW,
+    "",
+    RTL_TEXTENCODING_UTF8,
+  ]);
+});
+it("applies native font shorthand resets, family and absolute height", /** Original declaration order overrides preceding explicit font properties. @returns Nothing. */ () => {
+  const doc = html(
+    '<span style="font-weight: bold; font-style: italic; font: 18pt Example Font, monospace">A</span><span style="font: italic 700 16px Other Font">B</span>C',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads the actual character items after shorthand. @param run - Run. @returns Font/weight/posture/height. */ (
+        run,
+      ) => [
+        run.text,
+        run.attributes.bold,
+        run.attributes.italic,
+        run.attributes.fontSizeTwips,
+        run.attributes.fontFamily,
+      ],
+    ),
+  ).toEqual([
+    ["A", false, false, 360, "Example Font;monospace"],
+    ["B", true, true, 240, "Other Font"],
+    ["C", false, false, undefined, undefined],
+  ]);
+});
+it("retains native shorthand partial writes before a missing family", /** CSS1 font resets before validating the remaining font-family expression. @returns Nothing. */ () => {
+  const doc = html('<b><span style="font: 18pt">A</span>B</b>');
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads source partial update rather than applying browser CSS rejection. @param run - Run. @returns Text and weight/height. */ (
+        run,
+      ) => [run.text, run.attributes.bold, run.attributes.fontSizeTwips],
+    ),
+  ).toEqual([
+    ["A", false, 360],
+    ["B", true, undefined],
+  ]);
+});
+it("retains native rejection of keyword sizes in font shorthand", /** The pinned prefix loop consumes identifiers until no size expression remains. @returns Nothing. */ () => {
+  const doc = html('<b><span style="font: medium Example">A</span></b>');
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(true);
+});
+it("retains native empty-string scanning in font-family", /** The native scanner consumes a closing quote as string content before checking its terminator. @returns Nothing. */ () => {
+  const doc = html('<span style="font-family: &quot;&quot;, serif">A</span>');
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.fontFamily).toBe('", serif');
+});
+it("imports the font shorthand slash as native proportional line spacing", /** Original font shorthand calls the native line-height handler. @returns Nothing. */ () => {
+  const doc = html('<span style="font: italic 14pt/1.5 Example">A</span>');
+  const spacing = doc.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING);
+  assert(spacing instanceof SvxLineSpacingItem);
+  expect([
+    spacing.GetLineSpaceRule(),
+    spacing.GetInterLineSpaceRule(),
+    spacing.GetPropLineSpace(),
+  ]).toEqual([SvxLineSpaceRule.Auto, SvxInterLineSpaceRule.Prop, 150]);
+});
+it("uses the native minimum line height and ignores normal after explicit height", /** Length line-height is minimum spacing; normal emits no resetting item in this handler. @returns Nothing. */ () => {
+  const doc = html('<span style="line-height: 1pt; line-height: normal">A</span>');
+  const spacing = doc.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING);
+  assert(spacing instanceof SvxLineSpacingItem);
+  expect([spacing.GetLineSpaceRule(), spacing.GetLineHeight()]).toEqual([
+    SvxLineSpaceRule.Min,
+    Number(toTwips(25n, Length.mm10)),
+  ]);
+});
+it("keeps stylesheets inert in the actual existing-document Markdown insertion path", /** Native SwCSS1Parser.StyleParsed exits when m_bIsNewDoc is false. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(
+    OUStringToOString(
+      '<style>.x { font-weight: bold } strong { font-style: italic }</style>\n\n<div><span class="x">A</span><strong>B</strong></div>',
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  docs.push(doc);
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual model styles after discarded stylesheet content. @param run - Run. @returns Weight/posture. */ (
+        run,
+      ) => [run.text, run.attributes.bold, run.attributes.italic],
+    ),
+  ).toEqual([
+    ["A", false, false],
+    ["B", true, false],
+  ]);
+});
+it("transports Markdown raw HTML font items through the actual Worker codec", /** Native family and shorthand items survive the existing UI transport. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(
+    OUStringToOString(
+      '<div><span style="font: italic bold 18pt Example Font">A</span></div>',
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  docs.push(doc);
+  const restored = decodeWriterDocument(encodeWriterDocument(doc));
+  docs.push(restored);
+  expect(projectWriterTextRuns(restored.paragraphs[0])[0]?.attributes).toMatchObject({
+    fontFamily: "Example Font",
+    fontSizeTwips: 360,
+    bold: true,
+    italic: true,
+  });
+});
+it("applies direct font, line-height and adjustment to native HTML paragraphs", /** Block CSS feeds the same actual context and attribute owners as inline CSS. @returns Nothing. */ () => {
+  const doc = html('<p style="font: italic 18pt/200% Example; text-align: center">A</p><p>B</p>');
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes).toMatchObject({
+    fontFamily: "Example",
+    fontSizeTwips: 360,
+    italic: true,
+  });
+  expect(projectWriterTextRuns(doc.paragraphs[1])[0]?.attributes.fontFamily).toBeUndefined();
+  expect(doc.paragraphs[0]?.GetParagraphAlignment()).toBe("center");
+  const spacing = doc.paragraphs[0]?.GetAttr(RES_PARATR_LINESPACING);
+  assert(spacing instanceof SvxLineSpacingItem);
+  expect(spacing.GetPropLineSpace()).toBe(200);
+});
+it("preserves the original ALIGN precedence over paragraph CSS", /** Native NewPara inserts ALIGN after parsing the style attribute. @returns Nothing. */ () => {
+  const doc = html('<p align="right" style="text-align: center">A</p>');
+  expect(doc.paragraphs[0]?.GetParagraphAlignment()).toBe("right");
+});
+it("applies existing direct font items to headings and block-style contexts", /** Heading/quote styles remain actual paragraph styles below direct CSS. @returns Nothing. */ () => {
+  const doc = html(
+    '<h2 style="font: 18pt Heading Font">A</h2><blockquote style="font-family: Quote Font">B</blockquote>',
+  );
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.fontFamily).toBe("Heading Font");
+  expect(projectWriterTextRuns(doc.paragraphs[1])[0]?.attributes.fontFamily).toBe("Quote Font");
+  expect(
+    doc.paragraphs.map(
+      /** Reads actual style identities. @param node - Native paragraph. @returns Pool style. */ (
+        node,
+      ) => node.GetTextFormatColl().id,
+    ),
+  ).toEqual(["heading-2", "quotations"]);
+});
+it("consumes native white-space flags only at paragraph open", /** NewPara enables preservation and EndPara restores the source default. @returns Nothing. */ () => {
+  const doc = html('<p style="white-space: pre">  A   B</p><p>  C   D</p>');
+  expect(text(doc)).toEqual(["  A   B", "C D"]);
 });

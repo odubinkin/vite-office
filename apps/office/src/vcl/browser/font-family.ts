@@ -6,15 +6,18 @@ export function browserFontFamily(
   generic: string | undefined,
 ): string | undefined {
   if (family === undefined) return undefined;
+  // Native font items retain semicolon-separated fallback names. Translate
+  // their list separator only at the CSS presentation boundary.
+  const cssFamily = family.replaceAll(";", ", ");
   switch (generic?.toLowerCase()) {
     case "roman":
-      return `${family}, Liberation Serif, serif`;
+      return `${cssFamily}, Liberation Serif, serif`;
     case "swiss":
-      return `${family}, Liberation Sans, sans-serif`;
+      return `${cssFamily}, Liberation Sans, sans-serif`;
     case "modern":
-      return `${family}, Liberation Mono, monospace`;
+      return `${cssFamily}, Liberation Mono, monospace`;
     default:
-      return family;
+      return cssFamily;
   }
 }
 

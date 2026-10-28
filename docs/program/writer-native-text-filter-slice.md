@@ -512,3 +512,46 @@ HTML font-family/shorthand/background/borders/paragraph CSS, language/direction,
 whitespace flags, hyperlinks/bookmarks, HTML lists/tables or the remaining RTF
 matrix entries. These are assessed by their real filter callers and current-model
 cases; unconsumed generic services remain outside the completion gate.
+
+### Native font CSS and the actual Markdown stylesheet boundary
+
+The current Markdown reader always constructs its native HTML insertion parser
+with `newDoc=false`. Pinned `SwCSS1Parser::StyleParsed` immediately returns in
+that mode: stylesheet rules do not populate class/ID maps or mutate paragraph
+and character styles. An actual Markdown `<style>`/class/semantic-tag case now
+verifies this behavior. Implementing the full new-document stylesheet receiver
+is therefore **not a completion prerequisite for this Markdown caller**. Earlier
+open-item mentions of stylesheet selectors/class/ID application must be read with
+this native caller restriction; existing named-style lookup is a separate path.
+
+Inline `font-family`, `font` and `line-height` now consume actual pooled font and
+spacing items. Family names preserve source identifier joining, semicolon list
+storage, unknown family/pitch, empty style name and the current UTF-8 thread
+encoding. The current model has no DocShell/device font-list owner, matching the
+source null-list branch; no browser font substitution or invented metric provider
+is introduced. Native Symbol charset promotion would require an actual DocShell
+font list and is outside this caller profile. `FontSetting` remains its pinned
+false default; the application has no HTML font-import preference UI.
+
+Font shorthand retains original prefix admission, resets and partial writes;
+keyword-size rejection and missing-family writes are WRITER213/214. Native
+line-height preserves minimum/auto/interline rule owners, 16-bit narrowing and
+the integral 2.5mm minimum (142twips), using the existing integral o3tl conversion.
+Absolute line-height is minimum spacing, not fixed spacing; `normal` emits no
+item in the pinned handler. Existing HTML P, heading and quotation/address/PRE
+contexts now apply these same direct declarations. P retains native ALIGN-after-
+CSS order and consumes `white-space: pre`/`pre-wrap`; EndPara restores whitespace.
+Headings and other contexts do not acquire P-only whitespace behavior.
+
+Actual-model tests cover font resets, list values, the existing empty CSS string
+scanner quirk (WRITER161), normal-weight precedence, paragraph spacing/alignment,
+block-style identities, whitespace restoration, stylesheet omission, Markdown raw
+HTML entry and Worker serialization. Remaining real HTML consumers include legacy
+FONT/BIG/SMALL tags, backgrounds/borders/remaining paragraph CSS, language,
+hyperlinks/bookmarks and lists/tables. Remaining RTF matrix work is unchanged;
+no whole-filter completion is claimed by this checkpoint.
+
+The existing shared browser font-family presentation adapter now converts native
+semicolon fallback separators to CSS comma separators. The document/Worker still
+retain the source list string; a mounted Writer paragraph test verifies valid CSS
+at the display boundary. Physical font matching/rendering is not certified.

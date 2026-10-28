@@ -4,6 +4,11 @@ import { aItemIds, type SvxCSS1Parser } from "./svxcss1";
 import type { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import type { SfxItemSet } from "../../../../svl/source/items/itemset";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
+import { SvxFontItem } from "../../../../editeng/inc/fontitem";
+import { SvxLineSpacingItem } from "../../../../editeng/inc/lspcitem";
+import { SvxLineSpaceRule, SvxInterLineSpaceRule } from "../../../../editeng/inc/svxenum";
+import { FontFamily, FontPitch } from "../../../../tools/inc/fontenum";
+import { toTwips, Length } from "../../../../o3tl/inc/unit_conversion";
 import { SvxWeightItem } from "../../../../editeng/inc/wghtitem";
 import { SvxPostureItem } from "../../../../editeng/inc/postitem";
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
@@ -65,6 +70,92 @@ const posture = new Map<string, I>([
   ["italic", I.ITALIC_NORMAL],
   ["oblique", I.ITALIC_NORMAL],
 ]);
+/** Consumed native no-DocShell font-family path; device metrics are absent in the current Markdown insertion caller. No host font-name normalization is added. @param expression - Borrowed chain. @param set - Actual set. @param parser - Native parser. @returns Nothing. */
+function fontFamily(expression: ConstCSS1Expression, set: SfxItemSet, parser: SvxCSS1Parser): void {
+  let current: ConstCSS1Expression | undefined = expression,
+    first = true,
+    name = "";
+  while (current && (first || current.GetOp() === 44 || !current.GetOp())) {
+    const type = current.GetType();
+    if (type === T.IDENT || type === T.STRING) {
+      let ident = current.GetString();
+      if (type === T.IDENT) {
+        let next = current.GetNext();
+        while (next && !next.GetOp() && next.GetType() === T.IDENT) {
+          ident += " " + next.GetString();
+          current = next;
+          next = current.GetNext();
+        }
+      }
+      if (ident) {
+        if (!first) name += ";";
+        name += ident;
+      }
+    }
+    current = current.GetNext();
+    first = false;
+  }
+  if (name && !parser.IsIgnoreFontFamily())
+    scripts(
+      set,
+      new SvxFontItem(
+        FontFamily.FAMILY_DONTKNOW,
+        name,
+        "",
+        FontPitch.PITCH_DONTKNOW,
+        parser.GetDfltEncoding(),
+        aItemIds.nFont,
+      ),
+      [aItemIds.nFont, aItemIds.nFontCJK, aItemIds.nFontCTL],
+    );
+}
+/** Original font shorthand order and partial-write semantics, including default resets before checking later family syntax. @param expression - Borrowed chain. @param set - Native set. @param info - Actual flags. @param parser - Native parser. @returns Nothing. */
+function font(
+  expression: ConstCSS1Expression,
+  set: SfxItemSet,
+  info: SvxCSS1PropertyInfo,
+  parser: SvxCSS1Parser,
+): void {
+  let current: ConstCSS1Expression | undefined = expression,
+    italic = I.ITALIC_NONE,
+    mode = C.NotMapped,
+    bold = W.WEIGHT_NORMAL;
+  while (current && !current.GetOp() && [T.IDENT, T.STRING, T.NUMBER].includes(current.GetType())) {
+    if (current.GetType() === T.NUMBER)
+      bold = (Math.trunc(current.GetNumber()) & 0xffff) > 400 ? W.WEIGHT_BOLD : W.WEIGHT_NORMAL;
+    else {
+      const value = cssAsciiLower(current.GetString()),
+        slant = posture.get(value);
+      if (slant !== undefined) italic = slant;
+      else if (value === "normal" || value === "small-caps")
+        mode = value === "normal" ? C.NotMapped : C.SmallCaps;
+      else bold = weight.get(value) ?? bold;
+    }
+    current = current.GetNext();
+  }
+  if (!current || current.GetOp()) return;
+  scripts(set, new SvxPostureItem(italic, aItemIds.nPosture), [
+    aItemIds.nPosture,
+    aItemIds.nPostureCJK,
+    aItemIds.nPostureCTL,
+  ]);
+  put(set, new SvxCaseMapItem(mode, aItemIds.nCaseMap));
+  scripts(set, new SvxWeightItem(bold, aItemIds.nWeight), [
+    aItemIds.nWeight,
+    aItemIds.nWeightCJK,
+    aItemIds.nWeightCTL,
+  ]);
+  const value = new CSS1Expression(current.GetType(), current.GetString(), current.GetNumber());
+  ParseCSS1Property("font-size", value, set, info, parser);
+  current = current.GetNext();
+  if (!current) return;
+  if (current.GetOp() === 47) {
+    value.Set(current.GetType(), current.GetString(), current.GetNumber());
+    ParseCSS1Property("line-height", value, set, info, parser);
+    current = current.GetNext();
+  }
+  if (current && !current.GetOp()) fontFamily(current, set, parser);
+}
 /** Native property dispatch retains source token admission, expression order and default branches. @param property - Source property. @param expression - Native chain. @param set - Actual target. @param info - Actual property info. @param parser - Original parser. @returns Nothing. */
 export function ParseCSS1Property(
   property: string,
@@ -76,6 +167,38 @@ export function ParseCSS1Property(
   const type = expression.GetType(),
     value = cssAsciiLower(expression.GetString());
   switch (cssAsciiLower(property)) {
+    case "font-family":
+      fontFamily(expression, set, parser);
+      break;
+    case "font":
+      font(expression, set, info, parser);
+      break;
+    case "line-height": {
+      let height = 0,
+        proportion = 0;
+      if (type === T.LENGTH) height = expression.GetULength() & 0xffff;
+      else if (type === T.PIXLENGTH) {
+        const pixels = expression.GetNumber();
+        if (pixels < 2147483647 / 2 && pixels > -2147483648 / 2)
+          height = (Math.trunc(pixels) * 15) & 0xffff;
+      } else if (type === T.PERCENTAGE) proportion = Math.trunc(expression.GetNumber()) & 0xffff;
+      else if (type === T.NUMBER) proportion = Math.trunc(expression.GetNumber() * 100) & 0xffff;
+      if (height) {
+        height = Math.max(height, Number(toTwips(25n, Length.mm10)));
+        const item = new SvxLineSpacingItem(height, aItemIds.nLineSpacing);
+        item.SetLineHeight(height);
+        item.SetLineSpaceRule(SvxLineSpaceRule.Min);
+        item.SetInterLineSpaceRule(SvxInterLineSpaceRule.Off);
+        put(set, item);
+      } else if (proportion) {
+        const item = new SvxLineSpacingItem(proportion, aItemIds.nLineSpacing);
+        item.SetLineSpaceRule(SvxLineSpaceRule.Auto);
+        if (proportion === 100) item.SetInterLineSpaceRule(SvxInterLineSpaceRule.Off);
+        else item.SetPropLineSpace(proportion);
+        put(set, item);
+      }
+      break;
+    }
     case "font-weight": {
       const result =
         type === T.IDENT || type === T.STRING

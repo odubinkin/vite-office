@@ -40,6 +40,7 @@ import {
 } from "../../../../tools/inc/fontenum";
 import * as H from "../../../inc/hintids";
 import { SwPoolFormatId, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { RTL_TEXTENCODING_UTF8 } from "../../../../sal/inc/rtl/textenc";
 import { SwCSS1Parser } from "./htmlcss1";
 import { SvxCSS1PropertyInfo } from "./svxcss1.types";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
@@ -78,6 +79,7 @@ export class SwHTMLParser extends HTMLParser {
       m_sBaseURL,
       newDoc,
     );
+    this.m_pCSS1Parser.SetDfltEncoding(RTL_TEXTENCODING_UTF8);
     m_pPam.DeleteMark();
     this.m_bOldIsHTMLMode = m_xDoc.GetDocumentSettingManager().get("HTML_MODE");
     m_xDoc.GetDocumentSettingManager().set("HTML_MODE", true);
@@ -234,6 +236,10 @@ export class SwHTMLParser extends HTMLParser {
       [H.RES_CHRATR_FONTSIZE, tab.pFontHeight],
       [H.RES_CHRATR_CJK_FONTSIZE, tab.pFontHeightCJK],
       [H.RES_CHRATR_CTL_FONTSIZE, tab.pFontHeightCTL],
+      [H.RES_CHRATR_FONT, tab.pFont],
+      [H.RES_CHRATR_CJK_FONT, tab.pFontCJK],
+      [H.RES_CHRATR_CTL_FONT, tab.pFontCTL],
+      [H.RES_PARATR_LINESPACING, tab.pLineSpacing],
       [H.RES_CHRATR_UNDERLINE, tab.pUnderline],
       [H.RES_CHRATR_COLOR, tab.pFontColor],
       [H.RES_CHRATR_CROSSEDOUT, tab.pStrike],
@@ -409,6 +415,18 @@ export class SwHTMLParser extends HTMLParser {
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(A.AM_SPACE);
     else this.AddParSpace();
     const context = new HTMLAttrContext(T.PARABREAK_ON);
+    const style = this.GetStyleOption(O.STYLE);
+    if (style) {
+      const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
+      try {
+        const info = new SvxCSS1PropertyInfo();
+        this.m_pCSS1Parser.ParseStyleOption(style, items, info);
+        this.InsertAttrs(items, info, context);
+        if (info.m_bPreserveSpace) this.SetPreserveSpaces(true);
+      } finally {
+        items.Dispose();
+      }
+    }
     this.InsertAlignment(context);
     this.PushContext(context);
     this.SetTextCollAttrs();
@@ -439,6 +457,17 @@ export class SwHTMLParser extends HTMLParser {
       token,
       SwPoolFormatId.COLL_HEADLINE1 + (token - T.HEAD1_ON) / 2,
     );
+    const style = this.GetStyleOption(O.STYLE);
+    if (style) {
+      const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
+      try {
+        const info = new SvxCSS1PropertyInfo();
+        this.m_pCSS1Parser.ParseStyleOption(style, items, info);
+        this.InsertAttrs(items, info, context);
+      } finally {
+        items.Dispose();
+      }
+    }
     this.InsertAlignment(context);
     this.PushContext(context);
     this.SetTextCollAttrs();
@@ -468,7 +497,19 @@ export class SwHTMLParser extends HTMLParser {
     const mode = token === T.ADDRESS_ON ? A.AM_NOSPACE : A.AM_SPACE;
     if (this.m_pPam.GetPoint().GetContentIndex()) this.AppendTextNode(mode);
     else if (mode === A.AM_SPACE) this.AddParSpace();
-    this.PushContext(new HTMLAttrContext(token, pool));
+    const context = new HTMLAttrContext(token, pool);
+    const style = this.GetStyleOption(O.STYLE);
+    if (style) {
+      const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
+      try {
+        const info = new SvxCSS1PropertyInfo();
+        this.m_pCSS1Parser.ParseStyleOption(style, items, info);
+        this.InsertAttrs(items, info, context);
+      } finally {
+        items.Dispose();
+      }
+    }
+    this.PushContext(context);
     this.SetTextCollAttrs();
   }
   /** Original block close applies its append policy before ending context attributes. @param token - Original opening or closing token. @returns Nothing. */

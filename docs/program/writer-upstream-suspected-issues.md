@@ -2017,3 +2017,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_text_decoration` default switch branch.
 - Observation: an admitted identifier/string other than the recognized decoration values sets single underline rather than discarding that value.
 - Local behavior: the native property handler and actual HTML/Markdown document insertion retain this fallback. `swhtml.native.integration.test.ts` checks unknown-value underline and restoration after the closing tag. This is not a compiled upstream differential certificate.
+
+### WRITER213 — CSS font shorthand consumes keyword sizes as prefix identifiers
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_font` prefix loop and subsequent font-size dispatch.
+- Observation: the prefix loop consumes every identifier/string/number with no operator, including `medium` and subsequent family identifiers. If no later expression remains, the handler returns without applying any font reset. The separate `font-size` handler does recognize size keywords. This is source-level evidence, not a compiled desktop result.
+- Preservation: do not replace the loop with browser CSS shorthand parsing. Actual HTML insertion verifies that `font: medium Example` leaves the outer bold attribute intact.
+
+### WRITER214 — Incomplete CSS font shorthand can apply partial attribute changes
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_font` writes posture/case/weight resets and font size before checking for the optional slash and font-family expression.
+- Observation: `font: 18pt` has no family, but can still reset weight/posture and set height. The declaration is not transactionally rejected after the missing family is found. This is source-level evidence, not compiled upstream differential behavior.
+- Preservation: actual native HTML attribute insertion keeps these partial writes, including explicit normal weight inside an outer bold span. Tests cover restoration after the closing span and real Markdown/Worker font-item transport.

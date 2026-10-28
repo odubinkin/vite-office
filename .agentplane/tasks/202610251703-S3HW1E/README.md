@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 149
+revision: 152
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T13:41:42.274Z"
+  updated_at: "2026-10-28T13:51:19.372Z"
   updated_by: "CODER"
-  note: "Connected native semantic HTML styles and inline CSS to Markdown; 941 filter, 7583 touched-core, 89 shared and 21 final HTML tests pass, with type/lint/format/registry gates. Remaining current-model HTML and RTF filter rows keep the overall task open."
-  attempts: 14
+  note: "Native font CSS, paragraph consumers and browser font lists verified: 949 related tests, 9 mounted UI tests, type/lint/format/source gates pass. Source proves stylesheet rules are inert for Markdown newDoc=false. Remaining actual HTML and RTF consumer rows keep the overall task open."
+  attempts: 15
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -229,8 +232,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T13:51:19.372Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native font CSS, paragraph consumers and browser font lists verified: 949 related tests, 9 mounted UI tests, type/lint/format/source gates pass. Source proves stylesheet rules are inert for Markdown newDoc=false. Remaining actual HTML and RTF consumer rows keep the overall task open."
+  -
+    type: "status"
+    at: "2026-10-28T13:51:26.637Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T13:41:48.466Z"
+doc_updated_at: "2026-10-28T13:51:26.637Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -373,6 +389,36 @@ sections:
     Attempts: 14
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:41:41.702Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T13:51:19.372Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native font CSS, paragraph consumers and browser font lists verified: 949 related tests, 9 mounted UI tests, type/lint/format/source gates pass. Source proves stylesheet rules are inert for Markdown newDoc=false. Remaining actual HTML and RTF consumer rows keep the overall task open.
+    Attempts: 15
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:51:18.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -909,6 +955,22 @@ sections:
     - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check over all intentional changed/new paths; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run check:source-tree; npm run inventory:parity:writer; npm run inventory:parity:shared
     - Result: pass; Evidence: type/lint/format clean, JSDoc 3907 authored files, boundaries 1700 runtime sources, provenance 1701 modules, source-tree 115 paths/32 retired roots, both registry checks pass. Logs: output/playwright/rtf-properties-native/html3-*.log (ignored local artifacts).
     - Remaining filter work: stylesheet selectors/class/ID, represented HTML font-family/shorthand/background/borders/paragraph CSS, language/whitespace, hyperlinks/bookmarks/list/table consumers and remaining current-model RTF matrix rows. No unrelated UNO/desktop/full-module completeness gate is introduced. Overall task remains DOING/rework.
+
+    ### Native Markdown HTML font CSS and caller-bound stylesheet closure
+
+    - Prior goal turn: progress, committed 3ef772a977d8. Current checkout was clean before this checkpoint.
+    - Requirement/source decision: Markdown InsertHtmlData constructs SwHTMLParser with newDoc=false. Native SwCSS1Parser::StyleParsed immediately returns when !m_bIsNewDoc, so stylesheet/class/ID rule application is not a blocker for this actual caller. Actual Markdown style/class/semantic-tag insertion verifies no stylesheet mutation. This corrects earlier open-item wording without narrowing the current-model objective or substituting browser behavior.
+    - Implementation: native font-family list collection, font shorthand prefix/reset/partial-write order and line-height minimum/auto/interline state now use actual SvxFontItem/SvxLineSpacingItem owners. Western/CJK/CTL font heads and native paragraph spacing head receive these declarations. Current no-DocShell font-list path retains default encoding; HTML parser now supplies the same current UTF8 thread encoding used by this browser import profile. No physical-font provider, desktop service or new kernel value family is introduced.
+    - Block callers: P, heading and native quotation/address/PRE contexts apply represented inline CSS; P retains ALIGN-after-CSS precedence and white-space flag consumption with EndPara restoration. Headings do not gain P-only whitespace behavior. Integral 2.5mm minimum uses Number(toTwips(25n, Length.mm10))=142; the initial floating-call fixture expectation was corrected to the source integral overload rather than modifying the shared converter.
+    - UI correction: native semicolon family lists previously reached CSS unchanged, producing invalid font-family list syntax. Existing vcl/browser/font-family translates separators only at the browser rendering boundary. Native document and Worker snapshots retain original list values. A mounted WriterEditableParagraph case verifies the actual CSS list.
+    - Source quirks: existing WRITER161 empty-string scanning remains observable through family import; added WRITER213 keyword-size consumption and WRITER214 incomplete-shorthand partial writes. Initial empty-family test assumed standard CSS scanning; source do-while evidence showed its closing quote becomes content, so the test now asserts that pinned behavior. No compiled desktop certificate is claimed.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+    - Result: pass; Evidence: 949 tests / 71 suites; Scope: related native filters and document I/O. HTML actual-model suite contains 34 cases, including real Markdown entry and Worker transport.
+    - Command: npm run test:writer -- src/sw/browser/editor/WriterEditableParagraph.test.tsx
+    - Result: pass; Evidence: 9 cases; Scope: mounted paragraph rendering including native family fallback lists.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0 on six changed sources; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared
+    - Result: pass; Evidence: type/lint/format/whitespace clean, JSDoc3907 authored files, boundaries1700 sources/8953 imports/210 allowed edges, provenance1701 modules, both registries pass. Scope: changed HTML/native-item browser presentation and source evidence. Logs: output/playwright/rtf-properties-native/html4-*.log (ignored local artifacts).
+    - Remaining actual filter work: legacy HTML FONT/BIG/SMALL; background/borders/other represented paragraph CSS, language, hyperlinks/bookmarks, HTML lists/tables, existing-style lookup where reachable, and remaining represented RTF matrix rows. New-document stylesheet completeness, unrelated UNO operations, physical-font/device services and generic module completeness are not independent gates. Overall task remains DOING/rework; no full-suite repetition or goal-completion claim.
 id_source: "generated"
 ---
 ## Summary
@@ -1062,6 +1124,36 @@ Note: Connected native semantic HTML styles and inline CSS to Markdown; 941 filt
 Attempts: 14
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:41:41.702Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T13:51:19.372Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native font CSS, paragraph consumers and browser font lists verified: 949 related tests, 9 mounted UI tests, type/lint/format/source gates pass. Source proves stylesheet rules are inert for Markdown newDoc=false. Remaining actual HTML and RTF consumer rows keep the overall task open.
+Attempts: 15
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:51:18.799Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1602,3 +1694,19 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check over all intentional changed/new paths; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run check:source-tree; npm run inventory:parity:writer; npm run inventory:parity:shared
 - Result: pass; Evidence: type/lint/format clean, JSDoc 3907 authored files, boundaries 1700 runtime sources, provenance 1701 modules, source-tree 115 paths/32 retired roots, both registry checks pass. Logs: output/playwright/rtf-properties-native/html3-*.log (ignored local artifacts).
 - Remaining filter work: stylesheet selectors/class/ID, represented HTML font-family/shorthand/background/borders/paragraph CSS, language/whitespace, hyperlinks/bookmarks/list/table consumers and remaining current-model RTF matrix rows. No unrelated UNO/desktop/full-module completeness gate is introduced. Overall task remains DOING/rework.
+
+### Native Markdown HTML font CSS and caller-bound stylesheet closure
+
+- Prior goal turn: progress, committed 3ef772a977d8. Current checkout was clean before this checkpoint.
+- Requirement/source decision: Markdown InsertHtmlData constructs SwHTMLParser with newDoc=false. Native SwCSS1Parser::StyleParsed immediately returns when !m_bIsNewDoc, so stylesheet/class/ID rule application is not a blocker for this actual caller. Actual Markdown style/class/semantic-tag insertion verifies no stylesheet mutation. This corrects earlier open-item wording without narrowing the current-model objective or substituting browser behavior.
+- Implementation: native font-family list collection, font shorthand prefix/reset/partial-write order and line-height minimum/auto/interline state now use actual SvxFontItem/SvxLineSpacingItem owners. Western/CJK/CTL font heads and native paragraph spacing head receive these declarations. Current no-DocShell font-list path retains default encoding; HTML parser now supplies the same current UTF8 thread encoding used by this browser import profile. No physical-font provider, desktop service or new kernel value family is introduced.
+- Block callers: P, heading and native quotation/address/PRE contexts apply represented inline CSS; P retains ALIGN-after-CSS precedence and white-space flag consumption with EndPara restoration. Headings do not gain P-only whitespace behavior. Integral 2.5mm minimum uses Number(toTwips(25n, Length.mm10))=142; the initial floating-call fixture expectation was corrected to the source integral overload rather than modifying the shared converter.
+- UI correction: native semicolon family lists previously reached CSS unchanged, producing invalid font-family list syntax. Existing vcl/browser/font-family translates separators only at the browser rendering boundary. Native document and Worker snapshots retain original list values. A mounted WriterEditableParagraph case verifies the actual CSS list.
+- Source quirks: existing WRITER161 empty-string scanning remains observable through family import; added WRITER213 keyword-size consumption and WRITER214 incomplete-shorthand partial writes. Initial empty-family test assumed standard CSS scanning; source do-while evidence showed its closing quote becomes content, so the test now asserts that pinned behavior. No compiled desktop certificate is claimed.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts
+- Result: pass; Evidence: 949 tests / 71 suites; Scope: related native filters and document I/O. HTML actual-model suite contains 34 cases, including real Markdown entry and Worker transport.
+- Command: npm run test:writer -- src/sw/browser/editor/WriterEditableParagraph.test.tsx
+- Result: pass; Evidence: 9 cases; Scope: mounted paragraph rendering including native family fallback lists.
+- Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0 on six changed sources; npx prettier --check on all intentional paths; git diff --check; npm run check:docs; npm run check:file-size; npm run check:dependencies; npm run check:source-provenance; npm run inventory:parity:writer; npm run inventory:parity:shared
+- Result: pass; Evidence: type/lint/format/whitespace clean, JSDoc3907 authored files, boundaries1700 sources/8953 imports/210 allowed edges, provenance1701 modules, both registries pass. Scope: changed HTML/native-item browser presentation and source evidence. Logs: output/playwright/rtf-properties-native/html4-*.log (ignored local artifacts).
+- Remaining actual filter work: legacy HTML FONT/BIG/SMALL; background/borders/other represented paragraph CSS, language, hyperlinks/bookmarks, HTML lists/tables, existing-style lookup where reachable, and remaining represented RTF matrix rows. New-document stylesheet completeness, unrelated UNO operations, physical-font/device services and generic module completeness are not independent gates. Overall task remains DOING/rework; no full-suite repetition or goal-completion claim.

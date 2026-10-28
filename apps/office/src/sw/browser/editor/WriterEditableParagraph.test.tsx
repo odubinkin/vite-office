@@ -119,6 +119,36 @@ describe("Writer editable paragraph colors", /** Groups color rendering tests. @
     });
     expect(screen.getByText("other")).toHaveStyle({ fontFamily: "Georgia" });
   });
+  it("renders native semicolon font fallback lists as CSS lists", /** Native font-item storage is retained while the mounted browser gets valid CSS separators. @returns Nothing. */ () => {
+    const source = paragraph();
+    render(
+      <WriterEditableParagraph
+        index={0}
+        isActive
+        listMarker={undefined}
+        paragraph={{
+          ...source,
+          text: "native font list",
+          runs: [
+            {
+              startOffset: 0,
+              text: "native font list",
+              attributes: {
+                bold: false,
+                italic: false,
+                underline: false,
+                fontFamily: "Noto Sans;Liberation Sans;serif",
+              },
+            },
+          ],
+        }}
+        retainElement={/** Ignores the fixture element. @returns Nothing. */ () => undefined}
+      />,
+    );
+    expect(screen.getByText("native font list")).toHaveStyle({
+      fontFamily: "Noto Sans, Liberation Sans, serif",
+    });
+  });
   it("positions list markers from the paragraph or list style according to ODT precedence", /** Checks both tdf114287 indentation routes. @returns Nothing. */ () => {
     const source = paragraph();
     const item: WriterParagraphProjection = {
