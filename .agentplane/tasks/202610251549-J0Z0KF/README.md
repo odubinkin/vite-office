@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 59
+revision: 62
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T15:26:09.330Z"
+  updated_at: "2026-10-28T15:47:58.274Z"
   updated_by: "CODER"
-  note: "Bounded native SAL ByteSequence/UNO ownership checkpoint:161 targeted tests and compiled unchanged native initialized-domain witness pass; build/static/type/source/registry/lint/docs/format checks pass. Unchanged seven-owner100 coverage fails S374/379 B179/187 F93/93 L342/342; allocation-failure paths are retained without test providers/private forcing. Complete cache/XOutputStream/package and DOCX/XLSX model/filter/worker/UI acceptance remain pending. Evidence: evidence/native-byte-sequence-checkpoint.json."
-  attempts: 19
+  note: "Verified bounded relationship SDK block:49 targeted tests pass; whole-two-owner coverage100 S45/45 B14/14 F17/17 L44/44, type/build/static/source/provenance/registry/resources/lint/docs/format/doctor/routing pass. Full DOCX/XLSX core/UI task remains incomplete. User requests pause after committing this block for parallel branch merge; no further metadata/output integration is authorized before resume. Evidence: evidence/native-relationship-sdk-checkpoint.json."
+  attempts: 20
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -312,8 +315,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T15:47:58.274Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Verified bounded relationship SDK block:49 targeted tests pass; whole-two-owner coverage100 S45/45 B14/14 F17/17 L44/44, type/build/static/source/provenance/registry/resources/lint/docs/format/doctor/routing pass. Full DOCX/XLSX core/UI task remains incomplete. User requests pause after committing this block for parallel branch merge; no further metadata/output integration is authorized before resume. Evidence: evidence/native-relationship-sdk-checkpoint.json."
+  -
+    type: "status"
+    at: "2026-10-28T15:48:14.378Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T15:27:04.871Z"
+doc_updated_at: "2026-10-28T15:48:14.378Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -898,6 +914,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T15:47:58.274Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Verified bounded relationship SDK block:49 targeted tests pass; whole-two-owner coverage100 S45/45 B14/14 F17/17 L44/44, type/build/static/source/provenance/registry/resources/lint/docs/format/doctor/routing pass. Full DOCX/XLSX core/UI task remains incomplete. User requests pause after committing this block for parallel branch merge; no further metadata/output integration is authorized before resume. Evidence: evidence/native-relationship-sdk-checkpoint.json.
+    Attempts: 20
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:47:57.713Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -978,6 +1024,10 @@ sections:
     - Observation: Original SAL ByteSequence C/wrapper and toUnoSequence now share actual SAL headers/elements and one OSL count address with genuine CPPU/Any owners. Compiled unchanged native C/C++/allocator/atomic bodies corroborate initialized copy/COW/move cases. CALC-367/WRITER204 preserve empty COW missing decrement; separate source-suspected cache aliasing is documented as CALC-368/WRITER205.
       Impact: 161 targeted tests pass. Unchanged seven-owner100 gate fails S374/379 B179/187 F93/93 L342/342 on retained native allocation-failure paths; no fake allocator/private state or changed thresholds. Full cache/output/package and DOCX/XLSX core/worker/UI acceptance remains incomplete.
       Resolution: Evidence: evidence/native-byte-sequence-checkpoint.json. Final build/static/type/docs/size/source/provenance/registry/resources/lint/format/doctor/routing pass after selected-handle typing, native literal quoting and header module-resolution evidence repairs. Continue actual output ownership and full filters/UI without promoting broad parity.
+
+    - Observation: Current block adds actual original StringPair value/type owners and complete XRelationshipAccess SDK declarations. Any and initialized struct Sequence COW verify genuine fields, retained const views and lifetime behavior; no replacement storage/relationship service is instantiated.
+      Impact: 49 targeted tests pass; whole-two-owner unchanged100 coverage S45/45 B14/14 F17/17 L44/44. Build/type/static/source/registry/lint/docs/format checks pass. Full storage/relationship/output/model/filter/worker/UI acceptance remains incomplete; this SDK scope does not supersede earlier broader coverage failures.
+      Resolution: Evidence: evidence/native-relationship-sdk-checkpoint.json. User explicitly requests pausing the goal after this tested block for parallel branch merge. Persist this block, confirm clean checkout, then pause; do not begin OFOPXMLHelper or output migration and do not perform the merge.
 id_source: "generated"
 ---
 ## Summary
@@ -1572,6 +1622,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T15:47:58.274Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Verified bounded relationship SDK block:49 targeted tests pass; whole-two-owner coverage100 S45/45 B14/14 F17/17 L44/44, type/build/static/source/provenance/registry/resources/lint/docs/format/doctor/routing pass. Full DOCX/XLSX core/UI task remains incomplete. User requests pause after committing this block for parallel branch merge; no further metadata/output integration is authorized before resume. Evidence: evidence/native-relationship-sdk-checkpoint.json.
+Attempts: 20
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T15:47:57.713Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -1656,3 +1736,7 @@ DecisionContextRef:
 - Observation: Original SAL ByteSequence C/wrapper and toUnoSequence now share actual SAL headers/elements and one OSL count address with genuine CPPU/Any owners. Compiled unchanged native C/C++/allocator/atomic bodies corroborate initialized copy/COW/move cases. CALC-367/WRITER204 preserve empty COW missing decrement; separate source-suspected cache aliasing is documented as CALC-368/WRITER205.
   Impact: 161 targeted tests pass. Unchanged seven-owner100 gate fails S374/379 B179/187 F93/93 L342/342 on retained native allocation-failure paths; no fake allocator/private state or changed thresholds. Full cache/output/package and DOCX/XLSX core/worker/UI acceptance remains incomplete.
   Resolution: Evidence: evidence/native-byte-sequence-checkpoint.json. Final build/static/type/docs/size/source/provenance/registry/resources/lint/format/doctor/routing pass after selected-handle typing, native literal quoting and header module-resolution evidence repairs. Continue actual output ownership and full filters/UI without promoting broad parity.
+
+- Observation: Current block adds actual original StringPair value/type owners and complete XRelationshipAccess SDK declarations. Any and initialized struct Sequence COW verify genuine fields, retained const views and lifetime behavior; no replacement storage/relationship service is instantiated.
+  Impact: 49 targeted tests pass; whole-two-owner unchanged100 coverage S45/45 B14/14 F17/17 L44/44. Build/type/static/source/registry/lint/docs/format checks pass. Full storage/relationship/output/model/filter/worker/UI acceptance remains incomplete; this SDK scope does not supersede earlier broader coverage failures.
+  Resolution: Evidence: evidence/native-relationship-sdk-checkpoint.json. User explicitly requests pausing the goal after this tested block for parallel branch merge. Persist this block, confirm clean checkout, then pause; do not begin OFOPXMLHelper or output migration and do not perform the merge.

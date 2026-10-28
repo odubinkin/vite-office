@@ -1,0 +1,339 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "verified bounded StringPair/XRelationshipAccess SDK block; full DOCX/XLSX task incomplete; user requested goal pause after this block for parallel branch merge",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts": "fb53f529540e4350ef424c72e00e1680923ff93d",
+    "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts": "e180ab75af02d598da27e94954a9f70fe2791dde",
+    "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts": "eb0b837683faa62197cfdb9e1685f1bf10db2027",
+    "docs/program/native-relationship-sdk.md": "3fb070dfa39394c0ee64a19f8133f595faa00757",
+    "docs/program/registry/calc/capabilities/CAP-719a7f4d-1031-4809-8c40-63220d57a7e9.json": "2a82b4b2a5c8eddb847831208bc0c6669fea8ed8",
+    "docs/program/registry/shared/provenance/offapi/com/sun/star/embed/XRelationshipAccess.ts.json": "e4dd2a64b45ed2efa8891451c8696f9d5f8fa750",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/beans/StringPair.ts.json": "3825b4002284076f9479598267f1224a570cb87e",
+    "docs/program/registry/shared/runtime/offapi/com/sun/star/embed/XRelationshipAccess.ts.json": "ebad78ab62ca645a9e7a15c612e79665315b6ad0",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/beans/StringPair.ts.json": "5e6865ae6b93ad478d701aa3afcf98e6d274df02"
+  },
+  "checks": [
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:dependencies"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-0.log",
+      "cwd": ".",
+      "sha256": "b5ddeabfc7d6a563c18362e5398e89dfe8511b2487891cbd2cddb4bb5925ab30"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:docs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-1.log",
+      "cwd": ".",
+      "sha256": "46ad01242e28936260c023107d2bfb0dcd8be81ccf4433baf4d372197ba20421"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:file-size"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-2.log",
+      "cwd": ".",
+      "sha256": "697d5e393dd94beaec7dcd36c29e984df17d6d85848226ce69de1fc771f81c39"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-tree"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-3.log",
+      "cwd": ".",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:source-provenance"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-4.log",
+      "cwd": ".",
+      "sha256": "510749dcd068384d8191c1b3dd48784438ec9a6699e64fe69f2fb8f2ac324360"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:invariants"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-5.log",
+      "cwd": ".",
+      "sha256": "9a907981a489a9da3f7a6e67025212b2140494807f6136d7839a632ed9f59cd5"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "inventory:parity"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-6.log",
+      "cwd": ".",
+      "sha256": "c61019a7ecc6d8ab491b86b0ee5a71ae1938a654dc9dc4c81ded023dab330dfc"
+    },
+    {
+      "command": [
+        "ap",
+        "doctor"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-7.log",
+      "cwd": ".",
+      "sha256": "bc00a1c54a0fd49c7686f726a1136223685df18fcbe453af3e1d4c5b58b3fc2e"
+    },
+    {
+      "command": [
+        "node",
+        ".agentplane/policy/check-routing.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-check-8.log",
+      "cwd": ".",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "typecheck",
+        "--workspace",
+        "@vite-office/office"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-0.log",
+      "cwd": ".",
+      "sha256": "95074d7a9bb3a320c929b8c8311534bfdc86e140dc41177f3228e50a346e94b2"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "build"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-1.log",
+      "cwd": ".",
+      "sha256": "d707931108017da296bb01ab5ff49b35ed414253d5701e5e2cc39c704173e367"
+    },
+    {
+      "command": [
+        "node",
+        "scripts/check-static-build.mjs"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-2.log",
+      "cwd": ".",
+      "sha256": "c5492dc765c864a9a705fb0a5e74afd4a2544af46ca34f753f7c8131365441b0"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:writer-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-3.log",
+      "cwd": ".",
+      "sha256": "0f0f71c2b6d9fb7621ae26ab75cac31187c6e6fa736ad439b0a56237c26e3587"
+    },
+    {
+      "command": [
+        "npm",
+        "run",
+        "check:calc-resources"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-4.log",
+      "cwd": ".",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    {
+      "command": [
+        "npx",
+        "eslint",
+        "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-5.log",
+      "cwd": ".",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "command": [
+        "npx",
+        "prettier",
+        "--check",
+        "apps/office/src/udkapi/com/sun/star/beans/StringPair.ts",
+        "apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+        "apps/office/src/udkapi/com/sun/star/beans/StringPair.test.ts",
+        "docs/program/native-relationship-sdk.md"
+      ],
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-build-6.log",
+      "cwd": ".",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/udkapi/com/sun/star/beans/StringPair.test.ts",
+        "--maxWorkers=1",
+        "--coverage",
+        "--coverage.include=src/udkapi/com/sun/star/beans/StringPair.ts",
+        "--coverage.include=src/offapi/com/sun/star/embed/XRelationshipAccess.ts",
+        "--coverage.reportsDirectory=coverage/relationship-sdk-verified",
+        "--coverage.reporter=text",
+        "--coverage.reporter=json-summary"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-verified.log",
+      "result": "5 tests pass; whole-two-owner unchanged100 S45/45 B14/14 F17/17 L44/44",
+      "sha256": "a05b07d77e54b9373a4b072507c2ef143e71c452f34d4fe0c2fea36c059d5186"
+    },
+    {
+      "command": [
+        "npx",
+        "vitest",
+        "run",
+        "src/cppu/source/uno/sequence-engine.test.ts",
+        "src/cppu/inc/com/sun/star/uno/Any-data.test.ts",
+        "src/comphelper/source/xml/ofopxmlhelper.test.ts",
+        "src/oox/source/core/xmlfilterbase.test.ts",
+        "--maxWorkers=2"
+      ],
+      "cwd": "apps/office",
+      "exitCode": 0,
+      "log": "apps/office/coverage/relationship-sdk-related.log",
+      "result": "42 tests/4 files pass",
+      "sha256": "3857fea22d4a29bf39bd69a63928e475a40c0e6f44e2702a67d7acfe2f87c28d"
+    }
+  ],
+  "coverage": {
+    "total": {
+      "lines": {
+        "total": 44,
+        "covered": 44,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 45,
+        "covered": 45,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 17,
+        "covered": 17,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/offapi/com/sun/star/embed/XRelationshipAccess.ts": {
+      "lines": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 3,
+        "covered": 3,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 9,
+        "covered": 9,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 2,
+        "covered": 2,
+        "skipped": 0,
+        "pct": 100
+      }
+    },
+    "/Users/odubinkin/Projects/vite-office/apps/office/src/udkapi/com/sun/star/beans/StringPair.ts": {
+      "lines": {
+        "total": 35,
+        "covered": 35,
+        "skipped": 0,
+        "pct": 100
+      },
+      "functions": {
+        "total": 14,
+        "covered": 14,
+        "skipped": 0,
+        "pct": 100
+      },
+      "statements": {
+        "total": 36,
+        "covered": 36,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 12,
+        "covered": 12,
+        "skipped": 0,
+        "pct": 100
+      }
+    }
+  },
+  "testCounts": {
+    "focused": 5,
+    "compoundAndMetadataRegressions": 42,
+    "writerResources": 2,
+    "total": 49
+  },
+  "scope": "Actual original StringPair OUString field ownership, normal shared struct type, copy/moves/equality/addresses/destruction, borrowed aggregate views through existing real string views; complete XRelationshipAccess IDL method set and normal shared interface type. Genuine Any and initialized struct Sequence COW exercise ownership. No replacement storage/relationship/query/type/default provider is constructed.",
+  "limits": [
+    "SDK declarations and metadata are not an instantiated storage/relationship component or full reflection/ABI/marshalling/thread certificate.",
+    "Existing host metadata pairs, package XPropertySet/XRelationshipAccess, actual cache/XOutputStream output connection and full DOCX/XLSX model/filter/worker/UI acceptance remain pending.",
+    "Previous broader coverage failures are not superseded by this two-owner100 scope.",
+    "Full suites remain on approved ten-task cadence. Browser open/save/autosave/recovery behavior is unchanged."
+  ],
+  "correctedDuringVerification": [
+    "Actual nonnull shared struct type pointer needed an explicit selected R type in the test after nullable Type API erasure; final typecheck passes."
+  ],
+  "stopRule": "Finish and commit this verified block, confirm clean tracked state, then pause the active goal at the user request. Do not start metadata/output integration or merge parallel branches."
+}
