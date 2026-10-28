@@ -6,11 +6,12 @@ import { RtfExport } from "../sw/source/filter/ww8/rtfexport";
 const contexts: { document: SwDoc | undefined; range: SwPaM; exporter: RtfExport }[] = [];
 afterEach(
   /** Releases range registrations before their document owners. @returns Nothing. */ () => {
-    for (const context of contexts.splice(0)) {
+    const pending = contexts.splice(0);
+    for (const context of pending) {
       context.exporter.Dispose();
       context.range.Dispose();
-      context.document?.Dispose();
     }
+    for (const context of pending) context.document?.Dispose();
   },
 );
 /** Creates a native exporter over an actual collapsed range for direct attribute-writer tests. @param document - Optional borrowed document. @returns Actual source exporter. */

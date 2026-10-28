@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 109
+revision: 111
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-10-28T07:57:43.879Z"
+  updated_at: "2026-10-28T08:46:02.669Z"
   updated_by: "CODER"
-  note: "Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings."
-  attempts: 2
+  note: "Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings."
+  attempts: 3
 commit: null
 comments:
   -
@@ -47,8 +47,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Temporary Word numbering ownership checkpoint passed1399 related document/filter/codec tests,33 UI tests and final6 owner-lifetime tests plus static/provenance/registry checks. Whole task stays incomplete: original paragraph dispatch, character-style table/cache, importer and prior goal gaps remain in Findings."
+  -
+    type: "verify"
+    at: "2026-10-28T08:46:02.669Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings."
 doc_version: 3
-doc_updated_at: "2026-10-28T07:57:43.939Z"
+doc_updated_at: "2026-10-28T08:46:02.832Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -99,6 +105,36 @@ sections:
     Attempts: 2
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T08:46:02.669Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings.
+    Attempts: 3
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -483,6 +519,18 @@ sections:
     - Result: pass; boundaries1683runtime/8738imports/210edges; provenance1684runtime/1472mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-numbering-lifetime/{writer-parity,shared-parity,file-size,jsdoc}.txt. No full suite under the user-approved related-module cadence. Source-wide behavior/contract/default statuses remain unverified.
     - Observation: the JSDoc gate initially found one missing annotation on a forced const-destructor rejection callback; annotation added and gate passed. Source review corrected shared-base creation/deletion family order; final ownership checks passed afterwards. No semantic test failure, network action, merge or external publication.
     - Scope: this completes the temporary-rule/lifetime prerequisite, not paragraph restart integration. ParaNumRule still needs to consume it; character-style slot/table/cache, original paragraph list output, importer metadata, complete color/common-output paths and prior goal gaps remain open. Existing browser aggregate location for rule-table storage and wider document lifecycle/ABI remain uncertified. WRITER200 documents retained native unsigned16 counter hazards. Task remains DOING; goal remains active.
+
+    Word character-style table/cache checkpoint (2026-10-28, CODER)
+    - Implemented: actual MSWordExportBase style context and retained m_rExport; native concrete RTF/DOCX format-kind virtual; character-first named format slots before non-reserved paragraphs; original4091 bound and missing sentinel; complete pinned GetWWId pool mapping and91 English names; native builtin-first shared-family naming, character self-next, exact pointer/null lookup and numeric GetId overloads. Added original wwstyles header enum/function facade, styles implementation and StyleType declaration at source-shaped paths. Native paragraph GetId now emits Standard slot0 for a missing style instead of omitting its style control. Removed the duplicate id-keyed paragraph map from RTF.
+    - Implemented: RTF StartStyles/StartStyle/EndStyle/EndStyles/default-style framing, color-table emission over the audited precollection slice, native first-inserted property-only InsStyle/GetStyle cache and actual character stylesheet definitions. EndStyle binds the existing drained StyleDefinition string as an explicit argument; native full OutputFormat/item-buffer closure is still unverified. Test bridges now release every export/range context before any owned document, and style tests use owned live document contexts rather than destroying borrowed documents prematurely.
+    - Command: node scripts/word-styles-native-probe.mjs.
+    - Result: pass. Unchanged pinned GetWWId/BuildGetSlot/GetSlot/GetStiNames/GetEnglishNameFromSti, original enum definitions and enum arithmetic compile under ASan/UBSan with scalar SwFormat/vector-entry carriers. Native fixture records65536 pool IDs,91 names and null slots1/10. Actual SwFormat/exporter tests compare the entire finite mapping; full native Writer/style ABI is not certified. Evidence: apps/office/src/sw/source/filter/ww8/word-styles-native.json and output/playwright/word-styles-native/probe.cxx. WRITER201 records retained null lookup behavior; native header MapEntry.format=nullptr and concrete export kinds were checked directly.
+    - Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md src/sw/source/writerfilter/rtftok src/sw/inc/poolfmt.test.ts --reporter=json --outputFile=../../output/playwright/rtf-word-styles/writer-tests.json.
+    - Result: pass492/492. Final real-context/style/file-UI set39/39; after removing the duplicate paragraph map, final related RTF export/font/style set147/147. Evidence: output/playwright/rtf-word-styles/{writer-tests,final-tests,final-export-tests}.json. No full suite under the approved related-module cadence.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+    - Result: pass. Boundaries1686runtime/8745imports/210edges; provenance1687runtime/1475mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-word-styles/{writer-parity,shared-parity,file-size,jsdoc}.txt. New source semantic statuses remain unverified.
+    - Observation: typecheck exposed missing native paragraph enum identities; admitted the consumed pinned values. The native probe initially lacked enum arithmetic/reserved-slot macro; copied original operators/macro rather than changing source functions. ESLint required unified TS signatures and explicit handling of original enum aliases; numeric-returning overloads now share a union, and six original symbolic range aliases retain narrowly documented prefer-literal exceptions like existing native enums. A formatting command had missing .ts extensions and the JSON generator needed project formatting; command corrected and probe now formats its output reproducibly. Final gates pass.
+    - Scope/remaining: this completes the named-slot/cache prerequisite, not original ParaNumRule integration. Native property/output-buffer closure, linked style graph, full model auto-update state, list-style true mode, hidden default paragraph representation, full OutColorTable collection, character-style importer, paragraph restart dispatch and previous goal gaps remain audited. Current core's Standard-at-index0 logical table binding is explicit. No network, external write, merge or publication. Task remains DOING; goal remains active.
 id_source: "generated"
 ---
 ## Summary
@@ -544,6 +592,36 @@ Note: Temporary Word numbering ownership checkpoint passed1399 related document/
 Attempts: 2
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T07:57:43.314Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T08:46:02.669Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Word character-style slot/cache checkpoint passed492 related tests,39 final style/UI tests,147 final export/font tests, exhaustive pinned native style helper witness and static/provenance/registry gates. Full text-filter task remains incomplete; paragraph dispatch/property/importer and prior goals remain in Findings.
+Attempts: 3
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T08:46:01.452Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -932,3 +1010,15 @@ RTF temporary-numbering ownership checkpoint (2026-10-28, CODER)
 - Result: pass; boundaries1683runtime/8738imports/210edges; provenance1684runtime/1472mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-numbering-lifetime/{writer-parity,shared-parity,file-size,jsdoc}.txt. No full suite under the user-approved related-module cadence. Source-wide behavior/contract/default statuses remain unverified.
 - Observation: the JSDoc gate initially found one missing annotation on a forced const-destructor rejection callback; annotation added and gate passed. Source review corrected shared-base creation/deletion family order; final ownership checks passed afterwards. No semantic test failure, network action, merge or external publication.
 - Scope: this completes the temporary-rule/lifetime prerequisite, not paragraph restart integration. ParaNumRule still needs to consume it; character-style slot/table/cache, original paragraph list output, importer metadata, complete color/common-output paths and prior goal gaps remain open. Existing browser aggregate location for rule-table storage and wider document lifecycle/ABI remain uncertified. WRITER200 documents retained native unsigned16 counter hazards. Task remains DOING; goal remains active.
+
+Word character-style table/cache checkpoint (2026-10-28, CODER)
+- Implemented: actual MSWordExportBase style context and retained m_rExport; native concrete RTF/DOCX format-kind virtual; character-first named format slots before non-reserved paragraphs; original4091 bound and missing sentinel; complete pinned GetWWId pool mapping and91 English names; native builtin-first shared-family naming, character self-next, exact pointer/null lookup and numeric GetId overloads. Added original wwstyles header enum/function facade, styles implementation and StyleType declaration at source-shaped paths. Native paragraph GetId now emits Standard slot0 for a missing style instead of omitting its style control. Removed the duplicate id-keyed paragraph map from RTF.
+- Implemented: RTF StartStyles/StartStyle/EndStyle/EndStyles/default-style framing, color-table emission over the audited precollection slice, native first-inserted property-only InsStyle/GetStyle cache and actual character stylesheet definitions. EndStyle binds the existing drained StyleDefinition string as an explicit argument; native full OutputFormat/item-buffer closure is still unverified. Test bridges now release every export/range context before any owned document, and style tests use owned live document contexts rather than destroying borrowed documents prematurely.
+- Command: node scripts/word-styles-native-probe.mjs.
+- Result: pass. Unchanged pinned GetWWId/BuildGetSlot/GetSlot/GetStiNames/GetEnglishNameFromSti, original enum definitions and enum arithmetic compile under ASan/UBSan with scalar SwFormat/vector-entry carriers. Native fixture records65536 pool IDs,91 names and null slots1/10. Actual SwFormat/exporter tests compare the entire finite mapping; full native Writer/style ABI is not certified. Evidence: apps/office/src/sw/source/filter/ww8/word-styles-native.json and output/playwright/word-styles-native/probe.cxx. WRITER201 records retained null lookup behavior; native header MapEntry.format=nullptr and concrete export kinds were checked directly.
+- Command: npm run test:writer --workspace @vite-office/office -- src/sw/source/filter/ww8 src/sw/source/filter/ascii src/sw/source/filter/md src/sw/source/writerfilter/rtftok src/sw/inc/poolfmt.test.ts --reporter=json --outputFile=../../output/playwright/rtf-word-styles/writer-tests.json.
+- Result: pass492/492. Final real-context/style/file-UI set39/39; after removing the duplicate paragraph map, final related RTF export/font/style set147/147. Evidence: output/playwright/rtf-word-styles/{writer-tests,final-tests,final-export-tests}.json. No full suite under the approved related-module cadence.
+- Command: npm run typecheck --workspace @vite-office/office; scoped ESLint/Prettier; npm run check:dependencies; npm run check:source-provenance; npm run check:file-size; npm run check:docs; npm run inventory:parity:writer; npm run inventory:parity:shared; git diff --check.
+- Result: pass. Boundaries1686runtime/8745imports/210edges; provenance1687runtime/1475mapped; Writer/shared semanticViolationCount0. Evidence: command output and output/playwright/rtf-word-styles/{writer-parity,shared-parity,file-size,jsdoc}.txt. New source semantic statuses remain unverified.
+- Observation: typecheck exposed missing native paragraph enum identities; admitted the consumed pinned values. The native probe initially lacked enum arithmetic/reserved-slot macro; copied original operators/macro rather than changing source functions. ESLint required unified TS signatures and explicit handling of original enum aliases; numeric-returning overloads now share a union, and six original symbolic range aliases retain narrowly documented prefer-literal exceptions like existing native enums. A formatting command had missing .ts extensions and the JSON generator needed project formatting; command corrected and probe now formats its output reproducibly. Final gates pass.
+- Scope/remaining: this completes the named-slot/cache prerequisite, not original ParaNumRule integration. Native property/output-buffer closure, linked style graph, full model auto-update state, list-style true mode, hidden default paragraph representation, full OutColorTable collection, character-style importer, paragraph restart dispatch and previous goal gaps remain audited. Current core's Standard-at-index0 logical table binding is explicit. No network, external write, merge or publication. Task remains DOING; goal remains active.

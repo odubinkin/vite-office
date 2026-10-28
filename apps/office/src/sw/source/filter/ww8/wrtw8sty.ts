@@ -217,40 +217,12 @@ export class wwFontHelper {
   }
 }
 
-/** @fileoverview Builds the represented paragraph-style slots of pinned MSWordStyles. */
-import { getWriterParagraphStyleDefinition } from "../../../inc/poolfmt";
-import type { SwDoc } from "../../core/doc/doc";
-import type { SwTextFormatColl } from "../../core/doc/fmtcol";
+/** Consumed MSWordStyles named-format ownership from pinned wrtw8sty.cxx. */
+import { SwPoolFormatId } from "../../../inc/poolfmt";
 
 /** Word reserves slots 0-14 before document character and paragraph styles. */
 const WW8_RESERVED_SLOTS = 15;
 const MSWORD_MAX_STYLES_LIMIT = 4091;
-const STANDARD = getWriterParagraphStyleDefinition("default")?.poolId;
-const HEADLINE1 = getWriterParagraphStyleDefinition("heading-1")?.poolId;
-const HEADLINE9 = getWriterParagraphStyleDefinition("heading-9")?.poolId;
-
-/** Current pool subset of GetWWId plus ww::GetEnglishNameFromSti. */
-const WORD_PARAGRAPH_STYLE_NAMES: ReadonlyMap<string, string> = new Map([
-  ["default", "Normal"],
-  ...Array.from(
-    { length: 9 },
-    /** Maps source heading names. @param _unused - Empty slot. @param index - Zero-based heading level. @returns Native ID and Word name. */ (
-      _,
-      index,
-    ): [string, string] => [`heading-${index + 1}`, `heading ${index + 1}`],
-  ),
-  ["footnote", "footnote text"],
-  ["marginalia", "annotation text"],
-  ["caption", "caption"],
-  ["endnote", "endnote text"],
-  ["title", "Title"],
-  ["appendix", "Closing"],
-  ["text-body", "Body Text"],
-  ["text-body-indent", "Body Text Indent"],
-  ["subtitle", "Subtitle"],
-  ["first-line-indent", "Body Text First Indent"],
-]);
-
 /** Source OUString::toAsciiLowerCase leaves non-ASCII letters unchanged. @param value - Style name. @returns ASCII-folded key. */
 function asciiLowerCase(value: string): string {
   return value.replace(
@@ -261,30 +233,35 @@ function asciiLowerCase(value: string): string {
   );
 }
 
-/** Source MSWordStyles::BuildStylesTable and GetSlot for the current paragraph-style graph. */
+/** Source named character/paragraph slots and Word names for the represented format graph. */
 export class MSWordStyles {
-  private readonly styles: (SwTextFormatColl | undefined)[] =
-    Array(WW8_RESERVED_SLOTS).fill(undefined);
-  private readonly slots = new Map<SwTextFormatColl, number>();
-  private readonly names = new Map<SwTextFormatColl, string>();
+  private readonly m_rExport: MSWordExportBase;
+  private readonly styles: (SwFormat | undefined)[] = Array(WW8_RESERVED_SLOTS).fill(undefined);
+  private readonly names = new Map<SwFormat, string>();
 
-  /** Collects materialized named collections; this core's first collection is Standard. @param document - Owning Writer document. @returns Nothing. */
-  public constructor(document: SwDoc) {
+  /** Collects actual named formats through the native export context; this core has Standard at paragraph index0. @param owner - Actual exporter. @returns Nothing. */
+  public constructor(owner: MSWordExportBase) {
+    this.m_rExport = owner;
+    const document = this.m_rExport.m_rDoc;
+    const characters = document.GetCharFormats();
+    for (
+      let index = 1;
+      index < characters.length && this.styles.length < MSWORD_MAX_STYLES_LIMIT;
+      ++index
+    ) {
+      const format = characters[index] as SwFormat;
+      if (
+        this.m_rExport.GetExportFormat() === MSWordExportFormat.DOCX &&
+        format.GetName().startsWith("ListLabel")
+      )
+        continue;
+      this.styles.push(format);
+    }
     for (const collection of document.GetTextFormatColls()) {
-      const poolId = collection.poolId;
-      const reserved =
-        poolId === STANDARD
-          ? 0
-          : HEADLINE1 !== undefined &&
-              HEADLINE9 !== undefined &&
-              poolId >= HEADLINE1 &&
-              poolId <= HEADLINE9
-            ? poolId - HEADLINE1 + 1
-            : undefined;
-      if (reserved === undefined && this.styles.length >= MSWORD_MAX_STYLES_LIMIT) continue;
-      const slot = reserved ?? this.styles.length;
+      const reserved = BuildGetSlot(collection);
+      if (reserved === 0x0fff && this.styles.length >= MSWORD_MAX_STYLES_LIMIT) continue;
+      const slot = reserved === 0x0fff ? this.styles.length : reserved;
       this.styles[slot] = collection;
-      this.slots.set(collection, slot);
     }
     const used = new Set<string>(["normal"]);
     const normal = this.styles[0];
@@ -307,11 +284,7 @@ export class MSWordStyles {
     // BuildWwNames gives built-in Word names priority over user names.
     for (const collection of this.styles) {
       if (collection === undefined || this.names.has(collection)) continue;
-      const builtin = [...WORD_PARAGRAPH_STYLE_NAMES].find(
-        /** Matches a native builtin pool identity. @param entry - Style ID and Word name. @returns Whether the collection has this pool ID. */ ([
-          id,
-        ]) => getWriterParagraphStyleDefinition(id)?.poolId === collection.poolId,
-      )?.[1];
+      const builtin = GetEnglishNameFromSti(MSWordStyles.GetWWId(collection));
       if (builtin !== undefined) this.names.set(collection, uniqueName(builtin));
     }
     for (const collection of this.styles) {
@@ -320,18 +293,171 @@ export class MSWordStyles {
     }
   }
 
+  /** Original pool identity mapping for every builtin format family. @param rFormat - Actual format. @returns Word sti identity. */
+  public static GetWWId(rFormat: SwFormat): number {
+    let nRet: number = sti.stiUser; // user style as default
+    const nPoolId = rFormat.GetPoolFormatId();
+    if (nPoolId == SwPoolFormatId.COLL_STANDARD) nRet = sti.stiNormal;
+    else if (nPoolId >= SwPoolFormatId.COLL_HEADLINE1 && nPoolId <= SwPoolFormatId.COLL_HEADLINE9)
+      nRet = nPoolId + sti.stiLevFirst - SwPoolFormatId.COLL_HEADLINE1;
+    else if (nPoolId >= SwPoolFormatId.COLL_TOX_IDX1 && nPoolId <= SwPoolFormatId.COLL_TOX_IDX3)
+      nRet = nPoolId + sti.stiIndexFirst - SwPoolFormatId.COLL_TOX_IDX1;
+    else if (nPoolId >= SwPoolFormatId.COLL_TOX_CNTNT1 && nPoolId <= SwPoolFormatId.COLL_TOX_CNTNT5)
+      nRet = nPoolId + sti.stiToc1 - SwPoolFormatId.COLL_TOX_CNTNT1;
+    else if (nPoolId >= SwPoolFormatId.COLL_TOX_CNTNT6 && nPoolId <= SwPoolFormatId.COLL_TOX_CNTNT9)
+      nRet = nPoolId + sti.stiToc6 - SwPoolFormatId.COLL_TOX_CNTNT6;
+    else
+      switch (nPoolId) {
+        case SwPoolFormatId.COLL_FOOTNOTE:
+          nRet = sti.stiFootnoteText;
+          break;
+        case SwPoolFormatId.COLL_MARGINAL:
+          nRet = sti.stiAtnText;
+          break;
+        case SwPoolFormatId.COLL_HEADER:
+          nRet = sti.stiHeader;
+          break;
+        case SwPoolFormatId.COLL_FOOTER:
+          nRet = sti.stiFooter;
+          break;
+        case SwPoolFormatId.COLL_TOX_IDXH:
+          nRet = sti.stiIndexHeading;
+          break;
+        case SwPoolFormatId.COLL_LABEL:
+          nRet = sti.stiCaption;
+          break;
+        case SwPoolFormatId.COLL_TOX_ILLUS1:
+          nRet = sti.stiToCaption;
+          break;
+        case SwPoolFormatId.COLL_ENVELOPE_ADDRESS:
+          nRet = sti.stiEnvAddr;
+          break;
+        case SwPoolFormatId.COLL_SEND_ADDRESS:
+          nRet = sti.stiEnvRet;
+          break;
+        case SwPoolFormatId.CHR_FOOTNOTE_ANCHOR:
+          nRet = sti.stiFootnoteRef;
+          break;
+        case SwPoolFormatId.CHR_LINENUM:
+          nRet = sti.stiLnn;
+          break;
+        case SwPoolFormatId.CHR_PAGENO:
+          nRet = sti.stiPgn;
+          break;
+        case SwPoolFormatId.CHR_ENDNOTE_ANCHOR:
+          nRet = sti.stiEdnRef;
+          break;
+        case SwPoolFormatId.COLL_ENDNOTE:
+          nRet = sti.stiEdnText;
+          break;
+        case SwPoolFormatId.COLL_TOX_AUTHORITIESH:
+          nRet = sti.stiToa;
+          break;
+        case SwPoolFormatId.COLL_TOX_CNTNTH:
+          nRet = sti.stiToaHeading;
+          break;
+        case SwPoolFormatId.COLL_LISTS_BEGIN:
+          nRet = sti.stiList;
+          break;
+        case SwPoolFormatId.COLL_BULLET_LEVEL1:
+          nRet = sti.stiListBullet;
+          break;
+        case SwPoolFormatId.COLL_NUM_LEVEL1:
+          nRet = sti.stiListNumber;
+          break;
+        case SwPoolFormatId.COLL_BULLET_LEVEL2:
+          nRet = sti.stiListBullet2;
+          break;
+        case SwPoolFormatId.COLL_BULLET_LEVEL3:
+          nRet = sti.stiListBullet3;
+          break;
+        case SwPoolFormatId.COLL_BULLET_LEVEL4:
+          nRet = sti.stiListBullet4;
+          break;
+        case SwPoolFormatId.COLL_BULLET_LEVEL5:
+          nRet = sti.stiListBullet5;
+          break;
+        case SwPoolFormatId.COLL_NUM_LEVEL2:
+          nRet = sti.stiListNumber2;
+          break;
+        case SwPoolFormatId.COLL_NUM_LEVEL3:
+          nRet = sti.stiListNumber3;
+          break;
+        case SwPoolFormatId.COLL_NUM_LEVEL4:
+          nRet = sti.stiListNumber4;
+          break;
+        case SwPoolFormatId.COLL_NUM_LEVEL5:
+          nRet = sti.stiListNumber5;
+          break;
+        case SwPoolFormatId.COLL_DOC_TITLE:
+          nRet = sti.stiTitle;
+          break;
+        case SwPoolFormatId.COLL_DOC_APPENDIX:
+          nRet = sti.stiClosing;
+          break;
+        case SwPoolFormatId.COLL_SIGNATURE:
+          nRet = sti.stiSignature;
+          break;
+        case SwPoolFormatId.COLL_TEXT:
+          nRet = sti.stiBodyText;
+          break;
+        case SwPoolFormatId.COLL_TEXT_MOVE:
+          nRet = sti.stiBodyTextInd1;
+          break;
+        case SwPoolFormatId.COLL_BULLET_NONUM1:
+          nRet = sti.stiListCont;
+          break;
+        case SwPoolFormatId.COLL_BULLET_NONUM2:
+          nRet = sti.stiListCont2;
+          break;
+        case SwPoolFormatId.COLL_BULLET_NONUM3:
+          nRet = sti.stiListCont3;
+          break;
+        case SwPoolFormatId.COLL_BULLET_NONUM4:
+          nRet = sti.stiListCont4;
+          break;
+        case SwPoolFormatId.COLL_BULLET_NONUM5:
+          nRet = sti.stiListCont5;
+          break;
+        case SwPoolFormatId.COLL_DOC_SUBTITLE:
+          nRet = sti.stiSubtitle;
+          break;
+        case SwPoolFormatId.COLL_GREETING:
+          nRet = sti.stiSalutation;
+          break;
+        case SwPoolFormatId.COLL_TEXT_IDENT:
+          nRet = sti.stiBodyText1I;
+          break;
+        case SwPoolFormatId.CHR_INET_NORMAL:
+          nRet = sti.stiHyperlink;
+          break;
+        case SwPoolFormatId.CHR_INET_VISIT:
+          nRet = sti.stiHyperlinkFollowed;
+          break;
+        case SwPoolFormatId.CHR_HTML_STRONG:
+          nRet = sti.stiStrong;
+          break;
+        case SwPoolFormatId.CHR_HTML_EMPHASIS:
+          nRet = sti.stiEmphasis;
+          break;
+        default:
+          break;
+      }
+    return nRet;
+  }
   /** Returns the source Word slot, or its missing-style sentinel. @param collection - Native collection. @returns Slot or 0x0fff. */
-  public GetSlot(collection: SwTextFormatColl | undefined): number {
-    return collection === undefined ? 0x0fff : (this.slots.get(collection) ?? 0x0fff);
+  public GetSlot(collection: SwFormat | undefined): number {
+    const slot = this.styles.indexOf(collection);
+    return slot === -1 ? 0x0fff : slot;
   }
 
   /** Returns source slot order, including reserved empty slots. @returns Native style slots. */
-  public GetStyles(): readonly (SwTextFormatColl | undefined)[] {
+  public GetStyles(): readonly (SwFormat | undefined)[] {
     return this.styles;
   }
 
   /** Returns BuildWwNames output for an exported style. @param collection - Native collection. @returns Word style name. */
-  public GetWWName(collection: SwTextFormatColl): string {
+  public GetWWName(collection: SwFormat): string {
     return this.names.get(collection) ?? collection.GetName();
   }
 }
@@ -342,3 +468,16 @@ import { SvxNumType } from "../../../../editeng/inc/svxenum";
 import { GetDfltAttr } from "../../core/attr/hints";
 import { RES_CHRATR_FONT, RES_CHRATR_CJK_FONT, RES_CHRATR_CTL_FONT } from "../../../inc/hintids";
 import { RTL_TEXTENCODING_MS_1252, RTL_TEXTENCODING_SYMBOL } from "../../../../sal/inc/rtl/textenc";
+
+import type { SwFormat } from "../../core/attr/format";
+import { sti, GetEnglishNameFromSti } from "../inc/wwstyles";
+import { MSWordExportFormat } from "./wrtww8";
+
+/** Original reserved-slot mapping uses pool IDs, not user-visible names. @param format - Actual format. @returns Reserved slot or native missing sentinel. */
+export function BuildGetSlot(format: SwFormat): number {
+  const id = format.GetPoolFormatId();
+  if (id === SwPoolFormatId.COLL_STANDARD) return 0;
+  if (id >= SwPoolFormatId.COLL_HEADLINE1 && id <= SwPoolFormatId.COLL_HEADLINE9)
+    return id - SwPoolFormatId.COLL_HEADLINE1 + 1;
+  return 0x0fff;
+}

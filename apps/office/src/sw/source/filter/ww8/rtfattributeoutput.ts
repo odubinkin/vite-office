@@ -81,7 +81,12 @@ export class RtfAttributeOutput {
     private readonly colorIndex: (color: string) => number,
     private readonly exporter: Pick<
       RtfExport,
-      "GetCurrentEncoding" | "SetCurrentEncoding" | "GetDefaultEncoding" | "Strm"
+      | "GetCurrentEncoding"
+      | "SetCurrentEncoding"
+      | "GetDefaultEncoding"
+      | "Strm"
+      | "OutColorTable"
+      | "InsStyle"
     >,
   ) {
     this.associated = new RtfAssociatedProperties(
@@ -90,6 +95,51 @@ export class RtfAttributeOutput {
     );
   }
 
+  private m_aStylesheet = "";
+  private m_rStyleName = "";
+  private m_nStyleId = 0;
+  /** Original styles start writes color-table opening and retains stylesheet text until EndStyles. @returns Nothing. */
+  StartStyles(): void {
+    this.exporter.Strm().WriteOString("\n{\\colortbl");
+    this.exporter.OutColorTable();
+    if (this.m_aStylesheet !== "") throw new Error("assert(stylesheet empty)");
+    this.m_aStylesheet = "\n{\\stylesheet";
+  }
+  /** Original end flushes the complete stylesheet after closing the color destination. @param count - Ignored native count. @returns Nothing. */
+  EndStyles(count: number): void {
+    void count;
+    this.exporter.Strm().WriteChar("}").WriteOString(this.m_aStylesheet);
+    this.m_aStylesheet = "";
+    this.exporter.Strm().WriteChar("}");
+  }
+  /** Original default-style output is empty in RTF. @returns Nothing. */
+  DefaultStyle(): void {}
+  /** Original style header retains native paragraph/character controls and sentinels. @param name - Word name. @param type - Native style type. @param base - Parent slot. @param next - Next slot. @param link - Ignored native link. @param wwId - Ignored builtin ID. @param slot - Native slot. @param autoUpdate - Native update flag. @returns Nothing. */
+  StartStyle(
+    name: string,
+    type: StyleType,
+    base: number,
+    next: number,
+    link: number,
+    wwId: number,
+    slot: number,
+    autoUpdate: boolean,
+  ): void {
+    void link;
+    void wwId;
+    this.m_aStylesheet += `{${type === StyleType.STYLE_TYPE_PARA ? "\\s" : "\\*\\cs"}${slot}`;
+    if (base !== 0x0fff) this.m_aStylesheet += `\\sbasedon${base}`;
+    this.m_aStylesheet += `\\snext${next}`;
+    if (autoUpdate) this.m_aStylesheet += "\\sautoupd";
+    this.m_rStyleName = name;
+    this.m_nStyleId = slot;
+  }
+  /** Original end caches property controls separately from the wrapper/name. The argument binds this port's existing string property sink instead of inventing a second buffer. @param properties - Drained StyleDefinition controls. @returns Nothing. */
+  EndStyle(properties: string): void {
+    this.exporter.InsStyle(this.m_nStyleId, properties);
+    this.m_aStylesheet +=
+      properties + " " + OutString(this.m_rStyleName, this.exporter.GetCurrentEncoding()) + ";}\n";
+  }
   private m_nListId = 0;
   /** Original concrete numbering instance. @param id - One-based abstract ID. @param rule - Unused in RTF. @returns Nothing. */
   NumberingDefinition(id: number, rule: SwNumRule): void {
@@ -677,3 +727,5 @@ import type { SwNumRule } from "../../core/doc/number";
 import { SvxLanguageItem } from "../../../../editeng/inc/langitem";
 import { RES_CHRATR_CJK_LANGUAGE } from "../../../inc/hintids";
 import { LANGUAGE_CHINESE_SIMPLIFIED } from "../../../../i18nlangtag/inc/lang";
+
+import { StyleType } from "./attributeoutputbase";

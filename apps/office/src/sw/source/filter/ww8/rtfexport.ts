@@ -80,6 +80,10 @@ const RTF_DEFAULT_COLORS = [
 
 /** Writes current-model Writer text, direct character attributes and tables as RTF. */
 export class RtfExport extends MSWordExportBase {
+  /** Original concrete export-kind identity. @returns Native format. */
+  GetExportFormat(): MSWordExportFormat {
+    return MSWordExportFormat.RTF;
+  }
   private readonly attributeOutput = new RtfAttributeOutput(
     /** Computes the family result. @param family - Family. @returns The computed result. */ (
       family,
@@ -89,7 +93,6 @@ export class RtfExport extends MSWordExportBase {
     this,
   );
   private readonly colors = new Map<string, number>();
-  private readonly styles = new Map<string, { index: number; style: SwTextFormatColl }>();
 
   private readonly m_eDefaultEncoding = rtl_getTextEncodingFromWindowsCharset(
     rtl_TextEncodingToWinCharset(RTL_TEXTENCODING_ASCII_US),
@@ -123,6 +126,23 @@ export class RtfExport extends MSWordExportBase {
     }
   }
 
+  private readonly m_aStyTable = new Map<number, string>();
+  /** Native insertion keeps the first style property string. @param id - Native slot. @param properties - Property controls without wrapper/name. @returns Nothing. */
+  InsStyle(id: number, properties: string): void {
+    if (!this.m_aStyTable.has(id & 0xffff)) this.m_aStyTable.set(id & 0xffff, properties);
+  }
+  /** Original borrowed property lookup. @param id - Native slot. @returns Cached controls or null binding. */
+  GetStyle(id: number): string | undefined {
+    return this.m_aStyTable.get(id & 0xffff);
+  }
+  /** Original color-table emission over this slice's pre-collected colors. Remaining native item collectors stay explicit in the capability audit. @returns Nothing. */
+  OutColorTable(): void {
+    this.Strm().WriteChar(";");
+    for (const color of this.colors.keys())
+      this.Strm().WriteOString(
+        `\\red${Number.parseInt(color.slice(1, 3), 16)}\\green${Number.parseInt(color.slice(3, 5), 16)}\\blue${Number.parseInt(color.slice(5, 7), 16)};`,
+      );
+  }
   /** Actual RTF implementation of the native attribute-output virtual. @returns Output owner. */
   AttrOutput(): RtfAttributeOutput {
     return this.attributeOutput;
@@ -172,10 +192,8 @@ export class RtfExport extends MSWordExportBase {
     this.stream = new SvStream(new Uint8Array(), this.GetDefaultEncoding());
     this.colors.clear();
     for (const color of RTF_DEFAULT_COLORS) this.IndexColor(rtfColorKey(color));
-    this.styles.clear();
-    const styleTable = new MSWordStyles(document);
-    for (const [index, style] of styleTable.GetStyles().entries())
-      if (style !== undefined) this.styles.set(style.id, { index, style });
+    const styleTable = new MSWordStyles(this);
+    this.m_pStyles = styleTable;
     const blocks = document.GetNodes().getBodyContent();
     for (const node of document.GetNodes().entries()) {
       if (!node.IsTextNode()) continue;
@@ -188,7 +206,8 @@ export class RtfExport extends MSWordExportBase {
       const paragraph = node as SwTextNode;
       this.IndexBoxColors(paragraph.GetAttr(RES_BOX) as SvxBoxItem);
     }
-    for (const { style } of this.styles.values()) {
+    for (const style of styleTable.GetStyles()) {
+      if (!(style instanceof SwTextFormatColl)) continue;
       this.IndexBoxColors(style.GetAttrSet().Get(RES_BOX) as SvxBoxItem);
       const attributes = projectWriterCharacterAttributes(style.GetAttrSet());
       if (attributes.color !== undefined && attributes.color !== "auto")
@@ -230,28 +249,33 @@ export class RtfExport extends MSWordExportBase {
     this.Strm().WriteOString("{\\fonttbl");
     this.m_aFontHelper.WriteFontTable(this.attributeOutput);
     this.Strm().WriteChar("}");
+    this.attributeOutput.StartStyles();
+    for (const [index, style] of styleTable.GetStyles().entries()) {
+      if (style === undefined) {
+        this.attributeOutput.DefaultStyle();
+        continue;
+      }
+      const paragraph = style instanceof SwTextFormatColl;
+      const base =
+        style.DerivedFrom() === undefined ? 0x0fff : styleTable.GetSlot(style.DerivedFrom());
+      const next = styleTable.GetSlot(paragraph ? style.GetNextTextFormatColl() : style);
+      this.attributeOutput.StartStyle(
+        styleTable.GetWWName(style),
+        paragraph ? StyleType.STYLE_TYPE_PARA : StyleType.STYLE_TYPE_CHAR,
+        base,
+        next,
+        0x0fff,
+        MSWordStyles.GetWWId(style),
+        index,
+        false,
+      );
+      const properties =
+        (paragraph ? this.attributeOutput.WriteStyleParagraphProperties(style) : "") +
+        this.attributeOutput.WriteNativeCharacter(style.GetAttrSet());
+      this.attributeOutput.EndStyle(properties);
+    }
+    this.attributeOutput.EndStyles(styleTable.GetStyles().length);
     let output = "";
-    // The fixed Word highlight palette is registered at the beginning of every export.
-    output += "{\\colortbl;";
-    for (const color of this.colors.keys()) {
-      const red = Number.parseInt(color.slice(1, 3), 16),
-        green = Number.parseInt(color.slice(3, 5), 16),
-        blue = Number.parseInt(color.slice(5, 7), 16);
-      output += `\\red${red}\\green${green}\\blue${blue};`;
-    }
-    output += "}";
-    output += "{\\stylesheet";
-    for (const { index, style } of this.styles.values()) {
-      const paragraph = this.attributeOutput.WriteStyleParagraphProperties(style),
-        character = this.attributeOutput.WriteNativeCharacter(style.GetAttrSet());
-      const parent = style.DerivedFrom();
-      const base = parent instanceof SwTextFormatColl ? styleTable.GetSlot(parent) : 0x0fff;
-      const next = styleTable.GetSlot(style.GetNextTextFormatColl());
-      output += `{\\s${index}${base === 0x0fff ? "" : `\\sbasedon${base}`}\\snext${next}${paragraph}${character} ${OutString(styleTable.GetWWName(style), this.GetCurrentEncoding())};}`;
-    }
-    output += "}";
-    this.Strm().WriteOString(output);
-    output = "";
     this.BuildNumbering();
     this.WriteNumbering();
     const defaultTabs = document
@@ -559,8 +583,7 @@ export class RtfExport extends MSWordExportBase {
     end = paragraph.GetText().length,
   ): string {
     let output = this.attributeOutput.WriteParagraphProperties(paragraph);
-    const style = this.styles.get(paragraph.GetParagraphStyle());
-    if (style !== undefined) output += `\\s${style.index}`;
+    output += `\\s${this.GetId(paragraph.GetFormatColl() as SwTextFormatColl)}`;
     const rule = paragraph.GetNumRule();
     if (rule !== undefined && paragraph.IsCountedInList()) {
       const id = this.GetNumberingId(rule);
@@ -766,7 +789,7 @@ function rtfColorKey(color: Readonly<Color>): string {
     .join("")}`;
 }
 
-import { MSWordExportBase } from "./wrtww8";
+import { MSWordExportBase, MSWordExportFormat } from "./wrtww8";
 import { SwPaM, SwPosition } from "../../core/crsr/pam";
 
 /** Native exportability scan stops at the last explicitly owned level. @param rule - Original rule. @returns Original gate. */
@@ -786,3 +809,5 @@ function IsExportNumRule(rule: SwNumRule): boolean {
 }
 
 import { AbstractNumberingDefinitions, NumberingDefinitions } from "./wrtw8num";
+
+import { StyleType } from "./attributeoutputbase";

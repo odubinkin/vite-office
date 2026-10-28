@@ -2,7 +2,7 @@
 import { SvxFontItem } from "../../../../editeng/inc/fontitem";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwPaM } from "../../core/crsr/pam";
-import { wwFont, wwFontHelper } from "./wrtw8sty";
+import { type MSWordStyles, wwFont, wwFontHelper } from "./wrtw8sty";
 import {
   EnsureUsedNumberingTable,
   GetNumberingId,
@@ -17,7 +17,10 @@ import type {
   SymbolExportFontName,
 } from "../../../../filter/source/msfilter/util";
 /** Native common Word export owner for the currently consumed context. */
-export class MSWordExportBase {
+export abstract class MSWordExportBase {
+  public m_pStyles: MSWordStyles | undefined;
+  /** Original exporter-kind virtual. @returns Actual output format. */
+  abstract GetExportFormat(): MSWordExportFormat;
   readonly m_aFontHelper = new wwFontHelper();
   public m_pUsedNumTable: SwNumRule[] | undefined;
   public m_bSubstituteBullets = true;
@@ -69,13 +72,33 @@ export class MSWordExportBase {
   ): void {
     SubstituteBullet(this, text, encoding, family);
   }
-  /** Original item overload returns the registered numeric font ID. @param font - Actual shared item. @returns ID. */
-  GetId(font: SvxFontItem): number;
+  /** Original numeric-returning overloads share a TS union: paragraph fallback0, character fallback10/native null lookup, and font-item registration. @param font - Actual format/item or native character null. @returns Source-specific numeric ID. */
+  GetId(font: SwTextFormatColl | SwCharFormat | SvxFontItem | undefined): number;
   /** Original font-value overload registers without returning an ID. @param font - Actual native font value. @returns Nothing. */
   GetId(font: wwFont): void;
-  /** Native overload binding consumes the genuine shared font helper. @param font - Actual font/item. @returns ID for the item overload only. */
-  GetId(font: SvxFontItem | wwFont): number | void {
+  /** Native overload binding consumes genuine format owners and the shared font helper. @param font - Actual format/item/value or native null. @returns ID for numeric overloads only. */
+  GetId(font: SvxFontItem | wwFont | SwCharFormat | SwTextFormatColl | undefined): number | void {
+    if (font instanceof SwTextFormatColl) {
+      if (this.m_pStyles === undefined) throw new Error("assert(styles initialized)");
+      const slot = this.m_pStyles.GetSlot(font);
+      return slot === 0x0fff ? 0 : slot;
+    }
+    if (font === undefined || font instanceof SwCharFormat) {
+      if (this.m_pStyles === undefined) throw new Error("assert(styles initialized)");
+      const slot = this.m_pStyles.GetSlot(font);
+      return slot === 0x0fff ? 10 : slot;
+    }
     if (font instanceof SvxFontItem) return this.m_aFontHelper.GetId(font);
     this.m_aFontHelper.GetId(font);
   }
 }
+
+import { SwCharFormat } from "../../../inc/charfmt";
+/** Original Word export format identities. */
+export enum MSWordExportFormat {
+  DOC = 0,
+  RTF = 1,
+  DOCX = 2,
+}
+
+import { SwTextFormatColl } from "../../core/doc/fmtcol";

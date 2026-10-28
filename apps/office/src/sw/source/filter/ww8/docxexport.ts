@@ -9,9 +9,13 @@ import { FastSerializerHelper, FSNS } from "../../../../sax/inc/fshelper";
 import type { SwDoc } from "../../core/doc/doc";
 import type { SwPaM } from "../../core/crsr/pam";
 import { DocxAttributeOutput } from "./docxattributeoutput";
-import { MSWordExportBase } from "./wrtww8";
+import { MSWordExportBase, MSWordExportFormat } from "./wrtww8";
 /** Actual native exporter owner for the admitted document/font parts. */
 export class DocxExport extends MSWordExportBase {
+  /** Original concrete export-kind identity. @returns Native format. */
+  GetExportFormat(): MSWordExportFormat {
+    return MSWordExportFormat.DOCX;
+  }
   private readonly m_pDocumentFS: FastSerializerHelper;
   private readonly m_pAttrOutput: DocxAttributeOutput;
   /** Original consumed constructor keeps the document type flags and document relation/MIME selection. WriteProperties/drawings are not represented by dummy services. @param m_rFilter - Actual XML filter base binding. @param document - Actual document. @param current - Current range base binding. @param original - Actual original range. @param docm - Original macro format flag. @param template - Original template flag. @returns Exporter. */
