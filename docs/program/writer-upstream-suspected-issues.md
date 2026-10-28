@@ -1565,7 +1565,7 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 
 - Source: pinned `sw/source/writerfilter/dmapper/DomainMapper.cxx`, `LN_EG_RPrBase_position`, defers ordinary run positions and negative paragraph-style positions. Other nonzero stylesheet positions instead insert `DFLT_ESC_AUTO_SUPER` or `DFLT_ESC_AUTO_SUB` with `DFLT_ESC_PROP`; the source explicitly says `DON'T FIXME` and describes the missing final-font-size calculation.
 - Observation: a positive paragraph-style position does not retain its numeric half-point offset, while a negative paragraph-style position follows the deferred calculation. This asymmetric branch is source-derived; compiled desktop differential behavior remains unverified.
-- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import remains outside this completed block.
+- Preservation: the represented RTF paragraph-style owner retains positive substitution and negative deferred resolution. Tests distinguish positive automatic superscript from negative numeric displacement; no compensating style normalization is added. Character-style import now also retains the automatic positive/negative substitutions, independent of the supplied magnitude and font size. Ordinary run position normalization remains a separate filter gap.
 
 ### WRITER143 — md4c tag recognizer accepts a slash in a closing tag
 

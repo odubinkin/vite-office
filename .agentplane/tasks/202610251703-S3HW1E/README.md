@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 136
+revision: 139
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T12:02:35.647Z"
+  updated_at: "2026-10-28T12:15:55.708Z"
   updated_by: "CODER"
-  note: "Ordered RTF strike/highlight checkpoint passes841 latest related assertions and static/source gates. Keep full format goal open for actual filter failures: Markdown raw HTML throws, represented RTF language controls are ignored, character-style displacement disagrees with source; complete remaining capability audit without unrelated API expansion."
-  attempts: 10
+  note: "Character-style automatic position correction: 695 related tests and static gates pass. Native Markdown HTML blocks, RTF language controls and position/vertAlign normalization remain incomplete; keep full scope open."
+  attempts: 11
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -165,8 +168,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T12:15:55.708Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Character-style automatic position correction: 695 related tests and static gates pass. Native Markdown HTML blocks, RTF language controls and position/vertAlign normalization remain incomplete; keep full scope open."
+  -
+    type: "status"
+    at: "2026-10-28T12:16:08.566Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T12:04:06.717Z"
+doc_updated_at: "2026-10-28T12:16:08.566Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -189,6 +205,36 @@ sections:
     Attempts: 10
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:02:35.050Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T12:15:55.708Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Character-style automatic position correction: 695 related tests and static gates pass. Native Markdown HTML blocks, RTF language controls and position/vertAlign normalization remain incomplete; keep full scope open.
+    Attempts: 11
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:15:55.095Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -641,6 +687,22 @@ sections:
     - Failures/remediation: initial resource-ID extraction accidentally included comment prefixes ending in underscore; excluded those non-symbol fragments and admitted the ten actual generated names. Initial typecheck caught unavailable Array.findLast/findLastIndex library APIs, a missing edge token, literal-union includes typing, wrong Any type spelling and two unused test imports; used original-direction loops, source IDs/switch and real sal_Int32 Any binding. The Any type-name test now reads/releases its actual OUString rather than comparing it with a host string.
     - Synchronous-loop diagnosis: the new default/font boundary initially selected OUString's zero-terminated pointer overload for nonterminated UTF16 arrays, causing a source-style scan beyond the input. Deliberately stopped the identified live test workers to diagnose, then supplied explicit native lengths15/value.length. A duplicate verification was mistakenly launched while the original handle was still live; both identified runs were terminated and are not passing evidence. Bounded one-case/owner checks, complete related tests and final owner/UI checks then passed. No original source behavior was corrected or worked around.
     - Remaining requirements/next work: whole task is NOT complete. Actual containers now replace the default shortcut, but parser-wide RTF property state and generic resource returned-reference lifetime transport still need integration. The existing run projection/difference-based automatic-hint builder requires a presence audit: normalized explicit defaults equal to inherited values may currently be omitted at final model insertion, affecting later style changes. Preserve native normalized property presence rather than inventing sentinel baselines or alternate style owners when closing this. Full nested property replay, duplicate style-index name/property tables, cross-family s/cs selection, linked styles, full paragraph OutputFormat/item buffers, CJK/CTL import association, script/bidi and earlier TXT/RTF/Markdown gaps remain open. User UI/open/save/autosave/recovery deviations are unchanged. Same continuing AgentPlane task; related tests only, consistent with full suite once per10 tasks.
+
+    ### Character-style position source correction (2026-10-28)
+
+    - Scope: existing RTF style-application callback only. The pinned DomainMapper position branch deliberately substitutes automatic super/subscript for every nonzero character-style position, with DFLT_ESC_PROP. The previous fixture incorrectly claimed numeric character-style positions were native behavior. Both signs and two magnitudes now test actual SwCharFormat items and inherited runs; a different direct displacement tests final run size. The remaining raw position/vertAlign, zero no-op and equal-style deduplication gaps remain explicitly open in the capability document. No generic UNO/module completeness requirement was added.
+    - Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/filter/ascii
+    - Result: pass. Evidence: 695 tests / 50 suites. Scope: related Writer text filters, style/mapper contracts and export/import owners.
+    - Command: npm run typecheck --workspace @vite-office/office
+    - Result: pass. Evidence: tsc --noEmit exited 0. Scope: office source types.
+    - Command: npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts apps/office/src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts --max-warnings 0
+    - Result: pass. Scope: changed source.
+    - Command: npm run check:dependencies && npm run check:docs && npm run check:file-size && npx prettier --check apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts apps/office/src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts
+    - Result: pass. Evidence: 1693 runtime sources; 3899 authored JSDoc sources; file-size exit 0; formatting passed. Scope: existing static gates.
+    - Command: npm run check:source-provenance && npm run inventory:parity:writer && npm run inventory:parity:shared
+    - Result: pass. Evidence: 1694 runtime modules; both registries exit 0. Scope: metadata consistency only, not full behavior parity.
+    - Observation: first test invocation used root-relative rather than workspace-relative test filters and found no tests. A subsequent targeted run found a missing runtime SwCharFormat import; type-only import was corrected. Route refreshed after each nonzero test command, followed by the full related 695-test passing run. No test remained skipped.
+    - Remaining concrete filter work: native Markdown HTML-block reader, RTF language controls, and native position/vertAlign normalization including equal reference values and zero no-op. Full current-model capability audit is incomplete. The active goal and task remain open. Full suite cadence unchanged (no new AgentPlane task was created).
 id_source: "generated"
 ---
 ## Summary
@@ -674,6 +736,36 @@ Note: Ordered RTF strike/highlight checkpoint passes841 latest related assertion
 Attempts: 10
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:02:35.050Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T12:15:55.708Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Character-style automatic position correction: 695 related tests and static gates pass. Native Markdown HTML blocks, RTF language controls and position/vertAlign normalization remain incomplete; keep full scope open.
+Attempts: 11
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T12:15:55.095Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1130,3 +1222,19 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Failures/remediation: initial resource-ID extraction accidentally included comment prefixes ending in underscore; excluded those non-symbol fragments and admitted the ten actual generated names. Initial typecheck caught unavailable Array.findLast/findLastIndex library APIs, a missing edge token, literal-union includes typing, wrong Any type spelling and two unused test imports; used original-direction loops, source IDs/switch and real sal_Int32 Any binding. The Any type-name test now reads/releases its actual OUString rather than comparing it with a host string.
 - Synchronous-loop diagnosis: the new default/font boundary initially selected OUString's zero-terminated pointer overload for nonterminated UTF16 arrays, causing a source-style scan beyond the input. Deliberately stopped the identified live test workers to diagnose, then supplied explicit native lengths15/value.length. A duplicate verification was mistakenly launched while the original handle was still live; both identified runs were terminated and are not passing evidence. Bounded one-case/owner checks, complete related tests and final owner/UI checks then passed. No original source behavior was corrected or worked around.
 - Remaining requirements/next work: whole task is NOT complete. Actual containers now replace the default shortcut, but parser-wide RTF property state and generic resource returned-reference lifetime transport still need integration. The existing run projection/difference-based automatic-hint builder requires a presence audit: normalized explicit defaults equal to inherited values may currently be omitted at final model insertion, affecting later style changes. Preserve native normalized property presence rather than inventing sentinel baselines or alternate style owners when closing this. Full nested property replay, duplicate style-index name/property tables, cross-family s/cs selection, linked styles, full paragraph OutputFormat/item buffers, CJK/CTL import association, script/bidi and earlier TXT/RTF/Markdown gaps remain open. User UI/open/save/autosave/recovery deviations are unchanged. Same continuing AgentPlane task; related tests only, consistent with full suite once per10 tasks.
+
+### Character-style position source correction (2026-10-28)
+
+- Scope: existing RTF style-application callback only. The pinned DomainMapper position branch deliberately substitutes automatic super/subscript for every nonzero character-style position, with DFLT_ESC_PROP. The previous fixture incorrectly claimed numeric character-style positions were native behavior. Both signs and two magnitudes now test actual SwCharFormat items and inherited runs; a different direct displacement tests final run size. The remaining raw position/vertAlign, zero no-op and equal-style deduplication gaps remain explicitly open in the capability document. No generic UNO/module completeness requirement was added.
+- Command: npm run test:writer -- src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/source/filter/ww8 src/sw/source/filter/md src/sw/source/filter/ascii
+- Result: pass. Evidence: 695 tests / 50 suites. Scope: related Writer text filters, style/mapper contracts and export/import owners.
+- Command: npm run typecheck --workspace @vite-office/office
+- Result: pass. Evidence: tsc --noEmit exited 0. Scope: office source types.
+- Command: npx eslint apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts apps/office/src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts --max-warnings 0
+- Result: pass. Scope: changed source.
+- Command: npm run check:dependencies && npm run check:docs && npm run check:file-size && npx prettier --check apps/office/src/sw/source/writerfilter/rtftok/rtfdocumentimpl.document.ts apps/office/src/sw/source/writerfilter/rtftok/rtf-character-styles.test.ts
+- Result: pass. Evidence: 1693 runtime sources; 3899 authored JSDoc sources; file-size exit 0; formatting passed. Scope: existing static gates.
+- Command: npm run check:source-provenance && npm run inventory:parity:writer && npm run inventory:parity:shared
+- Result: pass. Evidence: 1694 runtime modules; both registries exit 0. Scope: metadata consistency only, not full behavior parity.
+- Observation: first test invocation used root-relative rather than workspace-relative test filters and found no tests. A subsequent targeted run found a missing runtime SwCharFormat import; type-only import was corrected. Route refreshed after each nonzero test command, followed by the full related 695-test passing run. No test remained skipped.
+- Remaining concrete filter work: native Markdown HTML-block reader, RTF language controls, and native position/vertAlign normalization including equal reference values and zero no-op. Full current-model capability audit is incomplete. The active goal and task remain open. Full suite cadence unchanged (no new AgentPlane task was created).

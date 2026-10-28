@@ -123,16 +123,53 @@ it("retains explicit direct overrides over named style and keeps character style
   expect(named(doc)[0]?.style).toBe(doc.FindCharFormatByName("Named"));
   expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
 });
-it("uses character-style baseline percentages instead of paragraph-style automatic superscript", /** The native mapper's positive paragraph-style substitution is not a character-style rule. @returns Nothing. */ () => {
+it.each([
+  ["up10", DFLT_ESC_AUTO_SUPER],
+  ["up2", DFLT_ESC_AUTO_SUPER],
+  ["dn10", DFLT_ESC_AUTO_SUB],
+  ["dn2", DFLT_ESC_AUTO_SUB],
+])(
+  "uses native automatic character-style position for %s",
+  /** Native DomainMapper deliberately ignores the magnitude in character styles. @param control - Source position. @param expected - Native automatic position. @returns Nothing. */ (
+    control,
+    expected,
+  ) => {
+    const doc = read(
+      String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\fs40` +
+        "\\" +
+        control +
+        String.raw` Raised;}}\cs21 Text}`,
+    );
+    const style = doc.FindCharFormatByName("Raised");
+    assert(style);
+    const item = style.GetAttrSet().Get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem;
+    expect([item.GetEsc(), item.GetProportionalHeight()]).toEqual([expected, DFLT_ESC_PROP]);
+    expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.escapement).toEqual({
+      offset: expected,
+      height: DFLT_ESC_PROP,
+    });
+  },
+);
+it("resolves a different direct displacement against the final run font size over an automatic character style", /** Direct position uses final text size, while the style itself retains the source default. @returns Nothing. */ () => {
   const doc = read(
-    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\fs40\up10 Raised;}}\cs21\fs40\up10 Text}`,
+    String.raw`{\rtf1{\stylesheet{\s0 Normal;}{\*\cs21\fs40\up10 Raised;}}\cs21\up6\fs40 Text}`,
   );
   const style = doc.FindCharFormatByName("Raised");
   assert(style);
-  expect((style.GetAttrSet().Get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc()).toBe(25);
-  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.escapement?.offset).toBe(25);
+  expect((style.GetAttrSet().Get(RES_CHRATR_ESCAPEMENT) as SvxEscapementItem).GetEsc()).toBe(
+    DFLT_ESC_AUTO_SUPER,
+  );
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.escapement).toEqual({
+    offset: 15,
+    height: 100,
+  });
 });
-import { SvxEscapementItem } from "../../../../editeng/inc/escapementitem";
+import {
+  SvxEscapementItem,
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_PROP,
+} from "../../../../editeng/inc/escapementitem";
 import { RES_CHRATR_ESCAPEMENT } from "../../../inc/hintids";
 
 it("retains real named style identity and parent ownership through the browser worker snapshot", /** The existing file UI crosses this actual codec boundary after import. @returns Nothing. */ () => {

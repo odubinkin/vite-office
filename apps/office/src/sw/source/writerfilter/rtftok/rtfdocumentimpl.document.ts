@@ -1,6 +1,10 @@
 /** @fileoverview RtfDocumentImpl document implementation, called with the original native owner as this. */
 import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
-import { DFLT_ESC_AUTO_SUPER, DFLT_ESC_PROP } from "../../../../editeng/inc/escapementitem";
+import {
+  DFLT_ESC_AUTO_SUPER,
+  DFLT_ESC_AUTO_SUB,
+  DFLT_ESC_PROP,
+} from "../../../../editeng/inc/escapementitem";
 import { MakeTextAttr } from "../../core/txtnode/thints";
 import { SwTextINetFormat } from "../../core/txtnode/txtatr2";
 import { SwFormatINetFormat } from "../../core/txtnode/fmtatr2";
@@ -434,12 +438,16 @@ export function ApplyStyleDefinition(
   };
   if (definition.baselineHalfPoints !== undefined) {
     const position = definition.baselineHalfPoints;
-    // DomainMapper deliberately substitutes automatic superscript for positive paragraph-style positions (WRITER142).
+    // DomainMapper deliberately uses automatic positions for character styles of either sign
+    // and positive paragraph-style positions; negative paragraph positions remain deferred.
     target = {
       ...target,
       escapement:
-        position > 0 && collection instanceof SwTextFormatColl
-          ? { offset: DFLT_ESC_AUTO_SUPER, height: DFLT_ESC_PROP }
+        position !== 0 && (position > 0 || collection instanceof SwCharFormat)
+          ? {
+              offset: position > 0 ? DFLT_ESC_AUTO_SUPER : DFLT_ESC_AUTO_SUB,
+              height: DFLT_ESC_PROP,
+            }
           : {
               offset: resolveRtfBaseline(
                 position,
@@ -686,7 +694,7 @@ export function ApplyParagraph(
   }
 }
 
-import type { SwCharFormat } from "../../../inc/charfmt";
+import { SwCharFormat } from "../../../inc/charfmt";
 import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { WRITER_CHARACTER_WHICH_RANGES } from "../../../inc/hintids";
