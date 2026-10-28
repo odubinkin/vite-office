@@ -4,7 +4,7 @@ title: "Implement Calc XLSX import export and existing file UI integration"
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 26
+revision: 29
 origin:
   system: "manual"
 depends_on:
@@ -21,15 +21,18 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T10:16:03.645Z"
+  updated_at: "2026-10-28T10:29:52.263Z"
   updated_by: "CODER"
-  note: "Native model/controller/frame/window SDK prerequisite verified with68 related tests/9 files, whole executable new scope100 (S126 B26 F40 L126),48 tooling tests/3 files, full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff. Evidence: native-model-sdk-checkpoint.json binds72 intentional source paths. Registry check now passes with meaningful upstream field/method symbols and actual exported runtime owners. Full model factories, model guards/controllers/undo, native DOCX/XLSX filters and UI round trips remain incomplete; this is not full task acceptance."
-  attempts: 8
+  note: "Native model XChild/entry/shared-lifetime checkpoint:63 related tests/9files, whole four-owner scope100 S73 B34 F24 L67;49 boundary tests/3files;51 Calc ODS/CSV regressions/4files; full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff passed. Evidence native-model-child-checkpoint.json binds17 source paths. Actual model and original parent/weak/subcomponent ownership are exercised. Complete XModel/factories/controllers/undo, FilterBase and DOCX/XLSX core/UI acceptance remain incomplete; this is a bounded checkpoint only."
+  attempts: 9
 commit: null
 comments:
   -
     author: "CODER"
     body: "Start: Resume user-approved XLSX import/export work after the merge; begin native address and range prerequisites, preserve existing ODS/CSV and browser persistence behavior, and record bounded evidence without whole-format readiness claims."
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -136,8 +139,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T10:29:52.263Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Native model XChild/entry/shared-lifetime checkpoint:63 related tests/9files, whole four-owner scope100 S73 B34 F24 L67;49 boundary tests/3files;51 Calc ODS/CSV regressions/4files; full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff passed. Evidence native-model-child-checkpoint.json binds17 source paths. Actual model and original parent/weak/subcomponent ownership are exercised. Complete XModel/factories/controllers/undo, FilterBase and DOCX/XLSX core/UI acceptance remain incomplete; this is a bounded checkpoint only."
+  -
+    type: "status"
+    at: "2026-10-28T10:30:03.299Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T10:16:10.645Z"
+doc_updated_at: "2026-10-28T10:30:03.299Z"
 doc_updated_by: "CODER"
 description: "User-approved third cohesive task: preserve pinned ExcelFilter workbook/worksheet/style/shared-string import and Excel export ownership while supporting the current Calc core slice, including cells, types, formulas, sheets, formatting and dimensions where implemented. Integrate shell filter routing and existing Open/download UI, errors/cancellation and primary ODS persistence. Record suspected upstream issues and source mappings, refactor touched workarounds and run related tests. Preserve recovery/autosave and browser file product decisions. Local work only."
 sections:
@@ -392,6 +408,36 @@ sections:
     - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
     - risks: none
 
+    ### 2026-10-28T10:29:52.263Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Native model XChild/entry/shared-lifetime checkpoint:63 related tests/9files, whole four-owner scope100 S73 B34 F24 L67;49 boundary tests/3files;51 Calc ODS/CSV regressions/4files; full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff passed. Evidence native-model-child-checkpoint.json binds17 source paths. Actual model and original parent/weak/subcomponent ownership are exercised. Complete XModel/factories/controllers/undo, FilterBase and DOCX/XLSX core/UI acceptance remain incomplete; this is a bounded checkpoint only.
+    Attempts: 9
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:29:51.301Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+    - old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: true
+    - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+    - risks: none
+
     <!-- END VERIFICATION RESULTS -->
   Rollback Plan: |-
     - Revert task-related commit(s).
@@ -428,6 +474,10 @@ sections:
     - Observation: Native model SDK checkpoint: added thirteen complete XModel/controller/frame/window/listener IDL interfaces with actual CPPUMaker-normal cached types and direct bases, eight explicitly declaration-only event field contracts and original FrameAction literals. Full model/filter/UI task remains incomplete.
       Impact: Command: focused SDK/CPPU coverage over nine files; Result: pass68 tests, scoped100 S126/126 B26/26 F40/40 L126/126. Command: targeted module-boundary tooling; Result: pass48 tests/3 files. Full typecheck, static build, changed-path ESLint/Prettier, dependencies, docs, file size, source tree, Calc resources, doctor/routing/diff pass. Initial self-import, exact native InputEvent false positive, and registry nonempty-doc/meaningful-symbol validation were corrected; no check was weakened.
       Resolution: Native InputEvent identifiers are admitted only in the original three IDL owners with exact type-only imports and declaration/extends shapes; new DOM constructors/global accesses and neighboring owners still fail. Concrete SfxBaseModel/ScModelObj XModel and factories, guard/controller undo behavior, event value owners/metadata, FilterBase admission, workbook context and full DOCX/XLSX UI round trips remain pending. Existing browser save/recovery decisions are unchanged. Preserve checkpoint evidence and continue approved scope; do not mark full acceptance verified.
+
+    - Observation: Native model component checkpoint: actual SfxBaseModel/ScModelObj now uses real WeakImplHelper with fully implemented XChild as its declared subset and same-identity SfxListener. Original parent Reference ownership, ordered MethodEntryCheck exceptions and SfxModelSubComponent shared lifetime are implemented; original complete model interfaces and FilterBase model admission remain incomplete.
+      Impact: Command: focused native model/weak/SDK/shell coverage over9 files; Result: pass63 tests and unchanged whole four-owner scoped100 S73/73 B34/34 F24/24 L67/67. Command: module-boundary regressions; Result: pass49 tests/3 files. Command: Calc docshell/CSV/ODS/workflow regressions; Result: pass51 tests/4 files. Full typecheck, static build, scoped lint/format, dependencies, docs/size/tree/provenance/registry/resources, doctor/routing/diff pass. A test-only untyped empty Reference was corrected to the original root-interface type; production sources remained unchanged after coverage. Original Library_sfx SDK/CPPU edges were admitted with reverse/browser rejection tests.
+      Resolution: Keep full task incomplete and preserve native-model-child-checkpoint.json evidence. No XModel or XMultiServiceFactory substitute is advertised. Original guard entry checks are inlined for synchronous calls; native SolarMutex synchronization remains unverified. Host Dispose is still the explicit destructor binding, separate from native UNO close/dispose; disposed-branch tests document that limitation. Actual weak invalidation, most-derived Calc cleanup and parent-member-before-listener destruction are observed using real owners. Continue complete model/factory/controller/undo and DOCX/XLSX filter/UI integration.
 id_source: "generated"
 ---
 ## Summary
@@ -692,6 +742,36 @@ DecisionContextRef:
 - repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
 - risks: none
 
+### 2026-10-28T10:29:52.263Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Native model XChild/entry/shared-lifetime checkpoint:63 related tests/9files, whole four-owner scope100 S73 B34 F24 L67;49 boundary tests/3files;51 Calc ODS/CSV regressions/4files; full typecheck/static build/scoped lint/format/dependencies/docs/size/tree/provenance/registry/resources/doctor/routing/diff passed. Evidence native-model-child-checkpoint.json binds17 source paths. Actual model and original parent/weak/subcomponent ownership are exercised. Complete XModel/factories/controllers/undo, FilterBase and DOCX/XLSX core/UI acceptance remain incomplete; this is a bounded checkpoint only.
+Attempts: 9
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T10:29:51.301Z, excerpt_hash=sha256:ad33e433164633c6aca7716df642529eebfd3956c9f99fac41732f1502594dcb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610251549-J0Z0KF/blueprint/resolved-snapshot.json
+- old_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- current_digest: c951e9f04e9782a01c8343dadffb5faab7f4205d89a41b9785084f7bd1c16dd9
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251549-J0Z0KF
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane commit 202610251549-J0Z0KF -m 🧩 J0Z0KF task: persist canonical task artifacts --allow-tasks
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: true
+- repeat_stop_condition: after any non-zero exit or completed mutation, recompute task next-action before a second step
+- risks: none
+
 <!-- END VERIFICATION RESULTS -->
 
 ## Rollback Plan
@@ -732,3 +812,7 @@ DecisionContextRef:
 - Observation: Native model SDK checkpoint: added thirteen complete XModel/controller/frame/window/listener IDL interfaces with actual CPPUMaker-normal cached types and direct bases, eight explicitly declaration-only event field contracts and original FrameAction literals. Full model/filter/UI task remains incomplete.
   Impact: Command: focused SDK/CPPU coverage over nine files; Result: pass68 tests, scoped100 S126/126 B26/26 F40/40 L126/126. Command: targeted module-boundary tooling; Result: pass48 tests/3 files. Full typecheck, static build, changed-path ESLint/Prettier, dependencies, docs, file size, source tree, Calc resources, doctor/routing/diff pass. Initial self-import, exact native InputEvent false positive, and registry nonempty-doc/meaningful-symbol validation were corrected; no check was weakened.
   Resolution: Native InputEvent identifiers are admitted only in the original three IDL owners with exact type-only imports and declaration/extends shapes; new DOM constructors/global accesses and neighboring owners still fail. Concrete SfxBaseModel/ScModelObj XModel and factories, guard/controller undo behavior, event value owners/metadata, FilterBase admission, workbook context and full DOCX/XLSX UI round trips remain pending. Existing browser save/recovery decisions are unchanged. Preserve checkpoint evidence and continue approved scope; do not mark full acceptance verified.
+
+- Observation: Native model component checkpoint: actual SfxBaseModel/ScModelObj now uses real WeakImplHelper with fully implemented XChild as its declared subset and same-identity SfxListener. Original parent Reference ownership, ordered MethodEntryCheck exceptions and SfxModelSubComponent shared lifetime are implemented; original complete model interfaces and FilterBase model admission remain incomplete.
+  Impact: Command: focused native model/weak/SDK/shell coverage over9 files; Result: pass63 tests and unchanged whole four-owner scoped100 S73/73 B34/34 F24/24 L67/67. Command: module-boundary regressions; Result: pass49 tests/3 files. Command: Calc docshell/CSV/ODS/workflow regressions; Result: pass51 tests/4 files. Full typecheck, static build, scoped lint/format, dependencies, docs/size/tree/provenance/registry/resources, doctor/routing/diff pass. A test-only untyped empty Reference was corrected to the original root-interface type; production sources remained unchanged after coverage. Original Library_sfx SDK/CPPU edges were admitted with reverse/browser rejection tests.
+  Resolution: Keep full task incomplete and preserve native-model-child-checkpoint.json evidence. No XModel or XMultiServiceFactory substitute is advertised. Original guard entry checks are inlined for synchronous calls; native SolarMutex synchronization remains unverified. Host Dispose is still the explicit destructor binding, separate from native UNO close/dispose; disposed-branch tests document that limitation. Actual weak invalidation, most-derived Calc cleanup and parent-member-before-listener destruction are observed using real owners. Continue complete model/factory/controller/undo and DOCX/XLSX filter/UI integration.

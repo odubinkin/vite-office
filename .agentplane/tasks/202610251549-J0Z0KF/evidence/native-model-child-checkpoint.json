@@ -1,0 +1,162 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded original model XChild/entry/shared-lifetime prerequisite; full task remains incomplete",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "sourceBlobs": {
+    "apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts": "557dd70e20758bd1ce9254d774ca571897c78632",
+    "apps/office/src/sfx2/source/doc/native-model-child.test.ts": "d4395c14330fcd0fbb6378720d937a37e81dc09d",
+    "apps/office/src/sfx2/source/doc/sfxbasemodel.ts": "6de38f1bdcf08ae41831a6a5c643c720aa3e3749",
+    "apps/office/src/sfx2/source/inc/docundomanager.ts": "517337bdee77e98fc980dfc53f05b4d84248f014",
+    "apps/office/src/udkapi/com/sun/star/container/XChild.ts": "49abe2640b2244f5d321548b6ee737e717a6e216",
+    "docs/program/registry/calc/capabilities/CAP-e17ea6dd-076b-4b74-bd24-427bf514499f.json": "fdade03ebbf064bcf064138c82756c1a2e07e0df",
+    "docs/program/registry/shared/provenance/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json": "6029c0b8332687a655912344a6768691ce173add",
+    "docs/program/registry/shared/provenance/sfx2/source/doc/sfxbasemodel.ts.json": "09a9ab801babd334b42a8945841ea5189d8ae91b",
+    "docs/program/registry/shared/provenance/sfx2/source/inc/docundomanager.ts.json": "cdc92004e863ea83704aabbe8f7367b6ec80fbd2",
+    "docs/program/registry/shared/provenance/udkapi/com/sun/star/container/XChild.ts.json": "7f06a1a59122c0cf9fad58d8e313c59d30e159d8",
+    "docs/program/registry/shared/runtime/cppu/inc/com/sun/star/lang/NotInitializedException.ts.json": "6b17838739eef65ad1e6d7e83fe8019b03e4d73c",
+    "docs/program/registry/shared/runtime/sfx2/source/doc/sfxbasemodel.ts.json": "3f7d6e10d433da62e5e4b6c78b43db896f0d5fd3",
+    "docs/program/registry/shared/runtime/sfx2/source/inc/docundomanager.ts.json": "31805a4f87eed3d13728bb8c6b1bfb60ed13f44a",
+    "docs/program/registry/shared/runtime/udkapi/com/sun/star/container/XChild.ts.json": "0237f5ed1cdacb4cb76a7c92db8652a592dba2cc",
+    "docs/program/uno-model-sdk.md": "dbea5e6bd6324bf813f2ab0d889ee13b0d0b8b24",
+    "scripts/check-module-boundaries.mjs": "aa6498af0074eec25d9210056691fd82e02b01c7",
+    "scripts/check-module-boundaries.test.ts": "cf96969a9e4bd2c8ac40bb2ccb166a2c68d9ef57"
+  },
+  "scope": "Actual WeakImplHelper component declaration for implemented XChild on the same SfxBaseModel/ScModelObj identity as SfxListener. Original parent Reference ownership, ordered MethodEntryCheck and generated NotInitializedException, model subcomponent delegated lifetime and member/base destruction order. Native Sfx SDK/CPPU dependencies are source-backed and reverse/browser prohibitions remain tested.",
+  "checks": {
+    "tests": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sfx2/source/doc/native-model-child.test.ts src/sc/source/ui/unoobj/docuno.test.ts src/cppuhelper/source/native-implbase.test.ts src/cppuhelper/source/native-weak-object.test.ts src/cppuhelper/source/weakref.test.ts src/cppu/inc/com/sun/star/lang/DisposedException.test.ts src/offapi/com/sun/star/document/native-filter-interfaces.test.ts src/offapi/com/sun/star/frame/native-model-interfaces.test.ts src/sfx2/source/doc/objsh.test.ts --coverage.include=src/sfx2/source/doc/sfxbasemodel.ts --coverage.include=src/sfx2/source/inc/docundomanager.ts --coverage.include=src/udkapi/com/sun/star/container/XChild.ts --coverage.include=src/cppu/inc/com/sun/star/lang/NotInitializedException.ts --coverage.reportsDirectory=coverage/model-child-final --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-tests.log",
+      "sha256": "5c0fc961ab138400bc12d9b7ead443fd29a11cd24ade04571844e1a54d53d3c8"
+    },
+    "calc-regressions": {
+      "command": "npm run test:calc -- src/sc/source/ui/docshell/docsh.test.ts src/sc/source/ui/docshell/docsh.csv-export.test.ts src/sc/source/filter/xml/ods.test.ts src/sc/browser/workflows/calc-ods-io.test.ts --maxWorkers=2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-calc-regressions.log",
+      "sha256": "b182fbb9fff9452be214b6cc7dd5c9ec0687737157016197802c3eb716b02dc4"
+    },
+    "tooling": {
+      "command": "npx vitest run scripts/check-module-boundaries.test.ts scripts/native-attribute-value-boundary.test.ts scripts/native-input-event-boundary.test.ts --maxWorkers 2",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-tooling.log",
+      "sha256": "9f8cd584db210837b9496dfabaec96ff49bc557c8d6e91a1be0790c14f3f9df4"
+    },
+    "typecheck": {
+      "command": "npm run typecheck",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-typecheck.log",
+      "sha256": "931090d85df1a16f03b33766a9cede120e114038a4dce18b18e460d9d2d992ed"
+    },
+    "build": {
+      "command": "npm run test:static",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-build.log",
+      "sha256": "6d6626d718fb8763f0e7dea6e20f2deb83f3ee450cdcf3cc06054da922e14a5c"
+    },
+    "deps": {
+      "command": "npm run check:dependencies",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-deps.log",
+      "sha256": "9897f485ff80e59ddcf234c3dc321b2584c8f68b43a1bbb059bd302c38de76b2"
+    },
+    "docs": {
+      "command": "npm run check:docs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-docs.log",
+      "sha256": "73a53a3cac95182d726a1c872cf5da974da2c8153d403e915d0c0eee8ab95fde"
+    },
+    "size": {
+      "command": "npm run check:file-size",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-size.log",
+      "sha256": "321b11c67b92ec677ef76d5f738f64e95e88a95b387974df29d824ac05896280"
+    },
+    "tree": {
+      "command": "npm run check:source-tree",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-tree.log",
+      "sha256": "00eaf2e752129e758c4ff844e3489ff39208d6675619b9db4376ea89eae8e497"
+    },
+    "resources": {
+      "command": "npm run check:calc-resources",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-resources.log",
+      "sha256": "c021e3daa47a90025057bf00020c84d9ec70590a8e4d9b369e4a0190ab50fd38"
+    },
+    "provenance": {
+      "command": "npm run check:source-provenance",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-provenance.log",
+      "sha256": "ad59c9b38b50efd2c10290b25cb4c53f61832d13637a22cd895f20fbe0441427"
+    },
+    "registrycheck": {
+      "command": "npm run inventory:registry:check",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-registrycheck.log",
+      "sha256": "ed3f27a01663ff38724c969be840f3a4991f652d2f6c14792bee77974424ca25"
+    },
+    "doctor": {
+      "command": "ap doctor",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-doctor.log",
+      "sha256": "80aa8a5a6843c3c4eff4902953a186c47b262653df6b3528cd2137ab11b83974"
+    },
+    "routing": {
+      "command": "node .agentplane/policy/check-routing.mjs",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-routing.log",
+      "sha256": "f0816450b350c20b6fd763a73f149a3ad42035dac268ccdb608adf47b6d288f9"
+    },
+    "lintfinal": {
+      "command": "npx eslint apps/office/src/sfx2/source/doc/sfxbasemodel.ts apps/office/src/sfx2/source/inc/docundomanager.ts apps/office/src/udkapi/com/sun/star/container/XChild.ts apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts apps/office/src/sfx2/source/doc/native-model-child.test.ts scripts/check-module-boundaries.mjs scripts/check-module-boundaries.test.ts --max-warnings 0",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-lintfinal.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "format": {
+      "command": "npx prettier --check apps/office/src/sfx2/source/doc/sfxbasemodel.ts apps/office/src/sfx2/source/inc/docundomanager.ts apps/office/src/udkapi/com/sun/star/container/XChild.ts apps/office/src/cppu/inc/com/sun/star/lang/NotInitializedException.ts apps/office/src/sfx2/source/doc/native-model-child.test.ts scripts/check-module-boundaries.mjs scripts/check-module-boundaries.test.ts",
+      "result": "pass",
+      "log": "apps/office/coverage/model-child-format.log",
+      "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    "coverage": {
+      "result": "whole four-owner scope100 S73/73 B34/34 F24/24 L67/67;63 related tests/9files. Production owners unchanged after this pass. Later test-only Reference generic annotation/import does not change executed JS; final complete typecheck passes.",
+      "rawFile": "apps/office/coverage/model-child-final/coverage-final.json",
+      "sha256": "7ac04a12f7f73d4c350ba4ae89254e01502e3ba5d8492eda8415f5544b24ad53",
+      "totals": {
+        "s": {
+          "covered": 73,
+          "total": 73
+        },
+        "b": {
+          "covered": 34,
+          "total": 34
+        },
+        "f": {
+          "covered": 24,
+          "total": 24
+        }
+      }
+    }
+  },
+  "results": {
+    "nativeRelatedTests": "63pass/9files",
+    "boundaryTooling": "49pass/3files",
+    "CalcODSCSVregressions": "51pass/4files"
+  },
+  "initialCorrections": [
+    "A test caller public forwarding constructor was replaced with a factory invoking the original protected constructor; no production constructor contract changed.",
+    "The test empty Reference now declares XInterface explicitly; this was a compile-only generic correction after passing runtime tests.",
+    "Initial dependency failures were resolved by adding actual Library_sfx cppu/cppuhelper/SDK API edges with reverse/application/browser guards; no graph validation was disabled."
+  ],
+  "limitations": [
+    "Only implemented XChild is declared on the real component; original complete SfxBaseModel_Base, XModel, XMultiServiceFactory and full model/factory/controller/undo services remain pending. No synthetic model/factory/query provider is installed.",
+    "Synchronous original guard entry checks are inlined. No fake SolarMutex/SfxModelGuard lock is supplied and native thread synchronization is not certified.",
+    "Explicit host Dispose remains the existing C++ destructor binding, separate from unported native UNO close/dispose. Disposed-state branch observations are host-binding admission evidence, not claimed calls on native destroyed C++ objects.",
+    "Native ABI/full reflection and independently compiled new model/exception differential are not certified.",
+    "Complete FilterBase admission, workbook contexts and DOCX/XLSX import/export/UI desktop/mobile reopen acceptance remain pending; original goal is active and not complete.",
+    "Full test suite not run at this checkpoint under approved ten-agentplane-task cadence.",
+    "Doctor passed with the existing managed pre-push readiness warning. No global hooks/settings changed."
+  ],
+  "workingTree": "Only17 intentional source/registry/docs/tooling paths plus canonical task artifacts; verify clean git status after commit."
+}
