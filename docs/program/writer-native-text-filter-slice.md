@@ -482,3 +482,33 @@ The unsupported InsertHtmlData exception is removed. Its SAL UTF16-to-UTF8 conve
 Actual Markdown BeginHtmlBlock starts on a blank paragraph at its section EOF. This checkpoint connects that consumed profile, including empty final-paragraph removal, directly to native parser operations. Generic SwReader/Sfx medium orchestration, standalone HTML file I/O and arbitrary insertion into preexisting text are not certified or made unrelated API completion gates. The ignored parser return and empty HTML base URL follow the pinned Markdown caller.
 
 This is not complete current-model Markdown HTML support: CSS inline/sheet property mapping, named semantic character tags, fonts, links/bookmarks, lists and tables remain concrete input scenarios, alongside RTF language commands. Unrepresented graphics/forms/fields and desktop media plumbing do not broaden the current core slice. The native text filters' full capability audit remains open.
+
+### Connected semantic HTML and inline CSS consumers
+
+Markdown raw HTML now reaches native semantic character-format hints for emphasis,
+citation, strong, code, sample, keyboard, variable, definition and teletype tags,
+and source-named quote/language/author/person/acronym/abbreviation styles. These
+are document-owned styles, not boolean tag substitutions. Inline declarations
+on the represented inline tags now use CSS1Parser -> SvxCSS1Parser -> SwCSS1Parser
+and the existing deferred HTML attribute stacks. Consumed handlers cover weight,
+posture, absolute/configured height, color, underline and strikeout; percentage
+height insertion and unsupported native HTML overline mapping are intentionally
+omitted as in the corresponding source dispatch. Case-map/blink/direction items
+are absent from the current sparse Writer pool and are not added to the model.
+The seven HTML font-size defaults are 7/10/12/14/18/24/36pt from pinned Common.xcs.
+Configurable HTML font preferences remain unimplemented.
+
+A real consumer exposed an existing InsertPoolItem shortcut: direct character
+items were reconstructed as unpartitioned automatic hints, allowing shorter named
+style hints to override explicit CSS normal weight. This path now uses existing
+MakeTextAttr/InsertHint/BuildPortions owners and preserves the native insertion
+mode; whole-paragraph character items also remain hints when character styles
+already exist, as native SwTextNode::SetAttr requires. Targeted actual-model cases
+cover nested and whole-paragraph precedence, restoration, CSS font heights and
+Markdown raw HTML entry. WRITER211/212 record retained CSS source quirks.
+
+This block does not close stylesheet selector application, class/ID application,
+HTML font-family/shorthand/background/borders/paragraph CSS, language/direction,
+whitespace flags, hyperlinks/bookmarks, HTML lists/tables or the remaining RTF
+matrix entries. These are assessed by their real filter callers and current-model
+cases; unconsumed generic services remain outside the completion gate.

@@ -188,6 +188,14 @@ export class SfxItemPool {
     if (this.mpSecondary && deep) return this.mpSecondary.GetWhichIDFromSlotID(slot);
     return slot;
   }
+  /** Original true slot lookup returns zero for non-slots and missing translations. @param slot - Native slot identity. @param deep - Native secondary-chain policy. @returns Registered Which or zero. */
+  public GetTrueWhichIDFromSlotID(slot: number, deep = true): number {
+    if (!SfxItemPool.IsSlot(slot)) return 0;
+    const which = this.mpSlotIDToWhichIDMap?.get(slot);
+    if (which !== undefined) return which;
+    if (this.mpSecondary && deep) return this.mpSecondary.GetTrueWhichIDFromSlotID(slot);
+    return 0;
+  }
   /** Original chain-aware Which-to-slot conversion and identity fallback. @param which - Native identity. @returns Registered nonzero slot or unchanged identity. */
   public GetSlotId(which: number): number {
     if (!SfxItemPool.IsWhich(which)) return which;

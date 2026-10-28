@@ -2005,3 +2005,15 @@ Pinned `cui/source/tabpages/tabstpge.cxx` `FillItemSet` inserts a Default tab at
 - Source: pinned `sw/source/filter/md/swmd.cxx`, `SwMarkdownParser::InsertHtmlData`, constructs SwReader with two empty OUString arguments; the stream insertion constructor in `sw/source/filter/basflt/shellio.cxx` assigns the second string as its base URL.
 - Observation: the embedded native HTML reader receives an empty base URL even when the surrounding Markdown reader has a nonempty source base URL. Relative-resource behavior may therefore differ across Markdown and embedded HTML paths. This is a source-level finding; desktop differential behavior is unverified.
 - Preservation: the connected raw HTML path retains empty path/base URL arguments. No compensation using the Markdown parser's m_sBaseURL is introduced; link/font/CSS/table producers remain separately tracked work.
+
+### WRITER211 — CSS property-info copying and resetting omit whitespace/visibility flags
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `SvxCSS1PropertyInfo` copy constructor, `Clear` and `Merge`; member defaults in `svxcss1.hxx`.
+- Observation: copy construction leaves `m_bPreserveSpace=false` and `m_bVisible=true` instead of copying them; `Clear` and `Merge` leave the destination flags unchanged. A parsed `white-space: pre` can therefore behave differently through an inline property-info owner and a copied stylesheet map entry.
+- Local behavior: scalar owners retain these omissions. This is source-level evidence; visible stylesheet/whitespace integration and compiled upstream differential behavior remain unverified.
+
+### WRITER212 — Unknown CSS text-decoration values enable underline
+
+- Source: pinned `sw/source/filter/html/svxcss1.cxx`, `ParseCSS1_text_decoration` default switch branch.
+- Observation: an admitted identifier/string other than the recognized decoration values sets single underline rather than discarding that value.
+- Local behavior: the native property handler and actual HTML/Markdown document insertion retain this fallback. `swhtml.native.integration.test.ts` checks unknown-value underline and restoration after the closing tag. This is not a compiled upstream differential certificate.

@@ -4,7 +4,7 @@ title: "Complete current Writer model slice across TXT RTF Markdown filters"
 status: "DOING"
 priority: "med"
 owner: "CODER"
-revision: 146
+revision: 149
 origin:
   system: "manual"
 depends_on: []
@@ -18,12 +18,15 @@ plan_approval:
   note: null
 verification:
   state: "blocked_external"
-  updated_at: "2026-10-28T13:14:57.229Z"
+  updated_at: "2026-10-28T13:41:42.274Z"
   updated_by: "CODER"
-  note: "Native Markdown HTML body/attribute path connected: 928 related Writer tests, 83 lexer tests and 14 final native integration cases pass with static gates. HTML CSS/named styles/fonts/links/lists/tables, RTF languages and full current-model audit remain open."
-  attempts: 13
+  note: "Connected native semantic HTML styles and inline CSS to Markdown; 941 filter, 7583 touched-core, 89 shared and 21 final HTML tests pass, with type/lint/format/registry gates. Remaining current-model HTML and RTF filter rows keep the overall task open."
+  attempts: 14
 commit: null
 comments:
+  -
+    author: "CODER"
+    body: "Start: continue direct-mode task in current checkout."
   -
     author: "CODER"
     body: "Start: continue direct-mode task in current checkout."
@@ -213,8 +216,21 @@ events:
     from: "BLOCKED"
     to: "DOING"
     note: "Start: continue direct-mode task in current checkout."
+  -
+    type: "verify"
+    at: "2026-10-28T13:41:42.274Z"
+    author: "CODER"
+    state: "blocked_external"
+    note: "Connected native semantic HTML styles and inline CSS to Markdown; 941 filter, 7583 touched-core, 89 shared and 21 final HTML tests pass, with type/lint/format/registry gates. Remaining current-model HTML and RTF filter rows keep the overall task open."
+  -
+    type: "status"
+    at: "2026-10-28T13:41:48.466Z"
+    author: "CODER"
+    from: "BLOCKED"
+    to: "DOING"
+    note: "Start: continue direct-mode task in current checkout."
 doc_version: 3
-doc_updated_at: "2026-10-28T13:18:45.705Z"
+doc_updated_at: "2026-10-28T13:41:48.466Z"
 doc_updated_by: "CODER"
 description: "Audit represented Writer body, paragraph, character, list, table, and hyperlink contracts against pinned LibreOffice sources; close format import/export gaps in the already approved native filter scope and verify targeted behavior."
 sections:
@@ -327,6 +343,36 @@ sections:
     Attempts: 13
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:14:56.644Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+    - old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610251703-S3HW1E
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-28T13:41:42.274Z — VERIFY — blocked_external
+
+    By: CODER
+
+    Note: Connected native semantic HTML styles and inline CSS to Markdown; 941 filter, 7583 touched-core, 89 shared and 21 final HTML tests pass, with type/lint/format/registry gates. Remaining current-model HTML and RTF filter rows keep the overall task open.
+    Attempts: 14
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:41:41.702Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
     Details:
 
@@ -845,6 +891,24 @@ sections:
     - Result: pass. Evidence: final3903 authored JSDoc sources, file-size exit0 and1696 runtime sources/8901 imports/210 allowed edges. Scope: existing static gates.
     - Observation: initial compilation exposed wrong import paths, use of a nonexistent node-index Dispose/InsertItemSet facade, content-node narrowing and a prohibited switch fallthrough. Corrected the consumed native item path, real existing APIs and explicit PRE BR dispatch; unconsumed background/field producers remain explicitly outside this checkpoint. Replaced the obsolete unsupported-HTML fixture with actual import/buffer cleanup. An integration test initially passed a host string to the real UNO cursor API; corrected to actual OUString ownership. JSDoc requires comments on arrow expressions rather than variable declarations; final forms pass. Intermediate failures were followed by route refresh and targeted reruns; no required test is skipped.
     - Remaining concrete goal work: current-model HTML CSS/named semantic character/font/link/bookmark/list/table producers and complete raw-HTML capability audit, plus RTF language commands. Keep the original full TXT/RTF/Markdown goal and task active. Whole unconsumed factory/UNO/ABI completeness does not independently block filter completion. No new AgentPlane task was created; full-suite cadence remains unchanged.
+
+    ### Connected Markdown HTML semantic styles and inline CSS checkpoint
+
+    - Requirement: the actual SwMarkdownParser.InsertHtmlData caller must preserve represented semantic character styles and inline CSS, including explicit normal weight above Strong Emphasis. This is a concrete current-model filter consumer, not a generic kernel-completeness gate.
+    - Implementation: native CSS1Parser -> SvxCSS1Parser -> SwCSS1Parser hierarchy, actual scalar property/map ownership, real document character styles, original HTML direct/style queues and configured 7/10/12/14/18/24/36pt height defaults. Standard inline tags and semantic tags consume native weight/posture/height/color/decoration handlers. Sparse-pool missing case/blink/direction families do not expand the model; zero Which identities are excluded from ranges and single-family clearing.
+    - Kernel correction: InsertPoolItem now sends selected direct character items through existing MakeTextAttr/InsertHint/BuildPortions, preserving insertion flags; whole-paragraph items use hints when character styles exist. The previous unpartitioned automatic-style reconstruction made explicit CSS normal weight lose to shorter semantic style hints. Native SwTextNode::SetAttr whole-paragraph conditions and thints.cxx portion ownership supply source evidence. No additional generic core service was ported.
+    - Source evidence: pinned sw/source/filter/html/svxcss1.cxx/hxx, htmlcss1.cxx, htmlctxt.cxx, swhtml.cxx; Office/Common.xcs font defaults; svl/source/items/itempool.cxx; sw/source/core/txtnode/thints.cxx. WRITER211/212 record source property-info flag omissions and unknown-decoration underline fallback. No compiled upstream certificate or whole-filter promotion.
+    - Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/source/core/txtnode/character-style-hints.test.ts
+    - Result: pass; Evidence: 941 tests / 72 suites; Scope: related filters, document I/O, character-style consumers.
+    - Command: npm run test:writer -- src/sw/source/core/txtnode src/sw/source/core/doc
+    - Result: pass; Evidence: 7583 tests / 100 suites; Scope: touched InsertPoolItem caller and actual native document/hint ownership.
+    - Command: npm run test:shared -- src/svl/source/items/native-pool-chain.test.ts src/svtools/source/svhtml
+    - Result: pass; Evidence: 89 tests / 4 suites; Scope: true-slot translation and shared native HTML lexer.
+    - Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts
+    - Result: pass; Evidence: final 21 actual-model cases; Scope: native HTML and real Markdown caller, semantic styles, CSS override/restoration, configured/absolute/percentage heights, nested and whole-paragraph direct-item precedence, source unknown-decoration fallback.
+    - Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check over all intentional changed/new paths; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run check:source-tree; npm run inventory:parity:writer; npm run inventory:parity:shared
+    - Result: pass; Evidence: type/lint/format clean, JSDoc 3907 authored files, boundaries 1700 runtime sources, provenance 1701 modules, source-tree 115 paths/32 retired roots, both registry checks pass. Logs: output/playwright/rtf-properties-native/html3-*.log (ignored local artifacts).
+    - Remaining filter work: stylesheet selectors/class/ID, represented HTML font-family/shorthand/background/borders/paragraph CSS, language/whitespace, hyperlinks/bookmarks/list/table consumers and remaining current-model RTF matrix rows. No unrelated UNO/desktop/full-module completeness gate is introduced. Overall task remains DOING/rework.
 id_source: "generated"
 ---
 ## Summary
@@ -968,6 +1032,36 @@ Note: Native Markdown HTML body/attribute path connected: 928 related Writer tes
 Attempts: 13
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:14:56.644Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office-writer/.agentplane/tasks/202610251703-S3HW1E/blueprint/resolved-snapshot.json
+- old_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- current_digest: ddfaac35f66d06b2e586360937ffea855ad5eabc6d078d6a41b8ca383fd28134
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610251703-S3HW1E
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610251703-S3HW1E
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-28T13:41:42.274Z — VERIFY — blocked_external
+
+By: CODER
+
+Note: Connected native semantic HTML styles and inline CSS to Markdown; 941 filter, 7583 touched-core, 89 shared and 21 final HTML tests pass, with type/lint/format/registry gates. Remaining current-model HTML and RTF filter rows keep the overall task open.
+Attempts: 14
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-28T13:41:41.702Z, excerpt_hash=sha256:2c0c20f49f2ff1e2499b7cda4f49b8b9959791322d2c626d17a9d0761f42aedb
 
 Details:
 
@@ -1490,3 +1584,21 @@ Word character-style table/cache checkpoint (2026-10-28, CODER)
 - Result: pass. Evidence: final3903 authored JSDoc sources, file-size exit0 and1696 runtime sources/8901 imports/210 allowed edges. Scope: existing static gates.
 - Observation: initial compilation exposed wrong import paths, use of a nonexistent node-index Dispose/InsertItemSet facade, content-node narrowing and a prohibited switch fallthrough. Corrected the consumed native item path, real existing APIs and explicit PRE BR dispatch; unconsumed background/field producers remain explicitly outside this checkpoint. Replaced the obsolete unsupported-HTML fixture with actual import/buffer cleanup. An integration test initially passed a host string to the real UNO cursor API; corrected to actual OUString ownership. JSDoc requires comments on arrow expressions rather than variable declarations; final forms pass. Intermediate failures were followed by route refresh and targeted reruns; no required test is skipped.
 - Remaining concrete goal work: current-model HTML CSS/named semantic character/font/link/bookmark/list/table producers and complete raw-HTML capability audit, plus RTF language commands. Keep the original full TXT/RTF/Markdown goal and task active. Whole unconsumed factory/UNO/ABI completeness does not independently block filter completion. No new AgentPlane task was created; full-suite cadence remains unchanged.
+
+### Connected Markdown HTML semantic styles and inline CSS checkpoint
+
+- Requirement: the actual SwMarkdownParser.InsertHtmlData caller must preserve represented semantic character styles and inline CSS, including explicit normal weight above Strong Emphasis. This is a concrete current-model filter consumer, not a generic kernel-completeness gate.
+- Implementation: native CSS1Parser -> SvxCSS1Parser -> SwCSS1Parser hierarchy, actual scalar property/map ownership, real document character styles, original HTML direct/style queues and configured 7/10/12/14/18/24/36pt height defaults. Standard inline tags and semantic tags consume native weight/posture/height/color/decoration handlers. Sparse-pool missing case/blink/direction families do not expand the model; zero Which identities are excluded from ranges and single-family clearing.
+- Kernel correction: InsertPoolItem now sends selected direct character items through existing MakeTextAttr/InsertHint/BuildPortions, preserving insertion flags; whole-paragraph items use hints when character styles exist. The previous unpartitioned automatic-style reconstruction made explicit CSS normal weight lose to shorter semantic style hints. Native SwTextNode::SetAttr whole-paragraph conditions and thints.cxx portion ownership supply source evidence. No additional generic core service was ported.
+- Source evidence: pinned sw/source/filter/html/svxcss1.cxx/hxx, htmlcss1.cxx, htmlctxt.cxx, swhtml.cxx; Office/Common.xcs font defaults; svl/source/items/itempool.cxx; sw/source/core/txtnode/thints.cxx. WRITER211/212 record source property-info flag omissions and unknown-decoration underline fallback. No compiled upstream certificate or whole-filter promotion.
+- Command: npm run test:writer -- src/sw/source/filter/html src/sw/source/filter/md src/sw/source/filter/ascii src/sw/source/filter/basflt src/sw/source/filter/ww8 src/sw/source/writerfilter/rtftok src/sw/source/writerfilter/dmapper src/sw/browser/filter src/sw/browser/services/writer-document-io.test.ts src/sw/inc/poolfmt.test.ts src/sw/source/core/txtnode/character-style-hints.test.ts
+- Result: pass; Evidence: 941 tests / 72 suites; Scope: related filters, document I/O, character-style consumers.
+- Command: npm run test:writer -- src/sw/source/core/txtnode src/sw/source/core/doc
+- Result: pass; Evidence: 7583 tests / 100 suites; Scope: touched InsertPoolItem caller and actual native document/hint ownership.
+- Command: npm run test:shared -- src/svl/source/items/native-pool-chain.test.ts src/svtools/source/svhtml
+- Result: pass; Evidence: 89 tests / 4 suites; Scope: true-slot translation and shared native HTML lexer.
+- Command: npm run test:writer -- src/sw/source/filter/html/swhtml.native.integration.test.ts
+- Result: pass; Evidence: final 21 actual-model cases; Scope: native HTML and real Markdown caller, semantic styles, CSS override/restoration, configured/absolute/percentage heights, nested and whole-paragraph direct-item precedence, source unknown-decoration fallback.
+- Command: npm run typecheck --workspace @vite-office/office; scoped npx eslint --max-warnings 0; npx prettier --check over all intentional changed/new paths; npm run check:docs; npm run check:dependencies; npm run check:file-size; npm run check:source-provenance; npm run check:source-tree; npm run inventory:parity:writer; npm run inventory:parity:shared
+- Result: pass; Evidence: type/lint/format clean, JSDoc 3907 authored files, boundaries 1700 runtime sources, provenance 1701 modules, source-tree 115 paths/32 retired roots, both registry checks pass. Logs: output/playwright/rtf-properties-native/html3-*.log (ignored local artifacts).
+- Remaining filter work: stylesheet selectors/class/ID, represented HTML font-family/shorthand/background/borders/paragraph CSS, language/whitespace, hyperlinks/bookmarks/list/table consumers and remaining current-model RTF matrix rows. No unrelated UNO/desktop/full-module completeness gate is introduced. Overall task remains DOING/rework.

@@ -347,3 +347,105 @@ it("retains explicit paragraph alignment, native duplicate-option precedence and
 });
 import { SvxAdjustItem, SvxAdjust } from "../../../../editeng/inc/adjustitem";
 import { RES_PARATR_ADJUST } from "../../../inc/hintids";
+it("applies native semantic styles and restores them after closing tags", /** Actual character-format hints drive the existing text projection. @returns Nothing. */ () => {
+  const doc = html("<strong>A</strong><em>B</em><cite>C</cite>D");
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads effective native character properties. @param run - Native run. @returns Observable attributes. */ (
+        run,
+      ) => [run.text, run.attributes.bold, run.attributes.italic],
+    ),
+  ).toEqual([
+    ["A", true, false],
+    ["BC", false, true],
+    ["D", false, false],
+  ]);
+});
+it("lets native CSS override tag defaults without leaking to following text", /** Declarations become actual pooled attributes before deferred insertion. @returns Nothing. */ () => {
+  const doc = html(
+    '<b style="font-weight: normal; font-style: italic">A</b><span style="font-weight: 700; text-decoration: underline">B</span>C',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual native run properties. @param run - Run. @returns Visible effects. */ (
+        run,
+      ) => [run.text, run.attributes.bold, run.attributes.italic, run.attributes.underline],
+    ),
+  ).toEqual([
+    ["A", false, true, false],
+    ["B", true, false, true],
+    ["C", false, false, false],
+  ]);
+});
+it("retains direct CSS precedence over semantic style inheritance", /** Character format and direct items use separate native queues. @returns Nothing. */ () => {
+  const doc = html('<strong style="font-weight: normal">A<em>B</em>C</strong>D');
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual effective formatting. @param run - Run. @returns Native result. */ (run) => [
+        run.text,
+        run.attributes.bold,
+        run.attributes.italic,
+      ],
+    ),
+  ).toEqual([
+    ["A", false, false],
+    ["B", false, true],
+    ["CD", false, false],
+  ]);
+});
+it("uses configured native CSS font sizes and ignores percentage height insertion", /** The native InsertAttrs branch only admits absolute height items. @returns Nothing. */ () => {
+  const doc = html(
+    '<span style="font-size: xx-small">A</span><span style="font-size: 150%">B</span><span style="font-size: 18pt">C</span>',
+  );
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads font height through the existing browser projection. @param run - Run. @returns Text and point size. */ (
+        run,
+      ) => [run.text, run.attributes.fontSizeTwips],
+    ),
+  ).toEqual([
+    ["A", 140],
+    ["B", undefined],
+    ["C", 360],
+  ]);
+});
+it("passes inline CSS through the real Markdown HTML insertion caller", /** Raw HTML callbacks invoke the native reader, including semantic character styles. @returns Nothing. */ () => {
+  const doc = new MarkdownReader().Read(
+    OUStringToOString(
+      '<div><strong>A</strong><span style="font-style: italic">B</span></div>',
+      RTL_TEXTENCODING_UTF8,
+    ),
+  );
+  docs.push(doc);
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads actual model formatting. @param run - Run. @returns Text/bold/italic. */ (run) => [
+        run.text,
+        run.attributes.bold,
+        run.attributes.italic,
+      ],
+    ),
+  ).toEqual([
+    ["A", true, false],
+    ["B", false, true],
+  ]);
+});
+
+it("keeps whole-paragraph direct CSS above existing native character styles", /** Native SetAttr must retain range hints when the paragraph already contains a character format. @returns Nothing. */ () => {
+  const doc = html('<strong style="font-weight: normal">A</strong>');
+  expect(projectWriterTextRuns(doc.paragraphs[0])[0]?.attributes.bold).toBe(false);
+});
+it("preserves the native unknown text-decoration underline fallback", /** No browser CSS validation replaces the pinned property handler. @returns Nothing. */ () => {
+  const doc = html('<span style="text-decoration: unknown">A</span>B');
+  expect(
+    projectWriterTextRuns(doc.paragraphs[0]).map(
+      /** Reads effective underline. @param run - Run. @returns Text and flag. */ (run) => [
+        run.text,
+        run.attributes.underline,
+      ],
+    ),
+  ).toEqual([
+    ["A", true],
+    ["B", false],
+  ]);
+});

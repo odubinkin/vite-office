@@ -40,6 +40,11 @@ import {
 } from "../../../../tools/inc/fontenum";
 import * as H from "../../../inc/hintids";
 import { SwPoolFormatId, WRITER_PARAGRAPH_STYLE_POOL } from "../../../inc/poolfmt";
+import { SwCSS1Parser } from "./htmlcss1";
+import { SvxCSS1PropertyInfo } from "./svxcss1.types";
+import { SfxItemSet } from "../../../../svl/source/items/itemset";
+import { SvxFontHeightItem } from "../../../../editeng/inc/fhgtitem";
+import { SwFormatCharFormat } from "../../core/txtnode/fmtatr2";
 const HTML_PARSPACE = Math.round((5 * 1440) / 25.4);
 /** Native synchronous body insertion owner. Unrepresented form/graphic/field producers do not have alternate model adapters here. */
 export class SwHTMLParser extends HTMLParser {
@@ -47,6 +52,7 @@ export class SwHTMLParser extends HTMLParser {
   readonly m_aParaAttrs: HTMLAttr[] = [];
   readonly m_aSetAttrTab: HTMLAttr[] = [];
   readonly m_aContexts: HTMLAttrContext[] = [];
+  readonly m_pCSS1Parser: SwCSS1Parser;
   private readonly m_pNumRuleInfo = new SwHTMLNumRuleInfo();
   private readonly breakIterator = new BreakIteratorImpl();
   private m_nOpenParaToken = T.NONE;
@@ -64,6 +70,14 @@ export class SwHTMLParser extends HTMLParser {
     newDoc = false,
   ) {
     super(input, newDoc);
+    // Office.Common/Filter/HTML/Import/FontSize defaults, in native twips.
+    this.m_pCSS1Parser = new SwCSS1Parser(
+      m_xDoc,
+      this,
+      [140, 200, 240, 280, 360, 480, 720],
+      m_sBaseURL,
+      newDoc,
+    );
     m_pPam.DeleteMark();
     this.m_bOldIsHTMLMode = m_xDoc.GetDocumentSettingManager().get("HTML_MODE");
     m_xDoc.GetDocumentSettingManager().set("HTML_MODE", true);
@@ -104,6 +118,7 @@ export class SwHTMLParser extends HTMLParser {
   }
   /** Releases remaining native node-index/item owners after success or failure, without deleting borrowed document/cursor. @returns Nothing. */
   SourceDispose(): void {
+    this.m_pCSS1Parser.SourceDispose();
     this.m_xDoc.GetDocumentSettingManager().set("HTML_MODE", this.m_bOldIsHTMLMode);
     const seen = new Set<HTMLAttr>();
     const release =
@@ -181,9 +196,77 @@ export class SwHTMLParser extends HTMLParser {
   NewStdAttr(token: T, items: readonly (readonly [HTMLAttrHead, SfxPoolItem])[] = []): void {
     const context = new HTMLAttrContext(token);
     try {
-      for (const [head, item] of items) this.InsertAttr(head, item, context);
+      const style = this.GetStyleOption(O.STYLE);
+      if (style) {
+        const set = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
+        try {
+          for (const [, item] of items) set.Put(item);
+          const info = new SvxCSS1PropertyInfo();
+          this.m_pCSS1Parser.ParseStyleOption(style, set, info);
+          this.InsertAttrs(set, info, context);
+        } finally {
+          set.Dispose();
+        }
+      } else for (const [head, item] of items) this.InsertAttr(head, item, context);
     } finally {
       for (const [, item] of items) item.Dispose();
+    }
+    this.PushContext(context);
+  }
+  /** Reads duplicate HTML options in original reverse order. @param id - Native option. @returns First source occurrence. */
+  private GetStyleOption(id: O): string {
+    let result = "";
+    for (const option of [...this.GetOptions()].reverse())
+      if (option.GetToken() === id) result = option.GetString();
+    return result;
+  }
+  /** Consumed native InsertAttrs paths; percentage heights are deliberately not applied. @param items - Native declarations. @param info - Native property flags. @param context - Actual attribute context. @returns Nothing. */
+  InsertAttrs(items: SfxItemSet, info: SvxCSS1PropertyInfo, context: HTMLAttrContext): void {
+    void info;
+    const tab = this.m_xAttrTab;
+    const heads = new Map<number, HTMLAttrHead>([
+      [H.RES_CHRATR_WEIGHT, tab.pBold],
+      [H.RES_CHRATR_CJK_WEIGHT, tab.pBoldCJK],
+      [H.RES_CHRATR_CTL_WEIGHT, tab.pBoldCTL],
+      [H.RES_CHRATR_POSTURE, tab.pItalic],
+      [H.RES_CHRATR_CJK_POSTURE, tab.pItalicCJK],
+      [H.RES_CHRATR_CTL_POSTURE, tab.pItalicCTL],
+      [H.RES_CHRATR_FONTSIZE, tab.pFontHeight],
+      [H.RES_CHRATR_CJK_FONTSIZE, tab.pFontHeightCJK],
+      [H.RES_CHRATR_CTL_FONTSIZE, tab.pFontHeightCTL],
+      [H.RES_CHRATR_UNDERLINE, tab.pUnderline],
+      [H.RES_CHRATR_COLOR, tab.pFontColor],
+      [H.RES_CHRATR_CROSSEDOUT, tab.pStrike],
+      [H.RES_PARATR_ADJUST, tab.pAdjust],
+    ]);
+    for (const item of items.entries()) {
+      if (item instanceof SvxFontHeightItem && item.GetProp() !== 100) continue;
+      const head = heads.get(item.Which());
+      if (head) this.InsertAttr(head, item, context);
+    }
+  }
+  /** Native semantic tags retain a separate character-format stack beneath direct CSS attributes. @param token - Native opening token. @returns Nothing. */
+  NewCharFormat(token: T): void {
+    const context = new HTMLAttrContext(token);
+    const format = this.m_pCSS1Parser.GetChrFormat(token, this.GetStyleOption(O.CLASS));
+    const style = this.GetStyleOption(O.STYLE);
+    if (style) {
+      const items = new SfxItemSet(this.m_xDoc.GetAttrPool(), this.m_pCSS1Parser.GetWhichMap());
+      try {
+        const info = new SvxCSS1PropertyInfo();
+        this.m_pCSS1Parser.ParseStyleOption(style, items, info);
+        this.InsertAttrs(items, info, context);
+      } finally {
+        items.Dispose();
+      }
+    }
+    if (format) {
+      const item = new SwFormatCharFormat(format);
+      try {
+        this.InsertAttr(this.m_xAttrTab.pCharFormats, item, context);
+      } finally {
+        item.Dispose();
+      }
     }
     this.PushContext(context);
   }
@@ -562,6 +645,40 @@ export class SwHTMLParser extends HTMLParser {
       case T.LISTING_OFF:
       case T.XMP_OFF:
         this.EndTextFormatColl(token);
+        break;
+      case T.EMPHASIS_ON:
+      case T.CITATION_ON:
+      case T.STRONG_ON:
+      case T.CODE_ON:
+      case T.SAMPLE_ON:
+      case T.KEYBOARD_ON:
+      case T.VARIABLE_ON:
+      case T.DEFINSTANCE_ON:
+      case T.SHORTQUOTE_ON:
+      case T.LANGUAGE_ON:
+      case T.AUTHOR_ON:
+      case T.PERSON_ON:
+      case T.ACRONYM_ON:
+      case T.ABBREVIATION_ON:
+      case T.TELETYPE_ON:
+        this.NewCharFormat(token);
+        break;
+      case T.EMPHASIS_OFF:
+      case T.CITATION_OFF:
+      case T.STRONG_OFF:
+      case T.CODE_OFF:
+      case T.SAMPLE_OFF:
+      case T.KEYBOARD_OFF:
+      case T.VARIABLE_OFF:
+      case T.DEFINSTANCE_OFF:
+      case T.SHORTQUOTE_OFF:
+      case T.LANGUAGE_OFF:
+      case T.AUTHOR_OFF:
+      case T.PERSON_OFF:
+      case T.ACRONYM_OFF:
+      case T.ABBREVIATION_OFF:
+      case T.TELETYPE_OFF:
+        this.EndTag(token);
         break;
       case T.BOLD_ON:
         this.NewStdAttr(token, [

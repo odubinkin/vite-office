@@ -24,6 +24,7 @@ import {
 import { SetAttrMode } from "../../../inc/swtypes";
 import type { SfxPoolItem } from "../../../../svl/source/items/poolitem";
 import { RES_CHRATR_END } from "../../../inc/hintids";
+import { MakeTextAttr } from "../txtnode/thints";
 import { setCharacterItems } from "../txtnode/ndhints-font";
 import { SwFormatAutoFormat } from "../txtnode/txatbase";
 import { SwFormatCharFormat, SwFormatINetFormat } from "../txtnode/fmtatr2";
@@ -222,20 +223,18 @@ export function InsertPoolItem(
     else if (
       item.Which() < RES_CHRATR_END &&
       start !== end &&
-      ((mode & SetAttrMode.NOFORMATATTR) !== 0 || start !== 0 || end !== node.Len())
+      ((mode & SetAttrMode.NOFORMATATTR) !== 0 ||
+        start !== 0 ||
+        end !== node.Len() ||
+        node
+          .GetpSwpHints()
+          ?.entries()
+          .some(
+            /** Native whole-paragraph SetAttr retains hints when a character style is present. @param hint - Actual hint. @returns Named character owner. */
+            (hint) => hint.IsCharFormatAttr(),
+          ))
     )
-      node.SetTextHints(
-        setCharacterItems(
-          node.GetOrCreateSwpHints(),
-          document.GetAttrPool(),
-          node.Len(),
-          start,
-          end,
-          [item],
-          node.GetSwAttrSet(),
-          true,
-        ),
-      );
+      node.InsertHint(MakeTextAttr(document, item, start, end), mode);
     else node.SetAttr(item);
   }
 }
