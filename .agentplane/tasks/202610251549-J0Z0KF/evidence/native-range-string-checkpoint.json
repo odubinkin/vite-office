@@ -1,0 +1,98 @@
+{
+  "task": "202610251549-J0Z0KF",
+  "status": "bounded native range-string prerequisite checkpoint; task remains DOING/needs_rework",
+  "baseline": "9bc445578031fecf56086729d8e4940c77e14d65",
+  "scope": "Original quote/token/offset, address/range/list conversion and actual document grammar projection used by OOXML AddressConverter. No fake workbook/parser provider or whole-format/UI implementation.",
+  "sourceBlobs": {
+    "apps/office/src/sc/source/core/data/documen3.ts": "4214452808895e776b2e54fa0915c5340aec74c5",
+    "apps/office/src/sc/source/core/data/document.ts": "49e6b1026b6c82c0b61f1333b7857e91c1d41466",
+    "docs/program/calc-upstream-suspected-issues.md": "11ef38181a70f079062a0faa7fbb19a6b43ebf2a",
+    "docs/program/registry/calc/provenance/sc/source/core/data/documen3.ts.json": "5579a8ff550b708d1c765e860fb86c3d502c033f",
+    "docs/program/registry/calc/provenance/sc/source/core/data/document.ts.json": "99589d5b3291213b1d8c34b87ef1ce889b0ba5ff",
+    "docs/program/registry/calc/runtime/sc/source/core/data/documen3.ts.json": "08c9057ad03bca97f19d24882aa90378610d01f5",
+    "docs/program/registry/calc/runtime/sc/source/core/data/document.ts.json": "e1b9e05ae12246a0f69c24e33a9b258bc6797a34",
+    "apps/office/src/sc/inc/rangeutl.ts": "44c1607c6c659115733f0218056f7c83fa2aea85",
+    "apps/office/src/sc/source/core/tool/rangeutl.test.ts": "fa3178b369a6ac391c5d2c804b5a9852bba74e78",
+    "apps/office/src/sc/source/core/tool/rangeutl.ts": "ed3758af63453e7e7351296b2624b245fdb0ed93",
+    "docs/program/registry/calc/capabilities/CAP-7563ff44-544f-463b-9ac0-f12ec35866d4.json": "0a62d6a0b379222cf5f874d1749b9d260c5dcda4",
+    "docs/program/registry/calc/provenance/sc/inc/rangeutl.ts.json": "cd1dda54214c3f4b48f5834d00086a8e4fb12e99",
+    "docs/program/registry/calc/provenance/sc/source/core/tool/rangeutl.ts.json": "adb74ed6121b1422ab098c62f06d224d21d37a05",
+    "docs/program/registry/calc/runtime/sc/inc/rangeutl.ts.json": "8c9a0f5e1e4d7c9d1efeff505beaac747301d7f5",
+    "docs/program/registry/calc/runtime/sc/source/core/tool/rangeutl.ts.json": "ea0dd9755fa946de6465b71d24e13aca64aed5cf"
+  },
+  "checks": {
+    "coverage": {
+      "command": "npm run test:coverage --workspace @vite-office/office -- src/sc/source/core/tool/rangeutl.test.ts src/sc/source/core/tool/address.xl-a1.test.ts src/sc/source/core/tool/rangelst.test.ts src/sc/source/core/data/clipboard-reference.test.ts --coverage.include=src/sc/source/core/tool/rangeutl.ts --coverage.include=src/sc/source/core/data/documen3.ts --coverage.reportsDirectory=coverage/xlsx-rangeutl-final --maxWorkers=2",
+      "result": "pass:133 tests/4 files; whole two included owners S115/115 B81/81 F9/9 L106/106, unchanged100 thresholds",
+      "rawFile": "apps/office/coverage/xlsx-rangeutl-final/coverage-final.json",
+      "sha256": "35f3d0e679582f6466e733a26ad8d6ad0e57d6ca0480566a00fe57d9ea2486e0",
+      "files": {
+        "apps/office/src/sc/source/core/data/documen3.ts": {
+          "s": {
+            "covered": 9,
+            "total": 9
+          },
+          "b": {
+            "covered": 7,
+            "total": 7
+          },
+          "f": {
+            "covered": 2,
+            "total": 2
+          }
+        },
+        "apps/office/src/sc/source/core/tool/rangeutl.ts": {
+          "s": {
+            "covered": 106,
+            "total": 106
+          },
+          "b": {
+            "covered": 74,
+            "total": 74
+          },
+          "f": {
+            "covered": 7,
+            "total": 7
+          }
+        }
+      }
+    },
+    "regression": {
+      "command": "npm run test:calc -- src/sc/source/filter/xml/ src/sc/source/core/data/documentimport.test.ts src/sc/source/core/data/documentimport.admission.test.ts src/sc/source/core/tool/range-formula.test.ts src/sc/source/core/tool/reference-parse.test.ts --maxWorkers=2",
+      "result": "pass:87 tests/16 files; related ODS/model-import/range tests, not a full suite"
+    },
+    "typecheck": "pass:npm run typecheck (tools and app)",
+    "static": "pass:npm run test:static",
+    "eslint": "pass:all five changed production/test TS paths max-warnings0",
+    "prettier": "pass:same five TS paths",
+    "dependencies": "pass:1687 runtime sources/8728 relative imports/209 allowed cross-module edges",
+    "docs": "pass:npm run check:docs,3884 authored source files",
+    "fileSize": "pass:3888 authored files; existing decomposition candidates retained",
+    "sourceTree": "pass:115required paths/32retired roots",
+    "resources": "pass:464commands/11menus/17dispositions",
+    "provenance": "pass:1688runtime modules/1476mapped/182browser adaptations/30infrastructure",
+    "registry": "pass:1688modules/349capabilities/34invariants/3788records; whole parity stays false",
+    "doctor": "pass:0errors; existing managed-hook readiness warning retained",
+    "routing": "pass:node .agentplane/policy/check-routing.mjs",
+    "diff": "pass:git diff --check"
+  },
+  "findings": [
+    "CALC-349:original GetTokenCount reversed separator/quote arguments are preserved.",
+    "CALC-350:original range VALID-only test propagates B2:C0 -> B2:C2 partial endpoint result, as in CALC-344."
+  ],
+  "resolvedValidationFindings": [
+    "Two initial test expectations wrongly rejected A1:B0 and assigned rowzero for B2:C0; corrected after pinned original scanner review, production semantics unchanged.",
+    "Static-only class erased as native member object for repository lint, without disabling rules.",
+    "Native enum return explicitly typed after actual extractRefConvention; no fixed convention provider.",
+    "Corrected new provenance record required symbols/evidence fields and added missing test callback JSDoc; provenance,registry,docs,typecheck and lint rerun successfully."
+  ],
+  "limitations": [
+    "Full XLSX workbook/worksheet/styles/shared-string/formula import/export/filter/shell/UI acceptance remains pending; actual AddressConverter/WorkbookHelper owners are next prerequisites.",
+    "Requested and document conventions are retried through actual existing address/range owners. Their missing qualified/external/R1C1/OOO services can still throw; no catch-and-repair substitutes.",
+    "UTF16 views and scalar reference tuples bind existing host value boundaries. Full original converter/name/API/formatting/AppendTableName and native allocation/pointer lifetime remain unported or unverified.",
+    "Source-backed local literal tests and real ScDocument writes are not an independently compiled native converter differential. Referenced qahelper caller is source evidence, not a ported native QA suite.",
+    "Earlier address/OUString/ScFormulaCell coverage gaps remain open; this passing scoped profile does not close those profiles or the task.",
+    "Writer DOCX model/filter/export/UI acceptance remains incomplete and unchanged in this checkpoint.",
+    "Full suites not due under approved ten-task cadence; no merge, push, publication or task completion performed."
+  ]
+}
