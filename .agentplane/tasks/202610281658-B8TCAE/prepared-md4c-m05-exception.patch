@@ -1,0 +1,12 @@
+--- a/apps/office/src/external/md4c/src/md4c.mark.collect.ts
++++ b/apps/office/src/external/md4c/src/md4c.mark.collect.ts
+@@ -132,7 +132,9 @@
+             off = htmlEnd;
+             if (off > line.end) {
+               const found = md_lookup_line(off, lines);
++              /* istanbul ignore if -- B8TCAE-M05 proposal: a successfully recognized HTML span ends inside the same immutable paragraph lines. */
+               if (found === undefined) throw new Error("Invalid md4c HTML span line.");
++              else { /* Keep the successfully located line alternative visible to source mapping. */ }
+               [line, lineIndex] = found;
+             }
+             continue;

@@ -1,5 +1,5 @@
 {
-  "status": "eleven individually approved scopes annotated; no pending coverage approval; A05 withdrawn and unapplied",
+  "status": "eleven scopes approved and annotated; M04/M05 pending independent decisions; A05 withdrawn, speculative M03 draft withdrawn before requesting approval",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -260,6 +260,164 @@
       "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0438\u0442\u044c \u0442\u043e\u043b\u044c\u043a\u043e M02",
       "verificationProof": "approved-m01-m02-map-proof.json",
       "status": "Individually approved narrow scope applied; fresh1912 assertions and strict module100 coverage pass. Native algorithms remain unchanged."
+    },
+    {
+      "id": "B8TCAE-M04",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/external/md4c/src/md4c.mark.collect.ts",
+      "originalLine": 100,
+      "scope": "Only the missing covering-line true alternative and its defensive throw for the code span.",
+      "preconditions": [
+        "Input buffer and collected paragraph line array remain stable during synchronous parsing.",
+        "The actual code recognizer receives a suffix of the same nonempty paragraph lines and bounds a successful closing offset by their end.",
+        "md_lookup_line receives the same original covering paragraph; it also maps an offset in a line gap to the following line. A successfully recognized closing offset cannot lie beyond the last line.",
+        "Original md4c.c lines3118..3126 assigns the successful span end then uses md_lookup_line directly; there is no absent-line recovery branch. Native invalid-pointer execution is not performed."
+      ],
+      "sourceSha256": "d41a100d5780edabaa7233be3388f627f772a89c32352ba1b584e6905df9553f",
+      "preAnnotationReport": "apps/office/coverage/integration-md4c-mark-boundaries/coverage-final.json",
+      "preAnnotationReportSha256": "ea2392a4c346afbb91b7cd2c75d15bf95171f16a51f7e1e73a478f83ce1962ec",
+      "testFiles": 8,
+      "tests": 1998,
+      "allAssertionsPassed": true,
+      "rawBranch": {
+        "id": "28",
+        "hits": [
+          0,
+          14
+        ],
+        "map": {
+          "loc": {
+            "start": {
+              "line": 100,
+              "column": 12
+            },
+            "end": {
+              "line": 100,
+              "column": null
+            }
+          },
+          "type": "if",
+          "locations": [
+            {
+              "start": {
+                "line": 100,
+                "column": 12
+              },
+              "end": {
+                "line": 100,
+                "column": null
+              }
+            },
+            {
+              "start": {},
+              "end": {}
+            }
+          ]
+        }
+      },
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 169,
+          "functions": 3,
+          "branchArms": 151
+        },
+        "after": {
+          "statements": 168,
+          "functions": 3,
+          "branchArms": 150
+        },
+        "cardinalityChanges": [
+          {
+            "id": "28",
+            "type": "if",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-md4c-m04-exception.patch",
+      "evidenceBoundary": "Native source precondition plus actual public-parser corpus, not a newly demonstrated ordinary-input upstream defect or native invalid-pointer experiment. Each scope needs its own human decision."
+    },
+    {
+      "id": "B8TCAE-M05",
+      "approval": "pending-human-decision",
+      "exceptionApplied": false,
+      "path": "apps/office/src/external/md4c/src/md4c.mark.collect.ts",
+      "originalLine": 135,
+      "scope": "Only the missing covering-line true alternative and its defensive throw for the HTML span.",
+      "preconditions": [
+        "Input buffer and collected paragraph line array remain stable during synchronous parsing.",
+        "The actual HTML recognizer receives a suffix of the same nonempty paragraph lines and bounds a successful closing offset by their end.",
+        "md_lookup_line receives the same original covering paragraph; it also maps an offset in a line gap to the following line. A successfully recognized closing offset cannot lie beyond the last line.",
+        "Original md4c.c lines3169..3175 assigns the successful span end then uses md_lookup_line directly; there is no absent-line recovery branch. Native invalid-pointer execution is not performed."
+      ],
+      "sourceSha256": "d41a100d5780edabaa7233be3388f627f772a89c32352ba1b584e6905df9553f",
+      "preAnnotationReport": "apps/office/coverage/integration-md4c-mark-boundaries/coverage-final.json",
+      "preAnnotationReportSha256": "ea2392a4c346afbb91b7cd2c75d15bf95171f16a51f7e1e73a478f83ce1962ec",
+      "testFiles": 8,
+      "tests": 1998,
+      "allAssertionsPassed": true,
+      "rawBranch": {
+        "id": "37",
+        "hits": [
+          0,
+          46
+        ],
+        "map": {
+          "loc": {
+            "start": {
+              "line": 135,
+              "column": 14
+            },
+            "end": {
+              "line": 135,
+              "column": null
+            }
+          },
+          "type": "if",
+          "locations": [
+            {
+              "start": {
+                "line": 135,
+                "column": 14
+              },
+              "end": {
+                "line": 135,
+                "column": null
+              }
+            },
+            {
+              "start": {},
+              "end": {}
+            }
+          ]
+        }
+      },
+      "instrumentationDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 169,
+          "functions": 3,
+          "branchArms": 151
+        },
+        "after": {
+          "statements": 168,
+          "functions": 3,
+          "branchArms": 150
+        },
+        "cardinalityChanges": [
+          {
+            "id": "37",
+            "type": "if",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preparedPatch": "prepared-md4c-m05-exception.patch",
+      "evidenceBoundary": "Native source precondition plus actual public-parser corpus, not a newly demonstrated ordinary-input upstream defect or native invalid-pointer experiment. Each scope needs its own human decision."
     }
   ],
   "additionalAudits": [
