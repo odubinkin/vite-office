@@ -1411,6 +1411,303 @@
       "sourceAudit": "era-fixed-package-audit.json",
       "verificationProof": "approved-era-fixed-package-map-proof.json",
       "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P01",
+      "branch": 11,
+      "arm": 0,
+      "statements": [
+        "26"
+      ],
+      "reason": "res_load writes only illegal-argument/file-access errors, never memory status; failed incoming status already returns before loading.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P02",
+      "branch": 13,
+      "arm": 0,
+      "statements": [
+        "32"
+      ],
+      "reason": "Validated immutable pool exists, is non-bogus, has isPoolBundle and never recursively uses the pool.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P03",
+      "branch": 14,
+      "arm": 1,
+      "statements": [],
+      "reason": "After the same successful pool load, the status cannot be a failure.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P04",
+      "branch": 17,
+      "arm": 1,
+      "statements": [
+        "40",
+        "41"
+      ],
+      "reason": "Synchronous private Map insertion has no callbacks/concurrency; all53 default-package file aliases are acyclic and cannot reinsert an in-flight filename. Native race/other-package alias behavior remains outside the binding.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P05",
+      "branch": 20,
+      "arm": 0,
+      "statements": [
+        "50"
+      ],
+      "reason": "The actual pool entry is present/non-bogus/isPoolBundle; its tuple and native package checksums are validated.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P06",
+      "branch": 33,
+      "arm": 0,
+      "statements": [
+        "86",
+        "87"
+      ],
+      "reason": "Fresh parentStatus starts0; by induction init_entry returns only success/warning for this fixed valid pool and default package, or throws.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P07",
+      "branch": 35,
+      "arm": 0,
+      "statements": [
+        "93"
+      ],
+      "reason": "Both private insertRootBundle callers enter only after checked successful entry initialization/parent loading.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P08",
+      "branch": 36,
+      "arm": 0,
+      "statements": [
+        "97",
+        "98"
+      ],
+      "reason": "Fresh local status starts0 and the immutable root exists; init_entry cannot produce a positive error.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P09",
+      "branch": 38,
+      "arm": 0,
+      "statements": [
+        "116",
+        "117"
+      ],
+      "reason": "Fresh entry search starts0 and can produce only success or fallback warning, never memory status.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P10",
+      "branch": 42,
+      "arm": 0,
+      "statements": [
+        "124"
+      ],
+      "reason": "The outer status is checked initially and parent loading cannot fail under the fixed backend.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P11",
+      "branch": 45,
+      "arm": 0,
+      "statements": [
+        "130",
+        "131"
+      ],
+      "reason": "Default-locale search preserves the same non-memory status domain, including unknown/default/root names.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P12",
+      "branch": 49,
+      "arm": 0,
+      "statements": [
+        "140"
+      ],
+      "reason": "The second parent load has the same successful backend/status preconditions.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P13",
+      "branch": 51,
+      "arm": 0,
+      "statements": [
+        "146",
+        "147"
+      ],
+      "reason": "Final root search has a fresh nonfailed status and cannot produce memory status.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P14",
+      "branch": 52,
+      "arm": 1,
+      "statements": [
+        "152",
+        "153"
+      ],
+      "reason": "Final root search necessarily finds the actual root bundle.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P15",
+      "branch": 55,
+      "arm": 0,
+      "statements": [
+        "157"
+      ],
+      "reason": "Private root insertion cannot fail with the checked status and immutable root.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P16",
+      "branch": 56,
+      "arm": 0,
+      "statements": [
+        "160"
+      ],
+      "reason": "Pure local flow sets hasRealData=true whenever r becomes non-null; this arm is entered only from the non-null-r else path.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P17",
+      "branch": 58,
+      "arm": 1,
+      "statements": [
+        "168"
+      ],
+      "reason": "Successful function entry and all represented operations leave status nonfailed; retain its guard, normal return and the separate unreachable final return.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P18",
+      "branch": 63,
+      "arm": 1,
+      "statements": [
+        "180"
+      ],
+      "reason": "Direct open checks incoming status before init_entry, which cannot produce a new positive error in this backend.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P19",
+      "branch": 67,
+      "arm": 1,
+      "statements": [],
+      "reason": "The disjunction succeeds by short-circuit or successful loadParentsExceptRoot; that call cannot fail here.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P20",
+      "branch": 71,
+      "arm": 0,
+      "statements": [
+        "188"
+      ],
+      "reason": "The same direct-open path has no represented source of a positive status.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-P21",
+      "branch": null,
+      "arm": null,
+      "statements": [
+        "207"
+      ],
+      "reason": "init_entry returns the final non-alias target; fAlias is assigned only during construction before cache insertion. Its adopted target therefore cannot itself have an alias. Retain the while condition; exclude only its unreachable advance statement.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "resource-entry-domain-audit.json",
+      "verificationProof": "approved-resource-entry-map-proof.json",
+      "upstreamDefectSuspected": false
     }
   ],
   "additionalAudits": [

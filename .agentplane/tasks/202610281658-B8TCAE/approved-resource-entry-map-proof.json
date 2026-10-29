@@ -1,0 +1,412 @@
+{
+  "P01-P21": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 57,
+          "column": 53
+        },
+        "end": {
+          "line": 57,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 63,
+          "column": 34
+        },
+        "end": {
+          "line": 63,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 74,
+          "column": 6
+        },
+        "end": {
+          "line": 74,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 75,
+          "column": 6
+        },
+        "end": {
+          "line": 75,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 87,
+          "column": 4
+        },
+        "end": {
+          "line": 87,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 146,
+          "column": 6
+        },
+        "end": {
+          "line": 146,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 147,
+          "column": 6
+        },
+        "end": {
+          "line": 147,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 157,
+          "column": 28
+        },
+        "end": {
+          "line": 157,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 161,
+          "column": 4
+        },
+        "end": {
+          "line": 161,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 162,
+          "column": 4
+        },
+        "end": {
+          "line": 162,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 197,
+          "column": 4
+        },
+        "end": {
+          "line": 197,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 198,
+          "column": 4
+        },
+        "end": {
+          "line": 198,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 205,
+          "column": 62
+        },
+        "end": {
+          "line": 205,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 227,
+          "column": 6
+        },
+        "end": {
+          "line": 227,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 228,
+          "column": 6
+        },
+        "end": {
+          "line": 228,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 237,
+          "column": 64
+        },
+        "end": {
+          "line": 237,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 255,
+          "column": 6
+        },
+        "end": {
+          "line": 255,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 256,
+          "column": 6
+        },
+        "end": {
+          "line": 256,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 263,
+          "column": 6
+        },
+        "end": {
+          "line": 263,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 264,
+          "column": 6
+        },
+        "end": {
+          "line": 264,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 273,
+          "column": 44
+        },
+        "end": {
+          "line": 273,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 275,
+          "column": 22
+        },
+        "end": {
+          "line": 275,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 285,
+          "column": 2
+        },
+        "end": {
+          "line": 285,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 303,
+          "column": 9
+        },
+        "end": {
+          "line": 303,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 321,
+          "column": 30
+        },
+        "end": {
+          "line": 321,
+          "column": null
+        }
+      },
+      {
+        "start": {
+          "line": 352,
+          "column": 34
+        },
+        "end": {
+          "line": 352,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "11",
+        "originalLine": 57,
+        "excludedArm": 0,
+        "retainedArmHits": 112
+      },
+      {
+        "id": "13",
+        "originalLine": 63,
+        "excludedArm": 0,
+        "retainedArmHits": 6859
+      },
+      {
+        "id": "14",
+        "originalLine": 65,
+        "excludedArm": 1,
+        "retainedArmHits": 9081
+      },
+      {
+        "id": "17",
+        "originalLine": 72,
+        "excludedArm": 1,
+        "retainedArmHits": 9193
+      },
+      {
+        "id": "20",
+        "originalLine": 86,
+        "excludedArm": 0,
+        "retainedArmHits": 6859
+      },
+      {
+        "id": "33",
+        "originalLine": 145,
+        "excludedArm": 0,
+        "retainedArmHits": 2513
+      },
+      {
+        "id": "35",
+        "originalLine": 157,
+        "excludedArm": 0,
+        "retainedArmHits": 2221
+      },
+      {
+        "id": "36",
+        "originalLine": 160,
+        "excludedArm": 0,
+        "retainedArmHits": 2221
+      },
+      {
+        "id": "38",
+        "originalLine": 196,
+        "excludedArm": 0,
+        "retainedArmHits": 41065
+      },
+      {
+        "id": "42",
+        "originalLine": 205,
+        "excludedArm": 0,
+        "retainedArmHits": 38095
+      },
+      {
+        "id": "45",
+        "originalLine": 226,
+        "excludedArm": 0,
+        "retainedArmHits": 68
+      },
+      {
+        "id": "49",
+        "originalLine": 237,
+        "excludedArm": 0,
+        "retainedArmHits": 51
+      },
+      {
+        "id": "51",
+        "originalLine": 254,
+        "excludedArm": 0,
+        "retainedArmHits": 54
+      },
+      {
+        "id": "52",
+        "originalLine": 258,
+        "excludedArm": 1,
+        "retainedArmHits": 54
+      },
+      {
+        "id": "55",
+        "originalLine": 273,
+        "excludedArm": 0,
+        "retainedArmHits": 1305
+      },
+      {
+        "id": "56",
+        "originalLine": 275,
+        "excludedArm": 0,
+        "retainedArmHits": 1305
+      },
+      {
+        "id": "58",
+        "originalLine": 281,
+        "excludedArm": 1,
+        "retainedArmHits": 41065
+      },
+      {
+        "id": "63",
+        "originalLine": 298,
+        "excludedArm": 1,
+        "retainedArmHits": 53757
+      },
+      {
+        "id": "67",
+        "originalLine": 313,
+        "excludedArm": 1,
+        "retainedArmHits": 917
+      },
+      {
+        "id": "71",
+        "originalLine": 321,
+        "excludedArm": 0,
+        "retainedArmHits": 917
+      }
+    ],
+    "functionsUnchanged": 15,
+    "statements": [
+      221,
+      195
+    ],
+    "branchArms": [
+      170,
+      150
+    ],
+    "sourceMapBoundaryNote": "Only14 audited no-op else blocks provide retained normal-arm source positions for the excluded true alternatives; every retained true-arm position matches exactly and all runtime tokens match after omitting these empty alternatives.",
+    "retainedPreviouslyPositiveStatementPositions": 195,
+    "retainedPreviouslyPositiveAlternatives": 150,
+    "strictCoverage": {
+      "statements": "195/195",
+      "alternatives": "150/150",
+      "functions": "15/15",
+      "lines": "179/179"
+    },
+    "hashes": {
+      "apps/office/src/external/icu/source/common/uresbund.entries.ts": "7c9292a3412a952dce62fb5318c20bc93d6492245271d50446ac84e8dd5f707d",
+      "apps/office/coverage/integration-resource-entry-fixed-backend/coverage-final.json": "0541a3aa896e4cf026a0c676df01c09a769c5f3b0ae5d99951940b0570ff513d",
+      ".agentplane/tasks/202610281658-B8TCAE/resource-entry-domain-audit.json": "a7d3d25c0a952b20bd47da4f2a47d2c247f75b82e9ca27a07425d03fd4576dc6"
+    }
+  }
+}
