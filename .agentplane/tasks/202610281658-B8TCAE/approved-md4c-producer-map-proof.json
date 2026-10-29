@@ -1,0 +1,130 @@
+{
+  "md4c.mark.ts": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "6",
+        "originalLine": 64,
+        "excludedArm": 1,
+        "retainedArmHits": 28
+      },
+      {
+        "id": "9",
+        "originalLine": 94,
+        "excludedArm": 1,
+        "retainedArmHits": 2003
+      }
+    ],
+    "functionsUnchanged": 9,
+    "statements": [
+      60,
+      60
+    ],
+    "branchArms": [
+      28,
+      26
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  },
+  "md4c.inline.ts": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "20",
+        "originalLine": 141,
+        "excludedArm": 1,
+        "retainedArmHits": 1901
+      },
+      {
+        "id": "42",
+        "originalLine": 212,
+        "excludedArm": 1,
+        "retainedArmHits": 261
+      }
+    ],
+    "functionsUnchanged": 2,
+    "statements": [
+      129,
+      129
+    ],
+    "branchArms": [
+      119,
+      117
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  },
+  "md4c.render.ts": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 193,
+          "column": 10
+        },
+        "end": {
+          "line": 193,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [
+      {
+        "id": "41",
+        "originalLine": 243,
+        "excludedArm": 1,
+        "retainedArmHits": 167
+      },
+      {
+        "id": "43",
+        "originalLine": 247,
+        "excludedArm": 1,
+        "retainedArmHits": 103
+      }
+    ],
+    "functionsUnchanged": 8,
+    "statements": [
+      146,
+      145
+    ],
+    "branchArms": [
+      95,
+      93
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  },
+  "md4c.context.ts": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "5",
+        "originalLine": 59,
+        "excludedArm": 1,
+        "retainedArmHits": 5157
+      }
+    ],
+    "functionsUnchanged": 6,
+    "statements": [
+      22,
+      22
+    ],
+    "branchArms": [
+      18,
+      17
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  },
+  "scope": "Eight audited scopes: seven zero-hit alternatives and one zero-hit leading-code trim statement; M10/M15 remain counted and unapplied.",
+  "sourcePreservation": "Runtime tokens and all retained source-map positions are exactly identical after removing comments. One formatter-only ignore preserves the original nested conditional and avoids any parenthesis/colon remapping exception.",
+  "nativeCases": {
+    "originalConfiguration": 88,
+    "wikiDisabledReferenceConfiguration": 12,
+    "allOriginal82CasesRetained": true
+  },
+  "hashes": {
+    "apps/office/coverage/integration-md4c-producer-domains/coverage-final.json": "2e85555793d60ea7373dc80c076f06462c2cf54178eb7e0b404a2a4c8ec9e4f4",
+    ".agentplane/tasks/202610281658-B8TCAE/md4c-producer-domain-audit.json": "73e43b91587587b8f37132ca03c9f786dc136080558647ab81ca33877eb9d527"
+  }
+}

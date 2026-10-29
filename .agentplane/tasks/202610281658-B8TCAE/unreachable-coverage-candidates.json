@@ -1708,6 +1708,112 @@
       "sourceAudit": "resource-entry-domain-audit.json",
       "verificationProof": "approved-resource-entry-map-proof.json",
       "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M07",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.ts",
+      "branch": "9",
+      "arm": 1,
+      "statements": [],
+      "reason": "Both pop callers require a nonnegative stack top: bracket analysis checks top>=0; pop_openers receives actual nonnegative opener indices and loops only while top>=opener. Every pop therefore sees top>=0.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M08",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.ts",
+      "branch": "6",
+      "arm": 1,
+      "statements": [],
+      "reason": "Only emphasis and tilde analysis call md_opener_stack. Emphasis stacks contain only their star/underscore family; tilde dispatch supplies ch126. The bracket-stack fallback14 remains for source fidelity but has no actual caller.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M09",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "branch": "20",
+      "arm": 1,
+      "statements": [],
+      "reason": "Every resolved ordinary link/image is created by the attr-success arm, which assigns title.pointer=attr.title. Every real attr producer supplies Uint8Array, including the empty title. Wiki links bypass this path. Native pointer/null representation is not asserted; the local guarded fallback is retained.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M11",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "branch": "42",
+      "arm": 1,
+      "statements": [],
+      "reason": "The only text-type assignments in this function produce NORMAL, CODE, HTML or LATEXMATH. CODE/LATEXMATH and HTML are handled in preceding arms, so the remaining branch necessarily has NORMAL.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M12a",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": "41",
+      "arm": 1,
+      "statements": [],
+      "reason": "Analysis assigns dense container records at every entered depth and preserves the array when leaving. Balanced emitted list/quote events replay at depth no larger than the analysis peak, so the slot is defined. No callback exposes the parser context.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M12b",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": "43",
+      "arm": 1,
+      "statements": [],
+      "reason": "The same dense retained container/queue invariant applies independently to quote openers.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M13",
+      "path": "apps/office/src/external/md4c/src/md4c.render.ts",
+      "branch": null,
+      "arm": null,
+      "statements": [
+        "102"
+      ],
+      "reason": "For block.data0, CODE is indented code; fenced opening sets data1. Empty lines cannot start indented code: blank classification precedes code classification, and only an existing same-container indented pivot can retain code type on a blank. Container entry/sibling transitions reset the pivot; forced new blocks are only fences/HTML. Therefore the first stored indented-code line is nonempty and this leading-trim advance cannot run. Retain the while guard and body.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
+    },
+    {
+      "id": "B8TCAE-M14",
+      "path": "apps/office/src/external/md4c/src/md4c.context.ts",
+      "branch": "5",
+      "arm": 1,
+      "statements": [],
+      "reason": "Every actual md_emit_text caller supplies a positive guarded slice or nonempty SPACE/LF/NUL/SPACES constant. Escape/entity marks have nonzero validated extents; indentation chunks are guarded >0 after draining full space blocks; normal/HTML/code slices are guarded by increasing offsets; null replacement calls only for offset>0 or one NUL. The stable borrowed-input contract excludes detaching/mutating parser-owned storage during callbacks.",
+      "approval": "approved-under-standing-human-authorization",
+      "exceptionApplied": true,
+      "sourceAudit": "md4c-producer-domain-audit.json",
+      "verificationProof": "approved-md4c-producer-map-proof.json",
+      "upstreamDefectSuspected": false
     }
   ],
   "additionalAudits": [
@@ -2236,6 +2342,18 @@
       "verificationProof": "approved-a01a-a01b-map-proof.json",
       "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
       "journal": "WRITER247"
+    },
+    {
+      "candidate": "M10",
+      "path": "apps/office/src/external/md4c/src/md4c.inline.ts",
+      "line": 170,
+      "status": "Unapplied. Original C comment explicitly discusses out-of-order permissive closers. Read-only actual-counter search of63000 public inputs found no false hit, which does not prove unreachability; investigate further."
+    },
+    {
+      "candidate": "M15",
+      "path": "apps/office/src/external/md4c/src/md4c.mark.link.ts",
+      "line": 97,
+      "status": "Unapplied. Nested nonempty reference adjacency requires a complete queue-mutation proof or a genuine reaching input. Native flags-disabled cases cover the separate empty-reference nested guard at99."
     }
   ],
   "standingAuthorization": {
