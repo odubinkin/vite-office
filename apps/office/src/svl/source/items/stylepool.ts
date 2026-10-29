@@ -85,7 +85,11 @@ class Node {
     let index = 0;
     if (last && last !== this) {
       index = this.children.indexOf(last);
-      index = index < 0 ? this.children.length : index + 1;
+      index =
+        index < 0
+          ? /* istanbul ignore next -- B8TCAE-A01a: a nonself traversal token is always a direct child while the pool is alive. */ this
+              .children.length
+          : index + 1;
     }
     for (; index < this.children.length; ++index) {
       const child = this.children[index] as Node;
@@ -113,6 +117,7 @@ class Node {
       const next = child.nextItemSet(null, skipUnused, false);
       if (next) return next.getUsedOrLastAddedItemSet();
     }
+    /* istanbul ignore next -- B8TCAE-A01b: the same synchronous usage-filter check has already proved that a representative exists. */
     return undefined;
   }
   /** Native unique-node and shared-leaf destruction. @returns Nothing. */
@@ -168,7 +173,9 @@ class Iterator {
         return acquireStyleHandle(this.node.getUsedOrLastAddedItemSet());
       if (this.skipIgnorable && this.node?.hasIgnorableChildren(this.skipUnused)) {
         const set = this.node.getItemSetOfIgnorableChild(this.skipUnused);
-        return set === undefined ? undefined : acquireStyleHandle(set);
+        return set === undefined
+          ? /* istanbul ignore next -- B8TCAE-A01b: the preceding same-filter existence check guarantees this representative. */ undefined
+          : acquireStyleHandle(set);
       }
     }
     return undefined;

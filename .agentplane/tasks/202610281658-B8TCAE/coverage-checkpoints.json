@@ -1916,5 +1916,103 @@
     ],
     "newGetStartDateStatusPathCovered": true,
     "fullVerifierPassed": false
+  },
+  "approvedStylePoolAndSaxWire": {
+    "approvedScopes": [
+      "A01a",
+      "A01b"
+    ],
+    "proof": "approved-a01a-a01b-map-proof.json",
+    "stylePool": {
+      "testFiles": 4,
+      "tests": 41,
+      "strictCoveragePassed": true,
+      "statements": [
+        145,
+        145
+      ],
+      "branchArms": [
+        108,
+        108
+      ],
+      "functions": [
+        26,
+        26
+      ],
+      "lines": [
+        126,
+        126
+      ]
+    },
+    "sax": {
+      "testFiles": 4,
+      "tests": 65,
+      "allAssertionsPassed": true,
+      "strictCoveragePassed": false,
+      "statements": [
+        406,
+        428
+      ],
+      "branchArms": [
+        260,
+        271
+      ],
+      "functions": [
+        31,
+        31
+      ],
+      "lines": [
+        365,
+        383
+      ],
+      "runtimeSourceUnchanged": true,
+      "report": "apps/office/coverage/integration-sax-wire-encodings/coverage-final.json"
+    },
+    "journals": [
+      "WRITER247",
+      "WRITER248",
+      "CALC-389",
+      "CALC-390"
+    ],
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108167,
+        "covered": 107447,
+        "skipped": 0,
+        "pct": 99.33
+      },
+      "statements": {
+        "total": 119504,
+        "covered": 118292,
+        "skipped": 0,
+        "pct": 98.98
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74572,
+        "covered": 72966,
+        "skipped": 0,
+        "pct": 97.84
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 219,
+    "fullVerifierPassed": false,
+    "typecheckPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "lintPassed": true,
+    "formatFocusedPassed": true
   }
 }
