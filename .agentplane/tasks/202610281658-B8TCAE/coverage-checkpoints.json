@@ -2308,5 +2308,65 @@
     "sourceProvenancePassed": true,
     "invariantsPassed": true,
     "formatFocusedPassed": true
+  },
+  "dateClosedDomains": {
+    "proof": "approved-date-d02-d11-map-proof.json",
+    "audit": "date-closed-domain-audit.json",
+    "consumerFiles": 44,
+    "consumerTests": 731,
+    "targetedTests": 83,
+    "strictOwnerCoveragePassed": true,
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108148,
+          "covered": 107526,
+          "skipped": 0,
+          "pct": 99.42
+        },
+        "statements": {
+          "total": 119480,
+          "covered": 118401,
+          "skipped": 0,
+          "pct": 99.09
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74554,
+          "covered": 73071,
+          "skipped": 0,
+          "pct": 98.01
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 209,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts"
+      ]
+    },
+    "fullVerifierPassed": false,
+    "runtimeTokensChanged": false,
+    "thresholdsChanged": false
   }
 }
