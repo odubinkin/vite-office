@@ -1,5 +1,5 @@
 /** @fileoverview Original automatic-input policy, number-format overwrite and formula ownership on actual document stores. */
-import { afterEach, expect, it } from "vitest";
+import { afterEach, assert, expect, it } from "vitest";
 import { unicode, text } from "../../../../i18nlangtag/source/isolang/isolang.tables";
 import { FormulaGrammar } from "../../../../formula/inc/grammar";
 import { FormulaByteToken } from "../../../../formula/inc/token";
@@ -160,5 +160,39 @@ it("checks link opcodes in tokenized code while preferring available RPN", /** A
   } finally {
     raw.Clear();
     formula.Dispose();
+  }
+});
+
+import { EditTextObjectImpl, TextRotation } from "../../../../editeng/inc/editobj";
+import { SvtScriptType } from "../../../../svl/inc/languageoptions";
+import { MapUnit } from "../../../../tools/inc/mapunit";
+it("rejects invalid edit-text rows before adopting or normalizing the supplied owner", /** The real column must leave valid cells intact and the rejected rich object owned by its caller. @returns Nothing. */ () => {
+  const { document, position } = fixture();
+  document.SetValue(position, 17);
+  const column = document.FetchTable(0)?.FetchColumn(0),
+    value = new EditTextObjectImpl(
+      null,
+      MapUnit.Map100thMM,
+      false,
+      TextRotation.NONE,
+      SvtScriptType.LATIN,
+    ),
+    input = unicode("Retained");
+  assert(column);
+  value.CreateAndInsertContent().SetText(input);
+  input.dispose();
+  try {
+    document.SetValue(position, 17);
+    for (const row of [-1, document.MaxRow() + 1]) column.SetEditText(row, value);
+    expect(document.GetValue(position)).toBe(17);
+    expect(value.GetParagraphCount()).toBe(1);
+    const content = value.GetText(0);
+    try {
+      expect(text(content)).toBe("Retained");
+    } finally {
+      content.dispose();
+    }
+  } finally {
+    value.dispose();
   }
 });

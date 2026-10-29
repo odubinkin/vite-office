@@ -1,5 +1,5 @@
 /** @fileoverview Checks native ASCII selection, numbering visibility and margin contracts on real Writer owners. */
-import { afterEach, expect, it } from "vitest";
+import { afterEach, assert, expect, it } from "vitest";
 import { RES_MARGIN_FIRSTLINE } from "../../../inc/hintids";
 import { SvxIndentValue, SvxFirstLineIndentItem } from "../../../../editeng/inc/lrspitem";
 import { createWriterDocument } from "../../core/doc/doc";
@@ -256,4 +256,26 @@ it("keeps native clipboard breaks, empty paragraphs and nonclipboard end flags",
   expect(write(first, second, 0, 2, false, writer)).toBe("Alpha\nOm");
   second.SetText("");
   expect(write(first, second, 0, 0, false, clipboard())).toBe("Alpha\n");
+});
+
+it("keeps paragraph breaks inside table cells separate from column tabs and row endings", /** Actual connected cell paragraphs exercise whole-document ASCII export and line-end restoration. @returns Nothing. */ () => {
+  const doc = createWriterDocument();
+  documents.push(doc);
+  const body = doc.paragraphs[0];
+  assert(body);
+  body.SetText("Body");
+  const table = doc.nodes.MakeTableNode("ASCII cells"),
+    line = doc.nodes.AppendTableRow(table, 2),
+    [left, right] = line.GetTabBoxes();
+  assert(left && right);
+  const first = left.GetParagraphs()[0],
+    next = right.GetParagraphs()[0];
+  assert(first && next);
+  first.SetText("Cell");
+  doc.nodes.AppendTableCellParagraph(left).SetText("Tail");
+  next.SetText("Right");
+  const writer = new SwASCWriter();
+  expect(writer.WriteDocument(doc)).toBe("Body\nCell\nTail\tRight\n");
+  expect(writer.GetLineEnd()).toBe("\n");
+  expect(writer.WriteDocument(doc)).toBe("Body\nCell\nTail\tRight\n");
 });

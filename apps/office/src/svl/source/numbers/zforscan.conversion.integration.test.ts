@@ -6,6 +6,13 @@ import { createNumberFormatLanguage } from "../../../test/number-format-language
 
 const conversions = [
   [0x0409, 0x0407, "MM/DD/YYYY", "TT.MM.JJJJ"],
+  // Duplicate particles disable reordering, but original DATESEP replacement still runs.
+  [0x0409, 0x0407, "M/M/DD/YYYY", "M.M.TT.JJJJ"],
+  [0x0409, 0x0407, "MM/DD/D/YYYY", "MM.TT.T.JJJJ"],
+  [0x0409, 0x0407, "MM/DD/YY/YYYY", "MM.TT.JJ.JJJJ"],
+  [0x0409, 0x0407, "MM/DD/YYYY HH:MM:SS.00", "TT.MM.JJJJ HH:MM:SS,00"],
+  [0x0407, 0x0409, "TT.MM.JJJJ HH:MM:SS,00", "MM/DD/YYYY HH:MM:SS.00"],
+
   [0x0409, 0x0411, "MM/DD/YYYY", "YYYY/MM/DD"],
   [0x0407, 0x0409, "TT.MM.JJJJ", "MM/DD/YYYY"],
   [0x0407, 0x0411, "TT.MM.JJJJ", "YYYY/MM/DD"],

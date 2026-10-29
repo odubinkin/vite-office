@@ -271,3 +271,23 @@ it("retains original checked buffer and length/literal assertions", /** Verifies
     b.dispose();
   }
 });
+
+it("uses default search/strip arguments and preserves the buffer after invalid search bounds", /** Public UTF16-unit indexing admits the end position and rejects out-of-range starts before mutation. @returns Nothing. */ () => {
+  const value = new OUStringBuffer(Uint16Array.of(32, 32, 65, 0, 66));
+  try {
+    expect(value.indexOf(65)).toBe(2);
+    expect(value.indexOf(0)).toBe(3);
+    expect(value.indexOf(66, value.getLength())).toBe(-1);
+    for (const offset of [-1, value.getLength() + 1])
+      expect(
+        /** Rejected public index leaves the owner intact. @returns Native assertion diagnostic. */ () =>
+          value.indexOf(65, offset),
+      ).toThrow("assert(fromIndex >= 0");
+    expect([...value.view()]).toEqual([32, 32, 65, 0, 66]);
+    expect(value.stripStart()).toBe(2);
+    expect([...value.view()]).toEqual([65, 0, 66]);
+    expect(value.stripStart()).toBe(0);
+  } finally {
+    value.dispose();
+  }
+});

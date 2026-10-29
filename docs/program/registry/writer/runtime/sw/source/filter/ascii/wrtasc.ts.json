@@ -18,9 +18,10 @@
       "evidence": [
         "apps/office/src/sw/source/filter/ascii/wrtasc.ts#SwASCWriter",
         "vendor/libreoffice-reference/sw/source/filter/ascii/wrtasc.cxx#SwASCWriter::WriteStream",
-        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts#native clipboard breaks"
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts#native clipboard breaks",
+        "apps/office/src/sw/source/filter/ascii/native-ascii-range.test.ts"
       ],
-      "justification": "SwASCWriter retains native SwPaM selection output and now serializes full body text and table rows through the Writer shell. Full-document output preserves original numbering and final line rules; WriteTable follows upstream tab-separated cells, intra-cell paragraph breaks and row terminators. Complete ASCII attributes/fields/redlines, clipboard table topology, rings/options, desktop environment overrides and broad core/UI parity remain unverified.",
+      "justification": "SwASCWriter retains native SwPaM selection output and now serializes full body text and table rows through the Writer shell. Full-document output preserves original numbering and final line rules; WriteTable follows upstream tab-separated cells, intra-cell paragraph breaks and row terminators. Complete ASCII attributes/fields/redlines, clipboard table topology, rings/options, desktop environment overrides and broad core/UI parity remain unverified. B8TCAE adds a real connected table with multiple cell paragraphs. Whole-document ASCII export preserves inner paragraph LF, column TAB, row LF and restores the writer line ending across repeated exports. No manufactured paragraph list or alternate document model is used.",
       "knownViolations": [],
       "localSymbols": [
         "SwASCWriter"

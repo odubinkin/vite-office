@@ -153,3 +153,32 @@ it("resets ISCII virama lookbehind in both streaming directions", /** Makes rese
   expect(info[0] & F.RTL_UNICODETOTEXT_INFO_ERROR).not.toBe(0);
   C.rtl_destroyUnicodeToTextContext(encoder, reverse);
 });
+
+it("accepts reset of absent descriptor/context before a real UTF8 conversion", /** The source reset guard is a no-op for either absent resource; subsequent public decoding remains usable. @returns Nothing. */ () => {
+  const converter = C.rtl_createTextToUnicodeConverter(E.RTL_TEXTENCODING_UTF8),
+    context = C.rtl_createTextToUnicodeContext(converter),
+    output = new Uint16Array(2),
+    info: [number] = [0],
+    consumed: [number] = [0];
+  try {
+    C.rtl_resetTextToUnicodeContext(null, null);
+    C.rtl_resetTextToUnicodeContext(converter, null);
+    expect(
+      C.rtl_convertTextToUnicode(
+        converter,
+        context,
+        Uint8Array.of(0xc3, 0xa9),
+        2,
+        output,
+        2,
+        F.RTL_TEXTTOUNICODE_FLAGS_FLUSH,
+        info,
+        consumed,
+      ),
+    ).toBe(1);
+    expect([output[0], info[0], consumed[0]]).toEqual([0xe9, 0, 2]);
+  } finally {
+    C.rtl_destroyTextToUnicodeContext(converter, context);
+    C.rtl_destroyTextToUnicodeConverter(converter);
+  }
+});

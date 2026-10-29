@@ -302,6 +302,35 @@ for (const [year, month] of [
   [3418246, 9],
 ])
   add("Q", 11, year, month, 1, 0);
+// Actual Chinese/Dangi field stamps exercise ordinal-month mapping and leap
+// selection; checked cycle arithmetic fails before astronomical computation.
+for (const type of [16, 17]) {
+  for (const [era, year] of [
+    [-2147483648, 1],
+    [2147483647, 1],
+    [35791395, 2147483647],
+    [1, -2147483648],
+  ])
+    for (const status of [0, 1])
+      add("E", type, 0, 0, 1, status, [
+        [0, era],
+        [1, year],
+      ]);
+  for (const year of [2023, 2024])
+    for (const month of [-1, 0, 1, 5, 11, 12, 13])
+      for (const status of [0, 1])
+        add("O", type, 0, 3, 0, status, [
+          [19, year],
+          [23, month],
+        ]);
+  for (const leap of [0, 1, 2])
+    for (const month of [0, 1, 5, 11])
+      for (const kind of ["M", "L"]) add(kind, type, 2023, month, 1, 0, [[22, leap]]);
+  // These Julian days are within the global ICU range but outside the derived
+  // extended-year limits, exposing actual lenient clamping and strict rejection.
+  for (const day of [-1900000000, 1900000000])
+    for (const lenient of [0, 1]) add("F", type, day, 0, lenient, 0);
+}
 const rows = execFileSync(`${build}/calendar-hooks-witness`, [`${source}/data/in`], {
   input: inputs.join("\n") + "\n",
   encoding: "utf8",

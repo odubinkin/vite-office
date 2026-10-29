@@ -2014,5 +2014,92 @@
     "invariantsPassed": true,
     "lintPassed": true,
     "formatFocusedPassed": true
+  },
+  "temporalNumericChineseAndScalarBoundaries": {
+    "nativeProof": "temporal-numeric-chinese-native-proof.json",
+    "scannerNativeRows": 44226,
+    "addedScannerRows": 14256,
+    "calendarNativeRows": 23912,
+    "addedCalendarRows": 128,
+    "priorNativeRowsPreserved": true,
+    "nativeSourceLibraryWitnessHashesUnchanged": true,
+    "publicScannerReplay": {
+      "files": 2,
+      "tests": 96,
+      "assertionsPassed": true,
+      "coverageGatePassed": false,
+      "report": "apps/office/coverage/integration-temporal-format-boundaries/coverage-final.json"
+    },
+    "scalarPublicOwners": {
+      "files": 3,
+      "tests": 19,
+      "assertionsPassed": true,
+      "coverageGatePassed": false,
+      "report": "apps/office/coverage/integration-scalar-public-boundaries/coverage-final.json"
+    },
+    "connectedAsciiAndRejectedRichText": {
+      "files": 2,
+      "tests": 27,
+      "assertionsPassed": true,
+      "coverageGatePassed": false,
+      "report": "apps/office/coverage/integration-table-richtext-boundaries/coverage-final.json"
+    },
+    "chineseNativeReplay": {
+      "files": 1,
+      "tests": 18,
+      "assertionsPassed": true,
+      "coverageGatePassed": false,
+      "report": "apps/office/coverage/integration-chinese-native-boundaries/coverage-final.json"
+    },
+    "runtimeAlgorithmsChanged": false,
+    "coverageThresholdsChanged": false,
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108167,
+        "covered": 107497,
+        "skipped": 0,
+        "pct": 99.38
+      },
+      "statements": {
+        "total": 119504,
+        "covered": 118367,
+        "skipped": 0,
+        "pct": 99.04
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74572,
+        "covered": 73039,
+        "skipped": 0,
+        "pct": 97.94
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 214,
+    "fullVerifierPassed": false,
+    "typecheckPassed": true,
+    "jsdocPassed": true,
+    "lintPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "formatFocusedPassed": true,
+    "pendingSeparateApproval": [
+      "S01"
+    ],
+    "toolingPassed": true,
+    "toolingTestFiles": 40,
+    "toolingTests": 169,
+    "fileSizeGatePassed": true,
+    "policyRoutingPassed": true
   }
 }
