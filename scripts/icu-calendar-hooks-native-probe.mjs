@@ -341,6 +341,18 @@ for (const type of [16, 17])
       [-2147483648, 0],
     ])
       for (const status of [0, -128]) add(kind, type, year, month, 1, status);
+// Actual year fields reach checked era-offset overflow before calendar computation.
+for (const [type, era, year] of [
+  [1, 0, -2147483648],
+  [2, 1, 2147483647],
+  [5, 0, -2147483648],
+  [6, 0, -2147483648],
+])
+  for (const status of [0, -128, 1])
+    add("E", type, 0, 0, 1, status, [
+      [0, era],
+      [1, year],
+    ]);
 const rows = execFileSync(`${build}/calendar-hooks-witness`, [`${source}/data/in`], {
   input: inputs.join("\n") + "\n",
   encoding: "utf8",

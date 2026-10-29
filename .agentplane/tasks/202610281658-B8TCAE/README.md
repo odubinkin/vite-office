@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 77
+revision: 78
 origin:
   system: "manual"
 depends_on: []
@@ -18,10 +18,10 @@ plan_approval:
   note: null
 verification:
   state: "needs_rework"
-  updated_at: "2026-10-29T05:58:16.900Z"
+  updated_at: "2026-10-29T09:03:06.733Z"
   updated_by: "CODER"
-  note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
-  attempts: 1
+  note: "Human deferred remaining coverage and authorized publication plus reverse merges on2026-10-29. Latest native36 tests pass with strict100% for three selected calendar owners; compatible diagnostic union still has176 incomplete owners. The full100% verification objective is not complete and must be resumed later."
+  attempts: 2
 commit: null
 comments:
   -
@@ -41,8 +41,14 @@ events:
     author: "CODER"
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
+  -
+    type: "verify"
+    at: "2026-10-29T09:03:06.733Z"
+    author: "CODER"
+    state: "needs_rework"
+    note: "Human deferred remaining coverage and authorized publication plus reverse merges on2026-10-29. Latest native36 tests pass with strict100% for three selected calendar owners; compatible diagnostic union still has176 incomplete owners. The full100% verification objective is not complete and must be resumed later."
 doc_version: 3
-doc_updated_at: "2026-10-29T09:01:57.782Z"
+doc_updated_at: "2026-10-29T09:03:06.892Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -65,6 +71,36 @@ sections:
     Attempts: 1
 
     VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T05:58:16.311Z, excerpt_hash=sha256:c0b5b70e409b9c4a9c1638266b6e0d86215a7ed799d30b57fc7c0e94d825b659
+
+    Details:
+
+    BlueprintSnapshotRef:
+    - state: current
+    - path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610281658-B8TCAE/blueprint/resolved-snapshot.json
+    - old_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+    - current_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+    - route_changed: no
+    - safe_command: agentplane blueprint snapshot 202610281658-B8TCAE
+
+    DecisionContextRef:
+    - operator_action: run_exact_argv
+    - can_execute_now: true
+    - safe_command: agentplane task verify-show 202610281658-B8TCAE
+    - diagnostic_command: none
+    - source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+    - freshness: route=computed_local remote=remote_skipped
+    - repeat_allowed: false
+    - repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+    - risks: none
+
+    ### 2026-10-29T09:03:06.733Z — VERIFY — needs_rework
+
+    By: CODER
+
+    Note: Human deferred remaining coverage and authorized publication plus reverse merges on2026-10-29. Latest native36 tests pass with strict100% for three selected calendar owners; compatible diagnostic union still has176 incomplete owners. The full100% verification objective is not complete and must be resumed later.
+    Attempts: 2
+
+    VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T09:01:57.782Z, excerpt_hash=sha256:eefc64096d2a8b71038a97fc4663673b452a2a7c71b5a89952027663306375eb
 
     Details:
 
@@ -311,6 +347,36 @@ Note: Current approved SAX/MD4C scopes and all focused assertions/checks pass; d
 Attempts: 1
 
 VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T05:58:16.311Z, excerpt_hash=sha256:c0b5b70e409b9c4a9c1638266b6e0d86215a7ed799d30b57fc7c0e94d825b659
+
+Details:
+
+BlueprintSnapshotRef:
+- state: current
+- path: /Users/odubinkin/Projects/vite-office/.agentplane/tasks/202610281658-B8TCAE/blueprint/resolved-snapshot.json
+- old_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+- current_digest: 03f9dd644b675042c1613c220f9ddeaca75a541814e396cd5cd0c5e2c9bd1709
+- route_changed: no
+- safe_command: agentplane blueprint snapshot 202610281658-B8TCAE
+
+DecisionContextRef:
+- operator_action: run_exact_argv
+- can_execute_now: true
+- safe_command: agentplane task verify-show 202610281658-B8TCAE
+- diagnostic_command: none
+- source_of_truth: route=task_next_action diagnostic=task_next_action remote=not_checked
+- freshness: route=computed_local remote=remote_skipped
+- repeat_allowed: false
+- repeat_stop_condition: do not repeat task verify-show; complete the approved semantic work and verification before recomputing the route
+- risks: none
+
+### 2026-10-29T09:03:06.733Z — VERIFY — needs_rework
+
+By: CODER
+
+Note: Human deferred remaining coverage and authorized publication plus reverse merges on2026-10-29. Latest native36 tests pass with strict100% for three selected calendar owners; compatible diagnostic union still has176 incomplete owners. The full100% verification objective is not complete and must be resumed later.
+Attempts: 2
+
+VerifyStepsRef: doc_version=3, doc_updated_at=2026-10-29T09:01:57.782Z, excerpt_hash=sha256:eefc64096d2a8b71038a97fc4663673b452a2a7c71b5a89952027663306375eb
 
 Details:
 

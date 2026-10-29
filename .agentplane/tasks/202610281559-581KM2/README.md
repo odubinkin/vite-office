@@ -4,7 +4,7 @@ title: "Integrate Writer and Calc and synchronize development branches"
 status: "BLOCKED"
 priority: "high"
 owner: "CODER"
-revision: 17
+revision: 18
 origin:
   system: "manual"
 depends_on:
@@ -69,7 +69,7 @@ events:
     to: "BLOCKED"
     note: "Blocked: Await the user coverage-scope decision before publishing integrated main and synchronizing writer and calc; all known assertion failures are repaired."
 doc_version: 3
-doc_updated_at: "2026-10-28T17:37:46.016Z"
+doc_updated_at: "2026-10-29T09:03:07.514Z"
 doc_updated_by: "CODER"
 description: "Push current Writer and Calc branches, merge both into main, resolve conflicts, run full verification and repair failures, document suspected upstream issues, push main and merge it back into both development branches. User explicitly authorized network pushes and all three repositories."
 sections:
@@ -134,6 +134,8 @@ sections:
     - Observation: User explicitly chose expansion to100 percent coverage on2026-10-28 Asia/Bangkok. New executable dependency B8TCAE owns remaining runtime coverage work; publication remains pending its completion.
       Impact: The earlier coverage acceptance request is superseded by the approved expanded work. No global exception or threshold reduction has been approved.
       Resolution: Continue B8TCAE. Its original OOX helper restoration already reaches genuine strict100 for the utility and three stream owners, so the formerly discussed inline-boundary exception is no longer needed. Preserve final full-verifier requirement before publication.
+
+    Human publication instruction2026-10-29: stop expanding remaining coverage, commit current work, then explicitly push and reverse merge main into writer and calc. Coverage child remains incomplete and must not be falsely finished. Latest raw coverage evidence is recorded in B8TCAE; final compatible diagnostic union has176 incomplete owners (99.15% statements,98.13% alternatives,100% functions,99.46% lines), not a passing full verifier. All origin feature heads are already ancestors of current main and siblings have clean tracked state. Publication/reverse merges may proceed under this explicit instruction; preserve Calc output/native/AQF9AG-icu-grego.
 id_source: "generated"
 ---
 ## Summary
@@ -214,3 +216,5 @@ Resolved merge conflicts preserving both feature sets and registry evidence. New
 - Observation: User explicitly chose expansion to100 percent coverage on2026-10-28 Asia/Bangkok. New executable dependency B8TCAE owns remaining runtime coverage work; publication remains pending its completion.
   Impact: The earlier coverage acceptance request is superseded by the approved expanded work. No global exception or threshold reduction has been approved.
   Resolution: Continue B8TCAE. Its original OOX helper restoration already reaches genuine strict100 for the utility and three stream owners, so the formerly discussed inline-boundary exception is no longer needed. Preserve final full-verifier requirement before publication.
+
+Human publication instruction2026-10-29: stop expanding remaining coverage, commit current work, then explicitly push and reverse merge main into writer and calc. Coverage child remains incomplete and must not be falsely finished. Latest raw coverage evidence is recorded in B8TCAE; final compatible diagnostic union has176 incomplete owners (99.15% statements,98.13% alternatives,100% functions,99.46% lines), not a passing full verifier. All origin feature heads are already ancestors of current main and siblings have clean tracked state. Publication/reverse merges may proceed under this explicit instruction; preserve Calc output/native/AQF9AG-icu-grego.
