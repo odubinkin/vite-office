@@ -1,0 +1,16 @@
+{
+  "id": "B8TCAE-R01",
+  "authorization": "Standing human authorization for independently proven unreachable branches.",
+  "path": "apps/office/src/filter/source/msfilter/rtfutil.ts",
+  "originalLine": 60,
+  "scope": "Only the post-conversion null guard true alternative and its throw, not the nullable finally-release guard.",
+  "proof": "rtl_string_new binds the concrete static empty byte owner before the try. The actual checked converter leaves that owner unchanged on checked failure; on success it assigns a non-null allocated owner or the same concrete empty owner. Allocation-null paths throw before normal return. No target-slot reference escapes to external callbacks. Thus normal return cannot leave null. Genuine original replaceable-allocator failure for UTF8 NUL executes the nullable finally alternative and propagates its assertion; it is covered, not excluded.",
+  "upstreamDefectSuspected": false,
+  "scopeBoundary": "Local defensive TypeScript null guard around original OString ownership, not a native allocator/ABI equivalence claim or permission to replace converter owners.",
+  "sourceHashes": {
+    "apps/office/src/filter/source/msfilter/rtfutil.ts": "bd44ba0ea4175e8c81f3508f47de30f68309a9f8f3e8029b7ed834863b1078c7",
+    "apps/office/src/sal/rtl/string.ts": "f937b614567a591fdb034791196b2817361bd1b667c005d8d67479b8fa80ee69",
+    "apps/office/src/sal/rtl/strtmpl.ts": "8762e9f1d22635da581dab5b7c615ee7cd2035089edf4ce6b0e5b6a6ea970248"
+  },
+  "reportSha256": "80b50cd00534ad1ed42f4668faeac6a41d9e46a79dc39d7433ba590a9b90f3cc"
+}
