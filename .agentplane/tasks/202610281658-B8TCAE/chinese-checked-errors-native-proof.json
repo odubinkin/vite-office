@@ -1,0 +1,106 @@
+{
+  "before": 23912,
+  "after": 23936,
+  "allPriorRowsRetainedInOrder": true,
+  "sourceLibraryWitnessHashesUnchanged": true,
+  "extra": [
+    [
+      "M 16 2147483647 12 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 16 2147483647 12 1 -128 0",
+      "0 1"
+    ],
+    [
+      "M 16 -2147483648 -1 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 16 -2147483648 -1 1 -128 0",
+      "0 1"
+    ],
+    [
+      "M 16 -2147483648 0 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 16 -2147483648 0 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 16 2147483647 12 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 16 2147483647 12 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 16 -2147483648 -1 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 16 -2147483648 -1 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 16 -2147483648 0 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 16 -2147483648 0 1 -128 0",
+      "0 1"
+    ],
+    [
+      "M 17 2147483647 12 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 17 2147483647 12 1 -128 0",
+      "0 1"
+    ],
+    [
+      "M 17 -2147483648 -1 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 17 -2147483648 -1 1 -128 0",
+      "0 1"
+    ],
+    [
+      "M 17 -2147483648 0 1 0 0",
+      "0 1"
+    ],
+    [
+      "M 17 -2147483648 0 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 17 2147483647 12 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 17 2147483647 12 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 17 -2147483648 -1 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 17 -2147483648 -1 1 -128 0",
+      "0 1"
+    ],
+    [
+      "L 17 -2147483648 0 1 0 0",
+      "0 1"
+    ],
+    [
+      "L 17 -2147483648 0 1 -128 0",
+      "0 1"
+    ]
+  ],
+  "scope": "Original protected M/L callers for Chinese/Dangi. Signed32 positive/negative month-normalization overflow and checked previous-year underflow return before astronomical work. Existing Calendar owners and actual field/status inputs only; no private state mutation, method replacement or new exception.",
+  "fixtureSha256": "f62e39bbe9f3c7bdde42d7f104140bb19a9945c49dfa75ccaa4891e6cce868f3"
+}
