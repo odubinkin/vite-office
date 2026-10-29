@@ -1,0 +1,21 @@
+--- a/apps/office/src/svl/source/items/stylepool.ts
++++ b/apps/office/src/svl/source/items/stylepool.ts
+@@ -113,6 +113,7 @@
+       const next = child.nextItemSet(null, skipUnused, false);
+       if (next) return next.getUsedOrLastAddedItemSet();
+     }
++    /* istanbul ignore next -- B8TCAE-A01b: the same synchronous usage-filter check has already proved that a representative exists. */
+     return undefined;
+   }
+   /** Native unique-node and shared-leaf destruction. @returns Nothing. */
+@@ -168,7 +169,9 @@
+         return acquireStyleHandle(this.node.getUsedOrLastAddedItemSet());
+       if (this.skipIgnorable && this.node?.hasIgnorableChildren(this.skipUnused)) {
+         const set = this.node.getItemSetOfIgnorableChild(this.skipUnused);
+-        return set === undefined ? undefined : acquireStyleHandle(set);
++        return set === undefined
++          ? /* istanbul ignore next -- B8TCAE-A01b: the preceding same-filter existence check guarantees this representative. */ undefined
++          : acquireStyleHandle(set);
+       }
+     }
+     return undefined;

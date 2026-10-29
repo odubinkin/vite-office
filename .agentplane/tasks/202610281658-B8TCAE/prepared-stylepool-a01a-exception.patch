@@ -1,0 +1,15 @@
+--- a/apps/office/src/svl/source/items/stylepool.ts
++++ b/apps/office/src/svl/source/items/stylepool.ts
+@@ -85,7 +85,11 @@
+     let index = 0;
+     if (last && last !== this) {
+       index = this.children.indexOf(last);
+-      index = index < 0 ? this.children.length : index + 1;
++      index =
++        index < 0
++          ? /* istanbul ignore next -- B8TCAE-A01a: a nonself traversal token is always a direct child while the pool is alive. */ this
++              .children.length
++          : index + 1;
+     }
+     for (; index < this.children.length; ++index) {
+       const child = this.children[index] as Node;

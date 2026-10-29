@@ -1,5 +1,5 @@
 {
-  "status": "six-scopes-approved-and-annotated; A01 unapproved; A05 approved-but-withdrawn-and-unapplied",
+  "status": "eight-scopes-approved-and-annotated; A01 split into A01a/A01b; A05 withdrawn and unapplied",
   "policy": "No exception is authorized by elapsed time. Keep source logic, thresholds and counters unchanged until explicit individual user approval.",
   "candidates": [
     {
@@ -126,7 +126,7 @@
   "additionalAudits": [
     {
       "id": "B8TCAE-A01",
-      "approval": "not-requested",
+      "approval": "superseded-by-individual-A01a-A01b-review",
       "path": "apps/office/src/svl/source/items/stylepool.ts",
       "sourceSha256": "e6f04a675df5604d2df140de42146f1d9b3e90b75be1d731fb47f2fd651b4761",
       "alternatives": [
@@ -134,7 +134,7 @@
         "getItemSetOfIgnorableChild empty return at line116 and Iterator empty representative at line171"
       ],
       "proof": "Node/Iterator are private and tree children are append-only during public iteration. nextItemSet receives null, self, or a direct child from its fixed traversal; child removal occurs only in pool disposal outside iteration. The ignorable lookup is called only after hasIgnorableChildren with the same usage filter. Recursive lookup searches that same unchanged tree and actual ownership counts synchronously, without callbacks that can release the selected external owner. An actual matching descendant must exist. This is a local single-turn source-domain invariant; concurrent native shared_ptr owner changes and full ABI/threading behavior are not certified.",
-      "status": "Proof audit retained for later individual user review; no exclusion or source change."
+      "status": "Split into exact independent A01a/A01b proposals after fresh raw-counter and caller re-audit. No StylePool annotation applied."
     },
     {
       "id": "B8TCAE-A02",
@@ -519,6 +519,136 @@
       },
       "afterSourceSha256": "5a63c9982f2d428db493d903e49543ebc78a1c48a1811cbf5699ad486ce1ae40",
       "strictCoveragePassed": true
+    },
+    {
+      "id": "B8TCAE-A01a",
+      "approval": "approved",
+      "path": "apps/office/src/svl/source/items/stylepool.ts",
+      "sourceSha256": "e6f04a675df5604d2df140de42146f1d9b3e90b75be1d731fb47f2fd651b4761",
+      "rawBranch": {
+        "id": "15",
+        "type": "cond-expr",
+        "line": 88,
+        "hits": [
+          0,
+          38
+        ]
+      },
+      "proof": "Node and Iterator are private. Every nextItemSet call passes null, itself, or its direct child via upper.nextItemSet(this). Children are append-only until pool destruction; no callbacks or awaits occur during traversal. Therefore indexOf(last)<0 cannot occur while the pool satisfies the iterator lifetime contract. Native stylepool.cxx128..156 describes this argument as the given child. Do not invoke an iterator after native pool destruction.",
+      "proposedScope": "Only the negative-index ternary true alternative; no statement/function excluded.",
+      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-stylepool-a01a-exception.patch",
+      "instrumenterDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 146,
+          "functions": 26,
+          "branchArms": 110
+        },
+        "after": {
+          "statements": 146,
+          "functions": 26,
+          "branchArms": 109
+        },
+        "cardinalityChanges": [
+          {
+            "id": "15",
+            "type": "cond-expr",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preAnnotationConsumerProfile": {
+        "report": "apps/office/coverage/integration-stylepool-invariant-audit/coverage-final.json",
+        "sha256": "79d25d544daffc456f331b7bbc31ad4e1a29e33657f51733686b0ae476cbe386",
+        "testFiles": 4,
+        "tests": 41,
+        "allAssertionsPassed": true,
+        "statements": [
+          145,
+          146
+        ],
+        "branchArms": [
+          108,
+          110
+        ],
+        "functions": [
+          26,
+          26
+        ]
+      },
+      "status": "Only the individually approved scope is annotated. All41 actual style tests pass with strict100 coverage; exact runtime-token/counter comparison passes.",
+      "approvedBy": "human user in this conversation",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0430\u044e A01a \u0438 A01b. \u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u0443\u0439 \u043f\u0440\u0435\u0434\u043f\u043e\u0441\u044b\u043b\u043a\u0438 upstream \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u0438 \u0438 \u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0430\u0439 \u0434\u043e\u0432\u043e\u0434\u0438\u0442\u044c \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0435 \u0434\u043e 100%.",
+      "exceptionApplied": true,
+      "verificationProof": "approved-a01a-a01b-map-proof.json",
+      "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
+      "journal": "WRITER247"
+    },
+    {
+      "id": "B8TCAE-A01b",
+      "approval": "approved",
+      "path": "apps/office/src/svl/source/items/stylepool.ts",
+      "sourceSha256": "e6f04a675df5604d2df140de42146f1d9b3e90b75be1d731fb47f2fd651b4761",
+      "rawBranch": {
+        "id": "40",
+        "type": "cond-expr",
+        "line": 171,
+        "hits": [
+          0,
+          7
+        ]
+      },
+      "proof": "Only getAllStyles uses skipIgnorable=true, and it also uses skipUnused=true. The same synchronous step checks hasIgnorableChildren(true) before getItemSetOfIgnorableChild(true). A positive check guarantees an actually used leaf in that fixed subtree; private traversal and WeakMap use-count reads invoke no external callbacks or awaits, so the representative cannot disappear between checks. Even an incomplete path from failed insertion cannot pass the true usage filter without another retained leaf. Native stylepool.cxx205..209 explicitly asserts the existence precondition. This current host invariant does not certify concurrent native shared_ptr owner changes.",
+      "proposedScope": "Only the empty-representative return at116 and the undefined-representative ternary true alternative at171; no function/other branch excluded.",
+      "preparedPatch": ".agentplane/tasks/202610281658-B8TCAE/prepared-stylepool-a01b-exception.patch",
+      "instrumenterDiagnostic": {
+        "scope": "Standalone installed-instrumenter diagnostic; actual Vitest remapped-counter comparison remains mandatory after explicit approval.",
+        "before": {
+          "statements": 146,
+          "functions": 26,
+          "branchArms": 110
+        },
+        "after": {
+          "statements": 145,
+          "functions": 26,
+          "branchArms": 109
+        },
+        "cardinalityChanges": [
+          {
+            "id": "40",
+            "type": "cond-expr",
+            "beforeArms": 2,
+            "afterArms": 1
+          }
+        ]
+      },
+      "preAnnotationConsumerProfile": {
+        "report": "apps/office/coverage/integration-stylepool-invariant-audit/coverage-final.json",
+        "sha256": "79d25d544daffc456f331b7bbc31ad4e1a29e33657f51733686b0ae476cbe386",
+        "testFiles": 4,
+        "tests": 41,
+        "allAssertionsPassed": true,
+        "statements": [
+          145,
+          146
+        ],
+        "branchArms": [
+          108,
+          110
+        ],
+        "functions": [
+          26,
+          26
+        ]
+      },
+      "status": "Only the individually approved scope is annotated. All41 actual style tests pass with strict100 coverage; exact runtime-token/counter comparison passes.",
+      "approvedBy": "human user in this conversation",
+      "approvalEvidence": "\u0420\u0430\u0437\u0440\u0435\u0448\u0430\u044e A01a \u0438 A01b. \u0417\u0430\u0444\u0438\u043a\u0441\u0438\u0440\u0443\u0439 \u043f\u0440\u0435\u0434\u043f\u043e\u0441\u044b\u043b\u043a\u0438 upstream \u0432 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u0430\u0446\u0438\u0438 \u0438 \u043f\u0440\u043e\u0434\u043e\u043b\u0436\u0430\u0439 \u0434\u043e\u0432\u043e\u0434\u0438\u0442\u044c \u043f\u043e\u043a\u0440\u044b\u0442\u0438\u0435 \u0434\u043e 100%.",
+      "exceptionApplied": true,
+      "verificationProof": "approved-a01a-a01b-map-proof.json",
+      "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
+      "journal": "WRITER247"
     }
   ]
 }

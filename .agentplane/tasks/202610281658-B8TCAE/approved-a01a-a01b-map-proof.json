@@ -1,0 +1,46 @@
+{
+  "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+  "removedStatements": [
+    {
+      "start": {
+        "line": 116,
+        "column": 4
+      },
+      "end": {
+        "line": 116,
+        "column": null
+      }
+    }
+  ],
+  "branchChanges": [
+    {
+      "id": "15",
+      "originalLine": 88,
+      "excludedArm": 0,
+      "retainedArmHits": 38
+    },
+    {
+      "id": "40",
+      "originalLine": 171,
+      "excludedArm": 0,
+      "retainedArmHits": 7
+    }
+  ],
+  "functionsUnchanged": 26,
+  "statements": [
+    146,
+    145
+  ],
+  "branchArms": [
+    110,
+    108
+  ],
+  "sourceMapBoundaryNote": "Only the two approved zero-hit conditional alternatives and one approved zero-hit return are omitted; all retained source positions match canonically.",
+  "path": "apps/office/src/svl/source/items/stylepool.ts",
+  "preAnnotationCommit": "6791e04d3c70e09e7d3846fe141a5ba5e28625ff",
+  "beforeSourceSha256": "e6f04a675df5604d2df140de42146f1d9b3e90b75be1d731fb47f2fd651b4761",
+  "afterSourceSha256": "ada735c57de8d4894f075bb12a08e2fdefc5448c19b847627592def1038e916b",
+  "beforeReportSha256": "79d25d544daffc456f331b7bbc31ad4e1a29e33657f51733686b0ae476cbe386",
+  "afterReportSha256": "f221495f52cd1a805fd47479976e914cb3c77df455e5a42bf72dd87c19c3b070",
+  "configurationSha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c"
+}
