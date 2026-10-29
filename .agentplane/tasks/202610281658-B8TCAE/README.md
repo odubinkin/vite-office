@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 71
+revision: 72
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T07:41:42.658Z"
+doc_updated_at: "2026-10-29T07:58:55.102Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -262,6 +262,10 @@ sections:
     - Observation: Compiled unchanged ICU EraRules now matches20064 rows, retaining all16302 old query/results plus identical source/archive/witness hashes. Additional signed-minimum-year month/day inputs cover the real sentinel comparison; failed host-clock conversion is genuinely tested. Read-only package audit validates all17 era tables /261 descriptions and their fixed shape, numeric unique keys, valid start vectors, absence of tentative names and nonempty final indices.
       Impact: E01-E14 exclude only21 unreachable zero-hit statements and18 alternatives; exact canonical token/map proof retains every150 prior positive statement position,91 alternatives and12 functions. Eight no-op else blocks and two transparent single-if wrappers retain normal counters and attach the exact annotations without moving any lexical declaration. Fresh21 tests reach strict100% (150/91/12/135). The original sentinel and end-flag suspected bugs remain unchanged and documented. The diagnostic union has196 incomplete owners, not a full-verifier certificate.
       Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Continue remaining source-backed gaps before main publication and reverse merges; standing approval does not waive proof or100% thresholds.
+
+    - Observation: Unchanged original uresbund.cpp matches111105 native queries;14420 default/entry/cache operations are persisted as sequential portable replay. The corpus retains genuine retain/close/flush and pool counts for all982 files, finite source-primed aliases and valid underscore requests. The formerly missing und-parent body is genuinely covered, not excluded. Additional default/NUL/sticky/search/reused-parent tests use existing real APIs and owners.
+      Impact: Complete immutable root/pool/53-acyclic-alias graph plus synchronous status/data-flow audit proves P01-P21 for this backend. Exact token/map proof excludes26 zero-hit statements and20 alternatives only, retains195 prior positive statement positions,150 alternatives and15 functions, and removes only14 explicit no-op else blocks during token comparison. All79 ICU suites /925 tests pass at strict100% for entry owner195/150/15/179. Native OOM, concurrency/external packages/private corruption are not declared universally unreachable or source bugs. Diagnostic union now has195 incomplete owners,99.14% statements,98.09% branches and100% functions.
+      Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Native comparison script supports the existing explicit build-directory environment variable and --check preserves generated runtime tables. Continue remaining coverage before final full verification, publication and reverse merges.
 id_source: "generated"
 ---
 ## Summary
@@ -497,3 +501,7 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Observation: Compiled unchanged ICU EraRules now matches20064 rows, retaining all16302 old query/results plus identical source/archive/witness hashes. Additional signed-minimum-year month/day inputs cover the real sentinel comparison; failed host-clock conversion is genuinely tested. Read-only package audit validates all17 era tables /261 descriptions and their fixed shape, numeric unique keys, valid start vectors, absence of tentative names and nonempty final indices.
   Impact: E01-E14 exclude only21 unreachable zero-hit statements and18 alternatives; exact canonical token/map proof retains every150 prior positive statement position,91 alternatives and12 functions. Eight no-op else blocks and two transparent single-if wrappers retain normal counters and attach the exact annotations without moving any lexical declaration. Fresh21 tests reach strict100% (150/91/12/135). The original sentinel and end-flag suspected bugs remain unchanged and documented. The diagnostic union has196 incomplete owners, not a full-verifier certificate.
   Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Continue remaining source-backed gaps before main publication and reverse merges; standing approval does not waive proof or100% thresholds.
+
+- Observation: Unchanged original uresbund.cpp matches111105 native queries;14420 default/entry/cache operations are persisted as sequential portable replay. The corpus retains genuine retain/close/flush and pool counts for all982 files, finite source-primed aliases and valid underscore requests. The formerly missing und-parent body is genuinely covered, not excluded. Additional default/NUL/sticky/search/reused-parent tests use existing real APIs and owners.
+  Impact: Complete immutable root/pool/53-acyclic-alias graph plus synchronous status/data-flow audit proves P01-P21 for this backend. Exact token/map proof excludes26 zero-hit statements and20 alternatives only, retains195 prior positive statement positions,150 alternatives and15 functions, and removes only14 explicit no-op else blocks during token comparison. All79 ICU suites /925 tests pass at strict100% for entry owner195/150/15/179. Native OOM, concurrency/external packages/private corruption are not declared universally unreachable or source bugs. Diagnostic union now has195 incomplete owners,99.14% statements,98.09% branches and100% functions.
+  Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Native comparison script supports the existing explicit build-directory environment variable and --check preserves generated runtime tables. Continue remaining coverage before final full verification, publication and reverse merges.

@@ -1,11 +1,12 @@
 /** @fileoverview Native source witness for ICU78.3 private resource fallback helpers and cached entry loading. Includes the entire unchanged original uresbund.cpp rather than reconstructing private native behavior. */
 import { execFileSync } from "node:child_process";
+import { writeIcuObservations } from "./icu-fixture-observations.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { format, resolveConfig } from "prettier";
 const source = resolve("vendor/icu-reference/source"),
-  build = resolve("output/native/AQF9AG-icu-grego");
+  build = resolve(process.env.VITE_OFFICE_ICU_NATIVE_BUILD ?? "output/native/AQF9AG-icu-grego");
 writeFileSync(
   `${build}/resource-fallback-witness.cc`,
   String.raw`
@@ -300,7 +301,7 @@ for (const defaultLocale of ["en_US", "ru_RU", "zh_Hant_TW", ""]) {
   locale_set_default_internal(defaultLocale, local);
   add("S", [hex(defaultLocale)], [local[0]]);
   const corpus = defaultLocale === "en_US" ? entryNames : entryNames.slice(-13);
-  for (const name of corpus) {
+  for (const name of [...corpus, "_"]) {
     for (const mode of [0, 1, 2])
       for (const incoming of [0, -128, -124, 1]) entryCase(mode, name, incoming, 1, 0);
     entryCase(0, "root", 0, 0, 1);
@@ -387,3 +388,31 @@ const report = {
 };
 writeFileSync(`${build}/resource-fallback-comparison.json`, JSON.stringify(report, null, 2) + "\n");
 console.log(JSON.stringify(report, null, 2));
+
+const entryRows = input.flatMap(
+  /** Keeps stateful default/entry operations in their original order; other operations do not change this cache before the entry corpus. @param query - Original native command. @param index - Native result index. @returns Selected original observation. */ (
+    query,
+    index,
+  ) => (/^[SE] /.test(query) ? [[query, actual[index]]] : []),
+);
+writeIcuObservations(
+  "resource-fallback",
+  entryRows.map(
+    /** Selects original command bytes. @param row - Native pair. @returns Command. */ (row) =>
+      row[0],
+  ),
+  entryRows.map(
+    /** Selects compiled original output bytes. @param row - Native pair. @returns Output. */ (
+      row,
+    ) => row[1],
+  ),
+  build,
+  source,
+  [
+    "common/uresbund.cpp",
+    "common/localefallback_data.h",
+    "common/uresdata.cpp",
+    "data/in/icudt78l.dat",
+  ],
+  "common",
+);

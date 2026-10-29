@@ -2574,5 +2574,70 @@
       ]
     },
     "fullVerifierPassed": false
+  },
+  "resourceEntryNativeAndFixedBackend": {
+    "nativeDifferentialQueries": 111105,
+    "portableEntryDefaultRows": 14420,
+    "nativeReport": "test-results/native/B8TCAE-icu/resource-fallback-comparison.json",
+    "files": 79,
+    "tests": 925,
+    "strictCoverage": "195 statements /150 alternatives /15 functions /179 lines, all100%",
+    "proof": "approved-resource-entry-map-proof.json",
+    "audit": "resource-entry-domain-audit.json",
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108118,
+          "covered": 107527,
+          "skipped": 0,
+          "pct": 99.45
+        },
+        "statements": {
+          "total": 119431,
+          "covered": 118406,
+          "skipped": 0,
+          "pct": 99.14
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74510,
+          "covered": 73091,
+          "skipped": 0,
+          "pct": 98.09
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 195,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/external/icu/source/common/uresbund.entries.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts"
+      ]
+    },
+    "fullVerifierPassed": false
   }
 }
