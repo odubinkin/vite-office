@@ -18,8 +18,20 @@ import { COMPLEX } from "../../../../offapi/com/sun/star/i18n/ScriptType";
 import { RES_CHRATR_CTL_FONT, RES_CHRATR_CTL_FONTSIZE } from "../../../inc/hintids";
 
 it("resolves native character names and custom suffix disambiguation", /** Checks resource-backed name mappings. @returns Nothing. */ () => {
+  expect(SwStyleNameMapper.FillUIName("Standard", SwGetPoolIdFromName.ChrFmt)).toBe(
+    "No Character Style",
+  );
+  expect(SwStyleNameMapper.FillProgName("No Character Style", SwGetPoolIdFromName.ChrFmt)).toBe(
+    "Standard",
+  );
   expect(SwStyleNameMapper.FillProgName("Custom (user)", SwGetPoolIdFromName.ChrFmt)).toBe(
     "Custom",
+  );
+  expect(SwStyleNameMapper.FillProgName("Footnote Symbol", SwGetPoolIdFromName.ChrFmt)).toBe(
+    "Footnote Symbol (user)",
+  );
+  expect(SwStyleNameMapper.FillUIName("Footnote Symbol (user)", SwGetPoolIdFromName.ChrFmt)).toBe(
+    "Footnote Symbol",
   );
   const strong = WRITER_CHARACTER_STYLE_POOL.find(
     /** Finds the known pool entry. @param row - Native entry. @returns Whether strong. */ (row) =>

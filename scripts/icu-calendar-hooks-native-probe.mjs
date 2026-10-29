@@ -331,6 +331,16 @@ for (const type of [16, 17]) {
   for (const day of [-1900000000, 1900000000])
     for (const lenient of [0, 1]) add("F", type, day, 0, lenient, 0);
 }
+// These inputs stop at original checked integer arithmetic before astronomical work.
+// Month normalization and the previous-year search have independent overflow boundaries.
+for (const type of [16, 17])
+  for (const kind of ["M", "L"])
+    for (const [year, month] of [
+      [2147483647, 12],
+      [-2147483648, -1],
+      [-2147483648, 0],
+    ])
+      for (const status of [0, -128]) add(kind, type, year, month, 1, status);
 const rows = execFileSync(`${build}/calendar-hooks-witness`, [`${source}/data/in`], {
   input: inputs.join("\n") + "\n",
   encoding: "utf8",

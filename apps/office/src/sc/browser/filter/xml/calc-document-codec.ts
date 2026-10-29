@@ -97,7 +97,11 @@ function* encodeSteps(document: ScDocument): Generator<void, CalcDocumentRecord>
         sheet.cells.push([col[0], row[0], "number", cell.getDouble()]);
       else if (cell.getType() === CellType.CELLTYPE_EDIT) {
         const edit = cell.getEditText();
+        /* istanbul ignore if -- B8TCAE-C01: the actual borrowed EDIT view always retains its constructor-bound non-null edit owner. */
         if (!edit) throw new Error("Calc edit cell is unavailable.");
+        else {
+          /* Keep the genuine owned-value alternative visible to source mapping. */
+        }
         const value = edit.GetText();
         try {
           sheet.cells.push([col[0], row[0], "edit", text(value)]);

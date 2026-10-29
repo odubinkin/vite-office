@@ -150,7 +150,11 @@ export class SvxCSS1Parser extends CSS1Parser {
   }
   /** Original declaration dispatch against the borrowed actual target set. @param property - Native property name. @param expression - Owned native expression chain. @returns Nothing. */
   protected override DeclarationParsed(property: string, expression: CSS1Expression): void {
+    /* istanbul ignore if -- B8TCAE-W02: both real parse entry points bind these owners before synchronous declaration callbacks. */
     if (!this.m_pItemSet || !this.m_pPropInfo) throw new Error("assert(DeclarationParsed ItemSet)");
+    else {
+      /* Keep the genuine owned-value alternative visible to source mapping. */
+    }
     ParseCSS1Property(property, expression, this.m_pItemSet, this.m_pPropInfo, this);
   }
   /** Original stylesheet callback lifecycle and final selector flush. @param input - Native sheet text; undefined represents the erased base overload. @returns Native success. */

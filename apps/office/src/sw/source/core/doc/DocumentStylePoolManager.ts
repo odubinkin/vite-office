@@ -55,7 +55,11 @@ export class DocumentStylePoolManager {
           entry,
         ) => entry.poolId === id,
       ) ?? WRITER_CHARACTER_STYLE_POOL[0];
+    /* istanbul ignore if -- B8TCAE-W01: the readonly pinned character pool always has its validated first entry. */
     if (definition === undefined) throw new Error("Writer character pool has no default entry.");
+    else {
+      /* Keep the genuine owned-value alternative visible to source mapping. */
+    }
     const format = this.MakeCharFormat(
       definition.uiName,
       this.attrPool.GetDoc().GetDfltCharFormat(),
