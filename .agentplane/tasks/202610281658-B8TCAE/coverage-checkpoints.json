@@ -2509,5 +2509,70 @@
       ]
     },
     "fullVerifierPassed": false
+  },
+  "eraFixedPackage": {
+    "nativeRows": 20064,
+    "retainedNativeRows": 16302,
+    "additionalNativeRows": 3762,
+    "files": 1,
+    "tests": 21,
+    "strictCoverage": "150 statements /91 alternatives /12 functions /135 lines, all100%",
+    "proof": "approved-era-fixed-package-map-proof.json",
+    "nativeRetentionProof": "era-signed-native-retention-proof.json",
+    "audit": "era-fixed-package-audit.json",
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108135,
+          "covered": 107527,
+          "skipped": 0,
+          "pct": 99.43
+        },
+        "statements": {
+          "total": 119457,
+          "covered": 118405,
+          "skipped": 0,
+          "pct": 99.11
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74530,
+          "covered": 73084,
+          "skipped": 0,
+          "pct": 98.05
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 196,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts"
+      ]
+    },
+    "fullVerifierPassed": false
   }
 }

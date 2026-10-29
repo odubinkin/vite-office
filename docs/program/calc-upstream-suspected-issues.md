@@ -4481,7 +4481,7 @@ Pinned `sax/source/tools/CachedOutputStream.hxx` stores pSeq from its const Byte
 ### CALC-370 — EraRules decodes its minimum-year sentinel as -1
 
 - Upstream: ICU78.3 `source/i18n/erarules.cpp`, MIN_INT32, decodeDate and compareEncodedDateWithYMD.
-- Observation: MIN_INT32 is initialized with `0xFFFFFFFF`, whose signed32 value is -1. Decoding MIN_ENCODED_START returns year -1 rather than INT32_MIN; the out-of-packed-range comparison also uses this -1 constant. Unchanged ICU libraries match16302 pinned EraRules lookup cases, including sentinel, negative/extreme years, sparse and invalid era codes.
+- Observation: MIN_INT32 is initialized with `0xFFFFFFFF`, whose signed32 value is -1. Decoding MIN_ENCODED_START returns year -1 rather than INT32_MIN; the out-of-packed-range comparison also uses this -1 constant. Unchanged ICU libraries initially matched16302 pinned EraRules lookup cases; the expanded20064-row witness retains every prior result and adds valid February/second-day queries at INT32_MIN. The sentinel comparator also produces the original month/day-dependent result for years below-32768 while comparing against the incorrectly named-1 constant. Source/archive/witness hashes remain unchanged.
 - Suspected issue: the constant name and the surrounding minimum-year handling suggest INT32_MIN, while the literal represents -1. This finding does not infer a replacement value.
 - Local behavior: retain -1, the exact encoded sentinel and the original comparison branches. Do not correct the constant or reinterpret the era boundary.
 

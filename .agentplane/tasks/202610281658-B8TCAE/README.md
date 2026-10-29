@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 70
+revision: 71
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T07:33:16.846Z"
+doc_updated_at: "2026-10-29T07:41:42.658Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -258,6 +258,10 @@ sections:
     - Observation: Genuine explicit/host default-locale caching, C-string termination, URI ordinary file-relative fallback and empty/ASCII/non-ASCII blank inputs close four further owners without exceptions. Fresh43 suites /713 tests pass with all69 statements,55 alternatives,12 functions and56 lines covered.
       Impact: B01-B03 separately preserve native malloc-null guards while excluding their three impossible false alternatives in the concrete non-null-returning browser ByteStorage allocator;2 suites /12 tests reach strict100%. I01 excludes only the contradictory IndianCalendar month12 alternative after normalization into0..11; native-hook plus standard-calendar2 suites /36 tests reach strict100%. Exact source-token/map proofs preserve all statements and functions. CALC-393 records the suspicious original redundant branch and the absence of a proven ordinary wrong result. Diagnostic current-map union has197 incomplete owners; final full verification remains pending.
       Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. No threshold, runtime algorithm, resource package or native output is changed. Continue remaining coverage before main publication and reverse merges.
+
+    - Observation: Compiled unchanged ICU EraRules now matches20064 rows, retaining all16302 old query/results plus identical source/archive/witness hashes. Additional signed-minimum-year month/day inputs cover the real sentinel comparison; failed host-clock conversion is genuinely tested. Read-only package audit validates all17 era tables /261 descriptions and their fixed shape, numeric unique keys, valid start vectors, absence of tentative names and nonempty final indices.
+      Impact: E01-E14 exclude only21 unreachable zero-hit statements and18 alternatives; exact canonical token/map proof retains every150 prior positive statement position,91 alternatives and12 functions. Eight no-op else blocks and two transparent single-if wrappers retain normal counters and attach the exact annotations without moving any lexical declaration. Fresh21 tests reach strict100% (150/91/12/135). The original sentinel and end-flag suspected bugs remain unchanged and documented. The diagnostic union has196 incomplete owners, not a full-verifier certificate.
+      Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Continue remaining source-backed gaps before main publication and reverse merges; standing approval does not waive proof or100% thresholds.
 id_source: "generated"
 ---
 ## Summary
@@ -489,3 +493,7 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Observation: Genuine explicit/host default-locale caching, C-string termination, URI ordinary file-relative fallback and empty/ASCII/non-ASCII blank inputs close four further owners without exceptions. Fresh43 suites /713 tests pass with all69 statements,55 alternatives,12 functions and56 lines covered.
   Impact: B01-B03 separately preserve native malloc-null guards while excluding their three impossible false alternatives in the concrete non-null-returning browser ByteStorage allocator;2 suites /12 tests reach strict100%. I01 excludes only the contradictory IndianCalendar month12 alternative after normalization into0..11; native-hook plus standard-calendar2 suites /36 tests reach strict100%. Exact source-token/map proofs preserve all statements and functions. CALC-393 records the suspicious original redundant branch and the absence of a proven ordinary wrong result. Diagnostic current-map union has197 incomplete owners; final full verification remains pending.
   Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. No threshold, runtime algorithm, resource package or native output is changed. Continue remaining coverage before main publication and reverse merges.
+
+- Observation: Compiled unchanged ICU EraRules now matches20064 rows, retaining all16302 old query/results plus identical source/archive/witness hashes. Additional signed-minimum-year month/day inputs cover the real sentinel comparison; failed host-clock conversion is genuinely tested. Read-only package audit validates all17 era tables /261 descriptions and their fixed shape, numeric unique keys, valid start vectors, absence of tentative names and nonempty final indices.
+  Impact: E01-E14 exclude only21 unreachable zero-hit statements and18 alternatives; exact canonical token/map proof retains every150 prior positive statement position,91 alternatives and12 functions. Eight no-op else blocks and two transparent single-if wrappers retain normal counters and attach the exact annotations without moving any lexical declaration. Fresh21 tests reach strict100% (150/91/12/135). The original sentinel and end-flag suspected bugs remain unchanged and documented. The diagnostic union has196 incomplete owners, not a full-verifier certificate.
+  Resolution: Typecheck, focused ESLint, JSDoc, provenance, invariants, routing, focused formatting and diff checks pass. Continue remaining source-backed gaps before main publication and reverse merges; standing approval does not waive proof or100% thresholds.

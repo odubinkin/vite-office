@@ -77,3 +77,16 @@ it("retains an already-loaded era table and caller outputs under sticky query fa
   expect(rules.getEraCode(2024, 1, 1, status)).toBe(code);
   expect(status[0]).toBe(0);
 });
+
+it("keeps the first era when the host clock cannot be converted to Gregorian fields", /** Controls only platform UTC milliseconds; original resource loading, Grego validation and era initialization execute normally. @returns Nothing. */ () => {
+  const clock = vi.spyOn(globalThis.Date, "now").mockReturnValue(Number.MAX_VALUE);
+  try {
+    const status: [number] = [0],
+      rules = EraRules.createInstance("gregorian", false, status);
+    assert(rules);
+    expect(status[0]).toBeLessThanOrEqual(0);
+    expect(rules.getCurrentEraCode()).toBe(rules.getEraCode(-2147483648, 1, 1, [0]));
+  } finally {
+    clock.mockRestore();
+  }
+});

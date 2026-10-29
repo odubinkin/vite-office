@@ -77,6 +77,9 @@ for (const name of [...gCalTypes, "missing"])
       for (const incoming of [0, -128, 1])
         for (const date of [
           [-2147483648, 1, 1],
+          [-2147483648, 2, 1],
+          [-2147483648, 1, 2],
+          [-2147483648, 2, 2],
           [-32769, 1, 1],
           [-1, 1, 1],
           [1, 1, 1],
