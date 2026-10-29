@@ -1,0 +1,56 @@
+{
+  "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+  "removedStatements": [
+    {
+      "start": {
+        "line": 100,
+        "column": 37
+      },
+      "end": {
+        "line": 100,
+        "column": null
+      }
+    },
+    {
+      "start": {
+        "line": 135,
+        "column": 39
+      },
+      "end": {
+        "line": 135,
+        "column": null
+      }
+    }
+  ],
+  "branchChanges": [
+    {
+      "id": "28",
+      "originalLine": 100,
+      "excludedArm": 0,
+      "retainedArmHits": 14
+    },
+    {
+      "id": "37",
+      "originalLine": 135,
+      "excludedArm": 0,
+      "retainedArmHits": 46
+    }
+  ],
+  "functionsUnchanged": 3,
+  "statements": [
+    169,
+    167
+  ],
+  "branchArms": [
+    151,
+    149
+  ],
+  "sourceMapBoundaryNote": "Only approved no-op else blocks provide retained normal-arm source positions.",
+  "path": "apps/office/src/external/md4c/src/md4c.mark.collect.ts",
+  "preAnnotationSourceCommit": "41fbc1647f16c362bdfc18d47e9753f0772c4f0a",
+  "beforeSourceSha256": "d41a100d5780edabaa7233be3388f627f772a89c32352ba1b584e6905df9553f",
+  "afterSourceSha256": "a9e1d297cd3b8c1aa7ca38de15891cb3dadc9008ae60b99ba90a9a0bcf1a3016",
+  "beforeReportSha256": "259eb528aa1fe17b3346a3eaadab7f117771af09defbe7ffe8bee42a052d6609",
+  "afterReportSha256": "7987382e853f8b70462bd3b4bbc71ffcf004344c0dcb7088dfe76cc5bcd8da8d",
+  "configurationSha256": "315155d7b24d9f790f5faf69a909d9e3a105bedd2365bf45fed712e7eb1bca0c"
+}

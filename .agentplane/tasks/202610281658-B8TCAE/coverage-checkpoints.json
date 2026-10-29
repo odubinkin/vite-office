@@ -2,7 +2,7 @@
   "status": "in_progress",
   "finalFullVerifierPassed": false,
   "thresholdsChanged": false,
-  "exceptionsApproved": false,
+  "exceptionsApproved": true,
   "baselineNote": "Initial integration coverage was collected before some integration repairs and is diagnostic only. Same-source ICU deltas are checked by exact statement/function/branch-map equality. A final full current-code verifier is still required. Original HTML coverage is also historical after the source-backed shared LINEBREAK/NEWPARA restoration; current HTML maps must not be merged with old maps. LocaleData maps also differ after removal of the duplicate argument-spread bridge; old LocaleData counters are historical. RTL strtmpl.ts/ustring.ts maps also differ after restoring the separate original raw replacement overload and C wrapper; old RTL counters must not be merged with the current maps.",
   "icu": {
     "testFiles": 9,
@@ -2101,5 +2101,139 @@
     "toolingTests": 169,
     "fileSizeGatePassed": true,
     "policyRoutingPassed": true
+  },
+  "exceptionApprovalScope": {
+    "approved": [
+      "U01",
+      "U02",
+      "A04",
+      "A02",
+      "A03",
+      "A06",
+      "A01a",
+      "A01b",
+      "S01",
+      "M01",
+      "M02",
+      "M04",
+      "M05"
+    ],
+    "pending": [],
+    "withdrawnUnapplied": [
+      "A05",
+      "M03"
+    ],
+    "blanketApproval": false
+  },
+  "approvedSaxAndMarkdownBoundaries": {
+    "proofs": [
+      "approved-s01-map-proof.json",
+      "approved-m01-m02-map-proof.json",
+      "approved-m04-m05-map-proof.json"
+    ],
+    "newScopes": [
+      "S01",
+      "M01",
+      "M02",
+      "M04",
+      "M05"
+    ],
+    "md4cBlockScanner": {
+      "tests": 1912,
+      "files": 7,
+      "strictCoveragePassed": true,
+      "statements": [
+        174,
+        174
+      ],
+      "branchArms": [
+        212,
+        212
+      ],
+      "functions": [
+        14,
+        14
+      ],
+      "lines": [
+        142,
+        142
+      ]
+    },
+    "md4cSpanCollector": {
+      "tests": 1999,
+      "files": 8,
+      "strictCoveragePassed": true,
+      "statements": [
+        167,
+        167
+      ],
+      "branchArms": [
+        149,
+        149
+      ],
+      "functions": [
+        3,
+        3
+      ],
+      "lines": [
+        155,
+        155
+      ]
+    },
+    "sax": {
+      "tests": 65,
+      "files": 4,
+      "allAssertionsPassed": true,
+      "strictCoveragePassed": false,
+      "report": "apps/office/coverage/integration-sax-wire-encodings/coverage-final.json"
+    },
+    "newNativePublicParserCases": 82,
+    "newNativeDestinationWindowCases": 4,
+    "newNativeAsciiByteComparisons": 65536,
+    "nativeProof": "md4c-mark-native-proof.json",
+    "markParserCorpus": {
+      "tests": 1999,
+      "files": 8,
+      "allAssertionsPassed": true,
+      "strictCoveragePassed": false,
+      "report": "apps/office/coverage/integration-md4c-mark-boundaries/coverage-final.json",
+      "note": "Historical pre-M04/M05 source maps for that owner are filtered before the approved fresh owner replacement."
+    },
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108167,
+        "covered": 107504,
+        "skipped": 0,
+        "pct": 99.38
+      },
+      "statements": {
+        "total": 119500,
+        "covered": 118380,
+        "skipped": 0,
+        "pct": 99.06
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74567,
+        "covered": 73051,
+        "skipped": 0,
+        "pct": 97.96
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 210,
+    "fullVerifierPassed": false,
+    "runtimeAlgorithmsChanged": false,
+    "thresholdsChanged": false
   }
 }
