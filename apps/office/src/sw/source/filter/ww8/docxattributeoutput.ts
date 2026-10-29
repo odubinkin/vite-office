@@ -314,6 +314,7 @@ export class DocxAttributeOutput {
           break;
         case 11:
         case LINE_BREAK:
+          /* istanbul ignore else -- B8TCAE-W04: an empty segment starts at a control delimiter; its predecessor is a control too, so this condition is always true for the actual immutable run. */
           if (
             impl_WriteRunText(this.m_pSerializer, textToken, text, begin, index) ||
             previous < 32

@@ -4,7 +4,7 @@ import { SwDoc } from "../doc/doc";
 import { SwAttrIter } from "./itratr";
 import { SwAttrHandler } from "./atrstck";
 import { SwFormatAutoFormat, SwTextAttrEnd } from "../txtnode/txatbase";
-import { SwFormatINetFormat } from "../txtnode/fmtatr2";
+import { SwFormatINetFormat, SwFormatCharFormat } from "../txtnode/fmtatr2";
 import { SfxStringItem } from "../../../../svl/source/items/stritem";
 import { SfxItemSet } from "../../../../svl/source/items/itemset";
 import { SvxColorItem } from "../../../../editeng/inc/colritem";
@@ -217,4 +217,23 @@ it("native attribute handler reinitializes defaults without clearing active owne
   handler.Reset();
   expect(handler.ReadItem(15)).toBe(defaults.Get(15));
   expect(handler.ReadItem(11)).toBe(defaults.Get(11));
+});
+
+it("reads the paragraph default when an active named style clears its explicit item", /** Exercises a live style mutation without replacing stack internals. @returns Nothing. */ () => {
+  const doc = new SwDoc(),
+    node = required(doc.paragraphs[0]),
+    handler = new SwAttrHandler(),
+    style = doc.MakeCharFormat("Mutable weight", undefined),
+    hint = new SwTextAttrEnd(new SwFormatCharFormat(style), 0, 1);
+  try {
+    handler.Init(node.GetSwAttrSet());
+    style.SetFormatAttr(new SvxWeightItem(8, 15));
+    handler.PushAndChg(hint);
+    expect(handler.ReadItem(15)).toBe(style.GetAttrSet().Get(15));
+    expect(style.ResetFormatAttr(15)).toBe(true);
+    expect(handler.ReadItem(15)).toBe(node.GetAttr(15));
+    handler.PopAndChg(hint);
+  } finally {
+    doc.Dispose();
+  }
 });

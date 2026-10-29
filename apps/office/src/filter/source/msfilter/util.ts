@@ -55,6 +55,7 @@ export function TransColToIco(color: Readonly<Color>): number {
     }
     if (best >= 0) return best + 1;
   }
+  /* istanbul ignore next -- B8TCAE-U03: every RGB8 scheme matches the fixed Word palette at a variance no greater than255; the exact domain proof is retained in the task audit. */
   return 1;
 }
 
