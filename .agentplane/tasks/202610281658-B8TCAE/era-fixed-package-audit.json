@@ -1,0 +1,2707 @@
+{
+  "authorization": "Standing human authorization for independently proven unreachable code; missing hits alone do not establish impossibility.",
+  "packagePath": "apps/office/src/external/icu/source/data/in/icudt78l.resources.json",
+  "packageSha256": "da045cc7f72abd3b651b6270600accd81a1dc17317da08857f5d4a838d412f74",
+  "calendars": 17,
+  "eraTables": 17,
+  "eras": 261,
+  "rows": [
+    {
+      "name": "buddhist",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -542,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "chinese",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -2636,
+            2,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "name": "coptic",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 1,
+          "property": "start",
+          "values": [
+            284,
+            8,
+            29
+          ]
+        }
+      ]
+    },
+    {
+      "name": "dangi",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -2332,
+            2,
+            15
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ethiopic",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -5492,
+            7,
+            17
+          ]
+        },
+        {
+          "index": 1,
+          "property": "start",
+          "values": [
+            8,
+            8,
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ethiopic-amete-alem",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -5492,
+            7,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "name": "gregorian",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "end",
+          "values": [
+            0,
+            12,
+            31
+          ]
+        },
+        {
+          "index": 1,
+          "property": "start",
+          "values": [
+            1,
+            1,
+            1
+          ]
+        }
+      ]
+    },
+    {
+      "name": "hebrew",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            -3760,
+            9,
+            7
+          ]
+        }
+      ]
+    },
+    {
+      "name": "indian",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            79,
+            3,
+            22
+          ]
+        }
+      ]
+    },
+    {
+      "name": "islamic",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            7,
+            19
+          ]
+        },
+        {
+          "index": 1,
+          "property": "end",
+          "values": [
+            622,
+            7,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "name": "islamic-civil",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            7,
+            19
+          ]
+        },
+        {
+          "index": 1,
+          "property": "end",
+          "values": [
+            622,
+            7,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "name": "islamic-rgsa",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            7,
+            19
+          ]
+        },
+        {
+          "index": 1,
+          "property": "end",
+          "values": [
+            622,
+            7,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "name": "islamic-tbla",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            7,
+            18
+          ]
+        },
+        {
+          "index": 1,
+          "property": "end",
+          "values": [
+            622,
+            7,
+            17
+          ]
+        }
+      ]
+    },
+    {
+      "name": "islamic-umalqura",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            7,
+            19
+          ]
+        },
+        {
+          "index": 1,
+          "property": "end",
+          "values": [
+            622,
+            7,
+            18
+          ]
+        }
+      ]
+    },
+    {
+      "name": "japanese",
+      "hasEras": true,
+      "eras": 237,
+      "maximumIndex": 236,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            645,
+            6,
+            19
+          ]
+        },
+        {
+          "index": 1,
+          "property": "start",
+          "values": [
+            650,
+            2,
+            15
+          ]
+        },
+        {
+          "index": 10,
+          "property": "start",
+          "values": [
+            729,
+            8,
+            5
+          ]
+        },
+        {
+          "index": 100,
+          "property": "start",
+          "values": [
+            1169,
+            4,
+            8
+          ]
+        },
+        {
+          "index": 101,
+          "property": "start",
+          "values": [
+            1171,
+            4,
+            21
+          ]
+        },
+        {
+          "index": 102,
+          "property": "start",
+          "values": [
+            1175,
+            7,
+            28
+          ]
+        },
+        {
+          "index": 103,
+          "property": "start",
+          "values": [
+            1177,
+            8,
+            4
+          ]
+        },
+        {
+          "index": 104,
+          "property": "start",
+          "values": [
+            1181,
+            7,
+            14
+          ]
+        },
+        {
+          "index": 105,
+          "property": "start",
+          "values": [
+            1182,
+            5,
+            27
+          ]
+        },
+        {
+          "index": 106,
+          "property": "start",
+          "values": [
+            1184,
+            4,
+            16
+          ]
+        },
+        {
+          "index": 107,
+          "property": "start",
+          "values": [
+            1185,
+            8,
+            14
+          ]
+        },
+        {
+          "index": 108,
+          "property": "start",
+          "values": [
+            1190,
+            4,
+            11
+          ]
+        },
+        {
+          "index": 109,
+          "property": "start",
+          "values": [
+            1199,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 11,
+          "property": "start",
+          "values": [
+            749,
+            4,
+            14
+          ]
+        },
+        {
+          "index": 110,
+          "property": "start",
+          "values": [
+            1201,
+            2,
+            13
+          ]
+        },
+        {
+          "index": 111,
+          "property": "start",
+          "values": [
+            1204,
+            2,
+            20
+          ]
+        },
+        {
+          "index": 112,
+          "property": "start",
+          "values": [
+            1206,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 113,
+          "property": "start",
+          "values": [
+            1207,
+            10,
+            25
+          ]
+        },
+        {
+          "index": 114,
+          "property": "start",
+          "values": [
+            1211,
+            3,
+            9
+          ]
+        },
+        {
+          "index": 115,
+          "property": "start",
+          "values": [
+            1213,
+            12,
+            6
+          ]
+        },
+        {
+          "index": 116,
+          "property": "start",
+          "values": [
+            1219,
+            4,
+            12
+          ]
+        },
+        {
+          "index": 117,
+          "property": "start",
+          "values": [
+            1222,
+            4,
+            13
+          ]
+        },
+        {
+          "index": 118,
+          "property": "start",
+          "values": [
+            1224,
+            11,
+            20
+          ]
+        },
+        {
+          "index": 119,
+          "property": "start",
+          "values": [
+            1225,
+            4,
+            20
+          ]
+        },
+        {
+          "index": 12,
+          "property": "start",
+          "values": [
+            749,
+            7,
+            2
+          ]
+        },
+        {
+          "index": 120,
+          "property": "start",
+          "values": [
+            1227,
+            12,
+            10
+          ]
+        },
+        {
+          "index": 121,
+          "property": "start",
+          "values": [
+            1229,
+            3,
+            5
+          ]
+        },
+        {
+          "index": 122,
+          "property": "start",
+          "values": [
+            1232,
+            4,
+            2
+          ]
+        },
+        {
+          "index": 123,
+          "property": "start",
+          "values": [
+            1233,
+            4,
+            15
+          ]
+        },
+        {
+          "index": 124,
+          "property": "start",
+          "values": [
+            1234,
+            11,
+            5
+          ]
+        },
+        {
+          "index": 125,
+          "property": "start",
+          "values": [
+            1235,
+            9,
+            19
+          ]
+        },
+        {
+          "index": 126,
+          "property": "start",
+          "values": [
+            1238,
+            11,
+            23
+          ]
+        },
+        {
+          "index": 127,
+          "property": "start",
+          "values": [
+            1239,
+            2,
+            7
+          ]
+        },
+        {
+          "index": 128,
+          "property": "start",
+          "values": [
+            1240,
+            7,
+            16
+          ]
+        },
+        {
+          "index": 129,
+          "property": "start",
+          "values": [
+            1243,
+            2,
+            26
+          ]
+        },
+        {
+          "index": 13,
+          "property": "start",
+          "values": [
+            757,
+            8,
+            18
+          ]
+        },
+        {
+          "index": 130,
+          "property": "start",
+          "values": [
+            1247,
+            2,
+            28
+          ]
+        },
+        {
+          "index": 131,
+          "property": "start",
+          "values": [
+            1249,
+            3,
+            18
+          ]
+        },
+        {
+          "index": 132,
+          "property": "start",
+          "values": [
+            1256,
+            10,
+            5
+          ]
+        },
+        {
+          "index": 133,
+          "property": "start",
+          "values": [
+            1257,
+            3,
+            14
+          ]
+        },
+        {
+          "index": 134,
+          "property": "start",
+          "values": [
+            1259,
+            3,
+            26
+          ]
+        },
+        {
+          "index": 135,
+          "property": "start",
+          "values": [
+            1260,
+            4,
+            13
+          ]
+        },
+        {
+          "index": 136,
+          "property": "start",
+          "values": [
+            1261,
+            2,
+            20
+          ]
+        },
+        {
+          "index": 137,
+          "property": "start",
+          "values": [
+            1264,
+            2,
+            28
+          ]
+        },
+        {
+          "index": 138,
+          "property": "start",
+          "values": [
+            1275,
+            4,
+            25
+          ]
+        },
+        {
+          "index": 139,
+          "property": "start",
+          "values": [
+            1278,
+            2,
+            29
+          ]
+        },
+        {
+          "index": 14,
+          "property": "start",
+          "values": [
+            765,
+            1,
+            7
+          ]
+        },
+        {
+          "index": 140,
+          "property": "start",
+          "values": [
+            1288,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 141,
+          "property": "start",
+          "values": [
+            1293,
+            8,
+            5
+          ]
+        },
+        {
+          "index": 142,
+          "property": "start",
+          "values": [
+            1299,
+            4,
+            25
+          ]
+        },
+        {
+          "index": 143,
+          "property": "start",
+          "values": [
+            1302,
+            11,
+            21
+          ]
+        },
+        {
+          "index": 144,
+          "property": "start",
+          "values": [
+            1303,
+            8,
+            5
+          ]
+        },
+        {
+          "index": 145,
+          "property": "start",
+          "values": [
+            1306,
+            12,
+            14
+          ]
+        },
+        {
+          "index": 146,
+          "property": "start",
+          "values": [
+            1308,
+            10,
+            9
+          ]
+        },
+        {
+          "index": 147,
+          "property": "start",
+          "values": [
+            1311,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 148,
+          "property": "start",
+          "values": [
+            1312,
+            3,
+            20
+          ]
+        },
+        {
+          "index": 149,
+          "property": "start",
+          "values": [
+            1317,
+            2,
+            3
+          ]
+        },
+        {
+          "index": 15,
+          "property": "start",
+          "values": [
+            767,
+            8,
+            16
+          ]
+        },
+        {
+          "index": 150,
+          "property": "start",
+          "values": [
+            1319,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 151,
+          "property": "start",
+          "values": [
+            1321,
+            2,
+            23
+          ]
+        },
+        {
+          "index": 152,
+          "property": "start",
+          "values": [
+            1324,
+            12,
+            9
+          ]
+        },
+        {
+          "index": 153,
+          "property": "start",
+          "values": [
+            1326,
+            4,
+            26
+          ]
+        },
+        {
+          "index": 154,
+          "property": "start",
+          "values": [
+            1329,
+            8,
+            29
+          ]
+        },
+        {
+          "index": 155,
+          "property": "start",
+          "values": [
+            1331,
+            8,
+            9
+          ]
+        },
+        {
+          "index": 156,
+          "property": "start",
+          "values": [
+            1334,
+            1,
+            29
+          ]
+        },
+        {
+          "index": 157,
+          "property": "start",
+          "values": [
+            1336,
+            2,
+            29
+          ]
+        },
+        {
+          "index": 158,
+          "property": "start",
+          "values": [
+            1340,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 159,
+          "property": "start",
+          "values": [
+            1346,
+            12,
+            8
+          ]
+        },
+        {
+          "index": 16,
+          "property": "start",
+          "values": [
+            770,
+            10,
+            1
+          ]
+        },
+        {
+          "index": 160,
+          "property": "start",
+          "values": [
+            1370,
+            7,
+            24
+          ]
+        },
+        {
+          "index": 161,
+          "property": "start",
+          "values": [
+            1372,
+            4,
+            1
+          ]
+        },
+        {
+          "index": 162,
+          "property": "start",
+          "values": [
+            1375,
+            5,
+            27
+          ]
+        },
+        {
+          "index": 163,
+          "property": "start",
+          "values": [
+            1379,
+            3,
+            22
+          ]
+        },
+        {
+          "index": 164,
+          "property": "start",
+          "values": [
+            1381,
+            2,
+            10
+          ]
+        },
+        {
+          "index": 165,
+          "property": "start",
+          "values": [
+            1384,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 166,
+          "property": "start",
+          "values": [
+            1387,
+            8,
+            22
+          ]
+        },
+        {
+          "index": 167,
+          "property": "start",
+          "values": [
+            1387,
+            8,
+            23
+          ]
+        },
+        {
+          "index": 168,
+          "property": "start",
+          "values": [
+            1389,
+            2,
+            9
+          ]
+        },
+        {
+          "index": 169,
+          "property": "start",
+          "values": [
+            1390,
+            3,
+            26
+          ]
+        },
+        {
+          "index": 17,
+          "property": "start",
+          "values": [
+            781,
+            1,
+            1
+          ]
+        },
+        {
+          "index": 170,
+          "property": "start",
+          "values": [
+            1394,
+            7,
+            5
+          ]
+        },
+        {
+          "index": 171,
+          "property": "start",
+          "values": [
+            1428,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 172,
+          "property": "start",
+          "values": [
+            1429,
+            9,
+            5
+          ]
+        },
+        {
+          "index": 173,
+          "property": "start",
+          "values": [
+            1441,
+            2,
+            17
+          ]
+        },
+        {
+          "index": 174,
+          "property": "start",
+          "values": [
+            1444,
+            2,
+            5
+          ]
+        },
+        {
+          "index": 175,
+          "property": "start",
+          "values": [
+            1449,
+            7,
+            28
+          ]
+        },
+        {
+          "index": 176,
+          "property": "start",
+          "values": [
+            1452,
+            7,
+            25
+          ]
+        },
+        {
+          "index": 177,
+          "property": "start",
+          "values": [
+            1455,
+            7,
+            25
+          ]
+        },
+        {
+          "index": 178,
+          "property": "start",
+          "values": [
+            1457,
+            9,
+            28
+          ]
+        },
+        {
+          "index": 179,
+          "property": "start",
+          "values": [
+            1460,
+            12,
+            21
+          ]
+        },
+        {
+          "index": 18,
+          "property": "start",
+          "values": [
+            782,
+            8,
+            19
+          ]
+        },
+        {
+          "index": 180,
+          "property": "start",
+          "values": [
+            1466,
+            2,
+            28
+          ]
+        },
+        {
+          "index": 181,
+          "property": "start",
+          "values": [
+            1467,
+            3,
+            3
+          ]
+        },
+        {
+          "index": 182,
+          "property": "start",
+          "values": [
+            1469,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 183,
+          "property": "start",
+          "values": [
+            1487,
+            7,
+            29
+          ]
+        },
+        {
+          "index": 184,
+          "property": "start",
+          "values": [
+            1489,
+            8,
+            21
+          ]
+        },
+        {
+          "index": 185,
+          "property": "start",
+          "values": [
+            1492,
+            7,
+            19
+          ]
+        },
+        {
+          "index": 186,
+          "property": "start",
+          "values": [
+            1501,
+            2,
+            29
+          ]
+        },
+        {
+          "index": 187,
+          "property": "start",
+          "values": [
+            1504,
+            2,
+            30
+          ]
+        },
+        {
+          "index": 188,
+          "property": "start",
+          "values": [
+            1521,
+            8,
+            23
+          ]
+        },
+        {
+          "index": 189,
+          "property": "start",
+          "values": [
+            1528,
+            8,
+            20
+          ]
+        },
+        {
+          "index": 19,
+          "property": "start",
+          "values": [
+            806,
+            5,
+            18
+          ]
+        },
+        {
+          "index": 190,
+          "property": "start",
+          "values": [
+            1532,
+            7,
+            29
+          ]
+        },
+        {
+          "index": 191,
+          "property": "start",
+          "values": [
+            1555,
+            10,
+            23
+          ]
+        },
+        {
+          "index": 192,
+          "property": "start",
+          "values": [
+            1558,
+            2,
+            28
+          ]
+        },
+        {
+          "index": 193,
+          "property": "start",
+          "values": [
+            1570,
+            4,
+            23
+          ]
+        },
+        {
+          "index": 194,
+          "property": "start",
+          "values": [
+            1573,
+            7,
+            28
+          ]
+        },
+        {
+          "index": 195,
+          "property": "start",
+          "values": [
+            1592,
+            12,
+            8
+          ]
+        },
+        {
+          "index": 196,
+          "property": "start",
+          "values": [
+            1596,
+            10,
+            27
+          ]
+        },
+        {
+          "index": 197,
+          "property": "start",
+          "values": [
+            1615,
+            7,
+            13
+          ]
+        },
+        {
+          "index": 198,
+          "property": "start",
+          "values": [
+            1624,
+            2,
+            30
+          ]
+        },
+        {
+          "index": 199,
+          "property": "start",
+          "values": [
+            1644,
+            12,
+            16
+          ]
+        },
+        {
+          "index": 2,
+          "property": "start",
+          "values": [
+            672,
+            1,
+            1
+          ]
+        },
+        {
+          "index": 20,
+          "property": "start",
+          "values": [
+            810,
+            9,
+            19
+          ]
+        },
+        {
+          "index": 200,
+          "property": "start",
+          "values": [
+            1648,
+            2,
+            15
+          ]
+        },
+        {
+          "index": 201,
+          "property": "start",
+          "values": [
+            1652,
+            9,
+            18
+          ]
+        },
+        {
+          "index": 202,
+          "property": "start",
+          "values": [
+            1655,
+            4,
+            13
+          ]
+        },
+        {
+          "index": 203,
+          "property": "start",
+          "values": [
+            1658,
+            7,
+            23
+          ]
+        },
+        {
+          "index": 204,
+          "property": "start",
+          "values": [
+            1661,
+            4,
+            25
+          ]
+        },
+        {
+          "index": 205,
+          "property": "start",
+          "values": [
+            1673,
+            9,
+            21
+          ]
+        },
+        {
+          "index": 206,
+          "property": "start",
+          "values": [
+            1681,
+            9,
+            29
+          ]
+        },
+        {
+          "index": 207,
+          "property": "start",
+          "values": [
+            1684,
+            2,
+            21
+          ]
+        },
+        {
+          "index": 208,
+          "property": "start",
+          "values": [
+            1688,
+            9,
+            30
+          ]
+        },
+        {
+          "index": 209,
+          "property": "start",
+          "values": [
+            1704,
+            3,
+            13
+          ]
+        },
+        {
+          "index": 21,
+          "property": "start",
+          "values": [
+            824,
+            1,
+            5
+          ]
+        },
+        {
+          "index": 210,
+          "property": "start",
+          "values": [
+            1711,
+            4,
+            25
+          ]
+        },
+        {
+          "index": 211,
+          "property": "start",
+          "values": [
+            1716,
+            6,
+            22
+          ]
+        },
+        {
+          "index": 212,
+          "property": "start",
+          "values": [
+            1736,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 213,
+          "property": "start",
+          "values": [
+            1741,
+            2,
+            27
+          ]
+        },
+        {
+          "index": 214,
+          "property": "start",
+          "values": [
+            1744,
+            2,
+            21
+          ]
+        },
+        {
+          "index": 215,
+          "property": "start",
+          "values": [
+            1748,
+            7,
+            12
+          ]
+        },
+        {
+          "index": 216,
+          "property": "start",
+          "values": [
+            1751,
+            10,
+            27
+          ]
+        },
+        {
+          "index": 217,
+          "property": "start",
+          "values": [
+            1764,
+            6,
+            2
+          ]
+        },
+        {
+          "index": 218,
+          "property": "start",
+          "values": [
+            1772,
+            11,
+            16
+          ]
+        },
+        {
+          "index": 219,
+          "property": "start",
+          "values": [
+            1781,
+            4,
+            2
+          ]
+        },
+        {
+          "index": 22,
+          "property": "start",
+          "values": [
+            834,
+            1,
+            3
+          ]
+        },
+        {
+          "index": 220,
+          "property": "start",
+          "values": [
+            1789,
+            1,
+            25
+          ]
+        },
+        {
+          "index": 221,
+          "property": "start",
+          "values": [
+            1801,
+            2,
+            5
+          ]
+        },
+        {
+          "index": 222,
+          "property": "start",
+          "values": [
+            1804,
+            2,
+            11
+          ]
+        },
+        {
+          "index": 223,
+          "property": "start",
+          "values": [
+            1818,
+            4,
+            22
+          ]
+        },
+        {
+          "index": 224,
+          "property": "start",
+          "values": [
+            1830,
+            12,
+            10
+          ]
+        },
+        {
+          "index": 225,
+          "property": "start",
+          "values": [
+            1844,
+            12,
+            2
+          ]
+        },
+        {
+          "index": 226,
+          "property": "start",
+          "values": [
+            1848,
+            2,
+            28
+          ]
+        },
+        {
+          "index": 227,
+          "property": "start",
+          "values": [
+            1854,
+            11,
+            27
+          ]
+        },
+        {
+          "index": 228,
+          "property": "start",
+          "values": [
+            1860,
+            3,
+            18
+          ]
+        },
+        {
+          "index": 229,
+          "property": "start",
+          "values": [
+            1861,
+            2,
+            19
+          ]
+        },
+        {
+          "index": 23,
+          "property": "start",
+          "values": [
+            848,
+            6,
+            13
+          ]
+        },
+        {
+          "index": 230,
+          "property": "start",
+          "values": [
+            1864,
+            2,
+            20
+          ]
+        },
+        {
+          "index": 231,
+          "property": "start",
+          "values": [
+            1865,
+            4,
+            7
+          ]
+        },
+        {
+          "index": 232,
+          "property": "start",
+          "values": [
+            1868,
+            10,
+            23
+          ]
+        },
+        {
+          "index": 233,
+          "property": "start",
+          "values": [
+            1912,
+            7,
+            30
+          ]
+        },
+        {
+          "index": 234,
+          "property": "start",
+          "values": [
+            1926,
+            12,
+            25
+          ]
+        },
+        {
+          "index": 235,
+          "property": "start",
+          "values": [
+            1989,
+            1,
+            8
+          ]
+        },
+        {
+          "index": 236,
+          "property": "start",
+          "values": [
+            2019,
+            5,
+            1
+          ]
+        },
+        {
+          "index": 24,
+          "property": "start",
+          "values": [
+            851,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 25,
+          "property": "start",
+          "values": [
+            854,
+            11,
+            30
+          ]
+        },
+        {
+          "index": 26,
+          "property": "start",
+          "values": [
+            857,
+            2,
+            21
+          ]
+        },
+        {
+          "index": 27,
+          "property": "start",
+          "values": [
+            859,
+            4,
+            15
+          ]
+        },
+        {
+          "index": 28,
+          "property": "start",
+          "values": [
+            877,
+            4,
+            16
+          ]
+        },
+        {
+          "index": 29,
+          "property": "start",
+          "values": [
+            885,
+            2,
+            21
+          ]
+        },
+        {
+          "index": 3,
+          "property": "start",
+          "values": [
+            686,
+            7,
+            20
+          ]
+        },
+        {
+          "index": 30,
+          "property": "start",
+          "values": [
+            889,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 31,
+          "property": "start",
+          "values": [
+            898,
+            4,
+            26
+          ]
+        },
+        {
+          "index": 32,
+          "property": "start",
+          "values": [
+            901,
+            7,
+            15
+          ]
+        },
+        {
+          "index": 33,
+          "property": "start",
+          "values": [
+            923,
+            4,
+            11
+          ]
+        },
+        {
+          "index": 34,
+          "property": "start",
+          "values": [
+            931,
+            4,
+            26
+          ]
+        },
+        {
+          "index": 35,
+          "property": "start",
+          "values": [
+            938,
+            5,
+            22
+          ]
+        },
+        {
+          "index": 36,
+          "property": "start",
+          "values": [
+            947,
+            4,
+            22
+          ]
+        },
+        {
+          "index": 37,
+          "property": "start",
+          "values": [
+            957,
+            10,
+            27
+          ]
+        },
+        {
+          "index": 38,
+          "property": "start",
+          "values": [
+            961,
+            2,
+            16
+          ]
+        },
+        {
+          "index": 39,
+          "property": "start",
+          "values": [
+            964,
+            7,
+            10
+          ]
+        },
+        {
+          "index": 4,
+          "property": "start",
+          "values": [
+            701,
+            3,
+            21
+          ]
+        },
+        {
+          "index": 40,
+          "property": "start",
+          "values": [
+            968,
+            8,
+            13
+          ]
+        },
+        {
+          "index": 41,
+          "property": "start",
+          "values": [
+            970,
+            3,
+            25
+          ]
+        },
+        {
+          "index": 42,
+          "property": "start",
+          "values": [
+            973,
+            12,
+            20
+          ]
+        },
+        {
+          "index": 43,
+          "property": "start",
+          "values": [
+            976,
+            7,
+            13
+          ]
+        },
+        {
+          "index": 44,
+          "property": "start",
+          "values": [
+            978,
+            11,
+            29
+          ]
+        },
+        {
+          "index": 45,
+          "property": "start",
+          "values": [
+            983,
+            4,
+            15
+          ]
+        },
+        {
+          "index": 46,
+          "property": "start",
+          "values": [
+            985,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 47,
+          "property": "start",
+          "values": [
+            987,
+            4,
+            5
+          ]
+        },
+        {
+          "index": 48,
+          "property": "start",
+          "values": [
+            989,
+            8,
+            8
+          ]
+        },
+        {
+          "index": 49,
+          "property": "start",
+          "values": [
+            990,
+            11,
+            7
+          ]
+        },
+        {
+          "index": 5,
+          "property": "start",
+          "values": [
+            704,
+            5,
+            10
+          ]
+        },
+        {
+          "index": 50,
+          "property": "start",
+          "values": [
+            995,
+            2,
+            22
+          ]
+        },
+        {
+          "index": 51,
+          "property": "start",
+          "values": [
+            999,
+            1,
+            13
+          ]
+        },
+        {
+          "index": 52,
+          "property": "start",
+          "values": [
+            1004,
+            7,
+            20
+          ]
+        },
+        {
+          "index": 53,
+          "property": "start",
+          "values": [
+            1012,
+            12,
+            25
+          ]
+        },
+        {
+          "index": 54,
+          "property": "start",
+          "values": [
+            1017,
+            4,
+            23
+          ]
+        },
+        {
+          "index": 55,
+          "property": "start",
+          "values": [
+            1021,
+            2,
+            2
+          ]
+        },
+        {
+          "index": 56,
+          "property": "start",
+          "values": [
+            1024,
+            7,
+            13
+          ]
+        },
+        {
+          "index": 57,
+          "property": "start",
+          "values": [
+            1028,
+            7,
+            25
+          ]
+        },
+        {
+          "index": 58,
+          "property": "start",
+          "values": [
+            1037,
+            4,
+            21
+          ]
+        },
+        {
+          "index": 59,
+          "property": "start",
+          "values": [
+            1040,
+            11,
+            10
+          ]
+        },
+        {
+          "index": 6,
+          "property": "start",
+          "values": [
+            708,
+            1,
+            11
+          ]
+        },
+        {
+          "index": 60,
+          "property": "start",
+          "values": [
+            1044,
+            11,
+            24
+          ]
+        },
+        {
+          "index": 61,
+          "property": "start",
+          "values": [
+            1046,
+            4,
+            14
+          ]
+        },
+        {
+          "index": 62,
+          "property": "start",
+          "values": [
+            1053,
+            1,
+            11
+          ]
+        },
+        {
+          "index": 63,
+          "property": "start",
+          "values": [
+            1058,
+            8,
+            29
+          ]
+        },
+        {
+          "index": 64,
+          "property": "start",
+          "values": [
+            1065,
+            8,
+            2
+          ]
+        },
+        {
+          "index": 65,
+          "property": "start",
+          "values": [
+            1069,
+            4,
+            13
+          ]
+        },
+        {
+          "index": 66,
+          "property": "start",
+          "values": [
+            1074,
+            8,
+            23
+          ]
+        },
+        {
+          "index": 67,
+          "property": "start",
+          "values": [
+            1077,
+            11,
+            17
+          ]
+        },
+        {
+          "index": 68,
+          "property": "start",
+          "values": [
+            1081,
+            2,
+            10
+          ]
+        },
+        {
+          "index": 69,
+          "property": "start",
+          "values": [
+            1084,
+            2,
+            7
+          ]
+        },
+        {
+          "index": 7,
+          "property": "start",
+          "values": [
+            715,
+            9,
+            2
+          ]
+        },
+        {
+          "index": 70,
+          "property": "start",
+          "values": [
+            1087,
+            4,
+            7
+          ]
+        },
+        {
+          "index": 71,
+          "property": "start",
+          "values": [
+            1094,
+            12,
+            15
+          ]
+        },
+        {
+          "index": 72,
+          "property": "start",
+          "values": [
+            1096,
+            12,
+            17
+          ]
+        },
+        {
+          "index": 73,
+          "property": "start",
+          "values": [
+            1097,
+            11,
+            21
+          ]
+        },
+        {
+          "index": 74,
+          "property": "start",
+          "values": [
+            1099,
+            8,
+            28
+          ]
+        },
+        {
+          "index": 75,
+          "property": "start",
+          "values": [
+            1104,
+            2,
+            10
+          ]
+        },
+        {
+          "index": 76,
+          "property": "start",
+          "values": [
+            1106,
+            4,
+            9
+          ]
+        },
+        {
+          "index": 77,
+          "property": "start",
+          "values": [
+            1108,
+            8,
+            3
+          ]
+        },
+        {
+          "index": 78,
+          "property": "start",
+          "values": [
+            1110,
+            7,
+            13
+          ]
+        },
+        {
+          "index": 79,
+          "property": "start",
+          "values": [
+            1113,
+            7,
+            13
+          ]
+        },
+        {
+          "index": 8,
+          "property": "start",
+          "values": [
+            717,
+            11,
+            17
+          ]
+        },
+        {
+          "index": 80,
+          "property": "start",
+          "values": [
+            1118,
+            4,
+            3
+          ]
+        },
+        {
+          "index": 81,
+          "property": "start",
+          "values": [
+            1120,
+            4,
+            10
+          ]
+        },
+        {
+          "index": 82,
+          "property": "start",
+          "values": [
+            1124,
+            4,
+            3
+          ]
+        },
+        {
+          "index": 83,
+          "property": "start",
+          "values": [
+            1126,
+            1,
+            22
+          ]
+        },
+        {
+          "index": 84,
+          "property": "start",
+          "values": [
+            1131,
+            1,
+            29
+          ]
+        },
+        {
+          "index": 85,
+          "property": "start",
+          "values": [
+            1132,
+            8,
+            11
+          ]
+        },
+        {
+          "index": 86,
+          "property": "start",
+          "values": [
+            1135,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 87,
+          "property": "start",
+          "values": [
+            1141,
+            7,
+            10
+          ]
+        },
+        {
+          "index": 88,
+          "property": "start",
+          "values": [
+            1142,
+            4,
+            28
+          ]
+        },
+        {
+          "index": 89,
+          "property": "start",
+          "values": [
+            1144,
+            2,
+            23
+          ]
+        },
+        {
+          "index": 9,
+          "property": "start",
+          "values": [
+            724,
+            2,
+            4
+          ]
+        },
+        {
+          "index": 90,
+          "property": "start",
+          "values": [
+            1145,
+            7,
+            22
+          ]
+        },
+        {
+          "index": 91,
+          "property": "start",
+          "values": [
+            1151,
+            1,
+            26
+          ]
+        },
+        {
+          "index": 92,
+          "property": "start",
+          "values": [
+            1154,
+            10,
+            28
+          ]
+        },
+        {
+          "index": 93,
+          "property": "start",
+          "values": [
+            1156,
+            4,
+            27
+          ]
+        },
+        {
+          "index": 94,
+          "property": "start",
+          "values": [
+            1159,
+            4,
+            20
+          ]
+        },
+        {
+          "index": 95,
+          "property": "start",
+          "values": [
+            1160,
+            1,
+            10
+          ]
+        },
+        {
+          "index": 96,
+          "property": "start",
+          "values": [
+            1161,
+            9,
+            4
+          ]
+        },
+        {
+          "index": 97,
+          "property": "start",
+          "values": [
+            1163,
+            3,
+            29
+          ]
+        },
+        {
+          "index": 98,
+          "property": "start",
+          "values": [
+            1165,
+            6,
+            5
+          ]
+        },
+        {
+          "index": 99,
+          "property": "start",
+          "values": [
+            1166,
+            8,
+            27
+          ]
+        }
+      ]
+    },
+    {
+      "name": "persian",
+      "hasEras": true,
+      "eras": 1,
+      "maximumIndex": 0,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "start",
+          "values": [
+            622,
+            3,
+            21
+          ]
+        }
+      ]
+    },
+    {
+      "name": "roc",
+      "hasEras": true,
+      "eras": 2,
+      "maximumIndex": 1,
+      "allNamesImplicitlyTrue": true,
+      "noTrailingEmptyIndex": true,
+      "fields": [
+        {
+          "index": 0,
+          "property": "end",
+          "values": [
+            1911,
+            12,
+            31
+          ]
+        },
+        {
+          "index": 1,
+          "property": "start",
+          "values": [
+            1912,
+            1,
+            1
+          ]
+        }
+      ]
+    }
+  ],
+  "scopes": [
+    {
+      "id": "B8TCAE-E01",
+      "branch": "10",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "40"
+      ],
+      "reason": "Existing valid era iteration cannot fail on the fixed mapped table."
+    },
+    {
+      "id": "B8TCAE-E02",
+      "branch": "11",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "45",
+        "46"
+      ],
+      "reason": "Every actual key is a complete unique nonnegative signed32 decimal index."
+    },
+    {
+      "id": "B8TCAE-E03",
+      "branch": "13",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "50",
+        "51"
+      ],
+      "reason": "Validated unique keys have unique parsed indices."
+    },
+    {
+      "id": "B8TCAE-E04",
+      "branch": "14",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "58"
+      ],
+      "reason": "Existing validated property iteration cannot fail on mapped resources."
+    },
+    {
+      "id": "B8TCAE-E05",
+      "branch": "16",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "64"
+      ],
+      "reason": "Every start property is a real int-vector node."
+    },
+    {
+      "id": "B8TCAE-E06",
+      "branch": "17",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "70",
+        "71"
+      ],
+      "reason": "Every fixed start vector has three valid bounded date components."
+    },
+    {
+      "id": "B8TCAE-E07",
+      "branch": "19",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "74",
+        "75",
+        "76"
+      ],
+      "reason": "No mapped era property is named; nested branch20 both alternatives are dormant."
+    },
+    {
+      "id": "B8TCAE-E08",
+      "branch": "21",
+      "arms": [
+        1
+      ],
+      "statements": [],
+      "reason": "After excluding start and named, every actual remaining property is end."
+    },
+    {
+      "id": "B8TCAE-E09",
+      "branch": "24",
+      "arms": [
+        1
+      ],
+      "statements": [
+        "87",
+        "88"
+      ],
+      "reason": "No named property changes hasName; nested branch26 both alternatives are dormant."
+    },
+    {
+      "id": "B8TCAE-E10",
+      "branch": "25",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "85",
+        "86"
+      ],
+      "reason": "firstTentativeIdx stays INT32_MAX while every actual index is smaller."
+    },
+    {
+      "id": "B8TCAE-E11",
+      "branch": "28",
+      "arms": [
+        0,
+        1
+      ],
+      "statements": [
+        "92",
+        "93"
+      ],
+      "reason": "The tentative-removal loop cannot enter because firstTentativeIdx remains INT32_MAX; annotate only its nested unreachable if, retaining the loop condition."
+    },
+    {
+      "id": "B8TCAE-E12a",
+      "branch": null,
+      "arms": [],
+      "statements": [
+        "94"
+      ],
+      "reason": "Same unreachable tentative-removal body; retain the while guard."
+    },
+    {
+      "id": "B8TCAE-E12b",
+      "branch": null,
+      "arms": [],
+      "statements": [
+        "96"
+      ],
+      "reason": "The highest mapped era always has a nonzero encoded start or end sentinel, so trailing-zero trim cannot enter."
+    },
+    {
+      "id": "B8TCAE-E13",
+      "branch": "48",
+      "arms": [
+        1
+      ],
+      "statements": [],
+      "reason": "Actual createDefault clones a non-null TimeZone or throws; native allocator-null returns and invalid clone overrides are outside this browser binding."
+    },
+    {
+      "id": "B8TCAE-E14",
+      "branch": "50",
+      "arms": [
+        0
+      ],
+      "statements": [
+        "170"
+      ],
+      "reason": "The preceding successful Grego conversion supplies month0..11 and day1..31; getEraCode can only change status for invalid month/day."
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/external/icu/source/i18n/erarules.ts": "fabeb72afa042da0234964e55f589e79cc1c3059776f43ca0ad3d43dffb2db63",
+    "apps/office/src/external/icu/source/common/uresdata.package.ts": "a6d9cbd371d7bfa87e17b244378ae79de464a94dc3dc95d0ee81a2d60d12a941",
+    "apps/office/src/external/icu/source/common/uresbund.ts": "5c149b1a0483d051315aec35709089b2bf0174a17fac0d6b791256275766908b",
+    "apps/office/src/external/icu/source/i18n/gregoimp.ts": "07d01a163a4861ad44787bf1a87e2f39eac2d58c55ac9ce48cc637079ce5492b",
+    "apps/office/src/external/icu/source/i18n/timezone.default.ts": "067196a55c171f7e657acbce71fbcae259635c44c6637f33bced7dbe2e4dabd3",
+    "vendor/icu-reference/source/i18n/erarules.cpp": "c3fed7e02ac23a913e7d893b871da6224c0fb4d323c38b3d3ae73ade8f8b332d"
+  },
+  "scopeBoundary": "Fixed immutable mapped default package, original successful resource readers, constructor-owned era table and actual non-null clone contracts. External packages, mutated private resources, native OOM and invalid callback overrides are not certified. The reachable failed host-clock conversion remains covered, not excluded.",
+  "upstreamDefectSuspected": false
+}
