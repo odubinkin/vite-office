@@ -4,7 +4,7 @@ title: "Close integrated runtime coverage gaps without changing upstream behavio
 status: "DOING"
 priority: "high"
 owner: "CODER"
-revision: 67
+revision: 68
 origin:
   system: "manual"
 depends_on: []
@@ -42,7 +42,7 @@ events:
     state: "needs_rework"
     note: "Current approved SAX/MD4C scopes and all focused assertions/checks pass; diagnostic coverage remains incomplete across210 owners (99.06% statements,97.96% branches). Continue approved full100 work; final npm run verify and branch synchronization are not yet complete."
 doc_version: 3
-doc_updated_at: "2026-10-29T06:31:04.298Z"
+doc_updated_at: "2026-10-29T07:21:19.470Z"
 doc_updated_by: "CODER"
 description: "User explicitly approved expanding the integration work to100 percent coverage, with individually reviewed unreachable branches. Add meaningful source-backed regression tests for the255-file diagnostic gap set, repair actual bugs from evidence, preserve coverage thresholds and native contracts, record suspected upstream issues, and validate current-code full coverage before unblocking the integration publication task."
 sections:
@@ -246,6 +246,10 @@ sections:
     - Command: public zero-particle input regressions using actual compiled MMMM format and incoming DATE. Result: pass (74 targeted date tests now). Evidence: January remains text and TRUE/FALSE remain logical; original private GetDateRef is not part of their admitted conversion path. Scope: D02 call-graph proposal is prepared but unapplied pending a separate human decision; four statements/three alternatives are its complete proposed scope. No guard/case is removed and no private field mutation is introduced.
     - Standing human authorization on2026-10-29 supersedes individual exception questions: independently prove and apply unreachable coverage exceptions, preserve exact scope/runtime behavior and strict100 thresholds, and document suspected upstream bugs when they cause unreachability. Missing tests or low counters alone remain insufficient. Plan and Verify Steps updated through the CLI and re-approved; CODER resumed. D02 is authorized under this rule but not yet applied.
     - Command: current date-phase typecheck, focused ESLint, JSDoc, source provenance, invariants and focused formatting. Result: pass. Scope: real public date/logical regressions, D01 annotation and evidence metadata. Whole-project verifier/publication/back-merges remain outstanding.
+
+    - Observation: Standing user authorization now permits independently proven unreachable coverage exceptions without repeated questions; suspected upstream bugs must still be documented. D02-D11 preserve every GetDateRef runtime token and guard. Exact positional remapping removes only19 zero-hit statements and12 zero-hit alternatives and retains every216 previously positive statement position and123 alternatives.
+      Impact: Fresh44 consumer suites /731 tests reach strict100% for this owner (222 statements,131 alternatives,1 function,215 lines). The diagnostic current-map union is99.09% statements /98.01% branches /100% functions with209 incomplete owners; it is not final full verification.
+      Resolution: D02 call-graph assumptions remain in CALC-392; D03-D11 ordinary closed-domain guards have audit evidence rather than invented upstream defects. Typecheck, lint, JSDoc, source provenance, inventory invariants, focused formatting and policy routing pass. Continue remaining coverage before main publication and reverse merges.
 id_source: "generated"
 ---
 ## Summary
@@ -465,3 +469,7 @@ Human separately approved A02, A03 and A06 and requested documentation of upstre
 - Command: public zero-particle input regressions using actual compiled MMMM format and incoming DATE. Result: pass (74 targeted date tests now). Evidence: January remains text and TRUE/FALSE remain logical; original private GetDateRef is not part of their admitted conversion path. Scope: D02 call-graph proposal is prepared but unapplied pending a separate human decision; four statements/three alternatives are its complete proposed scope. No guard/case is removed and no private field mutation is introduced.
 - Standing human authorization on2026-10-29 supersedes individual exception questions: independently prove and apply unreachable coverage exceptions, preserve exact scope/runtime behavior and strict100 thresholds, and document suspected upstream bugs when they cause unreachability. Missing tests or low counters alone remain insufficient. Plan and Verify Steps updated through the CLI and re-approved; CODER resumed. D02 is authorized under this rule but not yet applied.
 - Command: current date-phase typecheck, focused ESLint, JSDoc, source provenance, invariants and focused formatting. Result: pass. Scope: real public date/logical regressions, D01 annotation and evidence metadata. Whole-project verifier/publication/back-merges remain outstanding.
+
+- Observation: Standing user authorization now permits independently proven unreachable coverage exceptions without repeated questions; suspected upstream bugs must still be documented. D02-D11 preserve every GetDateRef runtime token and guard. Exact positional remapping removes only19 zero-hit statements and12 zero-hit alternatives and retains every216 previously positive statement position and123 alternatives.
+  Impact: Fresh44 consumer suites /731 tests reach strict100% for this owner (222 statements,131 alternatives,1 function,215 lines). The diagnostic current-map union is99.09% statements /98.01% branches /100% functions with209 incomplete owners; it is not final full verification.
+  Resolution: D02 call-graph assumptions remain in CALC-392; D03-D11 ordinary closed-domain guards have audit evidence rather than invented upstream defects. Typecheck, lint, JSDoc, source provenance, inventory invariants, focused formatting and policy routing pass. Continue remaining coverage before main publication and reverse merges.

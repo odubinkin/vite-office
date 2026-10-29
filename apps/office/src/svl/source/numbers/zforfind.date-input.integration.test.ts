@@ -16,6 +16,10 @@ beforeAll(
 it.each([
   ["January", ""],
   ["January", "MMMM"],
+  ["10 January", 'MMMM" "DD'],
+  ["10 January 2025", ""],
+  ["10 January 2025 08:23", ""],
+  ["2025/12 08:23", 'YYYY"/"MM" "HH:MM'],
   ["2025 10 January", ""],
   ["2025 10 January 08:23", ""],
   ["02/30/2025", ""],
@@ -73,6 +77,11 @@ it.each([
 );
 afterAll(/** Restores the host clock. @returns Nothing. */ () => vi.useRealTimers());
 const dates = [
+  [0x0409, "10/", 'DD"/"', E.International, 2024, 6, 10],
+  [0x0409, "12|31", 'QQ"|"QQ', E.Format, 2024, 12, 31],
+  [0x0407, "31|12", 'QQ"|"QQ', E.Format, 2024, 12, 31],
+  [0x0411, "12|31", 'YYYY"|"QQ', E.Format, 2024, 12, 31],
+  [0x0409, "12/10 08:23", 'YYYY"/"MM" "HH:MM', E.Format, 2012, 10, 1, 8, 23],
   [0x0407, "29.2.23", 'JJ.MM.TT" tag"', E.InternationalThenFormat, 2029, 2, 23],
   // Accepted locale particles may override a three-field order; a quarter-only
   // tail supplies a genuine date format whose exact order has only the year.

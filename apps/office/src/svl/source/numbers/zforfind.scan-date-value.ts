@@ -98,6 +98,7 @@ export function GetDateRef(
     switch (
       state.nNumericsCnt // count of numbers in string
     ) {
+      /* istanbul ignore next -- B8TCAE-D02: the original zero-numeric classification exits as logical/text before date conversion. */
       case 0: // none
         if (state.nMonthPos) // only month (Jan)
         {
@@ -154,6 +155,7 @@ export function GetDateRef(
               case DateOrder.DMY:
                 pCal.setValue(C.YEAR, this["ImplGetYear"](0));
                 break;
+              /* istanbul ignore next -- B8TCAE-D03: actual short-order producers return only MDY, DMY or YMD. */
               default:
                 res = false;
                 break;
@@ -173,6 +175,7 @@ export function GetDateRef(
                 break;
             }
             break;
+          /* istanbul ignore next -- B8TCAE-D08: single-numeric classification calls only start/end scanners, yielding positions 0, 1 or 3. */
           default:
             res = false;
             break;
@@ -217,6 +220,7 @@ export function GetDateRef(
                   case 68:
                     pCal.setValue(C.DAY_OF_MONTH, this["ImplGetDay"](0));
                     break;
+                  /* istanbul ignore next -- B8TCAE-D04: an exact two-byte order contains only source-filtered D, M or Y bytes. */
                   default:
                     bHadExact = false;
                 }
@@ -230,6 +234,7 @@ export function GetDateRef(
                   case 68:
                     pCal.setValue(C.DAY_OF_MONTH, this["ImplGetDay"](1));
                     break;
+                  /* istanbul ignore next -- B8TCAE-D05: an exact two-byte order contains only source-filtered D, M or Y bytes. */
                   default:
                     bHadExact = false;
                 }
@@ -282,6 +287,7 @@ export function GetDateRef(
                       pCal.setValue(C.YEAR, this["ImplGetYear"](0));
                     }
                     break;
+                  /* istanbul ignore next -- B8TCAE-D06: actual short-order producers return only MDY, DMY or YMD. */
                   default:
                     res = false;
                     break;
@@ -332,6 +338,7 @@ export function GetDateRef(
               pCal.setValue(C.YEAR, this["ImplGetYear"](0));
             }
             break;
+          /* istanbul ignore next -- B8TCAE-D09: all original month-position assignments yield only 0, 1, 2 or 3. */
           default:
             res = false;
             break;
@@ -372,6 +379,7 @@ export function GetDateRef(
                 pCal.setValue(C.MONTH, this["ImplGetMonth"](1));
                 pCal.setValue(C.YEAR, this["ImplGetYear"](0));
                 break;
+              /* istanbul ignore next -- B8TCAE-D07: the ISO override or the closed short-order producer yields only MDY, DMY or YMD. */
               default:
                 res = false;
                 break;
@@ -424,6 +432,7 @@ export function GetDateRef(
               pCal.setValue(C.YEAR, this["ImplGetYear"](0));
             }
             break;
+          /* istanbul ignore next -- B8TCAE-D10: all original month-position assignments yield only 0, 1, 2 or 3. */
           default:
             nCounter[0] = 2;
             res = false;
@@ -432,7 +441,9 @@ export function GetDateRef(
         break;
     } // switch (state.nNumericsCnt)
 
-    if (state.mbEraCE != true) pCal.setValue(C.ERA, state.mbEraCE ? 1 : 0);
+    // B8TCAE-D11: the guarded Boolean is false; the CE alternative is unreachable.
+    if (state.mbEraCE != true)
+      pCal.setValue(C.ERA, state.mbEraCE ? /* istanbul ignore next */ 1 : 0);
 
     if (res && pCal.isValid()) {
       const fDiff = DateTime.Sub(new DateTime(state.maNullDate), pCal.getEpochStart());
