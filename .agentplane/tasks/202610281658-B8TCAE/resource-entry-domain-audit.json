@@ -1,0 +1,283 @@
+{
+  "authorization": "Standing human authorization for independently proven unreachable coverage cases; no threshold/data/algorithm changes.",
+  "path": "apps/office/src/external/icu/source/common/uresbund.entries.ts",
+  "defaultPackage": {
+    "path": "apps/office/src/external/icu/source/data/in/icudt78l.resources.json",
+    "sha256": "da045cc7f72abd3b651b6270600accd81a1dc17317da08857f5d4a838d412f74",
+    "bundles": 982,
+    "pool": [
+      123388,
+      1,
+      0,
+      1
+    ],
+    "rootPresent": true,
+    "aliases": {
+      "ars": "ar_SA",
+      "az_AZ": "az_Latn_AZ",
+      "bs_BA": "bs_Latn_BA",
+      "en_NH": "en_VU",
+      "en_RH": "en_ZW",
+      "ff_CM": "ff_Latn_CM",
+      "ff_GN": "ff_Latn_GN",
+      "ff_MR": "ff_Latn_MR",
+      "ff_SN": "ff_Latn_SN",
+      "in": "id",
+      "in_ID": "id_ID",
+      "iw": "he",
+      "iw_IL": "he_IL",
+      "ks_IN": "ks_Arab_IN",
+      "ku_SY": "ku_Latn_SY",
+      "kxv_IN": "kxv_Latn_IN",
+      "mni_IN": "mni_Beng_IN",
+      "mo": "ro",
+      "no_NO": "no",
+      "no_NO_NY": "nn_NO",
+      "pa_IN": "pa_Guru_IN",
+      "pa_PK": "pa_Arab_PK",
+      "sat_IN": "sat_Olck_IN",
+      "sd_IN": "sd_Deva_IN",
+      "sd_PK": "sd_Arab_PK",
+      "sh": "sr_Latn",
+      "sh_BA": "sr_Latn_BA",
+      "sh_CS": "sr_Latn_RS",
+      "sh_YU": "sr_Latn_RS",
+      "shi_MA": "shi_Tfng_MA",
+      "sr_BA": "sr_Cyrl_BA",
+      "sr_CS": "sr_RS",
+      "sr_Cyrl_CS": "sr_Cyrl_RS",
+      "sr_Cyrl_YU": "sr_Cyrl_RS",
+      "sr_Latn_CS": "sr_Latn_RS",
+      "sr_Latn_YU": "sr_Latn_RS",
+      "sr_ME": "sr_Latn_ME",
+      "sr_RS": "sr_Cyrl_RS",
+      "sr_XK": "sr_Cyrl_XK",
+      "sr_YU": "sr_RS",
+      "su_ID": "su_Latn_ID",
+      "tl": "fil",
+      "tl_PH": "fil_PH",
+      "uz_AF": "uz_Arab_AF",
+      "uz_UZ": "uz_Latn_UZ",
+      "vai_LR": "vai_Vaii_LR",
+      "yue_CN": "yue_Hans_CN",
+      "yue_HK": "yue_Hant_HK",
+      "zh_CN": "zh_Hans_CN",
+      "zh_HK": "zh_Hant_HK",
+      "zh_MO": "zh_Hant_MO",
+      "zh_SG": "zh_Hans_SG",
+      "zh_TW": "zh_Hant_TW"
+    },
+    "maximumAliasDepth": 2,
+    "acyclic": true
+  },
+  "errorDomain": "For a nonfailed entry status, actual res_load has only three explicit positive-error assignments: illegal null/empty names or missing-file access. init_entry normalizes names and converts loading errors to a negative fallback warning. Its only remaining positive-error source is getPoolEntry validation, contradicted by the fixed pool tuple and the complete original native package witness. Induction over finite alias/pool recursion yields only success/warning; host allocation exceptions are not native null/status returns. Incoming failures remain handled and tested at their actual entry points.",
+  "nativeEvidence": {
+    "report": "test-results/native/B8TCAE-icu/resource-fallback-comparison.json",
+    "sha256": "68ea7013af8feff350f11ec9ac4ceed2d17f30070f9097a27bc353af10f3b7f9",
+    "portableRows": 14420,
+    "fixture": "apps/office/src/external/icu/source/common/resource-fallback.native-observations.json",
+    "fixtureSha256": "5b8c38ce27778082fb426c5920191c0a8b2f35589693e97fd3ea5967771a491e"
+  },
+  "scopes": [
+    {
+      "id": "B8TCAE-P01",
+      "branch": 11,
+      "arm": 0,
+      "statements": [
+        "26"
+      ],
+      "reason": "res_load writes only illegal-argument/file-access errors, never memory status; failed incoming status already returns before loading."
+    },
+    {
+      "id": "B8TCAE-P02",
+      "branch": 13,
+      "arm": 0,
+      "statements": [
+        "32"
+      ],
+      "reason": "Validated immutable pool exists, is non-bogus, has isPoolBundle and never recursively uses the pool."
+    },
+    {
+      "id": "B8TCAE-P03",
+      "branch": 14,
+      "arm": 1,
+      "statements": [],
+      "reason": "After the same successful pool load, the status cannot be a failure."
+    },
+    {
+      "id": "B8TCAE-P04",
+      "branch": 17,
+      "arm": 1,
+      "statements": [
+        "40",
+        "41"
+      ],
+      "reason": "Synchronous private Map insertion has no callbacks/concurrency; all53 default-package file aliases are acyclic and cannot reinsert an in-flight filename. Native race/other-package alias behavior remains outside the binding."
+    },
+    {
+      "id": "B8TCAE-P05",
+      "branch": 20,
+      "arm": 0,
+      "statements": [
+        "50"
+      ],
+      "reason": "The actual pool entry is present/non-bogus/isPoolBundle; its tuple and native package checksums are validated."
+    },
+    {
+      "id": "B8TCAE-P06",
+      "branch": 33,
+      "arm": 0,
+      "statements": [
+        "86",
+        "87"
+      ],
+      "reason": "Fresh parentStatus starts0; by induction init_entry returns only success/warning for this fixed valid pool and default package, or throws."
+    },
+    {
+      "id": "B8TCAE-P07",
+      "branch": 35,
+      "arm": 0,
+      "statements": [
+        "93"
+      ],
+      "reason": "Both private insertRootBundle callers enter only after checked successful entry initialization/parent loading."
+    },
+    {
+      "id": "B8TCAE-P08",
+      "branch": 36,
+      "arm": 0,
+      "statements": [
+        "97",
+        "98"
+      ],
+      "reason": "Fresh local status starts0 and the immutable root exists; init_entry cannot produce a positive error."
+    },
+    {
+      "id": "B8TCAE-P09",
+      "branch": 38,
+      "arm": 0,
+      "statements": [
+        "116",
+        "117"
+      ],
+      "reason": "Fresh entry search starts0 and can produce only success or fallback warning, never memory status."
+    },
+    {
+      "id": "B8TCAE-P10",
+      "branch": 42,
+      "arm": 0,
+      "statements": [
+        "124"
+      ],
+      "reason": "The outer status is checked initially and parent loading cannot fail under the fixed backend."
+    },
+    {
+      "id": "B8TCAE-P11",
+      "branch": 45,
+      "arm": 0,
+      "statements": [
+        "130",
+        "131"
+      ],
+      "reason": "Default-locale search preserves the same non-memory status domain, including unknown/default/root names."
+    },
+    {
+      "id": "B8TCAE-P12",
+      "branch": 49,
+      "arm": 0,
+      "statements": [
+        "140"
+      ],
+      "reason": "The second parent load has the same successful backend/status preconditions."
+    },
+    {
+      "id": "B8TCAE-P13",
+      "branch": 51,
+      "arm": 0,
+      "statements": [
+        "146",
+        "147"
+      ],
+      "reason": "Final root search has a fresh nonfailed status and cannot produce memory status."
+    },
+    {
+      "id": "B8TCAE-P14",
+      "branch": 52,
+      "arm": 1,
+      "statements": [
+        "152",
+        "153"
+      ],
+      "reason": "Final root search necessarily finds the actual root bundle."
+    },
+    {
+      "id": "B8TCAE-P15",
+      "branch": 55,
+      "arm": 0,
+      "statements": [
+        "157"
+      ],
+      "reason": "Private root insertion cannot fail with the checked status and immutable root."
+    },
+    {
+      "id": "B8TCAE-P16",
+      "branch": 56,
+      "arm": 0,
+      "statements": [
+        "160"
+      ],
+      "reason": "Pure local flow sets hasRealData=true whenever r becomes non-null; this arm is entered only from the non-null-r else path."
+    },
+    {
+      "id": "B8TCAE-P17",
+      "branch": 58,
+      "arm": 1,
+      "statements": [
+        "168"
+      ],
+      "reason": "Successful function entry and all represented operations leave status nonfailed; retain its guard, normal return and the separate unreachable final return."
+    },
+    {
+      "id": "B8TCAE-P18",
+      "branch": 63,
+      "arm": 1,
+      "statements": [
+        "180"
+      ],
+      "reason": "Direct open checks incoming status before init_entry, which cannot produce a new positive error in this backend."
+    },
+    {
+      "id": "B8TCAE-P19",
+      "branch": 67,
+      "arm": 1,
+      "statements": [],
+      "reason": "The disjunction succeeds by short-circuit or successful loadParentsExceptRoot; that call cannot fail here."
+    },
+    {
+      "id": "B8TCAE-P20",
+      "branch": 71,
+      "arm": 0,
+      "statements": [
+        "188"
+      ],
+      "reason": "The same direct-open path has no represented source of a positive status."
+    },
+    {
+      "id": "B8TCAE-P21",
+      "branch": null,
+      "arm": null,
+      "statements": [
+        "207"
+      ],
+      "reason": "init_entry returns the final non-alias target; fAlias is assigned only during construction before cache insertion. Its adopted target therefore cannot itself have an alias. Retain the while condition; exclude only its unreachable advance statement."
+    }
+  ],
+  "sourceHashes": {
+    "apps/office/src/external/icu/source/common/uresbund.entries.ts": "9af4bc6d772e4b2cc9f8910193c08f3f71aad592dcf8f1e4ebe688b9276a6548",
+    "apps/office/src/external/icu/source/common/uresdata.package.ts": "a6d9cbd371d7bfa87e17b244378ae79de464a94dc3dc95d0ee81a2d60d12a941",
+    "apps/office/src/external/icu/source/common/uresimp.ts": "34c05e465bcdcef3e935fb7659748f68f588ea47b4d7c6095d6d0804b652238e",
+    "vendor/icu-reference/source/common/uresbund.cpp": "45a35f13e9552aabf60f184299df9b1eb6195e15080b98dc7380b94d239a9fb3"
+  },
+  "upstreamDefectSuspected": false,
+  "limits": "Concrete synchronous default-package backend and valid original cache ownership. Native OOM, concurrent insertion, external packages, corrupted mapped resources/private entries and invalid refcount lifetimes are not certified. Existing native alias/self-parent observations are preserved; no general upstream race/alias guard is declared erroneous."
+}
