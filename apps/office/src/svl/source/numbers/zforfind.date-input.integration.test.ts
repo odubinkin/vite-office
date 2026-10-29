@@ -71,6 +71,9 @@ it.each([
 );
 afterAll(/** Restores the host clock. @returns Nothing. */ () => vi.useRealTimers());
 const dates = [
+  [0x0426, "2025 10 janvāris", "", E.International, 2025, 1, 10],
+  [0x0426, "2025 10 janvāris 08:23", "", E.International, 2025, 1, 10, 8, 23],
+
   [0x0409, "12/31/2024", "YYYY-MM-DD", E.InternationalThenFormat, 2024, 12, 31],
   // Original invalid day fragments fall through to short-year expansion, not a guessed day.
   [0x0409, "January 32", "", E.International, 2032, 1, 1],

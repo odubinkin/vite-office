@@ -1,0 +1,14 @@
+--- a/apps/office/src/external/md4c/src/md4c.ref.ts
++++ b/apps/office/src/external/md4c/src/md4c.ref.ts
+@@ -191,7 +191,11 @@
+ ): { readonly end: number; readonly attr: MD_LINK_ATTR } | undefined {
+   const text = ctx.text,
+     found = md_lookup_line(beg, lines);
++  /* istanbul ignore if -- B8TCAE-A03: the original caller supplies the covering paragraph line; native code assumes its lookup index. */
+   if (found === undefined) return undefined;
++  else {
++    // Keep the ordinary covered path explicit for exact source-map accounting.
++  }
+   let lineIndex = found[1],
+     off = beg + 1;
+   while (off < (lines[lineIndex] as MD_LINE).end && ISWHITESPACE_(text[off] as number)) off++;

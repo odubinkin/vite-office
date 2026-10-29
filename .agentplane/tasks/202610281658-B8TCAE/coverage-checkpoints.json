@@ -1694,5 +1694,106 @@
     "lintPassed": true,
     "formatPassed": true,
     "jsdocPassed": true
+  },
+  "latvianDateOrderAndResourceStatus": {
+    "dateProfile": "apps/office/coverage/integration-latvian-date-order",
+    "dateTests": 65,
+    "resourceProfile": "apps/office/coverage/integration-resource-status-boundaries",
+    "resourceTestFiles": 5,
+    "resourceTests": 52,
+    "allAssertionsPassed": true,
+    "localeAudit": "locale-date-order-audit.json",
+    "auditedLocales": 284,
+    "ydmLocales": [
+      "lv_LV"
+    ],
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "typecheckPassed": true,
+    "lintFocusedPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true,
+    "fullVerifierPassed": false,
+    "formatFocusedPassed": true
+  },
+  "calendarWeekDateNativeCalls": {
+    "originalCases": 23731,
+    "totalCases": 23784,
+    "addedCases": 53,
+    "originalCasesPreserved": true,
+    "sourceHashesUnchanged": true,
+    "libraryHashesUnchanged": true,
+    "proof": "calendar-week-date-native-proof.json",
+    "scope": "Actual C++ SDK subclass uses ordinary field/week settings and explicit protected base calls. Three astronomical month starts remain inside original numeric limits and naturally select forward lunar search. No algorithm/private state replacement or remote-date astronomical accuracy claim. Runtime sources unchanged.",
+    "fullVerifierPassed": false,
+    "addedByKind": {
+      "E": 10,
+      "B": 4,
+      "W": 36,
+      "Q": 3
+    },
+    "portableReplayPassed": true,
+    "replayTestFiles": 1,
+    "replayTests": 18,
+    "rawReport": "apps/office/coverage/integration-calendar-native-contracts/coverage-final.json",
+    "rawReportSha256": "f1854dcd5dfb90425c4259f50c792ec8799f4201d9fbba8ac02ba4efd101bf4b",
+    "coverageExceptionsApplied": false,
+    "productionSourcesChanged": false,
+    "diagnosticUnion": {
+      "lines": {
+        "total": 108168,
+        "covered": 107441,
+        "skipped": 0,
+        "pct": 99.32
+      },
+      "statements": {
+        "total": 119507,
+        "covered": 118271,
+        "skipped": 0,
+        "pct": 98.96
+      },
+      "functions": {
+        "total": 18429,
+        "covered": 18429,
+        "skipped": 0,
+        "pct": 100
+      },
+      "branches": {
+        "total": 74577,
+        "covered": 72927,
+        "skipped": 0,
+        "pct": 97.78
+      },
+      "branchesTrue": {
+        "total": 0,
+        "covered": 0,
+        "skipped": 0,
+        "pct": "Unknown"
+      }
+    },
+    "remainingOwners": 222,
+    "typecheckPassed": true,
+    "lintFocusedPassed": true,
+    "formatFocusedPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true
+  },
+  "calendarClearMonthAfterTime": {
+    "report": "apps/office/coverage/integration-calendar-clear-month",
+    "testFiles": 1,
+    "tests": 12,
+    "allAssertionsPassed": true,
+    "scope": "Both MONTH and ORDINAL_MONTH clears immediately after setTime materialize the actual fields, retain independent civil year/day/clock and clear paired month stamps. Expected Gregorian time comes from Date.UTC.",
+    "productionSourcesChanged": false,
+    "coverageExceptionsApplied": false,
+    "fullVerifierPassed": false,
+    "typecheckPassed": true,
+    "lintFocusedPassed": true,
+    "formatFocusedPassed": true,
+    "jsdocPassed": true,
+    "sourceProvenancePassed": true,
+    "invariantsPassed": true
   }
 }

@@ -1,0 +1,1434 @@
+{
+  "count": 284,
+  "unknownShort": [],
+  "unknownLong": [],
+  "ydm": [
+    {
+      "locale": "lv_LV_",
+      "shortOrder": 1,
+      "longOrder": 3
+    }
+  ],
+  "observations": [
+    {
+      "locale": "en_US_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_AU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_BZ_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_CA_",
+      "shortOrder": 2,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_GB_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_IE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_JM_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_NZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_PH_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_TT_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_ZW_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "en_NA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_GH_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_MW_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_GM_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_BW_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_ZM_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_LK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_NG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_KE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_DK_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_MU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_GY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_AR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_BO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_CL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_CO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_CR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_DO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_EC_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_GT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_HN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_MX_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_NI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_PA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_PE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_PR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_PY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_SV_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_UY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "es_VE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "gl_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_ES_oc-ES-aranes",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ext_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "de_DE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "de_AT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "de_CH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "de_LI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "de_LU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_FR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_BE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_CA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_CH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_LU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_MC_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_BF_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_CI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_ML_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_SN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_BJ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_NE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_TG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fr_GN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "it_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "it_CH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sl_SI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sv_SE_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "sv_FI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ca_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_ES_ca-ES-valencia",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "cs_CZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sk_SK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "da_DK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "el_GR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fi_FI_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "is_IS_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "nl_BE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "nl_NL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "no_NO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "nn_NO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "nb_NO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "nds_DE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pl_PL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pt_PT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pt_BR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pt_MZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ru_RU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tr_TR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tt_RU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "et_EE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "vro_EE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lb_LU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lt_LT_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "lv_LV_",
+      "shortOrder": 1,
+      "longOrder": 3
+    },
+    {
+      "locale": "uk_UA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ro_MD_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ro_RO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "cy_GB_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "bg_BG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_ME_sr-Latn-ME",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_RS_sr-Latn-RS",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_CS_sr-Latn-CS",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sr_ME_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sr_RS_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sr_CS_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "hr_HR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "bs_BA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "eu_ES_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "fo_FO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ga_IE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "gd_GB_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ka_GE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "be_BY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "kl_GL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "mk_MK_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "br_FR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "la_VA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "cv_RU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "wa_BE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fur_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "gsc_FR_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fy_NL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_FR_oc-FR-lengadoc",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "mt_MT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sc_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ast_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ltg_LV_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "hsb_DE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "dsb_DE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "rue_SK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "an_ES_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "myv_RU_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "lld_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "cu_RU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "vec_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "szl_PL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lij_IT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "gos_NL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sq_AL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ja_JP_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "ko_KR_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "zh_CN_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "zh_HK_",
+      "shortOrder": 1,
+      "longOrder": 2
+    },
+    {
+      "locale": "zh_SG_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "zh_TW_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "zh_MO_",
+      "shortOrder": 1,
+      "longOrder": 2
+    },
+    {
+      "locale": "en_HK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_EG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_DZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_LB_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_SA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_TN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "he_IL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "hi_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "kn_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "ta_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "te_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "gu_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "mr_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "pa_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "bn_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "or_IN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_IN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ml_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "bn_BD_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "th_TH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "af_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "hu_HU_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "id_ID_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ms_MY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_MY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ia__",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_MN_mn-Cyrl-MN",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_MN_mn-Mong-MN",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "az_AZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sw_TZ_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "km_KH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lo_LA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "rw_RW_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "eo__",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "dz_BT_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "ne_NP_",
+      "shortOrder": 2,
+      "longOrder": 0
+    },
+    {
+      "locale": "zu_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "nso_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "vi_VN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tn_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "xh_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "st_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ss_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ve_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "nr_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ts_ZA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_TR_kmr-Latn-TR",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "ak_GH_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "af_NA_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "am_ET_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ti_ER_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "tg_TJ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ky_KG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "kk_KZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "fa_IR_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_GH_ha-Latn-GH",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "ee_GH_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "sg_CF_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lg_UG_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "uz_UZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ln_CD_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "hy_AM_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "hil_PH_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "so_SO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "gug_PY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tk_TM_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "my_MM_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "shs_CA_",
+      "shortOrder": 2,
+      "longOrder": 0
+    },
+    {
+      "locale": "tpi_PG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_OM_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ug_CN_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "om_ET_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "plt_MG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "mai_IN_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "yi_US_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "haw_US_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "lif_NP_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ur_PK_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ht_HT_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "jbo__",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "kab_DZ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pt_AO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pjt_AU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pap_BQ_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "pap_CW_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ebo_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tyx_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "axk_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "beq_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "bkw_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "bvx_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "dde_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "iyx_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "kkw_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "kng_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ldi_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "mdw_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "mkw_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "njx_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ngz_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "njy_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "puu_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sdj_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tek_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "tsa_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "vif_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "xku_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "yom_CG_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sid_ET_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "bo_CN_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "bo_IN_",
+      "shortOrder": 2,
+      "longOrder": 2
+    },
+    {
+      "locale": "ar_AE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_KW_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "bm_ML_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pui_CO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "lgr_SB_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "mos_BF_",
+      "shortOrder": 2,
+      "longOrder": 1
+    },
+    {
+      "locale": "ny_MW_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_BH_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_IQ_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_JO_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_LY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_MA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_QA_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_SY_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ar_YE_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "ilo_PH_",
+      "shortOrder": 0,
+      "longOrder": 1
+    },
+    {
+      "locale": "qlt_NG_ha-Latn-NG",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "min_ID_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sun_ID_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "en_IL_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "pdc_US_",
+      "shortOrder": 0,
+      "longOrder": 0
+    },
+    {
+      "locale": "dv_MV_",
+      "shortOrder": 1,
+      "longOrder": 2
+    },
+    {
+      "locale": "mfe_MU_",
+      "shortOrder": 1,
+      "longOrder": 1
+    },
+    {
+      "locale": "sat_IN_",
+      "shortOrder": 1,
+      "longOrder": 0
+    },
+    {
+      "locale": "qlt_IN_sat-Olck-IN",
+      "shortOrder": 1,
+      "longOrder": 0
+    }
+  ]
+}

@@ -173,3 +173,21 @@ it("exposes coherent generic field limits under both week policies", /** Generic
   value.setMinimalDaysInFirstWeek(256);
   expect(value.getMinimalDaysInFirstWeek()).toBe(1);
 });
+
+it.each([F.UCAL_MONTH, F.UCAL_ORDINAL_MONTH])(
+  "materializes a stored time before clearing month field %i",
+  /** Clearing a single field immediately after setTime retains the other civil components, unlike a full clear. @param field - Either paired month representation. @returns Nothing. */ (
+    field,
+  ) => {
+    const value = calendar(),
+      status: [number] = [0];
+    value.setTime(Date.UTC(2024, 11, 31, 8, 23, 45, 123), status);
+    value.clear(field);
+    expect(value.isSet(F.UCAL_MONTH)).toBe(false);
+    expect(value.isSet(F.UCAL_ORDINAL_MONTH)).toBe(false);
+    expect(value.getTime(status)).toBe(Date.UTC(2024, 0, 31, 8, 23, 45, 123));
+    expect(value.get(F.UCAL_YEAR, status)).toBe(2024);
+    expect(value.get(F.UCAL_DAY_OF_MONTH, status)).toBe(31);
+    expect(status[0]).toBe(0);
+  },
+);

@@ -1,0 +1,14 @@
+--- a/apps/office/src/external/md4c/src/md4c.ref.ts
++++ b/apps/office/src/external/md4c/src/md4c.ref.ts
+@@ -162,7 +162,11 @@
+   beg += ctx.text[beg] === 33 ? 2 : 1;
+   end--;
+   const found = md_lookup_line(beg, lines);
++  /* istanbul ignore if -- B8TCAE-A02: the original caller supplies the covering paragraph line; native lookup is dereferenced unconditionally. */
+   if (found === undefined) return undefined;
++  else {
++    // Keep the ordinary covered path explicit for exact source-map accounting.
++  }
+   const [line, index] = found;
+   const label =
+     end > line.end

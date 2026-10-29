@@ -44,7 +44,7 @@ writeFileSync(
   headers +
     String.raw`
 #include <type_traits>
-template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();if(kind=='F')this->setLenient(use!=0);for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='V'){this->validateField(UCalendarDateFields(a),s);std::cout<<0;}else if(kind=='O'){if(use)std::cout<<this->Calendar::internalGetMonth(b,s);else std::cout<<this->internalGetMonth(s);}else if(kind=='A')std::cout<<this->getActualMaximum(UCAL_DATE,s);else if(kind=='I'||kind=='Q'){if constexpr(std::is_base_of<IslamicCalendar,C>::value){if(kind=='I')std::cout<<this->yearStart(a,s);else std::cout<<this->monthStart(a,b,s);}else std::abort();}else if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='E')std::cout<<this->handleGetExtendedYear(s);else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
+template<class C> class Witness:public C{public:using C::C;void observe(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;this->adoptTimeZone(new SimpleTimeZone(0,UnicodeString(u"UTC")));this->setTime(kind=='F'?(double(a)-2440588.0)*86400000.0:0,s);if(kind=='F')this->get(UCAL_JULIAN_DAY,s);else this->clear();if(kind=='F')this->setLenient(use!=0);for(int i=0;i<count;i++){int f,v;std::cin>>f>>v;this->set(UCalendarDateFields(f),v);}s=UErrorCode(incoming);if(kind=='F'){this->handleComputeFields(a,s);std::cout<<int(s);for(int f=0;f<UCAL_FIELD_COUNT;f++)std::cout<<' '<<this->internalGet(UCalendarDateFields(f));std::cout<<'\n';return;}if(kind=='V'){this->validateField(UCalendarDateFields(a),s);std::cout<<0;}else if(kind=='O'){if(use)std::cout<<this->Calendar::internalGetMonth(b,s);else std::cout<<this->internalGetMonth(s);}else if(kind=='A')std::cout<<this->getActualMaximum(UCAL_DATE,s);else if(kind=='I'||kind=='Q'){if constexpr(std::is_base_of<IslamicCalendar,C>::value){if(kind=='I')std::cout<<this->yearStart(a,s);else std::cout<<this->monthStart(a,b,s);}else std::abort();}else if(kind=='M')std::cout<<this->handleComputeMonthStart(a,b,bool(use),s);else if(kind=='L')std::cout<<this->handleGetMonthLength(a,b,s);else if(kind=='Y')std::cout<<this->handleGetYearLength(a,s);else if(kind=='B')std::cout<<this->Calendar::handleGetMonthLength(a,b,s);else if(kind=='E'||kind=='W'){if(kind=='W'){this->setFirstDayOfWeek(UCalendarDaysOfWeek(a));this->setMinimalDaysInFirstWeek(uint8_t(b));}std::cout<<this->handleGetExtendedYear(s);}else{auto m=this->getDefaultMonthInYear(a,s);auto d=this->getDefaultDayInMonth(a,b,s);std::cout<<m<<' '<<d;}std::cout<<' '<<int(s)<<'\n';}};
 template<class C>void run(char kind,int a,int b,int use,int incoming,int count){UErrorCode s=U_ZERO_ERROR;Witness<C>c(Locale("en_US"),s);c.observe(kind,a,b,use,incoming,count);}
 int main(int argc,char**argv){u_setDataDirectory(argv[1]);UErrorCode s=U_ZERO_ERROR;uloc_setDefault("en_US",&s);TimeZone::adoptDefault(new SimpleTimeZone(0,UnicodeString(u"UTC")));char kind;int type,a,b,use,incoming,count;while(std::cin>>kind>>type>>a>>b>>use>>incoming>>count){switch(type){
 ` +
@@ -241,6 +241,67 @@ for (const era of [235, 236])
       [0, era],
       [1, year],
     ]);
+// Public field-stamp order can select an authored day/month or day-of-year while
+// YEAR_WOY remains the selected year owner. Exercise the original base resolver.
+for (const fields of [
+  [
+    [17, 2024],
+    [3, 52],
+    [2, 0],
+    [5, 5],
+  ],
+  [
+    [17, 2024],
+    [3, 1],
+    [2, 0],
+    [5, 5],
+  ],
+  [
+    [17, 2024],
+    [3, 1],
+    [2, 11],
+    [5, 5],
+  ],
+  [
+    [17, 2024],
+    [3, 10],
+    [2, 6],
+    [5, 5],
+  ],
+  [
+    [17, 2024],
+    [3, 10],
+    [6, 100],
+  ],
+])
+  for (const status of [0, -128]) add("E", 0, 0, 0, 1, status, fields);
+// Conforming derived callers may explicitly use the original protected base
+// month-length implementation; no virtual override or private field is replaced.
+for (const month of [0, 1, 11, 2147483647]) add("B", 0, 2024, month, 1, 0);
+// Authored week rules use original public configuration methods, then the same
+// extended-year hook as E. Both Sunday-year and ISO Monday-year boundaries occur.
+for (const [firstDay, minimum] of [
+  [1, 1],
+  [2, 4],
+  [7, 7],
+])
+  for (const year of [2023, 2024])
+    for (const week of [1, 52, 53])
+      for (const weekday of [1, 7])
+        add("W", 0, firstDay, minimum, 1, 0, [
+          [17, year],
+          [3, week],
+          [7, weekday],
+        ]);
+// These positive years remain within IslamicCalendar's original1..5000000
+// field limits and signed32 relative-day range. Their mean lunar estimates have
+// negative signed age, selecting the original forward daily search naturally.
+for (const [year, month] of [
+  [3351760, 1],
+  [3384172, 4],
+  [3418246, 9],
+])
+  add("Q", 11, year, month, 1, 0);
 const rows = execFileSync(`${build}/calendar-hooks-witness`, [`${source}/data/in`], {
   input: inputs.join("\n") + "\n",
   encoding: "utf8",

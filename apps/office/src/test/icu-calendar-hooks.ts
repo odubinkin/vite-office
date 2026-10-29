@@ -1,4 +1,5 @@
 /** @fileoverview Original protected Calendar test-caller protocol; invokes actual owners without replacing methods or manufacturing private state. */
+import { Calendar } from "../external/icu/source/i18n/calendar";
 import { getActualMaximumDate } from "../external/icu/source/i18n/calendar.limits";
 import { IslamicCalendar } from "../external/icu/source/i18n/islamcal";
 import { standardCalendarClasses } from "./icu-calendar-owners";
@@ -51,8 +52,15 @@ export function observeCalendarHook(query: string): string {
     );
   else if (kind === "L") result = value["handleGetMonthLength"](Number(a), Number(b), status);
   else if (kind === "Y") result = value["handleGetYearLength"](Number(a), status);
-  else if (kind === "E") result = value["handleGetExtendedYear"](status);
-  else {
+  else if (kind === "B")
+    result = Calendar.prototype["handleGetMonthLength"].call(value, Number(a), Number(b), status);
+  else if (kind === "E" || kind === "W") {
+    if (kind === "W") {
+      value.setFirstDayOfWeek(Number(a));
+      value.setMinimalDaysInFirstWeek(Number(b));
+    }
+    result = value["handleGetExtendedYear"](status);
+  } else {
     const month = value["getDefaultMonthInYear"](Number(a), status),
       day = value["getDefaultDayInMonth"](Number(a), Number(b), status);
     return [month, day, status[0]].join(" ");
