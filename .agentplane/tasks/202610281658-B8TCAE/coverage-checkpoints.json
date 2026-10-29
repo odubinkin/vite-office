@@ -2846,5 +2846,117 @@
       ]
     },
     "limitation": "The pre-existing unsupported-cell test patches getSharedString; its hit is retained but does not prove reachability from a canonical document. No new mock was added and C01 is proved independently from concrete cell ownership. Final full verifier has not passed."
+  },
+  "paletteRunGuardsAndLiveDefaults": {
+    "reports": [
+      {
+        "report": "apps/office/coverage/integration-writer-live-defaults/coverage-final.json",
+        "sha256": "71c11a7e8b67882ebb681755f1884666385dd8db38bc54e41424d0e87f3d106c",
+        "bytes": 45968
+      },
+      {
+        "report": "apps/office/coverage/integration-palette-run-guards/coverage-final.json",
+        "sha256": "c0b4e43c76365b80e78d113ec2f5a5ea249df22f324feecd31a3b3877f346086",
+        "bytes": 7838
+      },
+      {
+        "report": "apps/office/coverage/integration-docx-run-guard/coverage-final.json",
+        "sha256": "dfd5441e5fe680cbb74139dcf78b60ad0defeb2d328abf7b724827070d9799a7",
+        "bytes": 41601
+      }
+    ],
+    "audit": "palette-run-guard-domain-audit.json",
+    "mapProof": "approved-palette-run-guard-map-proof.json",
+    "exceptions": [
+      "U03",
+      "W04"
+    ],
+    "util": {
+      "selectedSuites": 5,
+      "tests": 57,
+      "strictOwnerCoveragePassed": true,
+      "coverage": "58/58 statements;18/18 alternatives;6/6 functions;52/52 lines"
+    },
+    "docx": {
+      "files": 3,
+      "tests": 47,
+      "strictOwnerCoveragePassed": true,
+      "coverage": "245/245 statements;119/119 alternatives;42/42 functions;222/222 lines"
+    },
+    "liveDefaults": {
+      "files": 2,
+      "tests": 20,
+      "allAssertionsPassed": true,
+      "strictIsolatedGroupCoveragePassed": false,
+      "newCoveredAlternatives": [
+        "ndtbl default name",
+        "atrstck removed named-style item fallback"
+      ],
+      "note": "Same-source maps merge with existing full-baseline evidence; fresh isolated tests do not exercise every unrelated table owner method."
+    },
+    "diagnosticUnion": {
+      "summary": {
+        "lines": {
+          "total": 108116,
+          "covered": 107531,
+          "skipped": 0,
+          "pct": 99.45
+        },
+        "statements": {
+          "total": 119426,
+          "covered": 118414,
+          "skipped": 0,
+          "pct": 99.15
+        },
+        "functions": {
+          "total": 18429,
+          "covered": 18429,
+          "skipped": 0,
+          "pct": 100
+        },
+        "branches": {
+          "total": 74499,
+          "covered": 73101,
+          "skipped": 0,
+          "pct": 98.12
+        },
+        "branchesTrue": {
+          "total": 0,
+          "covered": 0,
+          "skipped": 0,
+          "pct": "Unknown"
+        }
+      },
+      "remainingOwners": 183,
+      "recollectedOwners": [
+        "/svl/source/numbers/zforlist.currency-entry.ts",
+        "/svl/source/numbers/zforlist.currency-patterns.ts",
+        "/sw/source/uibase/app/docst.ts",
+        "/external/icu/source/i18n/erarules.ts",
+        "/i18npool/source/localedata/localedata.ts",
+        "/external/md4c/src/md4c.ref.ts",
+        "/sw/source/filter/ww8/rtfattributeoutput.ts",
+        "/svl/source/items/stylepool.ts",
+        "/sax/source/fastparser/streaminput.ts",
+        "/external/md4c/src/md4c.block.scan.ts",
+        "/external/md4c/src/md4c.mark.collect.ts",
+        "/external/md4c/src/md4c.mark.analyze.ts",
+        "/filter/source/msfilter/rtfutil.ts",
+        "/sal/rtl/byteseq.ts",
+        "/external/icu/source/i18n/indiancal.ts",
+        "/external/icu/source/common/uresbund.entries.ts",
+        "/external/md4c/src/md4c.mark.ts",
+        "/external/md4c/src/md4c.inline.ts",
+        "/external/md4c/src/md4c.render.ts",
+        "/external/md4c/src/md4c.context.ts",
+        "/svl/source/numbers/zforfind.scan-date-value.ts",
+        "/sw/source/core/doc/DocumentStylePoolManager.ts",
+        "/sw/source/filter/html/svxcss1.ts",
+        "/sc/browser/filter/xml/calc-document-codec.ts",
+        "/filter/source/msfilter/util.ts",
+        "/sw/source/filter/ww8/docxattributeoutput.ts"
+      ]
+    },
+    "finalFullVerifierPassed": false
   }
 }

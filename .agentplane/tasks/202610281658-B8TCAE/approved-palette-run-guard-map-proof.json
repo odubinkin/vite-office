@@ -1,0 +1,50 @@
+{
+  "U03": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [
+      {
+        "start": {
+          "line": 58,
+          "column": 2
+        },
+        "end": {
+          "line": 58,
+          "column": null
+        }
+      }
+    ],
+    "branchChanges": [],
+    "functionsUnchanged": 6,
+    "statements": [
+      59,
+      58
+    ],
+    "branchArms": [
+      18,
+      18
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  },
+  "W04": {
+    "sourceTokensIdenticalAfterRemovingCommentsAndApprovedEmptyElse": true,
+    "removedStatements": [],
+    "branchChanges": [
+      {
+        "id": "21",
+        "originalLine": 317,
+        "excludedArm": 1,
+        "retainedArmHits": 4
+      }
+    ],
+    "functionsUnchanged": 42,
+    "statements": [
+      245,
+      245
+    ],
+    "branchArms": [
+      120,
+      119
+    ],
+    "sourceMapBoundaryNote": "Only audited zero-hit counters are excluded. Every retained source position matches canonically; statements/functions/runtime tokens remain otherwise unchanged."
+  }
+}

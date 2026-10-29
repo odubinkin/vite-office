@@ -1850,6 +1850,31 @@
       "implementation": "Applied only the proven throw/true alternative; runtime guard retained with one no-op normal else for exact source mapping.",
       "audit": "owned-guard-domain-audit.json",
       "mapProof": "approved-owned-guard-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-U03",
+      "path": "apps/office/src/filter/source/msfilter/util.ts",
+      "excludedStatement": "28",
+      "originalLine": 58,
+      "proof": "Actual Color channels are integers0..255. If max-min<=254, variance255 makes every scheme component3 and matches black. Otherwise channels are a permutation of(255,k,0). For k<=127 choose variance k+1 and the corresponding primary palette color(255,0,0); both have scheme(1,3,3). For k>=128 choose variance256-k and the corresponding secondary palette color(255,255,0); both have scheme(2,2,3). All permutations occur in the fixed Word palette. All candidate errors are<=765<65535, so a match always assigns best and returns inside the loop. Alpha does not change the three byte getters. The final fallback return is unreachable for actual immutable Color objects.",
+      "counterScope": "One zero-hit fallback return only; no branch/function exclusion.",
+      "approval": "approved under standing human authorization",
+      "implementation": "Applied exact zero-hit scope with runtime tokens and guards retained.",
+      "audit": "palette-run-guard-domain-audit.json",
+      "mapProof": "approved-palette-run-guard-map-proof.json"
+    },
+    {
+      "id": "B8TCAE-W04",
+      "path": "apps/office/src/sw/source/filter/ww8/docxattributeoutput.ts",
+      "excludedBranch": "21",
+      "excludedArm": 1,
+      "originalLine": 317,
+      "proof": "At each line-break iteration, impl_WriteRunText returns false only when begin>=index; begin starts0 and is advanced only to an already processed control delimiter index+1. Thus empty segment means current index0 or preceding iteration was a control. Initial previous equals the current line-break control; after each processed delimiter previous is its control code<32. If the preceding iteration was printable, begin<=index-1 and the helper returns true. Induction gives a true condition on every line-break iteration. Immutable primitive input and actual synchronous serializer ownership are required; arbitrary reentrant method replacement is outside this domain.",
+      "counterScope": "Only the zero-hit false alternative; all statements/functions and the normal body stay counted.",
+      "approval": "approved under standing human authorization",
+      "implementation": "Applied exact zero-hit scope with runtime tokens and guards retained.",
+      "audit": "palette-run-guard-domain-audit.json",
+      "mapProof": "approved-palette-run-guard-map-proof.json"
     }
   ],
   "additionalAudits": [
