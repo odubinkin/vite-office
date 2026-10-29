@@ -1,0 +1,44 @@
+{
+  "authorization": "Standing human approval of 2026-10-29 for independently proven unreachable branches; suspected upstream bugs must be documented.",
+  "runtimeTokensIdentical": true,
+  "functionsUnchanged": 1,
+  "scopes": [
+    "D02",
+    "B8TCAE-D03",
+    "B8TCAE-D08",
+    "B8TCAE-D04",
+    "B8TCAE-D05",
+    "B8TCAE-D06",
+    "B8TCAE-D09",
+    "B8TCAE-D07",
+    "B8TCAE-D10",
+    "B8TCAE-D11"
+  ],
+  "counters": {
+    "s": {
+      "before": 241,
+      "after": 222,
+      "removed": 19,
+      "retainedPositive": 216
+    },
+    "b": {
+      "before": 143,
+      "after": 131,
+      "removed": 12,
+      "retainedPositive": 123
+    }
+  },
+  "tests": {
+    "files": 44,
+    "passed": 731
+  },
+  "coverage": {
+    "statements": "222/222",
+    "branches": "131/131",
+    "functions": "1/1",
+    "lines": "215/215"
+  },
+  "sourceSha256": "f3068d4d2197b5f3e78b30a4ab50d4a8fd348d46b657555d9a1a6dda82b70cba",
+  "reportSha256": "b3d2dca317dcda5b2058fe84cf93decd7221045dd6c9cd10f1d3d599fb033b43",
+  "auditSha256": "ab750832467f1dfe263fef9fa411045909bb4458d2b71723c91f3b4cfd728cb3"
+}
